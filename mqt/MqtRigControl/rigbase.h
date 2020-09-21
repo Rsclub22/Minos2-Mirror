@@ -36,7 +36,7 @@ public:
     virtual int closeRig() = 0;
 
     virtual int getFrequency(VFO vfo, Frequency&) = 0;
-    virtual int setFrequency(Frequency freq, VFO vfo ) = 0;
+    virtual int setFrequency(const Frequency &freq, VFO vfo ) = 0;
 
     virtual int getMode(VFO vfo, MODE& mode) = 0;
     virtual int setMode(VFO vfo, MODE mode) = 0;
@@ -50,7 +50,7 @@ public:
     virtual bool supportReadRit(int rigModelNumber) = 0;
     virtual bool supportWriteRit(int rigModelNumber) = 0;
     virtual int getRit(VFO vfo, ShortFreq &ritfreq) = 0;
-    virtual int setRit(VFO vfo, ShortFreq ritfreq) = 0;
+    virtual int setRit(VFO vfo, const ShortFreq &ritfreq) = 0;
     virtual int getMaxRitFreq(int rigNumber) = 0;
 
     virtual bool supportReadRitState(int rigModelNumber) = 0;
@@ -78,15 +78,11 @@ public:
     virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
-    //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
-
-
-
 
 signals:
 
     // no polling signals
-    void newRxFreq(quint64 f);
+    void newRxFreq(Frequency f);
     void newMode();
     void newVfo(QString);
     void ritOn();

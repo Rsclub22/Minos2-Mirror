@@ -32,7 +32,7 @@ public:
     QAction* editAction;
     QAction* clearAction;
 
-    QString returnFrequency;
+    Frequency returnFrequency;
 
     void setContest(BaseContestLog *);
 
@@ -83,13 +83,13 @@ public:
     void setContest(BaseContestLog *c);
     void setRigControl(RigControlFrame *);
 
-    void setFreq(QString freq);
+    void setFreq(Frequency freq);
 private:
     Ui::RunButtonsFrame *ui;
     LoggerContestLog *ct = nullptr;
     RigControlFrame *rigControl = nullptr;
 
-    QString curRadioFreq;
+    Frequency curRadioFreq;
 
     int runButtonOnNum;
 
@@ -97,7 +97,7 @@ private:
 
     bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
 
-    QString curRunFreq;
+    Frequency curRunFreq;
     QTimer *chkRunFreqTimer;
 
 
@@ -110,12 +110,12 @@ private:
 
     void chkRunFreq();
 signals:
-    void sendRunOnFlag(QString, bool);
-    void sendRunOffFreqFlag(QString, bool);
+    void sendRunOnFlag(Frequency, bool);
+    void sendRunOffFreqFlag(Frequency, bool);
 private slots:
     void runButActivated(int buttonNumber);
     void on_radioFreqCheckTimer();
-    void setFreqDisplay(QString, bool);
+    void setFreqDisplay(Frequency, bool);
     void radioIsConnected(bool on);
 public slots:
     void runButClearActSel(int buttonNumber);

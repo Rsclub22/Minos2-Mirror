@@ -20,9 +20,9 @@ const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "T
 // add delimiter to string for display
 // input string should just be digits
 
-QString convertFreqStrDisp(QString sfreq)
+QString convertFreqStrDisp(const Frequency & frequency)
 {
-
+    QString sfreq = frequency.str();
     if (sfreq == "")
     {
         return sfreq;
@@ -80,45 +80,22 @@ QString convertFreqStrDisp(QString sfreq)
 
 
 
-QString convertFreqToStr(double frequency)
+QString convertFreqToStr(const Frequency &frequency)
 {
-
-    return QString::number(frequency,'f', 0);
-
+    return QString::number(qint64(frequency), 10);
 }
 
 
-QString convertFreqToStr(int frequency)
-{
-
-    return QString::number(frequency, 10);
-
-}
-
-QString convertFreqToStr(qint64 frequency)
-{
-    return QString::number(frequency, 10);
-}
-
-QString convertFreqToStr(quint64 frequency)
-{
-    return QString::number(frequency, 10);
-}
-
-
-double convertStrToFreq(QString frequency)
+Frequency convertStrToFreq(QString frequency)
 {
     bool ok = false;
-    double f = 0.0;
-    f = frequency.toDouble(&ok);
-    if (ok)
+    qint64 f = 0;
+    f = frequency.toLongLong(&ok);
+    if (!ok)
     {
-        return f;
+        f = -1;
     }
-    else
-    {
-        return -1.0;
-    }
+    return Frequency(f);
 }
 
 
@@ -200,9 +177,9 @@ QString validateFreqTxtInput(QString f, bool* ok)
 // convert freq string for display - single delimter
 // 144.000000
 
-QString convertFreqStrDispSingle(QString sfreq)
+QString convertFreqStrDispSingle(const Frequency &freq)
 {
-
+    QString sfreq = freq.str();
     int len = sfreq.length();
 
     switch(len)
@@ -248,8 +225,9 @@ QString convertFreqStrDispSingle(QString sfreq)
 }
 
 
-QString convertFreqStrDispSingleNoTrailZero(QString sfreq)
+QString convertFreqStrDispSingleNoTrailZero(const Frequency &freq)
 {
+    QString sfreq = freq.str();
 
         int len = sfreq.length();
 
@@ -541,57 +519,56 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
 // if tensKHz is true - support +/- 99KHz
 // false support +/- 9KHz
 
-QString convertRitFreqToStr(int freq, bool ritKHzFlag)
+QString convertRitFreqToStr(const ShortFreq &freq, bool ritKHzFlag)
 {
 
     bool negNum = false;
 
-    QString rfreq = convertFreqToStr(freq);
+    QString rfreq = freq.str();
 
-
-
+    int f = qint32(freq);
 
     if (rfreq[0] == '-')
     {
         negNum = true;
         rfreq = rfreq.remove('-');
-        freq = freq * -1;
+        f = f * -1;
     }
 
     if (ritKHzFlag)
     {
-        if (freq < 9)
+        if (f < 9)
         {
             rfreq = QString("+00.00");
             return rfreq;
         }
 
-        if (freq < 1000)
+        if (f < 1000)
         {
             rfreq.prepend("00.");
         }
-        else if (freq < 10000)
+        else if (f < 10000)
         {
             rfreq.insert(1, '.').prepend('0');
 
         }
-        else if (freq >= 10000)
+        else if (f >= 10000)
         {
             rfreq.insert(2, '.');
         }
     }
     else
     {
-        if (freq < 9)
+        if (f < 9)
         {
             rfreq = QString("+0.00");
             return rfreq;
         }
-        if (freq < 1000)
+        if (f < 1000)
         {
             rfreq.prepend(("0."));
         }
-        if (freq >= 1000)
+        if (f >= 1000)
         {
             rfreq.insert(1, '.');
         }
@@ -622,84 +599,6 @@ QString convertRitFreqToStr(int freq, bool ritKHzFlag)
 
 }
 
-
-
-/*
-// modified for tens khz
-// if tensKHz is true - support +/- 99KHz
-// false support +/- 9KHz
-
-QString convertRitFreqToStr(int freq, bool ritKHzFlag)
-{
-
-    bool negNum = false;
-    if (freq == 0 && freq <= 9)  // not interested in Hz
-    {
-        if (ritKHzFlag)
-        {
-           return QString("+00.00");
-        }
-        else
-        {
-            return QString ("+0.00");
-        }
-
-    }
-
-    QString rfreq = convertFreqToStr(freq);
-
-
-    if (rfreq[0] == '-')
-    {
-        negNum = true;
-        rfreq = rfreq.remove('-');
-    }
-
-    if (ritKHzFlag)
-    {
-        if (freq < 1000)
-        {
-            rfreq.prepend("00.");
-        }
-        else if (freq < 10000)
-        {
-            rfreq.insert(1, '.').prepend('0');
-
-        }
-        else if (freq >= 10000)
-        {
-            rfreq.insert(2, '.');
-        }
-    }
-    else
-    {
-        if (freq < 1000)
-        {
-            rfreq.prepend(("0."));
-        }
-        if (freq >= 1000)
-        {
-            rfreq.insert(1, '.');
-        }
-
-    }
-
-
-    if (negNum)
-    {
-        rfreq = rfreq.prepend('-');
-    }
-    else
-    {
-        rfreq = rfreq.prepend('+');
-    }
-
-
-    return rfreq;
-
-}
-*/
-
 // remove hundreds hz and hz from freq for cluster display
 QString removeHundredHzAndHzDigits(QString f)
 {
@@ -724,31 +623,17 @@ QString removeHundredHzAndHzDigits(QString f)
 
 }
 
-QString extractKhz(QString f)
+QString extractKhz(Frequency f)
 {
     QString khz = "***";
-    QString sf = f.remove('.');
-    bool ok = false;
-    double df = sf.toDouble(&ok);
-    if (ok && df != 0.0)
+    if (!f.isClear())
     {
-        if (f.contains('.'))
+        QString sf = f.str();
+        int i = sf.length();
+        if (i >= 6)
         {
-            QStringList k = f.split('.');
-            int i = k.length();
-            if (i >=2)
-            {
-                return k[i-2];
-            }
-        }
-        else
-        {
-            int i = f.length();
-            if (i >= 6)
-            {
-                khz = f.mid(i - 6, 3);
-                return khz;
-            }
+            khz = sf.mid(i - 6, 3);
+            return khz;
         }
     }
 

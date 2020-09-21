@@ -44,7 +44,7 @@ public:
     //QSize minimumSizeHint() const override;
     //QSize sizeHint() const override;
 
-    void setFreq(double f, bool legalFreq);
+    void setFreq(Frequency f, bool legalFreq);
 
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
@@ -75,11 +75,11 @@ public:
 
     void updateZoom(bool dir);
 
-    void setBandFreqLimits(double flow, double fhigh);
-    void setBandmapHeight(double flow, double fhigh);
+    void setBandFreqLimits(Frequency flow, Frequency fhigh);
+    void setBandmapHeight(Frequency flow, Frequency fhigh);
     void makeCursorVisibleInBandmap();
 
-    void scrollBandmapCenterToFreq(qint64 freq);
+    void scrollBandmapCenterToFreq(Frequency freq);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
     int getDialZoomLevel();
@@ -143,7 +143,7 @@ private:
     QGraphicsView* bandmapGraphicsView;
 
     BandmapFreqDial *dial;
-    double curFreq;
+    Frequency curFreq;
 
 
     int totalSize = 300; //for test
@@ -152,9 +152,9 @@ private:
     int dialMaxZoomLevel;
     int zoomLevel;
 
-    double contestBandFlow;
-    double contestBandFhigh;
-    qint64 curViewPortStartFreq;
+    Frequency contestBandFlow;
+    Frequency contestBandFhigh;
+    Frequency curViewPortStartFreq;
 
     int idealWidth;
     int idealHeight;
@@ -176,12 +176,12 @@ private:
 
 
     void assembleSpotMsg(int row, QString& markerMsg);
-    void assembleToolTip(int row, QString freq, QString& toolTipMsg);
+    void assembleToolTip(int row, Frequency freq, QString& toolTipMsg);
     QRectF viewportRectForRow(int row) const;
     QRectF calculateSpotRect(const QString text, const QPoint spotCoord);
     void bandmapSelectFreq(int y);
     void bandmapSelectSpot(QPoint p);
-    void sendFreqToRig(QString freq);
+    void sendFreqToRig(Frequency freq);
     void setSelectedSpot(int displayedSpotNum);
 
     void clearListOfMarkers();
@@ -194,9 +194,9 @@ private:
     void traceMsg(QString msg);
     void clearSpotData(BandmapData &selectedSpot);
     void deleteItemsFromMarkerList();
-    void assembleCqToolTip(int row, QString freq, QString& toolTipMsg);
+    void assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);
-    int dialCursorWithinViewport(qint64 freq);
+    int dialCursorWithinViewport(Frequency freq);
     bool matchDistance(int sourceRow);
 
 };

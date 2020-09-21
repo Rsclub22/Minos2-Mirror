@@ -3,7 +3,6 @@
 
 #include "base_pch.h"
 #include "WsjtxMessageServer.hpp"
-#include "WsjtxRadio.hpp"
 
 using port_type = MessageServer::port_type;
 

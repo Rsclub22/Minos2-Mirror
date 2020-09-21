@@ -68,19 +68,19 @@ void RigState::setSelected(const QString &loggeruuid, const QString &selected)
     _selected.setSelection(loggeruuid, selected);
 }
 
-void RigState::setRadioFreq(double freq)
+void RigState::setRadioFreq(Frequency freq)
 {
     _radioFreq.setValue(freq);
 }
-void RigState::setLogFreq(double freq)
+void RigState::setLogFreq(Frequency freq)
 {
     _logFreq.setValue(freq);
 }
-void RigState::setRadioRitFreq(int freq)
+void RigState::setRadioRitFreq(const ShortFreq &freq)
 {
     _radioRitFreq.setValue(freq);
 }
-void RigState::setLogRitFreq(int freq)
+void RigState::setLogRitFreq(const ShortFreq &freq)
 {
     _logRitFreq.setValue(freq);
 }
@@ -121,12 +121,12 @@ QString RigState::pack() const
 
     jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rigControlStatus, status().getValue());
-    jv.insert(rpcConstants::rigControlRadioFreq, radioFreq().getValue());
-    jv.insert(rpcConstants::rigControlLogFreq, logFreq().getValue());
+    jv.insert(rpcConstants::rigControlRadioFreq, double(radioFreq().getValue()));
+    jv.insert(rpcConstants::rigControlLogFreq, double(logFreq().getValue()));
     jv.insert(rpcConstants::rigControlRadioMode, radioMode().getValue());
     jv.insert(rpcConstants::rigControlLogMode, logMode().getValue());
-    jv.insert(rpcConstants::rigControlRadioRitFreq, radioRitFreq().getValue());
-    jv.insert(rpcConstants::rigControlLogRitFreq, logRitFreq().getValue());
+    jv.insert(rpcConstants::rigControlRadioRitFreq, double(radioRitFreq().getValue()));
+    jv.insert(rpcConstants::rigControlLogRitFreq, double(logRitFreq().getValue()));
     jv.insert(rpcConstants::rigRadioVolLevel, radioVolLevel().getValue());
     jv.insert(rpcConstants::rigLogVolLevel, logVolLevel().getValue());
     jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
@@ -174,11 +174,11 @@ MinosStringItem<QString> RigState::status() const
 }
 
 
-MinosItem<double> RigState::radioFreq() const
+MinosFrequencyItem<Frequency> RigState::radioFreq() const
 {
     return _radioFreq;
 }
-MinosItem<double> RigState::logFreq() const
+MinosFrequencyItem<Frequency> RigState::logFreq() const
 {
     return _logFreq;
 }
@@ -193,11 +193,11 @@ MinosStringItem<QString> RigState::logMode() const
 }
 
 
-MinosItem<int> RigState::radioRitFreq() const
+MinosItem<ShortFreq> RigState::radioRitFreq() const
 {
     return _radioRitFreq;
 }
-MinosItem<int> RigState::logRitFreq() const
+MinosItem<ShortFreq> RigState::logRitFreq() const
 {
     return _logRitFreq;
 }

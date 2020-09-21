@@ -241,11 +241,11 @@ void RigCache::setStatus(const PubSubName &name, const QString &status)
     rigStates[name].setStatus(status);
 }
 
-void RigCache::setRadioFreq(const PubSubName &name, double freq)
+void RigCache::setRadioFreq(const PubSubName &name, Frequency freq)
 {
     rigStates[name].setRadioFreq(freq);
 }
-void RigCache::setLogFreq(const PubSubName &name, double freq)
+void RigCache::setLogFreq(const PubSubName &name, Frequency freq)
 {
     rigStates[name].setLogFreq(freq);
 }
@@ -291,11 +291,11 @@ void RigCache::setBandList(const PubSubName &name, const QString &bands)
 {
     rigDetails[name].setBandList(bands);
 }
-void RigCache::setRadioRitFreq(const PubSubName &name, int freq)
+void RigCache::setRadioRitFreq(const PubSubName &name, const ShortFreq &freq)
 {
     rigStates[name].setRadioRitFreq(freq);
 }
-void RigCache::setLogRitFreq(const PubSubName &name, int freq)
+void RigCache::setLogRitFreq(const PubSubName &name, ShortFreq freq)
 {
     rigStates[name].setLogRitFreq(freq);
 }

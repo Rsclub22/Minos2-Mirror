@@ -128,7 +128,7 @@ class BaseContact: public QObject
       MinosItem<unsigned short> contactFlags;
       MinosStringItem<QString> forcedMult;
       MinosStringItem<QString> rigName;
-      MinosStringItem<QString> frequency;
+      MinosFrequencyItem<Frequency> frequency;
       MinosStringItem<QString> rotatorHeading;
 
       MinosStringItem<QString> op1;         // current main op - derived from contacts

@@ -19,7 +19,7 @@ SpotData::SpotData()
 }
 
 SpotData::SpotData(qint64 _rxTime, QString _spotTime,
-                   QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
+                   Frequency _dxFreq, QString _dxBandStr, QString _dxBandMask,
                    QString _dxMode, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,

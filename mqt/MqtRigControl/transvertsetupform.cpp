@@ -57,19 +57,14 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
     else
     {
         // may need to compare real freq here!
-        if (ui->radioFreq->text().remove('.') != transVertData->radioFreqStr)
+        if (Frequency(ui->radioFreq->text().remove('.')) != transVertData->radioFreq)
         {
 
             if (ui->radioFreq->text().isEmpty() || ui->radioFreq->text() == "0.0")
             {
-                transVertData->transVertOffset = 0.0;
-                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-                if (transVertData->transVertOffsetStr.contains('?'))
-                {
-                    transVertData->transVertOffsetStr = QString("0.0");
-                }
+                transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                ui->offsetFreq->setText(transVertData->transVertOffset.str());
                 return;
             }
             QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -102,14 +97,13 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, 
     else
     {
         // may need to compare real freq here!
-        if (ui->targetFreq->text().remove('.') != transVertData->targetFreqStr) // changed?
+        if (Frequency(ui->targetFreq->text().remove('.')) != transVertData->targetFreq) // changed?
         {
             if (ui->targetFreq->text().isEmpty() || ui->targetFreq->text() == "0.0")
             {
-                transVertData->transVertOffset = 0.0;
-                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+                transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                ui->offsetFreq->setText(transVertData->transVertOffset.str());
                 return;
             }
             QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -157,26 +151,18 @@ void TransVertSetupForm::calcOffset()
 
     // convert radio freq
     txf = convertFreqToFullDigit(txf).remove('.');
-    transVertData->radioFreqStr = txf;
-    transVertData->radioFreq = txf.toDouble();
+    transVertData->radioFreq = Frequency(txf);
     // convert target freq
     targetf = convertFreqToFullDigit(targetf).remove('.');
-    transVertData->targetFreqStr = targetf;
-    transVertData->targetFreq = targetf.toDouble();
+    transVertData->targetFreq = Frequency(targetf);
 
     // check target freq in band
     if (transVertData->targetFreq >= transVertData->fLow && transVertData->targetFreq <= transVertData->fHigh)
     {
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
-        //transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-        transVertData->transVertOffsetStr = convertFreqStrDispSingleNoTrailZero(convertFreqToStr(transVertData->transVertOffset));
-        if (transVertData->transVertOffsetStr.contains('?'))
-        {
-            transVertData->transVertOffsetStr = QString("0.0");
-        }
 
         // display
-        ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+        ui->offsetFreq->setText(transVertData->transVertOffset.str());
 
         transVertOffsetOk = true;
         transVertValueChanged = true;
@@ -193,20 +179,20 @@ void TransVertSetupForm::calcOffset()
 }
 
 
-void TransVertSetupForm::setRadioFreqBox(QString f)
+void TransVertSetupForm::setRadioFreqBox(Frequency f)
 {
-    ui->radioFreq->setText(f);
+    ui->radioFreq->setText(f.str());
 }
 
-void TransVertSetupForm::setTargetFreqBox(QString f)
+void TransVertSetupForm::setTargetFreqBox(Frequency f)
 {
-    ui->targetFreq->setText(f);
+    ui->targetFreq->setText(f.str());
 }
 
 
-void TransVertSetupForm::setOffsetFreqLabel(QString f)
+void TransVertSetupForm::setOffsetFreqLabel(Frequency f)
 {
-    ui->offsetFreq->setText(f);
+    ui->offsetFreq->setText(f.str());
 }
 
 

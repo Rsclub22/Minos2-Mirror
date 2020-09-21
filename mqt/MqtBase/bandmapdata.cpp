@@ -15,7 +15,6 @@
 BandmapData::BandmapData()
 {
     rxTime = 0;
-    dxFreq = 0;
     rotConnected = false;
     dxCallWorked = false;
     dxLocatorWorked = false;
@@ -25,8 +24,8 @@ BandmapData::BandmapData()
 
 }
 
-BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
-                   qint64 _dxFreq, QString _dxBand, QString _dxBandMaskStr,
+BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
+                   Frequency _dxFreq, QString _dxBand, QString _dxBandMaskStr,
                    QString _dxMode,  QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorWorked,
@@ -38,7 +37,6 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _dxFreqStr,
 
     rxTime = _rxTime;
     spotTime = _spotTime;
-    dxFreqStr = _dxFreqStr;
     dxFreq = _dxFreq;
     dxBand = _dxBand;
     dxBandMaskStr = _dxBandMaskStr;
@@ -67,7 +65,6 @@ void BandmapData::operator = (const BandmapData& bmd)
 {
     rxTime = bmd.rxTime;
     spotTime = bmd.spotTime;
-    dxFreqStr = bmd.dxFreqStr;
     dxFreq = bmd.dxFreq;
     dxBand = bmd.dxBand;
     dxBandMaskStr = bmd.dxBandMaskStr;
@@ -96,7 +93,6 @@ void BandmapData::operator = (const BandmapData* bmd)
 {
     rxTime = bmd->rxTime;
     spotTime = bmd->spotTime;
-    dxFreqStr = bmd->dxFreqStr;
     dxFreq = bmd->dxFreq;
     dxBand = bmd->dxBand;
     dxBandMaskStr = bmd->dxBandMaskStr;
@@ -129,8 +125,7 @@ void BandmapData::clear()
 
     rxTime = 0;
     spotTime.clear();
-    dxFreqStr.clear();
-    dxFreq = 0;
+    dxFreq.clear();
     dxBand.clear();
     dxBandMaskStr.clear();
     dxMode.clear();

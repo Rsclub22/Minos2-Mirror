@@ -7,8 +7,6 @@
 #include <QHostAddress>
 #include <QColor>
 
-#include "WsjtxRadio.hpp"
-
 #include "Wsjtx_pimpl_h.hpp"
 
 class QString;

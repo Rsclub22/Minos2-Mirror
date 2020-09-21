@@ -180,13 +180,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
       return true; // i.e. not equal
 
-   QString newfreq = frequency.getValue();
-   QString newmctfreq = mct.frequency;
-
-   newfreq = newfreq.remove('.');
-   newmctfreq = newmctfreq.remove('.');
-
-   if ( strcmpsp( newfreq, newmctfreq ) )
+   if (frequency.getValue() != mct.frequency)
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.rotatorHeading, rotatorHeading.getValue() ) )
@@ -756,7 +750,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           res = rigName.getValue();
           break;
       case egFrequency:
-          res = frequency.getValue();
+          res = frequency.getValue().str();
           break;
       case egRotatorHeading:
       {
@@ -857,7 +851,9 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
              contest->currentMode = contest->contestBands;
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
-         mt->getStructArgMemberValue( "frequency", frequency );
+         QString temp;
+         mt->getStructArgMemberValue( "frequency", temp );
+         frequency.setValue( Frequency(temp) );
          mt->getStructArgMemberValue( "rotatorHeading", rotatorHeading );
          mt->getStructArgMemberValue( "rigName", rigName );
 

@@ -37,7 +37,7 @@ class quickBandSelData
 public:
 
     QString band;
-    QString freq;
+    Frequency freq;
 
 
 };
@@ -65,8 +65,8 @@ public:
 
     void setMode(QString);
     void setVolume(int level);
-    void setFreq(QString);
-    void setRitFreq(int);
+    void setFreq(Frequency);
+    void setRitFreq(ShortFreq);
     void setRitRadioStatus(bool);
     void setRadioName(QString, bool);
     void setRadioState(QString);
@@ -103,26 +103,26 @@ public:
 
 
 signals:
-    void selectRadio(QString, QString, QString);  // radio name, freq, mode
-    void sendFreqControl(QString);
+    void selectRadio(QString, Frequency, QString);  // radio name, freq, mode
+    void sendFreqControl(Frequency);
     void sendVolumeToRadio(int);
-    void noRadioSendFreq(QString);
+    void noRadioSendFreq(Frequency);
     void noRadioSendMode(QString);
     void sendModeToControl(QString);
-    void sendRitFreq(int);
+    void sendRitFreq(ShortFreq);
     void ritStatus(bool);
     void radioIsConnected(bool);
     void radioHasError(QString);
     void radioDisconnected();
 
-    void setFreqDisplay(QString, bool);
+    void setFreqDisplay(Frequency, bool);
 
 private slots:
     void on_FontChanged();
 
     void freqLineEditInFocus();
     void radioBandFreq(int index);
-    void noRadioSetFreq(QString);
+    void noRadioSetFreq(Frequency);
     void noRadioSetMode(QString m);
     void freqEditSelected();
     void freqPlusShortCut_clicked(bool);
@@ -130,7 +130,7 @@ private slots:
     void freqPlus_ShortCut();
     void freqNeg_ShortCut();
     void changeMainRadioFreq();
-    void changeRitRadioFreq(int);
+    void changeRitRadioFreq(ShortFreq);
     void on_radioNameSel_activated(const QString &arg1);
 
 
@@ -148,7 +148,7 @@ private slots:
 
 
     void checkRigDetailsAvail();
-    void clusterUpdateRigFreq(QString freq);
+    void clusterUpdateRigFreq(Frequency freq);
 
 
     void freqStepComboChanged(const QString step);
@@ -178,11 +178,11 @@ private:
     bool radioConnected;
     bool radioError;
     bool freqEditOn;
-    QString curFreq;
-    QString lastFreq;
-    QString sendFreq;
-    QString disconnectFreq;
-    double curFStepButtonsFreq;
+    Frequency curFreq;
+    Frequency lastFreq;
+    Frequency sendFreq;
+    Frequency disconnectFreq;
+    Frequency curFStepButtonsFreq;
     QString curMode;
 
     bool ritEnable;
@@ -192,8 +192,8 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
-    double contestBandFLow = 0;
-    double contestBandFHigh = 0;
+    Frequency contestBandFLow;
+    Frequency contestBandFHigh;
 
     QStringList listOfRadios;
     RadioDetails selRadioDetails;
@@ -217,8 +217,8 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
-    void sendRigFreq(QString f);
-    QString getCurFreq() const;
+    void sendRigFreq(Frequency f);
+    Frequency getCurFreq() const;
 
     void sendModeToRadio(QString);
     void freqLineEditBkgnd(bool status);
@@ -229,19 +229,19 @@ private:
 
     void initRigFrame(QWidget *parent);
     void initPassBandRadioButtons();
-    void noRadioSendOutFreq(QString f);
+    void noRadioSendOutFreq(Frequency f);
     void noRadioSendOutMode(QString m);
 
     void traceMsg(QString msg);
 
     void mgmLabelVisible(bool state);
-    bool checkValidFreq(QString freq);
+    bool checkValidFreq(Frequency freq);
 
-    QString calcNewFreq(double incFreq);
+    Frequency calcNewFreq(Frequency incFreq);
 
     int calcMinosMode(QString mode);
 
-    void freqPlusMinusButton(double freq);
+    void freqPlusMinusButton(Frequency freq);
 
 
     void showRitButOn();
@@ -260,9 +260,9 @@ private:
     void transVertIndicatorOn();
     void transVertIndicatorOff();
 
-    bool isFreqLegal(const double freq, const QString band, const QString mode);
-    bool checkFreqIsLegal(const double freq, const QString mode);
-    void setFreqTextLegalColour(const QString freq, QString mode);
+    bool isFreqLegal(const Frequency &freq, const QString band, const QString mode);
+    bool checkFreqIsLegal(const Frequency &freq, const QString mode);
+    void setFreqTextLegalColour(const Frequency freq, QString mode);
     void setFreqStepCombo(QString mode);
     double getStepFreqFromComboText(const QString step);
     void clearFreqInputFocus();
@@ -271,11 +271,11 @@ private:
     void setRitMaxKHzFreq(int maxRitFreq);
     int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
-    void displayFreqOnFreqEditDisplay(QString freq);
-    void setRadioFreq(QString &sendFreq, bool &rigFrameStartFlag);
-    int setBandSelComboFromFreq(QString freq);
-    bool checkFreqOK(QString freq);
-    bool checkContestBandMatch(QString freq);
+    void displayFreqOnFreqEditDisplay(const Frequency &freq);
+    void setRadioFreq(Frequency &sendFreq, bool &rigFrameStartFlag);
+    int setBandSelComboFromFreq(const Frequency &freq);
+    bool checkFreqOK(const Frequency &freq);
+    bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);
 };
 

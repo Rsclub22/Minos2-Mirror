@@ -75,7 +75,7 @@ private:
 
 
 
-    bool checkInBand(double freq, freqPresetData::bandOffSet band);
+    bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
     void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
 
     void loadSettingsToDialog();

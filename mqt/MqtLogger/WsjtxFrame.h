@@ -5,7 +5,6 @@
 
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
-#include "WsjtxRadio.hpp"
 #include "WsjtxMessageServer.hpp"
 #include "WsjtxServer.h"
 

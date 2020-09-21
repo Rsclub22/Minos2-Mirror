@@ -497,7 +497,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
     if (index.column() == FREQ_STR_COL_NUM)
     {
         QString freq = spotProxyModel->data(index, DataStoredRole).toString();
-        sendFreqToRig(freq);
+        sendFreqToRig(Frequency(freq));
 
     }
     else if (index.column() == DXSPOT_CALL_COL_NUM )
@@ -577,10 +577,9 @@ void ClusterClientFrame::onLocatorSpotVertHeaderClicked(int row)
 
 
 
-void ClusterClientFrame::sendFreqToRig(QString freq)
+void ClusterClientFrame::sendFreqToRig(Frequency freq)
 {
-    QString f = freq.remove('.');
-    MinosLoggerEvents::SendFreqStrToRig(f);
+    MinosLoggerEvents::SendFreqToRig(freq);
 }
 
 
@@ -1128,7 +1127,7 @@ void ClusterClientFrame::on_freqActionSelected()
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
             QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_STR_COL_NUM), DataStoredRole).toString();
-            sendFreqToRig(freq);
+            sendFreqToRig(Frequency(freq));
         }
     }
 

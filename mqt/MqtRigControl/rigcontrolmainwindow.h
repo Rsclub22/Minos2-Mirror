@@ -112,10 +112,10 @@ private:
     int rigCtldConnectDelay;
 
     // data from logger
-    QString logger_freq;
+    Frequency logger_freq;
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
-    QString selRadioFreq;
+    Frequency selRadioFreq;
     //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
@@ -130,7 +130,6 @@ private:
 
     // data from radio
     Frequency rfrequency;       // read frequency
-    QString sfreq;          // read freq converted to string
     MODE rmode;          // read radio mode
     //pbwidth_t rwidth;        // read radio rx bw
     VFO curVfo;
@@ -187,22 +186,16 @@ private:
     void radioError(int errorCode, QString cmd);
 //    void frequency_updated(double frequency);
 //    void mode_updated(QString);
-    void setFreq(QString, VFO vfo);
-    void displayFreqVfo(double);
+    void setFreq(Frequency, VFO vfo);
+    void displayFreqVfo(Frequency);
 
     void displayModeVfo(QString);
 
-
-    void displayTransVertVfo(double frequency);
-
-
-
+    void displayTransVertVfo(Frequency frequency);
 
     void readTraceLogFlag();
 
-
     void closeEvent(QCloseEvent *event);
-
 
     //void sendBandListLogger();
     void sendStatusLogger(const QString &message);
@@ -211,7 +204,7 @@ private:
     void sendStatusToLogError(QString);
     void sendTransVertOffsetToLogger(int tvNum);
     void sendTransVertSwitchToLogger(const QString &swNum);
-    void sendFreqToLog(Frequency freq);
+    void sendFreqToLog(const Frequency &freq);
     void sendModeToLog(QString mode);
     void sendRitEnableStatus(bool status);
     void sendRitEnableStatusLogger();
@@ -226,7 +219,7 @@ private:
     void dumpRadioToTraceLog();
     void setRitFreqDisplayVisible(bool state);
     int getRitFreq(VFO vfo);
-    void setRitFreq(VFO vfo, ShortFreq ritFreq);
+    void setRitFreq(VFO vfo, const ShortFreq &ritFreq);
     void cmdLockOn();
     void cmdLockOff();
     int getMinosModeIndex(QString mode);
@@ -238,7 +231,7 @@ private:
 
     void refreshRadio();
 
-    QString getBand(Frequency freq);
+    QString getBand(const Frequency &freq);
 
     void testBoxesVisible(bool visible);
 
@@ -246,7 +239,7 @@ private:
     //void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
-    void sendRitFreqLogger(int ritFreq);
+    void sendRitFreqLogger(const ShortFreq &ritFreq);
 
     void setRitEnableDisplayVisible(bool s);
     void setRitOnOffDisplayVisible(bool s);
@@ -357,20 +350,20 @@ private slots:
     void about();
     void LogTimerTimer();
 
-    void loggerSetFreq(QString freq);
+    void loggerSetFreq(Frequency freq);
     void loggerSetMode(QString mode);
     void loggerSetVolume(int level);
     void currentRadioSettingChanged(QString radioName);
     void updateSelectRadioBox();
     void aboutRigConfig();
 
-    void onSelectRadio(PubSubName, QString freq, QString mode);
+    void onSelectRadio(PubSubName, Frequency freq, QString mode);
     void selFreqClicked();
     void setupBandFreq();
     void selectRadio();
     void onLaunchSetup();
 
-    void setRitFreq(int ritFreq);
+    void setRitFreq(ShortFreq ritFreq);
     void setRitLogStatus(bool status);
 
     void sendRadioListLogger();
@@ -389,7 +382,7 @@ private slots:
     void rigCtldStarted();
     void rigCtldStatusTimeout();
 
-    void onNewRxFreq(quint64);
+    void onNewRxFreq(Frequency);
     void onNewMode();
     void onRigStatus(int status, QString cmd);
 

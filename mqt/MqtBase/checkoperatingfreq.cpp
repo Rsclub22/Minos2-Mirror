@@ -6,10 +6,10 @@ CheckOperatingFreq::CheckOperatingFreq()
 }
 
 
-int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, const double freq)
+int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, const Frequency &freq)
 {
-    QMap<QString, ModeFreqDetail<double>> modeList;
-    ModeFreqDetail<double> freqs;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
+    ModeFreqDetail<Frequency> freqs;
 
 
     if (bandModeFreqList.contains(band))
@@ -20,10 +20,10 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
             freqs = modeList.value(mode);
             for (int i = 0; i < freqs.freq.count(); i++)
             {
-                QList< double > freqLimits = freqs.freq[i];
+                QList< Frequency > freqLimits = freqs.freq[i];
                 if (freqLimits.count() == 0)
                     continue;
-                if (freq >= (freqLimits[0] * 1000) && freq < (freqLimits[1] * 1000))
+                if (freq >= (freqLimits[0]) && freq < (freqLimits[1]))
                 {
                     return FREQ_NOT_OK;
 
@@ -41,7 +41,7 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
 
 bool CheckOperatingFreq::modeExists(const QString &band, const QString &mode)
 {
-    QMap<QString, ModeFreqDetail<double>> modeList;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
 
     if (bandModeFreqList.contains(band))
     {
@@ -56,9 +56,9 @@ bool CheckOperatingFreq::modeExists(const QString &band, const QString &mode)
 }
 
 
-int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<double> &listOfFreqs, const QString &band, const QString &mode)
+int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFreqs, const QString &band, const QString &mode)
 {
-    QMap<QString, ModeFreqDetail<double>> modeList;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
 
 
     if (bandModeFreqList.contains(band))

@@ -230,7 +230,7 @@ void MainWindow::SyncTimerTimer(  )
 
     if (n1mmLink.isConnected())
     {
-        mainRigFreq = convertStrToFreq(n1mmLink.getFrequency());
+        mainRigFreq = n1mmLink.getFrequency();
         mainRigMode = n1mmLink.getMode();
         ui->Rig1Label->setText(n1mmLink.getRadioName());
         if (ui->trackRig->isChecked())
@@ -239,7 +239,7 @@ void MainWindow::SyncTimerTimer(  )
         }
         trackBand();
     }
-    ui->QF1Label->setText(convertFreqToStr(mainRigFreq));
+    ui->QF1Label->setText(mainRigFreq.str());
 }
 
 
@@ -343,7 +343,7 @@ void MainWindow::on_closeButton_clicked()
 
 void MainWindow::on_transfer12Button_clicked()
 {
-    long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
+    long lFreq = qint64(mainRigFreq) - qint64(transvertOffset);
 
     QString mess = ">fHz " + QString::number(fCentre) + "\n";
     mess += ">tf " + QString::number(lFreq - fCentre) + "\n";
@@ -376,7 +376,7 @@ void MainWindow::on_transfer21Button_clicked()
             QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
             st->addMember( select, rpcConstants::selected );
 
-            st->addMember( convertFreqToStr(lFreq + transvertOffset), rpcConstants::rigControlLogFreq );
+            st->addMember( QString::number(lFreq + qint64(transvertOffset)), rpcConstants::rigControlLogFreq );
             rpc.getCallArgs() ->addParam( st );
 
             rpc.queueCall( rigSelected);
@@ -432,7 +432,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 mainRigFreq = selState.radioFreq().getValue();
 
                 selState.clearDirty();
-                ui->QF1Label->setText(convertFreqToStr(mainRigFreq));
+                ui->QF1Label->setText(mainRigFreq.str());
 
                 if (ui->trackRig->isChecked())
                 {
@@ -457,17 +457,17 @@ void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const 
     trace("method is " + mro->getMethodName());
 }
 //---------------------------------------------------------------------------
-void MainWindow::QS1RCentre(double fLow, double fHigh)
+void MainWindow::QS1RCentre(const Frequency &fLow, const Frequency &fHigh)
 {
     if (qs1rConnected)
     {
-        trace(QString("%1 %2").arg(fLow).arg(fHigh));
-        double bandWidth = fHigh - fLow;
-        double centre = fLow + bandWidth/2;
+        trace(QString("%1 %2").arg(fLow.str()).arg(fHigh.str()));
+        qint64 bandWidth = qint64(fHigh) - qint64(fLow);
+        qint64 centre = qint64(fLow) + bandWidth/2;
 
         // search for nearest matching bandwidth on QS1R
 
-        double sampleRate = 0.0;
+        qint64 sampleRate = 0;
 
         for(int i = 0; i < bws.size(); i++)
         {
@@ -479,8 +479,8 @@ void MainWindow::QS1RCentre(double fLow, double fHigh)
         }
         if (sampleRate > 0)
         {
-            long lFreq = static_cast<long>(mainRigFreq - transvertOffset);
-            fCentre = centre - transvertOffset;
+            qint64 lFreq = qint64(mainRigFreq) - qint64(transvertOffset);
+            fCentre = centre - qint64(transvertOffset);
 
             QString mess;
 
@@ -508,7 +508,7 @@ void MainWindow::trackBand()
     lastTransverterOffset = transvertOffset;
     lastMainRigMode = mainRigMode;
 
-    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq).arg(lastTransverterOffset).arg(lastMainRigMode));
+    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq.str()).arg(lastTransverterOffset.str()).arg(lastMainRigMode));
 
     // mainRigFreq is absolute, i.e. on air frequency
     // so we use it to find the band

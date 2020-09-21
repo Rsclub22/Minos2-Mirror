@@ -48,7 +48,7 @@ public:
     virtual ~HamlibRigControl();
 
     static void register_rigs(RigFactory::Rigs*);
-    static bool checkFreqRange(int rigNumber, Frequency freq);
+    static bool checkFreqRange(int rigNumber, const Frequency &freq);
 
     int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
@@ -57,7 +57,7 @@ public:
     bool getRigConnected() override;
 
     int getFrequency(VFO vfo, Frequency& f) override;
-    int setFrequency(Frequency frequency, VFO vfo) override;
+    int setFrequency(const Frequency &frequency, VFO vfo) override;
 
     int getMode(VFO vfo, MODE& mode) override;
     int setMode(VFO vfo, MODE mode) override;
@@ -76,7 +76,7 @@ public:
     bool supportReadRit(int rigNumber) override;
     bool supportWriteRit(int rigNumber) override;
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
-    int setRit(VFO vfo, ShortFreq ritfreq) override;
+    int setRit(VFO vfo, const ShortFreq &ritfreq) override;
 
     bool supportWriteRitState(int rigNumber) override;
     bool supportReadRitState(int rigNumber) override;

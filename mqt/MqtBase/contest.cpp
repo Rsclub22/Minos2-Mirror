@@ -112,13 +112,12 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
    }
    return QSharedPointer<BaseContact>();
 }
-double BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
+double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper ADIF name of the band
 
-    txfreq = txfreq.remove('.');
-    double freq = convertStrToFreq(txfreq);
+    double freq = txfreq;
 
     QString cband = currentBand.getValue();
 
@@ -129,20 +128,17 @@ double BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
     if (bandOK)
     {
         cb = bi->adif;
-        if (txfreq.isEmpty() || freq < 100)
+        if (freq < 100)
         {
             freq = bi->fLow;
         }
     }
     return freq;
 }
-QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
+QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq )
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper Cabrillo name of the band
-
-    txfreq = txfreq.remove('.');
-    double freq = convertStrToFreq(txfreq);
 
     QString cband = currentBand.getValue();
 
@@ -153,7 +149,8 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
     if (bandOK)
     {
         cb = bi->cabrillo;
-        if (txfreq.isEmpty() || freq < 100)
+        qint64 f = qint64(txfreq);
+        if (f  < 100)
         {
             return cb;
         }
@@ -162,13 +159,13 @@ QString BaseContestLog::getCabrilloFreqBand(QString txfreq )
         {
             return cb;
         }
-        freq = freq/1000.0;
-        return QString::number(freq, 'f', 0);
+        f = f/1000.0;
+        return QString::number(f, 'f', 0);
     }
     return "XXX";
 }
 
-double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
 {
     // we now want to get the band associated with the current freq
     // so we can get the correct map value for mults etc
@@ -177,17 +174,16 @@ double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     QSharedPointer<BandInfo>  bi;
     bool bandOK;
 
-    txfreq = txfreq.remove('.');
-    double freq = convertStrToFreq(txfreq);
+    Frequency freq = txfreq;
 
-    if (txfreq.isEmpty() || freq < 100)
+    if (qint64(txfreq) < 100)
     {
         QString cband = currentBand.getValue().trimmed();
         bandOK = blist.findBand(cband, bi);
         if (bandOK)
         {
             cb = bi->uk;
-            freq = static_cast<long>(bi->fLow);
+            freq = bi->fLow;
         }
         else
         {

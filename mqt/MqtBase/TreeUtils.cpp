@@ -66,10 +66,9 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
     {
         if (column == egTime)
         {
-            QString cb = ct->frequency.getValue().trimmed();
             BandList &blist = BandList::getBandList();
             QSharedPointer<BandInfo>  bi;
-            bool bandOK = blist.findBand(cb, bi);
+            bool bandOK = blist.findBand(ct->frequency.getValue(), bi);
             bool hf = false;
             if (bandOK)
             {

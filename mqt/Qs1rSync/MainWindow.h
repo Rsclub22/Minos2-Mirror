@@ -66,7 +66,6 @@ private:
     bool qs1rConnected = false;
 
     bool muted = false;
-    long getQS1RFreq();
     QString lastQS1RRx;
     int fCentre = 0.0;
     int ftf = 0;
@@ -76,9 +75,9 @@ private:
     QString mainRigMode;
     QString lastMainRigMode;
 
-    double mainRigFreq= 0.0;
-    double lastMainRigFreq = 0.0;
-    double lastTransverterOffset = 0.0;
+    Frequency mainRigFreq;
+    Frequency lastMainRigFreq;
+    Frequency lastTransverterOffset;
 
     QSharedPointer<BandInfo>  lastBand;
     QSharedPointer<ModeInfo>  lastBandMode;
@@ -86,10 +85,10 @@ private:
     PubSubName rigSelected;
 
     bool transvertState = false;
-    double transvertOffset = 0.0;
+    Frequency transvertOffset;
 
     void trackBand();
-    void QS1RCentre(double fLow, double fHigh);
+    void QS1RCentre(const Frequency &fLow, const Frequency &fHigh);
 };
 
 #endif // MAINWINDOW_H

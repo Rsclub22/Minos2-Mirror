@@ -12,19 +12,19 @@ const char * clusterStateList[] =
 
 
 
-void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
+void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
 {
-    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
+    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq.str()).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
     trace(QString("getMode: modeBandPlan loaded Ok - %1").arg(modeBandPlan->checkLoadedOk() ? "true" : "false"));
     if (dxBand != "")
     {
 
         if (modeBandPlan->checkLoadedOk() )
         {
-            QString f = freq;
+            Frequency f = freq;
             QString b = dxBand;
 
-            dxModeStr = modeBandPlan->getMode(b, f.remove('.').toDouble());
+            dxModeStr = modeBandPlan->getMode(b, f);
             trace(QString("getMode: found dxModeStr - %1").arg(dxModeStr));
 
             int modeMask = clusterModes.indexOf(dxModeStr);
@@ -54,14 +54,11 @@ void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dx
 }
 
 
-void getBand(QVector<QSharedPointer<BandInfo> > &bands, QString freq, QString &band, QString &bandMask)
+void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandMask)
 {
-    //double f = freq.append("000").remove('.').toDouble();
-    double f = freq.remove('.').toDouble();
-
     for (int i = 0; i < bands.count(); i++)
     {
-        if (f <= bands[i]->fHigh && f >= bands[i]->fLow)
+        if (fr <= bands[i]->fHigh && fr >= bands[i]->fLow)
         {
             band = bands[i]->name();
             bandMask = QString::number(i);

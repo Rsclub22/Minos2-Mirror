@@ -19,7 +19,7 @@ SentSpotData::SentSpotData()
 }
 
 SentSpotData::SentSpotData(qint64 _rxTime, QString _spotTime,
-                   QString _dxFreq, QString _dxCall,
+                   Frequency _dxFreq, QString _dxCall,
                    QString _dxLocator, QString comment, bool _sentOk, QString _reason)
 {
 

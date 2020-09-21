@@ -13,9 +13,9 @@ public:
 
     void initialise();
 
-    void sendFrequencyRequest(long f);
+    void sendFrequencyRequest(Frequency f);
 
-    QString getFrequency();
+    Frequency getFrequency();
     QString getMode();
     QString getRadioName();
 
@@ -28,11 +28,11 @@ private:
     QTimer connectTimer;
 
     bool connected = false;
-    QString currFrequency;
+    Frequency currFrequency;
     QString radioName;
     QString mode;
 
-    QString genFreqStanza(long f);
+    QString genFreqStanza(const Frequency &f);
     bool setAddress(QString addr, QHostAddress &host);
 private slots:
 

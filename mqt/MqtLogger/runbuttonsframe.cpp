@@ -69,7 +69,7 @@ void RunButtonsFrame::setRigControl(RigControlFrame *rc)
 {
     rigControl = rc;
     // This shouldn't need to be a unique connection
-    connect(rc, SIGNAL(setFreqDisplay(QString, bool)), this, SLOT(setFreqDisplay(QString, bool)), Qt::UniqueConnection);
+    connect(rc, SIGNAL(setFreqDisplay(Frequency, bool)), this, SLOT(setFreqDisplay(Frequency, bool)), Qt::UniqueConnection);
     connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(radioIsConnected(bool)));
 
 }
@@ -88,7 +88,7 @@ void RunButtonsFrame::radioIsConnected(bool on)
     }
 
 }
-void RunButtonsFrame::setFreq(QString freq)
+void RunButtonsFrame::setFreq(Frequency freq)
 {
     curRadioFreq = freq;
     // rig frequency changed signal
@@ -128,7 +128,7 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
     // first, save the current frequency so we can return to it
 
     memoryData::memData m = getRunMemoryData(buttonNumber);
-    QString curFreq = rigControl->getCurFreq();
+    Frequency curFreq = rigControl->getCurFreq();
 
     if (m.freq == curFreq)
     {
@@ -150,7 +150,7 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     // run button not active
     // make this one active
 
-    QString oldfreq = rigControl->getCurFreq();
+    Frequency oldfreq = rigControl->getCurFreq();
 
     runButReadActSel(buttonNumber);
 
@@ -179,9 +179,9 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
 {
     // on run freq - return to prior frequency
 
-    QString rfreq = runButtonMap[buttonNumber]->returnFrequency;
+    Frequency rfreq = runButtonMap[buttonNumber]->returnFrequency;
 
-    if (!rfreq.isEmpty())
+    if (!rfreq.isClear())
     {
         // go to restore freq
         runButtonMap[buttonNumber]->returnFrequency.clear();
@@ -292,7 +292,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
         if (rigControl->radioConnected && !rigControl->radioError)
         {
             rigControl->clearFreqInputFocus();
-            if (m.freq.remove('.') != rigControl->getCurFreq().remove('.'))
+            if (m.freq != rigControl->getCurFreq())
             {
                 rigControl->sendRigFreq(m.freq);
                  // pre-empt us being told; if it doesn't happen, we will get told later
@@ -401,7 +401,7 @@ void RunButtonsFrame::setRunButtonText(int buttonNumber)
     QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
             + tr("Mode: ") + m.mode + "\n";
     QString restoreText;
-    if (!runButtonMap[buttonNumber]->returnFrequency.isEmpty())
+    if (!runButtonMap[buttonNumber]->returnFrequency.isClear())
     {
         restoreText = "\n" + tr("Restore .%1    ").arg(extractKhz(runButtonMap[buttonNumber]->returnFrequency) );
         tTipStr += tr("Restore freq: ") + convertFreqStrDisp(runButtonMap[buttonNumber]->returnFrequency) + "\n";
@@ -429,27 +429,27 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
         {
             // update run freq
             memoryData::memData m = getRunMemoryData(buttonNumber);
-            if (m.freq.remove('.') != rigControl->getCurFreq().remove('.'))
+            if (m.freq != rigControl->getCurFreq())
             {
                 rigControl->sendRigFreq(m.freq);
                 // pre-empt us being told; if it doesn't happen, we will get told later
                 curRadioFreq = m.freq;
                 chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
             }
-            curRunFreq = m.freq.remove('.');
+            curRunFreq = m.freq;
             emit sendRunOnFlag(curRunFreq, true);
         }
     }
 
 }
-void RunButtonsFrame::setFreqDisplay(QString f, bool legalFreq)
+void RunButtonsFrame::setFreqDisplay(Frequency f, bool legalFreq)
 {
     QString freq;
     if (!legalFreq)
     {
         freq = HtmlFontColour(Qt::red);
     }
-    ui->freqDisplay->setText(freq + convertFreqStrDisp(f));
+    ui->freqDisplay->setText(freq + f.str());
 }
 
 void RunButtonsFrame::on_radioFreqCheckTimer()
@@ -461,7 +461,7 @@ void RunButtonsFrame::chkRunFreq()
 {
     if (runButtonOnNum >= 0)
     {
-        if (curRunFreq.toLongLong() != 0)
+        if (!curRunFreq.isClear())
         {
             radioOffRunFreq = !chkRadioFreqOnRunFreq();
 
@@ -485,8 +485,8 @@ void RunButtonsFrame::chkRunFreq()
 
 bool RunButtonsFrame::chkRadioFreqOnRunFreq()
 {
-    qint64 curRunF = curRunFreq.toLongLong();
-    qint64 curF = curRadioFreq.toLongLong();
+    qint64 curRunF = curRunFreq;
+    qint64 curF = curRadioFreq;
 
     if (curRunF != 0)
     {

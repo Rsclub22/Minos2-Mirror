@@ -53,7 +53,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     ui->rigMemTable->setItemDelegate( delegate.data());
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
@@ -276,7 +276,7 @@ void RigMemoryFrame::checkTimerTimer()
     lastRigFreq = logData.freq;
     lastBearing = logData.bearing;
 
-    double rigFreq = convertStrToFreq(logData.freq);
+    Frequency rigFreq = logData.freq;
     int bearing = logData.bearing;
 
     int mcount = ct->rigMemories.size();
@@ -289,7 +289,7 @@ void RigMemoryFrame::checkTimerTimer()
         if (m.callsign == memDefData::DEFAULT_CALLSIGN)
             continue;
 
-        double memFreq = convertStrToFreq(m.freq);
+        Frequency memFreq = m.freq;
         int memBearing = m.bearing;
 
         enum rTriState{rtsNotLoaded, rtsOn, rtsOff};
@@ -298,7 +298,7 @@ void RigMemoryFrame::checkTimerTimer()
 
         if (tslf->isRadioLoaded())
         {
-            if (std::abs(rigFreq - memFreq) < 2000.0)
+            if (std::abs(qint64(rigFreq - memFreq)) < 2000)
             {
                 onfreq = rtsOn;
             }
@@ -353,7 +353,7 @@ void RigMemoryFrame::checkTimerTimer()
     }
     proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
 }
-void RigMemoryFrame::onRigFreqChanged(QString /*f*/, BaseContestLog *c)
+void RigMemoryFrame::onRigFreqChanged(Frequency /*f*/, BaseContestLog *c)
 {
     if (ct == c)
     {
@@ -711,10 +711,9 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 break;
             case ermFreq:
                 {
-                    if (!m.freq.isEmpty())
+                    if (!m.freq.isClear())
                     {
-                        QString newfreq = m.freq.trimmed().remove('.');
-                        double dfreq = convertStrToFreq(newfreq);
+                        qint64 dfreq = m.freq;
                         dfreq = dfreq/1000000.0;  // MHz
 
                         disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places

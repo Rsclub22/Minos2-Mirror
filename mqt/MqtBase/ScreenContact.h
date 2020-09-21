@@ -52,7 +52,7 @@ class ScreenContact
       QString comments;
       unsigned short contactFlags = 0;
       QString forcedMult;
-      QString frequency;
+      Frequency frequency;
       QString rotatorHeading;
       QString rigName;
 

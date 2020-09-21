@@ -151,7 +151,7 @@ private slots:
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
-    void sendSpotToDXCluster(QString freq, QString call, QString loc);
+    void sendSpotToDXCluster(Frequency freq, QString call, QString loc);
     void sendSpotToTxEnabled(bool state);
 
 signals:
@@ -223,7 +223,7 @@ private:
 
     QStringList dxMsg;
     QString dxCall;
-    QString dxFreq;
+    Frequency dxFreq;
     QString dxBandStr;
     QString dxBandMask;
     QString dxModeStr;
@@ -306,7 +306,7 @@ private:
 
 
     QString getPropMode(const QString comment);
-    QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
+    QString assembleSpotForDXCluster(Frequency freq, QString call, QString loc);
 
     void removeInsertSendSpotTab(bool state);
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);

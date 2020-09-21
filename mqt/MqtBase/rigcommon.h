@@ -57,14 +57,11 @@ public:
 
     QString transVertName;
     QString band;
-    QString radioFreqStr;
-    Frequency radioFreq = 0;
-    QString targetFreqStr;
-    Frequency targetFreq = 0;
+    Frequency radioFreq;
+    Frequency targetFreq;
     Frequency fLow;
     Frequency fHigh;
-    QString transVertOffsetStr;
-    Frequency transVertOffset = 0;
+    Frequency transVertOffset;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
 

@@ -118,7 +118,7 @@ void RitLineEdit::changeFreq(bool direction)
 
             // send to radio
 
-            emit newFreq(freq);
+            emit newFreq(ShortFreq(freq));
 
             setCursorPosition(pos);
        }

@@ -49,8 +49,8 @@ public:
     RigDetails &getDetails(const PubSubName &p);
     bool setSelected(const PubSubName &name, const QString &loggeruuid, const QString &selected);
     void setStatus(const PubSubName &name, const QString &status);
-    void setRadioFreq(const PubSubName &name, double freq);
-    void setLogFreq(const PubSubName &name, double freq);
+    void setRadioFreq(const PubSubName &name, Frequency freq);
+    void setLogFreq(const PubSubName &name, Frequency freq);
     void setRadioVolume(const PubSubName &name, const int level);
     void setLogVolume(const PubSubName &name, const int level);
     void setRadioMode(const PubSubName &name, const QString &mode);
@@ -61,8 +61,8 @@ public:
     void setTransverterStatus(const PubSubName &name, bool transverterStatus);
     void setVolumeStatus(const PubSubName &name, bool volumeStatus);
     void setBandList(const PubSubName &name, const QString &bands);
-    void setRadioRitFreq(const PubSubName &name, int freq);
-    void setLogRitFreq(const PubSubName &name, int freq);
+    void setRadioRitFreq(const PubSubName &name, const ShortFreq &freq);
+    void setLogRitFreq(const PubSubName &name, ShortFreq freq);
     void setRitMaxKHzFreq(const PubSubName &name, int ritMaxKHzFreq);
     void setRitEnableStatus(const PubSubName &name, bool ritEnableStatus);
     void setRitOnOffStatus(const PubSubName &name, bool status);

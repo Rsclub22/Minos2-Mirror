@@ -29,8 +29,8 @@ extern const QString allHF;
 class ExclusionInfo
 {
 public:
-    double fLow = 0.0;
-    double fHigh = 0.0;
+    Frequency fLow;
+    Frequency fHigh;
     QString reason;
 };
 
@@ -38,12 +38,12 @@ class ModeInfo
 {
     QString type;
 public:
-    double fLow = 0.0;
-    double fHigh = 0.0;
-    double fcLow1 = 0.0;
-    double fcHigh1 = 0.0;
-    double fcLow2 = 0.0;
-    double fcHigh2 = 0.0;
+    Frequency fLow;
+    Frequency fHigh;
+    Frequency fcLow1;
+    Frequency fcHigh1;
+    Frequency fcLow2;
+    Frequency fcHigh2;
 
     QVector<QSharedPointer<ExclusionInfo> > exclusions;
 
@@ -55,8 +55,8 @@ class BandInfo
 {
         QString type;
     public:
-        double fLow = 0.0;
-        double fHigh = 0.0;
+        Frequency fLow;
+        Frequency fHigh;
         QString wlen;
         QString uk;
         QString cabrillo;
@@ -86,10 +86,9 @@ class BandList
         QVector<QSharedPointer<BandInfo> > bandList;
         bool parseFile ( const QString &bandFile );
         bool findBand (const QString &freq, QSharedPointer<BandInfo> & );
-        bool findBand ( long freq, QSharedPointer<BandInfo>  & );
-        bool findBand ( double freq, QSharedPointer<BandInfo>  &bi);
+        bool findBand ( const Frequency &freq, QSharedPointer<BandInfo>  &bi);
 
-        bool checkValidBand(QString freq);
+        bool checkValidBand(Frequency freq);
         void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
 
         static BandList &getBandList();

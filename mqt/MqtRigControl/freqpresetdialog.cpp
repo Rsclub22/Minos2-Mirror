@@ -128,7 +128,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 
 
        // check in band
-       if (checkInBand(freq.toDouble(), band))
+       if (checkInBand(Frequency(freq), band))
        {
            presetFreq[band] = freq;
            freqChanged = true;
@@ -143,7 +143,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 
 // check in band
 
-bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
+bool FreqPresetDialog::checkInBand(Frequency freq, freqPresetData::bandOffSet band)
 {
     if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {

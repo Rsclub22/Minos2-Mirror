@@ -24,7 +24,7 @@ public:
 signals:
     void receivedFocus() ;
     void lostFocus();
-    void newFreq(int);
+    void newFreq(ShortFreq);
     void freqEditReturn();
 private:
 

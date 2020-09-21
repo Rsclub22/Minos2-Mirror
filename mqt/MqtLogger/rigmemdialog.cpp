@@ -115,7 +115,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
         ui->bearingLineEdit->setText(number);
     }
 
-    if (ldata->freq.isEmpty())
+    if (ldata->freq.isClear())
     {
         ui->freqLineEdit->setText("");
     }
@@ -153,7 +153,7 @@ void RigMemDialog::on_okButton_clicked()
         fl[1] = fl[1] + "0000000";
         fl[1].truncate(6);
 
-        logData->freq = fl[0] + fl[1];
+        logData->freq = Frequency(fl[0] + fl[1]);
     }
 
     logData->mode = ui->modecb->currentText();

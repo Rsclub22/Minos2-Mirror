@@ -133,25 +133,25 @@ bool BandList::parseBand ( TiXmlElement * e )
 
     QString unit = getAttribute ( e, "unit" );
     QString temp = getAttribute ( e, "flow" );
-    band->fLow = temp.toInt();
+    band->fLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
-    band->fHigh = temp.toInt();
+    band->fHigh = Frequency(temp);
     if ( unit == "K" )
     {
-        band->fLow *= 1000.0;
-        band->fHigh *= 1000.0;
+        band->fLow  = qint64(band->fLow) * 1000;
+        band->fHigh = qint64(band->fHigh) * 1000;
     }
     else
         if ( unit == "M" )
         {
-            band->fLow *= 1000000.0;
-            band->fHigh *= 1000000.0;
+            band->fLow  = qint64(band->fLow) * 1000000;
+            band->fHigh = qint64(band->fHigh) * 1000000;
         }
         else
             if ( unit == "G" )
             {
-                band->fLow *= 1000000000.0;
-                band->fHigh *= 1000000000.0;
+                band->fLow  = qint64(band->fLow) * 1000000000;
+                band->fHigh = qint64(band->fHigh) * 1000000000;
             }
 
     band->wlen = getAttribute ( e, "wlen" );
@@ -208,48 +208,48 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
 
     QString temp;
     temp = getAttribute ( e, "flow" );
-    mode->fLow = temp.toInt();
+    mode->fLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
-    mode->fHigh = temp.toInt();
+    mode->fHigh = Frequency(temp);
 
     temp = getAttribute ( e, "fclow1" );
-    mode->fcLow1 = temp.toInt();
+    mode->fcLow1 = Frequency(temp);
     temp = getAttribute ( e, "fchigh1" );
-    mode->fcHigh1 = temp.toInt();
+    mode->fcHigh1 = Frequency(temp);
 
     temp = getAttribute ( e, "fclow2" );
-    mode->fcLow2 = temp.toInt();
+    mode->fcLow2 = Frequency(temp);
     temp = getAttribute ( e, "fchigh2" );
-    mode->fcHigh2 = temp.toInt();
+    mode->fcHigh2 = Frequency(temp);
 
     if ( unit == "K" )
     {
-        mode->fLow *= 1000.0;
-        mode->fHigh *= 1000.0;
-        mode->fcLow1 *= 1000.0;
-        mode->fcHigh1 *= 1000.0;
-        mode->fcLow2 *= 1000.0;
-        mode->fcHigh2 *= 1000.0;
+        mode->fLow = qint64(mode->fLow) * 1000;
+        mode->fHigh = qint64(mode->fHigh) * 1000;
+        mode->fcLow1 = qint64(mode->fcLow1) * 1000;
+        mode->fcHigh1 = qint64(mode->fcHigh1) * 1000;
+        mode->fcLow2 = qint64(mode->fcLow2) * 1000;
+        mode->fcHigh2 = qint64(mode->fcHigh2) * 1000;
     }
     else
         if ( unit == "M" )
         {
-            mode->fLow *= 1000000.0;
-            mode->fHigh *= 1000000.0;
-            mode->fcLow1 *= 1000000.0;
-            mode->fcHigh1 *= 1000000.0;
-            mode->fcLow2 *= 1000000.0;
-            mode->fcHigh2 *= 1000000.0;
+            mode->fLow = qint64(mode->fLow) * 1000000;
+            mode->fHigh = qint64(mode->fHigh) * 1000000;
+            mode->fcLow1 = qint64(mode->fcLow1) * 1000000;
+            mode->fcHigh1 = qint64(mode->fcHigh1) * 1000000;
+            mode->fcLow2 = qint64(mode->fcLow2) * 1000000;
+            mode->fcHigh2 = qint64(mode->fcHigh2) * 1000000;
         }
         else
             if ( unit == "G" )
             {
-                mode->fLow *= 1000000000.0;
-                mode->fHigh *= 1000000000.0;
-                mode->fcLow1 *= 1000000000.0;
-                mode->fcHigh1 *= 1000000000.0;
-                mode->fcLow2 *= 1000000000.0;
-                mode->fcHigh2 *= 1000000000.0;
+                mode->fLow = qint64(mode->fLow) * 1000000000;
+                mode->fHigh = qint64(mode->fHigh) * 1000000000;
+                mode->fcLow1 = qint64(mode->fcLow1) * 1000000000;
+                mode->fcHigh1 = qint64(mode->fcHigh1) * 1000000000;
+                mode->fcLow2 = qint64(mode->fcLow2) * 1000000000;
+                mode->fcHigh2 = qint64(mode->fcHigh2) * 1000000000;
             }
 
     for ( TiXmlElement * m = e->FirstChildElement(); m; m = m->NextSiblingElement() )
@@ -271,25 +271,25 @@ bool BandList::parseExclusion (QSharedPointer<ModeInfo> mode, QString unit, TiXm
     QSharedPointer<ExclusionInfo> excl(new ExclusionInfo());
 
     QString temp = getAttribute ( e, "flow" );
-    excl->fLow = temp.toInt();
+    excl->fLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
-    excl->fHigh = temp.toInt();
+    excl->fHigh = Frequency(temp);
     if ( unit == "K" )
     {
-        excl->fLow *= 1000.0;
-        excl->fHigh *= 1000.0;
+        excl->fLow = qint64(excl->fLow) * 1000;
+        excl->fHigh = qint64(excl->fHigh) * 1000;
     }
     else
         if ( unit == "M" )
         {
-            excl->fLow *= 1000000.0;
-            excl->fHigh *= 1000000.0;
+            excl->fLow = qint64(excl->fLow) * 1000000;
+            excl->fHigh = qint64(excl->fHigh) * 1000000;
         }
         else
             if ( unit == "G" )
             {
-                excl->fLow *= 1000000000.0;
-                excl->fHigh *= 1000000000.0;
+                excl->fLow = qint64(excl->fLow) * 1000000000;
+                excl->fHigh = qint64(excl->fHigh) * 1000000000;
             }
     excl->reason = getAttribute( e, "reason");
     mode->exclusions.push_back(excl);
@@ -306,10 +306,10 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     {
         sfreq = "1,3 GHz";
     }
-    int ifreq = sfreq.toInt();
-    double dhffreq = ifreq * 1000.0;
-    double dvhffreq = dhffreq * 1000.0;
-    double dmwvfreq = dvhffreq * 1000.0;
+    qint64 ifreq = sfreq.toInt();
+    Frequency dhffreq(ifreq * 1000);
+    Frequency dvhffreq(ifreq * 1000000);
+    Frequency dmwvfreq(ifreq * 1000000000);
 
     for ( int i = 0; i < bandList.size(); i++ )
     {
@@ -328,8 +328,8 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     for ( int i = 0; i < bandList.size(); i++ )
     {
         QString bandType = bandList[ i ]->getType();
-        double bfhigh = bandList[ i ]->fHigh;
-        double bflow = bandList[ i ]->fLow;
+        Frequency bfhigh = bandList[ i ]->fHigh;
+        Frequency bflow = bandList[ i ]->fLow;
 
         if ( bandType == "HF" )
         {
@@ -381,22 +381,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 }
 
 
-bool BandList::findBand(long freq, QSharedPointer<BandInfo> &bi)
-{
-   for (QVector<QSharedPointer<BandInfo> >::iterator i = bandList.begin(); i != bandList.end(); i++)
-   {
-      if ((*i)->fLow <= freq && (*i)->fHigh >= freq)
-      {
-         bi = (*i);
-         return true;
-      }
-   }
-   return false;
-}
-
-
-
-bool BandList::findBand(double freq, QSharedPointer<BandInfo> &bi)
+bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
    for (QVector<QSharedPointer<BandInfo> >::iterator i = bandList.begin(); i != bandList.end(); i++)
    {
@@ -429,18 +414,15 @@ void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 
 }
 
-bool BandList::checkValidBand(QString freq)
+bool BandList::checkValidBand(Frequency freq)
 {
     bool ok = false;
     QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
-    QString sfreq = freq.trimmed();
-
-    double dfreq = sfreq.toDouble(&ok);
 
     if (ok)
     {
-        bandOK = findBand(dfreq, bi);
+        bandOK = findBand(freq, bi);
     }
     return bandOK;
 }

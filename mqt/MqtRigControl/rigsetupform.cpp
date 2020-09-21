@@ -1444,9 +1444,9 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 
 void RigSetupForm::loadTransVertTab(int tabNum)
 {
-    transVertTab[tabNum]->setRadioFreqBox(convertFreqStrDispSingle(radioData->transVertSettings[tabNum]->radioFreqStr));
-    transVertTab[tabNum]->setTargetFreqBox(convertFreqStrDispSingle(radioData->transVertSettings[tabNum]->targetFreqStr));
-    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffsetStr);
+    transVertTab[tabNum]->setRadioFreqBox(radioData->transVertSettings[tabNum]->radioFreq);
+    transVertTab[tabNum]->setTargetFreqBox(radioData->transVertSettings[tabNum]->targetFreq);
+    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffset);
     transVertTab[tabNum]->setTransVerSwNum(radioData->transVertSettings[tabNum]->transSwitchNum);
     transVertTab[tabNum]->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
 }

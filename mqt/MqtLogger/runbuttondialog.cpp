@@ -85,7 +85,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber)
     ui->modecb->setCurrentText(ldata->mode);
 
 
-    if (logdata->freq.isEmpty())
+    if (logdata->freq.isClear())
     {
         ui->freqLineEdit->setText("");
     }
@@ -118,7 +118,7 @@ void RunButtonDialog::on_okButton_clicked()
         fl[1] = fl[1] + "0000000";
         fl[1].truncate(6);
 
-        logdata->freq = fl[0] + fl[1];
+        logdata->freq = Frequency(fl[0] + fl[1]);
 
     }
     logdata->mode = ui->modecb->currentText();

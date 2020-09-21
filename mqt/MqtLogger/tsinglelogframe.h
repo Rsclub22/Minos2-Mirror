@@ -108,9 +108,9 @@ public:
     bool splittersChanged;
 
     // From rigcontrol
-    QString sCurFreq = ZEROFREQ;
-    QString sSavedCurFreq = ZEROFREQ;
-    int curRitFreq;
+    Frequency sCurFreq;
+    Frequency sSavedCurFreq;
+    ShortFreq curRitFreq;
     QString sCurMode;
     QString sSavedCurMode;
 
@@ -145,7 +145,7 @@ public:
 
     void goNextUnfilled();
 
-    void on_NoRadioSetFreq(QString);
+    void on_NoRadioSetFreq(Frequency);
     void on_NoRadioSetMode(QString);
 
     void transferDetails(memoryData::memData &m);
@@ -230,8 +230,8 @@ private slots:
     void on_RadioLoaded();
     void on_SetRadioList();
     void on_SetMode(QString);
-    void on_SetFreq(QString);
-    void on_SetRitFreq(int);
+    void on_SetFreq(Frequency);
+    void on_SetRitFreq(ShortFreq);
     void on_SetRitRadioStatus(bool);
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
@@ -254,12 +254,12 @@ private slots:
     void sendKeyerStop();
     void sendRotator(rpcConstants::RotateDirection direction, int angle );
     void sendRotatorPreset(QString);
-    void sendRadioFreq(QString);
-    void sendRadioRitFreq(int freq);
+    void sendRadioFreq(Frequency);
+    void sendRadioRitFreq(ShortFreq freq);
     void sendRadioMode(QString);
     void sendRadioRitStatus(bool status);
 
-    void sendSelectRadio(const QString &, const QString &freq, const QString &mode);
+    void sendSelectRadio(const QString &, const Frequency &freq, const QString &mode);
     void sendSelectRotator(const QString &);
     void onSplitterMoved(int, int);
 
@@ -272,15 +272,15 @@ private slots:
     void on_doColumnChanges(BaseContestLog*);
     void on_doSplitterChanges(BaseContestLog*);
     //void sendIgnoreRunChkBoxState(int num, bool checked);
-    void on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
-    void on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+    void on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg);
+    void on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg);
     void on_rotatorConnected(bool connected);
-    void sendRunOnFlag(QString, bool);
-    void sendRunOffFreqFlag(QString, bool);
+    void sendRunOnFlag(Frequency, bool);
+    void sendRunOffFreqFlag(Frequency, bool);
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
     void on_clusterServerLoaded();
-    void on_SendSpotToClusterServer(QString freq, QString callsign, QString loc);
+    void on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
     void on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData);
 

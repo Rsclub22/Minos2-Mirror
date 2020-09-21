@@ -7,7 +7,7 @@ class Server
 public:
     QString serverName;
     QString app;
-    QString freq;
+    Frequency freq;
     PublishState state;
 };
 class ChatServer : public QObject
@@ -36,7 +36,7 @@ private:
 private slots:
     void SyncTimerTimer( );
 
-    void onRigFreqChanged(QString /*f*/, BaseContestLog *c);
+    void onRigFreqChanged(Frequency /*f*/, BaseContestLog *c);
     void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );
     void on_notify( bool err, QSharedPointer<MinosRPCObj>, const QString &from );
 signals:

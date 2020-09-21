@@ -43,8 +43,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
-    , callsignEnterTextFreq(ZEROFREQ)
-    , curFreq(ZEROFREQ)
 
 
 {
@@ -111,7 +109,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->SecondOpLabel->setText("<b>" + Op2String);
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
-    freqString = ui->freqLabel->text();
 
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -449,7 +446,7 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
     setClusterSendSpotControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
-    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
+    connect(this, SIGNAL(freqChanged(Frequency)), this, SLOT(on_FreqChanged(Frequency)));
 
 
 
@@ -891,11 +888,11 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 
     if (text.count() > 0)
     {
-        callsignEnterTextFreq = curFreq;
+        callsignEnterTextFreq = curFreq.str();
     }
     else
     {
-        callsignEnterTextFreq = ZEROFREQ;
+        callsignEnterTextFreq.clear();
     }
 
 }
@@ -1082,17 +1079,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          QString freq;
-
-          QString newfreq = temp.frequency.trimmed().remove('.');
-          if (!newfreq.isEmpty())
-          {
-              double dfreq = convertStrToFreq(newfreq);
-              dfreq = dfreq/1000000.0;  // MHz
-
-              freq = QString::number(dfreq, 'f', 6); //MHz to 6 decimal places
-          }
-          ui->frequencyEdit->setText(removeTrailingZeroes(freq));
+          ui->frequencyEdit->setText(temp.frequency.str());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -1784,7 +1771,7 @@ void QSOLogFrame::setMode(QString m)
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
-void QSOLogFrame::setFreq(QString f)
+void QSOLogFrame::setFreq(Frequency f)
 {
     if (curFreq != f)
     {
@@ -1793,7 +1780,7 @@ void QSOLogFrame::setFreq(QString f)
 
     }
 }
-void QSOLogFrame::sendFreq(QString f)
+void QSOLogFrame::sendFreq(Frequency f)
 {
     emit sendFreqControl(f);
 }
@@ -2197,7 +2184,7 @@ void QSOLogFrame::getScreenRigData()
     if (!edit && !catchup && isRadioLoaded())
     {
         screenContact.rigName = curRadioName;
-        screenContact.frequency = convertFreqStrDisp(curFreq);
+        screenContact.frequency = curFreq;
     }
     else
     {
@@ -2791,8 +2778,8 @@ void QSOLogFrame::on_SpotPbClicked()
         {
             // send last spot logged
             trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
-            emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
-            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
+            emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
+            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.str());
         }
         else
         {
@@ -2802,15 +2789,15 @@ void QSOLogFrame::on_SpotPbClicked()
             if (validCall)
             {
                 // callsign valid
-                if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+                if (!logData.callsign.isEmpty() || !logData.freq.isClear())
                 {
                    trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
-                    emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
-                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+                    emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
+                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.str());
                 }
                 else
                 {
-                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq));
+                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.str()));
                 }
             }
             else
@@ -2848,12 +2835,12 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     if (validCall)
     {
         logData.freq = callsignEnterTextFreq;
-        callsignEnterTextFreq = ZEROFREQ;
+        callsignEnterTextFreq.clear();
 
         doGJVCancelButton_clicked();
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
-        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+        emit bandmapSaveFreq(logData.callsign, logData.freq.str(), logData.locator, QString::number(logData.bearing));
 
 
     }
@@ -3097,13 +3084,13 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 
 
 
-void QSOLogFrame::on_FreqChanged(QString f)
+void QSOLogFrame::on_FreqChanged(Frequency f)
 {
 
     if (!logDataFromBandmapOrMemory && isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
     {
-        qint64 dialFreq = f.toLongLong() / 1000;
-        qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
+        qint64 dialFreq = qint64(f) / 1000;
+        qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
         int toleranceF = 0;
         if (callsignEnterFreq != 0)
         {
@@ -3125,10 +3112,6 @@ void QSOLogFrame::on_FreqChanged(QString f)
 
                     on_bandmapSaveFreqPbClicked();
                 }
-
-
-
-
             }
         }
     }

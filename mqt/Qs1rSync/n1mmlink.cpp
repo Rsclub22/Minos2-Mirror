@@ -137,7 +137,7 @@ void N1MMLink::initialise()
 void N1MMLink::connectTimeout()
 {
     connected = false;
-    currFrequency = "N1MM not connected";
+    currFrequency.clear();
 }
 static QString makeTag(const QString &tag, const QString &arg)
 {
@@ -145,7 +145,7 @@ static QString makeTag(const QString &tag, const QString &arg)
     return temp;
 }
 
-QString N1MMLink::genFreqStanza(long f)
+QString N1MMLink::genFreqStanza(const Frequency &f)
 {/*
     <?xml version="l.0" encoding="utf-8"?>
     <radio_setfrequency>
@@ -156,7 +156,7 @@ QString N1MMLink::genFreqStanza(long f)
     </radio_setfrequency>
 
 */
-    double freq = f/1000.0;
+    double freq = qint64(f)/1000.0;
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
                   + "<radio_setfrequency>\n"
                    + makeTag("app", "Minos")
@@ -190,7 +190,7 @@ QString N1MMLink::genFreqStanza(long f)
 //    return false;
 //}
 
-void N1MMLink::sendFrequencyRequest(long f)
+void N1MMLink::sendFrequencyRequest(Frequency f)
 {
     // send f to N1MM
 //    QHostAddress addr;
@@ -246,7 +246,7 @@ void N1MMLink::onReceiveUDP()
             {
                if ( checkElementName( e, "Freq" ) )
                {
-                    currFrequency = QString(e->GetText()) + "0";    // as freq is in tens of Hz
+                    currFrequency = Frequency(QString(e->GetText()) + "0");    // as freq is in tens of Hz
                }
                if ( checkElementName( e, "RadioName" ) )
                {
@@ -262,7 +262,7 @@ void N1MMLink::onReceiveUDP()
     }
 
 }
-QString N1MMLink::getFrequency()
+Frequency N1MMLink::getFrequency()
 {
     return currFrequency;
 }

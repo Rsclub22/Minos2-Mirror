@@ -16,14 +16,14 @@ class RigState: public PubSubValue
 {
     CacheSelection _selected;
     MinosStringItem<QString> _status;
-    MinosItem<double> _radioFreq;
-    MinosItem<double> _logFreq;
+    MinosFrequencyItem<Frequency> _radioFreq;
+    MinosFrequencyItem<Frequency> _logFreq;
     MinosStringItem<QString> _radioMode;
     MinosStringItem<QString> _logMode;
     MinosItem<int> _radioVolLevel;
     MinosItem<int> _logVolLevel;
-    MinosItem<int> _radioRitFreq;
-    MinosItem<int> _logRitFreq;
+    MinosItem<ShortFreq> _radioRitFreq;
+    MinosItem<ShortFreq> _logRitFreq;
     MinosItem<bool> _ritOnOffStatus;
     MinosItem<bool> _ritRadioStatus;
 
@@ -42,27 +42,27 @@ public:
 
     MinosStringItem<QString> getSelectedContest(QString loggerUuid) const;
     MinosStringItem<QString> status() const;
-    MinosItem<double> radioFreq() const;
-    MinosItem<double> logFreq() const;
+    MinosFrequencyItem<Frequency> radioFreq() const;
+    MinosFrequencyItem<Frequency> logFreq() const;
     MinosStringItem<QString> radioMode() const;
     MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosItem<bool> ritRadioStatus() const;
-    MinosItem<int> radioRitFreq() const;
-    MinosItem<int> logRitFreq() const;
+    MinosItem<ShortFreq> radioRitFreq() const;
+    MinosItem<ShortFreq> logRitFreq() const;
     MinosItem<int> radioVolLevel() const;
     MinosItem<int> logVolLevel() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
-    void setRadioFreq(double freq);
-    void setLogFreq(double freq);
+    void setRadioFreq(Frequency freq);
+    void setLogFreq(Frequency freq);
     void setRadioMode(const QString &mode);
     void setLogMode(const QString &mode);
     void setRadioVolume(int level);
     void setLogVolume(int level);
     void setStatus(const QString &status);
-    void setRadioRitFreq(int freq);
-    void setLogRitFreq(int freq);
+    void setRadioRitFreq(const ShortFreq &freq);
+    void setLogRitFreq(const ShortFreq &freq);
     void setRitOnOffStatus(const bool status);
     void setRitRadioStatus(const bool status);
 

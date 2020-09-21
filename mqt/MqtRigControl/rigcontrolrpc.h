@@ -35,10 +35,10 @@ public:
     void publishRadioNames(QStringList radios);
 
 signals:
-    void setFreq(QString);
+    void setFreq(Frequency);
     void setMode(QString);
-    void selectLoggerRadio(PubSubName, QString, QString);
-    void setRitFreq(int);
+    void selectLoggerRadio(PubSubName, Frequency, QString);
+    void setRitFreq(ShortFreq);
     void setRitStatus(bool);
     void setVolume(int volLevel);
 

@@ -245,7 +245,7 @@ private:
     void setupDXSpotView();
     void setupCallsignSpotView();
     void setupLocatorSpotView();
-    void sendFreqToRig(QString freq);
+    void sendFreqToRig(Frequency freq);
     void sendBrgToRot(QString brg);
     memoryData::memData getSpotDataToMemoryVariable(DxSpotSortFilterProxyModel*, int);
     void calcSpotDistanceBearing(const QString &locator, double *distance, int *bearing);

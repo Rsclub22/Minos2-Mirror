@@ -94,7 +94,7 @@ void ScreenContact::initialise( BaseContestLog *ct )
     comments = "";
     contactFlags = 0;
     forcedMult = "";
-    frequency = "";
+    frequency.clear();
     rotatorHeading = "";
     rigName = "";
     screenQSOValid = false;

@@ -162,9 +162,9 @@ bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 qlonglong spotElapsedTime(qlonglong spotTime);
 
-void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
+void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
-void getBand(QVector<QSharedPointer<BandInfo> > &bands, QString freq, QString &band, QString &bandMask);
+void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency freq, QString &band, QString &bandMask);
 
 class ClusterClientFilterSettings
 {

@@ -10,7 +10,6 @@
 
 #include "MinosLoggerEvents.h"
 
-#include "WsjtxRadio.hpp"
 #include "WsjtxNetworkMessage.hpp"
 #include "Wsjtx_qt_helpers.hpp"
 
