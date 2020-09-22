@@ -6,6 +6,7 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QColor>
+#include "frequency.h"
 
 #include "Wsjtx_pimpl_h.hpp"
 

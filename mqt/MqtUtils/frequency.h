@@ -3,6 +3,7 @@
 
 #include <QMetaType>
 #include <QDataStream>
+#include <QLocale>
 
 class Frequency
 {

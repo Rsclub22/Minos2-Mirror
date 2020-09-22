@@ -16,6 +16,7 @@
 #define BANDMAPDATA_H
 
 #include <QString>
+#include "frequency.h"
 
 namespace bandmapSpotType {
 

@@ -4,7 +4,7 @@
 
 #include <QString>
 #include <QStringList>
-
+#include "frequency.h"
 
 
 // Status messages sent to minos logger
