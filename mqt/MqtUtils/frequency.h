@@ -9,12 +9,11 @@ class Frequency
 {
 private:
     qint64 f = 0;
-    bool ok = true;
 public:
     Frequency(qint64 fr):f(fr){}
-    Frequency(long fr):f(fr){}
-    Frequency(int fr):f(fr){}
-    Frequency(double fr):f(fr){}
+    //Frequency(long fr):f(fr){}
+    //Frequency(int fr):f(fr){}
+    //Frequency(double fr):f(fr){}
     Frequency(QString fr);
     Frequency():f(0){}
     Frequency(const Frequency &fr):f(fr){}
@@ -28,10 +27,13 @@ public:
     Frequency operator+ (const Frequency& rhs ) const{return Frequency(f + rhs.f);}
     Frequency operator- (const Frequency& rhs ) const{return Frequency(f - rhs.f);}
     operator qint64() const{return f;}
-    operator double() const {return f;}
-    QString str() const {return (f == 0)?"00000000000":QString::number(f);}
+    //operator double() const {return f;}
+    QString str() const ;
+    QString traceStr() const;
+    QString dispStr() const;
+
     void clear(){f = 0;}
-    bool isOK() const {return ok;}
+    bool isOK() const {return f >= 0;}
     bool isClear() const {return f == 0;}
 
     QString pretty_frequency_MHz_string( const QLocale &locale = QLocale()) const;
@@ -40,13 +42,18 @@ public:
         in >> ff;
         return in;
     }
+    QString extractKhz();
+    QString convertFreqStrDisp();
+    QString convertFreqStrDispSingle();
+    QString convertFreqStrDispSingleNoTrailZero();
+    QString removeTrailingZeroes(QString sfreq);
+
 };
 
 class ShortFreq
 {
 private:
     qint32 sf = 0;
-    bool ok = true;
 public:
     ShortFreq(qint32 fr):sf(fr){}
     ShortFreq(long fr):sf(fr){}
@@ -64,7 +71,8 @@ public:
     operator qint32() const{return sf;}
     operator double() const {return sf;}
     QString str() const {return QString::number(sf);}
-    bool isOK(){return ok;}
+    QString traceStr() const {return str();}
+    bool isOK(){return sf >= 0;}
 
 };
 

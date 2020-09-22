@@ -239,7 +239,7 @@ void MainWindow::SyncTimerTimer(  )
         }
         trackBand();
     }
-    ui->QF1Label->setText(mainRigFreq.str());
+    ui->QF1Label->setText(mainRigFreq.dispStr());
 }
 
 
@@ -432,7 +432,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 mainRigFreq = selState.radioFreq().getValue();
 
                 selState.clearDirty();
-                ui->QF1Label->setText(mainRigFreq.str());
+                ui->QF1Label->setText(mainRigFreq.dispStr());
 
                 if (ui->trackRig->isChecked())
                 {
@@ -461,7 +461,7 @@ void MainWindow::QS1RCentre(const Frequency &fLow, const Frequency &fHigh)
 {
     if (qs1rConnected)
     {
-        trace(QString("%1 %2").arg(fLow.str()).arg(fHigh.str()));
+        trace(QString("%1 %2").arg(fLow.traceStr()).arg(fHigh.traceStr()));
         qint64 bandWidth = qint64(fHigh) - qint64(fLow);
         qint64 centre = qint64(fLow) + bandWidth/2;
 
@@ -508,7 +508,7 @@ void MainWindow::trackBand()
     lastTransverterOffset = transvertOffset;
     lastMainRigMode = mainRigMode;
 
-    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq.str()).arg(lastTransverterOffset.str()).arg(lastMainRigMode));
+    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq.traceStr()).arg(lastTransverterOffset.traceStr()).arg(lastMainRigMode));
 
     // mainRigFreq is absolute, i.e. on air frequency
     // so we use it to find the band

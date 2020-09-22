@@ -932,7 +932,7 @@ void BandmapView::drawBandMapSpots()
     // don't draw spots when freq is zero, or no spots
     if (curFreq.isClear() || model()->rowCount() == 0)
     {
-        traceMsg(QString("CurFreq = %1, Number of Spots = %2 - Don't draw markers").arg(curFreq.str()).arg(model()->rowCount()));
+        traceMsg(QString("CurFreq = %1, Number of Spots = %2 - Don't draw markers").arg(curFreq.traceStr()).arg(model()->rowCount()));
         return;
     }
 
@@ -1215,7 +1215,7 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
     }
 
 
-    QString msg = tr("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(extractKhz(freq)).arg(msgColourEnd).arg(bLineEnd);
+    QString msg = tr("%1%2CQ Frequency @ .%3%4%5").arg(bLineStart).arg(msgColourStart).arg(freq.extractKhz()).arg(msgColourEnd).arg(bLineEnd);
     markerMsg = msg;
     //msg.detach();
 }
@@ -1323,7 +1323,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime) + " " + tr("min");
 
-    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart).arg(callsign).arg(extractKhz(freq)).arg(locator).arg(distance).arg(bearing).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg).arg(bLineEnd);
+    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart).arg(callsign).arg(freq.extractKhz()).arg(locator).arg(distance).arg(bearing).arg(elapsedTimeStr).arg(markSym).arg(newSpotMsg).arg(bLineEnd);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
@@ -1341,7 +1341,7 @@ void BandmapView::assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg
 {
 
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    QString msg = tr("CQ Frequency = %1\nThe computed mode is %2").arg(freq.str()).arg(computedMode);
+    QString msg = tr("CQ Frequency = %1\nThe computed mode is %2").arg(freq.convertFreqStrDisp()).arg(computedMode);
     toolTipMsg = msg;
     //msg.detach();
 
@@ -1375,7 +1375,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
 
     QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \nThe computed mode is %9\n%10")
                                             .arg(callsign)
-                                            .arg(freq.str())
+                                            .arg(freq.convertFreqStrDisp())
                                             .arg(locator)
                                             .arg(bearing)
                                             .arg(distance)

@@ -888,7 +888,7 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 
     if (text.count() > 0)
     {
-        callsignEnterTextFreq = curFreq.str();
+        callsignEnterTextFreq = curFreq.dispStr();
     }
     else
     {
@@ -1079,7 +1079,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          ui->frequencyEdit->setText(temp.frequency.str());
+          ui->frequencyEdit->setText(temp.frequency.dispStr());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -2779,7 +2779,7 @@ void QSOLogFrame::on_SpotPbClicked()
             // send last spot logged
             trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
             emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
-            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.str());
+            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.dispStr());
         }
         else
         {
@@ -2793,11 +2793,11 @@ void QSOLogFrame::on_SpotPbClicked()
                 {
                    trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
                     emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
-                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.str());
+                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.dispStr());
                 }
                 else
                 {
-                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.str()));
+                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.traceStr()));
                 }
             }
             else

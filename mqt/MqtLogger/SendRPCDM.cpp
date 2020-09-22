@@ -233,7 +233,7 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const Frequency &freq
 {
     // we should de-select the cached uuid on all rig apps
 
-    trace(QString("Change rig selection to name = %1, freq = %2, mode = %3, uuid = %4").arg(name.toString()).arg(freq.str()).arg(mode).arg(uuid));
+    trace(QString("Change rig selection to name = %1, freq = %2, mode = %3, uuid = %4").arg(name.toString()).arg(freq.traceStr()).arg(mode).arg(uuid));
 
     PubSubName selected = rigCache.getSelected(loggerUuid);
 
@@ -285,7 +285,7 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.str()).arg(tslf->getContest()->uuid));
+    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr()).arg(tslf->getContest()->uuid));
 }
 
 
@@ -489,13 +489,13 @@ void TSendDM::notifyRigChanges()
                     if (selState.radioFreq().isDirty())
                     {
 
-                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(convertFreqToStr(selState.radioFreq().getValue())).arg(selStateUuid));
-                        tslf->on_SetFreq(convertFreqToStr(selState.radioFreq().getValue()));
+                        traceMsg(QString("Rig set freq = %1, uuid = %2").arg(selState.radioFreq().getValue().traceStr()).arg(selStateUuid));
+                        tslf->on_SetFreq(selState.radioFreq().getValue());
 
                     }
                     if (selState.radioRitFreq().isDirty())
                     {
-                        traceMsg(QString("Rig set ritFreq = %1, uuid = %2").arg(selState.radioRitFreq().getValue().str()).arg(selStateUuid));
+                        traceMsg(QString("Rig set ritFreq = %1, uuid = %2").arg(selState.radioRitFreq().getValue().traceStr()).arg(selStateUuid));
                         tslf->on_SetRitFreq(selState.radioRitFreq().getValue());
                     }
                     if (selState.ritRadioStatus().isDirty())

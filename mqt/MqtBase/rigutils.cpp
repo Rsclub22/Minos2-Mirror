@@ -20,278 +20,6 @@ const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "T
 // add delimiter to string for display
 // input string should just be digits
 
-QString convertFreqStrDisp(const Frequency & frequency)
-{
-    QString sfreq = frequency.str();
-    if (sfreq == "")
-    {
-        return sfreq;
-    }
-
-    if (sfreq.contains('.'))
-    {
-        sfreq.remove('.');
-    }
-
-    int len = sfreq.length();
-
-    switch(len)
-    {
-        case 11:
-            sfreq = sfreq.insert(8, '.');
-            sfreq = sfreq.insert(5, '.');
-            sfreq = sfreq.insert(2, '.');
-            break;
-        case 10:
-            sfreq = sfreq.insert(7, '.');
-            sfreq = sfreq.insert(4, '.');
-            sfreq = sfreq.insert(1, '.');
-            break;
-        case 9:
-            sfreq = sfreq.insert(3, '.');
-            sfreq = sfreq.insert(7, '.');
-            break;
-        case 8:
-            sfreq = sfreq.insert(2, '.');
-            sfreq = sfreq.insert(6, '.');
-            break;
-        case 7:
-            sfreq = sfreq.insert(4, '.');
-            sfreq = sfreq.insert(1, '.');
-            break;
-        case 6:
-            sfreq = sfreq.insert(3,'.');
-            break;
-        case 5:
-            sfreq = sfreq.insert(2,'.');
-            break;
-        case 4:
-            sfreq = sfreq.insert(1,'.');
-            break;
-        default:
-            sfreq = "00.000.000.000";    // error
-
-    }
-
-
-    return sfreq;
-}
-
-
-
-
-QString convertFreqToStr(const Frequency &frequency)
-{
-    return QString::number(qint64(frequency), 10);
-}
-
-
-Frequency convertStrToFreq(QString frequency)
-{
-    bool ok = false;
-    qint64 f = 0;
-    f = frequency.toLongLong(&ok);
-    if (!ok)
-    {
-        f = -1;
-    }
-    return Frequency(f);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-QString validateFreqTxtInput(QString f, bool* ok)
-{
-
-    if (f == "")
-    {
-        *ok = true;
-        return f;
-    }
-
-
-    QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
-
-    QString retFreq = "";
-    if (f.count('.') != 1)
-    {
-        *ok = false;
-        return f;
-    }
-
-
-    if (f1rx.exactMatch(f))
-    {
-        QStringList sl = f.split('.');
-        if (sl[0].count() > 3)
-        {
-            retFreq = sl[0].left(sl[0].count()-3) + "." + sl[0].right(3) + ".";
-        }
-        else
-        {
-            retFreq = sl[0] + ".";
-        }
-
-        if (sl[1].count() > 3)
-        {
-           retFreq = retFreq + sl[1].left(3) + "." + sl[1].right(sl[1].count()-3);
-           if (sl[1].count() == 4)
-           {
-               retFreq = retFreq + "00";
-           }
-           else if (sl[1].count() == 5)
-           {
-               retFreq = retFreq + "0";
-           }
-        }
-        else
-        {
-           retFreq = retFreq + sl[1] + "." + "000";
-        }
-
-        *ok = true;
-    }
-    else
-    {
-        // error
-        *ok = false;
-    }
-
-
-    return retFreq;
-}
-*/
-
-/* Single Delimiter Utilities */
-
-// convert freq string for display - single delimter
-// 144.000000
-
-QString convertFreqStrDispSingle(const Frequency &freq)
-{
-    QString sfreq = freq.str();
-    int len = sfreq.length();
-
-    switch(len)
-    {
-        case 11:
-            //sfreq = sfreq.insert(8, '.');
-            sfreq = sfreq.insert(5, '.');
-            //sfreq = sfreq.insert(2, '.');
-            break;
-        case 10:
-            //sfreq = sfreq.insert(7, '.');
-            sfreq = sfreq.insert(4, '.');
-            //sfreq = sfreq.insert(1, '.');
-            break;
-        case 9:
-            sfreq = sfreq.insert(3, '.');
-            //sfreq = sfreq.insert(7, '.');
-            break;
-        case 8:
-            sfreq = sfreq.insert(2, '.');
-            //sfreq = sfreq.insert(6, '.');
-            break;
-        case 7:
-            //sfreq = sfreq.insert(4, '.');
-            sfreq = sfreq.insert(1, '.');
-            break;
-        case 6:
-            sfreq = sfreq.insert(0,'.');
-            break;
-        //case 5:
-        //    sfreq = sfreq.insert(2,'.');
-        //    break;
-        //case 4:
-        //    sfreq = sfreq.insert(1,'.');
-        //    break;
-        default:
-            sfreq = "0.0";    // error
-
-    }
-
-    return sfreq;
-
-}
-
-
-QString convertFreqStrDispSingleNoTrailZero(const Frequency &freq)
-{
-    QString sfreq = freq.str();
-
-        int len = sfreq.length();
-
-        switch(len)
-        {
-            case 11:
-                //sfreq = sfreq.insert(8, '.');
-                sfreq = sfreq.insert(5, '.');
-                //sfreq = sfreq.insert(2, '.');
-                break;
-            case 10:
-                //sfreq = sfreq.insert(7, '.');
-                sfreq = sfreq.insert(4, '.');
-                //sfreq = sfreq.insert(1, '.');
-                break;
-            case 9:
-                sfreq = sfreq.insert(3, '.');
-                //sfreq = sfreq.insert(7, '.');
-                break;
-            case 8:
-                sfreq = sfreq.insert(2, '.');
-                //sfreq = sfreq.insert(6, '.');
-                break;
-            case 7:
-                //sfreq = sfreq.insert(4, '.');
-                sfreq = sfreq.insert(1, '.');
-                break;
-            case 6:
-                sfreq = sfreq.insert(0,'.');
-                break;
-            //case 5:
-            //    sfreq = sfreq.insert(2,'.');
-            //    break;
-            //case 4:
-            //    sfreq = sfreq.insert(1,'.');
-            //    break;
-            default:
-                sfreq = "??.???.???.???";    // error
-
-        }
-
-        sfreq = removeTrailingZeroes(sfreq);
-        return sfreq;
-}
-
-
-
-
-QString removeTrailingZeroes(QString sfreq)
-{
-    // remove trailing zero, apart from after period.
-    QStringList fspl = sfreq.split('.');
-    int last = fspl.count() - 1;
-    fspl[last].remove(QRegularExpression("0+$"));  //remove trailing zeros
-    if (fspl[last].count() == 0)
-    {
-        fspl[last] = "0";    // add back one zero
-    }
-
-    sfreq = fspl.join(".");
-
-    return sfreq;
-}
-
 
 bool validateFreqTxtInput(QString f)
 {
@@ -348,12 +76,6 @@ bool valInputFreq(QString f, QString errMsg)
 
 }
 
-
-
-
-
-
-
 // This will convert "144.3" etc to "144.300000"
 
 QString convertSinglePeriodFreqToFullDigit(QString f)
@@ -392,79 +114,6 @@ QString convertFreqToFullDigit(QString f)
 
 
 }
-
-// converts freq received from cluster from khz to ghz and mhz
-// not used...
-QString convertKhzToMhz(QString f)
-{
-
-    QStringList sl;
-    if (!f.contains('.'))
-    {
-        return f;
-    }
-    else
-    {
-
-        sl = f.split('.');
-        if (sl.count() == 2)
-        {
-            if (sl[0].count() <= 6 && sl[0].count() > 3)
-            {
-                sl[0] = sl[0].insert(sl[0].count() - 3, '.');
-            }
-            else
-            {
-                if (sl[0].count() >= 4 && sl[0].count() <= 8)
-                {
-                    sl[0] = sl[0].insert(sl[0].count() - 6, '.');
-                    sl[0] = sl[0].insert(sl[0].count() - 3, '.');
-
-                }
-            }
-        }
-    }
-
-
-
-    return sl[0];
-}
-
-
-// used to pad display of freq with spaces
-
-QString alignFreqRight(QString f)
-{
-    QString freq = f;
-    QStringList sl;
-    if (freq.count('.') == 1)
-    {
-        sl = freq.split('.');
-        if (sl.count() == 2)
-        {
-            for (int i = 0; i < (6 - sl[0].count()); i++)
-            {
-                freq.prepend('\x20');
-            }
-            return freq;
-        }
-    }
-    else if (freq.count('.') == 2)
-    {
-        sl = freq.split('.');
-        if (sl.count() == 3)
-        {
-            if (sl[0].count() == 1)
-            {
-                freq.prepend('\x20');
-            }
-            return freq;
-        }
-    }
-
-    return freq;
-}
-
 
 QString convertSinglePeriodFreqToMultiPeriod(QString f)
 {
@@ -600,48 +249,32 @@ QString convertRitFreqToStr(const ShortFreq &freq, bool ritKHzFlag)
 }
 
 // remove hundreds hz and hz from freq for cluster display
-QString removeHundredHzAndHzDigits(QString f)
+QString removeHundredHzAndHzDigits(Frequency f)
 {
-    QStringList sl = f.split('.');
-    int count = sl.count();
-    sl[count - 1] = sl[count - 1].mid(0,1);
-    QString fnew;
-    for (int i = count - 1; i >= 0; i--)
-    {
-        if (i == count - 1)
-        {
-            fnew = (sl[i]);
-        }
-        else
-        {
-            fnew.prepend(sl[i] + ".");
-        }
-
-    }
-
+    QString fnew = f.str();
+    fnew.chop(2);
     return fnew;
 
+//    QStringList sl = f.split('.');
+//    int count = sl.count();
+//    sl[count - 1] = sl[count - 1].mid(0,1);
+//    QString fnew;
+//    for (int i = count - 1; i >= 0; i--)
+//    {
+//        if (i == count - 1)
+//        {
+//            fnew = (sl[i]);
+//        }
+//        else
+//        {
+//            fnew.prepend(sl[i] + ".");
+//        }
+
+//    }
+//    return fnew;
 }
 
-QString extractKhz(Frequency f)
-{
-    QString khz = "***";
-    if (!f.isClear())
-    {
-        QString sf = f.str();
-        int i = sf.length();
-        if (i >= 6)
-        {
-            khz = sf.mid(i - 6, 3);
-            return khz;
-        }
-    }
 
-
-    return khz;
-
-
-}
 
 
 

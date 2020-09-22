@@ -716,12 +716,12 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     Frequency f;
     getFrequency(CURRENT_VFO, f);
-    traceMsg(QString("Rig Init - first getFreq = %1").arg(f.str()));
+    traceMsg(QString("Rig Init - first getFreq = %1").arg(f.traceStr()));
     for (int i = 0; (f.isClear()) && (i < 10); i++)
     {
         traceMsg(QString("Rig Init getFreq i = %1").arg(i));
         getFrequency(CURRENT_VFO, f);
-        traceMsg(QString("Rig Init getRxFreq = %1").arg(f.str()));
+        traceMsg(QString("Rig Init getRxFreq = %1").arg(f.traceStr()));
         if (!f.isClear())
         {
             break;
@@ -729,9 +729,9 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         QThread::msleep(500);
     }
 
-    traceMsg(QString("Rig Init - freq after delay = %1").arg(f.str()));
+    traceMsg(QString("Rig Init - freq after delay = %1").arg(f.traceStr()));
 
-    if (!BandList::getBandList().checkValidBand(f.str()))
+    if (!BandList::getBandList().checkValidBand(f))
     {
         f.clear();      // received freq not valid
         traceMsg(QString("Rig Init - freq not in valid band"));
@@ -745,7 +745,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     if (!f.isClear())
     {
         setRigConnected(true);
-        traceMsg(QString(" Rig init, get freq = %1").arg(f.str()));
+        traceMsg(QString(" Rig init, get freq = %1").arg(f.traceStr()));
     }
     else
     {
@@ -846,7 +846,7 @@ int OmnirigControl::getFrequency(VFO vfo, Frequency &freq)
 
 int OmnirigControl::setFrequency(const Frequency &freq, VFO vfo)
 {
-    traceMsg(QString("Set Frequency = %1").arg(freq.str()));
+    traceMsg(QString("Set Frequency = %1").arg(freq.traceStr()));
     Q_UNUSED(vfo)
 
     if (!rig || rig->isNull ())

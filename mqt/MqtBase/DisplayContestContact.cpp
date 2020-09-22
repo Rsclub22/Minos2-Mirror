@@ -750,7 +750,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           res = rigName.getValue();
           break;
       case egFrequency:
-          res = frequency.getValue().str();
+          res = frequency.getValue().dispStr();
           break;
       case egRotatorHeading:
       {

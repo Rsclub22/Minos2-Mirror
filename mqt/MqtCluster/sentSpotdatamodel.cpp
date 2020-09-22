@@ -129,7 +129,7 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
                 d = sentSpot->spotTime;
             break;
             case SENT_SPOT_FREQ_STR_COL_NUM:
-                d = sentSpot->dxFreq.str();
+                d = sentSpot->dxFreq.dispStr();
             break;
             case SENT_SPOT_DXSPOT_CALL_COL_NUM:
                 d = sentSpot->dxCall;
@@ -176,7 +176,7 @@ QVariant SentSpotDataModel::data(const QModelIndex &index, int role) const
                 d = sentSpot->spotTime;
             break;
             case SENT_SPOT_FREQ_STR_COL_NUM:
-                d = sentSpot->dxFreq.str();
+                d = sentSpot->dxFreq.dispStr();
             break;
             case SENT_SPOT_DXSPOT_CALL_COL_NUM:
                 d = sentSpot->dxCall;

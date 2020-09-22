@@ -910,7 +910,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                 if (retCode >= 0)
                 {
                     trace(QString("Parse Dx - Extracted spot = %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                    .arg(dxCall).arg(dxFreq.str()).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
+                    .arg(dxCall).arg(dxFreq.traceStr()).arg(dxBandStr).arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
                     .arg(spotCall).arg(dxLocator).arg(spotLocator).arg(dxPropMode).arg(spotTime).arg(spotDate).arg(spotComment).arg(setupCluster->getTimeToLive()));
 
                     qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
@@ -999,15 +999,14 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, const QString _spotCal
 
     if (dxMsg.count() > 4)
     {
-        //dxFreq = convertKhzToMhz(dxMsg[0]);
         QString f = dxMsg[0] + "00";
         f.remove('.');
-        dxFreq = convertFreqStrDisp(f);
+        dxFreq = Frequency(f).convertFreqStrDisp();
         getBand(bands, dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(dxFreq.str()));
+            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(dxFreq.traceStr()));
             return -3;
         }
 
@@ -1231,13 +1230,12 @@ int ClusterMainWindow::upackDxSpot(QString txt, QString &spotCall)
         spotCall = dxMsg[2].remove(':');
         QString f = dxMsg[3] + "00";
         f.remove('.');
-        //dxFreq = convertKhzToMhz(dxMsg[3]);
-        dxFreq = convertFreqStrDisp(f);
+        dxFreq = Frequency(f).convertFreqStrDisp();
         getBand(bands, dxFreq, dxBandStr, dxBandMask);
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(dxFreq.str()));
+            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(dxFreq.traceStr()));
             return -3;
         }
 
@@ -1498,7 +1496,7 @@ void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QStrin
     QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
     if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isClear() && !call.isEmpty())
     {
-        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq.str()).arg(loc));
+        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq.traceStr()).arg(loc));
         if (BandList::getBandList().checkValidBand(freq))
         {
 
@@ -1522,7 +1520,7 @@ void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QStrin
         }
         else
         {
-            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq.str()).arg(call));
+            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq.traceStr()).arg(call));
             spotStatus = false;
             addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[FREQ_ERR]));
         }

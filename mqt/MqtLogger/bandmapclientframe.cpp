@@ -360,7 +360,7 @@ void BandmapClientFrame::on_freqActionSelected()
 {
     if (bandmapView->getSelectedSpotDataPtr()->isSelected)
     {
-        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->dxFreq.str()));
+        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->dxFreq.traceStr()));
          Frequency freq = bandmapView->getSelectedSpotDataPtr()->dxFreq;
          sendFreqToRig(freq);
     }
@@ -559,7 +559,7 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
 
 void BandmapClientFrame::context_freqActionSelected()
 {
-    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.dxFreq.str()));
+    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.dxFreq.traceStr()));
      Frequency freq = contextMenuSelectedSpotData.dxFreq;
      sendFreqToRig(freq);
 
@@ -793,7 +793,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
             contestBandFHigh = bi->fHigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
-            traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow.str()).arg(contestBandFHigh.str()));
+            traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow.traceStr()).arg(contestBandFHigh.traceStr()));
             break;
         }
     }
@@ -926,7 +926,7 @@ void BandmapClientFrame::timerCheckNewBandMapSpots()
             for (int i = 0; i < logSpotQueue.count(); i++)
             {
                 addLogSpotToBandmapTable(logSpotQueue[i]);
-                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().str()).arg(logSpotQueue[i]->getLocator()));
+                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
                 delete logSpotQueue[i];
             }
 
@@ -969,7 +969,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
             addLogSpotToBandmapTable(logSpotQueue[i]);
-            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().str()).arg(logSpotQueue[i]->getLocator()));
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
             delete logSpotQueue[i];
         }
 
@@ -1184,7 +1184,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     QString logTimeStr = spot->getTime().time().toString("HH:mm");
 
 
-    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getCallsign().fullCall.getValue()).arg(spot->getFreq().str()).arg(spot->getModeStr()).arg(spot->getLocator()));
+    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getCallsign().fullCall.getValue()).arg(spot->getFreq().traceStr()).arg(spot->getModeStr()).arg(spot->getLocator()));
 
     bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(logTime, logTimeStr,
                                             spot->getFreq(), spot->getbandStr(),  spot->getBandMask(),
@@ -1837,7 +1837,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
     if (!isProtected)
     {
 
-        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq.str()).arg(loc).arg(brg));
+        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq.traceStr()).arg(loc).arg(brg));
         //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
         QDateTime time = QDateTime::currentDateTimeUtc();
 
@@ -1882,7 +1882,7 @@ void BandmapClientFrame::setCQFreq()
 {
     if (!isProtected)
     {
-        traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq.str()).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
+        traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq.traceStr()).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
@@ -1912,7 +1912,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
     Q_UNUSED(cs)
     if (!isProtected)
     {
-        traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.str()).arg(loc).arg(brg));
+        traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.traceStr()).arg(loc).arg(brg));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
@@ -1939,7 +1939,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 
     if (!isProtected)
     {
-        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.str()).arg(loc).arg(brg));
+        traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.traceStr()).arg(loc).arg(brg));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;

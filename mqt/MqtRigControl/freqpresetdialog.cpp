@@ -247,15 +247,13 @@ void FreqPresetDialog::cancelSettings()
 
 void FreqPresetDialog::loadSettingsToDialog()
 {
-//    ui->lineEdit_28mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_28MHZ]));
-    ui->lineEdit_50mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_50MHZ]));
-    ui->lineEdit_70mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_70MHZ]));
-    ui->lineEdit_144mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_144MHZ]));
-    ui->lineEdit_432mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_432MHZ]));
-    ui->lineEdit_1296mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_1296MHZ]));
-    ui->lineEdit_2300mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_2300MHZ]));
-    ui->lineEdit_3_4ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_3_4GHZ]));
-    ui->lineEdit_5_6ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_5_6GHZ]));
-    ui->lineEdit_10ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_10GHZ]));
-
+    ui->lineEdit_50mhz->setText(Frequency(presetFreq[freqPresetData::_50MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_70mhz->setText(Frequency(presetFreq[freqPresetData::_70MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_144mhz->setText(Frequency(presetFreq[freqPresetData::_144MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_432mhz->setText(Frequency(presetFreq[freqPresetData::_432MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_1296mhz->setText(Frequency(presetFreq[freqPresetData::_1296MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_2300mhz->setText(Frequency(presetFreq[freqPresetData::_2300MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_3_4ghz->setText(Frequency(presetFreq[freqPresetData::_3_4GHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_5_6ghz->setText(Frequency(presetFreq[freqPresetData::_5_6GHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_10ghz->setText(Frequency(presetFreq[freqPresetData::_10GHZ]).convertFreqStrDispSingleNoTrailZero());
 }

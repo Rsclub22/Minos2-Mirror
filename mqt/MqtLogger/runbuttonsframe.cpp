@@ -397,14 +397,14 @@ void RunButtonsFrame::setRunButtonText(int buttonNumber)
     memoryData::memData m = getRunMemoryData(buttonNumber);
     QString sc = ((buttonNumber == 0)?QString(" [ "):QString( " ] "));
 
-    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + extractKhz(m.freq) + "   ";
-    QString tTipStr = tr("Freq: ") + convertFreqStrDisp(m.freq) + "\n"
+    QString runText = "R" + QString::number(buttonNumber + 1) + "(" + sc + ") " + "." + m.freq.extractKhz() + "   ";
+    QString tTipStr = tr("Freq: ") + m.freq.convertFreqStrDisp() + "\n"
             + tr("Mode: ") + m.mode + "\n";
     QString restoreText;
     if (!runButtonMap[buttonNumber]->returnFrequency.isClear())
     {
-        restoreText = "\n" + tr("Restore .%1    ").arg(extractKhz(runButtonMap[buttonNumber]->returnFrequency) );
-        tTipStr += tr("Restore freq: ") + convertFreqStrDisp(runButtonMap[buttonNumber]->returnFrequency) + "\n";
+        restoreText = "\n" + tr("Restore .%1    ").arg(runButtonMap[buttonNumber]->returnFrequency.extractKhz() );
+        tTipStr += tr("Restore freq: ") + runButtonMap[buttonNumber]->returnFrequency.convertFreqStrDisp() + "\n";
     }
     runButtonMap[buttonNumber]->memButton->setText(runText + restoreText);
 
@@ -444,12 +444,12 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
 }
 void RunButtonsFrame::setFreqDisplay(Frequency f, bool legalFreq)
 {
-    QString freq;
+    QString freqCol;
     if (!legalFreq)
     {
-        freq = HtmlFontColour(Qt::red);
+        freqCol = HtmlFontColour(Qt::red);
     }
-    ui->freqDisplay->setText(freq + f.str());
+    ui->freqDisplay->setText(freqCol + f.convertFreqStrDisp());
 }
 
 void RunButtonsFrame::on_radioFreqCheckTimer()

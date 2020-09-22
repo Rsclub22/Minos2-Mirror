@@ -440,7 +440,7 @@ QString BandmapFreqDial::convertFreqDialDisplay(const Frequency &freq)
 {
 
     QString sfreq = freq.str();
-    sfreq = sfreq.left(sfreq.length() - 3);
+    sfreq = sfreq.left(sfreq.length() - 3); // convert to KHz
 
     int len = sfreq.length();
 

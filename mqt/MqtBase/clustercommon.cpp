@@ -14,7 +14,7 @@ const char * clusterStateList[] =
 
 void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
 {
-    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq.str()).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
+    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq.traceStr()).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
     trace(QString("getMode: modeBandPlan loaded Ok - %1").arg(modeBandPlan->checkLoadedOk() ? "true" : "false"));
     if (dxBand != "")
     {

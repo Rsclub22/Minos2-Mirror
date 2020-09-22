@@ -121,7 +121,7 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
     }
     else
     {
-        ui->freqLineEdit->setText(removeTrailingZeroes(convertFreqStrDispSingle(ldata->freq)));
+        ui->freqLineEdit->setText(ldata->freq.convertFreqStrDispSingleNoTrailZero());
     }
 
     ui->timeLineEdit->setText(ldata->time);

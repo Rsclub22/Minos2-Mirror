@@ -562,20 +562,20 @@ bool RigControlFrame::isRadioLoaded()
 
 void RigControlFrame::noRadioSetFreq(Frequency f)
 {
-    traceMsg(QString("No Radio SetFreq = %1").arg(f.str()));
+    traceMsg(QString("No Radio SetFreq = %1").arg(f.traceStr()));
     setFreq(f);
 }
 
 void RigControlFrame::setFreq(Frequency freq)
 {
-    traceMsg(QString("Set Freq: = %1").arg(freq.str()));
+    traceMsg(QString("Set Freq: = %1").arg(freq.traceStr()));
 
 
-    traceMsg(QString("setFreq: lastFreq = %1, setFreq = %2").arg(lastFreq.str()).arg(freq.str()));
+    traceMsg(QString("setFreq: lastFreq = %1, setFreq = %2").arg(lastFreq.traceStr()).arg(freq.traceStr()));
 
     if (lastFreq != freq)
     {
-        traceMsg(QString("setFreq: update lastFreq = %1, setFreq = %2").arg(lastFreq.str()).arg(freq.str()));
+        traceMsg(QString("setFreq: update lastFreq = %1, setFreq = %2").arg(lastFreq.traceStr()).arg(freq.traceStr()));
         lastFreq = freq;
 
     }
@@ -594,8 +594,8 @@ void RigControlFrame::displayFreqOnFreqEditDisplay(const Frequency &freq)
 
         if (!freqEditOn)
         {
+            traceMsg(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq.traceStr()));
             QString sf = freq.str();
-            traceMsg(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(sf));
             ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setText(sf);
@@ -770,7 +770,7 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                QString f =HtmlFontColour(Qt::red) + lastFreq.str();
+                QString f = HtmlFontColour(Qt::red) + lastFreq.dispStr();
                 traceMsg("changeMainRadioFreq " + f);
                 ui->freqInput->setText(f);
                 emit setFreqDisplay(f, legalFreq);
@@ -834,7 +834,7 @@ void RigControlFrame::sendRigFreq(Frequency f)
 
 void RigControlFrame::noRadioSendOutFreq(Frequency f)
 {
-    traceMsg(QString("No Radio Send Freq to rigcontrolframe and qsologframe = %1").arg(f.str()));
+    traceMsg(QString("No Radio Send Freq to rigcontrolframe and qsologframe = %1").arg(f.traceStr()));
     // update rigframe
     emit noRadioSendFreq(f);
     // update logger
@@ -954,7 +954,7 @@ void RigControlFrame::freqEditSelected()
 void RigControlFrame::transferDetails(memoryData::memData &m)
 {
     traceMsg(QString("Memory Read: Memory Freq = %1, CurFreq = %2, Mode = %3, CurMode = %4")
-             .arg(m.freq.str()).arg(curFreq.str()).arg(m.mode).arg(curMode));
+             .arg(m.freq.traceStr()).arg(curFreq.traceStr()).arg(m.mode).arg(curMode));
     if (isRadioLoaded())
     {
         if (radioConnected && !radioError)
@@ -1242,7 +1242,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                         rigFrameStartFlag = false;
                         onContestPageChangedFlag = false;
                         traceMsg(QString("setRadioName: start contest frame radioName = %1, freq = %2, mode = %3, contest = %4")
-                                 .arg(radioName).arg(sendFreq.str()
+                                 .arg(radioName).arg(sendFreq.traceStr()
                                                                                                                                                     ).arg(contestMode).arg(ct->uuid));
                         emit selectRadio(radioName, sendFreq, contestMode.remove(':'));
                     }
@@ -1321,7 +1321,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
 {
     traceMsg(QString("setRadioFreq: enter function, fromStartRigControl = %1, onContestPageChangedFlag = %2, rigFrameStartFlag = %3, lastFreq = %4")
              .arg(fromStartRigControl ? "True" : "False").arg(onContestPageChangedFlag ? "True" : "False")
-             .arg(rigFrameStartFlag ? "True" : "False").arg(lastFreq.str()));
+             .arg(rigFrameStartFlag ? "True" : "False").arg(lastFreq.traceStr()));
 
     if (selRadioDetails.getBandList().isEmpty())
     {
@@ -1353,7 +1353,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            // frame has been running, so use lastFreq, except if ignorePreviousFreqFlag set
            if (!ignorePreviousFreqFlag)
            {
-               traceMsg(QString("frame has been running, using lastFreq = %1").arg(lastFreq.str()));
+               traceMsg(QString("frame has been running, using lastFreq = %1").arg(lastFreq.traceStr()));
                sendFreq = lastFreq;
            }
 
@@ -1397,20 +1397,20 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
 
                        Frequency freq = listOfBands[i].freq;
 
-                       traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.str()));
+                       traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
                        if (checkValidFreq(freq))
                        {
-                           traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.str()));
+                           traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.traceStr()));
                            sendFreq = freq;
                            curFreq = freq;
                            lastFreq = freq;
                            traceMsg(QString("setRadioFreq: sendFreq = %1, curFreq = %2, lastFreq = %3")
-                                    .arg(sendFreq.str()).arg(curFreq.str()).arg(lastFreq.str()));
+                                    .arg(sendFreq.traceStr()).arg(curFreq.traceStr()).arg(lastFreq.traceStr()));
 
                        }
                        else
                        {
-                           traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.str()));
+                           traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.traceStr()));
                            sendFreq.clear();
 
                        }
@@ -1446,11 +1446,11 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            {
 
                freq = lastFreq;
-               traceMsg(QString("setRadioFreq: set send freq to lastFreq = %1").arg(freq.str()));
+               traceMsg(QString("setRadioFreq: set send freq to lastFreq = %1").arg(freq.traceStr()));
 
                if (checkValidFreq(freq))
                {
-                   traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.str()));
+                   traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.traceStr()));
 
                    //displayFreqOnFreqEditDisplay(freq);
 
@@ -1460,7 +1460,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
                }
                else
                {
-                   traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.str()));
+                   traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.traceStr()));
                    sendFreq.clear();
                }
            }
@@ -1503,12 +1503,12 @@ void RigControlFrame::restoreRadioFreq()
 
                 if (checkValidFreq(freq))
                 {
-                  traceMsg(QString("restoreRadioFreq: restoring this freq = %1").arg(freq.str()));
+                  traceMsg(QString("restoreRadioFreq: restoring this freq = %1").arg(freq.traceStr()));
                   sendRigFreq(freq);
                 }
                 else
                 {
-                   traceMsg(QString("restoreRadioFreq: freq %1 invalid").arg(curFreq.str()));
+                   traceMsg(QString("restoreRadioFreq: freq %1 invalid").arg(curFreq.traceStr()));
                 }
 
             }
@@ -1527,7 +1527,7 @@ void RigControlFrame::restoreRadioFreq()
 
 int RigControlFrame::setBandSelComboFromFreq(const Frequency &freq)
 {
-    traceMsg(QString("setBandSelComboFromFreq = %1").arg(freq.str()));
+    traceMsg(QString("setBandSelComboFromFreq = %1").arg(freq.traceStr()));
 
     int retCode = 0;
     BandList &blist = BandList::getBandList();
@@ -1541,7 +1541,7 @@ int RigControlFrame::setBandSelComboFromFreq(const Frequency &freq)
         {
             qDebug() << "set combo to band = " << bi->uk;
             retCode = setBandSelComboIndex(bi->uk);
-            traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq.str()).arg(bi->uk).arg(retCode));
+            traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq.traceStr()).arg(bi->uk).arg(retCode));
 
         }
 
@@ -2061,7 +2061,7 @@ void RigControlFrame::freqPlusMinusButton(Frequency f)
         {
 
             setFreqTextLegalColour(freq, curMode);
-            ui->freqInput->setText(freq.str());
+            ui->freqInput->setText(freq.dispStr());
             emit setFreqDisplay(freq, legalFreq);
 
            if (radioConnected && !radioError)
@@ -2096,7 +2096,7 @@ Frequency RigControlFrame::calcNewFreq(Frequency incFreq)
         }
         else
         {
-            traceMsg(QString("CalcNewFreq: Freq  = %1").arg(freq.str()));
+            traceMsg(QString("CalcNewFreq: Freq  = %1").arg(freq.traceStr()));
 
         }
     }

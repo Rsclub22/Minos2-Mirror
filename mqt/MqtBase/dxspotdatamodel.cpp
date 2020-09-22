@@ -180,7 +180,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->spotTime;
             break;
             case FREQ_STR_COL_NUM:
-                d = dxSpot->dxFreq.str();
+            d = removeHundredHzAndHzDigits(dxSpot->dxFreq);
             break;
             case DXSPOT_CALL_COL_NUM:
                 if (dxSpot->dxCallWorked == BOOL_YES)
@@ -245,7 +245,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->spotTime;
             break;
             case FREQ_STR_COL_NUM:
-                d = dxSpot->dxFreq.str();
+                d = dxSpot->dxFreq.dispStr();
             break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->dxCall;

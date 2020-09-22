@@ -91,7 +91,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber)
     }
     else
     {
-        ui->freqLineEdit->setText(removeTrailingZeroes(convertFreqStrDispSingle(ldata->freq)));
+        ui->freqLineEdit->setText(ldata->freq.convertFreqStrDispSingleNoTrailZero());
     }
 
 

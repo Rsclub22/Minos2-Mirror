@@ -1652,7 +1652,7 @@ void TSingleLogFrame::on_SetMode(QString m)
 
 void TSingleLogFrame::on_SetFreq(Frequency f)
 {
-    traceMsg(QString("on_SetFreq: freq from radio = %1").arg(f.str()));
+    traceMsg(QString("on_SetFreq: freq from radio = %1").arg(f.traceStr()));
 
     if (f.isClear())
     {
@@ -1666,7 +1666,7 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         if (f != sCurFreq)
         {
             stopKeyer = true;
-            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.str()).arg(sCurFreq.str()));
+            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr()).arg(sCurFreq.traceStr()));
         }
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
@@ -1882,7 +1882,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &f
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
             LogContainer->sendDM->changeRigSelectionTo(radName, freq, mode, ct->uuid);  // send message including mode if it has been appended.
-            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.str()).arg(mode).arg(uuid));
+            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.traceStr()).arg(mode).arg(uuid));
 
 
 

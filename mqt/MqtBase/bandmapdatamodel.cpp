@@ -76,7 +76,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->spotTime;
                 break;
             case FREQ_STR_COL_NUM:
-                d = bandmapSpot->dxFreq.str();
+                d = bandmapSpot->dxFreq.dispStr();
                 break;
             case DXBANDSTR_COL_NUM:
                 d = bandmapSpot->dxBand;
@@ -162,7 +162,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->spotTime;
             break;
             case FREQ_STR_COL_NUM:
-                d = bandmapSpot->dxFreq.str();
+                d = bandmapSpot->dxFreq.dispStr();
                 break;
             case FREQ_INT64_COL_NUM:
                 d = qint64(bandmapSpot->dxFreq);

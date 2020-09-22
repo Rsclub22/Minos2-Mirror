@@ -139,16 +139,16 @@ void FreqLineEdit::changeFreq(bool direction)
         }
 
 
-        sfreq = Frequency(freq).str();
+        sfreq = Frequency(freq).convertFreqStrDisp();
         trace(QString("Change Freq: Freq Tuning = %1").arg(sfreq));
         if (bandOK)
         {
-            setText(convertFreqStrDisp(sfreq));
+            setText(sfreq);
             emit newFreq();
         }
         else
         {
-            setText(HtmlFontColour(Qt::red) + convertFreqStrDisp(sfreq));
+            setText(HtmlFontColour(Qt::red) + sfreq);
         }
 
         setCursorPosition(pos);
