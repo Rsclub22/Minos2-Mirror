@@ -239,7 +239,7 @@ void MainWindow::SyncTimerTimer(  )
         }
         trackBand();
     }
-    ui->QF1Label->setText(mainRigFreq.dispStr());
+    ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
 }
 
 
@@ -325,9 +325,9 @@ void MainWindow::onReadyRead()
                 }
                 sampleRate = static_cast<int>(temp.toDouble());
             }
-            double f = (fCentre + ftf);
+            Frequency f(fCentre + ftf);
             lastQS1RRx = "fCentre " + QString::number(fCentre) + " Sample Rate "+ QString::number(sampleRate/1000) + "Ksps\r\n"
-                    "tf " + QString::number(ftf) + " freq " + QLocale::system().toString(f, 'f', 0);
+                    "tf " + QString::number(ftf) + " freq " + f.convertFreqStrDisp();
             if (ui->trackQS1R->isChecked())
             {
                 on_transfer21Button_clicked();
@@ -432,7 +432,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                 mainRigFreq = selState.radioFreq().getValue();
 
                 selState.clearDirty();
-                ui->QF1Label->setText(mainRigFreq.dispStr());
+                ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
 
                 if (ui->trackRig->isChecked())
                 {

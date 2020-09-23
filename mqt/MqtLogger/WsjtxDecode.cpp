@@ -123,7 +123,7 @@ bool decodeMessage::checkAsContact()
     scc.loc = fromGrid;
     scc.time = dtg(true);
     QString cb;
-    scc.frequency = cc->getTxFreqBand(Frequency(), cb).str();
+    scc.frequency = cc->getTxFreqBand(Frequency(), cb);
 
     scc.checkScreenContact();
     csret = scc.cs.valRes;

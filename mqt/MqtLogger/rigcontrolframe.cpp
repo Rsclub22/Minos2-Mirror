@@ -598,7 +598,7 @@ void RigControlFrame::displayFreqOnFreqEditDisplay(const Frequency &freq)
             QString sf = freq.str();
             ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
             setFreqTextLegalColour(freq, curMode);
-            ui->freqInput->setText(sf);
+            ui->freqInput->setLineText(sf);
 
         }
     }
@@ -770,10 +770,10 @@ void RigControlFrame::changeMainRadioFreq()
             }
             else
             {
-                QString f = HtmlFontColour(Qt::red) + lastFreq.dispStr();
-                traceMsg("changeMainRadioFreq " + f);
-                ui->freqInput->setText(f);
-                emit setFreqDisplay(f, legalFreq);
+                traceMsg("changeMainRadioFreq " + lastFreq.traceStr());
+                QString f = HtmlFontColour(Qt::red) + lastFreq.str();
+                ui->freqInput->setLineText(f);
+                emit setFreqDisplay(f, lastFreq);
             }
         }
     }
@@ -912,7 +912,7 @@ void RigControlFrame::exitFreqEdit()
         // up date display to current radio freq
         QString sf = curFreq.str();
         ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
-        ui->freqInput->setText(sf);
+        ui->freqInput->setLineText(sf);
         emit setFreqDisplay(curFreq, legalFreq);
     }
 
@@ -1795,7 +1795,7 @@ void RigControlFrame::setRadioState(QString s)
                curFreq.clear();
                QString sf = curFreq.str();
                ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
-               ui->freqInput->setText(sf);
+               ui->freqInput->setLineText(sf);
                emit setFreqDisplay(curFreq, legalFreq);
                ui->bandSelCombo->clear();
            }
@@ -2061,7 +2061,7 @@ void RigControlFrame::freqPlusMinusButton(Frequency f)
         {
 
             setFreqTextLegalColour(freq, curMode);
-            ui->freqInput->setText(freq.dispStr());
+            ui->freqInput->setLineText(freq.str());
             emit setFreqDisplay(freq, legalFreq);
 
            if (radioConnected && !radioError)
@@ -2264,3 +2264,10 @@ void RigControlFrame::checkConnection()
 }
 
 
+
+void RigControlFrame::on_freqInput_textChanged(const QString &/*arg1*/)
+{
+    // introduced to diagnose the displayed freqency going wrong
+    // Appears to have been a side effect of using HTML colouring in QLineEdit
+    //trace(QString("freqInput text changed to %1").arg(arg1));
+}

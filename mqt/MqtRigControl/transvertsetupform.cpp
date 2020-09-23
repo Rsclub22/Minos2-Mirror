@@ -64,7 +64,7 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
             {
                 transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffset.dispStr());
+                setOffsetFreqLabel(transVertData->transVertOffset);
                 return;
             }
             QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -103,7 +103,7 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, 
             {
                 transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffset.dispStr());
+                setOffsetFreqLabel(transVertData->transVertOffset);
                 return;
             }
             QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -150,10 +150,10 @@ void TransVertSetupForm::calcOffset()
     QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
 
     // convert radio freq
-    txf = convertFreqToFullDigit(txf).remove('.');
+    txf = convertFreqToFullDigit(txf);
     transVertData->radioFreq = Frequency(txf);
     // convert target freq
-    targetf = convertFreqToFullDigit(targetf).remove('.');
+    targetf = convertFreqToFullDigit(targetf);
     transVertData->targetFreq = Frequency(targetf);
 
     // check target freq in band
@@ -162,7 +162,7 @@ void TransVertSetupForm::calcOffset()
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
 
         // display
-        ui->offsetFreq->setText(transVertData->transVertOffset.dispStr());
+        setOffsetFreqLabel(transVertData->transVertOffset);
 
         transVertOffsetOk = true;
         transVertValueChanged = true;

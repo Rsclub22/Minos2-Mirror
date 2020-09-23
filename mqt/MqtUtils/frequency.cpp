@@ -14,14 +14,6 @@ QString Frequency::traceStr() const
 {
     return str();
 }
-QString Frequency::dispStr() const
-{
-    if (isClear())
-    {
-        return "";
-    }
-    return str();
-}
 
 static double constexpr MHz_factor {1.e6};
 static int constexpr frequency_precsion {6};
@@ -107,9 +99,6 @@ QString Frequency::convertFreqStrDisp()
             sfreq = sfreq.insert(i - 3, '.');
         }
     }
-
-
-
     return sfreq;
 }
 

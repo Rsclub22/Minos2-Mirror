@@ -64,7 +64,7 @@ const int TTLVALUE = 13;
 
 
 const int TIME_COL_NUM = 0;
-const int FREQ_STR_COL_NUM = 1;
+const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
 const int DXSPOT_CALL_WORKED_COL_NUM = 3;
 const int DXSPOT_MODE_COL_NUM = 4;
@@ -85,9 +85,8 @@ const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
 const int ROT_BEARING_COL_NUM = 20;
 const int ROT_CONNECTED_COL_NUM = 21;
-const int FREQ_INT64_COL_NUM = 22;      // used in bandmap, but not in display
-const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
+const int RUN_MODE_ON_COL_NUM = 22;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 23;    // used in bandmap
 
 
 const bool BOOL_YES = true;

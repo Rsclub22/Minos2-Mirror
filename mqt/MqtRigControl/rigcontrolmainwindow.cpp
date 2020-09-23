@@ -1845,7 +1845,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
             if (radio)
             {
-               retCode = radio->setFrequency(Frequency(f), vfo);
+               retCode = radio->setFrequency(f, vfo);
             }
             else
             {

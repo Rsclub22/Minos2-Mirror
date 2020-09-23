@@ -11,9 +11,6 @@ private:
     qint64 f = 0;
 public:
     Frequency(qint64 fr):f(fr){}
-    //Frequency(long fr):f(fr){}
-    //Frequency(int fr):f(fr){}
-    //Frequency(double fr):f(fr){}
     Frequency(QString fr);
     Frequency():f(0){}
     Frequency(const Frequency &fr):f(fr){}
@@ -30,7 +27,6 @@ public:
     //operator double() const {return f;}
     QString str() const ;
     QString traceStr() const;
-    QString dispStr() const;
 
     void clear(){f = 0;}
     bool isOK() const {return f >= 0;}

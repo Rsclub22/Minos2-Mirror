@@ -111,7 +111,7 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
 }
 
 
-void ClusterBandmapConfigure::onFreqToleranceValueChanged(int value)
+void ClusterBandmapConfigure::onFreqToleranceValueChanged(int /*value*/)
 {
 
 

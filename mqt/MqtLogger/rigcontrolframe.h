@@ -153,6 +153,8 @@ private slots:
 
     void freqStepComboChanged(const QString step);
 
+    void on_freqInput_textChanged(const QString &arg1);
+
 public slots:
     void returnChangeRadioFreq();
 private:

@@ -888,7 +888,7 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 
     if (text.count() > 0)
     {
-        callsignEnterTextFreq = curFreq.dispStr();
+        callsignEnterTextFreq = curFreq;
     }
     else
     {
@@ -1079,7 +1079,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          ui->frequencyEdit->setText(temp.frequency.dispStr());
+          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDisp());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -2779,7 +2779,7 @@ void QSOLogFrame::on_SpotPbClicked()
             // send last spot logged
             trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
             emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
-            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.dispStr());
+            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.convertFreqStrDisp());
         }
         else
         {
@@ -2793,7 +2793,7 @@ void QSOLogFrame::on_SpotPbClicked()
                 {
                    trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
                     emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
-                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.dispStr());
+                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.convertFreqStrDisp());
                 }
                 else
                 {
@@ -2840,7 +2840,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         doGJVCancelButton_clicked();
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
-        emit bandmapSaveFreq(logData.callsign, logData.freq.str(), logData.locator, QString::number(logData.bearing));
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
 
 
     }
