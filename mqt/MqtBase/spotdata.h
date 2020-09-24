@@ -31,7 +31,7 @@ public:
              QString bearing, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode, QString comment);
 
-    SpotData(const SpotData &spd);
+
 
     void operator = (const SpotData& spd);
 
@@ -105,7 +105,10 @@ public:
     void setSentToMemory(const bool sentToMemory_){sentToMemory = sentToMemory_;}
     bool getSentToMemory() const {return sentToMemory;}
 
-
+    SpotData(SpotData const&rhs)
+    {
+             *this = rhs;
+    }
 
 private:
 

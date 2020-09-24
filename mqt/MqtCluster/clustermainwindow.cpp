@@ -1024,7 +1024,7 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
 
             trace(QString("ProcessNewSpot: rxTime = %1").arg(rxTime));
             trace(QString("ProcessNewSpot: Add spot for display"));
-            spotsList += (new SpotData(newSpot));
+            spotsList.append(new SpotData(newSpot));
 
         }
     }
