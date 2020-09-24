@@ -990,7 +990,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 void ClusterMainWindow::processNewSpot(SpotData &newSpot)
 {
     trace(QString("Parse DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                        .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMask())
+                        .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMaskStr())
                         .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
 
     qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
@@ -1366,7 +1366,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         QString dxModeMask;
         getMode(modeBandPlan, newSpot.getDxFreq(), dxBandStr, dxModeStr, dxModeMask);
         newSpot.setDxModeStr(dxModeStr);
-        newSpot.setDxModeMask(dxModeMask);
+        newSpot.setDxModeMaskStr(dxModeMask);
 
         newSpot.setDxCall(dxMsg[1]);
         newSpot.setSpotDate(dxMsg[2]);
@@ -1404,7 +1404,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
             newSpot.setDxModeStr(commentMode);
-            newSpot.setDxModeMask(QString::number(commentModeNum));
+            newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
         return 0;
@@ -1755,7 +1755,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
             newSpot.setDxModeStr(commentMode);
-            newSpot.setDxModeMask(QString::number(commentModeNum));
+            newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
         return 0;

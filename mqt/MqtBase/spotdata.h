@@ -23,7 +23,7 @@ class SpotData
 public:
     SpotData();
 
-    SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate,
+    SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTime _spotDateTime,
              QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
              QString _dxMode, QString _dxModeMaskStr,
              QString _dxCall, bool _dxCallWorked, QString _dxLocator,
@@ -70,6 +70,9 @@ public:
     void setSpotDate(const QString spotDate_){spotDate = spotDate_.trimmed();}
     QString getSpotDate()const {return spotDate;}
 
+    void setSpotDateTime(const QDateTime spotDateTime_){spotDateTime = spotDateTime_;}
+    QDateTime getSpotDateTime() const {return spotDateTime;}
+
 
     void setDxLocator(const QString dxLocator_){dxLocator = dxLocator_.trimmed();}
     QString getDxLocator() const {return dxLocator;}
@@ -109,6 +112,7 @@ private:
     qint64 rxTime;
     QString spotTime;
     QString spotDate;
+    QDateTime spotDateTime;
     QString dxFreq;
     QString dxBandStr;
     QString dxBandMask;
