@@ -12,6 +12,7 @@
 #include "base_pch.h"
 #include "MatchCollection.h"
 #include "rigmemcommondata.h"
+#include "clustercommon.h"
 //---------------------------------------------------------------------------
 class BaseContestLog;
 class LoggerContestLog;
@@ -61,7 +62,9 @@ signals:
    void MatchBrgStrToRot(QString);
    void SpotBrgStrToRot(QString);
    void MemBrgStrToRot(QString);
+   void SendResendSpotsCommand(QString);
    void DxSpotToLog(memoryData::memData);         // cluster spot
+
    void DxSpotToMemory(BaseContestLog *, memoryData::memData);      // cluster spot
 
 
@@ -90,6 +93,7 @@ signals:
    void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
    void wsjtxDatagram(QByteArray *);
    void callsignLookup(BaseContestLog *l, QString c);
+   void ResendSpotsFromClusterCommand(resendFrameId, QString, int, QString);
 public:
    static MinosLoggerEvents mle;
 
@@ -136,6 +140,7 @@ public:
    static void SendSpotBrgStrToRot(QString);
    static void SendMemBrgStrToRot(QString);
    static void SendSpotToLog(memoryData::memData);     // cluster spot
+   static void SendRequestResendSpotsToClusterServer(resendFrameId, QString, int, QString);
    static void SendSpotToMemory(BaseContestLog *,memoryData::memData);  // cluster spot
 
    static void sendUpdateStats(BaseContestLog *c );

@@ -86,7 +86,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
+    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
 
@@ -190,6 +190,15 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
+    connect(ui->resendSpotsTestPb, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
+
+
+    if (!isProtected)
+    {
+        QTimer::singleShot(2000, this, SLOT(requestSpots()));
+
+    }
+
 
 
 
@@ -207,6 +216,25 @@ ClusterClientFrame::~ClusterClientFrame()
     }
     delete actionInObject;
 
+}
+
+void ClusterClientFrame::on_pushbuttonPressed()
+{
+    if (ct  && contestBand != -1)
+    {
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+    }
+}
+
+
+void ClusterClientFrame::requestSpots()
+{
+
+    if (ct && contestBand != -1)
+    {
+
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+    }
 }
 
 
@@ -273,7 +301,8 @@ void ClusterClientFrame::setupDXSpotView()
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
+    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
 
 
@@ -315,6 +344,8 @@ void ClusterClientFrame::setupSearchSpotView()
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
+    searchView->setColumnHidden(DATE_COL_NUM, true);
+    searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
 
 
@@ -365,7 +396,8 @@ void ClusterClientFrame::setupCallsignSpotView()
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
+    callSignView->setColumnHidden(DATE_COL_NUM, true);
+    callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
 
 
@@ -402,16 +434,16 @@ void ClusterClientFrame::setupLocatorSpotView()
     connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+
     locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
-    //locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-
-
+    locatorView->setColumnHidden(DATE_COL_NUM, true);
+    locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
 
 
@@ -606,26 +638,36 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     }
 }
 
-void ClusterClientFrame::dxSpots(QVector<QString> spotMsg)
+void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (isProtected)
+    if (!isProtected && ct)
     {
+        //get spot Message from queue
+        for (int i = 0; i < spotMsg.count(); i++)
+        {
+            ClusterMessage msg = spotMsg[i];
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid).arg(msg.getFrameId()));
+
+            // if loggerUuid is empty, message is for all frames
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::CLUSTER_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
+            {
+                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+                {
+                    traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    spotQueue += msg.getMessage();
+                }
+            }
+
+        }
+    }
+    else
+    {
+        // protected
+        spotQueue.clear();
         return;
     }
 
-    //get spot Message from queue
-    for (int i = 0; i < spotMsg.count(); i++)
-    {
-        QString msg = spotMsg[i];
-
-        if (msg.contains(DXSPOT))
-        {
-            spotQueue += spotMsg[i];
-        }
-
-
-    }
 
 
     if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
@@ -642,7 +684,7 @@ void ClusterClientFrame::handleDxSpots(QVector<QString> &spotQueue)
     for (int i = sqsize -1 ; i > -1; i--)
     {
        addDxSpotToTable(spotQueue[i]);
-       traceMsg("syncSpots " + spotQueue[i]);
+       //traceMsg("syncSpots " + spotQueue[i]);
     }
 
 
@@ -655,7 +697,20 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
     traceMsg(QString("addDXSpotToTable: %1").arg(spot));
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
-    QStringList sl = spot.split(DXSPOT);
+
+    bool resentSpot = false;
+
+    QStringList sl;
+    if (spot.contains(DXSPOT))
+    {
+      sl = spot.split(DXSPOT);
+    }
+    else if (spot.contains(RESENTSPOT))
+    {
+        resentSpot = true;
+        sl = spot.split(RESENTSPOT);
+    }
+
     if (sl.count() == 2)
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -716,14 +771,24 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-            dxSpotDataModel->rowData = new SpotData(rxTime, spotlist[SPOTTIME],
-                                                    spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
-                                                    spotlist[DXMODESTR], spotlist[DXMODEMASK],
-                                                    spotlist[DXCALL],
-                                                    callWorked, spotlist[DXLOCATOR],
-                                                    locWorked, distance,
-                                                    bearing, spotlist[SPOTCALL],
-                                                    spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
+            SpotData * spotData = new SpotData(rxTime, spotlist[SPOTTIME], spotlist[SPOTDATE],
+                                               spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
+                                               spotlist[DXMODESTR], spotlist[DXMODEMASK],
+                                               spotlist[DXCALL],
+                                               callWorked, spotlist[DXLOCATOR],
+                                               locWorked, distance,
+                                               bearing, spotlist[SPOTCALL],
+                                               spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
+
+            if (resentSpot)
+            {
+                if (checkspotExists(spotData))
+                {
+                    return;     // spot exists in table
+                }
+            }
+
+            dxSpotDataModel->rowData = spotData;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
@@ -732,6 +797,66 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
 }
 
+
+bool ClusterClientFrame::checkspotExists(SpotData *spotData)
+{
+    if (dxSpotDataModel->rowCount() == 0)
+    {
+        return false;
+    }
+
+    for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
+    {
+        if (checkDbRowForMatch(spotData->dxCall, row, DXSPOT_CALL_COL_NUM) )
+        {
+
+            if (checkDbRowForMatch(spotData->dxFreq, row, FREQ_COL_NUM) &&
+                    checkDbRowForMatch(spotData->spotTime, row, TIME_COL_NUM) &&
+                    checkDbRowForMatch(spotData->dxMode, row, DXSPOT_MODE_COL_NUM) &&
+                    checkDbRowForMatch(spotData->spotterCall, row, SPOTTER_CALL_COL_NUM))
+            {
+                return true;
+
+            }
+        }
+
+
+    }
+
+    return false;
+}
+
+
+
+bool ClusterClientFrame::checkDbRowForMatch(QString incomingVal, int row, const int colNum)
+{
+    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toString())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ClusterClientFrame::checkDbRowForMatch(bool incomingVal, int row, const int colNum)
+{
+    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toBool())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ClusterClientFrame::checkDbRowForMatch(qint64 incomingVal, int row, const int colNum)
+{
+    if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toLongLong())
+    {
+        return true;
+    }
+
+    return false;
+}
 
 void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bool* callWorked, bool* locatorWorked)
 {
@@ -965,7 +1090,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
-        traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+        traceMsg(QString("Set Contest: ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->contestBands.getValue();
         contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
@@ -1086,7 +1211,8 @@ void ClusterClientFrame::purgeSpots()
            {
                if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
-                     dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                   dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                   traceMsg(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
                }
                idx--;
            }
@@ -1176,28 +1302,19 @@ void ClusterClientFrame::logActionSelected()
 
 void ClusterClientFrame::memoryActionSelected()
 {
-    //TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    //if (tslf->isMemoryLoaded(ct))
-    //{
-        int curTab = ui->dxSpotTab->currentIndex();
 
-        if (filterProxyModelList[curTab]->rowCount() > 0)
+    int curTab = ui->dxSpotTab->currentIndex();
+
+    if (filterProxyModelList[curTab]->rowCount() > 0)
+    {
+        int currentRow = spotViewList[curTab]->currentIndex().row();
+        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
         {
-            int currentRow = spotViewList[curTab]->currentIndex().row();
-            if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
-            {
-                // check if spot has been sent to memory
-                //if (!filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-                //{
-                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
-                //}
-
-            }
+            sendSpotToMemory(filterProxyModelList[curTab], currentRow);
 
         }
-    //}
 
-
+    }
 
 }
 
@@ -1393,33 +1510,21 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
 void ClusterClientFrame::dxSpotProxyModelUpdate()
 {
-    //dxSpotProxyModel->setDynamicSortFilter(false);
-    //dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //dxSpotProxyModel->setDynamicSortFilter(true);
     dxSpotProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::callSignProxyModelUpdate()
 {
-    //callSignProxyModel->setDynamicSortFilter(false);
-   // callSignProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //callSignProxyModel->setDynamicSortFilter(true);
-    callSignProxyModel->setFilterRegExp("");
+   callSignProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::locatorProxyModelUpdate()
 {
-    //locatorProxyModel->setDynamicSortFilter(false);
-    //locatorProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    //locatorProxyModel->setDynamicSortFilter(true);
     locatorProxyModel->setFilterRegExp("");
 }
 
 void ClusterClientFrame::searchProxyModelUpdate()
 {
-    //searchSortProxyModel->setDynamicSortFilter(false);
-   // searchSortProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-   // searchSortProxyModel->setDynamicSortFilter(true);
     searchSortProxyModel->setFilterRegExp("");
 }
 

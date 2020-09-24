@@ -61,8 +61,6 @@ const int TTLVALUE = 13;
 
 // Cluster Data and View Columns
 
-
-
 const int TIME_COL_NUM = 0;
 const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
@@ -72,8 +70,8 @@ const int DXLOC_COL_NUM = 5;
 const int DXDIST_COL_NUM = 6;
 const int DXBRG_COL_NUM = 7;
 const int DXLOC_WORKED_COL_NUM = 8;
-const int SPOT_CALL_COL_NUM = 9;
-const int SPOTLOC_COL_NUM = 10;
+const int SPOTTER_CALL_COL_NUM = 9;
+const int SPOTTER_LOC_COL_NUM = 10;
 const int COMMENT_COL_NUM = 11;
 const int DXBANDSTR_COL_NUM = 12;
 const int DXBANDMASK_COL_NUM = 13;
@@ -81,13 +79,13 @@ const int DXMODEMASK_COL_NUM = 14;
 const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 15;
 const int DXSPOT_PROP_MODE_COL_NUM = 16;
 const int RXTIME_COL_NUM = 17;
-const int SPOT_TYPE_COL_NUM = 18;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 19;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 20;
-const int ROT_CONNECTED_COL_NUM = 21;
-const int RUN_MODE_ON_COL_NUM = 22;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 23;    // used in bandmap
-
+const int DATE_COL_NUM = 18;
+const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 21;
+const int ROT_CONNECTED_COL_NUM = 22;
+const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;
@@ -115,6 +113,7 @@ const QString DXSPOT = "DXSPOT:";
 //const QString TIMETOLIVE = "TIMETOLIVE:";
 const QString CLUSTER_STATUS = "CLUSTER_STATUS!";
 const QChar CLUSTER_STAT_DELIMITER = '!';
+const QString RESENTSPOT = "RESENTSPOT:";
 
 // Filter entry delimiter
 const QChar FILTER_DELIMITER = ',';
@@ -154,6 +153,11 @@ const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: orange ;\n
 const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: yellow;\n");
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange;\n");
 
+// resend clusterspots to client commands
+enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
+const QString RESEND_ALL_SPOTS = "resendAll";
+
+
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 
@@ -164,6 +168,25 @@ qlonglong spotElapsedTime(qlonglong spotTime);
 void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
 void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency freq, QString &band, QString &bandMask);
+
+class ClusterMessage
+{
+public:
+    void setMessage(QString msg){message = msg;}
+    QString getMessage(){return message;}
+
+    void setLoggerUuid(QString uuid){loggerUuid = uuid;}
+    QString getLoggerUuid(){return loggerUuid;}
+
+    void setFrameId(int frameId_){frameId = static_cast<resendFrameId>(frameId_);}
+    resendFrameId getFrameId(){return frameId;}
+
+private:
+    QString message;
+    QString loggerUuid;
+    resendFrameId frameId;
+};
+
 
 class ClusterClientFilterSettings
 {

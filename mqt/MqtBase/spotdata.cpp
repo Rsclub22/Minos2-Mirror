@@ -18,7 +18,7 @@ SpotData::SpotData()
 
 }
 
-SpotData::SpotData(qint64 _rxTime, QString _spotTime,
+SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate,
                    Frequency _dxFreq, QString _dxBandStr, QString _dxBandMask,
                    QString _dxMode, QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
@@ -30,6 +30,7 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime,
 
     rxTime = _rxTime;
     spotTime = _spotTime;
+    spotDate = _spotDate;
     dxFreq = _dxFreq;
     dxBandStr = _dxBandStr;
     dxBandMask = _dxBandMask;
@@ -52,6 +53,7 @@ void SpotData::operator = (const SpotData& spd)
 {
     rxTime = spd.rxTime;
     spotTime = spd.spotTime;
+    spotDate = spd.spotDate;
     dxFreq = spd.dxFreq;
     dxBandStr = spd.dxBandStr;
     dxBandMask = spd.dxBandMask;

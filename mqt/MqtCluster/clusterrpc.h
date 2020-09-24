@@ -23,15 +23,18 @@ class Clusterrpc : public QObject
 public:
     explicit Clusterrpc();
     ~Clusterrpc();
-    void sendDXSpot(QString spot);
+    void sendDXSpot(QString spot, QString uuid, int frameId);
 
     int getServerListCount();
     void publishState(const QString &raw, const QString &state);
 
     void publishTXEnable(const QString txOnOff);
+
 signals:
 
     void sendSpotToDXCluster(Frequency, QString, QString);
+    void resendSpotToClients(int, QString, QString, int);
+
 
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);

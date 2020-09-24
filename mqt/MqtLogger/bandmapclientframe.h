@@ -313,13 +313,14 @@ private:
     void saveBandmapZoomLevel(int &level);
     int readBandmapZoomLevel();
     void setZoomLevelLabelText(int level);
+
 protected:
 
 
 private slots:
 
      void clusterClientServerList(QVector<ClusterServer>);
-     void dxSpots(QVector<QString>);
+     void dxSpots(QVector<ClusterMessage>);
 
 
      void on_FontChanged();
@@ -364,6 +365,8 @@ private slots:
      void on_saveZoomLevelActionSelected();
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
+     void requestSpots();
+     void on_pushbuttonPressed();
 };
 
 

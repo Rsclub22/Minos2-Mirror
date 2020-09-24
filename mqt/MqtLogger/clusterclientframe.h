@@ -283,12 +283,19 @@ private:
 
     void setUnWorkedCallsignsCheckBoxVisible(bool state);
     void setUnworkedCheckboxesVisible(bool state);
+    bool checkDbRowForMatch(QString incomingVal, int row, const int colNum);
+    bool checkDbRowForMatch(qint64 incomingVal, int row, const int colNum);
+    bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
+
+
+    bool checkspotExists(SpotData *spotData);
+
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
 
     void clusterClientServerList(QVector<ClusterServer>);
-    void dxSpots(QVector<QString>);
+    void dxSpots(QVector<ClusterMessage>);
     void on_FontChanged();
     void filterButtonSelected();
     void purgeSpots();
@@ -329,6 +336,8 @@ private slots:
     void on_doSplitterChanges(BaseContestLog *);
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
+    void requestSpots();
+    void on_pushbuttonPressed();  //*************** test remove
 };
 
 class MouseInObject : public QObject

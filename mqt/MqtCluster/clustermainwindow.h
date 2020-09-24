@@ -108,6 +108,26 @@ public:
 
 };
 
+class ResendSpotCommand
+{
+public:
+    QString getCmd(){return cmd;}
+    void setCmd(QString cmd_){cmd = cmd_;}
+    int getBandmask(){return bandmask;}
+    void setBandmak(int bandmask_){bandmask = bandmask_;}
+    QString getuuid(){return uuid;}
+    void setUuid(QString uuid_){uuid = uuid_;}
+    int getFrameId(){return frameId;}
+    void setFrameId(int frameId_){frameId = frameId_;}
+
+private:
+
+    QString cmd;
+    int bandmask;
+    QString uuid;
+    int frameId;
+};
+
 class ClusterMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -199,12 +219,12 @@ private:
     SetupDialog *setupCluster;
 
     QVector<SpotData*> spotsList;
-    QTimer* getSpotsTimer;
+    //QTimer* getSpotsTimer;
 
-    QStringList sendSpotsQueue;
-    QTimer* sendSpotsTimer;
+    QStringList sendSpotsToClientQueue;
+    QTimer* sendSpotsToClientTimer;
 
-
+    QList<ResendSpotCommand> resendSpotsToClientQueue;
 
     QString currentNodeName;
     QString currentAddress;
@@ -312,12 +332,22 @@ private:
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
+    QString getSpotFromDisplayDb(int row);
+
+    void handleResendSpotToClientsCmds();
+
+    void getSpotsFromSendToClientQueue();
+    void resendAllSpotsToClients(ResendSpotCommand cmd);
+
+    QString createResendSpotToSend(QString spot);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
-    void getSpotsFromSendQueue();
+
     void clusterListChanged();
     void about();
     void handleStatusTimer();
+    void onResendSpotToClients(int frameId,  QString loggerUuid, QString cmd, int bandmask );
 
 
 #ifdef TEST_SPOTS
@@ -329,7 +359,9 @@ private slots:
 
 
 
-    void startSendSpotsTimer();
+
+
+    void getSpotsToSendToClientQueues();
 };
 
 #endif // CLUSTERMAINWINDOW_H

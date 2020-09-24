@@ -91,7 +91,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<QString>)), this, SLOT(dxSpots(QVector<QString>)));
+    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
 
 
@@ -254,6 +254,17 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeTimer->start(PURGE_TIME);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
 
+    connect(ui->resendSpotsTestPb, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
+
+
+    if (!isProtected)
+    {
+        QTimer::singleShot(2000, this, SLOT(requestSpots()));
+
+    }
+
+
+
 }
 
 
@@ -310,6 +321,24 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
     }
 }
 
+void BandmapClientFrame::on_pushbuttonPressed()
+{
+    if (ct  && contestBand != -1)
+    {
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+    }
+}
+
+
+void BandmapClientFrame::requestSpots()
+{
+
+    if (ct && contestBand != -1)
+    {
+
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+    }
+}
 
 
 void BandmapClientFrame::on_markSpotActionSelected()
@@ -880,7 +909,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
     }
 }
 
-void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
+void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
     if (!isProtected)
@@ -888,11 +917,18 @@ void BandmapClientFrame::dxSpots(QVector<QString> spotMsg)
         //get spot Message from queue
         for (int i = 0; i < spotMsg.count(); i++)
         {
-            QString msg = spotMsg[i];
+            ClusterMessage msg = spotMsg[i];
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid));
 
-            if (msg.contains(DXSPOT))
+            // if loggerUuid is empty, message is for all frames
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::BANDMAP_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
             {
-                spotQueue += spotMsg[i];
+                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+                {
+                    traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    spotQueue += msg.getMessage();
+
+                }
 
             }
 
@@ -984,7 +1020,21 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 {
 
     QDateTime spotDateTime = QDateTime::currentDateTimeUtc();
-    QStringList sl = spot.split(DXSPOT);
+
+//    bool resentSpot = false;
+
+    QStringList sl;
+    if (spot.contains(DXSPOT))
+    {
+       sl = spot.split(DXSPOT);
+    }
+    else if (spot.contains(RESENTSPOT))
+    {
+//       resentSpot = true;
+       sl = spot.split(RESENTSPOT);
+    }
+
+
     if (sl.count() == 2)
     {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

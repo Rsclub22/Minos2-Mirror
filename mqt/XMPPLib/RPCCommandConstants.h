@@ -36,21 +36,7 @@ static const QString monitorLogCategory ("MonitorLog");
 static const QString loggerStanzaRequest ("Minos:Logger:GetStanza");
 static const QString loggerStanzaResponse ("Minos:Logger:StanzaReturned");
 
-/*
-// Bandmap
-static const QString bandmapApp         ("mqtBandMap");
-static const QString bandmapMethod      ("Minos:BandMap");
 
-static const QString bandmapParamFreq   ("Freq");
-static const QString bandmapParamCallsign ("Callsign");
-static const QString bandmapParamLocator("Locator");
-static const QString bandmapParamUTC    ("UTC");
-static const QString bandmapParamQTH    ("QTH");
-
-static const QString BandMapCategory    ("BandMap");
-static const QString bandmapKeyLoaded    ("Loaded");
-
-*/
 
 // Cluster
 static const QString clusterApp         ("mqtCluster");
@@ -62,9 +48,13 @@ static const QString txSpotParamFreq    ("Freq");
 static const QString txSpotParamCallsign ("Callsign");
 static const QString txSpotParamLocator ("Locator");
 static const QString txSpotParamUTC    ("UTC");
+static const QString clusterResendSpots       ("MinosClusterResend");
+static const QString clusterResendSpotsCmd    ("MinosClusterResendCmd");
 static const QString clusterCategory    ("ClusterCategory");
 static const QString clusterReport      ("Report");
 static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
+static const QString clusterBandmask ("ClusterBandmask");
+static const QString clusterFrameId ("ClusterFrameId");
 
 // Chat
 static const QString chatApp            ("mqtChat");

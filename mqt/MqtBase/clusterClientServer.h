@@ -15,6 +15,7 @@
 
 #include <QObject>
 #include "base_pch.h"
+#include "clustercommon.h"
 
 
 class ClusterServer
@@ -36,11 +37,13 @@ public:
     virtual ~ClusterClientServer();
     static ClusterClientServer  *getClusterClientServer();
 
+    void setLoggerUuid(QString uuid);
 private:
     static ClusterClientServer *clusterClientServer;
     QTimer SyncTimer;
 
-    void addSpotQueue(const QString &spot);
+
+    void addSpotQueue(const ClusterMessage spot);
 
 private slots:
     void SyncTimerTimer( );
@@ -48,7 +51,7 @@ private slots:
 
 signals:
     void ClusterServerList(QVector<ClusterServer>);
-    void dxSpot(QVector<QString>);
+    void dxSpot(QVector<ClusterMessage>);
 
 };
 

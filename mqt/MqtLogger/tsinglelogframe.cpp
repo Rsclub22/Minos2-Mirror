@@ -140,6 +140,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
     // from cluster frame
     connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(ResendSpotsFromClusterCommand(resendFrameId, QString, int, QString)), this, SLOT(on_ResendSpotsFromClusterCommand(resendFrameId, QString, int, QString)));
 
 
     // to cluster server
@@ -1104,6 +1105,17 @@ void TSingleLogFrame::on_SendSpotToClusterServer(Frequency freq, QString callsig
         LogContainer->sendDM->sendSpotToClusterServer(freq, callsign, loc);
     }
 }
+
+void TSingleLogFrame::on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, int bandmask, QString uuid)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendRequestSpotsResentFromClusterServer(frameId, cmd, bandmask, uuid );
+    }
+}
+
+
+
 
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
 {

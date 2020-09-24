@@ -20,7 +20,7 @@
 
 #include "clusterClientServer.h"
 
-static QVector<QString> spotQueue;
+static QVector<ClusterMessage> spotQueue;
 
 ClusterClientServer *ClusterClientServer::clusterClientServer = nullptr;
 
@@ -63,17 +63,28 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
         if (args)
         {
             QSharedPointer<RPCParam> psMess;
-            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess))
+            QSharedPointer<RPCParam> loggerUuid;
+            QSharedPointer<RPCParam> frameId;
+            QString pmess;
+            QString uuid;
+            int frame_id;
+            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess)
+                    && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
+                    && args->getStructArgMember(0, rpcConstants::clusterFrameId, frameId))
             {
-                QString pmess;
-                if (psMess->getString(pmess))
-                {
-                    trace(QString("ClusterClientServer: on_serverCall - Message = %1").arg(pmess));
-                    // add to chat window
-                    QString mess = from + " : " + pmess;
-                    addSpotQueue( mess );
-                }
+
+                psMess->getString(pmess);
+                loggerUuid->getString(uuid);
+                frameId->getInt(frame_id);
+                trace(QString("ClusterClientServer: on_serverCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
+                ClusterMessage msg;
+                msg.setMessage(pmess);
+                msg.setFrameId(frame_id);
+                msg.setLoggerUuid(uuid);
+                addSpotQueue( msg );
+
             }
+
         }
     }
 }
@@ -86,13 +97,15 @@ void ClusterClientServer::SyncTimerTimer(  )
     }
 }
 
+
+
 //---------------------------------------------------------------------------
 
-void ClusterClientServer::addSpotQueue(const QString &spot)
+void ClusterClientServer::addSpotQueue(const ClusterMessage spot)
 {
-    QDateTime dt = QDateTime::currentDateTime();
-    QString sdt = dt.toString( "HH:mm:ss " ) + spot;
-    spotQueue.push_back(sdt);
+    //QDateTime dt = QDateTime::currentDateTime();
+    //QString sdt = dt.toString( "HH:mm:ss " ) + spot;
+    spotQueue.push_back(spot);
 }
 
 //---------------------------------------------------------------------------
