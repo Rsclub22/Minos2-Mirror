@@ -119,7 +119,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, Callsign, QString, QString, QString, QString, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString, QString, QString, QString, QString)));
 
     connect(bandmapView, SIGNAL( contextMenuSelected( const QPoint&, const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint&, const QPoint& ) ) );
     connect(bandmapView, SIGNAL(newZoomlevel(int)), this, SLOT(on_newZoomlevel(int)));
@@ -1903,11 +1903,25 @@ void BandmapClientFrame::purgeSpots()
     bandmapView->bandmapUpdate();
 }
 
-void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq)
+void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq, QString mode, QString districtMult)
 {
     Q_UNUSED(c)
     if (!isProtected)
     {
+        QString logContactDistrict = districtMult;
+        QString logContactMode;
+        QString logContactMgmSubMode;
+
+        if (mode.contains(':'))
+        {
+            QStringList ml = mode.split(':');
+            if (ml.count() == 2)
+            {
+                logContactMode = ml[0];
+                logContactMgmSubMode = ml[1];
+            }
+        }
+
 
         traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq).arg(loc).arg(brg));
         //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");

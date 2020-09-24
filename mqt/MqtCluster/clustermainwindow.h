@@ -378,8 +378,13 @@ private:
     QVector<SpotData*> spotsList;
     //QTimer* getSpotsTimer;
 
+
     QStringList sendSpotsToClientQueue;
     QTimer* sendSpotsToClientTimer;
+
+    QTimer* pingClusterNodeTimer;
+    bool pingOk;
+
 
     QList<ResendSpotCommand> resendSpotsToClientQueue;
 
@@ -513,6 +518,11 @@ private:
     QString txgeoloc(double *n, double *e, int f, char t);
     int geotoloc(double lat, double longi, QString &gridref);
 
+
+
+    int getPingTimeoutValue();
+    void sendPingMessage();
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
@@ -539,6 +549,10 @@ private slots:
     void handAskQrzTimer();
 
     void handleAskQrzTimeout();
+
+    void cancelPingTimeOut(QString msg);
+    void handlePingClusterNodeTimeout();
+
 
 };
 

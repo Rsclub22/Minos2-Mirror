@@ -335,7 +335,7 @@ private slots:
      void on_memoryActionSelected();
      void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
-     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq);
+     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq, QString mode, QString districtMult);
      void filterButtonSelected();
      void checkSavedFilters();
      void onMenuShow();
