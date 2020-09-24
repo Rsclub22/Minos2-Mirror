@@ -16,6 +16,7 @@
 #define BANDMAPDATA_H
 
 #include <QString>
+#include "frequency.h"
 
 namespace bandmapSpotType {
 
@@ -31,7 +32,7 @@ class BandmapData
 public:
     BandmapData();
     BandmapData(qint64 _rxTime, QString _spotTime,
-             QString _dxFreqStr, qint64 dxFreq, QString _dxBand, QString _dxBandMaskStr,
+             Frequency dxFreq, QString _dxBand, QString _dxBandMaskStr,
              QString _dxMode, QString _dxModeMaskStr, QString _dxCall,
              bool _dxCallWorked, QString _dxLocator,
              bool _dxLocatorWorked, QString _distance,
@@ -45,8 +46,7 @@ public:
 
     qint64 rxTime;
     QString spotTime;
-    QString dxFreqStr;
-    qint64 dxFreq;
+    Frequency dxFreq;
     QString dxBand;
     QString dxBandMaskStr;
     QString dxMode;

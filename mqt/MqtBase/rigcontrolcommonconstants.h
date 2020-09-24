@@ -4,7 +4,7 @@
 
 #include <QString>
 #include <QStringList>
-
+#include "frequency.h"
 
 
 // Status messages sent to minos logger
@@ -86,8 +86,7 @@ const int RIGCTLD_EXE_MISSING = -4;
 const QStringList radioOpenMessages = {"Open OK", "Open Failed", "RigCtld Failed",
                                       "RigCtld Failed to Stop", "RigCtld Exe Missing"};
 
-const QString ZEROFREQ = "00000000000";
-const QString NO_BAND_SUPPORT = ZEROFREQ;
+const Frequency NO_BAND_SUPPORT;
 
 const QString TRANSSW_NUM_DEFAULT = "0";
 

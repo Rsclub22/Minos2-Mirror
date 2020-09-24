@@ -58,6 +58,7 @@ BaseContestLog::BaseContestLog( )
   serialMandatoryField.setValue( true );
   locatorMandatoryField.setValue( true );
   otherExchange.setValue( false );
+  otherOptionalExchange.setValue( false );
   countryMult.setValue( false );
   nonGCountryMult.setValue( false );
   districtMult.setValue( false );
@@ -111,50 +112,78 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
    }
    return QSharedPointer<BaseContact>();
 }
-double BaseContestLog::getAdifFreqBand(QString txfreq, QString &cb)
+double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper ADIF name of the band
 
-    txfreq = txfreq.remove('.');
-    double freq = convertStrToFreq(txfreq);
+    double freq = txfreq;
 
     QString cband = currentBand.getValue();
 
     cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(cb, bi);
     if (bandOK)
     {
-        cb = bi.adif;
-        if (txfreq.isEmpty() || freq < 100)
+        cb = bi->adif;
+        if (freq < 100)
         {
-            freq = bi.flow;
+            freq = bi->fLow;
         }
     }
     return freq;
 }
-double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
+QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq )
+{
+    // get a tx freq, even when we don't have
+    // rig control, and the proper Cabrillo name of the band
+
+    QString cband = currentBand.getValue();
+
+    QString cb = cband.trimmed();
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        cb = bi->cabrillo;
+        qint64 f = qint64(txfreq);
+        if (f  < 100)
+        {
+            return cb;
+        }
+
+        if (bi->getType() != "HF")
+        {
+            return cb;
+        }
+        f = f/1000.0;
+        return QString::number(f, 'f', 0);
+    }
+    return "XXX";
+}
+
+Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
 {
     // we now want to get the band associated with the current freq
     // so we can get the correct map value for mults etc
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK;
 
-    txfreq = txfreq.remove('.');
-    double freq = convertStrToFreq(txfreq);
+    Frequency freq = txfreq;
 
-    if (txfreq.isEmpty() || freq < 100)
+    if (qint64(txfreq) < 100)
     {
         QString cband = currentBand.getValue().trimmed();
         bandOK = blist.findBand(cband, bi);
         if (bandOK)
         {
-            cb = bi.uk;
-            freq = static_cast<long>(bi.flow);
+            cb = bi->uk;
+            freq = bi->fLow;
         }
         else
         {
@@ -166,7 +195,7 @@ double BaseContestLog::getTxFreqBand(QString txfreq, QString &cb)
     bandOK = blist.findBand(freq, bi);
     if (bandOK)
     {
-        cb = bi.uk;
+        cb = bi->uk;
     }
     else
     {
@@ -201,6 +230,7 @@ void BaseContestLog::clearDirty()
    contestBands.clearDirty();
    currentBand.clearDirty();
    otherExchange.clearDirty();
+   otherOptionalExchange.clearDirty();
    countryMult.clearDirty();
    nonGCountryMult.clearDirty();
    locMult.clearDirty();
@@ -242,6 +272,7 @@ void BaseContestLog::setDirty()
    contestBands.setDirty();
    currentBand.setDirty();
    otherExchange.setDirty();
+   otherOptionalExchange.setDirty();
    countryMult.setDirty();
    nonGCountryMult.setDirty();
    locMult.setDirty();
@@ -1152,6 +1183,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "locMult", locMult );
       mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", otherExchange );
+      mt->getStructArgMemberValue( "QTHOpt", otherOptionalExchange );
       mt->getStructArgMemberValue( "AllowLoc4", allowLoc4 );
       mt->getStructArgMemberValue( "AllowLoc8", allowLoc8 );
       mt->getStructArgMemberValue( "currentMode", currentMode);

@@ -98,7 +98,7 @@ void FreqLineEdit::changeFreq(bool direction)
 
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
 
     bool ok = false;
@@ -115,44 +115,52 @@ void FreqLineEdit::changeFreq(bool direction)
     sfreq = sfreq.trimmed().remove('.');
 
 
-    double freq = sfreq.toDouble(&ok);
+    double dfreq = sfreq.toDouble(&ok);
 
     if (ok)
     {
         if (direction)
         {
-            freq += tuneStep;
-            bandOK = blist.findBand(freq, bi);
+            dfreq += tuneStep;
+            bandOK = blist.findBand(dfreq, bi);
             if (!bandOK)
             {
-                freq -= tuneStep;
+                dfreq -= tuneStep;
             }
         }
         else
         {
-            freq -= tuneStep;
-            bandOK = blist.findBand(freq, bi);
+            dfreq -= tuneStep;
+            bandOK = blist.findBand(dfreq, bi);
             if (!bandOK)
             {
-                freq += tuneStep;
+                dfreq += tuneStep;
             }
         }
 
 
-        sfreq = convertFreqToStr(freq);
-        trace(QString("Change Freq: Freq Tuning = %1").arg(sfreq));
+        QString sfreq2 = Frequency(dfreq).convertFreqStrDisp();
+
+        trace(QString("Change Freq: Freq Tuning = %1 from %2").arg(sfreq2).arg(sfreq));
         if (bandOK)
         {
-            setText(convertFreqStrDisp(sfreq));
+            setLineText(sfreq2);
             emit newFreq();
         }
         else
         {
-            setText(HtmlFontColour(Qt::red) + convertFreqStrDisp(sfreq));
+            // eventually the HTML colouring corrupts the value displayed
+            setLineText(/*HtmlFontColour(Qt::red) +*/ sfreq2);
         }
 
         setCursorPosition(pos);
    }
 }
 
-
+void FreqLineEdit::setLineText(QString s)
+{
+    // introduced to diagnose the displayed freqency going wrong
+    // Appears to have been a side effect of using HTML colouring in QLineEdit
+    //trace(QString("Set line text %1").arg(s));
+    setText(s);
+}

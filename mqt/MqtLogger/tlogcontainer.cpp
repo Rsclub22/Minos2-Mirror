@@ -38,6 +38,7 @@
 #include "n1mmbroadcastconfig.h"
 #include "defdirsdlg.h"
 #include "BandList.h"
+#include "delayedaction.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -88,6 +89,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
+
+    connect(MinosConfig::getMinosConfig(), SIGNAL(appStarted()), this, SLOT(appStarted()));
 }
 TLogContainer::~TLogContainer()
 {
@@ -159,14 +162,11 @@ bool TLogContainer::show(int argc, char *argv[])
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
 
-    setWindowState(windowState() | Qt::WindowState::WindowActive);
-
     return true;
 }
 void TLogContainer::onArgsReceived(QString conarg)
 {
     preloadFiles( conarg );
-    setWindowState(windowState() | Qt::WindowState::WindowActive);
 }
 
 void TLogContainer::on_TimeDisplayTimer( )
@@ -1220,6 +1220,7 @@ void TLogContainer::LanguageAcceptActionExecute()
         {
             if (l.dispName == selText)
             {
+                // this propagates a changeEvent that causes all contests to reload
                 switchTranslation(l.code);
                 break;
             }
@@ -1230,6 +1231,7 @@ void TLogContainer::LanguageAcceptActionExecute()
         }
     }
 }
+
 void TLogContainer::UDPConfigActionExecute()
 {
     N1MMBroadcastConfig udpConfig;
@@ -2248,6 +2250,11 @@ void TLogContainer::onRestorContestModeChecked(bool checked)
 {
     TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
 
+}
+
+void TLogContainer::appStarted()
+{
+    delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
 }
 
 bool TLogContainer::readRestoreContestModeFlag()

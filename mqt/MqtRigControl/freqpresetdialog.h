@@ -37,7 +37,7 @@ class FreqPresetDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail> &_bands, bool* freqPresetChanged, QWidget *parent = nullptr);
+    explicit FreqPresetDialog(QStringList& _presetFreq, const QVector<QSharedPointer<BandInfo> > &_bands, bool* freqPresetChanged, QWidget *parent = nullptr);
     ~FreqPresetDialog();
 
 
@@ -69,13 +69,13 @@ private slots:
 private:
     Ui::FreqPresetDialog *ui;
     QStringList presetFreq;
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
     bool freqChanged = false;
     bool* freqPresetChanged;
 
 
 
-    bool checkInBand(double freq, freqPresetData::bandOffSet band);
+    bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
     void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
 
     void loadSettingsToDialog();

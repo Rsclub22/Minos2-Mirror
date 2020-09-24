@@ -4,6 +4,7 @@
 
 #include "ConfigFile.h"
 #include "ConfigElementFrame.h"
+#include "delayedaction.h"
 
 #include "ui_StartConfig.h"
 
@@ -236,17 +237,12 @@ void StartConfig::on_newElementButton_clicked()
 
     update();
 
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         ui->elementScrollArea->verticalScrollBar()->setValue(ui->elementScrollArea->verticalScrollBar()->maximum());
-        timer->deleteLater();
     }
     );
 
-    timer->start(100);
     cef->setNameFocus();
 }

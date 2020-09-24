@@ -53,7 +53,7 @@ RunButtonDialog::~RunButtonDialog()
 
 void RunButtonDialog::onFreqEditFinish()
 {
-    QString f = ui->freqLineEdit->text().trimmed().remove( QRegExp("^[0]*"));
+    QString f = ui->freqLineEdit->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -85,13 +85,13 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber)
     ui->modecb->setCurrentText(ldata->mode);
 
 
-    if (logdata->freq.isEmpty())
+    if (logdata->freq.isClear())
     {
         ui->freqLineEdit->setText("");
     }
     else
     {
-        ui->freqLineEdit->setText(removeTrailingZeroes(convertFreqStrDispSingle(ldata->freq)));
+        ui->freqLineEdit->setText(ldata->freq.convertFreqStrDispSingleNoTrailZero());
     }
 
 
@@ -101,7 +101,7 @@ void RunButtonDialog::on_okButton_clicked()
 {
     // update run data
     //logdata->freq = ui->freqLineEdit->text().remove('.');
-    QString f = ui->freqLineEdit->text().remove( QRegExp("^[0]*")); //remove periods and leading zeros
+    QString f = ui->freqLineEdit->text().remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
     if (f.isEmpty())
     {
         logdata->freq = f;
@@ -118,7 +118,7 @@ void RunButtonDialog::on_okButton_clicked()
         fl[1] = fl[1] + "0000000";
         fl[1].truncate(6);
 
-        logdata->freq = fl[0] + fl[1];
+        logdata->freq = Frequency(fl[0] + fl[1]);
 
     }
     logdata->mode = ui->modecb->currentText();

@@ -318,16 +318,16 @@ int HamlibRigControl::getFrequency(VFO vfo, Frequency &frequency)
     int retCode = rig_get_freq(my_rig, hamlibVfoNames[vfo], &f);
     if (retCode >= RIG_OK)
     {
-        frequency = static_cast<Frequency>(f);
+        frequency = Frequency(f);
     }
 
     return retCode;
 }
 
 
-int HamlibRigControl::setFrequency(Frequency frequency, VFO vfo)
+int HamlibRigControl::setFrequency(const Frequency &frequency, VFO vfo)
 {
-    return (rig_set_freq(my_rig, hamlibVfoNames[vfo], static_cast<freq_t>(frequency)));
+    return (rig_set_freq(my_rig, hamlibVfoNames[vfo], frequency));
 }
 
 /*
@@ -347,7 +347,7 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 
 
 
-bool HamlibRigControl::checkFreqRange(int rigNumber, Frequency freq)
+bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
 {
 
     RIG *myRig = rig_init(rigNumber);
@@ -639,15 +639,15 @@ int HamlibRigControl::getRit(VFO vfo, ShortFreq &ritfreq)
     int retCode = rig_get_rit(my_rig, hamlibVfoNames[vfo], &freq);
     if (retCode == RIG_OK)
     {
-        ritfreq = static_cast<ShortFreq>(freq);
+        ritfreq = ShortFreq(freq);
     }
 
     return retCode;
 }
 
-int HamlibRigControl::setRit(VFO vfo, ShortFreq ritfreq)
+int HamlibRigControl::setRit(VFO vfo, const ShortFreq &ritfreq)
 {
-    return rig_set_rit(my_rig, hamlibVfoNames[vfo], static_cast<shortfreq_t>(ritfreq));
+    return rig_set_rit(my_rig, hamlibVfoNames[vfo], qint32(ritfreq));
 }
 
 int HamlibRigControl::clearRit(VFO vfo)

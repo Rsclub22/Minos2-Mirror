@@ -29,7 +29,9 @@
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
-RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, const QVector<BandDetail> &_bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
+RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
+                           const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _ui_RadioTab,
+                           QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
     transverterRemoved(false)
@@ -1406,10 +1408,10 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
     radioData->transVertSettings[tabNum]->band = tabName;
     for (int i = 0; i < bands.count(); i++)
     {
-         if (bands[i].name == tabName)
+         if (bands[i]->name() == tabName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i].fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i].fHigh;
+             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
+             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
              break;
          }
     }
@@ -1442,9 +1444,9 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 
 void RigSetupForm::loadTransVertTab(int tabNum)
 {
-    transVertTab[tabNum]->setRadioFreqBox(convertFreqStrDispSingle(radioData->transVertSettings[tabNum]->radioFreqStr));
-    transVertTab[tabNum]->setTargetFreqBox(convertFreqStrDispSingle(radioData->transVertSettings[tabNum]->targetFreqStr));
-    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffsetStr);
+    transVertTab[tabNum]->setRadioFreqBox(radioData->transVertSettings[tabNum]->radioFreq);
+    transVertTab[tabNum]->setTargetFreqBox(radioData->transVertSettings[tabNum]->targetFreq);
+    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffset);
     transVertTab[tabNum]->setTransVerSwNum(radioData->transVertSettings[tabNum]->transSwitchNum);
     transVertTab[tabNum]->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
 }
@@ -1579,10 +1581,10 @@ void RigSetupForm::changeBand()
 
     for (int i = 0; i < bands.count(); i++)
     {
-         if (bands[i].name == transVertName)
+         if (bands[i]->name() == transVertName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i].fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i].fHigh;
+             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
+             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
          }
     }
     //renamedTransVertTabs.append(oldName);

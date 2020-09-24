@@ -173,7 +173,7 @@ void WsjtxFrame::setContest(BaseContestLog *c)
 //  << new QStandardItem {dx_call}
 //  << new QStandardItem {dx_grid}
 //  << new QStandardItem {name}
-//  << new QStandardItem {Radio::frequency_MHz_string (dial_frequency)}
+//  << new QStandardItem {frequency_MHz_string (dial_frequency)}
 //  << new QStandardItem {mode}
 //  << new QStandardItem {report_sent}
 //  << new QStandardItem {report_received}
@@ -627,7 +627,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         return;
 
     BandList &blist = BandList::getBandList();
-    BandInfo bi;
+    QSharedPointer<BandInfo>  bi;
     double df = f;
     bandOK = blist.findBand(df, bi);
     if (bandOK)
@@ -635,20 +635,20 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         QString cb = ct->contestBands.getValue().trimmed();
         if (cb == allHF)
         {
-            cb = bi.uk;
+            cb = bi->uk;
             ct->setCurrentBand(cb);
         }
         else
         {
-            BandInfo cbi;
+            QSharedPointer<BandInfo>  cbi;
             bool cbandOK = blist.findBand(cb, cbi);
             if (cbandOK)
             {
-                cb = cbi.uk;
+                cb = cbi->uk;
             }
-            if (cb != bi.uk)
+            if (cb != bi->uk)
             {
-                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi.uk);
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi->uk);
                 ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
             }
             else
@@ -791,7 +791,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                               .arg (tx_mode.isEmpty () || tx_mode == mode ? QString() : '(' + tx_mode + ')'));
 
 
-    ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + Radio::pretty_frequency_MHz_string (f));
+    ui->frequency_label_->setText (HtmlFontColour(fcolour) + "QRG: " + f.pretty_frequency_MHz_string());
 
     ui->dx_label_->setText (dx_call.size () >= 0 ? QString {"DX: %1%2"}.arg (dx_call)
                                                    .arg (dx_grid.size () ? '(' + dx_grid + ')' : QString {}) : QString {});
@@ -945,7 +945,7 @@ void WsjtxFrame::on_testButton_clicked()
 //        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
 
 
-            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, true, 0, 0
+            update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, true, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 
@@ -1010,7 +1010,7 @@ void WsjtxFrame::on_testButton_clicked()
             decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ RR73", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC 73", false, true);
 
-            update_status ("test", 14070060, "FT8", "","0", "FT8", false, false, false, 0, 0
+            update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0);
 

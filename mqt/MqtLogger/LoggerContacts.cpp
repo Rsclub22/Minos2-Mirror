@@ -347,7 +347,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
          sdest += districtMult->districtCode;
    }
    else
-      if ( clp->otherExchange.getValue() )
+      if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
       {
          sdest += extraText.getValue();
       }
@@ -394,7 +394,100 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    if ( cs.valRes == ERR_DUPCS )
       sdest += 'D';
 }
+static QString getCabrilloField(QString s, int len)
+{
+    QString outstr = s;
+    s += QString(' ', len);
+    if (s.isEmpty())
+        s = QString('-', len);
 
+    return s + " ";
+}
+void ContestContact::getCabrilloText(QString &outstr )
+{
+    /*
+QSO: qso-data
+QSO data as specified by the Cabrillo QSO data format.
+    All QSO lines must appear in chronological order.
+    See QSO data specification.
+
+X-QSO: qso-data
+    Any QSO marked with this tag will be ignored in your log.
+    Use to mark QSOs made that you do not want to count toward your score.
+
+                              --------info sent------- -------info rcvd--------
+QSO:  freq mo date       time call          rst exch   call          rst exch   t
+QSO: ***** ** yyyy-mm-dd nnnn ************* nnn ****** ************* nnn ****** n
+QSO:  3799 PH 1999-03-06 0711 HC8N           59 700    W1AW           59 CT     0
+QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     0
+*/
+
+    BaseContestLog * clp = contest;
+    if ( !bool( clp ) )
+        return;
+    LoggerContestLog *lcl = dynamic_cast<LoggerContestLog *>(clp);
+    if (!bool(lcl))
+        return;
+
+    if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
+        return;
+
+    if ( contactFlags.getValue() & NON_SCORING)
+        outstr += "X-QSO: ";
+    else
+        outstr += "QSO:   ";
+
+    outstr += getCabrilloField(contest->getCabrilloFreqBand(frequency.getValue()), 5);
+
+    QString smode = mode.getValue().toUpper();
+    if (smode == hamlibData::USB || smode == hamlibData::LSB || smode == hamlibData::FM)
+        smode = "PH";
+    else if (smode == hamlibData::MGM)
+        smode = "DG";
+    else
+        smode = "CW";
+
+    outstr += smode;
+    outstr += " ";
+
+    outstr += getCabrilloField(time.getCabrilloDTG(), 15);
+
+    outstr += getCabrilloField(lcl->mycall.fullCall.getValue(), 13);
+
+    if (lcl->RSTMandatoryField.getValue())
+    {
+        outstr += getCabrilloField(reps.getValue(), 3);
+    }
+    if (lcl->serialMandatoryField.getValue())
+    {
+        outstr += getCabrilloField(serials.getValue(), 6);
+    }
+    // loc - or other exchange
+    if (lcl->locatorMandatoryField.getValue())
+    {
+        outstr += getCabrilloField(lcl->myloc.loc.getValue(), 6);
+    }
+
+    outstr += getCabrilloField(cs.fullCall.getValue(), 13);
+
+    if (lcl->RSTMandatoryField.getValue())
+    {
+        outstr += getCabrilloField(repr.getValue(), 3);
+    }
+    if (lcl->serialMandatoryField.getValue())
+    {
+        QString srbuff;
+        int sr = serialr.getValue().toInt();
+        if ( sr )
+            srbuff = QString("%1").arg(sr, 4, 10, QChar('0') );
+        outstr += getCabrilloField(srbuff, 6);   // RX sno
+    }
+    // loc - or other exchange
+    if (lcl->locatorMandatoryField.getValue())
+    {
+        outstr += getCabrilloField(loc.loc.getValue(), 6);
+    }
+}
 QString ContestContact::getADIFLine()
 {
     //date

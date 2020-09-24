@@ -9,7 +9,7 @@
 extern const char * clusterStateList[];
 
 class checkModeAgainstFreq;
-class BandDetail;
+class BandInfo;
 
 // Files
 const QString CLUSTER_PATH = "./Configuration/Cluster/";
@@ -61,10 +61,8 @@ const int TTLVALUE = 13;
 
 // Cluster Data and View Columns
 
-
-
 const int TIME_COL_NUM = 0;
-const int FREQ_STR_COL_NUM = 1;
+const int FREQ_COL_NUM = 1;
 const int DXSPOT_CALL_COL_NUM = 2;
 const int DXSPOT_CALL_WORKED_COL_NUM = 3;
 const int DXSPOT_MODE_COL_NUM = 4;
@@ -86,10 +84,8 @@ const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
 const int ROT_BEARING_COL_NUM = 21;
 const int ROT_CONNECTED_COL_NUM = 22;
-const int FREQ_INT64_COL_NUM = 23;      // used in bandmap, but not in display
-const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
-
+const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;
@@ -99,9 +95,9 @@ const QString SPOT_TX_OFF = "TxSpotOff";
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 // Only locators in Europe
-const QRegExp FULL_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
-const QRegExp PART_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
-const QRegExp SEARCH_LOC_EXP = QRegExp("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
+const QRegularExpression FULL_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
+const QRegularExpression PART_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
+const QRegularExpression SEARCH_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
 
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;
@@ -169,9 +165,9 @@ bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 qlonglong spotElapsedTime(qlonglong spotTime);
 
-void getMode(checkModeAgainstFreq* modeBandPlan, QString freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
+void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
-void getBand(QVector<BandDetail> &bands, QString freq, QString &band, QString &bandMask);
+void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency freq, QString &band, QString &bandMask);
 
 class ClusterMessage
 {

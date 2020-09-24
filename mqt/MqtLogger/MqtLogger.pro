@@ -55,6 +55,7 @@ SOURCES += \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
+    cabrillo.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
@@ -101,8 +102,6 @@ SOURCES += \
     WsjtxDecodesModel.cpp \
     WsjtxNetworkMessage.cpp \
     WsjtxMessageServer.cpp \
-    WsjtxRadio.cpp \
-    WsjtxRadioMetaType.cpp \
     Wsjtx_qt_helpers.cpp \
         bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
@@ -137,6 +136,7 @@ HEADERS  += \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
+    cabrillo.h \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
@@ -186,7 +186,6 @@ HEADERS  += \
     Wsjtx_pimpl_h.hpp \
     Wsjtx_pimpl_impl.hpp \
     Wsjtx_qt_helpers.hpp \
-    WsjtxRadio.hpp \
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\

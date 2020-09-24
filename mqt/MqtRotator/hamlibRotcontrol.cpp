@@ -39,7 +39,7 @@ const char* HamlibRotControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operati
                                                 QT_TR_NOOP("Invalid VFO"),
                                                 QT_TR_NOOP("RIG_EDOM")};
 
-
+#define SPID_DELAY 500
 static QList<const rot_caps *> capsList;
 
 int collect(const rot_caps *caps, rig_ptr_t)
@@ -241,7 +241,7 @@ int HamlibRotControl::closeRotator()
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
     {
         // make sure we stop for a moment to let any last poll finish sending
-        QThread::msleep(1000);
+       QThread::msleep(SPID_DELAY);
     }
     int retcode;
     retcode = rot_close (my_rot);
@@ -499,7 +499,7 @@ int HamlibRotControl::rotateClockwise(const int speed)
     retCode = rot_move(my_rot, ROT_MOVE_RIGHT , speed);
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
     {
-        QThread::msleep(1000);
+        QThread::msleep(SPID_DELAY);
     }
 
     return retCode;
@@ -511,7 +511,7 @@ int HamlibRotControl::rotateCClockwise(const int speed)
     retCode = rot_move(my_rot, ROT_MOVE_LEFT , speed);
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
     {
-        QThread::msleep(1000);
+        QThread::msleep(SPID_DELAY);
     }
 
     return retCode;
@@ -526,7 +526,7 @@ int HamlibRotControl::rotate_to_bearing(const int bearing)
     retCode = rot_set_position(my_rot, rotbearing, 0.0);
     if (my_rot->caps->rot_model == ROT_MODEL_SPID_ROT1PROG || my_rot->caps->rot_model == ROT_MODEL_SPID_ROT2PROG)
     {
-        QThread::msleep(1000);
+        QThread::msleep(SPID_DELAY);
     }
 
     return retCode;

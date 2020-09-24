@@ -36,6 +36,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->ExchangeComboBox->addItem(tr("No Exchange Required"));
     ui->ExchangeComboBox->addItem(tr("PostCode Multipliers"));
     ui->ExchangeComboBox->addItem(tr("Other Exchange Multiplier"));
+    ui->ExchangeComboBox->addItem(tr("Optional Exchange Multiplier"));
     ui->ExchangeComboBox->addItem(tr("Exchange Required (no multiplier)"));
 
     ui->BonusComboBox->addItem(tr("None"));
@@ -90,6 +91,10 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
     connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
+
+    ui->NonGCtryMult->setVisible(false);
+    ui->GLocMult->setVisible(false);
+    ui->M7LocatorMults->setVisible(false);
 }
 void ContestDetails::doCloseEvent()
 {
@@ -178,11 +183,11 @@ void ContestDetails::setDetails(  )
    {
        ui->BandComboBox->addItem( tr("All HF") );
    }
-   for (QVector<BandInfo>::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
+   for (QVector<QSharedPointer<BandInfo> >::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
    {
-       if (allowHF || (*i).getType() != "HF")
+       if (allowHF || (*i)->getType() != "HF")
        {
-           ui->BandComboBox->addItem( (*i).uk );
+           ui->BandComboBox->addItem( (*i)->uk );
        }
    }
 
@@ -193,11 +198,11 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-       BandInfo bi;
+       QSharedPointer<BandInfo>  bi;
        bool bandOK = blist.findBand(cb, bi);
        if (bandOK)
        {
-           cb = bi.uk;
+           cb = bi->uk;
        }
    }
    int b = ui->BandComboBox->findText( cb );        // contest
@@ -290,9 +295,34 @@ void ContestDetails::setDetails(  )
       contest->mycall.fullCall.setValue( call );
    }
    ui->CallsignEdit->setText(call);
+
+   QString mainop = contest->currentOp1.getValue();
+   if ( !mainop.size() )                                       // Entry
+   {
+      contest->entryBundle.getStringProfile( eepMainOp, mainop );
+
+   }
    if (contest->currentOp1.getValue().size()== 0)
    {
-      contest->currentOp1.setValue( contest->mycall.realCall);
+       if (mainop.size())
+       {
+           contest->currentOp1.setValue( mainop);
+       }
+       else
+       {
+           contest->currentOp1.setValue( contest->mycall.realCall);
+       }
+   }
+
+   QString secondop = contest->currentOp2.getValue();
+   if ( !secondop.size() )                                       // Entry
+   {
+      contest->entryBundle.getStringProfile( eepSecondOp, secondop );
+
+   }
+   if (contest->currentOp2.getValue().size()== 0)
+   {
+      contest->currentOp2.setValue( secondop);
    }
 
    contest->validateLoc();
@@ -327,6 +357,7 @@ void ContestDetails::setDetails(  )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Muktiplier
       Exchange Required (no multiplier)
    */
 
@@ -337,12 +368,17 @@ void ContestDetails::setDetails(  )
    else
       if ( contest->otherExchange.getValue() )
       {
-          ui->ExchangeComboBox->setCurrentIndex( 3);
+          ui->ExchangeComboBox->setCurrentIndex( 4);
       }
       else
-      {
-          ui->ExchangeComboBox->setCurrentIndex( 0);
-      }
+          if ( contest->otherOptionalExchange.getValue() )
+          {
+              ui->ExchangeComboBox->setCurrentIndex( 3);
+          }
+          else
+              {
+                  ui->ExchangeComboBox->setCurrentIndex( 0);
+              }
    ui->DXCCMult->setChecked( contest->countryMult.getValue()) ;
    ui->NonGCtryMult->setChecked( contest->nonGCountryMult.getValue()) ;
 
@@ -465,11 +501,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->BandComboBox->clear();
 
    BandList &blist = BandList::getBandList();
-   BandInfo bi;
+   QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(ic.reg1band, bi);
     if (bandOK)
     {
-        ui->BandComboBox->addItem( bi.uk );
+        ui->BandComboBox->addItem( bi->uk );
     }
    else
     {
@@ -709,6 +745,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Multilier
       Exchange Required (no multiplier)
    */
 
@@ -719,12 +756,17 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    else
       if ( contest->otherExchange.getValue() )
       {
-         ui->ExchangeComboBox->setCurrentIndex(3);
+         ui->ExchangeComboBox->setCurrentIndex(4);
       }
       else
-      {
-         ui->ExchangeComboBox->setCurrentIndex(0);
-      }
+          if ( contest->otherOptionalExchange.getValue() )
+          {
+             ui->ExchangeComboBox->setCurrentIndex(3);
+          }
+          else
+              {
+                 ui->ExchangeComboBox->setCurrentIndex(0);
+              }
    ui->NonGCtryMult->setChecked(contest->nonGCountryMult.getValue()) ;
    ui->DXCCMult->setChecked(contest->countryMult.getValue()) ;
 
@@ -1052,27 +1094,38 @@ QWidget * ContestDetails::getDetails( )
       No Exchange Required
       PostCode Multipliers
       Other Exchange Multiplier
+      Optional Exchange Multiplier
       Exchange Required (no multiplier)
    */
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
     case 0:
         contest->otherExchange.setValue( false );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 
     case 1:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( true );
         break;
 
     case 2:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 
     case 3:
+        contest->otherExchange.setValue( false );
+        contest->otherOptionalExchange.setValue( true );
+        contest->districtMult.setValue( false );
+        break;
+
+    case 4:
         contest->otherExchange.setValue( true );
+        contest->otherOptionalExchange.setValue( false );
         contest->districtMult.setValue( false );
         break;
 
@@ -1225,7 +1278,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contest, nullptr, true );    // don't show the export options
+    TEntryOptionsForm EntryDlg( this, contest, nullptr, true );        // don't show the export options
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 

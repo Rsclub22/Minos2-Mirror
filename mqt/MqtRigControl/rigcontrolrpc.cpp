@@ -130,17 +130,17 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                         }
                     }
 
-                    QString freq;
+                    QString sfreq;
                     if ( args->getStructArgMember(0, rpcConstants::rigControlLogFreq, psFreq))
                     {
-                        if (psFreq->getString(freq))
+                        if (psFreq->getString(sfreq))
                         {
-                            trace(QString("Rig RPC: Select Radio Freq Command From Logger = %1").arg(freq));
+                            trace(QString("Rig RPC: Select Radio Freq Command From Logger = %1").arg(sfreq));
                         }
                     }
 
                     psn = rigCache.getSelectedRadio(psn);
-                    emit selectLoggerRadio(psn, freq, mode);
+                    emit selectLoggerRadio(psn, Frequency(sfreq), mode);
                 }
                 else
                 {
@@ -170,12 +170,12 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
-                QString freq;
-                if ( psFreq->getString( freq ) )
+                QString sfreq;
+                if ( psFreq->getString( sfreq ) )
                 {
                     // here you handle what the logger has sent to us
-                    trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
-                    emit (setFreq(freq));
+                    trace(QString("Rig RPC: Freq Command From Logger = %1").arg(sfreq));
+                    emit (setFreq(Frequency(sfreq)));
                 }
             }
         }
@@ -186,12 +186,12 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
-                int ritFreq;
-                if ( psRitFreq->getInt( ritFreq ) )
+                QString ritFreq;
+                if ( psRitFreq->getString( ritFreq ) )
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
-                    emit (setRitFreq(ritFreq));
+                    emit (setRitFreq(ShortFreq(ritFreq)));
                 }
             }
         }

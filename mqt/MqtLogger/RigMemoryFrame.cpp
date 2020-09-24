@@ -8,6 +8,8 @@
 #include "rigutils.h"
 #include "RigMemoryFrame.h"
 #include "htmldelegate.h"
+#include "delayedaction.h"
+
 #include "ui_RigMemoryFrame.h"
 
 
@@ -51,7 +53,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     ui->rigMemTable->setItemDelegate( delegate.data());
 
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
 
@@ -117,8 +119,6 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
 RigMemoryFrame::~RigMemoryFrame()
 {
-    delete ct;
-    ct = nullptr;
     delete ui;
 }
 
@@ -276,7 +276,7 @@ void RigMemoryFrame::checkTimerTimer()
     lastRigFreq = logData.freq;
     lastBearing = logData.bearing;
 
-    double rigFreq = convertStrToFreq(logData.freq);
+    Frequency rigFreq = logData.freq;
     int bearing = logData.bearing;
 
     int mcount = ct->rigMemories.size();
@@ -289,7 +289,7 @@ void RigMemoryFrame::checkTimerTimer()
         if (m.callsign == memDefData::DEFAULT_CALLSIGN)
             continue;
 
-        double memFreq = convertStrToFreq(m.freq);
+        Frequency memFreq = m.freq;
         int memBearing = m.bearing;
 
         enum rTriState{rtsNotLoaded, rtsOn, rtsOff};
@@ -298,7 +298,7 @@ void RigMemoryFrame::checkTimerTimer()
 
         if (tslf->isRadioLoaded())
         {
-            if (std::abs(rigFreq - memFreq) < 2000.0)
+            if (std::abs(qint64(rigFreq - memFreq)) < 2000)
             {
                 onfreq = rtsOn;
             }
@@ -353,7 +353,7 @@ void RigMemoryFrame::checkTimerTimer()
     }
     proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
 }
-void RigMemoryFrame::onRigFreqChanged(QString /*f*/, BaseContestLog *c)
+void RigMemoryFrame::onRigFreqChanged(Frequency /*f*/, BaseContestLog *c)
 {
     if (ct == c)
     {
@@ -437,39 +437,26 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               int sortCol = ui->rigMemTable->horizontalHeader()->sortIndicatorSection();
               bool sortOrder = ui->rigMemTable->horizontalHeader()->sortIndicatorOrder() == Qt::AscendingOrder;
 
+              delayedAction(this, [=]()
               {
-                  QTimer *timer = new QTimer(this);
-                  timer->setSingleShot(true);
-
-                  connect(timer, &QTimer::timeout, [=]()
-                  {
-                      // NB a lambda function
-                      suppressSaveColumns = true;
-                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
-                      suppressSaveColumns = false;
-                      timer->deleteLater();
-                  }
-                  );
-
-                  timer->start(10);
+                  // NB a lambda function
+                  suppressSaveColumns = true;
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                  suppressSaveColumns = false;
               }
+              , 10
+              );
 
+              delayedAction(this, [=]()
               {
-                  QTimer *timer2 = new QTimer(this);
-                  timer2->setSingleShot(true);
-
-                  connect(timer2, &QTimer::timeout, [=]()
-                  {
-                      // NB a lambda function
-                      suppressSaveColumns = true;
-                      ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
-                      suppressSaveColumns = false;
-                      timer2->deleteLater();
-                  }
-                  );
-
-                  timer2->start(20);
+                  // NB a lambda function
+                  suppressSaveColumns = true;
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                  suppressSaveColumns = false;
               }
+              , 20
+              );
+
               firstTime = false;
           }
 
@@ -724,10 +711,9 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 break;
             case ermFreq:
                 {
-                    if (!m.freq.isEmpty())
+                    if (!m.freq.isClear())
                     {
-                        QString newfreq = m.freq.trimmed().remove('.');
-                        double dfreq = convertStrToFreq(newfreq);
+                        qint64 dfreq = m.freq;
                         dfreq = dfreq/1000000.0;  // MHz
 
                         disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places

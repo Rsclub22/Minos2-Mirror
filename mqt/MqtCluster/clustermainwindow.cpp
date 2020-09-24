@@ -23,6 +23,8 @@
 #include "rigutils.h"
 #include "cutils.h"
 #include "BandList.h"
+#include "delayedaction.h"
+
 #include "ui_clustermainwindow.h"
 #include "latlong.h"
 
@@ -59,6 +61,13 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    delayedAction(this, [=](){
+        doStartup();
+    });
+}
+void ClusterMainWindow::doStartup()
+{
+
     connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
     stdinReader.start();
 
@@ -89,10 +98,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
-    loadVhfAndUpBands(bands);
+    BandList::getBandList().loadVhfAndUpBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
-    if (modeBandPlan->loadFile("./Configuration/mode_bandplan.json"))
+    if (modeBandPlan->loadBandsFromBandList())
     {
         trace(QString("Mode frequency bandplan loaded OK"));
 
@@ -134,7 +143,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
 
     clusterRpc = new Clusterrpc();
-    connect(clusterRpc, SIGNAL(sendSpotToDXCluster(QString, QString, QString)), this, SLOT(sendSpotToDXCluster(QString, QString, QString)));
+    connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, int)), this, SLOT(onResendSpotToClients(int, QString, QString, int)));
 
 
@@ -142,8 +151,10 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     connect(sendSpotsToClientTimer, SIGNAL(timeout()), this, SLOT(getSpotsToSendToClientQueues()));
     sendSpotsToClientTimer->start(SEND_SPOTS_DUR);
 
-    client = new QtTelnet(parent);
+
+    client = new QtTelnet(parent());
     dxClusterCommand = new ClusterCommands();
+
 
     if (!FileExists(CLUSTER_SETTINGS_FILE))
     {
@@ -322,6 +333,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
+
     connectToHost(currentNodeName);
 
     connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
@@ -937,12 +949,12 @@ void ClusterMainWindow::parseDX(const QString txt)
                 // look for qrz info
                 else if (getQrzInfo && line.contains("qrz"))
                 {
+
                     retCode = getQrzReply(line);
                     if (!qrzInfo.getGotAllData())
                     {
                         // still waiting
                         trace(QString("ParseDx - waiting for qrzInfo for callsign = %1").arg(waitingForCallFromQrz));
-
                     }
                     else
                     {
@@ -951,6 +963,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                         if (qrzInfo.getCall() == waitingForCallFromQrz)
                         {
+
                             trace(QString("ParseDx - qrz info matches waiting callsign = %1").arg(waitingForCallFromQrz));
                             if (spotListNoQra.contains(qrzInfo.getCall()))
                             {
@@ -980,6 +993,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                             {
                                 trace(QString("ParseDx - Couldn't find call = %1 in queued qrz spotlist").arg(waitingForCallFromQrz));
                             }
+
 
                         }
                         else
@@ -1352,17 +1366,16 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
 
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    dxMsg = txt.split(QRegExp("\\s+"), Qt::SkipEmptyParts);
+    dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
 #else
-    dxMsg = txt.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+    dxMsg = txt.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
 #endif
 
     if (dxMsg.count() > 4)
     {
-        //dxFreq = convertKhzToMhz(dxMsg[0]);
         QString f = dxMsg[0] + "00";
         f.remove('.');
-        newSpot.setDxFreq(convertFreqStrDisp(f));
+        newSpot.setDxFreq(Frequency(f).convertFreqStrDisp());
         QString dxBandStr;
         QString dxBandMask;
         getBand(bands, newSpot.getDxFreq(), dxBandStr, dxBandMask);
@@ -1552,7 +1565,7 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
 
     QString dxCall = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     QString dxLocator = dxSpotDataModel->data(dxSpotDataModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
-    QString dxFreq = dxSpotDataModel->data(dxSpotDataModel->index(row, FREQ_STR_COL_NUM), DataStoredRole).toString();
+    Frequency dxFreq = qvariant_cast<Frequency>(dxSpotDataModel->data(dxSpotDataModel->index(row, FREQ_COL_NUM), DataStoredRole));
     QString dxBandStr = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
     QString dxBandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString();
     QString dxModeStr = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_MODE_COL_NUM), DataStoredRole).toString();
@@ -1566,7 +1579,7 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString spotComment = dxSpotDataModel->data(dxSpotDataModel->index(row, COMMENT_COL_NUM), DataStoredRole).toString();
     QString dxPropMode = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_PROP_MODE_COL_NUM), DataStoredRole).toString();
 
-    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq).arg(dxBandStr)
+    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq.str()).arg(dxBandStr)
                     .arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
                     .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive());
 
@@ -1708,21 +1721,23 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
     int timePos = 0;
 
 
+
     txt.remove('\x07');
     //if (!txt.contains("DX de"))
     //{
     //    return -2;
     //}
 
-    dxMsg = txt.split(QRegExp("\\s+"));
+    dxMsg = txt.split(QRegularExpression("\\s+"));
 
     if (dxMsg.count() > 5)
     {
         newSpot.setSpotterCall(dxMsg[2].remove(':'));
         QString f = dxMsg[3] + "00";
         f.remove('.');
+
         //dxFreq = convertKhzToMhz(dxMsg[3]);
-        newSpot.setDxFreq(convertFreqStrDisp(f));
+        newSpot.setDxFreq(Frequency(f).convertFreqStrDisp());
 
 
         QString dxBandStr;
@@ -1735,6 +1750,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         {
             // discard spot as it is HF
             trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
+
             return -3;
         }
 
@@ -1897,7 +1913,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
 }
 
 
-QString ClusterMainWindow::extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp)
+QString ClusterMainWindow::extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp)
 {
     if (text.contains(fullLocExp))
     {
@@ -1997,16 +2013,16 @@ void ClusterMainWindow::LogTimerTimer()
 }
 
 
-void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString loc)
+void ClusterMainWindow::sendSpotToDXCluster(Frequency freq, QString call, QString loc)
 {
 
 
     bool spotStatus = false;
     QString spotMsg = assembleSpotForDXCluster(freq, call, loc);
-    if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isEmpty() && !call.isEmpty())
+    if (setupCluster->getSendToDXClusterEnabled() && loginSuccess && !freq.isClear() && !call.isEmpty())
     {
-        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq).arg(loc));
-        if (checkValidBand(freq))
+        trace(QString("SendSpotToDXCluster: sending spot, call %1, freq %2, locator %3").arg(call).arg(freq.traceStr()).arg(loc));
+        if (BandList::getBandList().checkValidBand(freq))
         {
 
 #ifdef TXSPOT
@@ -2029,7 +2045,7 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
         }
         else
         {
-            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq).arg(call));
+            trace(QString("SendSpotToDXCluster: spot freq is out of band %1, spot callsign %2").arg(freq.traceStr()).arg(call));
             spotStatus = false;
             addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[FREQ_ERR]));
         }
@@ -2041,7 +2057,7 @@ void ClusterMainWindow::sendSpotToDXCluster(QString freq, QString call, QString 
         {
            addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[NOT_LOGGED_ON]));
         }
-        else if (!freq.isEmpty() || !call.isEmpty())
+        else if (!freq.isClear() || !call.isEmpty())
         {
            addSentSpotToDisplayQueue(false, tr(sendClusterReasonText[CALL_LOC_EMPTY]));
         }
@@ -2065,7 +2081,7 @@ void ClusterMainWindow::addSentSpotToDisplayQueue(bool spotStatus, QString reaso
 
 
 
-QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, QString loc)
+QString ClusterMainWindow::assembleSpotForDXCluster(Frequency freq, QString call, QString loc)
 {
 #ifdef TEST_PLEASE_IGNORE
     bool testMsg = true;
@@ -2081,7 +2097,7 @@ QString ClusterMainWindow::assembleSpotForDXCluster(QString freq, QString call, 
     }
 #endif
 
-    qint64 f = freq.toLongLong();
+    qint64 f = freq;
     f = f / 1000;
 
     sentCallsign = call;

@@ -82,7 +82,7 @@ private slots:
 
     void on_AfterLogContact( BaseContestLog *ct);
 
-    void onRigFreqChanged(QString /*f*/, BaseContestLog *c);
+    void onRigFreqChanged(Frequency /*f*/, BaseContestLog *c);
 
     void onRotBearingChanged(int /*f*/, BaseContestLog *c);
 
@@ -117,7 +117,7 @@ private:
     bool suppressSendUpdate = false;
     bool suppressSaveColumns = false;
     bool firstTime = true;
-    QString lastRigFreq;
+    Frequency lastRigFreq;
     int lastBearing = 0;
     bool lastVisible = false;
     bool doTimer = false;

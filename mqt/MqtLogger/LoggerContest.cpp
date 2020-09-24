@@ -14,6 +14,7 @@
 #include "ScreenConfigFile.h"
 #include "AdifImport.h"
 #include "reg1test.h"
+#include "cabrillo.h"
 #include "printfile.h"
 #include "enqdlg.h"
 #include "MinosTestImport.h"
@@ -888,6 +889,10 @@ bool LoggerContestLog::export_contest(QSharedPointer<QFile> expfd, ExportType ex
          ret = exportREG1TEST( expfd, noSerials );
          break;
 
+      case ECABRILLO:
+         ret = exportCabrillo(expfd);
+         break;
+
       case EPRINTFILE:
          ret = exportPrintFile(expfd);
          break;
@@ -1035,6 +1040,7 @@ bool LoggerContestLog::exportREG1TEST(QSharedPointer<QFile>expfd, bool noSerials
 {
    // First test validity. Reg1test dictates in particular
 
+    /*
    // band
 
    QString cb = currentBand.getValue().trimmed();
@@ -1048,7 +1054,6 @@ bool LoggerContestLog::exportREG1TEST(QSharedPointer<QFile>expfd, bool noSerials
 
    if ( !bandOK )
    {
-       /*
       // put up a band chooser dialog
       TMinosBandChooser mshowMessage( LogContainer );
 
@@ -1071,20 +1076,24 @@ bool LoggerContestLog::exportREG1TEST(QSharedPointer<QFile>expfd, bool noSerials
       mshowMessage.ShowModal();
 
       band.setValue( mshowMessage.BandCombo->Text.c_str() );
-      */
    }
+      */
 
 
-   reg1test * rtest = new reg1test( this );
-   int rep = rtest->exportTest( expfd, noSerials );
-   delete rtest;
+   reg1test rtest ( this );
+   int rep = rtest.exportTest( expfd, noSerials );
+   return rep;
+}
+bool LoggerContestLog::exportCabrillo(QSharedPointer<QFile> expfd)
+{
+   Cabrillo rtest( this );
+   int rep = rtest.exportTest( expfd );
    return rep;
 }
 bool LoggerContestLog::exportPrintFile(QSharedPointer<QFile> expfd )
 {
-   PrintFile * rtest = new PrintFile( this );
-   int rep = rtest->exportTest( expfd );
-   delete rtest;
+   PrintFile rtest( this );
+   int rep = rtest.exportTest( expfd );
    return rep;
 }
 bool LoggerContestLog::exportMinos( QSharedPointer<QFile> expfd )
@@ -1103,9 +1112,8 @@ bool LoggerContestLog::exportMinos( QSharedPointer<QFile> expfd )
    if ( !MinosParameters::getMinosParameters() ->yesNoMessage( nullptr, temp ) )
       return false;
 
-   MinosTestExport * mtest = new MinosTestExport( this );
-   int rep = mtest->exportTest( expfd, mindump, maxdump );
-   delete mtest;
+   MinosTestExport mtest( this );
+   int rep = mtest.exportTest( expfd, mindump, maxdump );
    return ( rep > 0 );
 }
 
@@ -1551,7 +1559,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                int memno;
                                mt->getStructArgMemberValue( "memno", memno);
                                mt->getStructArgMemberValue( "callsign", mem.callsign);
-                               mt->getStructArgMemberValue( "freq", mem.freq);
+                               QString temp;
+                               mt->getStructArgMemberValue( "freq", temp);
+                               mem.freq = Frequency(temp);
                                mt->getStructArgMemberValue( "mode", mem.mode);
                                mt->getStructArgMemberValue( "locator", mem.locator);
                                mt->getStructArgMemberValue( "bearing", mem.bearing);
@@ -1567,7 +1577,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                    memoryData::memData mem;
                                    int memno;
                                    mt->getStructArgMemberValue( "memno", memno);
-                                   mt->getStructArgMemberValue( "freq", mem.freq);
+                                   QString temp;
+                                   mt->getStructArgMemberValue( "freq", temp);
+                                   mem.freq = Frequency(temp);
                                    mt->getStructArgMemberValue( "mode", mem.mode);
 
                                    saveInitialRunMemory(memno, mem);

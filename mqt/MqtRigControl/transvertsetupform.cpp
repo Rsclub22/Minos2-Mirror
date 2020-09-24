@@ -17,6 +17,7 @@
 #include "rigcommon.h"
 #include "rigutils.h"
 #include "BandList.h"
+#include "cutils.h"
 #include <QLineEdit>
 #include <QCheckBox>
 
@@ -56,26 +57,21 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
     else
     {
         // may need to compare real freq here!
-        if (ui->radioFreq->text().remove('.') != transVertData->radioFreqStr)
+        if (Frequency(ui->radioFreq->text().remove('.')) != transVertData->radioFreq)
         {
 
             if (ui->radioFreq->text().isEmpty() || ui->radioFreq->text() == "0.0")
             {
-                transVertData->transVertOffset = 0.0;
-                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-                if (transVertData->transVertOffsetStr.contains('?'))
-                {
-                    transVertData->transVertOffsetStr = QString("0.0");
-                }
+                transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                setOffsetFreqLabel(transVertData->transVertOffset);
                 return;
             }
-            QString txf = ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
             if (valInputFreq(txf, tr(RADIO_FREQ_EDIT_ERR_MSG)))
             {
                radioFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
                {
                    targetFreqOK = true;
                    calcOffset();
@@ -101,21 +97,20 @@ void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, 
     else
     {
         // may need to compare real freq here!
-        if (ui->targetFreq->text().remove('.') != transVertData->targetFreqStr) // changed?
+        if (Frequency(ui->targetFreq->text().remove('.')) != transVertData->targetFreq) // changed?
         {
             if (ui->targetFreq->text().isEmpty() || ui->targetFreq->text() == "0.0")
             {
-                transVertData->transVertOffset = 0.0;
-                transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
+                transVertData->transVertOffset.clear();
                 // display
-                ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+                setOffsetFreqLabel(transVertData->transVertOffset);
                 return;
             }
-            QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
+            QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
             if (valInputFreq(targetf, tr(TARGET_FREQ_EDIT_ERR_MSG)))
             {
                targetFreqOK = true;
-               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegExp("^[0]*")))))
+               if (validateFreqTxtInput(convertFreqToFullDigit(ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*")))))
                {
                    radioFreqOK = true;
                    calcOffset();
@@ -151,31 +146,23 @@ void TransVertSetupForm::calcOffset()
 
     transVertOffsetOk = false;
 
-    QString txf = ui->radioFreq->text().trimmed().remove( QRegExp("^[0]*"));
-    QString targetf = ui->targetFreq->text().trimmed().remove(QRegExp("^[0]*"));
+    QString txf = ui->radioFreq->text().trimmed().remove( QRegularExpression("^[0]*"));
+    QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
 
     // convert radio freq
-    txf = convertFreqToFullDigit(txf).remove('.');
-    transVertData->radioFreqStr = txf;
-    transVertData->radioFreq = txf.toDouble();
+    txf = convertFreqToFullDigit(txf);
+    transVertData->radioFreq = Frequency(txf);
     // convert target freq
-    targetf = convertFreqToFullDigit(targetf).remove('.');
-    transVertData->targetFreqStr = targetf;
-    transVertData->targetFreq = targetf.toDouble();
+    targetf = convertFreqToFullDigit(targetf);
+    transVertData->targetFreq = Frequency(targetf);
 
     // check target freq in band
     if (transVertData->targetFreq >= transVertData->fLow && transVertData->targetFreq <= transVertData->fHigh)
     {
         transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
-        //transVertData->transVertOffsetStr = convertFreqStrDispSingle(convertFreqToStr(transVertData->transVertOffset));
-        transVertData->transVertOffsetStr = convertFreqStrDispSingleNoTrailZero(convertFreqToStr(transVertData->transVertOffset));
-        if (transVertData->transVertOffsetStr.contains('?'))
-        {
-            transVertData->transVertOffsetStr = QString("0.0");
-        }
 
         // display
-        ui->offsetFreq->setText(transVertData->transVertOffsetStr);
+        setOffsetFreqLabel(transVertData->transVertOffset);
 
         transVertOffsetOk = true;
         transVertValueChanged = true;
@@ -192,20 +179,20 @@ void TransVertSetupForm::calcOffset()
 }
 
 
-void TransVertSetupForm::setRadioFreqBox(QString f)
+void TransVertSetupForm::setRadioFreqBox(Frequency f)
 {
-    ui->radioFreq->setText(f);
+    ui->radioFreq->setText(f.convertFreqStrDispSingle());
 }
 
-void TransVertSetupForm::setTargetFreqBox(QString f)
+void TransVertSetupForm::setTargetFreqBox(Frequency f)
 {
-    ui->targetFreq->setText(f);
+    ui->targetFreq->setText(f.convertFreqStrDispSingle());
 }
 
 
-void TransVertSetupForm::setOffsetFreqLabel(QString f)
+void TransVertSetupForm::setOffsetFreqLabel(Frequency f)
 {
-    ui->offsetFreq->setText(f);
+    ui->offsetFreq->setText(f.convertFreqStrDispSingle());
 }
 
 
@@ -216,12 +203,12 @@ void TransVertSetupForm::setOffsetFreqLabel(QString f)
 
 void TransVertSetupForm::transVertSwNumSel()
 {
-    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
     QString numSel = ui->transVertSwNum->text().trimmed();
     if (numSel != transVertData->transSwitchNum)
     {
-
-        if (re.exactMatch(numSel))
+        QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
+        QRegularExpressionMatch rem = re.match(numSel);
+        if (rem.hasMatch())
         {
             transVertData->transSwitchNum = numSel;
             transVertValueChanged = true;
@@ -267,7 +254,7 @@ void TransVertSetupForm::setEnableTransVertSwBoxVisible(bool visible)
 void TransVertSetupForm::antennaNumSwSel()
 {
     QString numSel = ui->radioAntSwNum->text().trimmed();
-    QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
+    QRegularExpression re("\\d*");  // a digit (\d), zero or more times (*)
     if (re.exactMatch(numSel))
     {
         transVertData->antSwitchNum = numSel;

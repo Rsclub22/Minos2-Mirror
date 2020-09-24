@@ -72,7 +72,7 @@ public:
     void logTabChanged();
 
     void modeSentFromRig(QString mode);
-    void setFreq(QString freq);
+    void setFreq(Frequency freq);
     void setRadioName(QString);
     QString getRadioName();
     void setRadioState(QString s);
@@ -85,7 +85,7 @@ public:
     ScreenContact *getPartialContact() const;
     void setPartialContact(ScreenContact *value);
 
-    void setRunMemoryFreqUpdate(int num, QString freq);
+    //void setRunMemoryFreqUpdate(int num, Frequency freq);
     //void setIgnoreRunChkBoxState(int num, bool checked);
     void setClusterServerState(QString state);
     void setClusterTXSpotEnableState(bool txEnableState);
@@ -171,7 +171,6 @@ private:
     QString Op2String;
 
     FocusWatcher *freqFW;
-    QString freqString;
 
     ErrorList errs;
 
@@ -219,13 +218,13 @@ private:
     bool runButtonOnFlag;
     bool radioOffRunFreq;
 
-    QString callsignEnterTextFreq;
+    Frequency callsignEnterTextFreq;
 
 
     QString mode;
     QString oldMode;
     bool qsoLogModeFlag = false;
-    QString curFreq;
+    Frequency curFreq;
     QString curRadioName;
     QString curRotatorBearing;
 
@@ -254,7 +253,7 @@ private:
 
     Callsign lastLoggedCallsign;        // saved to send to cluster
     QString lastLoggedLocator;
-    QString lastLoggedFreq;
+    Frequency lastLoggedFreq;
 
 
     void onBandMapAfterLogContact();
@@ -262,7 +261,7 @@ private:
     void initLogRunButton();
     void runButtonOn();
     void runButtonOff();
-    void sendFreq(QString f);
+    void sendFreq(Frequency f);
 
     QString getRunMemoryFreq(int memoryNumber);
 
@@ -276,14 +275,13 @@ private:
     void setClusterSendSpotControlsDisabled(bool disabled);
 signals:
     void QSOFrameCancelled();
-    void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
+    void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
-    void bandmapMarkFreq(QString, QString, QString, QString);
-    void bandmapSaveFreq(QString, QString, QString, QString);
-    void sendFreqControl(QString);
-    void freqChanged(QString);
-    void sendSpotToClusterServer(QString, QString, QString);
-
+    void bandmapMarkFreq(QString, Frequency, QString, QString);
+    void bandmapSaveFreq(QString, Frequency, QString, QString);
+    void sendFreqControl(Frequency);
+    void freqChanged(Frequency);
+    void sendSpotToClusterServer(Frequency, QString, QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -325,7 +323,7 @@ private slots:
 
     void on_SpotPbClicked();
 
-    void on_FreqChanged(QString f);
+    void on_FreqChanged(Frequency f);
 
 
 

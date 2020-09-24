@@ -6,7 +6,7 @@
 
 
 HAMLIBVER = $$(hamlib)
-message(The hamlib version is $$HAMLIBVER)
+#message(The hamlib version is $$HAMLIBVER)
 
 equals(HAMLIBVER, 33) {
 
@@ -15,7 +15,7 @@ equals(HAMLIBVER, 33) {
        win32-g++* {
           contains(QT_ARCH, i386) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-3.3)
-          message(Hamlib path is $$HAMLIBDIR)
+          #message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w64-3.3)
@@ -35,12 +35,12 @@ equals(HAMLIBVER, 33) {
 
     }
 } else {
-    message(Using default version - hamlib V4.0)
+    #message(Using default version - hamlib V4.0)
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
       HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
-      message(Hamlib path is $$HAMLIBDIR)
+      #message(Hamlib path is $$HAMLIBDIR)
       }
    contains(QT_ARCH, x86_64) {
       HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)

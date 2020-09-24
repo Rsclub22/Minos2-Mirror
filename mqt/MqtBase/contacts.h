@@ -99,6 +99,8 @@ class BaseContact: public QObject
       {}
       virtual void getReg1TestText( QString &, bool /*noSerials*/ )
       {}
+      virtual void getCabrilloText( QString & )
+      {}
       virtual void getPrintFileText(QString &, short )
       {}
       virtual QString getADIFLine()
@@ -126,7 +128,7 @@ class BaseContact: public QObject
       MinosItem<unsigned short> contactFlags;
       MinosStringItem<QString> forcedMult;
       MinosStringItem<QString> rigName;
-      MinosStringItem<QString> frequency;
+      MinosFrequencyItem<Frequency> frequency;
       MinosStringItem<QString> rotatorHeading;
 
       MinosStringItem<QString> op1;         // current main op - derived from contacts

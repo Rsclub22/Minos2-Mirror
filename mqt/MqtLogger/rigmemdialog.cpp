@@ -58,7 +58,7 @@ RigMemDialog::~RigMemDialog()
 
 void RigMemDialog::onFreqEditFinish()
 {
-    QString f = ui->freqLineEdit->text().trimmed().remove( QRegExp("^[0]*"));
+    QString f = ui->freqLineEdit->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -115,13 +115,13 @@ void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, Logg
         ui->bearingLineEdit->setText(number);
     }
 
-    if (ldata->freq.isEmpty())
+    if (ldata->freq.isClear())
     {
         ui->freqLineEdit->setText("");
     }
     else
     {
-        ui->freqLineEdit->setText(removeTrailingZeroes(convertFreqStrDispSingle(ldata->freq)));
+        ui->freqLineEdit->setText(ldata->freq.convertFreqStrDispSingleNoTrailZero());
     }
 
     ui->timeLineEdit->setText(ldata->time);
@@ -136,7 +136,7 @@ void RigMemDialog::on_okButton_clicked()
     logData->worked = ui->workedCB->isChecked();
 
     //QString f = convertSinglePeriodFreqToMultiPeriod(ui->freqLineEdit->text());
-    QString f = ui->freqLineEdit->text().remove( QRegExp("^[0]*")); //remove periods and leading zeros
+    QString f = ui->freqLineEdit->text().remove( QRegularExpression("^[0]*")); //remove periods and leading zeros
     if (f.isEmpty())
     {
         logData->freq = f;
@@ -153,7 +153,7 @@ void RigMemDialog::on_okButton_clicked()
         fl[1] = fl[1] + "0000000";
         fl[1].truncate(6);
 
-        logData->freq = fl[0] + fl[1];
+        logData->freq = Frequency(fl[0] + fl[1]);
     }
 
     logData->mode = ui->modecb->currentText();

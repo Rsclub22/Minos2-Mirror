@@ -8,9 +8,9 @@ class checkModeAgainstFreq : public freqModeBandPlan
     Q_OBJECT
 public:
     checkModeAgainstFreq();
-    int confirmMode(QString &band, QString &mode, double freq);
+    int confirmMode(QString &band, QString &mode, Frequency freq);
     bool modeExists(QString &band, QString &mode);
-    QString getMode(const QString &band, double freq);
+    QString getMode(const QString &band, Frequency freq);
 };
 
 #endif // CHECKMODEAGAINSTFREQ_H

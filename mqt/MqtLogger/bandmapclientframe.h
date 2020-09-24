@@ -51,7 +51,7 @@ public:
 
     LoggerSpots(Callsign _cs, QString _loc,  QString _brg,
                 QString _modeStr, QString _modeMask,
-                QString _freq, QString _bandStr, QString _bandMask,
+                Frequency _freq, QString _bandStr, QString _bandMask,
                 bool _worked, QDateTime _time, bool _runModeOn, bool _offRunFreq, bandmapSpotType::SPOT_TYPE _spotType )
     {
         cs = _cs;
@@ -79,8 +79,8 @@ public:
     QString getBearing(){return brg;}
     void setBearing(QString _brg){brg = _brg;}
 
-    QString getFreq(){return freq;}
-    void setFreq(QString _freq){freq = _freq;}
+    Frequency getFreq(){return freq;}
+    void setFreq(Frequency _freq){freq = _freq;}
 
     QString getbandStr(){return bandStr;}
     void setBandStr(QString _bandStr){bandStr = _bandStr;}
@@ -119,7 +119,7 @@ private:
     QString brg;
     QString modeStr;
     QString modeMask;
-    QString freq;
+    Frequency freq;
     QString bandStr;
     QString bandMask;
     bool worked;
@@ -144,7 +144,7 @@ public:
 
     QTimer* mouseInFrameTimer;
 
-    void setFreq(QString);
+    void setFreq(Frequency);
     void setContest(BaseContestLog *c);
     void setHoldUpdateFlag(bool state);
     bool getPurgeSpotFlag(){return purgeSpotFlag;}
@@ -152,8 +152,8 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void setBandmapMarkFreq(QString cs, QString freq, QString loc, QString brg);
-    void setBandmapSaveFreq(QString cs, QString freq, QString loc, QString brg);
+    void setBandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg);
+    void setBandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg);
 
     void setRotatorBearing(QString s);
     void setRotatorConnected(bool connected);
@@ -169,8 +169,8 @@ public:
     bool readTuneAddBandMapSetting();
 
 
-    void setRunOnFlag(QString _runFreq, bool _runModeOn);
-    void setRunOffFreqFlag(QString _runFreq, bool _offRunFreq);
+    void setRunOnFlag(Frequency _runFreq, bool _runModeOn);
+    void setRunOffFreqFlag(Frequency _runFreq, bool _offRunFreq);
     void setBandmapRadioIsConnect(bool state);
     void setBandmapRadioHasError(QString error);
     void setMode(QString mode);
@@ -188,8 +188,8 @@ private:
     QString contestUuid;
     QString contestBandStr;
     int contestBand;
-    double contestBandFlow;
-    double contestBandFHigh;
+    Frequency contestBandFlow;
+    Frequency contestBandFHigh;
     QString contestModeStr;
     int contestMode;
 
@@ -197,7 +197,7 @@ private:
 
     bool radioIsConnected;
     QString radioError;
-    QString lastfreq;
+    Frequency lastfreq;
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
@@ -206,7 +206,7 @@ private:
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
     checkModeAgainstFreq* modeBandPlan;
     bool modeBandPlanOk;
 
@@ -224,7 +224,7 @@ private:
     bool clusterServerConnected;
 
     // CQ Frequency
-    QString runFreq;
+    Frequency runFreq;
     bool runModeOn;
     bool offRunFreq;
 
@@ -238,8 +238,8 @@ private:
     QSortFilterProxyModel* bandmapSpotProxyModel;
     BandmapClientFilterDialog* filterSetup;
 
-    QString sfreq;
-    double curFreq = 0;
+    //QString sfreq;
+    Frequency curFreq;
     int mapViewHeight = 0;
 
     BandmapDataModel *bandmapDataModel;
@@ -294,12 +294,12 @@ private:
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
     void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
     bool checkSpotInTable(QStringList &sl);
-    void sendFreqToRig(QString freq);
+    void sendFreqToRig(Frequency freq);
 
     bool event(QEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
     int findRowToInsert(QString f);
-    bool isFreqLegal(const double freq, const QString band, const QString mode);
+    bool isFreqLegal(const Frequency &freq, const QString band, const QString mode);
 
     QString readBandmapFreqLimit(QString band, QString mode);
     void getBandLimitsFromBandListXML();
@@ -309,7 +309,7 @@ private:
     void addRemoveCQSpot(LoggerSpots *spot);
 
     void radioStatusIndicatorToggle(bool on);
-    bool checkContestBandMatch(double curFreq);
+    bool checkContestBandMatch(Frequency curFreq);
     void saveBandmapZoomLevel(int &level);
     int readBandmapZoomLevel();
     void setZoomLevelLabelText(int level);
@@ -335,7 +335,7 @@ private slots:
      void on_memoryActionSelected();
      void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
-     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, QString freq, QString mode, QString districtMult);
+     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, Frequency freq, QString mode, QString districtMult);
      void filterButtonSelected();
      void checkSavedFilters();
      void onMenuShow();

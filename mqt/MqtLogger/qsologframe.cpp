@@ -14,6 +14,8 @@
 #include "rigcommon.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
+#include "delayedaction.h"
+
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
 
@@ -41,8 +43,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
-    , callsignEnterTextFreq(ZEROFREQ)
-    , curFreq(ZEROFREQ)
 
 
 {
@@ -109,7 +109,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->SecondOpLabel->setText("<b>" + Op2String);
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
-    freqString = ui->freqLabel->text();
 
     connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
     connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
@@ -157,7 +156,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     {
         trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
     }
-
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -448,7 +446,7 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
     setClusterSendSpotControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
-    connect(this, SIGNAL(freqChanged(QString)), this, SLOT(on_FreqChanged(QString)));
+    connect(this, SIGNAL(freqChanged(Frequency)), this, SLOT(on_FreqChanged(Frequency)));
 
 
 
@@ -894,7 +892,7 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
     }
     else
     {
-        callsignEnterTextFreq = ZEROFREQ;
+        callsignEnterTextFreq.clear();
     }
 
 }
@@ -1023,7 +1021,7 @@ void QSOLogFrame::getScreenEntry()
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
 
-       QString f = ui->frequencyEdit->text().trimmed().remove( QRegExp("^[0]*")); //remove leading zeros
+       QString f = ui->frequencyEdit->text().trimmed().remove( QRegularExpression("^[0]*")); //remove leading zeros
        f = convertSinglePeriodFreqToMultiPeriod(convertSinglePeriodFreqToFullDigit(f));
        screenContact.frequency = f;
 
@@ -1081,17 +1079,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          QString freq;
-
-          QString newfreq = temp.frequency.trimmed().remove('.');
-          if (!newfreq.isEmpty())
-          {
-              double dfreq = convertStrToFreq(newfreq);
-              dfreq = dfreq/1000000.0;  // MHz
-
-              freq = QString::number(dfreq, 'f', 6); //MHz to 6 decimal places
-          }
-          ui->frequencyEdit->setText(removeTrailingZeroes(freq));
+          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDisp());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -1783,7 +1771,7 @@ void QSOLogFrame::setMode(QString m)
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 }
 //---------------------------------------------------------------------------
-void QSOLogFrame::setFreq(QString f)
+void QSOLogFrame::setFreq(Frequency f)
 {
     if (curFreq != f)
     {
@@ -1792,7 +1780,7 @@ void QSOLogFrame::setFreq(QString f)
 
     }
 }
-void QSOLogFrame::sendFreq(QString f)
+void QSOLogFrame::sendFreq(Frequency f)
 {
     emit sendFreqControl(f);
 }
@@ -1874,14 +1862,24 @@ void QSOLogFrame::updateQSODisplay()
    {
 //      ui->QTHEdit->CharCase = ecNormal;
    }
+   //CallsignEdit->Enabled = false; // leave this enabled in protected to allow searching
    bool notProtected = !contest->isReadOnly();
-   ui->RSTTXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
-   ui->SerTXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   ui->RSTRXEdit->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
-   ui->SerRXEdit->setEnabled(notProtected && contest->serialMandatoryField.getValue());
-   //CallsignEdit->Enabled = false; // leave these to allow searching
-   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());
+   ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
+   ui->SerTxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->RSTRxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
+   ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
+   ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
+   ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
+   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
+   ui->LocFrame->setVisible(contest->locatorMandatoryField.getValue());
+   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
+   ui->QTHFrame->setEnabled( exchangeNeeded );
+   ui->QTHFrame->setVisible(exchangeNeeded);
    ui->CommentsEdit->setEnabled(notProtected);
+
+
    ui->ModeComboBoxGJV->setEnabled(notProtected);
    ui->MGMSubModeFrame->setEnabled(notProtected);
    ui->NonScoreCheckBox->setEnabled(notProtected);
@@ -1891,9 +1889,6 @@ void QSOLogFrame::updateQSODisplay()
    ui->radioEdit->setEnabled(notProtected);
    ui->frequencyEdit->setEnabled(notProtected);
    ui->rotatorHeadingEdit->setEnabled(notProtected);
-
-   bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue();
-   ui->QTHEdit->setEnabled( exchangeNeeded );
 
    ui->ModeButton->setEnabled(notProtected);
    ui->SecondOpComboBox->setEnabled(notProtected);
@@ -2190,7 +2185,7 @@ void QSOLogFrame::getScreenRigData()
     if (!edit && !catchup && isRadioLoaded())
     {
         screenContact.rigName = curRadioName;
-        screenContact.frequency = convertFreqStrDisp(curFreq);
+        screenContact.frequency = curFreq;
     }
     else
     {
@@ -2322,19 +2317,13 @@ void QSOLogFrame::updateQSOTime(bool fromTimer)
 }
 void QSOLogFrame::setDtgSection()
 {
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         ui->timeEdit->setCurrentSection(QDateTimeEdit::MinuteSection);
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
-        timer->deleteLater();
     }
     );
-
-    timer->start(10);
 }
 
 
@@ -2345,10 +2334,11 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
    {
       if ( ( contest->districtMult.getValue() && matct->districtMult.getValue() ) ||
-           ( contest->otherExchange.getValue() && matct->otherExchange.getValue() )
+           ( contest->otherExchange.getValue() && matct->otherExchange.getValue() ) ||
+           ( contest->otherOptionalExchange.getValue() && matct->otherOptionalExchange.getValue() )
          )
       {
         QString exch = lct->extraText.getValue();
@@ -2377,7 +2367,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
-   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+   if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
    {
       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
       {
@@ -2789,8 +2779,8 @@ void QSOLogFrame::on_SpotPbClicked()
         {
             // send last spot logged
             trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
-            emit sendSpotToClusterServer( lastLoggedFreq.remove('.'), lastLoggedCallsign.realCall, lastLoggedLocator );
-            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq);
+            emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
+            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.convertFreqStrDisp());
         }
         else
         {
@@ -2800,15 +2790,15 @@ void QSOLogFrame::on_SpotPbClicked()
             if (validCall)
             {
                 // callsign valid
-                if (!logData.callsign.isEmpty() || !logData.freq.isEmpty())
+                if (!logData.callsign.isEmpty() || !logData.freq.isClear())
                 {
                    trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
-                    emit sendSpotToClusterServer(logData.freq.remove('.'), logData.callsign, logData.locator);
-                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq);
+                    emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
+                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.convertFreqStrDisp());
                 }
                 else
                 {
-                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq));
+                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.traceStr()));
                 }
             }
             else
@@ -2846,7 +2836,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     if (validCall)
     {
         logData.freq = callsignEnterTextFreq;
-        callsignEnterTextFreq = ZEROFREQ;
+        callsignEnterTextFreq.clear();
 
         doGJVCancelButton_clicked();
 
@@ -3095,13 +3085,13 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 
 
 
-void QSOLogFrame::on_FreqChanged(QString f)
+void QSOLogFrame::on_FreqChanged(Frequency f)
 {
 
     if (!logDataFromBandmapOrMemory && isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
     {
-        qint64 dialFreq = f.toLongLong() / 1000;
-        qint64 callsignEnterFreq = callsignEnterTextFreq.toLongLong() / 1000;
+        qint64 dialFreq = qint64(f) / 1000;
+        qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
         int toleranceF = 0;
         if (callsignEnterFreq != 0)
         {
@@ -3123,10 +3113,6 @@ void QSOLogFrame::on_FreqChanged(QString f)
 
                     on_bandmapSaveFreqPbClicked();
                 }
-
-
-
-
             }
         }
     }

@@ -120,7 +120,7 @@ public:
     int memno = 0;
 
     QString callsign;
-    QString freq;
+    Frequency freq;
     QString mode;
     QString locator;
     int bearing = 0;
@@ -133,7 +133,7 @@ public:
     bool operator==( const memData& rhs ) const
     {
         if (callsign.compare(rhs.callsign, Qt::CaseInsensitive) == 0
-                && freq.compare(rhs.freq, Qt::CaseInsensitive) == 0
+                && freq == rhs.freq
                 && mode.compare(rhs.mode, Qt::CaseInsensitive) == 0
                 && locator.compare(rhs.locator, Qt::CaseInsensitive) == 0
                 && worked == rhs.worked

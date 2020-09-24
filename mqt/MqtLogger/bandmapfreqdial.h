@@ -14,21 +14,21 @@ class DialFreqText
 
 public:
 
-    DialFreqText(QRect _textRect, qint32 _freqText)
+    DialFreqText(QRect _textRect, Frequency _freqText)
     {
         textRect = _textRect;
         freqText = _freqText;
     }
 
     QRect getTextRect(){return textRect;}
-    qint32 getFreqText(){return freqText;}
+    Frequency getFreqText(){return freqText;}
 
 
 
 private:
 
     QRect textRect;
-    qint32 freqText;
+    Frequency freqText;
 
 };
 
@@ -48,13 +48,13 @@ public:
 
     QRectF boundingRect() const override;
 
-    void setCurFreq(double frequency);
-    double getCurFreq();
+    void setCurFreq(const Frequency &frequency);
+    Frequency getCurFreq();
     void setCurHeight(int height);
     int getCurHeight();
 
-    void drawScale(QPainter *painter, qint32 frequency, int scaleHeight);
-    void drawCursor(QPainter *painter, qint64 frequency);
+    void drawScale(QPainter *painter, Frequency frequency, int scaleHeight);
+    void drawCursor(QPainter *painter, Frequency frequency);
 
 
     void setZoomLevel(int level);
@@ -62,41 +62,36 @@ public:
     int getMaxZoomLevel() {return dialData::MAX_ZOOM_LEVEL;}
     int getMinZoomLevel() {return dialData::MIN_ZOOM_LEVEL;}
 
-    qint64 getScaleStartFreq();
-    qint64 getScaleEndFreq();
+    Frequency getScaleStartFreq();
+    Frequency getScaleEndFreq();
 
 
     void setCurWidth(int width);
     int getCurWidth();
 
     void changeBoundingRect(int height, int width);
-    int checkFreqWidth(qint32 freq);
-    int checkFreqWidth(double freq);
+    int checkFreqWidth(const Frequency &freq);
 
 
     void onFontChanged(QFont cf);
     void setCursorColour(QColor colour);
 
-    int getYCoordOnDial(qint64 frequency);
+    int getYCoordOnDial(const Frequency &frequency);
 
 
-//    void drawDial(QPainter *painter);
-
-//    void calcStartEndFreq(qint32 frequency);
-    qint32 getCurFreqInt32();
-    QString getFreqFromYCoordOnDial(int y);
-    qint32 checkSelectedFreqTextOnDial(QPoint p);
+    Frequency getFreqFromYCoordOnDial(int y);
+    Frequency checkSelectedFreqTextOnDial(QPoint p);
 
 
-    int getFullBandHeight(double flow, double fhigh);
+    int getFullBandHeight(const Frequency &flow, const Frequency &fhigh);
 
 
-    qint64 getViewPortFreq(int startPos, double contestBandFlow);
+    Frequency getViewPortFreq(int startPos, Frequency contestBandFlow);
 
-    void setViewPortStartEndFreq(int startPos, int endPos, double contestBandFlow);
+    void setViewPortStartEndFreq(int startPos, int endPos, Frequency contestBandFlow);
 
 
-    void setContestBandLimits(double flow, double fhigh);
+    void setContestBandLimits(const Frequency &flow, const Frequency &fhigh);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
     void setRadioMode(QString mode);
@@ -118,20 +113,17 @@ private:
     int freqTextWidth = 0;
     int fontHeight = 0;
 
-    double currentFreqDbl;
+    Frequency currentFreq;
 
-    //qint32 currentFreq = 0;
-    qint64 scaleStartFreq = 0;
-    qint64 scaleEndFreq = 0;
-    qint32 currentFreqInt32 = 0;
-    qint64 currentFreqInt64 = 0;
+    Frequency scaleStartFreq;
+    Frequency scaleEndFreq;
 
     int scaleStartYCoord;
     int scaleEndYCoord;
     int fullBandHeight;
 
-    qint32 contestBandFlow;
-    qint32 contestBandFhigh;
+    Frequency contestBandFlow;
+    Frequency contestBandFhigh;
 
     QString contestBandStr;
     QString contestModeStr;
@@ -149,7 +141,7 @@ private:
 //    QPainter  *painter;
 
 
-    QString convertFreqDialDisplay(qint32 freq);
+    QString convertFreqDialDisplay(const Frequency &freq);
 
     int getFontHeight();
 

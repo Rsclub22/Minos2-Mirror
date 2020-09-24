@@ -16,7 +16,6 @@
 #include "htmldelegate.h"
 #include "dxspotdatamodel.h"
 
-
 DxSpotDataModel::DxSpotDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -44,7 +43,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("UTC");
                 case DATE_COL_NUM:
                     return tr("Date");
-                case FREQ_STR_COL_NUM:
+                case FREQ_COL_NUM:
                     return tr("Freq");
                 case DXSPOT_CALL_COL_NUM:
                     return tr("Dx");
@@ -184,7 +183,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DATE_COL_NUM:
                 d = dxSpot->getSpotDate();
             break;
-            case FREQ_STR_COL_NUM:
+            case FREQ_COL_NUM:
                 d = removeHundredHzAndHzDigits(dxSpot->getDxFreq());
             break;
             case DXSPOT_CALL_COL_NUM:
@@ -193,9 +192,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     QColor colour = CALLSIGN_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
                 }
+
                 d = d + dxSpot->getDxCall();
             break;
-
             case DXLOC_COL_NUM:
                 if (dxSpot->getDxLocatorWorked() == BOOL_YES)
                 {
@@ -257,8 +256,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = dxSpot->getSpotTime();
             break;
-            case FREQ_STR_COL_NUM:
-                d = dxSpot->getDxFreq();
+
+            case FREQ_COL_NUM:
+                d.setValue(dxSpot->getDxFreq());
             break;
             case DXSPOT_CALL_COL_NUM:
                 d = dxSpot->getDxCall();
@@ -341,8 +341,8 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case DATE_COL_NUM:
                 dxSpot->setSpotDate(value.toString());
             break;
-            case FREQ_STR_COL_NUM:
-                dxSpot->setDxFreq(value.toString());
+            case FREQ_COL_NUM:
+                dxSpot->setDxFreq(qvariant_cast<Frequency>(value));
             break;
             case DXSPOT_CALL_COL_NUM:
                 dxSpot->setDxCall(value.toString());

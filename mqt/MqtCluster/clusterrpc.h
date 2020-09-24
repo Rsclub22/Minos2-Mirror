@@ -32,7 +32,7 @@ public:
 
 signals:
 
-    void sendSpotToDXCluster(QString, QString, QString);
+    void sendSpotToDXCluster(Frequency, QString, QString);
     void resendSpotToClients(int, QString, QString, int);
 
 

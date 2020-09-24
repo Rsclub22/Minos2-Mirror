@@ -33,7 +33,7 @@ ChatServer::ChatServer()
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(QString,BaseContestLog*)), this, SLOT(onRigFreqChanged(QString,BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
 }
 
 ChatServer::~ChatServer()
@@ -125,11 +125,12 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
                 QVector<Server>::iterator stat;
                 for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
                 {
+                    Frequency f = Frequency(an.getValue());
                     if ((*stat).serverName == an.getPublisherServer())
                     {
-                        if ((*stat).freq != an.getValue())
+                        if ((*stat).freq != f)
                         {
-                            (*stat).freq = an.getValue();
+                            (*stat).freq = f;
                             syncstat = true;
                         }
                         break;
@@ -210,7 +211,7 @@ void ChatServer::sendMessage(QString mess)
         rpc.queueCall( (*i).app );
     }
 }
-void ChatServer::onRigFreqChanged(QString f, BaseContestLog * /*c*/)
+void ChatServer::onRigFreqChanged(Frequency f, BaseContestLog * /*c*/)
 {
-    RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f, psPublished);
+    RPCPubSub::publish(rpcConstants::ChatCategory, rpcConstants::ChatServerFrequency, f.str(), psPublished);
 }

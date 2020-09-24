@@ -23,6 +23,8 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "delayedaction.h"
+
 #include "ui_clusterclientframe.h"
 
 
@@ -243,18 +245,13 @@ void ClusterClientFrame::delayed_afterLogContact(BaseContestLog *c, Callsign cs,
     // delay the search of the spots until the contact logging should have finished
     // and the screen been redrawn, or a lot of spots slows things down too much
 
-    QTimer *timer = new QTimer(this);
-    timer->setSingleShot(true);
-
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         on_AfterLogContact(c, cs, loc);
-        timer->deleteLater();
     }
+    , 50
     );
-
-    timer->start(50);
 }
 
 
@@ -529,9 +526,9 @@ void ClusterClientFrame::onSpotTabChanged(int index)
 
 void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, const QModelIndex &index)
 {
-    if (index.column() == FREQ_STR_COL_NUM)
+    if (index.column() == FREQ_COL_NUM)
     {
-        QString freq = spotProxyModel->data(index, DataStoredRole).toString();
+        Frequency freq = qvariant_cast<Frequency>(spotProxyModel->data(index, DataStoredRole));
         sendFreqToRig(freq);
 
     }
@@ -612,10 +609,9 @@ void ClusterClientFrame::onLocatorSpotVertHeaderClicked(int row)
 
 
 
-void ClusterClientFrame::sendFreqToRig(QString freq)
+void ClusterClientFrame::sendFreqToRig(Frequency freq)
 {
-    QString f = freq.remove('.');
-    MinosLoggerEvents::SendFreqStrToRig(f);
+    MinosLoggerEvents::SendFreqToRig(freq);
 }
 
 
@@ -841,10 +837,12 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
         if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
         {
 
-            if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_STR_COL_NUM) &&
+
+            if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_COL_NUM) &&
                     checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
                     checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
                     checkDbRowForMatch(spotData->getSpotterCall(), row, SPOTTER_CALL_COL_NUM))
+
             {
                 return true;
 
@@ -1283,7 +1281,7 @@ void ClusterClientFrame::on_freqActionSelected()
         if (filterProxyModelList[curTab]->rowCount() > 0)
         {
             int currentRow = spotViewList[curTab]->currentIndex().row();
-            QString freq = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_STR_COL_NUM), DataStoredRole).toString();
+            Frequency freq = qvariant_cast<Frequency>(filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, FREQ_COL_NUM), DataStoredRole));
             sendFreqToRig(freq);
         }
     }
@@ -1387,7 +1385,8 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     memoryData::memData spotData;
     spotData.callsign = spotProxyModel->data(spotProxyModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     spotData.time = spotProxyModel->data(spotProxyModel->index(row, TIME_COL_NUM), DataStoredRole).toString();
-    spotData.freq = spotProxyModel->data(spotProxyModel->index(row, FREQ_STR_COL_NUM), DataStoredRole).toString().remove('.');
+    spotData.freq = qvariant_cast<Frequency>(spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole));
+
     spotData.mode = memDefData::DEFAULT_MODE;
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();

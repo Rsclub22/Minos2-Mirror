@@ -421,10 +421,10 @@ void RPCTestTest::testBands()
    bool loaded = blist.parseFile( "C:/Projects/sfMinos/Minos/MinosLogger/Configuration/bandlist.xml" );
    QVERIFY( true == loaded );
 
-   BandInfo b;
+   QSharedPointer<BandInfo>  b;
    loaded = blist.findBand(144250000.0, b);
    QVERIFY( true == loaded );
-   QVERIFY( QString("VHF") == b.getType() );
+   QVERIFY( QString("VHF") == b->getType() );
    int cnt = blist.bandList.size();
    QVERIFY( 21 == cnt );
 

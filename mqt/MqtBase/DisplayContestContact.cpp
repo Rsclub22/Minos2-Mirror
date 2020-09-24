@@ -12,6 +12,7 @@
 #include "MinosTestImport.h"
 #include "ScreenContact.h"
 #include "DisplayContestContact.h"
+#include "BandList.h"
 //==========================================================================
 DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now )
       : BaseContact( ct, time_now ),
@@ -27,8 +28,40 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
 
    if (curmode != hamlibData::MGM)
    {
-       repr.setInitialValue( "5  " );
-       reps.setInitialValue( "5  " );
+       QString cb = clp->currentBand.getValue().trimmed();
+       BandList &blist = BandList::getBandList();
+       QSharedPointer<BandInfo>  bi;
+       bool bandOK = blist.findBand(cb, bi);
+       bool hf = false;
+       if (bandOK)
+       {
+          hf = bi->getType() == "HF";
+       }
+       else
+       {
+           if (cb == allHF)
+           {
+               hf = true;
+           }
+       }
+       if (hf)
+       {
+            if (curmode == hamlibData::CW)
+            {
+                repr.setInitialValue( "599" );
+                reps.setInitialValue( "599" );
+            }
+            else
+            {
+                repr.setInitialValue( "59 " );
+                reps.setInitialValue( "59 " );
+            }
+       }
+       else
+       {
+           repr.setInitialValue( "5  " );
+           reps.setInitialValue( "5  " );
+       }
    }
    else
    {
@@ -147,13 +180,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
       return true; // i.e. not equal
 
-   QString newfreq = frequency.getValue();
-   QString newmctfreq = mct.frequency;
-
-   newfreq = newfreq.remove('.');
-   newmctfreq = newmctfreq.remove('.');
-
-   if ( strcmpsp( newfreq, newmctfreq ) )
+   if (frequency.getValue() != mct.frequency)
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.rotatorHeading, rotatorHeading.getValue() ) )
@@ -723,7 +750,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           res = rigName.getValue();
           break;
       case egFrequency:
-          res = frequency.getValue();
+          res = frequency.getValue().convertFreqStrDisp();
           break;
       case egRotatorHeading:
       {
@@ -824,7 +851,9 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
              contest->currentMode = contest->contestBands;
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
-         mt->getStructArgMemberValue( "frequency", frequency );
+         QString temp;
+         mt->getStructArgMemberValue( "frequency", temp );
+         frequency.setValue( Frequency(temp) );
          mt->getStructArgMemberValue( "rotatorHeading", rotatorHeading );
          mt->getStructArgMemberValue( "rigName", rigName );
 

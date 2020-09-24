@@ -68,19 +68,19 @@ void RigState::setSelected(const QString &loggeruuid, const QString &selected)
     _selected.setSelection(loggeruuid, selected);
 }
 
-void RigState::setRadioFreq(double freq)
+void RigState::setRadioFreq(Frequency freq)
 {
     _radioFreq.setValue(freq);
 }
-void RigState::setLogFreq(double freq)
+void RigState::setLogFreq(Frequency freq)
 {
     _logFreq.setValue(freq);
 }
-void RigState::setRadioRitFreq(int freq)
+void RigState::setRadioRitFreq(const ShortFreq &freq)
 {
     _radioRitFreq.setValue(freq);
 }
-void RigState::setLogRitFreq(int freq)
+void RigState::setLogRitFreq(const ShortFreq &freq)
 {
     _logRitFreq.setValue(freq);
 }
@@ -121,12 +121,12 @@ QString RigState::pack() const
 
     jv.insert(rpcConstants::selected, _selected.pack());
     jv.insert(rpcConstants::rigControlStatus, status().getValue());
-    jv.insert(rpcConstants::rigControlRadioFreq, radioFreq().getValue());
-    jv.insert(rpcConstants::rigControlLogFreq, logFreq().getValue());
+    jv.insert(rpcConstants::rigControlRadioFreq, radioFreq().getValue().str());
+    jv.insert(rpcConstants::rigControlLogFreq, logFreq().getValue().str());
     jv.insert(rpcConstants::rigControlRadioMode, radioMode().getValue());
     jv.insert(rpcConstants::rigControlLogMode, logMode().getValue());
-    jv.insert(rpcConstants::rigControlRadioRitFreq, radioRitFreq().getValue());
-    jv.insert(rpcConstants::rigControlLogRitFreq, logRitFreq().getValue());
+    jv.insert(rpcConstants::rigControlRadioRitFreq, radioRitFreq().getValue().str());
+    jv.insert(rpcConstants::rigControlLogRitFreq, logRitFreq().getValue().str());
     jv.insert(rpcConstants::rigRadioVolLevel, radioVolLevel().getValue());
     jv.insert(rpcConstants::rigLogVolLevel, logVolLevel().getValue());
     jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
@@ -147,14 +147,14 @@ void RigState::unpack(QString s)
         QJsonValue selobj = json.object().value(rpcConstants::selected);
         _selected.unpack(selobj);
         _status.setValue(json.object().value(rpcConstants::rigControlStatus).toString());
-        _radioFreq.setValue(json.object().value(rpcConstants::rigControlRadioFreq).toDouble());
-        _logFreq.setValue(json.object().value(rpcConstants::rigControlLogFreq).toDouble());
+        _radioFreq.setValue(json.object().value(rpcConstants::rigControlRadioFreq).toString());
+        _logFreq.setValue(json.object().value(rpcConstants::rigControlLogFreq).toString());
         _radioMode.setValue(json.object().value(rpcConstants::rigControlRadioMode).toString());
         _logMode.setValue(json.object().value(rpcConstants::rigControlLogMode).toString());
         _radioVolLevel.setValue(json.object().value(rpcConstants::rigRadioVolLevel).toInt());
         _logVolLevel.setValue(json.object().value(rpcConstants::rigLogVolLevel).toInt());
-        _radioRitFreq.setValue(json.object().value(rpcConstants::rigControlRadioRitFreq).toInt());
-        _logRitFreq.setValue(json.object().value(rpcConstants::rigControlLogRitFreq).toInt());
+        _radioRitFreq.setValue(json.object().value(rpcConstants::rigControlRadioRitFreq).toString());
+        _logRitFreq.setValue(json.object().value(rpcConstants::rigControlLogRitFreq).toString());
         _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
         _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
     }
@@ -174,11 +174,11 @@ MinosStringItem<QString> RigState::status() const
 }
 
 
-MinosItem<double> RigState::radioFreq() const
+MinosFrequencyItem<Frequency> RigState::radioFreq() const
 {
     return _radioFreq;
 }
-MinosItem<double> RigState::logFreq() const
+MinosFrequencyItem<Frequency> RigState::logFreq() const
 {
     return _logFreq;
 }
@@ -193,11 +193,11 @@ MinosStringItem<QString> RigState::logMode() const
 }
 
 
-MinosItem<int> RigState::radioRitFreq() const
+MinosItem<ShortFreq> RigState::radioRitFreq() const
 {
     return _radioRitFreq;
 }
-MinosItem<int> RigState::logRitFreq() const
+MinosItem<ShortFreq> RigState::logRitFreq() const
 {
     return _logRitFreq;
 }

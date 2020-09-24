@@ -57,7 +57,7 @@ void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, Callsig
     emit mle.AfterLogContactToCluster(ct, cs, loc);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, QString freq, QString mode, QString districtMult)
+void MinosLoggerEvents::SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult)
 {
     emit mle.AfterLogContactToBandmap(ct, cs, loc, bearing, freq, mode, districtMult);
 }
@@ -198,7 +198,7 @@ void MinosLoggerEvents::sendUpdateMemories(BaseContestLog *c )
 }
 
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendRigFreqChanged(QString f, BaseContestLog *c)
+void MinosLoggerEvents::sendRigFreqChanged(Frequency f, BaseContestLog *c)
 {
     emit mle.RigFreqChanged(f, c);
 }
@@ -208,9 +208,9 @@ void MinosLoggerEvents::sendRotBearingChanged(int f, BaseContestLog *c)
     emit mle.RotBearingChanged(f, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendFreqStrToRig(QString f)
+void MinosLoggerEvents::SendFreqToRig(Frequency f)
 {
-    emit mle.FreqStrToRig(f);
+    emit mle.FreqToRig(f);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendBrgStrToRot(QString bearing)

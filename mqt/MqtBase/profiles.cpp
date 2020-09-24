@@ -172,6 +172,8 @@ BundleFile::BundleFile( PROFILES p )
         break;
     case epENTRYPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", QT_TR_NOOP("Call Used"), QT_TR_NOOP("Call sign used"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMainOp, "Main Op", "", QT_TR_NOOP("Main Op"), QT_TR_NOOP("Main Operator"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepSecondOp, "Second Op", "", QT_TR_NOOP("Second Op"), QT_TR_NOOP("Second  Operator"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepEntrant, "Entrant", "", QT_TR_NOOP("On Behalf Of (Club)"), QT_TR_NOOP("Name of club/group"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyName, "MyName", "", QT_TR_NOOP("My Name"), QT_TR_NOOP("Name of responsible operator"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepMyCall, "MyCall", "", QT_TR_NOOP("My Call"), QT_TR_NOOP("Callsign of responsible operator"), false ) ) );

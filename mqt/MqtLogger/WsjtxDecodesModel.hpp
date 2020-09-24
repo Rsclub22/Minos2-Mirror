@@ -5,8 +5,8 @@
 #include <QAbstractItemModel>
 #include <QRegularExpression>
 #include "htmldelegate.h"
-#include "WsjtxDecode.h"
 
+class decodeMessage;
 
 enum DecodeColumns
 {

@@ -43,9 +43,6 @@ enum VFO {CURRENT_VFO, VFOA, VFOB};
 QString vfoToStr(VFO curVfo);
 VFO strToVfo(QString vfo);
 
-using  Frequency = quint64;
-using ShortFreq = qint32;
-
 // hamlib conf token strings
 const QString HAMLIB_RETRY = "retry";
 const QString HAMLIB_TIMEOUT = "timeout";
@@ -60,14 +57,11 @@ public:
 
     QString transVertName;
     QString band;
-    QString radioFreqStr;
-    Frequency radioFreq = 0;
-    QString targetFreqStr;
-    Frequency targetFreq = 0;
+    Frequency radioFreq;
+    Frequency targetFreq;
     Frequency fLow;
     Frequency fHigh;
-    QString transVertOffsetStr;
-    Frequency transVertOffset = 0;
+    Frequency transVertOffset;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
 

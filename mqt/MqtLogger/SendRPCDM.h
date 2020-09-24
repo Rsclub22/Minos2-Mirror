@@ -61,7 +61,7 @@ public:  		// User declarations
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
-      void sendSpotToClusterServer(  const QString &freq, const QString &call, const QString &loc );
+      void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const int bandMask, const QString &uuid);
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
@@ -71,13 +71,13 @@ public:  		// User declarations
       void sendRotatorSelection(const PubSubName &name, const QString &uuid);
       void sendRotator(TSingleLogFrame *tslf,rpcConstants::RotateDirection direction, int angle );
 
-      void changeRigSelectionTo(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
-      void sendRigSelection(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
-      void sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq);
+      void changeRigSelectionTo(const PubSubName &name, const Frequency &freq, const QString &mode, const QString &uuid);
+      void sendRigSelection(const PubSubName &name, const Frequency &freq, const QString &mode, const QString &uuid);
+      void sendRigControlFreq(TSingleLogFrame *tslf,const Frequency &freq);
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
-      void sendRigControlRitFreq(TSingleLogFrame *tslf, int freq);
+      void sendRigControlRitFreq(TSingleLogFrame *tslf, ShortFreq freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
 
       QStringList rotators();

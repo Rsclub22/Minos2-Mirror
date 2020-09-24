@@ -41,6 +41,8 @@ void ContestDetailsTransferObject::setINIDetails()
    {
       entryBundle.startGroup();
       entryBundle.getStringProfile( eepCall, mycall.fullCall );
+      entryBundle.getStringProfile( eepMainOp, currentOp1 );
+      entryBundle.getStringProfile( eepSecondOp, currentOp2 );
       entryBundle.getStringProfile( eepEntrant, entrant );
       entryBundle.getStringProfile( eepMyName, entName );
       entryBundle.getStringProfile( eepMyCall, entCall );
@@ -67,7 +69,7 @@ void ContestDetailsTransferObject::setINIDetails()
       if ( districtMult.getValue() )
          QTHBundle.getStringProfile( eqpDistrict, location );
       else
-         if ( otherExchange.getValue() && location.getValue().size() == 0 )
+         if ( (otherExchange.getValue() || otherOptionalExchange.getValue()) && location.getValue().size() == 0 )
             QTHBundle.getStringProfile( eqpLocation, location );
 
       QTHBundle.getStringProfile( eqpStationQTH1, sqth1 );
@@ -121,6 +123,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     contestBands = ct->contestBands;
     currentBand = ct->currentBand;
     otherExchange = ct->otherExchange;
+    otherOptionalExchange = ct->otherOptionalExchange;
     countryMult = ct->countryMult;
     nonGCountryMult = ct->nonGCountryMult;
     locMult = ct->locMult;
@@ -226,6 +229,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->contestBands = contestBands;
     ct->currentBand = currentBand;
+    ct->otherOptionalExchange = otherOptionalExchange;
     ct->otherExchange = otherExchange;
     ct->countryMult = countryMult;
     ct->nonGCountryMult = nonGCountryMult;

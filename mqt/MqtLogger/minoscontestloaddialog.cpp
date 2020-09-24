@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "delayedaction.h"
 
 #include "minoscontestloaddialog.h"
 #include "ui_minoscontestloaddialog.h"
@@ -47,15 +48,14 @@ void MinosContestLoadDialog::doShow()
     trace("Progress Dialog doShow");
     show();
 
-    connect(timer, &QTimer::timeout, [=]()
+    delayedAction(this, [=]()
     {
         // NB a lambda function
         trace("Progress Dialog timer fired");
         timer->stop();
         el->quit();
     }
+    ,500
     );
-
-    timer->start(500);
     el->exec();
 }

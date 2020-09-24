@@ -3,11 +3,13 @@
 
 #include "base_pch.h"
 #include "RigCache.h"
+#include "n1mmlink.h"
 
 namespace Ui {
 class MainWindow;
 }
-
+class BandInfo;
+class ModeInfo;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -42,9 +44,12 @@ private slots:
     void on_trackQS1R_clicked();
 
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
+    void on_trackBandcb_stateChanged(int);
+
 private:
     Ui::MainWindow *ui;
     RigCache rigCache;
+    N1MMLink n1mmLink;
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
@@ -61,19 +66,29 @@ private:
     bool qs1rConnected = false;
 
     bool muted = false;
-    long getQS1RFreq();
-    QString lastF;
+    QString lastQS1RRx;
     int fCentre = 0.0;
     int ftf = 0;
+    int sampleRate = 0;
 
     QString state;
-    QString mode;
-    double freq= 0.0;
+    QString mainRigMode;
+    QString lastMainRigMode;
+
+    Frequency mainRigFreq;
+    Frequency lastMainRigFreq;
+    Frequency lastTransverterOffset;
+
+    QSharedPointer<BandInfo>  lastBand;
+    QSharedPointer<ModeInfo>  lastBandMode;
+
     PubSubName rigSelected;
 
     bool transvertState = false;
-    double transvertOffset = 0.0;
+    Frequency transvertOffset;
 
+    void trackBand();
+    void QS1RCentre(const Frequency &fLow, const Frequency &fHigh);
 };
 
 #endif // MAINWINDOW_H

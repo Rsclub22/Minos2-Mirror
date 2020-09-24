@@ -6,10 +6,7 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include <QColor>
-
-#define UDP_EXPORT
-//#include "udp_export.h"
-#include "WsjtxRadio.hpp"
+#include "frequency.h"
 
 #include "Wsjtx_pimpl_h.hpp"
 
@@ -24,14 +21,13 @@ class QString;
 // applications that use the Qt framework. Other applications should
 // use this classes' implementation as a reference implementation.
 //
-class UDP_EXPORT MessageServer
+class MessageServer
   : public QObject
 {
   Q_OBJECT
 
 public:
   using port_type = quint16;
-  using Frequency = Radio::Frequency;
 
   MessageServer (QObject * parent = nullptr,
                  QString const& version = QString {}, QString const& revision = QString {});
@@ -103,7 +99,7 @@ public:
 
   void stop();
 private:
-  class UDP_NO_EXPORT impl;
+  class impl;
   pimpl<impl> m_;
 };
 

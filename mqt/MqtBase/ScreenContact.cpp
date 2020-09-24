@@ -10,6 +10,8 @@
 #include "contest.h"
 #include "cutils.h"
 #include "ScreenContact.h"
+#include "BandList.h"
+
 ScreenContact::ScreenContact() :
     logSequence( 0 ),
     time( false )
@@ -43,14 +45,47 @@ void ScreenContact::initialise( BaseContestLog *ct )
 
     if (mode != hamlibData::MGM)
     {
-        reps = "5  ";
-        repr = "5  ";
+        QString cb = clp->currentBand.getValue().trimmed();
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK = blist.findBand(cb, bi);
+        bool hf = false;
+        if (bandOK)
+        {
+           hf = bi->getType() == "HF";
+        }
+        else
+        {
+            if (cb == allHF)
+            {
+                hf = true;
+            }
+        }
+        if (hf)
+        {
+             if (mode == hamlibData::CW)
+             {
+                 repr = "599" ;
+                 reps = "599" ;
+             }
+             else
+             {
+                 repr = "59 " ;
+                 reps = "59 " ;
+             }
+        }
+        else
+        {
+            repr = "5  " ;
+            reps = "5  " ;
+        }
     }
     else
     {
-        reps = "   ";
-        repr = "   ";
+        repr = "   " ;
+        reps = "   " ;
     }
+
 
     QString temp = QString("%1").arg(ms, 3, 10, QChar('0'));  //leading zeros
     serials = temp;
@@ -59,7 +94,7 @@ void ScreenContact::initialise( BaseContestLog *ct )
     comments = "";
     contactFlags = 0;
     forcedMult = "";
-    frequency = "";
+    frequency.clear();
     rotatorHeading = "";
     rigName = "";
     screenQSOValid = false;

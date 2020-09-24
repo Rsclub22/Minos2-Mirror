@@ -48,7 +48,7 @@ public:
     int closeRig() override;
 
     int getFrequency(VFO vfo, Frequency &) override;
-    int setFrequency(Frequency freq, VFO vfo) override;
+    int setFrequency(const Frequency &freq, VFO vfo) override;
 
     int getMode(VFO vfo, MODE &mode) override;
     int setMode(VFO vfo, MODE mode) override;
@@ -67,7 +67,7 @@ public:
     bool supportReadRit(int rigModelNumber) override;
     bool supportWriteRit(int rigModelNumber) override;
     int getRit(VFO vfo, ShortFreq &ritfreq) override;
-    int setRit(VFO vfo, ShortFreq ritfreq) override;
+    int setRit(VFO vfo, const ShortFreq &ritfreq) override;
     int getMaxRitFreq(int rigNumber) override;
 
     bool supportReadRitState(int rigModelNumber) override;

@@ -5,11 +5,9 @@
 
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
-#include "WsjtxRadio.hpp"
 #include "WsjtxMessageServer.hpp"
 #include "WsjtxServer.h"
 
-using Frequency = MessageServer::Frequency;
 using port_type = MessageServer::port_type;
 
 namespace Ui {

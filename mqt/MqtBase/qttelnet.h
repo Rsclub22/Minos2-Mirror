@@ -50,7 +50,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QSize>
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 #include <QtNetwork/QTcpSocket>
 
 class QtTelnetPrivate;
@@ -238,9 +238,9 @@ public:
     void setSocket(QTcpSocket *socket);
     QTcpSocket *socket() const;
 
-    void setPromptPattern(const QRegExp &pattern);
+    void setPromptPattern(const QRegularExpression &pattern);
     void setPromptString(const QString &pattern)
-    { setPromptPattern(QRegExp(QRegExp::escape(pattern))); }
+    { setPromptPattern(QRegularExpression(QRegularExpression::escape(pattern))); }
 public Q_SLOTS:
     void close();
     void logout();
@@ -259,12 +259,12 @@ Q_SIGNALS:
     void socketConnected();
 
 public:
-    void setLoginPattern(const QRegExp &pattern);
+    void setLoginPattern(const QRegularExpression &pattern);
     void setLoginString(const QString &pattern)
-    { setLoginPattern(QRegExp(QRegExp::escape(pattern))); }
-    void setPasswordPattern(const QRegExp &pattern);
+    { setLoginPattern(QRegularExpression(QRegularExpression::escape(pattern))); }
+    void setPasswordPattern(const QRegularExpression &pattern);
     void setPasswordString(const QString &pattern)
-    { setPasswordPattern(QRegExp(QRegExp::escape(pattern))); }
+    { setPasswordPattern(QRegularExpression(QRegularExpression::escape(pattern))); }
 
 private:
     QtTelnetPrivate *d;

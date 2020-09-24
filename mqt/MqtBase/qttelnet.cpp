@@ -391,7 +391,7 @@ public:
     QtTelnetAuth *curauth;
     bool nullauth;
 
-    QRegExp loginp, passp, promptp;
+    QRegularExpression loginp, passp, promptp;
     QString login, pass;
 
     bool allowOption(int oper, int opt);
@@ -571,7 +571,7 @@ void QtTelnetPrivate::parseSubAuth(const QByteArray &data)
         if (!curauth) {
             curauth = new QtTelnetAuthNull;
             nullauth = true;
-            if (loginp.isEmpty() && passp.isEmpty()) {
+            if (loginp.pattern().isEmpty() && passp.pattern().isEmpty()) {
                 // emit q->loginRequired();
                 nocheckp = true;
             }
@@ -585,7 +585,7 @@ void QtTelnetPrivate::parseSubAuth(const QByteArray &data)
         if (curauth->state() == QtTelnetAuth::AuthFailure)
             emit q->loginFailed();
         else if (curauth->state() == QtTelnetAuth::AuthSuccess) {
-            if (loginp.isEmpty() && passp.isEmpty())
+            if (loginp.pattern().isEmpty() && passp.pattern().isEmpty())
                 emit q->loggedIn();
             if (!nullauth)
                 nocheckp = true;
@@ -611,7 +611,7 @@ int QtTelnetPrivate::parseIAC(const QByteArray &data)
             return 3;
         }
         if (operation == static_cast<char>(Common::DONT) && option == static_cast<char>(Common::Authentication)) {
-            if (loginp.isEmpty() && passp.isEmpty())
+            if (loginp.pattern().isEmpty() && passp.pattern().isEmpty())
                 emit q->loggedIn();
             nullauth = true;
         }
@@ -663,15 +663,18 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
     QString text = QString::fromLocal8Bit(data.constData(), length);
 
     if (!nocheckp && nullauth) {
-        if (!promptp.isEmpty() && promptp.indexIn(text) != -1) {
+#ifdef RUBBISH
+        // QRegularExpression doesn't include ::indexIn
+        if (!promptp.pattern().isEmpty() && promptp.indexIn(text) != -1) {
             emit q->loggedIn();
             nocheckp = true;
         }
+#endif
     }
     //if (!nocheckp && nullauth) {
     if (!nocheckp && !nullauth) {
         bool f = text.contains("login:", Qt::CaseInsensitive);
-        if (!loginp.isEmpty() && f) {
+        if (!loginp.pattern().isEmpty() && f) {
             if (triedlogin || firsttry) {
                 emit q->message(text);    // Display the login prompt
                 text.clear();
@@ -684,7 +687,10 @@ int QtTelnetPrivate::parsePlaintext(const QByteArray &data)
                 triedlogin = true;
             }
         }
-        if (!passp.isEmpty() && passp.indexIn(text) != -1) {
+        // QRegularExpression doesn't include ::indexIn
+        // QRegExp not part of Qt6!
+        f = text.contains("assword:", Qt::CaseInsensitive);
+        if (!passp.pattern().isEmpty() && f/*passp.indexIn(text) != -1*/) {
             if (triedpass || firsttry) {
                 emit q->message(text);    // Display the password prompt
                 text.clear();
@@ -1171,7 +1177,7 @@ void QtTelnet::sendSync()
 
     \sa login(), loggedIn()
 */
-void QtTelnet::setPromptPattern(const QRegExp &pattern)
+void QtTelnet::setPromptPattern(const QRegularExpression &pattern)
 {
     d->promptp = pattern;
 }
@@ -1198,7 +1204,7 @@ void QtTelnet::sConnected()
 
     \sa login()
 */
-void QtTelnet::setLoginPattern(const QRegExp &pattern)
+void QtTelnet::setLoginPattern(const QRegularExpression &pattern)
 {
     d->loginp = pattern;
 }
@@ -1220,7 +1226,7 @@ void QtTelnet::setLoginPattern(const QRegExp &pattern)
 
     \sa login()
 */
-void QtTelnet::setPasswordPattern(const QRegExp &pattern)
+void QtTelnet::setPasswordPattern(const QRegularExpression &pattern)
 {
     d->passp = pattern;
 }

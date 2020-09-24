@@ -7,7 +7,10 @@ include($$PWD/../mqt.pri)
 include($$PWD/../mqthamlib.pri)
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network widgets serialport
+QT       += core gui network widgets
+lessThan(QT_MAJOR_VERSION, 6){
+QT       += serialport
+}
 
 TARGET = MqtRotator
 TEMPLATE = app

@@ -26,7 +26,17 @@ ADIFImport::~ADIFImport()
 {
 }
 //---------------------------------------------------------------------------
-
+Frequency convertAdifStrToFreq(QString frequency)
+{
+    bool ok = false;
+    qint64 f = 0;
+    f = frequency.toLongLong(&ok);
+    if (!ok)
+    {
+        f = -1;
+    }
+    return Frequency(f * 1000000);
+}
 void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QString /*FieldType*/,
    QString FieldContent )
 {
@@ -110,9 +120,8 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       {
           strcpysp( temp, FieldContent, FieldLength );
 
-          double freq = convertStrToFreq(temp);
-          QString sfreq = QString::number(freq, 'f', 6); //MHz to 6 decimal places
-          aqso->frequency.setValue(sfreq);
+          Frequency freq = convertAdifStrToFreq(temp);
+          aqso->frequency.setValue(freq);
       }
 
       if ( Fieldname.toUpper() == "COMMENT" )
@@ -211,23 +220,20 @@ void ADIFImport::ADIFImportEndOfRecord( )
             dtg d = bct->time;
             if (c->checkTime(d))
             {
-                QString freq = bct->frequency.getValue();
-                if (!freq.isEmpty())
+                if (!bct->frequency.getValue().isClear())
                 {
                     bool ok = false;
                     BandList &blist = BandList::getBandList();
-                    BandInfo bi;
+                    QSharedPointer<BandInfo>  bi;
                     bool bandOK = false;
-                    QString sfreq = freq.trimmed();
                     QString current = test.currentBand.getValue();
 
                     ok = blist.findBand(current, bi);
 
                     if (ok)
                     {
-                        double dfreq = sfreq.toDouble(&ok);
-                        dfreq *= 1000000.0;
-                        if (dfreq <= bi.fhigh && dfreq >= bi.flow)
+                        Frequency freq = bct->frequency.getValue();
+                        if (freq <= bi->fHigh && freq >= bi->fLow)
                         {
                             bandOK = true;
                         }
@@ -369,7 +375,7 @@ bool ADIFImport::executeImport()
       }
       while ( InChar != ':' && InChar != '>' );
 
-      //acmulate field length string
+      //accumulate field length string
       if ( InChar != '>' )
       {
          do

@@ -43,7 +43,7 @@
 
 enum MatchType {ThisMatch, OtherMatch, ArchiveMatch};
 
-enum ExportType {EREG1TEST, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
 
 #define STACKITEMS 10
 
@@ -170,6 +170,47 @@ public:
     }
 
 };
+template < class Frequency >
+class MinosFrequencyItem : public MinosItem<Frequency>
+{
+public:
+    virtual void setValue( Frequency t )
+    {
+       if ( MinosItem<Frequency>::val != t )        // so all item classes need != operator
+       {
+          MinosItem<Frequency>::dirty = true;
+          MinosItem<Frequency>::val = t;
+       }
+    }
+    void setValue( MinosFrequencyItem<Frequency> t )
+    {
+       if ( MinosItem<Frequency>::val != t.getValue() )        // so all item classes need != operator
+       {
+          MinosItem<Frequency>::dirty = true;
+          MinosItem<Frequency>::val = t.getValue();
+       }
+    }
+    virtual void setInitialValue( Frequency t )
+    {
+       MinosItem<Frequency>::dirty = false;
+       MinosItem<Frequency>::val = t;
+    }
+    MinosFrequencyItem& operator = ( const MinosFrequencyItem&rhs )
+    {
+        MinosItem<Frequency>::dirty = rhs.dirty;
+        MinosItem<Frequency>::val = rhs.val;
+        return *this;
+    }
+    void addIfDirty( RPCParamStruct *st, const QString &stName, bool &d ) const
+    {
+       d |= this->isDirty();
+       if ( this->isDirty() )
+       {
+          st->addMember( this->getValue().str(), stName );
+       }
+    }
+};
+
 
 //---------------------------------------------------------------------------
 enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE};
@@ -197,6 +238,7 @@ class dtg
       void setIsoDTG( const QString & );
 
       QString getN1mmDTG();
+      QString getCabrilloDTG();
 
       QDate getDate();
       QTime getTime();

@@ -23,6 +23,7 @@ class SpotData
 public:
     SpotData();
 
+
     SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTime _spotDateTime,
              QString _dxFreq, QString _dxBandStr, QString _dxBandMask,
              QString _dxMode, QString _dxModeMaskStr,
@@ -31,7 +32,10 @@ public:
              QString bearing, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode, QString comment);
 
-
+    SpotData(SpotData const&rhs)
+    {
+             *this = rhs;
+    }
 
     void operator = (const SpotData& spd);
 
@@ -43,8 +47,8 @@ public:
     void setDxCall(const QString dxCall_){dxCall = dxCall_.trimmed();}
     QString getDxCall()const {return dxCall;}
 
-    void setDxFreq(const QString dxFreq_){dxFreq = dxFreq_.trimmed();}
-    QString getDxFreq()const {return dxFreq;}
+    void setDxFreq(const Frequency dxFreq_){dxFreq = dxFreq_;}
+    Frequency getDxFreq()const {return dxFreq;}
 
     void setDxBandStr(const QString dxBandStr_){dxBandStr = dxBandStr_.trimmed();}
     QString getDxBandStr()const {return dxBandStr;}
@@ -105,18 +109,15 @@ public:
     void setSentToMemory(const bool sentToMemory_){sentToMemory = sentToMemory_;}
     bool getSentToMemory() const {return sentToMemory;}
 
-    SpotData(SpotData const&rhs)
-    {
-             *this = rhs;
-    }
+
 
 private:
 
     qint64 rxTime;
     QString spotTime;
+    Frequency dxFreq;
     QString spotDate;
     QDateTime spotDateTime;
-    QString dxFreq;
     QString dxBandStr;
     QString dxBandMask;
     QString dxModeStr;

@@ -78,7 +78,7 @@ RigBase* RigFactory::createRigs(int rigId)
 }
 
 
-bool RigFactory::checkForBands(int rigNumber, Frequency freq)
+bool RigFactory::checkForBands(int rigNumber, const Frequency &freq)
 {
     if (rigNumber == OmniRigOneId)
     {

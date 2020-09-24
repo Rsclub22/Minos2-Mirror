@@ -34,6 +34,7 @@
 #include "ChatFrame.h"
 #include "clusterclientframe.h"
 #include "bandmapclientframe.h"
+#include "delayedaction.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -110,18 +111,18 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     // To rig controller
 
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
-    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, QString)), this, SLOT(sendSelectRadio(QString, QString, QString)));
+    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, Frequency, QString)));
 
-    connect(FKHRigControlFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
-    connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(QString)), this, SLOT(sendRadioFreq(QString)));
-    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(int)), this, SLOT(sendRadioRitFreq(int)));
+    connect(FKHRigControlFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
+    connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
+    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(ShortFreq)), this, SLOT(sendRadioRitFreq(ShortFreq)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
     connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
-    connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, bool)), this, SLOT(sendRunOnFlag(Frequency, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(Frequency, bool)), this, SLOT(sendRunOffFreqFlag(Frequency, bool)));
 
 
     // Rotator updates
@@ -143,7 +144,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
 
     // to cluster server
-    connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(QString, QString, QString)), this, SLOT(on_SendSpotToClusterServer(QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(Frequency, QString, QString)), this, SLOT(on_SendSpotToClusterServer(Frequency, QString, QString)));
 
     // from cluster server
     connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
@@ -152,10 +153,10 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
 
     // to bandmap
-    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, QString, QString, QString)),
-            this, SLOT(on_BandmapMarkFreq(QString, QString, QString, QString)));
-    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, QString, QString, QString)),
-            this, SLOT(on_BandmapSaveFreq(QString, QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString)),
+            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString)),
+            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString)));
     //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
     connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
@@ -883,12 +884,12 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         QString cb = contest->currentBand.getValue().trimmed();
 
         BandList &blist = BandList::getBandList();
-        BandInfo bi;
+        QSharedPointer<BandInfo>  bi;
         bool bandOK = blist.findBand(cb, bi);
         if (bandOK)
         {
-            cb = bi.uk;
-            bic = bi.bandColour;
+            cb = bi->uk;
+            bic = bi->bandColour;
         }
         else
         {
@@ -1097,7 +1098,7 @@ void TSingleLogFrame::dxSpotToLog(memoryData::memData m )
 }
 
 
-void TSingleLogFrame::on_SendSpotToClusterServer(QString freq, QString callsign, QString loc)
+void TSingleLogFrame::on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
@@ -1195,10 +1196,7 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
     if (ct == contest && !lct)
     {
         // use a lambda on a short timer as when contest is first opened, it doesn't actually scroll
-        QTimer *timer = new QTimer(this);
-        timer->setSingleShot(true);
-
-        connect(timer, &QTimer::timeout, [=]()
+        delayedAction(this, [=]()
         {
             // NB a lambda function
             QSOTable->scrollToBottom();
@@ -1212,11 +1210,8 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
                     QSOTable->setCurrentIndex(index);
                 }
             }
-            timer->deleteLater();
         }
         );
-
-        timer->start(100);
     }
 }
 void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
@@ -1481,13 +1476,13 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
 //}
 
 
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, QString freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg)
 {
     bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg);
 }
 
 
-void TSingleLogFrame::on_BandmapSaveFreq(QString cs, QString freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg)
 {
     bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
 }
@@ -1507,13 +1502,13 @@ void TSingleLogFrame::sendBandmapRadioHasError(QString error)
 //    bandmapControlFrame->setCQFreq(runFreq, showMarker);
 //}
 
-void TSingleLogFrame::sendRunOnFlag(QString runFreq, bool runModeOn)
+void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, bool runModeOn)
 {
     GJVQSOLogFrame->setRunOnFlag(runModeOn);
     bandmapControlFrame->setRunOnFlag(runFreq, runModeOn);
 }
 
-void TSingleLogFrame::sendRunOffFreqFlag(QString runFreq, bool offRunFreq)
+void TSingleLogFrame::sendRunOffFreqFlag(Frequency runFreq, bool offRunFreq)
 {
     GJVQSOLogFrame->setRunOffFreqFlag(offRunFreq);
     bandmapControlFrame->setRunOffFreqFlag(runFreq, offRunFreq);
@@ -1667,18 +1662,11 @@ void TSingleLogFrame::on_SetMode(QString m)
     }
 }
 
-void TSingleLogFrame::on_SetFreq(QString f)
+void TSingleLogFrame::on_SetFreq(Frequency f)
 {
-    traceMsg(QString("on_SetFreq: freq from radio = %1").arg(f));
+    traceMsg(QString("on_SetFreq: freq from radio = %1").arg(f.traceStr()));
 
-    bool ok;
-    qint64 fInt64 = f.toLongLong(&ok);
-    if (!ok)
-    {
-       traceMsg(QString("on_SetFreq: freq not numeric"));
-       return;
-    }
-    else if (fInt64 == 0)
+    if (f.isClear())
     {
         traceMsg(QString("onSetFreq: freq is zero"));
         return;
@@ -1686,6 +1674,12 @@ void TSingleLogFrame::on_SetFreq(QString f)
 
     if ( this == LogContainer->getCurrentLogFrame() )
     {
+        bool stopKeyer = false;
+        if (f != sCurFreq)
+        {
+            stopKeyer = true;
+            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr()).arg(sCurFreq.traceStr()));
+        }
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         runButtonsFrame->setFreq(f);
@@ -1693,11 +1687,17 @@ void TSingleLogFrame::on_SetFreq(QString f)
         bandmapControlFrame->setFreq(f);
 
         MinosLoggerEvents::sendRigFreqChanged(f, contest);
+
+        if (stopKeyer)
+        {
+            trace("sendKeyerStop from TSingleLogFrame::on_setFreq");
+            sendKeyerStop();    // if we have tuned, stop keyer
+        }
     }
 
 }
 
-void TSingleLogFrame::on_SetRitFreq(int f)
+void TSingleLogFrame::on_SetRitFreq(ShortFreq f)
 {
     if (curRitFreq != f)
         if ( this == LogContainer->getCurrentLogFrame() )
@@ -1716,7 +1716,7 @@ void TSingleLogFrame::on_SetRitRadioStatus(bool status)
 
 }
 
-void TSingleLogFrame::on_NoRadioSetFreq(QString f)
+void TSingleLogFrame::on_NoRadioSetFreq(Frequency f)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
@@ -1829,21 +1829,21 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
 
 
 
-void TSingleLogFrame::sendRadioFreq(QString freq)
+void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
+        trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
 
     }
 }
 
-void TSingleLogFrame::sendRadioRitFreq(int freq)
+void TSingleLogFrame::sendRadioRitFreq(ShortFreq freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlRitFreq(this, freq);
     }
 }
@@ -1853,7 +1853,6 @@ void TSingleLogFrame::sendRadioRitStatus(bool status)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlRitStatus(this, status);
     }
 }
@@ -1862,7 +1861,6 @@ void TSingleLogFrame::sendRadioVolume(int level)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
-        sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlVolumeLevel(this, level);
     }
 }
@@ -1871,12 +1869,13 @@ void TSingleLogFrame::sendRadioMode(QString mode)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
+        trace("sendKeyerStop from TSingleLogFrame::sendRadioMode");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlMode(this, mode);
     }
 }
 
-void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &freq, const QString &mode)
+void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &freq, const QString &mode)
 {
 
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1895,7 +1894,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &fre
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
             LogContainer->sendDM->changeRigSelectionTo(radName, freq, mode, ct->uuid);  // send message including mode if it has been appended.
-            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq).arg(mode).arg(uuid));
+            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.traceStr()).arg(mode).arg(uuid));
 
 
 

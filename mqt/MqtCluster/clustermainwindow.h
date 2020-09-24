@@ -295,6 +295,7 @@ class ClusterMainWindow : public QMainWindow
 
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
+    void doStartup();
     ~ClusterMainWindow();
 
     static const char *userCmdButtonLabels[4];
@@ -328,7 +329,7 @@ private slots:
 
     void onSpotTabChanged(int index);
     void disconnectTimeout();
-    void sendSpotToDXCluster(QString freq, QString call, QString loc);
+    void sendSpotToDXCluster(Frequency freq, QString call, QString loc);
     void sendSpotToTxEnabled(bool state);
 
 signals:
@@ -350,7 +351,7 @@ private:
     QLabel* status;
     QString rawStatus;
 
-    QVector<BandDetail> bands;
+    QVector<QSharedPointer<BandInfo> > bands;
     checkModeAgainstFreq* modeBandPlan;
 
     QList<PresetButton *> userCmdButton;
@@ -405,6 +406,7 @@ private:
 
     QStringList dxMsg;
 
+
     SpotData curSpot;
 
     ClusterQRZDetails qrzInfo;
@@ -424,7 +426,23 @@ private:
     QTimer *askQrzTimeout;
 
 
+/*
+    QString dxCall;
+    Frequency dxFreq;
+    QString dxBandStr;
+    QString dxBandMask;
+    QString dxModeStr;
+    QString dxModeMask;
+    QString spotCall;
+    QString spotComment;
+    QString spotTime;
+    QString spotDate;
+    QDateTime spotDateTime;
+    QString dxLocator;
+    QString spotLocator;
+    QString dxPropMode;
 
+*/
     bool loginStart;
     bool loginSuccess;
     bool loginStatDetails;
@@ -465,7 +483,7 @@ private:
     void readUserCommandStrings();
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
-    QString extractLocator(const QString &text, const QRegExp fullLocExp, const QRegExp partLocExp);
+    QString extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp);
 
     void showStatusMessage(const QString &message, const QString &raw);
     void startDisconnectTimer(int time);
@@ -494,7 +512,7 @@ private:
 
 
     QString getPropMode(const QString comment);
-    QString assembleSpotForDXCluster(QString freq, QString call, QString loc);
+    QString assembleSpotForDXCluster(Frequency freq, QString call, QString loc);
 
     void removeInsertSendSpotTab(bool state);
     void addSentSpotToDisplayQueue(bool spotStatus, QString reason);

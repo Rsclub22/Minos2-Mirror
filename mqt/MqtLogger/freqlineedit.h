@@ -28,6 +28,8 @@ public:
     void changeFreq(bool direction);
     //QString convertFreqString(double frequency);
 
+    void setLineText(QString s);
+
 signals:
 
     void newFreq();
@@ -37,8 +39,6 @@ private:
 
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
-
-
 
 } ;
 

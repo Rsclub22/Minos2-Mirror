@@ -10,7 +10,7 @@
 
 
 namespace Ui {
-    class transVertSetupForm;
+class transVertSetupForm;
 }
 
 
@@ -23,58 +23,47 @@ public:
     explicit TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent = nullptr);
 
 
-        bool transVertValueChanged = false;
-        bool transVertNameChanged = false;
+    bool transVertValueChanged = false;
+    bool transVertNameChanged = false;
 
-        bool transVertOffsetOk = false;
+    bool transVertOffsetOk = false;
 
-        void setBand(QString b);
-        QString getBand();
+    void setBand(QString b);
+    QString getBand();
 
-        //void antSwNumVisible(bool visible);
-        QString getTransVerSwNum();
-        void setTransVerSwNum(QString s);
+    //void antSwNumVisible(bool visible);
+    QString getTransVerSwNum();
+    void setTransVerSwNum(QString s);
 
-        void setUiItemsVisible(bool visible);
-        void loadBandFreqLimits();
-         void setRadioFreqBox(QString f);
-         void setTargetFreqBox(QString f);
-         void setOffsetFreqLabel(QString f);
+    void setUiItemsVisible(bool visible);
+    void loadBandFreqLimits();
+    void setRadioFreqBox(Frequency f);
+    void setTargetFreqBox(Frequency f);
+    void setOffsetFreqLabel(Frequency f);
 
-         void setLocTVSwComport(QString p);
-         void setEnableTransVertSwBoxVisible(bool visible);
-signals:
-
-    public slots:
-
-    private slots:
-        //void bandSelected();
-        void calcOffset();
-
-        void transVertSwNumSel();
-
-
-
-
+    void setLocTVSwComport(QString p);
+    void setEnableTransVertSwBoxVisible(bool visible);
 
 private:
 
+    Ui::transVertSetupForm *ui;
+    TransVertParams *transVertData;
 
-        Ui::transVertSetupForm *ui;
-        TransVertParams *transVertData;
+    FocusWatcher *radioFreqEdit;
+    FocusWatcher *targetFreqEdit;
 
+    bool radioFreqOK = false;
+    bool targetFreqOK = false;
 
+    void loadBandSel();
+private slots:
+    //void bandSelected();
+    void calcOffset();
 
-        FocusWatcher *radioFreqEdit;
-        FocusWatcher *targetFreqEdit;
-
-        bool radioFreqOK = false;
-        bool targetFreqOK = false;
-
-        void loadBandSel();
-public Q_SLOTS:
+    void transVertSwNumSel();
+public slots:
     void radioFreqEditfocusChange(QObject *, bool, QFocusEvent *event);
     void targetFreqEditfocusChange(QObject *, bool, QFocusEvent *event);
 };
 
-    #endif // TRANSVERTSETUPFORM_H
+#endif // TRANSVERTSETUPFORM_H

@@ -19,7 +19,7 @@
 #include "freqpresetdialog.h"
 #include "ui_freqpresetdialog.h"
 
-FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<BandDetail> &band, bool* _freqPresetChanged, QWidget *parent) :
+FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<QSharedPointer<BandInfo> > &band, bool* _freqPresetChanged, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FreqPresetDialog)
 {
@@ -121,14 +121,14 @@ void FreqPresetDialog::b_10ghzSelected()
 void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band)
 {
 
-    QString freq = f_box->text().trimmed().remove( QRegExp("^[0]*"));
+    QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
     {
        freq = convertFreqToFullDigit(freq).remove('.');
 
 
        // check in band
-       if (checkInBand(freq.toDouble(), band))
+       if (checkInBand(Frequency(freq), band))
        {
            presetFreq[band] = freq;
            freqChanged = true;
@@ -143,19 +143,20 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 
 // check in band
 
-bool FreqPresetDialog::checkInBand(double freq, freqPresetData::bandOffSet band)
+bool FreqPresetDialog::checkInBand(Frequency freq, freqPresetData::bandOffSet band)
 {
-    if (freq >= bands[band].fLow && freq <= bands[band].fHigh)
+    if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {
         return true;
     }
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band].name));
+        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band]->name()));
         msgBox.exec();
         return false;
     }
+    return false;
 }
 
 
@@ -246,15 +247,13 @@ void FreqPresetDialog::cancelSettings()
 
 void FreqPresetDialog::loadSettingsToDialog()
 {
-//    ui->lineEdit_28mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[_28MHZ]));
-    ui->lineEdit_50mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_50MHZ]));
-    ui->lineEdit_70mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_70MHZ]));
-    ui->lineEdit_144mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_144MHZ]));
-    ui->lineEdit_432mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_432MHZ]));
-    ui->lineEdit_1296mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_1296MHZ]));
-    ui->lineEdit_2300mhz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_2300MHZ]));
-    ui->lineEdit_3_4ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_3_4GHZ]));
-    ui->lineEdit_5_6ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_5_6GHZ]));
-    ui->lineEdit_10ghz->setText(convertFreqStrDispSingleNoTrailZero(presetFreq[freqPresetData::_10GHZ]));
-
+    ui->lineEdit_50mhz->setText(Frequency(presetFreq[freqPresetData::_50MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_70mhz->setText(Frequency(presetFreq[freqPresetData::_70MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_144mhz->setText(Frequency(presetFreq[freqPresetData::_144MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_432mhz->setText(Frequency(presetFreq[freqPresetData::_432MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_1296mhz->setText(Frequency(presetFreq[freqPresetData::_1296MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_2300mhz->setText(Frequency(presetFreq[freqPresetData::_2300MHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_3_4ghz->setText(Frequency(presetFreq[freqPresetData::_3_4GHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_5_6ghz->setText(Frequency(presetFreq[freqPresetData::_5_6GHZ]).convertFreqStrDispSingleNoTrailZero());
+    ui->lineEdit_10ghz->setText(Frequency(presetFreq[freqPresetData::_10GHZ]).convertFreqStrDispSingleNoTrailZero());
 }

@@ -35,9 +35,9 @@ void BearingLineEdit::onTextChanged(const QString& brg)
 
     if (!bearingStr.isEmpty())
     {
-
-        QRegExp re("\\d*");  // a digit (\d), zero or more times (*)
-        if (re.exactMatch(bearingStr.trimmed()))
+        QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));  // match ghz_mhz.khz_hz
+        QRegularExpressionMatch rem = re.match(bearingStr.trimmed());
+        if (rem.hasMatch())
         {
             // all digits
             int bearing = bearingStr.trimmed().toInt();

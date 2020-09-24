@@ -89,7 +89,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
               trace(QString("Cluster RPC: send spot to cluster node, call = %1, loc = %2, freq = %3").arg(call).arg(loc).arg(freq));
 
-              emit sendSpotToDXCluster(freq, call, loc);
+              emit sendSpotToDXCluster(Frequency(freq), call, loc);
 
 
           }
@@ -120,7 +120,6 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
 
       }
-
 
       mro->clearCallArgs();
       QSharedPointer<RPCParam>st(new RPCParamStruct);

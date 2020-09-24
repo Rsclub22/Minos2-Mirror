@@ -274,6 +274,8 @@ void appStartup(const QString &pappName)
 
     trace(title);
 
+    register_frequency_types();
+
     setAppLanguage(languageName);
 }
 

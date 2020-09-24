@@ -109,6 +109,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->locMult.addIfDirty( st, "locMult", dirty );
    ct->GLocMult.addIfDirty( st, "GLocMult", dirty );
    ct->otherExchange.addIfDirty( st, "QTHReq", dirty );
+   ct->otherOptionalExchange.addIfDirty( st, "QTHOpt", dirty );
    ct->allowLoc4.addIfDirty( st, "AllowLoc4", dirty );
    ct->allowLoc8.addIfDirty( st, "AllowLoc8", dirty );
    ct->currentMode.addIfDirty(st, "currentMode", dirty);
@@ -490,7 +491,7 @@ void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
 
         st->addMember(memno, "memno");
         st->addMember(mem.getValue().callsign, "callsign");
-        st->addMember(mem.getValue().freq, "freq");
+        st->addMember(mem.getValue().freq.str(), "freq");
         st->addMember(mem.getValue().mode, "mode");
         st->addMember(mem.getValue().locator, "locator");
         st->addMember(mem.getValue().bearing, "bearing");
@@ -509,7 +510,7 @@ void MinosTestExport::exportRunMemory(QSharedPointer<QFile> expfd, int memno )
         makeHeader( st, 1 );
 
         st->addMember(memno, "memno");
-        st->addMember(mem.getValue().freq, "freq");
+        st->addMember(mem.getValue().freq.str(), "freq");
         st->addMember(mem.getValue().mode, "mode");
 
         sendRequest(expfd, "MinosRunMemory", st);

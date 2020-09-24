@@ -6,7 +6,7 @@
 include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network widgets multimedia
+QT       += core gui network widgets
 
 TARGET = MqtKeyer
 TEMPLATE = app

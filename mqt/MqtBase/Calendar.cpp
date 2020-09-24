@@ -480,10 +480,12 @@ bool Calendar::parseFile ( const QString &fname )
                             }
 
                             BandList &blist = BandList::getBandList();
-                            BandInfo bi;
-                            blist.findBand(ic.reg1band, bi);
-                            ic.flow = bi.flow;
-                            ic.ukband = bi.uk;
+                            QSharedPointer<BandInfo>  bi;
+                            if (blist.findBand(ic.reg1band, bi))
+                            {
+                                ic.flow = bi->fLow;
+                                ic.ukband = bi->uk;
+                            }
 
                             calendar.push_back ( ic );
                         }

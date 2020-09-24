@@ -36,5 +36,6 @@
 #include "MLogFile.h"
 #include "AppStartup.h"
 #include "StdInReader.h"
+#include "frequency.h"
 
 #endif

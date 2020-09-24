@@ -38,7 +38,7 @@ signals:
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
    void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
-   void AfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, QString freq, QString mode, QString districtMult);
+   void AfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
@@ -58,7 +58,7 @@ signals:
    void AfterTabFocusIn(QLineEdit *tle);
 
    void BrgStrToRot(QString);
-   void FreqStrToRig(QString);
+   void FreqToRig(Frequency);
    void MatchBrgStrToRot(QString);
    void SpotBrgStrToRot(QString);
    void MemBrgStrToRot(QString);
@@ -80,7 +80,7 @@ signals:
    void FiltersChanged(BaseContestLog *);
    void UpdateStats(BaseContestLog *);
    void UpdateMemories(BaseContestLog *);
-   void RigFreqChanged(QString, BaseContestLog *);
+   void RigFreqChanged(Frequency, BaseContestLog *);
    void RotBearingChanged(int, BaseContestLog *);
 
    void XferEnabled(bool s, BaseContestLog *c, QString basename);
@@ -106,7 +106,7 @@ public:
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);
    static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
-   static void SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, QString freq, QString mode, QString districtMult);
+   static void SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
@@ -135,7 +135,7 @@ public:
 
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
-   static void SendFreqStrToRig(QString);
+   static void SendFreqToRig(Frequency);
    static void SendMatchBrgStrToRot(QString);
    static void SendSpotBrgStrToRot(QString);
    static void SendMemBrgStrToRot(QString);
@@ -147,7 +147,7 @@ public:
    static void sendFiltersChanged(BaseContestLog *c );
    static void sendUpdateMemories(BaseContestLog *c );
 
-    static void sendRigFreqChanged(QString f, BaseContestLog *c);
+    static void sendRigFreqChanged(Frequency f, BaseContestLog *c);
     static void sendRotBearingChanged(int f, BaseContestLog *c);
 
     static void sendXferEnabled(bool s, BaseContestLog *c, QString basename);

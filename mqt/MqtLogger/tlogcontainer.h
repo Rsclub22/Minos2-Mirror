@@ -262,6 +262,8 @@ private slots:
     void onIgnorePresetFreqChecked(bool);
     void onRestorContestModeChecked(bool checked);
 
+    void appStarted();
+
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

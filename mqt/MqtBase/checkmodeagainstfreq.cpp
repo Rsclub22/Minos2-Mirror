@@ -7,23 +7,23 @@ checkModeAgainstFreq::checkModeAgainstFreq()
 
 
 
-QString checkModeAgainstFreq::getMode(const QString &band, double freq)
+QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
 {
-    QMap<QString, ModeFreqDetail<double>> modeList;
-    ModeFreqDetail<double> freqs;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
+    ModeFreqDetail<Frequency> freqs;
 
     if (bandModeFreqList.contains(band))
     {
 
         modeList = bandModeFreqList.value(band);
-        QMapIterator<QString, ModeFreqDetail<double>> i(modeList);
+        QMapIterator<QString, ModeFreqDetail<Frequency>> i(modeList);
         while (i.hasNext())
         {
             i.next();
             freqs = i.value();
             for (int fi = 0; fi < freqs.freq.count(); fi++)
             {
-                QList<double> freqLimits = freqs.freq[fi];
+                QList<Frequency> freqLimits = freqs.freq[fi];
                 if (freqLimits.count() == 0)
                     continue;
                 if (freq >= freqLimits[0] && freq <= freqLimits[1])
@@ -39,11 +39,11 @@ QString checkModeAgainstFreq::getMode(const QString &band, double freq)
 }
 
 
-int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, double freq)
+int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, Frequency freq)
 {
 
-    QMap<QString, ModeFreqDetail<double>> modeList;
-    ModeFreqDetail<double> freqs;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
+    ModeFreqDetail<Frequency> freqs;
 
 
     if (bandModeFreqList.contains(band))
@@ -54,7 +54,7 @@ int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, double freq)
             freqs = modeList.value(mode);
             for (int i = 0; i < freqs.freq.count(); i++)
             {
-                QList< double > freqLimits = freqs.freq[i];
+                QList< Frequency > freqLimits = freqs.freq[i];
                 if (freqLimits.count() == 0)
                     continue;
                 if (freq >= freqLimits[0] && freq <= freqLimits[1])
@@ -80,7 +80,7 @@ int checkModeAgainstFreq::confirmMode(QString &band, QString &mode, double freq)
 bool checkModeAgainstFreq::modeExists(QString &band, QString &mode)
 {
 
-    QMap<QString, ModeFreqDetail<double>> modeList;
+    QMap<QString, ModeFreqDetail<Frequency>> modeList;
 
     if (bandModeFreqList.contains(band))
     {

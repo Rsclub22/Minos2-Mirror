@@ -398,7 +398,7 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
     if (file.open(QIODevice::ReadOnly))
     {
         QString data = file.readAll();
-        data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
+        data.remove( QRegularExpression("\r") ); //remove all ocurrences of CR (Carriage Return)
         QString temp;
         QChar character;
         QTextStream textStream(&data);
@@ -462,8 +462,8 @@ void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
     {
         if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
         {
-             temp.remove( QRegExp("^\"") );
-             temp.remove( QRegExp("\"$") );
+             temp.remove( QRegularExpression("^\"") );
+             temp.remove( QRegularExpression("\"$") );
         }
         //FIXME: will possibly fail if there are 4 or more reapeating double quotes
         temp.replace("\"\"", "\"");
@@ -485,8 +485,8 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
     {
         if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
         {
-            temp.remove( QRegExp("^\"") );
-            temp.remove( QRegExp("\"$") );
+            temp.remove( QRegularExpression("^\"") );
+            temp.remove( QRegularExpression("\"$") );
         }
         temp.replace("\"\"", "\"");
         itemList.append(temp.trimmed());
@@ -528,7 +528,7 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
      if (file.open(QIODevice::ReadOnly))
      {
          QString data = file.readAll();
-         data.remove( QRegExp("\r") ); //remove all ocurrences of CR (Carriage Return)
+         data.remove( QRegularExpression("\r") ); //remove all ocurrences of CR (Carriage Return)
          QString temp;
          QChar character;
          QTextStream textStream(&data);
@@ -564,8 +564,8 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
     {
         if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
         {
-             temp.remove( QRegExp("^\"") );
-             temp.remove( QRegExp("\"$") );
+             temp.remove( QRegularExpression("^\"") );
+             temp.remove( QRegularExpression("\"$") );
         }
         temp.replace("\"\"", "\"");
         itemList.append(temp.trimmed());
@@ -584,3 +584,25 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
 
 
 #endif
+QString anchoredPattern(const QString &expression)
+{
+    return QLatin1String("\\A(?:")
+           + expression
+           + QLatin1String(")\\z");
+}
+int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
+{
+    // needed because QStringList::indexOf not introduced until 5.13
+    int i = 0;
+    while(i != supportedBands.count())
+    {
+        if (contestBandStr == supportedBands[i])
+        {
+            return i;
+        }
+        i++;
+    }
+
+    return -1;
+}
+

@@ -75,8 +75,8 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = bandmapSpot->spotTime;
                 break;
-            case FREQ_STR_COL_NUM:
-                d = bandmapSpot->dxFreqStr;
+            case FREQ_COL_NUM:
+                d = bandmapSpot->dxFreq.convertFreqStrDisp();
                 break;
             case DXBANDSTR_COL_NUM:
                 d = bandmapSpot->dxBand;
@@ -161,12 +161,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = bandmapSpot->spotTime;
             break;
-            case FREQ_STR_COL_NUM:
-                d = bandmapSpot->dxFreqStr;
+            case FREQ_COL_NUM:
+                d.setValue( bandmapSpot->dxFreq);
                 break;
-            case FREQ_INT64_COL_NUM:
-                d = bandmapSpot->dxFreq;
-            break;
             case DXBANDSTR_COL_NUM:
                 d = bandmapSpot->dxBand;
             break;
@@ -260,11 +257,8 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             case TIME_COL_NUM :
                 bandmapSpot->spotTime = value.toString();
             break;
-            case FREQ_STR_COL_NUM:
-                bandmapSpot->dxFreqStr = value.toString();
-            break;
-            case FREQ_INT64_COL_NUM:
-                bandmapSpot->dxFreq = value.toLongLong();
+            case FREQ_COL_NUM:
+                bandmapSpot->dxFreq = qvariant_cast<Frequency>(value);
             break;
             case DXBANDSTR_COL_NUM:
                 bandmapSpot->dxBand = value.toString();
