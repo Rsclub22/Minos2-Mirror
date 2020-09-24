@@ -775,7 +775,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-
+/*
             SpotData * spotData = new SpotData(rxTime, spotlist[SPOTTIME], spotlist[SPOTDATE],
                                                spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
                                                spotlist[DXMODESTR], spotlist[DXMODEMASK],
@@ -784,16 +784,18 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                locWorked, distance,
                                                bearing, spotlist[SPOTCALL],
                                                spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
-/*
+*/
+
             SpotData* newSpot = new SpotData();
 
             newSpot->setRxTime(rxTime);
             newSpot->setSpotTime(spotlist[SPOTTIME]);
+            newSpot->setSpotDate(spotlist[SPOTDATE]);
             newSpot->setDxFreq(spotlist[DXFREQ]);
             newSpot->setDxBandStr(spotlist[DXBANDSTR]);
             newSpot->setDxBandMask(spotlist[DXBANDMASK]);
             newSpot->setDxModeStr(spotlist[DXMODESTR]);
-            newSpot->setDxModeMask(spotlist[DXMODEMASK]);
+            newSpot->setDxModeMaskStr(spotlist[DXMODEMASK]);
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
@@ -806,18 +808,18 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             newSpot->setSpotComment(spotlist[SPOTCOMMENT]);
 
             dxSpotDataModel->rowData = newSpot;
-*/
+
 
 
             if (resentSpot)
             {
-                if (checkspotExists(spotData))
+                if (checkspotExists(newSpot))
                 {
                     return;     // spot exists in table
                 }
             }
 
-            dxSpotDataModel->rowData = spotData;
+            dxSpotDataModel->rowData = newSpot;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
