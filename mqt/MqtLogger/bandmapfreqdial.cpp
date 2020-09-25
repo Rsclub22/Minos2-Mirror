@@ -488,6 +488,9 @@ int BandmapFreqDial::getYCoordOnDial(const Frequency &frequency)
 Frequency BandmapFreqDial::getFreqFromYCoordOnDial(int y)
 {
     int dialPos = y - dialData::DIAL_VERT_OFFSET;
+    int fmajor = (dialPos / dialData::khzPixelStep[zoomLevel]) * 1000;
+    int fminor = (dialPos % dialData::khzPixelStep[zoomLevel] * dialData::hzPixelStep[zoomLevel]) * 1000;
+    int minor = dialPos % dialData::khzPixelStep[zoomLevel];
     Frequency fmaj = (dialPos / dialData::khzPixelStep[zoomLevel]) * 1000 ;
     Frequency fmin = (dialPos % dialData::khzPixelStep[zoomLevel] * dialData::hzPixelStep[zoomLevel]) * 1000;
     Frequency ftot = fmaj + fmin;
