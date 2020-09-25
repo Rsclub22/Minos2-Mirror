@@ -1325,39 +1325,6 @@ int ClusterMainWindow::getPrefixReply(QString &line, QString &callsign)
 
 
 
-int ClusterMainWindow::geotoloc( double lat, double longi, QString &gridref )
-{
-   // lat, longi to be in degrees, -ve for W or S
-
-   longi = longi / 360 + 0.5;
-   lat = lat / 180 + 0.5;
-
-   gridref = txgeoloc( &lat, &longi, 18, 'A' );
-   gridref += txgeoloc( &lat, &longi, 10, '0' );
-   gridref += txgeoloc( &lat, &longi, 24, 'A' );
-   gridref += txgeoloc( &lat, &longi, 10, '0' );
-
-   return ( GRIDOK );
-
-}
-
-QString ClusterMainWindow::txgeoloc( double *n, double *e, int f, char t)
-{
-
-
-
-
-   *e = f * ( *e - ( static_cast< int >  (* e) ) );
-   *n = f * ( *n - ( static_cast< int >  (* n) ) );
-
-    QString res;
-    res += static_cast< char >  ( static_cast< int >  ( *e ) + t );
-    res += static_cast< char >  ( static_cast< int >  ( *n ) + t );
-
-    return res;
-}
-
-
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
 {

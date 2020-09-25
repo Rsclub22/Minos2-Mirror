@@ -584,7 +584,7 @@ static int internaltoloc( Location *ingrid, Location *outgrid )
    return ( internaltogeo( ingrid, outgrid ) );
 }
 
-static QString txgeoloc( double *n, double *e, int f, char t)
+QString txgeoloc( double *n, double *e, int f, char t)
 {
    *e = f * ( *e - ( static_cast< int >  (* e) ) );
    *n = f * ( *n - ( static_cast< int >  (* n) ) );

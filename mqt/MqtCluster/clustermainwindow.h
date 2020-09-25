@@ -533,8 +533,6 @@ private:
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
     int getPrefixReply(QString &line, QString &callsign);
-    QString txgeoloc(double *n, double *e, int f, char t);
-    int geotoloc(double lat, double longi, QString &gridref);
 
 
 
