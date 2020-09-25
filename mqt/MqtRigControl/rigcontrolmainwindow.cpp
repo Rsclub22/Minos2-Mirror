@@ -1768,12 +1768,19 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
         cb = bi->uk;
         logMessage(QString("SetFreq: Band found = %1").arg(cb));
     }
+    else
+    {
+        logMessage((QString("SetFreq: No band found for this freq")));
+        return;
+    }
+
     Frequency f(freq);
 
     if (/*cb != selTvBand &&*/ setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
     {
 
         // does a transverter support this band?
+        logMessage((QString("SetFreq: Looking for Transverters that support this band")));
 
         bool b = false;
         while (tvNum < setupRadio->currentRadio.numTransverters)
@@ -1839,56 +1846,53 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
 
         }
+    }
 
-        if (radioCommsOK)
+    if (radioCommsOK)
+    {
+
+        if (radio)
         {
-
-            if (radio)
-            {
-               retCode = radio->setFrequency(f, vfo);
-            }
-            else
-            {
-                logMessage(QString("setFreq - radio = nullptr"));
-                return;
-            }
-
-            if (retCode != Rig_OK)
-            {
-                if (retCode == -9)
-                {
-                    logMessage(QString("SetFreq: Invalid Tx Freq for Radio, Freq = %1").arg(QString::number(static_cast<qint64>(f))));
-                    cmdLockOff();
-                    return;
-                }
-
-                logMessage(QString("SetFreq: Error Setting Freq Code = %1").arg(retCode));
-                radioError(retCode, tr("SetFreq"));
-            }
-            else
-            {
-                logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(static_cast<qint64>(f))));
-            }
-
-            if (!rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData) // non polling radio
-            {
-                // when not polling radio for information
-                trace(QString("SetFreq: Check Transvert Freq at startup"));
-                cmdLockOff();
-                getRadioInfo(DONT_PUBLISH_NOW);
-
-             }
-
+           retCode = radio->setFrequency(f, vfo);
         }
         else
         {
-            logMessage(QString("SetFreq: Radio is not connected"));
+            logMessage(QString("setFreq - radio = nullptr"));
+            return;
         }
+
+        if (retCode != Rig_OK)
+        {
+            if (retCode == -9)
+            {
+                logMessage(QString("SetFreq: Invalid Tx Freq for Radio, Freq = %1").arg(QString::number(static_cast<qint64>(f))));
+                cmdLockOff();
+                return;
+            }
+
+            logMessage(QString("SetFreq: Error Setting Freq Code = %1").arg(retCode));
+            radioError(retCode, tr("SetFreq"));
+        }
+        else
+        {
+            logMessage(QString("SetFreq: Rig set to Freq = %1").arg(QString::number(static_cast<qint64>(f))));
+        }
+
+        if (!rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).pollData) // non polling radio
+        {
+            // when not polling radio for information
+            trace(QString("SetFreq: Check Transvert Freq at startup"));
+            cmdLockOff();
+            getRadioInfo(DONT_PUBLISH_NOW);
+
+         }
+
     }
     else
     {
-        logMessage(QString("SetFreq:: Freq conversion from string %1 failed").arg(rfrequency.traceStr()));
+        logMessage(QString("SetFreq: Radio is not connected"));
     }
+
 
     cmdLockOff();
 }
