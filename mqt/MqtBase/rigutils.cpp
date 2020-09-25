@@ -270,29 +270,25 @@ QString convertRitFreqToStr(const ShortFreq &freq, bool ritKHzFlag)
 }
 
 // remove hundreds hz and hz from freq for cluster display
-QString removeHundredHzAndHzDigits(Frequency f)
+QString removeHundredHzAndHzDigits(QString f)
 {
-    QString fnew = f.str();
-    fnew.chop(2);
+    QStringList sl = f.split('.');
+    int count = sl.count();
+    sl[count - 1] = sl[count - 1].mid(0,1);
+    QString fnew;
+    for (int i = count - 1; i >= 0; i--)
+    {
+        if (i == count - 1)
+        {
+            fnew = (sl[i]);
+        }
+        else
+        {
+            fnew.prepend(sl[i] + ".");
+        }
+
+    }
     return fnew;
-
-//    QStringList sl = f.split('.');
-//    int count = sl.count();
-//    sl[count - 1] = sl[count - 1].mid(0,1);
-//    QString fnew;
-//    for (int i = count - 1; i >= 0; i--)
-//    {
-//        if (i == count - 1)
-//        {
-//            fnew = (sl[i]);
-//        }
-//        else
-//        {
-//            fnew.prepend(sl[i] + ".");
-//        }
-
-//    }
-//    return fnew;
 }
 
 
