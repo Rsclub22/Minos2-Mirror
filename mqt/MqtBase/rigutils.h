@@ -28,6 +28,6 @@ QString convertFreqToFullDigit(QString f);
 
 QString convertRitFreqToStr(const ShortFreq &freq, bool ritKHzFlag);
 
-QString removeHundredHzAndHzDigits(Frequency f);
+QString removeHundredHzAndHzDigits(QString f);
 
 #endif // RIGUTILS_H

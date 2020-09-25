@@ -184,7 +184,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getSpotDate();
             break;
             case FREQ_COL_NUM:
-                d = removeHundredHzAndHzDigits(dxSpot->getDxFreq());
+                d = removeHundredHzAndHzDigits(dxSpot->getDxFreq().convertFreqStrDisp());
             break;
             case DXSPOT_CALL_COL_NUM:
                 if (dxSpot->getDxCallWorked() == BOOL_YES)

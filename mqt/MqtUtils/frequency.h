@@ -35,6 +35,7 @@ public:
     QString pretty_frequency_MHz_string( const QLocale &locale = QLocale()) const;
     friend QDataStream& operator>> (QDataStream& in, const Frequency& ff)
     {
+        // required in the WSJT-X code
         in >> ff;
         return in;
     }
