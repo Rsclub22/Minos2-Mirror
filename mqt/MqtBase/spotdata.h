@@ -47,6 +47,21 @@ public:
     void setDxCall(const QString dxCall_){dxCall = dxCall_.trimmed();}
     QString getDxCall()const {return dxCall;}
 
+    // migrate completely to Callsign ??
+
+    void populateDxCall(const QString dxCall_)
+    {
+        dxCall = dxCall_.trimmed();
+        dx_Call = dxCall_;
+        callValidateCode = dx_Call.validate();
+    }
+
+    Callsign getDx_Call() const {return dx_Call;}
+    int getDx_CallValidateCode() const {return callValidateCode;}
+
+    void setAskCallsign(const QString askCallsign_){askCallsign = askCallsign_;}
+    QString getAskCallsign(){return askCallsign;}
+
     void setDxFreq(const Frequency dxFreq_){dxFreq = dxFreq_;}
     Frequency getDxFreq()const {return dxFreq;}
 
@@ -81,11 +96,17 @@ public:
     void setDxLocator(const QString dxLocator_){dxLocator = dxLocator_.trimmed();}
     QString getDxLocator() const {return dxLocator;}
 
-    void setDxLocatorFromQrz(const bool dxLocatorFromQrz_){dxLocatorFromQrz = dxLocatorFromQrz_;}
-    bool getDxLocatorFromQrz()const {return dxLocatorFromQrz;}
+    void setDxLocatorFromNode(const bool dxLocatorFromNode_){dxLocatorFromNode = dxLocatorFromNode_;}
+    bool getDxLocatorFromNode()const {return dxLocatorFromNode;}
 
     void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
     bool getAskQrz()const {return askQrz;}
+
+    void setAskQrzFailed(const bool askQrzFailed_){askQrzFailed = askQrzFailed_;}
+    bool getAskQrzFailed()const {return askQrzFailed;}
+
+    void setAskPrefix(const bool askPrefix_){askPrefix = askPrefix_;}
+    bool getAskPrefix()const {return askPrefix;}
 
 
     void setSpotterLocator(const QString spotterLocator_){spotterLocator = spotterLocator_.trimmed();}
@@ -123,9 +144,14 @@ private:
     QString dxModeStr;
     QString dxModeMaskStr;
     QString dxCall;
+    Callsign dx_Call;
+    int callValidateCode;
     QString dxLocator;
-    bool dxLocatorFromQrz;
+    bool dxLocatorFromNode;
     bool askQrz;
+    bool askQrzFailed;
+    bool askPrefix;
+    QString askCallsign;
     QString dxDist;
     QString dxBrg;
     bool dxCallWorked;

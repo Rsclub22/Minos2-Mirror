@@ -80,8 +80,8 @@ const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
-const int ASKQRZ_QUEUE_TIMER_PERIOD = 5000;
-const int ASKQRZ_TIMEOUT = 10000;
+const int ASKQRA_QUEUE_TIMER_PERIOD = 5000;
+const int ASKQRA_TIMEOUT = 10000;
 
 
 //const int SPOT_IS_HF = -3;
@@ -410,20 +410,20 @@ private:
     SpotData curSpot;
 
     ClusterQRZDetails qrzInfo;
-    bool getQrzInfo = false;
-    bool qrzQueryAvail = false;
-    bool testQrzInfo = false;
+    //bool getQrzInfo = false;
+    //bool qrzQueryAvail = false;
+    //bool testQrzInfo = false;
 
-    bool getPrefixInfo = false;
-    bool prefixQueryAvail = false;
-    QString prefixQra;
+    //bool getPrefixInfo = false;
+    //bool prefixQueryAvail = false;
+    //QString prefixQra;
 
 
 
-    QString waitingForCallFromQrz;
-    QMap<QString, SpotData> spotListNoQra;
-    QTimer *askQrzTimer;
-    QTimer *askQrzTimeout;
+    SpotData spotWaitingForQraFromNode;
+    QVector<SpotData> spotListNoQra;
+    QTimer *askQraTimer;
+    QTimer *askQraTimeout;
 
 
 /*
@@ -532,7 +532,7 @@ private:
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
-    int getPrefixReply(QString &line, QString &callsign);
+    int getPrefixReply(QString &line, const QString &callsign);
 
 
 
@@ -562,9 +562,9 @@ private slots:
 
     void getSpotsToSendToClientQueues();
 
-    void handAskQrzTimer();
+    void handAskQraTimer();
 
-    void handleAskQrzTimeout();
+    void handleAskQraTimeout();
 
     void cancelPingTimeOut(QString msg);
     void handlePingClusterNodeTimeout();
