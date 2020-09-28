@@ -1153,7 +1153,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                     traceMsg(QString("AddLogSpot Callsign moved freq - %1, %2").arg(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString())
                              .arg(qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ), BMP_DataStoredRole)).traceStr()));
 
-                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), QVariant(spot->getFreq()), BMP_DataStoredRole);
+                    QVariant f;
+                    f.setValue(spot->getFreq());
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), f, BMP_DataStoredRole);
 
                     // do we need to update the time as well????
                     // we don't need to save this incomming logger spot as we have moved it..
@@ -1302,7 +1304,9 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
             // update the spot
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, RUN_MODE_ON_COL_NUM ), spot->getRunModeOn() ,BMP_DataStoredRole);
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, OFF_RUN_FREQ_COL_NUM ), spot->getOffRunFreq() ,BMP_DataStoredRole);
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), QVariant(spot->getFreq()) ,BMP_DataStoredRole);
+            QVariant f;
+            f.setValue(spot->getFreq());
+            bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
         }
 
 
@@ -1390,7 +1394,9 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
                              .arg(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString())
                              .arg(qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM), BMP_DataStoredRole)).traceStr()));
 
-                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM), QVariant(dxFreq), BMP_DataStoredRole);
+                    QVariant f;
+                    f.setValue(dxFreq);
+                    bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM), f, BMP_DataStoredRole);
                     return  false;          // don't save this spot to the bandmap spot list
 
                 } else if (spotType == bandmapSpotType::CLUSTER)
