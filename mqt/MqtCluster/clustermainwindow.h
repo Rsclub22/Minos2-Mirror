@@ -283,6 +283,46 @@ private:
 
 };
 
+class AskQraData
+{
+
+public:
+    AskQraData()
+    {
+        clear();
+    }
+
+    void setAskCallsign(const QString askCallsign_){askCallsign = askCallsign_;}
+    QString getAskCallsign(){return askCallsign;}
+
+    void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
+    bool getAskQrz()const {return askQrz;}
+
+    void setAskPrefix(const bool askPrefix_){askPrefix = askPrefix_;}
+    bool getAskPrefix()const {return askPrefix;}
+
+
+    void clear()
+    {
+        askQrz = false;
+        askPrefix = false;
+
+        askCallsign.clear();
+
+    }
+
+
+private:
+
+
+
+   bool askQrz;
+   bool askPrefix;
+   QString askCallsign;
+
+
+};
+
 
 
 
@@ -410,13 +450,8 @@ private:
     SpotData curSpot;
 
     ClusterQRZDetails qrzInfo;
-    //bool getQrzInfo = false;
-    //bool qrzQueryAvail = false;
-    //bool testQrzInfo = false;
 
-    //bool getPrefixInfo = false;
-    //bool prefixQueryAvail = false;
-    //QString prefixQra;
+    AskQraData askQraData;
 
 
 
@@ -426,23 +461,7 @@ private:
     QTimer *askQraTimeout;
 
 
-/*
-    QString dxCall;
-    Frequency dxFreq;
-    QString dxBandStr;
-    QString dxBandMask;
-    QString dxModeStr;
-    QString dxModeMask;
-    QString spotCall;
-    QString spotComment;
-    QString spotTime;
-    QString spotDate;
-    QDateTime spotDateTime;
-    QString dxLocator;
-    QString spotLocator;
-    QString dxPropMode;
 
-*/
     bool loginStart;
     bool loginSuccess;
     bool loginStatDetails;
@@ -532,7 +551,7 @@ private:
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
-    int getPrefixReply(QString &line, const QString &callsign);
+    int getPrefixReply(QString &line, const QString &callsign, QString &qra);
 
 
 

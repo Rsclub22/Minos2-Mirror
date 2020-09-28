@@ -43,6 +43,7 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTi
     //dxCall = _dxCall;
     populateDxCall(_dxCall); // sets validate code
     dxLocator = _dxLocator;
+    dxLocatorIsFromNode = false;
     dxDist = distance;
     dxBrg = bearing;
     dxCallWorked = _dxCallWorked;
@@ -52,11 +53,8 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTi
     spotterLocator = _spotterLocator;
     dxPropMode = _dxPropMode;
     spotComment = comment;
-    dxLocatorFromNode = false;
-    askQrz = false;
     askQrzFailed = false;
-    askPrefix = false;
-    askCallsign.clear();
+
 }
 
 
@@ -78,18 +76,16 @@ void SpotData::clear(){
     spotterCall.clear();
     spotComment.clear();
     dxLocator.clear();
+    dxLocatorIsFromNode = false;
     dxDist.clear();
     dxBrg.clear();
     dxCallWorked = false;
     dxLocatorWorked = false;
-    dxLocatorFromNode = false;
     sentToMemory = false;
     spotterLocator.clear();
     dxPropMode.clear();
-    askQrz = false;
     askQrzFailed = false;
-    askPrefix = false;
-    askCallsign.clear();
+
 
 }
 
@@ -110,6 +106,7 @@ void SpotData::operator = (const SpotData& spd)
     dx_Call = spd.dx_Call;
     callValidateCode = spd.callValidateCode;
     dxLocator = spd.dxLocator;
+    dxLocatorIsFromNode = spd.dxLocatorIsFromNode;
     dxDist = spd.dxDist;
     dxBrg = spd.dxBrg;
     dxCallWorked = spd.dxCallWorked;
@@ -119,11 +116,8 @@ void SpotData::operator = (const SpotData& spd)
     spotterLocator = spd.spotterLocator;
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
-    askQrz = spd.askQrz;
     askQrzFailed = spd.askQrzFailed;
-    askPrefix = spd.askPrefix;
-    askCallsign = spd.askCallsign;
-    dxLocatorFromNode = spd.dxLocatorFromNode;
+
 }
 
 

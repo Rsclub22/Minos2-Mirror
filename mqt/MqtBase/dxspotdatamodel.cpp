@@ -201,7 +201,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     QColor colour = LOCATOR_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
                 }
-                if (dxSpot->getDxLocatorFromNode())
+                if (dxSpot->getDxLocatorIsFromNode())
                 {
                     d = d + "<i>" + dxSpot->getDxLocator() + "</i>";
                 }
