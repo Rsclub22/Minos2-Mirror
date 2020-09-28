@@ -332,7 +332,6 @@ void ClusterMainWindow::doStartup()
 
 
 
-
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
 
@@ -341,17 +340,6 @@ void ClusterMainWindow::doStartup()
     connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
 
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
-
-
-
-
-
-    //QString line = "M0DGB CC: 61 IZ: 27 CZ: 14 LL: 52 46 N 1 28 W (M, England-G)";
-    //QString callsign = "M0DGB";
-    //getPrefixReply(line, callsign);
-    //int a = 0;
-
-
 
 
 }
@@ -1061,7 +1049,7 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
             if (currentUserCallsign != newSpot.getSpotterCall())
             {
                 // send spot to clients if spotter isn't this station
-                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients"));
+                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot.getDxCall()));
                 sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(newSpot.getDxCall()).arg(newSpot.getDxLocator()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMaskStr())
                                                        .arg(newSpot.getSpotterCall()).arg(newSpot.getSpotterLocator()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(newSpot.getDxPropMode()).arg(setupCluster->getTimeToLive())));
             }
@@ -1070,16 +1058,14 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
                 trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
             }
 
-
-            trace(QString("ProcessNewSpot: rxTime = %1").arg(rxTime));
-            trace(QString("ProcessNewSpot: Add spot for display"));
+            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCall()).arg(rxTime));
             spotsList.append(new SpotData(newSpot));
 
         }
     }
     else
     {
-        trace(QString("ProcessNewSpot: Spot older than time to live time = %1 mins").arg(timeToLive/60));
+        trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot.getDxCall()).arg(timeToLive/60));
     }
 
 
@@ -1752,13 +1738,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
     trace(QString("UnpackDXSpot - %1").arg(txt));
     int timePos = 0;
 
-
-
     txt.remove('\x07');
-    //if (!txt.contains("DX de"))
-    //{
-    //    return -2;
-    //}
 
     dxMsg = txt.split(QRegularExpression("\\s+"));
 
@@ -1813,11 +1793,11 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         // get current date
         QDate d = QDate::currentDate();
         newSpot.setSpotDate(d.toString("dd-MMM-yyyy"));
-//        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
-//        if (!newSpot.getSpotDateTime().isValid())
-//        {
-//           return -1;
-//        }
+        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
+        if (!newSpot.getSpotDateTime().isValid())
+        {
+           return -1;
+        }
 
         // look for locator
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range
@@ -1825,10 +1805,6 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
             // no spotlocator sent
             newSpot.setSpotterLocator("");
         }
-        //else if (dxMsg[timePos + 1] == "")
-        //{
-        //    spotLocator = "";
-        //}
         else
         {
             newSpot.setSpotterLocator(dxMsg[timePos + 1]);
