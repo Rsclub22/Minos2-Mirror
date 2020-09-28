@@ -919,6 +919,102 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
 
 
+void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int &lastOffset)
+{
+    if (matchMode(row) && matchDistance(row))
+    {
+        int centreYCoord = dial->getYCoordOnDial(curFreq);
+        int dialWidth = dial->getCurWidth();
+
+        BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(0, 0));
+        listOfMarkers.append(markerDetails);
+
+        Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+        int yCoord = dial->getYCoordOnDial(f);
+        int syCoord;
+
+        if (row >= markersAbove)
+        {
+            // marker at higher frequency
+            syCoord = centreYCoord + fontOffset;
+            if (syCoord < yCoord)
+            {
+                syCoord = yCoord;
+                fontOffset = yCoord - centreYCoord;
+            }
+            if (fontOffset <= lastOffset)
+            {
+                fontOffset = lastOffset + fontHeight;
+                syCoord = centreYCoord + fontOffset;
+
+            }
+
+        }
+        else
+        {
+            // marker at lower frequency
+            syCoord = centreYCoord - fontOffset;
+            if (syCoord > yCoord)
+            {
+                syCoord = yCoord;
+                fontOffset = centreYCoord - yCoord;
+            }
+            if (fontOffset <= lastOffset)
+            {
+                fontOffset = lastOffset + fontHeight;
+                syCoord = centreYCoord - fontOffset;
+
+            }
+        }
+        lastOffset = fontOffset;
+        //spotCoord is left, top
+        QPoint spotCoord = QPoint(dialWidth + SPOTMARKER_XOFFSET, syCoord - fontHeight/2);
+        QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, syCoord + fontHeight/3);
+
+        BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord); //spotcoord is used for the text position
+        bandmapScene->addItem(spot);
+
+
+        QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
+
+        QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
+        QLineF markerLineCoordsF = QLineF(markerLineCoord);
+
+        QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
+        bandmapScene->addItem(markerLine);
+
+        bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+
+        QString spotMsg;
+        QRectF spotRect;
+        QString spotTooltipText;
+
+        if (savedSpotType == bandmapSpotType::CQ)
+        {
+            assembleCqMsg(row, spotMsg);
+            spotRect = calculateSpotRect(spotMsg, spotCoord);
+            assembleCqToolTip(row, f, spotTooltipText);
+        }
+        else
+        {
+            assembleSpotMsg(row, spotMsg);
+            spotRect = calculateSpotRect(spotMsg, spotCoord);
+            assembleToolTip(row, f, spotTooltipText);
+        }
+
+
+        spot->setSpotText(spotMsg);
+        spot->setToolTipText(spotTooltipText);
+
+        markerDetails->setSpotMarkerPtr(spot);
+        markerDetails->setMarkerLinePtr(markerLine);
+        markerDetails->setSpotRect(spotRect);
+        markerDetails->setModelRowNum(row);
+
+        fontOffset += fontHeight;
+    }
+}
+
 void BandmapView::drawBandMapSpots()
 {
 
@@ -957,16 +1053,18 @@ void BandmapView::drawBandMapSpots()
     if (maxNumSpots == 0)
         return;
 
-    int textYCoord = 0;
-
-    for (int i = 0; i < maxNumSpots; i++)
+    bool centreTextOnFrequency = true;
+    if (!centreTextOnFrequency)
     {
-        BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(dialWidth + SPOTMARKER_XOFFSET, textYCoord));
-        listOfMarkers.append(markerDetails);
-        textYCoord += fontHeight;
-    }
+        int textYCoord = 0;
 
-    int yCoord = 0;
+        for (int i = 0; i < maxNumSpots; i++)
+        {
+            BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(dialWidth + SPOTMARKER_XOFFSET, textYCoord));
+            listOfMarkers.append(markerDetails);
+            textYCoord += fontHeight;
+        }
+    }
     int numrows = model()->rowCount();
 
     if (numrows != 0)
@@ -985,84 +1083,178 @@ void BandmapView::drawBandMapSpots()
             }
         }
 
-
-
-
-        for (int row = 0; row < numrows; ++row)
+        if (centreTextOnFrequency)
         {
-           // check mode and distance against the filter settings
-            if (matchMode(row) && matchDistance(row))
+            int markersAbove = 0;
+            int centreSpot;
+            for (centreSpot = 0; centreSpot < model()->rowCount(); ++centreSpot)
             {
-
-                Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-
-                if (f >= startFreq && f <= endFreq)
+                Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(centreSpot, FREQ_COL_NUM), BMP_DataStoredRole));
+                if (freq >= startFreq && freq <= endFreq)
                 {
-                    yCoord = dial->getYCoordOnDial(f);
-                    for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
+                    if (freq > curFreq)
                     {
-                        int fontOffset;
-                        if (markNum == 0)
-                        {
-                            fontOffset = 0;
-                        }
-                        else
-                        {
-                            fontOffset = fontHeight;
-                        }
+                        break;
+                    }
+                    if (matchMode(centreSpot) && matchDistance(centreSpot))
+                    {
+                        markersAbove++;
+                    }
+                }
+            }
+            int fontOffset = -fontHeight;
+            int lastOffset = -1;
+            for (int row = markersAbove - 1; row >= 0; --row)
+            {
+                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+            }
+            fontOffset = -1;
+            lastOffset = -1;
+            for (int row = markersAbove; row < numrows; ++row)
+            {
+                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+#ifdef RUBBISH
+                if (matchMode(row) && matchDistance(row))
+                {
+                    BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(0, 0));
+                    listOfMarkers.append(markerDetails);
 
-                        if (listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontOffset  >= yCoord && markNum != 0)
+                    Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+                    int yCoord = dial->getYCoordOnDial(f);
+                    fontOffset += fontHeight;
+
+                    int syCoord = centreYCoord + fontOffset;
+                    if (syCoord < yCoord)
+                    {
+                        syCoord = yCoord;
+                        fontOffset = yCoord - centreYCoord;
+                    }
+                    //spotCoord is left, top
+                    QPoint spotCoord = QPoint(dialWidth + SPOTMARKER_XOFFSET, syCoord);
+
+                    BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
+
+                    bandmapScene->addItem(spot);
+
+                    QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, centreYCoord + fontOffset + fontHeight);
+
+                    QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
+
+                    QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
+                    QLineF markerLineCoordsF = QLineF(markerLineCoord);
+
+                    QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
+                    bandmapScene->addItem(markerLine);
+
+                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+
+                    QString spotMsg;
+                    QRectF spotRect;
+                    QString spotTooltipText;
+
+                    if (savedSpotType == bandmapSpotType::CQ)
+                    {
+                        assembleCqMsg(row, spotMsg);
+                        spotRect = calculateSpotRect(spotMsg, spotCoord);
+                        assembleCqToolTip(row, f, spotTooltipText);
+                    }
+                    else
+                    {
+                        assembleSpotMsg(row, spotMsg);
+                        spotRect = calculateSpotRect(spotMsg, spotCoord);
+                        assembleToolTip(row, f, spotTooltipText);
+                    }
+
+                    spot->setSpotText(spotMsg);
+                    spot->setToolTipText(spotTooltipText);
+
+                    markerDetails->setSpotMarkerPtr(spot);
+                    markerDetails->setMarkerLinePtr(markerLine);
+                    markerDetails->setSpotRect(spotRect);
+                    markerDetails->setModelRowNum(row);
+                }
+#endif
+            }
+        }
+        else
+        {
+            for (int row = 0; row < numrows; ++row)
+            {
+               // check mode and distance against the filter settings
+                if (matchMode(row) && matchDistance(row))
+                {
+
+                    Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+
+                    if (f >= startFreq && f <= endFreq)
+                    {
+                        int yCoord = dial->getYCoordOnDial(f);
+                        for (int markNum = 0; markNum < listOfMarkers.count(); markNum++)
                         {
-                            if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
+                            int fontOffset;
+                            if (markNum == 0)
                             {
-                                QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+                                fontOffset = 0;
+                            }
+                            else
+                            {
+                                fontOffset = fontHeight;
+                            }
 
-                                QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
-                                BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
-
-                                bandmapScene->addItem(spot);
-
-                                bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
-
-                                QString spotMsg;
-                                QRectF spotRect;
-                                QString spotTooltipText;
-
-                                if (savedSpotType == bandmapSpotType::CQ)
+                            if (listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontOffset  >= yCoord && markNum != 0)
+                            {
+                                if (listOfMarkers[markNum]->getSpotMarkerPtr() == nullptr)
                                 {
-                                    assembleCqMsg(row, spotMsg);
-                                    spotRect = calculateSpotRect(spotMsg, spotCoord);
-                                    assembleCqToolTip(row, f, spotTooltipText);
+                                    QString callsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), Qt::DisplayRole).toString();
+
+                                    QPoint spotCoord = QPoint(listOfMarkers[markNum]->getSpotMarkerCoord().x(), listOfMarkers[markNum]->getSpotMarkerCoord().y());
+                                    BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
+
+                                    bandmapScene->addItem(spot);
+
+                                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+
+                                    QString spotMsg;
+                                    QRectF spotRect;
+                                    QString spotTooltipText;
+
+                                    if (savedSpotType == bandmapSpotType::CQ)
+                                    {
+                                        assembleCqMsg(row, spotMsg);
+                                        spotRect = calculateSpotRect(spotMsg, spotCoord);
+                                        assembleCqToolTip(row, f, spotTooltipText);
+                                    }
+                                    else
+                                    {
+                                        assembleSpotMsg(row, spotMsg);
+                                        spotRect = calculateSpotRect(spotMsg, spotCoord);
+                                        assembleToolTip(row, f, spotTooltipText);
+                                    }
+
+
+                                    spot->setSpotText(spotMsg);
+                                    //spotMsg.detach();
+                                    spot->setToolTipText(spotTooltipText);
+                                    //spotTooltipText.detach();
+                                    listOfMarkers[markNum]->setSpotMarkerPtr(spot);
+
+                                    QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
+
+                                    QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
+
+                                    QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
+                                    QLineF markerLineCoordsF = QLineF(markerLineCoord);
+
+                                    QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
+                                    bandmapScene->addItem(markerLine);
+
+                                    listOfMarkers[markNum]->setMarkerLinePtr(markerLine);
+                                    listOfMarkers[markNum]->setSpotRect(spotRect);
+                                    listOfMarkers[markNum]->setModelRowNum(row);
+
+                                    break;
                                 }
-                                else
-                                {
-                                    assembleSpotMsg(row, spotMsg);
-                                    spotRect = calculateSpotRect(spotMsg, spotCoord);
-                                    assembleToolTip(row, f, spotTooltipText);
-                                }
 
-
-                                spot->setSpotText(spotMsg);
-                                //spotMsg.detach();
-                                spot->setToolTipText(spotTooltipText);
-                                //spotTooltipText.detach();
-                                listOfMarkers[markNum]->setSpotMarkerPtr(spot);
-
-                                QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);
-
-                                QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
-
-                                QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
-                                QLineF markerLineCoordsF = QLineF(markerLineCoord);
-
-                                QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
-                                bandmapScene->addItem(markerLine);
-
-                                listOfMarkers[markNum]->setMarkerLinePtr(markerLine);
-                                listOfMarkers[markNum]->setSpotRect(spotRect);
-                                listOfMarkers[markNum]->setModelRowNum(row);
-
-                                break;
                             }
 
                         }
@@ -1070,10 +1262,7 @@ void BandmapView::drawBandMapSpots()
                     }
 
                 }
-
             }
-
-
         }
 
     }
