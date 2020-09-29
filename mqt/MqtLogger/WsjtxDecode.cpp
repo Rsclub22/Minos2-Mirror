@@ -241,13 +241,13 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     }
     else
     {
-        dc.message= message_text.trimmed();
+        dc.message = message_text.trimmed();
     }
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QStringList sl = message_text.trimmed().split(' ', Qt::SkipEmptyParts);
+    QStringList sl = dc.message.trimmed().split(' ', Qt::SkipEmptyParts);
 #else
-    QStringList sl = message_text.trimmed().split(' ', QString::SkipEmptyParts);
+    QStringList sl = dc.message.trimmed().split(' ', QString::SkipEmptyParts);
 #endif
 
     if (sl.count() == 0)
