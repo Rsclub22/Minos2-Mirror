@@ -1113,68 +1113,14 @@ void BandmapView::drawBandMapSpots()
             for (int row = markersAbove; row < numrows; ++row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
-#ifdef RUBBISH
-                if (matchMode(row) && matchDistance(row))
-                {
-                    BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(0, 0));
-                    listOfMarkers.append(markerDetails);
-
-                    Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-                    int yCoord = dial->getYCoordOnDial(f);
-                    fontOffset += fontHeight;
-
-                    int syCoord = centreYCoord + fontOffset;
-                    if (syCoord < yCoord)
-                    {
-                        syCoord = yCoord;
-                        fontOffset = yCoord - centreYCoord;
-                    }
-                    //spotCoord is left, top
-                    QPoint spotCoord = QPoint(dialWidth + SPOTMARKER_XOFFSET, syCoord);
-
-                    BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
-
-                    bandmapScene->addItem(spot);
-
-                    QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, centreYCoord + fontOffset + fontHeight);
-
-                    QPoint endMarkerLine = QPoint(dialWidth, yCoord + dialData::DIAL_VERT_OFFSET);
-
-                    QLine markerLineCoord = QLine(startMarkerLine, endMarkerLine);
-                    QLineF markerLineCoordsF = QLineF(markerLineCoord);
-
-                    QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
-                    bandmapScene->addItem(markerLine);
-
-                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
-
-                    QString spotMsg;
-                    QRectF spotRect;
-                    QString spotTooltipText;
-
-                    if (savedSpotType == bandmapSpotType::CQ)
-                    {
-                        assembleCqMsg(row, spotMsg);
-                        spotRect = calculateSpotRect(spotMsg, spotCoord);
-                        assembleCqToolTip(row, f, spotTooltipText);
-                    }
-                    else
-                    {
-                        assembleSpotMsg(row, spotMsg);
-                        spotRect = calculateSpotRect(spotMsg, spotCoord);
-                        assembleToolTip(row, f, spotTooltipText);
-                    }
-
-                    spot->setSpotText(spotMsg);
-                    spot->setToolTipText(spotTooltipText);
-
-                    markerDetails->setSpotMarkerPtr(spot);
-                    markerDetails->setMarkerLinePtr(markerLine);
-                    markerDetails->setSpotRect(spotRect);
-                    markerDetails->setModelRowNum(row);
-                }
-#endif
             }
+            std::sort(listOfMarkers.begin(), listOfMarkers.end(),
+                      [](const BandmapMarkerDetails* a, const BandmapMarkerDetails* b) -> bool
+                        {
+                            return a->getSpotMarkerPtr()->y() < b->getSpotMarkerPtr()->y();
+                        }
+                      );
+            trace("sort finished");
         }
         else
         {
