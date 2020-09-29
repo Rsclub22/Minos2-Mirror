@@ -33,10 +33,12 @@ public:
     bool isClear() const {return f == 0;}
 
     QString pretty_frequency_MHz_string( const QLocale &locale = QLocale()) const;
-    friend QDataStream& operator>> (QDataStream& in, const Frequency& ff)
+    friend QDataStream& operator>> (QDataStream& in, Frequency& ff)
     {
         // required in the WSJT-X code
-        in >> ff;
+        qint64 f;
+        in  >> f;
+        ff = Frequency(f);
         return in;
     }
     QString extractKhz();
