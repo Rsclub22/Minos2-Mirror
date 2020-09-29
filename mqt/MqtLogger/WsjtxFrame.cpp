@@ -974,7 +974,7 @@ void WsjtxFrame::on_testButton_clicked()
 
 
             // Normal
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ K1ABC FN42", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ K1ABC FN42            a1", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ IO91", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ R-22", false, true);
