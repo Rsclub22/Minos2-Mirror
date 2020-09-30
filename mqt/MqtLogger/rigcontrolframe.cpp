@@ -176,6 +176,10 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     launchRadioSelectCount = 10;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
+
+    checkFreqContestBandTimer = new QTimer(this);
+    connect(checkFreqContestBandTimer, SIGNAL(timeout()), this, SLOT(onCheckContestBandMatch()));
+    checkFreqContestBandTimer->start(1000);
 }
 
 RigControlFrame::~RigControlFrame()
@@ -591,7 +595,6 @@ void RigControlFrame::setFreq(QString freq)
     }
     if (freq.count() >= 4)
     {
-        checkContestBandMatch(freq);        // to show error on panel
         displayFreqOnFreqEditDisplay(freq);
         curFreq = freq;
         emit setFreqDisplay(freq, legalFreq);
@@ -1618,6 +1621,14 @@ int RigControlFrame::setBandSelComboIndex(QString band)
 }
 
 
+void RigControlFrame::onCheckContestBandMatch()
+{
+
+    checkContestBandMatch(curFreq);
+
+}
+
+
 
 bool RigControlFrame::checkContestBandMatch(QString freq)
 {
@@ -1628,7 +1639,7 @@ bool RigControlFrame::checkContestBandMatch(QString freq)
     {
 
 
-        if (freqDbl >= contestBandFLow && freqDbl <= contestBandFHigh)
+        if ((freqDbl >= contestBandFLow && freqDbl <= contestBandFHigh) || freqDbl == 0.0 || !radioConnected)
         {
 
             setRadioBandWarning("");
