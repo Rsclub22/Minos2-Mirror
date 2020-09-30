@@ -1674,7 +1674,7 @@ void TSingleLogFrame::on_SetFreq(QString f)
 
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        if (!pauseRigControlUpdates)
+        if (!pauseRigControlUpdates)    // pausing updates while contest is changing
         {
             sCurFreq = f;
             FKHRigControlFrame->setFreq(f);
