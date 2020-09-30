@@ -26,6 +26,7 @@
 #include "volumeslider.h"
 #include "freqlineedit.h"
 #include "ritlineedit.h"
+#include "delayedaction.h"
 #include "ui_rigcontrolframe.h"
 
 
@@ -177,9 +178,9 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
 
-    checkFreqContestBandTimer = new QTimer(this);
-    connect(checkFreqContestBandTimer, SIGNAL(timeout()), this, SLOT(onCheckContestBandMatch()));
-    checkFreqContestBandTimer->start(1000);
+    //checkFreqContestBandTimer = new QTimer(this);
+    //connect(checkFreqContestBandTimer, SIGNAL(timeout()), this, SLOT(onCheckContestBandMatch()));
+    //checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
 }
 
 RigControlFrame::~RigControlFrame()
@@ -592,6 +593,14 @@ void RigControlFrame::setFreq(QString freq)
         traceMsg(QString("setFreq: update lastFreq = %1, setFreq = %2").arg(lastFreq).arg(freq));
         lastFreq = freq;
 
+        // check freq matches contest band
+        delayedAction(this, [=]()
+        {
+           // NB a lambda function
+           onCheckContestBandMatch();
+        }, CHECK_CONTEST_FREQ_MATCH_TIMEOUT);
+
+
     }
     if (freq.count() >= 4)
     {
@@ -910,10 +919,29 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->setPauseRigControlUpdatesFlag(true);
+
+
         setRadioName(radNam, false);
+
+        delayedAction(this, [=]()
+        {
+           // NB a lambda function
+           clearPauseRigControlUpdatesFlag();
+        }, 2000);
+
+
+
 
 
     }
+}
+
+void RigControlFrame::clearPauseRigControlUpdatesFlag()
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->setPauseRigControlUpdatesFlag(false);
 }
 
 
@@ -1620,15 +1648,10 @@ int RigControlFrame::setBandSelComboIndex(QString band)
 
 }
 
-
 void RigControlFrame::onCheckContestBandMatch()
 {
-
     checkContestBandMatch(curFreq);
-
 }
-
-
 
 bool RigControlFrame::checkContestBandMatch(QString freq)
 {

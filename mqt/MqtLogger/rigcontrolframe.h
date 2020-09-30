@@ -153,7 +153,9 @@ private slots:
 
     void freqStepComboChanged(const QString step);
 
+
     void onCheckContestBandMatch();
+    void clearPauseRigControlUpdatesFlag();
 public slots:
     void returnChangeRadioFreq();
 private:
@@ -209,9 +211,6 @@ private:
 
     QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
-
-    QTimer *checkFreqContestBandTimer = nullptr;
-
 
 
     CheckOperatingFreq *operatingFreq;
