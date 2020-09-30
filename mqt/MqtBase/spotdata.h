@@ -18,6 +18,9 @@
 #include <QString>
 #include "clustercommon.h"
 
+
+
+
 class SpotData
 {
 public:
@@ -46,6 +49,19 @@ public:
 
     void setDxCall(const QString dxCall_){dxCall = dxCall_.trimmed();}
     QString getDxCall()const {return dxCall;}
+
+    // migrate completely to Callsign ??
+
+    void populateDxCall(const QString dxCall_)
+    {
+        dxCall = dxCall_.trimmed();
+        dx_Call = dxCall_;
+        callValidateCode = dx_Call.validate();
+    }
+
+    Callsign getDx_Call() const {return dx_Call;}
+    int getDx_CallValidateCode() const {return callValidateCode;}
+
 
     void setDxFreq(const Frequency dxFreq_){dxFreq = dxFreq_;}
     Frequency getDxFreq()const {return dxFreq;}
@@ -81,12 +97,11 @@ public:
     void setDxLocator(const QString dxLocator_){dxLocator = dxLocator_.trimmed();}
     QString getDxLocator() const {return dxLocator;}
 
-    void setDxLocatorFromQrz(const bool dxLocatorFromQrz_){dxLocatorFromQrz = dxLocatorFromQrz_;}
-    bool getDxLocatorFromQrz()const {return dxLocatorFromQrz;}
+    void setDxLocatorIsFromNode(const bool dxLocatorIsFromNode_){dxLocatorIsFromNode = dxLocatorIsFromNode_;}
+    bool getDxLocatorIsFromNode()const {return dxLocatorIsFromNode;}
 
-    void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
-    bool getAskQrz()const {return askQrz;}
-
+    void setAskQrzFailed(const bool askQrzFailed_){askQrzFailed = askQrzFailed_;}
+    bool getAskQrzFailed()const {return askQrzFailed;}
 
     void setSpotterLocator(const QString spotterLocator_){spotterLocator = spotterLocator_.trimmed();}
     QString getSpotterLocator() const {return spotterLocator;}
@@ -123,9 +138,11 @@ private:
     QString dxModeStr;
     QString dxModeMaskStr;
     QString dxCall;
+    Callsign dx_Call;
+    int callValidateCode;
     QString dxLocator;
-    bool dxLocatorFromQrz;
-    bool askQrz;
+    bool dxLocatorIsFromNode;
+    bool askQrzFailed;
     QString dxDist;
     QString dxBrg;
     bool dxCallWorked;

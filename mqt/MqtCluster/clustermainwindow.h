@@ -80,8 +80,8 @@ const int PERSONAL_TABNUM = 1;
 const int NODELIST_TABNUM = 2;
 const int SEND_SPOTS_DUR = 1000;
 const int STATUS_TIMER_DUR = 1000;
-const int ASKQRZ_QUEUE_TIMER_PERIOD = 5000;
-const int ASKQRZ_TIMEOUT = 10000;
+const int ASKQRA_QUEUE_TIMER_PERIOD = 5000;
+const int ASKQRA_TIMEOUT = 10000;
 
 
 //const int SPOT_IS_HF = -3;
@@ -283,6 +283,46 @@ private:
 
 };
 
+class AskQraData
+{
+
+public:
+    AskQraData()
+    {
+        clear();
+    }
+
+    void setAskCallsign(const QString askCallsign_){askCallsign = askCallsign_;}
+    QString getAskCallsign(){return askCallsign;}
+
+    void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
+    bool getAskQrz()const {return askQrz;}
+
+    void setAskPrefix(const bool askPrefix_){askPrefix = askPrefix_;}
+    bool getAskPrefix()const {return askPrefix;}
+
+
+    void clear()
+    {
+        askQrz = false;
+        askPrefix = false;
+
+        askCallsign.clear();
+
+    }
+
+
+private:
+
+
+
+   bool askQrz;
+   bool askPrefix;
+   QString askCallsign;
+
+
+};
+
 
 
 
@@ -410,39 +450,18 @@ private:
     SpotData curSpot;
 
     ClusterQRZDetails qrzInfo;
-    bool getQrzInfo = false;
-    bool qrzQueryAvail = false;
-    bool testQrzInfo = false;
 
-    bool getPrefixInfo = false;
-    bool prefixQueryAvail = false;
-    QString prefixQra;
+    AskQraData askQraData;
 
 
 
-    QString waitingForCallFromQrz;
-    QMap<QString, SpotData> spotListNoQra;
-    QTimer *askQrzTimer;
-    QTimer *askQrzTimeout;
+    SpotData spotWaitingForQraFromNode;
+    QVector<SpotData> spotListNoQra;
+    QTimer *askQraTimer;
+    QTimer *askQraTimeout;
 
 
-/*
-    QString dxCall;
-    Frequency dxFreq;
-    QString dxBandStr;
-    QString dxBandMask;
-    QString dxModeStr;
-    QString dxModeMask;
-    QString spotCall;
-    QString spotComment;
-    QString spotTime;
-    QString spotDate;
-    QDateTime spotDateTime;
-    QString dxLocator;
-    QString spotLocator;
-    QString dxPropMode;
 
-*/
     bool loginStart;
     bool loginSuccess;
     bool loginStatDetails;
@@ -532,9 +551,7 @@ private:
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
-    int getPrefixReply(QString &line, QString &callsign);
-    QString txgeoloc(double *n, double *e, int f, char t);
-    int geotoloc(double lat, double longi, QString &gridref);
+    int getPrefixReply(QString &line, const QString &callsign, QString &qra);
 
 
 
@@ -564,9 +581,9 @@ private slots:
 
     void getSpotsToSendToClientQueues();
 
-    void handAskQrzTimer();
+    void handAskQraTimer();
 
-    void handleAskQrzTimeout();
+    void handleAskQraTimeout();
 
     void cancelPingTimeOut(QString msg);
     void handlePingClusterNodeTimeout();

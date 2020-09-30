@@ -28,5 +28,7 @@ void dms( double, int *, int *, double * );
 int transform( Location *, Location * );
 double raddeg( double );
 double degrad( double );
+QString txgeoloc( double *n, double *e, int f, char t);
+int geotoloc( double lat, double longi, QString &gridref );
 
 #endif

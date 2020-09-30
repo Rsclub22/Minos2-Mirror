@@ -200,8 +200,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     }
 
 
-
-
 }
 
 

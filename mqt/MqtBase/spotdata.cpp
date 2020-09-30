@@ -40,8 +40,10 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTi
     dxBandMask = _dxBandMask;
     dxModeStr = _dxModeStr;
     dxModeMaskStr = _dxModeMaskStr;
-    dxCall = _dxCall;
+    //dxCall = _dxCall;
+    populateDxCall(_dxCall); // sets validate code
     dxLocator = _dxLocator;
+    dxLocatorIsFromNode = false;
     dxDist = distance;
     dxBrg = bearing;
     dxCallWorked = _dxCallWorked;
@@ -51,6 +53,8 @@ SpotData::SpotData(qint64 _rxTime, QString _spotTime, QString _spotDate, QDateTi
     spotterLocator = _spotterLocator;
     dxPropMode = _dxPropMode;
     spotComment = comment;
+    askQrzFailed = false;
+
 }
 
 
@@ -62,6 +66,8 @@ void SpotData::clear(){
     spotDate.clear();
     spotDateTime = QDateTime::currentDateTime();
     dxCall.clear();
+    dx_Call = QString("");
+    callValidateCode = ERR_INVCS;
     dxFreq.clear();
     dxBandStr.clear();
     dxBandMask.clear();
@@ -70,15 +76,16 @@ void SpotData::clear(){
     spotterCall.clear();
     spotComment.clear();
     dxLocator.clear();
+    dxLocatorIsFromNode = false;
     dxDist.clear();
     dxBrg.clear();
     dxCallWorked = false;
     dxLocatorWorked = false;
-    dxLocatorFromQrz = false;
     sentToMemory = false;
     spotterLocator.clear();
     dxPropMode.clear();
-    askQrz = false;
+    askQrzFailed = false;
+
 
 }
 
@@ -96,7 +103,10 @@ void SpotData::operator = (const SpotData& spd)
     dxModeStr = spd.dxModeStr;
     dxModeMaskStr = spd.dxModeMaskStr;
     dxCall = spd.dxCall;
+    dx_Call = spd.dx_Call;
+    callValidateCode = spd.callValidateCode;
     dxLocator = spd.dxLocator;
+    dxLocatorIsFromNode = spd.dxLocatorIsFromNode;
     dxDist = spd.dxDist;
     dxBrg = spd.dxBrg;
     dxCallWorked = spd.dxCallWorked;
@@ -106,8 +116,8 @@ void SpotData::operator = (const SpotData& spd)
     spotterLocator = spd.spotterLocator;
     dxPropMode = spd.dxPropMode;
     spotComment = spd.spotComment;
-    askQrz = spd.askQrz;
-    dxLocatorFromQrz = spd.dxLocatorFromQrz;
+    askQrzFailed = spd.askQrzFailed;
+
 }
 
 
