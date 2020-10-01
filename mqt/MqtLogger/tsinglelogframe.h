@@ -198,6 +198,7 @@ private:
 
 
     void traceMsg(QString msg);
+    void updateFreq(QString f);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 

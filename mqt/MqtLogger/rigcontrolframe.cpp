@@ -914,6 +914,7 @@ void RigControlFrame::on_ContestPageChanged()
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
 
+
         QString radNam = ct->radioName.getValue().toString();
         //QString mode = ct->currentMode.getValue();
 
@@ -921,8 +922,9 @@ void RigControlFrame::on_ContestPageChanged()
 
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->setPauseRigControlUpdatesFlag(true);
+        sendFreq.clear();
 
-
+        traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
         setRadioName(radNam, false);
 
         delayedAction(this, [=]()
@@ -1288,6 +1290,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // get freq to send
                     setRadioFreq(sendFreq,  fromStartRigControl);
 
+
                     // set Band Sel Combo to band of contest band
                     QString contestBand = ct->contestBands.getValue();
                     if (setBandSelComboIndex(contestBand) == -1)
@@ -1382,7 +1385,12 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 }
 
+// used to test freq received from rigcontrol in tsinglelogframe
 
+QString RigControlFrame::getSendFreq()
+{
+    return sendFreq;
+}
 
 void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 {

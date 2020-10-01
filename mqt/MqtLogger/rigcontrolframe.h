@@ -102,6 +102,7 @@ public:
 
 
 
+    QString getSendFreq();
 signals:
     void selectRadio(QString, QString, QString);  // radio name, freq, mode
     void sendFreqControl(QString);
