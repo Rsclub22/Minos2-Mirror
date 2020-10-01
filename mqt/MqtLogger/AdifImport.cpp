@@ -303,6 +303,13 @@ bool ADIFImport::executeImport()
 
    bool inHeader = true;
 
+   // Be a little generous - allow blank lines to NOT be the start of a header
+
+   while(InChar == ' ' || InChar == '\r' || InChar == '\n' || InChar == '\t')
+   {
+       getNextChar(InChar);
+   }
+
    if ( InChar != '<' ) 	//if file does not start with < it must start with a header
    {
       //skip to > symbol accumulating header
