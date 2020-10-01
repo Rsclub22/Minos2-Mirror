@@ -978,6 +978,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                                 trace(QString("ParseDx - flag failed and place back in queue to ask prefix"));
                                 newSpot.setAskQrzFailed(true);
                                 spotListNoQra.append(newSpot);
+
                             }
 
                             //spotListNoQra.remove(qrzInfo.getCall());
@@ -986,7 +987,12 @@ void ClusterMainWindow::parseDX(const QString txt)
                             askQraData.clear();
                             //getQrzInfo = false;
                             retCode = 0;
-                            processNewSpot(newSpot);
+
+                            if (!newSpot.getDxLocator().isEmpty())
+                            {
+                                processNewSpot(newSpot);
+                            }
+
 
                         }
                         else
@@ -1002,6 +1008,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                     retCode = getPrefixReply(line, askQraData.getAskCallsign(), qra);
                     if (retCode == 0)
                     {
+                        trace(QString("parseDx: getPrefix extracted QRA = %1 for call = %2").arg(qra).arg(spotWaitingForQraFromNode.getDxCall()));
                         newSpot = spotWaitingForQraFromNode;
                         newSpot.setDxLocator(qra);
                         newSpot.setDxLocatorIsFromNode(true);
@@ -1011,6 +1018,10 @@ void ClusterMainWindow::parseDX(const QString txt)
                         //getQrzInfo = false;
                         retCode = 0;
                         processNewSpot(newSpot);
+                    }
+                    else
+                    {
+                        trace(QString("parseDx: getPrefix failed to extract QRA retcode = %1").arg(retCode));
                     }
 
                 }
