@@ -7,6 +7,9 @@ apt-get upgrade -y
 apt-get install git -y
 apt-get install git-gui -y
 
+apt-get  install libtool -y
+apt-get install automake -y
+
 apt-get install cmake -y
 apt-get install build-essential qt5-default qtcreator -y
 apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5 -y
@@ -16,6 +19,8 @@ apt-get install qttools5-dev -y
 
 apt-get install libasound2 -y
 apt-get install libasound2-dev -y
+
+apt remove libhamlib2 -y
 
 apt-get autoremove -y
 
