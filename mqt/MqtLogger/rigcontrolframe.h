@@ -102,6 +102,7 @@ public:
 
 
 
+    QString getSendFreq();
 signals:
     void selectRadio(QString, QString, QString);  // radio name, freq, mode
     void sendFreqControl(QString);
@@ -153,6 +154,9 @@ private slots:
 
     void freqStepComboChanged(const QString step);
 
+
+    void onCheckContestBandMatch();
+    void clearPauseRigControlUpdatesFlag();
 public slots:
     void returnChangeRadioFreq();
 private:
@@ -208,7 +212,6 @@ private:
 
     QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
-
 
 
     CheckOperatingFreq *operatingFreq;

@@ -26,6 +26,7 @@
 #include "volumeslider.h"
 #include "freqlineedit.h"
 #include "ritlineedit.h"
+#include "delayedaction.h"
 #include "ui_rigcontrolframe.h"
 
 
@@ -176,6 +177,10 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     launchRadioSelectCount = 10;     // wait five seconds
     connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
     launchRadioSelectTimer->start(1000);
+
+    //checkFreqContestBandTimer = new QTimer(this);
+    //connect(checkFreqContestBandTimer, SIGNAL(timeout()), this, SLOT(onCheckContestBandMatch()));
+    //checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
 }
 
 RigControlFrame::~RigControlFrame()
@@ -588,10 +593,17 @@ void RigControlFrame::setFreq(QString freq)
         traceMsg(QString("setFreq: update lastFreq = %1, setFreq = %2").arg(lastFreq).arg(freq));
         lastFreq = freq;
 
+        // check freq matches contest band
+        delayedAction(this, [=]()
+        {
+           // NB a lambda function
+           onCheckContestBandMatch();
+        }, CHECK_CONTEST_FREQ_MATCH_TIMEOUT);
+
+
     }
     if (freq.count() >= 4)
     {
-        checkContestBandMatch(freq);        // to show error on panel
         displayFreqOnFreqEditDisplay(freq);
         curFreq = freq;
         emit setFreqDisplay(freq, legalFreq);
@@ -902,15 +914,36 @@ void RigControlFrame::on_ContestPageChanged()
     if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
 
+
         QString radNam = ct->radioName.getValue().toString();
         //QString mode = ct->currentMode.getValue();
 
         onContestPageChangedFlag = true;
 
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->setPauseRigControlUpdatesFlag(true);
+        sendFreq.clear();
+
+        traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
         setRadioName(radNam, false);
+
+        delayedAction(this, [=]()
+        {
+           // NB a lambda function
+           clearPauseRigControlUpdatesFlag();
+        }, 2000);
+
+
+
 
 
     }
+}
+
+void RigControlFrame::clearPauseRigControlUpdatesFlag()
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    tslf->setPauseRigControlUpdatesFlag(false);
 }
 
 
@@ -1257,6 +1290,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // get freq to send
                     setRadioFreq(sendFreq,  fromStartRigControl);
 
+
                     // set Band Sel Combo to band of contest band
                     QString contestBand = ct->contestBands.getValue();
                     if (setBandSelComboIndex(contestBand) == -1)
@@ -1351,7 +1385,12 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 }
 
+// used to test freq received from rigcontrol in tsinglelogframe
 
+QString RigControlFrame::getSendFreq()
+{
+    return sendFreq;
+}
 
 void RigControlFrame::setRadioFreq(QString &sendFreq, bool &fromStartRigControl)
 {
@@ -1617,7 +1656,10 @@ int RigControlFrame::setBandSelComboIndex(QString band)
 
 }
 
-
+void RigControlFrame::onCheckContestBandMatch()
+{
+    checkContestBandMatch(curFreq);
+}
 
 bool RigControlFrame::checkContestBandMatch(QString freq)
 {
@@ -1628,7 +1670,7 @@ bool RigControlFrame::checkContestBandMatch(QString freq)
     {
 
 
-        if (freqDbl >= contestBandFLow && freqDbl <= contestBandFHigh)
+        if ((freqDbl >= contestBandFLow && freqDbl <= contestBandFHigh) || freqDbl == 0.0 || !radioConnected)
         {
 
             setRadioBandWarning("");

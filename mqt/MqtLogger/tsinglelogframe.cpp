@@ -1674,15 +1674,40 @@ void TSingleLogFrame::on_SetFreq(QString f)
 
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        sCurFreq = f;
-        FKHRigControlFrame->setFreq(f);
-        runButtonsFrame->setFreq(f);
-        GJVQSOLogFrame->setFreq(f);
-        bandmapControlFrame->setFreq(f);
+        if (pauseRigControlUpdates)    // pausing updates while contest is changing
+        {
 
-        MinosLoggerEvents::sendRigFreqChanged(f, contest);
+            if (f == FKHRigControlFrame->getSendFreq()) // waiting for correct freq on contest change
+            {
+                pauseRigControlUpdates = false;
+                updateFreq(f);
+            }
+
+        }
+        else
+        {
+            updateFreq(f);
+        }
+
     }
 
+}
+
+void TSingleLogFrame::updateFreq(QString f)
+{
+    sCurFreq = f;
+    FKHRigControlFrame->setFreq(f);
+    runButtonsFrame->setFreq(f);
+    GJVQSOLogFrame->setFreq(f);
+    bandmapControlFrame->setFreq(f);
+
+    MinosLoggerEvents::sendRigFreqChanged(f, contest);
+}
+
+
+void TSingleLogFrame::setPauseRigControlUpdatesFlag(bool status)
+{
+    pauseRigControlUpdates = status;
 }
 
 void TSingleLogFrame::on_SetRitFreq(int f)

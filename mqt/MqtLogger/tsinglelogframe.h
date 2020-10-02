@@ -174,6 +174,8 @@ private:
     FocusWatcher *OtherMatchTreeFW = nullptr;
     FocusWatcher *ArchiveMatchTreeFW = nullptr;
 
+    bool pauseRigControlUpdates = false;
+
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
     void keyPressEvent( QKeyEvent* event );
@@ -196,6 +198,7 @@ private:
 
 
     void traceMsg(QString msg);
+    void updateFreq(QString f);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -303,6 +306,7 @@ public:
 
 
     void on_SupportStopCommand(bool state);
+    void setPauseRigControlUpdatesFlag(bool status);
 };
 
 #endif // TSINGLELOGFRAME_H
