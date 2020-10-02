@@ -1697,15 +1697,17 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, Frequency freq, QString m
 
     setupRadio->setCurrentRadioName(s.key());
 
-    //if (!s.isEmpty() && s.key() == oldRadio)
-   // {
-   //     refreshRadio();
-    //}
-   // else
-    //{
+    if (!s.isEmpty() && (s.key() == oldRadio))
+    {
+        trace(QString("Selected Radio - %1 is the same as previous radio - %2, refresh radio").arg(s.key()).arg(oldRadio));
+        refreshRadio();
+    }
+    else
+    {
+        trace(QString("Selected Radio - %1 is different to previuos radio - %2, update radio").arg(s.key()).arg(oldRadio));
         upDateRadio();
         msg->rigCache.invalidate();
-    //}
+    }
 
 }
 
