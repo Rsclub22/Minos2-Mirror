@@ -14,9 +14,6 @@ apt-get install libqt5serialport5 -y
 apt-get install libqt5serialport5-dev -y
 apt-get install qttools5-dev -y
 
-apt-get install libhamlib2 -y
-apt-get install libhamlib-dev -y
-
 apt-get install libasound2 -y
 apt-get install libasound2-dev -y
 
