@@ -19,6 +19,8 @@ static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 enum MODE {UNK, CW, CW_R, USB, LSB, FSK, FSK_R, DIG_U, DIG_L, AM, FM, DIG_FM};
 
+
+
 // radio modes
 
 const QString AM_STR = "AM";             // Amplitude Modulation
