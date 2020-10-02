@@ -924,7 +924,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                 if (line.contains("DX de"))
                 {
                    retCode = upackDxSpot(line, newSpot);
-                   trace(QString("ParseDx - Unpack DxSpot retcode = %1").arg(retCode));
+                   trace(QString("ParseDx - Unpack DxSpot error = %1").arg(clusterErrorMsg[retCode]));
                    if (retCode >= 0)
                    {
                        processNewSpot(newSpot);
@@ -934,7 +934,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                 else if (checkShowDxMsg(line, newSpot))
                 {
                     retCode = upackShowDxSpot(line, newSpot);
-                    trace(QString("ParseDx - Unpack ShowDxSpot retcode = %1").arg(retCode));
+                    trace(QString("ParseDx - Unpack ShowDxSpot error = %1").arg(clusterErrorMsg[retCode]));
                     if (retCode >= 0)
                     {
                         processNewSpot(newSpot);
@@ -1415,7 +1415,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         {
             // discard spot as it is HF
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
-            return -3;
+            return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
@@ -1430,7 +1430,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
         if (! newSpot.getSpotDateTime().isValid())
         {
-           return -1;
+           return SPOT_DATETIME_INVALID * -1;
         }
         QString sptCall = newSpot.getSpotterCall();
         sptCall.prepend('<').append('>');
@@ -1463,10 +1463,10 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
             newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
-        return 0;
+        return SPOT_OK;
     }
 
-    return -1;
+    return SPOT_TOO_MANY_SECTIONS * -1;
 
 }
 
@@ -1774,7 +1774,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
             // discard spot as it is HF
             trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
 
-            return -3;
+            return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
@@ -1798,7 +1798,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         if (newSpot.getSpotTime() == "")
         {
             //error
-            return -1;
+            return NO_SPOT_TIME * -1;
         }
 
         // get current date
@@ -1807,7 +1807,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
         if (!newSpot.getSpotDateTime().isValid())
         {
-           return -1;
+           return SPOT_DATETIME_INVALID * -1;
         }
 
         // look for locator
@@ -1851,10 +1851,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
             newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
-        return 0;
+        return SPOT_OK;
     }
 
-    return -1;
+    return SPOT_TOO_MANY_SECTIONS * -1;
 
 }
 
