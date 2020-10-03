@@ -948,15 +948,15 @@ bool LoggerContestLog::exportGJV(QSharedPointer<QFile>fd )
 
    int mind = 1;
    int maxd = maxSerial;
-   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be dumped"), mind ) )
+   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be written"), mind ) )
       return false;
-   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be dumped"), maxd ) )
+   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be written"), maxd ) )
       return false;
 
    int mindump = qMin( mind, maxd );
    int maxdump = qMax( mind, maxd );
 
-   QString temp = tr( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
+   QString temp = tr( "Writing all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
    if ( !MinosParameters::getMinosParameters() ->yesNoMessage( nullptr, temp ) )
       return false;
 
@@ -1100,15 +1100,15 @@ bool LoggerContestLog::exportMinos( QSharedPointer<QFile> expfd )
 {
    int mind = 1;
    int maxd = maxSerial;
-   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be dumped"), mind ) )
+   if ( !enquireDialog(   /*Owner*/nullptr,tr( "Please give first serial to be written"), mind ) )
       return false;
-   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be dumped"), maxd ) )
+   if ( !enquireDialog(   /*Owner*/nullptr, tr("Please give last serial to be written"), maxd ) )
       return false;
 
    int mindump = qMin( mind, maxd );
    int maxdump = qMax( mind, maxd );
 
-   QString temp = tr( "Dumping all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
+   QString temp = tr( "Writing all contacts between serials %1 and %2 inclusive" ).arg(mindump).arg(maxdump );
    if ( !MinosParameters::getMinosParameters() ->yesNoMessage( nullptr, temp ) )
       return false;
 

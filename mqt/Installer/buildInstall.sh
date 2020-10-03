@@ -5,7 +5,7 @@ SCRIPT=$(readlink -f $0)
 DIR=$(echo ${SCRIPT%/*}/../..)
 cd $DIR
 
-git pull origin master
+git pull origin
 
 if [ ! -d ./build ]; then
    mkdir build

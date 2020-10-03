@@ -16,7 +16,7 @@ class CalendarYear
         QString yearString()
         {
             QString y = QString::number( calendarFormYear + yearOffset );
-            y = y.midRef( 2, 2 ).toString();
+            y = y.mid( 2, 2 );
             return y;
         }
     public:

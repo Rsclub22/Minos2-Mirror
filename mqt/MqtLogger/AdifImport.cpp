@@ -29,13 +29,15 @@ ADIFImport::~ADIFImport()
 Frequency convertAdifStrToFreq(QString frequency)
 {
     bool ok = false;
-    qint64 f = 0;
-    f = frequency.toLongLong(&ok);
+    double f = 0.0;
+    f = frequency.toDouble(&ok);
     if (!ok)
     {
-        f = -1;
+        f = 0.0;
     }
-    return Frequency(f * 1000000);
+    f *= 1000000;
+    f += 0.5;       // to get the rounding right
+    return Frequency(f);
 }
 void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QString /*FieldType*/,
    QString FieldContent )
@@ -271,7 +273,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
 //====================================================================
 bool ADIFImport::getNextChar( char &ic )
 {
-   if ( offset <= limit )
+   if ( offset < limit )
    {
       ic = fileContent[ offset++ ].toLatin1();
       return true;
@@ -300,6 +302,13 @@ bool ADIFImport::executeImport()
       return false;
 
    bool inHeader = true;
+
+   // Be a little generous - allow blank lines to NOT be the start of a header
+
+   while(InChar == ' ' || InChar == '\r' || InChar == '\n' || InChar == '\t')
+   {
+       getNextChar(InChar);
+   }
 
    if ( InChar != '<' ) 	//if file does not start with < it must start with a header
    {

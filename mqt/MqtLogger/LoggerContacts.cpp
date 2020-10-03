@@ -396,10 +396,9 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
 }
 static QString getCabrilloField(QString s, int len)
 {
-    QString outstr = s;
-    s += QString(' ', len);
+    s += QString(len - s.size(), ' ');
     if (s.isEmpty())
-        s = QString('-', len);
+        s = QString(len, '-');
 
     return s + " ";
 }

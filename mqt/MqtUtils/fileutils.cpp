@@ -79,9 +79,8 @@ const QString ExcludeTrailingBackslash( const QString &s )
 {
     if ( s.length() && ( s[ s.length() - 1 ] == '\\' || s[ s.length() - 1 ] == '/' ) )
     {
-        QStringRef s1(&s, 0, s.length() - 1);
-//        QString s1 = s.substr( 0, s.length() - 1 );
-        return s1.toString();
+        QString s1 = s.mid(s.length() - 1);
+        return s1;
     }
     return s;
 }

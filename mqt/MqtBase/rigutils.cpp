@@ -23,12 +23,6 @@ const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "T
 
 bool validateFreqTxtInput(QString f)
 {
-
-    if (f.remove('.') == "000014400")
-    {
-        trace("000014400");
-    }
-    //QRegularExpression f1rx = QRegularExpression("\\d{1,5}\\.\\d{3,6}");  // match ghz_mhz.khz_hz
     QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,5}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
     QRegularExpressionMatch f1rxm = f1rx.match(f);
     if (f1rxm.hasMatch())
@@ -48,11 +42,6 @@ bool validateFreqTxtInput(QString f)
 
 bool valInputFreq(QString f, QString errMsg)
 {
-    if (f.remove('.') == "000014400")
-    {
-        trace("000014400");
-    }
-
     if (f == "")
     {
         return false;
@@ -88,11 +77,6 @@ bool valInputFreq(QString f, QString errMsg)
 
 QString convertSinglePeriodFreqToFullDigit(QString f)
 {
-    if (f.remove('.') == "000014400")
-    {
-        trace("000014400");
-    }
-
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -108,12 +92,6 @@ QString convertSinglePeriodFreqToFullDigit(QString f)
 
 QString convertFreqToFullDigit(QString f)
 {
-    if (f.remove('.') == "000014400")
-    {
-        trace("000014400");
-    }
-
-
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
@@ -134,11 +112,6 @@ QString convertFreqToFullDigit(QString f)
 
 QString convertSinglePeriodFreqToMultiPeriod(QString f)
 {
-    if (f.remove('.') == "000014400")
-    {
-        trace("000014400");
-    }
-
     QString retFreq = "";
 
     if (f == "")

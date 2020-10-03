@@ -416,14 +416,10 @@ void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 
 bool BandList::checkValidBand(Frequency freq)
 {
-    bool ok = false;
     QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
+    bandOK = findBand(freq, bi);
 
-    if (ok)
-    {
-        bandOK = findBand(freq, bi);
-    }
     return bandOK;
 }
 

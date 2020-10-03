@@ -15,27 +15,96 @@ where the default oS is similar enough to Ubuntu. There shouldn't be any
 problem with other variants, but all the package stuff may be different.
 
 
+=========== Initial setup ====================================================
+
 If git isn't installed, you need to install it:
 
 sudo apt-get install git
 
 
-Go to your home directory and check out Minos
+Go to your home directory 
+
+cd
+
+ and check out Minos
 
 git clone git://git.code.sf.net/p/minos/minos Minos2
 
+Then, so that you get the latest release rather than the "bleeding edge" source code
 
 cd Minos2
-sudo ./tools.sh 
+git checkout mqt_Release_2.4
 
-cd mqt/Installer
+# tools.sh is a script that installs all the pre-requisites that may not already be installed.
+# it includes those required for Hamlib 4 as well.
+# it also will remove any pre-installed hamlib
+
+sudo ./tools.sh
+
+===================== Building Hamlib 4 ========================================
+The current Minos (2.4, and the various preceeding beta releases) uses hamlib 4,
+which is not yet available in the various Linux repositories - at the time of 
+writing, it isn't even released, but is at Release Candidate status.
+
+Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
+including their build instructions, from which the following is derived.
+
+This means that you have to download and build it yourself; here is one recipe:
+
+Make sure you have downloaded Mios, and run tools.sh (as above)
+
+Then
+
+git clone https://github.com/Hamlib/Hamlib.git
+
+cd Hamlib
+
+# get the hamlib 4 release branch
+
+git checkout Hamlib-4.0
+
+# and run the build
+
+./bootstrap
+./configure
+make
+sudo make install
+
+
+Once hamlib 4 is fully released, or another release candidate comes out, you will
+need to execute
+
+cd ~/Hamlib
+git pull
+./configure
+make
+sudo make install
+
+===================== Building Minos =========================================== 
+Then you can start building Minos. 
+
+cd ~/Minos2/mqt/Installer
 ./buildInstall.sh
 
 
-which will update to the latest version of Minos, build it, and put a runnable system into ~/minos-runtime.
+which will update to the latest version of Minos, build it, and put a 
+runnable system into ~/minos-runtime. This directory is removed and 
+then rebuilt
 
+It will then offer to copy the binaries and then config into the "~/runtime" 
+directory which will be created if it doesn't exist.
+
+The config shouldn't overwrite anything that has been changed by the user!
+                                                                          
 To run it, from the command line type
 
-~/minos-runtime/Minos.sh &
+~/runtime/Minos.sh &
 
-To update and buid again, repeat from after "git clone"
+There is a skeleton for a .desktop file in ~/Minos2/mqt/Installer/MqtLogger.desktop
+but that is up to you - different systems have different ways of creating desktop
+shortcuts. 
+
+To update and build again, 
+
+cd ~/Minos2/mqt/Installer
+./buildInstall.sh

@@ -702,9 +702,9 @@ QString TLogContainer::getDefaultDirectory( bool IsList )
    if ( fileName.size() && DirectoryExists( fileName ) )
    {
       // need to check possible validity of directory string
-      if ( fileName[ fileName.size() ] != '/' )
+      if ( fileName[ fileName.size() - 1 ] != '/' )
          fileName += "/";
-      if ( fileName[ fileName.size() ] == '/' )
+      if ( fileName[ fileName.size() - 1 ] == '/' )
       {
          fileName = fileName.left( fileName.size() - 1 );
       }
