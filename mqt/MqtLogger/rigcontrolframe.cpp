@@ -891,7 +891,11 @@ void RigControlFrame::on_ContestPageChanged()
         delayedAction(this, [=]()
         {
            // NB a lambda function
-           clearPauseRigControlUpdatesFlag();
+            if (ct)
+            {
+                // There are circumstances where ct has been cleared by now!
+                clearPauseRigControlUpdatesFlag();
+            }
         }, 2000);
 
 

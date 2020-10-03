@@ -915,7 +915,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (!isProtected)
+    if (ct && !isProtected)
     {
         //get spot Message from queue
         for (int i = 0; i < spotMsg.count(); i++)
