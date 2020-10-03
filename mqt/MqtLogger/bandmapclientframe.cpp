@@ -105,7 +105,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
-    bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
+    //bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);    // we have lessThan now defined
 
     bandmapView->setModel(bandmapSpotProxyModel);
 

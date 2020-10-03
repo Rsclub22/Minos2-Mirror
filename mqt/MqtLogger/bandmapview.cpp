@@ -1089,6 +1089,7 @@ void BandmapView::drawBandMapSpots()
             int centreSpot;
             for (centreSpot = 0; centreSpot < model()->rowCount(); ++centreSpot)
             {
+                // BUT unfortunately the BandMapDataModel isn't sorted
                 Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(centreSpot, FREQ_COL_NUM), BMP_DataStoredRole));
                 if (freq >= startFreq && freq <= endFreq)
                 {

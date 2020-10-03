@@ -37,6 +37,10 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
 
     rxTime = _rxTime;
     spotTime = _spotTime;
+    if (spotTime.indexOf(":") <= 0)
+    {
+        spotTime = _spotTime.left(2) + ":" + _spotTime.right(2);
+    }
     dxFreq = _dxFreq;
     dxBand = _dxBand;
     dxBandMaskStr = _dxBandMaskStr;
