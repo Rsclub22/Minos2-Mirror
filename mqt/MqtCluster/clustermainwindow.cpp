@@ -906,7 +906,7 @@ void ClusterMainWindow::parseDX(const QString txt)
     in.setString(&buf, QIODevice::ReadOnly);
     buf = txt;
 
-    int retCode = -100;
+    int retCode = SPOT_OK;
     SpotData newSpot;
     newSpot.clear();
 
@@ -924,8 +924,8 @@ void ClusterMainWindow::parseDX(const QString txt)
                 if (line.contains("DX de"))
                 {
                    retCode = upackDxSpot(line, newSpot);
-                   trace(QString("ParseDx - Unpack DxSpot retcode = %1").arg(retCode));
-                   if (retCode >= 0)
+                   trace(QString("ParseDx - Unpack DxSpot error = %1").arg(clusterErrorMsg[retCode * -1]));
+                   if (retCode == SPOT_OK)
                    {
                        processNewSpot(newSpot);
                    }
@@ -934,8 +934,8 @@ void ClusterMainWindow::parseDX(const QString txt)
                 else if (checkShowDxMsg(line, newSpot))
                 {
                     retCode = upackShowDxSpot(line, newSpot);
-                    trace(QString("ParseDx - Unpack ShowDxSpot retcode = %1").arg(retCode));
-                    if (retCode >= 0)
+                    trace(QString("ParseDx - Unpack ShowDxSpot error = %1").arg(clusterErrorMsg[retCode * -1]));
+                    if (retCode == SPOT_OK)
                     {
                         processNewSpot(newSpot);
                     }
@@ -945,7 +945,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                 else if (askQraData.getAskQrz() && line.contains("qrz"))
                 {
 
-                    retCode = getQrzReply(line);
+                    retCode = getQrzReply(line);        // not using retCode here...
                     if (!qrzInfo.getGotAllData())
                     {
                         // still waiting
@@ -978,6 +978,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                                 trace(QString("ParseDx - flag failed and place back in queue to ask prefix"));
                                 newSpot.setAskQrzFailed(true);
                                 spotListNoQra.append(newSpot);
+
                             }
 
                             //spotListNoQra.remove(qrzInfo.getCall());
@@ -985,8 +986,13 @@ void ClusterMainWindow::parseDX(const QString txt)
                             qrzInfo.clear();
                             askQraData.clear();
                             //getQrzInfo = false;
-                            retCode = 0;
-                            processNewSpot(newSpot);
+                            retCode = SPOT_OK;
+
+                            if (!newSpot.getDxLocator().isEmpty())
+                            {
+                                processNewSpot(newSpot);
+                            }
+
 
                         }
                         else
@@ -1000,8 +1006,9 @@ void ClusterMainWindow::parseDX(const QString txt)
                 {
                     QString qra;
                     retCode = getPrefixReply(line, askQraData.getAskCallsign(), qra);
-                    if (retCode == 0)
+                    if (retCode == SPOT_OK)
                     {
+                        trace(QString("parseDx: getPrefix extracted QRA = %1 for call = %2").arg(qra).arg(spotWaitingForQraFromNode.getDxCall()));
                         newSpot = spotWaitingForQraFromNode;
                         newSpot.setDxLocator(qra);
                         newSpot.setDxLocatorIsFromNode(true);
@@ -1009,8 +1016,12 @@ void ClusterMainWindow::parseDX(const QString txt)
                         qrzInfo.clear();
                         askQraData.clear();
                         //getQrzInfo = false;
-                        retCode = 0;
+                        //retCode = SPOT_OK;
                         processNewSpot(newSpot);
+                    }
+                    else
+                    {
+                        trace(QString("parseDx: Error %1").arg(clusterErrorMsg[retCode * -1]));
                     }
 
                 }
@@ -1163,7 +1174,7 @@ int ClusterMainWindow::getQrzReply(QString &line)
             qrzInfo.setError(true);
             qrzInfo.setGotAllData(true);
         }
-        return 0;
+        return SPOT_OK;
     }
 
     else if (line.contains("call") && line.contains(':'))
@@ -1260,10 +1271,10 @@ int ClusterMainWindow::getQrzReply(QString &line)
     else if (line.contains("www.qrz.com"))
     {
         qrzInfo.setGotAllData(true);
-        return 0;
+        return SPOT_OK;
     }
 
-    return -100;
+    return ASKQRZ_FAILED_QRA;
 }
 
 int ClusterMainWindow::getPrefixReply(QString &line, const QString &callsign, QString &qra)
@@ -1283,7 +1294,7 @@ int ClusterMainWindow::getPrefixReply(QString &line, const QString &callsign, QS
                 // found a QRA
                 qra = latLon.mid(pos, 4);
                 trace(QString("getPrefixReply: found qra in response = %1").arg(qra));
-                return 0;
+                return SPOT_OK;
 
 
             }
@@ -1359,7 +1370,7 @@ int ClusterMainWindow::getPrefixReply(QString &line, const QString &callsign, QS
                         geotoloc(latitude, longitude, qra);
                         qra = qra.mid(0,6);
                         trace(QString("getPrefixReply: qra found from lat/long = %1").arg(qra));
-                        return 0;
+                        return SPOT_OK;
                     }
 
                 }
@@ -1369,7 +1380,7 @@ int ClusterMainWindow::getPrefixReply(QString &line, const QString &callsign, QS
         }
     }
 
-    return -100;
+    return GET_PREFIX_FAILED * -1;
 }
 
 
@@ -1404,7 +1415,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         {
             // discard spot as it is HF
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
-            return -3;
+            return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
@@ -1419,7 +1430,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
         if (! newSpot.getSpotDateTime().isValid())
         {
-           return -1;
+           return SPOT_DATETIME_INVALID * -1;
         }
         QString sptCall = newSpot.getSpotterCall();
         sptCall.prepend('<').append('>');
@@ -1452,10 +1463,10 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
             newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
-        return 0;
+        return SPOT_OK;
     }
 
-    return -1;
+    return SPOT_TOO_MANY_SECTIONS * -1;
 
 }
 
@@ -1763,7 +1774,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
             // discard spot as it is HF
             trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
 
-            return -3;
+            return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
@@ -1787,7 +1798,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         if (newSpot.getSpotTime() == "")
         {
             //error
-            return -1;
+            return NO_SPOT_TIME * -1;
         }
 
         // get current date
@@ -1796,7 +1807,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
         if (!newSpot.getSpotDateTime().isValid())
         {
-           return -1;
+           return SPOT_DATETIME_INVALID * -1;
         }
 
         // look for locator
@@ -1840,10 +1851,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
             newSpot.setDxModeMaskStr(QString::number(commentModeNum));
         }
 
-        return 0;
+        return SPOT_OK;
     }
 
-    return -1;
+    return SPOT_TOO_MANY_SECTIONS * -1;
 
 }
 

@@ -84,7 +84,6 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
-
         dl[0].prepend('0');         // correct if date isn't 0x for < 10
         dl[0] = dl[0].right(2);
 
