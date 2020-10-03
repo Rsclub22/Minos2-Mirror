@@ -103,11 +103,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapView = new BandmapView();
     bandmapView->setFilterSettings(&filterSettings);
 
-    bandmapSpotProxyModel = new QSortFilterProxyModel(parent);
+    bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
     bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
 
     bandmapView->setModel(bandmapSpotProxyModel);
+
+    ui->textFilterEdit->setValidator(&ucValidator);
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
@@ -2171,4 +2173,9 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
         levStr.prepend('0');
     }
     ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
+}
+
+void BandmapClientFrame::on_textFilterEdit_textEdited(const QString &filter)
+{
+bandmapSpotProxyModel->setFilterString(filter);
 }
