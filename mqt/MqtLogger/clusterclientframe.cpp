@@ -290,7 +290,19 @@ void ClusterClientFrame::setupDXSpotView()
 
     spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    dxSpotView->setColumnHidden(TIME_COL_NUM, false);
+    dxSpotView->setColumnHidden(FREQ_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXLOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXDIST_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXBRG_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
+    // hide these columns
     dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
@@ -334,7 +346,20 @@ void ClusterClientFrame::setupSearchSpotView()
     connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
     searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    searchView->setColumnHidden(TIME_COL_NUM, false);
+    searchView->setColumnHidden(FREQ_COL_NUM, false);
+    searchView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    searchView->setColumnHidden(DXLOC_COL_NUM, false);
+    searchView->setColumnHidden(DXDIST_COL_NUM, false);
+    searchView->setColumnHidden(DXBRG_COL_NUM, false);
+    searchView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    searchView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    searchView->setColumnHidden(COMMENT_COL_NUM, false);
 
+
+    // hide these columns
     searchView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
@@ -388,6 +413,21 @@ void ClusterClientFrame::setupCallsignSpotView()
 
     callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    callSignView->setColumnHidden(TIME_COL_NUM, false);
+    callSignView->setColumnHidden(FREQ_COL_NUM, false);
+    callSignView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    callSignView->setColumnHidden(DXLOC_COL_NUM, false);
+    callSignView->setColumnHidden(DXDIST_COL_NUM, false);
+    callSignView->setColumnHidden(DXBRG_COL_NUM, false);
+    callSignView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    callSignView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    callSignView->setColumnHidden(COMMENT_COL_NUM, false);
+
+
+
+    // hide these columns
     callSignView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
@@ -436,6 +476,22 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
+    // show these columns
+    locatorView->setColumnHidden(TIME_COL_NUM, false);
+    locatorView->setColumnHidden(FREQ_COL_NUM, false);
+    locatorView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    locatorView->setColumnHidden(DXLOC_COL_NUM, false);
+    locatorView->setColumnHidden(DXDIST_COL_NUM, false);
+    locatorView->setColumnHidden(DXBRG_COL_NUM, false);
+    locatorView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    locatorView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    locatorView->setColumnHidden(COMMENT_COL_NUM, false);
+
+
+
+
+    // hide these columns
     locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);

@@ -43,7 +43,7 @@ const char *ClusterMainWindow::userCmdButtonLabels[4] = {QT_TR_NOOP("&Send"), QT
                                                 QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
 
 
-#include <QDebug>
+
 
 #define TXSPOT  // enable to actually send to cluster
 //#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
@@ -217,7 +217,16 @@ void ClusterMainWindow::doStartup()
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( dxSpotView_sectionResized(int, int , int)));
 
+    // set these columns visible
+    dxSpotView->setColumnHidden(TIME_COL_NUM, false);
+    dxSpotView->setColumnHidden(FREQ_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXLOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
+    // hide these columns
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
@@ -1045,8 +1054,6 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
                         .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
 
     qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
-
-    qDebug() << "callsign = " << newSpot.getDxCall() << ", spotTime = " << newSpot.getSpotTime() << ", rxTime = " << rxTime;
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
