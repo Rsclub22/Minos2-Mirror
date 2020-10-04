@@ -43,7 +43,7 @@ const char *ClusterMainWindow::userCmdButtonLabels[4] = {QT_TR_NOOP("&Send"), QT
                                                 QT_TR_NOOP("&Edit"), QT_TR_NOOP("&Clear")};
 
 
-#include <QDebug>
+
 
 #define TXSPOT  // enable to actually send to cluster
 //#define TEST_PLEASE_IGNORE // comment out to stop this in tx spot remarks
@@ -194,7 +194,8 @@ void ClusterMainWindow::doStartup()
 
     dxSpotProxyModel = new QSortFilterProxyModel();
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
-    dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    //dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    dxSpotProxyModel->sort(TIME_COL_NUM, Qt::DescendingOrder);
 
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
@@ -216,10 +217,18 @@ void ClusterMainWindow::doStartup()
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
              this, SLOT( dxSpotView_sectionResized(int, int , int)));
 
+    // set these columns visible
+    dxSpotView->setColumnHidden(TIME_COL_NUM, false);
+    dxSpotView->setColumnHidden(FREQ_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXLOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
+    // hide these columns
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
@@ -228,6 +237,9 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
+
 
 
     // sent spot tab
@@ -1061,8 +1073,22 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
             {
                 // send spot to clients if spotter isn't this station
                 trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot.getDxCall()));
-                sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(newSpot.getDxCall()).arg(newSpot.getDxLocator()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMaskStr())
-                                                       .arg(newSpot.getSpotterCall()).arg(newSpot.getSpotterLocator()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(newSpot.getDxPropMode()).arg(setupCluster->getTimeToLive())));
+                sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
+                                                               .arg(newSpot.getDxCall())
+                                                               .arg(newSpot.getDxLocator())
+                                                               .arg(newSpot.getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")
+                                                               .arg(newSpot.getDxFreq())
+                                                               .arg(newSpot.getDxBandStr())
+                                                               .arg(newSpot.getDxBandMask())
+                                                               .arg(newSpot.getDxModeStr())
+                                                               .arg(newSpot.getDxModeMaskStr())
+                                                               .arg(newSpot.getSpotterCall())
+                                                               .arg(newSpot.getSpotterLocator())
+                                                               .arg(newSpot.getSpotTime())
+                                                               .arg(newSpot.getSpotDate())
+                                                               .arg(newSpot.getSpotComment())
+                                                               .arg(newSpot.getDxPropMode())
+                                                               .arg(setupCluster->getTimeToLive())));
             }
             else
             {
@@ -1580,6 +1606,7 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
             if (cmd.getBandmask() | dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt())
             {
                 QString spot = createResendSpotToSend(getSpotFromDisplayDb(row));
+                trace(QString("resending this spot - %1 to uuid = %2").arg(spot).arg(cmd.getuuid()));
                 clusterRpc->sendDXSpot(spot, cmd.getuuid(), cmd.getFrameId());   // send spot and loggeruuid
             }
 
@@ -1594,6 +1621,7 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
 
     QString dxCall = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_CALL_COL_NUM), DataStoredRole).toString();
     QString dxLocator = dxSpotDataModel->data(dxSpotDataModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+    bool dxLocFromNodeFlag = dxSpotDataModel->data(dxSpotDataModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();
     Frequency dxFreq = qvariant_cast<Frequency>(dxSpotDataModel->data(dxSpotDataModel->index(row, FREQ_COL_NUM), DataStoredRole));
     QString dxBandStr = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
     QString dxBandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString();
@@ -1608,9 +1636,22 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString spotComment = dxSpotDataModel->data(dxSpotDataModel->index(row, COMMENT_COL_NUM), DataStoredRole).toString();
     QString dxPropMode = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_PROP_MODE_COL_NUM), DataStoredRole).toString();
 
-    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14").arg(dxCall).arg(dxLocator).arg(dxFreq.str()).arg(dxBandStr)
-                    .arg(dxBandMask).arg(dxModeStr).arg(dxModeMask)
-                    .arg(spotCall).arg(spotLocator).arg(spotTime).arg(spotDate).arg(spotComment).arg(dxPropMode).arg(setupCluster->getTimeToLive());
+    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
+            .arg(dxCall)
+            .arg(dxLocator)
+            .arg(dxLocFromNodeFlag ? "locFromNode-true" : "locFromNode-false")
+            .arg(dxFreq.str())
+            .arg(dxBandStr)
+            .arg(dxBandMask)
+            .arg(dxModeStr)
+            .arg(dxModeMask)
+            .arg(spotCall)
+            .arg(spotLocator)
+            .arg(spotTime)
+            .arg(spotDate)
+            .arg(spotComment)
+            .arg(dxPropMode)
+            .arg(setupCluster->getTimeToLive());
 
 }
 

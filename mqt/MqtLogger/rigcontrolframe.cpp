@@ -1579,11 +1579,8 @@ int RigControlFrame::setBandSelComboFromFreq(const Frequency &freq)
 
     if (blist.findBand(freq, bi))
     {
-        qDebug() << "combo text = " << ui->bandSelCombo->currentText();
-        qDebug() << "band = " << bi->uk;
         if (ui->bandSelCombo->currentText() != bi->uk)
         {
-            qDebug() << "set combo to band = " << bi->uk;
             retCode = setBandSelComboIndex(bi->uk);
             traceMsg(QString("setBandSelComboFromFreq = %1, band = %2, retCode = %3").arg(freq.traceStr()).arg(bi->uk).arg(retCode));
 

@@ -64,7 +64,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 case SPOTTER_LOC_COL_NUM:
                     return tr("Loc");
                 case COMMENT_COL_NUM:
-                return tr("Comment");
+                    return tr("Comment");
                 case DXBANDMASK_COL_NUM:
                     return tr("Band Mask");
                 case DXMODEMASK_COL_NUM:
@@ -239,6 +239,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXBANDSTR_COL_NUM:
                 d = dxSpot->getDxBandStr();
             break;
+            case DXLOC_FROM_NODE_FLAG_COL_NUM:
+                d = dxSpot->getDxLocatorIsFromNode();
+            break;
             default:
                 d = "";
         }
@@ -256,7 +259,9 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case TIME_COL_NUM:
                 d = dxSpot->getSpotTime();
             break;
-
+            case DATE_COL_NUM:
+                d = dxSpot->getSpotDate();
+            break;
             case FREQ_COL_NUM:
                 d.setValue(dxSpot->getDxFreq());
             break;
@@ -307,9 +312,6 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             break;
             case DXBANDSTR_COL_NUM:
                 d = dxSpot->getDxBandStr();
-            break;
-            case DATE_COL_NUM:
-                d = dxSpot->getSpotDate();
             break;
 
 

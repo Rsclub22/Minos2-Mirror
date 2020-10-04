@@ -290,10 +290,23 @@ void ClusterClientFrame::setupDXSpotView()
 
     spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    dxSpotView->setColumnHidden(TIME_COL_NUM, false);
+    dxSpotView->setColumnHidden(FREQ_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXLOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXDIST_COL_NUM, false);
+    dxSpotView->setColumnHidden(DXBRG_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    dxSpotView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
+    // hide these columns
     dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -333,10 +346,24 @@ void ClusterClientFrame::setupSearchSpotView()
     connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
     searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    searchView->setColumnHidden(TIME_COL_NUM, false);
+    searchView->setColumnHidden(FREQ_COL_NUM, false);
+    searchView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    searchView->setColumnHidden(DXLOC_COL_NUM, false);
+    searchView->setColumnHidden(DXDIST_COL_NUM, false);
+    searchView->setColumnHidden(DXBRG_COL_NUM, false);
+    searchView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    searchView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    searchView->setColumnHidden(COMMENT_COL_NUM, false);
 
+
+    // hide these columns
     searchView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    searchView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -386,9 +413,25 @@ void ClusterClientFrame::setupCallsignSpotView()
 
     callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    // show these columns
+    callSignView->setColumnHidden(TIME_COL_NUM, false);
+    callSignView->setColumnHidden(FREQ_COL_NUM, false);
+    callSignView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    callSignView->setColumnHidden(DXLOC_COL_NUM, false);
+    callSignView->setColumnHidden(DXDIST_COL_NUM, false);
+    callSignView->setColumnHidden(DXBRG_COL_NUM, false);
+    callSignView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    callSignView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    callSignView->setColumnHidden(COMMENT_COL_NUM, false);
+
+
+
+    // hide these columns
     callSignView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    callSignView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -433,9 +476,26 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
 
 
+    // show these columns
+    locatorView->setColumnHidden(TIME_COL_NUM, false);
+    locatorView->setColumnHidden(FREQ_COL_NUM, false);
+    locatorView->setColumnHidden(DXSPOT_CALL_COL_NUM, false);
+    locatorView->setColumnHidden(DXSPOT_MODE_COL_NUM, false);
+    locatorView->setColumnHidden(DXLOC_COL_NUM, false);
+    locatorView->setColumnHidden(DXDIST_COL_NUM, false);
+    locatorView->setColumnHidden(DXBRG_COL_NUM, false);
+    locatorView->setColumnHidden(SPOTTER_CALL_COL_NUM, false);
+    locatorView->setColumnHidden(SPOTTER_LOC_COL_NUM, false);
+    locatorView->setColumnHidden(COMMENT_COL_NUM, false);
+
+
+
+
+    // hide these columns
     locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    locatorView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
@@ -719,29 +779,16 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
         if (spotlist.count() == TTLVALUE +1)
         {
-            // get time to live value
-            if (spotlist[TTLVALUE] == "0")
+
+            bool ok = false;
+            int ttl = spotlist[TTLVALUE].toInt(&ok);
+            if (ok)
             {
-                timeToLive = 0;  // timeToLive is off
-            }
-            else
-            {
-                bool ok = false;
-                int ttl = spotlist[TTLVALUE].toInt(&ok);
-                if (ok)
+                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
                 {
-                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                    {
-                        timeToLive = ttl * 60; // seconds
-                    }
+                    timeToLive = ttl * 60; // seconds
                 }
             }
-
-            //*********************************************************
-
-            //timeToLive = 120; // for testing.....
-
-            //*******************************************************
 
 
             // check to see if call or locator worked
@@ -765,6 +812,8 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 distance = QString::number(static_cast< int> ( dist));
                 bearing =  QString::number(brg);
             }
+
+            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
@@ -793,6 +842,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
+            newSpot->setDxLocatorIsFromNode(dxLocFromNodeFlag);
             newSpot->setDxLocatorWorked(locWorked);
             newSpot->setDxDist(distance);
             newSpot->setDxBrg(bearing);
@@ -835,7 +885,6 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
         if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
         {
 
-
             if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_COL_NUM) &&
                     checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
                     checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
@@ -868,6 +917,17 @@ bool ClusterClientFrame::checkDbRowForMatch(QString incomingVal, int row, const 
 bool ClusterClientFrame::checkDbRowForMatch(bool incomingVal, int row, const int colNum)
 {
     if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toBool())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ClusterClientFrame::checkDbRowForMatch(Frequency incomingVal, int row, const int colNum)
+{
+
+    if (incomingVal == qvariant_cast<Frequency>(dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole)))
     {
         return true;
     }
@@ -1389,6 +1449,7 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
     spotData.fromBandmapOrMemory = true;
+    spotData.dxLocFromNode = spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();
     return spotData;
 }
 

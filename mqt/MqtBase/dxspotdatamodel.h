@@ -17,7 +17,7 @@
 #include "spotdata.h"
 #include "clustercommon.h"
 
-const int dxSpotColCount = 18;
+const int dxSpotColCount = 20;
 
 const int DataStoredRole = Qt::UserRole + 0;
 

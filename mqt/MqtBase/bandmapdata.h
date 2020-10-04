@@ -34,7 +34,7 @@ public:
     BandmapData(qint64 _rxTime, QString _spotTime,
              Frequency dxFreq, QString _dxBand, QString _dxBandMaskStr,
              QString _dxMode, QString _dxModeMaskStr, QString _dxCall,
-             bool _dxCallWorked, QString _dxLocator,
+             bool _dxCallWorked, QString _dxLocator, bool _dxLocatorIsFromNode,
              bool _dxLocatorWorked, QString _distance,
              QString _bearing, QString _rotBrg, bool _rotConnected, QString _spotterCall,
              QString _spotterLocator, QString _dxPropMode,
@@ -53,6 +53,7 @@ public:
     QString dxModeMaskStr;
     QString dxCall;
     QString dxLocator;
+    bool dxLocatorIsFromNode;
     QString dxDist;
     QString dxBrg;
     QString rotBrg;

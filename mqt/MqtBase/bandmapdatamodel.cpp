@@ -144,6 +144,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case OFF_RUN_FREQ_COL_NUM:
                 d = bandmapSpot->offRunFreq;
             break;
+            case DXLOC_FROM_NODE_FLAG_COL_NUM:
+                d = bandmapSpot->dxLocatorIsFromNode;
+            break;
             default:
                 d = "";
         }

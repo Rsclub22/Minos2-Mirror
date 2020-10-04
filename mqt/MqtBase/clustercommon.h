@@ -48,18 +48,19 @@ const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
 const int DXCALL = 0;
 const int DXLOCATOR = 1;
-const int DXFREQ = 2;
-const int DXBANDSTR = 3;
-const int DXBANDMASK = 4;
-const int DXMODESTR = 5;
-const int DXMODEMASK = 6;
-const int SPOTCALL = 7;
-const int SPOTLOCATOR = 8;
-const int SPOTTIME = 9;
-const int SPOTDATE = 10;
-const int SPOTCOMMENT = 11;
-const int DXPROPMODE = 12;
-const int TTLVALUE = 13;
+const int DXLOC_FROM_NODE_FLAG = 2;
+const int DXFREQ = 3;
+const int DXBANDSTR = 4;
+const int DXBANDMASK = 5;
+const int DXMODESTR = 6;
+const int DXMODEMASK = 7;
+const int SPOTCALL = 8;
+const int SPOTLOCATOR = 9;
+const int SPOTTIME = 10;
+const int SPOTDATE = 11;
+const int SPOTCOMMENT = 12;
+const int DXPROPMODE = 13;
+const int TTLVALUE = 14;
 
 
 // Cluster Data and View Columns
@@ -70,25 +71,26 @@ const int DXSPOT_CALL_COL_NUM = 2;
 const int DXSPOT_CALL_WORKED_COL_NUM = 3;
 const int DXSPOT_MODE_COL_NUM = 4;
 const int DXLOC_COL_NUM = 5;
-const int DXDIST_COL_NUM = 6;
-const int DXBRG_COL_NUM = 7;
-const int DXLOC_WORKED_COL_NUM = 8;
-const int SPOTTER_CALL_COL_NUM = 9;
-const int SPOTTER_LOC_COL_NUM = 10;
-const int COMMENT_COL_NUM = 11;
-const int DXBANDSTR_COL_NUM = 12;
-const int DXBANDMASK_COL_NUM = 13;
-const int DXMODEMASK_COL_NUM = 14;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 15;
-const int DXSPOT_PROP_MODE_COL_NUM = 16;
-const int RXTIME_COL_NUM = 17;
-const int DATE_COL_NUM = 18;
-const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 21;
-const int ROT_CONNECTED_COL_NUM = 22;
-const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
+const int DXLOC_FROM_NODE_FLAG_COL_NUM = 6;
+const int DXDIST_COL_NUM = 7;
+const int DXBRG_COL_NUM = 8;
+const int DXLOC_WORKED_COL_NUM = 9;
+const int SPOTTER_CALL_COL_NUM = 10;
+const int SPOTTER_LOC_COL_NUM = 11;
+const int COMMENT_COL_NUM = 12;
+const int DXBANDSTR_COL_NUM = 13;
+const int DXBANDMASK_COL_NUM = 14;
+const int DXMODEMASK_COL_NUM = 15;
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 16;
+const int DXSPOT_PROP_MODE_COL_NUM = 17;
+const int RXTIME_COL_NUM = 18;
+const int DATE_COL_NUM = 19;
+const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 22;
+const int ROT_CONNECTED_COL_NUM = 23;
+const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;
@@ -171,6 +173,9 @@ qlonglong spotElapsedTime(qlonglong spotTime);
 void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
 void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency freq, QString &band, QString &bandMask);
+
+bool extractDxLocFromNodeFlag(QString locFlagMsg);
+
 
 class ClusterMessage
 {
