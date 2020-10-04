@@ -28,7 +28,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
                    Frequency _dxFreq, QString _dxBand, QString _dxBandMaskStr,
                    QString _dxMode,  QString _dxModeMaskStr,
                    QString _dxCall, bool _dxCallWorked,
-                   QString _dxLocator, bool _dxLocatorWorked,
+                   QString _dxLocator, bool _dxLocatorIsFromNode, bool _dxLocatorWorked,
                    QString _distance, QString _bearing, QString _rotBrg, bool _rotConnected,
                    QString _spotterCall, QString _spotterLocator, QString _dxPropMode,
                    bool _runModeOn, bool _offRunFreq,
@@ -44,6 +44,7 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
     dxModeMaskStr = _dxModeMaskStr;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
+    dxLocatorIsFromNode = _dxLocatorIsFromNode;
     dxDist = _distance;
     dxBrg = _bearing;
     rotBrg = _rotBrg;
@@ -72,6 +73,7 @@ void BandmapData::operator = (const BandmapData& bmd)
     dxModeMaskStr = bmd.dxModeMaskStr;
     dxCall = bmd.dxCall;
     dxLocator = bmd.dxLocator;
+    dxLocatorIsFromNode = bmd.dxLocatorIsFromNode;
     dxDist = bmd.dxDist;
     dxBrg = bmd.dxDist;
     rotBrg = bmd.rotBrg;
@@ -100,6 +102,7 @@ void BandmapData::operator = (const BandmapData* bmd)
     dxModeMaskStr = bmd->dxModeMaskStr;
     dxCall = bmd->dxCall;
     dxLocator = bmd->dxLocator;
+    dxLocatorIsFromNode = bmd->dxLocatorIsFromNode;
     dxDist = bmd->dxDist;
     dxBrg = bmd->dxDist;
     rotBrg = bmd->rotBrg;
@@ -132,6 +135,7 @@ void BandmapData::clear()
     dxModeMaskStr.clear();
     dxCall.clear();
     dxLocator.clear();
+    dxLocatorIsFromNode = false;
     dxDist.clear();
     dxBrg.clear();
     rotBrg.clear();

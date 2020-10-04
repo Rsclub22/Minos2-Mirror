@@ -704,7 +704,15 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 disp = m.worked?tr("Y"):tr("N");
                 break;
             case ermLocator:
-                disp = m.locator;
+
+                if (m.dxLocFromNode)
+                {
+                    disp = "<i>" + m.locator + "</i>";
+                }
+                else
+                {
+                    disp = m.locator;
+                }
                 break;
             case ermBearing:
                 disp = QString("%1").arg( m.bearing, 3, 10, QChar('0'));

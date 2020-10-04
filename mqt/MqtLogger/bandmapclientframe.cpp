@@ -483,6 +483,7 @@ void BandmapClientFrame::on_memoryActionSelected()
         spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreq;
         spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
+        spotData.dxLocFromNode = bandmapView->getSelectedSpotDataPtr()->dxLocatorIsFromNode;
 
         MinosLoggerEvents::SendSpotToMemory(ct,spotData);
 
@@ -645,6 +646,7 @@ void BandmapClientFrame::context_memoryActionSelected()
     spotData.freq = contextMenuSelectedSpotData.dxFreq;
     spotData.locator = contextMenuSelectedSpotData.dxLocator;
     spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
+    spotData.dxLocFromNode = contextMenuSelectedSpotData.dxLocatorIsFromNode;
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
 
@@ -1104,6 +1106,9 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                 bearing =  QString::number(brg);
             }
 
+            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
+
+
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
@@ -1111,7 +1116,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(rxTime, spotlist[SPOTTIME],
                                                     spotlist[DXFREQ], spotlist[DXBANDSTR],  spotlist[DXBANDMASK],
                                                     spotlist[DXMODESTR], spotlist[DXMODEMASK], spotlist[DXCALL],
-                                                    callWorked, spotlist[DXLOCATOR],
+                                                    callWorked, spotlist[DXLOCATOR], dxLocFromNodeFlag,
                                                     locWorked,distance,
                                                     bearing, "", false, spotlist[SPOTCALL],        // ignore rotator bearing
                                                     spotlist[SPOTLOCATOR], spotlist[DXPROPMODE],
@@ -1239,7 +1244,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(logTime, logTimeStr,
                                             spot->getFreq(), spot->getbandStr(),  spot->getBandMask(),
                                             spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
-                                            spot->getWorked(), spot->getLocator(),
+                                            spot->getWorked(), spot->getLocator(), false,
                                             locWorked, distance,
                                             spot->getBearing(), rotBrg, rotatorConnected, "",
                                             "", "", false, false, "", spot->getSpotType()));
@@ -1290,7 +1295,7 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
             bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(logTime, logTimeStr,
             spot->getFreq(), spot->getbandStr(),  spot->getBandMask(),
             spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
-            spot->getWorked(), spot->getLocator(),
+            spot->getWorked(), spot->getLocator(), false,
             false, "",
             spot->getBearing(), "", rotatorConnected, "",
             "", "",

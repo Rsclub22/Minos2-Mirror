@@ -717,31 +717,19 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 #endif
 
+        int a = spotlist.count();
         if (spotlist.count() == TTLVALUE +1)
         {
-            // get time to live value
-            if (spotlist[TTLVALUE] == "0")
+
+            bool ok = false;
+            int ttl = spotlist[TTLVALUE].toInt(&ok);
+            if (ok)
             {
-                timeToLive = 0;  // timeToLive is off
-            }
-            else
-            {
-                bool ok = false;
-                int ttl = spotlist[TTLVALUE].toInt(&ok);
-                if (ok)
+                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
                 {
-                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                    {
-                        timeToLive = ttl * 60; // seconds
-                    }
+                    timeToLive = ttl * 60; // seconds
                 }
             }
-
-            //*********************************************************
-
-            //timeToLive = 120; // for testing.....
-
-            //*******************************************************
 
 
             // check to see if call or locator worked
@@ -765,6 +753,8 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 distance = QString::number(static_cast< int> ( dist));
                 bearing =  QString::number(brg);
             }
+
+            bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
@@ -793,6 +783,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
+            newSpot->setDxLocatorIsFromNode(dxLocFromNodeFlag);
             newSpot->setDxLocatorWorked(locWorked);
             newSpot->setDxDist(distance);
             newSpot->setDxBrg(bearing);
@@ -1389,6 +1380,7 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
     spotData.fromBandmapOrMemory = true;
+    spotData.dxLocFromNode = spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();
     return spotData;
 }
 

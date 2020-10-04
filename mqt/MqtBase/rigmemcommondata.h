@@ -127,6 +127,7 @@ public:
     QString time = "00:00";
     bool worked = false;
     bool fromBandmapOrMemory = false;
+    bool dxLocFromNode = false;
 
     QColor headerColor = Qt::black;
 
@@ -139,7 +140,8 @@ public:
                 && worked == rhs.worked
                 && fromBandmapOrMemory == rhs.fromBandmapOrMemory
                 && time.compare(rhs.time, Qt::CaseInsensitive) == 0
-                && bearing == rhs.bearing)
+                && bearing == rhs.bearing
+                && dxLocFromNode == rhs.dxLocFromNode)
 
         {
             return true;

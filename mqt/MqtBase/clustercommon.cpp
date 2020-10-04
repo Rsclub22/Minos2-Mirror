@@ -111,3 +111,13 @@ qlonglong spotElapsedTime(qlonglong spotTime)
     qlonglong elapsedTime = curTime - spotTime;
     return elapsedTime;
 }
+
+bool extractDxLocFromNodeFlag(QString locFlagMsg)
+{
+    if (locFlagMsg.contains("true"))
+    {
+        return true;
+    }
+
+    return false;
+}
