@@ -103,11 +103,13 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     bandmapView = new BandmapView();
     bandmapView->setFilterSettings(&filterSettings);
 
-    bandmapSpotProxyModel = new QSortFilterProxyModel(parent);
+    bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
     bandmapSpotProxyModel->setSourceModel(bandmapDataModel);
-    bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);
+    //bandmapSpotProxyModel->sort(FREQ_COL_NUM, Qt::AscendingOrder);    // we have lessThan now defined
 
     bandmapView->setModel(bandmapSpotProxyModel);
+
+    ui->textFilterEdit->setValidator(&ucValidator);
 
     bandmapView->initBandmapView(ui->bandmapGraphicsView);
 
@@ -915,7 +917,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (!isProtected)
+    if (ct && !isProtected)
     {
         //get spot Message from queue
         for (int i = 0; i < spotMsg.count(); i++)
@@ -2176,4 +2178,10 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
         levStr.prepend('0');
     }
     ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
+}
+
+void BandmapClientFrame::on_textFilterEdit_textEdited(const QString &filter)
+{
+    bandmapSpotProxyModel->setFilterString(filter);
+    bandmapView->bandmapUpdate();
 }

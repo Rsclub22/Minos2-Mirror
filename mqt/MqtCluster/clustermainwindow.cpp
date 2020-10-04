@@ -1821,6 +1821,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         QString dxModeStr;
         QString dxModeMask;
         getMode(modeBandPlan, newSpot.getDxFreq(), newSpot.getDxBandStr(), dxModeStr, dxModeMask);
+        newSpot.setDxModeStr(dxModeStr);
+        newSpot.setDxModeMaskStr(dxModeMask);
 
         newSpot.populateDxCall(dxMsg[4]); // populate QString dxCall and Callsign dx_Call
         // find time

@@ -57,4 +57,15 @@ private:
 
 };
 
+class BandmapSortFilterProxyModel: public QSortFilterProxyModel
+{
+    QString filterString;
+public:
+    explicit BandmapSortFilterProxyModel(QObject *parent = nullptr);
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    void setFilterString(QString f);
+    bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;
+};
+
 #endif // BANDMAPDATAMODEL_H

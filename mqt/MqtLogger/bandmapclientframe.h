@@ -235,8 +235,10 @@ private:
     QItemSelectionModel *selectionModel;
     QGraphicsView* bandmapGraphicsView;
 
-    QSortFilterProxyModel* bandmapSpotProxyModel;
+    BandmapSortFilterProxyModel* bandmapSpotProxyModel;
     BandmapClientFilterDialog* filterSetup;
+
+    UpperCaseValidator ucValidator;
 
     //QString sfreq;
     Frequency curFreq;
@@ -367,6 +369,7 @@ private slots:
      void on_newZoomlevel(int level);
      void requestSpots();
      void on_pushbuttonPressed();
+     void on_textFilterEdit_textEdited(const QString &arg1);
 };
 
 
