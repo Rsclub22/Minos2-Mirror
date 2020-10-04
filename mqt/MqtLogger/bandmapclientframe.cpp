@@ -2177,5 +2177,6 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
 
 void BandmapClientFrame::on_textFilterEdit_textEdited(const QString &filter)
 {
-bandmapSpotProxyModel->setFilterString(filter);
+    bandmapSpotProxyModel->setFilterString(filter);
+    bandmapView->bandmapUpdate();
 }

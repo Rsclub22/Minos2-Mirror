@@ -374,7 +374,6 @@ bool BandmapDataModel::insertColumns(int column, int count, const QModelIndex &p
 }
 
 
-
 bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 {
     beginRemoveRows(parent, _row, _row + count - 1);

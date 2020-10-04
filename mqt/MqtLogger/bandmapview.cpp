@@ -948,6 +948,7 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
                 syCoord = centreYCoord + fontOffset;
 
             }
+            trace(QString("DrawBandmapSpot (above) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
 
         }
         else
@@ -961,10 +962,11 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
             }
             if (fontOffset <= lastOffset)
             {
-                fontOffset = lastOffset + fontHeight;
+                fontOffset = lastOffset +fontHeight;
                 syCoord = centreYCoord - fontOffset;
 
             }
+            trace(QString("DrawBandmapSpot (below) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
         }
         lastOffset = fontOffset;
         //spotCoord is left, top
@@ -1002,7 +1004,7 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
             assembleToolTip(row, f, spotTooltipText);
         }
 
-
+        trace(spotMsg);
         spot->setSpotText(spotMsg);
         spot->setToolTipText(spotTooltipText);
 
@@ -1091,17 +1093,13 @@ void BandmapView::drawBandMapSpots()
             {
                 // BUT unfortunately the BandMapDataModel isn't sorted
                 Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(centreSpot, FREQ_COL_NUM), BMP_DataStoredRole));
-                if (freq >= startFreq && freq <= endFreq)
+                // If they are in the table, we have to account for them
+                // we can filter when looking at the individuals later
+                if (freq > curFreq)
                 {
-                    if (freq > curFreq)
-                    {
-                        break;
-                    }
-                    if (matchMode(centreSpot) && matchDistance(centreSpot))
-                    {
-                        markersAbove++;
-                    }
+                    break;
                 }
+                markersAbove++;
             }
             int fontOffset = -fontHeight;
             int lastOffset = -1;
