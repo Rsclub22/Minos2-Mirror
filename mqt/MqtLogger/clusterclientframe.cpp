@@ -717,7 +717,6 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
         QStringList spotlist = sl[1].split(':', QString::KeepEmptyParts);
 #endif
 
-        int a = spotlist.count();
         if (spotlist.count() == TTLVALUE +1)
         {
 
@@ -826,7 +825,6 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
         if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
         {
 
-
             if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_COL_NUM) &&
                     checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
                     checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
@@ -859,6 +857,17 @@ bool ClusterClientFrame::checkDbRowForMatch(QString incomingVal, int row, const 
 bool ClusterClientFrame::checkDbRowForMatch(bool incomingVal, int row, const int colNum)
 {
     if (incomingVal == dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole).toBool())
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ClusterClientFrame::checkDbRowForMatch(Frequency incomingVal, int row, const int colNum)
+{
+
+    if (incomingVal == qvariant_cast<Frequency>(dxSpotDataModel->data(dxSpotDataModel->index(row, colNum,  QModelIndex()), DataStoredRole)))
     {
         return true;
     }

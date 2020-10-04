@@ -1627,8 +1627,7 @@ QString ClusterMainWindow::getSpotFromDisplayDb(int row)
     QString spotComment = dxSpotDataModel->data(dxSpotDataModel->index(row, COMMENT_COL_NUM), DataStoredRole).toString();
     QString dxPropMode = dxSpotDataModel->data(dxSpotDataModel->index(row, DXSPOT_PROP_MODE_COL_NUM), DataStoredRole).toString();
 
-
-    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14")
+    return QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
             .arg(dxCall)
             .arg(dxLocator)
             .arg(dxLocFromNodeFlag ? "locFromNode-true" : "locFromNode-false")
