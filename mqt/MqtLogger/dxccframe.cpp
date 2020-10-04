@@ -155,7 +155,7 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
 
 QModelIndex DXCCGridModel::index( int row, int column, const QModelIndex &/*parent*/) const
 {
-    if ( row < 0 || row >= rowCount()  )
+    if ( !ct || row < 0 || row >= rowCount()  )
         return QModelIndex();
 
     return createIndex( row, column );
