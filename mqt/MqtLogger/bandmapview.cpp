@@ -942,13 +942,13 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
                 syCoord = yCoord;
                 fontOffset = yCoord - centreYCoord;
             }
-            if (fontOffset <= lastOffset)
+            if (fontOffset <= lastOffset + fontHeight)
             {
                 fontOffset = lastOffset + fontHeight;
                 syCoord = centreYCoord + fontOffset;
 
             }
-            trace(QString("DrawBandmapSpot (above) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
+            //trace(QString("DrawBandmapSpot (above) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
 
         }
         else
@@ -960,13 +960,13 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
                 syCoord = yCoord;
                 fontOffset = centreYCoord - yCoord;
             }
-            if (fontOffset <= lastOffset)
+            if (fontOffset <= lastOffset + fontHeight)
             {
-                fontOffset = lastOffset +fontHeight;
+                fontOffset = lastOffset + fontHeight;
                 syCoord = centreYCoord - fontOffset;
 
             }
-            trace(QString("DrawBandmapSpot (below) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
+            //trace(QString("DrawBandmapSpot (below) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
         }
         lastOffset = fontOffset;
         //spotCoord is left, top
@@ -1004,7 +1004,7 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
             assembleToolTip(row, f, spotTooltipText);
         }
 
-        trace(spotMsg);
+        //trace(spotMsg);
         spot->setSpotText(spotMsg);
         spot->setToolTipText(spotTooltipText);
 
