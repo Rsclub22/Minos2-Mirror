@@ -354,6 +354,7 @@ void ClusterMainWindow::doStartup()
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
 
+
 }
 
 /*
@@ -984,13 +985,13 @@ void ClusterMainWindow::parseDX(const QString txt)
                             }
                             else
                             {
-                                trace(QString("ParseDx - qrzInfo error no data found for callsign = %1").arg(qrzInfo.getCall()));
+                                trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
                                 // asking qrz via node didn't give qra, use prefix
-                                // place back in queue
-                                trace(QString("ParseDx - flag failed and place back in queue to ask prefix"));
-                                newSpot.setAskQrzFailed(true);
-                                spotListNoQra.append(newSpot);
-
+                                // let's lookup using prefix
+                                QString loc = getQraFromCallsignPrefix(newSpot.getDx_Call());
+                                trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
+                                newSpot.setDxLocator(loc);
+                                newSpot.setDxLocatorIsFromNode(true);
                             }
 
                             //spotListNoQra.remove(qrzInfo.getCall());
@@ -1014,29 +1015,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                     }
 
                 }
-                else if (askQraData.getAskPrefix() && (line.contains("CC:") || line.contains("LL:")))
-                {
-                    QString qra;
-                    retCode = getPrefixReply(line, askQraData.getAskCallsign(), qra);
-                    if (retCode == SPOT_OK)
-                    {
-                        trace(QString("parseDx: getPrefix extracted QRA = %1 for call = %2").arg(qra).arg(spotWaitingForQraFromNode.getDxCall()));
-                        newSpot = spotWaitingForQraFromNode;
-                        newSpot.setDxLocator(qra);
-                        newSpot.setDxLocatorIsFromNode(true);
-                        spotWaitingForQraFromNode.clear();
-                        qrzInfo.clear();
-                        askQraData.clear();
-                        //getQrzInfo = false;
-                        //retCode = SPOT_OK;
-                        processNewSpot(newSpot);
-                    }
-                    else
-                    {
-                        trace(QString("parseDx: Error %1").arg(clusterErrorMsg[retCode * -1]));
-                    }
 
-                }
             }
        } while (!line.isNull());
     }
@@ -1113,65 +1092,23 @@ void ClusterMainWindow::handAskQraTimer()
 {
 
 
-    if (!spotListNoQra.isEmpty() && !askQraData.getAskQrz() && !askQraData.getAskPrefix())
+    if (!spotListNoQra.isEmpty() && !askQraData.getAskQrz())
     {
 
            spotWaitingForQraFromNode = spotListNoQra.first();
            spotListNoQra.removeFirst();
            trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode.getDxCall()));
 
-           if (spotWaitingForQraFromNode.getAskQrzFailed())
-           {
-               // we couldn't get the QRA by asking Node QRZ, so need to use the callsign prefix
-               if (spotWaitingForQraFromNode.getDx_Call().locCtryPrefix != spotWaitingForQraFromNode.getDx_Call().dupPrefix)
-               {
-                   // station isn't in the country of issued callsign
-                   // use out of country prefix to work out QRA
-
-                   askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().locCtryPrefix);
-               }
-               else
-               {
-                   askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().realCall);
-               }
-
-               // flag we are asking prefix
-               askQraData.setAskPrefix(true);
-               askQraTimeout->start(ASKQRA_TIMEOUT);
-               txText(dxClusterCommand->showPrefix(askQraData.getAskCallsign()));
-               trace(QString("Ask QRZ Cluster Node failed, use Show Prefix for QRA details from prefix = %1").arg(askQraData.getAskCallsign()));
-               return;
-
-           }
+           // use call to get QRA from node QRZ command
+           askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().realCall);
+           // flag we are asking QRZ
+           trace(QString("Get QRA from node with QRA command, callsign = %1").arg(askQraData.getAskCallsign()));
+           askQraData.setAskQrz(true);
+           askQraTimeout->start(ASKQRA_TIMEOUT);
+           txText(dxClusterCommand->showQRZMsg(askQraData.getAskCallsign()));
 
 
-           else if (spotWaitingForQraFromNode.getDx_Call().locCtryPrefix != spotWaitingForQraFromNode.getDx_Call().dupPrefix)
-           {
-               // station isn't in the country of issued callsign
-               // use out of country prefix to work out QRA
-
-               askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().locCtryPrefix);
-               // flag we are asking prefix
-               askQraData.setAskPrefix(true);
-               askQraTimeout->start(ASKQRA_TIMEOUT);
-               txText(dxClusterCommand->showPrefix(askQraData.getAskCallsign()));
-               trace(QString("Ask Cluster Node Show Prefix for QRA details from prefix = %1").arg(askQraData.getAskCallsign()));
-               return;
-
-           }
-           else
-           {
-               // use call to get QRA from node QRZ command
-               askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().realCall);
-               // flag we are asking QRZ
-               trace(QString("Get QRA from node with QRA command, callsign = %1").arg(askQraData.getAskCallsign()));
-               askQraData.setAskQrz(true);
-               askQraTimeout->start(ASKQRA_TIMEOUT);
-               txText(dxClusterCommand->showQRZMsg(askQraData.getAskCallsign()));
-               return;
-           }
-
-        }
+     }
 
 }
 
@@ -1303,112 +1240,23 @@ int ClusterMainWindow::getQrzReply(QString &line)
     return ASKQRZ_FAILED_QRA;
 }
 
-int ClusterMainWindow::getPrefixReply(QString &line, const QString &callsign, QString &qra)
+
+QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
 {
-    if (line.contains(callsign) && (line.contains("CC:") || line.contains("LL:")))
+    QString prefix;
+
+    if (cs.locCtryPrefix != cs.dupPrefix)
     {
-        QString latLon;
-
-        QStringList sl = line.split(':');
-
-        if (sl.count() == 5)
-        {
-            latLon = sl[4].trimmed();
-            int pos = latLon.lastIndexOf(QRegExp("\\w\\w\\d\\d"));
-            if (pos >= 0)
-            {
-                // found a QRA
-                qra = latLon.mid(pos, 4);
-                trace(QString("getPrefixReply: found qra in response = %1").arg(qra));
-                return SPOT_OK;
-
-
-            }
-            else
-            {
-                // no qra found extract lat and long
-                trace(QString("getPrefixReply: no qra found, extract lat and long"));
-
-                double latdeg;
-                double latmin;
-                double latitude;
-
-
-                double londeg;
-                double lonmin;
-                double longitude;
-
-                bool ok;
-
-                sl = latLon.split(' ');
-                if (sl.count() > 4)
-                {
-                    latdeg = sl[0].toDouble(&ok);
-                    if (ok)
-                    {
-                       latmin = sl[1].toDouble(&ok);
-                       if (ok)
-                       {
-                           latitude = latdeg + (latmin/60);
-
-                           if (sl[2] == "N" || sl[2] == "S")
-                           {
-                               if (sl[2] == "S")
-                               {
-                                   latitude = latitude * -1;
-                               }
-                           }
-                           else
-                           {
-                               ok = false;
-                           }
-                       }
-
-                    }
-
-                    if (ok)
-                    {
-                        londeg = sl[3].toDouble(&ok);
-                        if (ok)
-                        {
-                           lonmin = sl[4].toDouble(&ok);
-                           if (ok)
-                           {
-                               longitude = londeg + (lonmin/60);
-
-                               if (sl[5] == "W" || sl[5] == "E")
-                               {
-                                   if (sl[5] == "W")
-                                   {
-                                       longitude = longitude * -1;
-                                   }
-                               }
-                               else
-                               {
-                                   ok = false;
-                               }
-                           }
-
-                        }
-                    }
-                    if (ok)
-                    {
-                        geotoloc(latitude, longitude, qra);
-                        qra = qra.mid(0,6);
-                        trace(QString("getPrefixReply: qra found from lat/long = %1").arg(qra));
-                        return SPOT_OK;
-                    }
-
-                }
-
-
-            }
-        }
+        prefix = cs.locCtryPrefix;
+    }
+    else
+    {
+        prefix = cs.dupPrefix;
     }
 
-    return GET_PREFIX_FAILED * -1;
+    QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( prefix );
+    return syn.data()->country.data()->central.loc.getValue();
 }
-
 
 
 

@@ -298,14 +298,11 @@ public:
     void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
     bool getAskQrz()const {return askQrz;}
 
-    void setAskPrefix(const bool askPrefix_){askPrefix = askPrefix_;}
-    bool getAskPrefix()const {return askPrefix;}
 
 
     void clear()
     {
         askQrz = false;
-        askPrefix = false;
 
         askCallsign.clear();
 
@@ -317,7 +314,6 @@ private:
 
 
    bool askQrz;
-   bool askPrefix;
    QString askCallsign;
 
 
@@ -551,13 +547,15 @@ private:
 
     void processNewSpot(SpotData &newSpot);
     int getQrzReply(QString &line);
-    int getPrefixReply(QString &line, const QString &callsign, QString &qra);
 
 
 
     int getPingTimeoutValue();
     void sendPingMessage();
 
+
+
+    QString getQraFromCallsignPrefix(Callsign prefix);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
