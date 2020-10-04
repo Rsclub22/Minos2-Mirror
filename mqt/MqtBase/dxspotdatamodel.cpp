@@ -64,7 +64,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                 case SPOTTER_LOC_COL_NUM:
                     return tr("Loc");
                 case COMMENT_COL_NUM:
-                return tr("Comment");
+                    return tr("Comment");
                 case DXBANDMASK_COL_NUM:
                     return tr("Band Mask");
                 case DXMODEMASK_COL_NUM:

@@ -294,6 +294,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -337,6 +338,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    searchView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -389,6 +391,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    callSignView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
@@ -436,6 +439,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
+    locatorView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
