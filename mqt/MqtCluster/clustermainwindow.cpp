@@ -229,6 +229,8 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+    dxSpotView->setColumnHidden(DATE_COL_NUM, true);
+
 
 
     // sent spot tab
