@@ -1,3 +1,7 @@
+#include "base_pch.h"
+#include "mults.h"
+#include "cutils.h"
+
 #include "callsign.h"
 
 Callsign::Callsign( ) : valRes( CS_NOT_VALIDATED )
