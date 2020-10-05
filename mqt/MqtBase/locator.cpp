@@ -1,3 +1,4 @@
+#include "base_pch.h"
 #include "locator.h"
 
 Locator::Locator( ) : valRes( ERR_NOLOC )
