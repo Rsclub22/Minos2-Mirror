@@ -1,9 +1,8 @@
 #ifndef MINOSITEM_H
 #define MINOSITEM_H
-
+#include "XMPP_pch.h"
 
 // templated class for items in contest and contact
-class RPCParamStruct;
 
 template < class itemtype >
 class MinosItem
