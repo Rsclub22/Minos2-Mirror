@@ -2,6 +2,7 @@
 #define LOCATOR_H
 
 #include "XMPP_pch.h"
+#include "minositem.h"
 
 #define LOC_NOT_VALIDATED -1
 #define LOC_OK 0

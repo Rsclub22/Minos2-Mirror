@@ -2,6 +2,7 @@
 #define CALLSIGN_H
 
 #include "XMPP_pch.h"
+#include "minositem.h"
 
 #define CS_OK 0
 #define CS_NOT_VALIDATED -1
