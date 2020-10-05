@@ -24,11 +24,12 @@ BandmapData::BandmapData()
 
 }
 
-BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
-                   Frequency _dxFreq, QString _dxBand, QString _dxBandMaskStr,
-                   QString _dxMode,  QString _dxModeMaskStr,
+BandmapData::BandmapData(qint64 _rxTime, QString _spotTime, QString _spotDate,
+                   Frequency _dxFreq, QString _dxBand, QString _dxBandMask,
+                   QString _dxMode,  QString _dxModeMask,
                    QString _dxCall, bool _dxCallWorked,
                    QString _dxLocator, bool _dxLocatorIsFromNode, bool _dxLocatorWorked,
+                   QString _dxDistrict, bool _dxDistrictWorked,
                    QString _distance, QString _bearing, QString _rotBrg, bool _rotConnected,
                    QString _spotterCall, QString _spotterLocator, QString _dxPropMode,
                    bool _runModeOn, bool _offRunFreq,
@@ -37,19 +38,19 @@ BandmapData::BandmapData(qint64 _rxTime, QString _spotTime,
 
     rxTime = _rxTime;
     spotTime = _spotTime;
-    if (spotTime.indexOf(":") <= 0)
-    {
-        spotTime = _spotTime.left(2) + ":" + _spotTime.right(2);
-    }
+    spotDate = _spotDate;
+    spotTime =  _spotTime;
     dxFreq = _dxFreq;
     dxBand = _dxBand;
-    dxBandMaskStr = _dxBandMaskStr;
+    dxBandMask = _dxBandMask;
     dxMode = _dxMode;
-    dxModeMaskStr = _dxModeMaskStr;
+    dxModeMask = _dxModeMask;
     dxCall = _dxCall;
     dxLocator = _dxLocator;
     dxLocatorIsFromNode = _dxLocatorIsFromNode;
     dxDist = _distance;
+    dxDistrict = _dxDistrict;
+    dxDistrictWorked = _dxDistrictWorked;
     dxBrg = _bearing;
     rotBrg = _rotBrg;
     rotConnected = _rotConnected;
@@ -70,11 +71,13 @@ void BandmapData::operator = (const BandmapData& bmd)
 {
     rxTime = bmd.rxTime;
     spotTime = bmd.spotTime;
+    spotDate = bmd.spotDate;
+    spotDateTime = bmd.spotDateTime;
     dxFreq = bmd.dxFreq;
     dxBand = bmd.dxBand;
-    dxBandMaskStr = bmd.dxBandMaskStr;
+    dxBandMask = bmd.dxBandMask;
     dxMode = bmd.dxMode;
-    dxModeMaskStr = bmd.dxModeMaskStr;
+    dxModeMask = bmd.dxModeMask;
     dxCall = bmd.dxCall;
     dxLocator = bmd.dxLocator;
     dxLocatorIsFromNode = bmd.dxLocatorIsFromNode;
@@ -82,6 +85,8 @@ void BandmapData::operator = (const BandmapData& bmd)
     dxBrg = bmd.dxDist;
     rotBrg = bmd.rotBrg;
     rotConnected = bmd.rotConnected;
+    dxDistrict = bmd.dxDistrict;
+    dxDistrictWorked = bmd.dxDistrictWorked;
     dxCallWorked = bmd.dxCallWorked;
     dxLocatorWorked = bmd.dxLocatorWorked;
     sentToMemory = bmd.sentToMemory;
@@ -99,11 +104,13 @@ void BandmapData::operator = (const BandmapData* bmd)
 {
     rxTime = bmd->rxTime;
     spotTime = bmd->spotTime;
+    spotDate = bmd->spotDate;
+    spotDateTime = bmd->spotDateTime;
     dxFreq = bmd->dxFreq;
     dxBand = bmd->dxBand;
-    dxBandMaskStr = bmd->dxBandMaskStr;
+    dxBandMask = bmd->dxBandMask;
     dxMode = bmd->dxMode;
-    dxModeMaskStr = bmd->dxModeMaskStr;
+    dxModeMask = bmd->dxModeMask;
     dxCall = bmd->dxCall;
     dxLocator = bmd->dxLocator;
     dxLocatorIsFromNode = bmd->dxLocatorIsFromNode;
@@ -111,6 +118,8 @@ void BandmapData::operator = (const BandmapData* bmd)
     dxBrg = bmd->dxDist;
     rotBrg = bmd->rotBrg;
     rotConnected = bmd->rotConnected;
+    dxDistrict = bmd->dxDistrict;
+    dxDistrictWorked = bmd->dxDistrictWorked;
     dxCallWorked = bmd->dxCallWorked;
     dxLocatorWorked = bmd->dxLocatorWorked;
     sentToMemory = bmd->sentToMemory;
@@ -132,11 +141,13 @@ void BandmapData::clear()
 
     rxTime = 0;
     spotTime.clear();
+    spotDate.clear();
+    spotDateTime.currentDateTimeUtc();
     dxFreq.clear();
     dxBand.clear();
-    dxBandMaskStr.clear();
+    dxBandMask.clear();
     dxMode.clear();
-    dxModeMaskStr.clear();
+    dxModeMask.clear();
     dxCall.clear();
     dxLocator.clear();
     dxLocatorIsFromNode = false;
@@ -144,6 +155,8 @@ void BandmapData::clear()
     dxBrg.clear();
     rotBrg.clear();
     rotConnected = false;
+    dxDistrict.clear();
+    dxDistrictWorked = false;
     dxCallWorked = false;
     dxLocatorWorked = false;
     sentToMemory = false;

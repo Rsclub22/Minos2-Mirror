@@ -30,6 +30,7 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
+    SpotDataParent.cpp \
     bandmapmarkerdetails.cpp \
     calcs.cpp \
     Calendar.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
+    SpotDataParent.h \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \

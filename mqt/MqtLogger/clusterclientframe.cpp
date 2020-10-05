@@ -863,7 +863,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 }
             }
 
-            dxSpotDataModel->rowData = newSpot;
+            //dxSpotDataModel->rowData = newSpot;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));

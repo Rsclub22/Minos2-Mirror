@@ -28,6 +28,8 @@
 #include "ui_clustermainwindow.h"
 #include "latlong.h"
 
+#include "SpotDataParent.h"
+
 
 
 static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
