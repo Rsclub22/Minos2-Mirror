@@ -56,10 +56,19 @@ template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &k
 #include <math.h>
 #include <time.h>
 
+#include "baseconstants.h"
+
 #include "fileutils.h"
 #include "MinosParameters.h"
 #include "ProfileEnums.h"
-#include "mwin.h"
+
+#include "minositem.h"
+#include "baseloglist.h"
+#include "callsign.h"
+#include "dtg.h"
+#include "gjvparams.h"
+#include "locator.h"
+
 #include "CacheSelection.h"
 #include "calcs.h"
 

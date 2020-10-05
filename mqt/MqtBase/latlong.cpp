@@ -559,10 +559,6 @@ static void ukoscentre ( double /*longi*/, double *centre )
    *centre = degrad( -2.0 );
 }
 /**********************************************************************/
-
-//extern char lonlat(const char *qra, double &lon, double &lat);	// from cdlg.h
-//#define LOC_OK 0	// from mwin.h
-
 static int locinput( Location *ingrid )
 {
    int tok = lonlat( ingrid->datastring, ingrid->easting, ingrid->northing, MinosParameters::getMinosParameters() ->getAllowLoc4() );

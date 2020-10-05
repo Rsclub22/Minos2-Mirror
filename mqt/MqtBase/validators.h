@@ -12,7 +12,7 @@
 #define validatorsH 
 
 #include <QLineEdit>
-#include "mwin.h"
+
 class ScreenContact;
 //---------------------------------------------------------------------------
 #define ERR_0 0

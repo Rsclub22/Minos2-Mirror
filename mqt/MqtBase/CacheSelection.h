@@ -1,7 +1,7 @@
 #ifndef CACHESELECTION_H
 #define CACHESELECTION_H
 
-#include "mwin.h"
+#include "minositem.h"
 
 class CacheSelection
 {

@@ -35,6 +35,7 @@ SOURCES += \
     minossplitter.cpp
 
 HEADERS += \
+    baseconstants.h \
     delayedaction.h \
     fileutils.h \
     ConfigFile.h \

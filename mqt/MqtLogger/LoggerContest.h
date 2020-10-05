@@ -18,6 +18,8 @@
 #include "PubSubValue.h"
 #include "contest.h"
 
+enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+
 class DisplayContestContact;
 struct StanzaPos
 {
