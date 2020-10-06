@@ -57,9 +57,9 @@ static Locator nullLoc;
 
 static void addCall(const Callsign &c, const Locator &l)
 {
-    if (c.fullCall.getValue() != "..." && c.valRes == CS_OK && (l.valRes == LOC_OK || l.valRes == LOC_PARTIAL) )
+    if (c.fullCall.getValue() != "..." && c.getValRes() == CS_OK && (l.getValRes() == LOC_OK || l.getValRes() == LOC_PARTIAL) )
     {
-        if (GridCallMap[c.realCall].valRes != LOC_OK)
+        if (GridCallMap[c.realCall].getValRes() != LOC_OK)
             GridCallMap[c.realCall] = l;
     }
 }
@@ -126,7 +126,7 @@ bool decodeMessage::checkAsContact()
     scc.frequency = cc->getTxFreqBand(Frequency(), cb);
 
     scc.checkScreenContact();
-    csret = scc.cs.valRes;
+    csret = scc.cs.getValRes();
     if (scc.screenQSOValid)
     {
         scc.score();
@@ -149,27 +149,20 @@ bool decodeMessage::checkAsContact()
 }
 void decodeMessage::validate()
 {
-    fromCall.validate();
-    toCall.validate();
-    fromGrid.validate();
-
     if (fromCall.fullCall.getValue() == "...")
     {
-        fromCall.valRes = CS_OK;
+        fromCall.clearValRes();
     }
     if (toCall.fullCall.getValue() == "...")
     {
-        toCall.valRes = CS_OK;
+        toCall.clearValRes();
     }
 }
 
 void WsjtxDecode::setMyCallGrid(const QString &c, const QString &l)
 {
     myCall = Callsign(c);
-    myCall.validate();
-
     myGrid = Locator(l);
-    myGrid.validate();
 
     addCall(myCall, myGrid);
 }
@@ -360,10 +353,9 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         //<PA9XYZ> <G4ABC> 570123 IO91NP
 
         dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.toCall.validate();
         if (dc.toCall.fullCall.getValue() == "...")
         {
-            dc.toCall.valRes = CS_OK;
+            dc.toCall.setValRes(CS_OK);
         }
 
 
@@ -420,11 +412,11 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
     }
 
-    if (dc.fromCall.valRes == CS_OK && dc.fromGrid.valRes != LOC_OK && dc.fromGrid.valRes != LOC_PARTIAL)
+    if (dc.fromCall.getValRes() == CS_OK && dc.fromGrid.getValRes() != LOC_OK && dc.fromGrid.getValRes() != LOC_PARTIAL)
     {
         dc.fromGrid = WsjtGetCallLoc(dc.fromCall);
     }
-    if (dc.toCall.valRes == CS_OK)
+    if (dc.toCall.getValRes() == CS_OK)
     {
         // we never have toGrid
         dc.toGrid = WsjtGetCallLoc(dc.toCall);

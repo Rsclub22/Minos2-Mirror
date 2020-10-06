@@ -55,8 +55,8 @@ public:
     void populateDxCall(const QString dxCall_)
     {
         dxCall = dxCall_.trimmed();
-        dx_Call = dxCall_;
-        callValidateCode = dx_Call.validate();
+        dx_Call = Callsign(dxCall_);
+        callValidateCode = dx_Call.getValRes();
     }
 
     Callsign getDx_Call() const {return dx_Call;}

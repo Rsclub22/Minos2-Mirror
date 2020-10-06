@@ -292,7 +292,7 @@ void ContestDetails::setDetails(  )
 
       // STL version of strupr
       call = call.toUpper();
-      contest->mycall.fullCall.setValue( call );
+      contest->mycall = Callsign( call );
    }
    ui->CallsignEdit->setText(call);
 
@@ -331,7 +331,7 @@ void ContestDetails::setDetails(  )
    {
       QString temp;
       contest->QTHBundle.getStringProfile( eqpLocator, temp );
-      contest->myloc.loc.setValue( temp );
+      contest->myloc = Locator( temp );
       contest->validateLoc();
    }
    ui->LocatorEdit->setText(contest->myloc.loc.getValue().trimmed());
@@ -855,10 +855,8 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->BandComboBox->setStyleSheet("");
         }
 
-        contest->mycall.fullCall.setValue( ui->CallsignEdit->text() );
-        contest->mycall.valRes = CS_NOT_VALIDATED;
-        contest->mycall.validate();
-        if ( contest->mycall.valRes != CS_OK )
+        contest->mycall = Callsign( ui->CallsignEdit->text() );
+        if ( contest->mycall.getValRes() != CS_OK )
         {
             ui->CallsignEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -867,9 +865,8 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->CallsignEdit->setStyleSheet("");
         }
 
-        contest->myloc.loc.setValue( ui->LocatorEdit->text() );
-        contest->myloc.validate();
-        if ( contest->myloc.valRes != LOC_OK )
+        contest->myloc = Locator( ui->LocatorEdit->text() );
+        if ( contest->myloc.getValRes() != LOC_OK )
         {
             ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -942,19 +939,16 @@ QWidget * ContestDetails::getDetails( )
     }
     contest->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
 
-    contest->mycall.fullCall.setValue( ui->CallsignEdit->text() );
-    contest->mycall.valRes = CS_NOT_VALIDATED;
-    contest->mycall.validate();
-    if ( contest->mycall.valRes != CS_OK )
+    contest->mycall = Callsign( ui->CallsignEdit->text() );
+    if ( contest->mycall.getValRes() != CS_OK )
     {
         if (!nextD)
         {
             nextD = ui->CallsignEdit;
         }
     }
-    contest->myloc.loc.setValue( ui->LocatorEdit->text() );
-    contest->myloc.validate();
-    if ( contest->myloc.valRes != LOC_OK )
+    contest->myloc = Locator( ui->LocatorEdit->text() );
+    if ( contest->myloc.getValRes() != LOC_OK )
     {
         if (!nextD)
         {
@@ -1358,7 +1352,7 @@ void ContestDetails::on_CallsignEdit_editingFinished()
     if (ui->MainOpComboBox->currentText().isEmpty())
     {
        Callsign cs(ui->CallsignEdit->text());
-       cs.validate();
+
        ui->MainOpComboBox->addItem( ( cs.realCall ) );
        ui->MainOpComboBox->setCurrentText( cs.realCall);
     }

@@ -27,7 +27,6 @@ class Callsign
 
       QString realCall; // the actual calsign, stripped of decorations
       QString wpxPrefix;
-      int valRes;   // current validation result
 
       Callsign( );
       Callsign( const QString &orig );
@@ -43,7 +42,23 @@ class Callsign
 
       int validate( );
       bool isUK() const;
+
+      int getValRes() const
+      {
+          return valRes;
+      }
+      void setValRes(int c)
+      {
+          valRes = c;
+      }
+      void clearValRes()
+      {
+          valRes = CS_NOT_VALIDATED;
+      }
+
 private:
+      int valRes = CS_NOT_VALIDATED;   // current validation result
+
       bool isValidStructure();
       static bool isValidStructure( const QString &prefix,  const QString &number,  const QString &body );
 };

@@ -86,7 +86,7 @@ MultEntry::MultEntry( const QString &name, const QString &cloc ) : listOffset( -
    realName = name.trimmed();
 
    // set up central
-   central.loc.setValue( cloc.trimmed().left( 6 ) );
+   central = Locator( cloc.trimmed().left( 6 ) );
 }
 MultEntry::~MultEntry()
 {}

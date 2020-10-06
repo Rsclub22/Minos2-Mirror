@@ -83,12 +83,10 @@ DisplayContestContact::~DisplayContestContact()
 void DisplayContestContact::copyFromArg( ScreenContact &cct )
 {
    //   logSequence = cct.logSequence; // addContact or whatever will already have it correct
-   loc.loc.setValue( cct.loc.loc );
-   loc.validate();
+   loc = cct.loc;
    extraText.setValue( cct.extraText );
 
-   cs.fullCall.setValue( cct.cs.fullCall );
-   cs.validate();
+   cs = cct.cs;
 
    time.setValue( cct.time );
 
@@ -251,7 +249,7 @@ void DisplayContestContact::checkContact( bool inScan)
       unsigned long valp  = clp->validationPoint;
       if ( clp->DupSheet.checkCurDup( clp, getLogSequence(), valp, false ) )
       {
-         cs.valRes = ERR_DUPCS;
+         cs.setValRes(ERR_DUPCS);
          checkret = ERR_12;
       }
    }
@@ -583,7 +581,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                   brgbuff = tr("MAN");
                else
                {
-                  if ( loc.valRes == LOC_OK )
+                  if ( loc.getValRes() == LOC_OK )
                   {
                      if ( contest == curcon )
                      {
@@ -611,7 +609,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                      }
                   }
                   else
-                      if (loc.valRes == LOC_PARTIAL)
+                      if (loc.getValRes() == LOC_PARTIAL)
                       {
                           if ( contest == curcon )
                           {
@@ -659,7 +657,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
 					 if ( contest == curcon )
 					 {
 						// use the existing data
-						if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == clp ) )
+                        if ( ( cs.getValRes() == ERR_DUPCS ) && ( curcon == clp ) )
                            scorebuff = tr("DUP");
 						else
 						{
@@ -835,12 +833,18 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "serialTx", serials );
          mt->getStructArgMemberValue( "exchangeTx", contest->location );
          mt->getStructArgMemberValue( "modeRx", mode );
-         mt->getStructArgMemberValue( "callRx", cs.fullCall );
+         QString temp;
+         if (mt->getStructArgMemberValue( "callRx", cs.fullCall ))
+         {
+            cs = Callsign(temp);
+         }
          mt->getStructArgMemberValue( "rstRx", repr );
          mt->getStructArgMemberValue( "serialRx", serialr );
          mt->getStructArgMemberValue( "exchangeRx", extraText );
-         if ( mt->getStructArgMemberValue( "locRx", loc.loc ) )
-            loc.validate();
+         if ( mt->getStructArgMemberValue( "locRx", temp ) )
+         {
+            loc = Locator(temp);
+         }
          mt->getStructArgMemberValue( "commentsTx", comments );
          mt->getStructArgMemberValue( "commentsRx", comments );
 
@@ -848,12 +852,15 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "band", contest->contestBands );
          mt->getStructArgMemberValue( "currentBand", contest->currentBand );
          if (contest->currentBand.getValue().isEmpty())
+         {
              contest->currentMode = contest->contestBands;
+         }
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
-         QString temp;
-         mt->getStructArgMemberValue( "frequency", temp );
-         frequency.setValue( Frequency(temp) );
+         if (mt->getStructArgMemberValue( "frequency", temp ))
+         {
+            frequency.setValue( Frequency(temp) );
+         }
          mt->getStructArgMemberValue( "rotatorHeading", rotatorHeading );
          mt->getStructArgMemberValue( "rigName", rigName );
 
@@ -862,7 +869,9 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
 
          int maxct = serials.getValue().toInt();
          if ( maxct > contest->maxSerial )
+         {
             contest->maxSerial = maxct;
+         }
 
          contest->validationPoint = getLogSequence();
          checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history

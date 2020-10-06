@@ -953,7 +953,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
     {
 
         Callsign mcs(callsign);
-        mcs.validate();
+
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
             unsigned short cf = (*i).wt->contactFlags.getValue();
@@ -2142,7 +2142,7 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
         else
         {
             Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
-            spotCall.validate();
+
             if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
             {
                 return true;
@@ -2164,7 +2164,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
             Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
-            spotCall.validate();
+
             foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))

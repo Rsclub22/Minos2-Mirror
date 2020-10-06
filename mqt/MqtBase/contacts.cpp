@@ -236,7 +236,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
          else
          {
             // look at the contest dup
-            if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == contest ) )
+            if ( ( cs.getValRes() == ERR_DUPCS ) && ( curcon == contest ) )
                contactBuffs.scorebuff = tr("DUP");
          }
    }

@@ -121,14 +121,12 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 {
     logSequence = cct->getLogSequence();
     loc = cct->loc;
-    loc.validate();
     loc.loc.clearDirty();
 
     extraText = cct->extraText.getValue();
 
     cs = cct->cs;
     cs.fullCall.clearDirty();
-    cs.validate();
 
     time = cct->time;
     time.clearDirty();
@@ -172,14 +170,12 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 {
     //   logSequence = cct.logSequence; // don't copy between partial and screen contacts.
     loc = cct.loc;
-    loc.validate();
     loc.loc.clearDirty();
 
     extraText = cct.extraText;
 
     cs = cct.cs;
     cs.fullCall.clearDirty();
-    cs.validate();
 
     time = cct.time;
     time.clearDirty();
@@ -245,7 +241,7 @@ void ScreenContact::checkScreenContact( )
         unsigned long valp = clp->validationPoint;
         if ( clp->DupSheet.checkCurDup( this, valp, false ) )
         {
-            cs.valRes = ERR_DUPCS;
+            cs.setValRes( ERR_DUPCS);
             checkret = ERR_12;
         }
     }

@@ -15,11 +15,11 @@ void ContestDetailsTransferObject::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
-    if ( nloc.validate( ode, odn ) == LOC_OK )
+    nloc = Locator(myloc.loc.getValue().left(4) + "MM");
+    if ( nloc.getValRes() == LOC_OK )
     {
         locValid = true;
-        myloc.valRes = LOC_OK;
+        myloc.setValRes(LOC_OK);
     }
     else
         locValid = false;

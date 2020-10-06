@@ -13,10 +13,10 @@
 
 class Locator
 {
+      char valRes = LOC_NOT_VALIDATED;
    public:
       MinosStringItem<QString> loc;
 
-      mutable char valRes;
 
       Locator();
       Locator(const QString &);
@@ -27,7 +27,18 @@ class Locator
       char validate( double &lon, double &lat );
       Locator &operator =( const Locator& );
 
-
+    char getValRes() const
+    {
+        return valRes;
+    }
+    void setValRes(char vr)
+    {
+        valRes = vr;
+    }
+    void clearValRes()
+    {
+        valRes = LOC_NOT_VALIDATED;
+    }
 };
 
 #endif // LOCATOR_H

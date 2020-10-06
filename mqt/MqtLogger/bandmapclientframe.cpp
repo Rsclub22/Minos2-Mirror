@@ -1470,7 +1470,7 @@ void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
     {
 
         Callsign mcs(callsign);
-        mcs.validate();
+
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
             unsigned short cf = (*i).wt->contactFlags.getValue();

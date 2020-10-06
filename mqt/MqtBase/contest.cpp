@@ -314,13 +314,13 @@ void BaseContestLog::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
+    nloc = Locator(myloc.loc.getValue().left(4) + "MM");
     if ( nloc.validate( odec, odnc ) == LOC_OK )
     {
         cosodnc = cos( odnc );
         sinodnc = sin( odnc );
         locValid = true;
-        myloc.valRes = LOC_OK;
+        myloc.setValRes(LOC_OK);
     }
     else
         locValid = false;
@@ -346,7 +346,7 @@ void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) 
 //int *brg ;                      /* resulting bearing */
 
 {
-   if ( myloc.valRes != LOC_OK )
+   if ( myloc.getValRes() != LOC_OK )
    {
       dist = 1;
       brg = 0;
@@ -400,7 +400,7 @@ void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) 
 //int *brg ;                      /* resulting bearing */
 
 {
-   if ( myloc.valRes != LOC_OK )
+   if ( myloc.getValRes() != LOC_OK )
    {
       dist = 1;
       brg = 0;
@@ -703,7 +703,7 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
    if ( cct->contactFlags.getValue() & ( NON_SCORING | COMMENT_ONLY | LOCAL_COMMENT | DONT_PRINT ) )
       return ;
 
-   if ( cct->cs.valRes != CS_OK )
+   if ( cct->cs.getValRes() != CS_OK )
       return ;
 
    if ( ( !*bestDX ) || ( ( cct->contactScore.getValue() > ( *bestDX ) ->contactScore.getValue() ) ) )
@@ -809,14 +809,14 @@ void BaseContestLog::scanContest( )
 
       // check for duplicates; accumulate the current points score
 
-      nct->cs.valRes = CS_NOT_VALIDATED;
+      nct->cs.clearValRes();
       nct->cs.validate( );
 
       nct->bearing = -1;		// force a recalc
       nct->loc.validate();
 
       if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
-         nct->cs.valRes = ERR_DUPCS;
+         nct->cs.setValRes( ERR_DUPCS);
 
 
       nct->multCount = 0;
@@ -880,7 +880,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       {
          continue;
       }
-      if (nct->cs.valRes != CS_OK)
+      if (nct->cs.getValRes() != CS_OK)
       {
          continue;
       }
@@ -1046,7 +1046,7 @@ dupsheet::~dupsheet()
 bool dupsheet::checkCurDup(ScreenContact *nct, unsigned long valpseq, bool insert )
 {
    curdup.reset();
-   if ( nct->cs.valRes == CS_OK )
+   if ( nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = ctList.find(test);
@@ -1080,7 +1080,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
 {
    curdup.reset();
    QSharedPointer<BaseContact> nct = contest->pcontactAtSeq(nctseq);
-   if ( nct && nct->cs.valRes == CS_OK )
+   if ( nct && nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = ctList.find(test);
@@ -1246,15 +1246,23 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       else
          if ( methodName == "MinosLogQTH" )
          {
-            if ( mt->getStructArgMemberValue( "locator", myloc.loc ) )
+            QString temp;
+            if ( mt->getStructArgMemberValue( "locator", temp ) )
+            {
+                myloc = Locator(temp);
                validateLoc();
+            }
             mt->getStructArgMemberValue( "district", location );
             mt->getStructArgMemberValue( "location", location ); // doubled up...
          }
          else
             if ( methodName == "MinosLogEntry" )
             {
-               mt->getStructArgMemberValue( "call", mycall.fullCall );
+                QString temp;
+               if (mt->getStructArgMemberValue( "call", temp ))
+               {
+                   mycall = Callsign(temp);
+               }
             }
             else
                if ( methodName == "MinosLogStation" )

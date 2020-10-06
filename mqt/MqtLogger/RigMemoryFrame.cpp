@@ -416,7 +416,6 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               if ( m.callsign != memDefData::DEFAULT_CALLSIGN)
               {
                   Callsign mcs(m.callsign);
-                  mcs.validate();
 
                   for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
                   {
@@ -613,7 +612,6 @@ void RigMemoryFrame::clearWorkedActionSelected()
         if ( m.callsign != memDefData::DEFAULT_CALLSIGN)
         {
             Callsign mcs(m.callsign);
-            mcs.validate();
 
             for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
             {

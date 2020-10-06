@@ -261,14 +261,12 @@ bool reg1test::parseHeader(QString line )
       {
          //PCall=G4RFR/P
          ct->mycall = Callsign( a[ 1 ].toUpper() );
-         ct->mycall.valRes = CS_NOT_VALIDATED;
-         ct->mycall.validate();
       }
       else
          if ( code == "PWWLO" )
          {
             //PWWLo=IO80ST
-            ct->myloc.loc.setValue( a[ 1 ] );
+            ct->myloc = Locator( a[ 1 ] );
             ct->validateLoc();
          }
          else
@@ -543,7 +541,6 @@ bool reg1test::parseQSO( QString line )
       aqso->time.setDate( a[ 0 ], DTGReg1Test );
       aqso->time.setTime( a[ 1 ], DTGReg1Test );
       aqso->cs = Callsign( a[ 2 ].toUpper() );
-      aqso->cs.valRes = CS_NOT_VALIDATED;
       // a[3] mode
       aqso->reps.setValue( a[ 4 ] );
       aqso->serials.setValue( a[ 5 ] ); // not string, int
@@ -555,9 +552,8 @@ bool reg1test::parseQSO( QString line )
       aqso->repr.setValue( a[ 6 ] );
       aqso->serialr.setValue( a[ 7 ] ); // not string, int
       aqso->extraText.setValue( a[ 8 ] );     // or district code if postcode mults
-      aqso->loc.loc.setValue( a[ 9 ] );
+      aqso->loc = Locator( a[ 9 ] );
 
-      aqso->loc.valRes = LOC_NOT_VALIDATED;
       aqso->contactScore.setValue( a[ 10 ].toInt() );
 
       if ( a[ 10 ].toInt() == 0 || QString::compare( a[ 14 ], "D", Qt::CaseInsensitive ) == 0 )

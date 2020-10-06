@@ -4,13 +4,15 @@
 
 #include "callsign.h"
 
-Callsign::Callsign( ) : valRes( CS_NOT_VALIDATED )
+Callsign::Callsign( )
 {
     fullCall.setValue( "" );
 }
-Callsign::Callsign(const QString &pcs ) : valRes( CS_NOT_VALIDATED )
+Callsign::Callsign(const QString &pcs )
 {
    fullCall.setValue( pcs );
+   valRes = LOC_NOT_VALIDATED;
+   validate();
 }
 // default versions are good enough for now!
 //callsign::callsign(const callsign&)

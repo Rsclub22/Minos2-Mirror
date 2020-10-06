@@ -1,13 +1,14 @@
 #include "base_pch.h"
 #include "locator.h"
 
-Locator::Locator( ) : valRes( ERR_NOLOC )
+Locator::Locator( )
 {
    loc.setInitialValue( "        " );
 }
-Locator::Locator(const QString & l): valRes(ERR_NOLOC)
+Locator::Locator(const QString & l)
 {
-    loc.setInitialValue(l);
+    loc.setValue(l);
+    validate();
 }
 // default versions are good enough for now!
 //locator::locator(const locator&)

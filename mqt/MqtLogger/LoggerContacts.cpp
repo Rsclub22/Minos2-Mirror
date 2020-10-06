@@ -75,7 +75,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
          exp_buff = tr("No Score Claimed") + " " ;
       }
       else
-         if ( cs.valRes == ERR_DUPCS )
+         if ( cs.getValRes() == ERR_DUPCS )
          {
              contactBuffs.scorebuff = "0";
              exp_buff = tr("Duplicate") + " ";
@@ -391,7 +391,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
       sdest += 'N';
    sdest += ';';
 
-   if ( cs.valRes == ERR_DUPCS )
+   if ( cs.getValRes() == ERR_DUPCS )
       sdest += 'D';
 }
 static QString getCabrilloField(QString s, int len)
@@ -601,7 +601,7 @@ QString ContestContact::getADIFLine()
         temp = 0;
     }
     else
-        if ( cs.valRes == ERR_DUPCS )
+        if ( cs.getValRes() == ERR_DUPCS )
         {
             temp = 0;
         }
@@ -656,8 +656,8 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          // search for the country, district, locator multipliers as required
          // Add to the worked counts as required
 
-         cs.valRes = CS_NOT_VALIDATED;
-         loc.valRes = LOC_NOT_VALIDATED;
+         cs.clearValRes();
+         loc.clearValRes();
          loc.validate();
          checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
       }
@@ -773,7 +773,6 @@ bool ContestContact::GJVload( int diskBlock )
 
    buftostr( temp );
    cs = Callsign( temp.toUpper() );
-   cs.valRes = CS_NOT_VALIDATED;
 
    buftostr( temp );
    reps.setInitialValue( temp );
@@ -785,7 +784,7 @@ bool ContestContact::GJVload( int diskBlock )
    serialr.setInitialValue( temp );
    buftostr( temp );
    loc.loc.setInitialValue( temp );
-   loc.valRes = LOC_NOT_VALIDATED;
+   loc.clearValRes();
    buftostr( temp );
    extraText.setInitialValue( temp );
 

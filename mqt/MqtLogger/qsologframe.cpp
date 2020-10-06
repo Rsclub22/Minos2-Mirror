@@ -998,9 +998,7 @@ void QSOLogFrame::getScreenEntry()
    getScreenContactTime();
    getScreenRigData();
    getscreenRotatorData();
-   screenContact.cs.fullCall.setValue( ui->CallsignEdit->text().trimmed() );
-   screenContact.cs.valRes = CS_NOT_VALIDATED;
-   screenContact.cs.validate( );
+   screenContact.cs = Callsign( ui->CallsignEdit->text().trimmed() );
 
    screenContact.reps = ui->RSTTXEdit->text().trimmed();
    screenContact.serials = ui->SerTXEdit->text().trimmed();
@@ -1008,9 +1006,7 @@ void QSOLogFrame::getScreenEntry()
    screenContact.serialr = ui->SerRXEdit->text().trimmed();
 
    QString loc = ui->LocEdit->text().trimmed();
-   screenContact.loc.loc.setValue( loc );
-   screenContact.bearing = -1;		// force a recalc
-   screenContact.loc.validate();
+   screenContact.loc = Locator( loc );
 
    QString extra = ui->QTHEdit->text().trimmed();
    screenContact.extraText = extra;
@@ -1373,7 +1369,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 {
                     if ((*vcp) == csIl)
                     {
-                        if ( screenContact.cs.valRes == ERR_DUPCS)
+                        if ( screenContact.cs.getValRes() == ERR_DUPCS)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
@@ -1393,11 +1389,11 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                     else if ((*vcp) == locIl)
                     {
                         // leave as no error
-                        if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
+                        if (screenContact.loc.getValRes() == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
-                        else if (screenContact.loc.valRes != LOC_OK)
+                        else if (screenContact.loc.getValRes() != LOC_OK)
                         {
                             ss = ssLineEditFrRedBkWhite;
                         }
@@ -1592,7 +1588,7 @@ void QSOLogFrame::contactValid( )
    }
    // cs worked
 
-   vcct->cs.valRes = CS_NOT_VALIDATED;
+   vcct->cs.clearValRes();
 
    // we only validate this contact up to the validation point of the contest
    contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
@@ -1605,7 +1601,8 @@ void QSOLogFrame::contactValid( )
       {
          if ( contest->DupSheet.isCurDup( vcct ) )      // But vcct is screen contact... so it won't be curdup
          {
-            csret = vcct->cs.valRes = ERR_DUPCS;
+            vcct->cs.setValRes(ERR_DUPCS);
+            csret = ERR_DUPCS;
          }
       }
    }
@@ -2862,7 +2859,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
     getScreenEntry();
     calcLoc();
     validCall = true;
-    if (screenContact.cs.validate() != CS_OK)
+    if (screenContact.cs.getValRes() != CS_OK)
     {
         logData.callsign = screenContact.cs.fullCall.getValue();
         validCall = false;

@@ -182,8 +182,8 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     ct->sqth1.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->sqth2.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entSect.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->mycall.fullCall.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->myloc.loc.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->mycall = Callsign( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->myloc = Locator( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->location.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entTx.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->power.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
@@ -321,7 +321,7 @@ QString TEntryOptionsForm::doFileSave( )
             break;
         case EREG1TEST:
             defext = "edi";
-            ct->mycall.valRes = CS_NOT_VALIDATED;
+            ct->mycall.clearValRes();
             ct->mycall.validate( );
             filter =tr( "Region 1 EDI files (*.edi);;All Files (*.*);;") ;
             title = tr("Save contest in Region 1 EDI file format as...");
@@ -336,7 +336,7 @@ QString TEntryOptionsForm::doFileSave( )
         case ECABRILLO:
         {
             defext = "cbr";
-            ct->mycall.valRes = CS_NOT_VALIDATED;
+            ct->mycall.clearValRes();
             ct->mycall.validate( );
             filter =tr( "Cabrillo files (*.cbr);;All Files (*.*);;") ;
             title = tr("Save contest in Cabrillo file format as...");

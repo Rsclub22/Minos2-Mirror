@@ -144,7 +144,7 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
 
       case vtCallsign:
 
-        if (screenContact.cs.valRes == ERR_DUPCS)
+        if (screenContact.cs.getValRes() == ERR_DUPCS)
         {
             setError(ERR_12);
             return false;

@@ -38,7 +38,7 @@ void CallsignLineEdit::onTextChanged(const QString& callsign)
     if (!callsign.isEmpty())
     {
         Callsign cs(callsign);
-        if (cs.validate() != CS_OK)
+        if (cs.getValRes() != CS_OK)
         {
             callsignValid = false;
             showCallsignGoodBad(callsignValid);

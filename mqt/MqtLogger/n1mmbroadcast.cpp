@@ -185,7 +185,6 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
         QSharedPointer<BaseContact> tct(new BaseContact(c, true));
 
         tct->cs = Callsign(call);
-        tct->cs.validate();
 
         tct->ctryMult = findCtryPrefix( tct->cs );
 

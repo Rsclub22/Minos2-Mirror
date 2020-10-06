@@ -623,8 +623,8 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
         else
         {
             Locator loc;
-            loc.loc.setValue(m.locator);
-            loc.validate();
+            loc = Locator(m.locator);
+
             double lon = 0.0;
             double lat = 0.0;
 
@@ -793,7 +793,8 @@ bool LoggerContestLog::GJVload( )
    buftostr( name );
    buftostr( temp );
    mycall = Callsign( temp.toUpper() );
-   buftostr( myloc.loc );
+   buftostr( temp );
+   myloc = Locator(temp);
    buftostr( location );
 
    otherExchange.setValue( inyn() );
@@ -907,7 +908,7 @@ void LoggerContestLog::procUnknown(QSharedPointer<BaseContact> cct, writer &wr )
    QString lbuff;
 
    if ( cct->QSOValid
-        && !( ( cct->cs.valRes == ERR_DUPCS )
+        && !( ( cct->cs.getValRes() == ERR_DUPCS )
               || ( cct->contactFlags.getValue() & NON_SCORING )
               || ( cct->contactScore.getValue() <= 0 )
             )
@@ -1336,9 +1337,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            {
                               text = text.left(spos ).trimmed();
                            }
-                           mycall.fullCall.setValue( text.toUpper() );
-                           mycall.valRes = CS_NOT_VALIDATED;
-                           mycall.validate();
+                           mycall = Callsign( text.toUpper() );
 
                         }
                         else
@@ -1346,7 +1345,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc.loc.setValue( text.toUpper() );
+                              myloc = Locator( text.toUpper() );
                               validateLoc();
                            }
                            else
@@ -1406,7 +1405,6 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       bct->time.setTime( temp, DTGLOG );
       strcpysp( temp, lbuff.mid(21), 15 );
       bct->cs = Callsign( temp.toUpper() );
-      bct->cs.valRes = CS_NOT_VALIDATED;
       strcpysp( temp, lbuff.mid( 37 ), 3 );
       bct->reps.setValue( temp );
       strcpysp( temp, lbuff.mid( 41 ), 4 );
@@ -1431,7 +1429,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
 
       strcpysp( temp, lbuff.mid( 72 ), 6 );
       bct->loc.loc.setValue( temp );
-      bct->loc.valRes = LOC_NOT_VALIDATED;
+      bct->loc.clearValRes();
 
       //ct->comments = "";
 
