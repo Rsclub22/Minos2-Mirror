@@ -14,9 +14,9 @@
 #define DXSPOTDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "spotdata.h"
+//#include "spotdata.h"
 #include "clustercommon.h"
-
+#include "SpotDataParent.h"
 const int dxSpotColCount = 20;
 
 const int DataStoredRole = Qt::UserRole + 0;
@@ -51,12 +51,12 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
-    SpotData* rowData = nullptr;
+    SpotDataParent* rowData = nullptr;
     QSharedPointer<HtmlDelegate> delegate ;
 
 private:
 
-    QVector<SpotData*> dxSpotData;
+    QVector<ClusterSpotData*> dxSpotData;
 
 
 };
