@@ -31,7 +31,7 @@ class TSessionManager : public QDialog
 
     Ui::TSessionManager *ui;
 public:
-    explicit TSessionManager(TLogContainer *parent);
+    explicit TSessionManager(QWidget *parent);
     ~TSessionManager() override;
     QString currSession;
 
@@ -71,7 +71,6 @@ private:
     void showSession(int sess);
     void enableButtons();
 
-    TLogContainer *tlc;
     bool inShowSession;
     bool inShowSessions;
     SessionVector sessionList;

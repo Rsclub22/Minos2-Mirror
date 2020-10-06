@@ -62,7 +62,9 @@ public:
     }
     void setCaption( QString );
 
-    void getCurrSession();
+    QString getCurrSession();
+    void setCurrSessionName(QString sessionName);
+
     QStringList getSessions();
     void updateSessionActions();
     void closeSession();

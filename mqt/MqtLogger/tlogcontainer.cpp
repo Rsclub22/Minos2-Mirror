@@ -1719,9 +1719,7 @@ void TLogContainer::updateSessionActions()
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
-    getCurrSession();
-
-    preloadBundle.openSection(app ->currSession);
+    preloadBundle.openSection(getCurrSession());
 
     sessionsMenu->clear();
 
@@ -1899,7 +1897,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.endGroup();
     return ct;
 }
-void TLogContainer::getCurrSession()
+QString TLogContainer::getCurrSession()
 {
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
@@ -1912,8 +1910,22 @@ void TLogContainer::getCurrSession()
     {
         app ->currSession = app ->defaultSession;
     }
+    return app->currSession;
 }
+void TLogContainer::setCurrSessionName(QString sessionName)
+{
+    TContestApp *app = TContestApp::getContestApp();
+    SettingsBundle &preloadBundle = app ->logsPreloadBundle;
+    preloadBundle.openSection(app ->preloadsect);
 
+    preloadBundle.getStringProfile(eppDefSession, app ->defaultSession );
+    if (sessionName == app ->preloadsect)
+    {
+        sessionName = app ->defaultSession;
+    }
+
+    preloadBundle.setStringProfile(eppSession, sessionName);
+}
 void TLogContainer::preloadFiles( const QString &conarg )
 {
     // and here we want to pre-load lists and contests from the INI file
@@ -1924,9 +1936,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
-    getCurrSession();
-
-    preloadBundle.openSection(app ->currSession);
+    preloadBundle.openSection(getCurrSession());
 
     if (app ->currSession == app ->preloadsect)
     {

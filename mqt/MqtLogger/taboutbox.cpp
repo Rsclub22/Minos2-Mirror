@@ -1,6 +1,8 @@
 #include "base_pch.h"
 #include <QDesktopServices>
-
+#include "ContestApp.h"
+#include "tlogcontainer.h"
+#include "TSessionManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "taboutbox.h"
@@ -81,6 +83,10 @@ int TAboutBox::exec()
     {
         doStartup = false;
     }
+    else if (doStartup)
+    {
+        LogContainer->setCurrSessionName( ui->chooseSetCb->currentText());
+    }
     if ( !started && doStartup )
     {
        // auto start on first run, but only if we gave that option
@@ -133,6 +139,25 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     ui->ExitButton->setVisible(onStartup);
     ui->LoggerOnlyButton->setVisible(onStartup);
+    ui->SessionsFrame->setVisible(onStartup);
+
+    if (onStartup)
+    {
+        TContestApp *app = TContestApp::getContestApp();
+
+        // This sets app ->currSession which allows an incoming
+        // LanguageChange even to do things...
+
+        QString sess = LogContainer->getCurrSession();
+
+        // so clear it again!
+        app ->currSession.clear();
+
+        QStringList sessionlst = LogContainer->getSessions();
+        ui->chooseSetCb->addItems(sessionlst);
+        ui->chooseSetCb->setCurrentText(sess);
+
+    }
 
     if (  onStartup && !checkServerReady() )
     {
@@ -186,4 +211,19 @@ void TAboutBox::on_AppsButton_clicked()
 {
     StartConfig configBox( this, false);
     configBox.exec();
+}
+
+void TAboutBox::on_manageSets_clicked()
+{
+    LogContainer->setCurrSessionName(ui->chooseSetCb->currentText());
+    TSessionManager tsm(this);
+    tsm.exec();
+
+    ui->chooseSetCb->clear();
+
+    QString sess = LogContainer->getCurrSession();
+
+    QStringList sessionlst = LogContainer->getSessions();
+    ui->chooseSetCb->addItems(sessionlst);
+    ui->chooseSetCb->setCurrentText(sess);
 }

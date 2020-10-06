@@ -7,10 +7,9 @@
 #include "TSessionManager.h"
 #include "ui_TSessionManager.h"
 
-TSessionManager::TSessionManager(TLogContainer *parent) :
+TSessionManager::TSessionManager(QWidget *parent) :
     QDialog(parent)
   , ui(new Ui::TSessionManager)
-  , tlc(parent)
   , inShowSession(false)
   , inShowSessions(false)
 {
@@ -52,7 +51,7 @@ void TSessionManager::enableButtons()
 void TSessionManager::parseSessions()
 {
     TContestApp *app = TContestApp::getContestApp();
-    QStringList sessions = tlc->getSessions();
+    QStringList sessions = LogContainer->getSessions();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
     preloadBundle.startGroup();
@@ -267,7 +266,7 @@ void TSessionManager::on_AddEntryButton_clicked()
     //- need to put up a file selection dialog
     // AND we want it to be multiselect
 
-    QString InitialDir = tlc->getDefaultDirectory( false );
+    QString InitialDir = LogContainer->getDefaultDirectory( false );
 
     QFileInfo qf(InitialDir);
 

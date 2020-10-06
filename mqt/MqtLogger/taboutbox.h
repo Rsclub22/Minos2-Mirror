@@ -42,6 +42,7 @@ private slots:
 
     void on_AboutMemo_linkActivated(const QString &link);
     void on_AppsButton_clicked();
+    void on_manageSets_clicked();
 };
 
 #endif // TABOUTBOX_H
