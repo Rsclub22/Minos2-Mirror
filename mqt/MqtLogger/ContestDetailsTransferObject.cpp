@@ -16,6 +16,7 @@ void ContestDetailsTransferObject::validateLoc( )
 
     Locator nloc;
     nloc = Locator(myloc.loc.getValue().left(4) + "MM");
+    nloc.validate( ode, odn );
     if ( nloc.getValRes() == LOC_OK )
     {
         locValid = true;

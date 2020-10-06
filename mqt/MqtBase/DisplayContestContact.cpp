@@ -834,7 +834,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "exchangeTx", contest->location );
          mt->getStructArgMemberValue( "modeRx", mode );
          QString temp;
-         if (mt->getStructArgMemberValue( "callRx", cs.fullCall ))
+         if (mt->getStructArgMemberValue( "callRx", temp ))
          {
             cs = Callsign(temp);
          }

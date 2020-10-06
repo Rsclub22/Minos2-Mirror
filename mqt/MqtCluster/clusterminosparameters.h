@@ -1,13 +1,14 @@
-#ifndef KSTMINOSPARAMETERS_H
-#define KSTMINOSPARAMETERS_H
+#ifndef CLUSTERMINOSPARAMETERS_H
+#define CLUSTERMINOSPARAMETERS_H
+
 #include "base_pch.h"
 
-class KSTMinosParameters : public MinosParametersAdapter
+class ClusterMinosParameters : public MinosParametersAdapter
 {
    public:
-      KSTMinosParameters()
+      ClusterMinosParameters()
       {}
-      ~KSTMinosParameters() override
+      ~ClusterMinosParameters() override
       {}
       virtual bool getAllowLoc4() override;
       virtual bool getAllowLoc8() override;
@@ -15,4 +16,4 @@ class KSTMinosParameters : public MinosParametersAdapter
       virtual void mshowMessage(const QString &mess, QWidget* Owner = nullptr ) override;
 };
 
-#endif // KSTMINOSPARAMETERS_H
+#endif // CLUSTERMINOSPARAMETERS_H
