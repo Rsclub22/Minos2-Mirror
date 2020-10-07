@@ -920,18 +920,25 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->setPauseRigControlUpdatesFlag(true);
-        sendFreq.clear();
+        if (!rigFrameStartFlag) // don't do this at startup
+        {
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            tslf->setPauseRigControlUpdatesFlag(true);
+
+            sendFreq.clear();
+
+            delayedAction(this, [=]()
+            {
+               // NB a lambda function
+               clearPauseRigControlUpdatesFlag();
+            }, 2000);
+        }
+
 
         traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
         setRadioName(radNam, false);
 
-        delayedAction(this, [=]()
-        {
-           // NB a lambda function
-           clearPauseRigControlUpdatesFlag();
-        }, 2000);
+
 
 
 

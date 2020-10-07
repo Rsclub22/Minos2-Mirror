@@ -1707,7 +1707,10 @@ void TSingleLogFrame::updateFreq(QString f)
 
 void TSingleLogFrame::setPauseRigControlUpdatesFlag(bool status)
 {
-    pauseRigControlUpdates = status;
+    if (this == LogContainer->getCurrentLogFrame())
+    {
+            pauseRigControlUpdates = status;
+    }
 }
 
 void TSingleLogFrame::on_SetRitFreq(int f)
