@@ -46,7 +46,12 @@ fi
 mkdir ./minos-runtime
 
 cd ./minos-runtime
-
+if [ ! -d ~/runtime/Logs ]; then
+   mkdir ~/runtime/Logs
+fi
+if [ ! -d ~/runtime/Lists ]; then
+   mkdir ~/runtime/Lists
+fi
 mkdir Configuration
 mkdir Lists
 mkdir Logs
