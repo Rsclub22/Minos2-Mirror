@@ -288,7 +288,7 @@ private:
     bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
     bool checkDbRowForMatch(Frequency incomingVal, int row, const int colNum);
 
-    bool checkspotExists(SpotData *spotData);
+    bool checkspotExists(ClusterSpotData *spotData);
 
 
 private slots:

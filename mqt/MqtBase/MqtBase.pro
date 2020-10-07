@@ -30,7 +30,6 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
-    SpotDataParent.cpp \
     bandmapmarkerdetails.cpp \
     calcs.cpp \
     Calendar.cpp \
@@ -84,6 +83,7 @@ SOURCES += \
     StartConfig.cpp \
     TreeUtils.cpp \
     serialdata.cpp \
+    spotdatabase.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -104,7 +104,6 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
-    SpotDataParent.h \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
@@ -163,6 +162,7 @@ HEADERS += \
     StartConfig.h \
     TreeUtils.h \
     serialdata.h \
+    spotdatabase.h \
     validators.h \
     waitcursor.h \
     dxspotdatamodel.h \

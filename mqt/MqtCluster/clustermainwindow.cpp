@@ -28,7 +28,7 @@
 #include "ui_clustermainwindow.h"
 #include "latlong.h"
 
-#include "SpotDataParent.h"
+
 
 
 
@@ -922,7 +922,7 @@ void ClusterMainWindow::parseDX(const QString txt)
     buf = txt;
 
     int retCode = SPOT_OK;
-    SpotData newSpot;
+    ClusterSpotData newSpot;
     newSpot.clear();
 
     QString line;
@@ -964,12 +964,12 @@ void ClusterMainWindow::parseDX(const QString txt)
                     if (!qrzInfo.getGotAllData())
                     {
                         // still waiting
-                        trace(QString("ParseDx - waiting for qrzInfo for askcallsign = %1, spot callsign = %2").arg(askQraData.getAskCallsign()).arg(spotWaitingForQraFromNode.getDxCall()));
+                        trace(QString("ParseDx - waiting for qrzInfo for askcallsign = %1, spot callsign = %2").arg(askQraData.getAskCallsign()).arg(spotWaitingForQraFromNode.getDxCallStr()));
                     }
                     else
                     {
                         // got all the data
-                        trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode.getDxCall()));
+                        trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode.getDxCallStr()));
 
                         if (qrzInfo.getCall() == askQraData.getAskCallsign())
                         {
@@ -990,7 +990,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                                 trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
                                 // asking qrz via node didn't give qra, use prefix
                                 // let's lookup using prefix
-                                QString loc = getQraFromCallsignPrefix(newSpot.getDx_Call());
+                                QString loc = getQraFromCallsignPrefix(newSpot.getDxCallStr());
                                 trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
                                 newSpot.setDxLocator(loc);
                                 newSpot.setDxLocatorIsFromNode(true);
@@ -1028,11 +1028,12 @@ void ClusterMainWindow::parseDX(const QString txt)
 
 
 
-void ClusterMainWindow::processNewSpot(SpotData &newSpot)
+void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
 {
+
     trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                        .arg(newSpot.getDxCall()).arg(newSpot.getDxFreq()).arg(newSpot.getDxBandStr()).arg(newSpot.getDxBandMask()).arg(newSpot.getDxModeStr()).arg(newSpot.getDxModeMaskStr())
-                        .arg(newSpot.getSpotterCall()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
+                        .arg(newSpot.getDxCallStr()).arg(newSpot.getFreq().traceStr()).arg(newSpot.getBand()).arg(newSpot.getBandMask()).arg(newSpot.getMode()).arg(newSpot.getModeMask())
+                        .arg(newSpot.getSpotterCallStr()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
 
     qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
 
@@ -1045,25 +1046,25 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
         if (newSpot.getDxLocator().isEmpty())
         {
             // queue to ask Qrz for locator
-            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCall()));
+            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCallStr()));
             spotListNoQra.append(newSpot);
         }
         else
         {
-            if (currentUserCallsign != newSpot.getSpotterCall())
+            if (currentUserCallsign != newSpot.getSpotterCallStr())
             {
                 // send spot to clients if spotter isn't this station
-                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot.getDxCall()));
+                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot.getDxCallStr()));
                 sendSpotsToClientQueue.append(createSpotToSend(QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
-                                                               .arg(newSpot.getDxCall())
+                                                               .arg(newSpot.getDxCallStr())
                                                                .arg(newSpot.getDxLocator())
                                                                .arg(newSpot.getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")
-                                                               .arg(newSpot.getDxFreq())
-                                                               .arg(newSpot.getDxBandStr())
-                                                               .arg(newSpot.getDxBandMask())
-                                                               .arg(newSpot.getDxModeStr())
-                                                               .arg(newSpot.getDxModeMaskStr())
-                                                               .arg(newSpot.getSpotterCall())
+                                                               .arg(newSpot.getFreq().str())
+                                                               .arg(newSpot.getBand())
+                                                               .arg(newSpot.getBandMask())
+                                                               .arg(newSpot.getMode())
+                                                               .arg(newSpot.getModeMask())
+                                                               .arg(newSpot.getSpotterCallStr())
                                                                .arg(newSpot.getSpotterLocator())
                                                                .arg(newSpot.getSpotTime())
                                                                .arg(newSpot.getSpotDate())
@@ -1076,14 +1077,14 @@ void ClusterMainWindow::processNewSpot(SpotData &newSpot)
                 trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
             }
 
-            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCall()).arg(rxTime));
-            spotsList.append(new SpotData(newSpot));
+            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(rxTime));
+            spotsList.append(new ClusterSpotData(newSpot));
 
         }
     }
     else
     {
-        trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot.getDxCall()).arg(timeToLive/60));
+        trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot.getDxCallStr()).arg(timeToLive/60));
     }
 
 
@@ -1099,10 +1100,10 @@ void ClusterMainWindow::handAskQraTimer()
 
            spotWaitingForQraFromNode = spotListNoQra.first();
            spotListNoQra.removeFirst();
-           trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode.getDxCall()));
+           trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode.getDxCallStr()));
 
            // use call to get QRA from node QRZ command
-           askQraData.setAskCallsign(spotWaitingForQraFromNode.getDx_Call().realCall);
+           askQraData.setAskCallsign(spotWaitingForQraFromNode.getDxCall().realCall);
            // flag we are asking QRZ
            trace(QString("Get QRA from node with QRA command, callsign = %1").arg(askQraData.getAskCallsign()));
            askQraData.setAskQrz(true);
@@ -1264,7 +1265,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
 
 
 
-int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
+int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSpot)
 {
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
@@ -1280,35 +1281,37 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
     {
         QString f = dxMsg[0] + "00";
         f.remove('.');
-        newSpot.setDxFreq(Frequency(f).convertFreqStrDisp());
+        newSpot.setFreq(f);
         QString dxBandStr;
         QString dxBandMask;
-        getBand(bands, newSpot.getDxFreq(), dxBandStr, dxBandMask);
-        newSpot.setDxBandStr(dxBandStr);
-        newSpot.setDxBandMask(dxBandMask);
+        getBand(bands, newSpot.getFreq().str(), dxBandStr, dxBandMask);
+        newSpot.setBand(dxBandStr);
+        newSpot.setBandMask(dxBandMask);
 
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
+            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot.getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
         QString dxModeMask;
-        getMode(modeBandPlan, newSpot.getDxFreq(), dxBandStr, dxModeStr, dxModeMask);
-        newSpot.setDxModeStr(dxModeStr);
-        newSpot.setDxModeMaskStr(dxModeMask);
+        getMode(modeBandPlan, newSpot.getFreq().str(), dxBandStr, dxModeStr, dxModeMask);
+        newSpot.setMode(dxModeStr);
+        newSpot.setModeMask(dxModeMask);
 
-        newSpot.populateDxCall(dxMsg[1]); // populate QString dxCall and Callsign dx_Call
-        newSpot.setSpotDate(dxMsg[2]);
-        newSpot.setSpotTime(dxMsg[3].remove('Z'));
-        newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
+        newSpot.setDxCall(dxMsg[1]);
+        //newSpot.setSpotDate(dxMsg[2]);
+        //newSpot.setSpotTime(dxMsg[3].remove('Z'));
+        //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
+        newSpot.setSpotDateTime(getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z')));
+
         if (! newSpot.getSpotDateTime().isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
         }
-        QString sptCall = newSpot.getSpotterCall();
+        QString sptCall = newSpot.getSpotterCallStr();
         sptCall.prepend('<').append('>');
         // reassemble comment
         QString spotComment;
@@ -1335,8 +1338,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
         QString commentMode;
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
-            newSpot.setDxModeStr(commentMode);
-            newSpot.setDxModeMaskStr(QString::number(commentModeNum));
+            newSpot.setMode(commentMode);
+            newSpot.setModeMask(QString::number(commentModeNum));
         }
 
         return SPOT_OK;
@@ -1347,7 +1350,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, SpotData &newSpot)
 }
 
 
-bool ClusterMainWindow::checkShowDxMsg(const QString txt, SpotData &newSpot)
+bool ClusterMainWindow::checkShowDxMsg(const QString txt, ClusterSpotData &newSpot)
 {
 
     QChar sep1 = '<';
@@ -1634,7 +1637,7 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
 }
 
 
-int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
+int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
 {
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
@@ -1651,44 +1654,49 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         f.remove('.');
 
         //dxFreq = convertKhzToMhz(dxMsg[3]);
-        newSpot.setDxFreq(Frequency(f).convertFreqStrDisp());
+        newSpot.setFreq(f);
 
 
         QString dxBandStr;
         QString dxBandMask;
-        getBand(bands, newSpot.getDxFreq(), dxBandStr, dxBandMask);
-        newSpot.setDxBandStr(dxBandStr);
-        newSpot.setDxBandMask(dxBandMask);
+        getBand(bands, newSpot.getFreq().str(), dxBandStr, dxBandMask);
+        newSpot.setBand(dxBandStr);
+        newSpot.setBandMask(dxBandMask);
 
         if (dxBandStr.isEmpty() && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getDxFreq()));
+            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getFreq().traceStr()));
 
             return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
         QString dxModeMask;
-        getMode(modeBandPlan, newSpot.getDxFreq(), newSpot.getDxBandStr(), dxModeStr, dxModeMask);
-        newSpot.setDxModeStr(dxModeStr);
-        newSpot.setDxModeMaskStr(dxModeMask);
+        getMode(modeBandPlan, newSpot.getFreq().str(), newSpot.getBand(), dxModeStr, dxModeMask);
+        newSpot.setMode(dxModeStr);
+        newSpot.setModeMask(dxModeMask);
 
-        newSpot.populateDxCall(dxMsg[4]); // populate QString dxCall and Callsign dx_Call
+        newSpot.setDxCall(dxMsg[4]);
+
         // find time
+
+        QString time;
         for (int i = 4; i < dxMsg.count(); i++)
         {
             QRegularExpression re("\\d\\d\\d\\dZ");
             QRegularExpressionMatch match = re.match(dxMsg[i]);
             if (match.hasMatch())
             {
-                newSpot.setSpotTime(dxMsg[i].remove('Z'));
+                //newSpot.setSpotTime(dxMsg[i].remove('Z'));
+                time = dxMsg[i].remove('Z');
                 timePos = i;
                 break;
             }
         }
 
-        if (newSpot.getSpotTime() == "")
+        //if (newSpot.getSpotTime() == "")
+        if (time == "")
         {
             //error
             return NO_SPOT_TIME * -1;
@@ -1696,8 +1704,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
 
         // get current date
         QDate d = QDate::currentDate();
-        newSpot.setSpotDate(d.toString("dd-MMM-yyyy"));
-        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
+        //newSpot.setSpotDate(d.toString("dd-MMM-yyyy"));
+        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), time));
         if (!newSpot.getSpotDateTime().isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
@@ -1740,8 +1748,8 @@ int ClusterMainWindow::upackDxSpot(QString txt, SpotData &newSpot)
         QString commentMode;
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
-            newSpot.setDxModeStr(commentMode);
-            newSpot.setDxModeMaskStr(QString::number(commentModeNum));
+            newSpot.setMode(commentMode);
+            newSpot.setModeMask(QString::number(commentModeNum));
         }
 
         return SPOT_OK;

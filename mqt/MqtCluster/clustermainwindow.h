@@ -412,7 +412,7 @@ private:
 
     SetupDialog *setupCluster;
 
-    QVector<SpotData*> spotsList;
+    QVector<ClusterSpotData*> spotsList;
     //QTimer* getSpotsTimer;
 
 
@@ -443,7 +443,7 @@ private:
     QStringList dxMsg;
 
 
-    SpotData curSpot;
+    ClusterSpotData curSpot;
 
     ClusterQRZDetails qrzInfo;
 
@@ -451,8 +451,8 @@ private:
 
 
 
-    SpotData spotWaitingForQraFromNode;
-    QVector<SpotData> spotListNoQra;
+    ClusterSpotData spotWaitingForQraFromNode;
+    QVector<ClusterSpotData> spotListNoQra;
     QTimer *askQraTimer;
     QTimer *askQraTimeout;
 
@@ -476,7 +476,7 @@ private:
 
 
     int txText(QString msg);
-    int upackDxSpot(QString txt, SpotData &newSpot);
+    int upackDxSpot(QString txt, ClusterSpotData &newSpot);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
@@ -509,8 +509,8 @@ private:
     void echoMsg(QString msg);
     QString createSpotToSend(QString spot);
     QString createStatusToSend(QString status);
-    int upackShowDxSpot(const QString txt, SpotData &newSpot);
-    bool checkShowDxMsg(const QString txt, SpotData &newSpot);
+    int upackShowDxSpot(const QString txt, ClusterSpotData &newSpot);
+    bool checkShowDxMsg(const QString txt, ClusterSpotData &newSpot);
 
     void handleStartFile();
     void handleEndFile();
@@ -545,7 +545,7 @@ private:
 
 
 
-    void processNewSpot(SpotData &newSpot);
+    void processNewSpot(const ClusterSpotData &newSpot);
     int getQrzReply(QString &line);
 
 

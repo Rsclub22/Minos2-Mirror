@@ -829,16 +829,16 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                                                spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
 */
 
-            SpotData* newSpot = new SpotData();
+            ClusterSpotData* newSpot = new ClusterSpotData();
 
             newSpot->setRxTime(rxTime);
             newSpot->setSpotTime(spotlist[SPOTTIME]);
             newSpot->setSpotDate(spotlist[SPOTDATE]);
-            newSpot->setDxFreq(spotlist[DXFREQ]);
-            newSpot->setDxBandStr(spotlist[DXBANDSTR]);
-            newSpot->setDxBandMask(spotlist[DXBANDMASK]);
-            newSpot->setDxModeStr(spotlist[DXMODESTR]);
-            newSpot->setDxModeMaskStr(spotlist[DXMODEMASK]);
+            newSpot->setFreq(spotlist[DXFREQ]);
+            newSpot->setBand(spotlist[DXBANDSTR]);
+            newSpot->setBandMask(spotlist[DXBANDMASK]);
+            newSpot->setMode(spotlist[DXMODESTR]);
+            newSpot->setModeMask(spotlist[DXMODEMASK]);
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
@@ -873,13 +873,14 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 }
 
 
-bool ClusterClientFrame::checkspotExists(SpotData *spotData)
+bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
 {
     if (dxSpotDataModel->rowCount() == 0)
     {
         return false;
     }
 
+/* fix for new ClusterSpotData class **********************************************
     for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
     {
         if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
@@ -898,7 +899,7 @@ bool ClusterClientFrame::checkspotExists(SpotData *spotData)
 
 
     }
-
+*/
     return false;
 }
 
