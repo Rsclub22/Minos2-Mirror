@@ -3,9 +3,9 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Cluster Server
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2020
 //
-///
+//
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -1312,11 +1312,24 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
         //newSpot.setSpotTime(dxMsg[3].remove('Z'));
         //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
 
+        // get date/time
+        QDate d;
 
-        QDateTime dt = getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z'));
-        //newSpot.setSpotDateTime(getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z')));
+        QStringList dl = dxMsg[2].split('-');
 
-        if (! newSpot.getSpotDateTime().isValid())
+        if (dl.count() == 3)
+        {
+            d = QDate(dl[2].toInt(), dl[1].toInt(), dl[0].toInt());
+        }
+
+        dxMsg[3] = dxMsg[3].remove('Z');
+        dxMsg[3].prepend('0');
+        dxMsg[3] = dxMsg[3].right(2);
+        int sec = QTime::currentTime().second();
+        QTime t = QTime(dxMsg[3].left(1).toInt(), dxMsg[3].right(1).toInt(), sec);
+        QDateTime dt = QDateTime(d, t, Qt::UTC);
+
+        if (! dt.isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
         }
@@ -1716,15 +1729,17 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
 
         // get current date
         QDate d = QDate::currentDate();
-        QTime t = QTime(time.left(2).toInt(), time.right(2).toInt());
+        int sec = QTime::currentTime().second();
+        QTime t = QTime(time.left(2).toInt(), time.right(2).toInt(), sec);
+        QDateTime dt = QDateTime(d, t, Qt::UTC);
 
-        QDateTime dt = QDateTime(d, t);
         if (!dt.isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
         }
 
         newSpot.setSpotDateTime(dt);
+
 
         // look for locator
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range
