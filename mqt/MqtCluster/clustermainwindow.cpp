@@ -241,6 +241,7 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
+    dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
 
 
 
@@ -990,7 +991,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                                 trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
                                 // asking qrz via node didn't give qra, use prefix
                                 // let's lookup using prefix
-                                QString loc = getQraFromCallsignPrefix(newSpot.getDxCallStr());
+                                QString loc = getQraFromCallsignPrefix(newSpot.getDxCall());
                                 trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
                                 newSpot.setDxLocator(loc);
                                 newSpot.setDxLocatorIsFromNode(true);
