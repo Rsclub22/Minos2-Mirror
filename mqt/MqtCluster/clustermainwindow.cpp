@@ -1322,12 +1322,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
             d = QDate(dl[2].toInt(), dl[1].toInt(), dl[0].toInt());
         }
 
-        dxMsg[3] = dxMsg[3].remove('Z');
-        dxMsg[3].prepend('0');
-        dxMsg[3] = dxMsg[3].right(2);
-        int sec = QTime::currentTime().second();
-        QTime t = QTime(dxMsg[3].left(1).toInt(), dxMsg[3].right(1).toInt(), sec);
-        QDateTime dt = QDateTime(d, t, Qt::UTC);
+        QDateTime dt = getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z'));
 
         if (! dt.isValid())
         {
@@ -1727,11 +1722,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
             return NO_SPOT_TIME * -1;
         }
 
-        // get current date
         QDate d = QDate::currentDate();
-        int sec = QTime::currentTime().second();
-        QTime t = QTime(time.left(2).toInt(), time.right(2).toInt(), sec);
-        QDateTime dt = QDateTime(d, t, Qt::UTC);
+        QString spotDate = d.toString("dd-MMM-yyyy");
+
+        QDateTime dt = getSpotDateTime(spotDate, time);
 
         if (!dt.isValid())
         {
