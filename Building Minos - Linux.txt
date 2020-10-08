@@ -80,6 +80,11 @@ git pull
 make
 sudo make install
 
+The first time that you build and install hamlib, an extra stage is required
+so that the built libraries can be found:
+
+sudo ldconfig
+
 ===================== Building Minos =========================================== 
 Then you can start building Minos. 
 
