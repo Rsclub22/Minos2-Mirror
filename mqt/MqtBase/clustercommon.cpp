@@ -81,6 +81,9 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     {
         t = "0" + t;
     }
+
+    QTime tm = QTime(spotTime.left(2).toInt(), spotTime.right(2).toInt(), t.toInt());
+
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
@@ -88,9 +91,10 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
         dl[0] = dl[0].right(2);
 
         QString time = dl[2] + dl[1] + dl[0] + spotTime + t;
+        QDate date = QDate(dl[2].toInt(), dl[1].toInt(), dl[0].toInt() );
         trace(QString("getSpotDateTime: spotTime is %1").arg(time));
-        dt = QDateTime::fromString(time, "yyyyMMMddHHmmss" );
-        dt.setTimeSpec(Qt::UTC);
+        dt = QDateTime(date, tm, Qt::UTC);
+
 
     }
 

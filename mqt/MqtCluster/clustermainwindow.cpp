@@ -1066,8 +1066,10 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
                                                                .arg(newSpot.getModeMask())
                                                                .arg(newSpot.getSpotterCallStr())
                                                                .arg(newSpot.getSpotterLocator())
-                                                               .arg(newSpot.getSpotTime())
-                                                               .arg(newSpot.getSpotDate())
+                                                               //.arg(newSpot.getSpotTime())
+                                                               //.arg(newSpot.getSpotDate())
+                                                               .arg(newSpot.getSpotDateTime().toString("hh.mm"))
+                                                               .arg(newSpot.getSpotDateTime().toString("dd.MM.yyyy"))
                                                                .arg(newSpot.getSpotComment())
                                                                .arg(newSpot.getDxPropMode())
                                                                .arg(setupCluster->getTimeToLive())));
@@ -1258,6 +1260,10 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
     }
 
     QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( prefix );
+    if (!syn)
+    {
+        return "";
+    }
     return syn.data()->country.data()->central.loc.getValue();
 }
 
@@ -1305,12 +1311,18 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
         //newSpot.setSpotDate(dxMsg[2]);
         //newSpot.setSpotTime(dxMsg[3].remove('Z'));
         //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
-        newSpot.setSpotDateTime(getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z')));
+
+
+        QDateTime dt = getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z'));
+        //newSpot.setSpotDateTime(getSpotDateTime(dxMsg[2], dxMsg[3].remove('Z')));
 
         if (! newSpot.getSpotDateTime().isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
         }
+
+        newSpot.setSpotDateTime(dt);
+
         QString sptCall = newSpot.getSpotterCallStr();
         sptCall.prepend('<').append('>');
         // reassemble comment
@@ -1704,12 +1716,15 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
 
         // get current date
         QDate d = QDate::currentDate();
-        //newSpot.setSpotDate(d.toString("dd-MMM-yyyy"));
-        newSpot.setSpotDateTime( getSpotDateTime(newSpot.getSpotDate(), time));
-        if (!newSpot.getSpotDateTime().isValid())
+        QTime t = QTime(time.left(2).toInt(), time.right(2).toInt());
+
+        QDateTime dt = QDateTime(d, t);
+        if (!dt.isValid())
         {
            return SPOT_DATETIME_INVALID * -1;
         }
+
+        newSpot.setSpotDateTime(dt);
 
         // look for locator
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range
