@@ -851,7 +851,7 @@ void BandmapView::clearSelectedSpotData()
 
 
 
-void BandmapView::clearSpotData(BandmapData &selectedSpot)
+void BandmapView::clearSpotData(BandmapSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
     selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
@@ -886,7 +886,7 @@ void BandmapView::clearListOfMarkers()
 }
 
 
-void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapData &selectedSpot)
+void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
 

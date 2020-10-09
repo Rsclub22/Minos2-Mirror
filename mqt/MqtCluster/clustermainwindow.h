@@ -534,8 +534,6 @@ private:
     bool lookforModeInComment(const QString &spotComment, int &commnetModeNum, QString &commentMode);
 
 
-    QString getSpotFromDisplayDb(int row);
-
     void handleResendSpotToClientsCmds();
 
     void getSpotsFromSendToClientQueue();
@@ -556,6 +554,7 @@ private:
 
 
     QString getQraFromCallsignPrefix(Callsign prefix);
+    QString assembleSpotMsgToSendToClients(const ClusterSpotData *spotData, const QString timeToLive);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

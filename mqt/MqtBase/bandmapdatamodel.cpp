@@ -67,7 +67,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        QSharedPointer<BandmapData> bandmapSpot = bandmapData.at(row);
+        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.at(row);
 
         QString d;
         switch (col)
@@ -76,7 +76,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getSpotTime();
                 break;
             case FREQ_COL_NUM:
-                d = bandmapSpot->getDxFreq().convertFreqStrDisp();
+                d = bandmapSpot->getFreq().convertFreqStrDisp();
                 break;
             case DXBANDSTR_COL_NUM:
                 d = bandmapSpot->getDxBand();
@@ -162,7 +162,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
     if (role == BMP_DataStoredRole)
     {
 
-        QSharedPointer<BandmapData> bandmapSpot = bandmapData.at(index.row());
+        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -265,7 +265,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
     if (index.isValid() && role == BMP_DataStoredRole)
     {
 
-        QSharedPointer<BandmapData> bandmapSpot = bandmapData.value(row);
+        QSharedPointer<BandmapSpotData> bandmapSpot = bandmapData.value(row);
 
         switch (col)
         {
@@ -372,13 +372,13 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
         bandmapData.insert(row , rowData);
     }
     std::sort(bandmapData.begin(), bandmapData.end(),
-              [=](const QSharedPointer<BandmapData> a, const QSharedPointer<BandmapData> b)->bool
+              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
                 {
-                    if (a->getDxFreq() == b->getDxFreq())
+                    if (a->getFreq() == b->getFreq())
                     {
                         return a->getDxCall() < b->getDxCall();
                     }
-                    return a->getDxFreq() < b->getDxFreq();
+                    return a->getFreq() < b->getFreq();
                 }
     );
 
@@ -401,7 +401,7 @@ bool BandmapDataModel::removeRows(int _row, int count, const QModelIndex &parent
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        QSharedPointer<BandmapData> spotData = bandmapData[row];
+        QSharedPointer<BandmapSpotData> spotData = bandmapData[row];
         bandmapData.removeAt(row);
     }
     endRemoveRows();
@@ -417,7 +417,7 @@ bool BandmapDataModel::removeColumns(int column, int count, const QModelIndex &p
     return true;
 }
 
-QSharedPointer<BandmapData> BandmapDataModel::getBandmapDataRow(int row)
+QSharedPointer<BandmapSpotData> BandmapDataModel::getBandmapDataRow(int row)
 {
     return bandmapData[row];
 }
@@ -436,7 +436,7 @@ bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
 
-    QSharedPointer<BandmapData> spotData = cgm->getBandmapDataRow(sourceRow);
+    QSharedPointer<BandmapSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
 
 
     QString call = cgm->data(cgm->index(sourceRow, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();

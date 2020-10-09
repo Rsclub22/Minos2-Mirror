@@ -55,7 +55,8 @@ public:
     ClusterSpotData* rowData = nullptr;
     QSharedPointer<HtmlDelegate> delegate ;
 
-    int getCount(){return dxSpotData.count();}
+    // used to access all the data directly
+
     ClusterSpotData* getSpotData(int row){ return dxSpotData[row];}
 
 private:

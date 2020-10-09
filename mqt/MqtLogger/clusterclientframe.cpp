@@ -815,25 +815,14 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
-            spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            //spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
-
-/*
-            SpotData * spotData = new SpotData(rxTime, spotlist[SPOTTIME], spotlist[SPOTDATE],
-                                               spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
-                                               spotlist[DXMODESTR], spotlist[DXMODEMASK],
-                                               spotlist[DXCALL],
-                                               callWorked, spotlist[DXLOCATOR],
-                                               locWorked, distance,
-                                               bearing, spotlist[SPOTCALL],
-                                               spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
-*/
 
             ClusterSpotData* newSpot = new ClusterSpotData();
 
             newSpot->setRxTime(rxTime);
-            newSpot->setSpotTime(spotlist[SPOTTIME]);
-            newSpot->setSpotDate(spotlist[SPOTDATE]);
+            newSpot->setSpotDateTime(spotDateTime);
             newSpot->setFreq(spotlist[DXFREQ]);
             newSpot->setBand(spotlist[DXBANDSTR]);
             newSpot->setBandMask(spotlist[DXBANDMASK]);
@@ -880,26 +869,17 @@ bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
         return false;
     }
 
-/* fix for new ClusterSpotData class **********************************************
-    for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
+
+    for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
     {
-        if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
+        if (*dxSpotDataModel->getSpotData(i) == *spotData)
         {
-
-            if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getSpotterCall(), row, SPOTTER_CALL_COL_NUM))
-
-            {
-                return true;
-
-            }
+            trace(QString("Spot Call = %1, already in display, skip").arg(spotData->getDxCall().realCall));
+            return true;
         }
-
-
     }
-*/
+
+
     return false;
 }
 

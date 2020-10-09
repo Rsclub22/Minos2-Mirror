@@ -223,7 +223,7 @@ class BandmapSpotData: public SpotdataBase, public ClusterSpotDataBase
 {
 public:
     BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_);
-    BandmapSpotData(BandmapSpotData &sdp);
+    BandmapSpotData(const BandmapSpotData &sdp);
 
     bool operator ==(const BandmapSpotData &bsd) const;
     bool operator !=(const BandmapSpotData &bsd) const;

@@ -245,7 +245,7 @@ private:
     int mapViewHeight = 0;
 
     BandmapDataModel *bandmapDataModel;
-    BandmapData *bandmapData;
+    BandmapSpotData *bandmapData;
 
     QMenu* spotsMenu;
     QAction* markSpotAction;
@@ -275,7 +275,7 @@ private:
 
     //BandmapData actionMenuSelectedSpotData;
     //int actionMenuSelectedSpotDataRowNum;
-    BandmapData contextMenuSelectedSpotData;
+    BandmapSpotData contextMenuSelectedSpotData;
     int contextMenuSelectedSpotDataRowNum;
 
     bool purgeSpotFlag;

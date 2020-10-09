@@ -1111,7 +1111,8 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
 
-            spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            //spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));
@@ -1128,10 +1129,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
                                                     spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER));
 */
 
-            bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData());
+            bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData());
 
             bandmapDataModel->rowData->setRxTime(rxTime);
-            bandmapDataModel->rowData->setSpotTime(spotlist[SPOTTIME]);
+            bandmapDataModel->rowData->setSpotDateTime(spotDateTime);
             bandmapDataModel->rowData->setDxFreq(spotlist[DXFREQ]);
             bandmapDataModel->rowData->setDxBand(spotlist[DXBANDSTR]);
             bandmapDataModel->rowData->setDxBandMask(spotlist[DXBANDMASK]);
@@ -1275,7 +1276,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
                                             "", "", false, false, "", spot->getSpotType()));
 */
 
-    bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData());
+    bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData());
     bandmapDataModel->rowData->setRxTime(logTime);
     bandmapDataModel->rowData->setSpotTime(logTimeStr);
     bandmapDataModel->rowData->setDxFreq(spot->getFreq());

@@ -97,7 +97,6 @@ SOURCES += \
     bearinglineedit.cpp \
     callsigninputdialog.cpp \
     locatorinputdialog.cpp \
-    bandmapdata.cpp \
     bandmapdatamodel.cpp
 
 HEADERS += \
@@ -178,7 +177,6 @@ HEADERS += \
     bearinglineedit.h \
     callsigninputdialog.h \
     locatorinputdialog.h \
-    bandmapdata.h \
     bandmapdatamodel.h \
     bandmapcommon.h
 
