@@ -112,7 +112,7 @@ void RigFactory::populateComboRigList(QComboBox* comBox )
 bool RigFactory::checkOmniRigInstalled()
 {
 
-    QString fileName = RADIO_PATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings  config(fileName, QSettings::IniFormat);
 
     config.beginGroup("Omnirig");
