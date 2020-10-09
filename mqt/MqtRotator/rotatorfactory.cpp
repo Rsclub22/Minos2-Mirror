@@ -74,44 +74,45 @@ RotatorBase* RotatorFactory::createRotator(int rotatorId)
 bool RotatorFactory::checkPstRotatorInstalled()
 {
 
-    QString fileName = RADIO_PATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+    QString fileName = CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
     QSettings  config(fileName, QSettings::IniFormat);
 
     config.beginGroup("PSTRotator");
+
     QString pstRotatorFilePathx86 = config.value("pstRotatorPathx86", "C:/Program Files (x86)/PstRotator/").toString();
     QString pstRotatorFilePath = config.value("pstRotatorPath", "C:/Program Files/PstRotator/").toString();
-
-    QString pstRotatorFileName = config.value("pstRotatorExe", "PstRotator.exe").toString();
 
     QString pstRotatorAzFilePathx86 = config.value("pstRotatorAzPathx86", "C:/Program Files (x86)/PstRotatorAz/").toString();
     QString pstRotatorAzFilePath = config.value("pstRotatorAzPath", "C:/Program Files/PstRotatorAz/").toString();
 
+    QString pstRotatorExeFileName = config.value("pstRotatorExe", "PstRotator.exe").toString();
 
-    QString pstRotatorAzFileName = config.value("pstRotatorAzExe", "PstRotatorAz.exe").toString();
+    QString pstRotatorAzExeFileName = config.value("pstRotatorAzExe", "PstRotatorAz.exe").toString();
+
     config.endGroup();
 
-    QString pstFileNamex86 = pstRotatorFilePathx86 + pstRotatorFileName;
-    bool pstRotatorfileExistsx86;
+    // check x86 program files path
 
-    checkPstRotatorExists(pstFileNamex86, pstRotatorfileExistsx86);
+    bool pstRotatorExeExistsx86;
+    QString pstFileNamex86 = pstRotatorFilePathx86 + pstRotatorExeFileName;
+    checkPstRotatorExists(pstFileNamex86, pstRotatorExeExistsx86);
 
-    QString pstFileName = pstRotatorFilePath + pstRotatorFileName;
-    bool pstRotatorfileExists;
-
-    checkPstRotatorExists(pstFileName, pstRotatorfileExists);
-
-    QString pstAzFileNamex86 = pstRotatorAzFilePathx86 + pstRotatorAzFileName;
-    bool pstRotatorAzfileExistsx86;
-
-    checkPstRotatorExists(pstAzFileNamex86, pstRotatorAzfileExistsx86);
-
-    QString pstAzFileName = pstRotatorAzFilePath + pstRotatorAzFileName;
-    bool pstRotatorAzfileExists;
-
-    checkPstRotatorExists(pstAzFileName, pstRotatorAzfileExists);
+    QString pstAzFileNamex86 = pstRotatorAzFilePathx86 + pstRotatorAzExeFileName;
+    bool pstRotatorAzExeExistsx86;
+    checkPstRotatorExists(pstAzFileNamex86, pstRotatorAzExeExistsx86);
 
 
-    if (pstRotatorfileExistsx86 || pstRotatorfileExists || pstRotatorAzfileExistsx86 || pstRotatorAzfileExists)
+    // check program files path
+    bool pstRotatorExeExists;
+    QString pstFileName = pstRotatorFilePath + pstRotatorExeFileName;
+    checkPstRotatorExists(pstFileName, pstRotatorExeExists);
+
+    bool pstRotatorAzExeExists;
+    QString pstAzFileName = pstRotatorAzFilePath + pstRotatorAzExeFileName;
+    checkPstRotatorExists(pstAzFileName, pstRotatorAzExeExists);
+
+
+    if (pstRotatorExeExistsx86 || pstRotatorExeExists || pstRotatorAzExeExistsx86 || pstRotatorAzExeExists)
     {
         return true;
     }
