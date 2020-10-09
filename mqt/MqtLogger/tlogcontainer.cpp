@@ -251,11 +251,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
     TContestApp::getContestApp() ->suppressWritePreload = true;
     TContestApp::getContestApp() ->clearPreloadComplete();
 
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       closeSlot(0, true);
-    }
+    CloseAllActionExecute();
     trace("closeEvent:Contest slots closed");
 
     MinosConfig::getMinosConfig() ->askStop();
@@ -972,13 +968,20 @@ void TLogContainer::onTabClosebutton(int t)
 
 void TLogContainer::CloseAllActionExecute()
 {
-   while ( ui->ContestPageControl->count())
-   {
-      // Keep closing the current (and hence visible) contest
-      closeSlot(0, true);
-   }
-   on_ContestPageControl_currentChanged(-1);
-   enableActions();
+    QWidget *thisContest = ui->ContestPageControl->currentWidget();
+    while ( ui->ContestPageControl->count() > 1)
+    {
+        int t = ui->ContestPageControl->count() - 1;
+        QWidget *ctab = ui->ContestPageControl->widget(t);
+        if (ctab == thisContest)
+        {
+            t -= 1;
+        }
+        closeSlot(t, true );
+    }
+    closeSlot(0, true);
+    on_ContestPageControl_currentChanged(-1);
+    enableActions();
 }
 //---------------------------------------------------------------------------
 
@@ -1586,8 +1589,9 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();
-
+trace("About to remove tab");
           ui->ContestPageControl->removeTab(t);
+trace("Tab remove complete");
           on_ContestPageControl_currentChanged(-1);
       }
       enableActions();
@@ -1789,12 +1793,7 @@ void TLogContainer::closeSession()
     app->suppressWritePreload = true;
 
     // first, close all current slots, but don't write preload
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       // DO add to MRU (Is that right?)
-       closeSlot(0, true );
-    }
+    CloseAllActionExecute();
     app->suppressWritePreload = false;
 }
 void TLogContainer::selectSession(QString sessName)
@@ -1806,12 +1805,7 @@ void TLogContainer::selectSession(QString sessName)
     app->suppressWritePreload = true;
 
     // first, close all current slots, but don't write preload
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       // DO add to MRU (Is that right?)
-       closeSlot(0, true );
-    }
+    CloseAllActionExecute();
 
     // and reload
     BaseContestLog *ct = loadSession(sessName);

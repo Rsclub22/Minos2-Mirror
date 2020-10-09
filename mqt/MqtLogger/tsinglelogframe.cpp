@@ -439,6 +439,8 @@ void TSingleLogFrame::clearScreenLayout()
     QString msg = ct->name.getValue() + " uuid " + ct->uuid;
     traceMsg("clearScreenLayout starts for " + msg);
 
+    qsoModel.initialise(nullptr);
+
     FKHRigControlFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
@@ -451,21 +453,89 @@ void TSingleLogFrame::clearScreenLayout()
     setBandmapLoaded(false);
     wsjtxFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
-    rotPresets->setContest(nullptr);
 
-    traceMsg("clearScreenLayout start clearance for " + msg);
-//    if (!LogContainer->isLoggerClosing())
+/*
+
+    // we could just close things, but we want to keep components...
+    // ?? set their parents to zero?
+
+    // This detaches them from the layout? Then we can jst delete ? the layout
+
+
+*/
+
+    // we need to setContest(nullptr) on all aux frames
+    MinosLoggerEvents::SendClearContestInFrame(ct);
+
+    if (LogContainer->isLoggerClosing())
     {
-        while (singleLogFrameSplitter->count())
-        {
-            MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-            clearSplitter(s);
-            s->setParent(nullptr);
-            s->deleteLater();
-        }
-        rowSplitters.clear();
-        update();
+        // do nothing more...
     }
+    else
+    {
+        // we will need to come back to these components
+        // so we have to treat them carefully
+
+        QSOTable->setParent(this);
+        QSOTable->hide();
+        GJVQSOLogFrame->setParent(this);
+        GJVQSOLogFrame->hide();
+        CribSheet->setParent(this);
+        CribSheet->hide();
+
+
+        FKHRigControlFrame->setParent(this);
+        FKHRigControlFrame->hide();
+
+        FKHRotControlFrame->setParent(this);
+        FKHRotControlFrame->hide();
+
+        rotPresets->setParent(this);
+        rotPresets->hide();
+
+        thisMatchFrame->setParent(this);
+        thisMatchFrame->hide();
+
+        otherMatchFrame->setParent(this);
+        otherMatchFrame->hide();
+
+        archiveMatchFrame->setParent(this);
+        archiveMatchFrame->hide();
+
+        clusterControlFrame->setParent(this);
+        clusterControlFrame->hide();
+
+        bandmapControlFrame->setParent(this);
+        bandmapControlFrame->hide();
+
+        wsjtxFrame->setParent(this);
+        wsjtxFrame->hide();
+
+        runButtonsFrame->setParent(this);
+        runButtonsFrame->hide();
+
+
+        MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
+        s->setParent(nullptr);
+        s->deleteLater();
+    }
+//    if (LogContainer->isLoggerClosing())
+//    {
+//        // we need to setContest(nullptr) on all aux frames
+//        MinosLoggerEvents::SendClearContestInFrame(ct);
+//    }
+//    else
+//    {
+//        while (singleLogFrameSplitter->count())
+//        {
+//            MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
+//            clearSplitter(s);
+//            s->setParent(nullptr);
+//            s->deleteLater();
+//        }
+//        rowSplitters.clear();
+//        update();
+//    }
     traceMsg("clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
@@ -764,7 +834,9 @@ void TSingleLogFrame::closeContest()
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
 
        clearScreenLayout();
+       trace("Start of closeFile");
        TContestApp::getContestApp() ->closeFile( contest );
+       trace("End of closeFile");
        qsoModel.initialise(nullptr);
 
        contest = nullptr;

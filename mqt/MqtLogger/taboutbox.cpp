@@ -8,8 +8,6 @@
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
-static bool started = false;
-
 QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                "<br><br>";
@@ -83,11 +81,11 @@ int TAboutBox::exec()
     {
         doStartup = false;
     }
-    else if (doStartup)
+    else
     {
         LogContainer->setCurrSessionName( ui->chooseSetCb->currentText());
     }
-    if ( !started && doStartup )
+    if ( doStartup )
     {
        // auto start on first run, but only if we gave that option
 
