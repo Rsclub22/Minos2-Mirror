@@ -55,6 +55,8 @@ signals:
    //void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
+   void clearContestInFrame(BaseContestLog *);
+
 
    void BrgStrToRot(QString);
    void FreqStrToRig(QString);
@@ -109,6 +111,8 @@ public:
    static void SendMakeEntry(BaseContestLog *);
    static void SendNextUnfilled(BaseContestLog *);
    static void SendFormKey(unsigned int *, BaseContestLog *);
+   static void SendClearContestInFrame(BaseContestLog *);
+
 
    static void SendScreenContactChanged(ScreenContact *, BaseContestLog *, QString);
    static void SendReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);

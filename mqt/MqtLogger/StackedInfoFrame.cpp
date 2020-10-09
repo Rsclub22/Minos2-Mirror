@@ -78,10 +78,13 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateStats(BaseContestLog*)), this, SLOT(onUpdateStats(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateMemories(BaseContestLog*)), this, SLOT(onUpdateMemories(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(BaseContestLog *)), this, SLOT(onRefreshStackMults(BaseContestLog *)));
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(clearContestInFrame(BaseContestLog *)), this, SLOT(clearContestInFrame(BaseContestLog *)));
 }
 
 StackedInfoFrame::~StackedInfoFrame()
 {
+    trace(QString("Deleting %1").arg(ui->infoCombo->currentText()));
     delete ui;
 }
 void StackedInfoFrame::setCurrentFrameType(QString s)
@@ -215,6 +218,13 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
                 }
             }
         }
+    }
+}
+void StackedInfoFrame::clearContestInFrame(BaseContestLog *ct)
+{
+    if (contest == ct)
+    {
+        setContest(nullptr);
     }
 }
 void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *c )

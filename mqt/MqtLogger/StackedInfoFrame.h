@@ -84,6 +84,7 @@ private slots:
     void onUpdateMemories(BaseContestLog *ct);
     void onRefreshStackMults(BaseContestLog *ct);
 
+    void clearContestInFrame(BaseContestLog *ct);
 public slots:
     void setContest(LoggerContestLog *contest);
 };
