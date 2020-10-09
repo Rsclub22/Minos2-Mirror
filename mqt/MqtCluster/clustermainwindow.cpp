@@ -1080,6 +1080,18 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
                 trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
             }
 
+            // is spot already in the display list?
+            for (int i = 0; i < dxSpotDataModel->getCount(); i++)
+            {
+                if (*dxSpotDataModel->getSpotData(i) == newSpot)
+                {
+                    trace(QString("Spot Call = %1, already in display, skip").arg(newSpot.getDxCall().realCall));
+                    return;
+                }
+            }
+
+
+
             trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(rxTime));
             spotsList.append(new ClusterSpotData(newSpot));
 

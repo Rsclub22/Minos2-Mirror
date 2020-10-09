@@ -55,6 +55,9 @@ public:
     ClusterSpotData* rowData = nullptr;
     QSharedPointer<HtmlDelegate> delegate ;
 
+    int getCount(){return dxSpotData.count();}
+    ClusterSpotData* getSpotData(int row){ return dxSpotData[row];}
+
 private:
 
     QVector<ClusterSpotData*> dxSpotData;
