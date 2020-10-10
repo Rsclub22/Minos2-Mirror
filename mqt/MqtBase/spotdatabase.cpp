@@ -219,7 +219,7 @@ BandmapSpotData::BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_)
 }
 
 
-BandmapSpotData::BandmapSpotData(BandmapSpotData &bsd) : SpotdataBase(bsd), ClusterSpotDataBase(bsd)
+BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotdataBase(bsd), ClusterSpotDataBase(bsd)
 {
     runModeOn = bsd.runModeOn;
     offRunFreq = bsd.offRunFreq;

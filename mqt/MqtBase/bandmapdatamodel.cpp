@@ -79,14 +79,14 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getFreq().convertFreqStrDisp();
                 break;
             case DXBANDSTR_COL_NUM:
-                d = bandmapSpot->getDxBand();
+                d = bandmapSpot->getBand();
             break;
             case DXSPOT_CALL_COL_NUM:
                 if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
                 {
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
-                d = d + bandmapSpot->getDxCall();
+                d = d + bandmapSpot->getDxCallStr();
                 if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
                 {
                     d = d + HtmlFontColour(NOT_WORKED_COLOUR);
@@ -94,7 +94,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
 
             case DXSPOT_MODE_COL_NUM:
-                d = bandmapSpot->getDxMode();
+                d = bandmapSpot->getMode();
             break;
 
             case DXLOC_COL_NUM:
@@ -118,7 +118,7 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getDxBrg();
             break;
             case SPOTTER_CALL_COL_NUM:
-                d = bandmapSpot->getSpotterCall();
+                d = bandmapSpot->getSpotterCallStr();
             break;
             case SPOTTER_LOC_COL_NUM:
                 d = bandmapSpot->getSpotterLocator();
@@ -148,10 +148,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getDxLocatorIsFromNode();
             break;
             case DX_DISTRICT_COL_NUM:
-                d = bandmapSpot->getDxDistrict();
+                d = bandmapSpot->getDistrict();
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                d = bandmapSpot->getDxDistrictWorked();
+                d = bandmapSpot->getDistrictWorked();
             break;
             default:
                 d = "";
@@ -171,13 +171,13 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getSpotTime();
             break;
             case FREQ_COL_NUM:
-                d.setValue( bandmapSpot->getDxFreq());
+                d.setValue( bandmapSpot->getFreq());
                 break;
             case DXBANDSTR_COL_NUM:
-                d = bandmapSpot->getDxBand();
+                d = bandmapSpot->getBand();
             break;
             case DXSPOT_CALL_COL_NUM:
-                d = bandmapSpot->getDxCall();
+                d = bandmapSpot->getDxCallStr();
             break;
             case DXLOC_COL_NUM:
                 d = bandmapSpot->getDxLocator();
@@ -189,10 +189,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getDxBrg();
             break;
             case DXSPOT_MODE_COL_NUM:
-                d = bandmapSpot->getDxMode();
+                d = bandmapSpot->getMode();
             break;
             case SPOTTER_CALL_COL_NUM:
-                d = bandmapSpot->getSpotterCall();
+                d = bandmapSpot->getSpotterCallStr();
             break;
             case SPOTTER_LOC_COL_NUM:
                 d = bandmapSpot->getSpotterLocator();
@@ -210,10 +210,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getSentToMemory();
             break;
             case DXBANDMASK_COL_NUM:
-                d = bandmapSpot->getDxBandMask();
+                d = bandmapSpot->getBandMask();
             break;
             case DXMODEMASK_COL_NUM:
-                d = bandmapSpot->getDxModeMask();
+                d = bandmapSpot->getModeMask();
             break;
             case RXTIME_COL_NUM:
                 d = bandmapSpot->getRxTime();
@@ -237,10 +237,10 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getOffRunFreq();
             break;
             case DX_DISTRICT_COL_NUM:
-                d = bandmapSpot->getDxDistrict();
+                d = bandmapSpot->getDistrict();
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                d = bandmapSpot->getDxDistrictWorked();
+                d = bandmapSpot->getDistrictWorked();
             break;
             default:
             d = "";
@@ -273,10 +273,10 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->setSpotTime(value.toString());
             break;
             case FREQ_COL_NUM:
-                bandmapSpot->setDxFreq(qvariant_cast<Frequency>(value));
+                bandmapSpot->setFreq(qvariant_cast<Frequency>(value));
             break;
             case DXBANDSTR_COL_NUM:
-                bandmapSpot->setDxBand(value.toString());
+                bandmapSpot->setBand(value.toString());
             break;
             case DXSPOT_CALL_COL_NUM:
                 bandmapSpot->setDxCall(value.toString());
@@ -285,7 +285,7 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->setDxCallWorked(value.toBool());
             break;
             case DXSPOT_MODE_COL_NUM:
-                bandmapSpot->setDxMode(value.toString());
+                bandmapSpot->setMode(value.toString());
             break;
             case DXLOC_COL_NUM:
                 bandmapSpot->setDxLocator(value.toString());
@@ -309,10 +309,10 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->setSpotComment(value.toString());
                 break;
             case DXBANDMASK_COL_NUM:
-                bandmapSpot->setDxBandMask(value.toString());
+                bandmapSpot->setBandMask(value.toString());
                 break;
             case DXMODEMASK_COL_NUM:
-                bandmapSpot->setDxModeMask(value.toString());
+                bandmapSpot->setModeMask(value.toString());
                 break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 bandmapSpot->setSentToMemory(value.toBool());
@@ -336,10 +336,10 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 bandmapSpot->setOffRunFreq(value.toBool());
             break;
             case DX_DISTRICT_COL_NUM:
-                bandmapSpot->setDxDistrict(value.toString());
+                bandmapSpot->setDistrict(value.toString());
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                bandmapSpot->setDxDistrictWorked(value.toBool());
+                bandmapSpot->setDistrictWorked(value.toBool());
             break;
 
             default:

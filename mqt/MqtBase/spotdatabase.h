@@ -14,9 +14,13 @@
 #ifndef SPOTDATABASE_H
 #define SPOTDATABASE_H
 
-#include "bandmapdata.h"
 
 
+namespace bandmapSpotType {
+
+enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ};
+
+}
 
 class SpotdataBase
 {

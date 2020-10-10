@@ -14,7 +14,6 @@
 #define BANDMAPDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "bandmapdata.h"
 #include "clustercommon.h"
 #include "bandmapcommon.h"
 #include "spotdatabase.h"

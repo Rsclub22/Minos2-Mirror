@@ -33,6 +33,7 @@ BandmapView::BandmapView(QWidget *parent) :
     fullBandHeight(4000),
     fontHeight(0),
     maxNumSpots(0),
+    selectedSpot(bandmapSpotType::NONE),
     selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
     selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
 {
@@ -502,9 +503,9 @@ void BandmapView::mouseDoubleClicked(QPoint p)
     {
 
         memoryData::memData spotData;
-        spotData.callsign = selectedSpot.getDxCall();
+        spotData.callsign = selectedSpot.getDxCallStr();
         spotData.time = selectedSpot.getSpotTime();
-        spotData.freq = selectedSpot.getDxFreq();
+        spotData.freq = selectedSpot.getFreq();
         spotData.locator = selectedSpot.getDxLocator();
         spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
@@ -810,7 +811,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
                 clearSelectedSpot();       // clear any spot previously selected
                 setSelectedSpot(spotViewNum);        // mark new selected spot
 
-                MinosLoggerEvents::SendFreqToRig(selectedSpot.getDxFreq());
+                MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
             }
 
         }
@@ -893,7 +894,7 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
     if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
     {
         selectedSpot.setSpotTime(model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setDxFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
+        selectedSpot.setFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
         selectedSpot.setDxCall(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setDxLocator(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setDxDist(model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString());
