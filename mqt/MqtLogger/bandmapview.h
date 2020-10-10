@@ -199,7 +199,7 @@ private:
     int dialCursorWithinViewport(Frequency freq);
     bool matchDistance(int sourceRow);
 
-    void drawBandmapSpot(int row, int fontOffset, int markersAbove, int &lastOffset);
+    void drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset);
 };
 
 #endif // BANDMAPVIEW_H

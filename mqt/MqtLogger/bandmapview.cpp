@@ -908,7 +908,7 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
 
 
-void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int &lastOffset)
+void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset)
 {
     if (matchMode(row) && matchDistance(row))
     {
@@ -1091,14 +1091,19 @@ void BandmapView::drawBandMapSpots()
                 }
                 markersAbove++;
             }
-            int fontOffset = -fontHeight;
-            int lastOffset = -1;
+            int fontOffset = -1;
+            int lastOffset = -fontHeight;
+            int firstOffset = -1;
             for (int row = markersAbove - 1; row >= 0; --row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+                if (firstOffset == -1)
+                {
+                    firstOffset = fontOffset;
+                }
             }
             fontOffset = -1;
-            lastOffset = -1;
+            lastOffset = -firstOffset + fontHeight;
             for (int row = markersAbove; row < numrows; ++row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
