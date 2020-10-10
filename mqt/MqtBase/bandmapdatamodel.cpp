@@ -422,6 +422,24 @@ QSharedPointer<BandmapSpotData> BandmapDataModel::getBandmapDataRow(int row)
     return bandmapData[row];
 }
 
+void BandmapDataModel::sortModel()
+{
+    beginResetModel();
+
+    std::sort(bandmapData.begin(), bandmapData.end(),
+              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
+                {
+                    if (a->getFreq() == b->getFreq())
+                    {
+                        return a->getDxCall() < b->getDxCall();
+                    }
+                    return a->getFreq() < b->getFreq();
+                }
+    );
+
+    endResetModel();
+}
+
 BandmapSortFilterProxyModel::BandmapSortFilterProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
 {}

@@ -1174,6 +1174,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
                     QVariant f;
                     f.setValue(spot->getFreq());
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), f, BMP_DataStoredRole);
+                    bandmapDataModel->sortModel();
 
                     // do we need to update the time as well????
                     // we don't need to save this incomming logger spot as we have moved it..
@@ -1340,6 +1341,7 @@ void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
             QVariant f;
             f.setValue(spot->getFreq());
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
+            bandmapDataModel->sortModel();
         }
 
 
@@ -1430,6 +1432,7 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
                     QVariant f;
                     f.setValue(dxFreq);
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM), f, BMP_DataStoredRole);
+                    bandmapDataModel->sortModel();
                     return  false;          // don't save this spot to the bandmap spot list
 
                 } else if (spotType == bandmapSpotType::CLUSTER)
