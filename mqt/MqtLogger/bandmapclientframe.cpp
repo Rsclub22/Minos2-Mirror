@@ -1057,23 +1057,17 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
         if (spotlist.count() == TTLVALUE +1)
         {
-            // get time to live value
-            if (spotlist[TTLVALUE] == "0")
+
+            bool ok = false;
+            int ttl = spotlist[TTLVALUE].toInt(&ok);
+            if (ok)
             {
-                timeToLive = 0;  // timeToLive is off
-            }
-            else
-            {
-                bool ok = false;
-                int ttl = spotlist[TTLVALUE].toInt(&ok);
-                if (ok)
+                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
                 {
-                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                    {
-                        timeToLive = ttl * 60; // seconds
-                    }
+                    timeToLive = ttl * 60; // seconds
                 }
             }
+
 
             //-------------------------------------------------------
 
@@ -1127,6 +1121,8 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             bandmapDataModel->rowData->setFreq(spotlist[DXFREQ]);
             bandmapDataModel->rowData->setBand(spotlist[DXBANDSTR]);
             bandmapDataModel->rowData->setBandMask(spotlist[DXBANDMASK]);
+            bandmapDataModel->rowData->setMode(spotlist[DXMODESTR]);
+            bandmapDataModel->rowData->setModeMask(spotlist[DXMODEMASK]);
             bandmapDataModel->rowData->setDxCall(spotlist[DXCALL]);
             bandmapDataModel->rowData->setDxCallWorked(callWorked);
             bandmapDataModel->rowData->setDxLocator(spotlist[DXLOCATOR]);

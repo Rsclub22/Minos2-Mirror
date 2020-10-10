@@ -48,10 +48,6 @@ BandmapView::BandmapView(QWidget *parent) :
     //horizontalScrollBar()->setRange(0, 0);
     //verticalScrollBar()->setRange(0, 0);
 
-    bool traceDebugFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
-
-
 
 }
 
@@ -1067,6 +1063,7 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
         if (traceDebugFlag)
         {
             traceMsg(QString("dump list of spots and freq"));
