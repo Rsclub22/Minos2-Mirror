@@ -19,6 +19,9 @@ TSessionManager::TSessionManager(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    QByteArray state = settings.value("TSessionManager/SplitterState/setSplitter").toByteArray();
+    ui->setSplitter->restoreState(state);
+
     parseSessions();
     showSessions();
     showSession(sessionList.currentSession);
@@ -28,7 +31,12 @@ TSessionManager::~TSessionManager()
     delete ui;
 }
 
-
+void TSessionManager::on_setSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->setSplitter->saveState();
+    settings.setValue("TSessionManager/SplitterState/setSplitter", state);
+}
 void TSessionManager::enableButtons()
 {
     int nsess = sessionList.sessions.count();

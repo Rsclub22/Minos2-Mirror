@@ -21,7 +21,7 @@ TSettingsEditDlg::TSettingsEditDlg(QWidget *parent, SettingsBundle *bundle) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    QByteArray state = settings.value("EntrySettings/SplittterState/" + bundle->getBundle()).toByteArray();
+    QByteArray state = settings.value("EntrySettings/SplitterState/" + bundle->getBundle()).toByteArray();
     ui->splitter->restoreState(state);
 
     baseTitle = windowTitle();
