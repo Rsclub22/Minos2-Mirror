@@ -48,6 +48,9 @@
      </item>
      <item>
       <widget class="QLineEdit" name="textFilterEdit">
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
        <property name="clearButtonEnabled">
         <bool>true</bool>
        </property>

@@ -2180,7 +2180,7 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
     ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
 }
 
-void BandmapClientFrame::on_textFilterEdit_textEdited(const QString &filter)
+void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
     bandmapSpotProxyModel->setFilterString(filter);
     bandmapView->bandmapUpdate();
