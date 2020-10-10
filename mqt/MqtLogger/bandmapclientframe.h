@@ -44,7 +44,7 @@ namespace Ui {
 
 class BMP_MouseInObject;
 
-
+/*
 class LoggerSpots
 {
 public:
@@ -128,7 +128,7 @@ private:
     bool offRunFreq;
     bandmapSpotType::SPOT_TYPE spotType;
 };
-
+*/
 const QString MODE_BANDPLAN_FILE = "./Configuration/mode_bandplan.json";
 const QString OPERATING_FREQ_FILE = "./Configuration/operating_frequencies.json";
 const QString BANDPLAN_FREQ_LIMITS_FILE = "./Configuration/bandmap_limits.ini";
@@ -229,7 +229,7 @@ private:
     bool offRunFreq;
 
     // spots from logger
-    QVector<LoggerSpots*> logSpotQueue;
+    QVector<BandmapSpotData*> logSpotQueue;
 
     BandmapView *bandmapView;
     QItemSelectionModel *selectionModel;
@@ -308,7 +308,7 @@ private:
     void traceMsg(QString msg);
 
     void setCQFreq();
-    void addRemoveCQSpot(LoggerSpots *spot);
+    void addRemoveCQSpot(const BandmapSpotData *spot);
 
     void radioStatusIndicatorToggle(bool on);
     bool checkContestBandMatch(Frequency curFreq);
@@ -346,7 +346,7 @@ private slots:
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
-     void addLogSpotToBandmapTable(LoggerSpots *spot);
+     void addLogSpotToBandmapTable(const BandmapSpotData *spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
 

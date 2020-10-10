@@ -969,7 +969,7 @@ void BandmapClientFrame::timerCheckNewBandMapSpots()
             for (int i = 0; i < logSpotQueue.count(); i++)
             {
                 addLogSpotToBandmapTable(logSpotQueue[i]);
-                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
+                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getDxCallStr()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getDxLocator()));
                 delete logSpotQueue[i];
             }
 
@@ -1012,7 +1012,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
             addLogSpotToBandmapTable(logSpotQueue[i]);
-            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getDxCallStr()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getDxLocator()));
             delete logSpotQueue[i];
         }
 
@@ -1146,7 +1146,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
 
 
-void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
+void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
 {
 
     // is it a CQ Freq Spot
@@ -1163,7 +1163,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
             bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
-            if (spot->getCallsign().fullCall.getValue() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
+            if (spot->getDxCallStr() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
             {
                 if ((savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED || savedSpotType == bandmapSpotType::CLUSTER_MARKED) && spot->getSpotType() == bandmapSpotType::SAVED)
                 {
@@ -1192,7 +1192,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
     bool locWorked = false;
     // update worked locators
-    QString loc = spot->getLocator();
+    QString loc = spot->getDxLocator();
     if (!loc.isEmpty())
     {
         QString locMajor = loc.mid(0,4);
@@ -1225,9 +1225,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     QString distance;
 
 
-    if (!spot->getLocator().isEmpty())
+    if (!spot->getDxLocator().isEmpty())
     {
-        calcSpotDistanceBearing(spot->getLocator(), &dist, &brg);
+        calcSpotDistanceBearing(spot->getDxLocator(), &dist, &brg);
         distance = QString::number(static_cast<int>(dist));
     }
 
@@ -1243,27 +1243,27 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
 
 
-    qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+    qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
 
-    QString logTimeStr = spot->getTime().time().toString("HH:mm");
+    QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
 
 
-    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getCallsign().fullCall.getValue()).arg(spot->getFreq().traceStr()).arg(spot->getModeStr()).arg(spot->getLocator()));
+    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getDxCallStr()).arg(spot->getFreq().traceStr()).arg(spot->getMode()).arg(spot->getDxLocator()));
 
     bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::LOGGED));
     bandmapDataModel->rowData->setRxTime(logTime);
     bandmapDataModel->rowData->setSpotTime(logTimeStr);
     bandmapDataModel->rowData->setFreq(spot->getFreq());
-    bandmapDataModel->rowData->setBand(spot->getbandStr());
+    bandmapDataModel->rowData->setBand(spot->getBand());
     bandmapDataModel->rowData->setBandMask(spot->getBandMask());
-    bandmapDataModel->rowData->setMode(spot->getModeStr());
+    bandmapDataModel->rowData->setMode(spot->getMode());
     bandmapDataModel->rowData->setModeMask(spot->getModeMask());
-    bandmapDataModel->rowData->setDxCall(spot->getCallsign().fullCall.getValue());
-    bandmapDataModel->rowData->setDxCallWorked(spot->getWorked());
-    bandmapDataModel->rowData->setDxLocator(spot->getLocator());
+    bandmapDataModel->rowData->setDxCall(spot->getDxCallStr());
+    bandmapDataModel->rowData->setDxCallWorked(spot->getDxCallWorked());
+    bandmapDataModel->rowData->setDxLocator(spot->getDxLocator());
     bandmapDataModel->rowData->setDxLocatorWorked(locWorked);
     bandmapDataModel->rowData->setDxDist(distance);
-    bandmapDataModel->rowData->setDxBrg(spot->getBearing());
+    bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
     bandmapDataModel->rowData->setRotBrg(rotBrg);
     bandmapDataModel->rowData->setRotConnected(rotatorConnected);
     bandmapDataModel->rowData->setSpotType(spot->getSpotType());
@@ -1273,7 +1273,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
 }
 
-void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
+void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
 {
 
     if (!spot->getRunModeOn())
@@ -1292,9 +1292,9 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
     else
     {
 
-        qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+        qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
 
-        QString logTimeStr = spot->getTime().time().toString("HH:mm");
+        QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
 
         // does a CQ Spot exist?
         int rowNum = -1;
@@ -1316,14 +1316,14 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
             bandmapDataModel->rowData->setRxTime(logTime);
             bandmapDataModel->rowData->setSpotTime(logTimeStr);
             bandmapDataModel->rowData->setFreq(spot->getFreq());
-            bandmapDataModel->rowData->setBand(spot->getbandStr());
+            bandmapDataModel->rowData->setBand(spot->getBand());
             bandmapDataModel->rowData->setBandMask(spot->getBandMask());
-            bandmapDataModel->rowData->setMode(spot->getModeStr());
+            bandmapDataModel->rowData->setMode(spot->getMode());
             bandmapDataModel->rowData->setModeMask(spot->getModeMask());
-            bandmapDataModel->rowData->setDxCall(spot->getCallsign().fullCall.getValue());
-            bandmapDataModel->rowData->setDxCallWorked(spot->getWorked());
-            bandmapDataModel->rowData->setDxLocator(spot->getLocator());
-            bandmapDataModel->rowData->setDxBrg(spot->getBearing());
+            bandmapDataModel->rowData->setDxCall(spot->getDxCallStr());
+            bandmapDataModel->rowData->setDxCallWorked(spot->getDxCallWorked());
+            bandmapDataModel->rowData->setDxLocator(spot->getDxLocator());
+            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
             bandmapDataModel->rowData->setRotConnected(rotatorConnected);
             bandmapDataModel->rowData->setRunModeOn(spot->getRunModeOn());
             bandmapDataModel->rowData->setOffRunFreq(spot->getOffRunFreq());
@@ -1949,10 +1949,25 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
         getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
 
-        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                            logModeStr, logModeMask,
-                                            freq, logBandStr, logBandMask,
-                                            true, time, false, false, bandmapSpotType::LOGGED);
+//        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            freq, logBandStr, logBandMask,
+//                                            true, time, false, false, bandmapSpotType::LOGGED);
+
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::LOGGED);
+        spot->setCallsign(cs);
+        spot->setDxLocator(loc);
+        spot->setDxBrg(brg);
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(freq);
+        spot->setBand(logBandStr);
+        spot->setBandMask(logBandMask);
+        spot->setDxCallWorked(true);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
         logSpotQueue.append(spot);
     }
 }
@@ -1994,10 +2009,24 @@ void BandmapClientFrame::setCQFreq()
         getBand(bands, freq, logBandStr, logBandMask);
         getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
-        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
-                                                logModeStr, logModeMask,
-                                                freq, logBandStr, logBandMask,
-                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
+//        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
+//                                                logModeStr, logModeMask,
+//                                                freq, logBandStr, logBandMask,
+//                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::CQ);
+        spot->setCallsign(Callsign("???"));
+        spot->setDxLocator("");
+        spot->setDxBrg("");
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(runModeOn);
+        spot->setOffRunFreq(offRunFreq);
+
+
         logSpotQueue.append(spot);
     }
 
@@ -2023,10 +2052,25 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
 
 
-        LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
-                                            logModeStr, logModeMask,
-                                            _freq, logBandStr, logBandMask,
-                                            false, time, false, false, bandmapSpotType::MARKED);
+//        LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            _freq, logBandStr, logBandMask,
+//                                            false, time, false, false, bandmapSpotType::MARKED);
+
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::MARKED);
+        spot->setCallsign(Callsign("???"));
+        spot->setDxLocator("");
+        spot->setDxBrg("");
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(_freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
+
         logSpotQueue.append(spot);
     }
 
@@ -2049,10 +2093,24 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         getBand(bands, _freq, logBandStr, logBandMask);
         getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
 
-        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                            logModeStr, logModeMask,
-                                            _freq, logBandStr, logBandMask,
-                                            false, time, false, false, bandmapSpotType::SAVED);
+//        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            _freq, logBandStr, logBandMask,
+//                                            false, time, false, false, bandmapSpotType::SAVED);
+//
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::SAVED);
+        spot->setCallsign(Callsign(cs));
+        spot->setDxLocator(loc);
+        spot->setDxBrg(brg);
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(_freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
         logSpotQueue.append(spot);
     }
 

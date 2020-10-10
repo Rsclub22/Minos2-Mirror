@@ -84,6 +84,8 @@ public:
         dxCallValidateCode = dxCall.validate();
     }
 
+    void setCallsign(Callsign cs){dxCall = cs;}
+
     Callsign getDxCall() const {return dxCall;}
     QString getDxCallStr() const {return dxCall.fullCall.getValue();}
     int getDxCallValidateCode() const {return dxCallValidateCode;}
