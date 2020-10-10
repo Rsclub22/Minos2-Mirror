@@ -22,7 +22,7 @@ public:
 private:
     Ui::MinosContestLoadDialog *ui;
     QEventLoop *el = nullptr;
-    QTimer *timer = nullptr;
+    //QTimer *timer = nullptr;
 };
 
 #endif // MINOSCONTESTLOADDIALOG_H
