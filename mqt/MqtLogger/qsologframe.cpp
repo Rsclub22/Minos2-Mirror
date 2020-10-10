@@ -1075,7 +1075,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDisp());
+          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDispSingle());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
