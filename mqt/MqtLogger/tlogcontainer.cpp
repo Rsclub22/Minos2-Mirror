@@ -1587,9 +1587,7 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();
-trace("About to remove tab");
           ui->ContestPageControl->removeTab(t);
-trace("Tab remove complete");
           on_ContestPageControl_currentChanged(-1);
       }
       enableActions();

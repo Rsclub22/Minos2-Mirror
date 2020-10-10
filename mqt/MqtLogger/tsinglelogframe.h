@@ -188,7 +188,7 @@ private:
     void createScreenComponents();
     void clearScreenLayout();
     void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
-    void clearSplitter(MinosSplitter *s);
+
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
     QString getClusterServerState();

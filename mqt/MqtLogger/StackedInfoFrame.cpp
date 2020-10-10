@@ -84,7 +84,6 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
 StackedInfoFrame::~StackedInfoFrame()
 {
-    trace(QString("Deleting %1").arg(ui->infoCombo->currentText()));
     delete ui;
 }
 void StackedInfoFrame::setCurrentFrameType(QString s)

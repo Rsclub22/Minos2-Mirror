@@ -384,55 +384,11 @@ void TSingleLogFrame::createScreenComponents()
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 }
-void TSingleLogFrame::clearSplitter(MinosSplitter *s)
-{
-    while(s && s->count())
-    {
-        QWidget *w = s->widget(0);
-        MinosSplitter *ws = dynamic_cast<MinosSplitter *>(w);
-
-        if (ws)
-        {
-            clearSplitter(ws);
-            ws->setParent(nullptr);
-            ws->deleteLater();
-        }
-        else
-        {
-            // normal components - keep them built, but out of the way (not shown)
-            // A lot ofthe code relies on them existing
-            // aux components - delete them, and recreate them as necessary
-
-            // but get rid of any scroll area "wrappers".
-
-            w->hide();
-            w->setParent(this);
-
-            QScrollArea *qsa = dynamic_cast<QScrollArea *>(w);
-            if (qsa)
-            {
-                QWidget *tw = qsa->takeWidget();
-                qsa->deleteLater();
-                if (tw)
-                {
-                    tw->hide();
-                    tw->setParent(this);
-                    StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
-                    if (aux)
-                    {
-                        aux->setContest(nullptr);
-                        aux->deleteLater();
-                    }
-                }
-            }
-        }
-    }
-
-}
 void TSingleLogFrame::clearScreenLayout()
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
+
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     QString msg = ct->name.getValue() + " uuid " + ct->uuid;
     traceMsg("clearScreenLayout starts for " + msg);
@@ -452,16 +408,6 @@ void TSingleLogFrame::clearScreenLayout()
     wsjtxFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
 
-/*
-
-    // we could just close things, but we want to keep components...
-    // ?? set their parents to zero?
-
-    // This detaches them from the layout? Then we can jst delete ? the layout
-
-
-*/
-
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
 
@@ -471,8 +417,6 @@ void TSingleLogFrame::clearScreenLayout()
     }
     else
     {
-        // we will need to come back to these components
-        // so we have to treat them carefully
 
         QSOTable->setParent(this);
         QSOTable->hide();
@@ -517,23 +461,6 @@ void TSingleLogFrame::clearScreenLayout()
         s->setParent(nullptr);
         s->deleteLater();
     }
-//    if (LogContainer->isLoggerClosing())
-//    {
-//        // we need to setContest(nullptr) on all aux frames
-//        MinosLoggerEvents::SendClearContestInFrame(ct);
-//    }
-//    else
-//    {
-//        while (singleLogFrameSplitter->count())
-//        {
-//            MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-//            clearSplitter(s);
-//            s->setParent(nullptr);
-//            s->deleteLater();
-//        }
-//        rowSplitters.clear();
-//        update();
-//    }
     traceMsg("clearScreenLayout complete for " + msg);
 }
 void TSingleLogFrame::applyScreenLayout()
@@ -832,9 +759,7 @@ void TSingleLogFrame::closeContest()
        RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
 
        clearScreenLayout();
-       trace("Start of closeFile");
        TContestApp::getContestApp() ->closeFile( contest );
-       trace("End of closeFile");
        qsoModel.initialise(nullptr);
 
        contest = nullptr;
