@@ -75,19 +75,20 @@ void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &b
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
 {
     QDateTime dt = QDateTime();
-    int tn = QTime::currentTime().second();
-    QString t = QString::number(tn);
-    if (tn < 10)
-    {
-        t = "0" + t;
-    }
+    //int tn = QTime::currentTime().second();
+    //QString t = QString::number(tn);
+    //if (tn < 10)
+    //{
+    //    t = "0" + t;
+    //}
+
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
         dl[0].prepend('0');         // correct if date isn't 0x for < 10
         dl[0] = dl[0].right(2);
 
-        QString time = dl[2] + dl[1] + dl[0] + spotTime + t;
+        QString time = dl[2] + dl[1] + dl[0] + spotTime + "00";
         trace(QString("getSpotDateTime: spotTime is %1").arg(time));
         dt = QDateTime::fromString(time, "yyyyMMMddHHmmss" );
         dt.setTimeSpec(Qt::UTC);
@@ -96,6 +97,8 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
 
     return dt;
 }
+
+
 
 bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive)
 {

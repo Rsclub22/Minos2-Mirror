@@ -56,11 +56,11 @@ const int DXMODESTR = 6;
 const int DXMODEMASK = 7;
 const int SPOTCALL = 8;
 const int SPOTLOCATOR = 9;
-const int SPOTTIME = 10;
-const int SPOTDATE = 11;
-const int SPOTCOMMENT = 12;
-const int DXPROPMODE = 13;
-const int TTLVALUE = 14;
+const int SPOTDATETIME = 10;
+//const int SPOTDATE = 11;
+const int SPOTCOMMENT = 11;
+const int DXPROPMODE = 12;
+const int TTLVALUE = 13;
 
 
 // Cluster Data and View Columns
@@ -85,12 +85,15 @@ const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 16;
 const int DXSPOT_PROP_MODE_COL_NUM = 17;
 const int RXTIME_COL_NUM = 18;
 const int DATE_COL_NUM = 19;
-const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 22;
-const int ROT_CONNECTED_COL_NUM = 23;
-const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
+const int DATE_TIME_COL_NUM = 20;
+const int SPOT_TYPE_COL_NUM = 21;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 22;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 23;     // used in bandmap
+const int ROT_CONNECTED_COL_NUM = 24;   // used in bandmap
+const int RUN_MODE_ON_COL_NUM = 25;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 26;    // used in bandmap
+const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
+const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;

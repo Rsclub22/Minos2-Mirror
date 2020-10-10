@@ -815,30 +815,19 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
-            spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            //spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-/*
-            SpotData * spotData = new SpotData(rxTime, spotlist[SPOTTIME], spotlist[SPOTDATE],
-                                               spotlist[DXFREQ], spotlist[DXBANDSTR], spotlist[DXBANDMASK],
-                                               spotlist[DXMODESTR], spotlist[DXMODEMASK],
-                                               spotlist[DXCALL],
-                                               callWorked, spotlist[DXLOCATOR],
-                                               locWorked, distance,
-                                               bearing, spotlist[SPOTCALL],
-                                               spotlist[SPOTLOCATOR], spotlist[DXPROPMODE], spotlist[SPOTCOMMENT]);
-*/
-
-            SpotData* newSpot = new SpotData();
+            ClusterSpotData* newSpot = new ClusterSpotData();
 
             newSpot->setRxTime(rxTime);
-            newSpot->setSpotTime(spotlist[SPOTTIME]);
-            newSpot->setSpotDate(spotlist[SPOTDATE]);
-            newSpot->setDxFreq(spotlist[DXFREQ]);
-            newSpot->setDxBandStr(spotlist[DXBANDSTR]);
-            newSpot->setDxBandMask(spotlist[DXBANDMASK]);
-            newSpot->setDxModeStr(spotlist[DXMODESTR]);
-            newSpot->setDxModeMaskStr(spotlist[DXMODEMASK]);
+            newSpot->setSpotDateTime(spotDateTime);
+            newSpot->setFreq(spotlist[DXFREQ]);
+            newSpot->setBand(spotlist[DXBANDSTR]);
+            newSpot->setBandMask(spotlist[DXBANDMASK]);
+            newSpot->setMode(spotlist[DXMODESTR]);
+            newSpot->setModeMask(spotlist[DXMODEMASK]);
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
@@ -863,7 +852,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 }
             }
 
-            dxSpotDataModel->rowData = newSpot;
+            //dxSpotDataModel->rowData = newSpot;
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
@@ -873,31 +862,23 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 }
 
 
-bool ClusterClientFrame::checkspotExists(SpotData *spotData)
+bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
 {
     if (dxSpotDataModel->rowCount() == 0)
     {
         return false;
     }
 
-    for (int row = 0; row < dxSpotDataModel->rowCount(); row++)
+
+    for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
     {
-        if (checkDbRowForMatch(spotData->getDxCall(), row, DXSPOT_CALL_COL_NUM) )
+        if (*dxSpotDataModel->getSpotData(i) == *spotData)
         {
-
-            if (checkDbRowForMatch(spotData->getDxFreq(), row, FREQ_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getSpotTime(), row, TIME_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getDxModeStr(), row, DXSPOT_MODE_COL_NUM) &&
-                    checkDbRowForMatch(spotData->getSpotterCall(), row, SPOTTER_CALL_COL_NUM))
-
-            {
-                return true;
-
-            }
+            trace(QString("Spot Call = %1, already in display, skip").arg(spotData->getDxCall().realCall));
+            return true;
         }
-
-
     }
+
 
     return false;
 }

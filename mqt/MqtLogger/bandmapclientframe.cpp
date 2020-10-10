@@ -76,10 +76,12 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     clusterServerConnected(false),
     runModeOn(false),
     offRunFreq(false),
+    contextMenuSelectedSpotData(bandmapSpotType::NONE),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     timeToLive(0),
     rotatorConnected(false)
+
 
 {
 
@@ -346,9 +348,9 @@ void BandmapClientFrame::requestSpots()
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu mark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
+        traceMsg(QString("menu mark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
         bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
         if (spotType == bandmapSpotType::CLUSTER)
         {
@@ -364,9 +366,9 @@ void BandmapClientFrame::on_markSpotActionSelected()
 
 void BandmapClientFrame::on_unMarkSpotActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu unmark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
+        traceMsg(QString("menu unmark spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
         bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
         if (spotType == bandmapSpotType::CLUSTER_MARKED)
         {
@@ -390,10 +392,10 @@ void BandmapClientFrame::on_FreqDisplayClicked()
 
 void BandmapClientFrame::on_freqActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->dxFreq.traceStr()));
-         Frequency freq = bandmapView->getSelectedSpotDataPtr()->dxFreq;
+        traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()).arg(bandmapView->getSelectedSpotDataPtr()->getFreq().traceStr()));
+         Frequency freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
          sendFreqToRig(freq);
     }
 
@@ -411,11 +413,11 @@ void BandmapClientFrame::sendFreqToRig(Frequency freq)
 
 void BandmapClientFrame::on_bearingActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(bandmapView->getSelectedSpotDataPtr()->dxCall).arg(bandmapView->getSelectedSpotDataPtr()->rotBrg));
-        QString brg = bandmapView->getSelectedSpotDataPtr()->dxBrg;
-        QString loc = bandmapView->getSelectedSpotDataPtr()->dxLocator;
+        traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()).arg(bandmapView->getSelectedSpotDataPtr()->getRotBrg()));
+        QString brg = bandmapView->getSelectedSpotDataPtr()->getDxBrg();
+        QString loc = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
         if (!brg.isEmpty())
         {
             if (loc.count() < 6)
@@ -448,16 +450,16 @@ void BandmapClientFrame::sendBrgToRot(QString brg)
 
 void BandmapClientFrame::on_logActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu send to log selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
+        traceMsg(QString("menu send to log selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
 
         memoryData::memData spotData;
-        spotData.callsign = bandmapView->getSelectedSpotDataPtr()->dxCall;
-        spotData.time = bandmapView->getSelectedSpotDataPtr()->spotTime;
-        spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreq;
-        spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
-        spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
+        spotData.callsign = bandmapView->getSelectedSpotDataPtr()->getDxCallStr();
+        spotData.time = bandmapView->getSelectedSpotDataPtr()->getSpotTime();
+        spotData.freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
+        spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+        spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
 
         MinosLoggerEvents::SendSpotToLog(spotData);
@@ -475,17 +477,17 @@ void BandmapClientFrame::on_logActionSelected()
 
 void BandmapClientFrame::on_memoryActionSelected()
 {
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
-        traceMsg(QString("menu send to memory selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
+        traceMsg(QString("menu send to memory selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
 
         memoryData::memData spotData;
-        spotData.callsign = bandmapView->getSelectedSpotDataPtr()->dxCall;
-        spotData.time = bandmapView->getSelectedSpotDataPtr()->spotTime;
-        spotData.freq = bandmapView->getSelectedSpotDataPtr()->dxFreq;
-        spotData.locator = bandmapView->getSelectedSpotDataPtr()->dxLocator;
-        spotData.bearing = bandmapView->getSelectedSpotDataPtr()->dxBrg.toInt();
-        spotData.dxLocFromNode = bandmapView->getSelectedSpotDataPtr()->dxLocatorIsFromNode;
+        spotData.callsign = bandmapView->getSelectedSpotDataPtr()->getDxCallStr();
+        spotData.time = bandmapView->getSelectedSpotDataPtr()->getSpotTime();
+        spotData.freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
+        spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+        spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
+        spotData.dxLocFromNode = bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode();
 
         MinosLoggerEvents::SendSpotToMemory(ct,spotData);
 
@@ -504,14 +506,14 @@ void BandmapClientFrame::on_memoryActionSelected()
 void BandmapClientFrame::on_clearSpotActionSelected()
 {
 
-    if (bandmapView->getSelectedSpotDataPtr()->isSelected)
+    if (bandmapView->getSelectedSpotDataPtr()->getIsSelected())
     {
         int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                       tr("Please confirm you want to delete this spot - %1?").arg(bandmapView->getSelectedSpotDataPtr()->dxCall),
+                                       tr("Please confirm you want to delete this spot - %1?").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()),
                                        QMessageBox::Yes | QMessageBox::No);
         if (ret == QMessageBox::Yes)
         {
-            traceMsg(QString("menu clear spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->dxCall));
+            traceMsg(QString("menu clear spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
             bandmapSpotProxyModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
             bandmapView->clearSelectedSpotData();
             bandmapView->bandmapUpdate();
@@ -550,7 +552,7 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint&
     if (contextSelectedSpotViewRowNum != NO_SELECTED_ROWNUM)
     {
         bandmapView->getSpotData(contextMenuSelectedSpotDataRowNum, contextSelectedSpotViewRowNum, contextMenuSelectedSpotData);
-        if (contextMenuSelectedSpotData.spotType == bandmapSpotType::CQ)
+        if (contextMenuSelectedSpotData.getSpotType() == bandmapSpotType::CQ)
         {
             traceMsg(QString("Context Menu Selected - ViewRowNum %1 - Error Selected CQ Marker").arg(contextSelectedSpotViewRowNum));
             return;
@@ -565,7 +567,7 @@ void BandmapClientFrame::on_contextMenuSelected(const QPoint& pos, const QPoint&
 
 void BandmapClientFrame::context_markSpotActionSelected()
 {
-    traceMsg(QString("menu mark spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
+    traceMsg(QString("menu mark spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER)
     {
@@ -579,7 +581,7 @@ void BandmapClientFrame::context_markSpotActionSelected()
 
 void BandmapClientFrame::context_unMarkSpotActionSelected()
 {
-    traceMsg(QString("menu unmark spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
+    traceMsg(QString("menu unmark spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapSpotProxyModel->data(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
@@ -592,8 +594,8 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
 
 void BandmapClientFrame::context_freqActionSelected()
 {
-    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.dxFreq.traceStr()));
-     Frequency freq = contextMenuSelectedSpotData.dxFreq;
+    traceMsg(QString("menu freq selected for callsign %1, freq %2").arg(contextMenuSelectedSpotData.getDxCallStr()).arg(contextMenuSelectedSpotData.getFreq().traceStr()));
+     Frequency freq = contextMenuSelectedSpotData.getFreq();
      sendFreqToRig(freq);
 
 }
@@ -601,9 +603,9 @@ void BandmapClientFrame::context_freqActionSelected()
 
 void BandmapClientFrame::context_bearingActionSelected()
 {
-    traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(contextMenuSelectedSpotData.dxCall).arg(contextMenuSelectedSpotData.rotBrg));
-    QString brg = contextMenuSelectedSpotData.dxBrg;
-    QString loc = contextMenuSelectedSpotData.dxLocator;
+    traceMsg(QString("menu bearing selected for callsign %1, bearing %2").arg(contextMenuSelectedSpotData.getDxCallStr()).arg(contextMenuSelectedSpotData.getRotBrg()));
+    QString brg = contextMenuSelectedSpotData.getDxBrg();
+    QString loc = contextMenuSelectedSpotData.getDxLocator();
     if (!brg.isEmpty())
     {
         if (loc.count() < 6)
@@ -622,14 +624,14 @@ void BandmapClientFrame::context_bearingActionSelected()
 
 void BandmapClientFrame::context_logActionSelected()
 {
-    traceMsg(QString("menu send to log selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
+    traceMsg(QString("menu send to log selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
 
     memoryData::memData spotData;
-    spotData.callsign = contextMenuSelectedSpotData.dxCall;
-    spotData.time = contextMenuSelectedSpotData.spotTime;
-    spotData.freq = contextMenuSelectedSpotData.dxFreq;
-    spotData.locator = contextMenuSelectedSpotData.dxLocator;
-    spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
+    spotData.callsign = contextMenuSelectedSpotData.getDxCallStr();
+    spotData.time = contextMenuSelectedSpotData.getSpotTime();
+    spotData.freq = contextMenuSelectedSpotData.getFreq();
+    spotData.locator = contextMenuSelectedSpotData.getDxLocator();
+    spotData.bearing = contextMenuSelectedSpotData.getDxBrg().toInt();
     spotData.fromBandmapOrMemory = true;
 
     MinosLoggerEvents::SendSpotToLog(spotData);
@@ -640,15 +642,15 @@ void BandmapClientFrame::context_logActionSelected()
 
 void BandmapClientFrame::context_memoryActionSelected()
 {
-    traceMsg(QString("menu send to memory selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
+    traceMsg(QString("menu send to memory selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
 
     memoryData::memData spotData;
-    spotData.callsign = contextMenuSelectedSpotData.dxCall;
-    spotData.time = contextMenuSelectedSpotData.spotTime;
-    spotData.freq = contextMenuSelectedSpotData.dxFreq;
-    spotData.locator = contextMenuSelectedSpotData.dxLocator;
-    spotData.bearing = contextMenuSelectedSpotData.dxBrg.toInt();
-    spotData.dxLocFromNode = contextMenuSelectedSpotData.dxLocatorIsFromNode;
+    spotData.callsign = contextMenuSelectedSpotData.getDxCallStr();
+    spotData.time = contextMenuSelectedSpotData.getSpotTime();
+    spotData.freq = contextMenuSelectedSpotData.getFreq();
+    spotData.locator = contextMenuSelectedSpotData.getDxLocator();
+    spotData.bearing = contextMenuSelectedSpotData.getDxBrg().toInt();
+    spotData.dxLocFromNode = contextMenuSelectedSpotData.getDxLocatorIsFromNode();
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
 
@@ -660,11 +662,11 @@ void BandmapClientFrame::context_clearSpotActionSelected()
 
 
     int ret = QMessageBox::warning(this, tr("Bandmap"),
-                                   tr("Please confirm you want to delete this spot - %1?").arg(contextMenuSelectedSpotData.dxCall),
+                                   tr("Please confirm you want to delete this spot - %1?").arg(contextMenuSelectedSpotData.getDxCallStr()),
                                    QMessageBox::Yes | QMessageBox::No);
     if (ret == QMessageBox::Yes)
     {
-        traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.dxCall));
+        traceMsg(QString("menu clear spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
         bandmapSpotProxyModel->removeRows(contextMenuSelectedSpotDataRowNum, 1);
 
     }
@@ -967,7 +969,7 @@ void BandmapClientFrame::timerCheckNewBandMapSpots()
             for (int i = 0; i < logSpotQueue.count(); i++)
             {
                 addLogSpotToBandmapTable(logSpotQueue[i]);
-                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
+                traceMsg(QString("New Logger Spot: %1 %2 %3").arg(logSpotQueue[i]->getDxCallStr()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getDxLocator()));
                 delete logSpotQueue[i];
             }
 
@@ -1010,7 +1012,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
             addLogSpotToBandmapTable(logSpotQueue[i]);
-            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getCallsign().fullCall.getValue()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getLocator()));
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4").arg(logSpotQueue[i]->getDxCallStr()).arg(logSpotQueue[i]->getFreq().traceStr()).arg(logSpotQueue[i]->getDxLocator()));
             delete logSpotQueue[i];
         }
 
@@ -1055,23 +1057,17 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
         if (spotlist.count() == TTLVALUE +1)
         {
-            // get time to live value
-            if (spotlist[TTLVALUE] == "0")
+
+            bool ok = false;
+            int ttl = spotlist[TTLVALUE].toInt(&ok);
+            if (ok)
             {
-                timeToLive = 0;  // timeToLive is off
-            }
-            else
-            {
-                bool ok = false;
-                int ttl = spotlist[TTLVALUE].toInt(&ok);
-                if (ok)
+                if (ttl >= MIN_TTL && ttl <= MAX_TTL)
                 {
-                    if (ttl >= MIN_TTL && ttl <= MAX_TTL)
-                    {
-                        timeToLive = ttl * 60; // seconds
-                    }
+                    timeToLive = ttl * 60; // seconds
                 }
             }
+
 
             //-------------------------------------------------------
 
@@ -1111,19 +1107,34 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
 
-            spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            //spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));
-            bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(rxTime, spotlist[SPOTTIME],
-                                                    spotlist[DXFREQ], spotlist[DXBANDSTR],  spotlist[DXBANDMASK],
-                                                    spotlist[DXMODESTR], spotlist[DXMODEMASK], spotlist[DXCALL],
-                                                    callWorked, spotlist[DXLOCATOR], dxLocFromNodeFlag,
-                                                    locWorked,distance,
-                                                    bearing, "", false, spotlist[SPOTCALL],        // ignore rotator bearing
-                                                    spotlist[SPOTLOCATOR], spotlist[DXPROPMODE],
-                                                    false, false,                                   // only used by CQ Freq
-                                                    spotlist[SPOTCOMMENT], bandmapSpotType::SPOT_TYPE::CLUSTER));
+
+
+            bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::CLUSTER));
+
+            bandmapDataModel->rowData->setRxTime(rxTime);
+            bandmapDataModel->rowData->setSpotDateTime(spotDateTime);
+            bandmapDataModel->rowData->setFreq(spotlist[DXFREQ]);
+            bandmapDataModel->rowData->setBand(spotlist[DXBANDSTR]);
+            bandmapDataModel->rowData->setBandMask(spotlist[DXBANDMASK]);
+            bandmapDataModel->rowData->setMode(spotlist[DXMODESTR]);
+            bandmapDataModel->rowData->setModeMask(spotlist[DXMODEMASK]);
+            bandmapDataModel->rowData->setDxCall(spotlist[DXCALL]);
+            bandmapDataModel->rowData->setDxCallWorked(callWorked);
+            bandmapDataModel->rowData->setDxLocator(spotlist[DXLOCATOR]);
+            bandmapDataModel->rowData->setDxLocatorIsFromNode(dxLocFromNodeFlag);
+            bandmapDataModel->rowData->setDxLocatorWorked(locWorked);
+            bandmapDataModel->rowData->setDxDist(distance);
+            bandmapDataModel->rowData->setDxBrg(bearing);
+            bandmapDataModel->rowData->setSpotterCall(spotlist[SPOTCALL]);
+            bandmapDataModel->rowData->setSpotterLocator(spotlist[SPOTLOCATOR]);
+            bandmapDataModel->rowData->setSpotComment(spotlist[SPOTCOMMENT]);
+            bandmapDataModel->rowData->setSpotType(bandmapSpotType::SPOT_TYPE::CLUSTER);
+
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
@@ -1135,7 +1146,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
 
 
-void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
+void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
 {
 
     // is it a CQ Freq Spot
@@ -1152,7 +1163,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
             bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
-            if (spot->getCallsign().fullCall.getValue() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
+            if (spot->getDxCallStr() == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString())
             {
                 if ((savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED || savedSpotType == bandmapSpotType::CLUSTER_MARKED) && spot->getSpotType() == bandmapSpotType::SAVED)
                 {
@@ -1181,7 +1192,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
     bool locWorked = false;
     // update worked locators
-    QString loc = spot->getLocator();
+    QString loc = spot->getDxLocator();
     if (!loc.isEmpty())
     {
         QString locMajor = loc.mid(0,4);
@@ -1206,10 +1217,6 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     }
 
 
-
-
-
-
     QString rotBrg;
 
     // find distance to station
@@ -1218,9 +1225,9 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
     QString distance;
 
 
-    if (!spot->getLocator().isEmpty())
+    if (!spot->getDxLocator().isEmpty())
     {
-        calcSpotDistanceBearing(spot->getLocator(), &dist, &brg);
+        calcSpotDistanceBearing(spot->getDxLocator(), &dist, &brg);
         distance = QString::number(static_cast<int>(dist));
     }
 
@@ -1236,27 +1243,37 @@ void BandmapClientFrame::addLogSpotToBandmapTable(LoggerSpots* spot)
 
 
 
-    qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+    qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
 
-    QString logTimeStr = spot->getTime().time().toString("HH:mm");
+    QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
 
 
-    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getCallsign().fullCall.getValue()).arg(spot->getFreq().traceStr()).arg(spot->getModeStr()).arg(spot->getLocator()));
+    traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getDxCallStr()).arg(spot->getFreq().traceStr()).arg(spot->getMode()).arg(spot->getDxLocator()));
 
-    bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(logTime, logTimeStr,
-                                            spot->getFreq(), spot->getbandStr(),  spot->getBandMask(),
-                                            spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
-                                            spot->getWorked(), spot->getLocator(), false,
-                                            locWorked, distance,
-                                            spot->getBearing(), rotBrg, rotatorConnected, "",
-                                            "", "", false, false, "", spot->getSpotType()));
+    bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::LOGGED));
+    bandmapDataModel->rowData->setRxTime(logTime);
+    bandmapDataModel->rowData->setSpotTime(logTimeStr);
+    bandmapDataModel->rowData->setFreq(spot->getFreq());
+    bandmapDataModel->rowData->setBand(spot->getBand());
+    bandmapDataModel->rowData->setBandMask(spot->getBandMask());
+    bandmapDataModel->rowData->setMode(spot->getMode());
+    bandmapDataModel->rowData->setModeMask(spot->getModeMask());
+    bandmapDataModel->rowData->setDxCall(spot->getDxCallStr());
+    bandmapDataModel->rowData->setDxCallWorked(spot->getDxCallWorked());
+    bandmapDataModel->rowData->setDxLocator(spot->getDxLocator());
+    bandmapDataModel->rowData->setDxLocatorWorked(locWorked);
+    bandmapDataModel->rowData->setDxDist(distance);
+    bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
+    bandmapDataModel->rowData->setRotBrg(rotBrg);
+    bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+    bandmapDataModel->rowData->setSpotType(spot->getSpotType());
 
-    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+      bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
 
 }
 
-void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
+void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
 {
 
     if (!spot->getRunModeOn())
@@ -1275,15 +1292,16 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
     else
     {
 
-        qint64 logTime = spot->getTime().toMSecsSinceEpoch() / 1000;
+        qint64 logTime = spot->getSpotDateTime().toMSecsSinceEpoch() / 1000;
 
-        QString logTimeStr = spot->getTime().time().toString("HH:mm");
+        QString logTimeStr = spot->getSpotDateTime().time().toString("HH:mm");
 
         // does a CQ Spot exist?
         int rowNum = -1;
+        bandmapSpotType::SPOT_TYPE savedSpotType;
         for(int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
-            bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+            savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
             if (savedSpotType == bandmapSpotType::CQ)
             {
                 rowNum = row;
@@ -1293,16 +1311,24 @@ void BandmapClientFrame::addRemoveCQSpot(LoggerSpots* spot)
 
         if (rowNum == -1)
         {
-            // new spot
-            bandmapDataModel->rowData = QSharedPointer<BandmapData>(new BandmapData(logTime, logTimeStr,
-            spot->getFreq(), spot->getbandStr(),  spot->getBandMask(),
-            spot->getModeStr(), spot->getModeMask(), spot->getCallsign().fullCall.getValue(),
-            spot->getWorked(), spot->getLocator(), false,
-            false, "",
-            spot->getBearing(), "", rotatorConnected, "",
-            "", "",
-            spot->getRunModeOn(), spot->getOffRunFreq(),
-            "", spot->getSpotType()));
+
+            bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData(savedSpotType));
+            bandmapDataModel->rowData->setRxTime(logTime);
+            bandmapDataModel->rowData->setSpotTime(logTimeStr);
+            bandmapDataModel->rowData->setFreq(spot->getFreq());
+            bandmapDataModel->rowData->setBand(spot->getBand());
+            bandmapDataModel->rowData->setBandMask(spot->getBandMask());
+            bandmapDataModel->rowData->setMode(spot->getMode());
+            bandmapDataModel->rowData->setModeMask(spot->getModeMask());
+            bandmapDataModel->rowData->setDxCall(spot->getDxCallStr());
+            bandmapDataModel->rowData->setDxCallWorked(spot->getDxCallWorked());
+            bandmapDataModel->rowData->setDxLocator(spot->getDxLocator());
+            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
+            bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+            bandmapDataModel->rowData->setRunModeOn(spot->getRunModeOn());
+            bandmapDataModel->rowData->setOffRunFreq(spot->getOffRunFreq());
+            bandmapDataModel->rowData->setSpotType(spot->getSpotType());
+
 
             bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
         }
@@ -1923,10 +1949,25 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
         getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
 
-        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                            logModeStr, logModeMask,
-                                            freq, logBandStr, logBandMask,
-                                            true, time, false, false, bandmapSpotType::LOGGED);
+//        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            freq, logBandStr, logBandMask,
+//                                            true, time, false, false, bandmapSpotType::LOGGED);
+
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::LOGGED);
+        spot->setCallsign(cs);
+        spot->setDxLocator(loc);
+        spot->setDxBrg(brg);
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(freq);
+        spot->setBand(logBandStr);
+        spot->setBandMask(logBandMask);
+        spot->setDxCallWorked(true);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
         logSpotQueue.append(spot);
     }
 }
@@ -1968,10 +2009,24 @@ void BandmapClientFrame::setCQFreq()
         getBand(bands, freq, logBandStr, logBandMask);
         getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
-        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
-                                                logModeStr, logModeMask,
-                                                freq, logBandStr, logBandMask,
-                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
+//        LoggerSpots* spot = new LoggerSpots(Callsign("???"), "", "",
+//                                                logModeStr, logModeMask,
+//                                                freq, logBandStr, logBandMask,
+//                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::CQ);
+        spot->setCallsign(Callsign("???"));
+        spot->setDxLocator("");
+        spot->setDxBrg("");
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(runModeOn);
+        spot->setOffRunFreq(offRunFreq);
+
+
         logSpotQueue.append(spot);
     }
 
@@ -1997,10 +2052,25 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
 
 
-        LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
-                                            logModeStr, logModeMask,
-                                            _freq, logBandStr, logBandMask,
-                                            false, time, false, false, bandmapSpotType::MARKED);
+//        LoggerSpots* spot = new LoggerSpots(Callsign("????"), loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            _freq, logBandStr, logBandMask,
+//                                            false, time, false, false, bandmapSpotType::MARKED);
+
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::MARKED);
+        spot->setCallsign(Callsign("???"));
+        spot->setDxLocator("");
+        spot->setDxBrg("");
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(_freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
+
         logSpotQueue.append(spot);
     }
 
@@ -2023,10 +2093,24 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         getBand(bands, _freq, logBandStr, logBandMask);
         getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
 
-        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
-                                            logModeStr, logModeMask,
-                                            _freq, logBandStr, logBandMask,
-                                            false, time, false, false, bandmapSpotType::SAVED);
+//        LoggerSpots* spot = new LoggerSpots(cs, loc, brg,
+//                                            logModeStr, logModeMask,
+//                                            _freq, logBandStr, logBandMask,
+//                                            false, time, false, false, bandmapSpotType::SAVED);
+//
+        BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::SAVED);
+        spot->setCallsign(Callsign(cs));
+        spot->setDxLocator(loc);
+        spot->setDxBrg(brg);
+        spot->setMode(logModeStr);
+        spot->setModeMask(logModeMask);
+        spot->setFreq(_freq);
+        spot->setBand(logBandStr);
+        spot->setDxCallWorked(false);
+        spot->setSpotDateTime(time);
+        spot->setRunModeOn(false);
+        spot->setOffRunFreq(false);
+
         logSpotQueue.append(spot);
     }
 

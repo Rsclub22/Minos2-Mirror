@@ -16,7 +16,7 @@
 #include "bandmapmarkerdetails.h"
 #include "bandmapclientfilterdialog.h"
 #include "bandmapcommon.h"
-
+#include "spotdatabase.h"
 
 const QChar DEG_SYMBOL = 0260; // octal value
 const int NO_SELECTED_ROWNUM = -1;
@@ -59,7 +59,7 @@ public:
     int isClickInRegionOfSpot(QPoint p);
 
 
-    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapData &selectedSpot);
+    void getSpotData(int &selectedSpotDataRowNum, int displayedSpotNum, BandmapSpotData &selectedSpot);
 
     void clearSelectedSpotData();
 
@@ -67,7 +67,7 @@ public:
 
     int getSelectedSpotDataRowNum(){return selectedSpotDataRowNum;}
 
-    BandmapData* getSelectedSpotDataPtr(){return &selectedSpot;}
+    BandmapSpotData* getSelectedSpotDataPtr(){return &selectedSpot;}
 
     void clearSelectedSpot();
 
@@ -166,7 +166,7 @@ private:
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 
-    BandmapData selectedSpot;
+    BandmapSpotData selectedSpot;
     int selectedSpotDataRowNum;
     int selectedSpotViewRowNum;
 
@@ -192,7 +192,7 @@ private:
     int getViewPortStartYCoordOnScene();
     int getViewPortEndYCoordOnScene();
     void traceMsg(QString msg);
-    void clearSpotData(BandmapData &selectedSpot);
+    void clearSpotData(BandmapSpotData &selectedSpot);
     void deleteItemsFromMarkerList();
     void assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg);
     void assembleCqMsg(int row, QString& markerMsg);

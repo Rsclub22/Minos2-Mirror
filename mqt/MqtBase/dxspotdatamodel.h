@@ -14,10 +14,11 @@
 #define DXSPOTDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "spotdata.h"
+//#include "spotdata.h"
 #include "clustercommon.h"
+#include "spotdatabase.h"
 
-const int dxSpotColCount = 20;
+const int dxSpotColCount = 21;
 
 const int DataStoredRole = Qt::UserRole + 0;
 
@@ -51,12 +52,16 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
-    SpotData* rowData = nullptr;
+    ClusterSpotData* rowData = nullptr;
     QSharedPointer<HtmlDelegate> delegate ;
+
+    // used to access all the data directly
+
+    ClusterSpotData* getSpotData(int row){ return dxSpotData[row];}
 
 private:
 
-    QVector<SpotData*> dxSpotData;
+    QVector<ClusterSpotData*> dxSpotData;
 
 
 };

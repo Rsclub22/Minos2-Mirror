@@ -33,6 +33,7 @@ BandmapView::BandmapView(QWidget *parent) :
     fullBandHeight(4000),
     fontHeight(0),
     maxNumSpots(0),
+    selectedSpot(bandmapSpotType::NONE),
     selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
     selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
 {
@@ -46,10 +47,6 @@ BandmapView::BandmapView(QWidget *parent) :
 
     //horizontalScrollBar()->setRange(0, 0);
     //verticalScrollBar()->setRange(0, 0);
-
-    bool traceDebugFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
-
 
 
 }
@@ -502,11 +499,11 @@ void BandmapView::mouseDoubleClicked(QPoint p)
     {
 
         memoryData::memData spotData;
-        spotData.callsign = selectedSpot.dxCall;
-        spotData.time = selectedSpot.spotTime;
-        spotData.freq = selectedSpot.dxFreq;
-        spotData.locator = selectedSpot.dxLocator;
-        spotData.bearing = selectedSpot.dxBrg.toInt();
+        spotData.callsign = selectedSpot.getDxCallStr();
+        spotData.time = selectedSpot.getSpotTime();
+        spotData.freq = selectedSpot.getFreq();
+        spotData.locator = selectedSpot.getDxLocator();
+        spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
 
         MinosLoggerEvents::SendSpotToLog(spotData);
@@ -810,7 +807,7 @@ void BandmapView::bandmapSelectSpot(QPoint p)
                 clearSelectedSpot();       // clear any spot previously selected
                 setSelectedSpot(spotViewNum);        // mark new selected spot
 
-                MinosLoggerEvents::SendFreqToRig(selectedSpot.dxFreq);
+                MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
             }
 
         }
@@ -851,20 +848,12 @@ void BandmapView::clearSelectedSpotData()
 
 
 
-void BandmapView::clearSpotData(BandmapData &selectedSpot)
+void BandmapView::clearSpotData(BandmapSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = NO_SELECTED_ROWNUM;
     selectedSpotViewRowNum = NO_SELECTED_ROWNUM;
-    selectedSpot.spotTime = "";
-    selectedSpot.dxFreq.clear();
-    selectedSpot.dxCall = "";
-    selectedSpot.dxLocator = "";
-    selectedSpot.dxDist = "";
-    selectedSpot.dxBrg = "";
-    selectedSpot.dxCallWorked = false;
-    selectedSpot.dxLocatorWorked = false;
-    selectedSpot.isSelected = false;
-    selectedSpot.spotType = bandmapSpotType::SPOT_TYPE::NONE;
+    selectedSpot.clear();
+
 }
 
 void BandmapView::setSelectedSpot(int spotViewNum)
@@ -880,7 +869,7 @@ void BandmapView::setSelectedSpot(int spotViewNum)
     getSpotData(selectedSpotDataRowNum, selectedSpotViewRowNum, selectedSpot);
 
     model()->setData(model()->index(selectedSpotDataRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
-    selectedSpot.isSelected = true;
+    selectedSpot.setIsSelected(true);
     bandmapUpdate();
 }
 
@@ -894,21 +883,21 @@ void BandmapView::clearListOfMarkers()
 }
 
 
-void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapData &selectedSpot)
+void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewRowNum, BandmapSpotData &selectedSpot)
 {
     selectedSpotDataRowNum = listOfMarkers[selectedSpotViewRowNum]->getModelRowNum();
 
     if (selectedSpotDataRowNum >= 0 && selectedSpotDataRowNum < model()->rowCount())
     {
-        selectedSpot.spotTime = model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString();
-        selectedSpot.dxFreq =qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole));
-        selectedSpot.dxCall = model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-        selectedSpot.dxLocator = model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
-        selectedSpot.dxDist = model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
-        selectedSpot.dxBrg = model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
-        selectedSpot.dxCallWorked = model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-        selectedSpot.dxLocatorWorked = model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
-        selectedSpot.spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+        selectedSpot.setSpotTime(model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
+        selectedSpot.setDxCall(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDxLocator(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDxDist(model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDxBrg(model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDxCallWorked(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
+        selectedSpot.setDxLocatorWorked(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
+        selectedSpot.setSpotType(static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt()));
 
     }
 
@@ -1074,6 +1063,7 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
         if (traceDebugFlag)
         {
             traceMsg(QString("dump list of spots and freq"));

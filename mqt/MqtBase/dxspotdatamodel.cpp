@@ -25,11 +25,7 @@ DxSpotDataModel::DxSpotDataModel(QObject *parent)
 
 DxSpotDataModel::~DxSpotDataModel()
 {
-    //foreach(auto s, dxSpotData)
-    //{
-    //    delete s;
-    //}
-    //dxSpotData.clear();
+
 }
 
 QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -91,7 +87,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
        }
        else if (role == Qt::ForegroundRole)
        {
-           SpotData* dxSpot = dxSpotData.at(section);
+           ClusterSpotData* dxSpot = dxSpotData.at(section);
            if (dxSpot->getSentToMemory())
            {
                QColor c = SPOT_TO_MEMORY;
@@ -172,7 +168,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        SpotData* dxSpot = dxSpotData.at(row);
+        ClusterSpotData* dxSpot = dxSpotData.at(row);
 
         QString d;
         switch (col)
@@ -184,7 +180,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getSpotDate();
             break;
             case FREQ_COL_NUM:
-                d = removeHundredHzAndHzDigits(dxSpot->getDxFreq().convertFreqStrDisp());
+                d = removeHundredHzAndHzDigits(dxSpot->getFreq().convertFreqStrDisp());
             break;
             case DXSPOT_CALL_COL_NUM:
                 if (dxSpot->getDxCallWorked() == BOOL_YES)
@@ -193,7 +189,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                     d = HtmlFontColour(colour);
                 }
 
-                d = d + dxSpot->getDxCall();
+                d = d + dxSpot->getDxCallStr();
             break;
             case DXLOC_COL_NUM:
                 if (dxSpot->getDxLocatorWorked() == BOOL_YES)
@@ -219,7 +215,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getDxBrg();
             break;
             case SPOTTER_CALL_COL_NUM:
-                d = dxSpot->getSpotterCall();
+                d = dxSpot->getSpotterCallStr();
             break;
             case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->getSpotterLocator();
@@ -231,13 +227,13 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = QString::number(dxSpot->getRxTime());
             break;
             case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->getDxModeStr();
+                d = dxSpot->getMode();
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
                 d = dxSpot->getDxPropMode();
             break;
             case DXBANDSTR_COL_NUM:
-                d = dxSpot->getDxBandStr();
+                d = dxSpot->getBand();
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
                 d = dxSpot->getDxLocatorIsFromNode();
@@ -251,7 +247,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     if (role == DataStoredRole)
     {
 
-        SpotData* dxSpot = dxSpotData.at(index.row());
+        ClusterSpotData* dxSpot = dxSpotData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -263,10 +259,10 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getSpotDate();
             break;
             case FREQ_COL_NUM:
-                d.setValue(dxSpot->getDxFreq());
+                d.setValue(dxSpot->getFreq());
             break;
             case DXSPOT_CALL_COL_NUM:
-                d = dxSpot->getDxCall();
+                d = dxSpot->getDxCallStr();
             break;
             case DXLOC_COL_NUM:
                 d = dxSpot->getDxLocator();
@@ -278,7 +274,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getDxBrg();
             break;
             case SPOTTER_CALL_COL_NUM:
-                d = dxSpot->getSpotterCall();
+                d = dxSpot->getSpotterCallStr();
             break;
             case SPOTTER_LOC_COL_NUM:
                 d = dxSpot->getSpotterLocator();
@@ -296,22 +292,22 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getSentToMemory();
             break;
             case DXBANDMASK_COL_NUM:
-                d = dxSpot->getDxBandMask();
+                d = dxSpot->getBandMask();
             break;
             case DXMODEMASK_COL_NUM:
-                d = dxSpot->getDxModeMaskStr();
+                d = dxSpot->getModeMask();
             break;
             case RXTIME_COL_NUM:
                 d = dxSpot->getRxTime();
             break;
             case DXSPOT_MODE_COL_NUM:
-                d = dxSpot->getDxModeStr();
+                d = dxSpot->getMode();
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
                 d = dxSpot->getDxPropMode();
             break;
             case DXBANDSTR_COL_NUM:
-                d = dxSpot->getDxBandStr();
+                d = dxSpot->getBand();
             break;
 
 
@@ -333,7 +329,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
     if (index.isValid() && role == DataStoredRole)
     {
 
-        SpotData* dxSpot = dxSpotData.value(row);
+        ClusterSpotData* dxSpot = dxSpotData.value(row);
 
         switch (col)
         {
@@ -344,7 +340,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                 dxSpot->setSpotDate(value.toString());
             break;
             case FREQ_COL_NUM:
-                dxSpot->setDxFreq(qvariant_cast<Frequency>(value));
+                dxSpot->setFreq(qvariant_cast<Frequency>(value));
             break;
             case DXSPOT_CALL_COL_NUM:
                 dxSpot->setDxCall(value.toString());
@@ -374,19 +370,19 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
                 dxSpot->setSpotComment(value.toString());
                 break;
             case DXBANDMASK_COL_NUM:
-                dxSpot->setDxModeMaskStr(value.toString());
+                dxSpot->setModeMask(value.toString());
             break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 dxSpot->setSentToMemory(value.toBool());
             break;
             case DXSPOT_MODE_COL_NUM:
-                dxSpot->setDxModeStr(value.toString());
+                dxSpot->setMode(value.toString());
             break;
             case DXSPOT_PROP_MODE_COL_NUM:
                 dxSpot->setDxPropMode(value.toString());
             break;
             case DXBANDSTR_COL_NUM:
-                dxSpot->setDxBandStr(value.toString());
+                dxSpot->setBand(value.toString());
             break;
             default:
                 return false;
@@ -437,7 +433,7 @@ bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        SpotData *s = dxSpotData.takeAt(row);
+        ClusterSpotData *s = dxSpotData.takeAt(row);
         delete s;
     }
     endRemoveRows();

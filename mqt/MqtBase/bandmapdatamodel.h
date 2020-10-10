@@ -14,12 +14,12 @@
 #define BANDMAPDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "bandmapdata.h"
 #include "clustercommon.h"
 #include "bandmapcommon.h"
+#include "spotdatabase.h"
 #include "cutils.h"
 
-const int bandmapColCount = 26;
+const int bandmapColCount = 29;
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 
 class BandmapDataModel : public QAbstractTableModel
@@ -46,13 +46,15 @@ public:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-    QSharedPointer<BandmapData> getBandmapDataRow(int row);
+    QSharedPointer<BandmapSpotData> getBandmapDataRow(int row);
 
-    QSharedPointer<BandmapData> rowData;
+    QSharedPointer<BandmapSpotData> rowData;
+
+    QSharedPointer<BandmapSpotData> getSpotData(int row){return bandmapData[row];};
 
 private:
 
-    QVector< QSharedPointer<BandmapData> > bandmapData;
+    QVector< QSharedPointer<BandmapSpotData>>  bandmapData;
 
 
 };

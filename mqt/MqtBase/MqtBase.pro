@@ -88,11 +88,11 @@ SOURCES += \
     StartConfig.cpp \
     TreeUtils.cpp \
     serialdata.cpp \
+    spotdatabase.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    spotdata.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
     clustercommon.cpp \
@@ -101,7 +101,6 @@ SOURCES += \
     bearinglineedit.cpp \
     callsigninputdialog.cpp \
     locatorinputdialog.cpp \
-    bandmapdata.cpp \
     bandmapdatamodel.cpp
 
 HEADERS += \
@@ -171,13 +170,13 @@ HEADERS += \
     StartConfig.h \
     TreeUtils.h \
     serialdata.h \
+    spotdatabase.h \
     validators.h \
     waitcursor.h \
     dxspotdatamodel.h \
     qttelnet.h \
     clustercommon.h \
     clusterClientServer.h \
-    spotdata.h \
     rigmemcommondata.h \
     helpbrowser.h \
     helptextbrowser.h \
@@ -186,7 +185,6 @@ HEADERS += \
     bearinglineedit.h \
     callsigninputdialog.h \
     locatorinputdialog.h \
-    bandmapdata.h \
     bandmapdatamodel.h \
     bandmapcommon.h
 
