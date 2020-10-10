@@ -88,7 +88,6 @@ SOURCES += \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
     clusterClientServer.cpp \
-    spotdata.cpp \
     helpbrowser.cpp \
     helptextbrowser.cpp \
     clustercommon.cpp \
@@ -168,7 +167,6 @@ HEADERS += \
     qttelnet.h \
     clustercommon.h \
     clusterClientServer.h \
-    spotdata.h \
     rigmemcommondata.h \
     helpbrowser.h \
     helptextbrowser.h \
