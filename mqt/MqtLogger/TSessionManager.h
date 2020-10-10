@@ -63,6 +63,7 @@ private slots:
 
     void on_amendButton_clicked();
 
+    void on_setSplitter_splitterMoved(int, int);
 private:
     void doCloseEvent();
     void parseSessions();
