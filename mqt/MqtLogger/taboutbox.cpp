@@ -214,12 +214,14 @@ void TAboutBox::on_AppsButton_clicked()
 void TAboutBox::on_manageSets_clicked()
 {
     LogContainer->setCurrSessionName(ui->chooseSetCb->currentText());
+    QString sess = LogContainer->getCurrSession();  // sets ap->currSession
     TSessionManager tsm(this);
     tsm.exec();
 
     ui->chooseSetCb->clear();
 
-    QString sess = LogContainer->getCurrSession();
+    // it might have changed
+    sess = LogContainer->getCurrSession();
 
     QStringList sessionlst = LogContainer->getSessions();
     ui->chooseSetCb->addItems(sessionlst);
