@@ -403,11 +403,12 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       {
          return false;
       }
+
+   setVersion(STRINGVERSION);
    commonSave( newFile );
 
    return true;
 }
-
 qint64 LoggerContestLog::readBlock( int bno )
 {
     bool sres = GJVcontestFile->seek(bno * bsize);

@@ -92,6 +92,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
 
    bool dirty = false;
 
+   ct->appVersion.addIfDirty(st, "version", dirty);
    ct->name.addIfDirty( st, "name", dirty );
    ct->contestBands.addIfDirty( st, "band", dirty );
    ct->currentBand.addIfDirty( st, "currentBand", dirty );

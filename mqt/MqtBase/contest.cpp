@@ -51,7 +51,7 @@ BaseContestLog::BaseContestLog( )
    bearingOffset.setValue(0);
    currentMode.setValue( "USB" );
 
-   protectedContest.setValue( false );
+  protectedContest.setValue( false );
   allowLoc8.setValue( false );
   allowLoc4.setValue ( false );
   RSTMandatoryField.setValue( true );
@@ -75,6 +75,11 @@ BaseContestLog::~BaseContestLog()
 {
    closeFile();
 }
+void BaseContestLog::setVersion(QString v)
+{
+    appVersion.setValue(v);
+}
+
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
     int i = 0;
@@ -185,6 +190,7 @@ void BaseContestLog::setCurrentBand(QString cb)
 
 void BaseContestLog::clearDirty()
 {
+   appVersion.clearDirty();
    protectedContest.clearDirty();
    mycall.fullCall.clearDirty();
 
@@ -227,6 +233,7 @@ void BaseContestLog::clearDirty()
 }
 void BaseContestLog::setDirty()
 {
+   appVersion.setDirty();
    protectedContest.setDirty();
    mycall.fullCall.setDirty();
    name.setDirty();
@@ -1133,6 +1140,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
 
    if ( methodName == "MinosLogContest" )
    {
+      mt->getStructArgMemberValue( "version", appVersion );
       mt->getStructArgMemberValue( "name", name );
       mt->getStructArgMemberValue( "band", contestBands );
       mt->getStructArgMemberValue( "currentBand", currentBand );

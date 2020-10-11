@@ -106,6 +106,8 @@ class BaseContestLog: public BaseLogList
       // "Real" basic contest data that needs monitoring
       // and provide the "front sheet" data
 
+      MinosStringItem<QString> appVersion;
+
       MinosItem<bool> protectedContest;
 
       MinosStringItem<QString> name;         // name of contest
@@ -394,6 +396,8 @@ protected:
    int ct_stanzaCount = 0;
    bool suppressProtected = false;
    bool unwriteable = false;
+
+   void setVersion(QString v);
 
    virtual bool minosSaveFile( bool /*newfile*/ )
    {

@@ -100,6 +100,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     cfileName = ct->cfileName;
     minosFile = ct->minosFile;
 
+    appVersion = ct->appVersion;
+
     protectedContest = ct->protectedContest;
 
     name = ct->name;
@@ -205,6 +207,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 {
     ct->cfileName = cfileName;
     ct->minosFile = minosFile;
+
+    ct->appVersion = appVersion;
 
     ct->protectedContest = protectedContest;
 

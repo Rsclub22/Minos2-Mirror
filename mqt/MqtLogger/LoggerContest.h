@@ -51,7 +51,7 @@ class LoggerContestLog : public BaseContestLog
       bool importReg1Test( QSharedPointer<QFile> adifContestFile );
       QVector<StanzaPos> stanzaLocations;
 
-   protected:
+protected:
       // minos file
       virtual bool minosSaveFile( bool newfile ) override;
    public:
