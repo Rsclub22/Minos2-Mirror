@@ -1077,10 +1077,6 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
             // check to see if spot is for this contest band
 
-            if (spotlist[DXBANDSTR] != contestBandStr)
-            {
-                return;
-            }
 
             // check to see if call or locator worked
             bool callWorked = false;
@@ -1089,6 +1085,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
             {
                 checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+            }
+            else
+            {
+                return;  // not for this contest band
             }
 
 
@@ -1269,7 +1269,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
     bandmapDataModel->rowData->setRotConnected(rotatorConnected);
     bandmapDataModel->rowData->setSpotType(spot->getSpotType());
 
-      bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
 
 }
@@ -1299,7 +1299,7 @@ void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
 
         // does a CQ Spot exist?
         int rowNum = -1;
-        bandmapSpotType::SPOT_TYPE savedSpotType;
+        bandmapSpotType::SPOT_TYPE savedSpotType = bandmapSpotType::SPOT_TYPE::NONE;
         for(int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
             savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
