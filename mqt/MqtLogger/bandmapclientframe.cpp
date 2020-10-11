@@ -1268,7 +1268,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
     bandmapDataModel->rowData->setRotConnected(rotatorConnected);
     bandmapDataModel->rowData->setSpotType(spot->getSpotType());
 
-      bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+    bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 
 
 }
@@ -1298,7 +1298,7 @@ void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
 
         // does a CQ Spot exist?
         int rowNum = -1;
-        bandmapSpotType::SPOT_TYPE savedSpotType;
+        bandmapSpotType::SPOT_TYPE savedSpotType = bandmapSpotType::SPOT_TYPE::NONE;
         for(int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
             savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
