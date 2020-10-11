@@ -13,5 +13,5 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../MqtBase/libMqtBase.a
 
 include($$PWD/mqtminlibs.pri)
 
-PRECOMPILED_HEADER = ../MqtBase/base_pch.h
+#PRECOMPILED_HEADER = ../MqtBase/base_pch.h
 

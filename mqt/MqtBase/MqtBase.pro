@@ -23,7 +23,7 @@ INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
 
-PRECOMPILED_HEADER = ../MqtBase/base_pch.h
+#PRECOMPILED_HEADER = ../MqtBase/base_pch.h
 
 SOURCES += \
     AntennaDetail.cpp \
