@@ -55,7 +55,7 @@ void MinosContestLoadDialog::doShow()
         //timer->stop();
         el->quit();
     }
-    ,50
+    ,500
     );
     el->exec();
     trace("Exit from doShow after delay for screen update");
