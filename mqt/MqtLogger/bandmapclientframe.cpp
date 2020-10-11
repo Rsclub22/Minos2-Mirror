@@ -1077,10 +1077,6 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
 
             // check to see if spot is for this contest band
 
-            if (spotlist[DXBANDSTR] != contestBandStr)
-            {
-                return;
-            }
 
             // check to see if call or locator worked
             bool callWorked = false;
@@ -1089,6 +1085,10 @@ void BandmapClientFrame::addDxSpotToBandmapTable(const QString spot)
             if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
             {
                 checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+            }
+            else
+            {
+                return;  // not for this contest band
             }
 
 
