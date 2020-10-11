@@ -51,6 +51,7 @@ private:
     QString cfileName;
     bool minosFile;
 
+    MinosStringItem<QString> appVersion;
     MinosItem<bool> protectedContest;
     MinosStringItem<QString> name;         // name of contest
     MinosStringItem<QString> location;
