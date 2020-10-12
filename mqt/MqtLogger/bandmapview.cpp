@@ -1045,6 +1045,10 @@ void BandmapView::drawBandMapSpots()
         return;
 
     bool centreTextOnFrequency = true;
+    bool btemp;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
+    centreTextOnFrequency = !btemp;
+
     if (!centreTextOnFrequency)
     {
         int textYCoord = 0;

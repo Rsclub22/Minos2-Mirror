@@ -1,5 +1,6 @@
 #include "base_pch.h"
 #include "delayedaction.h"
+#include "ContestApp.h"
 
 #include "minoscontestloaddialog.h"
 #include "ui_minoscontestloaddialog.h"
@@ -47,6 +48,8 @@ void MinosContestLoadDialog::doShow()
 {
     trace("Progress Dialog doShow");
     show();
+    int progDelay;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpProgressDelay, progDelay );
 
     delayedAction(this, [=]()
     {
@@ -55,7 +58,7 @@ void MinosContestLoadDialog::doShow()
         //timer->stop();
         el->quit();
     }
-    ,500
+    ,progDelay
     );
     el->exec();
     trace("Exit from doShow after delay for screen update");
