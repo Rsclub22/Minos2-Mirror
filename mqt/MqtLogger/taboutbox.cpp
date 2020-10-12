@@ -147,12 +147,23 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
         // LanguageChange even to do things...
 
         QString sess = LogContainer->getCurrSession();
+        if (sess.isEmpty())
+        {
+            sess = app->defaultSession;
+        }
 
         // so clear it again!
         app ->currSession.clear();
 
         QStringList sessionlst = LogContainer->getSessions();
-        ui->chooseSetCb->addItems(sessionlst);
+        if (sessionlst.count())
+        {
+            ui->chooseSetCb->addItems(sessionlst);
+        }
+        else
+        {
+            ui->chooseSetCb->addItem(sess);
+        }
         ui->chooseSetCb->setCurrentText(sess);
 
     }
