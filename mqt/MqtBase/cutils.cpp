@@ -259,7 +259,8 @@ int strnicmp( const QString &s1, const QString &s2, int len )
 QDateTime CanonicalToTDT(QString cdtg )
 {
    QDateTime d;
-   d = QDateTime::fromString(cdtg, "yyyyMMddHHmm" );
+   QString format("yyyyMMddHHmm");
+   d = QDateTime::fromString(cdtg, format );
    d.setTimeSpec(Qt::UTC);
    return d;
 

@@ -101,7 +101,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpProgressDelay, "LoadProgressDelay", 500, QT_TR_NOOP("Load Progress Delay"), QT_TR_NOOP("Load Progress Delay"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", -1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );

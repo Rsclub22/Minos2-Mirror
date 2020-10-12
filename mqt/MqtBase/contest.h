@@ -82,10 +82,18 @@ class BaseContestLog: public BaseLogList
       QMap<QString, QSharedPointer<int> > districtWorked;
       QMap<QString, QSharedPointer<int> > countryWorked;
 
+      MinosItem<bool> protectedContest;
+      // This is private as in general yu shuld be using isReadOnly()
+      bool isProtected( )
+      {
+         return protectedContest.getValue();
+      }
+
    public:
       QString uuid;
       int cslotno = -1;
       int unfilledCount = 0;
+      bool ageProtected = false;
 
       //BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
       BaseContestLog();
@@ -107,9 +115,11 @@ class BaseContestLog: public BaseLogList
       // "Real" basic contest data that needs monitoring
       // and provide the "front sheet" data
 
+      MinosItem<bool> &getProtectedState()
+      {
+          return protectedContest;
+      }
       MinosStringItem<QString> appVersion;
-
-      MinosItem<bool> protectedContest;
 
       MinosStringItem<QString> name;         // name of contest
       MinosStringItem<QString> location;
@@ -164,11 +174,11 @@ class BaseContestLog: public BaseLogList
       virtual void setDirty();
       bool isReadOnly( )
       {
-         return (protectedContest.getValue() && ! suppressProtected) || unwriteable;
+         return (protectedContest.getValue() && ! suppressProtected) || unwriteable || ageProtected;
       }
-      bool isProtected( )
+      bool isAgeProtected()
       {
-         return protectedContest.getValue();
+          return ageProtected;
       }
       void setProtected( bool s  )
       {

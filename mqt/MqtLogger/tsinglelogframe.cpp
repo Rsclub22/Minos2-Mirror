@@ -923,7 +923,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 void TSingleLogFrame::PublishTimerTimer(  )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
-   if ( ct && ct->isMinosFile() && !ct->isUnwriteable() && !ct->isProtected())
+   if ( ct && ct->isMinosFile() && !ct->isReadOnly())
    {
       int stanzaCount = contest->getCtStanzaCount();
       if ( lastStanzaCount != stanzaCount )
@@ -1907,7 +1907,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &f
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !ct->isProtected())
+        if (ct && !ct->isReadOnly())
         {
             // make sure log frame has correct name for radio
             if (radName != GJVQSOLogFrame->getRadioName())
@@ -1941,7 +1941,7 @@ void TSingleLogFrame::invalidateCacheOnDisconnect()
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !ct->isProtected())
+        if (ct && !ct->isReadOnly())
         {
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
         }
@@ -1954,7 +1954,7 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !contest->isProtected())
+        if (ct && !contest->isReadOnly())
         {
             // log frame doesn't record the antenna name
 

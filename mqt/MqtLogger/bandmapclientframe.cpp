@@ -797,7 +797,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
-            if (!ct->isProtected())
+            if (!ct->isReadOnly())
             {
                 isProtected = false;
             }
@@ -1495,7 +1495,7 @@ void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 {
     bool callfound = false;
     bool locfound = false;
-    if (ct && !ct->isProtected())
+    if (ct && !ct->isReadOnly())
     {
 
         Callsign mcs(callsign);

@@ -105,7 +105,8 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     appVersion = ct->appVersion;
 
-    protectedContest = ct->protectedContest;
+    protectedContest = ct->getProtectedState();
+    ageProtected = ct->ageProtected;
 
     name = ct->name;
     location = ct->location;
@@ -214,7 +215,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->appVersion = appVersion;
 
-    ct->protectedContest = protectedContest;
+    ct->getProtectedState() = protectedContest;
+    ct->ageProtected = ageProtected;
 
     ct->name = name;
     ct->location = location;

@@ -194,7 +194,7 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     if (!bandOK)
         return;
 
-    if (ct->isProtected())
+    if (ct->isReadOnly())
         return;
 
     trace("WsjtxFrame::log_ADIF " + QString(ADIF));

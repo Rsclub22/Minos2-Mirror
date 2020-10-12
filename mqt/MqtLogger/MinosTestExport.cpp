@@ -75,7 +75,7 @@ void MinosTestExport::exportMode(QSharedPointer<QFile> expfd )
 
    bool dirty = false;
 
-   ct->protectedContest.addIfDirty( st, "protectedContest", dirty );
+   ct->getProtectedState().addIfDirty( st, "protectedContest", dirty );
    if ( dirty )
    {
       sendRequest( expfd, "MinosLogMode", st );

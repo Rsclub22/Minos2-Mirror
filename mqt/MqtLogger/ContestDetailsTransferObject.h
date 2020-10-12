@@ -37,6 +37,14 @@ public:
           protectedContest.setValue( true );
        }
     }
+    bool isAgeProtected( )
+    {
+       return ageProtected;
+    }
+    void setAgeProtected( bool s  )
+    {
+        ageProtected = s;
+    }
     bool isProtectedSuppressed( )
     {
        return suppressProtected;
@@ -111,6 +119,7 @@ private:
     int NonUKloc_multiplier = 0;
     int UKloc_multiplier = 0;
 
+    bool ageProtected = false;
     bool suppressProtected = false;
     bool unwriteable = false;
 

@@ -214,7 +214,7 @@ void RigControlFrame::checkRigDetailsAvail()
         return;
     }
 
-    if (ct && !ct->isProtected() )
+    if (ct && !ct->isReadOnly() )
     {
         if (ui->radioNameSel->count() == 0)
         {
@@ -226,7 +226,7 @@ void RigControlFrame::checkRigDetailsAvail()
     }
 
 
-    if (ct &&  ct->isProtected() /*|| ct != TContestApp::getContestApp() ->getCurrentContest())*/)
+    if (ct &&  ct->isReadOnly() /*|| ct != TContestApp::getContestApp() ->getCurrentContest())*/)
     {
         traceMsg(QString("checkRigDetailsAvail: contest protected or not current contest count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         //launchRadioSelectTimer->stop();
@@ -235,7 +235,7 @@ void RigControlFrame::checkRigDetailsAvail()
 
     }
 
-    else if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
+    else if (ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
 
         if (!ct->radioName.getValue().toString().isEmpty() )
@@ -408,7 +408,7 @@ void RigControlFrame::setTransVertEnabled(bool status, PubSubName psn)
         rd.setTransVertEnabled(status);
         allRadioDetails[psn] = rd;
     }
-    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn == selRadioName && ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         setRadioTxVertEnabled(status);
         selRadioDetails.setTransVertEnabled(status);
@@ -436,7 +436,7 @@ void RigControlFrame::setTransVertStatus(bool status, PubSubName psn)
         rd.setTransVertStatus(status);
         allRadioDetails[psn] = rd;
     }
-    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn == selRadioName && ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         setRadioTxVertStatus(status);
         selRadioDetails.setTransVertStatus(status);
@@ -459,7 +459,7 @@ void RigControlFrame::setVolumeStatus(bool status, PubSubName psn)
         rd.setVolumeStatus(status);
         allRadioDetails[psn] = rd;
     }
-    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn == selRadioName && ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         setRadioVolumeState(status);
         selRadioDetails.setVolumeStatus(status);
@@ -483,7 +483,7 @@ void RigControlFrame::setRitEnableStatus(bool status, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn == selRadioName && ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         setRitEnableState(status);
         selRadioDetails.setRitEnableStatus(status);
@@ -506,7 +506,7 @@ void RigControlFrame::setRitMaxKHzFreq(int maxRitFreq, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    if (psn == selRadioName && ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (psn == selRadioName && ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
         setRitMaxKHzFreq(maxRitFreq);
         selRadioDetails.setRitMaxKHzFreq(maxRitFreq);
@@ -536,7 +536,7 @@ void RigControlFrame::setBandList(QString s,PubSubName psn)
     }
 
     // update bandlist combo if current radio and current contest
-    if (psn.toString().toLower() == radioName.toLower() && ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
+    if (psn.toString().toLower() == radioName.toLower() && ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
         createActiveBandList(s);
     }
@@ -872,7 +872,7 @@ void RigControlFrame::noRadioSendOutMode(QString m)
 void RigControlFrame::on_ContestPageChanged()
 {
 
-    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
 
 
@@ -1205,7 +1205,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 
 
-    if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
+    if (ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
             radioName = radNam;
 
@@ -1690,7 +1690,7 @@ void RigControlFrame::setRadioList()
 {
     QString currentSelRadioName;
 
-    if (ct && !ct->isProtected() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
+    if (ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
         if (LogContainer->sendDM->rigs().count() > 0)
         {
@@ -1766,7 +1766,7 @@ void RigControlFrame::createActiveBandList(QString b)
         ui->bandSelCombo->addItem("");
         ui->bandSelCombo->addItems(lb);
         // set combo to current contest band
-        if (ct && !ct->isProtected())
+        if (ct && !ct->isReadOnly())
         {
             QString contestBand = ct->contestBands.getValue();
             // is band in combo sel

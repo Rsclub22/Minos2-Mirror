@@ -115,16 +115,16 @@ void ContestDetails::accept()
 int ContestDetails::exec()
 {
     // If someone has created them by hand, make sure we reread them1
-    contest->QTHBundle.checkLoaded();
-    contest->stationBundle.checkLoaded();
-    contest->entryBundle.checkLoaded();
+    contestTransferObject->QTHBundle.checkLoaded();
+    contestTransferObject->stationBundle.checkLoaded();
+    contestTransferObject->entryBundle.checkLoaded();
 
-    ui->QTHBundleFrame->initialise( this, tr("QTH"), &contest->QTHBundle, &contest->QTHBundleName );
-    ui->StationBundleFrame->initialise(this,  tr("Station"), &contest->stationBundle, &contest->stationBundleName );
-    ui->EntryBundleFrame->initialise(this,  tr("Entry"), &contest->entryBundle, &contest->entryBundleName );
-    ui->ContestNameSelected->setText(contest->VHFContestName.getValue());
+    ui->QTHBundleFrame->initialise( this, tr("QTH"), &contestTransferObject->QTHBundle, &contestTransferObject->QTHBundleName );
+    ui->StationBundleFrame->initialise(this,  tr("Station"), &contestTransferObject->stationBundle, &contestTransferObject->stationBundleName );
+    ui->EntryBundleFrame->initialise(this,  tr("Entry"), &contestTransferObject->entryBundle, &contestTransferObject->entryBundleName );
+    ui->ContestNameSelected->setText(contestTransferObject->VHFContestName.getValue());
 
-    contest->initialiseINI();
+    contestTransferObject->initialiseINI();
 
     focusChange(nullptr, false, nullptr);    // higlight required fields
     QWidget *nextD = getDetails( );
@@ -161,16 +161,16 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    if ( !pcont )
       return ;
    inputcontest = pcont;
-   contest = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
-   contest->getFromContest(pcont);
-   sectionList = contest->sectionList.getValue(); // the combo will then be properly set up in setDetails()
+   contestTransferObject = QSharedPointer<ContestDetailsTransferObject>(new ContestDetailsTransferObject());
+   contestTransferObject->getFromContest(pcont);
+   sectionList = contestTransferObject->sectionList.getValue(); // the combo will then be properly set up in setDetails()
    setDetails();
 }
 void ContestDetails::setDetails(  )
 {
-   setWindowTitle( (tr("Details of Contest Entry - %1").arg(contest->cfileName)));
+   setWindowTitle( (tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName)));
 
-   ui->ContestNameEdit->setText(contest->name.getValue());
+   ui->ContestNameEdit->setText(contestTransferObject->name.getValue());
 
    ui->BandComboBox->clear();
    // need to get legal bands from ContestLog
@@ -191,7 +191,7 @@ void ContestDetails::setDetails(  )
        }
    }
 
-   QString cb = contest->contestBands.getValue().trimmed();
+   QString cb = contestTransferObject->contestBands.getValue().trimmed();
    if (cb == allHF)
    {
        cb = tr("All HF");
@@ -213,12 +213,12 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-      ui->BandComboBox->setCurrentText(contest->contestBands.getValue());
+      ui->BandComboBox->setCurrentText(contestTransferObject->contestBands.getValue());
    }
 
-   if (!contest->currentMode.getValue().isEmpty())
+   if (!contestTransferObject->currentMode.getValue().isEmpty())
    {
-       int m = ui->ModeComboBox->findText( contest->currentMode.getValue() );
+       int m = ui->ModeComboBox->findText( contestTransferObject->currentMode.getValue() );
 
        if ( m >= 0 )
        {
@@ -226,7 +226,7 @@ void ContestDetails::setDetails(  )
        }
        else
        {
-          ui->ModeComboBox->setCurrentText(contest->currentMode.getValue());
+          ui->ModeComboBox->setCurrentText(contestTransferObject->currentMode.getValue());
        }
     }
    ui->SectionComboBox->clear();
@@ -240,7 +240,7 @@ void ContestDetails::setDetails(  )
        ui->SectionComboBox->addItems(sl);
    }
 
-   int s = ui->SectionComboBox->findText( contest->entSect.getValue() );        // contest
+   int s = ui->SectionComboBox->findText( contestTransferObject->entSect.getValue() );        // contest
 
    if ( s >= 0 )
    {
@@ -248,7 +248,7 @@ void ContestDetails::setDetails(  )
    }
    else
    {
-      ui->SectionComboBox->setCurrentText(contest->entSect.getValue());
+      ui->SectionComboBox->setCurrentText(contestTransferObject->entSect.getValue());
    }
 
    // start/end of ContestLog
@@ -258,9 +258,9 @@ void ContestDetails::setDetails(  )
    //      QString contest->DTGStart;  //ccccmmsshhmm
    //      QString contest->DTGEnd;    //ccccmmsshhmm
 
-   if ( contest->DTGStart.getValue().size() )
+   if ( contestTransferObject->DTGStart.getValue().size() )
    {
-      QString s = contest->DTGStart.getValue();
+      QString s = contestTransferObject->DTGStart.getValue();
       QDateTime t = QDateTime::fromString(s, "yyyyMMddHHmm");
       ui->StartDateEdit->setDate(t.date());
       QString stc = t.time().toString( "HH:mm UTC" );
@@ -271,9 +271,9 @@ void ContestDetails::setDetails(  )
       //         StartDateEdit->Date = "";
       ui->StartTimeCombo->setCurrentText("");
    }
-   if ( contest->DTGEnd.getValue().size() )
+   if ( contestTransferObject->DTGEnd.getValue().size() )
    {
-       QString s = contest->DTGEnd.getValue();
+       QString s = contestTransferObject->DTGEnd.getValue();
        QDateTime t = QDateTime::fromString(s, "yyyyMMddHHmm");
       ui->EndDateEdit->setDate(t.date()); // short date format, hours:minutes
       QString etc = t.time().toString( "HH:mm UTC" );
@@ -285,63 +285,63 @@ void ContestDetails::setDetails(  )
       ui->EndTimeCombo->setCurrentText("");
    }
 
-   QString call = contest->mycall.fullCall.getValue();
+   QString call = contestTransferObject->mycall.fullCall.getValue();
    if ( !call.size() )                                       // Entry
    {
-      contest->entryBundle.getStringProfile( eepCall, call );
+      contestTransferObject->entryBundle.getStringProfile( eepCall, call );
 
       // STL version of strupr
       call = call.toUpper();
-      contest->mycall = Callsign( call );
+      contestTransferObject->mycall = Callsign( call );
    }
    ui->CallsignEdit->setText(call);
 
-   QString mainop = contest->currentOp1.getValue();
+   QString mainop = contestTransferObject->currentOp1.getValue();
    if ( !mainop.size() )                                       // Entry
    {
-      contest->entryBundle.getStringProfile( eepMainOp, mainop );
+      contestTransferObject->entryBundle.getStringProfile( eepMainOp, mainop );
 
    }
-   if (contest->currentOp1.getValue().size()== 0)
+   if (contestTransferObject->currentOp1.getValue().size()== 0)
    {
        if (mainop.size())
        {
-           contest->currentOp1.setValue( mainop);
+           contestTransferObject->currentOp1.setValue( mainop);
        }
        else
        {
-           contest->currentOp1.setValue( contest->mycall.realCall);
+           contestTransferObject->currentOp1.setValue( contestTransferObject->mycall.realCall);
        }
    }
 
-   QString secondop = contest->currentOp2.getValue();
+   QString secondop = contestTransferObject->currentOp2.getValue();
    if ( !secondop.size() )                                       // Entry
    {
-      contest->entryBundle.getStringProfile( eepSecondOp, secondop );
+      contestTransferObject->entryBundle.getStringProfile( eepSecondOp, secondop );
 
    }
-   if (contest->currentOp2.getValue().size()== 0)
+   if (contestTransferObject->currentOp2.getValue().size()== 0)
    {
-      contest->currentOp2.setValue( secondop);
+      contestTransferObject->currentOp2.setValue( secondop);
    }
 
-   contest->validateLoc();
+   contestTransferObject->validateLoc();
 
-   if ( !contest->locValid && contest->myloc.loc.getValue().size() == 0 )
+   if ( !contestTransferObject->locValid && contestTransferObject->myloc.loc.getValue().size() == 0 )
    {
       QString temp;
-      contest->QTHBundle.getStringProfile( eqpLocator, temp );
-      contest->myloc = Locator( temp );
-      contest->validateLoc();
+      contestTransferObject->QTHBundle.getStringProfile( eqpLocator, temp );
+      contestTransferObject->myloc = Locator( temp );
+      contestTransferObject->validateLoc();
    }
-   ui->LocatorEdit->setText(contest->myloc.loc.getValue().trimmed());
+   ui->LocatorEdit->setText(contestTransferObject->myloc.loc.getValue().trimmed());
 
-   ui->AllowLoc4CB->setChecked(contest->allowLoc4.getValue());    // bool               // ?? contest
-   ui->AllowLoc8CB->setChecked(contest->allowLoc8.getValue());    // bool               // ?? contest
+   ui->AllowLoc4CB->setChecked(contestTransferObject->allowLoc4.getValue());    // bool               // ?? contest
+   ui->AllowLoc8CB->setChecked(contestTransferObject->allowLoc8.getValue());    // bool               // ?? contest
 
-   ui->ExchangeEdit->setText(contest->location.getValue()); // QTH/if contest specifies - but disp anyway
+   ui->ExchangeEdit->setText(contestTransferObject->location.getValue()); // QTH/if contest specifies - but disp anyway
 
-   switch (contest->scoreMode.getValue())
+   switch (contestTransferObject->scoreMode.getValue())
    {
    case 0:
        ui->commencedKRB->setChecked(true);
@@ -361,17 +361,17 @@ void ContestDetails::setDetails(  )
       Exchange Required (no multiplier)
    */
 
-   if ( contest->districtMult.getValue() )
+   if ( contestTransferObject->districtMult.getValue() )
    {
       ui->ExchangeComboBox->setCurrentIndex( 1);
    }
    else
-      if ( contest->otherExchange.getValue() )
+      if ( contestTransferObject->otherExchange.getValue() )
       {
           ui->ExchangeComboBox->setCurrentIndex( 4);
       }
       else
-          if ( contest->otherOptionalExchange.getValue() )
+          if ( contestTransferObject->otherOptionalExchange.getValue() )
           {
               ui->ExchangeComboBox->setCurrentIndex( 3);
           }
@@ -379,13 +379,13 @@ void ContestDetails::setDetails(  )
               {
                   ui->ExchangeComboBox->setCurrentIndex( 0);
               }
-   ui->DXCCMult->setChecked( contest->countryMult.getValue()) ;
-   ui->NonGCtryMult->setChecked( contest->nonGCountryMult.getValue()) ;
+   ui->DXCCMult->setChecked( contestTransferObject->countryMult.getValue()) ;
+   ui->NonGCtryMult->setChecked( contestTransferObject->nonGCountryMult.getValue()) ;
 
-   ui->M7LocatorMults->setChecked(contest->M7Mults.getValue());
+   ui->M7LocatorMults->setChecked(contestTransferObject->M7Mults.getValue());
 
-   bool usesBonus = contest->usesBonus.getValue();
-   QString bonusType = contest->bonusType.getValue();
+   bool usesBonus = contestTransferObject->usesBonus.getValue();
+   QString bonusType = contestTransferObject->bonusType.getValue();
 
    if (usesBonus)
    {
@@ -404,31 +404,33 @@ void ContestDetails::setDetails(  )
        ui->BonusComboBox->setCurrentIndex(0);
    }
 
-   ui->LocatorMult->setChecked(contest->locMult.getValue()) ;
-   ui->GLocMult->setChecked(contest->GLocMult.getValue());
+   ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
+   ui->GLocMult->setChecked(contestTransferObject->GLocMult.getValue());
 
-   ui->PowerEdit->setText(contest->power.getValue());
+   ui->PowerEdit->setText(contestTransferObject->power.getValue());
 
    on_SetRadioList();
    on_RotatorList();
 
-   if ( contest->isMinosFile() )
+   ui->ageProtectedcb->setChecked(contestTransferObject->isAgeProtected());
+
+   if ( contestTransferObject->isMinosFile() )
    {
       suppressProtectedOnClick = true;
-      ui->ProtectedOption->setChecked(contest->isProtected() && !contest->isProtectedSuppressed());
+      ui->ProtectedOption->setChecked(contestTransferObject->isProtected() && !contestTransferObject->isProtectedSuppressed());
       suppressProtectedOnClick = false;
    }
    else
    {
       ui->ProtectedOption->setEnabled(false);
    }
-   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;   // bool                   // contest
-   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;   // bool             // contest
-   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;   // bool         // contest
+   ui->RSTField->setChecked(contestTransferObject->RSTMandatoryField.getValue()) ;   // bool                   // contest
+   ui->SerialField->setChecked(contestTransferObject->serialMandatoryField.getValue()) ;   // bool             // contest
+   ui->LocatorField->setChecked(contestTransferObject->locatorMandatoryField.getValue()) ;   // bool         // contest
 
-   ui->AntOffsetEdit->setText(QString::number(contest->bearingOffset.getValue()));	// int
+   ui->AntOffsetEdit->setText(QString::number(contestTransferObject->bearingOffset.getValue()));	// int
 
-   ui->MGMCheckBox->setChecked(contest->MGMContestRules.getValue());
+   ui->MGMCheckBox->setChecked(contestTransferObject->MGMContestRules.getValue());
    refreshOps();
 
 
@@ -436,7 +438,7 @@ void ContestDetails::setDetails(  )
    ScreenConfigFile scf;
    scf.loadFile(false, this);
 
-   QString curConfigName = contest->screenLayout.getValue();
+   QString curConfigName = contestTransferObject->screenLayout.getValue();
    if (curConfigName.isEmpty())
        curConfigName = defaultLayoutName();
 
@@ -459,19 +461,19 @@ void ContestDetails::setDetails(  )
 void ContestDetails::refreshOps()
 {
    // refill the op combo boxes from the current contest, and select the correct op
-   if (contest)
+   if (contestTransferObject)
    {
       ui->MainOpComboBox->clear();
       ui->SecondOpComboBox->clear();
       //bool addCall = true;
       QStringList ops;
-      for ( OperatorIterator i = contest->oplist.begin(); i != contest->oplist.end(); i++ )
+      for ( OperatorIterator i = contestTransferObject->oplist.begin(); i != contestTransferObject->oplist.end(); i++ )
       {
           if (!(*i).isEmpty())
             ops.append(*i);
       }
-      ops.append(contest->currentOp1.getValue());
-      ops.append(contest->currentOp2.getValue());
+      ops.append(contestTransferObject->currentOp1.getValue());
+      ops.append(contestTransferObject->currentOp2.getValue());
 
       ops.append("");
 
@@ -481,21 +483,21 @@ void ContestDetails::refreshOps()
       ui->MainOpComboBox->addItems(ops);
       ui->SecondOpComboBox->addItems(ops);
 
-      ui->MainOpComboBox->setCurrentText(contest->currentOp1.getValue());
-      ui->SecondOpComboBox->setCurrentText(contest->currentOp2.getValue());
+      ui->MainOpComboBox->setCurrentText(contestTransferObject->currentOp1.getValue());
+      ui->SecondOpComboBox->setCurrentText(contestTransferObject->currentOp2.getValue());
    }
 }
 void ContestDetails::setDetails( const IndividualContest &ic )
 {
 
-   setWindowTitle(tr("Details of Contest Entry - %1").arg(contest->cfileName) );
+   setWindowTitle(tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName) );
 
    ui->ContestNameEdit->setText(ic.description);                      // contest
-   contest->VHFContestName.setValue(ic.description);
+   contestTransferObject->VHFContestName.setValue(ic.description);
 
-   contest->RSTMandatoryField.setValue(true);
-   contest->serialMandatoryField.setValue(true);
-   contest->locatorMandatoryField.setValue(true);
+   contestTransferObject->RSTMandatoryField.setValue(true);
+   contestTransferObject->serialMandatoryField.setValue(true);
+   contestTransferObject->locatorMandatoryField.setValue(true);
 
    // need to get legal bands from ContestLog
    ui->BandComboBox->clear();
@@ -522,7 +524,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       ui->SectionComboBox->addItems(sl);
    }
 
-   int s = ui->SectionComboBox->findText( contest->entSect.getValue() );        // contest
+   int s = ui->SectionComboBox->findText( contestTransferObject->entSect.getValue() );        // contest
 
    if ( s >= 0 )
    {
@@ -530,7 +532,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    }
    else
    {
-      ui->SectionComboBox->setCurrentText(contest->entSect.getValue());
+      ui->SectionComboBox->setCurrentText(contestTransferObject->entSect.getValue());
    }
 
    ui->StartDateEdit->setDate(ic.start.date());
@@ -542,203 +544,203 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    if ( ic.mults == "M1" )
    {
       // PC, DXCC
-       contest->usesBonus.setValue(false);
-       contest->bonusType.setValue("");
+       contestTransferObject->usesBonus.setValue(false);
+       contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( true );
-      contest->countryMult.setValue( true );
-      contest->locMult.setValue( false );
-      contest->GLocMult.setValue( false );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( true );
+      contestTransferObject->countryMult.setValue( true );
+      contestTransferObject->locMult.setValue( false );
+      contestTransferObject->GLocMult.setValue( false );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = false;
-      contest->NonUKloc_mult = false;
-      contest->UKloc_multiplier = 0;
-      contest->NonUKloc_multiplier = 0;
+      contestTransferObject->UKloc_mult = false;
+      contestTransferObject->NonUKloc_mult = false;
+      contestTransferObject->UKloc_multiplier = 0;
+      contestTransferObject->NonUKloc_multiplier = 0;
    }
    else if ( ic.mults == "M2" )
    {
       // Loc
-       contest->usesBonus.setValue(false);
-       contest->bonusType.setValue("");
+       contestTransferObject->usesBonus.setValue(false);
+       contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( false );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( false );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( false );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( false );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = true;
-      contest->UKloc_multiplier = 1;
-      contest->NonUKloc_multiplier = 1;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = true;
+      contestTransferObject->UKloc_multiplier = 1;
+      contestTransferObject->NonUKloc_multiplier = 1;
    }
    else if ( ic.mults == "M3" )
    {
       // PC, DXCC, LOC
-       contest->usesBonus.setValue(false);
-       contest->bonusType.setValue("");
+       contestTransferObject->usesBonus.setValue(false);
+       contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( true );
-      contest->countryMult.setValue( true );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( false );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( true );
+      contestTransferObject->countryMult.setValue( true );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( false );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = true;
-      contest->UKloc_multiplier = 1;
-      contest->NonUKloc_multiplier = 1;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = true;
+      contestTransferObject->UKloc_multiplier = 1;
+      contestTransferObject->NonUKloc_multiplier = 1;
    }
    else if ( ic.mults == "M4" )
    {
       // DXCC, LOC
-      contest->usesBonus.setValue(false);
-      contest->bonusType.setValue("");
+      contestTransferObject->usesBonus.setValue(false);
+      contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( true );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( false );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( true );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( false );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = true;
-      contest->UKloc_multiplier = 1;
-      contest->NonUKloc_multiplier = 1;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = true;
+      contestTransferObject->UKloc_multiplier = 1;
+      contestTransferObject->NonUKloc_multiplier = 1;
    }
    else if ( ic.mults == "M5" )
    {
       // G Locs only
-      contest->usesBonus.setValue(false);
-      contest->bonusType.setValue("");
+      contestTransferObject->usesBonus.setValue(false);
+      contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( false );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( true );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( false );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( true );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = false;
-      contest->UKloc_multiplier = 1;
-      contest->NonUKloc_multiplier = 0;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = false;
+      contestTransferObject->UKloc_multiplier = 1;
+      contestTransferObject->NonUKloc_multiplier = 0;
    }
    else if ( ic.mults == "M6" )
    {
       // G Locs only  + DXCC
-      contest->usesBonus.setValue(false);
-      contest->bonusType.setValue("");
+      contestTransferObject->usesBonus.setValue(false);
+      contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( false );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( true );
-      contest->nonGCountryMult.setValue( true );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( false );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( true );
+      contestTransferObject->nonGCountryMult.setValue( true );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = false;
-      contest->UKloc_multiplier = 1;
-      contest->NonUKloc_multiplier = 0;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = false;
+      contestTransferObject->UKloc_multiplier = 1;
+      contestTransferObject->NonUKloc_multiplier = 0;
    }
    else if ( ic.mults == "M7" )
    {
       // Modified M5; non UK 1 mult, UK 2 mults
-      contest->usesBonus.setValue(false);
-      contest->bonusType.setValue("");
+      contestTransferObject->usesBonus.setValue(false);
+      contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( false );
-      contest->locMult.setValue( true );
-      contest->GLocMult.setValue( true );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( false );
+      contestTransferObject->locMult.setValue( true );
+      contestTransferObject->GLocMult.setValue( true );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(true);
+      contestTransferObject->M7Mults.setValue(true);
 
-      contest->UKloc_mult = true;
-      contest->NonUKloc_mult = true;
-      contest->UKloc_multiplier = 2;
-      contest->NonUKloc_multiplier = 1;
+      contestTransferObject->UKloc_mult = true;
+      contestTransferObject->NonUKloc_mult = true;
+      contestTransferObject->UKloc_multiplier = 2;
+      contestTransferObject->NonUKloc_multiplier = 1;
    }
    else if ( ic.mults == "B2" )
    {
-       contest->usesBonus.setValue(true);
-       contest->bonusType.setValue("B2");
+       contestTransferObject->usesBonus.setValue(true);
+       contestTransferObject->bonusType.setValue("B2");
 
-       contest->districtMult.setValue( false );
-       contest->countryMult.setValue( false );
-       contest->locMult.setValue( false );
-       contest->GLocMult.setValue( false );
-       contest->nonGCountryMult.setValue( false );
+       contestTransferObject->districtMult.setValue( false );
+       contestTransferObject->countryMult.setValue( false );
+       contestTransferObject->locMult.setValue( false );
+       contestTransferObject->GLocMult.setValue( false );
+       contestTransferObject->nonGCountryMult.setValue( false );
 
-       contest->M7Mults.setValue(false);
+       contestTransferObject->M7Mults.setValue(false);
 
-       contest->UKloc_mult = false;
-       contest->NonUKloc_mult = false;
-       contest->UKloc_multiplier = 0;
-       contest->NonUKloc_multiplier = 0;
+       contestTransferObject->UKloc_mult = false;
+       contestTransferObject->NonUKloc_mult = false;
+       contestTransferObject->UKloc_multiplier = 0;
+       contestTransferObject->NonUKloc_multiplier = 0;
    }
    else if ( ic.mults == "B4" )
    {
-       contest->usesBonus.setValue(true);
-       contest->bonusType.setValue("B4");
+       contestTransferObject->usesBonus.setValue(true);
+       contestTransferObject->bonusType.setValue("B4");
 
-       contest->districtMult.setValue( false );
-       contest->countryMult.setValue( false );
-       contest->locMult.setValue( false );
-       contest->GLocMult.setValue( false );
-       contest->nonGCountryMult.setValue( false );
+       contestTransferObject->districtMult.setValue( false );
+       contestTransferObject->countryMult.setValue( false );
+       contestTransferObject->locMult.setValue( false );
+       contestTransferObject->GLocMult.setValue( false );
+       contestTransferObject->nonGCountryMult.setValue( false );
 
-       contest->M7Mults.setValue(false);
+       contestTransferObject->M7Mults.setValue(false);
 
-       contest->UKloc_mult = false;
-       contest->NonUKloc_mult = false;
-       contest->UKloc_multiplier = 0;
-       contest->NonUKloc_multiplier = 0;
+       contestTransferObject->UKloc_mult = false;
+       contestTransferObject->NonUKloc_mult = false;
+       contestTransferObject->UKloc_multiplier = 0;
+       contestTransferObject->NonUKloc_multiplier = 0;
    }
    else
    {
-      contest->usesBonus.setValue(false);
-      contest->bonusType.setValue("");
+      contestTransferObject->usesBonus.setValue(false);
+      contestTransferObject->bonusType.setValue("");
 
-      contest->districtMult.setValue( false );
-      contest->countryMult.setValue( false );
-      contest->locMult.setValue( false );
-      contest->GLocMult.setValue( false );
-      contest->nonGCountryMult.setValue( false );
+      contestTransferObject->districtMult.setValue( false );
+      contestTransferObject->countryMult.setValue( false );
+      contestTransferObject->locMult.setValue( false );
+      contestTransferObject->GLocMult.setValue( false );
+      contestTransferObject->nonGCountryMult.setValue( false );
 
-      contest->M7Mults.setValue(false);
+      contestTransferObject->M7Mults.setValue(false);
 
-      contest->UKloc_mult = false;
-      contest->NonUKloc_mult = false;
-      contest->UKloc_multiplier = 0;
-      contest->NonUKloc_multiplier = 0;
+      contestTransferObject->UKloc_mult = false;
+      contestTransferObject->NonUKloc_mult = false;
+      contestTransferObject->UKloc_multiplier = 0;
+      contestTransferObject->NonUKloc_multiplier = 0;
    }
    if (ic.specialRules.indexOf("MGM") >= 0)
    {
        //contest->locMult.setValue( true );
-       contest->MGMContestRules.setValue(true);
-       contest->serialMandatoryField.setValue(false);
-       contest->allowLoc4.setValue(true);
+       contestTransferObject->MGMContestRules.setValue(true);
+       contestTransferObject->serialMandatoryField.setValue(false);
+       contestTransferObject->allowLoc4.setValue(true);
        ui->AllowLoc4CB->setChecked(true);
    }
    else
    {
-       contest->MGMContestRules.setValue(false);
+       contestTransferObject->MGMContestRules.setValue(false);
    }
-   ui->MGMCheckBox->setChecked(contest->MGMContestRules.getValue());
+   ui->MGMCheckBox->setChecked(contestTransferObject->MGMContestRules.getValue());
    /*
       ExchangeComboBox:
 
@@ -749,17 +751,17 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       Exchange Required (no multiplier)
    */
 
-   if ( contest->districtMult.getValue() )
+   if ( contestTransferObject->districtMult.getValue() )
    {
       ui->ExchangeComboBox->setCurrentIndex(1);
    }
    else
-      if ( contest->otherExchange.getValue() )
+      if ( contestTransferObject->otherExchange.getValue() )
       {
          ui->ExchangeComboBox->setCurrentIndex(4);
       }
       else
-          if ( contest->otherOptionalExchange.getValue() )
+          if ( contestTransferObject->otherOptionalExchange.getValue() )
           {
              ui->ExchangeComboBox->setCurrentIndex(3);
           }
@@ -767,21 +769,21 @@ void ContestDetails::setDetails( const IndividualContest &ic )
               {
                  ui->ExchangeComboBox->setCurrentIndex(0);
               }
-   ui->NonGCtryMult->setChecked(contest->nonGCountryMult.getValue()) ;
-   ui->DXCCMult->setChecked(contest->countryMult.getValue()) ;
+   ui->NonGCtryMult->setChecked(contestTransferObject->nonGCountryMult.getValue()) ;
+   ui->DXCCMult->setChecked(contestTransferObject->countryMult.getValue()) ;
 
-   ui->LocatorMult->setChecked(contest->locMult.getValue()) ;
-   ui->GLocMult->setChecked(contest->GLocMult.getValue()) ;
-   ui->M7LocatorMults->setChecked(contest->M7Mults.getValue()) ;
+   ui->LocatorMult->setChecked(contestTransferObject->locMult.getValue()) ;
+   ui->GLocMult->setChecked(contestTransferObject->GLocMult.getValue()) ;
+   ui->M7LocatorMults->setChecked(contestTransferObject->M7Mults.getValue()) ;
 
-   bool UKACBonus = contest->usesBonus.getValue();
+   bool UKACBonus = contestTransferObject->usesBonus.getValue();
    if (!UKACBonus)
    {
        ui->BonusComboBox->setCurrentIndex(0);
    }
    else
    {
-       QString bonusType = contest->bonusType.getValue();
+       QString bonusType = contestTransferObject->bonusType.getValue();
        if (bonusType == "B2")
             ui->BonusComboBox->setCurrentIndex(1);
        if (bonusType == "B4")
@@ -792,7 +794,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    QString mode = ic.mode;
    if (mode.isEmpty())
    {
-      if (contest->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
+      if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
           mode = hamlibData::MGM;
       else
           mode = hamlibData::USB;
@@ -807,14 +809,14 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    {
       ui->ModeComboBox->setCurrentText(mode);
    }
-   contest->currentMode.setValue(mode);
+   contestTransferObject->currentMode.setValue(mode);
 
 
-   ui->RSTField->setChecked(contest->RSTMandatoryField.getValue()) ;
-   ui->SerialField->setChecked(contest->serialMandatoryField.getValue()) ;
-   ui->LocatorField->setChecked(contest->locatorMandatoryField.getValue()) ;
+   ui->RSTField->setChecked(contestTransferObject->RSTMandatoryField.getValue()) ;
+   ui->SerialField->setChecked(contestTransferObject->serialMandatoryField.getValue()) ;
+   ui->LocatorField->setChecked(contestTransferObject->locatorMandatoryField.getValue()) ;
 
-   contest->scoreMode.setValue( static_cast< SCOREMODE> ( ic.ppKmScoring ? 0 : 1 ) );  // combo
+   contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE> ( ic.ppKmScoring ? 0 : 1 ) );  // combo
 
    switch (( ic.ppKmScoring ? 0 : 1 ))
    {
@@ -855,8 +857,8 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->BandComboBox->setStyleSheet("");
         }
 
-        contest->mycall = Callsign( ui->CallsignEdit->text() );
-        if ( contest->mycall.getValRes() != CS_OK )
+        contestTransferObject->mycall = Callsign( ui->CallsignEdit->text() );
+        if ( contestTransferObject->mycall.getValRes() != CS_OK )
         {
             ui->CallsignEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -865,8 +867,8 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->CallsignEdit->setStyleSheet("");
         }
 
-        contest->myloc = Locator( ui->LocatorEdit->text() );
-        if ( contest->myloc.getValRes() != LOC_OK )
+        contestTransferObject->myloc = Locator( ui->LocatorEdit->text() );
+        if ( contestTransferObject->myloc.getValRes() != LOC_OK )
         {
             ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -900,15 +902,15 @@ QWidget * ContestDetails::getDetails( )
 {
     QWidget *nextD = getNextFocus();
 
-    contest->name.setValue( ui->ContestNameEdit->text() );
+    contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
     QString cb = ui->BandComboBox->currentText();
     if (cb == tr("All HF"))
     {
         cb = allHF;
     }
-    contest->contestBands.setValue( cb );
-    contest->entSect.setValue( ui->SectionComboBox->currentText() );
-    contest->sectionList.setValue( sectionList );
+    contestTransferObject->contestBands.setValue( cb );
+    contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
+    contestTransferObject->sectionList.setValue( sectionList );
 
     if ( ui->ContestNameEdit->text().trimmed().isEmpty() )
     {
@@ -931,24 +933,24 @@ QWidget * ContestDetails::getDetails( )
         ui->StartDateEdit->setDate(QDate::currentDate());
     }
     QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
-    contest->DTGStart.setValue(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
+    contestTransferObject->DTGStart.setValue(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
 
     if (ui->EndDateEdit->text().isEmpty())
     {
         ui->EndDateEdit->setDate(QDate::currentDate());
     }
-    contest->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
+    contestTransferObject->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
 
-    contest->mycall = Callsign( ui->CallsignEdit->text() );
-    if ( contest->mycall.getValRes() != CS_OK )
+    contestTransferObject->mycall = Callsign( ui->CallsignEdit->text() );
+    if ( contestTransferObject->mycall.getValRes() != CS_OK )
     {
         if (!nextD)
         {
             nextD = ui->CallsignEdit;
         }
     }
-    contest->myloc = Locator( ui->LocatorEdit->text() );
-    if ( contest->myloc.getValRes() != LOC_OK )
+    contestTransferObject->myloc = Locator( ui->LocatorEdit->text() );
+    if ( contestTransferObject->myloc.getValRes() != LOC_OK )
     {
         if (!nextD)
         {
@@ -965,123 +967,124 @@ QWidget * ContestDetails::getDetails( )
     }
 
 
-    contest->currentOp1.setValue(ui->MainOpComboBox->currentText());
-    contest->currentOp2.setValue(ui->SecondOpComboBox->currentText());
-    contest->oplist.insert(contest->currentOp1.getValue(), contest->currentOp1.getValue());
-    contest->oplist.insert(contest->currentOp2.getValue(), contest->currentOp2.getValue());
+    contestTransferObject->currentOp1.setValue(ui->MainOpComboBox->currentText());
+    contestTransferObject->currentOp2.setValue(ui->SecondOpComboBox->currentText());
+    contestTransferObject->oplist.insert(contestTransferObject->currentOp1.getValue(), contestTransferObject->currentOp1.getValue());
+    contestTransferObject->oplist.insert(contestTransferObject->currentOp2.getValue(), contestTransferObject->currentOp2.getValue());
 
-    if ( contest->currentOp1.getValue().isEmpty() )
+    if ( contestTransferObject->currentOp1.getValue().isEmpty() )
     {
         if (!nextD)
         {
             nextD = ui->MainOpComboBox;
         }
     }
-    contest->allowLoc4.setValue( ui->AllowLoc4CB->isChecked() );    // bool
-    contest->allowLoc8.setValue( ui->AllowLoc8CB->isChecked() );    // bool
-    contest->location.setValue( ui->ExchangeEdit->text() );
-    contest->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?1:0) );  // combo
+    contestTransferObject->allowLoc4.setValue( ui->AllowLoc4CB->isChecked() );    // bool
+    contestTransferObject->allowLoc8.setValue( ui->AllowLoc8CB->isChecked() );    // bool
+    contestTransferObject->location.setValue( ui->ExchangeEdit->text() );
+    contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?1:0) );  // combo
 
     if (ui->NonGCtryMult->isChecked())
     {
         ui->DXCCMult->setChecked(true);
     }
-    contest->countryMult.setValue( ui->DXCCMult->isChecked() );   // bool
-    contest->nonGCountryMult.setValue( ui->NonGCtryMult->isChecked() );   // bool
+    contestTransferObject->countryMult.setValue( ui->DXCCMult->isChecked() );   // bool
+    contestTransferObject->nonGCountryMult.setValue( ui->NonGCtryMult->isChecked() );   // bool
 
     if (ui->GLocMult->isChecked() || ui->M7LocatorMults->isChecked())
     {
         ui->LocatorMult->setChecked(true);
     }
 
-    contest->locMult.setValue( ui->LocatorMult->isChecked() ) ;   // bool
-    contest->GLocMult.setValue( ui->GLocMult->isChecked() ) ;   // bool
-    contest->M7Mults.setValue( ui->M7LocatorMults->isChecked() ) ;   // bool
-    contest->usesBonus.setValue(ui->BonusComboBox->currentIndex() >= 1);
+    contestTransferObject->locMult.setValue( ui->LocatorMult->isChecked() ) ;   // bool
+    contestTransferObject->GLocMult.setValue( ui->GLocMult->isChecked() ) ;   // bool
+    contestTransferObject->M7Mults.setValue( ui->M7LocatorMults->isChecked() ) ;   // bool
+    contestTransferObject->usesBonus.setValue(ui->BonusComboBox->currentIndex() >= 1);
 
-    if (contest->usesBonus.getValue())
+    if (contestTransferObject->usesBonus.getValue())
     {
         int bt = ui->BonusComboBox->currentIndex();
 
         if (bt == 1)
         {
-            contest->bonusType.setValue("B2");
+            contestTransferObject->bonusType.setValue("B2");
         }
         else if (bt == 2)
         {
-            contest->bonusType.setValue("B4");
+            contestTransferObject->bonusType.setValue("B4");
         }
         else if (bt == 3)
         {
-            contest->bonusType.setValue("NAC");
+            contestTransferObject->bonusType.setValue("NAC");
         }
         else
         {
-            contest->usesBonus.setValue(false);
-            contest->bonusType.setValue("");
+            contestTransferObject->usesBonus.setValue(false);
+            contestTransferObject->bonusType.setValue("");
         }
     }
     else
     {
-        contest->bonusType.setValue("");
+        contestTransferObject->bonusType.setValue("");
     }
 
-    if (contest->M7Mults.getValue())
+    if (contestTransferObject->M7Mults.getValue())
     {
-        contest->UKloc_mult = true;
-        contest->NonUKloc_mult = true;
-        contest->UKloc_multiplier = 2;
-        contest->NonUKloc_multiplier = 1;
+        contestTransferObject->UKloc_mult = true;
+        contestTransferObject->NonUKloc_mult = true;
+        contestTransferObject->UKloc_multiplier = 2;
+        contestTransferObject->NonUKloc_multiplier = 1;
     }
     else
     {
-        if (contest->locMult.getValue())
+        if (contestTransferObject->locMult.getValue())
         {
-            contest->UKloc_mult = true;
-            contest->UKloc_multiplier = 1;
+            contestTransferObject->UKloc_mult = true;
+            contestTransferObject->UKloc_multiplier = 1;
 
-            if (contest->GLocMult.getValue())
+            if (contestTransferObject->GLocMult.getValue())
             {
-                contest->NonUKloc_mult = false;
-                contest->NonUKloc_multiplier = 0;
+                contestTransferObject->NonUKloc_mult = false;
+                contestTransferObject->NonUKloc_multiplier = 0;
             }
             else
             {
-                contest->NonUKloc_mult = true;
-                contest->NonUKloc_multiplier = 1;
+                contestTransferObject->NonUKloc_mult = true;
+                contestTransferObject->NonUKloc_multiplier = 1;
             }
         }
         else
         {
-            contest->UKloc_mult = false;
-            contest->NonUKloc_mult = false;
-            contest->UKloc_multiplier = 0;
-            contest->NonUKloc_multiplier = 0;
+            contestTransferObject->UKloc_mult = false;
+            contestTransferObject->NonUKloc_mult = false;
+            contestTransferObject->UKloc_multiplier = 0;
+            contestTransferObject->NonUKloc_multiplier = 0;
         }
     }
-    contest->MGMContestRules.setValue(ui->MGMCheckBox->isChecked());
+    contestTransferObject->MGMContestRules.setValue(ui->MGMCheckBox->isChecked());
 
-    if (ui->ProtectedOption->isChecked() && contest->isProtected() && contest->isProtectedSuppressed())
+    if (ui->ProtectedOption->isChecked() && contestTransferObject->isProtected() && contestTransferObject->isProtectedSuppressed())
     {
-        contest->setProtectedSuppressed(false);
+        contestTransferObject->setProtectedSuppressed(false);
     }
     else
     {
-        if (ui->ProtectedOption->isChecked() && !contest->isProtected())
+        if (ui->ProtectedOption->isChecked() && !contestTransferObject->isProtected())
         {
-            contest->setProtected( true ) ;
+            contestTransferObject->setProtected( true ) ;
             saveContestOK  = true;
         }
-        else if (!ui->ProtectedOption->isChecked() && contest->isProtected())
+        else if (!ui->ProtectedOption->isChecked() && contestTransferObject->isProtected())
         {
-            contest->setProtected( false ) ;
+            contestTransferObject->setProtected( false ) ;
             saveContestOK  = true;
         }
-        else if (!contest->isReadOnly()) // not protected, not unwriteable, protected but suppressed
+        else if (!contestTransferObject->isReadOnly()) // not protected, not unwriteable, protected but suppressed
         {
             saveContestOK  = true;
         }
     }
+    contestTransferObject->setAgeProtected(ui->ageProtectedcb->isChecked());
     /*
       ExchangeComboBox:
 
@@ -1094,53 +1097,53 @@ QWidget * ContestDetails::getDetails( )
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
     case 0:
-        contest->otherExchange.setValue( false );
-        contest->otherOptionalExchange.setValue( false );
-        contest->districtMult.setValue( false );
+        contestTransferObject->otherExchange.setValue( false );
+        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->districtMult.setValue( false );
         break;
 
     case 1:
-        contest->otherExchange.setValue( true );
-        contest->otherOptionalExchange.setValue( false );
-        contest->districtMult.setValue( true );
+        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->districtMult.setValue( true );
         break;
 
     case 2:
-        contest->otherExchange.setValue( true );
-        contest->otherOptionalExchange.setValue( false );
-        contest->districtMult.setValue( false );
+        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->districtMult.setValue( false );
         break;
 
     case 3:
-        contest->otherExchange.setValue( false );
-        contest->otherOptionalExchange.setValue( true );
-        contest->districtMult.setValue( false );
+        contestTransferObject->otherExchange.setValue( false );
+        contestTransferObject->otherOptionalExchange.setValue( true );
+        contestTransferObject->districtMult.setValue( false );
         break;
 
     case 4:
-        contest->otherExchange.setValue( true );
-        contest->otherOptionalExchange.setValue( false );
-        contest->districtMult.setValue( false );
+        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherOptionalExchange.setValue( false );
+        contestTransferObject->districtMult.setValue( false );
         break;
 
     }
-    contest->RSTMandatoryField.setValue( ui->RSTField->isChecked() ) ;   // bool
-    contest->serialMandatoryField.setValue( ui->SerialField->isChecked() ) ;   // bool
-    contest->locatorMandatoryField.setValue( ui->LocatorField->isChecked() ) ;   // bool
+    contestTransferObject->RSTMandatoryField.setValue( ui->RSTField->isChecked() ) ;   // bool
+    contestTransferObject->serialMandatoryField.setValue( ui->SerialField->isChecked() ) ;   // bool
+    contestTransferObject->locatorMandatoryField.setValue( ui->LocatorField->isChecked() ) ;   // bool
 
-    contest->power.setValue( ui->PowerEdit->text() );
-    contest->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
+    contestTransferObject->power.setValue( ui->PowerEdit->text() );
+    contestTransferObject->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
 
     if (LogContainer->sendDM->radioLoaded)
-        contest->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
+        contestTransferObject->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
     if (LogContainer->sendDM->rotatorLoaded)
-        contest->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
+        contestTransferObject->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
 
-    contest->currentMode.setValue(ui->ModeComboBox->currentText());
+    contestTransferObject->currentMode.setValue(ui->ModeComboBox->currentText());
 
-    contest->validateLoc();
+    contestTransferObject->validateLoc();
 
-    contest->screenLayout.setValue(ui->screenLayoutCombo->currentText());
+    contestTransferObject->screenLayout.setValue(ui->screenLayoutCombo->currentText());
 
     return nextD;
 }
@@ -1175,7 +1178,7 @@ QWidget * ContestDetails::getNextFocus()
 void ContestDetails::enableControls()
 {
 // Should protected be disabled if the contest is unwriteable?
-   bool protectedChecked = ui->ProtectedOption->isChecked();
+   bool protectedChecked = ui->ProtectedOption->isChecked() || ui->ageProtectedcb->isChecked();
 // enable/disable relevant fields based on protected
    ui->ContestNameEdit->setEnabled(!protectedChecked);
    ui->BandComboBox->setEnabled(!protectedChecked);
@@ -1235,7 +1238,7 @@ void ContestDetails::on_OKButton_clicked()
 {
     // make sure we have the minimum required information
 
-    if (ui->ProtectedOption->isChecked() && ! contest->isProtected())
+    if (ui->ProtectedOption->isChecked() && ! contestTransferObject->isProtected())
     {
        if (!mShowYesNoMessage(this, tr("This contest will be marked as protected.\r\n"
                                      "This is a permanent change that may be temporarily overridden.\r\n"
@@ -1252,7 +1255,7 @@ void ContestDetails::on_OKButton_clicked()
     }
     else
     {
-        contest->setToContest(inputcontest);
+        contestTransferObject->setToContest(inputcontest);
 
         inputcontest->loadBonusList();
 
@@ -1272,7 +1275,7 @@ void ContestDetails::on_OKButton_clicked()
 void ContestDetails::on_EntDetailButton_clicked()
 {
     getDetails( );   // override from the window
-    TEntryOptionsForm EntryDlg( this, contest, nullptr, true );        // don't show the export options
+    TEntryOptionsForm EntryDlg( this, contestTransferObject, nullptr, true );        // don't show the export options
     if ( EntryDlg.exec() == QDialog::Accepted )
        setDetails( );
 
@@ -1464,14 +1467,14 @@ void ContestDetails::on_ProtectedOption_clicked()
           // move to protected
           if (!mShowYesNoMessage(this, tr("Are you sure you want to protect this contest?") ))
           {
-             ui->ProtectedOption->setChecked(contest->isProtected() && !contest->isProtectedSuppressed());
+             ui->ProtectedOption->setChecked(contestTransferObject->isProtected() && !contestTransferObject->isProtectedSuppressed());
           }
        }
        else // unchecked
        {
           if (!mShowYesNoMessage(this, tr("Are you sure you want to disable protection for this contest?") ))
           {
-             ui->ProtectedOption->setChecked(contest->isProtected() && !contest->isProtectedSuppressed());
+             ui->ProtectedOption->setChecked(contestTransferObject->isProtected() && !contestTransferObject->isProtectedSuppressed());
           }
        }
        enableControls();
@@ -1481,7 +1484,7 @@ void ContestDetails::bundleChanged()
 {
     getDetails( );   // override from the window
 
-    contest->setINIDetails();
+    contestTransferObject->setINIDetails();
     setDetails( );
     QWidget *next = getNextFocus();
     if (next)
@@ -1521,9 +1524,9 @@ void ContestDetails::on_RotatorList()
     ui->antennaNameEdit->clear();
     ui->antennaNameEdit->addItem("");
     ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
-    if (contest)
+    if (contestTransferObject)
     {
-        ui->antennaNameEdit->setCurrentText(contest->antennaName.getValue().toString());
+        ui->antennaNameEdit->setCurrentText(contestTransferObject->antennaName.getValue().toString());
     }
 }
 void ContestDetails::on_SetRadioList()
@@ -1531,8 +1534,13 @@ void ContestDetails::on_SetRadioList()
     ui->radioNameEdit->clear();
     ui->radioNameEdit->addItem("");
     ui->radioNameEdit->addItems( LogContainer->sendDM->rigs());
-    if (contest)
+    if (contestTransferObject)
     {
-        ui->radioNameEdit->setCurrentText(contest->radioName.getValue().toString());
+        ui->radioNameEdit->setCurrentText(contestTransferObject->radioName.getValue().toString());
     }
+}
+
+void ContestDetails::on_ageProtectedcb_stateChanged(int /*arg1*/)
+{
+    enableControls();
 }
