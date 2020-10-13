@@ -121,6 +121,10 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
     ReportAutofillAction->setChecked(autoFill);
 
+    bool oldBandMap;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
+    OldBandMapAction->setChecked(oldBandMap);
+
     ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
     ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
     restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
@@ -446,6 +450,9 @@ void TLogContainer::setupMenus()
     restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+
+    OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
+    ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
     DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
@@ -1262,6 +1269,24 @@ void TLogContainer::ReportAutofillActionExecute()
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, autoFill );
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
+}
+void TLogContainer::OldBandMap()
+{
+    bool oldBandMap = OldBandMapAction->isChecked();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+void TLogContainer::ConfigAgeProtection()
+{
+    int cap;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+    if (enquireDialog(this, tr("Set days after which to protect contests (-1 for never)"), cap, -1, 365))
+    {
+        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
 }
 
 void TLogContainer::GoToSerialActionExecute()

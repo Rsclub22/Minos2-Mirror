@@ -212,8 +212,7 @@ protected:
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
       void removeContact(QSharedPointer<BaseContact> );
 
-
-
+      void checkAgeProtection();
 };
 
 #endif

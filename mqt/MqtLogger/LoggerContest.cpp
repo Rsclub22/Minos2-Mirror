@@ -408,26 +408,30 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    setVersion(STRINGVERSION);
    commonSave( newFile );
 
-   // check last time in contest against current date/time and the
-
-   int ageDays;
-   TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
-   if (ageDays >= 0)
-   {
-       QString t1 = DTGEnd.getValue();
-       QDateTime end = CanonicalToTDT( t1 );
-
-       QDate endDate = end.date();
-
-       endDate = endDate.addDays(ageDays);
-       if (endDate <= QDate::currentDate())
-       {
-           // e.g. if ageDays is 1, allow contest day and all the following day
-           ageProtected = true;
-       }
-   }
+   checkAgeProtection();
 
    return true;
+}
+void LoggerContestLog::checkAgeProtection()
+{
+    // check last time in contest against current date/time and the
+
+    int ageDays;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
+    if (ageDays >= 0)
+    {
+        QString t1 = DTGEnd.getValue();
+        QDateTime end = CanonicalToTDT( t1 );
+
+        QDate endDate = end.date();
+
+        endDate = endDate.addDays(ageDays);
+        if (endDate <= QDate::currentDate())
+        {
+            // e.g. if ageDays is 1, allow contest day and all the following day
+            ageProtected = true;
+        }
+    }
 }
 qint64 LoggerContestLog::readBlock( int bno )
 {
