@@ -58,11 +58,14 @@ void MinosContestLoadDialog::showEvent(QShowEvent *ev)
     QDialog::showEvent(ev);
     if (isVisible())
     {
+        update();
         int progDelay;
         TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpProgressDelay, progDelay );
 
         delayedAction(this, [=]()
         {
+            update();
+            el->processEvents();
             // NB a lambda function
             trace("Progress Dialog timer fired");
             //timer->stop();

@@ -1986,7 +1986,7 @@ void TLogContainer::preloadLists( )
 void TLogContainer::addListSlot( QWidget *p, const QString &fname, int slotno, bool preload )
 {
 
-    MinosContestLoadDialog progress(p);
+    MinosContestLoadDialog progress(this);
    //create and show a progress splash screen
     progress.setLoadMessage(fname, false, true);
     progress.doShow();
