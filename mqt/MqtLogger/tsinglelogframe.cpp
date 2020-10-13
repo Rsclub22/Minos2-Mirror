@@ -461,6 +461,8 @@ void TSingleLogFrame::clearScreenLayout()
         MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
         s->setParent(nullptr);
         s->deleteLater();
+        rowSplitters.clear();
+
     }
     traceMsg("clearScreenLayout complete for " + msg);
 }
