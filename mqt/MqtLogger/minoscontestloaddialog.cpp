@@ -48,18 +48,27 @@ void MinosContestLoadDialog::doShow()
 {
     trace("Progress Dialog doShow");
     show();
-    int progDelay;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpProgressDelay, progDelay );
 
-    delayedAction(this, [=]()
-    {
-        // NB a lambda function
-        trace("Progress Dialog timer fired");
-        //timer->stop();
-        el->quit();
-    }
-    ,progDelay
-    );
     el->exec();
     trace("Exit from doShow after delay for screen update");
+}
+
+void MinosContestLoadDialog::showEvent(QShowEvent *ev)
+{
+    QDialog::showEvent(ev);
+    if (isVisible())
+    {
+        int progDelay;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpProgressDelay, progDelay );
+
+        delayedAction(this, [=]()
+        {
+            // NB a lambda function
+            trace("Progress Dialog timer fired");
+            //timer->stop();
+            el->quit();
+        }
+        ,progDelay
+        );
+    }
 }

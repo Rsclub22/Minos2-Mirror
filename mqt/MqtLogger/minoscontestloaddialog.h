@@ -15,14 +15,19 @@ class MinosContestLoadDialog : public QDialog
 
 public:
     explicit MinosContestLoadDialog(QWidget *parent = nullptr);
-    ~MinosContestLoadDialog();
+    ~MinosContestLoadDialog() override;
 
     void setLoadMessage(QString mess, bool newFile, bool list);
     void doShow();
+
 private:
     Ui::MinosContestLoadDialog *ui;
     QEventLoop *el = nullptr;
     //QTimer *timer = nullptr;
+
+protected:
+    void showEvent(QShowEvent *) Q_DECL_OVERRIDE;
+
 };
 
 #endif // MINOSCONTESTLOADDIALOG_H
