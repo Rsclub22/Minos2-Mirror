@@ -1436,7 +1436,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (freq == curFreq )
+    if (std::abs(freq - curFreq) < 1000 )
     {
         bLineStart = "<b>";
         bLineEnd = "</b>";
