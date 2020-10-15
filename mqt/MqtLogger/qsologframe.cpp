@@ -140,9 +140,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
-    widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
-
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
 
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
@@ -382,6 +379,14 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
 
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
+
+    QString ssQsoFrame = ssQsoFrameBlue;
+    if (contest->isReadOnly())
+    {
+        ssQsoFrame = ssQsoFrameRed;
+    }
+    ui->qsoFrame->setStyleSheet(ssQsoFrame);
+    widgetStyles[ui->qsoFrame] = ssQsoFrame;
 
     csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
     vcs.push_back( csIl );
