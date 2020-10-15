@@ -178,7 +178,7 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="185"/>
+        <location filename="../minoscompass.cpp" line="186"/>
         <source>N,E,S,W</source>
         <translation>N,E,S,O</translation>
     </message>
