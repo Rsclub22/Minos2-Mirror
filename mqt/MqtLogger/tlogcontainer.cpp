@@ -1283,6 +1283,7 @@ void TLogContainer::ConfigAgeProtection()
     if (enquireDialog(this, tr("Set days after which to protect contests (-1 for never)"), cap, -1, 365))
     {
         TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         TWaitCursor wc(this);
         selectSession(TContestApp::getContestApp()->currSession);
