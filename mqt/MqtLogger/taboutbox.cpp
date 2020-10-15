@@ -166,6 +166,10 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
         }
         ui->chooseSetCb->setCurrentText(sess);
 
+        int cap;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+        ui->ageSpinner->setValue(cap);
+
     }
 
     if (  onStartup && !checkServerReady() )
@@ -237,4 +241,10 @@ void TAboutBox::on_manageSets_clicked()
     QStringList sessionlst = LogContainer->getSessions();
     ui->chooseSetCb->addItems(sessionlst);
     ui->chooseSetCb->setCurrentText(sess);
+}
+
+void TAboutBox::on_ageSpinner_valueChanged(int cap)
+{
+    TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
