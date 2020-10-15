@@ -931,9 +931,11 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
                 syCoord = yCoord;
                 fontOffset = yCoord - centreYCoord;
             }
-            if (lastOffset >= 0 && fontOffset <= lastOffset + fontHeight)
+            if (fontOffset <= lastOffset + fontHeight)
             {
                 fontOffset = lastOffset + fontHeight;
+                if (fontOffset < 0)
+                    fontOffset = 0;
                 syCoord = centreYCoord + fontOffset;
 
             }
@@ -1096,7 +1098,7 @@ void BandmapView::drawBandMapSpots()
                 markersAbove++;
             }
             int fontOffset = -1;
-            int lastOffset = -fontHeight;
+            int lastOffset = -1;
             int firstOffset = -1;
             for (int row = markersAbove - 1; row >= 0; --row)
             {
@@ -1108,14 +1110,14 @@ void BandmapView::drawBandMapSpots()
             }
             fontOffset = -1;
             lastOffset = -1;
-            if (firstOffset > 0)
+            if (firstOffset >= 0)
             {
                 lastOffset = -firstOffset + fontHeight;
             }
-            if (lastOffset < 0)
-            {
-                lastOffset = 0;
-            }
+//            if (lastOffset < 0)
+//            {
+//                lastOffset = 0;
+//            }
             for (int row = markersAbove; row < numrows; ++row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
