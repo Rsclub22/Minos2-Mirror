@@ -83,7 +83,7 @@ class BaseContestLog: public BaseLogList
       QMap<QString, QSharedPointer<int> > countryWorked;
 
       MinosItem<bool> protectedContest;
-      // This is private as in general yu shuld be using isReadOnly()
+      // This is private as in general you shuld be using isReadOnly()
       bool isProtected( )
       {
          return protectedContest.getValue();

@@ -26,6 +26,11 @@ void ScreenContact::initialise( BaseContestLog *ct )
     loc = Locator();
     time = dtg( false );
 
+    if (!ct)
+    {
+        return;
+    }
+
     BaseContestLog * clp = ct;
 
     int ms = 0;
