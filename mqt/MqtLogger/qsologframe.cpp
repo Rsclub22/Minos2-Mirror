@@ -385,6 +385,11 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
 
+    if (!pcontest)
+    {
+        return;
+    }
+
     csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
     vcs.push_back( csIl );
     rsIl = new ValidatedControl( ui->RSTTXEdit, vtRST );

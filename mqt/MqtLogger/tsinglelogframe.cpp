@@ -396,17 +396,22 @@ void TSingleLogFrame::clearScreenLayout()
     qsoModel.initialise(nullptr);
 
     FKHRigControlFrame->setContest(nullptr);
+    runButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
+    // CribSheet
+    // NextContactDetailsLabel
+    // CurrentBandLabel
+    GJVQSOLogFrame->initialise(nullptr);
     thisMatchFrame->setContest(nullptr);
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
+    //chatFrame
+    wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     setClusterClientLoaded(false);
     bandmapControlFrame->setContest(nullptr);
     setBandmapLoaded(false);
-    wsjtxFrame->setContest(nullptr);
-    runButtonsFrame->setContest(nullptr);
 
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
@@ -420,20 +425,29 @@ void TSingleLogFrame::clearScreenLayout()
 
         QSOTable->setParent(this);
         QSOTable->hide();
-        GJVQSOLogFrame->setParent(this);
-        GJVQSOLogFrame->hide();
-        CribSheet->setParent(this);
-        CribSheet->hide();
-
 
         FKHRigControlFrame->setParent(this);
         FKHRigControlFrame->hide();
+
+        runButtonsFrame->setParent(this);
+        runButtonsFrame->hide();
 
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
 
         rotPresets->setParent(this);
         rotPresets->hide();
+
+        CribSheet->setParent(this);
+        CribSheet->hide();
+
+        NextContactDetailsLabel->setParent(this);
+        NextContactDetailsLabel->hide();
+        CurrentBandLabel->setParent(this);
+        CurrentBandLabel->hide();
+
+        GJVQSOLogFrame->setParent(this);
+        GJVQSOLogFrame->hide();
 
         thisMatchFrame->setParent(this);
         thisMatchFrame->hide();
@@ -444,22 +458,26 @@ void TSingleLogFrame::clearScreenLayout()
         archiveMatchFrame->setParent(this);
         archiveMatchFrame->hide();
 
+        chatFrame->setParent(this);
+        chatFrame->hide();
+
+        wsjtxFrame->setParent(this);
+        wsjtxFrame->hide();
+
         clusterControlFrame->setParent(this);
         clusterControlFrame->hide();
 
         bandmapControlFrame->setParent(this);
         bandmapControlFrame->hide();
 
-        wsjtxFrame->setParent(this);
-        wsjtxFrame->hide();
-
-        runButtonsFrame->setParent(this);
-        runButtonsFrame->hide();
-
-
-        MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-        s->setParent(nullptr);
-        s->deleteLater();
+        QWidget *s = singleLogFrameSplitter->widget(0);
+        while (s)
+        {
+            s->setParent(nullptr);
+    //        s->deleteLater();
+            delete(s);
+            s = singleLogFrameSplitter->widget(0);
+        }
 
         rowSplitters.clear();
 
@@ -489,6 +507,7 @@ QString TSingleLogFrame::getCurScreenLayout() const
 
 void TSingleLogFrame::setCurScreenLayout(const QString &value)
 {
+    curScreenLayout = value;
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
@@ -677,6 +696,7 @@ void TSingleLogFrame::buildScreenLayout()
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
+        ct->screenLayout.setValue(curConfigName);
         if ( !scf.configs.contains(curConfigName))
         {
             //we need to get the built in default
