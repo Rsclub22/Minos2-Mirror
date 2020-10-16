@@ -380,10 +380,30 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
 
+    if (!pcontest)
+    {
+        return;
+    }
     QString ssQsoFrame = ssQsoFrameBlue;
     if (contest->isReadOnly())
     {
         ssQsoFrame = ssQsoFrameRed;
+        if (contest->isUnwriteable())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
+        }
+        else if (contest->getProtectedState().getValue())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
+        }
+        else if (contest->isAgeProtected())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+        }
+    }
+    else
+    {
+        ui->protectionLabel->setText("");
     }
     ui->qsoFrame->setStyleSheet(ssQsoFrame);
     widgetStyles[ui->qsoFrame] = ssQsoFrame;
@@ -1898,6 +1918,9 @@ void QSOLogFrame::updateQSODisplay()
 
    ui->InsertBeforeButton->setEnabled(notProtected);
    ui->InsertAfterButton->setEnabled(notProtected);
+
+   ui->CatchupButton->setEnabled(notProtected);
+   ui->FirstUnfilledButton->setEnabled(notProtected);
 
    bool mgm = contest->MGMContestRules.getValue();
 
