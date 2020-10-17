@@ -423,7 +423,7 @@ void LoggerContestLog::checkAgeProtection()
         QDate endDate = end.date();
 
         endDate = endDate.addDays(ageDays);
-        if (endDate <= QDate::currentDate())
+        if (endDate.isValid() && endDate <= QDate::currentDate())
         {
             // e.g. if ageDays is 1, allow contest day and all the following day
             ageProtected = true;
