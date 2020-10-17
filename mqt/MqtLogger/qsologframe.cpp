@@ -2987,7 +2987,7 @@ void QSOLogFrame::setClusterServerState(QString stateMsg)
 void QSOLogFrame::checkBandMapAndClusterLoaded()
 {
 
-    if (isBandMapLoaded())
+    if (contest && !contest->isReadOnly() && isBandMapLoaded())
     {
         setBandmapControlsState();
         setTuningAddMapChkBoxState();
