@@ -292,24 +292,21 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                }
    if ( !newFile )
    {
-      if (!FileAccessible(fn))
-      {
-          setUnwriteable(true);
-      }
-
       QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
-      if (isUnwriteable())
-      {
-        om = QIODevice::ReadOnly;
-      }
       QSharedPointer<QFile> contestFile(new QFile(fn));
 
       if (!contestFile->open(om))
       {
-         QString lerr = contestFile->errorString();
-         QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
-         MinosParameters::getMinosParameters() ->mshowMessage( emess );
-         return false;
+          // isWriteable doesn't give good results on Windows
+          om = QIODevice::ReadOnly;
+          if (!contestFile->open(om))
+          {
+             QString lerr = contestFile->errorString();
+             QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
+             MinosParameters::getMinosParameters() ->mshowMessage( emess );
+             return false;
+          }
+          setUnwriteable(true);
       }
 
       bool loadOK = false;
