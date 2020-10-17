@@ -90,7 +90,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
-    connect(MinosConfig::getMinosConfig(), SIGNAL(appStarted()), this, SLOT(appStarted()));
+    connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));
 }
 TLogContainer::~TLogContainer()
 {
@@ -2282,7 +2282,12 @@ void TLogContainer::onRestorContestModeChecked(bool checked)
 
 void TLogContainer::appStarted()
 {
-    delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
+    delayedAction(this,  [=]()
+    {
+        Qt::WindowStates ss = windowState();
+        trace(QString("WindowsState %1").arg(ss));
+        setWindowState(ss | Qt::WindowState::WindowActive);
+    });
 }
 
 bool TLogContainer::readRestoreContestModeFlag()

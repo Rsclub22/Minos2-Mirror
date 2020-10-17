@@ -8,10 +8,15 @@
 
 
 //---------------------------------------------------------------------------
-
+MinosConfigEvents MinosConfigEvents::mce;
+void MinosConfigEvents::sendAppStarted()
+{
+    emit mce.appStarted();
+}
 static bool terminated = false;
 
 QString RunLocal("RunLocal");
+
 QString ConnectServer("ConnectServer");
 const char * MinosConfig::appNone = QT_TR_NOOP("None");
 const char * MinosConfig::appOther = QT_TR_NOOP("Other");
@@ -190,7 +195,7 @@ void RunConfigElement::createProcess()
         QString fontCommand = "Font " + QApplication::font().toString();
         sendCommand(fontCommand);
 
-        emit MinosConfig::getMinosConfig()->appStarted();
+         MinosConfigEvents::sendAppStarted();
     }
 }
 void RunConfigElement::askStopProcess()
