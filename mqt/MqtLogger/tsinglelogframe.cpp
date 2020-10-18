@@ -601,6 +601,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctQSOEdit:
                 {
                     elementScrollArea->setWidget(GJVQSOLogFrame);
+                    GJVQSOLogFrame->initialise(ct);
                     GJVQSOLogFrame->setVisible(true);
                     break;
                 }
@@ -713,6 +714,9 @@ void TSingleLogFrame::buildScreenLayout()
         buildRow(sc.baseElement->rows[j], auxInstance, singleLogFrameSplitter);
 
     }
+    qsoModel.initialise(contest);
+    QSOTable->setModel(&qsoModel);
+
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
     wsjtxFrame->setContest(ct);
