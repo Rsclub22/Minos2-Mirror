@@ -22,7 +22,7 @@
     <message>
         <location filename="../clustermainwindow.ui" line="78"/>
         <source>User Commands</source>
-        <translation>Commandes d&apos;utilisateur</translation>
+        <translation>Commandes utilisateur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="87"/>
@@ -127,12 +127,12 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="519"/>
         <source>Connect to Node - Disconnect Timeout</source>
-        <translation>Connecter à nœud de Cluster - Délai de déconnexion</translation>
+        <translation>Connecter au nœud de Cluster - Délai de déconnexion</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="555"/>
         <source>Connect to Cluster Node</source>
-        <translation>Connecter à nœud de Cluster</translation>
+        <translation>Connecter au nœud de Cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="556"/>
@@ -186,7 +186,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="617"/>
         <source>Logging in with callsign %1</source>
-        <translation>Ouvrant connexion avec l&apos;indicatif d&apos;appel %1</translation>
+        <translation>Etablir la connexion avec l&apos;Iindicatif d&apos;appel %1</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="623"/>
@@ -196,7 +196,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="630"/>
         <source>Disconnected</source>
-        <translation>Débranché</translation>
+        <translation>Déconnecté</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="813"/>
@@ -231,12 +231,12 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="1777"/>
         <source>Cluster User Command Clear</source>
-        <translation>Cluster: Effacer commande d&apos;utilisateur</translation>
+        <translation>Effacer la commande utilisateur du cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="1778"/>
         <source>Do you really want to clear cluster user command number:%1?</source>
-        <translation>Effacer commande %1 du cluster?</translation>
+        <translation>Voulez-vous vraiment effacer la commande utilisateur du cluster:%1?</translation>
     </message>
 </context>
 <context>
@@ -311,7 +311,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../sentSpotdatamodel.cpp" line="153"/>
         <source>Failed</source>
-        <translation>Échoué</translation>
+        <translation>Echec</translation>
     </message>
 </context>
 <context>
@@ -349,7 +349,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../setupdialog.ui" line="78"/>
         <source>Send Spots to DXCluster</source>
-        <translation>Envoyer des Spots à DXCluster</translation>
+        <translation>Envoyer des Spots au DXCluster</translation>
     </message>
     <message>
         <location filename="../setupdialog.ui" line="87"/>
@@ -405,7 +405,7 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
         <location filename="../setupdialog.cpp" line="167"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
-        <translation>%1 minutes a été entré
+        <translation>%1 minutes a été entrée
 La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation>
     </message>
 </context>
@@ -419,12 +419,12 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../clustermainwindow.cpp" line="28"/>
         <source>Failed - comms error</source>
-        <translation>Échec - erreur de communication</translation>
+        <translation>Echec - erreur de communication</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="29"/>
         <source>Not Logged On</source>
-        <translation>Pas connecté</translation>
+        <translation>Non connecté</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="29"/>
@@ -452,7 +452,7 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
     <message>
         <location filename="../userclustercommanddialog.cpp" line="54"/>
         <source>Cluster User Command %1 - %2</source>
-        <translation>Cluster: Effacer commande %1 - %2</translation>
+        <translation>Commande d&apos;utilisateur du Cluster: Commande %1 - %2</translation>
     </message>
 </context>
 </TS>

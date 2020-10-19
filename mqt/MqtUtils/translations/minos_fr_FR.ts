@@ -52,7 +52,7 @@
         <source> Executable path does not exist
 
 </source>
-        <translation> L&apos;image exécutable chemin n&apos;existe pas
+        <translation> Le chemin pour l&apos;exécutable n&apos;existe pas
 
 </translation>
     </message>
@@ -71,7 +71,7 @@
     <message>
         <location filename="../ConfigFile.cpp" line="146"/>
         <source>:program doesn&apos;t exist:</source>
-        <translation>:l&apos;image exécutable n&apos;existe pas:</translation>
+        <translation>:l&apos;exécutable n&apos;existe pas:</translation>
     </message>
 </context>
 </TS>

@@ -14,7 +14,7 @@
     <message>
         <location filename="../MonitorMain.ui" line="14"/>
         <source>Minos Log Monitor</source>
-        <translation>Moniteur de journal Minos</translation>
+        <translation>Moniteur de Log Minos</translation>
     </message>
     <message>
         <location filename="../MonitorMain.ui" line="72"/>

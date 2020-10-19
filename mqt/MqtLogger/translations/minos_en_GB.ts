@@ -1951,7 +1951,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="165"/>
-        <location filename="../qsologframe.cpp" line="529"/>
+        <location filename="../qsologframe.cpp" line="534"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2151,12 +2151,12 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="538"/>
+        <location filename="../qsologframe.cpp" line="543"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1735"/>
+        <location filename="../qsologframe.cpp" line="1740"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2164,32 +2164,32 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2125"/>
+        <location filename="../qsologframe.cpp" line="2130"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2132"/>
+        <location filename="../qsologframe.cpp" line="2137"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2227"/>
+        <location filename="../qsologframe.cpp" line="2232"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2229"/>
+        <location filename="../qsologframe.cpp" line="2234"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2556"/>
+        <location filename="../qsologframe.cpp" line="2561"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2591"/>
+        <location filename="../qsologframe.cpp" line="2596"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4586,22 +4586,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="740"/>
+        <location filename="../tsinglelogframe.cpp" line="764"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1304"/>
+        <location filename="../tsinglelogframe.cpp" line="1328"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1323"/>
+        <location filename="../tsinglelogframe.cpp" line="1347"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1345"/>
+        <location filename="../tsinglelogframe.cpp" line="1369"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
