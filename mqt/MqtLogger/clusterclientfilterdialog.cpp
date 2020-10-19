@@ -75,7 +75,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 
 
-    bandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
+    bandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
+                   << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox
+                   << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
     for (int i = 0; i < bandChkBoxList.count(); i++)
@@ -109,7 +111,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         }
     }
 
-    distanceLineEditsList << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
+    distanceLineEditsList << ui->spotDistanceEdit_1_8MHz << ui->spotDistanceEdit_3_5MHz << ui->spotDistanceEdit_7MHz
+                          << ui->spotDistanceEdit_14MHz << ui->spotDistanceEdit_21MHz << ui->spotDistanceEdit_28MHz
+                          << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
                           << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
 
 
@@ -126,7 +130,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(distanceLineEditsList[i], &QLineEdit::editingFinished,  [=](){onDistanceEditingFinished(i);});
     }
 
-    ignoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
+    ignoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_1_8MHz << ui->distFilterIgnoreCheckBox_3_5MHz << ui->distFilterIgnoreCheckBox_7MHz
+                             << ui->distFilterIgnoreCheckBox_14MHz << ui->distFilterIgnoreCheckBox_21MHz << ui->distFilterIgnoreCheckBox_28MHz
+                             << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
                              << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
 
     for (int i = 0; i < ignoreDistanceChkBoxList.count(); i++)
@@ -147,7 +153,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     }
 
-    ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
+    ignoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_1_8MHz << ui->ignoreEmptyDistanceValuesChkBox_3_5MHz  << ui->ignoreEmptyDistanceValuesChkBox_7MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_14MHz << ui->ignoreEmptyDistanceValuesChkBox_21MHz << ui->ignoreEmptyDistanceValuesChkBox_28MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
                                   << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
 
     for (int i = 0; i < ignoreEmptyDistanceChkBoxList.count(); i++)
@@ -171,27 +179,26 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     distanceLabelsList << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
                        << ui->bandLabel_1296MHz << ui->bandLabel_2300MHz << ui->bandLabel_3_4GHz << ui->bandLabel_5_6GHz << ui->bandLabel_10GHz;
 
+    connect(ui->hfSetAlDefaultDistPb, SIGNAL(clicked()), this, SLOT(onHfSetDefDistPbClicked()));
     connect(ui->vhfSetAlDefaultDistPb, SIGNAL(clicked()), this, SLOT(onVhfSetDefDistPbClicked()));
     connect(ui->uhfSetAlDefaultDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetDefDistPbClicked()));
 
+    connect(ui->hfSetAllIgnorePb, SIGNAL(clicked()), this, SLOT(onHfSetAllIgnorePbClicked()));
     connect(ui->vhfSetAllIgnorePb, SIGNAL(clicked()), this, SLOT(onVhfSetAllIgnorePbClicked()));
     connect(ui->uhfSetAllIgnorePb, SIGNAL(clicked()), this, SLOT(onUhfSetAllIgnorePbClicked()));
 
-
+    connect(ui->hfClearAllIgnorePb, SIGNAL(clicked()), this, SLOT(onHfClearAllIgnorePbClicked()));
     connect(ui->vhfClearAllIgnorePb, SIGNAL(clicked()), this, SLOT(onVhfClearAllIgnorePbClicked()));
     connect(ui->uhfClearAllIgnorePb, SIGNAL(clicked()), this, SLOT(onUhfClearAllIgnorePbClicked()));
 
-
+    connect(ui->hfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onHfSetAllEmptyPbClicked()));
     connect(ui->vhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfSetAllEmptyPbClicked()));
     connect(ui->uhfSetAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfSetAllEmptyPbClicked()));
 
+    connect(ui->hfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onHfClearAllEmptyDistPbClicked()));
     connect(ui->vhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onVhfClearAllEmptyDistPbClicked()));
     connect(ui->uhfClearAllEmptyDistPb, SIGNAL(clicked()), this, SLOT(onUhfClearAllEmptyDistPbClicked()));
 
-
-
-
-    ui->ClusterClientFilterTab->setCurrentIndex(0);
 
 
     callsignListWidget = ui->callsignListWidget;
@@ -236,6 +243,18 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     setDistanceFilterTabCurrentIndex(distanceTabIndex);
 
     enableDistanceFields();
+
+    bool allowHF = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+    setHFVisible(allowHF);
+    if (allowHF)
+    {
+        ui->ClusterClientFilterTab->setCurrentIndex(0);
+    }
+    else
+    {
+        ui->ClusterClientFilterTab->setCurrentIndex(1);
+    }
 
 
 }
@@ -595,6 +614,79 @@ void ClusterClientFilterDialog::copyModeFiltersToFilterSettings()
     {
         *filterSettings.modeFilters[i] = modeChkBoxList[i]->isChecked();
     }
+}
+
+
+void ClusterClientFilterDialog::setHFVisible(bool state)
+{
+    ui->hfSelectBut->setVisible(state);
+    ui->_1_8MHzCheckBox->setVisible(state);
+    ui->_3_5MHzCheckBox->setVisible(state);
+    ui->_7MHzCheckBox->setVisible(state);
+    ui->_14MHzCheckBox->setVisible(state);
+    ui->_21MHzCheckBox->setVisible(state);
+    ui->_28MHzCheckBox->setVisible(state);
+
+
+    ui->HF_DistanceTab->setVisible(state);
+
+    ui->spotDistanceEdit_1_8MHz->setVisible(state);
+    ui->spotDistanceEdit_3_5MHz->setVisible(state);
+    ui->spotDistanceEdit_7MHz->setVisible(state);
+    ui->spotDistanceEdit_14MHz->setVisible(state);
+    ui->spotDistanceEdit_21MHz->setVisible(state);
+    ui->spotDistanceEdit_28MHz->setVisible(state);
+
+    ui->distFilterIgnoreCheckBox_1_8MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_3_5MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_7MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_14MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_21MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_28MHz->setVisible(state);
+
+    ui->ignoreEmptyDistanceValuesChkBox_1_8MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_3_5MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_7MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_14MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_21MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_28MHz->setVisible(state);
+
+    ui->bandLabel_1_8MHz->setVisible(state);
+    ui->bandLabel_3_5MHz->setVisible(state);
+    ui->bandLabel_7MHz->setVisible(state);
+    ui->bandLabel_14MHz->setVisible(state);
+    ui->bandLabel_21MHz->setVisible(state);
+    ui->bandLabel_28MHz->setVisible(state);
+
+    ui->distFilterIgnoreCheckBox_1_8MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_3_5MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_7MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_14MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_21MHz->setVisible(state);
+    ui->distFilterIgnoreCheckBox_28MHz->setVisible(state);
+
+    ui->ignoreEmptyDistanceValuesChkBox_1_8MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_3_5MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_7MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_14MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_21MHz->setVisible(state);
+    ui->ignoreEmptyDistanceValuesChkBox_28MHz->setVisible(state);
+
+    ui->hfLine1->setVisible(state);
+    ui->hfLine2->setVisible(state);
+    ui->hfLine3->setVisible(state);
+    ui->hfLine4->setVisible(state);
+    ui->hfLine5->setVisible(state);
+
+    ui->hfSetAlDefaultDistPb->setVisible(state);
+    ui->hfSetAllIgnorePb->setVisible(state);
+    ui->hfSetAllEmptyDistPb->setVisible(state);
+    ui->hfClearAllIgnorePb->setVisible(state);
+    ui->hfClearAllEmptyDistPb->setVisible(state);
+
+    ui->hfEnableFieldsLabel->setVisible(state);
+
+
 }
 
 

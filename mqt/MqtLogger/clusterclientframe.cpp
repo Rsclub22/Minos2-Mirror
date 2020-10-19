@@ -25,6 +25,7 @@
 #include "tsinglelogframe.h"
 #include "delayedaction.h"
 
+
 #include "ui_clusterclientframe.h"
 
 
@@ -73,7 +74,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
-
 
     purgeTimer = new QTimer(this);
 

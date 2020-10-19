@@ -31,8 +31,8 @@ const int VHFBANDEND = 4;
 const int MWBANDSTART = 4;
 const int MWBANDEND = 9;
 
-enum allBandOffsets {_50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
-const QStringList clusterBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
+enum allBandOffsets {_1_8M, _3_5M, _7M, _14M, _21M, _28M, _50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
+const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 Mhz" << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 
 enum allModeOffsets {NO_MODE, CW_MODE, USB_MODE, FM_MODE, RTTY_MODE, PSK31_MODE, FT8_MODE, MSK144_MODE, JT65_MODE};
@@ -247,7 +247,9 @@ public:
     QString callsignFilterList;
     QString locatorFilterList;
 
-    QList<bool*> bandFilters = { &bandFilter50Mhz, &bandFilter70Mhz, &bandFilter144Mhz,
+    QList<bool*> bandFilters = { &bandFilter1_8Mhz,  &bandFilter3_5Mhz, &bandFilter7Mhz,
+                                 &bandFilter14Mhz, &bandFilter21Mhz, &bandFilter28Mhz,
+                                 &bandFilter50Mhz, &bandFilter70Mhz, &bandFilter144Mhz,
                                  &bandFilter432Mhz, &bandFilter1296Mhz, &bandFilter2300Mhz,
                                  &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz};
 
@@ -255,19 +257,31 @@ public:
                                  &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
                                 &modeFilterMSK144MODE, &modeFilterJT65MODE};
 
-    QList<int*> distanceFilters = {&distanceFilter50MHz, &distanceFilter70MHz, &distanceFilter144MHz,
+    QList<int*> distanceFilters = {&distanceFilter1_8MHz, &distanceFilter3_5MHz, &distanceFilter7MHz,
+                                   &distanceFilter14MHz, &distanceFilter21MHz, &distanceFilter28MHz,
+                                   &distanceFilter50MHz, &distanceFilter70MHz, &distanceFilter144MHz,
                                    &distanceFilter432MHz, &distanceFilter1296MHz, &distanceFilter2300MHz,
                                    &distanceFilter3_4GHz, &distanceFilter5_6GHz, &distanceFilter10GHz};
 
-    QList<bool*> ignoreDistanceFlags = {&ignoreDistanceFlag_50MHz, &ignoreDistanceFlag_70MHz, &ignoreDistanceFlag_144MHz,
+    QList<bool*> ignoreDistanceFlags = {&ignoreDistanceFlag_1_8MHz, &ignoreDistanceFlag_3_5MHz, &ignoreDistanceFlag_7MHz,
+                                        &ignoreDistanceFlag_14MHz, &ignoreDistanceFlag_21MHz, &ignoreDistanceFlag_28MHz,
+                                        &ignoreDistanceFlag_50MHz, &ignoreDistanceFlag_70MHz, &ignoreDistanceFlag_144MHz,
                                         &ignoreDistanceFlag_432MHz, &ignoreDistanceFlag_1296MHz, &ignoreDistanceFlag_2300MHz,
                                         &ignoreDistanceFlag_3_4GHz, &ignoreDistanceFlag_5_6GHz, &ignoreDistanceFlag_10GHz};
 
-    QList<bool*> ignoreEmptyDistanceFlags = {&ignoreEmptyDistanceFlag_50MHz, &ignoreEmptyDistanceFlag_70MHz, &ignoreEmptyDistanceFlag_144MHz,
+    QList<bool*> ignoreEmptyDistanceFlags = {&ignoreEmptyDistanceFlag_1_8MHz, &ignoreEmptyDistanceFlag_3_5MHz, &ignoreEmptyDistanceFlag_7MHz,
+                                             &ignoreEmptyDistanceFlag_14MHz, &ignoreEmptyDistanceFlag_21MHz, &ignoreEmptyDistanceFlag_28MHz,
+                                             &ignoreEmptyDistanceFlag_50MHz, &ignoreEmptyDistanceFlag_70MHz, &ignoreEmptyDistanceFlag_144MHz,
                                              &ignoreEmptyDistanceFlag_432MHz, &ignoreEmptyDistanceFlag_1296MHz, &ignoreEmptyDistanceFlag_2300MHz,
                                              &ignoreEmptyDistanceFlag_3_4GHz, &ignoreEmptyDistanceFlag_5_6GHz, &ignoreEmptyDistanceFlag_10GHz};
 
 
+    bool bandFilter1_8Mhz;
+    bool bandFilter3_5Mhz;
+    bool bandFilter7Mhz;
+    bool bandFilter14Mhz;
+    bool bandFilter21Mhz;
+    bool bandFilter28Mhz;
     bool bandFilter50Mhz;
     bool bandFilter70Mhz;
     bool bandFilter144Mhz;
@@ -288,6 +302,12 @@ public:
     bool modeFilterMSK144MODE;
     bool modeFilterJT65MODE;
 
+    int distanceFilter1_8MHz;
+    int distanceFilter3_5MHz;
+    int distanceFilter7MHz;
+    int distanceFilter14MHz;
+    int distanceFilter21MHz;
+    int distanceFilter28MHz;
     int distanceFilter50MHz;
     int distanceFilter70MHz;
     int distanceFilter144MHz;
@@ -298,6 +318,12 @@ public:
     int distanceFilter5_6GHz;
     int distanceFilter10GHz;
 
+    bool ignoreDistanceFlag_1_8MHz;
+    bool ignoreDistanceFlag_3_5MHz;
+    bool ignoreDistanceFlag_7MHz;
+    bool ignoreDistanceFlag_14MHz;
+    bool ignoreDistanceFlag_21MHz;
+    bool ignoreDistanceFlag_28MHz;
     bool ignoreDistanceFlag_50MHz;
     bool ignoreDistanceFlag_70MHz;
     bool ignoreDistanceFlag_144MHz;
@@ -308,6 +334,12 @@ public:
     bool ignoreDistanceFlag_5_6GHz;
     bool ignoreDistanceFlag_10GHz;
 
+    bool ignoreEmptyDistanceFlag_1_8MHz;
+    bool ignoreEmptyDistanceFlag_3_5MHz;
+    bool ignoreEmptyDistanceFlag_7MHz;
+    bool ignoreEmptyDistanceFlag_14MHz;
+    bool ignoreEmptyDistanceFlag_21MHz;
+    bool ignoreEmptyDistanceFlag_28MHz;
     bool ignoreEmptyDistanceFlag_50MHz;
     bool ignoreEmptyDistanceFlag_70MHz;
     bool ignoreEmptyDistanceFlag_144MHz;

@@ -174,6 +174,7 @@ private:
     void setDistanceFilterTabCurrentIndex(int idx);
     int getDistanceFilterTabCurrentIndex();
 
+    void setHFVisible(bool state);
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
