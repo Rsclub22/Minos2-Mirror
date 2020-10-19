@@ -86,7 +86,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="14"/>
         <source>Minos KST Client Configuration</source>
-        <translation>Configuration du client Minos KST</translation>
+        <translation>Configuration du Minos KSTclient</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="20"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="171"/>
         <source>Automatically connect on load</source>
-        <translation>Connexion automatique lors du chargement</translation>
+        <translation>Connexion automatique lors du lancement</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="196"/>
@@ -161,7 +161,7 @@
     <message>
         <location filename="../kstconfigure.ui" line="246"/>
         <source>Server UDP Port</source>
-        <translation>Port UDP du serveur</translation>
+        <translation>Port du serveur UDP</translation>
     </message>
     <message>
         <location filename="../kstconfigure.ui" line="264"/>
@@ -199,7 +199,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="21"/>
         <source>Log in to these chats</source>
-        <translation>Connecter à ces bavardages</translation>
+        <translation>Connecter à ces Chats</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="39"/>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../kstmainwindow.ui" line="135"/>
         <source>Only show users for this band</source>
-        <translation>Afficher uniquement les utilisateurs de ce bande</translation>
+        <translation>Afficher uniquement les utilisateurs de cette bande</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="142"/>
@@ -256,7 +256,7 @@
         <source>Show me-&gt;user
 Path in AirScout</source>
         <translation>Afficher le chemin dans AirScout
-entre moi et Spot</translation>
+entre moi et le Spot</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="260"/>
@@ -282,7 +282,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="296"/>
         <source>Only show messages for this band</source>
-        <translation>Afficher uniquement les messages de ce bande</translation>
+        <translation>Afficher uniquement les messages de cette bande</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="303"/>
@@ -292,22 +292,23 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="313"/>
         <source>Clear the message filters</source>
-        <translation>Effacer les filtres messages</translation>
+        <translation>Effacer les filtres des messages</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="339"/>
         <source>Including me</source>
-        <translation>Including me</translation>
+        <translatorcomment>Context??</translatorcomment>
+        <translation>y compris les miens</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="361"/>
         <source>Chat to which messages will be sent</source>
-        <translation>Envoyer des messages à ce Bavardage</translation>
+        <translation>Envoyer des messages à ce Chat</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="379"/>
         <source>Active chat</source>
-        <translation>Bavardage actif</translation>
+        <translation>Chat actif</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="455"/>
@@ -379,12 +380,13 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.cpp" line="538"/>
         <source>Set Back</source>
-        <translation>Présent</translation>
+        <translatorcomment>ou Retour?</translatorcomment>
+        <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.cpp" line="542"/>
         <source>Set Away</source>
-        <translation>Absent</translation>
+        <translation>Définir statut à « Absent »</translation>
     </message>
 </context>
 <context>
@@ -392,7 +394,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="339"/>
         <source>Chat</source>
-        <translation>Bavardage</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../kstcallgridmodel.cpp" line="342"/>
@@ -445,7 +447,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="156"/>
         <source>Chat</source>
-        <translation>Bavardage</translation>
+        <translation>Chat</translation>
     </message>
     <message>
         <location filename="../kstmessagegridmodel.cpp" line="158"/>

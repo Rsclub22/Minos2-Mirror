@@ -4,22 +4,22 @@
 <context>
     <name>MinosConfig</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="16"/>
+        <location filename="../ConfigFile.cpp" line="21"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="17"/>
+        <location filename="../ConfigFile.cpp" line="22"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="576"/>
+        <location filename="../ConfigFile.cpp" line="581"/>
         <source>More than one server is defined and enabled</source>
         <translation>Plusieurs serveurs sont définis et activés</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="585"/>
+        <location filename="../ConfigFile.cpp" line="590"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
@@ -29,17 +29,17 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="600"/>
+        <location filename="../ConfigFile.cpp" line="605"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="615"/>
+        <location filename="../ConfigFile.cpp" line="620"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="656"/>
+        <location filename="../ConfigFile.cpp" line="661"/>
         <source>%1 requires a local %2
 
 </source>
@@ -48,16 +48,16 @@
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="666"/>
+        <location filename="../ConfigFile.cpp" line="671"/>
         <source> Executable path does not exist
 
 </source>
-        <translation> L&apos;image exécutable chemin n&apos;existe pas
+        <translation> Le chemin pour l&apos;exécutable n&apos;existe pas
 
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="670"/>
+        <location filename="../ConfigFile.cpp" line="675"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>
@@ -69,9 +69,9 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="146"/>
+        <location filename="../ConfigFile.cpp" line="151"/>
         <source>:program doesn&apos;t exist:</source>
-        <translation>:l&apos;image exécutable n&apos;existe pas:</translation>
+        <translation>:l&apos;exécutable n&apos;existe pas:</translation>
     </message>
 </context>
 </TS>

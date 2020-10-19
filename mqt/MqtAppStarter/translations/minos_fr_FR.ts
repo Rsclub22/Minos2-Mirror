@@ -37,7 +37,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="30"/>
         <source>Select &amp;Font...</source>
-        <translation>Choisir &amp;Police ...</translation>
+        <translation>Choisir la &amp;Police ...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="31"/>
@@ -47,7 +47,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="130"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
-        <translation>Le paramètre de police ne fonctionnera pas lorsque la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur QT5CT</translation>
+        <translation>Le paramètrage de la  police ne fonctionnera pas si la variable environnement QT_QPA_PLATFORMTHEME est définie sur QT5CT</translation>
     </message>
 </context>
 </TS>

@@ -1663,104 +1663,104 @@ Continents only apply to DXCC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="310"/>
+        <location filename="../LoggerContest.cpp" line="305"/>
         <source>Failed to open Contest file %1 : %2 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="388"/>
+        <location filename="../LoggerContest.cpp" line="385"/>
         <source>Failed to create Contest file %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="441"/>
+        <location filename="../LoggerContest.cpp" line="438"/>
         <source>(read) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="448"/>
+        <location filename="../LoggerContest.cpp" line="445"/>
         <source>Short read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="461"/>
+        <location filename="../LoggerContest.cpp" line="458"/>
         <source>Invalid block number for write!!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="466"/>
-        <location filename="../LoggerContest.cpp" line="1762"/>
+        <location filename="../LoggerContest.cpp" line="463"/>
+        <location filename="../LoggerContest.cpp" line="1759"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="471"/>
-        <location filename="../LoggerContest.cpp" line="1038"/>
-        <location filename="../LoggerContest.cpp" line="1051"/>
-        <location filename="../LoggerContest.cpp" line="1057"/>
+        <location filename="../LoggerContest.cpp" line="468"/>
+        <location filename="../LoggerContest.cpp" line="1035"/>
+        <location filename="../LoggerContest.cpp" line="1048"/>
+        <location filename="../LoggerContest.cpp" line="1054"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="558"/>
+        <location filename="../LoggerContest.cpp" line="555"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="711"/>
+        <location filename="../LoggerContest.cpp" line="708"/>
         <source>.GJV should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="805"/>
+        <location filename="../LoggerContest.cpp" line="802"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="812"/>
+        <location filename="../LoggerContest.cpp" line="809"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="944"/>
+        <location filename="../LoggerContest.cpp" line="941"/>
         <source>Unknown Country  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="950"/>
+        <location filename="../LoggerContest.cpp" line="947"/>
         <source>Unknown District   </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="976"/>
-        <location filename="../LoggerContest.cpp" line="1128"/>
+        <location filename="../LoggerContest.cpp" line="973"/>
+        <location filename="../LoggerContest.cpp" line="1125"/>
         <source>Please give first serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="978"/>
-        <location filename="../LoggerContest.cpp" line="1130"/>
+        <location filename="../LoggerContest.cpp" line="975"/>
+        <location filename="../LoggerContest.cpp" line="1127"/>
         <source>Please give last serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="984"/>
-        <location filename="../LoggerContest.cpp" line="1136"/>
+        <location filename="../LoggerContest.cpp" line="981"/>
+        <location filename="../LoggerContest.cpp" line="1133"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1027"/>
+        <location filename="../LoggerContest.cpp" line="1024"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1029"/>
+        <location filename="../LoggerContest.cpp" line="1026"/>
         <source>From file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1755"/>
+        <location filename="../LoggerContest.cpp" line="1752"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1976,7 +1976,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="165"/>
-        <location filename="../qsologframe.cpp" line="532"/>
+        <location filename="../qsologframe.cpp" line="530"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2021,152 +2021,157 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="337"/>
+        <location filename="../qsologframe.ui" line="332"/>
+        <source>Protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.ui" line="344"/>
         <source>Mark Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="347"/>
+        <location filename="../qsologframe.ui" line="354"/>
         <source>Save Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="359"/>
+        <location filename="../qsologframe.ui" line="366"/>
         <source>Tuning - Add Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="387"/>
+        <location filename="../qsologframe.ui" line="394"/>
         <source>Op1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="407"/>
+        <location filename="../qsologframe.ui" line="414"/>
         <source>Op2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="440"/>
+        <location filename="../qsologframe.ui" line="447"/>
         <source>dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="447"/>
+        <location filename="../qsologframe.ui" line="454"/>
         <source>(12345)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="457"/>
+        <location filename="../qsologframe.ui" line="464"/>
         <source>brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="464"/>
+        <location filename="../qsologframe.ui" line="471"/>
         <source>1234</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="503"/>
+        <location filename="../qsologframe.ui" line="510"/>
         <source>Non Scoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="529"/>
+        <location filename="../qsologframe.ui" line="536"/>
         <source>Deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="568"/>
+        <location filename="../qsologframe.ui" line="593"/>
         <source>Callsign (F1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="600"/>
+        <location filename="../qsologframe.ui" line="631"/>
         <source>RS(T)Tx(F2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="632"/>
+        <location filename="../qsologframe.ui" line="669"/>
         <source>Serial Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="667"/>
+        <location filename="../qsologframe.ui" line="710"/>
         <source>RS(T)Rx(F3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="699"/>
+        <location filename="../qsologframe.ui" line="748"/>
         <source>Serial Rx (F4)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="731"/>
+        <location filename="../qsologframe.ui" line="786"/>
         <source>Loc (F5)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="763"/>
+        <location filename="../qsologframe.ui" line="824"/>
         <source>Exchange (F6)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="803"/>
+        <location filename="../qsologframe.ui" line="864"/>
         <source>Comments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="836"/>
+        <location filename="../qsologframe.ui" line="897"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="839"/>
+        <location filename="../qsologframe.ui" line="900"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="862"/>
+        <location filename="../qsologframe.ui" line="923"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="865"/>
+        <location filename="../qsologframe.ui" line="926"/>
         <source>Force...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="894"/>
+        <location filename="../qsologframe.ui" line="955"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="917"/>
+        <location filename="../qsologframe.ui" line="978"/>
         <source>Get fields from current matching QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="920"/>
+        <location filename="../qsologframe.ui" line="981"/>
         <source>Match Xfer F12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="941"/>
+        <location filename="../qsologframe.ui" line="1002"/>
         <source>Insert Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="951"/>
+        <location filename="../qsologframe.ui" line="1012"/>
         <source>Insert After</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="974"/>
+        <location filename="../qsologframe.ui" line="1035"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="984"/>
+        <location filename="../qsologframe.ui" line="1045"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2176,12 +2181,12 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="541"/>
+        <location filename="../qsologframe.cpp" line="539"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1725"/>
+        <location filename="../qsologframe.cpp" line="1723"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2189,32 +2194,47 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2122"/>
+        <location filename="../qsologframe.cpp" line="1914"/>
+        <source>Read Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="1918"/>
+        <source>Protected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="1922"/>
+        <source>Protected by age of contest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="2147"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2129"/>
+        <location filename="../qsologframe.cpp" line="2154"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2225"/>
+        <location filename="../qsologframe.cpp" line="2250"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2227"/>
+        <location filename="../qsologframe.cpp" line="2252"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2549"/>
+        <location filename="../qsologframe.cpp" line="2574"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2584"/>
+        <location filename="../qsologframe.cpp" line="2609"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4662,22 +4682,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="740"/>
+        <location filename="../tsinglelogframe.cpp" line="764"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1309"/>
+        <location filename="../tsinglelogframe.cpp" line="1333"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1328"/>
+        <location filename="../tsinglelogframe.cpp" line="1352"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1350"/>
+        <location filename="../tsinglelogframe.cpp" line="1374"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
