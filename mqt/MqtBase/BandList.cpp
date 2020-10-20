@@ -414,6 +414,26 @@ void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 
 }
 
+void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
+{
+    for (int i = 0; i < bandList.size(); i++)   // just load VHF/UHF bands
+    {
+        // don't use bands > 10GHz (can't support Freq display)
+        if ( bandList[i]->uk != "24 GHz" && bandList[i]->uk != "47 GHz"
+             && bandList[i]->uk != "76 GHz" && bandList[i]->uk != "120 GHz"
+             && bandList[i]->uk != "134 GHz" && bandList[i]->uk != "248 GHz")
+
+        {
+            if (bandList[i]->getType().compare("VHF", Qt::CaseInsensitive) == 0
+                    || bandList[i]->getType().compare("MWave", Qt::CaseInsensitive) == 0
+                    || bandList[i]->getType().compare("HF", Qt::CaseSensitive) == 0)
+                bands.append(bandList[i]);
+        }
+    }
+
+}
+
+
 bool BandList::checkValidBand(Frequency freq)
 {
     QSharedPointer<BandInfo>  bi;

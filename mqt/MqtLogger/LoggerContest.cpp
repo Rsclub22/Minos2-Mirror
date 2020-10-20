@@ -1591,6 +1591,12 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        ClusterClientFilterSettings ccfs;
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);
+                                       mt->getStructArgMemberValue("bandFilter1_8Mhz", ccfs.bandFilter1_8Mhz);
+                                       mt->getStructArgMemberValue("bandFilter3_5Mhz", ccfs.bandFilter3_5Mhz);
+                                       mt->getStructArgMemberValue("bandFilter7Mhz", ccfs.bandFilter7Mhz);
+                                       mt->getStructArgMemberValue("bandFilter14Mhz", ccfs.bandFilter14Mhz);
+                                       mt->getStructArgMemberValue("bandFilter21Mhz", ccfs.bandFilter21Mhz);
+                                       mt->getStructArgMemberValue("bandFilter28Mhz", ccfs.bandFilter28Mhz);
                                        mt->getStructArgMemberValue("bandFilter50Mhz", ccfs.bandFilter50Mhz);
                                        mt->getStructArgMemberValue("bandFilter70Mhz", ccfs.bandFilter70Mhz);
                                        mt->getStructArgMemberValue("bandFilter144Mhz", ccfs.bandFilter144Mhz);
@@ -1600,6 +1606,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("bandFilter3_4Ghz", ccfs.bandFilter3_4Ghz);
                                        mt->getStructArgMemberValue("bandFilter5_6Ghz", ccfs.bandFilter5_6Ghz);
                                        mt->getStructArgMemberValue("bandFilter10Ghz", ccfs.bandFilter10Ghz);
+
                                        mt->getStructArgMemberValue("modeFilterCW", ccfs.modeFilterCW);
                                        mt->getStructArgMemberValue("modeFilterUSBMODE", ccfs.modeFilterUSBMODE);
                                        mt->getStructArgMemberValue("modeFilterFMMODE", ccfs.modeFilterFMMODE);
@@ -1609,6 +1616,30 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterMSK144MODE", ccfs.modeFilterMSK144MODE);
                                        mt->getStructArgMemberValue("modeFilterJT65MODE", ccfs.modeFilterJT65MODE);
                                        mt->getStructArgMemberValue("modeFilterNONEMODE", ccfs.modeFilterNONE);
+
+                                       mt->getStructArgMemberValue("distanceFilter1_8MHz", ccfs.distanceFilter1_8MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag1_8MHz", ccfs.ignoreDistanceFlag_1_8MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag1_8MHz", ccfs.ignoreEmptyDistanceFlag_1_8MHz);
+
+                                       mt->getStructArgMemberValue("distanceFilter3_5MHz", ccfs.distanceFilter3_5MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag3_5MHz", ccfs.ignoreDistanceFlag_1_8MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag3_5MHz", ccfs.ignoreEmptyDistanceFlag_3_5MHz);
+
+                                       mt->getStructArgMemberValue("distanceFilter7MHz", ccfs.distanceFilter7MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag7MHz", ccfs.ignoreDistanceFlag_7MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag7MHz", ccfs.ignoreEmptyDistanceFlag_7MHz);
+
+                                       mt->getStructArgMemberValue("distanceFilter14MHz", ccfs.distanceFilter14MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag14MHz", ccfs.ignoreDistanceFlag_14MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag14MHz", ccfs.ignoreEmptyDistanceFlag_14MHz);
+
+                                       mt->getStructArgMemberValue("distanceFilter21MHz", ccfs.distanceFilter21MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag21MHz", ccfs.ignoreDistanceFlag_21MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag21MHz", ccfs.ignoreEmptyDistanceFlag_21MHz);
+
+                                       mt->getStructArgMemberValue("distanceFilter28MHz", ccfs.distanceFilter28MHz);
+                                       mt->getStructArgMemberValue("ignoreDistanceFlag28MHz", ccfs.ignoreDistanceFlag_28MHz);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag28MHz", ccfs.ignoreEmptyDistanceFlag_28MHz);
 
                                        mt->getStructArgMemberValue("distanceFilter50MHz", ccfs.distanceFilter50MHz);
                                        mt->getStructArgMemberValue("ignoreDistanceFlag50MHz", ccfs.ignoreDistanceFlag_50MHz);

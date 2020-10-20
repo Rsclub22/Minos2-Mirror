@@ -103,9 +103,17 @@ const QString SPOT_TX_OFF = "TxSpotOff";
 
 const QChar SPOT_DATA_SEPERATOR = ':';
 // Only locators in Europe
+// use [I-Li-l][P-Lp-l] here??
 const QRegularExpression FULL_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d[A-Za-z][A-Za-z]");
 const QRegularExpression PART_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d\\W");
 const QRegularExpression SEARCH_LOC_EXP = QRegularExpression("[I,i,J,j,K,k,L,l][P,p,O,o,N,n,M,m,L,l]\\d\\d");
+
+const QRegularExpression FULL_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d[A-Za-z][A-Za-z]");
+const QRegularExpression PART_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d\\W");
+const QRegularExpression SEARCH_LOC_EXP_HF = QRegularExpression("[A-Ra-r][A-Ra-r]\\d\\d");
+
+const int START_HF = 0; // index bandlist table
+const int END_HF = 5;
 
 const int MIN_TTL = 10;
 const int MAX_TTL = 180;

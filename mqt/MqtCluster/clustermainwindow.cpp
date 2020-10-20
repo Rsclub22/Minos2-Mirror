@@ -100,7 +100,8 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
 
-    BandList::getBandList().loadVhfAndUpBands(bands);
+    //BandList::getBandList().loadVhfAndUpBands(bands);
+    BandList::getBandList().loadAllBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadBandsFromBandList())
@@ -1344,7 +1345,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
 
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment);
+        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
 
@@ -1665,13 +1666,24 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
         newSpot.setBand(dxBandStr);
         newSpot.setBandMask(dxBandMask);
 
-        if (dxBandStr.isEmpty() && !enableHFSpots)
+        if (enableHFSpots)
         {
-            // discard spot as it is HF
+            if (dxBandStr.isEmpty())
+            {
+                // discard spot as it is not a HF contest band
+                trace(QString("Unpack DX Spot: Discard Spot HF = %1, not a HF Contest Band").arg(newSpot.getFreq().traceStr()));
+
+                return DISCARD_HF_SPOT * -1;
+            }
+        }
+        else if (dxBandMask.toInt() < 5)
+        {
+            // discard spot as it is  HF
             trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getFreq().traceStr()));
 
             return DISCARD_HF_SPOT * -1;
         }
+
 
         QString dxModeStr;
         QString dxModeMask;
@@ -1743,7 +1755,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
         spotComment.remove(SPOT_DATA_SEPERATOR);
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment);
+        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
 
@@ -1782,36 +1794,52 @@ QString ClusterMainWindow::getPropMode(const QString comment)
 
 }
 
-void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
+void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, int bandmask)
 {
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
     // this should hopefully cope with different scenarios, independent of seperation chars
     // it is dependent on the sender correctly ordering the spotLoc and dxLoc, the spotLoc should be first
 
-    int fullLocExpCount = comment.count(FULL_LOC_EXP);
-    int partLocExpCount = comment.count(PART_LOC_EXP);
+    QRegularExpression full_loc_exp;
+    QRegularExpression part_loc_exp;
+
+    if (!enableHFSpots || (enableHFSpots && bandmask > END_HF))
+    {
+        full_loc_exp = FULL_LOC_EXP;
+        part_loc_exp = PART_LOC_EXP;
+
+    }
+    else
+    {
+        full_loc_exp = FULL_LOC_EXP_HF;
+        part_loc_exp = PART_LOC_EXP_HF;
+    }
+
+
+    int fullLocExpCount = comment.count(full_loc_exp);
+    int partLocExpCount = comment.count(part_loc_exp);
 
     if (fullLocExpCount == 2)
     {
-        int firstIndex = comment.indexOf(FULL_LOC_EXP);
-        int secondIndex = comment.indexOf(FULL_LOC_EXP, firstIndex + 4);
+        int firstIndex = comment.indexOf(full_loc_exp);
+        int secondIndex = comment.indexOf(full_loc_exp, firstIndex + 4);
         // extract locators
         spotLoc = comment.mid(firstIndex, 6).toUpper();
         dxLoc = comment.mid(secondIndex, 6).toUpper();
     }
     else if (partLocExpCount == 2)
     {
-        int firstIndex = comment.indexOf(PART_LOC_EXP);
-        int secondIndex = comment.indexOf(PART_LOC_EXP, firstIndex + 4);
+        int firstIndex = comment.indexOf(part_loc_exp);
+        int secondIndex = comment.indexOf(part_loc_exp, firstIndex + 4);
         // extract locators
         spotLoc = comment.mid(firstIndex, 4).toUpper();
         dxLoc = comment.mid(secondIndex, 4).toUpper();
     }
     else if (fullLocExpCount == 1 && partLocExpCount == 1)
     {
-        int firstIndex = comment.indexOf(FULL_LOC_EXP);
-        int secondIndex = comment.indexOf(PART_LOC_EXP);
+        int firstIndex = comment.indexOf(full_loc_exp);
+        int secondIndex = comment.indexOf(part_loc_exp);
         if (firstIndex < secondIndex)
         {
             spotLoc = comment.mid(firstIndex, 6).toUpper();
@@ -1825,12 +1853,12 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     }
     else if (fullLocExpCount == 1 && partLocExpCount == 0)
     {
-        int firstIndex = comment.indexOf(FULL_LOC_EXP);
+        int firstIndex = comment.indexOf(full_loc_exp);
         dxLoc = comment.mid(firstIndex, 6).toUpper();
     }
     else if (partLocExpCount == 1 && fullLocExpCount == 0)
     {
-        int firstIndex = comment.indexOf(PART_LOC_EXP);
+        int firstIndex = comment.indexOf(part_loc_exp);
         dxLoc = comment.mid(firstIndex, 4).toUpper();
     }
 
@@ -2110,10 +2138,10 @@ void ClusterMainWindow::getStartCommands()
 void ClusterMainWindow::initUserCommandButtons()
 {
 
-    ui->userCmdButFrame->setVisible(true);
+
     QList<QToolButton*> ui_userCommandButtons;
-    ui_userCommandButtons << ui->sendButton0 << ui->sendButton1 << ui->sendButton2 << ui->sendButton3 << ui->sendButton4
-                     << ui->sendButton5 << ui->sendButton6 << ui->sendButton7 << ui->sendButton8 << ui->sendButton9;
+    ui_userCommandButtons << ui->vhfUhfSendButton0 << ui->vhfUhfSendButton1 << ui->vhfUhfSendButton2 << ui->vhfUhfSendButton3 << ui->vhfUhfSendButton4
+                     << ui->vhfUhfSendButton5 << ui->vhfUhfSendButton6 << ui->vhfUhfSendButton7 << ui->vhfUhfSendButton8 << ui->vhfUhfSendButton9;
 
 
     for (int i = 0; i < userCommandShortCutKeys.count(); i++)

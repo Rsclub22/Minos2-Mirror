@@ -93,6 +93,8 @@ class BandList
 
         static BandList &getBandList();
 
+
+        void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands);
 private:
         bool parseBand ( TiXmlElement * e );
         bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);
