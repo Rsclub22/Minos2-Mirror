@@ -93,7 +93,7 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth1.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth2.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entSect.getValue()));
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->mycall.fullCall.getValue()));
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->mycall.getFullCall()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->myloc.loc.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->location.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entTx.getValue()));
@@ -182,7 +182,7 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     ct->sqth1.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->sqth2.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entSect.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->mycall = Callsign( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->mycall.setFullCall( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->myloc = Locator( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->location.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entTx.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );

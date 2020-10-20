@@ -165,7 +165,7 @@ void MinosTestExport::exportEntry( QSharedPointer<QFile> expfd )
    makeHeader( st, 1 );
 
    bool dirty = false;
-   ct->mycall.fullCall.addIfDirty( st, "call", dirty );
+   ct->mycall.addIfDirty( st, "call", dirty );
    ct->entrant.addIfDirty( st, "entrant", dirty );
    ct->entName.addIfDirty( st, "myName", dirty );
    ct->entCall.addIfDirty( st, "myCall", dirty );
@@ -348,7 +348,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & XBAND ) != 0 ), "xBand" );
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & FORCE_LOG ) != 0 ), "Forced" );
    }
-   lct->cs.fullCall.addIfDirty( st, "callRx", dirty );
+   lct->cs.addIfDirty( st, "callRx", dirty );
    lct->reps.addIfDirty( st, "rstTx", dirty );
    lct->serials.addIfDirty( st, "serialTx", dirty );
    //   lct->extraText.addIfDirty(st, "exchangeTx", dirty);

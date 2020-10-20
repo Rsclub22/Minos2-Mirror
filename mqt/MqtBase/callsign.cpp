@@ -8,26 +8,34 @@ Callsign::Callsign( )
 {
     fullCall.setValue( "" );
 }
-Callsign::Callsign(const QString &pcs )
-{
-   fullCall.setValue( pcs );
-   valRes = LOC_NOT_VALIDATED;
-   validate();
-}
+//Callsign::Callsign(const QString &pcs )
+//{
+//   fullCall.setValue( pcs );
+//   valRes = CS_NOT_VALIDATED;
+//   validate();
+//}
 // default versions are good enough for now!
 //callsign::callsign(const callsign&)
 //{
 //}
-Callsign& Callsign::operator =(const Callsign& rhs)
-{
-    fullCall.setValue(rhs.fullCall);
-    valRes = CS_NOT_VALIDATED;
-    validate();
-    return *this;
-}
+//
+//Callsign& Callsign::operator =(const Callsign& rhs)
+//{
+//    fullCall.setValue(rhs.fullCall);
+//    valRes = CS_NOT_VALIDATED;
+//    validate();
+//    return *this;
+//}
 Callsign::~Callsign()
 {
    // nothing needed
+}
+int Callsign::setFullCall(const QString &pcs)
+{
+    fullCall.setValue( pcs.trimmed().toUpper() );
+    valRes = CS_NOT_VALIDATED;
+    validate();
+    return valRes;
 }
 
 static bool isMobileString ( QString p )

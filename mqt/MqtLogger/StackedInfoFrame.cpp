@@ -243,7 +243,8 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
 {
     if (contest && contest == c && dxccFrame)
     {
-        Callsign cs( csCs );
+        Callsign cs;
+        cs.setFullCall( csCs );
 
         QSharedPointer<CountryEntry> ctryMult = findCtryPrefix( cs );
         if ( ctryMult )

@@ -139,7 +139,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
     if ( strcmpsp( ne_temp_time, time.getTime( DTGDISP ) ) )
      return true; // i.e. not equal
 
-   if ( strcmpsp( mct.cs.fullCall.getValue(), cs.fullCall.getValue() ) )
+   if ( strcmpsp( mct.cs.getFullCall(), cs.getFullCall() ) )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.reps, reps.getValue() ) )
@@ -542,7 +542,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = time.getTime( DTGDISP );
             break;
          case egCall:
-            res = cs.fullCall.getValue();
+            res = cs.getFullCall();
             break;
          case egRSTTx:
             res = reps.getValue();
@@ -836,7 +836,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          QString temp;
          if (mt->getStructArgMemberValue( "callRx", temp ))
          {
-            cs = Callsign(temp);
+            cs.setFullCall(temp);
          }
          mt->getStructArgMemberValue( "rstRx", repr );
          mt->getStructArgMemberValue( "serialRx", serialr );

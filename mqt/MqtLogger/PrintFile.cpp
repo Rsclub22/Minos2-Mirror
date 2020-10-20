@@ -108,7 +108,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    linelist[ static_cast< int> (TName) ] = PrintFileLine( "Contest Name                            ", ct->name.getValue()  /*, "Contest Name"*/ );
 
 //   linelist[ static_cast< int> ( TdDate ] = PrintFileLine("Start Date;End Date                     ", ct->dateRange( DTGFULL )  /*, "Start Date;End Date"*/ );
-   linelist[ static_cast< int> (PCall) ] = PrintFileLine( "Callsign Used                           ", ct->mycall.fullCall.getValue()  /*, "Callsign Used"*/ );
+   linelist[ static_cast< int> (PCall) ] = PrintFileLine( "Callsign Used                           ", ct->mycall.getFullCall()  /*, "Callsign Used"*/ );
    linelist[ static_cast< int> (PWWLo) ] = PrintFileLine( "Locator Used                            ", ct->myloc.loc.getValue()  /*, "Locator Used"*/ );
    linelist[ static_cast< int> (PExch) ] = PrintFileLine( "Exchange Used                           ", ct->location.getValue()  /*, "Exchange Used"*/ );
    linelist[ static_cast< int> (PAdr1) ] = PrintFileLine( "Address line 1/2 of station             ", ct->sqth1.getValue()  /*, "Address line 1/2 of station"*/ );
@@ -145,7 +145,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
 
 
    QString sbestdx = bestdx
-               ?( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number(bestdx->contactScore.getValue()))
+               ?( bestdx->cs.getFullCall() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number(bestdx->contactScore.getValue()))
                : QString(";;");
    linelist[ static_cast< int> (CODXC) ] = PrintFileLine( "Best DX - Callsign; Locator; Distance   ", sbestdx ); /*, "(Best DX) Callsign; Locator; Distance"*/
 

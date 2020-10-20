@@ -184,7 +184,7 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
     {
         QSharedPointer<BaseContact> tct(new BaseContact(c, true));
 
-        tct->cs = Callsign(call);
+        tct->cs.setFullCall(call);
 
         tct->ctryMult = findCtryPrefix( tct->cs );
 
@@ -216,7 +216,7 @@ QString N1MMBroadcast::genDeleteStanza(QSharedPointer<BaseContact> tct)
                    + makeTag("app", "Minos")
                    + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
                    + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
-                   + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
+                   + makeTag("call", tct->cs.getFullCall())       //        <call>W2BBB</call>
                    + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
             + "</contactdelete>\n";
 
@@ -241,16 +241,16 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("contestname", c->name.getValue())         //        <contestname>DXPEDITION</contestname>
                    + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
                    + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
-                   + makeTag("mycall", c->mycall.fullCall.getValue())   //        <mycall>K8UT</mycall>
+                   + makeTag("mycall", c->mycall.getFullCall())   //        <mycall>K8UT</mycall>
                    + makeTag("band", cb)                                //        <band>21</band>
                    + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>
                    + makeTag("txfreq", sfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
                    + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
-                   + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
+                   + makeTag("call", tct->cs.getFullCall())       //        <call>W2BBB</call>
                    + makeTag("countryprefix", tct->cs.locCtryPrefix)    //        <countryprefix>K</countryprefix>
                    + makeTag("wpxprefix", tct->cs.wpxPrefix)            //        <wpxprefix>W2</wpxprefix>
-                   + makeTag("stationprefix",c->mycall.fullCall.getValue()) //    <stationprefix>K8UT</stationprefix>
+                   + makeTag("stationprefix",c->mycall.getFullCall()) //    <stationprefix>K8UT</stationprefix>
                    + makeTag("continent", continent)                    //        <continent>NA</continent>
                    + makeTag("snt", tct->reps.getValue())               //        <snt>59</snt>
                    + makeTag("sntnr", tct->serials.getValue())          //        <sntnr>2</sntnr>

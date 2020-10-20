@@ -19,7 +19,7 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
    switch ( ACol )
    {
       case egCall:
-         res = cs.fullCall.getValue();
+         res = cs.getFullCall();
          break;
       case egLoc:
          res = loc.loc.getValue();

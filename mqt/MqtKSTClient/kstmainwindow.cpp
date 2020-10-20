@@ -775,7 +775,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
-            Callsign cs(test->call);
+            Callsign cs;
+            cs.setFullCall(test->call);
 
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
             if ( syn )
@@ -951,7 +952,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         if (!std::binary_search(callVector->begin(), callVector->end(), test, KstUserCompare))
         {
-            Callsign cs(test->call);
+            Callsign cs;
+            cs.setFullCall(test->call);
 
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
             if ( syn )

@@ -221,7 +221,7 @@ void BaseContestLog::clearDirty()
 {
    appVersion.clearDirty();
    protectedContest.clearDirty();
-   mycall.fullCall.clearDirty();
+   mycall.clearDirty();
 
    name.clearDirty();
    location.clearDirty();
@@ -265,7 +265,7 @@ void BaseContestLog::setDirty()
 {
    appVersion.setDirty();
    protectedContest.setDirty();
-   mycall.fullCall.setDirty();
+   mycall.setDirty();
    name.setDirty();
    location.setDirty();
    myloc.loc.setDirty();
@@ -933,7 +933,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       }
       else
       {
-         trace(QString("neg score ") + nct->cs.fullCall.getValue() + " " + nct->serials.getValue());
+         trace(QString("neg score ") + nct->cs.getFullCall() + " " + nct->serials.getValue());
       }
    }
    cs.nmults = 0;
@@ -1269,7 +1269,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                 QString temp;
                if (mt->getStructArgMemberValue( "call", temp ))
                {
-                   mycall = Callsign(temp);
+                   mycall.setFullCall(temp);
                }
             }
             else

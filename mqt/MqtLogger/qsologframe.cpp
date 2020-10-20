@@ -1001,7 +1001,7 @@ void QSOLogFrame::getScreenEntry()
    getScreenContactTime();
    getScreenRigData();
    getscreenRotatorData();
-   screenContact.cs = Callsign( ui->CallsignEdit->text().trimmed() );
+   screenContact.cs.setFullCall( ui->CallsignEdit->text().trimmed() );
 
    screenContact.reps = ui->RSTTXEdit->text().trimmed();
    screenContact.serials = ui->SerTXEdit->text().trimmed();
@@ -1064,7 +1064,7 @@ void QSOLogFrame::showScreenEntry( )
       temp.copyFromArg( screenContact ); // as screen contact gets corrupted by auto changes
       // op1, op2 in ScreenContact get corrupted as well
       showScreenContactTime();
-      ui->CallsignEdit->setText(temp.cs.fullCall.getValue().trimmed());
+      ui->CallsignEdit->setText(temp.cs.getFullCall());
       ui->RSTTXEdit->setText(temp.reps.trimmed());
       ui->SerTXEdit->setText(temp.serials.trimmed());
       ui->RSTRXEdit->setText(temp.repr.trimmed());
@@ -2184,7 +2184,7 @@ void QSOLogFrame::logScreenEntry( )
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
-   ui->lastLoggedCallsignLbl->setText(lct->cs.fullCall.getValue());
+   ui->lastLoggedCallsignLbl->setText(lct->cs.getFullCall());
    lastLoggedLocator = lct->loc.loc.getValue();
    lastLoggedFreq = lct->frequency.getValue();
 
@@ -2356,7 +2356,7 @@ void QSOLogFrame::setDtgSection()
 
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
-   ui->CallsignEdit->setText(lct->cs.fullCall.getValue());
+   ui->CallsignEdit->setText(lct->cs.getFullCall());
    ui->LocEdit->setText(lct->loc.loc.getValue());  // also forces update of score etc
 
    // only transfer qth info if required for this ContestLog
@@ -2389,7 +2389,7 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 }
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
-   ui->CallsignEdit->setText(lct->cs.fullCall.getValue());
+   ui->CallsignEdit->setText(lct->cs.getFullCall());
    ui->LocEdit->setText(lct->loc.loc.getValue());
 
    // only transfer qth info if required for this ContestLog
@@ -2891,12 +2891,12 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
     validCall = true;
     if (screenContact.cs.getValRes() != CS_OK)
     {
-        logData.callsign = screenContact.cs.fullCall.getValue();
+        logData.callsign = screenContact.cs.getFullCall();
         validCall = false;
 
     }
 
-    logData.callsign = screenContact.cs.fullCall.getValue();
+    logData.callsign = screenContact.cs.getFullCall();
     logData.freq = curFreq;
     logData.locator = screenContact.loc.loc.getValue().trimmed();
     logData.mode = screenContact.mode;

@@ -368,7 +368,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     linelist[ static_cast< int> (PContestName) ] = cabrilloLine( "CONTEST", ct->name.getValue()  /*, "Contest Name"*/ );
 
-    linelist[ static_cast< int> (PCallUsed )] = cabrilloLine( "CALLSIGN", ct->mycall.fullCall.getValue()  /*, "Callsign Used"*/ );
+    linelist[ static_cast< int> (PCallUsed )] = cabrilloLine( "CALLSIGN", ct->mycall.getFullCall()  /*, "Callsign Used"*/ );
     linelist[ static_cast< int> (PGridLoc )] = cabrilloLine( "GRID-LOCATOR", ct->myloc.loc.getValue()  /*, "Locator Used"*/ );
     linelist[ static_cast< int> (PLocation )] = cabrilloLine( "LOCATION", ct->location.getValue()  /*, "Exchange Used"*/ );
     linelist[ static_cast< int> (PAdr1 )] = cabrilloLine( "ADDRESS", ct->entAddr1.getValue()  /*, "Address line 1/2 of station"*/ );

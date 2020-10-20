@@ -126,7 +126,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    linelist[ static_cast< int> (TName) ] = reg1testLine( "TName", ct->name.getValue()  /*, "Contest Name"*/ );
 
    linelist[ static_cast< int> (TDate )] = reg1testLine( "TDate", ct->dateRange( DTGFULL )  /*, "Start Date;End Date"*/ );
-   linelist[ static_cast< int> (PCall )] = reg1testLine( "PCall", ct->mycall.fullCall.getValue()  /*, "Callsign Used"*/ );
+   linelist[ static_cast< int> (PCall )] = reg1testLine( "PCall", ct->mycall.getFullCall()  /*, "Callsign Used"*/ );
    linelist[ static_cast< int> (PWWLo )] = reg1testLine( "PWWLo", ct->myloc.loc.getValue()  /*, "Locator Used"*/ );
    linelist[ static_cast< int> (PExch )] = reg1testLine( "PExch", ct->location.getValue()  /*, "Exchange Used"*/ );
    linelist[ static_cast< int> (PAdr1 )] = reg1testLine( "PAdr1", ct->sqth1.getValue()  /*, "Address line 1/2 of station"*/ );
@@ -179,7 +179,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    linelist[ static_cast< int> (CDXCB) ] = reg1testLine( "CDXCB", QString("0") ); /*, "Claimed no of DXCC bonus points"*/
    linelist[ static_cast< int> (CToSc) ] = reg1testLine( "CToSc", QString::number( ct->contestScore * ct->bandPointsMultiplier.getValue() * ltot + bonus ) ); /*, "Claimed total score"*/
 
-   QString sbestdx = QString(bestdx ? ( bestdx->cs.fullCall.getValue() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number( bestdx->contactScore.getValue() )  ) : QString(";;") );
+   QString sbestdx = QString(bestdx ? ( bestdx->cs.getFullCall() + ";" + bestdx->loc.loc.getValue() + ";" + QString::number( bestdx->contactScore.getValue() )  ) : QString(";;") );
    linelist[ static_cast< int> (CODXC) ] = reg1testLine( "CODXC", sbestdx); /*, "(Best DX) Callsign; Locator; Distance"*/
 
    for ( int i = 0; i < LineCount; i++ )
@@ -260,7 +260,7 @@ bool reg1test::parseHeader(QString line )
       if ( code == "PCALL" )
       {
          //PCall=G4RFR/P
-         ct->mycall = Callsign( a[ 1 ].toUpper() );
+         ct->mycall.setFullCall( a[ 1 ].toUpper() );
       }
       else
          if ( code == "PWWLO" )
@@ -540,7 +540,7 @@ bool reg1test::parseQSO( QString line )
       */
       aqso->time.setDate( a[ 0 ], DTGReg1Test );
       aqso->time.setTime( a[ 1 ], DTGReg1Test );
-      aqso->cs = Callsign( a[ 2 ].toUpper() );
+      aqso->cs.setFullCall( a[ 2 ].toUpper() );
       // a[3] mode
       aqso->reps.setValue( a[ 4 ] );
       aqso->serials.setValue( a[ 5 ] ); // not string, int

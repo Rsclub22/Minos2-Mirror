@@ -131,7 +131,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     extraText = cct->extraText.getValue();
 
     cs = cct->cs;
-    cs.fullCall.clearDirty();
+    cs.clearDirty();
 
     time = cct->time;
     time.clearDirty();
@@ -180,7 +180,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     extraText = cct.extraText;
 
     cs = cct.cs;
-    cs.fullCall.clearDirty();
+    cs.clearDirty();
 
     time = cct.time;
     time.clearDirty();

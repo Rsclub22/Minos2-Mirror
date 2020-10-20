@@ -99,7 +99,7 @@ void TStatsDispFrame::reInitialiseStats()
    {
       double avpts = static_cast< double>(ct->contestScore) / nvalid;
       QString tempcs;
-      tempcs = bestdx->cs.fullCall.getValue().trimmed() ;
+      tempcs = bestdx->cs.getFullCall() ;
 
       QString buff = tr( "Best DX %1 Sn %2 %3(%4 kms). Average QSO is %5 Points" )
                            //#define MAX_DISPLAY_TEST 1

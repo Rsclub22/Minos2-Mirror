@@ -838,7 +838,7 @@ void MonitorMain::searchChanged()
     if (!bct)
         return;
 
-    screenContact.cs = Callsign(ui->callsignEdit->text().trimmed());
+    screenContact.cs.setFullCall(ui->callsignEdit->text().trimmed());
     screenContact.loc = Locator(ui->locEdit->text().trimmed());
     screenContact.extraText = ui->exchangeEdit->text().trimmed();
 

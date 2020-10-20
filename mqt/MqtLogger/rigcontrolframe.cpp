@@ -1030,7 +1030,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     ScreenContact sc = tslf->getScreenEntry();
 
-    logData.callsign = sc.cs.fullCall.getValue();
+    logData.callsign = sc.cs.getFullCall();
     logData.freq = curFreq;
     logData.locator = sc.loc.loc.getValue().trimmed();
     if (curMode.isEmpty())

@@ -933,7 +933,8 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
     if (ct && !ct->isReadOnly())
     {
 
-        Callsign mcs(callsign);
+        Callsign mcs;
+        mcs.setFullCall(callsign);
 
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
@@ -2122,7 +2123,8 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
         }
         else
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
+            Callsign spotCall;
+            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
 
             if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
             {
@@ -2144,7 +2146,8 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
+            Callsign spotCall;
+            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
 
             foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {

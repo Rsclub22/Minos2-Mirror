@@ -318,7 +318,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             }
             if ((msg.mstage == ems73 || msg.mstage == emsRRR))
             {
-                if (msg.toCall == call_ )
+                if (msg.toCall.getFullCall() == call_ )
                 {
                     return "";
                 }

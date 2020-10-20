@@ -143,7 +143,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       int next = 0;
       next = placestr( contactBuffs.buff2, time.getDate( DTGPRINT ), next, 10 );
       next = placestr( contactBuffs.buff2, time.getTime( DTGPRINT ), next + 1, 5 );
-      next = placestr( contactBuffs.buff2, cs.fullCall.getValue(), next + 1, 10 );
+      next = placestr( contactBuffs.buff2, cs.getFullCall(), next + 1, 10 );
       next = placestr( contactBuffs.buff2, reps.getValue(), next + 1, 3 );
       next = placestr( contactBuffs.buff2, contactBuffs.ssbuff, next + 1, -4 );
       next = placestr( contactBuffs.buff2, repr.getValue(), next + 1, 3 );
@@ -205,7 +205,7 @@ void ContestContact::addReg1TestComment( QStringList &remarks )
 
    if ( !comments.getValue().isEmpty() )
    {
-      cmnt += cs.fullCall.getValue();
+      cmnt += cs.getFullCall();
       cmnt += ';';
       cmnt += comments.getValue().trimmed();
       remarks.append( cmnt );
@@ -281,7 +281,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    sdest += ';';
 
    //callsign
-   sdest += cs.fullCall.getValue();
+   sdest += cs.getFullCall();
    sdest += ';';
 
    QString smode = mode.getValue().toUpper();
@@ -451,7 +451,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
 
     outstr += getCabrilloField(time.getCabrilloDTG(), 15);
 
-    outstr += getCabrilloField(lcl->mycall.fullCall.getValue(), 13);
+    outstr += getCabrilloField(lcl->mycall.getFullCall(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
@@ -467,7 +467,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
         outstr += getCabrilloField(lcl->myloc.loc.getValue(), 6);
     }
 
-    outstr += getCabrilloField(cs.fullCall.getValue(), 13);
+    outstr += getCabrilloField(cs.getFullCall(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
@@ -539,7 +539,7 @@ QString ContestContact::getADIFLine()
     QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
     outstr += makeADIFField("FREQ", freq);
 
-    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.fullCall.getValue());
+    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
     outstr += makeADIFField("OPERATOR", clp->currentOp1.getValue());
     outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.loc.getValue());
     int zone = 0;
@@ -569,7 +569,7 @@ QString ContestContact::getADIFLine()
         outstr += makeADIFField( "COMMENT", comments.getValue() );
         return outstr;
     }
-    outstr += makeADIFField( "CALL", cs.fullCall.getValue() );
+    outstr += makeADIFField( "CALL", cs.getFullCall() );
 
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
@@ -713,7 +713,7 @@ bool ContestContact::GJVsave( GJVParams &gp )
    }
    else
    {
-      strtobuf( cs.fullCall.getValue() );
+      strtobuf( cs.getFullCall() );
       strtobuf( reps.getValue() );
       strtobuf( serials.getValue() );
       strtobuf( repr.getValue() );
@@ -772,7 +772,7 @@ bool ContestContact::GJVload( int diskBlock )
    time.setTime( temp, DTGDISP );
 
    buftostr( temp );
-   cs = Callsign( temp.toUpper() );
+   cs.setFullCall( temp.toUpper() );
 
    buftostr( temp );
    reps.setInitialValue( temp );

@@ -17,7 +17,6 @@ class Callsign
     #define NUMBITLENGTH 4
     #define TRAILBITLENGTH 3
    public:
-      MinosStringItem<QString> fullCall; // full call
       // eg for <pe/f0ctt/mm> (g0gjv/p) [F6CTT/RVI/P]
       QString locCtryPrefix; // <pe> (g) [/RVI]country of location
       QString dupPrefix;  // <f> (g) [F]country of issue
@@ -29,7 +28,6 @@ class Callsign
       QString wpxPrefix;
 
       Callsign( );
-      Callsign( const QString &orig );
       ~Callsign();
       bool operator==( const Callsign& rhs ) const;
       bool operator!=( const Callsign& rhs ) const
@@ -37,7 +35,7 @@ class Callsign
           return !(rhs == *this);
       }
       bool operator<( const Callsign& rhs ) const;
-      Callsign& operator = ( const Callsign& );
+//      Callsign& operator = ( const Callsign& );
 
 
       int validate( );
@@ -56,8 +54,31 @@ class Callsign
           valRes = CS_NOT_VALIDATED;
       }
 
+      int setFullCall(const QString &pcs);
+      QString getFullCall() const
+      {
+          return fullCall.getValue();
+      }
+      void setDirty()
+      {
+          fullCall.setDirty();
+      }
+      void clearDirty()
+      {
+          fullCall.clearDirty();
+      }
+      bool isDirty() const
+      {
+          return fullCall.isDirty();
+      }
+      void addIfDirty(RPCParamStruct *st, const QString &stname, bool &d)
+      {
+          fullCall.addIfDirty(st, stname, d);
+      }
+
 private:
       int valRes = CS_NOT_VALIDATED;   // current validation result
+      MinosStringItem<QString> fullCall; // full call
 
       bool isValidStructure();
       static bool isValidStructure( const QString &prefix,  const QString &number,  const QString &body );

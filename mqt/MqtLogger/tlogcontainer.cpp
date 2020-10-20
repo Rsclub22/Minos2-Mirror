@@ -2009,7 +2009,7 @@ void TLogContainer::preloadLists( )
     TContestApp::getContestApp() ->writeListsList();
 }
 
-void TLogContainer::addListSlot( QWidget *p, const QString &fname, int slotno, bool preload )
+void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slotno, bool preload )
 {
 
     MinosContestLoadDialog progress(this);

@@ -96,7 +96,7 @@ bool ContactList::cslLoad( )
 
               if (parts.size() > 0)
               {
-                  rct->cs = Callsign( parts[0].toUpper() );
+                  rct->cs.setFullCall( parts[0].toUpper() );
               }
 
               if (parts.size() > 1)

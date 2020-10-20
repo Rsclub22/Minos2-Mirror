@@ -1498,7 +1498,8 @@ void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
     if (ct && !ct->isReadOnly())
     {
 
-        Callsign mcs(callsign);
+        Callsign mcs;
+        mcs.setFullCall(callsign);
 
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
@@ -1939,7 +1940,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
         }
 
 
-        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq.traceStr()).arg(loc).arg(brg));
+        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.getFullCall()).arg(freq.traceStr()).arg(loc).arg(brg));
         //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
         QDateTime time = QDateTime::currentDateTimeUtc();
 
@@ -2017,7 +2018,7 @@ void BandmapClientFrame::setCQFreq()
 //                                                freq, logBandStr, logBandMask,
 //                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::CQ);
-        spot->setCallsign(Callsign("???"));
+        spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
@@ -2061,7 +2062,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
 //                                            false, time, false, false, bandmapSpotType::MARKED);
 
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::MARKED);
-        spot->setCallsign(Callsign("???"));
+        spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
@@ -2102,7 +2103,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 //                                            false, time, false, false, bandmapSpotType::SAVED);
 //
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::SAVED);
-        spot->setCallsign(Callsign(cs));
+        spot->setDxCall(cs);
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);
         spot->setMode(logModeStr);

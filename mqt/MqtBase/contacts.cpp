@@ -78,7 +78,7 @@ bool BaseContact::operator<( const BaseContact& rhs ) const
 //==========================================================================
 void BaseContact::clearDirty()
 {
-   cs.fullCall.clearDirty();
+   cs.clearDirty();
    loc.loc.clearDirty();
    time.clearDirty();
 
@@ -101,7 +101,7 @@ void BaseContact::clearDirty()
 }
 void BaseContact::setDirty()
 {
-   cs.fullCall.setDirty();
+   cs.setDirty();
    loc.loc.setDirty();
    time.setDirty();
 
@@ -175,7 +175,7 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
 // replacement algorithm - HF inspired
 // just keep stripping it back until we get a match
 
-         testpart = cs.fullCall.getValue();
+         testpart = cs.getFullCall();
          testpart = trimr( testpart );
 
          int clen = testpart.length();
@@ -264,7 +264,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
    next = placestr( contactBuffs.buff, time.getTime( DTGDISP ), next, 5 );
 
    next += 1;
-   next = placestr( contactBuffs.buff, cs.fullCall.getValue(), next, 11 );
+   next = placestr( contactBuffs.buff, cs.getFullCall(), next, 11 );
 
    if ( curcon ->RSTMandatoryField.getValue() )
       next = placestr( contactBuffs.buff, reps.getValue(), next, 3 );

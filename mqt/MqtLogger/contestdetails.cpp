@@ -285,14 +285,14 @@ void ContestDetails::setDetails(  )
       ui->EndTimeCombo->setCurrentText("");
    }
 
-   QString call = contestTransferObject->mycall.fullCall.getValue();
+   QString call = contestTransferObject->mycall.getFullCall();
    if ( !call.size() )                                       // Entry
    {
       contestTransferObject->entryBundle.getStringProfile( eepCall, call );
 
       // STL version of strupr
       call = call.toUpper();
-      contestTransferObject->mycall = Callsign( call );
+      contestTransferObject->mycall.setFullCall( call );
    }
    ui->CallsignEdit->setText(call);
 
@@ -857,7 +857,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->BandComboBox->setStyleSheet("");
         }
 
-        contestTransferObject->mycall = Callsign( ui->CallsignEdit->text() );
+        contestTransferObject->mycall.setFullCall( ui->CallsignEdit->text() );
         if ( contestTransferObject->mycall.getValRes() != CS_OK )
         {
             ui->CallsignEdit->setStyleSheet(ssLineEditFrRedBkRed);
@@ -941,7 +941,7 @@ QWidget * ContestDetails::getDetails( )
     }
     contestTransferObject->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
 
-    contestTransferObject->mycall = Callsign( ui->CallsignEdit->text() );
+    contestTransferObject->mycall.setFullCall( ui->CallsignEdit->text() );
     if ( contestTransferObject->mycall.getValRes() != CS_OK )
     {
         if (!nextD)
@@ -1354,7 +1354,8 @@ void ContestDetails::on_CallsignEdit_editingFinished()
 {
     if (ui->MainOpComboBox->currentText().isEmpty())
     {
-       Callsign cs(ui->CallsignEdit->text());
+       Callsign cs;
+       cs.setFullCall(ui->CallsignEdit->text());
 
        ui->MainOpComboBox->addItem( ( cs.realCall ) );
        ui->MainOpComboBox->setCurrentText( cs.realCall);

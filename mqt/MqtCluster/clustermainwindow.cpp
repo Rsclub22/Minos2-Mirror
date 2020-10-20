@@ -1418,7 +1418,8 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, ClusterSpotData &newSp
     {
         for (int i = 0; i < extractStr.count(); i++)
         {
-            Callsign callsign(extractStr[i]);
+            Callsign callsign;
+            callsign.setFullCall(extractStr[i]);
             if (callsign.getValRes() == CS_OK)
             {
                 newSpot.setSpotterCall(extractStr[i]);

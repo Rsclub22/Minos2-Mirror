@@ -926,7 +926,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         if ( contest->isReadOnly() )
         {
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.fullCall.getValue() + "<br>"
+                                                  + contest->mycall.getFullCall() + "<br>"
                                                   + contest->myloc.loc.getValue() + "<br>"
                                                   + contest->location.getValue());
         }
@@ -939,7 +939,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
                 locBuff = "<br>" + contest->location.getValue();
             }
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.fullCall.getValue() + "<br>"
+                                                  + contest->mycall.getFullCall() + "<br>"
                                                   + snBuff + "<br>"
                                                   + contest->myloc.loc.getValue()
                                                   + locBuff);
