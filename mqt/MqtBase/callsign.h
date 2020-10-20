@@ -38,7 +38,6 @@ class Callsign
 //      Callsign& operator = ( const Callsign& );
 
 
-      int validate( );
       bool isUK() const;
 
       int getValRes() const
@@ -80,6 +79,7 @@ private:
       int valRes = CS_NOT_VALIDATED;   // current validation result
       MinosStringItem<QString> fullCall; // full call
 
+      int validate( );
       bool isValidStructure();
       static bool isValidStructure( const QString &prefix,  const QString &number,  const QString &body );
 };

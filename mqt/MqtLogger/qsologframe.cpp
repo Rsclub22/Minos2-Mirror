@@ -1589,15 +1589,11 @@ void QSOLogFrame::contactValid( )
    {
       return ;
    }
-   // cs worked
-
-   vcct->cs.clearValRes();
-
    // we only validate this contact up to the validation point of the contest
    contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
 
-   int csret = vcct->cs.validate( );
    contest->DupSheet.clearCurDup();
+   int csret = vcct->cs.getValRes();
    if ( csret == CS_OK )
    {
       if ( contest->DupSheet.checkCurDup( vcct, contest->validationPoint, false ) )

@@ -235,8 +235,8 @@ void ScreenContact::checkScreenContact( )
         return ;
 
     screenQSOValid = false;             // initially, anyway
-    // cs HAS been validated in TGJVEditFrame::contactValid
-    int csret = cs.validate( );
+
+    int csret = cs.getValRes();
     if ( csret != CS_OK && csret != ERR_DUPCS)
         checkret = ERR_13;
 

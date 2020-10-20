@@ -237,7 +237,7 @@ void DisplayContestContact::checkContact( bool inScan)
       return ;
 
    QSOValid = false;             // initially, anyway
-   int csret = cs.validate( );
+   int csret = cs.getValRes();
 //#warning scanContest may already have set ERR_DUPCS
    if ( csret != CS_OK && csret != ERR_DUPCS )
       checkret = ERR_13;

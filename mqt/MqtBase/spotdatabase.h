@@ -81,7 +81,7 @@ public:
     {
         dxCall.setFullCall(dxCall_);
 
-        dxCallValidateCode = dxCall.validate();
+        dxCallValidateCode = dxCall.getValRes();
     }
 
     void setCallsign(const Callsign &cs){dxCall = cs;}
@@ -117,8 +117,8 @@ public:
 
     void setSpotterCall(const QString spotterCall_)
     {
-        spotterCall.setFullCall(spotterCall_.trimmed());
-        spotterCallValidateCode = spotterCall.validate();
+        spotterCall.setFullCall(spotterCall_);
+        spotterCallValidateCode = spotterCall.getValRes();
     }
     Callsign getSpotterCall()const {return spotterCall;}
     QString getSpotterCallStr() const {return spotterCall.getFullCall();}

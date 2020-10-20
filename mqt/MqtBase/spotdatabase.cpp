@@ -53,7 +53,6 @@ void SpotdataBase::clear()
     modeMask.clear();
     freq.clear();
     dxCall = Callsign();
-    dxCall.validate();
     dxCallValidateCode = 0;
     dxLocator.clear();
     spotterCall = Callsign();

@@ -321,8 +321,6 @@ QString TEntryOptionsForm::doFileSave( )
             break;
         case EREG1TEST:
             defext = "edi";
-            ct->mycall.clearValRes();
-            ct->mycall.validate( );
             filter =tr( "Region 1 EDI files (*.edi);;All Files (*.*);;") ;
             title = tr("Save contest in Region 1 EDI file format as...");
             break;
@@ -336,8 +334,6 @@ QString TEntryOptionsForm::doFileSave( )
         case ECABRILLO:
         {
             defext = "cbr";
-            ct->mycall.clearValRes();
-            ct->mycall.validate( );
             filter =tr( "Cabrillo files (*.cbr);;All Files (*.*);;") ;
             title = tr("Save contest in Cabrillo file format as...");
             break;
