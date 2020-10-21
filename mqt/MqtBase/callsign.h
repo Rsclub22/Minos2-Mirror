@@ -29,14 +29,17 @@ class Callsign
 
       Callsign( );
       ~Callsign();
+
+      Callsign& operator = ( const Callsign& rhs);
+      Callsign(const Callsign &rhs);
+
+      int reValidate();
       bool operator==( const Callsign& rhs ) const;
       bool operator!=( const Callsign& rhs ) const
       {
           return !(rhs == *this);
       }
       bool operator<( const Callsign& rhs ) const;
-//      Callsign& operator = ( const Callsign& );
-
 
       bool isUK() const;
 

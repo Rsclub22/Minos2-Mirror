@@ -1593,6 +1593,7 @@ void QSOLogFrame::contactValid( )
    contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
 
    contest->DupSheet.clearCurDup();
+//   int csret = vcct->cs.reValidate();
    int csret = vcct->cs.getValRes();
    if ( csret == CS_OK )
    {

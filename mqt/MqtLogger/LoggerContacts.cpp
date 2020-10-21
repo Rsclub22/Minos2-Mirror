@@ -656,9 +656,6 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          // search for the country, district, locator multipliers as required
          // Add to the worked counts as required
 
-         cs.clearValRes();
-         loc.clearValRes();
-         loc.validate();
          checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
       }
    }

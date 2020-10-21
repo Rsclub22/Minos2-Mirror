@@ -8,24 +8,41 @@ Callsign::Callsign( )
 {
     fullCall.setValue( "" );
 }
-//Callsign::Callsign(const QString &pcs )
-//{
-//   fullCall.setValue( pcs );
-//   valRes = CS_NOT_VALIDATED;
-//   validate();
-//}
-// default versions are good enough for now!
-//callsign::callsign(const callsign&)
-//{
-//}
-//
-//Callsign& Callsign::operator =(const Callsign& rhs)
-//{
-//    fullCall.setValue(rhs.fullCall);
-//    valRes = CS_NOT_VALIDATED;
-//    validate();
-//    return *this;
-//}
+
+Callsign& Callsign::operator = ( const Callsign& rhs)
+{
+    fullCall = rhs.fullCall;
+    valRes = rhs.valRes;
+
+    locCtryPrefix = rhs.locCtryPrefix;
+    dupPrefix = rhs.locCtryPrefix;
+    number = rhs.number;
+    body = rhs.body;
+    suffix = rhs.suffix;
+
+    realCall = rhs.realCall;
+    wpxPrefix = rhs.wpxPrefix;
+
+    return *this;
+
+}
+Callsign::Callsign(const Callsign &rhs)
+{
+    fullCall = rhs.fullCall;
+    valRes = rhs.valRes;
+
+    locCtryPrefix = rhs.locCtryPrefix;
+    dupPrefix = rhs.locCtryPrefix;
+    number = rhs.number;
+    body = rhs.body;
+    suffix = rhs.suffix;
+
+    realCall = rhs.realCall;
+    wpxPrefix = rhs.wpxPrefix;
+
+}
+
+
 Callsign::~Callsign()
 {
    // nothing needed
@@ -33,10 +50,16 @@ Callsign::~Callsign()
 int Callsign::setFullCall(const QString &pcs)
 {
     fullCall.setValue( pcs.trimmed().toUpper() );
+    return reValidate();
+}
+
+int Callsign::reValidate()
+{
     valRes = CS_NOT_VALIDATED;
     validate();
     return valRes;
 }
+
 
 static bool isMobileString ( QString p )
 {

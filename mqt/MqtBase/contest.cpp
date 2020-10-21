@@ -816,6 +816,8 @@ void BaseContestLog::scanContest( )
 
       // check for duplicates; accumulate the current points score
 
+ //     nct->cs.reValidate();
+
       nct->bearing = -1;		// force a recalc
       nct->loc.validate();
 
