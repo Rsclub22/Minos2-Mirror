@@ -15,7 +15,7 @@ void ContestDetailsTransferObject::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc = Locator(myloc.loc.getValue().left(4) + "MM");
+    nloc.setLoc(myloc.getLoc().left(4) + "MM");
     nloc.validate( ode, odn );
     if ( nloc.getValRes() == LOC_OK )
     {
@@ -67,7 +67,9 @@ void ContestDetailsTransferObject::setINIDetails()
    if ( QTHBundle.getSection() != QTHBundle.noneBundle )
    {
       QTHBundle.startGroup();
-      QTHBundle.getStringProfile( eqpLocator, myloc.loc );
+      QString temp;
+      QTHBundle.getStringProfile( eqpLocator, temp );
+      myloc.setLoc(temp);
 
       if ( districtMult.getValue() )
          QTHBundle.getStringProfile( eqpDistrict, location );

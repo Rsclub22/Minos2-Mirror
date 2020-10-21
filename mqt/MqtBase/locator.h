@@ -13,25 +13,28 @@
 
 class Locator
 {
-      char valRes = LOC_NOT_VALIDATED;
-   public:
       MinosStringItem<QString> loc;
-
-
+      int valRes = LOC_NOT_VALIDATED;
+      int validate( );
+   public:
       Locator();
-      Locator(const QString &);
-      //    locator(const locator&);
-      //    locator& operator =(const locator&);
+      //Locator(const QString &);
+      Locator(const Locator&);
+      Locator& operator =(const Locator&);
       ~Locator();
-      char validate( );
-      char validate( double &lon, double &lat );
-      Locator &operator =( const Locator& );
+      int validate( double &lon, double &lat );
+      int reValidate()
+      {
+          valRes = LOC_NOT_VALIDATED;
+          validate();
+          return valRes;
+      }
 
     char getValRes() const
     {
         return valRes;
     }
-    void setValRes(char vr)
+    void setValRes(int vr)
     {
         valRes = vr;
     }
@@ -39,6 +42,34 @@ class Locator
     {
         valRes = LOC_NOT_VALIDATED;
     }
+
+    int setLoc(const QString &l)
+    {
+        loc.setValue(l.trimmed().toUpper());
+        reValidate();
+        return valRes;
+    }
+    QString getLoc() const
+    {
+        return loc.getValue();
+    }
+    void setDirty()
+    {
+        loc.setDirty();
+    }
+    void clearDirty()
+    {
+        loc.clearDirty();
+    }
+    bool isDirty() const
+    {
+        return loc.isDirty();
+    }
+    void addIfDirty(RPCParamStruct *st, const QString &stname, bool &d)
+    {
+        loc.addIfDirty(st, stname, d);
+    }
+
 };
 
 #endif // LOCATOR_H

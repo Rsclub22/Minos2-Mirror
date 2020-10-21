@@ -927,7 +927,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         {
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.getFullCall() + "<br>"
-                                                  + contest->myloc.loc.getValue() + "<br>"
+                                                  + contest->myloc.getLoc() + "<br>"
                                                   + contest->location.getValue());
         }
         else
@@ -941,7 +941,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
                                                   + contest->mycall.getFullCall() + "<br>"
                                                   + snBuff + "<br>"
-                                                  + contest->myloc.loc.getValue()
+                                                  + contest->myloc.getLoc()
                                                   + locBuff);
         }
     }

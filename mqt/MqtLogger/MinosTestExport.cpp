@@ -143,7 +143,7 @@ void MinosTestExport::exportQTH(QSharedPointer<QFile> expfd )
    makeHeader( st, 1 );
 
    bool dirty = false;
-   ct->myloc.loc.addIfDirty( st, "locator", dirty );
+   ct->myloc.addIfDirty( st, "locator", dirty );
    ct->location.addIfDirty( st, "district", dirty );  // We need to differentiate location from exchange!
    ct->location.addIfDirty( st, "location", dirty );
    ct->sqth1.addIfDirty( st, "stationQTH1", dirty );
@@ -354,7 +354,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    //   lct->extraText.addIfDirty(st, "exchangeTx", dirty);
    lct->repr.addIfDirty( st, "rstRx", dirty );
    lct->serialr.addIfDirty( st, "serialRx", dirty );
-   lct->loc.loc.addIfDirty( st, "locRx", dirty );
+   lct->loc.addIfDirty( st, "locRx", dirty );
    lct->extraText.addIfDirty( st, "exchangeRx", dirty );
    lct->extraText.addIfDirty( st, "qthRx", dirty );
    lct->comments.addIfDirty( st, "commentsTx", dirty );

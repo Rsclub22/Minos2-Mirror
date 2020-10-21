@@ -137,7 +137,7 @@ void LocFrame::setContest(BaseContestLog *contest)
     ct = contest;
     if (ct)
     {
-        currentCentre = ct->myloc.loc.getValue().left(4);
+        currentCentre = ct->myloc.getLoc().left(4);
         model->myLoc = currentCentre;
 
         reInitialiseLocators();
@@ -153,7 +153,7 @@ void LocFrame::reInitialiseLocators()
         return;
 
     //initialise these to a range round the contest location
-    QString ctLoc = ct->myloc.loc.getValue();
+    QString ctLoc = ct->myloc.getLoc();
 
     QString ctLocN = l_add(ctLoc, 0, 5);
     QString NLoc = QString(ctLocN[1]) + ctLocN[3];

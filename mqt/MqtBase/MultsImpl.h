@@ -111,7 +111,7 @@ public:
 
             case ectLocator:
                {
-                  dest = ce->central.loc.getValue().left( 6 );
+                  dest = ce->central.getLoc().left( 6 );
                   break;
                }
 
@@ -124,7 +124,7 @@ public:
                   int useBearing = 0;
 
                   QString brgbuff;
-                  int valRes = lonlat( ce->central.loc.getValue(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                  int valRes = lonlat( ce->central.getLoc(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                   if ( ( valRes == LOC_OK ) && ct ->locValid )
                      ct ->disbeara( longitude, latitude, useScore, useBearing );
                   else

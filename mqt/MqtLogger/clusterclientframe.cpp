@@ -957,7 +957,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
             if (!locator.isEmpty())
             {
                 QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
                 {
                     *locatorWorked = true;
                     locfound = true;

@@ -327,14 +327,13 @@ void ContestDetails::setDetails(  )
 
    contestTransferObject->validateLoc();
 
-   if ( !contestTransferObject->locValid && contestTransferObject->myloc.loc.getValue().size() == 0 )
+   if ( !contestTransferObject->locValid && contestTransferObject->myloc.getLoc().size() == 0 )
    {
       QString temp;
       contestTransferObject->QTHBundle.getStringProfile( eqpLocator, temp );
-      contestTransferObject->myloc = Locator( temp );
-      contestTransferObject->validateLoc();
+      contestTransferObject->myloc.setLoc( temp );
    }
-   ui->LocatorEdit->setText(contestTransferObject->myloc.loc.getValue().trimmed());
+   ui->LocatorEdit->setText(contestTransferObject->myloc.getLoc());
 
    ui->AllowLoc4CB->setChecked(contestTransferObject->allowLoc4.getValue());    // bool               // ?? contest
    ui->AllowLoc8CB->setChecked(contestTransferObject->allowLoc8.getValue());    // bool               // ?? contest
@@ -867,7 +866,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->CallsignEdit->setStyleSheet("");
         }
 
-        contestTransferObject->myloc = Locator( ui->LocatorEdit->text() );
+        contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
         if ( contestTransferObject->myloc.getValRes() != LOC_OK )
         {
             ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
@@ -949,7 +948,7 @@ QWidget * ContestDetails::getDetails( )
             nextD = ui->CallsignEdit;
         }
     }
-    contestTransferObject->myloc = Locator( ui->LocatorEdit->text() );
+    contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
     if ( contestTransferObject->myloc.getValRes() != LOC_OK )
     {
         if (!nextD)

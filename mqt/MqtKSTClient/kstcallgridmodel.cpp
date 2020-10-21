@@ -113,7 +113,7 @@ void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
         double latitude = 0.0;
 
         BaseContestLog cnt;
-        cnt.myloc = Locator( locator.toUpper() );
+        cnt.myloc.setLoc( locator );
         cnt.validateLoc();
 
         if ( lonlat( crec->loc.toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )

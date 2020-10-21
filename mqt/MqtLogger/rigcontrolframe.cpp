@@ -1032,7 +1032,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     logData.callsign = sc.cs.getFullCall();
     logData.freq = curFreq;
-    logData.locator = sc.loc.loc.getValue().trimmed();
+    logData.locator = sc.loc.getLoc();
     if (curMode.isEmpty())
     {
         logData.mode = sc.mode;
@@ -1049,7 +1049,7 @@ void RigControlFrame::getDetails(memoryData::memData &logData)
 
     //logData.bearing = sc.bearing;
 
-    if (sc.loc.loc.getValue().trimmed().isEmpty())
+    if (sc.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();
     }

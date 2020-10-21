@@ -162,7 +162,7 @@ void decodeMessage::validate()
 void WsjtxDecode::setMyCallGrid(const QString &c, const QString &l)
 {
     myCall.setFullCall(c);
-    myGrid = Locator(l);
+    myGrid.setLoc(l);
 
     addCall(myCall, myGrid);
 }
@@ -268,8 +268,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         if (callIndex + 1 < sl.count())
         {
             dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
-            dc.fromGrid = Locator(sl[callIndex + 1]);
-            dc.validate();
+            dc.fromGrid.setLoc(sl[callIndex + 1]);
             addCall(dc.fromCall, dc.fromGrid);
         }
     }
@@ -308,7 +307,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         dc.mstage = emsRplusGrid;
         dc.toCall.setFullCall(stripBrackets(sl[0]));
         dc.fromCall.setFullCall(stripBrackets(sl[1]));
-        dc.fromGrid = Locator(sl[3]);
+        dc.fromGrid.setLoc(sl[3]);
         dc.validate();
 
     }
@@ -318,7 +317,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         dc.mstage = emsRplusDbGrid;
         dc.toCall.setFullCall(stripBrackets(sl[0]));
         dc.fromCall.setFullCall(stripBrackets(sl[1]));
-        dc.fromGrid = Locator(sl[4]);
+        dc.fromGrid.setLoc(sl[4]);
         dc.validate();
         addCall(dc.fromCall, dc.fromGrid);
     }
@@ -328,7 +327,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDbGrid;
         dc.toCall.setFullCall(stripBrackets(sl[0]));
-        dc.fromGrid = Locator(sl[3]);
+        dc.fromGrid.setLoc(sl[3]);
         dc.validate();
         addCall(dc.fromCall, dc.fromGrid);
 
@@ -365,7 +364,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
             c0.setFullCall(stripBrackets(sl[0]));
             Callsign c1;
             c1.setFullCall(stripBrackets(sl[1]));
-            Locator l1(sl[2]);
+            Locator l1;
+            l1.setLoc(sl[2]);
 
             if (isNumeric(sl[1]))
             {
@@ -405,7 +405,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
             c0.setFullCall(stripBrackets(sl[0]));
             Callsign c1;
             c1.setFullCall(stripBrackets(sl[1]));
-            Locator l1(sl[2]);
+            Locator l1;
+            l1.setLoc(sl[2]);
 
             // new style EU VHF
             dc.toCall = c0;

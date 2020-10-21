@@ -644,12 +644,12 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
         else
         {
             Locator loc;
-            loc = Locator(m.locator);
+            loc.setLoc(m.locator);
 
             double lon = 0.0;
             double lat = 0.0;
 
-            if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+            if ( lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
             {
                 double dist;
                 int brg;
@@ -745,7 +745,7 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    setCurrentBand(contestBands.getValue());
    strtobuf( name );
    strtobuf( mycall.getFullCall() );
-   strtobuf( myloc.loc );
+   strtobuf( myloc.getLoc() );
    strtobuf( location );
 
    opyn( otherExchange );
@@ -813,9 +813,9 @@ bool LoggerContestLog::GJVload( )
    buftostr( contestBands );
    buftostr( name );
    buftostr( temp );
-   mycall.setFullCall( temp.toUpper() );
+   mycall.setFullCall( temp );
    buftostr( temp );
-   myloc = Locator(temp);
+   myloc.setLoc(temp);
    buftostr( location );
 
    otherExchange.setValue( inyn() );
@@ -1225,7 +1225,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
          char inputbuff[ 100 ];
-         strcpy( inputbuff, ct->loc.loc.getValue().toUtf8().data() );
+         strcpy( inputbuff, ct->loc.getLoc().toUtf8().data() );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;
 
@@ -1237,7 +1237,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
          {
             kml.append( "<Placemark><visibility>0</visibility>" );
             kml.append("<styleUrl>#styleMapGJV</styleUrl>");
-            kml.append( "<description><![CDATA[" + ct->cs.getFullCall() + " " + ct->loc.loc.getValue() + "]]></description>"  );
+            kml.append( "<description><![CDATA[" + ct->cs.getFullCall() + " " + ct->loc.getLoc() + "]]></description>"  );
             kml.append( "<name><![CDATA[" + ct->cs.getFullCall() + "]]></name>"  );
             kml.append( "<Point><coordinates>" + kmloutput( &l2 ) + ",0</coordinates></Point>"  );
             kml.append( "</Placemark>" );
@@ -1356,9 +1356,9 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            int spos = text.indexOf( " " );
                            if ( spos != -1 )
                            {
-                              text = text.left(spos ).trimmed();
+                              text = text.left(spos );
                            }
-                           mycall.setFullCall( text.toUpper() );
+                           mycall.setFullCall( text);
 
                         }
                         else
@@ -1366,8 +1366,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc = Locator( text.toUpper() );
-                              validateLoc();
+                              myloc.setLoc( text );
                            }
                            else
                               if ( stemp.toUpper().indexOf( "POWER OUTPUT" ) == 0 )
@@ -1425,7 +1424,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       strcpysp( temp, lbuff.mid(7), 4 );
       bct->time.setTime( temp, DTGLOG );
       strcpysp( temp, lbuff.mid(21), 15 );
-      bct->cs.setFullCall( temp.toUpper() );
+      bct->cs.setFullCall( temp );
       strcpysp( temp, lbuff.mid( 37 ), 3 );
       bct->reps.setValue( temp );
       strcpysp( temp, lbuff.mid( 41 ), 4 );
@@ -1449,8 +1448,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       bct->op1.setValue( temp );
 
       strcpysp( temp, lbuff.mid( 72 ), 6 );
-      bct->loc.loc.setValue( temp );
-      bct->loc.clearValRes();
+      bct->loc.setLoc( temp );
 
       //ct->comments = "";
 

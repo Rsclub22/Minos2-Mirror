@@ -1001,15 +1001,15 @@ void QSOLogFrame::getScreenEntry()
    getScreenContactTime();
    getScreenRigData();
    getscreenRotatorData();
-   screenContact.cs.setFullCall( ui->CallsignEdit->text().trimmed() );
+   screenContact.cs.setFullCall( ui->CallsignEdit->text() );
 
    screenContact.reps = ui->RSTTXEdit->text().trimmed();
    screenContact.serials = ui->SerTXEdit->text().trimmed();
    screenContact.repr = ui->RSTRXEdit->text().trimmed();
    screenContact.serialr = ui->SerRXEdit->text().trimmed();
 
-   QString loc = ui->LocEdit->text().trimmed();
-   screenContact.loc = Locator( loc );
+   QString loc = ui->LocEdit->text();
+   screenContact.loc.setLoc( loc );
 
    QString extra = ui->QTHEdit->text().trimmed();
    screenContact.extraText = extra;
@@ -1069,7 +1069,7 @@ void QSOLogFrame::showScreenEntry( )
       ui->SerTXEdit->setText(temp.serials.trimmed());
       ui->RSTRXEdit->setText(temp.repr.trimmed());
       ui->SerRXEdit->setText(temp.serialr.trimmed());
-      ui->LocEdit->setText(temp.loc.loc.getValue().trimmed());  // also forces update of score etc
+      ui->LocEdit->setText(temp.loc.getLoc());  // also forces update of score etc
       ui->QTHEdit->setText(temp.extraText.trimmed());
       ui->CommentsEdit->setText(temp.comments.trimmed());
       ui->NonScoreCheckBox->setChecked(temp.contactFlags & NON_SCORING);
@@ -1392,7 +1392,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                     else if ((*vcp) == locIl)
                     {
                         // leave as no error
-                        if (screenContact.loc.getValRes() == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
+                        if (screenContact.loc.getValRes() == ERR_LOC_RANGE && screenContact.loc.getLoc().size() > 4)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
@@ -1631,8 +1631,8 @@ void QSOLogFrame::contactValid( )
 
    // locator received
 
-   int locrep = vcct->loc.validate();
-   if ( locrep != 0 )
+   int locrep = vcct->loc.getValRes();
+   if ( locrep != LOC_OK )
    {
       if ( contest->locatorMandatoryField.getValue() )
          locIl->tIfValid = false;
@@ -1658,7 +1658,7 @@ void QSOLogFrame::contactValid( )
    // and look up in squares list for country
    // look for square against main prefix in LocSquares.ini
 
-      QString sloc = vcct->loc.loc.getValue().left(4);
+      QString sloc = vcct->loc.getLoc().left(4);
       if (sloc.size())
       {
          bool LocOK;
@@ -2171,18 +2171,18 @@ void QSOLogFrame::logScreenEntry( )
    killPartial();
 
    MinosLoggerEvents::SendAfterLogContact(ct);
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
+   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)
    {
        QString mode = lct->mode.getValue() + ':' + lct->mgmSubmode.getValue();
-       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
+       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.getLoc(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
    }
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
    ui->lastLoggedCallsignLbl->setText(lct->cs.getFullCall());
-   lastLoggedLocator = lct->loc.loc.getValue();
+   lastLoggedLocator = lct->loc.getLoc();
    lastLoggedFreq = lct->frequency.getValue();
 
 
@@ -2354,7 +2354,7 @@ void QSOLogFrame::setDtgSection()
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
    ui->CallsignEdit->setText(lct->cs.getFullCall());
-   ui->LocEdit->setText(lct->loc.loc.getValue());  // also forces update of score etc
+   ui->LocEdit->setText(lct->loc.getLoc());  // also forces update of score etc
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2387,7 +2387,7 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
    ui->CallsignEdit->setText(lct->cs.getFullCall());
-   ui->LocEdit->setText(lct->loc.loc.getValue());
+   ui->LocEdit->setText(lct->loc.getLoc());
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2895,9 +2895,9 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
 
     logData.callsign = screenContact.cs.getFullCall();
     logData.freq = curFreq;
-    logData.locator = screenContact.loc.loc.getValue().trimmed();
+    logData.locator = screenContact.loc.getLoc();
     logData.mode = screenContact.mode;
-    if (screenContact.loc.loc.getValue().trimmed().isEmpty())
+    if (screenContact.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();
     }

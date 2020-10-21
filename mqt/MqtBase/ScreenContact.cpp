@@ -126,7 +126,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 {
     logSequence = cct->getLogSequence();
     loc = cct->loc;
-    loc.loc.clearDirty();
+    loc.clearDirty();
 
     extraText = cct->extraText.getValue();
 
@@ -175,7 +175,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 {
     //   logSequence = cct.logSequence; // don't copy between partial and screen contacts.
     loc = cct.loc;
-    loc.loc.clearDirty();
+    loc.clearDirty();
 
     extraText = cct.extraText;
 
@@ -332,7 +332,7 @@ void ScreenContact::score()
 {
     // check shouldalready have run
 
-    QString gridref = loc.loc.getValue().trimmed();
+    QString gridref = loc.getLoc().trimmed();
     if (gridref.isEmpty())
         return;
 
@@ -413,13 +413,13 @@ void ScreenContact::score()
             int brg = 0;
             if (contest->MGMContestRules.getValue())
             {
-                 dist = contest->CalcCentres ( loc.loc.getValue(), brg );
+                 dist = contest->CalcCentres ( loc.getLoc(), brg );
                  if ( almost_equal(dist, 1.0, 2))
                      dist = 50;  // MGM same square == 50 points
             }
-            else if ( loc.loc.getValue().size() == 4 && contest->allowLoc4.getValue() )
+            else if ( loc.getLoc().size() == 4 && contest->allowLoc4.getValue() )
             {
-               dist = contest->CalcNearest( loc.loc.getValue() ); // deal with 4 char locs
+               dist = contest->CalcNearest( loc.getLoc() ); // deal with 4 char locs
             }
             else
             {
@@ -457,7 +457,7 @@ void ScreenContact::score()
            QString letters;
            QString numbers;
 
-           QString sloc = loc.loc.getValue().mid(0, 4);
+           QString sloc = loc.getLoc().mid(0, 4);
 
            letters = sloc.left(2);
            numbers = sloc.mid(2, 2);

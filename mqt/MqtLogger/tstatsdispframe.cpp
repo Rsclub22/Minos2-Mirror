@@ -105,7 +105,7 @@ void TStatsDispFrame::reInitialiseStats()
                            //#define MAX_DISPLAY_TEST 1
    #ifndef MAX_DISPLAY_TEST
                            .arg( tempcs) .arg(bestdx->serials.getValue())
-                           .arg(bestdx->loc.loc.getValue()) .arg( bestdx->contactScore.getValue())
+                           .arg(bestdx->loc.getLoc()) .arg( bestdx->contactScore.getValue())
                            .arg(avpts, 0, 'f', 1);
    #else
                            .arg("PE0/LX5ABC/P") .arg("9999") .arg( "XX99XX") .arg(29999) .arg(9999.9);

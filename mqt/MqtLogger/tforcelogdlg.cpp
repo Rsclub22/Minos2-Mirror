@@ -28,7 +28,7 @@ void TForceLogDlg::on_OKButton_clicked()
 void TForceLogDlg::on_LocCalcButton_clicked()
 {
     TLocCalcForm loccalc( this );
-    loccalc.S1Loc = ( TContestApp::getContestApp() ->getCurrentContest() ->myloc.loc.getValue() ).trimmed();
+    loccalc.S1Loc = TContestApp::getContestApp() ->getCurrentContest() ->myloc.getLoc();
     if ( loccalc.exec() == QDialog::Accepted )
     {
        ui->CheckBox4->setChecked(false);	// Scored - so not non-scoring!

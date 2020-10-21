@@ -838,8 +838,8 @@ void MonitorMain::searchChanged()
     if (!bct)
         return;
 
-    screenContact.cs.setFullCall(ui->callsignEdit->text().trimmed());
-    screenContact.loc = Locator(ui->locEdit->text().trimmed());
+    screenContact.cs.setFullCall(ui->callsignEdit->text());
+    screenContact.loc.setLoc(ui->locEdit->text());
     screenContact.extraText = ui->exchangeEdit->text().trimmed();
 
     MinosLoggerEvents::SendScreenContactChanged(&screenContact, bct, "Monitor");

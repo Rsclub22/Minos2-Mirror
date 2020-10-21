@@ -5,34 +5,35 @@ Locator::Locator( )
 {
    loc.setInitialValue( "        " );
 }
-Locator::Locator(const QString & l)
-{
-    loc.setValue(l);
-    validate();
-}
+//Locator::Locator(const QString & l)
+//{
+//    loc.setValue(l);
+//    validate();
+//}
 // default versions are good enough for now!
-//locator::locator(const locator&)
-//{
-//}
-//locator& locator::operator =(const locator&)
-//{
-//}
+Locator::Locator(const Locator& rhs)
+{
+    valRes = rhs.valRes;
+    loc = rhs.loc;
+}
+Locator& Locator::operator =(const Locator& rhs)
+{
+    valRes = rhs.valRes;
+    loc = rhs.loc;
+
+    return *this;
+}
 Locator::~Locator()
 {}
 
-char Locator::validate( double &lon, double &lat )
+int Locator::validate( double &lon, double &lat )
 {
    valRes = lonlat( loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
    return valRes;
 }
 
-Locator & Locator::operator =(const Locator &rhs)
-{
-    loc.setValue(rhs.loc);
-    validate();
-    return *this;
-}
-char Locator::validate( )
+
+int Locator::validate( )
 {
    double longitude = 0.0;
    double latitude = 0.0;

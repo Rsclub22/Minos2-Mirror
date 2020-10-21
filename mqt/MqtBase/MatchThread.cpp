@@ -462,7 +462,7 @@ void Matcher::initMatch( )
          {
             matchCountry( mct->cs.getFullCall() );   // scroll to
          }
-         changed |= matchloc.set( mct->loc.loc.getValue() );			// so don't do this all on one line
+         changed |= matchloc.set( mct->loc.getLoc() );			// so don't do this all on one line
          changed |= qth_changed;
 
          if ( matchcs.empty && matchloc.empty && matchqth.empty )
@@ -809,7 +809,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
              if ( csmatch )
              {
-                locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+                locmatch = matchloc.checkMatch( cct->loc.getLoc() );
              }
 
              if ( csmatch && locmatch )
@@ -1033,7 +1033,7 @@ bool OtherLogMatcher::idleMatch( int limit )
 
             if ( csmatch )
             {
-               locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+               locmatch = matchloc.checkMatch( cct->loc.getLoc() );
             }
 
             if ( csmatch && locmatch )
@@ -1246,7 +1246,7 @@ bool ListMatcher::idleMatch( int limit )
 
          if ( csmatch )
          {
-            locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+            locmatch = matchloc.checkMatch( cct->loc.getLoc() );
          }
 
 

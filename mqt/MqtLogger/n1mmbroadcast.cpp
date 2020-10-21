@@ -256,7 +256,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("sntnr", tct->serials.getValue())          //        <sntnr>2</sntnr>
                    + makeTag("rcv", tct->repr.getValue())               //        <rcv>59</rcv>
                    + makeTag("rcvnr", tct->serialr.getValue())          //        <rcvnr>0</rcvnr>
-                   + makeTag("gridsquare", tct->loc.loc.getValue())     //        <gridsquare></gridsquare>
+                   + makeTag("gridsquare", tct->loc.getLoc())     //        <gridsquare></gridsquare>
                    + makeTag("exchange1", tct->extraText.getValue())    //        <exchange1></exchange1>
                    + makeTag("section", c->entSect.getValue())          //        <section></section>
                    + makeTag("comment", tct->comments.getValue())       //        <comment></comment>

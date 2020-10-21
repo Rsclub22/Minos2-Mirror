@@ -96,12 +96,12 @@ bool ContactList::cslLoad( )
 
               if (parts.size() > 0)
               {
-                  rct->cs.setFullCall( parts[0].toUpper() );
+                  rct->cs.setFullCall( parts[0] );
               }
 
               if (parts.size() > 1)
               {
-                  rct->loc = Locator( parts[ 1 ].toUpper() );
+                  rct->loc.setLoc( parts[ 1 ] );
               }
 
               if (parts.size() > 2)

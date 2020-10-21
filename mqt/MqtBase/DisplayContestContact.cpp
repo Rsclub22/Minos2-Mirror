@@ -157,7 +157,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.reps, reps.getValue() ) )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.loc.loc.getValue(), loc.loc.getValue() ) )
+   if ( strcmpsp( mct.loc.getLoc(), loc.getLoc() ) )
       return true; // i.e. not equal
 
    if ( stricmpsp( mct.extraText, extraText.getValue() ) )       // we force exchange upper case if dist code
@@ -221,7 +221,7 @@ void DisplayContestContact::checkContact( bool inScan)
       double lat = 0.0;
       int brg = -1;
 
-      char v = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+      char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
       if ( v == LOC_OK )
       {
          clp->disbeara( lon, lat, dist, brg );
@@ -377,13 +377,13 @@ void DisplayContestContact::checkContact( bool inScan)
        if (contest->MGMContestRules.getValue())
        {
            int brg;
-            dist = clp->CalcCentres ( loc.loc.getValue(), brg );
+            dist = clp->CalcCentres ( loc.getLoc(), brg );
             if ( almost_equal(dist, 1.0, 2))
                 dist = 50;  // MGM same square == 50 points
        }
-       else if ( loc.loc.getValue().size() == 4 && clp->allowLoc4.getValue() )
+       else if ( loc.getLoc().size() == 4 && clp->allowLoc4.getValue() )
        {
-          dist = clp->CalcNearest( loc.loc.getValue() ); // deal with 4 char locs
+          dist = clp->CalcNearest( loc.getLoc() ); // deal with 4 char locs
        }
        contactScore.setValue( static_cast<int>(dist) );
    }
@@ -419,7 +419,7 @@ void DisplayContestContact::checkContact( bool inScan)
       QString letters;
       QString numbers;
 
-      QString sloc = loc.loc.getValue().mid(0, 4);
+      QString sloc = loc.getLoc().mid(0, 4);
 
       letters = sloc.left(2);
       numbers = sloc.mid(2, 2);
@@ -571,7 +571,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             }
             break;
          case egLoc:
-            res = loc.loc.getValue();
+            res = loc.getLoc();
             break;
          case egBrg:
             {
@@ -595,7 +595,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         // rework to come from prime contest loc
                         double lon = 0.0;
                         double lat = 0.0;
-                        if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+                        if ( lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
                         {
                            // we don't have it worked out already...
                            double dist;
@@ -623,7 +623,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                              // rework to come from prime contest loc
                              double lon = 0.0;
                              double lat = 0.0;
-                             char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                             char llres = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                              if ( llres == LOC_OK || llres == LOC_PARTIAL )
                              {
                                 // we don't have it worked out already...
@@ -701,7 +701,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         double lat = 0.0;
                         int brg;
                         double dist = 0.0;
-                        char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                        char llres = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                         if ( llres == LOC_OK )
                         {
                            curcon->disbeara( lon, lat, dist, brg );
@@ -843,7 +843,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "exchangeRx", extraText );
          if ( mt->getStructArgMemberValue( "locRx", temp ) )
          {
-            loc = Locator(temp);
+            loc.setLoc(temp);
          }
          mt->getStructArgMemberValue( "commentsTx", comments );
          mt->getStructArgMemberValue( "commentsRx", comments );

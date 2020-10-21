@@ -1103,7 +1103,7 @@ void TLogContainer::LocCalcActionExecute()
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     if (ct)
     {
-       loccalc.S1Loc = ct->myloc.loc.getValue();
+       loccalc.S1Loc = ct->myloc.getLoc();
     }
     loccalc.exec();
 }

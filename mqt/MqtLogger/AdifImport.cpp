@@ -68,7 +68,7 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       if ( Fieldname.toUpper() == "CALL" )
       {
          strcpysp( temp, FieldContent, FieldLength );
-         aqso->cs.setFullCall( temp.toUpper() );
+         aqso->cs.setFullCall( temp );
       }
       if ( Fieldname.toUpper() == "RST_SENT" )
       {
@@ -96,7 +96,7 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       if ( Fieldname.toUpper() == "GRIDSQUARE" )
       {
          strcpysp( temp, FieldContent, FieldLength );
-         aqso->loc = Locator( temp );
+         aqso->loc.setLoc( temp );
       }
       if ( Fieldname.toUpper() == "QSO_PTS" || Fieldname.toUpper() == "POINTS" )
       {

@@ -225,7 +225,7 @@ void BaseContestLog::clearDirty()
 
    name.clearDirty();
    location.clearDirty();
-   myloc.loc.clearDirty();
+   myloc.clearDirty();
    allowLoc4.clearDirty();
    allowLoc8.clearDirty();
    RSTMandatoryField.clearDirty();
@@ -268,7 +268,7 @@ void BaseContestLog::setDirty()
    mycall.setDirty();
    name.setDirty();
    location.setDirty();
-   myloc.loc.setDirty();
+   myloc.setDirty();
    allowLoc4.setDirty();
    allowLoc8.setDirty();
    RSTMandatoryField.setDirty();
@@ -321,7 +321,7 @@ void BaseContestLog::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc = Locator(myloc.loc.getValue().left(4) + "MM");
+    nloc.setLoc(myloc.getLoc().left(4) + "MM");
     if ( nloc.validate( odec, odnc ) == LOC_OK )
     {
         cosodnc = cos( odnc );
@@ -816,14 +816,10 @@ void BaseContestLog::scanContest( )
 
       // check for duplicates; accumulate the current points score
 
- //     nct->cs.reValidate();
-
       nct->bearing = -1;		// force a recalc
-      nct->loc.validate();
 
       if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
          nct->cs.setValRes( ERR_DUPCS);
-
 
       nct->multCount = 0;
       nct->newDistrict = false;
@@ -1256,7 +1252,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
             QString temp;
             if ( mt->getStructArgMemberValue( "locator", temp ) )
             {
-                myloc = Locator(temp);
+                myloc.setLoc(temp);
                validateLoc();
             }
             mt->getStructArgMemberValue( "district", location );

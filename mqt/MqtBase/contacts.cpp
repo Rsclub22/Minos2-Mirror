@@ -79,7 +79,7 @@ bool BaseContact::operator<( const BaseContact& rhs ) const
 void BaseContact::clearDirty()
 {
    cs.clearDirty();
-   loc.loc.clearDirty();
+   loc.clearDirty();
    time.clearDirty();
 
    extraText.clearDirty();
@@ -102,7 +102,7 @@ void BaseContact::clearDirty()
 void BaseContact::setDirty()
 {
    cs.setDirty();
-   loc.loc.setDirty();
+   loc.setDirty();
    time.setDirty();
 
    extraText.setDirty();
@@ -273,7 +273,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
       next = placestr( contactBuffs.buff, repr.getValue(), next + 1, 3 );
    next = placestr( contactBuffs.buff, contactBuffs.srbuff, next, -4 );
 
-   next = placestr( contactBuffs.buff, loc.loc.getValue(), next + 1, ( curcon ->allowLoc8.getValue() ) ? 8 : 6 );
+   next = placestr( contactBuffs.buff, loc.getLoc(), next + 1, ( curcon ->allowLoc8.getValue() ) ? 8 : 6 );
 
    next = placestr( contactBuffs.buff, contactBuffs.brgbuff, next + 1, 4 );
    next = placestr( contactBuffs.buff, contactBuffs.scorebuff, next, -5 );
