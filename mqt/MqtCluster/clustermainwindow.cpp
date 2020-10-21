@@ -973,49 +973,44 @@ void ClusterMainWindow::parseDX(const QString txt)
                         // got all the data
                         trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode.getDxCallStr()));
 
-                        if (qrzInfo.getCall() == askQraData.getAskCallsign())
+                        newSpot = spotWaitingForQraFromNode;
+
+                        if (qrzInfo.getError())
+                        {
+                            trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
+                            // asking qrz via node didn't give qra, use prefix
+                            // let's lookup using prefix
+                            QString loc = getQraFromCallsignPrefix(newSpot.getDxCall());
+                            trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
+                            newSpot.setDxLocator(loc);
+                            newSpot.setDxLocatorIsFromNode(true);
+                        }
+                        else if (qrzInfo.getCall() == askQraData.getAskCallsign())
                         {
 
                             trace(QString("ParseDx - qrz info matches waiting callsign = %1").arg(askQraData.getAskCallsign()));
 
 
-                            newSpot = spotWaitingForQraFromNode;
+                            trace(QString("ParseDx - qrzInfo no error, add locator to spot = %1").arg(qrzInfo.getGrid()));
 
-                            if (!qrzInfo.getError())
-                            {
-                                trace(QString("ParseDx - qrzInfo no error, add locator to spot = %1").arg(qrzInfo.getGrid()));
-                                newSpot.setDxLocator(qrzInfo.getGrid());
-                                newSpot.setDxLocatorIsFromNode(true);
-                            }
-                            else
-                            {
-                                trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
-                                // asking qrz via node didn't give qra, use prefix
-                                // let's lookup using prefix
-                                QString loc = getQraFromCallsignPrefix(newSpot.getDxCall());
-                                trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
-                                newSpot.setDxLocator(loc);
-                                newSpot.setDxLocatorIsFromNode(true);
-                            }
+                            newSpot.setDxLocator(qrzInfo.getGrid());
+                            newSpot.setDxLocatorIsFromNode(true);
 
-                            //spotListNoQra.remove(qrzInfo.getCall());
-                            spotWaitingForQraFromNode.clear();
-                            qrzInfo.clear();
-                            askQraData.clear();
-                            //getQrzInfo = false;
-                            retCode = SPOT_OK;
-
-                            if (!newSpot.getDxLocator().isEmpty())
-                            {
-                                processNewSpot(newSpot);
-                            }
-
-
-                        }
-                        else
-                        {
+                         }
+                         else
+                         {
                               trace(QString("ParseDx - QrzInfo call = %1, does not match waiting call %2").arg(qrzInfo.getCall()).arg(askQraData.getAskCallsign()));
-                        }
+                         }
+
+                        //spotListNoQra.remove(qrzInfo.getCall());
+                        spotWaitingForQraFromNode.clear();
+                        qrzInfo.clear();
+                        askQraData.clear();
+                        //getQrzInfo = false;
+                        retCode = SPOT_OK;
+
+                        processNewSpot(newSpot);
+
                     }
 
                 }
@@ -1237,6 +1232,12 @@ int ClusterMainWindow::getQrzReply(QString &line)
     else if (line.contains("www.qrz.com"))
     {
         qrzInfo.setGotAllData(true);
+        if (qrzInfo.getCall().isEmpty())
+        {
+            // some sites return the qrz.com, but not the data
+            trace(QString("getQrzReply: end message, but no data for callsign = %1").arg(spotWaitingForQraFromNode.getDxCallStr()));
+            qrzInfo.setError(true);
+        }
         return SPOT_OK;
     }
 
