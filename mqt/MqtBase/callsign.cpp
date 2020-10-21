@@ -64,23 +64,42 @@ static bool isNumeric ( const QString &s )
 }
 static QString getPrefix ( QString p, QSharedPointer<CountrySynonym> &csyn )
 {
-    QString testpart = p;
+//    QString testpart = p;
 
-    while ( testpart.length() >= 1 )
+//    while ( testpart.length() >= 1 )
+//    {
+//        // we need to stop when we get to the basic prefix...
+//        // otherwise RVI6ABC ends up matching R, which is UA
+
+//        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart );
+
+//        if ( csyn )
+//        {
+//            break;
+//        }
+
+//        testpart = testpart.left (testpart.length() - 1 );
+//    }
+//    return testpart;
+
+    // we need to keep adding to testpart until we fail to have a synonym
+    // then we come back one...
+    QString testPart;
+    QSharedPointer<CountrySynonym> lastCsyn;
+    for (int i = 1; i < p.size(); i++)
     {
-        // we need to stop when we get to the basic prefix...
-        // otherwise RVI6ABC ends up matching R, which is UA
+        testPart = p.left(i);
+        lastCsyn = MultLists::getMultLists()->searchCountrySynonym ( testPart );
 
-        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart );
-
-        if ( csyn )
+        if ( lastCsyn )
         {
-            break;
+            csyn = lastCsyn;
+            continue;
         }
-
-        testpart = testpart.left (testpart.length() - 1 );
+        testPart = p.left(i - 1);
+        break;
     }
-    return testpart;
+    return testPart;    // the successful part!
 }
 
 static int extraTail ( QString p, QSharedPointer<CountrySynonym> &csyn )
