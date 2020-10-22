@@ -43,5 +43,19 @@ public:
     {
         wt = m.wt;
     }
+    bool operator==(const MapWrapper &rhs) const
+    {
+        return *wt.data() == *rhs.wt.data();
+    }
+    bool operator<(const MapWrapper &rhs) const
+    {
+        return *wt.data() < *rhs.wt.data();
+    }
+
 };
+template <class itemtype>
+uint qHash(const MapWrapper<itemtype> &m)
+{
+    return m.wt->qHash();
+}
 #endif

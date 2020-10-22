@@ -9,7 +9,9 @@
 //----------------------------------------------------------------------------
 #ifndef MultsH
 #define MultsH 
-
+#include <QString>
+#include "locator.h"
+#include "callsign.h"
 //----------------------------------------------------------------------------
 class DistrictEntry;
 class DistrictSynonym;
@@ -20,6 +22,7 @@ class CountrySynonym;
 class CountryList;
 class MultEntry;
 class BaseContestLog;
+
 
 const int CONTINENTS = 6;
 struct ContList
@@ -47,6 +50,10 @@ class GlistEntry
 
       QString synPrefix;
       QString dupPrefix;
+      uint qHash()
+      {
+          return ::qHash(synPrefix);
+      }
 };
 class MultEntry
 {
@@ -79,6 +86,10 @@ class DistrictEntry : public MultEntry
 
       virtual QString str( bool );
       virtual void addSynonyms( QString & );
+      uint qHash()
+      {
+          return ::qHash(districtCode);
+      }
 };
 
 class DistrictSynonym
@@ -92,6 +103,10 @@ class DistrictSynonym
       bool operator<( const DistrictSynonym& rhs ) const;
       bool operator==( const DistrictSynonym& rhs ) const;
       bool operator!=( const DistrictSynonym& rhs ) const;
+      uint qHash()
+      {
+          return ::qHash(synonym);
+      }
 };
 
 class CountryEntry : public MultEntry
@@ -111,6 +126,10 @@ class CountryEntry : public MultEntry
       bool operator<( const CountryEntry& rhs ) const;
       bool operator==( const CountryEntry& rhs ) const;
       bool operator!=( const CountryEntry& rhs ) const;
+      uint qHash()
+      {
+          return ::qHash(basePrefix);
+      }
 };
 
 class CountrySynonym
@@ -130,6 +149,10 @@ class CountrySynonym
       bool operator<( const CountrySynonym& rhs ) const;
       bool operator==( const CountrySynonym& rhs ) const;
       bool operator!=( const CountrySynonym& rhs ) const;
+      uint qHash()
+      {
+          return ::qHash(synPrefix);
+      }
 };
 
 class LocCount

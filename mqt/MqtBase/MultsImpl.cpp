@@ -377,20 +377,28 @@ bool CountryEntry::operator!=( const CountryEntry& rhs ) const
 //======================================================================
 static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
 {
-    MapWrapper <CountrySynonym> test(new CountrySynonym( syn, "" ));
+    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "" ));
+    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", ""));
+    MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test, defVal);
 
-   MultList < CountrySynonym > ::iterator cs = std::lower_bound( MultListsImpl::getMultLists() ->ctrySynList.begin(),
-         MultListsImpl::getMultLists() ->ctrySynList.end(),
-         test);
+    if (cs == defVal)
+        return QSharedPointer<CountrySynonym>();
+    else
+        return cs.wt;
 
-   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() || !( ( *cs->wt.data() ) == *test.wt.data() ) )
-   {
-      cs = MultListsImpl::getMultLists() ->ctrySynList.end();
-   }
-   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() )
-      return QSharedPointer<CountrySynonym>();
-   else
-      return cs->wt;
+//    MapWrapper <CountrySynonym> test(new CountrySynonym( syn, "" ));
+//   MultList < CountrySynonym > ::iterator cs = std::lower_bound( MultListsImpl::getMultLists() ->ctrySynList.begin(),
+//         MultListsImpl::getMultLists() ->ctrySynList.end(),
+//         test);
+
+//   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() || !( ( *cs->wt.data() ) == *test.wt.data() ) )
+//   {
+//      cs = MultListsImpl::getMultLists() ->ctrySynList.end();
+//   }
+//   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() )
+//      return QSharedPointer<CountrySynonym>();
+//   else
+//      return cs->wt;
 
 }
 CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :

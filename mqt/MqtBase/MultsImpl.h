@@ -16,7 +16,7 @@
 #include "cutils.h"
 
 template < class itemtype >
-class MultList : public QObject, public QMap < MapWrapper<itemtype>, MapWrapper<itemtype> >
+class MultList : public QObject, public QHash < MapWrapper<itemtype>, MapWrapper<itemtype> >
 {
 
 public:
