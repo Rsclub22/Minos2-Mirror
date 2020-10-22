@@ -88,6 +88,8 @@ public:
     int setConfigurationParameter(QString cfgparam, QString value) override;
     int getConfigurationParameter(QString cfgparam, QString *value) override;
 
+    int setVoiceMessage(VFO vfo, int vmNum) override;
+
 
 #if defined (WIN32)
     OmniRig::RigParamX map_mode(QString mode);

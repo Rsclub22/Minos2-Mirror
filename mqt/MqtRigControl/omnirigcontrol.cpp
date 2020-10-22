@@ -519,6 +519,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
+                false,      // support voice memory
                 false);     // polldata flag
 
     // note the library may support these features,
@@ -543,6 +544,7 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
+                false,      // support voice memory
                 false);     // polldata flag
 
 
@@ -1150,7 +1152,12 @@ int OmnirigControl::getConfigurationParameter(QString cfgparam, QString *value)
     return retCode;
 }
 
-
+int OmnirigControl::setVoiceMessage(VFO vfo, int vmNum)
+{
+    Q_UNUSED(vmNum)
+    Q_UNUSED(vfo)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

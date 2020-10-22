@@ -141,6 +141,13 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         //}
 
+        bool supportVoiceMemory = false;
+        if (capsList[i]->rig_model == RIG_MODEL_IC7300 || capsList[i]->rig_model == RIG_MODEL_IC9700
+                || capsList[i]->rig_model == RIG_MODEL_IC7610)
+        {
+            supportVoiceMemory = true;
+        }
+
         // support Antenna Switch
         //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
@@ -161,6 +168,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,       // support volume
                                            true,        // support antenna switch
                                            true,            // support RigCtld
+                                           supportVoiceMemory,
                                            true);    // support poll data
     }
 
@@ -926,7 +934,15 @@ int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
     return retCode;
 }
 
+/*************** Voice Memory Control  ********************************/
 
+
+int HamlibRigControl::setVoiceMessage(VFO vfo, int vmNum)
+{
+
+    return rig_send_voice_mem(my_rig, hamlibVfoNames[vfo], vmNum);
+
+}
 
 /*************** Level Control  ********************************/
 

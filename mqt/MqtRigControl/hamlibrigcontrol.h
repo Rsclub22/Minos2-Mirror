@@ -95,7 +95,7 @@ public:
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
 
-
+    int setVoiceMessage(VFO vfo, int vmNum) override;
 
 
 

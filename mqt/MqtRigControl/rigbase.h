@@ -78,6 +78,8 @@ public:
     virtual QString getLibraryName() = 0;
     virtual QString getErrorMsgText(int errorCode) = 0;
 
+    virtual int setVoiceMessage(VFO vfo, int vmNum) = 0;
+
     //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
 
 
