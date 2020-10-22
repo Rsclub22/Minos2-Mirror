@@ -87,42 +87,44 @@ static bool isNumeric ( const QString &s )
 }
 static QString getPrefix ( QString p, QSharedPointer<CountrySynonym> &csyn )
 {
-//    QString testpart = p;
+    QString testpart = p;
 
-//    while ( testpart.length() >= 1 )
-//    {
-//        // we need to stop when we get to the basic prefix...
-//        // otherwise RVI6ABC ends up matching R, which is UA
-
-//        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart );
-
-//        if ( csyn )
-//        {
-//            break;
-//        }
-
-//        testpart = testpart.left (testpart.length() - 1 );
-//    }
-//    return testpart;
-
-    // we need to keep adding to testpart until we fail to have a synonym
-    // then we come back one...
-    QString testPart;
-    QSharedPointer<CountrySynonym> lastCsyn;
-    for (int i = 1; i < p.size(); i++)
+    while ( testpart.length() >= 1 )
     {
-        testPart = p.left(i);
-        lastCsyn = MultLists::getMultLists()->searchCountrySynonym ( testPart );
+        // we need to stop when we get to the basic prefix...
+        // otherwise RVI6ABC ends up matching R, which is UA
 
-        if ( lastCsyn )
+        csyn = MultLists::getMultLists()->searchCountrySynonym ( testpart );
+
+        if ( csyn )
         {
-            csyn = lastCsyn;
-            continue;
+            break;
         }
-        testPart = p.left(i - 1);
-        break;
+
+        testpart = testpart.left (testpart.length() - 1 );
     }
-    return testPart;    // the successful part!
+    return testpart;
+
+//    // we need to keep adding to testpart until we fail to have a synonym
+//    // then we come back one...
+//    // Does this work? e.g. if we have DL, D isn't in itself valid
+
+//    QString testPart;
+//    QSharedPointer<CountrySynonym> lastCsyn;
+//    for (int i = 1; i < p.size(); i++)
+//    {
+//        testPart = p.left(i);
+//        lastCsyn = MultLists::getMultLists()->searchCountrySynonym ( testPart );
+
+//        if ( lastCsyn )
+//        {
+//            csyn = lastCsyn;
+//            continue;
+//        }
+//        testPart = p.left(i - 1);
+//        break;
+//    }
+//    return testPart;    // the successful part!
 }
 
 static int extraTail ( QString p, QSharedPointer<CountrySynonym> &csyn )
