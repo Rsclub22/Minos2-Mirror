@@ -211,7 +211,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     initialiseSupportedRadioDisplay();
 
-
+    initVoiceMemButtons();
+    setVoiceMemButtonsVisible(false);
 
 
     if (appName.length() > 0)
@@ -746,6 +747,17 @@ void RigControlMainWindow::upDateRadio()
                     setRitGetSetFreqIndicatorVisible(false);
                     clearSupportRitFlags();
 
+                }
+
+                // does radio support voice memories
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory)
+                {
+                    setVoiceMemButtonsVisible(true);
+
+                }
+                else
+                {
+                    setVoiceMemButtonsVisible(false);
                 }
 
 
@@ -4290,4 +4302,108 @@ void RigControlMainWindow::showRitTestControl(bool state)
 {
     ui->testRitButton->setVisible(state);
     ui->setRitSpinner->setVisible(state);
+}
+
+
+
+void RigControlMainWindow::initVoiceMemButtons()
+{
+/*
+    QList<QToolButton*> ui_voiceMemButtons;
+    ui_voiceMemButtons << ui->voiceMemPb1 << ui->voiceMemPb2 << ui->voiceMemPb3 << ui->voiceMemPb4 ;
+
+    QStringList buttonLabels;
+    for (unsigned int i = 0; i < sizeof(RotPresetData::presetButtonLabels)/sizeof(const char *); i++)
+    {
+        buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
+    }
+
+    for (int i = 0; i < ui_voiceMemButtons.count(); i++)
+    {
+
+        // build array of buttons
+        //voiceMemButton.append(new PresetButton(ui_presetbuttons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
+        voiceMemButton.append(ui_voiceMemButtons[i]);
+
+        connect(voiceMemButton[i], &voiceMemButton[i]::clicked, [this, i]() {presetRead(i);});
+        //connect(presetButton[i], &PresetButton::presetShortCutRecall, [this, i]() {presetRead(i);});
+        //connect(presetButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showPresetMenu(i);});
+        //connect(presetButton[i], &PresetButton::presetReadAction, [this, i]() {presetRead(i);});
+        //connect(presetButton[i], &PresetButton::presetEditAction, [this, i]() {presetEdit(i);});
+        //connect(presetButton[i], &PresetButton::presetWriteAction, [this, i]() {presetWrite(i);});
+        //connect(presetButton[i], &PresetButton::presetClearAction, [this, i]() {presetClear(i);});
+
+    }
+
+*/
+    ui->voiceMemPb1->setText("VM 1");
+    ui->voiceMemPb2->setText("VM 2");
+    ui->voiceMemPb3->setText("VM 3");
+    ui->voiceMemPb4->setText("VM 4");
+    ui->voiceMemStopPb->setText("VM Stop");
+    connect(ui->voiceMemPb1, SIGNAL(clicked()), this, SLOT(onVoiceMem1Clicked()));
+    connect(ui->voiceMemPb2, SIGNAL(clicked()), this, SLOT(onVoiceMem2Clicked()));
+    connect(ui->voiceMemPb3, SIGNAL(clicked()), this, SLOT(onVoiceMem3Clicked()));
+    connect(ui->voiceMemPb4, SIGNAL(clicked()), this, SLOT(onVoiceMem4Clicked()));
+    connect(ui->voiceMemStopPb, SIGNAL(clicked()), this, SLOT(onVoiceMemStopClicked()));
+
+
+}
+
+void RigControlMainWindow::onVoiceMem1Clicked()
+{
+    onVoiceMemClicked(1);
+
+}
+
+
+void RigControlMainWindow::onVoiceMem2Clicked()
+{
+    onVoiceMemClicked(2);
+
+}
+
+void RigControlMainWindow::onVoiceMem3Clicked()
+{
+    onVoiceMemClicked(3);
+
+}
+
+void RigControlMainWindow::onVoiceMem4Clicked()
+{
+    onVoiceMemClicked(4);
+
+}
+
+void RigControlMainWindow::onVoiceMemClicked(int vmNum)
+{
+    if (radio)
+    {
+        trace(QString("Voice Memory %1 Clicked").arg(vmNum));
+        radio->setVoiceMessage(curVfo, vmNum);
+    }
+
+}
+
+void RigControlMainWindow::onVoiceMemStopClicked()
+{
+    if (radio)
+    {
+        trace(QString("Voice Memory Stop Clicked"));
+        radio->setVoiceMessage(curVfo, 0);
+    }
+
+}
+
+void RigControlMainWindow::setVoiceMemButtonsVisible(bool state)
+{
+    QList<QToolButton*> ui_voiceMemButtons;
+    ui_voiceMemButtons << ui->voiceMemPb1 << ui->voiceMemPb2 << ui->voiceMemPb3 << ui->voiceMemPb4 ;
+
+    for (int i = 0; i < ui_voiceMemButtons.count(); i++)
+    {
+       ui_voiceMemButtons[i]->setVisible(state);
+    }
+
+    ui->voiceMemStopPb->setVisible(state);
 }

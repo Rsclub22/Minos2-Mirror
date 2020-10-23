@@ -823,37 +823,37 @@ Active</string>
        </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="voiceMemPb1">
+       <widget class="QToolButton" name="voiceMemPb1">
         <property name="text">
-         <string>VM1</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="voiceMemPb2">
+       <widget class="QToolButton" name="voiceMemPb2">
         <property name="text">
-         <string>VM2</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="voiceMemPb3">
+       <widget class="QToolButton" name="voiceMemPb3">
         <property name="text">
-         <string>VM3</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="voiceMemPb4">
+       <widget class="QToolButton" name="voiceMemPb4">
         <property name="text">
-         <string>VM4</string>
+         <string>...</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="voiceMemStopPb">
+       <widget class="QToolButton" name="voiceMemStopPb">
         <property name="text">
-         <string>VM Stop</string>
+         <string>...</string>
         </property>
        </widget>
       </item>

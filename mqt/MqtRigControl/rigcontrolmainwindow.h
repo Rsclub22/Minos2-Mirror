@@ -346,6 +346,9 @@ private:
 
 
 
+    void initVoiceMemButtons();
+    void onVoiceMemClicked(int vmNum);
+    void setVoiceMemButtonsVisible(bool state);
 private slots:
 
     void onStdInRead(QString);
@@ -405,6 +408,11 @@ private slots:
 
     void pollRadioInfo();
 
+    void onVoiceMem1Clicked();
+    void onVoiceMem2Clicked();
+    void onVoiceMem3Clicked();
+    void onVoiceMem4Clicked();
+    void onVoiceMemStopClicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H
