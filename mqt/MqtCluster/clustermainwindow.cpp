@@ -1059,7 +1059,7 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
             {
                 trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
             }
-
+/*
             // is spot already in the display list?
             for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
             {
@@ -1070,7 +1070,7 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
                 }
             }
 
-
+*/
 
             trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(rxTime));
             spotsList.append(new ClusterSpotData(newSpot));
@@ -1630,6 +1630,7 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
             dxSpotDataModel->rowData = spotsList[i];
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
+            qDebug() << "number of spots stores = " << dxSpotDataModel->rowCount();
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             trace(QString("GetSpotsFromDisplayQueue: finished loop"));
 
