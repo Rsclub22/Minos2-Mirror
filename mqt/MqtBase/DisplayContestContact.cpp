@@ -335,8 +335,8 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( districtMult && districtMult->country1)
    {
-      clp->addDistrictWorked(band, districtMult->listOffset);
-      int n = clp->getDistrictsWorked(band, districtMult->listOffset);
+      clp->addDistrictWorked(band, districtMult->districtCode);
+      int n = clp->getDistrictsWorked(band, districtMult->districtCode);
       if ( n <= districtMult->country1->districtLimit() )
       {
          clp->ndistrict[band]++;
@@ -350,8 +350,8 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( ctryMult)
    {
-       clp->addCountryWorked(band, ctryMult->listOffset);
-       int n = clp->getCountriesWorked(band, ctryMult->listOffset);
+       clp->addCountryWorked(band, ctryMult->basePrefix);
+       int n = clp->getCountriesWorked(band, ctryMult->basePrefix);
        if ( n == 1 )
        {
            clp->nctry[band]++;

@@ -23,7 +23,6 @@ class CountryList;
 class MultEntry;
 class BaseContestLog;
 
-
 const int CONTINENTS = 6;
 struct ContList
 {
@@ -58,7 +57,6 @@ class GlistEntry
 class MultEntry
 {
    public:
-      int listOffset;
       Locator central;	// central point to take bearings to
       QString realName;
 
@@ -79,6 +77,7 @@ class DistrictEntry : public MultEntry
       QSharedPointer<CountryEntry> country2; // country containing district
 
       DistrictEntry( const QString &cd, const QString &name, const QString &prefix, const QString &prefix2, const QString &cloc );
+      DistrictEntry( const QString &cd );
       virtual ~DistrictEntry();
       bool operator<( const DistrictEntry& rhs ) const;
       bool operator==( const DistrictEntry& rhs ) const;
@@ -96,6 +95,7 @@ class DistrictSynonym
 {
    public:
       DistrictSynonym( const QString &cd, const QString &syn );
+      DistrictSynonym( const QString &syn );
       virtual ~DistrictSynonym();
 
       QString synonym;
@@ -120,6 +120,7 @@ class CountryEntry : public MultEntry
       bool hasDistricts( );
 
       CountryEntry( const QString &continent, const QString &prefix, const QString &name, const QString &cloc );
+      CountryEntry( const QString &prefix );
       virtual ~CountryEntry();
       virtual QString str( bool );
       virtual void addSynonyms( QString & );
@@ -139,6 +140,7 @@ class CountrySynonym
       QSharedPointer<CountryEntry> country;
 
       CountrySynonym( const QString &syn, const QString &prefix );
+      CountrySynonym( const QString &syn );
       virtual ~CountrySynonym();
 
       void getDupPrefix( QString & );
@@ -204,22 +206,19 @@ class MultLists
       MultLists();
       virtual ~MultLists();
 
-      //      void addCountry( bool addsyn ) = 0;
       virtual QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn ) = 0;
       virtual QSharedPointer<DistrictEntry> searchDistrict( const QString &syn ) = 0;
 
       virtual int getCtryListSize() = 0;
       virtual int getDistListSize() = 0;
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult ) = 0;
-      virtual QString getCtryListText( int item, int Column, BaseContestLog *const ct ) = 0;
-      virtual QString getDistListText( int item, int Column, BaseContestLog *const ct ) = 0;
-      virtual QSharedPointer<CountryEntry> getCtryListAt( int index ) = 0;
-      virtual int getCtryListIndexOf( QSharedPointer<CountryEntry> ) = 0;
-      virtual int getDistListIndexOf( QSharedPointer<DistrictEntry> ) = 0;
+      virtual QString getCtryListText( const QString & item, int Column, BaseContestLog *const ct ) = 0;
+      virtual QString getDistListText( const QString & item, int Column, BaseContestLog *const ct ) = 0;
       virtual bool isUKprefix(const Callsign &cs) = 0;
-//      virtual DistrictEntry *getDistrictEntry(int item) = 0;
-//      virtual CountryEntry *getCountryEntry(int item) = 0;
-      virtual int getDistWorked(int item, BaseContestLog *const ct ) = 0;
-      virtual int getCountryWorked(int item, BaseContestLog *const ct ) = 0;
+      virtual int getDistWorked(const QString & item, BaseContestLog *const ct ) = 0;
+      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct ) = 0;
+
+      virtual QVector<QSharedPointer<DistrictEntry> > &getDistList() = 0;
+      virtual QVector<QSharedPointer<CountryEntry> > &getCountryList() = 0;
 };
 #endif

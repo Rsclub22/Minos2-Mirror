@@ -66,18 +66,21 @@ void DXCCFrame::reInitialiseCountries()
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
         int sourceRow = index.row();
-        if (sourceRow == proxyModel.scrolledCountry)
+        QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[sourceRow];
+        QString bp = ce->basePrefix;
+
+        if (bp == proxyModel.scrolledCountry)
         {
             ui->DXCCTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
 }
-void DXCCFrame::scrollToCountry( int ctry_ind, bool makeVisible )
+void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
 {
     if (makeVisible)
-        proxyModel.scrolledCountry = ctry_ind;
+        proxyModel.scrolledCountry = bp;
     else
-        proxyModel.scrolledCountry = -1;
+        proxyModel.scrolledCountry.clear();
    reInitialiseCountries();
 }
 
@@ -117,7 +120,8 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
     {
         if (role == Qt::DisplayRole)
         {
-            QString disp = MultLists::getMultLists() ->getCtryListText( index.row(), CountryTreeColumns[ index.column() ].fieldId, ct );
+            QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->basePrefix;
+            QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ index.column() ].fieldId, ct );
             return disp.trimmed();
         }
         if (role == Qt::TextAlignmentRole)
@@ -177,15 +181,18 @@ int DXCCGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 }
 bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (scrolledCountry == sourceRow)
-        return true;
     LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>(TContestApp::getContestApp() ->getCurrentContest());
     if (!ct)
         return false;
 
-    int worked = MultLists::getMultLists()->getCountryWorked(sourceRow, ct) ;
+    QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[sourceRow];
 
-    QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCtryListAt( sourceRow );
+    QString bp = ce->basePrefix;
+    if (scrolledCountry == bp)
+        return true;
+
+    int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
+
     bool makeVisible = false;
     for ( int i = 0; i < CONTINENTS; i++ )
     {
@@ -215,7 +222,8 @@ void DXCCFrame::on_DXCCTable_clicked(const QModelIndex &index)
     const QModelIndex srcindex = proxyModel.mapToSource( index );
     int sourceRow = srcindex.row();
 
-    QString disp = MultLists::getMultLists() ->getCtryListText( sourceRow, 0, model.ct );
+    QString bp = MultLists::getMultLists() ->getCountryList()[sourceRow]->basePrefix;
+    QString disp = MultLists::getMultLists() ->getCtryListText( bp, 0, model.ct );
     MinosLoggerEvents::SendCountrySelect(disp, model.ct);
 
 }

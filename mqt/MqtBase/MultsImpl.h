@@ -20,7 +20,7 @@ class MultList : public QObject, public QHash < MapWrapper<itemtype>, MapWrapper
 {
 
 public:
-      virtual int getWorked( int /*item*/, BaseContestLog * const /*ct*/ )
+      virtual int getWorked( const QString & /*item*/, BaseContestLog * const /*ct*/ )
       {
          return 0;
       }
@@ -89,12 +89,13 @@ public:
           return ce;
       }
 
-      QString getText( int item, int Column, BaseContestLog *const ct )
+      QString getText( const QString &item, int Column, BaseContestLog *const ct )
       {
          QString dest;
-         if ( !ct || item >= MultList::size())
+         if ( !ct )
             return dest;
-         QSharedPointer<itemtype> ce = std::next(this->begin(), item)->wt;
+         MapWrapper<itemtype> test(new itemtype(item));
+         QSharedPointer<itemtype> ce = this->value(test).wt;
          switch ( Column )
          {
             case ectCall:
@@ -156,12 +157,10 @@ public:
          return dest;
       }
 
-      QString getText( int item, BaseContestLog *const ct )
+      QString getText( const QString &item, BaseContestLog *const ct )
       {
          // Only called for fullMultDisp
          QString dest;
-         if ( item >= MultList::size())
-            return dest;
          itemtype ce = MultList::at( item );
 
          double longitude = 0.0;
@@ -230,7 +229,7 @@ class DistrictList : public MultList < DistrictEntry >
       void load( );
       virtual bool procLine( QStringList );
       virtual int slen( bool );
-      virtual int getWorked( int item, BaseContestLog *const ct );
+      virtual int getWorked(const QString &item, BaseContestLog *const ct );
 };
 
 class DistrictSynonymList : public MultList < DistrictSynonym >
@@ -256,7 +255,7 @@ class CountryList : public MultList < CountryEntry >
       virtual bool procLine( QStringList );
       virtual int slen( bool );
       void loadEntries( const QString &fname, const QString &fmess );
-      virtual int getWorked( int item, BaseContestLog *const ct );
+      virtual int getWorked( const QString  &item, BaseContestLog *const ct );
 };
 
 class CountrySynonymList : public MultList < CountrySynonym >
@@ -278,6 +277,9 @@ class MultListsImpl: public MultLists
       static MultListsImpl *multLists;
       bool loadMultFiles ( );
       MultListsImpl();
+
+      QVector<QSharedPointer<DistrictEntry> > distVector;
+      QVector<QSharedPointer<CountryEntry> > countryVector;
    public:
       CountryList ctryList;
       CountrySynonymList ctrySynList;
@@ -287,22 +289,20 @@ class MultListsImpl: public MultLists
 
       static MultListsImpl *getMultLists();
       ~MultListsImpl();
-      //      void addCountry( bool addsyn );
       virtual QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn );
       virtual QSharedPointer<DistrictEntry> searchDistrict( const QString &syn );
       virtual int getCtryListSize();
       virtual int getDistListSize();
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult );
-      virtual QString getCtryListText( int item, int Column, BaseContestLog *const ct );
-      virtual QString getDistListText( int item, int Column, BaseContestLog *const ct );
-      virtual QSharedPointer<CountryEntry>  getCtryListAt( int index );
-      virtual int getCtryListIndexOf(QSharedPointer<CountryEntry> );
-      virtual int getDistListIndexOf( QSharedPointer<DistrictEntry> );
+      virtual QString getCtryListText( const QString &item, int Column, BaseContestLog *const ct );
+      virtual QString getDistListText(const QString &item, int Column, BaseContestLog *const ct );
       virtual bool isUKprefix(const Callsign &cs);
-//      virtual DistrictEntry *getDistrictEntry(int item);
-//      virtual CountryEntry *getCountryEntry(int item);
-      virtual int getDistWorked(int item, BaseContestLog *const ct );
-      virtual int getCountryWorked(int item, BaseContestLog *const ct );
+      virtual int getDistWorked(const QString & item, BaseContestLog *const ct );
+      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct );
+
+      virtual QVector<QSharedPointer<DistrictEntry> > &getDistList();
+      virtual QVector<QSharedPointer<CountryEntry> > &getCountryList();
+
 
 };
 #endif

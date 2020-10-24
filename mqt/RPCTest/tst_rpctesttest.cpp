@@ -598,11 +598,7 @@ void RPCTestTest::testMults()
 
     QTextStream os(&fos);
 
-    for (int i = 0; i < m->getCtryListSize(); i++)
-    {
-        QSharedPointer<CountryEntry> ce = m->getCtryListAt( i );
-        os << ce->basePrefix + " " + ce->realName << "\n";
-    }
+
     /*
     os << "================== country entries ========================\n";
     for (MultList < CountryEntry >::iterator i = m->ctryList.begin(); i != m->ctryList.end(); i++)

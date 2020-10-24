@@ -350,7 +350,7 @@ void ScreenContact::score()
 
         if ( districtMult && districtMult->country1)
         {
-           int n = contest->getDistrictsWorked(band, districtMult->listOffset) + 1;
+           int n = contest->getDistrictsWorked(band, districtMult->districtCode) + 1;
            if ( n < districtMult->country1->districtLimit() )
           if ( contest->districtMult.getValue() )
           {
@@ -361,7 +361,7 @@ void ScreenContact::score()
 
         if ( ctryMult)
         {
-            int n = contest->getCountriesWorked(band, ctryMult->listOffset);
+            int n = contest->getCountriesWorked(band, ctryMult->basePrefix);
             if ( n == 1 )
             {
                 if (!contest->nonGCountryMult.getValue() || !cs.isUK())

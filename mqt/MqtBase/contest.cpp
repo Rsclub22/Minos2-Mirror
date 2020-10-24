@@ -19,28 +19,14 @@
 
 #include "contest.h"
 
-void BaseContestLog::addCountryWorked(QString band, int ctry)
+void BaseContestLog::addCountryWorked(QString band, const QString &basePrefix)
 {
-    if (!countryWorked.contains(band))
-    {
-        int nc = MultLists::getMultLists() ->getCtryListSize();
-        countryWorked.insert(band, QSharedPointer<int>( new int[ nc ]));
-        for ( int i = 0; i < nc; i++ )
-           countryWorked[band].data()[ i ] = 0;
-    }
-    countryWorked[band].data()[ ctry ]++;
+    countryWorked[band][ basePrefix ]++;
 }
 
-void BaseContestLog::addDistrictWorked(QString band, int dist)
+void BaseContestLog::addDistrictWorked(QString band, const QString &cd)
 {
-    if (!districtWorked.contains(band))
-    {
-        int nc = MultLists::getMultLists() ->getDistListSize();
-        districtWorked.insert(band, QSharedPointer<int>(new int[ nc ]));
-        for (int i = 0; i < nc; i++ )
-           districtWorked[band].data()[ i ] = 0;
-    }
-    districtWorked[band].data()[ dist ]++;
+    districtWorked[band][ cd ]++;
 }
 
 BaseContestLog::BaseContestLog( )

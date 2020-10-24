@@ -233,8 +233,7 @@ void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *
         QSharedPointer<DistrictEntry> dist = MultLists::getMultLists() ->searchDistrict( qth );
         if ( dist )
         {
-            int district_ind = MultLists::getMultLists() ->getDistListIndexOf( dist );
-           districtFrame->scrollToDistrict( district_ind, true );
+           districtFrame->scrollToDistrict( dist->districtCode, true );
         }
     }
 }
@@ -249,8 +248,7 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         QSharedPointer<CountryEntry> ctryMult = findCtryPrefix( cs );
         if ( ctryMult )
         {
-           int ctry_ind = MultLists::getMultLists() ->getCtryListIndexOf( ctryMult );
-           dxccFrame->scrollToCountry( ctry_ind, true );
+           dxccFrame->scrollToCountry( ctryMult->basePrefix, true );
         }
     }
 }

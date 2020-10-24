@@ -19,6 +19,7 @@ class DistrictGridModel: public QAbstractItemModel
         QSharedPointer<HtmlDelegate> delegate ;
 
         BaseContestLog *ct;
+        QVector<QSharedPointer<DistrictEntry> > districts;
 
         void reset();
         void initialise( );
@@ -36,7 +37,7 @@ class DistrictGridModel: public QAbstractItemModel
 class DistrictSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
-    int scrolledDistrict;
+    QString scrolledDistrict;
     DistrictSortFilterProxyModel(): scrolledDistrict(-1)
     {
     }
@@ -57,7 +58,7 @@ public:
 
     void setContest(BaseContestLog *contest);
     void reInitialiseDistricts();
-    void scrollToDistrict( int district_ind, bool makeVisible );
+    void scrollToDistrict( const QString &cd, bool makeVisible );
 private:
     Ui::DistrictFrame *ui;
 private slots:
