@@ -88,6 +88,7 @@ void ClusterMainWindow::doStartup()
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
     LogTimer.start(100);
 
+
     spotsList.clear();
     //getSpotsTimer = new QTimer();
     //connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
@@ -124,7 +125,7 @@ void ClusterMainWindow::doStartup()
         ui->testSpotsLab->setVisible(true);
         connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
         spotTestTimer = new QTimer();
-        connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(spotTimerTimeOut()));
+        connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(onSpotTestTimerTimeOut()));
     }
     else
     {
@@ -150,9 +151,9 @@ void ClusterMainWindow::doStartup()
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, int)), this, SLOT(onResendSpotToClients(int, QString, QString, int)));
 
 
-    sendSpotsToClientTimer = new QTimer();
-    connect(sendSpotsToClientTimer, SIGNAL(timeout()), this, SLOT(getSpotsToSendToClientQueues()));
-    sendSpotsToClientTimer->start(SEND_SPOTS_DUR);
+    handleSpotsInQueues = new QTimer();
+    connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
+    handleSpotsInQueues->start(SEND_SPOTS_DUR);
 
 
     client = new QtTelnet(parent());
@@ -197,23 +198,21 @@ void ClusterMainWindow::doStartup()
 
     dxSpotProxyModel = new QSortFilterProxyModel();
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
-    //dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
-    dxSpotProxyModel->sort(TIME_COL_NUM, Qt::DescendingOrder);
+    dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
     dxSpotView->setModel(dxSpotProxyModel);
     dxSpotView->setAlternatingRowColors(true);
     dxSpotView->setSelectionMode( QAbstractItemView::NoSelection );
     dxSpotView->setItemDelegate(dxSpotViewDelegate.data());
 
-
-
-
     QHeaderView *verticalHeader = dxSpotView->verticalHeader();
     verticalHeader->setVisible(false);
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
 
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    verticalHeader->setSectionResizeMode(QHeaderView::Interactive);
+
 
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
@@ -269,7 +268,8 @@ void ClusterMainWindow::doStartup()
     sentSpotVerticalHeader->setDefaultSectionSize(10);
     sentSpotVerticalHeader->setMinimumSectionSize(10);
 
-    sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     restoreSentSpotViewColumns();
     sentSpotView->horizontalHeader()->setStretchLastSection(true);
@@ -334,6 +334,9 @@ void ClusterMainWindow::doStartup()
     connect(pingClusterNodeTimer, SIGNAL(timeout()), this, SLOT(handlePingClusterNodeTimeout()));
     pingOk = false;
 
+    purgeTimer = new QTimer(this);
+    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+    purgeTimer->start(PURGE_TIME);
 
 
     // get list of clusters
@@ -980,9 +983,7 @@ void ClusterMainWindow::parseDX(const QString txt)
                             trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
                             // asking qrz via node didn't give qra, use prefix
                             // let's lookup using prefix
-                            QString loc = getQraFromCallsignPrefix(newSpot.getDxCall());
-                            trace(QString("ParseDx - get QRA from Prefix, add locator to spot = %1").arg(loc));
-                            newSpot.setDxLocator(loc);
+                            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
                             newSpot.setDxLocatorIsFromNode(true);
                         }
                         else if (qrzInfo.getCall() == askQraData.getAskCallsign())
@@ -1032,17 +1033,15 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
                         .arg(newSpot.getDxCallStr()).arg(newSpot.getFreq().traceStr()).arg(newSpot.getBand()).arg(newSpot.getBandMask()).arg(newSpot.getMode()).arg(newSpot.getModeMask())
                         .arg(newSpot.getSpotterCallStr()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
 
-    qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
-
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
-    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(rxTime, timeToLive)))
+    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(newSpot.getRxTime(), timeToLive)))
     {
         trace(QString("ProcessNewSpot: Spot within timeToLive"));
         // does the spot have a dxLocator
-        if (newSpot.getDxLocator().isEmpty())
+        if (newSpot.getDxLocator().isEmpty() && !enableHFSpots)
         {
-            // queue to ask Qrz for locator
+            // queue to ask Qrz for locator, only for VHF/UHF spots
             trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCallStr()));
             spotListNoQra.append(newSpot);
         }
@@ -1072,7 +1071,7 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
 
 */
 
-            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(rxTime));
+            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(newSpot.getRxTime()));
             spotsList.append(new ClusterSpotData(newSpot));
 
         }
@@ -1344,11 +1343,23 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
 
         newSpot.setSpotComment(spotComment);
 
+        qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
+        newSpot.setRxTime(rxTime);
+
+
         QString spotLocator;
         QString dxLocator;
         findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
+
+        if (enableHFSpots && newSpot.getDxLocator().isEmpty())
+        {
+            // get locator based up prefix
+            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
+            newSpot.setDxLocatorIsFromNode(true);
+        }
+
 
         newSpot.setDxPropMode(getPropMode(spotComment));
 
@@ -1574,13 +1585,13 @@ QString ClusterMainWindow::createResendSpotToSend(QString spot)
 }
 
 
-void ClusterMainWindow::getSpotsToSendToClientQueues()
+void ClusterMainWindow::onHandleSpotsInQueues()
 {
     getSpotsFromDisplayQueue();
 
     getSpotsFromSendToClientQueue();
 
-    handleResendSpotToClientsCmds();
+    // ******************** handleResendSpotToClientsCmds();
 
 
 }
@@ -1598,7 +1609,7 @@ void ClusterMainWindow::getSpotsFromSendToClientQueue()
             while (sendSpotsToClientQueue.count() > 0)
             {
                 trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsToClientQueue.count()).arg(sendSpotsToClientQueue[0]));
-                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "", resendFrameId::ALL_CLIENTS);      // uuid = space all logs
+                //**********   clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "", resendFrameId::ALL_CLIENTS);      // uuid = space all logs
                 sendSpotsToClientQueue.removeFirst();
             }
         }
@@ -1730,6 +1741,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
 
         newSpot.setSpotDateTime(dt);
 
+        qint64 rxTime = dt.toMSecsSinceEpoch()/1000;
+        newSpot.setRxTime(rxTime);
+
+
 
         // look for locator
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range
@@ -1760,6 +1775,13 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
         findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
+
+        if (enableHFSpots && newSpot.getDxLocator().isEmpty())
+        {
+            // get locator based up prefix
+            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
+            newSpot.setDxLocatorIsFromNode(true);
+        }
 
         newSpot.setDxPropMode(getPropMode(spotComment));
 
@@ -2467,7 +2489,32 @@ void ClusterMainWindow::testSpotPbClicked()
 
 }
 
-void ClusterMainWindow::spotTimerTimeOut()
+
+void ClusterMainWindow::purgeSpots()
+{
+
+    if (setupCluster->getTimeToLive() > 0 /*&& !holdUpdateFlag && (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    {
+        if (dxSpotDataModel->rowCount() > 0)
+        {
+           purgeSpotFlag = true;
+           int idx = dxSpotDataModel->rowCount() - 1;
+           while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
+           {
+               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong()))
+               {
+                   dxSpotDataModel->removeRows(idx, 1, QModelIndex());
+                   trace(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
+               }
+               idx--;
+           }
+           purgeSpotFlag = false;
+        }
+    }
+
+}
+
+void ClusterMainWindow::onSpotTestTimerTimeOut()
 {
     QString spot;
     QTime time;

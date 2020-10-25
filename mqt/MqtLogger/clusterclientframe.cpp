@@ -288,7 +288,7 @@ void ClusterClientFrame::setupDXSpotView()
 
     connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_dxSpotViewSectionResized(int, int , int)));
 
-    spotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    spotVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     // show these columns
     dxSpotView->setColumnHidden(TIME_COL_NUM, false);
@@ -344,7 +344,7 @@ void ClusterClientFrame::setupSearchSpotView()
     restoreSearchViewColumns();
     searchView->horizontalHeader()->setStretchLastSection(true);
     connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
-    searchVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    searchVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     // show these columns
     searchView->setColumnHidden(TIME_COL_NUM, false);
@@ -411,7 +411,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->horizontalHeader()->setStretchLastSection(true);
     connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_callsignViewSectionResized(int, int , int)));
 
-    callSignVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    callSignVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     // show these columns
     callSignView->setColumnHidden(TIME_COL_NUM, false);
@@ -473,7 +473,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     restoreLocatorViewColumns();
     locatorView->horizontalHeader()->setStretchLastSection(true);
     connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
-    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
 
     // show these columns

@@ -381,7 +381,7 @@ private:
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
-    QTimer *startUpTimer;
+    //QTimer *startUpTimer;
 
     QString appName;
     QLabel* status;
@@ -415,12 +415,15 @@ private:
     QVector<ClusterSpotData*> spotsList;
     //QTimer* getSpotsTimer;
 
+    QTimer* handleSpotsInQueues;
 
     QStringList sendSpotsToClientQueue;
-    QTimer* sendSpotsToClientTimer;
+
 
     QTimer* pingClusterNodeTimer;
     bool pingOk;
+
+    QTimer* purgeTimer;
 
 
     QList<ResendSpotCommand> resendSpotsToClientQueue;
@@ -555,6 +558,8 @@ private:
 
     QString getQraFromCallsignPrefix(Callsign prefix);
     QString assembleSpotMsgToSendToClients(const ClusterSpotData *spotData, const QString timeToLive);
+    void getLocatorFromPrefix(ClusterSpotData &newSpot);
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
@@ -566,7 +571,7 @@ private slots:
 
 #ifdef TEST_SPOTS
     void testSpotPbClicked();
-    void spotTimerTimeOut();
+    void onSpotTestTimerTimeOut();
 #endif
 
 
@@ -576,7 +581,7 @@ private slots:
 
 
 
-    void getSpotsToSendToClientQueues();
+    void onHandleSpotsInQueues();
 
     void handAskQraTimer();
 
@@ -586,6 +591,7 @@ private slots:
     void handlePingClusterNodeTimeout();
 
 
+    void purgeSpots();
 };
 
 #endif // CLUSTERMAINWINDOW_H
