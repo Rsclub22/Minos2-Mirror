@@ -35,44 +35,38 @@ const QString CLUSTER_SPOT_TEST_FILE = "testspots.txt";
 
 #endif
 
-const QString USER_COMMAND1 = "Ctrl+1";
-const QString USER_COMMAND2 = "Ctrl+2";
-const QString USER_COMMAND3 = "Ctrl+3";
-const QString USER_COMMAND4 = "Ctrl+4";
-const QString USER_COMMAND5 = "Ctrl+5";
-const QString USER_COMMAND6 = "Ctrl+6";
-const QString USER_COMMAND7 = "Ctrl+7";
-const QString USER_COMMAND8 = "Ctrl+8";
-const QString USER_COMMAND9 = "Ctrl+9";
-const QString USER_COMMAND10 = "Ctrl+0";
-
-const QStringList userCommandShortCutKeys = {
-                                            USER_COMMAND1, USER_COMMAND2,
-                                            USER_COMMAND3, USER_COMMAND4,
-                                            USER_COMMAND5, USER_COMMAND6,
-                                            USER_COMMAND7, USER_COMMAND8,
-                                            USER_COMMAND9, USER_COMMAND10
-                                        };
 
 
-const QString USER_COMMAND_MENU1 = "Ctrl+Alt+1";
-const QString USER_COMMAND_MENU2 = "Ctrl+Alt+2";
-const QString USER_COMMAND_MENU3 = "Ctrl+Alt+3";
-const QString USER_COMMAND_MENU4 = "Ctrl+Alt+4";
-const QString USER_COMMAND_MENU5 = "Ctrl+Alt+5";
-const QString USER_COMMAND_MENU6 = "Ctrl+Alt+6";
-const QString USER_COMMAND_MENU7 = "Ctrl+Alt+7";
-const QString USER_COMMAND_MENU8 = "Ctrl+Alt+8";
-const QString USER_COMMAND_MENU9 = "Ctrl+Alt+9";
-const QString USER_COMMAND_MENU10 = "Ctrl+Alt+0";
 
-const QStringList userCommandMenuShortCutKeys = {
-                                                        USER_COMMAND_MENU1, USER_COMMAND_MENU2,
-                                                        USER_COMMAND_MENU3, USER_COMMAND_MENU4,
-                                                        USER_COMMAND_MENU5, USER_COMMAND_MENU6,
-                                                        USER_COMMAND_MENU7, USER_COMMAND_MENU8,
-                                                        USER_COMMAND_MENU9, USER_COMMAND_MENU10
-                                             };
+const QStringList userVHFUHFCommandShortCutKeys = { "Ctrl+1", "Ctrl+2",
+                                                    "Ctrl+3", "Ctrl+4",
+                                                    "Ctrl+5", "Ctrl+6",
+                                                    "Ctrl+7", "Ctrl+8",
+                                                    "Ctrl+9", "Ctrl+0"};
+
+const QStringList userHFCommandShortCutKeys = { "Ctrl+Shift+1", "Ctrl+Shift+2",
+                                                "Ctrl+Shift+3", "Ctrl+Shift+4",
+                                                "Ctrl+Shift+5", "Ctrl+Shift+6",
+                                                "Ctrl+Shift+7", "Ctrl+Shift+8",
+                                                "Ctrl+Shift+9", "Ctrl+Shift+0"};
+
+
+
+
+
+const QStringList userVHFUHFCommandMenuShortCutKeys = {"Ctrl+Alt+1", "Ctrl+Alt+2",
+                                                        "Ctrl+Alt+3", "Ctrl+Alt+4",
+                                                        "Ctrl+Alt+5", "Ctrl+Alt+6",
+                                                        "Ctrl+Alt+7", "Ctrl+Alt+8",
+                                                        "Ctrl+Alt+9", "Ctrl+Alt+0"};
+
+
+const QStringList userHFCommandMenuShortCutKeys = { "Ctrl+Shift+Alt+1", "Ctrl+Shift+Alt+2",
+                                                    "Ctrl+Shift+Alt+3", "Ctrl+Shift+Alt+4",
+                                                    "Ctrl+Shift+Alt+5", "Ctrl+Shift+Alt+6",
+                                                    "Ctrl+Shift+Alt+7", "Ctrl+Shift+Alt+8",
+                                                    "Ctrl+Shift+Alt+9", "Ctrl+Shift+Alt+0"};
+
 
 
 const int TIME_TO_LIVE_TABNUM = 0;
@@ -354,11 +348,6 @@ private slots:
     void onStdInRead(QString cmd);
     void loggedOut();
 
-    void showUserCmdButtonMenu(int buttonNumber);
-    void userCmdButtonRead(int buttonNumber);
-    void userCmdButtonEdit(int buttonNumber);
-    void userCmdButtonClear(int buttonNumber);
-    void userCmdButtonWrite(int buttonNumber);
 
      void onClearAllSpots();
      void getSpotsFromDisplayQueue();
@@ -390,11 +379,19 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
     checkModeAgainstFreq* modeBandPlan;
 
-    QList<PresetButton *> userCmdButton;
-    QList<QShortcut *> shortCutKeyList;
-    QList<QShortcut *> shiftShortCutKeyList;
-    QStringList startCommands;
-    QStringList userCommands;
+    QList<PresetButton *> userVHFUHFCmdButton;
+    QList<PresetButton *> userHFCmdButton;
+
+    QList<QShortcut *> vhfUhfCommandShortCutKeyList;
+    QList<QShortcut *> vhfUhfMenuShortCutKeyList;
+
+    //QStringList startCommands;
+
+    QStringList vhfUhfUserCommands;
+    QStringList hfUserCommands;
+
+    QList<QShortcut *> hfCommandShortCutKeyList;
+    QList<QShortcut *> hfMenuShortCutKeyList;
 
     QtTelnet* client;
     Clusterrpc* clusterRpc;
@@ -494,10 +491,10 @@ private:
 
 
     void initUserCommandButtons();
-    void userCommandButtonUpdate(int buttonNumber, ClusterUserCommandData &buttonData);
+    void userCommandButtonUpdate(QString tabSelected, int buttonNumber, ClusterUserCommandData &buttonData);
     void userCommandAllButtonUpdate();
     void saveRotPresetButton(ClusterUserCommandData &buttonData);
-    void saveUserCommandString(int buttonNumber, ClusterUserCommandData &buttonData);
+    void saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
     void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, int bandmask);
     void setAllTabsColor(QColor c);
@@ -518,6 +515,13 @@ private:
     void handleStartFile();
     void handleEndFile();
     void handleCmdFile(QString fileName);
+
+    void showUserCmdButtonMenu(int buttonNumber);
+    void userCmdButtonRead(QStringList userCommands, QString tabSelected, int buttonNumber);
+    void userCmdButtonEdit(QStringList userCommands, QString tabSelected, int buttonNumber);
+    void userCmdButtonClear(QStringList userCommands, QString tabSelected, int buttonNumber);
+    void userCmdButtonWrite(QString tabSelected, int buttonNumber);
+
 
 
 
@@ -560,6 +564,7 @@ private:
     QString assembleSpotMsgToSendToClients(const ClusterSpotData *spotData, const QString timeToLive);
     void getLocatorFromPrefix(ClusterSpotData &newSpot);
 
+    void updateToNewVhfUhfGroupKey();
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
@@ -592,6 +597,16 @@ private slots:
 
 
     void purgeSpots();
+    void userVhfUhfCmdButtonEdit(int buttonNumber);
+    void userHfCmdButtonEdit(int buttonNumber);
+    void userVhfUhfCmdButtonClear(int buttonNumber);
+    void userHfCmdButtonClear(int buttonNumber);
+    void userVhfUhfCmdButtonWrite(int buttonNumber);
+    void userHfCmdButtonWrite(int buttonNumber);
+    void showVhfUhfUserCmdButtonMenu(int buttonNumber);
+    void showHfUserCmdButtonMenu(int buttonNumber);
+    void userVhfUhfCmdButtonRead(int buttonNumber);
+    void userHfCmdButtonRead(int buttonNumber);
 };
 
 #endif // CLUSTERMAINWINDOW_H

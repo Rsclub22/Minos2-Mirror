@@ -2136,7 +2136,7 @@ void ClusterMainWindow::onStdInRead(QString cmd)
 
 }
 
-
+/*
 void ClusterMainWindow::getStartCommands()
 {
     startCommands.clear();
@@ -2154,7 +2154,7 @@ void ClusterMainWindow::getStartCommands()
     }
 }
 
-
+*/
 
 /**************************** User Command Buttons **************************/
 
@@ -2163,21 +2163,33 @@ void ClusterMainWindow::initUserCommandButtons()
 {
 
 
-    QList<QToolButton*> ui_userCommandButtons;
-    ui_userCommandButtons << ui->vhfUhfSendButton0 << ui->vhfUhfSendButton1 << ui->vhfUhfSendButton2 << ui->vhfUhfSendButton3 << ui->vhfUhfSendButton4
+    QList<QToolButton*> ui_userVHFUHFCommandButtons;
+    ui_userVHFUHFCommandButtons << ui->vhfUhfSendButton0 << ui->vhfUhfSendButton1 << ui->vhfUhfSendButton2 << ui->vhfUhfSendButton3 << ui->vhfUhfSendButton4
                      << ui->vhfUhfSendButton5 << ui->vhfUhfSendButton6 << ui->vhfUhfSendButton7 << ui->vhfUhfSendButton8 << ui->vhfUhfSendButton9;
 
+    QList<QToolButton*> ui_userHFCommandButtons;
+    ui_userHFCommandButtons << ui->hfSendButton0 << ui->hfSendButton1 << ui->hfSendButton2 << ui->hfSendButton3 << ui->hfSendButton4 << ui->hfSendButton5
+                                << ui->hfSendButton6 << ui->hfSendButton7 << ui->hfSendButton8 << ui->hfSendButton9;
 
-    for (int i = 0; i < userCommandShortCutKeys.count(); i++)
+    for (int i = 0; i < userVHFUHFCommandShortCutKeys.count(); i++)
     {
-        shortCutKeyList.append(new QShortcut(QKeySequence(userCommandShortCutKeys[i]), this));
+        vhfUhfCommandShortCutKeyList.append(new QShortcut(QKeySequence(userVHFUHFCommandShortCutKeys[i]), this));
     }
 
-    for (int i = 0; i < userCommandMenuShortCutKeys.count(); i++)
+    for (int i = 0; i < userVHFUHFCommandMenuShortCutKeys.count(); i++)
     {
-        shiftShortCutKeyList.append(new QShortcut(QKeySequence(userCommandMenuShortCutKeys[i]), this));
+        vhfUhfMenuShortCutKeyList.append(new QShortcut(QKeySequence(userVHFUHFCommandMenuShortCutKeys[i]), this));
     }
 
+    for (int i = 0; i < userHFCommandShortCutKeys.count(); i++)
+    {
+        hfCommandShortCutKeyList.append(new QShortcut(QKeySequence(userHFCommandShortCutKeys[i]), this));
+    }
+
+    for (int i = 0; i < userHFCommandMenuShortCutKeys.count(); i++)
+    {
+        hfMenuShortCutKeyList.append(new QShortcut(QKeySequence(userHFCommandMenuShortCutKeys[i]), this));
+    }
 
 
     QStringList buttonLabels;
@@ -2185,33 +2197,68 @@ void ClusterMainWindow::initUserCommandButtons()
     {
         buttonLabels.append(tr(userCmdButtonLabels[i]));
     }
-    for (int i = 0; i < ui_userCommandButtons.count(); i++)
+
+    for (int i = 0; i < ui_userVHFUHFCommandButtons.count(); i++)
     {
 
-        userCmdButton.append(new PresetButton(ui_userCommandButtons[i], i, shortCutKeyList[i], shiftShortCutKeyList[i], buttonLabels));
+        userVHFUHFCmdButton.append(new PresetButton(ui_userVHFUHFCommandButtons[i], i, vhfUhfCommandShortCutKeyList[i], vhfUhfMenuShortCutKeyList[i], buttonLabels));
 
-        connect(userCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showUserCmdButtonMenu(i);});
-        connect(userCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userCmdButtonRead(i);});
-        connect(userCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userCmdButtonEdit(i);});
-        connect(userCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userCmdButtonWrite(i);});
-        connect(userCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userCmdButtonClear(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showVhfUhfUserCmdButtonMenu(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userVhfUhfCmdButtonEdit(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userVhfUhfCmdButtonWrite(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userVhfUhfCmdButtonClear(i);});
+
 
 
     }
 
+
+    for (int i = 0; i < ui_userHFCommandButtons.count(); i++)
+    {
+
+        userHFCmdButton.append(new PresetButton(ui_userHFCommandButtons[i], i, hfCommandShortCutKeyList[i], hfMenuShortCutKeyList[i], buttonLabels));
+
+        connect(userHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showHfUserCmdButtonMenu(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userHfCmdButtonEdit(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userHfCmdButtonWrite(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userHfCmdButtonClear(i);});
+
+
+    }
+
+
 }
 
-void ClusterMainWindow::showUserCmdButtonMenu(int buttonNumber)
+void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    userCmdButton[buttonNumber]->showButtonMenu();
+    userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
+}
+
+void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
+{
+    userHFCmdButton[buttonNumber]->showButtonMenu();
+}
+
+void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
+{
+    userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+}
+
+void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
+{
+    userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
 }
 
 
-void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
+void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabSelected, int buttonNumber)
 {
-    trace(QString("UserCmdButton Button Read = %1").arg(buttonNumber + 1));
-    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userCmdButton.count())
+
+    trace(QString("UserCmdButton %1 Button Read = %2").arg(tabSelected).arg(buttonNumber + 1));
+    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userVHFUHFCmdButton.count())
     {
         if (userCommands[buttonNumber].contains(':'))
         {
@@ -2223,7 +2270,7 @@ void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
                     if (nodeConnected)
                     {
                         d[1].append('\n');
-                        trace(QString("UserCmdButton Read - Send Command to cluster = %1").arg(d[1]));
+                        trace(QString("UserCmdButton %1 Read - Send Command to cluster = %2").arg(tabSelected).arg(d[1]));
 
                         if (setupCluster->getRunEndFileFlag())
                         {
@@ -2245,10 +2292,24 @@ void ClusterMainWindow::userCmdButtonRead(int buttonNumber)
 
 }
 
-void ClusterMainWindow::userCmdButtonEdit(int buttonNumber)
+void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 {
-    trace(QString("UserCmdButton Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
-    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userCmdButton.count())
+    userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+}
+
+
+void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
+{
+    userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
+}
+
+
+void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabSelected, int buttonNumber)
+{
+
+
+    trace(QString("UserCmdButton %1 Edit Selected = %2").arg(tabSelected).arg(QString::number(buttonNumber + 1)));
+    if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userVHFUHFCmdButton.count())
     {
 
         if (userCommands[buttonNumber].contains(':'))
@@ -2259,7 +2320,7 @@ void ClusterMainWindow::userCmdButtonEdit(int buttonNumber)
                 ClusterUserCommandData editData(d[0], d[1]);
                 ClusterUserCommandData curData(d[0], d[1]);
 
-                trace(QString("UserCmdButton - Edit Data - name = %1, cmdString = %2").arg(d[0]).arg(d[1]));
+                trace(QString("UserCmdButton %1 - Edit Data - name = %2, cmdString = %3").arg(tabSelected).arg(d[0]).arg(d[1]));
                 userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData, QString("Edit"));
 
 
@@ -2268,8 +2329,8 @@ void ClusterMainWindow::userCmdButtonEdit(int buttonNumber)
                     if (editData.name != curData.name || editData.cmdString != curData.cmdString)
                     {
                         trace(QString("UserCmdButton - Saving Edited Data - name = %1, cmdString = %2").arg(editData.name).arg(editData.cmdString));
-                        saveUserCommandString(buttonNumber, editData);
-                        userCommandButtonUpdate(buttonNumber, editData);
+                        saveUserCommandString(tabSelected, buttonNumber, editData);
+                        userCommandButtonUpdate(tabSelected, buttonNumber, editData);
                     }
 
                 }
@@ -2278,16 +2339,28 @@ void ClusterMainWindow::userCmdButtonEdit(int buttonNumber)
     }
 }
 
-void ClusterMainWindow::userCmdButtonClear(int buttonNumber)
+
+void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
+{
+    userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+}
+
+
+void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
+{
+    userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
+}
+
+void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tabSelected, int buttonNumber)
 {
     trace(QString("UserCommand Clear Selected = %1").arg(QString::number(buttonNumber +1)));
 
-    if (!userCommands[buttonNumber].isEmpty() || (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count()))
+    if (!userCommands[buttonNumber].isEmpty() || (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count()))
     {
         int status = QMessageBox::question( this,
                                 tr("Cluster User Command Clear"),
-                                tr("Do you really want to clear cluster user command number:%1?")
-                                .arg(buttonNumber + 1),
+                                tr("Do you really want to clear cluster %1 user command number:%2?")
+                                .arg(tabSelected).arg(buttonNumber + 1),
                                 QMessageBox::Yes|QMessageBox::Default,
                                 QMessageBox::No|QMessageBox::Escape,
                                 QMessageBox::NoButton);
@@ -2296,8 +2369,8 @@ void ClusterMainWindow::userCmdButtonClear(int buttonNumber)
         {
              trace(QString("UserCommand Clear - Clearing Button = %1").arg(QString::number(buttonNumber +1)));
             ClusterUserCommandData pData("", "");
-            saveUserCommandString(buttonNumber, pData);
-            userCommandButtonUpdate(buttonNumber, pData);
+            saveUserCommandString(tabSelected, buttonNumber, pData);
+            userCommandButtonUpdate(tabSelected, buttonNumber, pData);
         }
 
 
@@ -2307,11 +2380,22 @@ void ClusterMainWindow::userCmdButtonClear(int buttonNumber)
 }
 
 
-
-void ClusterMainWindow::userCmdButtonWrite(int buttonNumber)
+void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 {
-    trace(QString("UserCommand New Selected = %1").arg(QString::number(buttonNumber +1)));
-    if (!userCmdButton.isEmpty()  && buttonNumber < userCmdButton.count())
+    userCmdButtonWrite("VHF/UHF", buttonNumber);
+}
+
+void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
+{
+   userCmdButtonWrite("HF", buttonNumber);
+}
+
+
+
+void ClusterMainWindow::userCmdButtonWrite(QString tabSelected, int buttonNumber)
+{
+    trace(QString("UserCommand %1 New Selected = %2").arg(tabSelected).arg(QString::number(buttonNumber +1)));
+    if (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count())
     {
 
         ClusterUserCommandData editData("", "");
@@ -2323,9 +2407,9 @@ void ClusterMainWindow::userCmdButtonWrite(int buttonNumber)
         {
             if (editData.name != curData.name || editData.cmdString != curData.cmdString)
             {
-                trace(QString("UserCommand New Selected - Saving new data name = %1, cmdString = %2").arg(editData.name).arg(editData.cmdString));
-                saveUserCommandString(buttonNumber, editData);
-                userCommandButtonUpdate(buttonNumber, editData);
+                trace(QString("UserCommand %1  New Selected - Saving new data name = %2, cmdString = %3").arg(tabSelected).arg(editData.name).arg(editData.cmdString));
+                saveUserCommandString(tabSelected, buttonNumber, editData);
+                userCommandButtonUpdate(tabSelected, buttonNumber, editData);
             }
 
         }
@@ -2335,13 +2419,22 @@ void ClusterMainWindow::userCmdButtonWrite(int buttonNumber)
 
 
 
-void ClusterMainWindow::userCommandButtonUpdate(int buttonNumber, ClusterUserCommandData& buttonData)
+void ClusterMainWindow::userCommandButtonUpdate(QString tabSelected, int buttonNumber, ClusterUserCommandData& buttonData)
 {
-    userCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
-    // update store
-    userCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
-    //QString tTipStr = "Bearing = " + editData.bearing;
-    //presetButton[buttonNumber]->presetButton->setToolTip(tTipStr);
+    if (tabSelected == "VHF/UHF")
+    {
+        userVHFUHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+        // update store
+        vhfUhfUserCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
+    }
+    else if (tabSelected == "HF")
+    {
+        userHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+        // update store
+        hfUserCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
+    }
+
+
 }
 
 
@@ -2349,16 +2442,32 @@ void ClusterMainWindow::userCommandAllButtonUpdate()
 {
     ClusterUserCommandData buttonData;
     QStringList cmdData;
-    if (userCommands.count() > 0)
+
+    if (vhfUhfUserCommands.count() > 0)
     {
-        for (int i = 0; i < userCommands.count(); i++)
+        for (int i = 0; i < vhfUhfUserCommands.count(); i++)
         {
-            cmdData = userCommands[i].split(':');
+            cmdData = vhfUhfUserCommands[i].split(':');
             if (cmdData.count() == 2)
             {
                buttonData.name = cmdData[0];
                buttonData.cmdString = cmdData[1];
-               userCommandButtonUpdate(i, buttonData);
+               userCommandButtonUpdate("VHF/UHF", i, buttonData);
+            }
+
+        }
+    }
+
+    if (hfUserCommands.count() > 0)
+    {
+        for (int i = 0; i < hfUserCommands.count(); i++)
+        {
+            cmdData = hfUserCommands[i].split(':');
+            if (cmdData.count() == 2)
+            {
+               buttonData.name = cmdData[0];
+               buttonData.cmdString = cmdData[1];
+               userCommandButtonUpdate("HF", i, buttonData);
             }
 
         }
@@ -2370,24 +2479,94 @@ void ClusterMainWindow::userCommandAllButtonUpdate()
 void ClusterMainWindow::readUserCommandStrings()
 {
     QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("UserCommandStrings");
-    if (userCmdButton.count() > 0)
+
+    QStringList keys = config.childGroups();
+    if (keys.contains("UserCommandStrings"))
     {
-        for (int i = 0; i < userCmdButton.count(); i++)
+        updateToNewVhfUhfGroupKey();        // legacy before HF support
+    }
+    else
+    {
+        config.beginGroup("VHF_UHF_UserCommandStrings");
+    }
+
+    if (userVHFUHFCmdButton.count() > 0)
+    {
+        for (int i = 0; i < userVHFUHFCmdButton.count(); i++)
         {
-            userCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
+            vhfUhfUserCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
+        }
+    }
+    config.endGroup();
+
+    config.beginGroup("HF_UserCommandStrings");
+    if (userHFCmdButton.count() > 0)
+    {
+        for (int i = 0; i < userHFCmdButton.count(); i++)
+        {
+            hfUserCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
         }
     }
     config.endGroup();
 }
 
+// to copy and remove legacy entry
 
-void ClusterMainWindow:: saveUserCommandString(int buttonNumber, ClusterUserCommandData& buttonData)
+void ClusterMainWindow::updateToNewVhfUhfGroupKey()
+{
+    QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+    config.beginGroup("UserCommandStrings");
+    if (userVHFUHFCmdButton.count() > 0)
+    {
+        for (int i = 0; i < userVHFUHFCmdButton.count(); i++)
+        {
+            vhfUhfUserCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
+        }
+    }
+
+    config.endGroup();
+
+
+    for (int i = 0; i < userVHFUHFCmdButton.count(); i++)
+    {
+        ClusterUserCommandData buttonData;
+        QStringList cl = vhfUhfUserCommands[i].split(':');
+
+        if (cl.count() == 2)
+        {
+            buttonData.name = cl[0];
+            buttonData.cmdString = cl[0];
+        }
+
+        saveUserCommandString("VHFUHF", i, buttonData);
+
+    }
+
+    config.remove("UserCommandStrings");
+
+
+
+}
+
+
+void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData& buttonData)
 {
 
     QString cmd = buttonData.name + ":" + buttonData.cmdString;
     QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("UserCommandStrings");
+    if (tabSelected == "VHF/UHF")
+    {
+       config.beginGroup("VHF_UHF_UserCommandStrings");
+    }
+    else if (tabSelected == "HF")
+    {
+       config.beginGroup("HF_UserCommandStrings");
+    }
+    else
+    {
+        return;
+    }
+
     config.setValue(QString("command%1").arg(QString::number(buttonNumber + 1)), QString(buttonData.name + ":" + buttonData.cmdString));
     config.endGroup();
 
@@ -2501,7 +2680,7 @@ void ClusterMainWindow::purgeSpots()
            int idx = dxSpotDataModel->rowCount() - 1;
            while (idx >= 0 && dxSpotDataModel->rowCount() > 0)
            {
-               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong()))
+               if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), setupCluster->getTimeToLive().toLongLong() * 60))
                {
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
                    trace(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
