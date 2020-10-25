@@ -658,10 +658,11 @@ static int geoinput( Location *ingrid )
    //		getline();
 
    ingrid->datastring = ingrid->datastring.toUpper();
+   QRegExp cc("[NSEW]");
 
-   i = static_cast<int>(strcspn( ingrid->datastring, "NSEW" ));
+   i = static_cast<int>(ingrid->datastring.indexOf( cc ));
    if ( i < ingrid->datastring.length() )
-      j = static_cast<int>(strcspn( ingrid->datastring.mid( i + 1 ), "NSEW" ));
+      j = static_cast<int>(ingrid->datastring.mid( i + 1 ).indexOf(cc) );
    else
       j = 0;
 
