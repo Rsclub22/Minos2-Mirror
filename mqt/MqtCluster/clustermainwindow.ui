@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>571</width>
-    <height>593</height>
+    <width>544</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Minos Cluster Client</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_7">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
@@ -498,7 +498,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>571</width>
+     <width>544</width>
      <height>21</height>
     </rect>
    </property>
@@ -513,6 +513,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionUser_Command_Shortcuts"/>
    </widget>
    <widget class="QMenu" name="menuActions">
     <property name="title">
@@ -546,6 +547,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionUser_Command_Shortcuts">
+   <property name="text">
+    <string>User Command Shortcuts</string>
    </property>
   </action>
  </widget>

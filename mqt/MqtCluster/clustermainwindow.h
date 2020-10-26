@@ -83,6 +83,8 @@ const int ASKQRA_TIMEOUT = 10000;
 //const int TOO_FEW_PARTS = -1;
 //const int SPOTTIME_EMPTY = -2;
 
+const int HF_TABNUM = 0;
+const int VHFUHF_TABNUM = 1;
 
 class ClusterAddress
 {
@@ -565,11 +567,13 @@ private:
     void getLocatorFromPrefix(ClusterSpotData &newSpot);
 
     void updateToNewVhfUhfGroupKey();
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
     void clusterListChanged();
     void about();
+    void clusterNodeCommandsShortcutHelp();
     void handleStatusTimer();
     void onResendSpotToClients(int frameId,  QString loggerUuid, QString cmd, int bandmask );
 

@@ -100,6 +100,7 @@ void ClusterMainWindow::doStartup()
     ui->statusBar->addWidget(status);
 
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+    connect(ui->actionUser_Command_Shortcuts, SIGNAL(triggered()), this, SLOT(clusterNodeCommandsShortcutHelp()));
 
     //BandList::getBandList().loadVhfAndUpBands(bands);
     BandList::getBandList().loadAllBands(bands);
@@ -2235,22 +2236,36 @@ void ClusterMainWindow::initUserCommandButtons()
 
 void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
+    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    {
+       userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
+    }
+
+
 }
 
 void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 {
-    userHFCmdButton[buttonNumber]->showButtonMenu();
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    {
+        userHFCmdButton[buttonNumber]->showButtonMenu();
+    }
 }
 
 void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
-    userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    {
+        userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    }
 }
 
 void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
-    userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    {
+        userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
+    }
 }
 
 
@@ -2294,13 +2309,19 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 {
-    userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    {
+        userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    }
 }
 
 
 void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
 {
-    userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    {
+        userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
+    }
 }
 
 
@@ -2321,7 +2342,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
                 ClusterUserCommandData curData(d[0], d[1]);
 
                 trace(QString("UserCmdButton %1 - Edit Data - name = %2, cmdString = %3").arg(tabSelected).arg(d[0]).arg(d[1]));
-                userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData, QString("Edit"));
+                userClusterCommandDialog cmdStringDialog(this, tabSelected, buttonNumber, &editData, &curData, QString("Edit"));
 
 
                 if (cmdStringDialog.exec() == QDialog::Accepted)
@@ -2342,13 +2363,19 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 {
-    userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    {
+        userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    }
 }
 
 
 void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
 {
-    userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    {
+        userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
+    }
 }
 
 void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tabSelected, int buttonNumber)
@@ -2358,7 +2385,7 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
     if (!userCommands[buttonNumber].isEmpty() || (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count()))
     {
         int status = QMessageBox::question( this,
-                                tr("Cluster User Command Clear"),
+                                tr("Cluster %1 User Command Clear").arg(tabSelected),
                                 tr("Do you really want to clear cluster %1 user command number:%2?")
                                 .arg(tabSelected).arg(buttonNumber + 1),
                                 QMessageBox::Yes|QMessageBox::Default,
@@ -2382,12 +2409,18 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
 void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 {
-    userCmdButtonWrite("VHF/UHF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    {
+        userCmdButtonWrite("VHF/UHF", buttonNumber);
+    }
 }
 
 void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 {
-   userCmdButtonWrite("HF", buttonNumber);
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    {
+        userCmdButtonWrite("HF", buttonNumber);
+    }
 }
 
 
@@ -2400,14 +2433,14 @@ void ClusterMainWindow::userCmdButtonWrite(QString tabSelected, int buttonNumber
 
         ClusterUserCommandData editData("", "");
         ClusterUserCommandData curData("", "");
-        userClusterCommandDialog cmdStringDialog(this, buttonNumber, &editData, &curData, QString("New"));
+        userClusterCommandDialog cmdStringDialog(this, tabSelected, buttonNumber, &editData, &curData, QString("New"));
 
 
         if (cmdStringDialog.exec() == QDialog::Accepted)
         {
             if (editData.name != curData.name || editData.cmdString != curData.cmdString)
             {
-                trace(QString("UserCommand %1  New Selected - Saving new data name = %2, cmdString = %3").arg(tabSelected).arg(editData.name).arg(editData.cmdString));
+                trace(QString("%1 UserCommand New Selected - Saving new data name = %2, cmdString = %3").arg(tabSelected).arg(editData.name).arg(editData.cmdString));
                 saveUserCommandString(tabSelected, buttonNumber, editData);
                 userCommandButtonUpdate(tabSelected, buttonNumber, editData);
             }
@@ -2633,8 +2666,25 @@ void ClusterMainWindow::handleStatusTimer()
 
 void ClusterMainWindow::about()
 {
-    QMessageBox::about(this, tr("Minos Cluster Server"), tr("Minos Cluster\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2019"));
+    QMessageBox::about(this, tr("Minos Cluster Server"), tr("Minos Cluster\nCopyright D Balharrie G8FKH/M0DGB 2016 - 2020"));
 }
+
+
+void ClusterMainWindow::clusterNodeCommandsShortcutHelp()
+{
+    QMessageBox::information(this, tr("Cluster Node User Command Shortcut Keys"),
+                             tr("VHF/UHF User Commands\n\nSend Cmd\nCtrl+1, Ctrl+2, Ctrl+3, Ctrl+4, Ctrl+5\n"
+                                "Ctrl+6, Ctrl+7, Ctrl+8, Ctrl+9, Ctrl+0\n\n"
+                                "Menu Recall\n"
+                                "Ctrl+Shift+1, Ctrl+Shift+2, Ctrl+Shift+3, Ctrl+Shift+4, Ctrl+Shift+5\n"
+                                "Ctrl+Shift+6, Ctrl+Shift+7, Ctrl+Shift+8, Ctrl+Shift+9, Ctrl+Shift+0\n"
+                                "Then letter:\n"
+                                "S - Send cmd\n"
+                                "N - New cmd\n"
+                                "E - Edit cmd\n"
+                                "C - Clear cmd\n"));
+}
+
 
 
 

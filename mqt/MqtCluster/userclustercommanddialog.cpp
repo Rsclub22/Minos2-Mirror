@@ -32,7 +32,7 @@ ClusterUserCommandData::ClusterUserCommandData()
 
 
 
-userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name) :
+userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, QString tabSelected, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name) :
     QDialog(parent),
     ui(new Ui::userClusterCommandDialog)
     ,editData(nullptr)
@@ -51,7 +51,7 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, int buttonNu
 
     editData = _editData;
     curData = _curData;
-    setWindowTitle(tr("Cluster User Command %1 - %2").arg(QString::number(buttonNumber + 1)).arg(name));
+    setWindowTitle(tr("Cluster %1 User Command %2 - %3").arg(tabSelected).arg(QString::number(buttonNumber + 1)).arg(name));
     ui->name->setText(curData->name);
     ui->commandString->setText(curData->cmdString);
 

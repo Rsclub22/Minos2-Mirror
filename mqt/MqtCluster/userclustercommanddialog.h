@@ -25,7 +25,7 @@ class userClusterCommandDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit userClusterCommandDialog(QWidget *parent, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name);
+    explicit userClusterCommandDialog(QWidget *parent, QString tabSelected, int buttonNumber, ClusterUserCommandData* _editData, ClusterUserCommandData* _curData, QString name);
     ~userClusterCommandDialog();
 
 private slots:
