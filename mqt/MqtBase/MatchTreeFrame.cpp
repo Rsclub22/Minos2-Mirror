@@ -266,7 +266,7 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
         MatchTreeItem *ci = new MatchTreeItem(rootItem, i->wt.data(), QSharedPointer<MatchContact>());
         rootItem->addChild(ci); // also sets row
         //(*i) is *BaseMatchContest
-        foreach(auto mct, i->wt->contactMatchList)
+        for(auto const &mct: i->wt->contactMatchList)
         {
             MatchTreeItem *mi = new MatchTreeItem(ci, i->wt.data(), mct.wt);
             ci->addChild(mi);

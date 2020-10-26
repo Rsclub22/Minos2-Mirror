@@ -677,7 +677,7 @@ void BaseContestLog::updateStats( int p1, int p2 )
 int BaseContestLog::getValidQSOs()
 {
    int nvalid = 0;
-   foreach(MapWrapper<BaseContact> i, ctList)
+   for(auto const &i: ctList)
    {
       QSharedPointer<BaseContact> dct = i.wt;
 
@@ -774,7 +774,7 @@ void BaseContestLog::scanContest( )
    QString curop2 = currentOp2.getValue();
    oplist.insert( curop2, curop2 );
 
-   foreach(MapWrapper<BaseContact> wnct, ctList)
+   for(auto const &wnct: ctList)
    {
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
@@ -846,7 +846,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.bonus = 0;
    cs.nbonus = 0;
 
-   foreach(MapWrapper<BaseContact> i, ctList)
+   for(auto const &i: ctList)
    {
        // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = i.wt;
@@ -1463,7 +1463,7 @@ int BaseContestLog::getSquareBonus(QString sloc) const
 int BaseContestLog::getBonus() const
 {
     int tot = 0;
-    foreach(int n, bonus)
+    for(auto const &n: bonus)
     {
         tot += n;
     }
@@ -1473,7 +1473,7 @@ int BaseContestLog::getBonus() const
 int BaseContestLog::getNbonus() const
 {
     int tot = 0;
-    foreach(int n, nbonus)
+    for(auto const &n: nbonus)
     {
         tot += n;
     }
@@ -1482,7 +1482,7 @@ int BaseContestLog::getNbonus() const
 int BaseContestLog::getNlocs() const
 {
     int tot = 0;
-    foreach(int n, nlocs)
+    for(auto const &n: nlocs)
     {
         tot += n;
     }
@@ -1492,7 +1492,7 @@ int BaseContestLog::getNlocs() const
 int BaseContestLog::getNdistrict() const
 {
     int tot = 0;
-    foreach(int n, ndistrict)
+    for(auto const &n: ndistrict)
     {
         tot += n;
     }
@@ -1502,7 +1502,7 @@ int BaseContestLog::getNdistrict() const
 int BaseContestLog::getNctry() const
 {
     int tot = 0;
-    foreach(int n, nctry)
+    for(auto const &n: nctry)
     {
         tot += n;
     }

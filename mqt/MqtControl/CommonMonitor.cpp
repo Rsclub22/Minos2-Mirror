@@ -68,7 +68,7 @@ void commonController::checkControls( )
 commonPort *commonController::createPort( const PortConfig &port )
 {
     commonPort * cp = nullptr;
-    foreach(commonPort *ni, portChain)
+    for(auto const &ni: portChain)
     {
         if (ni->portName == port.name)
         {

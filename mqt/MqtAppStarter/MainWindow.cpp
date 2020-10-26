@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QString currentLang = getCurrentLanguage();
 
     QVector<Translation> languages = getLanguages();
-    foreach(const Translation &l, languages)
+    for(auto const &l: languages)
     {
         QAction *act =  new QAction(this);
         act->setText(l.dispName);
@@ -140,7 +140,7 @@ void MainWindow::FontEditAcceptActionExecute()
         {
             QApplication::setFont( f );
 
-            foreach ( QWidget * widget, QApplication::allWidgets() )
+            for(auto &widget: QApplication::allWidgets() )
             {
                 widget->setFont(f);
                 widget->update();
@@ -175,7 +175,7 @@ void MainWindow::LanguageAcceptActionExecute()
         QString selText = action->text();
 
         QVector<Translation> languages = getLanguages();
-        foreach(const Translation &l, languages)
+        for(auto const &l: languages)
         {
             if (l.dispName == selText)
             {

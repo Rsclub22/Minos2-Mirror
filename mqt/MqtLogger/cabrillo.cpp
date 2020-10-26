@@ -336,7 +336,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     int nvalid = 0;      // valid QSOs
     int nlines = 0;      // QSO records
-    foreach(MapWrapper<BaseContact> dct, ct->ctList)
+    for(auto const &dct: ct->ctList)
     {
        QSharedPointer<BaseContact> cct = dct.wt;
        // Extract comments for "Remarks" section
@@ -413,7 +413,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     // and then the contact list
 
-    foreach(MapWrapper<BaseContact> dct, ct->ctList)
+    for(auto const &dct: ct->ctList)
     {
         QSharedPointer<BaseContact> cct = dct.wt;
 

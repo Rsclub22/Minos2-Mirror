@@ -112,7 +112,7 @@ qint64 AirScoutLink::sendMessage(QString messagetype, QString messageText)
 
     int cs = 0;
     QByteArray packet = QByteArray(mess.toUtf8());
-    foreach(auto c, packet)
+    for(auto const &c: packet)
     {
         cs += c;
     }
@@ -278,7 +278,7 @@ void AirScoutLink::onReadyRead()
                     }
 
                     std::sort(user->planes.begin(), user->planes.end());
-                    foreach(const Aircraft &ac, user->planes)
+                    for(auto const &ac: user->planes)
                     {
                         ac.traceAircaft();
                     }
@@ -328,7 +328,7 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
         if (watchList.count() > 0)
         {
             QString watch = watchFreq;
-            foreach(auto user, watchList)
+            for(auto const &user: watchList)
             {
                 QString ent = "," + user->baseCall + "," + user->loc;
                 watch.append(ent);

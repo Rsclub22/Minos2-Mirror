@@ -409,7 +409,7 @@ void TSendDM::notifyRigDetailChanges()
 {
     QVector<PubSubName> riglist = rigCache.getRigList();
     QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-    foreach (PubSubName psn, riglist)
+    for (auto const &psn: riglist)
     {
         RigDetails& selDetail = rigCache.getDetails(psn);
         if (selDetail.isDirty())
@@ -877,7 +877,7 @@ QStringList TSendDM::rotators()
 {
     QStringList sl;
     QVector<PubSubName> rotlist = rotatorCache.getRotList();
-    foreach (PubSubName psn, rotlist)
+    for(auto const &psn: rotlist)
     {
         QString antname = psn.toString();
         sl.append(antname);
@@ -889,7 +889,7 @@ QStringList TSendDM::rigs()
 {
     QStringList sl;
     QVector<PubSubName> riglist = rigCache.getRigList();
-    foreach (PubSubName psn, riglist)
+    for (auto const &psn: riglist)
     {
         QString rigname = psn.toString();
         sl.append(rigname);

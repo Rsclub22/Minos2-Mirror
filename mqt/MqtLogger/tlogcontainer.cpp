@@ -417,7 +417,7 @@ void TLogContainer::setupMenus()
     QString currentLang = getCurrentLanguage();
 
     QVector<Translation> languages = getLanguages();
-    foreach(const Translation &l, languages)
+    for(auto const &l: languages)
     {
         QAction *act =  new QAction(this);
         act->setText(l.dispName);
@@ -1192,7 +1192,7 @@ void TLogContainer::FontEditAcceptActionExecute()
             bool serverRunning = checkServerReady();
             QApplication::setFont( f );
 
-            foreach ( QWidget * widget, QApplication::allWidgets() )
+            for ( auto &widget: QApplication::allWidgets() )
             {
                 widget->setFont(f);
                 widget->update();
@@ -1225,7 +1225,7 @@ void TLogContainer::LanguageAcceptActionExecute()
         QString selText = action->text();
 
         QVector<Translation> languages = getLanguages();
-        foreach(const Translation &l, languages)
+        for(auto const &l: languages)
         {
             if (l.dispName == selText)
             {

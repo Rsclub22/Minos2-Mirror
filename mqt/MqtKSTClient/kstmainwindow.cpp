@@ -1088,7 +1088,7 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
 //    ui->planesText->clear();
 //    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
 //    ui->planesText->append(QString());
-//    foreach(const Aircraft &ac, user->planes)
+//    for(auto const &ac: user->planes)
 //    {
 //        ui->planesText->append(ac.getAircraft() );
 //    }

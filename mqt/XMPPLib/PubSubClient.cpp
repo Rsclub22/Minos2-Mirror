@@ -15,12 +15,12 @@ QVector<RPCPublisher *> publishList;
 
 void clearPubSub()
 {
-    foreach(auto v, subscribeList)
+    for(auto &v: subscribeList)
     {
         delete v;
     }
     subscribeList.clear();
-    foreach(auto v, publishList)
+    for(auto &v: publishList)
     {
         delete v;
     }

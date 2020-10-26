@@ -623,7 +623,7 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    exportClusterFilter(expfd);
 
    bool inDump = false;
-   foreach(MapWrapper<BaseContact> dct, ct->ctList)
+   for(auto const &dct: ct->ctList)
    {
        QSharedPointer<BaseContact> lct = dct.wt;
 

@@ -636,7 +636,7 @@ QString MinosConfig::checkConfig()
             if ( ele->requiresApps.size() > 0 && ele->runType == RunLocal)
             {
                 // "Requires" elements must be present
-                foreach(QString req, ele->requiresApps)
+                for(auto const &req: ele->requiresApps)
                 {
                     if (req.isEmpty())
                         continue;

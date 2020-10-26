@@ -208,7 +208,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    foreach(auto m, filterProxyModelList)
+    for(auto &m: filterProxyModelList)
     {
         delete m;
     }
@@ -2149,7 +2149,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
             Callsign spotCall;
             spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
 
-            foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
+            for (auto const &str: filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
                 {

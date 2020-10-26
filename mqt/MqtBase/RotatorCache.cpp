@@ -43,7 +43,7 @@ void RotatorCache::addRotList(const QString &s)
         PubSubName lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRotList;
 
-        foreach(PubSubName psn, rotList)
+        for(auto const &psn: rotList)
         {
             if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
                 newRotList.push_back(psn);
@@ -51,7 +51,7 @@ void RotatorCache::addRotList(const QString &s)
         rotList = newRotList;
 
     }
-    foreach(QString l, list)
+    for(auto const &l: list)
     {
         // add all of the list to rot list
         PubSubName psn(l);
@@ -88,7 +88,7 @@ void RotatorCache::addRotList(const QString &s)
         }
         rotStates = newstates;
     }
-    foreach(PubSubName psn, rotList)
+    for(auto const &psn: rotList)
     {
         if (!rotDetails.contains(psn))
         {

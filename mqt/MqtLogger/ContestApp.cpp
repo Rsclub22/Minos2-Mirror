@@ -441,7 +441,7 @@ void TContestApp::writeContestList()
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ContestSlotList newContestSlotList;
-        foreach ( QSharedPointer<ContestSlot> cs,  contestSlotList)
+        for ( auto &cs:  contestSlotList)
         {
             if (cs)
             {
@@ -458,7 +458,7 @@ void TContestApp::writeContestList()
         contestSlotList = newContestSlotList;
 
         // and write it out
-        foreach ( QSharedPointer<ContestSlot> cs,  contestSlotList)
+        for ( auto &cs:  contestSlotList)
         {
             BaseContestLog * ct = cs->slot;
             if ( !ct )
@@ -490,7 +490,7 @@ void TContestApp::writeListsList()
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ListSlotList newListSlotList;
-        foreach ( QSharedPointer<ListSlot> cs,  listSlotList)
+        for ( auto const &cs:  listSlotList)
         {
             if (cs) // after all, we may have just got rid of one...
             {

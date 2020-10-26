@@ -1273,7 +1273,7 @@ void TSingleLogFrame::getSplitters()
     singleLogFrameSplitter->setChildrenCollapsible(true);
     singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
 
-    foreach(MinosSplitter *s, rowSplitters)
+    for(auto &s: rowSplitters)
     {
         QByteArray sstate;
         QString name = s->objectName();
@@ -1293,7 +1293,7 @@ void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
     QSettings settings;
     settings.setValue("Splitters/singleLogFrameSplitter/state/" + curScreenLayout, state);
 
-    foreach(MinosSplitter *s, rowSplitters)
+    for(auto &s: rowSplitters)
     {
         state = s->saveState();
         QString name = s->objectName();

@@ -235,7 +235,7 @@ void TEntryOptionsForm::getContestOperators()
     QString ops2;
     int ls = operators.size();
     int i = 0;
-    foreach(QString op, operators)
+    for(auto const &op: operators)
     {
         if (i <= ls/2)
         {
@@ -284,7 +284,7 @@ QString TEntryOptionsForm::doFileSave( )
         exptypes.push_back(ECABRILLO);
     }
 
-    foreach(ExportType expformat, exptypes)
+    for(auto const &expformat: exptypes)
     {
         QString InitialDir = ExtractFilePath( ct->cfileName );
 

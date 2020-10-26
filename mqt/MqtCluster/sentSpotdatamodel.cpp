@@ -26,7 +26,7 @@ SentSpotDataModel::SentSpotDataModel(QObject *parent)
 
 SentSpotDataModel::~SentSpotDataModel()
 {
-    foreach(auto s, sentSpotData)
+    for(auto &s: sentSpotData)
     {
         delete s;
     }

@@ -12,7 +12,7 @@ MinosKeyboard::MinosKeyboard(QWidget *parent) :
     QList<QPushButton *> pushButtons = findChildren<QPushButton *>();
 
     setFocusPolicy(Qt::NoFocus);
-    foreach (auto t, pushButtons)
+    for (auto const &t: pushButtons)
     {
         t->setFocusPolicy(Qt::NoFocus);
         if (t == ui->tabButton)
