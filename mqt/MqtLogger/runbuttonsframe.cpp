@@ -49,7 +49,7 @@ RunButtonsFrame::~RunButtonsFrame()
 {
     delete ui;
 
-    foreach(auto b, runButtonMap)
+    for(auto const &b: runButtonMap)
     {
         delete b;
     }

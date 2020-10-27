@@ -358,9 +358,8 @@ QString removeChars(QString s, const QList<QChar> chars)
 QString escapeXML ( const QString &value )
 {
     QString escaped;
-    for ( int index = 0; index < value.length(); ++index )
+    for ( auto const &c: value )
     {
-        QChar c = value[ index ];
         if (c == '<')
             escaped += "&lt;";
         else if (c == '>')

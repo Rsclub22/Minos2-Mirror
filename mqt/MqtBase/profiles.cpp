@@ -308,9 +308,9 @@ bool SettingsBundle::newSection( const QString &newname )
    if (!isSectionPresent(newname))
    {
       currsection = newname;
-      for ( QVector<QSharedPointer<ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
+      for ( auto const &i: bundleFile->entries )
       {
-         (*i)->createEntry( this );
+         i->createEntry( this );
       }
       return true;
    }
@@ -354,15 +354,15 @@ QString SettingsBundle::displayNameOf( int enumKey )
 {
    if ( bool( bundleFile ) /*&& currsection != noneBundle*/ )
    {
-      for ( QVector<QSharedPointer <ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
+       for ( auto const &i: bundleFile->entries )
       {
-         if ( ( *i )->id == enumKey )
+         if ( i->id == enumKey )
          {
-            if (strlen(( *i )->dispname))
+            if (strlen(i->dispname))
             {
-               return BundleFile::tr(( *i )->dispname);
+               return BundleFile::tr(i->dispname);
             }
-            return ( *i )->name;
+            return i->name;
          }
       }
    }
@@ -372,11 +372,11 @@ bool SettingsBundle::isReadOnly( int enumKey )
 {
    if ( bool( bundleFile ) && currsection != noneBundle )
    {
-      for ( QVector<QSharedPointer <ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
+       for ( auto const &i: bundleFile->entries )
       {
-         if ( ( *i )->id == enumKey )
+         if ( i->id == enumKey )
          {
-            return ( *i )->RO;
+            return i->RO;
          }
       }
    }
@@ -519,9 +519,9 @@ QVector<int> SettingsBundle::getBundleEntries( )
    QVector<int> e;
    if ( bundleFile )
    {
-      for ( QVector<QSharedPointer <ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
+       for ( auto const &i: bundleFile->entries )
       {
-         e.push_back( ( *i )->id );
+         e.push_back( i->id );
       }
    }
    return e;
@@ -532,9 +532,9 @@ QStringList SettingsBundle::getBundleHints( )
    QStringList e;
    if ( bundleFile )
    {
-      for ( QVector<QSharedPointer <ProfileEntry> >::iterator i = bundleFile->entries.begin(); i != bundleFile->entries.end(); i++ )
+       for ( auto const &i: bundleFile->entries )
       {
-         e.append( BundleFile::tr(( *i )->hint) );
+         e.append( BundleFile::tr(i->hint) );
       }
    }
    return e;

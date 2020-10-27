@@ -64,9 +64,9 @@ void CacheSelection::unpack(const QJsonValue &json)
         notSelected.push_back(iter.key());
     }
     QJsonArray selarray = json.toArray();
-    for (int i = 0; i < selarray.count(); i++)
+    for (auto const &i: selarray)
     {
-        QJsonObject selstruct = selarray[i].toObject();
+        QJsonObject selstruct = i.toObject();
         QString logger = selstruct.value("logger").toString();
         QString contest = selstruct.value("contest").toString();
         _selected[logger].setValue(contest);
@@ -76,9 +76,9 @@ void CacheSelection::unpack(const QJsonValue &json)
             notSelected.remove(n);
     }
 
-    for (int i = 0; i < notSelected.count(); i++)
+    for (auto const &i: notSelected)
     {
-        _selected.remove(notSelected[i]);
+        _selected.remove(i);
         setDirty();
     }
 }

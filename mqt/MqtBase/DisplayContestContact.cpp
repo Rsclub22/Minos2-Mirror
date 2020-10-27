@@ -426,9 +426,9 @@ void DisplayContestContact::checkContact( bool inScan)
 
       LocSquare *ls = nullptr;
 
-      for ( LocSquareIterator i = clp->locs[band].llist.begin(); i != clp->locs[band].llist.end(); i++ )
+      for ( auto const &i: clp->locs[band].llist )
       {
-          LocSquare *locsq = ( *i ).wt.data();
+          LocSquare *locsq = i.wt.data();
           if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )
           {
               ls = locsq;

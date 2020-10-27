@@ -37,17 +37,17 @@ int Clusterrpc::getServerListCount()
 void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 {
     // We need to send the message to all connected cluster clients, except the spot server
-    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( auto const &s: serverList )
     {
 
-        trace(QString("SendDxSpot to station = %1").arg((*i).app));
+        trace(QString("SendDxSpot to station = %1").arg(s.app));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( spot, rpcConstants::sendClusterSpot );
         st->addMember(uuid, rpcConstants::loggerUuid);
         st->addMember(frameId, rpcConstants::clusterFrameId);
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( (*i).app );
+        rpc.queueCall( s.app );
 
     }
 }
@@ -139,11 +139,10 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString server = an.getKey();
-            QVector<ClusterServer>::iterator stat;
             bool subNeeded = true;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            for ( auto const &stat: serverList )
             {
-                if ((*stat).serverName == server)
+                if (stat.serverName == server)
                 {
                     subNeeded = false;
                     break;
@@ -157,15 +156,14 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if ( an.getCategory() == rpcConstants::clusterClientServer )
         {
             trace( QString("***") + clusterStateList[an.getState()] + " " + an.getCategory() + " " + an.getKey());
-            QVector<ClusterServer>::iterator stat;
             bool clusterFound = false;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            for ( auto &stat: serverList )
             {
-                if ((*stat).app == an.getKey())
+                if (stat.app == an.getKey())
                 {
-                    if ((*stat).state != an.getState())
+                    if (stat.state != an.getState())
                     {
-                        (*stat).state = an.getState();
+                        stat.state = an.getState();
                         QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()];
                         trace(QString("On notify: %1").arg(mess));
                     }

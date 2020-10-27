@@ -26,24 +26,24 @@ class RPCParam
 
       RPCParam();
       virtual ~RPCParam();
-      virtual void addParam( TiXmlElement &node );
-      virtual void addValue( TiXmlElement &node );
-      virtual void addNode( TiXmlElement &node ) = 0;
-      virtual QString print() = 0;
-      virtual QString analyse() = 0;
+      virtual void addParam( TiXmlElement &node ) const;
+      virtual void addValue( TiXmlElement &node ) const;
+      virtual void addNode( TiXmlElement &node ) const = 0;
+      virtual QString print() const = 0;
+      virtual QString analyse() const = 0;
 
       static QSharedPointer<RPCParam> paramFactory( TiXmlElement &node );
 
-      virtual bool getMember( const QString &name, QSharedPointer<RPCParam> &p );
-      virtual bool getMember( int eleno, QSharedPointer<RPCParam> &p );
-      virtual bool getElements(int &size );
-      virtual bool getElement( int eleno, QSharedPointer<RPCParam> &p );
-      virtual bool getBoolean( bool &res );
-      virtual bool getInt( int &res );
-      virtual bool getDouble( double &res );
-      virtual bool getString( QString &res );
-      virtual bool getBase64( QString &res );
-      virtual bool getDtg( QString &res );
+      virtual bool getMember( const QString &name, QSharedPointer<RPCParam> &p ) const;
+      virtual bool getMember( int eleno, QSharedPointer<RPCParam> &p ) const;
+      virtual bool getElements(int &size ) const;
+      virtual bool getElement( int eleno, QSharedPointer<RPCParam> &p ) const;
+      virtual bool getBoolean( bool &res ) const;
+      virtual bool getInt( int &res ) const;
+      virtual bool getDouble( double &res ) const;
+      virtual bool getString( QString &res ) const;
+      virtual bool getBase64( QString &res ) const;
+      virtual bool getDtg( QString &res ) const;
 
       virtual void addMember( QSharedPointer<RPCParam> , const QString &name );
       virtual void addMember( int, const QString &name );
@@ -73,14 +73,14 @@ class RPCParamStruct: public RPCParam
       void addBase64Member( const QString &, const QString &name ) override;
       void addDtgMember( const QString &, const QString &name ) override;
 
-      virtual void addNode( TiXmlElement &node ) override;
-      virtual QString print() override;
-      virtual QString analyse() override;
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getElements( int &size ) override;
-      virtual bool getElement( int eleno, QSharedPointer<RPCParam> &p ) override;
-      virtual bool getMember( const QString &name, QSharedPointer<RPCParam> &p ) override;
-      virtual bool getMember( int eleno, QSharedPointer<RPCParam> &p ) override;
+      virtual bool getElements( int &size ) const override;
+      virtual bool getElement( int eleno, QSharedPointer<RPCParam> &p ) const override;
+      virtual bool getMember( const QString &name, QSharedPointer<RPCParam> &p ) const override;
+      virtual bool getMember( int eleno, QSharedPointer<RPCParam> &p ) const override;
 };
 
 // array
@@ -106,12 +106,12 @@ class RPCParamArray: public RPCParam
       void AddBase64Element( const QString & );
       void AddDtgElement( const QString & );
 
-      virtual void addNode( TiXmlElement &node ) override;
+      virtual void addNode( TiXmlElement &node ) const override;
       static QSharedPointer<RPCParamArray> ParseArray( TiXmlElement &aNode );
-      virtual QString print() override;
-      virtual QString analyse() override ;
-      virtual bool getElements( int &size ) override;
-      virtual bool getElement(int eleno, QSharedPointer<RPCParam> &p ) override;
+      virtual QString print() const override;
+      virtual QString analyse() const override ;
+      virtual bool getElements( int &size ) const override;
+      virtual bool getElement(int eleno, QSharedPointer<RPCParam> &p ) const override;
 };
 
 // int or i4
@@ -123,12 +123,12 @@ class RPCIntParam: public RPCParam
       RPCIntParam( int v );
       RPCIntParam( TiXmlElement &sNode );
       RPCIntParam();
-      virtual ~RPCIntParam();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual ~RPCIntParam() override;
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getInt( int &res );
+      virtual bool getInt( int &res ) const override;
 };
 
 // boolean
@@ -140,12 +140,12 @@ class RPCBooleanParam: public RPCParam
       RPCBooleanParam( bool v );
       RPCBooleanParam( TiXmlElement &sNode );
       RPCBooleanParam();
-      virtual ~RPCBooleanParam();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual ~RPCBooleanParam() override;
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getBoolean( bool &res );
+      virtual bool getBoolean( bool &res ) const override;
 };
 
 // double
@@ -158,11 +158,11 @@ class RPCDoubleParam: public RPCParam
       RPCDoubleParam( TiXmlElement &sNode );
       RPCDoubleParam();
       virtual ~RPCDoubleParam();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getDouble( double &res );
+      virtual bool getDouble( double &res ) const override;
 };
 
 // string
@@ -175,11 +175,11 @@ class RPCStringParam: public RPCParam
       RPCStringParam( TiXmlElement &sNode );
       RPCStringParam();
       virtual ~RPCStringParam();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getString( QString &res );
+      virtual bool getString( QString &res ) const override;
 };
 
 // <dateTime.iso8601>
@@ -192,11 +192,11 @@ class RPCDtgParam: public RPCParam
       RPCDtgParam( TiXmlElement &sNode );
       RPCDtgParam();
       virtual ~RPCDtgParam();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getDtg( QString &res );
+      virtual bool getDtg( QString &res ) const override;
 };
 
 // base64
@@ -208,12 +208,12 @@ class RPCBase64Param: public RPCParam
       RPCBase64Param( QString v );
       RPCBase64Param( TiXmlElement &sNode );
       RPCBase64Param();
-      virtual ~RPCBase64Param();
-      virtual void addNode( TiXmlElement &node );
-      virtual QString print();
-      virtual QString analyse();
+      virtual ~RPCBase64Param() override;
+      virtual void addNode( TiXmlElement &node ) const override;
+      virtual QString print() const override;
+      virtual QString analyse() const override;
 
-      virtual bool getBase64( QString &res );
+      virtual bool getBase64( QString &res ) const override;
 };
 
 class RPCArgs

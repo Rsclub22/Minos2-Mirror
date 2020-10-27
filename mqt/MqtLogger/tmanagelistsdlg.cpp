@@ -62,16 +62,16 @@ void TManageListsDlg::DrawList()
    int row = 0;
    int toSelect = 0;
 
-   for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
+   for ( auto const &l: TContestApp::getContestApp() ->listSlotList )
    {
-      if ( ( *i ) && ( *i ) ->slot )
+      if ( l&& l->slot )
       {
           ui->ListsListBox->setRowCount(row + 1);
 
           QTableWidgetItem * qlwi = new QTableWidgetItem();
-          QString sname = ( *i ) ->slot->name;
+          QString sname = l->slot->name;
           qlwi->setText( sname);
-          qlwi->setData( Qt::UserRole, (*i)->slotno);
+          qlwi->setData( Qt::UserRole, l->slotno);
 
           ui->ListsListBox->setItem(row, 0, qlwi );
 
@@ -106,12 +106,11 @@ void TManageListsDlg::on_CloseListButton_clicked()
        return;
 
    int slotno = items[0]->data(Qt::UserRole).toInt();
-    for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
+    for ( auto const &l: TContestApp::getContestApp() ->listSlotList )
     {
-       if ( ( *i ) && ( *i ) ->slotno == slotno )
+       if ( l && l->slotno == slotno )
        {
-          TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
-//          ( *i ) ->slot = 0;
+          TContestApp::getContestApp() ->closeListFile( l ->slot );
           break;
        }
     }

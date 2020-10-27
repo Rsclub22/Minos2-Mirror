@@ -90,11 +90,11 @@ void PortConfigure::SetEnable( TiXmlElement *e, commonController &monitor )
       // now create the port
       commonPort *p = monitor.createPort( pc );
       // and loop through the lines adding the relevant lineConfig lines to it
-      for ( QMap <QString, LineConfig>::iterator i = linemap.begin(); i != linemap.end(); i++ )
+      for ( auto const &i: linemap )
       {
-         if ( pname == i.value().portName )
+         if ( pname == i.portName )
          {
-            p->addLine( i.value() );
+            p->addLine( i );
          }
       }
       if ( !p->initialise( pc, monitor ) )

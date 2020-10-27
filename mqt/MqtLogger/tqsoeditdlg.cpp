@@ -194,9 +194,9 @@ void TQSOEditDlg::on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseCon
   ui->QSOHistoryTree->clear();
   if (lct)
   {
-      for (int i = 0; i < lct->getHistory().size(); ++i)
+      for (auto const &h: lct->getHistory())
       {
-          addTreeRoot(lct->getHistory()[i]);
+          addTreeRoot(h);
       }
   }
   refreshOps(ui->GJVQSOEditFrame->screenContact);

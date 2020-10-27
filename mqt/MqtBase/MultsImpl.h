@@ -73,9 +73,9 @@ public:
       int indexOf( itemtype item )
       {
           int i = 0;
-          for (typename MultList::iterator m = this->begin(); m != this->end(); m++)
+          for (auto const &m: *this)
           {
-            if (*m->wt.data() == item)
+            if (m.wt.data() == item)
                 return i;
 
             i++;

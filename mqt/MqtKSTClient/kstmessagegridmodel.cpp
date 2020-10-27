@@ -22,9 +22,8 @@ void KstMessageGridModel::setChatVector(QSharedPointer<QVector <QSharedPointer<K
 {
     beginResetModel();
     messageVector = pchatVector;
-    for (int i = 0; i < messageVector->size(); i++)
+    for ( auto const &kstline: *messageVector)
     {
-        QSharedPointer<KstMessageLine> kstline = messageVector->at(i);
         if (kstline->distance == -2)
         {
             kstline->distance = mainWindow->calcDistance(kstline->call);

@@ -47,16 +47,16 @@ class my_deque : public std::deque < qe >
 
       void freeAll()
       {
-          for (typename  my_deque::iterator i = this->begin(); i != this->end(); i++ )
-            delete ( *i );
+          for (auto const &i: *this)
+            delete i;
           my_deque::clear();
       }
 
       qe find( const QString &s )
       {
-         for (typename  my_deque::iterator i = this->begin(); i != this->end(); i++ )
-            if ( ( *i ) ->pName.compare(s, Qt::CaseInsensitive ) == 0 )
-               return ( *i );
+          for (auto const &i: *this)
+            if ( i ->pName.compare(s, Qt::CaseInsensitive ) == 0 )
+               return i;
          return 0;
       }
 

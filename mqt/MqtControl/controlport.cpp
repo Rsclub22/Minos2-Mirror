@@ -84,9 +84,9 @@ void commonPort::addLine( const LineConfig &line )
 
 commonPort::~commonPort()
 {
-   for ( QVector<commonLineControl *>::iterator i = lines.begin(); i != lines.end(); i++ )
+   for ( auto const &i: lines )
    {
-      delete ( *i );
+      delete i;
    }
    lines.clear();
 }
@@ -102,22 +102,22 @@ bool commonPort::initialise( const PortConfig & /*port*/, commonController &mon 
 }
 commonLineControl *commonPort::findLine(const QString &name, bool lineIn )
 {
-   for ( QVector<commonLineControl *>::iterator i = lines.begin(); i != lines.end(); i++ )
+    for ( auto const &i: lines )
    {
-      if ( ( *i ) ->lineIn == lineIn && ( *i ) ->lineName == name )
-         return ( *i );
+      if ( i->lineIn == lineIn && i->lineName == name )
+         return i;
    }
    return nullptr;
 }
 void commonPort::checkControls( )
 {
    getLineState();
-   for ( QVector<commonLineControl *>::iterator i = lines.begin(); i != lines.end(); i++ )
+   for ( auto const &i: lines )
    {
       // output lines can't sort their state in the same way
-      if ( ( *i ) ->lineIn )
+      if ( i->lineIn )
       {
-         ( *i ) ->checkLine();
+         i->checkLine();
       }
    }
 }

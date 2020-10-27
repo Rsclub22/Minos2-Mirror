@@ -61,7 +61,8 @@ void fillPortsInfo(QComboBox* comportSel)
 
     comportSel->addItem("");
 
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+    for (auto const &info: QSerialPortInfo::availablePorts())
+    {
         QStringList list;
         description = info.description();
         manufacturer = info.manufacturer();

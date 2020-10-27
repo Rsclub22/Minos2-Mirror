@@ -988,9 +988,9 @@ bool LoggerContestLog::exportGJV(QSharedPointer<QFile>fd )
 
    bool inDump = false;
 
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      QSharedPointer<BaseContact> lct = i->wt;
+      QSharedPointer<BaseContact> lct = i.wt;
       // we need to test for "in dump"
 
       int serials = lct->serials.getValue().toInt();
@@ -1035,9 +1035,9 @@ bool LoggerContestLog::exportADIF(QSharedPointer<QFile> expfd )
       MinosParameters::getMinosParameters() ->mshowMessage( tr("bad reply from write!") );
    }
 
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      QSharedPointer<BaseContact> lct = i->wt;
+      QSharedPointer<BaseContact> lct = i.wt;
       QString l = lct ->getADIFLine();
       if ( l.size() )
       {
@@ -1152,9 +1152,9 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
    typedef QMap <QString, cmap> smap;       // map by prefix
    smap countries;
 
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      QSharedPointer<BaseContact> ct = i->wt;
+      QSharedPointer<BaseContact> ct = i.wt;
       if ( ct->ctryMult )
       {
          ( countries[ ct->ctryMult->basePrefix ] ) [ ct->cs.getFullCall() ] = ct;

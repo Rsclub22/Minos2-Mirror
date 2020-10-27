@@ -260,11 +260,11 @@ void TLogContainer::closeEvent(QCloseEvent *event)
 
     MinosConfig::getMinosConfig() ->askStop();
 
-    for ( ListSlotIterator i = TContestApp::getContestApp() ->listSlotList.begin(); i != TContestApp::getContestApp() ->listSlotList.end(); i++ )
+    for ( auto const &l: TContestApp::getContestApp() ->listSlotList )
     {
-       if ( ( *i ) )
+       if ( l )
        {
-          TContestApp::getContestApp() ->closeListFile( ( *i ) ->slot );
+          TContestApp::getContestApp() ->closeListFile( l->slot );
        }
     }
     trace("closeEvent:List slots closed");
@@ -417,7 +417,7 @@ void TLogContainer::setupMenus()
     QString currentLang = getCurrentLanguage();
 
     QVector<Translation> languages = getLanguages();
-    foreach(const Translation &l, languages)
+    for(auto const &l: languages)
     {
         QAction *act =  new QAction(this);
         act->setText(l.dispName);
@@ -869,9 +869,8 @@ void TLogContainer::FileOpenActionExecute()
                        InitialDir,  // dir
                        Filter
                        );
-    for (int i = 0; i < fnames.size(); i++)
+    for (auto const &fname: fnames)
     {
-        QString fname = fnames[i];
         BaseContestLog *ct = nullptr;
         if ( !fname.isEmpty() )
         {
@@ -1192,7 +1191,7 @@ void TLogContainer::FontEditAcceptActionExecute()
             bool serverRunning = checkServerReady();
             QApplication::setFont( f );
 
-            foreach ( QWidget * widget, QApplication::allWidgets() )
+            for ( auto const &widget: QApplication::allWidgets() )
             {
                 widget->setFont(f);
                 widget->update();
@@ -1225,7 +1224,7 @@ void TLogContainer::LanguageAcceptActionExecute()
         QString selText = action->text();
 
         QVector<Translation> languages = getLanguages();
-        foreach(const Translation &l, languages)
+        for(auto const &l: languages)
         {
             if (l.dispName == selText)
             {
@@ -1640,11 +1639,11 @@ QStringList TLogContainer::getSessions()
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
     QStringList newSessionList;
     sessionlst.sort();
-    for (int i = 0; i < sessionlst.size(); ++i)
+    for (auto const &s: sessionlst)
     {
-        if (sessionlst[i] != app ->logsPreloadBundle.noneBundle && sessionlst[i] != app->preloadsect)
+        if (s != app ->logsPreloadBundle.noneBundle && s!= app->preloadsect)
         {
-            newSessionList.append(sessionlst[i]);
+            newSessionList.append(s);
         }
     }
     return newSessionList;
@@ -1672,16 +1671,16 @@ void TLogContainer::updateLayoutsMenu()
         ScreenConfigFile scf;
         scf.loadFile(false, this);
         int j = 0;
-        for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+        for(auto const &c: scf.configs )
         {
             QAction *act =  new QAction(this);
-            if ((*i).name == defaultLayout)
+            if (c.name == defaultLayout)
             {
-                act->setText((*i).name + " " + ScreenConfigManager::tr(ScreenConfigManager::defLayoutText));
+                act->setText(c.name + " " + ScreenConfigManager::tr(ScreenConfigManager::defLayoutText));
             }
             else
             {
-                act->setText((*i).name);
+                act->setText(c.name);
             }
             connect(act, SIGNAL(triggered()),
                     this, SLOT(selectLayout()));
@@ -1689,7 +1688,7 @@ void TLogContainer::updateLayoutsMenu()
 
             screenLayoutMenu->addAction(act);
 
-            if ((*i).name == currentLayout)
+            if (c.name == currentLayout)
             {
                 act->setChecked(true);
                 lastLayoutSelected = act;
@@ -1752,18 +1751,18 @@ void TLogContainer::updateSessionActions()
 
     sessionManagerAction  = newAction(QT_TR_NOOP("&Manage Contest Sets..."), sessionsMenu, SLOT(sessionManageExecute()));
     QStringList sessionlst = getSessions();
-    for (int i = 0; i < sessionlst.size(); ++i)
+    for (auto const &s: sessionlst)
     {
-        if (sessionlst[i] == app->preloadsect)
+        if (s == app->preloadsect)
         {
             continue;
         }
         QAction *act =  new QAction(this);
-        act->setText(sessionlst[i]);
+        act->setText(s);
         connect(act, SIGNAL(triggered()),
                 this, SLOT(selectSession()));
         act->setCheckable(true);
-        if (sessionlst[i] == app->currSession)
+        if (s == app->currSession)
         {
             if (lastSessionSelected)
                 lastSessionSelected->setChecked(false);
@@ -1858,11 +1857,11 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     if (slotlst.count())
     {
         QStringList pathlst;
-        for ( int i = 0; i < slotlst.count(); i++ )
+        for ( auto const &s: slotlst )
         {
             // get each value
             QString ent;
-            preloadBundle.getStringProfile( slotlst[i], ent, "" );
+            preloadBundle.getStringProfile( s, ent, "" );
             pathlst.append( ent );
         }
         int curSlot = 0;
@@ -2057,9 +2056,8 @@ void TLogContainer::doListOpenActionExecute(QWidget *p)
                        Filter
                        );
 
-    for (int i = 0; i < fnames.size(); i++)
+    for (auto const &fname: fnames)
     {
-         QString fname = fnames[i];
          addListSlot( p, fname, -1, false );
     }
 }

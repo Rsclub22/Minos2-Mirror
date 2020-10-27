@@ -8,13 +8,13 @@ RigCache::RigCache()
 
 void RigCache::invalidate()
 {
-    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    for(auto &i: rigStates )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
+    for(auto &i: rigDetails )
     {
-        i->setDirty();
+        i.setDirty();
     }
 }
 void RigCache::invalidate(const PubSubName &name)
@@ -56,7 +56,7 @@ void RigCache::addRigList(const QString &s)
         PubSubName lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRigList;
 
-        foreach(PubSubName psn, rigList)
+        for(auto const &psn: rigList)
         {
             if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
                 newRigList.push_back(psn);
@@ -64,7 +64,7 @@ void RigCache::addRigList(const QString &s)
         rigList = newRigList;
 
     }
-    foreach(QString l, list)
+    for(auto const &l: list)
     {
         // add all of the list to rig list
         PubSubName psn(l);
@@ -101,7 +101,7 @@ void RigCache::addRigList(const QString &s)
         }
         rigStates = newstates;
     }
-    foreach(PubSubName psn, rigList)
+    for(auto const &psn: rigList)
     {
         if (!rigDetails.contains(psn))
         {

@@ -106,28 +106,28 @@ void commonPort::registerMonitor( lineMonitor *k )
 //==============================================================================
 void commonPort::pttChanged( int state )
 {
-   for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
-      ( *l ) ->pttChanged( state );
+   for ( auto const &l: monitors )
+      l ->pttChanged( state );
 }
 void commonPort::L1Changed( int state )
 {
-   for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
-      ( *l ) ->L1Changed( state );
+    for ( auto const &l: monitors )
+      l->L1Changed( state );
 }
 void commonPort::L2Changed( int state )
 {
-   for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
-      ( *l ) ->L2Changed( state );
+    for ( auto const &l: monitors )
+      l->L2Changed( state );
 }
 void commonPort::linesModeChanged( int state )
 {
-   for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
-      ( *l ) ->linesModeChanged( state );
+    for ( auto const &l: monitors )
+      l->linesModeChanged( state );
 }
 void commonPort::transverterSwitchChanged(int s)
 {
-    for ( my_deque < lineMonitor * >::iterator l = monitors.begin(); l != monitors.end(); l++ )
-       ( *l ) ->transverterSwitchChanged( s );
+    for ( auto const &l: monitors )
+       l->transverterSwitchChanged( s );
 }
 //=============================================================================
 LineCallBack WindowsMonitorPort::WinLineCallback = nullptr;

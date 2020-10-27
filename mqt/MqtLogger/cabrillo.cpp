@@ -336,7 +336,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     int nvalid = 0;      // valid QSOs
     int nlines = 0;      // QSO records
-    foreach(MapWrapper<BaseContact> dct, ct->ctList)
+    for(auto const &dct: ct->ctList)
     {
        QSharedPointer<BaseContact> cct = dct.wt;
        // Extract comments for "Remarks" section
@@ -400,20 +400,20 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
 
     linelist[ static_cast< int> (PClaimedScore) ] = cabrilloLine( "CLAIMED-SCORE", QString::number( ct->contestScore * ct->bandPointsMultiplier.getValue() * ltot + bonus ) ); /*, "Claimed total score"*/
 
-    for ( int i = 0; i < LineCount; i++ )
+    for ( auto const &l: linelist )
     {
-       sprintf( lbuff, "%s: %s", linelist[ i ].prefix.toStdString().c_str(), linelist[ i ].data.toStdString().c_str() );
+       sprintf( lbuff, "%s: %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
        wr.lwrite( lbuff );
     }
 
-    for ( int i = 0; i < remarks.size(); i++ )
+    for ( auto const &r: remarks )
     {
-       wr.lwrite( "SOAPBOX: " + remarks[ i ] );
+       wr.lwrite( "SOAPBOX: " + r);
     }
 
     // and then the contact list
 
-    foreach(MapWrapper<BaseContact> dct, ct->ctList)
+    for(auto const &dct: ct->ctList)
     {
         QSharedPointer<BaseContact> cct = dct.wt;
 

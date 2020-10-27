@@ -29,7 +29,7 @@ QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
 
 AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 {
-    foreach(const AuxTypeOption &opt, auxoptions)
+    for(auto const &opt: auxoptions)
     {
         if (tr(opt.s) == s || (opt.s == s))
             return opt.type;
@@ -39,7 +39,7 @@ AuxEntries StackedInfoFrame::getAuxEntryType(QString s)
 
 const char * StackedInfoFrame::getRawAuxTypeString(AuxEntries t)
 {
-    foreach(const AuxTypeOption &opt, auxoptions)
+    for(auto const &opt: auxoptions)
     {
         if (opt.type == t)
             return opt.s;
@@ -65,7 +65,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
     ui->infoCombo->clear();
     int i = 0;
-    foreach(const AuxTypeOption &opt, auxoptions)
+    for(auto const &opt: auxoptions)
     {
         ui->infoCombo->addItem(tr(opt.s), opt.type);
         ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );

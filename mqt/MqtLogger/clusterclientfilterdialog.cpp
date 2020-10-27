@@ -882,7 +882,7 @@ void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
     //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
     //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     callsignListWidget->clear();
-    foreach (QString str, filterSettings.unpackFilterList(filterSettings.callsignFilterList))
+    for (auto const &str: filterSettings.unpackFilterList(filterSettings.callsignFilterList))
     {
         callsignListWidget->addItem(str);
     }
@@ -1061,7 +1061,7 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
     //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
     //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     locatorListWidget->clear();
-    foreach (QString str, filterSettings.unpackFilterList( filterSettings.locatorFilterList))
+    for(auto const &str: filterSettings.unpackFilterList( filterSettings.locatorFilterList))
     {
         locatorListWidget->addItem(str);
     }

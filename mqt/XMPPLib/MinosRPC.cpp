@@ -45,13 +45,12 @@ void MinosRPC::on_connectedTimeout()
     {
         RPCPubSub::initialisePubSub( new TRPCCallback <MinosRPC> ( this, &MinosRPC::notifyCallback ) );
 
-        QPair<QString, QString> p;
-        foreach (p, remoteSubscriptions)
+        for (auto const &p: remoteSubscriptions)
         {
             RPCPubSub::subscribeRemote( p.first, p.second );
         }
 
-        foreach (QString c, subscriptions)
+        for (auto const &c: subscriptions)
         {
             RPCPubSub::subscribe( c );
         }

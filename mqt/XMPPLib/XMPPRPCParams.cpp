@@ -18,13 +18,13 @@ RPCParam::RPCParam()
 {}
 RPCParam::~RPCParam()
 {}
-void RPCParam::addParam( TiXmlElement &node )
+void RPCParam::addParam( TiXmlElement &node ) const
 {
    TiXmlElement paramNode( "param" );
    addValue( paramNode );
    node.InsertEndChild( paramNode );
 }
-void RPCParam::addValue( TiXmlElement &node )
+void RPCParam::addValue( TiXmlElement &node ) const
 {
    TiXmlElement valueNode( "value" );
    addNode( valueNode );
@@ -78,43 +78,43 @@ void RPCParam::addValue( TiXmlElement &node )
                         }
    return QSharedPointer<RPCParam>();
 }
-bool RPCParam::getBoolean( bool & )
+bool RPCParam::getBoolean( bool & ) const
 {
    return false;
 }
-bool RPCParam::getInt( int & )
+bool RPCParam::getInt( int & ) const
 {
    return false;
 }
-bool RPCParam::getDouble( double & )
+bool RPCParam::getDouble( double & ) const
 {
    return false;
 }
-bool RPCParam::getString( QString & )
+bool RPCParam::getString( QString & ) const
 {
    return false;
 }
-bool RPCParam::getBase64( QString & )
+bool RPCParam::getBase64( QString & ) const
 {
    return false;
 }
-bool RPCParam::getDtg( QString & )
+bool RPCParam::getDtg( QString & ) const
 {
    return false;
 }
-bool RPCParam::getMember( const QString &, QSharedPointer<RPCParam>& )
+bool RPCParam::getMember( const QString &, QSharedPointer<RPCParam>& ) const
 {
    return false;
 }
-bool RPCParam::getMember(int , QSharedPointer<RPCParam>& )
+bool RPCParam::getMember(int , QSharedPointer<RPCParam>& ) const
 {
    return false;
 }
-bool RPCParam::getElements( int & )
+bool RPCParam::getElements( int & ) const
 {
    return false;
 }
-bool RPCParam::getElement(int , QSharedPointer<RPCParam>& )
+bool RPCParam::getElement(int , QSharedPointer<RPCParam>& ) const
 {
    return false;
 }
@@ -218,7 +218,7 @@ void RPCParamStruct::addDtgMember( const QString &v, const QString &mname )
    addMember( QSharedPointer<RPCParam>(new RPCDtgParam( v )), mname );
 }
 
-void RPCParamStruct::addNode( TiXmlElement &node )
+void RPCParamStruct::addNode( TiXmlElement &node ) const
 {
    // struct
    // member
@@ -226,39 +226,39 @@ void RPCParamStruct::addNode( TiXmlElement &node )
 
    // value as for individual
    TiXmlElement sNode( "struct" );
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
       TiXmlElement mNode( "member" );
       TiXmlElement nNode( "name" );
-      TiXmlText tNode( ( *i ) ->name.toStdString() );
+      TiXmlText tNode( i->name.toStdString() );
       nNode.InsertEndChild( tNode );
       mNode.InsertEndChild( nNode );
-      ( *i ) ->addValue( mNode );
+      i->addValue( mNode );
       sNode.InsertEndChild( mNode );
    }
    node.InsertEndChild( sNode );
 
 }
-QString RPCParamStruct::print()
+QString RPCParamStruct::print() const
 {
    QString s = "Struct\r\n";
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
-      s += "Member name " + ( *i ) ->name + "\r\n";
-      s += ( *i ) ->print();
+      s += "Member name " + i->name + "\r\n";
+      s += i->print();
    }
    s += "End Struct\r\n";
    return s;
 }
-QString RPCParamStruct::analyse()
+QString RPCParamStruct::analyse() const
 {
    QString s;
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
-      if (( *i ) ->name == "lseq" )
+      if (i->name == "lseq" )
       {
          int n = 0;
-         ( *i )->getInt(n);
+         i->getInt(n);
          QString s1 = QString::number(n/65536);
          QString s2 = (n & 0x8000)?" 1":" 0";
          QString s3 = (n & 0x4000)?" 1":" 0";
@@ -276,29 +276,29 @@ QString RPCParamStruct::analyse()
          QString s15 = (n & 0x0004)?" 1":" 0";
          QString s16 = (n & 0x0002)?" 1":" 0";
          QString s17 = (n & 0x0001)?" 1":" 0";
-         s += ( *i ) ->name + "<" + s1 + " : " + s2  + s3  + s4  + s5  + s6  + s7  + s8  + s9  + s10 + s11 + s12  + s13  + s14  + s15  + s16  + s17 + " (" +  ( *i ) ->analyse() + ")> ";
+         s += i->name + "<" + s1 + " : " + s2  + s3  + s4  + s5  + s6  + s7  + s8  + s9  + s10 + s11 + s12  + s13  + s14  + s15  + s16  + s17 + " (" +  i->analyse() + ")> ";
       }
       else
       {
-         s += ( *i ) ->name + "<" + ( *i ) ->analyse() + "> ";
+         s += i->name + "<" + i->analyse() + "> ";
       }
    }
    return s;
 }
 
-bool RPCParamStruct::getMember( const QString &mname, QSharedPointer<RPCParam>&p )
+bool RPCParamStruct::getMember( const QString &mname, QSharedPointer<RPCParam>&p ) const
 {
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+    for ( auto const &i: elements )
    {
-      if ( ( *i ) ->name == mname )
+      if ( i->name == mname )
       {
-         p = ( *i );
+         p = i;
          return true;
       }
    }
    return false;
 }
-bool RPCParamStruct::getMember( int eleno, QSharedPointer<RPCParam>&p )
+bool RPCParamStruct::getMember( int eleno, QSharedPointer<RPCParam>&p ) const
 {
    if ( eleno < elements.size() )
    {
@@ -307,12 +307,12 @@ bool RPCParamStruct::getMember( int eleno, QSharedPointer<RPCParam>&p )
    }
    return false;
 }
-bool RPCParamStruct::getElements( int &size )
+bool RPCParamStruct::getElements( int &size ) const
 {
    size = elements.size();
    return true;
 }
-bool RPCParamStruct::getElement(int eleno, QSharedPointer<RPCParam>&p )
+bool RPCParamStruct::getElement(int eleno, QSharedPointer<RPCParam>&p ) const
 {
    if ( eleno < elements.size() )
    {
@@ -401,43 +401,43 @@ void RPCParamArray::AddDtgElement( const QString &v )
    addElement( QSharedPointer<RPCParam>(new RPCDtgParam( v )) );
 }
 
-void RPCParamArray::addNode( TiXmlElement &node )
+void RPCParamArray::addNode( TiXmlElement &node ) const
 {
    TiXmlElement aNode( "array" );
    TiXmlElement dNode( "data" );
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
-      ( *i ) ->addValue( dNode );
+      i->addValue( dNode );
    }
    aNode.InsertEndChild( dNode );
    node.InsertEndChild( aNode );
 }
-QString RPCParamArray::print()
+QString RPCParamArray::print() const
 {
    QString s = "Array\r\n";
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
-      s += ( *i ) ->print();
+      s += i->print();
    }
    s += "End Array\r\n";
    return s;
 }
-QString RPCParamArray::analyse()
+QString RPCParamArray::analyse() const
 {
    QString s = "[";
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = elements.begin(); i != elements.end(); i++ )
+   for ( auto const &i: elements )
    {
-      s += ( *i ) ->analyse();
+      s += i->analyse();
    }
    s += "]";
    return s;
 }
-bool RPCParamArray::getElements(int &size )
+bool RPCParamArray::getElements(int &size ) const
 {
    size = elements.size();
    return true;
 }
-bool RPCParamArray::getElement(int eleno, QSharedPointer<RPCParam> &p )
+bool RPCParamArray::getElement(int eleno, QSharedPointer<RPCParam> &p ) const
 {
    if ( elements.size() > eleno )
    {
@@ -463,7 +463,7 @@ RPCIntParam::RPCIntParam( TiXmlElement &aNode )
 }
 RPCIntParam::~RPCIntParam()
 {}
-void RPCIntParam::addNode( TiXmlElement &node )
+void RPCIntParam::addNode( TiXmlElement &node ) const
 {
    char buff[ 40 ];
    sprintf( buff, "%d", value );
@@ -472,19 +472,19 @@ void RPCIntParam::addNode( TiXmlElement &node )
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
-QString RPCIntParam::print()
+QString RPCIntParam::print() const
 {
    char buff[ 128 ];
    sprintf( buff, "Integer value %d\r\n", value );
    return QString( buff );
 }
-QString RPCIntParam::analyse()
+QString RPCIntParam::analyse() const
 {
    char buff[ 128 ];
    sprintf( buff, "%d", value );
    return QString( buff );
 }
-bool RPCIntParam::getInt( int &res )
+bool RPCIntParam::getInt( int &res ) const
 {
    res = value;
    return true;
@@ -506,7 +506,7 @@ RPCBooleanParam::RPCBooleanParam( TiXmlElement &aNode )
 }
 RPCBooleanParam::~RPCBooleanParam()
 {}
-void RPCBooleanParam::addNode( TiXmlElement &node )
+void RPCBooleanParam::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "boolean" );
    TiXmlText tNode( value ? "1" : "0" );
@@ -514,19 +514,19 @@ void RPCBooleanParam::addNode( TiXmlElement &node )
    node.InsertEndChild( vNode );
 
 }
-QString RPCBooleanParam::print()
+QString RPCBooleanParam::print() const
 {
    if ( value )
       return "Boolean value true\r\n";
    return "Boolean value false\r\n";
 }
-QString RPCBooleanParam::analyse()
+QString RPCBooleanParam::analyse() const
 {
    if ( value )
       return "true";
    return "false";
 }
-bool RPCBooleanParam::getBoolean( bool &res )
+bool RPCBooleanParam::getBoolean( bool &res ) const
 {
    res = value;
    return true;
@@ -549,7 +549,7 @@ RPCDoubleParam::RPCDoubleParam( TiXmlElement &aNode )
 }
 RPCDoubleParam::~RPCDoubleParam()
 {}
-void RPCDoubleParam::addNode( TiXmlElement &node )
+void RPCDoubleParam::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "double" );
    char buff[ 40 ];
@@ -558,19 +558,19 @@ void RPCDoubleParam::addNode( TiXmlElement &node )
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
-QString RPCDoubleParam::print()
+QString RPCDoubleParam::print() const
 {
    char buff[ 128 ];
    sprintf( buff, "double value %f\r\n", value );
    return QString( buff );
 }
-QString RPCDoubleParam::analyse()
+QString RPCDoubleParam::analyse() const
 {
    char buff[ 128 ];
    sprintf( buff, "%f", value );
    return QString( buff );
 }
-bool RPCDoubleParam::getDouble( double &res )
+bool RPCDoubleParam::getDouble( double &res ) const
 {
    res = value;
    return true;
@@ -592,7 +592,7 @@ RPCStringParam::RPCStringParam( TiXmlElement &aNode )
 }
 RPCStringParam::~RPCStringParam()
 {}
-void RPCStringParam::addNode( TiXmlElement &node )
+void RPCStringParam::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "string" );
 
@@ -600,16 +600,16 @@ void RPCStringParam::addNode( TiXmlElement &node )
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
-QString RPCStringParam::print()
+QString RPCStringParam::print() const
 {
    QString p = "String value \"" + value + "\"\r\n";
    return p;
 }
-QString RPCStringParam::analyse()
+QString RPCStringParam::analyse() const
 {
    return "'" + value + "'";
 }
-bool RPCStringParam::getString( QString &res )
+bool RPCStringParam::getString( QString &res ) const
 {
    res = value;
    return true;
@@ -631,22 +631,22 @@ RPCDtgParam::RPCDtgParam( TiXmlElement &aNode )
 }
 RPCDtgParam::~RPCDtgParam()
 {}
-void RPCDtgParam::addNode( TiXmlElement &node )
+void RPCDtgParam::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "dateTime.iso8601" );
    TiXmlText tNode( value.toStdString() );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
-QString RPCDtgParam::print()
+QString RPCDtgParam::print() const
 {
    return "dateTime.iso8601 value \"" + value + "\"\r\n";
 }
-QString RPCDtgParam::analyse()
+QString RPCDtgParam::analyse() const
 {
    return value;
 }
-bool RPCDtgParam::getDtg( QString &res )
+bool RPCDtgParam::getDtg( QString &res ) const
 {
    res = value;
    return true;
@@ -677,22 +677,22 @@ RPCBase64Param::RPCBase64Param( TiXmlElement &aNode )
 }
 RPCBase64Param::~RPCBase64Param()
 {}
-void RPCBase64Param::addNode( TiXmlElement &node )
+void RPCBase64Param::addNode( TiXmlElement &node ) const
 {
    TiXmlElement vNode( "base64" );
    TiXmlText tNode( value.toStdString() );
    vNode.InsertEndChild( tNode );
    node.InsertEndChild( vNode );
 }
-QString RPCBase64Param::print()
+QString RPCBase64Param::print() const
 {
    return "Base64 value \"" + value + "\"\r\n";
 }
-QString RPCBase64Param::analyse()
+QString RPCBase64Param::analyse() const
 {
    return value;
 }
-bool RPCBase64Param::getBase64( QString &res )
+bool RPCBase64Param::getBase64( QString &res ) const
 {
    res = value;
    return true;
@@ -742,9 +742,9 @@ TiXmlElement *RPCArgs::makeParamsNode( )
 {
    TiXmlElement * pNode = new TiXmlElement( "params" );
 
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = args.begin(); i != args.end(); i++ )
+   for ( auto const &i: args )
    {
-      ( *i ) ->addParam( *pNode );
+      i->addParam( *pNode );
    }
 
    return pNode;
@@ -827,9 +827,9 @@ QString RPCArgs::PrintArgs()
 {
    QString s;
 
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = args.begin(); i != args.end(); i++ )
+   for ( auto const &i: args )
    {
-      s += ( *i ) ->print();
+      s += i->print();
    }
    return s;
 }
