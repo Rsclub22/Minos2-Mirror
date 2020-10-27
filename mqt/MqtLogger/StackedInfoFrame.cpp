@@ -78,6 +78,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateStats(BaseContestLog*)), this, SLOT(onUpdateStats(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(UpdateMemories(BaseContestLog*)), this, SLOT(onUpdateMemories(BaseContestLog*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(BaseContestLog *)), this, SLOT(onRefreshStackMults(BaseContestLog *)));
+
+    connect(&MinosLoggerEvents::mle, SIGNAL(clearContestInFrame(BaseContestLog *)), this, SLOT(clearContestInFrame(BaseContestLog *)));
 }
 
 StackedInfoFrame::~StackedInfoFrame()
@@ -217,6 +219,13 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
         }
     }
 }
+void StackedInfoFrame::clearContestInFrame(BaseContestLog *ct)
+{
+    if (contest == ct)
+    {
+        setContest(nullptr);
+    }
+}
 void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *c )
 {
     if (contest && contest == c && districtFrame)
@@ -224,8 +233,7 @@ void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *
         QSharedPointer<DistrictEntry> dist = MultLists::getMultLists() ->searchDistrict( qth );
         if ( dist )
         {
-            int district_ind = MultLists::getMultLists() ->getDistListIndexOf( dist );
-           districtFrame->scrollToDistrict( district_ind, true );
+           districtFrame->scrollToDistrict( dist->districtCode, true );
         }
     }
 }
@@ -234,14 +242,13 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
 {
     if (contest && contest == c && dxccFrame)
     {
-        Callsign cs( csCs );
-        cs.validate( );	// we don't use the result
+        Callsign cs;
+        cs.setFullCall( csCs );
 
         QSharedPointer<CountryEntry> ctryMult = findCtryPrefix( cs );
         if ( ctryMult )
         {
-           int ctry_ind = MultLists::getMultLists() ->getCtryListIndexOf( ctryMult );
-           dxccFrame->scrollToCountry( ctry_ind, true );
+           dxccFrame->scrollToCountry( ctryMult->basePrefix, true );
         }
     }
 }

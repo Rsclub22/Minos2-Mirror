@@ -129,6 +129,12 @@ esac
 if [ ! -d .~/runtime ]; then
    mkdir ~/runtime
 fi
+if [ ! -d ~/runtime/Logs ]; then
+   mkdir ~/runtime/Logs
+fi
+if [ ! -d ~/runtime/Lists ]; then
+   mkdir ~/runtime/Lists
+fi
 cp -rv Bin ~/runtime
 cp *.ico ~/runtime
 cp runAppStarter.sh ~/runtime

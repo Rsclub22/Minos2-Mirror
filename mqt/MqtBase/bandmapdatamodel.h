@@ -52,6 +52,8 @@ public:
 
     QSharedPointer<BandmapSpotData> getSpotData(int row){return bandmapData[row];};
 
+    void sortModel();
+
 private:
 
     QVector< QSharedPointer<BandmapSpotData>>  bandmapData;

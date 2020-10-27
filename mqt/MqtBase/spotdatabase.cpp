@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-
+#include "base_pch.h"
 #include "spotdatabase.h"
 
 
@@ -53,7 +53,6 @@ void SpotdataBase::clear()
     modeMask.clear();
     freq.clear();
     dxCall = Callsign();
-    dxCall.validate();
     dxCallValidateCode = 0;
     dxLocator.clear();
     spotterCall = Callsign();

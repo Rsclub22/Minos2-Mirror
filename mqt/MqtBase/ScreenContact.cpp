@@ -26,6 +26,11 @@ void ScreenContact::initialise( BaseContestLog *ct )
     loc = Locator();
     time = dtg( false );
 
+    if (!ct)
+    {
+        return;
+    }
+
     BaseContestLog * clp = ct;
 
     int ms = 0;
@@ -121,14 +126,12 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 {
     logSequence = cct->getLogSequence();
     loc = cct->loc;
-    loc.validate();
-    loc.loc.clearDirty();
+    loc.clearDirty();
 
     extraText = cct->extraText.getValue();
 
     cs = cct->cs;
-    cs.fullCall.clearDirty();
-    cs.validate();
+    cs.clearDirty();
 
     time = cct->time;
     time.clearDirty();
@@ -172,14 +175,12 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 {
     //   logSequence = cct.logSequence; // don't copy between partial and screen contacts.
     loc = cct.loc;
-    loc.validate();
-    loc.loc.clearDirty();
+    loc.clearDirty();
 
     extraText = cct.extraText;
 
     cs = cct.cs;
-    cs.fullCall.clearDirty();
-    cs.validate();
+    cs.clearDirty();
 
     time = cct.time;
     time.clearDirty();
@@ -234,8 +235,8 @@ void ScreenContact::checkScreenContact( )
         return ;
 
     screenQSOValid = false;             // initially, anyway
-    // cs HAS been validated in TGJVEditFrame::contactValid
-    int csret = cs.validate( );
+
+    int csret = cs.getValRes();
     if ( csret != CS_OK && csret != ERR_DUPCS)
         checkret = ERR_13;
 
@@ -245,7 +246,7 @@ void ScreenContact::checkScreenContact( )
         unsigned long valp = clp->validationPoint;
         if ( clp->DupSheet.checkCurDup( this, valp, false ) )
         {
-            cs.valRes = ERR_DUPCS;
+            cs.setValRes( ERR_DUPCS);
             checkret = ERR_12;
         }
     }
@@ -331,7 +332,7 @@ void ScreenContact::score()
 {
     // check shouldalready have run
 
-    QString gridref = loc.loc.getValue().trimmed();
+    QString gridref = loc.getLoc().trimmed();
     if (gridref.isEmpty())
         return;
 
@@ -349,7 +350,7 @@ void ScreenContact::score()
 
         if ( districtMult && districtMult->country1)
         {
-           int n = contest->getDistrictsWorked(band, districtMult->listOffset) + 1;
+           int n = contest->getDistrictsWorked(band, districtMult->districtCode) + 1;
            if ( n < districtMult->country1->districtLimit() )
           if ( contest->districtMult.getValue() )
           {
@@ -360,7 +361,7 @@ void ScreenContact::score()
 
         if ( ctryMult)
         {
-            int n = contest->getCountriesWorked(band, ctryMult->listOffset);
+            int n = contest->getCountriesWorked(band, ctryMult->basePrefix);
             if ( n == 1 )
             {
                 if (!contest->nonGCountryMult.getValue() || !cs.isUK())
@@ -412,13 +413,13 @@ void ScreenContact::score()
             int brg = 0;
             if (contest->MGMContestRules.getValue())
             {
-                 dist = contest->CalcCentres ( loc.loc.getValue(), brg );
+                 dist = contest->CalcCentres ( loc.getLoc(), brg );
                  if ( almost_equal(dist, 1.0, 2))
                      dist = 50;  // MGM same square == 50 points
             }
-            else if ( loc.loc.getValue().size() == 4 && contest->allowLoc4.getValue() )
+            else if ( loc.getLoc().size() == 4 && contest->allowLoc4.getValue() )
             {
-               dist = contest->CalcNearest( loc.loc.getValue() ); // deal with 4 char locs
+               dist = contest->CalcNearest( loc.getLoc() ); // deal with 4 char locs
             }
             else
             {
@@ -456,7 +457,7 @@ void ScreenContact::score()
            QString letters;
            QString numbers;
 
-           QString sloc = loc.loc.getValue().mid(0, 4);
+           QString sloc = loc.getLoc().mid(0, 4);
 
            letters = sloc.left(2);
            numbers = sloc.mid(2, 2);

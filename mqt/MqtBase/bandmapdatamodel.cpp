@@ -422,6 +422,24 @@ QSharedPointer<BandmapSpotData> BandmapDataModel::getBandmapDataRow(int row)
     return bandmapData[row];
 }
 
+void BandmapDataModel::sortModel()
+{
+    beginResetModel();
+
+    std::sort(bandmapData.begin(), bandmapData.end(),
+              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
+                {
+                    if (a->getFreq() == b->getFreq())
+                    {
+                        return a->getDxCall() < b->getDxCall();
+                    }
+                    return a->getFreq() < b->getFreq();
+                }
+    );
+
+    endResetModel();
+}
+
 BandmapSortFilterProxyModel::BandmapSortFilterProxyModel(QObject *parent):
     QSortFilterProxyModel(parent)
 {}
@@ -479,13 +497,13 @@ bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
 
     Frequency ws1;
     Frequency ws2;
-    ws1 = qvariant_cast<Frequency>(sourceModel()->data(left, BMP_DataStoredRole));
-    ws2 = qvariant_cast<Frequency>(sourceModel()->data(right, BMP_DataStoredRole));
+    ws1 = qvariant_cast<Frequency>(cgm->data(left, BMP_DataStoredRole));
+    ws2 = qvariant_cast<Frequency>(cgm->data(right, BMP_DataStoredRole));
 
     if (ws1 == ws2)
     {
-        QString ss1 = sourceModel()->data(createIndex(lrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-        QString ss2 = sourceModel()->data(createIndex(rrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+        QString ss1 = cgm->data(createIndex(lrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+        QString ss2 = cgm->data(createIndex(rrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
         return ss1 < ss2;
     }
     else

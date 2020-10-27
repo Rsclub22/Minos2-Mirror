@@ -386,85 +386,101 @@ void TSingleLogFrame::createScreenComponents()
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 }
-void TSingleLogFrame::clearSplitter(MinosSplitter *s)
-{
-    while(s && s->count())
-    {
-        QWidget *w = s->widget(0);
-        MinosSplitter *ws = dynamic_cast<MinosSplitter *>(w);
-
-        if (ws)
-        {
-            clearSplitter(ws);
-            ws->setParent(nullptr);
-            ws->deleteLater();
-        }
-        else
-        {
-            // normal components - keep them built, but out of the way (not shown)
-            // A lot ofthe code relies on them existing
-            // aux components - delete them, and recreate them as necessary
-
-            // but get rid of any scroll area "wrappers".
-
-            w->hide();
-            w->setParent(this);
-
-            QScrollArea *qsa = dynamic_cast<QScrollArea *>(w);
-            if (qsa)
-            {
-                QWidget *tw = qsa->takeWidget();
-                qsa->deleteLater();
-                if (tw)
-                {
-                    tw->hide();
-                    tw->setParent(this);
-                    StackedInfoFrame *aux = dynamic_cast<StackedInfoFrame *>(tw);
-                    if (aux)
-                    {
-                        aux->setContest(nullptr);
-                        aux->deleteLater();
-                    }
-                }
-            }
-        }
-    }
-
-}
 void TSingleLogFrame::clearScreenLayout()
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
+
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     QString msg = ct->name.getValue() + " uuid " + ct->uuid;
     traceMsg("clearScreenLayout starts for " + msg);
 
+    qsoModel.initialise(nullptr);
+
     FKHRigControlFrame->setContest(nullptr);
+    runButtonsFrame->setContest(nullptr);
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
+    // CribSheet
+    // NextContactDetailsLabel
+    // CurrentBandLabel
+    GJVQSOLogFrame->initialise(nullptr);
     thisMatchFrame->setContest(nullptr);
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
+    //chatFrame
+    wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     setClusterClientLoaded(false);
     bandmapControlFrame->setContest(nullptr);
     setBandmapLoaded(false);
-    wsjtxFrame->setContest(nullptr);
-    runButtonsFrame->setContest(nullptr);
-    rotPresets->setContest(nullptr);
 
-    traceMsg("clearScreenLayout start clearance for " + msg);
-//    if (!LogContainer->isLoggerClosing())
+    // we need to setContest(nullptr) on all aux frames
+    MinosLoggerEvents::SendClearContestInFrame(ct);
+
+    if (LogContainer->isLoggerClosing())
     {
-        while (singleLogFrameSplitter->count())
+        // do nothing more...
+    }
+    else
+    {
+        QSOTable->setParent(this);
+        QSOTable->hide();
+
+        FKHRigControlFrame->setParent(this);
+        FKHRigControlFrame->hide();
+
+        runButtonsFrame->setParent(this);
+        runButtonsFrame->hide();
+
+        FKHRotControlFrame->setParent(this);
+        FKHRotControlFrame->hide();
+
+        rotPresets->setParent(this);
+        rotPresets->hide();
+
+        CribSheet->setParent(this);
+        CribSheet->hide();
+
+        NextContactDetailsLabel->setParent(this);
+        NextContactDetailsLabel->hide();
+        CurrentBandLabel->setParent(this);
+        CurrentBandLabel->hide();
+
+        GJVQSOLogFrame->setParent(this);
+        GJVQSOLogFrame->hide();
+
+        thisMatchFrame->setParent(this);
+        thisMatchFrame->hide();
+
+        otherMatchFrame->setParent(this);
+        otherMatchFrame->hide();
+
+        archiveMatchFrame->setParent(this);
+        archiveMatchFrame->hide();
+
+        chatFrame->setParent(this);
+        chatFrame->hide();
+
+        wsjtxFrame->setParent(this);
+        wsjtxFrame->hide();
+
+        clusterControlFrame->setParent(this);
+        clusterControlFrame->hide();
+
+        bandmapControlFrame->setParent(this);
+        bandmapControlFrame->hide();
+
+        QWidget *s = singleLogFrameSplitter->widget(0);
+        while (s)
         {
-            MinosSplitter *s = dynamic_cast<MinosSplitter *>(singleLogFrameSplitter->widget(0));
-            clearSplitter(s);
             s->setParent(nullptr);
-            s->deleteLater();
+    //        s->deleteLater();
+            delete(s);
+            s = singleLogFrameSplitter->widget(0);
         }
         rowSplitters.clear();
-        update();
+
     }
     traceMsg("clearScreenLayout complete for " + msg);
 }
@@ -491,6 +507,7 @@ QString TSingleLogFrame::getCurScreenLayout() const
 
 void TSingleLogFrame::setCurScreenLayout(const QString &value)
 {
+    curScreenLayout = value;
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
@@ -584,6 +601,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctQSOEdit:
                 {
                     elementScrollArea->setWidget(GJVQSOLogFrame);
+                    GJVQSOLogFrame->initialise(ct);
                     GJVQSOLogFrame->setVisible(true);
                     break;
                 }
@@ -679,6 +697,7 @@ void TSingleLogFrame::buildScreenLayout()
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
+        ct->screenLayout.setValue(curConfigName);
         if ( !scf.configs.contains(curConfigName))
         {
             //we need to get the built in default
@@ -695,6 +714,9 @@ void TSingleLogFrame::buildScreenLayout()
         buildRow(sc.baseElement->rows[j], auxInstance, singleLogFrameSplitter);
 
     }
+    qsoModel.initialise(contest);
+    QSOTable->setModel(&qsoModel);
+
     // ALWAYS link the wsjt frame to the contest; then we can log
     // even without showing it
     wsjtxFrame->setContest(ct);
@@ -904,8 +926,8 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         if ( contest->isReadOnly() )
         {
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.fullCall.getValue() + "<br>"
-                                                  + contest->myloc.loc.getValue() + "<br>"
+                                                  + contest->mycall.getFullCall() + "<br>"
+                                                  + contest->myloc.getLoc() + "<br>"
                                                   + contest->location.getValue());
         }
         else
@@ -917,9 +939,9 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
                 locBuff = "<br>" + contest->location.getValue();
             }
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.fullCall.getValue() + "<br>"
+                                                  + contest->mycall.getFullCall() + "<br>"
                                                   + snBuff + "<br>"
-                                                  + contest->myloc.loc.getValue()
+                                                  + contest->myloc.getLoc()
                                                   + locBuff);
         }
     }
@@ -927,7 +949,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 void TSingleLogFrame::PublishTimerTimer(  )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
-   if ( ct && ct->isMinosFile() && !ct->isUnwriteable() && !ct->isProtected())
+   if ( ct && ct->isMinosFile() && !ct->isReadOnly())
    {
       int stanzaCount = contest->getCtStanzaCount();
       if ( lastStanzaCount != stanzaCount )
@@ -1911,7 +1933,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &f
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !ct->isProtected())
+        if (ct && !ct->isReadOnly())
         {
             // make sure log frame has correct name for radio
             if (radName != GJVQSOLogFrame->getRadioName())
@@ -1945,7 +1967,7 @@ void TSingleLogFrame::invalidateCacheOnDisconnect()
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !ct->isProtected())
+        if (ct && !ct->isReadOnly())
         {
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
         }
@@ -1958,7 +1980,7 @@ void TSingleLogFrame::sendSelectRotator(const QString &s)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-        if (ct && !contest->isProtected())
+        if (ct && !contest->isReadOnly())
         {
             // log frame doesn't record the antenna name
 

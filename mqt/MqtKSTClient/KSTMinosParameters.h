@@ -1,5 +1,5 @@
-#ifndef MONITORPARAMETERS_H
-#define MONITORPARAMETERS_H
+#ifndef KSTMINOSPARAMETERS_H
+#define KSTMINOSPARAMETERS_H
 #include "base_pch.h"
 
 class KSTMinosParameters : public MinosParametersAdapter
@@ -15,4 +15,4 @@ class KSTMinosParameters : public MinosParametersAdapter
       virtual void mshowMessage(const QString &mess, QWidget* Owner = nullptr ) override;
 };
 
-#endif // MONITORPARAMETERS_H
+#endif // KSTMINOSPARAMETERS_H

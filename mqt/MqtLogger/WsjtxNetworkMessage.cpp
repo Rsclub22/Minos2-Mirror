@@ -1,6 +1,7 @@
 #include "WsjtxNetworkMessage.hpp"
 
 #include <exception>
+#include <stdexcept>
 
 #include <QString>
 #include <QByteArray>

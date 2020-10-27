@@ -7,6 +7,21 @@
 extern QString RunLocal;
 extern QString ConnectServer;
 
+class MinosConfigEvents: public QObject
+{
+    Q_OBJECT
+public:
+    virtual ~MinosConfigEvents() override
+    {}
+    static MinosConfigEvents mce;
+
+signals:
+    void appStarted();
+
+public:
+    static void sendAppStarted();
+};
+
 class AppConfigElement
 {
 public:
@@ -92,6 +107,9 @@ class MinosConfig : public QObject
 {
     Q_OBJECT
 private:  	// User declarations
+
+    static MinosConfigEvents mce;
+
     static MinosConfig *thisDM;
     static QString getConfigIniName();
     MinosConfig();
@@ -109,7 +127,7 @@ private:  	// User declarations
 public:  		// User declarations
     static MinosConfig *getMinosConfig( );
 
-    ~MinosConfig();
+    virtual ~MinosConfig() override;
 
     static const char * appNone;
     static const char * appOther;

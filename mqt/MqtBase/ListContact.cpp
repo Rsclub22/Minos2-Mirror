@@ -19,10 +19,10 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
    switch ( ACol )
    {
       case egCall:
-         res = cs.fullCall.getValue();
+         res = cs.getFullCall();
          break;
       case egLoc:
-         res = loc.loc.getValue();
+         res = loc.getLoc();
          break;
       case egBrg:
          {
@@ -30,7 +30,7 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
             double lon = 0.0;
             double lat = 0.0;
 
-            int lres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+            int lres = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
             if ( lres == LOC_OK )
             {
                int brg;
@@ -56,7 +56,7 @@ QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) co
             int brg;
             double dist = 0.0;
 
-            if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+            if ( lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
             {
                curcon->disbeara( lon, lat, dist, brg );
             }

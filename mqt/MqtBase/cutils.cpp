@@ -118,20 +118,6 @@ int stricmpsp( const QString &s1, const QString &s2 )
    return sp1.compare(sp2, Qt::CaseInsensitive );
 }
 //============================================================
-int strcspn(const QString &s, const QString &chars)
-{
-    for (int i = 0; i < chars.length(); i++)
-    {
-        int p = s.indexOf(chars[i]);
-        if (p >= 0)
-        {
-            return p;
-        }
-    }
-    return -1;
-}
-
-//============================================================
 
 int placestr( QString &buff, const QString &str, int start, int len )
 {
@@ -259,7 +245,8 @@ int strnicmp( const QString &s1, const QString &s2, int len )
 QDateTime CanonicalToTDT(QString cdtg )
 {
    QDateTime d;
-   d = QDateTime::fromString(cdtg, "yyyyMMddHHmm" );
+   QString format("yyyyMMddHHmm");
+   d = QDateTime::fromString(cdtg, format );
    d.setTimeSpec(Qt::UTC);
    return d;
 

@@ -327,6 +327,13 @@ to</string>
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="protectionLabel">
+           <property name="text">
+            <string>Protection</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_15">
            <item>
             <widget class="QPushButton" name="bandmapMarkFreqPb">
@@ -550,6 +557,18 @@ to</string>
         <number>2</number>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
+        <property name="bottomMargin">
+         <number>3</number>
+        </property>
         <item>
          <widget class="QFrame" name="CallsignFrame">
           <layout class="QVBoxLayout" name="callsignLayout">
@@ -559,7 +578,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -591,7 +616,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -623,7 +654,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -658,7 +695,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -690,7 +733,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -722,7 +771,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>
@@ -754,7 +809,13 @@ to</string>
            <property name="leftMargin">
             <number>2</number>
            </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
            <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
             <number>2</number>
            </property>
            <item>

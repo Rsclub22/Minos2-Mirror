@@ -59,18 +59,19 @@ void DistrictFrame::reInitialiseDistricts()
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
         int sourceRow = index.row();
-        if (sourceRow == proxyModel.scrolledDistrict)
+        QString cd = MultLists::getMultLists() ->getDistList()[sourceRow]->districtCode;
+        if (cd == proxyModel.scrolledDistrict)
         {
             ui->DistrictTable->setCurrentIndex(proxyModel.index(i, 0));
         }
     }
 }
-void DistrictFrame::scrollToDistrict( int district_ind, bool makeVisible )
+void DistrictFrame::scrollToDistrict( const QString &cd, bool makeVisible )
 {
     if (makeVisible)
-        proxyModel.scrolledDistrict = district_ind;
+        proxyModel.scrolledDistrict = cd;
     else
-        proxyModel.scrolledDistrict = -1;
+        proxyModel.scrolledDistrict.clear();
    reInitialiseDistricts();
 }
 void DistrictFrame::on_sectionResized(int, int , int)
@@ -117,7 +118,10 @@ QVariant DistrictGridModel::data( const QModelIndex &index, int role ) const
     {
         QString disp;
         if (ct)
-            disp = MultLists::getMultLists() ->getDistListText( index.row(), DistrictTreeColumns[ index.column() ].fieldId, ct );
+        {
+            QString cd = MultLists::getMultLists() ->getDistList()[index.row()]->districtCode;
+            disp = MultLists::getMultLists() ->getDistListText( cd, DistrictTreeColumns[ index.column() ].fieldId, ct );
+        }
         return disp;
     }
     return QVariant();
@@ -152,7 +156,7 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
 
 QModelIndex DistrictGridModel::index( int row, int column, const QModelIndex &/*parent*/) const
 {
-    if ( row < 0 || row >= rowCount()  )
+    if ( !ct || row < 0 || row >= rowCount()  )
         return QModelIndex();
 
     return createIndex( row, column );
@@ -174,14 +178,16 @@ int DistrictGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 }
 bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-    if (scrolledDistrict == sourceRow)
-        return true;
     LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>(TContestApp::getContestApp() ->getCurrentContest());
 
     if (!ct)
         return false;
 
-    int worked = MultLists::getMultLists()->getDistWorked(sourceRow, ct) ;
+    QString cd = MultLists::getMultLists() ->getDistList()[sourceRow]->districtCode;
+    if (scrolledDistrict == cd)
+        return true;
+
+    int worked = MultLists::getMultLists()->getDistWorked(cd, ct) ;
 
     bool makeVisible = true;
     if ( worked && ct->showUnworked.getValue() && !ct->showWorked.getValue() )
@@ -201,6 +207,8 @@ void DistrictFrame::on_DistrictTable_clicked(const QModelIndex &index)
     const QModelIndex srcindex = proxyModel.mapToSource( index );
     int sourceRow = srcindex.row();
 
-    QString disp = MultLists::getMultLists() ->getDistListText( sourceRow, 0, model.ct );
+    QString cd = MultLists::getMultLists() ->getDistList()[sourceRow]->districtCode;
+
+    QString disp = MultLists::getMultLists() ->getDistListText( cd, 0, model.ct );
     MinosLoggerEvents::SendDistrictSelect(disp, model.ct);
 }

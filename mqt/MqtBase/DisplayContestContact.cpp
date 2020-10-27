@@ -83,12 +83,10 @@ DisplayContestContact::~DisplayContestContact()
 void DisplayContestContact::copyFromArg( ScreenContact &cct )
 {
    //   logSequence = cct.logSequence; // addContact or whatever will already have it correct
-   loc.loc.setValue( cct.loc.loc );
-   loc.validate();
+   loc = cct.loc;
    extraText.setValue( cct.extraText );
 
-   cs.fullCall.setValue( cct.cs.fullCall );
-   cs.validate();
+   cs = cct.cs;
 
    time.setValue( cct.time );
 
@@ -141,7 +139,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
     if ( strcmpsp( ne_temp_time, time.getTime( DTGDISP ) ) )
      return true; // i.e. not equal
 
-   if ( strcmpsp( mct.cs.fullCall.getValue(), cs.fullCall.getValue() ) )
+   if ( strcmpsp( mct.cs.getFullCall(), cs.getFullCall() ) )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.reps, reps.getValue() ) )
@@ -159,7 +157,7 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.reps, reps.getValue() ) )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.loc.loc.getValue(), loc.loc.getValue() ) )
+   if ( strcmpsp( mct.loc.getLoc(), loc.getLoc() ) )
       return true; // i.e. not equal
 
    if ( stricmpsp( mct.extraText, extraText.getValue() ) )       // we force exchange upper case if dist code
@@ -223,7 +221,7 @@ void DisplayContestContact::checkContact( bool inScan)
       double lat = 0.0;
       int brg = -1;
 
-      char v = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+      char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
       if ( v == LOC_OK )
       {
          clp->disbeara( lon, lat, dist, brg );
@@ -239,7 +237,7 @@ void DisplayContestContact::checkContact( bool inScan)
       return ;
 
    QSOValid = false;             // initially, anyway
-   int csret = cs.validate( );
+   int csret = cs.getValRes();
 //#warning scanContest may already have set ERR_DUPCS
    if ( csret != CS_OK && csret != ERR_DUPCS )
       checkret = ERR_13;
@@ -251,7 +249,7 @@ void DisplayContestContact::checkContact( bool inScan)
       unsigned long valp  = clp->validationPoint;
       if ( clp->DupSheet.checkCurDup( clp, getLogSequence(), valp, false ) )
       {
-         cs.valRes = ERR_DUPCS;
+         cs.setValRes(ERR_DUPCS);
          checkret = ERR_12;
       }
    }
@@ -337,8 +335,8 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( districtMult && districtMult->country1)
    {
-      clp->addDistrictWorked(band, districtMult->listOffset);
-      int n = clp->getDistrictsWorked(band, districtMult->listOffset);
+      clp->addDistrictWorked(band, districtMult->districtCode);
+      int n = clp->getDistrictsWorked(band, districtMult->districtCode);
       if ( n <= districtMult->country1->districtLimit() )
       {
          clp->ndistrict[band]++;
@@ -352,8 +350,8 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( ctryMult)
    {
-       clp->addCountryWorked(band, ctryMult->listOffset);
-       int n = clp->getCountriesWorked(band, ctryMult->listOffset);
+       clp->addCountryWorked(band, ctryMult->basePrefix);
+       int n = clp->getCountriesWorked(band, ctryMult->basePrefix);
        if ( n == 1 )
        {
            clp->nctry[band]++;
@@ -379,13 +377,13 @@ void DisplayContestContact::checkContact( bool inScan)
        if (contest->MGMContestRules.getValue())
        {
            int brg;
-            dist = clp->CalcCentres ( loc.loc.getValue(), brg );
+            dist = clp->CalcCentres ( loc.getLoc(), brg );
             if ( almost_equal(dist, 1.0, 2))
                 dist = 50;  // MGM same square == 50 points
        }
-       else if ( loc.loc.getValue().size() == 4 && clp->allowLoc4.getValue() )
+       else if ( loc.getLoc().size() == 4 && clp->allowLoc4.getValue() )
        {
-          dist = clp->CalcNearest( loc.loc.getValue() ); // deal with 4 char locs
+          dist = clp->CalcNearest( loc.getLoc() ); // deal with 4 char locs
        }
        contactScore.setValue( static_cast<int>(dist) );
    }
@@ -421,7 +419,7 @@ void DisplayContestContact::checkContact( bool inScan)
       QString letters;
       QString numbers;
 
-      QString sloc = loc.loc.getValue().mid(0, 4);
+      QString sloc = loc.getLoc().mid(0, 4);
 
       letters = sloc.left(2);
       numbers = sloc.mid(2, 2);
@@ -544,7 +542,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = time.getTime( DTGDISP );
             break;
          case egCall:
-            res = cs.fullCall.getValue();
+            res = cs.getFullCall();
             break;
          case egRSTTx:
             res = reps.getValue();
@@ -573,7 +571,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             }
             break;
          case egLoc:
-            res = loc.loc.getValue();
+            res = loc.getLoc();
             break;
          case egBrg:
             {
@@ -583,7 +581,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                   brgbuff = tr("MAN");
                else
                {
-                  if ( loc.valRes == LOC_OK )
+                  if ( loc.getValRes() == LOC_OK )
                   {
                      if ( contest == curcon )
                      {
@@ -597,7 +595,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         // rework to come from prime contest loc
                         double lon = 0.0;
                         double lat = 0.0;
-                        if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+                        if ( lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
                         {
                            // we don't have it worked out already...
                            double dist;
@@ -611,7 +609,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                      }
                   }
                   else
-                      if (loc.valRes == LOC_PARTIAL)
+                      if (loc.getValRes() == LOC_PARTIAL)
                       {
                           if ( contest == curcon )
                           {
@@ -625,7 +623,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                              // rework to come from prime contest loc
                              double lon = 0.0;
                              double lat = 0.0;
-                             char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                             char llres = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                              if ( llres == LOC_OK || llres == LOC_PARTIAL )
                              {
                                 // we don't have it worked out already...
@@ -659,7 +657,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
 					 if ( contest == curcon )
 					 {
 						// use the existing data
-						if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == clp ) )
+                        if ( ( cs.getValRes() == ERR_DUPCS ) && ( curcon == clp ) )
                            scorebuff = tr("DUP");
 						else
 						{
@@ -703,7 +701,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
                         double lat = 0.0;
                         int brg;
                         double dist = 0.0;
-                        char llres = lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                        char llres = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                         if ( llres == LOC_OK )
                         {
                            curcon->disbeara( lon, lat, dist, brg );
@@ -835,12 +833,18 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "serialTx", serials );
          mt->getStructArgMemberValue( "exchangeTx", contest->location );
          mt->getStructArgMemberValue( "modeRx", mode );
-         mt->getStructArgMemberValue( "callRx", cs.fullCall );
+         QString temp;
+         if (mt->getStructArgMemberValue( "callRx", temp ))
+         {
+            cs.setFullCall(temp);
+         }
          mt->getStructArgMemberValue( "rstRx", repr );
          mt->getStructArgMemberValue( "serialRx", serialr );
          mt->getStructArgMemberValue( "exchangeRx", extraText );
-         if ( mt->getStructArgMemberValue( "locRx", loc.loc ) )
-            loc.validate();
+         if ( mt->getStructArgMemberValue( "locRx", temp ) )
+         {
+            loc.setLoc(temp);
+         }
          mt->getStructArgMemberValue( "commentsTx", comments );
          mt->getStructArgMemberValue( "commentsRx", comments );
 
@@ -848,12 +852,15 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "band", contest->contestBands );
          mt->getStructArgMemberValue( "currentBand", contest->currentBand );
          if (contest->currentBand.getValue().isEmpty())
+         {
              contest->currentMode = contest->contestBands;
+         }
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
-         QString temp;
-         mt->getStructArgMemberValue( "frequency", temp );
-         frequency.setValue( Frequency(temp) );
+         if (mt->getStructArgMemberValue( "frequency", temp ))
+         {
+            frequency.setValue( Frequency(temp) );
+         }
          mt->getStructArgMemberValue( "rotatorHeading", rotatorHeading );
          mt->getStructArgMemberValue( "rigName", rigName );
 
@@ -862,7 +869,9 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
 
          int maxct = serials.getValue().toInt();
          if ( maxct > contest->maxSerial )
+         {
             contest->maxSerial = maxct;
+         }
 
          contest->validationPoint = getLogSequence();
          checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history

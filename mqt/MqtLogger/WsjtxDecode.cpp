@@ -57,9 +57,9 @@ static Locator nullLoc;
 
 static void addCall(const Callsign &c, const Locator &l)
 {
-    if (c.fullCall.getValue() != "..." && c.valRes == CS_OK && (l.valRes == LOC_OK || l.valRes == LOC_PARTIAL) )
+    if (c.getFullCall() != "..." && c.getValRes() == CS_OK && (l.getValRes() == LOC_OK || l.getValRes() == LOC_PARTIAL) )
     {
-        if (GridCallMap[c.realCall].valRes != LOC_OK)
+        if (GridCallMap[c.realCall].getValRes() != LOC_OK)
             GridCallMap[c.realCall] = l;
     }
 }
@@ -126,7 +126,7 @@ bool decodeMessage::checkAsContact()
     scc.frequency = cc->getTxFreqBand(Frequency(), cb);
 
     scc.checkScreenContact();
-    csret = scc.cs.valRes;
+    csret = scc.cs.getValRes();
     if (scc.screenQSOValid)
     {
         scc.score();
@@ -149,27 +149,20 @@ bool decodeMessage::checkAsContact()
 }
 void decodeMessage::validate()
 {
-    fromCall.validate();
-    toCall.validate();
-    fromGrid.validate();
-
-    if (fromCall.fullCall.getValue() == "...")
+    if (fromCall.getFullCall() == "...")
     {
-        fromCall.valRes = CS_OK;
+        fromCall.clearValRes();
     }
-    if (toCall.fullCall.getValue() == "...")
+    if (toCall.getFullCall() == "...")
     {
-        toCall.valRes = CS_OK;
+        toCall.clearValRes();
     }
 }
 
 void WsjtxDecode::setMyCallGrid(const QString &c, const QString &l)
 {
-    myCall = Callsign(c);
-    myCall.validate();
-
-    myGrid = Locator(l);
-    myGrid.validate();
+    myCall.setFullCall(c);
+    myGrid.setLoc(l);
 
     addCall(myCall, myGrid);
 }
@@ -274,9 +267,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // NB we can get bad decodes
         if (callIndex + 1 < sl.count())
         {
-            dc.fromCall = Callsign(stripBrackets(sl[callIndex]));
-            dc.fromGrid = Locator(sl[callIndex + 1]);
-            dc.validate();
+            dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
+            dc.fromGrid.setLoc(sl[callIndex + 1]);
             addCall(dc.fromCall, dc.fromGrid);
         }
     }
@@ -285,8 +277,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // G0XYZ K1ABC RR73
         // PA9XYZ G4ABC/P RR73
         dc.mstage = emsRRR;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromCall.setFullCall(stripBrackets(sl[1]));
         dc.validate();
 
     }
@@ -295,8 +287,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // K1ABC G0XYZ 73
         // G4ABC/P PA9XYZ 73
         dc.mstage = ems73;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromCall.setFullCall(stripBrackets(sl[1]));
         dc.validate();
 
     }
@@ -304,8 +296,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     {
         // K1ABC G0XYZ R-22
         dc.mstage = emsRplusDb;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromCall = Callsign(stripBrackets(sl[1]));
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromCall.setFullCall(stripBrackets(sl[1]));
         dc.validate();
 
     }
@@ -313,9 +305,9 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     {
         // G0GJV 2E0EVM R IO80
         dc.mstage = emsRplusGrid;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromCall = Callsign(stripBrackets(sl[1]));
-        dc.fromGrid = Locator(sl[3]);
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromCall.setFullCall(stripBrackets(sl[1]));
+        dc.fromGrid.setLoc(sl[3]);
         dc.validate();
 
     }
@@ -323,9 +315,9 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     {
        // <G4ABC> <PA9XYZ> R 580071 JO22DB
         dc.mstage = emsRplusDbGrid;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromCall = Callsign(stripBrackets(sl[1]));
-        dc.fromGrid = Locator(sl[4]);
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromCall.setFullCall(stripBrackets(sl[1]));
+        dc.fromGrid.setLoc(sl[4]);
         dc.validate();
         addCall(dc.fromCall, dc.fromGrid);
     }
@@ -334,8 +326,8 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         // this will disappear with wsjt-x 2.2
         // G4ABC/P R 570007 JO22DB
         dc.mstage = emsRplusDbGrid;
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.fromGrid = Locator(sl[3]);
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        dc.fromGrid.setLoc(sl[3]);
         dc.validate();
         addCall(dc.fromCall, dc.fromGrid);
 
@@ -359,19 +351,21 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         //PA9XYZ 590003 IO91NP
         //<PA9XYZ> <G4ABC> 570123 IO91NP
 
-        dc.toCall = Callsign(stripBrackets(sl[0]));
-        dc.toCall.validate();
-        if (dc.toCall.fullCall.getValue() == "...")
+        dc.toCall.setFullCall(stripBrackets(sl[0]));
+        if (dc.toCall.getFullCall() == "...")
         {
-            dc.toCall.valRes = CS_OK;
+            dc.toCall.setValRes(CS_OK);
         }
 
 
         if (sl.count() == 3)
         {
-            Callsign c0(stripBrackets(sl[0]));
-            Callsign c1(stripBrackets(sl[1]));
-            Locator l1(sl[2]);
+            Callsign c0;
+            c0.setFullCall(stripBrackets(sl[0]));
+            Callsign c1;
+            c1.setFullCall(stripBrackets(sl[1]));
+            Locator l1;
+            l1.setLoc(sl[2]);
 
             if (isNumeric(sl[1]))
             {
@@ -407,9 +401,12 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
         else if (sl.count() == 4)
         {
-            Callsign c0(stripBrackets(sl[0]));
-            Callsign c1(stripBrackets(sl[1]));
-            Locator l1(sl[2]);
+            Callsign c0;
+            c0.setFullCall(stripBrackets(sl[0]));
+            Callsign c1;
+            c1.setFullCall(stripBrackets(sl[1]));
+            Locator l1;
+            l1.setLoc(sl[2]);
 
             // new style EU VHF
             dc.toCall = c0;
@@ -420,11 +417,11 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
     }
 
-    if (dc.fromCall.valRes == CS_OK && dc.fromGrid.valRes != LOC_OK && dc.fromGrid.valRes != LOC_PARTIAL)
+    if (dc.fromCall.getValRes() == CS_OK && dc.fromGrid.getValRes() != LOC_OK && dc.fromGrid.getValRes() != LOC_PARTIAL)
     {
         dc.fromGrid = WsjtGetCallLoc(dc.fromCall);
     }
-    if (dc.toCall.valRes == CS_OK)
+    if (dc.toCall.getValRes() == CS_OK)
     {
         // we never have toGrid
         dc.toGrid = WsjtGetCallLoc(dc.toCall);

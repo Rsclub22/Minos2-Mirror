@@ -1,5 +1,6 @@
 #include "base_pch.h"
 #include "delayedaction.h"
+#include "ContestApp.h"
 
 #include "minoscontestloaddialog.h"
 #include "ui_minoscontestloaddialog.h"
@@ -13,7 +14,7 @@ MinosContestLoadDialog::MinosContestLoadDialog(QWidget *parent) :
 
     ui->setupUi(this);
     el = new QEventLoop(this);
-    timer = new QTimer(this);
+    //timer = new QTimer(this);
 }
 
 MinosContestLoadDialog::~MinosContestLoadDialog()
@@ -21,8 +22,8 @@ MinosContestLoadDialog::~MinosContestLoadDialog()
     trace("Progress Dialog destructor");
 
     delete ui;
-    timer->stop();
-    timer->deleteLater();
+    //timer->stop();
+    //timer->deleteLater();
     el->quit();
     el->deleteLater();
 }
@@ -48,14 +49,29 @@ void MinosContestLoadDialog::doShow()
     trace("Progress Dialog doShow");
     show();
 
-    delayedAction(this, [=]()
-    {
-        // NB a lambda function
-        trace("Progress Dialog timer fired");
-        timer->stop();
-        el->quit();
-    }
-    ,500
-    );
     el->exec();
+    trace("Exit from doShow after delay for screen update");
+}
+
+void MinosContestLoadDialog::showEvent(QShowEvent *ev)
+{
+    QDialog::showEvent(ev);
+    if (isVisible())
+    {
+        update();
+        int progDelay;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpProgressDelay, progDelay );
+
+        delayedAction(this, [=]()
+        {
+            update();
+            el->processEvents();
+            // NB a lambda function
+            trace("Progress Dialog timer fired");
+            //timer->stop();
+            el->quit();
+        }
+        ,progDelay
+        );
+    }
 }

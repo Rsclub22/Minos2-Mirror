@@ -292,24 +292,21 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                }
    if ( !newFile )
    {
-      if (!FileAccessible(fn))
-      {
-          setUnwriteable(true);
-      }
-
       QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
-      if (isUnwriteable())
-      {
-        om = QIODevice::ReadOnly;
-      }
       QSharedPointer<QFile> contestFile(new QFile(fn));
 
       if (!contestFile->open(om))
       {
-         QString lerr = contestFile->errorString();
-         QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
-         MinosParameters::getMinosParameters() ->mshowMessage( emess );
-         return false;
+          // isWriteable doesn't give good results on Windows
+          om = QIODevice::ReadOnly;
+          if (!contestFile->open(om))
+          {
+             QString lerr = contestFile->errorString();
+             QString emess = tr("Failed to open Contest file %1 : %2 ").arg(fn).arg(lerr);
+             MinosParameters::getMinosParameters() ->mshowMessage( emess );
+             return false;
+          }
+          setUnwriteable(true);
       }
 
       bool loadOK = false;
@@ -404,11 +401,35 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
       {
          return false;
       }
+
+   setVersion(STRINGVERSION);
    commonSave( newFile );
+
+   checkAgeProtection();
 
    return true;
 }
+void LoggerContestLog::checkAgeProtection()
+{
+    // check last time in contest against current date/time and the
 
+    int ageDays;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
+    if (ageDays >= 0)
+    {
+        QString t1 = DTGEnd.getValue();
+        QDateTime end = CanonicalToTDT( t1 );
+
+        QDate endDate = end.date();
+
+        endDate = endDate.addDays(ageDays);
+        if (endDate.isValid() && endDate <= QDate::currentDate())
+        {
+            // e.g. if ageDays is 1, allow contest day and all the following day
+            ageProtected = true;
+        }
+    }
+}
 qint64 LoggerContestLog::readBlock( int bno )
 {
     bool sres = GJVcontestFile->seek(bno * bsize);
@@ -623,12 +644,12 @@ memoryData::memData LoggerContestLog::getRigMemoryData(int memoryNumber)
         else
         {
             Locator loc;
-            loc.loc.setValue(m.locator);
-            loc.validate();
+            loc.setLoc(m.locator);
+
             double lon = 0.0;
             double lat = 0.0;
 
-            if ( lonlat( loc.loc.getValue(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
+            if ( lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
             {
                 double dist;
                 int brg;
@@ -723,8 +744,8 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    strtobuf( contestBands );
    setCurrentBand(contestBands.getValue());
    strtobuf( name );
-   strtobuf( mycall.fullCall );
-   strtobuf( myloc.loc );
+   strtobuf( mycall.getFullCall() );
+   strtobuf( myloc.getLoc() );
    strtobuf( location );
 
    opyn( otherExchange );
@@ -792,8 +813,9 @@ bool LoggerContestLog::GJVload( )
    buftostr( contestBands );
    buftostr( name );
    buftostr( temp );
-   mycall = Callsign( temp.toUpper() );
-   buftostr( myloc.loc );
+   mycall.setFullCall( temp );
+   buftostr( temp );
+   myloc.setLoc(temp);
    buftostr( location );
 
    otherExchange.setValue( inyn() );
@@ -907,7 +929,7 @@ void LoggerContestLog::procUnknown(QSharedPointer<BaseContact> cct, writer &wr )
    QString lbuff;
 
    if ( cct->QSOValid
-        && !( ( cct->cs.valRes == ERR_DUPCS )
+        && !( ( cct->cs.getValRes() == ERR_DUPCS )
               || ( cct->contactFlags.getValue() & NON_SCORING )
               || ( cct->contactScore.getValue() <= 0 )
             )
@@ -1135,12 +1157,12 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
       QSharedPointer<BaseContact> ct = i->wt;
       if ( ct->ctryMult )
       {
-         ( countries[ ct->ctryMult->basePrefix ] ) [ ct->cs.fullCall.getValue() ] = ct;
+         ( countries[ ct->ctryMult->basePrefix ] ) [ ct->cs.getFullCall() ] = ct;
       }
       else
          if ( ct->QSOValid )
          {
-            ( countries[ "unknown" ] ) [ ct->cs.fullCall.getValue() ] = ct;
+            ( countries[ "unknown" ] ) [ ct->cs.getFullCall() ] = ct;
          }
          else
          {
@@ -1152,7 +1174,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
    kml.append( "<kml xmlns=\"http://earth.google.com/kml/2.0\">" );
    kml.append( "<Document><visibility>0</visibility><open>1</open>" );
-   kml.append( "<Folder><name><![CDATA[" + name.getValue() + " " + mycall.fullCall.getValue() + "]]></name><visibility>0</visibility><open>1</open>" );
+   kml.append( "<Folder><name><![CDATA[" + name.getValue() + " " + mycall.getFullCall() + "]]></name><visibility>0</visibility><open>1</open>" );
 
 
 
@@ -1203,7 +1225,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 
 
          char inputbuff[ 100 ];
-         strcpy( inputbuff, ct->loc.loc.getValue().toUtf8().data() );
+         strcpy( inputbuff, ct->loc.getLoc().toUtf8().data() );
          l1.gridstyle = LOC;
          l1.datastring = inputbuff;
 
@@ -1215,8 +1237,8 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
          {
             kml.append( "<Placemark><visibility>0</visibility>" );
             kml.append("<styleUrl>#styleMapGJV</styleUrl>");
-            kml.append( "<description><![CDATA[" + ct->cs.fullCall.getValue() + " " + ct->loc.loc.getValue() + "]]></description>"  );
-            kml.append( "<name><![CDATA[" + ct->cs.fullCall.getValue() + "]]></name>"  );
+            kml.append( "<description><![CDATA[" + ct->cs.getFullCall() + " " + ct->loc.getLoc() + "]]></description>"  );
+            kml.append( "<name><![CDATA[" + ct->cs.getFullCall() + "]]></name>"  );
             kml.append( "<Point><coordinates>" + kmloutput( &l2 ) + ",0</coordinates></Point>"  );
             kml.append( "</Placemark>" );
          }
@@ -1334,11 +1356,9 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                            int spos = text.indexOf( " " );
                            if ( spos != -1 )
                            {
-                              text = text.left(spos ).trimmed();
+                              text = text.left(spos );
                            }
-                           mycall.fullCall.setValue( text.toUpper() );
-                           mycall.valRes = CS_NOT_VALIDATED;
-                           mycall.validate();
+                           mycall.setFullCall( text);
 
                         }
                         else
@@ -1346,8 +1366,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                                 stemp.toUpper().indexOf( "QTH LOCATOR SENT" ) == 0 )
                            {
                               // yes, contestx DOES say QRH!
-                              myloc.loc.setValue( text.toUpper() );
-                              validateLoc();
+                              myloc.setLoc( text );
                            }
                            else
                               if ( stemp.toUpper().indexOf( "POWER OUTPUT" ) == 0 )
@@ -1405,8 +1424,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       strcpysp( temp, lbuff.mid(7), 4 );
       bct->time.setTime( temp, DTGLOG );
       strcpysp( temp, lbuff.mid(21), 15 );
-      bct->cs = Callsign( temp.toUpper() );
-      bct->cs.valRes = CS_NOT_VALIDATED;
+      bct->cs.setFullCall( temp );
       strcpysp( temp, lbuff.mid( 37 ), 3 );
       bct->reps.setValue( temp );
       strcpysp( temp, lbuff.mid( 41 ), 4 );
@@ -1430,8 +1448,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       bct->op1.setValue( temp );
 
       strcpysp( temp, lbuff.mid( 72 ), 6 );
-      bct->loc.loc.setValue( temp );
-      bct->loc.valRes = LOC_NOT_VALIDATED;
+      bct->loc.setLoc( temp );
 
       //ct->comments = "";
 

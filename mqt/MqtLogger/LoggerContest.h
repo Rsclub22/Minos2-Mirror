@@ -18,6 +18,8 @@
 #include "PubSubValue.h"
 #include "contest.h"
 
+enum ExportType {EREG1TEST, ECABRILLO, EADIF, EG0GJV, EMINOS, EKML, EPRINTFILE };
+
 class DisplayContestContact;
 struct StanzaPos
 {
@@ -51,7 +53,7 @@ class LoggerContestLog : public BaseContestLog
       bool importReg1Test( QSharedPointer<QFile> adifContestFile );
       QVector<StanzaPos> stanzaLocations;
 
-   protected:
+protected:
       // minos file
       virtual bool minosSaveFile( bool newfile ) override;
    public:
@@ -210,8 +212,7 @@ class LoggerContestLog : public BaseContestLog
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
       void removeContact(QSharedPointer<BaseContact> );
 
-
-
+      void checkAgeProtection();
 };
 
 #endif

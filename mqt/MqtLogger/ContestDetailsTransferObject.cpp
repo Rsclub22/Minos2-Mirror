@@ -15,11 +15,12 @@ void ContestDetailsTransferObject::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
-    if ( nloc.validate( ode, odn ) == LOC_OK )
+    nloc.setLoc(myloc.getLoc().left(4) + "MM");
+    nloc.validate( ode, odn );
+    if ( nloc.getValRes() == LOC_OK )
     {
         locValid = true;
-        myloc.valRes = LOC_OK;
+        myloc.setValRes(LOC_OK);
     }
     else
         locValid = false;
@@ -40,7 +41,9 @@ void ContestDetailsTransferObject::setINIDetails()
    if ( entryBundle.getSection() != entryBundle.noneBundle )
    {
       entryBundle.startGroup();
-      entryBundle.getStringProfile( eepCall, mycall.fullCall );
+      QString temp;
+      entryBundle.getStringProfile( eepCall, temp );
+      mycall.setFullCall(temp);
       entryBundle.getStringProfile( eepMainOp, currentOp1 );
       entryBundle.getStringProfile( eepSecondOp, currentOp2 );
       entryBundle.getStringProfile( eepEntrant, entrant );
@@ -64,7 +67,9 @@ void ContestDetailsTransferObject::setINIDetails()
    if ( QTHBundle.getSection() != QTHBundle.noneBundle )
    {
       QTHBundle.startGroup();
-      QTHBundle.getStringProfile( eqpLocator, myloc.loc );
+      QString temp;
+      QTHBundle.getStringProfile( eqpLocator, temp );
+      myloc.setLoc(temp);
 
       if ( districtMult.getValue() )
          QTHBundle.getStringProfile( eqpDistrict, location );
@@ -102,7 +107,10 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     cfileName = ct->cfileName;
     minosFile = ct->minosFile;
 
-    protectedContest = ct->protectedContest;
+    appVersion = ct->appVersion;
+
+    protectedContest = ct->getProtectedState();
+    ageProtected = ct->ageProtected;
 
     name = ct->name;
     location = ct->location;
@@ -209,7 +217,10 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->cfileName = cfileName;
     ct->minosFile = minosFile;
 
-    ct->protectedContest = protectedContest;
+    ct->appVersion = appVersion;
+
+    ct->getProtectedState() = protectedContest;
+    ct->ageProtected = ageProtected;
 
     ct->name = name;
     ct->location = location;

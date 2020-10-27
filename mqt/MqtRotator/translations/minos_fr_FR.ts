@@ -22,20 +22,20 @@
         <location filename="../addantennadialog.cpp" line="50"/>
         <source>Antenna Name Empty
 Please enter a name for the antenna</source>
-        <translation>Nom de l&apos;antenne vide - Entrer une nom pour la radio SVP</translation>
+        <translation>Nom de l&apos;antenne vide - Entrer une nom pour l&apos;antenne SVP</translation>
     </message>
     <message>
         <location filename="../addantennadialog.cpp" line="59"/>
         <source>Antenna name contains invalid characters,
  please remove non-alpha or non-numeric characters</source>
-        <translation>Nom de l&apos;antenne contient des caractères non valides,
+        <translation>Le Nom de l&apos;antenne contient des caractères non valides,
  supprimer les caractères non alpha ou non numériques SVP</translation>
     </message>
     <message>
         <location filename="../addantennadialog.cpp" line="67"/>
         <source>Antenna name already exists,
  please use another name</source>
-        <translation>Nom de l&apos;antenne existe déjà,
+        <translation>Le Nom de l&apos;antenne existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
 </context>
@@ -74,7 +74,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="29"/>
         <source>IO error, including open failed</source>
-        <translation>Erreur d&apos;E/S, y compris l&apos;ouverture a échoué</translation>
+        <translation>Erreur d&apos;E/S, y compris échec d&apos;ouverture&quot;</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="30"/>
@@ -94,7 +94,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="33"/>
         <source>Command performed, but arg truncated</source>
-        <translation>Commande exécutée, mais l&apos;argument tronqué</translation>
+        <translation>Commande exécutée, mais argument tronqué</translation>
     </message>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="34"/>
@@ -119,6 +119,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../hamlibRotcontrol.cpp" line="38"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
+        <translatorcomment>Prise en main de l&apos;appareil nulle ou un paramètre de pointeur invalide dans l&apos;argument retourné</translatorcomment>
         <translation>WHAT ???     (AND WHY?)   APJ19</translation>
     </message>
     <message>
@@ -147,7 +148,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../logdialog.ui" line="22"/>
         <source>Log Directory</source>
-        <translation>Dossier des journaux</translation>
+        <translation>Dossier des Logs</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="36"/>
@@ -157,7 +158,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../logdialog.ui" line="47"/>
         <source>Log Filename</source>
-        <translation>Nom du fichier du journal</translation>
+        <translation>Nom du fichier de Log</translation>
     </message>
     <message>
         <location filename="../logdialog.ui" line="71"/>
@@ -167,18 +168,18 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../logdialog.ui" line="78"/>
         <source>Logging Enabled</source>
-        <translation>Journalisation activée</translation>
+        <translation>Logging activé</translation>
     </message>
     <message>
         <location filename="../logdialog.cpp" line="44"/>
         <source>Select Bearing Log Folder</source>
-        <translation>Sélectionner le dossier du journal de le direction de rotateur</translation>
+        <translation>Sélectionner le dossier d&apos;enregistrement des directions du rotateur</translation>
     </message>
 </context>
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="185"/>
+        <location filename="../minoscompass.cpp" line="186"/>
         <source>N,E,S,W</source>
         <translation>N,E,S,O</translation>
     </message>
@@ -198,22 +199,22 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../pstRotControl.cpp" line="20"/>
         <source>Datagram Write Error</source>
-        <translation>Erreur d&apos;écriture de datagramme</translation>
+        <translation>Erreur d&apos;écriture de Datagram</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="21"/>
         <source>Request Bearing Command Timeout</source>
-        <translation>Demande direction: Timeout</translation>
+        <translation>Timeout pour la demande direction</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="22"/>
         <source>Rotate to Bearing Command Timeout</source>
-        <translation>Définir la direction: Timeout</translation>
+        <translation>Timeout pour la commande de rotation vers la direction choisie</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="23"/>
         <source>Stop Commond Timeout</source>
-        <translation>Commande d&apos;arrêt: Timeout</translation>
+        <translation>Timeout pour la Commande d&apos;arrêt</translation>
     </message>
     <message>
         <location filename="../pstRotControl.cpp" line="348"/>
@@ -249,9 +250,9 @@ utiliser un autre nom SVP</translation>
         <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please delete them and set up the rotators again</source>
-        <translation>Les fichiers de configuration de la rotateur dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
+        <translation>Les fichiers de configuration du rotateur dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
 
-Veuillez les supprimer et configurer à nouveau les radios</translation>
+Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="687"/>
@@ -261,7 +262,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotsetupdialog.cpp" line="695"/>
         <source>Do you really want to remove antenna - %1?</source>
-        <translation>Supprimer l&apos;Antenne %1?</translation>
+        <translation>Voulez-vous vraiment supprimer l&apos;Antenne %1?</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.cpp" line="730"/>
@@ -318,7 +319,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="137"/>
         <source>Enter Test Bearing</source>
-        <translation>Entrer direction d&apos;essai</translation>
+        <translation>Entrer la direction de test</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="161"/>
@@ -408,7 +409,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="653"/>
         <source>Log Heading</source>
-        <translation>Définir le journal de relèvement</translation>
+        <translation>Définir le Log de directions d&apos;antenne</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="658"/>
@@ -418,7 +419,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.ui" line="671"/>
         <source>Trace Data Comms</source>
-        <translation>Suivre communication de données</translation>
+        <translation>Suivre la communication de données</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="676"/>
@@ -439,17 +440,17 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="138"/>
         <source>RawRot: </source>
-        <translation>Rotateur: </translation>
+        <translation>Rotateur brut: </translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="202"/>
         <source>Please select an antenna or no antenna found!</source>
-        <translation>Sélectionner un antenne SVP, ou aucune antenne trouvée!</translation>
+        <translation>Sélectionner une antenne SVP, ou aucune antenne trouvée!</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="425"/>
         <source>Please select an Antenna</source>
-        <translation>Sélectionner un antenne SVP</translation>
+        <translation>Sélectionner une antenne SVP</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="433"/>
@@ -464,22 +465,22 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="450"/>
         <source>Please enter a network Address and Port Number</source>
-        <translation>Entrée un adresse réseau et numéro de port SVP</translation>
+        <translation>Entrée une adresse réseau et un numéro de port SVP</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="458"/>
         <source>Please select a rotator model</source>
-        <translation>Sélectionner la type d&apos;antenne SVP</translation>
+        <translation>Sélectionner un type de rotateur SVP</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="510"/>
         <source>Connected to: %1 - %2, %3</source>
-        <translation>Connecté: %1 - %2, %3</translation>
+        <translation>Connecté  à: %1 - %2, %3</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="514"/>
         <source>Connected to: %1 - %2</source>
-        <translation>Connecté: %1 - %2</translation>
+        <translation>Connecté  à: %1 - %2</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="525"/>
@@ -489,7 +490,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="566"/>
         <source>Disconnected</source>
-        <translation>Débranché</translation>
+        <translation>Déconnecté</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1109"/>
@@ -504,17 +505,17 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1140"/>
         <source>Minos Rotator Control - %1 - Logger</source>
-        <translation>Minos Contrôle du Rotateur - %1 - Enregistreur</translation>
+        <translation>Minos Rotator Control - Nom d&apos;instance: %1</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1144"/>
         <source>Minos Rotator Control - Local</source>
-        <translation>Minos Contrôle du Rotateur - Locale</translation>
+        <translation>Minos Rotator Control - Opération locale</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1174"/>
         <source>Request Bearing</source>
-        <translation>Demander un direction</translation>
+        <translation>Demander une direction</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1285"/>
@@ -531,7 +532,7 @@ Entrer %1 - %2 SVP</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1360"/>
         <source>Rotate to Bearing</source>
-        <translation>Tourner à un direction</translation>
+        <translation>Faire tourner jusqu&apos;à une direction</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1872"/>
@@ -548,12 +549,12 @@ Entrer %1 - %2 SVP</translation>
     <message>
         <location filename="../rotatormainwindow.cpp" line="504"/>
         <source>Connected to: %1 - %2, %3, %4, %5, %6, %7,  Handshake %8, ForceDTR %9, ForceRTS %10</source>
-        <translation>Connecté: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
+        <translation>Connecté  à: %1 - %2, %3:%4 - %5 %6, %7, Handshake %8 ForceDTR %9, ForceRTS %10</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1967"/>
         <source>Rotator %1 library Error</source>
-        <translation>Rotateurl: Erreur de bibliothèque %1</translation>
+        <translation>Rotateur %1: Erreur de bibliothèque</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="1967"/>
@@ -562,7 +563,7 @@ Entrer %1 - %2 SVP</translation>
 Command: %4</source>
         <translation>%1
 %2 - %3
-Command: %4</translation>
+Commande: %4</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2052"/>
@@ -591,7 +592,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotatormainwindow.cpp" line="2338"/>
         <source>Bearing = %1</source>
-        <translation>Relèvement = %1</translation>
+        <translation>Direction = %1</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2451"/>
@@ -620,7 +621,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2465"/>
         <source>Unable to determine library version at this time!
 </source>
-        <translation>Impossible de déterminer la version de la bibliothèque pour le moment!
+        <translation>Impossible de déterminer la version de bibliothèque pour le moment!
 </translation>
     </message>
     <message>
@@ -683,7 +684,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2476"/>
         <source>Rotator PortType = %1
 </source>
-        <translation>Type de port de rotateur = %1
+        <translation>Type de port du rotateur = %1
 </translation>
     </message>
     <message>
@@ -704,14 +705,14 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2484"/>
         <source>Rotator Comport = %1
 </source>
-        <translation>Port COM (du rotateur) = %1
+        <translation>Port COM (du Rotateur) = %1
 </translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2485"/>
         <source>Baudrate = %1
 </source>
-        <translation>Baud sélectionné = %1
+        <translation>Taux de baud = %1
 </translation>
     </message>
     <message>
@@ -802,21 +803,21 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2499"/>
         <source>Support CW and CCW Commands = %1
 </source>
-        <translation>Soutenir commandes pour sens horaire et antihoraire = %1
+        <translation>Supporter les  commandes pour sens horaire et antihoraire = %1
 </translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2500"/>
         <source>Simulate CW and CCW Commands selected = %1
 </source>
-        <translation>Commandes le sens horaire et antihoraire sont simulés = %1
+        <translation>Simulation des commandes dans le sens horaire et antihoraire sélectionnée = %1
 </translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="2501"/>
         <source>Rotator Polltime = %1
 </source>
-        <translation>Intervalle de poll = %1
+        <translation>Intervalle de sondage (Polling) = %1
 </translation>
     </message>
     <message>
@@ -830,8 +831,8 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <location filename="../rotatormainwindow.cpp" line="2508"/>
         <source>No Antenna Selected
 </source>
-        <translatorcomment>Antenna or ROtator??? selectee?</translatorcomment>
-        <translation>Pas de Rotateur selecter
+        <translatorcomment>Antenna or Rotator???</translatorcomment>
+        <translation>Pas de Rotateur selectionné
 </translation>
     </message>
 </context>
@@ -858,7 +859,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../skyscandialog.ui" line="36"/>
         <source>End Bearing</source>
-        <translation>Direction finale</translation>
+        <translation>Direction de fin</translation>
     </message>
     <message>
         <location filename="../skyscandialog.ui" line="50"/>
@@ -936,28 +937,27 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="255"/>
         <source>Poll Interval</source>
-        <translatorcomment>Some sources have l&apos;intervalle de sondage</translatorcomment>
-        <translation>Intervalle de poll</translation>
+        <translation>Intervalle de sondage (Polling)</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="267"/>
         <source>S Stop</source>
-        <translation>Arrêter Sud</translation>
+        <translation>Arrêt au Sud</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="275"/>
         <source>S-Stop Off</source>
-        <translation>Arrêt Sud désactivée</translation>
+        <translation>Arrêt au Sud désactivé</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="282"/>
         <source>S-Stop  0-360</source>
-        <translation>Arrêter Sud 0-360</translation>
+        <translation>Arrêt Sud 0-360</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="289"/>
         <source>S-Stop  180-180</source>
-        <translation>Arrêter Sud 180-180</translation>
+        <translation>Arrêt Sud 180-180</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="303"/>
@@ -967,7 +967,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="314"/>
         <source>Simulate CW/CCW Commands</source>
-        <translation>Simuler le commandes dans le sens horaire et antihoraire</translation>
+        <translation>Simuler les commandes dans le sens horaire et antihoraire</translation>
     </message>
     <message>
         <location filename="../rotsetupform.ui" line="336"/>
@@ -977,7 +977,7 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.ui" line="343"/>
         <source>Show Compass Dial</source>
-        <translation>Afficher le cadran de la boussole</translation>
+        <translation>Afficher le cadran du compas</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="489"/>
@@ -992,12 +992,12 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
     <message>
         <location filename="../rotsetupform.cpp" line="521"/>
         <source>Invalid Network Port Number %1</source>
-        <translation>Port de réseau numéro invalide %1</translation>
+        <translation>Numéro de Port réseau invalide %1</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="522"/>
         <source>Network Port Number out of range</source>
-        <translation>Port de réseau numéro hors plage</translation>
+        <translation>Numéro de Port de réseau hors plage</translation>
     </message>
     <message>
         <location filename="../rotsetupform.cpp" line="792"/>

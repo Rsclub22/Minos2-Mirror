@@ -78,8 +78,8 @@ bool BaseContact::operator<( const BaseContact& rhs ) const
 //==========================================================================
 void BaseContact::clearDirty()
 {
-   cs.fullCall.clearDirty();
-   loc.loc.clearDirty();
+   cs.clearDirty();
+   loc.clearDirty();
    time.clearDirty();
 
    extraText.clearDirty();
@@ -101,8 +101,8 @@ void BaseContact::clearDirty()
 }
 void BaseContact::setDirty()
 {
-   cs.fullCall.setDirty();
-   loc.loc.setDirty();
+   cs.setDirty();
+   loc.setDirty();
    time.setDirty();
 
    extraText.setDirty();
@@ -124,13 +124,20 @@ void BaseContact::setDirty()
 }
 //==========================================================================
 QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
-{
-   QString testpart = "/";	// look for e.g. /RVI as a country suffix
-   testpart += cs.suffix;	// look for e.g. /RVI as a country suffix
+{   
+    QSharedPointer<CountryEntry> ctryMult;
+    QSharedPointer<CountrySynonym> csyn;
 
-   QSharedPointer<CountrySynonym> csyn;
+    if (cs.getFullCall().isEmpty())
+    {
+        return ctryMult;
+    }
    if ( cs.suffix.length() )
-      csyn = MultLists::getMultLists() ->searchCountrySynonym( testpart );
+   {
+       QString testpart = "/";	// look for e.g. /RVI as a country suffix
+       testpart += cs.suffix;	// look for e.g. /RVI as a country suffix
+       csyn = MultLists::getMultLists() ->searchCountrySynonym( testpart );
+   }
 
    if ( !csyn )   	// look with number
    {
@@ -151,6 +158,14 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
 
       if ( !csyn )
       {
+
+          // This should just be cs.locCtryPrefix, searched for...
+          // as that is derived in the same way.
+
+          csyn = MultLists::getMultLists() ->searchCountrySynonym(cs.locCtryPrefix );
+
+          if (!csyn)
+          {
          // take the whole callsign, extra prefix, suffix, the lot and look for the
          // longest matching synonym. If the list is incomplete then this may
          // misidentify the country - e.g. if GW were missed out then this algorithm
@@ -174,9 +189,11 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
 
 // replacement algorithm - HF inspired
 // just keep stripping it back until we get a match
+// Now, start at the beginning and continue until there isn't a match
+// then come back one.
+// Does this work? e.g. if we have DL, D isn't in itself valid
 
-         testpart = cs.fullCall.getValue();
-         testpart = trimr( testpart );
+         QString testpart = cs.getFullCall();
 
          int clen = testpart.length();
          while ( ( clen >= 1 ) && ( !csyn ) )
@@ -187,10 +204,25 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
             clen--;
             csyn = MultLists::getMultLists() ->searchCountrySynonym(testpart );
          }
+//          QString p = cs.getFullCall();
+//          QSharedPointer<CountrySynonym> lastCsyn;
+//          for (int i = 1; i < p.size(); i++)
+//          {
+//              QString testPart = p.left(i);
+//              lastCsyn = MultLists::getMultLists()->searchCountrySynonym ( testPart );
+
+//              if ( lastCsyn )
+//              {
+//                  csyn = lastCsyn;
+//                  continue;
+//              }
+//              break;
+//          }
+
+          }
       }
    }
 
-   QSharedPointer<CountryEntry> ctryMult;
    if (csyn)
         ctryMult = csyn->country;
    return ctryMult;
@@ -236,7 +268,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
          else
          {
             // look at the contest dup
-            if ( ( cs.valRes == ERR_DUPCS ) && ( curcon == contest ) )
+            if ( ( cs.getValRes() == ERR_DUPCS ) && ( curcon == contest ) )
                contactBuffs.scorebuff = tr("DUP");
          }
    }
@@ -264,7 +296,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
    next = placestr( contactBuffs.buff, time.getTime( DTGDISP ), next, 5 );
 
    next += 1;
-   next = placestr( contactBuffs.buff, cs.fullCall.getValue(), next, 11 );
+   next = placestr( contactBuffs.buff, cs.getFullCall(), next, 11 );
 
    if ( curcon ->RSTMandatoryField.getValue() )
       next = placestr( contactBuffs.buff, reps.getValue(), next, 3 );
@@ -273,7 +305,7 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
       next = placestr( contactBuffs.buff, repr.getValue(), next + 1, 3 );
    next = placestr( contactBuffs.buff, contactBuffs.srbuff, next, -4 );
 
-   next = placestr( contactBuffs.buff, loc.loc.getValue(), next + 1, ( curcon ->allowLoc8.getValue() ) ? 8 : 6 );
+   next = placestr( contactBuffs.buff, loc.getLoc(), next + 1, ( curcon ->allowLoc8.getValue() ) ? 8 : 6 );
 
    next = placestr( contactBuffs.buff, contactBuffs.brgbuff, next + 1, 4 );
    next = placestr( contactBuffs.buff, contactBuffs.scorebuff, next, -5 );

@@ -908,7 +908,7 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
 
 
-void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int &lastOffset)
+void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset)
 {
     if (matchMode(row) && matchDistance(row))
     {
@@ -934,6 +934,8 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
             if (fontOffset <= lastOffset + fontHeight)
             {
                 fontOffset = lastOffset + fontHeight;
+                if (fontOffset < 0)
+                    fontOffset = 0;
                 syCoord = centreYCoord + fontOffset;
 
             }
@@ -949,7 +951,7 @@ void BandmapView::drawBandmapSpot(int row, int fontOffset, int markersAbove, int
                 syCoord = yCoord;
                 fontOffset = centreYCoord - yCoord;
             }
-            if (fontOffset <= lastOffset + fontHeight)
+            if (lastOffset > 0 && fontOffset <= lastOffset + fontHeight)
             {
                 fontOffset = lastOffset + fontHeight;
                 syCoord = centreYCoord - fontOffset;
@@ -1045,6 +1047,10 @@ void BandmapView::drawBandMapSpots()
         return;
 
     bool centreTextOnFrequency = true;
+    bool btemp;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
+    centreTextOnFrequency = !btemp;
+
     if (!centreTextOnFrequency)
     {
         int textYCoord = 0;
@@ -1091,14 +1097,27 @@ void BandmapView::drawBandMapSpots()
                 }
                 markersAbove++;
             }
-            int fontOffset = -fontHeight;
+            int fontOffset = -1;
             int lastOffset = -1;
+            int firstOffset = -1;
             for (int row = markersAbove - 1; row >= 0; --row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+                if (firstOffset == -1)
+                {
+                    firstOffset = fontOffset;
+                }
             }
             fontOffset = -1;
             lastOffset = -1;
+            if (firstOffset >= 0)
+            {
+                lastOffset = -firstOffset + fontHeight;
+            }
+//            if (lastOffset < 0)
+//            {
+//                lastOffset = 0;
+//            }
             for (int row = markersAbove; row < numrows; ++row)
             {
                 drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
@@ -1419,7 +1438,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (freq == curFreq )
+    if (std::abs(freq - curFreq) < 1000 )
     {
         bLineStart = "<b>";
         bLineEnd = "</b>";

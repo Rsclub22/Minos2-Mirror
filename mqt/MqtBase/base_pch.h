@@ -42,24 +42,23 @@
 #include <QVBoxLayout>
 
 #include <QDebug>
-template <class itemtype >inline bool operator < (const MapWrapper<itemtype> &key1, const MapWrapper<itemtype> &key2)
-{
-    itemtype *i1 = key1.wt.data();
-    itemtype *i2 = key2.wt.data();
-    return *i1 < *i2;
-}
-template <class itemtype >inline bool operator == (const MapWrapper<itemtype> &key1, const MapWrapper<itemtype> &key2)
-{
-    return key1.wt.data() == key2.wt.data();
-}
 
 #include <math.h>
 #include <time.h>
 
+#include "baseconstants.h"
+
 #include "fileutils.h"
 #include "MinosParameters.h"
 #include "ProfileEnums.h"
-#include "mwin.h"
+
+#include "minositem.h"
+#include "baseloglist.h"
+#include "callsign.h"
+#include "dtg.h"
+#include "gjvparams.h"
+#include "locator.h"
+
 #include "CacheSelection.h"
 #include "calcs.h"
 

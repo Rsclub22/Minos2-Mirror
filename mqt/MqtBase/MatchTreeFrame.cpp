@@ -1,5 +1,4 @@
 #include "base_pch.h"
-#include "MinosLoggerEvents.h"
 #include "MinosParameters.h"
 #include "ListContact.h"
 #include "list.h"
@@ -111,11 +110,11 @@ void MatchTreeFrame::doCustomContextMenuRequested()
             ListContact *lct = mc->getListContact();
             if (bct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.fullCall.getValue(), bct->loc.loc.getValue());
+                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
             }
             else if (lct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.fullCall.getValue(), lct->loc.loc.getValue());
+                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
             }
         }
     }

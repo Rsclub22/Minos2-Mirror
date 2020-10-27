@@ -28,7 +28,7 @@ void TForceLogDlg::on_OKButton_clicked()
 void TForceLogDlg::on_LocCalcButton_clicked()
 {
     TLocCalcForm loccalc( this );
-    loccalc.S1Loc = ( TContestApp::getContestApp() ->getCurrentContest() ->myloc.loc.getValue() ).trimmed();
+    loccalc.S1Loc = TContestApp::getContestApp() ->getCurrentContest() ->myloc.getLoc();
     if ( loccalc.exec() == QDialog::Accepted )
     {
        ui->CheckBox4->setChecked(false);	// Scored - so not non-scoring!
@@ -64,7 +64,7 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
     ui->CheckBox7->setChecked(screenContact.contactFlags & VALID_DISTRICT);
     ui->CheckBox8->setChecked(screenContact.contactFlags & XBAND);
 
-    if ((screenContact.cs.valRes == ERR_DUPCS) ||
+    if ((screenContact.cs.getValRes() == ERR_DUPCS) ||
             ( screenContact.contactFlags & ( NON_SCORING | MANUAL_SCORE | DONT_PRINT | VALID_DUPLICATE | TO_BE_ENTERED | XBAND ) ) )
 
     {

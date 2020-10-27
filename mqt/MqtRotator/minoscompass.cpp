@@ -93,6 +93,7 @@ void MinosCompass::paintEvent(QPaintEvent *)
     QColor needleBackColor("gray");
     QColor mouseBearingColor("green");
     QColor annulusColor("aliceblue");
+    annulusColor = annulusColor.darker(110);
 
     int side = qMin(width(), height());
 
@@ -217,7 +218,9 @@ void MinosCompass::mousePressEvent(QMouseEvent *event)
 
         double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
 
-        int radius = ((width()/2))*96/100;
+        int minwh = std::min(width(), height());
+
+        int radius = minwh/2;
         int inner = (radius * 7)/10;
 
         if (distanceFromCentre < radius && distanceFromCentre > inner)
@@ -248,7 +251,9 @@ void MinosCompass::mouseMoveEvent(QMouseEvent *event)
 
     double distanceFromCentre = sqrt(vec.x() * vec.x() + vec.y() * vec.y());
 
-    int radius = ((width()/2))*96/100;
+    int minwh = std::min(width(), height());
+
+    int radius = minwh/2;
     int inner = (radius * 7)/10;
 
     if (distanceFromCentre < radius && distanceFromCentre > inner)

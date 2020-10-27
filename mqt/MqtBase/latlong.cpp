@@ -559,10 +559,6 @@ static void ukoscentre ( double /*longi*/, double *centre )
    *centre = degrad( -2.0 );
 }
 /**********************************************************************/
-
-//extern char lonlat(const char *qra, double &lon, double &lat);	// from cdlg.h
-//#define LOC_OK 0	// from mwin.h
-
 static int locinput( Location *ingrid )
 {
    int tok = lonlat( ingrid->datastring, ingrid->easting, ingrid->northing, MinosParameters::getMinosParameters() ->getAllowLoc4() );
@@ -662,10 +658,11 @@ static int geoinput( Location *ingrid )
    //		getline();
 
    ingrid->datastring = ingrid->datastring.toUpper();
+   QRegExp cc("[NSEW]");
 
-   i = static_cast<int>(strcspn( ingrid->datastring, "NSEW" ));
+   i = static_cast<int>(ingrid->datastring.indexOf( cc ));
    if ( i < ingrid->datastring.length() )
-      j = static_cast<int>(strcspn( ingrid->datastring.mid( i + 1 ), "NSEW" ));
+      j = static_cast<int>(ingrid->datastring.mid( i + 1 ).indexOf(cc) );
    else
       j = 0;
 

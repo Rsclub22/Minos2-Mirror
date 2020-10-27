@@ -90,7 +90,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QString station = MinosConfig::getMinosConfig()->getThisServerName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
-    connect(MinosConfig::getMinosConfig(), SIGNAL(appStarted()), this, SLOT(appStarted()));
+    connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));
 }
 TLogContainer::~TLogContainer()
 {
@@ -120,6 +120,10 @@ bool TLogContainer::show(int argc, char *argv[])
     bool autoFill;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
     ReportAutofillAction->setChecked(autoFill);
+
+    bool oldBandMap;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
+    OldBandMapAction->setChecked(oldBandMap);
 
     ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
     ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
@@ -251,11 +255,7 @@ void TLogContainer::closeEvent(QCloseEvent *event)
     TContestApp::getContestApp() ->suppressWritePreload = true;
     TContestApp::getContestApp() ->clearPreloadComplete();
 
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       closeSlot(0, true);
-    }
+    CloseAllActionExecute();
     trace("closeEvent:Contest slots closed");
 
     MinosConfig::getMinosConfig() ->askStop();
@@ -450,6 +450,9 @@ void TLogContainer::setupMenus()
     restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+
+    OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
+    ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
     DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
@@ -764,7 +767,6 @@ void TLogContainer::FileNewActionExecute()
     }
     bool repeatDialog = true;
    QString suggestedfName;
-   c->mycall.validate();
    suggestedfName = ( c->mycall.realCall );
    suggestedfName += '_';
    if ( c->DTGStart.getValue().size() )
@@ -972,13 +974,20 @@ void TLogContainer::onTabClosebutton(int t)
 
 void TLogContainer::CloseAllActionExecute()
 {
-   while ( ui->ContestPageControl->count())
-   {
-      // Keep closing the current (and hence visible) contest
-      closeSlot(0, true);
-   }
-   on_ContestPageControl_currentChanged(-1);
-   enableActions();
+    QWidget *thisContest = ui->ContestPageControl->currentWidget();
+    while ( ui->ContestPageControl->count() > 1)
+    {
+        int t = ui->ContestPageControl->count() - 1;
+        QWidget *ctab = ui->ContestPageControl->widget(t);
+        if (ctab == thisContest)
+        {
+            t -= 1;
+        }
+        closeSlot(t, true );
+    }
+    closeSlot(0, true);
+    on_ContestPageControl_currentChanged(-1);
+    enableActions();
 }
 //---------------------------------------------------------------------------
 
@@ -1094,7 +1103,7 @@ void TLogContainer::LocCalcActionExecute()
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     if (ct)
     {
-       loccalc.S1Loc = ct->myloc.loc.getValue();
+       loccalc.S1Loc = ct->myloc.getLoc();
     }
     loccalc.exec();
 }
@@ -1259,6 +1268,25 @@ void TLogContainer::ReportAutofillActionExecute()
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, autoFill );
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
+}
+void TLogContainer::OldBandMap()
+{
+    bool oldBandMap = OldBandMapAction->isChecked();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+void TLogContainer::ConfigAgeProtection()
+{
+    int cap;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+    if (enquireDialog(this, tr("Set days after which to protect contests (-1 for never)"), cap, -1, 365))
+    {
+        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+
+        TWaitCursor wc(this);
+        selectSession(TContestApp::getContestApp()->currSession);
+    }
 }
 
 void TLogContainer::GoToSerialActionExecute()
@@ -1586,7 +1614,6 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
           QWidget *tab = ui->ContestPageControl->widget(t);
           tab->deleteLater();
-
           ui->ContestPageControl->removeTab(t);
           on_ContestPageControl_currentChanged(-1);
       }
@@ -1719,9 +1746,7 @@ void TLogContainer::updateSessionActions()
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
-    getCurrSession();
-
-    preloadBundle.openSection(app ->currSession);
+    preloadBundle.openSection(getCurrSession());
 
     sessionsMenu->clear();
 
@@ -1791,12 +1816,7 @@ void TLogContainer::closeSession()
     app->suppressWritePreload = true;
 
     // first, close all current slots, but don't write preload
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       // DO add to MRU (Is that right?)
-       closeSlot(0, true );
-    }
+    CloseAllActionExecute();
     app->suppressWritePreload = false;
 }
 void TLogContainer::selectSession(QString sessName)
@@ -1808,12 +1828,7 @@ void TLogContainer::selectSession(QString sessName)
     app->suppressWritePreload = true;
 
     // first, close all current slots, but don't write preload
-    while ( ui->ContestPageControl->count())
-    {
-       // Keep closing the current (and hence visible) contest
-       // DO add to MRU (Is that right?)
-       closeSlot(0, true );
-    }
+    CloseAllActionExecute();
 
     // and reload
     BaseContestLog *ct = loadSession(sessName);
@@ -1899,7 +1914,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
     preloadBundle.endGroup();
     return ct;
 }
-void TLogContainer::getCurrSession()
+QString TLogContainer::getCurrSession()
 {
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
@@ -1912,8 +1927,22 @@ void TLogContainer::getCurrSession()
     {
         app ->currSession = app ->defaultSession;
     }
+    return app->currSession;
 }
+void TLogContainer::setCurrSessionName(QString sessionName)
+{
+    TContestApp *app = TContestApp::getContestApp();
+    SettingsBundle &preloadBundle = app ->logsPreloadBundle;
+    preloadBundle.openSection(app ->preloadsect);
 
+    preloadBundle.getStringProfile(eppDefSession, app ->defaultSession );
+    if (sessionName == app ->preloadsect)
+    {
+        sessionName = app ->defaultSession;
+    }
+
+    preloadBundle.setStringProfile(eppSession, sessionName);
+}
 void TLogContainer::preloadFiles( const QString &conarg )
 {
     // and here we want to pre-load lists and contests from the INI file
@@ -1924,9 +1953,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
     TContestApp *app = TContestApp::getContestApp();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
-    getCurrSession();
-
-    preloadBundle.openSection(app ->currSession);
+    preloadBundle.openSection(getCurrSession());
 
     if (app ->currSession == app ->preloadsect)
     {
@@ -1981,10 +2008,10 @@ void TLogContainer::preloadLists( )
     TContestApp::getContestApp() ->writeListsList();
 }
 
-void TLogContainer::addListSlot( QWidget *p, const QString &fname, int slotno, bool preload )
+void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slotno, bool preload )
 {
 
-    MinosContestLoadDialog progress(p);
+    MinosContestLoadDialog progress(this);
    //create and show a progress splash screen
     progress.setLoadMessage(fname, false, true);
     progress.doShow();
@@ -2254,7 +2281,12 @@ void TLogContainer::onRestorContestModeChecked(bool checked)
 
 void TLogContainer::appStarted()
 {
-    delayedAction(this,  [=]() {setWindowState(windowState() | Qt::WindowState::WindowActive);});
+    delayedAction(this,  [=]()
+    {
+        Qt::WindowStates ss = windowState();
+        trace(QString("WindowsState %1").arg(ss));
+        setWindowState(ss | Qt::WindowState::WindowActive);
+    });
 }
 
 bool TLogContainer::readRestoreContestModeFlag()

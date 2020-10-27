@@ -14,7 +14,7 @@
 #ifndef SPOTDATABASE_H
 #define SPOTDATABASE_H
 
-
+#include "callsign.h"
 
 namespace bandmapSpotType {
 
@@ -79,15 +79,15 @@ public:
 
     void setDxCall(const QString dxCall_)
     {
-        dxCall = Callsign(dxCall_.trimmed());
+        dxCall.setFullCall(dxCall_);
 
-        dxCallValidateCode = dxCall.validate();
+        dxCallValidateCode = dxCall.getValRes();
     }
 
-    void setCallsign(Callsign cs){dxCall = cs;}
+    void setCallsign(const Callsign &cs){dxCall = cs;}
 
-    Callsign getDxCall() const {return dxCall;}
-    QString getDxCallStr() const {return dxCall.fullCall.getValue();}
+    const Callsign &getDxCall() const {return dxCall;}
+    QString getDxCallStr() const {return dxCall.getFullCall();}
     int getDxCallValidateCode() const {return dxCallValidateCode;}
 
 
@@ -117,11 +117,11 @@ public:
 
     void setSpotterCall(const QString spotterCall_)
     {
-        spotterCall = Callsign(spotterCall_.trimmed());
-        spotterCallValidateCode = spotterCall.validate();
+        spotterCall.setFullCall(spotterCall_);
+        spotterCallValidateCode = spotterCall.getValRes();
     }
     Callsign getSpotterCall()const {return spotterCall;}
-    QString getSpotterCallStr() const {return spotterCall.fullCall.getValue();}
+    QString getSpotterCallStr() const {return spotterCall.getFullCall();}
 
     int getSpotterCallValidateCode() const {return spotterCallValidateCode;}
 

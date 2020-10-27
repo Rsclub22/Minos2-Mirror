@@ -1281,7 +1281,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
     {
         return "";
     }
-    return syn.data()->country.data()->central.loc.getValue();
+    return syn.data()->country.data()->central.getLoc();
 }
 
 
@@ -1450,8 +1450,9 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, ClusterSpotData &newSp
     {
         for (int i = 0; i < extractStr.count(); i++)
         {
-            Callsign callsign(extractStr[i]);
-            if (callsign.validate() == CS_OK)
+            Callsign callsign;
+            callsign.setFullCall(extractStr[i]);
+            if (callsign.getValRes() == CS_OK)
             {
                 newSpot.setSpotterCall(extractStr[i]);
                 return true;

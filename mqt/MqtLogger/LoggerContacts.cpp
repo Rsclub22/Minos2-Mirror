@@ -75,7 +75,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
          exp_buff = tr("No Score Claimed") + " " ;
       }
       else
-         if ( cs.valRes == ERR_DUPCS )
+         if ( cs.getValRes() == ERR_DUPCS )
          {
              contactBuffs.scorebuff = "0";
              exp_buff = tr("Duplicate") + " ";
@@ -124,7 +124,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
 
          if ( clp->locMult.getValue() && locCount > 0 )
          {
-            catmult( multbuff, loc.loc.getValue(), 4 );
+            catmult( multbuff, loc.getLoc(), 4 );
          }
       }
       strcpysp( contactBuffs.buff, comments.getValue(), 42 );
@@ -143,12 +143,12 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       int next = 0;
       next = placestr( contactBuffs.buff2, time.getDate( DTGPRINT ), next, 10 );
       next = placestr( contactBuffs.buff2, time.getTime( DTGPRINT ), next + 1, 5 );
-      next = placestr( contactBuffs.buff2, cs.fullCall.getValue(), next + 1, 10 );
+      next = placestr( contactBuffs.buff2, cs.getFullCall(), next + 1, 10 );
       next = placestr( contactBuffs.buff2, reps.getValue(), next + 1, 3 );
       next = placestr( contactBuffs.buff2, contactBuffs.ssbuff, next + 1, -4 );
       next = placestr( contactBuffs.buff2, repr.getValue(), next + 1, 3 );
       next = placestr( contactBuffs.buff2, contactBuffs.srbuff, next + 1, -4 );
-      next = placestr( contactBuffs.buff2, loc.loc.getValue(), next + 1, clp->allowLoc8.getValue() ? 8 : 6 );
+      next = placestr( contactBuffs.buff2, loc.getLoc(), next + 1, clp->allowLoc8.getValue() ? 8 : 6 );
       if ( districtMult )
       {
          placestr( contactBuffs.buff2, districtMult->districtCode, next + 1, 3 );
@@ -205,7 +205,7 @@ void ContestContact::addReg1TestComment( QStringList &remarks )
 
    if ( !comments.getValue().isEmpty() )
    {
-      cmnt += cs.fullCall.getValue();
+      cmnt += cs.getFullCall();
       cmnt += ';';
       cmnt += comments.getValue().trimmed();
       remarks.append( cmnt );
@@ -281,7 +281,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    sdest += ';';
 
    //callsign
-   sdest += cs.fullCall.getValue();
+   sdest += cs.getFullCall();
    sdest += ';';
 
    QString smode = mode.getValue().toUpper();
@@ -354,7 +354,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    sdest += ';';
    if (contest->locatorMandatoryField.getValue())
    {
-        sdest += loc.loc.getValue();
+        sdest += loc.getLoc();
    }
    sdest += ';';
    //points
@@ -391,7 +391,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
       sdest += 'N';
    sdest += ';';
 
-   if ( cs.valRes == ERR_DUPCS )
+   if ( cs.getValRes() == ERR_DUPCS )
       sdest += 'D';
 }
 static QString getCabrilloField(QString s, int len)
@@ -451,7 +451,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
 
     outstr += getCabrilloField(time.getCabrilloDTG(), 15);
 
-    outstr += getCabrilloField(lcl->mycall.fullCall.getValue(), 13);
+    outstr += getCabrilloField(lcl->mycall.getFullCall(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
@@ -464,10 +464,10 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
     {
-        outstr += getCabrilloField(lcl->myloc.loc.getValue(), 6);
+        outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
     }
 
-    outstr += getCabrilloField(cs.fullCall.getValue(), 13);
+    outstr += getCabrilloField(cs.getFullCall(), 13);
 
     if (lcl->RSTMandatoryField.getValue())
     {
@@ -484,7 +484,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
     {
-        outstr += getCabrilloField(loc.loc.getValue(), 6);
+        outstr += getCabrilloField(loc.getLoc(), 6);
     }
 }
 QString ContestContact::getADIFLine()
@@ -539,9 +539,9 @@ QString ContestContact::getADIFLine()
     QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
     outstr += makeADIFField("FREQ", freq);
 
-    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.fullCall.getValue());
+    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
     outstr += makeADIFField("OPERATOR", clp->currentOp1.getValue());
-    outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.loc.getValue());
+    outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
     int zone = 0;
     lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
     outstr+= makeADIFField("ITUZ", zone);
@@ -569,7 +569,7 @@ QString ContestContact::getADIFLine()
         outstr += makeADIFField( "COMMENT", comments.getValue() );
         return outstr;
     }
-    outstr += makeADIFField( "CALL", cs.fullCall.getValue() );
+    outstr += makeADIFField( "CALL", cs.getFullCall() );
 
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
@@ -586,7 +586,7 @@ QString ContestContact::getADIFLine()
         outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
     }
     if (contest->locatorMandatoryField.getValue())
-        outstr += makeADIFField( "GRIDSQUARE", loc.loc.getValue() );
+        outstr += makeADIFField( "GRIDSQUARE", loc.getLoc() );
     if ( districtMult )
         outstr += makeADIFField( "QTH", districtMult->districtCode );
     else
@@ -601,7 +601,7 @@ QString ContestContact::getADIFLine()
         temp = 0;
     }
     else
-        if ( cs.valRes == ERR_DUPCS )
+        if ( cs.getValRes() == ERR_DUPCS )
         {
             temp = 0;
         }
@@ -656,9 +656,6 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          // search for the country, district, locator multipliers as required
          // Add to the worked counts as required
 
-         cs.valRes = CS_NOT_VALIDATED;
-         loc.valRes = LOC_NOT_VALIDATED;
-         loc.validate();
          checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
       }
    }
@@ -713,12 +710,12 @@ bool ContestContact::GJVsave( GJVParams &gp )
    }
    else
    {
-      strtobuf( cs.fullCall.getValue() );
+      strtobuf( cs.getFullCall() );
       strtobuf( reps.getValue() );
       strtobuf( serials.getValue() );
       strtobuf( repr.getValue() );
       strtobuf( serialr.getValue() );
-      strtobuf( loc.loc.getValue() );
+      strtobuf( loc.getLoc() );
       strtobuf( extraText.getValue() );
    }
    strtobuf( comments.getValue() );
@@ -772,8 +769,7 @@ bool ContestContact::GJVload( int diskBlock )
    time.setTime( temp, DTGDISP );
 
    buftostr( temp );
-   cs = Callsign( temp.toUpper() );
-   cs.valRes = CS_NOT_VALIDATED;
+   cs.setFullCall( temp );
 
    buftostr( temp );
    reps.setInitialValue( temp );
@@ -784,8 +780,7 @@ bool ContestContact::GJVload( int diskBlock )
    buftostr( temp );
    serialr.setInitialValue( temp );
    buftostr( temp );
-   loc.loc.setInitialValue( temp );
-   loc.valRes = LOC_NOT_VALIDATED;
+   loc.setLoc( temp );
    buftostr( temp );
    extraText.setInitialValue( temp );
 

@@ -583,7 +583,7 @@ void RotControlFrame::setRotatorList()
     ui->antennaName->addItem("");
     ui->antennaName->addItems(rots);
 
-    if (ct && !ct->isProtected())
+    if (ct && !ct->isReadOnly())
     {
         setRotatorAntennaName(ct->antennaName.getValue().toString());
     }
@@ -710,7 +710,7 @@ void RotControlFrame::setRotatorAntennaName(const QString &s)
        ui->antennaName->setCurrentText(s);
 
    antennaName = ui->antennaName->currentText();
-   if (ct && !ct->isProtected())
+   if (ct && !ct->isReadOnly())
    {
         emit selectRotator(s);
    }

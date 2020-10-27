@@ -23,7 +23,7 @@ INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
 
-PRECOMPILED_HEADER = ../MqtBase/base_pch.h
+#PRECOMPILED_HEADER = ../MqtBase/base_pch.h
 
 SOURCES += \
     AntennaDetail.cpp \
@@ -31,19 +31,23 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     bandmapmarkerdetails.cpp \
+    baseloglist.cpp \
     calcs.cpp \
     Calendar.cpp \
     CalendarList.cpp \
     ChatFrame.cpp \
     ChatServer.cpp \
     ConfigElementFrame.cpp \
+    callsign.cpp \
     checkmodeagainstfreq.cpp \
     checkoperatingfreq.cpp \
     contacts.cpp \
     contest.cpp \
     cutils.cpp \
     DisplayContestContact.cpp \
+    dtg.cpp \
     freqmodebandplan.cpp \
+    gjvparams.cpp \
     htmldelegate.cpp \
     KeyerState.cpp \
     latlong.cpp \
@@ -56,7 +60,9 @@ SOURCES += \
     MatchThisFrame.cpp \
     MatchThread.cpp \
     MatchTreeFrame.cpp \
+    locator.cpp \
     minosNetUtils.cpp \
+    minositem.cpp \
     minoskeyboard.cpp \
     MinosLines.cpp \
     MinosLoggerEvents.cpp \
@@ -66,7 +72,6 @@ SOURCES += \
     MinosTestImport.cpp \
     mults.cpp \
     MultsImpl.cpp \
-    mwin.cpp \
     presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
@@ -105,20 +110,24 @@ HEADERS += \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
+    baseloglist.h \
     calcs.h \
     Calendar.h \
     CalendarList.h \
     ChatFrame.h \
     ChatServer.h \
     ConfigElementFrame.h \
+    callsign.h \
     checkmodeagainstfreq.h \
     checkoperatingfreq.h \
     contacts.h \
     contest.h \
     cutils.h \
     DisplayContestContact.h \
+    dtg.h \
     focuswatcher.h \
     freqmodebandplan.h \
+    gjvparams.h \
     htmldelegate.h \
     KeyerState.h \
     latlong.h \
@@ -131,7 +140,9 @@ HEADERS += \
     MatchThisFrame.h \
     MatchThread.h \
     MatchTreeFrame.h \
+    locator.h \
     minosNetUtils.h \
+    minositem.h \
     minoskeyboard.h \
     MinosLines.h \
     MinosLoggerEvents.h \
@@ -141,7 +152,6 @@ HEADERS += \
     MinosTestImport.h \
     mults.h \
     MultsImpl.h \
-    mwin.h \
     ProfileEnums.h \
     presetbutton.h \
     profiles.h \

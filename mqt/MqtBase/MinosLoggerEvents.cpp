@@ -92,6 +92,11 @@ void MinosLoggerEvents::SendFormKey(unsigned int *key, BaseContestLog *c)
     emit mle.FormKey(key, c);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendClearContestInFrame(BaseContestLog *c)
+{
+    emit mle.clearContestInFrame(c);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendScreenContactChanged(ScreenContact *sct, BaseContestLog *c, QString b)
 {
     emit mle.ScreenContactChanged(sct, c, b);

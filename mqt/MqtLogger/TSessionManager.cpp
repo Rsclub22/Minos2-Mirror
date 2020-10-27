@@ -7,10 +7,9 @@
 #include "TSessionManager.h"
 #include "ui_TSessionManager.h"
 
-TSessionManager::TSessionManager(TLogContainer *parent) :
+TSessionManager::TSessionManager(QWidget *parent) :
     QDialog(parent)
   , ui(new Ui::TSessionManager)
-  , tlc(parent)
   , inShowSession(false)
   , inShowSessions(false)
 {
@@ -19,6 +18,9 @@ TSessionManager::TSessionManager(TLogContainer *parent) :
     QByteArray geometry = settings.value("TSessionManager/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
+
+    QByteArray state = settings.value("TSessionManager/SplitterState/setSplitter").toByteArray();
+    ui->setSplitter->restoreState(state);
 
     parseSessions();
     showSessions();
@@ -29,7 +31,12 @@ TSessionManager::~TSessionManager()
     delete ui;
 }
 
-
+void TSessionManager::on_setSplitter_splitterMoved(int /*pos*/, int /*index*/)
+{
+    QSettings settings;
+    QByteArray state = ui->setSplitter->saveState();
+    settings.setValue("TSessionManager/SplitterState/setSplitter", state);
+}
 void TSessionManager::enableButtons()
 {
     int nsess = sessionList.sessions.count();
@@ -52,7 +59,7 @@ void TSessionManager::enableButtons()
 void TSessionManager::parseSessions()
 {
     TContestApp *app = TContestApp::getContestApp();
-    QStringList sessions = tlc->getSessions();
+    QStringList sessions = LogContainer->getSessions();
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
 
     preloadBundle.startGroup();
@@ -267,7 +274,7 @@ void TSessionManager::on_AddEntryButton_clicked()
     //- need to put up a file selection dialog
     // AND we want it to be multiselect
 
-    QString InitialDir = tlc->getDefaultDirectory( false );
+    QString InitialDir = LogContainer->getDefaultDirectory( false );
 
     QFileInfo qf(InitialDir);
 

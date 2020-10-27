@@ -457,12 +457,12 @@ void Matcher::initMatch( )
          {
             matchDistrict( mct->extraText );
          }
-         unsigned char changed = matchcs.set( mct->cs.fullCall.getValue() );	// we rely on set to set up the search terms
+         unsigned char changed = matchcs.set( mct->cs.getFullCall() );	// we rely on set to set up the search terms
          if ( changed & SET_CHANGED )
          {
-            matchCountry( mct->cs.fullCall.getValue() );   // scroll to
+            matchCountry( mct->cs.getFullCall() );   // scroll to
          }
-         changed |= matchloc.set( mct->loc.loc.getValue() );			// so don't do this all on one line
+         changed |= matchloc.set( mct->loc.getLoc() );			// so don't do this all on one line
          changed |= qth_changed;
 
          if ( matchcs.empty && matchloc.empty && matchqth.empty )
@@ -803,13 +803,13 @@ bool ThisLogMatcher::idleMatch( int limit )
              }
              else
              {
-                 matchPart = cct->cs.fullCall.getValue();
+                 matchPart = cct->cs.getFullCall();
              }
              csmatch = matchcs.checkMatch( matchPart );
 
              if ( csmatch )
              {
-                locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+                locmatch = matchloc.checkMatch( cct->loc.getLoc() );
              }
 
              if ( csmatch && locmatch )
@@ -1027,13 +1027,13 @@ bool OtherLogMatcher::idleMatch( int limit )
             }
             else
             {
-                matchPart = cct->cs.fullCall.getValue();
+                matchPart = cct->cs.getFullCall();
             }
             csmatch = matchcs.checkMatch( matchPart );
 
             if ( csmatch )
             {
-               locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+               locmatch = matchloc.checkMatch( cct->loc.getLoc() );
             }
 
             if ( csmatch && locmatch )
@@ -1239,14 +1239,14 @@ bool ListMatcher::idleMatch( int limit )
          }
          else
          {
-             matchPart = cct->cs.fullCall.getValue();
+             matchPart = cct->cs.getFullCall();
          }
 
          csmatch = matchcs.checkMatch( matchPart );
 
          if ( csmatch )
          {
-            locmatch = matchloc.checkMatch( cct->loc.loc.getValue() );
+            locmatch = matchloc.checkMatch( cct->loc.getLoc() );
          }
 
 

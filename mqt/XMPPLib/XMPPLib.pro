@@ -16,7 +16,7 @@ CONFIG += staticlib
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../MqtUtils
 
-PRECOMPILED_HEADER = XMPP_pch.h
+#PRECOMPILED_HEADER = XMPP_pch.h
 
 SOURCES += \
     Dispatcher.cpp \

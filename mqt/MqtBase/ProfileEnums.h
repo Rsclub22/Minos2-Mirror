@@ -56,7 +56,11 @@ enum LOGGERPROFILE {
    elpPDFFile,
    elpAutoFill,
    elpAllowHF,
+   elpProgressDelay,
+   elpAgeToProtectContests,
+   elpBandmapOldStyle,
    elpAddBandMapTuningTolerance,
+
    elpDefaultFilterDistance_50MHz,
    elpDefaultFilterDistance_70MHz,
    elpDefaultFilterDistance_144MHz,
@@ -66,7 +70,6 @@ enum LOGGERPROFILE {
    elpDefaultFilterDistance_3_4GHz,
    elpDefaultFilterDistance_5_6GHz,
    elpDefaultFilterDistance_10GHz,
-
 
    elpBandmapStartZoomLevel_50MHz,
    elpBandmapStartZoomLevel_70MHz,

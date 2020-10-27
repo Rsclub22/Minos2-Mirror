@@ -75,7 +75,7 @@ void MinosTestExport::exportMode(QSharedPointer<QFile> expfd )
 
    bool dirty = false;
 
-   ct->protectedContest.addIfDirty( st, "protectedContest", dirty );
+   ct->getProtectedState().addIfDirty( st, "protectedContest", dirty );
    if ( dirty )
    {
       sendRequest( expfd, "MinosLogMode", st );
@@ -92,6 +92,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
 
    bool dirty = false;
 
+   ct->appVersion.addIfDirty(st, "version", dirty);
    ct->name.addIfDirty( st, "name", dirty );
    ct->contestBands.addIfDirty( st, "band", dirty );
    ct->currentBand.addIfDirty( st, "currentBand", dirty );
@@ -142,7 +143,7 @@ void MinosTestExport::exportQTH(QSharedPointer<QFile> expfd )
    makeHeader( st, 1 );
 
    bool dirty = false;
-   ct->myloc.loc.addIfDirty( st, "locator", dirty );
+   ct->myloc.addIfDirty( st, "locator", dirty );
    ct->location.addIfDirty( st, "district", dirty );  // We need to differentiate location from exchange!
    ct->location.addIfDirty( st, "location", dirty );
    ct->sqth1.addIfDirty( st, "stationQTH1", dirty );
@@ -164,7 +165,7 @@ void MinosTestExport::exportEntry( QSharedPointer<QFile> expfd )
    makeHeader( st, 1 );
 
    bool dirty = false;
-   ct->mycall.fullCall.addIfDirty( st, "call", dirty );
+   ct->mycall.addIfDirty( st, "call", dirty );
    ct->entrant.addIfDirty( st, "entrant", dirty );
    ct->entName.addIfDirty( st, "myName", dirty );
    ct->entCall.addIfDirty( st, "myCall", dirty );
@@ -347,13 +348,13 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & XBAND ) != 0 ), "xBand" );
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & FORCE_LOG ) != 0 ), "Forced" );
    }
-   lct->cs.fullCall.addIfDirty( st, "callRx", dirty );
+   lct->cs.addIfDirty( st, "callRx", dirty );
    lct->reps.addIfDirty( st, "rstTx", dirty );
    lct->serials.addIfDirty( st, "serialTx", dirty );
    //   lct->extraText.addIfDirty(st, "exchangeTx", dirty);
    lct->repr.addIfDirty( st, "rstRx", dirty );
    lct->serialr.addIfDirty( st, "serialRx", dirty );
-   lct->loc.loc.addIfDirty( st, "locRx", dirty );
+   lct->loc.addIfDirty( st, "locRx", dirty );
    lct->extraText.addIfDirty( st, "exchangeRx", dirty );
    lct->extraText.addIfDirty( st, "qthRx", dirty );
    lct->comments.addIfDirty( st, "commentsTx", dirty );

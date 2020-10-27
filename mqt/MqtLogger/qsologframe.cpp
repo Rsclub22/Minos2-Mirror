@@ -140,9 +140,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    ui->qsoFrame->setStyleSheet(ssQsoFrameBlue);
-    widgetStyles[ui->qsoFrame] = ssQsoFrameBlue;
-
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
 
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
@@ -382,6 +379,12 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
 
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
+
+    if (!pcontest)
+    {
+        return;
+    }
+
 
     csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
     vcs.push_back( csIl );
@@ -998,19 +1001,15 @@ void QSOLogFrame::getScreenEntry()
    getScreenContactTime();
    getScreenRigData();
    getscreenRotatorData();
-   screenContact.cs.fullCall.setValue( ui->CallsignEdit->text().trimmed() );
-   screenContact.cs.valRes = CS_NOT_VALIDATED;
-   screenContact.cs.validate( );
+   screenContact.cs.setFullCall( ui->CallsignEdit->text() );
 
    screenContact.reps = ui->RSTTXEdit->text().trimmed();
    screenContact.serials = ui->SerTXEdit->text().trimmed();
    screenContact.repr = ui->RSTRXEdit->text().trimmed();
    screenContact.serialr = ui->SerRXEdit->text().trimmed();
 
-   QString loc = ui->LocEdit->text().trimmed();
-   screenContact.loc.loc.setValue( loc );
-   screenContact.bearing = -1;		// force a recalc
-   screenContact.loc.validate();
+   QString loc = ui->LocEdit->text();
+   screenContact.loc.setLoc( loc );
 
    QString extra = ui->QTHEdit->text().trimmed();
    screenContact.extraText = extra;
@@ -1065,12 +1064,12 @@ void QSOLogFrame::showScreenEntry( )
       temp.copyFromArg( screenContact ); // as screen contact gets corrupted by auto changes
       // op1, op2 in ScreenContact get corrupted as well
       showScreenContactTime();
-      ui->CallsignEdit->setText(temp.cs.fullCall.getValue().trimmed());
+      ui->CallsignEdit->setText(temp.cs.getFullCall());
       ui->RSTTXEdit->setText(temp.reps.trimmed());
       ui->SerTXEdit->setText(temp.serials.trimmed());
       ui->RSTRXEdit->setText(temp.repr.trimmed());
       ui->SerRXEdit->setText(temp.serialr.trimmed());
-      ui->LocEdit->setText(temp.loc.loc.getValue().trimmed());  // also forces update of score etc
+      ui->LocEdit->setText(temp.loc.getLoc());  // also forces update of score etc
       ui->QTHEdit->setText(temp.extraText.trimmed());
       ui->CommentsEdit->setText(temp.comments.trimmed());
       ui->NonScoreCheckBox->setChecked(temp.contactFlags & NON_SCORING);
@@ -1079,7 +1078,7 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDisp());
+          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDispSingle());
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -1373,7 +1372,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                 {
                     if ((*vcp) == csIl)
                     {
-                        if ( screenContact.cs.valRes == ERR_DUPCS)
+                        if ( screenContact.cs.getValRes() == ERR_DUPCS)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
@@ -1393,11 +1392,11 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                     else if ((*vcp) == locIl)
                     {
                         // leave as no error
-                        if (screenContact.loc.valRes == ERR_LOC_RANGE && screenContact.loc.loc.getValue().size() > 4)
+                        if (screenContact.loc.getValRes() == ERR_LOC_RANGE && screenContact.loc.getLoc().size() > 4)
                         {
                             ss = ssLineEditFrRedBkRed;
                         }
-                        else if (screenContact.loc.valRes != LOC_OK)
+                        else if (screenContact.loc.getValRes() != LOC_OK)
                         {
                             ss = ssLineEditFrRedBkWhite;
                         }
@@ -1590,22 +1589,20 @@ void QSOLogFrame::contactValid( )
    {
       return ;
    }
-   // cs worked
-
-   vcct->cs.valRes = CS_NOT_VALIDATED;
-
    // we only validate this contact up to the validation point of the contest
    contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
 
-   int csret = vcct->cs.validate( );
    contest->DupSheet.clearCurDup();
+//   int csret = vcct->cs.reValidate();
+   int csret = vcct->cs.getValRes();
    if ( csret == CS_OK )
    {
       if ( contest->DupSheet.checkCurDup( vcct, contest->validationPoint, false ) )
       {
          if ( contest->DupSheet.isCurDup( vcct ) )      // But vcct is screen contact... so it won't be curdup
          {
-            csret = vcct->cs.valRes = ERR_DUPCS;
+            vcct->cs.setValRes(ERR_DUPCS);
+            csret = ERR_DUPCS;
          }
       }
    }
@@ -1634,8 +1631,8 @@ void QSOLogFrame::contactValid( )
 
    // locator received
 
-   int locrep = vcct->loc.validate();
-   if ( locrep != 0 )
+   int locrep = vcct->loc.getValRes();
+   if ( locrep != LOC_OK )
    {
       if ( contest->locatorMandatoryField.getValue() )
          locIl->tIfValid = false;
@@ -1661,7 +1658,7 @@ void QSOLogFrame::contactValid( )
    // and look up in squares list for country
    // look for square against main prefix in LocSquares.ini
 
-      QString sloc = vcct->loc.loc.getValue().left(4);
+      QString sloc = vcct->loc.getLoc().left(4);
       if (sloc.size())
       {
          bool LocOK;
@@ -1897,10 +1894,37 @@ void QSOLogFrame::updateQSODisplay()
    ui->InsertBeforeButton->setEnabled(notProtected);
    ui->InsertAfterButton->setEnabled(notProtected);
 
+   ui->CatchupButton->setEnabled(notProtected);
+   ui->FirstUnfilledButton->setEnabled(notProtected);
+
    bool mgm = contest->MGMContestRules.getValue();
 
    ui->ModeComboBoxGJV->setEnabled(!mgm);
    ui->ModeButton->setEnabled(!mgm);
+
+   QString ssQsoFrame = ssQsoFrameBlue;
+   if (contest->isReadOnly())
+   {
+       ssQsoFrame = ssQsoFrameRed;
+       if (contest->isUnwriteable())
+       {
+           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
+       }
+       else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
+       {
+           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
+       }
+       else if (contest->isAgeProtected())
+       {
+           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+       }
+   }
+   else
+   {
+       ui->protectionLabel->setText("");
+   }
+   ui->qsoFrame->setStyleSheet(ssQsoFrame);
+   widgetStyles[ui->qsoFrame] = ssQsoFrame;
 
    on_FontChanged();    // do all style sheets again
 }
@@ -2147,18 +2171,18 @@ void QSOLogFrame::logScreenEntry( )
    killPartial();
 
    MinosLoggerEvents::SendAfterLogContact(ct);
-   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.loc.getValue());
+   MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
    if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)
    {
        QString mode = lct->mode.getValue() + ':' + lct->mgmSubmode.getValue();
-       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.loc.getValue(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
+       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.getLoc(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
    }
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
-   ui->lastLoggedCallsignLbl->setText(lct->cs.fullCall.getValue());
-   lastLoggedLocator = lct->loc.loc.getValue();
+   ui->lastLoggedCallsignLbl->setText(lct->cs.getFullCall());
+   lastLoggedLocator = lct->loc.getLoc();
    lastLoggedFreq = lct->frequency.getValue();
 
 
@@ -2329,8 +2353,8 @@ void QSOLogFrame::setDtgSection()
 
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
-   ui->CallsignEdit->setText(lct->cs.fullCall.getValue());
-   ui->LocEdit->setText(lct->loc.loc.getValue());  // also forces update of score etc
+   ui->CallsignEdit->setText(lct->cs.getFullCall());
+   ui->LocEdit->setText(lct->loc.getLoc());  // also forces update of score etc
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2362,8 +2386,8 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 }
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
-   ui->CallsignEdit->setText(lct->cs.fullCall.getValue());
-   ui->LocEdit->setText(lct->loc.loc.getValue());
+   ui->CallsignEdit->setText(lct->cs.getFullCall());
+   ui->LocEdit->setText(lct->loc.getLoc());
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2862,18 +2886,18 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
     getScreenEntry();
     calcLoc();
     validCall = true;
-    if (screenContact.cs.validate() != CS_OK)
+    if (screenContact.cs.getValRes() != CS_OK)
     {
-        logData.callsign = screenContact.cs.fullCall.getValue();
+        logData.callsign = screenContact.cs.getFullCall();
         validCall = false;
 
     }
 
-    logData.callsign = screenContact.cs.fullCall.getValue();
+    logData.callsign = screenContact.cs.getFullCall();
     logData.freq = curFreq;
-    logData.locator = screenContact.loc.loc.getValue().trimmed();
+    logData.locator = screenContact.loc.getLoc();
     logData.mode = screenContact.mode;
-    if (screenContact.loc.loc.getValue().trimmed().isEmpty())
+    if (screenContact.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();
     }
@@ -2960,7 +2984,7 @@ void QSOLogFrame::setClusterServerState(QString stateMsg)
 void QSOLogFrame::checkBandMapAndClusterLoaded()
 {
 
-    if (isBandMapLoaded())
+    if (contest && !contest->isReadOnly() && isBandMapLoaded())
     {
         setBandmapControlsState();
         setTuningAddMapChkBoxState();

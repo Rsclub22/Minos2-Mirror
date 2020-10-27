@@ -318,7 +318,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             }
             if ((msg.mstage == ems73 || msg.mstage == emsRRR))
             {
-                if (msg.toCall == call_ )
+                if (msg.toCall.getFullCall() == call_ )
                 {
                     return "";
                 }
@@ -373,7 +373,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcFromGrid:
             if (msg.txrx == eTX)
                 return "";
-            return msg.fromGrid.loc.getValue();
+            return msg.fromGrid.getLoc();
         case dcToCall:
             if (msg.txrx == eTX)
                 return "";
@@ -381,7 +381,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
         case dcToGrid:
             if (msg.txrx == eTX)
                 return "";
-            return msg.toGrid.loc.getValue();
+            return msg.toGrid.getLoc();
 
         case dcBest:
         {

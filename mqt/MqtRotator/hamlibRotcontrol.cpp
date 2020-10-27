@@ -208,11 +208,11 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         {
             netAdd = selectedAntenna.networkAdd;
         }
-        strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN);
+        strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN - 1);
     }
     else if (selectedAntenna.portType == RotCapConstants::PortType::none)
     {
-        strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN);
+        strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN - 1);
     }
 
 

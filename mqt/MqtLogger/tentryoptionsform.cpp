@@ -93,8 +93,8 @@ TEntryOptionsForm::TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetai
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth1.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->sqth2.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entSect.getValue()));
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->mycall.fullCall.getValue()));
-    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->myloc.loc.getValue()));
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->mycall.getFullCall()));
+    ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->myloc.getLoc()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->location.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->entTx.getValue()));
     ui->OptionsScrollBox->setItem(r++, 0, new QTableWidgetItem(ct->power.getValue()));
@@ -182,8 +182,8 @@ void TEntryOptionsForm::on_CloseButton_clicked()
     ct->sqth1.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->sqth2.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entSect.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->mycall.fullCall.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
-    ct->myloc.loc.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->mycall.setFullCall( ui->OptionsScrollBox->item(r++, 0)->text() );
+    ct->myloc.setLoc( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->location.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->entTx.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
     ct->power.setValue( ui->OptionsScrollBox->item(r++, 0)->text() );
@@ -321,8 +321,6 @@ QString TEntryOptionsForm::doFileSave( )
             break;
         case EREG1TEST:
             defext = "edi";
-            ct->mycall.valRes = CS_NOT_VALIDATED;
-            ct->mycall.validate( );
             filter =tr( "Region 1 EDI files (*.edi);;All Files (*.*);;") ;
             title = tr("Save contest in Region 1 EDI file format as...");
             break;
@@ -336,8 +334,6 @@ QString TEntryOptionsForm::doFileSave( )
         case ECABRILLO:
         {
             defext = "cbr";
-            ct->mycall.valRes = CS_NOT_VALIDATED;
-            ct->mycall.validate( );
             filter =tr( "Cabrillo files (*.cbr);;All Files (*.*);;") ;
             title = tr("Save contest in Cabrillo file format as...");
             break;

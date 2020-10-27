@@ -930,11 +930,12 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 {
     bool callfound = false;
     bool locfound = false;
-    if (ct && !ct->isProtected())
+    if (ct && !ct->isReadOnly())
     {
 
-        Callsign mcs(callsign);
-        mcs.validate();
+        Callsign mcs;
+        mcs.setFullCall(callsign);
+
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
             unsigned short cf = (*i).wt->contactFlags.getValue();
@@ -956,7 +957,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
             if (!locator.isEmpty())
             {
                 QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
                 {
                     *locatorWorked = true;
                     locfound = true;
@@ -1221,7 +1222,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
-            if (!ct->isProtected())
+            if (!ct->isReadOnly())
             {
                 isProtected = false;
             }
@@ -1602,7 +1603,7 @@ void ClusterClientFrame::searchProxyModelUpdate()
 void ClusterClientFrame::checkNewSpots()
 {
 
-    if (ct && !ct->isProtected() && ct == TContestApp::getContestApp()->getCurrentContest())
+    if (ct && !ct->isReadOnly() && ct == TContestApp::getContestApp()->getCurrentContest())
     {
         LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
@@ -2122,8 +2123,9 @@ bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
         }
         else
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
-            spotCall.validate();
+            Callsign spotCall;
+            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
+
             if (spotCall.realCall.contains(searchParameter, Qt::CaseInsensitive))
             {
                 return true;
@@ -2144,8 +2146,9 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     {
         if (matchBand(sourceRow)  && matchMode(sourceRow))
         {
-            Callsign spotCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
-            spotCall.validate();
+            Callsign spotCall;
+            spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
+
             foreach (const QString &str, filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))

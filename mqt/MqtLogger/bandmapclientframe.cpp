@@ -797,7 +797,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
         if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
         {
-            if (!ct->isProtected())
+            if (!ct->isReadOnly())
             {
                 isProtected = false;
             }
@@ -1174,6 +1174,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(const BandmapSpotData* spot)
                     QVariant f;
                     f.setValue(spot->getFreq());
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), f, BMP_DataStoredRole);
+                    bandmapDataModel->sortModel();
 
                     // do we need to update the time as well????
                     // we don't need to save this incomming logger spot as we have moved it..
@@ -1340,6 +1341,7 @@ void BandmapClientFrame::addRemoveCQSpot(const BandmapSpotData* spot)
             QVariant f;
             f.setValue(spot->getFreq());
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
+            bandmapDataModel->sortModel();
         }
 
 
@@ -1430,6 +1432,7 @@ bool BandmapClientFrame::checkSpotInTable(QStringList &sl)
                     QVariant f;
                     f.setValue(dxFreq);
                     bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM), f, BMP_DataStoredRole);
+                    bandmapDataModel->sortModel();
                     return  false;          // don't save this spot to the bandmap spot list
 
                 } else if (spotType == bandmapSpotType::CLUSTER)
@@ -1492,11 +1495,12 @@ void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 {
     bool callfound = false;
     bool locfound = false;
-    if (ct && !ct->isProtected())
+    if (ct && !ct->isReadOnly())
     {
 
-        Callsign mcs(callsign);
-        mcs.validate();
+        Callsign mcs;
+        mcs.setFullCall(callsign);
+
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
             unsigned short cf = (*i).wt->contactFlags.getValue();
@@ -1518,7 +1522,7 @@ void BandmapClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
             if (!locator.isEmpty())
             {
                 QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
+                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
                 {
                     *locatorWorked = true;
                     locfound = true;
@@ -1936,7 +1940,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, Callsign cs, QStr
         }
 
 
-        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.fullCall.getValue()).arg(freq.traceStr()).arg(loc).arg(brg));
+        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs.getFullCall()).arg(freq.traceStr()).arg(loc).arg(brg));
         //QString time = QDateTime::currentDateTimeUtc().time().toString("HH:MM");
         QDateTime time = QDateTime::currentDateTimeUtc();
 
@@ -2014,7 +2018,7 @@ void BandmapClientFrame::setCQFreq()
 //                                                freq, logBandStr, logBandMask,
 //                                                false, time, runModeOn, offRunFreq, bandmapSpotType::CQ);
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::CQ);
-        spot->setCallsign(Callsign("???"));
+        spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
@@ -2058,7 +2062,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
 //                                            false, time, false, false, bandmapSpotType::MARKED);
 
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::MARKED);
-        spot->setCallsign(Callsign("???"));
+        spot->setDxCall("???");
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
@@ -2099,7 +2103,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 //                                            false, time, false, false, bandmapSpotType::SAVED);
 //
         BandmapSpotData* spot = new BandmapSpotData(bandmapSpotType::SAVED);
-        spot->setCallsign(Callsign(cs));
+        spot->setDxCall(cs);
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);
         spot->setMode(logModeStr);
@@ -2264,7 +2268,7 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
     ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
 }
 
-void BandmapClientFrame::on_textFilterEdit_textEdited(const QString &filter)
+void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
     bandmapSpotProxyModel->setFilterString(filter);
     bandmapView->bandmapUpdate();

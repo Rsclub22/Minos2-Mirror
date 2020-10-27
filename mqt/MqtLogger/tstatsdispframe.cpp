@@ -99,13 +99,13 @@ void TStatsDispFrame::reInitialiseStats()
    {
       double avpts = static_cast< double>(ct->contestScore) / nvalid;
       QString tempcs;
-      tempcs = bestdx->cs.fullCall.getValue().trimmed() ;
+      tempcs = bestdx->cs.getFullCall() ;
 
       QString buff = tr( "Best DX %1 Sn %2 %3(%4 kms). Average QSO is %5 Points" )
                            //#define MAX_DISPLAY_TEST 1
    #ifndef MAX_DISPLAY_TEST
                            .arg( tempcs) .arg(bestdx->serials.getValue())
-                           .arg(bestdx->loc.loc.getValue()) .arg( bestdx->contactScore.getValue())
+                           .arg(bestdx->loc.getLoc()) .arg( bestdx->contactScore.getValue())
                            .arg(avpts, 0, 'f', 1);
    #else
                            .arg("PE0/LX5ABC/P") .arg("9999") .arg( "XX99XX") .arg(29999) .arg(9999.9);

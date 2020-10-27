@@ -1,12 +1,12 @@
 #include "base_pch.h"
 #include <QDesktopServices>
-
+#include "ContestApp.h"
+#include "tlogcontainer.h"
+#include "TSessionManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
-
-static bool started = false;
 
 QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
@@ -28,7 +28,7 @@ QString TAboutBox::creditsText = QString(
     "<br><h3>%7</h3>"
     "<br> Peter Burton G3ZPB"
     "<br><h3>%8</h3>"
-    "<br>Ken Punshon G4APJ"
+    "<br>Ken Punshon G4APJ, Jacques Lepoil F1BHL"
     "<br><h3>%9</h3>"
     "<br>Dave Sergeant G3YMC"
     "<br><h3>%10</h3>"
@@ -81,7 +81,11 @@ int TAboutBox::exec()
     {
         doStartup = false;
     }
-    if ( !started && doStartup )
+    else
+    {
+        LogContainer->setCurrSessionName( ui->chooseSetCb->currentText());
+    }
+    if ( doStartup )
     {
        // auto start on first run, but only if we gave that option
 
@@ -133,6 +137,40 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     ui->ExitButton->setVisible(onStartup);
     ui->LoggerOnlyButton->setVisible(onStartup);
+    ui->SessionsFrame->setVisible(onStartup);
+
+    if (onStartup)
+    {
+        TContestApp *app = TContestApp::getContestApp();
+
+        // This sets app ->currSession which allows an incoming
+        // LanguageChange even to do things...
+
+        QString sess = LogContainer->getCurrSession();
+        if (sess.isEmpty())
+        {
+            sess = app->defaultSession;
+        }
+
+        // so clear it again!
+        app ->currSession.clear();
+
+        QStringList sessionlst = LogContainer->getSessions();
+        if (sessionlst.count())
+        {
+            ui->chooseSetCb->addItems(sessionlst);
+        }
+        else
+        {
+            ui->chooseSetCb->addItem(sess);
+        }
+        ui->chooseSetCb->setCurrentText(sess);
+
+        int cap;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+        ui->ageSpinner->setValue(cap);
+
+    }
 
     if (  onStartup && !checkServerReady() )
     {
@@ -186,4 +224,27 @@ void TAboutBox::on_AppsButton_clicked()
 {
     StartConfig configBox( this, false);
     configBox.exec();
+}
+
+void TAboutBox::on_manageSets_clicked()
+{
+    LogContainer->setCurrSessionName(ui->chooseSetCb->currentText());
+    QString sess = LogContainer->getCurrSession();  // sets ap->currSession
+    TSessionManager tsm(this);
+    tsm.exec();
+
+    ui->chooseSetCb->clear();
+
+    // it might have changed
+    sess = LogContainer->getCurrSession();
+
+    QStringList sessionlst = LogContainer->getSessions();
+    ui->chooseSetCb->addItems(sessionlst);
+    ui->chooseSetCb->setCurrentText(sess);
+}
+
+void TAboutBox::on_ageSpinner_valueChanged(int cap)
+{
+    TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }

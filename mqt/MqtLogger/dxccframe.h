@@ -35,7 +35,7 @@ class DXCCGridModel: public QAbstractItemModel
 class DXCCSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
-    int scrolledCountry;
+    QString scrolledCountry;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     DXCCSortFilterProxyModel(): scrolledCountry(-1)
     {
@@ -56,7 +56,7 @@ public:
 
     void setContest(LoggerContestLog *contest);
     void reInitialiseCountries();
-    void scrollToCountry( int ctry_ind, bool makeVisible );
+    void scrollToCountry(const QString &bp, bool makeVisible );
 
 private:
     Ui::DXCCFrame *ui;

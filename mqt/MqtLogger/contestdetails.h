@@ -26,7 +26,7 @@ private:
     Ui::ContestDetails *ui;
     UpperCaseValidator ucValidator;
 
-    QSharedPointer< ContestDetailsTransferObject > contest;
+    QSharedPointer< ContestDetailsTransferObject > contestTransferObject;
    LoggerContestLog * inputcontest;
    QString sectionList;
    bool saveContestOK;
@@ -76,6 +76,7 @@ private slots:
    void on_MGMCheckBox_stateChanged(int arg1);
    void on_RotatorList();
    void on_SetRadioList();
+   void on_ageProtectedcb_stateChanged(int arg1);
 };
 
 #endif // CONTESTDETAILS_H

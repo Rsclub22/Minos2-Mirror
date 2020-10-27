@@ -194,7 +194,7 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     if (!bandOK)
         return;
 
-    if (ct->isProtected())
+    if (ct->isReadOnly())
         return;
 
     trace("WsjtxFrame::log_ADIF " + QString(ADIF));
@@ -214,12 +214,12 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
     for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
-        if (bct->loc.loc.getValue().isEmpty())
+        if (bct->loc.getLoc().isEmpty())
         {
             Callsign cs = bct->cs;
             const Locator loc = WsjtGetCallLoc(cs);
-            bct->loc.loc.setValue(loc.loc);
-            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.fullCall.getValue()).arg(loc.loc.getValue()));
+            bct->loc = loc;
+            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.getFullCall()).arg(loc.getLoc()));
         }
         bct->commonSave(bct);
     }
@@ -335,14 +335,14 @@ void WsjtxFrame::process_decodes()
                         continue;   // potentially bad decode
 
                     trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
-                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()).arg(callingCall).arg(workingCall));
+                          .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.getFullCall()).arg(dc.fromCall.getFullCall()).arg(callingCall).arg(workingCall));
 
                     // if we are calling CQ or RR73 or 73, and we are toCall, we have a set of candidates for best
                     // work these before lookng for others
 
                      PointBonusMultSnr pbv(dc);
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
-                     QString dcFromCall = dc.fromCall.fullCall.getValue();
+                     QString dcFromCall = dc.fromCall.getFullCall();
 
                      if (toMyCall)
                      {
@@ -416,14 +416,14 @@ void WsjtxFrame::process_decodes()
                          continue;
 
                      trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
-                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.fullCall.getValue()).arg(dc.fromCall.fullCall.getValue()));
+                           .arg(messages[i].message).arg(dc.getMStage()).arg(dc.toCall.getFullCall()).arg(dc.fromCall.getFullCall()));
 
                      if (dc.points <= 0)    // e.g. duplicate
                         continue;
 
                      PointBonusMultSnr pbv(dc);
                      bool toMyCall = (dc.toCall == decoder.getMyCall());
-                     QString dcFromCall = dc.fromCall.fullCall.getValue();
+                     QString dcFromCall = dc.fromCall.getFullCall();
 
                      bool auto73 = ui->autosel73cb->isChecked();
                      if ((dc.mstage == emsCQ)   // CQ calls aren't "to" anyone

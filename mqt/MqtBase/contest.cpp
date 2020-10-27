@@ -19,28 +19,14 @@
 
 #include "contest.h"
 
-void BaseContestLog::addCountryWorked(QString band, int ctry)
+void BaseContestLog::addCountryWorked(QString band, const QString &basePrefix)
 {
-    if (!countryWorked.contains(band))
-    {
-        int nc = MultLists::getMultLists() ->getCtryListSize();
-        countryWorked.insert(band, QSharedPointer<int>( new int[ nc ]));
-        for ( int i = 0; i < nc; i++ )
-           countryWorked[band].data()[ i ] = 0;
-    }
-    countryWorked[band].data()[ ctry ]++;
+    countryWorked[band][ basePrefix ]++;
 }
 
-void BaseContestLog::addDistrictWorked(QString band, int dist)
+void BaseContestLog::addDistrictWorked(QString band, const QString &cd)
 {
-    if (!districtWorked.contains(band))
-    {
-        int nc = MultLists::getMultLists() ->getDistListSize();
-        districtWorked.insert(band, QSharedPointer<int>(new int[ nc ]));
-        for (int i = 0; i < nc; i++ )
-           districtWorked[band].data()[ i ] = 0;
-    }
-    districtWorked[band].data()[ dist ]++;
+    districtWorked[band][ cd ]++;
 }
 
 BaseContestLog::BaseContestLog( )
@@ -51,7 +37,7 @@ BaseContestLog::BaseContestLog( )
    bearingOffset.setValue(0);
    currentMode.setValue( "USB" );
 
-   protectedContest.setValue( false );
+  protectedContest.setValue( false );
   allowLoc8.setValue( false );
   allowLoc4.setValue ( false );
   RSTMandatoryField.setValue( true );
@@ -76,6 +62,11 @@ BaseContestLog::~BaseContestLog()
 {
    closeFile();
 }
+void BaseContestLog::setVersion(QString v)
+{
+    appVersion.setValue(v);
+}
+
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
     int i = 0;
@@ -214,12 +205,13 @@ void BaseContestLog::setCurrentBand(QString cb)
 
 void BaseContestLog::clearDirty()
 {
+   appVersion.clearDirty();
    protectedContest.clearDirty();
-   mycall.fullCall.clearDirty();
+   mycall.clearDirty();
 
    name.clearDirty();
    location.clearDirty();
-   myloc.loc.clearDirty();
+   myloc.clearDirty();
    allowLoc4.clearDirty();
    allowLoc8.clearDirty();
    RSTMandatoryField.clearDirty();
@@ -257,11 +249,12 @@ void BaseContestLog::clearDirty()
 }
 void BaseContestLog::setDirty()
 {
+   appVersion.setDirty();
    protectedContest.setDirty();
-   mycall.fullCall.setDirty();
+   mycall.setDirty();
    name.setDirty();
    location.setDirty();
-   myloc.loc.setDirty();
+   myloc.setDirty();
    allowLoc4.setDirty();
    allowLoc8.setDirty();
    RSTMandatoryField.setDirty();
@@ -314,13 +307,13 @@ void BaseContestLog::validateLoc( )
         locValid = false;
 
     Locator nloc;
-    nloc.loc.setValue(myloc.loc.getValue().left(4) + "MM");
+    nloc.setLoc(myloc.getLoc().left(4) + "MM");
     if ( nloc.validate( odec, odnc ) == LOC_OK )
     {
         cosodnc = cos( odnc );
         sinodnc = sin( odnc );
         locValid = true;
-        myloc.valRes = LOC_OK;
+        myloc.setValRes(LOC_OK);
     }
     else
         locValid = false;
@@ -346,7 +339,7 @@ void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) 
 //int *brg ;                      /* resulting bearing */
 
 {
-   if ( myloc.valRes != LOC_OK )
+   if ( myloc.getValRes() != LOC_OK )
    {
       dist = 1;
       brg = 0;
@@ -400,7 +393,7 @@ void BaseContestLog::disbearc( double lon, double lat, double &dist, int &brg ) 
 //int *brg ;                      /* resulting bearing */
 
 {
-   if ( myloc.valRes != LOC_OK )
+   if ( myloc.getValRes() != LOC_OK )
    {
       dist = 1;
       brg = 0;
@@ -703,7 +696,7 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
    if ( cct->contactFlags.getValue() & ( NON_SCORING | COMMENT_ONLY | LOCAL_COMMENT | DONT_PRINT ) )
       return ;
 
-   if ( cct->cs.valRes != CS_OK )
+   if ( cct->cs.getValRes() != CS_OK )
       return ;
 
    if ( ( !*bestDX ) || ( ( cct->contactScore.getValue() > ( *bestDX ) ->contactScore.getValue() ) ) )
@@ -809,15 +802,10 @@ void BaseContestLog::scanContest( )
 
       // check for duplicates; accumulate the current points score
 
-      nct->cs.valRes = CS_NOT_VALIDATED;
-      nct->cs.validate( );
-
       nct->bearing = -1;		// force a recalc
-      nct->loc.validate();
 
       if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
-         nct->cs.valRes = ERR_DUPCS;
-
+         nct->cs.setValRes( ERR_DUPCS);
 
       nct->multCount = 0;
       nct->newDistrict = false;
@@ -880,7 +868,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       {
          continue;
       }
-      if (nct->cs.valRes != CS_OK)
+      if (nct->cs.getValRes() != CS_OK)
       {
          continue;
       }
@@ -926,7 +914,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       }
       else
       {
-         trace(QString("neg score ") + nct->cs.fullCall.getValue() + " " + nct->serials.getValue());
+         trace(QString("neg score ") + nct->cs.getFullCall() + " " + nct->serials.getValue());
       }
    }
    cs.nmults = 0;
@@ -1046,7 +1034,7 @@ dupsheet::~dupsheet()
 bool dupsheet::checkCurDup(ScreenContact *nct, unsigned long valpseq, bool insert )
 {
    curdup.reset();
-   if ( nct->cs.valRes == CS_OK )
+   if ( nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = ctList.find(test);
@@ -1080,7 +1068,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
 {
    curdup.reset();
    QSharedPointer<BaseContact> nct = contest->pcontactAtSeq(nctseq);
-   if ( nct && nct->cs.valRes == CS_OK )
+   if ( nct && nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
       DupIterator c = ctList.find(test);
@@ -1164,6 +1152,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
 
    if ( methodName == "MinosLogContest" )
    {
+      mt->getStructArgMemberValue( "version", appVersion );
       mt->getStructArgMemberValue( "name", name );
       mt->getStructArgMemberValue( "band", contestBands );
       mt->getStructArgMemberValue( "currentBand", currentBand );
@@ -1246,15 +1235,23 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       else
          if ( methodName == "MinosLogQTH" )
          {
-            if ( mt->getStructArgMemberValue( "locator", myloc.loc ) )
+            QString temp;
+            if ( mt->getStructArgMemberValue( "locator", temp ) )
+            {
+                myloc.setLoc(temp);
                validateLoc();
+            }
             mt->getStructArgMemberValue( "district", location );
             mt->getStructArgMemberValue( "location", location ); // doubled up...
          }
          else
             if ( methodName == "MinosLogEntry" )
             {
-               mt->getStructArgMemberValue( "call", mycall.fullCall );
+                QString temp;
+               if (mt->getStructArgMemberValue( "call", temp ))
+               {
+                   mycall.setFullCall(temp);
+               }
             }
             else
                if ( methodName == "MinosLogStation" )

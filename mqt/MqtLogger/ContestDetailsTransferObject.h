@@ -37,6 +37,14 @@ public:
           protectedContest.setValue( true );
        }
     }
+    bool isAgeProtected( )
+    {
+       return ageProtected;
+    }
+    void setAgeProtected( bool s  )
+    {
+        ageProtected = s;
+    }
     bool isProtectedSuppressed( )
     {
        return suppressProtected;
@@ -51,6 +59,7 @@ private:
     QString cfileName;
     bool minosFile;
 
+    MinosStringItem<QString> appVersion;
     MinosItem<bool> protectedContest;
     MinosStringItem<QString> name;         // name of contest
     MinosStringItem<QString> location;
@@ -110,6 +119,7 @@ private:
     int NonUKloc_multiplier = 0;
     int UKloc_multiplier = 0;
 
+    bool ageProtected = false;
     bool suppressProtected = false;
     bool unwriteable = false;
 

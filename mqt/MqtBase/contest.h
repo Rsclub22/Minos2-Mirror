@@ -79,13 +79,21 @@ class BaseContestLog: public BaseLogList
       // This is the basis behind all variants - currently we have Logger and Monitor
       // which hold slightly different info, and more importantly handle backing store
       // totally differently
-      QMap<QString, QSharedPointer<int> > districtWorked;
-      QMap<QString, QSharedPointer<int> > countryWorked;
+      QHash<QString, QHash<QString,int> > districtWorked;
+      QHash<QString, QHash<QString,int> > countryWorked;
+
+      MinosItem<bool> protectedContest;
+      // This is private as in general you shuld be using isReadOnly()
+      bool isProtected( )
+      {
+         return protectedContest.getValue();
+      }
 
    public:
       QString uuid;
       int cslotno = -1;
       int unfilledCount = 0;
+      bool ageProtected = false;
 
       //BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
       BaseContestLog();
@@ -107,7 +115,11 @@ class BaseContestLog: public BaseLogList
       // "Real" basic contest data that needs monitoring
       // and provide the "front sheet" data
 
-      MinosItem<bool> protectedContest;
+      MinosItem<bool> &getProtectedState()
+      {
+          return protectedContest;
+      }
+      MinosStringItem<QString> appVersion;
 
       MinosStringItem<QString> name;         // name of contest
       MinosStringItem<QString> location;
@@ -162,11 +174,11 @@ class BaseContestLog: public BaseLogList
       virtual void setDirty();
       bool isReadOnly( )
       {
-         return (protectedContest.getValue() && ! suppressProtected) || unwriteable;
+         return (protectedContest.getValue() && ! suppressProtected) || unwriteable || ageProtected;
       }
-      bool isProtected( )
+      bool isAgeProtected()
       {
-         return protectedContest.getValue();
+          return ageProtected;
       }
       void setProtected( bool s  )
       {
@@ -252,37 +264,45 @@ class BaseContestLog: public BaseLogList
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
 
-      int getDistrictsWorked( int item )
+      int getDistrictsWorked( const QString &item )
       {
           int n = 0;
-          foreach(const QSharedPointer<int> nc, districtWorked)
+          for(auto dc: districtWorked)
           {
-              n += nc.data()[item];
+              if (dc.contains(item))
+              {
+                  auto nc = dc.value(item);
+                  n += nc;
+              }
           }
-         return n;
+          return n;
       }
-      int getCountriesWorked( int item )
+      int getCountriesWorked( const QString &item )
       {
           int n = 0;
-          foreach(const QSharedPointer<int> nc, countryWorked)
+          for(auto dc: countryWorked)
           {
-              n += nc.data()[item];
+              if (dc.contains(item))
+              {
+                  auto nc = dc.value(item);
+                  n += nc;
+              }
           }
-         return n;
+          return n;
       }
-      int getDistrictsWorked( QString band, int item )
+      int getDistrictsWorked( const QString &band, const QString &item )
       {
           if (districtWorked.contains(band))
           {
-              return districtWorked[band].data()[item];
+              return districtWorked[band][item];
           }
          return 0;
       }
-      int getCountriesWorked( QString band, int item )
+      int getCountriesWorked( QString band, const QString &item )
       {
           if (countryWorked.contains(band))
           {
-              return countryWorked[band].data()[item];
+              return countryWorked[band][item];
           }
          return 0;
       }
@@ -377,9 +397,9 @@ class BaseContestLog: public BaseLogList
       bool checkTime(const QDateTime &t) const;
 
 
-      void addCountryWorked(QString band, int ctry);
+      void addCountryWorked(QString band, const QString &basePrefix);
 
-      void addDistrictWorked(QString band, int dist);
+      void addDistrictWorked(QString band, const QString &cd);
 
       int getNctry() const;
 
@@ -396,6 +416,8 @@ protected:
    int ct_stanzaCount = 0;
    bool suppressProtected = false;
    bool unwriteable = false;
+
+   void setVersion(QString v);
 
    virtual bool minosSaveFile( bool /*newfile*/ )
    {
