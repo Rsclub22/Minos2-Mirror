@@ -17,18 +17,19 @@
 struct DistCount
 {
     DistCount(QString p, int d):prefix(p), dcount(d){}
+    DistCount():dcount(0){}
    QString prefix;
    char dcount;
 };
 static QVector<DistCount> distCounts =
    {
-      {"G", 1},
-      {"GD", 1},
-      {"GI", 6},
-      {"GJ", 1},
-      {"GM", 3},
-      {"GU", 1},
-      {"GW", 1}
+      DistCount("G", 1),
+      DistCount("GD", 1),
+      DistCount("GI", 6),
+      DistCount("GJ", 1),
+      DistCount("GM", 3),
+      DistCount("GU", 1),
+      DistCount("GW", 1)
    };
 //============================================================================
 GlistEntry::GlistEntry( const QString &syn, const QString &dup )
