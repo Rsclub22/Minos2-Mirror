@@ -80,6 +80,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
                    << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
+
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
         connect(bandChkBoxList[i], &QCheckBox::clicked, [=](){onBandChkBoxChecked(i);});

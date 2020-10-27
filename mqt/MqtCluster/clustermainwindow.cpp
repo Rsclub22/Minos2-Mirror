@@ -339,6 +339,7 @@ void ClusterMainWindow::doStartup()
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
     purgeTimer->start(PURGE_TIME);
 
+    initFilterCheckBoxs();
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -361,8 +362,25 @@ void ClusterMainWindow::doStartup()
 
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
+    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
+    setHF(false);
+
+}
 
 
+void ClusterMainWindow::onpbpressed()
+{
+    static bool state = false;
+    if (!state)
+    {
+        state = true;
+        setHF(state);
+    }
+    else
+    {
+        state = false;
+        setHF(state);
+    }
 }
 
 /*
@@ -1642,7 +1660,7 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
             dxSpotDataModel->rowData = spotsList[i];
             spotsList.remove(i);
             //dxSpotDataModel->insertRows(0, 1);
-            qDebug() << "number of spots stores = " << dxSpotDataModel->rowCount();
+
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             trace(QString("GetSpotsFromDisplayQueue: finished loop"));
 
@@ -2236,17 +2254,15 @@ void ClusterMainWindow::initUserCommandButtons()
 
 void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
     {
        userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
     }
-
-
 }
 
 void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
     {
         userHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2254,7 +2270,7 @@ void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2262,7 +2278,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
     {
         userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
     }
@@ -2309,7 +2325,7 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2318,7 +2334,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
     }
@@ -2363,7 +2379,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2372,7 +2388,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
     }
@@ -2409,7 +2425,7 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
 void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == VHFUHF_TABNUM)
+    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonWrite("VHF/UHF", buttonNumber);
     }
@@ -2417,7 +2433,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 {
-    if (ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonWrite("HF", buttonNumber);
     }
@@ -2603,6 +2619,181 @@ void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNu
     config.setValue(QString("command%1").arg(QString::number(buttonNumber + 1)), QString(buttonData.name + ":" + buttonData.cmdString));
     config.endGroup();
 
+}
+
+
+void ClusterMainWindow::initFilterCheckBoxs()
+{
+
+
+    bandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
+                   << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox
+                   << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
+                   << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
+
+    for (int i = 0; i < bandChkBoxList.count(); i++)
+    {
+        connect(bandChkBoxList[i], &QCheckBox::clicked, [=](int state) {onbandCheckBoxStateChanged(i, state);});
+
+    }
+
+
+    hfBandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
+                     << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox;
+
+    vhfBandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox;
+    uhfBandChkBoxList << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
+
+
+    allBandfilters << &bandFilter1_8Mhz << &bandFilter3_5Mhz << &bandFilter7Mhz
+                   << &bandFilter14Mhz << &bandFilter21Mhz << &bandFilter28Mhz
+                   << &bandFilter50Mhz << &bandFilter70Mhz << &bandFilter144Mhz<< &bandFilter432Mhz
+                   << &bandFilter1296Mhz << &bandFilter2300Mhz << &bandFilter3_4Ghz << &bandFilter5_6Ghz << &bandFilter10Ghz;
+
+    hfBandfilters << &bandFilter1_8Mhz << &bandFilter3_5Mhz << &bandFilter7Mhz
+                  << &bandFilter14Mhz << &bandFilter21Mhz << &bandFilter28Mhz;
+
+    vhfBandfilters << &bandFilter50Mhz << &bandFilter70Mhz << &bandFilter144Mhz<< &bandFilter432Mhz;
+
+    uhfBandfilters << &bandFilter1296Mhz << &bandFilter2300Mhz << &bandFilter3_4Ghz << &bandFilter5_6Ghz << &bandFilter10Ghz;
+
+    for (auto &bf:allBandfilters)
+    {
+        *bf = false;
+    }
+
+
+    connect(ui->hfSelectBandPb, &QPushButton::pressed, [=]() {onHfSelectBandPbPressed();});
+    connect(ui->vhfSelectBandPb, &QPushButton::pressed, [=]() {onVhfSelectBandPbPressed();});
+    connect(ui->uhfSelectBandPb, &QPushButton::pressed, [=]() {onUhfSelectBandPbPressed();});
+
+}
+
+
+void ClusterMainWindow::setHF(bool hfFlag)
+{
+    static QWidget* hfUserCommandTab = ui->clusterTab->widget(0);
+
+    //setHfFilterControlsVisible(hfFlag);
+    if (hfFlag)
+    {
+        hfUserCommandTab = ui->clusterTab->widget(0);
+        ui->clusterTab->removeTab(0);
+    }
+    else
+    {
+        ui->clusterTab->insertTab(0, hfUserCommandTab, tr("HF User Commands"));
+    }
+
+}
+
+
+void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
+{
+
+    for(auto const &bc: bandChkBoxList)
+    {
+        bc->setVisible(visible);
+    }
+
+    ui->hfSelectBandPb->setVisible(visible);
+    ui->vhfSelectBandPb->setVisible(visible);
+    ui->uhfSelectBandPb->setVisible(visible);
+}
+
+void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)
+{
+    if (i < bandChkBoxList.count())
+    {
+        if (state == Qt::Checked)
+        {
+            *allBandfilters[i] = true;
+        }
+        else if (state == Qt::Unchecked)
+        {
+            *allBandfilters[i] = false;
+        }
+
+    }
+
+}
+
+
+void ClusterMainWindow::onHfSelectBandPbPressed()
+{
+    static bool selectButtonState = false;
+
+    if (!selectButtonState)
+    {
+        selectButtonState = true;
+        setAllHFBandsFilter(selectButtonState);
+    }
+    else
+    {
+        selectButtonState = false;
+        setAllHFBandsFilter(selectButtonState);
+    }
+}
+
+
+void ClusterMainWindow::setAllHFBandsFilter(bool state)
+{
+    for (int i = 0; i < hfBandChkBoxList.count(); i++)
+    {
+        *hfBandfilters[i] =state;
+        hfBandChkBoxList[i]->setChecked(state);
+    }
+}
+
+void ClusterMainWindow::onVhfSelectBandPbPressed()
+{
+    static bool selectButtonState = false;
+
+    if (!selectButtonState)
+    {
+        selectButtonState = true;
+        setAllVHFBandsFilter(selectButtonState);
+    }
+    else
+    {
+        selectButtonState = false;
+        setAllVHFBandsFilter(selectButtonState);
+    }
+}
+
+void ClusterMainWindow::setAllVHFBandsFilter(bool state)
+{
+    for (int i = 0; i < vhfBandChkBoxList.count(); i++)
+    {
+        *vhfBandfilters[i] =state;
+        vhfBandChkBoxList[i]->setChecked(state);
+    }
+
+}
+
+void ClusterMainWindow::onUhfSelectBandPbPressed()
+{
+    static bool selectButtonState = false;
+
+    if (!selectButtonState)
+    {
+        selectButtonState = true;
+        setAllUHFBandsFilter(selectButtonState);
+    }
+    else
+    {
+        selectButtonState = false;
+        setAllUHFBandsFilter(selectButtonState);
+    }
+}
+
+void ClusterMainWindow::setAllUHFBandsFilter(bool state)
+{
+    for (int i = 0; i < uhfBandChkBoxList.count(); i++)
+    {
+        *uhfBandfilters[i] =state;
+        uhfBandChkBoxList[i]->setChecked(state);
+    }
 }
 
 void ClusterMainWindow::showStatusMessage(const QString &message, const QString &raw)

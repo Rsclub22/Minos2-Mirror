@@ -92,6 +92,10 @@ private:
     QList<distValue>  distanceValues;
 
     QList<QCheckBox*> bandChkBoxList;
+    QList<QCheckBox*> hfBandChkBoxList;
+    QList<QCheckBox*> vhfBandChkBoxList;
+    QList<QCheckBox*> uhfBandChkBoxList;
+
     QList<QCheckBox*> modeChkBoxList;
     QList<QLineEdit*> distanceLineEditsList;
     QList<QCheckBox*> ignoreDistanceChkBoxList;
