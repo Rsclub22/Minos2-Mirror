@@ -186,6 +186,8 @@ void ClusterMainWindow::doStartup()
     enableHFSpots = config.value("enable", false).toBool();
     config.endGroup();
 
+    initFilterCheckBoxs();
+
     // in comming spot tab
 
     dxSpotDataModel = new DxSpotDataModel();
@@ -197,7 +199,7 @@ void ClusterMainWindow::doStartup()
 
     dxSpotDataModel->delegate = dxSpotViewDelegate;
 
-    dxSpotProxyModel = new QSortFilterProxyModel();
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(allBandfilters);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -339,7 +341,7 @@ void ClusterMainWindow::doStartup()
     connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
     purgeTimer->start(PURGE_TIME);
 
-    initFilterCheckBoxs();
+
 
     // get list of clusters
     loadNodesSelectBox(setupCluster->getListOfClusterNames());
@@ -2715,6 +2717,8 @@ void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)
             *allBandfilters[i] = false;
         }
 
+         updateDisplay();
+
     }
 
 }
@@ -2744,6 +2748,8 @@ void ClusterMainWindow::setAllHFBandsFilter(bool state)
         *hfBandfilters[i] =state;
         hfBandChkBoxList[i]->setChecked(state);
     }
+
+     updateDisplay();
 }
 
 void ClusterMainWindow::onVhfSelectBandPbPressed()
@@ -2770,6 +2776,8 @@ void ClusterMainWindow::setAllVHFBandsFilter(bool state)
         vhfBandChkBoxList[i]->setChecked(state);
     }
 
+     updateDisplay();
+
 }
 
 void ClusterMainWindow::onUhfSelectBandPbPressed()
@@ -2795,6 +2803,14 @@ void ClusterMainWindow::setAllUHFBandsFilter(bool state)
         *uhfBandfilters[i] =state;
         uhfBandChkBoxList[i]->setChecked(state);
     }
+
+    updateDisplay();
+}
+
+
+void ClusterMainWindow::updateDisplay()
+{
+    dxSpotProxyModel->setFilterRegExp("");
 }
 
 void ClusterMainWindow::showStatusMessage(const QString &message, const QString &raw)
@@ -2877,6 +2893,39 @@ void ClusterMainWindow::clusterNodeCommandsShortcutHelp()
                                 "C - Clear cmd\n"));
 }
 
+
+bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
+{
+    bool match_band = matchBand(sourceRow);
+    //bool match_distance = matchDistance(sourceRow);
+    //bool match_mode = matchMode(sourceRow);
+    bool matchFlag = match_band /*&& match_distance && match_mode*/;
+    if (traceDebugFlag)
+    {
+        trace(QString("filter - callsign = %1, matchBand = %2, matchFlag = %3")
+            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
+            .arg(match_band ? "True" : "False")
+            //.arg(match_distance ? "True" : "False")
+            //.arg(match_mode ? "True" : "False")
+
+            .arg(matchFlag ? "True" : "False"));
+
+    }
+    return matchFlag;
+}
+
+bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
+{
+    bool ok = false;
+    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+
+    if (ok && (bandMask >= 0 && bandMask < allBandFilters.count()) )
+    {
+       return *allBandFilters[bandMask];
+    }
+
+    return false;
+}
 
 
 

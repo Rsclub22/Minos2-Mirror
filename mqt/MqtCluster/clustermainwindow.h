@@ -316,6 +316,27 @@ private:
 };
 
 
+class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
+{
+public:
+
+    bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    bool matchBand(int sourceRow) const;
+
+    bool traceDebugFlag;
+
+    DxSpotSortFilterProxyModel(QList<bool *> &allBandFilters_)
+    {
+        allBandFilters = allBandFilters_;
+    }
+
+    QList<bool *> allBandFilters;
+
+};
+
+
+
+
 
 
 class ClusterMainWindow : public QMainWindow
@@ -604,6 +625,9 @@ private:
     void setAllVHFBandsFilter(bool state);
     void setAllHFBandsFilter(bool state);
     void setHF(bool hfFlag);
+    void updateDisplay();
+
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
