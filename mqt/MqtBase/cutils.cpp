@@ -118,20 +118,6 @@ int stricmpsp( const QString &s1, const QString &s2 )
    return sp1.compare(sp2, Qt::CaseInsensitive );
 }
 //============================================================
-int strcspn(const QString &s, const QString &chars)
-{
-    for (int i = 0; i < chars.length(); i++)
-    {
-        int p = s.indexOf(chars[i]);
-        if (p >= 0)
-        {
-            return p;
-        }
-    }
-    return -1;
-}
-
-//============================================================
 
 int placestr( QString &buff, const QString &str, int start, int len )
 {
@@ -372,9 +358,8 @@ QString removeChars(QString s, const QList<QChar> chars)
 QString escapeXML ( const QString &value )
 {
     QString escaped;
-    for ( int index = 0; index < value.length(); ++index )
+    for ( auto const &c: value )
     {
-        QChar c = value[ index ];
         if (c == '<')
             escaped += "&lt;";
         else if (c == '>')

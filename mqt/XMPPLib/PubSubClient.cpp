@@ -15,12 +15,12 @@ QVector<RPCPublisher *> publishList;
 
 void clearPubSub()
 {
-    foreach(auto v, subscribeList)
+    for(auto const &v: subscribeList)
     {
         delete v;
     }
     subscribeList.clear();
-    foreach(auto v, publishList)
+    for(auto const &v: publishList)
     {
         delete v;
     }
@@ -50,11 +50,11 @@ bool RPCSubscriber::isRemoteEqual( const QString &/*pserver*/, const QString &/*
 void RPCSubscriber::testAndSubscribe( const QString &category )
 {
    RPCSubscriber * sub = nullptr;
-   for ( QVector<RPCSubscriber *>::iterator i = subscribeList.begin(); i != subscribeList.end(); i++ )
+   for ( auto const &i: subscribeList )
    {
-      if ( ( *i ) ->isEqual( category ) )
+      if ( i ->isEqual( category ) )
       {
-         sub = ( *i );
+         sub = i;
          break;
       }
    }
@@ -75,11 +75,11 @@ bool RPCRemoteSubscriber::isRemoteEqual( const QString &pServer, const QString &
 void RPCRemoteSubscriber::testAndSubscribe( const QString &server, const QString &cat )
 {
    RPCRemoteSubscriber * sub = nullptr;
-   for ( QVector<RPCSubscriber *>::iterator i = subscribeList.begin(); i != subscribeList.end(); i++ )
+   for ( auto const &i: subscribeList )
    {
-      if ( ( *i ) ->isRemoteEqual( server, cat ) )
+      if ( i->isRemoteEqual( server, cat ) )
       {
-         sub = dynamic_cast<RPCRemoteSubscriber *>( *i );
+         sub = dynamic_cast<RPCRemoteSubscriber *>( i );
          if (sub)
          {
             break;
@@ -123,11 +123,11 @@ void RPCRemoteSubscriber::reSubscribe()
 void RPCPublisher::testAndPublish( const QString &category, const QString &key, const QString &value, PublishState pState )
 {
    RPCPublisher * pub = nullptr;
-   for ( QVector<RPCPublisher *>::iterator i = publishList.begin(); i != publishList.end(); i++ )
+   for ( auto const &i: publishList )
    {
-      if ( ( *i ) ->category == category && ( *i ) ->key == key )
+      if ( i->category == category && i->key == key )
       {
-         pub = ( *i );
+         pub = i;
       }
    }
    if ( !pub )

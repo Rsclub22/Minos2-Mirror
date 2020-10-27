@@ -314,16 +314,16 @@ void ControlMain::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QSt
         if (category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
         {
             bool notificationOK = false;
-            for ( QVector <QSharedPointer<Connectable> >::iterator j = catMap[category].begin(); j != catMap[category].end(); j++ )
+            for ( auto const &c: catMap[category] )
             {
-                if ((*j)->runType == RunLocal)
+                if (c->runType == RunLocal)
                 {
-                    if (an.getPublisherServer() != (*j)->serverName)
+                    if (an.getPublisherServer() != c->serverName)
                     {
                         //trace("RunLocal server " + an.getPublisherServer() + " " + (*j)->serverName);
                         continue;
                     }
-                    if (an.getPublisherProgram() != (*j)->appName)
+                    if (an.getPublisherProgram() != c->appName)
                     {
                         //trace("RunLocal appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
@@ -332,24 +332,24 @@ void ControlMain::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QSt
                     notificationOK = true;
                     break;
                 }
-                else if ((*j)->runType == ConnectServer)
+                else if (c->runType == ConnectServer)
                 {
-                    if ((*j)->serverName.isEmpty())
+                    if (c->serverName.isEmpty())
                     {
                         notificationOK = true;
                         break;
                     }
-                    else if (an.getPublisherServer() != (*j)->serverName)
+                    else if (an.getPublisherServer() != c->serverName)
                     {
-                        //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j)->serverName);
+                        //trace("ConnectServer server " + an.getPublisherServer() + " " + c->serverName);
                         continue;
                     }
-                    if ((*j)->remoteAppName.isEmpty())
+                    if (c->remoteAppName.isEmpty())
                     {
                         notificationOK = true;
                         break;
                     }
-                    else if (an.getPublisherProgram() != (*j)->remoteAppName)
+                    else if (an.getPublisherProgram() != c->remoteAppName)
                     {
                         //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
@@ -462,69 +462,69 @@ void ControlMain::subscribeApps()
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
 
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
+    for ( auto const &e: config->elelist )
     {
-        if (!(*i)->deleted)
+        if (!e->deleted)
         {
-            QSharedPointer<Connectable> res = (*i)->connectable();
+            QSharedPointer<Connectable> res = e->connectable();
             connectables.push_back(res);
         }
     }
 
-    for ( QVector <QSharedPointer<Connectable> >::iterator i = connectables.begin(); i != connectables.end(); i++ )
+    for ( auto const &c: connectables )
     {
-        if ((*i)->appType == "None")
+        if (c->appType == "None")
         {
             // no action
         }
-        else if ((*i)->appType == "AppStarter")
+        else if (c->appType == "AppStarter")
         {
             // no action
         }
-        else if ((*i)->appType == "BandMap")
+        else if (c->appType == "BandMap")
         {
             // no action
         }
-        else if ((*i)->appType == "Chat")
+        else if (c->appType == "Chat")
         {
             // no action - done in chat server
         }
-        else if ((*i)->appType == "Keyer")
+        else if (c->appType == "Keyer")
         {
             // no action
         }
-        else if ((*i)->appType == "LineControl")
+        else if (c->appType == "LineControl")
         {
             // no action except in keyer
         }
-        else if ((*i)->appType == "Logger")
+        else if (c->appType == "Logger")
         {
             // no action
         }
-        else if ((*i)->appType == "Monitor")
+        else if (c->appType == "Monitor")
         {
             // no action
         }
-         else if ((*i)->appType == "Other")
+         else if (c->appType == "Other")
         {
             // no action
         }
-        else if ((*i)->appType == "RigControl")
+        else if (c->appType == "RigControl")
         {
-            catMap[rpcConstants::rigControlCategory].push_back((*i));
-            catMap[rpcConstants::rigDetailsCategory].push_back((*i));
-            catMap[rpcConstants::rigStateCategory].push_back((*i));
+            catMap[rpcConstants::rigControlCategory].push_back(c);
+            catMap[rpcConstants::rigDetailsCategory].push_back(c);
+            catMap[rpcConstants::rigStateCategory].push_back(c);
         }
-        else if ((*i)->appType == "Rotator")
+        else if (c->appType == "Rotator")
         {
             // no action
         }
-        else if ((*i)->appType == "Server")
+        else if (c->appType == "Server")
         {
-            catMap[rpcConstants::LocalStationCategory].push_back((*i));
-            catMap[rpcConstants::StationCategory].push_back((*i));
+            catMap[rpcConstants::LocalStationCategory].push_back(c);
+            catMap[rpcConstants::StationCategory].push_back(c);
         }
-        else if ((*i)->appType == "KSTClient")
+        else if (c->appType == "KSTClient")
         {
 
         }

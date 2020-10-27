@@ -372,28 +372,28 @@ QString Published::getPublisherServer()
 //---------------------------------------------------------------------------
 void Published::clearPublist()
 {
-   for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
+   for ( auto &p: Published::publist )
    {
-      delete ( *i );
-      (*i) = nullptr;
+      delete p;
+      p = nullptr;
    }
    Published::publist.clear();
 }
 int Published::GetSubscribedCount()
 {
    int scount = 0;
-   for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
+   for ( auto const &p: Published::publist )
    {
-      scount += ( *i ) ->GetSubscribedCount();
+      scount += p->GetSubscribedCount();
    }
    return scount;
 }
 int Published::GetPublishedCount()
 {
    int pcount = 0;
-   for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
+   for ( auto const &p: Published::publist )
    {
-      pcount += ( *i ) ->pubkeylist.size();
+      pcount += p->pubkeylist.size();
    }
    return pcount;
 }
@@ -402,16 +402,17 @@ void Published::buildPublishedTree(QTreeWidget *tree)
     tree->clear();
     tree->setColumnCount(3);
     QStringList h = {tr("key"), tr("state"), tr("value")};
-    tree->setHeaderLabels(h);    for ( PublishedCategoryListIterator i = Published::publist.begin(); i != Published::publist.end(); i++ )
+    tree->setHeaderLabels(h);
+    for ( auto const &p: Published::publist )
     {
-        QString cat = (*i)->getCategory();
+        QString cat = p->getCategory();
         QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
         catItem->setText(0, cat);
-        for ( PublishedKeyListIterator j = ( *i ) ->pubkeylist.begin(); j != ( *i ) ->pubkeylist.end(); j++ )
+        for ( auto const &j: p->pubkeylist)
         {
-           QString key = (*j)->getPubKey();
-           QString value = (*j)->getPubValue();
-           PublishState state = (*j)->getPubState();
+           QString key = j->getPubKey();
+           QString value = j->getPubValue();
+           PublishState state = j->getPubState();
 
            QTreeWidgetItem *keyItem = new QTreeWidgetItem(catItem);
            keyItem->setText(0, key);
@@ -426,33 +427,33 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
 {
     tree->clear();
 
-    for ( PublishedCategoryListIterator j = Published::publist.begin(); j != Published::publist.end(); j++ )
+    for ( auto const &p: Published::publist )
     {
-        QString cat = (*j)->getCategory();
+        QString cat = p->getCategory();
         QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
         catItem->setText(0, cat);
 
         QTreeWidgetItem *stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Local");
-        for ( SubscriberListIterator i = (*j)->subscribedLocal.begin(); i != (*j)->subscribedLocal.end(); i++ )
+        for ( auto const &i: p->subscribedLocal )
         {
-            QString sub = (*i)->getSjid();
+            QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
             subItem->setText(0, sub);
         }
         stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Server");
-        for ( ServerSubscriberListIterator i = (*j)->subscribedServer.begin(); i != (*j)->subscribedServer.end(); i++ )
+        for ( auto const &i: p->subscribedServer )
         {
-            QString sub = (*i)->getSjid();
+            QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
             subItem->setText(0, sub);
         }
         stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Remote");
-        for ( RemoteSubscriberListIterator i = (*j)->subscribedRemote.begin(); i != (*j)->subscribedRemote.end(); i++ )
+        for ( auto const &i: p->subscribedRemote )
         {
-            QString sub = (*i)->getSjid();
+            QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
             subItem->setText(0, sub);
         }
@@ -500,12 +501,12 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
+      for ( auto const &pk: ( *f ) ->pubkeylist )
       {
          // Here we are sending all the already published values
-         if ( ( *i ) ->getServer().size() == 0 || ( *i ) ->getServer() == "localhost" || ( *i ) ->getServer() == ThisMinosServer::getThisMinosServer() ->getServerName() )
+         if ( pk->getServer().size() == 0 || pk->getServer() == "localhost" || pk ->getServer() == ThisMinosServer::getThisMinosServer() ->getServerName() )
          {
-            s->SendTo( *( *i ) );
+            s->SendTo( *pk );
          }
       }
    }
@@ -534,12 +535,12 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
+      for ( auto const &pk: ( *f ) ->pubkeylist )
       {
          // Here we are sending all the already published values
-         if ( ( *i ) ->getServer() == server )
+         if ( pk->getServer() == server )
          {
-            s->SendTo( *( *i ) );
+            s->SendTo( *pk );
          }
       }
       RPCServerPubSub::serverSubscribeRemote( server, category );
@@ -567,18 +568,18 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
+      for ( auto const &pk: ( *f ) ->pubkeylist )
       {
          // make sure that the key is one published by THIS server; we don't
          // want to re-publish
          // BUT it can publish as blank
-         QString pserver = ( *i ) ->getServer();
+         QString pserver = pk->getServer();
          if ( pserver.size() == 0 || pserver == "localhost" || pserver == ThisMinosServer::getThisMinosServer() ->getServerName() )
          {
             // Here we are sending all the already published values
 
             // THIS DOES NASTY LOCAL THINGS - it DOESN't just send!
-            s->SendTo( *( *i ) );
+            s->SendTo( *pk);
          }
       }
    }
@@ -691,10 +692,10 @@ void PublishedCategory::serverPublish( const QString &pubId, const QString &svr,
    {
       ( *kl ) ->setPubValue( v );
       ( *kl ) ->setPubState( pState );
-      for ( RemoteSubscriberListIterator i = subscribedRemote.begin(); i != subscribedRemote.end(); i++ )
+      for ( auto const &s: subscribedRemote )
       {
          // send to all who have subscribed to the category
-         ( *i ) ->SendTo( *( *kl ) );
+         s->SendTo( *( *kl ) );
       }
    }
 }
@@ -703,59 +704,59 @@ PublishedCategory::PublishedCategory( const QString &publId, const QString &cate
 {}
 PublishedCategory::~PublishedCategory()
 {
-   for ( SubscriberListIterator i = subscribedLocal.begin(); i != subscribedLocal.end(); i++ )
+   for ( auto &i: subscribedLocal )
    {
-      delete ( *i );
-      (*i) = nullptr;
+      delete i;
+      i = nullptr;
    }
    subscribedLocal.clear();
-   for ( RemoteSubscriberListIterator i = subscribedRemote.begin(); i != subscribedRemote.end(); i++ )
+   for ( auto &i: subscribedRemote )
    {
-      delete ( *i );
-      (*i) = nullptr;
+      delete i;
+      i = nullptr;
    }
    subscribedRemote.clear();
-   for ( ServerSubscriberListIterator i = subscribedServer.begin(); i != subscribedServer.end(); i++ )
+   for ( auto &i: subscribedServer)
    {
-      delete ( *i );
-      (*i) = nullptr;
+      delete i;
+      i = nullptr;
    }
    subscribedServer.clear();
 
-   for ( PublishedKeyListIterator i = pubkeylist.begin(); i != pubkeylist.end(); i++ )
+   for ( auto &i: pubkeylist )
    {
-      delete ( *i );
-      (*i) = nullptr;
+      delete i;
+      i = nullptr;
    }
    pubkeylist.clear();
 }
 //---------------------------------------------------------------------------
 Subscriber * PublishedCategory::getClientSubscribed( const QString &subId )
 {
-   for ( SubscriberListIterator i = subscribedLocal.begin(); i != subscribedLocal.end(); i++ )
+   for ( auto const &i: subscribedLocal )
    {
-      if ( ( *i ) ->getSjid() == subId )
-         return ( *i );
+      if ( i->getSjid() == subId )
+         return i;
    }
    return nullptr;
 }
 //---------------------------------------------------------------------------
 RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId )
 {
-   for ( RemoteSubscriberListIterator i = subscribedRemote.begin(); i != subscribedRemote.end(); i++ )
+   for ( auto const &i: subscribedRemote )
    {
-      if ( ( *i ) ->getSjid() == subId )
-         return ( *i );
+      if ( i ->getSjid() == subId )
+         return i;
    }
    return nullptr;
 }
 //---------------------------------------------------------------------------
 ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId )
 {
-   for ( ServerSubscriberListIterator i = subscribedServer.begin(); i != subscribedServer.end(); i++ )
+   for ( auto const &i: subscribedServer )
    {
-      if ( ( *i ) ->getSjid() == subId )
-         return ( *i );
+      if ( i->getSjid() == subId )
+         return i;
    }
    return nullptr;
 }
@@ -983,19 +984,19 @@ void TPubSubMain::revokeClient(const QString &pubId)
    {
       return;
    }
-   for ( PublishedCategoryListIterator f = Published::publist.begin(); f != Published::publist.end(); f++ )
+   for ( auto &f: Published::publist )
    {
-      for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
+      for ( auto &i: f ->pubkeylist )
       {
-         if ((*i)->getPubId() == pubId)
+         if (i->getPubId() == pubId)
          {
             // publish revoke
-            TPubSubMain::publish( pubId, (*f)->getCategory(), (*i)->getPubKey(), "", psRevoked );
-            delete (*i);
-            (*i) = nullptr;
+            TPubSubMain::publish( pubId, f->getCategory(), i->getPubKey(), "", psRevoked );
+            delete i;
+            i = nullptr;
          }
       }
-      (*f)->pubkeylist.erase( std::remove_if( (*f)->pubkeylist.begin(), (*f)->pubkeylist.end(), nopub ), (*f)->pubkeylist.end() );
+      f->pubkeylist.erase( std::remove_if( f->pubkeylist.begin(), f->pubkeylist.end(), nopub ), f->pubkeylist.end() );
       // and now clear up the published key list for the category
    }
 }
@@ -1025,20 +1026,19 @@ void TPubSubMain::disconnectServer(const QString &pubId)
         publisherServer = sname;
    }
 
-   for ( PublishedCategoryListIterator f = Published::publist.begin(); f != Published::publist.end(); f++ )
+   for ( auto &f: Published::publist )
    {
-      for ( PublishedKeyListIterator i = ( *f ) ->pubkeylist.begin(); i != ( *f ) ->pubkeylist.end(); i++ )
+      for ( auto &pk: f->pubkeylist )
       {
-          PublishedKey *pk = (*i);
          if (pk->getPublisherServer() == publisherServer)
          {
             // publish revoke
-            TPubSubMain::serverPublish( pk->getPubId(), publisherServer, (*f)->getCategory(), pk->getPubKey(), "", psRevoked );
-            delete (*i);
-            (*i) = nullptr;
+            TPubSubMain::serverPublish( pk->getPubId(), publisherServer, f->getCategory(), pk->getPubKey(), "", psRevoked );
+            delete pk;
+            pk = nullptr;
          }
       }
-      (*f)->pubkeylist.erase( std::remove_if( (*f)->pubkeylist.begin(), (*f)->pubkeylist.end(), nopub ), (*f)->pubkeylist.end() );
+      f->pubkeylist.erase( std::remove_if( f->pubkeylist.begin(), f->pubkeylist.end(), nopub ), f->pubkeylist.end() );
    }
 }
 

@@ -588,6 +588,7 @@ void RPCTestTest::testBST()
 
 void RPCTestTest::testMults()
 {
+    /*
     MinosParametersAdapter mp;
 
     MultLists *m = MultLists::getMultLists();
@@ -599,7 +600,6 @@ void RPCTestTest::testMults()
     QTextStream os(&fos);
 
 
-    /*
     os << "================== country entries ========================\n";
     for (MultList < CountryEntry >::iterator i = m->ctryList.begin(); i != m->ctryList.end(); i++)
     {

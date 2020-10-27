@@ -43,9 +43,9 @@ void TForceLogDlg::on_CancelButton_clicked()
 }
 int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact, ErrorList &errs)
 {
-    for ( ErrorIterator i = errs.begin(); i != errs.end(); i++ )
+    for ( auto const &e: errs )
     {
-        new QListWidgetItem(tr(( *i ) ->errStr), ui->ErrList);
+        new QListWidgetItem(tr(e->errStr), ui->ErrList);
     }
     ui->ErrList->setCurrentRow(0);
 

@@ -29,9 +29,8 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
 
 //    int offset = 0;
-    for (int i = 0; i <  minosConfig->elelist.size(); i++)
+    for (auto const &c:  minosConfig->elelist)
     {
-        QSharedPointer<RunConfigElement> c = minosConfig->elelist[i];
         if (c->deleted)
             continue;
 
@@ -95,9 +94,9 @@ void StartConfig::checkEnabled()
     ui->StartButton->setEnabled(!running);
     ui->SetButton->setEnabled(!running);
     ui->StationIdEdit->setEnabled(!running);
-    for (int i = 0; i < elementFrames.size(); i++)
+    for (auto const &e: elementFrames)
     {
-        elementFrames[i]->setEnabled(!running);
+        e->setEnabled(!running);
     }
 }
 void StartConfig::reject()
@@ -174,9 +173,9 @@ void StartConfig::on_SetButton_clicked()
 
 void StartConfig::copyFromScreen()
 {
-    for (int i = 0; i < elementFrames.size(); i++)
+    for (auto const &e: elementFrames)
     {
-        elementFrames[i]->saveElement();
+        e->saveElement();
     }
 
     on_SetButton_clicked();

@@ -24,9 +24,9 @@ QSharedPointer<BaseMatchContest> TMatchCollection::pcontestAt( int i )
 int TMatchCollection::contactCount()
 {
     int cc = 0;
-    for (ContestMatchIterator i = contestMatchList.begin(); i != contestMatchList.end(); i++ )
+    for (auto const &i: contestMatchList )
     {
-        cc += i->wt->contactMatchList.size();
+        cc += i.wt->contactMatchList.size();
     }
     return cc;
 }

@@ -30,9 +30,9 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    for (int i = 0; i < supModeList.count(); i++)
+    for (auto const &sm: supModeList)
     {
-        ui->modecb->addItem(supModeList[i]);
+        ui->modecb->addItem(sm);
     }
 
 

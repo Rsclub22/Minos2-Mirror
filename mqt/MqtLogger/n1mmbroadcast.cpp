@@ -22,13 +22,13 @@ N1MMBroadcast::N1MMBroadcast()
 bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
 {
     QHostInfo haddr = QHostInfo::fromName( addr );
-    for (int i = 0; i < haddr.addresses().count(); i++)
+    for (auto const &a: haddr.addresses())
     {
         bool ok = true;
         quint32 iaddr;
 
         // This is a guess as to when the change came in
-        iaddr = haddr.addresses()[i].toIPv4Address(
+        iaddr = a.toIPv4Address(
             #if QT_VERSION > QT_VERSION_CHECK(5, 4, 0)
                     &ok
             #endif

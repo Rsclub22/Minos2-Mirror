@@ -8,17 +8,17 @@ RotatorCache::RotatorCache()
 }
 void RotatorCache::invalidate()
 {
-    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    for(auto &i: rotStates )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, AntennaDetail>::iterator i = rotDetails.begin(); i != rotDetails.end(); i++ )
+    for(auto &i: rotDetails )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    for(auto &i: rotPresets )
     {
-        i->setDirty();
+        i.setDirty();
     }
 
 }
@@ -43,7 +43,7 @@ void RotatorCache::addRotList(const QString &s)
         PubSubName lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRotList;
 
-        foreach(PubSubName psn, rotList)
+        for(auto const &psn: rotList)
         {
             if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
                 newRotList.push_back(psn);
@@ -51,7 +51,7 @@ void RotatorCache::addRotList(const QString &s)
         rotList = newRotList;
 
     }
-    foreach(QString l, list)
+    for(auto const &l: list)
     {
         // add all of the list to rot list
         PubSubName psn(l);
@@ -88,7 +88,7 @@ void RotatorCache::addRotList(const QString &s)
         }
         rotStates = newstates;
     }
-    foreach(PubSubName psn, rotList)
+    for(auto const &psn: rotList)
     {
         if (!rotDetails.contains(psn))
         {
@@ -175,9 +175,9 @@ bool RotatorCache::rotatorPresetsIsDirty(const PubSubName &name)
 }
 void RotatorCache::rotatorPresetsClearDirty()
 {
-    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    for(auto &i: rotPresets )
     {
-        i->clearDirty();
+        i.clearDirty();
     }
 }
 

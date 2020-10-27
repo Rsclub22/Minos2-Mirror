@@ -314,19 +314,6 @@ void MinosConfig::reset()
     thisDM = nullptr;
     getMinosConfig();
 }
-/*
-void MinosConfig::cleanElementsOnCancel()
-{
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
-    {
-        QSharedPointer<RunConfigElement> ele = (*i);
-        if (ele->newElement)
-        {
-            ele->deleted = true;
-        }
-    }
-}
-*/
 void MinosConfig::initialise()
 {
     buildAppConfigList();
@@ -334,9 +321,9 @@ void MinosConfig::initialise()
 
     QStringList lsect = config.getSections();
 
-    for ( int i = 0; i < lsect.count(); i++ )
+    for ( auto const &s: lsect )
     {
-        QString sect = lsect[ i ].trimmed();
+        QString sect = s.trimmed();
         if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
         {
             config.getPrivateProfileString( "Settings", "ServerName", "", thisServerName );
@@ -371,9 +358,9 @@ void MinosConfig::saveAll()
     config.clear();
     QVector <QSharedPointer<RunConfigElement> > newList = elelist;
     std::sort(newList.begin(), newList.end(), configSort);
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = newList.begin(); i != newList.end(); i++ )
+    for ( auto const &i: newList )
     {
-        (*i)->save(config);
+        i->save(config);
     }
     config.writePrivateProfileString("Settings", "ServerName", thisServerName);
     config.writePrivateProfileBool( "Settings", "AutoStart", autoStart );
@@ -386,9 +373,9 @@ void MinosConfig::start()
 {
    terminated = false;
 
-   for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+   for ( auto const &i: elelist )
    {
-       (*i)->createProcess();
+       i->createProcess();
    }
 }
 
@@ -396,11 +383,11 @@ void MinosConfig::askStop()
 {
    terminated = true;
 
-   for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+   for ( auto const &i: elelist )
    {
-      if ( ( *i ) )
+      if ( i )
       {
-         ( *i ) ->askStopProcess();
+         i->askStopProcess();
       }
    }
 }
@@ -408,23 +395,23 @@ void MinosConfig::forceStop()
 {
    terminated = true;
 
-   for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+   for ( auto const &i: elelist )
    {
-      if ( ( *i ) )
+      if ( i )
       {
-         ( *i ) ->forceStopProcess();
+         i->forceStopProcess();
       }
    }
 }
 
 void MinosConfig::bounce()
 {
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    for ( auto const &i: elelist )
     {
-       if ( ( *i ) )
+       if ( i )
        {
           logMessage( "Bouncing subProcess", "" );
-          ( *i ) ->bounceProcess();
+          i->bounceProcess();
        }
     }
 }
@@ -444,11 +431,11 @@ void MinosConfig::setAutoStart(bool s)
 QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
 {
     QSharedPointer<Connectable> res;
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    for ( auto const &i: elelist )
     {
-        if (appName.compare((*i)->name, Qt::CaseInsensitive) == 0)
+        if (appName.compare(i->name, Qt::CaseInsensitive) == 0)
         {
-            res = (*i)->connectable();
+            res = i->connectable();
             break;
         }
     }
@@ -458,11 +445,11 @@ QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
 QStringList MinosConfig::getAppTypes()
 {
     QStringList apps;
-    for (int i = 0; i < appConfigList.size(); i++)
+    for (auto const &a: appConfigList)
     {
-        if (appConfigList[i].appType != tr(appNone) && appConfigList[i].appType != tr(appOther))
+        if (a.appType != tr(appNone) && a.appType != tr(appOther))
         {
-            apps.append(appConfigList[i].appType);
+            apps.append(a.appType);
         }
     }
     apps.sort();
@@ -485,17 +472,17 @@ Server=false
     appConfig.startGroup();
 
     QStringList apps = appConfig.getSections();
-    for (int i = 0; i < apps.size(); i++)
+    for (auto &a: apps)
     {
-        if (apps[i] == appNone)
-            apps[i] = tr(appNone);
-        if (apps[i] == appOther)
-            apps[i] = tr(appOther);
+        if (a == appNone)
+            a = tr(appNone);
+        if (a == appOther)
+            a = tr(appOther);
 
         bool otherApp = false;
 
-        bool enabled = appConfig.getPrivateProfileBool(apps[i], "Enabled", false);
-        if (apps[i] == tr(appOther))
+        bool enabled = appConfig.getPrivateProfileBool(a, "Enabled", false);
+        if (a == tr(appOther))
         {
             otherApp = true;
             enabled = true;
@@ -505,19 +492,19 @@ Server=false
         {
             AppConfigElement ac;
 
-            ac.appType = apps[i].trimmed();
-            appConfig.getPrivateProfileString(apps[i], "Path", "", ac.appPath);
+            ac.appType = a.trimmed();
+            appConfig.getPrivateProfileString(a, "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
             if (!ac.appPath.isEmpty())
             {
                 ac.appPath += ".exe";
             }
 #endif
-            ac.server = appConfig.getPrivateProfileBool(apps[i], "Server", false);
-            ac.defaultHide = appConfig.getPrivateProfileBool(apps[i], "HideApp", false);
+            ac.server = appConfig.getPrivateProfileBool(a, "Server", false);
+            ac.defaultHide = appConfig.getPrivateProfileBool(a, "HideApp", false);
 
             QString whereString;
-            appConfig.getPrivateProfileString(apps[i], "Where", "Remote,Local", whereString);
+            appConfig.getPrivateProfileString(a, "Where", "Remote,Local", whereString);
             if (whereString.contains("local", Qt::CaseInsensitive))
             {
                 ac.localOK = true;
@@ -545,7 +532,7 @@ Server=false
 
             // NB using comma in value give a string list! Single value will also go to list if desired
             QString reqs;
-            appConfig.getPrivateProfileString(apps[i], "Requires",  "", reqs);
+            appConfig.getPrivateProfileString(a, "Requires",  "", reqs);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
             ac.requiresApps = reqs.split(',', Qt::SkipEmptyParts);
 #else
@@ -566,9 +553,8 @@ QString MinosConfig::checkConfig()
 
     bool serverPresent = false;
     int eleListSize = 0;
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    for ( auto const &ele: elelist )
     {
-        QSharedPointer<RunConfigElement> ele = (*i);
         if (ele->deleted)
             continue;
         if (ele->rEnabled)
@@ -624,10 +610,8 @@ QString MinosConfig::checkConfig()
     }
 
     // Go through the configured elements, and check that their requirements are also present
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    for ( auto const &ele: elelist )
     {
-        QSharedPointer<RunConfigElement> ele = (*i);
-
         if (ele->deleted)
             continue;
 
@@ -636,7 +620,7 @@ QString MinosConfig::checkConfig()
             if ( ele->requiresApps.size() > 0 && ele->runType == RunLocal)
             {
                 // "Requires" elements must be present
-                foreach(QString req, ele->requiresApps)
+                for(auto const &req: ele->requiresApps)
                 {
                     if (req.isEmpty())
                         continue;
@@ -646,11 +630,11 @@ QString MinosConfig::checkConfig()
 
 
                     bool reqFound = false;
-                    for ( QVector <QSharedPointer<RunConfigElement> >::iterator j = elelist.begin(); j != elelist.end(); j++ )
+                    for ( auto const &j: elelist )
                     {
-                        if ((*j)->deleted)
+                        if (j->deleted)
                             continue;
-                        if ((*j)->appType == req && (*j)->rEnabled && (*j)->runType == RunLocal)
+                        if (j->appType == req && j->rEnabled && j->runType == RunLocal)
                         {
                             reqFound = true;
                             continue;
@@ -682,9 +666,9 @@ QString MinosConfig::checkConfig()
 
 bool MinosConfig::anyRunning()
 {
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = elelist.begin(); i != elelist.end(); i++ )
+    for ( auto const &i: elelist )
     {
-       if ( ( *i ) && (*i)->isRunning() )
+       if ( i && i->isRunning() )
        {
            return true;
        }
@@ -694,11 +678,11 @@ bool MinosConfig::anyRunning()
 AppConfigElement MinosConfig::getAppConfigElement(QString appType)
 {
     AppConfigElement ace;
-    for ( QVector <AppConfigElement >::iterator j = appConfigList.begin(); j != appConfigList.end(); j++ )
+    for ( auto const &a: appConfigList)
     {
-        if ((*j).appType == appType)
+        if (a.appType == appType)
         {
-            ace = (*j);
+            ace = a;
             break;
         }
     }

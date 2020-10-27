@@ -71,9 +71,9 @@ TZConf::TZConf( )
 }
 TZConf::~TZConf( )
 {
-   for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( auto const &s: serverList )
    {
-      delete ( *i );
+      delete s;
    }
    serverList.clear();
 }
@@ -105,31 +105,31 @@ void TZConf::startZConf(const QString &name)
     QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
 
     // Interfaces iteration
-    for (int i = 0; i < ifaces.size(); i++)
+    for (auto  &i: ifaces)
     {
-        if (!ifaces[i].flags().testFlag( QNetworkInterface::IsUp))
+        if (!i.flags().testFlag( QNetworkInterface::IsUp))
             continue;
-        if (!ifaces[i].flags().testFlag(QNetworkInterface::IsRunning))
+        if (!i.flags().testFlag(QNetworkInterface::IsRunning))
             continue;
-        if (ifaces[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+        if (i.flags().testFlag(QNetworkInterface::IsLoopBack))
             continue;
 
         // Now get all IP addresses for this interface
-        QList<QNetworkAddressEntry> addrs = ifaces[i].addressEntries();
+        QList<QNetworkAddressEntry> addrs = i.addressEntries();
 
         // And for any IP address, if it is IPv4 and the interface is active, make a socket
-        for (int j = 0; j < addrs.size(); j++)
+        for (auto  &j: addrs)
         {
-            if ((addrs[j].ip().protocol() == QAbstractSocket::IPv4Protocol)
-                    && !addrs[j].ip().toString().isEmpty())
+            if ((j.ip().protocol() == QAbstractSocket::IPv4Protocol)
+                    && !j.ip().toString().isEmpty())
             {
                 QSharedPointer<UDPSocket> qus(new UDPSocket());
 
-                bool res = qus->setup(ifaces[i], addrs[j]);
+                bool res = qus->setup(i, j);
 
                 if (res)
                 {
-                    trace(QString("iface %1 address %2").arg(ifaces[i].humanReadableName()).arg(addrs[j].ip().toString()));
+                    trace(QString("iface %1 address %2").arg(i.humanReadableName()).arg(j.ip().toString()));
                     TxSocks.push_back(qus);
                 }
             }
@@ -201,10 +201,10 @@ bool TZConf::sendMessage( )
         sendBeaconResponse = QDateTime();
         reqBeacon = true;
     }
-    for (QVector<QSharedPointer<UDPSocket> >::iterator i = TxSocks.begin(); i != TxSocks.end(); i++)
+    for (auto const &t: TxSocks)
     {
-        QString mess = getZConfString(reqBeacon, (*i)->qua.ip().toString());
-        (*i)->sendMessage(mess);
+        QString mess = getZConfString(reqBeacon, t->qua.ip().toString());
+        t->sendMessage(mess);
     }
    return true;
 }
@@ -269,9 +269,9 @@ void TZConf::readServerListFile()
    QStringList sl = servers.childGroups();
 
 //   trace(QString::number(sl.size()) + " child groups");
-   for ( int i = 0; i < sl.count(); i++ )
+   for ( auto const &i: sl )
    {
-      servers.beginGroup(sl[i]);
+      servers.beginGroup(i);
 
       QString uuid = servers.value( "Uuid" ).toString();
       QString host = servers.value( "Host" ).toString();

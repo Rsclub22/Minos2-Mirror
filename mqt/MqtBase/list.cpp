@@ -21,8 +21,8 @@ ContactList::ContactList() :
 }
 ContactList::~ContactList()
 {
-    for ( ListIterator i = ctList.begin(); i != ctList.end(); i++ )
-       delete ( *i );
+    for ( auto const &i: ctList )
+       delete i;
 }
 bool ContactList::initialise( int sno )
 {
@@ -77,14 +77,13 @@ bool ContactList::cslLoad( )
        QString fn = ExtractFileName( cfileName );
        name = fn;
 
-       for ( int i = 0; i < readData.size(); ++i )
+       bool firstLine = true;
+       for ( auto const &parts:  readData )
        {
-           const QStringList &parts = readData.at(i);
-
            if (parts.size() == 0 || parts[0].size() == 0 ||  !(parts[0][0].isLetter() || parts[0][0].isNumber()))
                continue;
 
-           if ( i == 0 && parts.size() > 2 && parts[0].size() == 0 && parts[1].size() == 0 )
+           if ( firstLine && parts.size() > 2 && parts[0].size() == 0 && parts[1].size() == 0 )
            {
                name = parts[ 2 ];              // first line of file gives the list name
            }
@@ -111,6 +110,7 @@ bool ContactList::cslLoad( )
 
               ctList.push_back( rct );
            }
+           firstLine = false;
        }
        return true;
    }

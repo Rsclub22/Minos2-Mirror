@@ -529,7 +529,7 @@ void ThisLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog *
        contestMatchList.insert(wmc, wmc);
    }
    QSharedPointer<BaseMatchContest> found;
-   foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
+   for(auto const &test: contestMatchList)
    {
        if (test.wt->getContactLog() == ccon)
        {
@@ -913,7 +913,7 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
 
 
    QSharedPointer<BaseMatchContest> found;
-   foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
+   for(auto const &test: contestMatchList)
    {
        if (test.wt->getContactLog() == ccon)
        {
@@ -927,7 +927,7 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
        contestMatchList.insert(wmc, wmc);
    }
    found.reset();
-   foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
+   for(auto const &test: contestMatchList)
    {
        const BaseContestLog *tcon = test.wt->getContactLog();
        if (tcon == ccon)
@@ -1134,7 +1134,7 @@ void ListMatcher::addMatch( ListContact *lct, ContactList * clist )
        MapWrapper<BaseMatchContest> wmc(new MatchContactList);
 
        QSharedPointer<BaseMatchContest> found;
-       foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
+       for(auto const &test: contestMatchList)
        {
            if (test.wt->getContactList() == clist)
            {
@@ -1148,7 +1148,7 @@ void ListMatcher::addMatch( ListContact *lct, ContactList * clist )
            contestMatchList.insert(wmc, wmc);
        }
        found.reset();
-       foreach(MapWrapper<BaseMatchContest> test, contestMatchList)
+       for(auto const &test: contestMatchList)
        {
            if (test.wt->getContactList() == clist)
            {

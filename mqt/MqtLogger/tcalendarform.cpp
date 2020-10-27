@@ -105,36 +105,36 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
     int row = 0;
     int nextContest = -1;
     QDateTime now = QDateTime::currentDateTime();
-    for ( QVector<IndividualContest>::iterator i = cal.calendar.begin(); i != cal.calendar.end(); i++ )
+    for ( auto const &c: cal.calendar )
     {
         col = 0;
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).description ) );
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).reg1band ) );
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).start.toString ( "dd/MM/yyyy HH:mm" ) ) );
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).finish.toString ( "dd/MM/yyyy HH:mm" ) ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.description ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.reg1band ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.start.toString ( "dd/MM/yyyy HH:mm" ) ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.finish.toString ( "dd/MM/yyyy HH:mm" ) ) );
 
         if ( cal.calType == ectVHF )
         {
-            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).ppKmScoring ? tr("1Pt/Km") : tr("1Pt/QSO") ) );
-            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).mults ) );
+            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.ppKmScoring ? tr("1Pt/Km") : tr("1Pt/QSO") ) );
+            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.mults ) );
         }
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).sections ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.sections ) );
         if ( cal.calType == ectVHF )
         {
-            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( ( *i ).specialRules ) );
+            ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.specialRules ) );
         }
 
         if (!description.isEmpty())
          {
-            if (nextContest < 0 && description == (*i).description)
+            if (nextContest < 0 && description == c.description)
             {
-                if (((*i).start == sdate) && ((*i).reg1band == band || (*i).ukband == band))
+                if ((c.start == sdate) && (c.reg1band == band || c.ukband == band))
                     nextContest = row;
             }
          }
          else
          {
-            if (nextContest < 0 && ((*i).start.daysTo((*i).finish) < 360) && now <= (*i).finish)
+            if (nextContest < 0 && (c.start.daysTo(c.finish) < 360) && now <= c.finish)
             {
                // don't select the test contests
                nextContest = row;
@@ -316,9 +316,9 @@ void TCalendarForm::downloadFiles()
 //        yearList.push_back ( QSharedPointer<CalendarYear> ( new MicroCalendarYear ( i ) ) );
     }
 
-    for ( int i = 0; i < yearList.size(); i++ )
+    for ( auto const &y: yearList )
     {
-        if ( yearList[ i ] ->downloadFile ( false, LogContainer ) )
+        if ( y->downloadFile ( false, LogContainer ) )
         {
             fileCount++;
         }

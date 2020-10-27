@@ -525,9 +525,9 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
         hs->setChildrenCollapsible(false);
         rowSplitters.push_back(hs);
 
-        for (int srele = 0; srele < scrow.elements.count(); srele++)
+        for (auto &scele: scrow.elements)
         {
-            SCElement scele = scrow.elements[srele];
+            //SCElement scele = scrow.elements[srele];
             SCType type = scele.type;
             if (type == sctNone)
                 continue;
@@ -671,9 +671,9 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     vs->setChildrenCollapsible(false);
                     rowSplitters.push_back(vs);
 
-                    for (int srow = 0; srow < scele.rows.count(); srow++)
+                    for (auto &srow: scele.rows)
                     {
-                        buildRow(scele.rows[srow], auxInstance, vs);
+                        buildRow(srow, auxInstance, vs);
                     }
 
                     hs->addWidget(vs);
@@ -708,10 +708,10 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
-    for (int j = 0; j < sc.baseElement->rows.count(); j++)
+    for (auto &r: sc.baseElement->rows)
     {
 
-        buildRow(sc.baseElement->rows[j], auxInstance, singleLogFrameSplitter);
+        buildRow(r, auxInstance, singleLogFrameSplitter);
 
     }
     qsoModel.initialise(contest);
@@ -1273,7 +1273,7 @@ void TSingleLogFrame::getSplitters()
     singleLogFrameSplitter->setChildrenCollapsible(true);
     singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
 
-    foreach(MinosSplitter *s, rowSplitters)
+    for(auto const &s: rowSplitters)
     {
         QByteArray sstate;
         QString name = s->objectName();
@@ -1293,7 +1293,7 @@ void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
     QSettings settings;
     settings.setValue("Splitters/singleLogFrameSplitter/state/" + curScreenLayout, state);
 
-    foreach(MinosSplitter *s, rowSplitters)
+    for(auto const &s: rowSplitters)
     {
         state = s->saveState();
         QString name = s->objectName();
@@ -1355,13 +1355,13 @@ void TSingleLogFrame::goSerial( )
     while ( serial == -1 );
 
     QSharedPointer<BaseContact> cfu;
-    for ( LogIterator i = contest->ctList.begin(); i != contest->ctList.end(); i++ )
+    for ( auto const &c: contest->ctList )
     {
         bool ok;
-        int s = i->wt->serials.getValue().toInt(&ok );
+        int s = c.wt->serials.getValue().toInt(&ok );
        if ( ok && serial == s )
        {
-          cfu = i->wt;
+          cfu = c.wt;
           break;
        }
     }

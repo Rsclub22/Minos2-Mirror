@@ -70,9 +70,9 @@ void BaseContestLog::setVersion(QString v)
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
     int i = 0;
-    for (LogIterator m = ctList.begin(); m != ctList.end(); m++)
+    for (auto const &m: ctList)
     {
-      if (m->wt.data() == item.data())
+      if (m.wt.data() == item.data())
           return i;
 
       i++;
@@ -96,10 +96,10 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence ) const
 {
-   for ( ConstLogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      if ( i->wt ->getLogSequence() == logSequence )
-         return i->wt;
+      if ( i.wt ->getLogSequence() == logSequence )
+         return i.wt;
    }
    return QSharedPointer<BaseContact>();
 }
@@ -242,9 +242,9 @@ void BaseContestLog::clearDirty()
    DTGEnd.clearDirty();
    currentOp1.clearDirty();
    currentOp2.clearDirty();
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      i->wt->clearDirty();
+      i.wt->clearDirty();
    }
 }
 void BaseContestLog::setDirty()
@@ -286,9 +286,9 @@ void BaseContestLog::setDirty()
    currentOp1.setDirty();
    currentOp2.setDirty();
 
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      i->wt->setDirty();
+      i.wt->setDirty();
    }
 }
 void BaseContestLog::makeContact( bool timeNow, QSharedPointer<BaseContact>&lct )
@@ -677,7 +677,7 @@ void BaseContestLog::updateStats( int p1, int p2 )
 int BaseContestLog::getValidQSOs()
 {
    int nvalid = 0;
-   foreach(MapWrapper<BaseContact> i, ctList)
+   for(auto const &i: ctList)
    {
       QSharedPointer<BaseContact> dct = i.wt;
 
@@ -705,8 +705,8 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
 QSharedPointer<BaseContact> BaseContestLog::getBestDX( )
 {
    QSharedPointer<BaseContact> bestDX;
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
-      isBestDX( i->wt, &bestDX );
+   for ( auto const &i: ctList )
+      isBestDX( i.wt, &bestDX );
    return bestDX;
 }
 QString BaseContestLog::dateRange( DTG dstyle )
@@ -774,7 +774,7 @@ void BaseContestLog::scanContest( )
    QString curop2 = currentOp2.getValue();
    oplist.insert( curop2, curop2 );
 
-   foreach(MapWrapper<BaseContact> wnct, ctList)
+   for(auto const &wnct: ctList)
    {
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
@@ -846,7 +846,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.bonus = 0;
    cs.nbonus = 0;
 
-   foreach(MapWrapper<BaseContact> i, ctList)
+   for(auto const &i: ctList)
    {
        // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = i.wt;
@@ -1322,11 +1322,11 @@ bool BaseContestLog::getStanza( unsigned int /*stanza*/, QString & /*stanzaData*
 //====================================================================
 QSharedPointer<BaseContact> BaseContestLog::findNextUnfilledContact()
 {
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+    for ( auto const &i: ctList )
    {
-      if ( i->wt ->contactFlags.getValue() & TO_BE_ENTERED )
+      if ( i.wt ->contactFlags.getValue() & TO_BE_ENTERED )
       {
-         return i->wt;
+         return i.wt;
       }
    }
    return QSharedPointer<BaseContact>();
@@ -1463,7 +1463,7 @@ int BaseContestLog::getSquareBonus(QString sloc) const
 int BaseContestLog::getBonus() const
 {
     int tot = 0;
-    foreach(int n, bonus)
+    for(auto const &n: bonus)
     {
         tot += n;
     }
@@ -1473,7 +1473,7 @@ int BaseContestLog::getBonus() const
 int BaseContestLog::getNbonus() const
 {
     int tot = 0;
-    foreach(int n, nbonus)
+    for(auto const &n: nbonus)
     {
         tot += n;
     }
@@ -1482,7 +1482,7 @@ int BaseContestLog::getNbonus() const
 int BaseContestLog::getNlocs() const
 {
     int tot = 0;
-    foreach(int n, nlocs)
+    for(auto const &n: nlocs)
     {
         tot += n;
     }
@@ -1492,7 +1492,7 @@ int BaseContestLog::getNlocs() const
 int BaseContestLog::getNdistrict() const
 {
     int tot = 0;
-    foreach(int n, ndistrict)
+    for(auto const &n: ndistrict)
     {
         tot += n;
     }
@@ -1502,7 +1502,7 @@ int BaseContestLog::getNdistrict() const
 int BaseContestLog::getNctry() const
 {
     int tot = 0;
-    foreach(int n, nctry)
+    for(auto const &n: nctry)
     {
         tot += n;
     }

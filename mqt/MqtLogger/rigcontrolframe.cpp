@@ -1158,9 +1158,9 @@ void RigControlFrame::setMode(QString m)
     QStringList mode = m.split(':');
     if (mode.length() == 2 )
     {
-        for (int i = 0; i < supModeList.count(); i++)
+        for (auto const &sm: supModeList)
         {
-                if (mode[0] == supModeList[i])
+                if (mode[0] == sm)
                 {
                     ui->modelbl->setText(mode[0]);
                     curMode = mode[0];
@@ -1432,14 +1432,14 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            if (bandOK)
            {
 
-               for (int i = 0; i < listOfBands.size(); i++)
+               for (auto const &b: listOfBands)
                {
-                   if (listOfBands[i].band == cb)
+                   if (b.band == cb)
                    {
                        traceMsg(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
                        //ui->bandSelCombo->setCurrentIndex(i + 1);
 
-                       Frequency freq = listOfBands[i].freq;
+                       Frequency freq = b.freq;
 
                        traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
                        if (checkValidFreq(freq))

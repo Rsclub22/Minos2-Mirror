@@ -30,7 +30,6 @@ extern int strcpysp( QString &s1, const QString &s2, int maxlen = 255 );
 extern int strcmpsp( const QString &s1, const QString &s2 );
 extern int stricmpsp( const QString &s1, const QString &s2 );
 extern int placestr(QString &buff, const QString &str, int start, int len );
-extern int strcspn(const QString &s, const QString &chars);
 int parseLine(QString buff, char sep, QStringList &a, int count, char sep2, bool &sep2seen );
 
 extern QString trimr( const QString & );

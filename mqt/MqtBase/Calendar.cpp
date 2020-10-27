@@ -276,33 +276,27 @@ bool Calendar::parseFile ( const QString &fname )
     // Now we have the raw info; we need to go through it and
     // generate all the individual contest details for logger/adjsql
     setYear ( calendarYear );
-    for ( QMap<QString, CalendarContest>::iterator i = contests.begin(); i != contests.end(); i++ )
+    for ( auto const &i: contests )
     {
 
-        for ( QVector<CalendarBandList>::iterator bl = i.value().bandList.begin(); bl != i.value().bandList.end(); bl++ )
+        for ( auto const &bl: i.bandList )
         {
             // For each contest iterate the time list or the band list
             // the band list overrides the time list!
 
-            QVector<TimeList>::iterator tls;
-            QVector<TimeList>::iterator tle;
 
-            CalendarBand &cb = bands[ (*bl).name ];
+            CalendarBand &cb = bands[ bl.name ];
 
-            if (cb.timeList.size() != 0)
+            QVector<TimeList> tll = cb.timeList;
+
+            if (cb.timeList.size() == 0)
             {
-                tls = cb.timeList.begin();
-                tle = cb.timeList.end();
-            }
-            else
-            {
-                tls = i.value().timeList.begin();
-                tle = i.value().timeList.end();
+                tll = i.timeList;
             }
 
-            for ( QVector<TimeList>::iterator tl = tls; tl != tle; tl++ )
+            for ( auto const &tl: tll )
             {
-                for ( QVector<MonthList>::iterator ml = ( *tl ).monthList.begin(); ml != ( *tl ).monthList.end(); ml++ )
+                for ( auto const &ml: tl.monthList )
                 {
                     // startDate needs to incorporate the week and day
 
@@ -314,7 +308,7 @@ bool Calendar::parseFile ( const QString &fname )
                     // XMAS cumulatives also have <start_date_list>, but they appear to be the only ones
 
 
-                    int sm = getMonth ( ( *ml ).month );
+                    int sm = getMonth ( ml.month );
                     if ( sm == 0 )
                     {
                         continue;
@@ -322,14 +316,14 @@ bool Calendar::parseFile ( const QString &fname )
 
                     // we need to copy the datelist before we add to it...
 
-                    QVector<StartDateList> startDateList = ( *tl ).startDateList;
+                    QVector<StartDateList> startDateList = tl.startDateList;
 
                     if ( startDateList.size() == 0 )
                     {
                         // make the start info into a statt date (just one!)
 
-                        QString startWeek = ( *tl ).startWeek;
-                        QString startDay = ( *tl ).startDay;
+                        QString startWeek = tl.startWeek;
+                        QString startDay = tl.startDay;
 
 
                         QString startday1 = startDay;
@@ -379,9 +373,9 @@ bool Calendar::parseFile ( const QString &fname )
                     if ( startDateList.size() )
                     {
                         // need to iterate the start dates
-                        for ( int j = 0; j < startDateList.size(); j++ )
+                        for ( auto const &j: startDateList )
                         {
-                            int istartDate = startDateList[ j ].date.toInt();
+                            int istartDate = j.date.toInt();
                             if ( istartDate == 0 )
                             {
                                 continue;
@@ -389,11 +383,11 @@ bool Calendar::parseFile ( const QString &fname )
 
                             IndividualContest ic;
 
-                            QString desc = i.value().description.trimmed();
-                            QString sdesc = i.value().shortDescription.trimmed();
-                            QString name = i.value().name.trimmed();
+                            QString desc = i.description.trimmed();
+                            QString sdesc = i.shortDescription.trimmed();
+                            QString name = i.name.trimmed();
                             QString typeName = getTypeName ( name, calType );
-                            QString mode = i.value().mode.trimmed();
+                            QString mode = i.mode.trimmed();
 
                             // This needs changing once the contests are sorted
                             // as e.g. 70MHz cumulatives are defined in two groups
@@ -405,35 +399,35 @@ bool Calendar::parseFile ( const QString &fname )
                             ic.typeName = typeName;
                             ic.description = desc;
                             ic.shortDescription = sdesc;
-                            ic.bands = ( *bl ).name;
+                            ic.bands = bl.name;
                             ic.mode = mode;
 #if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                             ic.start = QDateTime ( QDate( curYear, sm, istartDate ) );
 #else
                             ic.start = QDate( curYear, sm, istartDate ).startOfDay(Qt::UTC);
 #endif
-                            int h = ( *tl ).startTime.left( 2 ).toInt();
-                            int m = ( *tl ).startTime.mid( 2, 2 ).toInt();
+                            int h = tl.startTime.left( 2 ).toInt();
+                            int m = tl.startTime.mid( 2, 2 ).toInt();
 
                             ic.start = ic.start.addSecs( h * 3600 + m * 60 );
 
-                            ic.duration = ( *tl ).duration;
+                            ic.duration = tl.duration;
                             double dur = ic.duration.toDouble();
                             double durh = static_cast< int >( dur / 24 );
                             double durm = ( dur - durh ) * 60;
                             ic.finish = ic.start.addSecs( static_cast< int >(durh) * 3600 + static_cast< int >(durm) * 60 );
 
-                            QString timeType = ( *tl ).timeType;
+                            QString timeType = tl.timeType;
                             if ( timeType == "local" )
                             {
                                 ic.start = localToUTC ( ic.start );
                                 ic.finish = localToUTC ( ic.finish );
                             }
 
-                            ic.ppKmScoring = ( i.value().scoring == CalendarContest::perkms );
-                            for ( int j = 0; j < i.value().sectionList.size(); j++ )
+                            ic.ppKmScoring = ( i.scoring == CalendarContest::perkms );
+                            for ( auto const &j: i.sectionList )
                             {
-                                QString n = i.value().sectionList[ j ].name;
+                                QString n = j.name;
 
                                 QMap<QString, CalendarSection>::iterator s = sections.find ( n );
 
@@ -445,9 +439,9 @@ bool Calendar::parseFile ( const QString &fname )
                                 if ( mls )
                                 {
                                     bool monthOK = false;
-                                    for ( QVector<MonthList>::iterator ml = s.value().monthList.begin(); ml != s.value().monthList.end(); ml++ )
+                                    for ( auto const &ml: s.value().monthList )
                                     {
-                                        if ( ( *ml ).month.compare(monthTable[ sm - 1 ], Qt::CaseInsensitive) == 0 )
+                                        if ( ml.month.compare(monthTable[ sm - 1 ], Qt::CaseInsensitive) == 0 )
                                         {
                                             monthOK = true;
                                             break;
@@ -466,12 +460,12 @@ bool Calendar::parseFile ( const QString &fname )
                                 }
                             }
                             ic.sections = ic.sections.left ( ic.sections.size() - 1 );  // lose any trailing comma
-                            ic.mults = i.value().mult;
-                            for ( int j = 0; j < i.value().specialRulesList.size(); j++ )
+                            ic.mults = i.mult;
+                            for ( auto const &j: i.specialRulesList )
                             {
-                                ic.specialRules += i.value().specialRulesList[ j ].name + " ";
+                                ic.specialRules += j.name + " ";
                             }
-                            ic.power = i.value().power;
+                            ic.power = i.power;
 
                             ic.reg1band = bands[ ic.bands ].reg1band;
                             if ( ic.reg1band == "1,2 GHz" )

@@ -282,27 +282,27 @@ static bool compdistnames( DistrictEntry *ce, const QString &syn )
 static QSharedPointer<DistrictEntry> searchDistrict( const QString &syn )
 {
    // given a random string, look for an entry or a synonym
-   for ( MultList < DistrictEntry>::iterator i = MultListsImpl::getMultLists() ->distList.begin(); i != MultListsImpl::getMultLists() ->distList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->distList )
    {
-      if ( i->wt->districtCode.compare( syn, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt->districtCode.compare( syn, Qt::CaseInsensitive ) == 0 )
       {
-         return i->wt;
+         return i.wt;
       }
    }
 
-   for ( MultList < DistrictSynonym>::iterator i = MultListsImpl::getMultLists() ->distSynList.begin(); i != MultListsImpl::getMultLists() ->distSynList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->distSynList )
    {
-      if ( i->wt->synonym.compare( syn, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt->synonym.compare( syn, Qt::CaseInsensitive ) == 0 )
       {
-         return i->wt ->district;
+         return i.wt ->district;
       }
    }
 
-   for ( MultList < DistrictEntry>::iterator i = MultListsImpl::getMultLists() ->distList.begin(); i != MultListsImpl::getMultLists() ->distList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->distList )
    {
-      if ( compdistnames( i->wt.data(), syn ) )
+      if ( compdistnames( i.wt.data(), syn ) )
       {
-         return i->wt;
+         return i.wt;
       }
    }
 
@@ -350,14 +350,14 @@ void CountryEntry::addSynonyms( QString &s )
 {
    // add list of synonyms to the display buffer
    s = QString();
-   for ( MultList < CountrySynonym >::iterator i = MultListsImpl::getMultLists() ->ctrySynList.begin(); i != MultListsImpl::getMultLists() ->ctrySynList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->ctrySynList )
    {
-      if ( i->wt ->country == this )
+      if ( i.wt ->country == this )
       {
          if ( s.length() < 180 )   		// should really use the correct value here!
          {
             s += " ";
-            i->wt ->synCat( s );
+            i.wt ->synCat( s );
          }
       }
    }
@@ -414,10 +414,10 @@ CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :
    {
       synPrefix = syn;
       // search country list for the prefix
-      for ( MultList < CountryEntry>::iterator i = MultListsImpl::getMultLists() ->ctryList.begin(); i != MultListsImpl::getMultLists() ->ctryList.end(); i++ )
+      for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
       {
-         if (  i->wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
-            country = i->wt;
+         if (  i.wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
+            country = i.wt;
       }
    }
    else
@@ -438,11 +438,11 @@ void CountrySynonym::getDupPrefix( QString &sprefix2 )
    //	search Glist
    // dup_prefix_offset was used to speed this up. We may need something similar
    // None found, then don't change prefix2
-   for ( MultList < GlistEntry >::iterator i = MultListsImpl::getMultLists() ->glist.begin(); i != MultListsImpl::getMultLists() ->glist.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->glist )
    {
-      if ( i->wt->synPrefix.compare( prefix2, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt->synPrefix.compare( prefix2, Qt::CaseInsensitive ) == 0 )
       {
-         sprefix2 = i->wt->dupPrefix;
+         sprefix2 = i.wt->dupPrefix;
          break;
       }
    }
@@ -642,7 +642,8 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          QString part = b[i];
          while ( !skip && i < 99 && !part.isEmpty()  && part[ 0 ] != '=')
          {
-            int bracket = strcspn( b[ i ], "({[<" );
+            QRegExp cc("[\\(\\{\\[\\<]");
+            int bracket = b[ i ].indexOf( cc );
             if ( bracket >= 0 )
                b[ i ] = b[i].left(bracket);   // chop off the brackets
             CountrySynonymList::makeCountrySynonym( b[ i ], mainPrefix );
@@ -694,11 +695,11 @@ void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString 
    }
 
    QSharedPointer<CountryEntry> ctry;
-   for ( MultList < CountryEntry>::iterator i = MultListsImpl::getMultLists() ->ctryList.begin(); i != MultListsImpl::getMultLists() ->ctryList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
    {
-      if ( i->wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
       {
-         ctry = i->wt;
+         ctry = i.wt;
          break;
       }
    }
@@ -867,11 +868,11 @@ int MultListsImpl::getDistListSize()
 QSharedPointer<CountryEntry> MultListsImpl::getCtryForPrefix( const QString &forcedMult )
 {
    QSharedPointer<CountryEntry> ctryMult;
-   for ( MultList < CountryEntry >::iterator i = MultListsImpl::getMultLists() ->ctryList.begin(); i != MultListsImpl::getMultLists() ->ctryList.end(); i++ )
+   for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
    {
-      if ( i ->wt ->basePrefix.compare( forcedMult, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt ->basePrefix.compare( forcedMult, Qt::CaseInsensitive ) == 0 )
       {
-         ctryMult = i->wt;
+         ctryMult = i.wt;
          break;
       }
    }
