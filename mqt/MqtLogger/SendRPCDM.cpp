@@ -947,7 +947,7 @@ void TSendDM::subscribeApps()
 
     for ( auto const &i: config->elelist )
     {
-        if (i->deleted)
+        if (!i->deleted)
         {
             QSharedPointer<Connectable> res = i->connectable();
             connectables.push_back(res);

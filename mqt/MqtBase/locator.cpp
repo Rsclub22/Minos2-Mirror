@@ -3,7 +3,7 @@
 
 Locator::Locator( )
 {
-   loc.setInitialValue( "        " );
+   loc.setInitialValue( "" );
 }
 //Locator::Locator(const QString & l)
 //{
