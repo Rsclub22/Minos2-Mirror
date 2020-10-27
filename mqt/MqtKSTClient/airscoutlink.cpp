@@ -3,7 +3,7 @@
 
 #include "kstmainwindow.h"
 
-const char *AirScoutLink::ASBandStrings[] = {
+QVector<const char *>AirScoutLink::ASBandStrings = {
     QT_TR_NOOP("50MHz"),
     QT_TR_NOOP("70MHz"),
     QT_TR_NOOP("144MHz"),
@@ -15,11 +15,10 @@ const char *AirScoutLink::ASBandStrings[] = {
     QT_TR_NOOP("10GHz"),
     QT_TR_NOOP("24GHz"),
     QT_TR_NOOP("47GHz"),
-    QT_TR_NOOP("76GHz"),
-    nullptr
+    QT_TR_NOOP("76GHz")
 };
 // frequencies are in 100 hz unit
-static const char * bandFreqStrings[] = {
+static QVector<const char *> bandFreqStrings = {
        "500000",
        "700000",
       "1440000",
@@ -81,23 +80,23 @@ void AirScoutLink::sendToAllBroadcast(QByteArray *packet)
     QList<QNetworkInterface> ifaces = QNetworkInterface::allInterfaces();
 
     // Interfaces iteration
-    for (int i = 0; i < ifaces.size(); i++)
+    for (auto const &i: ifaces)
     {
-        if (ifaces[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+        if (i.flags().testFlag(QNetworkInterface::IsLoopBack))
             continue;
 
         // Now get all IP addresses for the current interface
-        QList<QNetworkAddressEntry> addrs = ifaces[i].addressEntries();
+        QList<QNetworkAddressEntry> addrs = i.addressEntries();
 
         // And for any IP address, if it is IPv4 and the interface is active, send the packet
-        for (int j = 0; j < addrs.size(); j++)
+        for (auto const &a: addrs)
         {
-            if ((addrs[j].ip().protocol() == QAbstractSocket::IPv4Protocol) && (addrs[j].broadcast().toString() != ""))
+            if ((a.ip().protocol() == QAbstractSocket::IPv4Protocol) && (a.broadcast().toString() != ""))
             {
-                qint64 res = qus->writeDatagram(packet->data(), packet->length(), addrs[j].broadcast(), static_cast<quint16>(mainWindow->getASPort()));
+                qint64 res = qus->writeDatagram(packet->data(), packet->length(), a.broadcast(), static_cast<quint16>(mainWindow->getASPort()));
                 if (res > 0)
                 {
-                    trace(QString("%1 bytes sent to %2").arg(res).arg(addrs[j].broadcast().toString()));
+                    trace(QString("%1 bytes sent to %2").arg(res).arg(a.broadcast().toString()));
                     lastASSEnd = QDateTime::currentDateTime();
                     break;
                 }
@@ -305,20 +304,20 @@ void AirScoutLink::usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> >
     if (mainWindow->getASActive())
     {
         watchList.clear();
-        for(QVector<QSharedPointer<KstUser> >::iterator user = callVector->begin(); user != callVector->end(); user++)
+        for(auto const &user: *callVector)
         {
-            if (user->data()->baseCall == mainWindow->getMyCallsign())
+            if (user->baseCall == mainWindow->getMyCallsign())
                 continue;
 
-            if (user->data()->baseCall.isEmpty() || user->data()->loc.isEmpty())
+            if (user->baseCall.isEmpty() || user->loc.isEmpty())
                 continue;
 
             int mind = mainWindow->getASMinDistance();
             int maxd = mainWindow->getASMaxDistance();
-            if (user->data()->distance < mind ||( maxd > 0 && user->data()->distance > maxd))
+            if (user->distance < mind ||( maxd > 0 && user->distance > maxd))
                 continue;
 
-            watchList.append(*user);
+            watchList.append(user);
         }
         std::sort(watchList.begin(), watchList.end(), WatchCompare);
         watchList.erase( std::unique( watchList.begin(), watchList.end(), WatchEquals ), watchList.end() );

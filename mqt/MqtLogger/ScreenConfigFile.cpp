@@ -44,14 +44,14 @@ bool ScreenConfigFile::dumpFile()
 }
 void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
 {
-    for (int j = 0; j < rows.count(); j++)
+    for (auto const &r: rows)
     {
         SCRow scrow;
-        QJsonArray elearray = rows[j].toArray();
-        for (int k = 0; k < elearray.count(); k++)
+        QJsonArray elearray = r.toArray();
+        for (auto const &e: elearray)
         {
             SCElement scele;
-            QJsonObject ele = elearray[k].toObject();
+            QJsonObject ele = e.toObject();
             QString eletype = ele.value("type").toString();
             scele.type = ScreenConfigElement::getScreenType(eletype);
             if (scele.type == sctSplit)
@@ -124,10 +124,10 @@ bool ScreenConfigFile::parseConfigString(QString s)
         {
             configs.clear();
             QJsonArray namearray = json.array();
-            for (int i = 0; i < namearray.count(); i++)
+            for (auto const &n: namearray)
             {
                 SC config;
-                QJsonObject namestruct = namearray[i].toObject();
+                QJsonObject namestruct = n.toObject();
                 QString name = namestruct.value("name").toString();
                 config.name = name;
                 config.baseElement = QSharedPointer<SCElement>(new SCElement());
@@ -159,12 +159,12 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
     {
         QJsonArray splitRows;
 
-        for (int j = 0; j < e.rows.count(); j++)
+        for (auto &j: e.rows)
         {
             QJsonArray splitRow;
-           for (int k = 0; k < e.rows[j].elements.count(); k++)
+           for (auto &k: j.elements)
            {
-               writeTypetoRow(e.rows[j].elements[k], splitRow);
+               writeTypetoRow(k, splitRow);
            }
            splitRows.append(splitRow);
         }
@@ -187,18 +187,18 @@ bool ScreenConfigFile::writeFile(QString f)
      QJsonDocument json;
      QJsonArray scarray;
 
-     for(QMap<QString, SC>::iterator i = configs.begin(); i != configs.end(); i++ )
+     for(auto &i: configs )
      {
          QJsonObject sc;
          QJsonArray scrows;
-         QString name = i.value().name;
-         SC &scb = i.value();
-         for (int j = 0; j < scb.baseElement->rows.count(); j++)
+         QString name = i.name;
+         SC &scb = i;
+         for (auto &j: scb.baseElement->rows)
          {
             QJsonArray scrow;
-            for (int k = 0; k < scb.baseElement->rows[j].elements.count(); k++)
+            for (auto &k: j.elements)
             {
-                writeTypetoRow(scb.baseElement->rows[j].elements[k], scrow);
+                writeTypetoRow(k, scrow);
             }
             scrows.append(scrow);
          }

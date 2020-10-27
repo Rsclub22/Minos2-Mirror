@@ -99,10 +99,9 @@ INISection::INISection( INIFile *cb, const QString &name, bool valid )
 INISection::~INISection()
 {
     // delete all entries
-    for ( QVector <IniEntryPtr>::iterator this_ent = entries.begin();
-          this_ent != entries.end(); this_ent++ )
+    for ( auto const &this_ent: entries)
     {
-        delete ( *this_ent );
+        delete this_ent ;
     }
     entries.clear();
 }
@@ -116,10 +115,9 @@ bool INISection::isDirty( )
     if ( sectDirty )
         return true;
 
-    for ( QVector <IniEntryPtr>::iterator thisEntry = entries.begin();
-          thisEntry != entries.end(); thisEntry++ )
+    for ( auto const &thisEntry: entries)
     {
-        if ( ( *thisEntry ) ->isDirty() )
+        if ( thisEntry->isDirty() )
             return true;
     }
     return false;   // for now, just in case...
@@ -127,10 +125,9 @@ bool INISection::isDirty( )
 void INISection::setClean( )
 {
     //walk all sections and set each clean
-    for ( QVector <IniEntryPtr>::iterator thisEntry = entries.begin();
-          thisEntry != entries.end(); thisEntry++ )
+    for ( auto const &thisEntry: entries)
     {
-        ( *thisEntry ) ->setClean();
+        thisEntry->setClean();
     }
 }
 //==============================================================================
@@ -190,9 +187,9 @@ INIFile::~INIFile()
 {
     writePrivateProfileString( "", "", "" );
     // delete all sections
-    for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+    for ( auto const &thisSect: sections )
     {
-        delete ( *thisSect );
+        delete thisSect;
     }
     sections.clear();
     fileLoaded = false;
@@ -207,9 +204,9 @@ bool INIFile::dupSection( const QString &oldname, const QString &newname )
         {
             INISection * oldsect = ( *thisSect );
             INISection *newsect = new INISection( this, newname, true );
-            for ( QVector <IniEntryPtr>::iterator this_ent = oldsect->entries.begin(); this_ent != oldsect->entries.end(); this_ent++ )
+            for ( auto const &this_ent: oldsect->entries )
             {
-                INIEntry *i = ( *this_ent );
+                INIEntry *i = this_ent;
                 QString n = i->name;
                 QString v = i->getValue();
                 INIEntry *newent = new INIEntry( newsect, n, true );
@@ -245,9 +242,9 @@ bool INIFile::isDirty( )
     if ( fileDirty )
         return true;
 
-    for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+    for ( auto const &thisSect: sections )
     {
-        if ( ( *thisSect ) ->isDirty() )
+        if ( thisSect->isDirty() )
             return true;
     }
     return false;   // for now, just in case...
@@ -255,9 +252,9 @@ bool INIFile::isDirty( )
 void INIFile::setClean( )
 {
     //walk all sections and set each clean
-    for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+    for ( auto const &thisSect: sections )
     {
-        ( *thisSect ) ->setClean();
+        thisSect->setClean();
     }
 }
 
@@ -277,21 +274,21 @@ bool INIFile::writeINIFile()
 
     QTextStream out(&inf);
 
-    for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+    for ( auto const &thisSect: sections )
     {
-        const QString sname = ( *thisSect ) ->name;
+        const QString sname = thisSect->name;
 
-        if ( ( *thisSect ) ->isValidSection() )
+        if ( thisSect->isValidSection() )
         {
             QString s = QString("[%1]\n").arg(sname);
             out << s;
         }
 
-        for ( QVector <IniEntryPtr>::iterator this_entry = ( *thisSect ) ->entries.begin(); this_entry != ( *thisSect ) ->entries.end(); this_entry++ )
+        for ( auto const &this_entry: thisSect ->entries )
         {
-            const QString name = ( *this_entry ) ->name;
-            const QString val = ( *this_entry ) ->getValue();
-            if ( ( *this_entry ) ->isValidEntry() )
+            const QString name = this_entry->name;
+            const QString val = this_entry->getValue();
+            if ( this_entry->isValidEntry() )
             {
                 QString s = QString("%1=%2\n").arg(name).arg(val);
                 out << s;
@@ -339,9 +336,9 @@ void INIFile::loadINIFile()
             return;			// no change, so don't re-read
 //        writePrivateProfileString( "", "", "" );    // this could overwrite anyone elses changes if we are dirty
 //                                                    // if we aren't dirty, it doesn't do anything
-        for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+        for ( auto const &thisSect: sections )
         {
-            delete ( *thisSect );
+            delete thisSect;
         }
         sections.clear();
         fileLoaded = false;
@@ -440,11 +437,11 @@ int INIFile::getPrivateProfileList( const QString &Section,
         if ( Entry.isEmpty() )
         {
             /* build list of entry names in buffer */
-            for ( QVector <IniEntryPtr>::iterator this_entry = ( *thisSect ) ->entries.begin(); this_entry != ( *thisSect ) ->entries.end(); this_entry++ )
+            for ( auto const &this_entry: (*thisSect)->entries )
             {
-                if ( ( *this_entry ) ->isValidEntry() )
+                if ( this_entry->isValidEntry() )
                 {
-                    Buffer.append( (*this_entry ) ->name);
+                    Buffer.append( this_entry->name);
                 }
             }
         }
@@ -566,9 +563,9 @@ bool INIFile::writePrivateProfileString(const QString &Section,
     {
         if ( thisSect != sections.end() )
         {
-            for ( QVector <IniEntryPtr>::iterator this_ent = ( *thisSect ) ->entries.begin(); this_ent != ( *thisSect ) ->entries.end(); this_ent++ )
+            for ( auto const &this_ent: (*thisSect)->entries )
             {
-                delete ( *this_ent );
+                delete this_ent;
             }
             ( *thisSect ) ->entries.clear();
 
@@ -641,11 +638,11 @@ QStringList INIFile::getSections( )
 {
     loadINIFile();
     QStringList slist;
-    for ( QVector <IniSectionPtr>::iterator thisSect = sections.begin(); thisSect != sections.end(); thisSect++ )
+    for ( auto const &thisSect: sections )
     {
-        if ( ( *thisSect ) ->isValidSection() )
+        if ( thisSect->isValidSection() )
         {
-            slist.append( ( *thisSect ) ->name );
+            slist.append( thisSect->name );
         }
     }
 

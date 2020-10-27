@@ -42,10 +42,10 @@ void MinosRPCObj::clearCallArgs()
 }
 /*static*/ void MinosRPCObj::clearRPCObjects()
 {
-   for ( QMap <QString, QSharedPointer<MinosRPCObj> >::iterator i = getServerMethodMap().begin(); i != getServerMethodMap().end(); i++ )
+   for ( auto &i: getServerMethodMap() )
    {
-      delete i.value()->callback;
-      i.value().reset();
+      delete i->callback;
+      i.reset();
    }
    getServerMethodMap().clear();
 }
@@ -65,11 +65,11 @@ void MinosRPCObj::clearCallArgs()
       res->methodName = call;
       return res;
    }
-   for (mo = getServerMethodMap().begin(); mo != getServerMethodMap().end(); mo++)
+   for (auto &mo: getServerMethodMap())
    {
-       if (mo.value()->isGeneralObject())
+       if (mo->isGeneralObject())
        {
-           res = mo.value()->makeObj();
+           res = mo->makeObj();
            res->methodName = call;
            return res;
        }

@@ -70,9 +70,9 @@ void BaseContestLog::setVersion(QString v)
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
     int i = 0;
-    for (LogIterator m = ctList.begin(); m != ctList.end(); m++)
+    for (auto const &m: ctList)
     {
-      if (m->wt.data() == item.data())
+      if (m.wt.data() == item.data())
           return i;
 
       i++;
@@ -96,10 +96,10 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence ) const
 {
-   for ( ConstLogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      if ( i->wt ->getLogSequence() == logSequence )
-         return i->wt;
+      if ( i.wt ->getLogSequence() == logSequence )
+         return i.wt;
    }
    return QSharedPointer<BaseContact>();
 }
@@ -242,9 +242,9 @@ void BaseContestLog::clearDirty()
    DTGEnd.clearDirty();
    currentOp1.clearDirty();
    currentOp2.clearDirty();
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      i->wt->clearDirty();
+      i.wt->clearDirty();
    }
 }
 void BaseContestLog::setDirty()
@@ -286,9 +286,9 @@ void BaseContestLog::setDirty()
    currentOp1.setDirty();
    currentOp2.setDirty();
 
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+   for ( auto const &i: ctList )
    {
-      i->wt->setDirty();
+      i.wt->setDirty();
    }
 }
 void BaseContestLog::makeContact( bool timeNow, QSharedPointer<BaseContact>&lct )
@@ -705,8 +705,8 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
 QSharedPointer<BaseContact> BaseContestLog::getBestDX( )
 {
    QSharedPointer<BaseContact> bestDX;
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
-      isBestDX( i->wt, &bestDX );
+   for ( auto const &i: ctList )
+      isBestDX( i.wt, &bestDX );
    return bestDX;
 }
 QString BaseContestLog::dateRange( DTG dstyle )
@@ -1322,11 +1322,11 @@ bool BaseContestLog::getStanza( unsigned int /*stanza*/, QString & /*stanzaData*
 //====================================================================
 QSharedPointer<BaseContact> BaseContestLog::findNextUnfilledContact()
 {
-   for ( LogIterator i = ctList.begin(); i != ctList.end(); i++ )
+    for ( auto const &i: ctList )
    {
-      if ( i->wt ->contactFlags.getValue() & TO_BE_ENTERED )
+      if ( i.wt ->contactFlags.getValue() & TO_BE_ENTERED )
       {
-         return i->wt;
+         return i.wt;
       }
    }
    return QSharedPointer<BaseContact>();

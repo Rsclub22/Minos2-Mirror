@@ -77,12 +77,12 @@ void TSessionManager::parseSessions()
 
        if (slotlst.count())
        {
-           for ( int j = 0; j < slotlst.count(); j++ )
+           for ( auto const &s: slotlst )
            {
                QString ent;
-               preloadBundle.getStringProfile( slotlst[j], ent, "" );
+               preloadBundle.getStringProfile( s, ent, "" );
 
-               if (slotlst[j] == "CurrentLog")
+               if (s == "CurrentLog")
                {
                    sessionList.sessions[i].currentEntry = ent.toInt();
                    continue;
@@ -100,9 +100,9 @@ void TSessionManager::writeSessions()
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
 
-    for (int i = 0; i < sessionlst.count(); i++)
+    for (auto const &i: sessionlst)
     {
-        preloadBundle.openSection(sessionlst[i]);
+        preloadBundle.openSection(i);
         preloadBundle.clearProfileSection(true);
     }
     preloadBundle.flushProfile();
@@ -142,9 +142,9 @@ void TSessionManager::showSessions()
         ui->sessionsList->clear();
         ui->sessionEntries->clear();
 
-        for ( int i = 0; i < sessionList.sessions.count(); i++ )
+        for ( auto const &i: sessionList.sessions )
         {
-           ui->sessionsList->addItem( sessionList.sessions[ i ].sessionName );
+           ui->sessionsList->addItem(i.sessionName );
         }
         inShowSessions = false;
 
@@ -288,9 +288,8 @@ void TSessionManager::on_AddEntryButton_clicked()
                        InitialDir,  // dir
                        Filter
                        );
-    for (int i = 0; i < fnames.size(); i++)
+    for (auto const &fname: fnames)
     {
-        QString fname = fnames[i];
         if ( !fname.isEmpty() )
         {
             sessionList.sessions[sessionList.currentSession].entries.push_back(fname);

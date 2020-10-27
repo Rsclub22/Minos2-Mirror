@@ -120,18 +120,18 @@ void MinosListener::on_timeout()
 
     }
     bool clearup = false;
-    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    for ( auto &a: i_array )
     {
-        if ( ( *i ) ->remove_socket )
+        if ( a ->remove_socket )
         {
             // process says to finish off
-            MinosCommonConnection *mcc = (*i);
-            if ((*i)->publish_disconnect)
+            MinosCommonConnection *mcc = a;
+            if (a->publish_disconnect)
             {
                 mcc->closeDown();
             }
             delete mcc;
-            *i = nullptr;
+            a = nullptr;
             clearup = true;
         }
     }
@@ -144,9 +144,9 @@ void MinosListener::on_timeout()
 
 void MinosListener::clearSockets()
 {
-      for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+      for ( auto  &a: i_array )
       {
-          delete ( *i );
+          delete a;
       }
       i_array.clear();
 }
@@ -176,11 +176,11 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
     // OK, it is not for us... look at connected servers
 
-    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    for ( auto const &a: i_array )
     {
-        if ( ( *i ) ->checkServer( to ) )
+        if ( a ->checkServer( to ) )
         {
-            if ( !( *i ) ->tryForwardStanza( tix ) )
+            if ( !a->tryForwardStanza( tix ) )
             {
                 break;
             }
@@ -202,9 +202,9 @@ void MinosServerListener::buildTable(QTableWidget *tab)
     QStringList h = {"name", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
-    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    for ( auto const &a: i_array )
     {
-        MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(*i);
+        MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(a);
         QString server = msc->getClientServer();
         QTableWidgetItem *s = new QTableWidgetItem(server);
         tab->setItem(row, 0, s);
@@ -223,11 +223,11 @@ void MinosServerListener::closeDown()
 
 MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h)
 {
-    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    for ( auto const &a: i_array )
     {
-        if (h.toIPv4Address() == (*i)->connectHost.toIPv4Address())
+        if (h.toIPv4Address() == a->connectHost.toIPv4Address())
         {
-            return dynamic_cast<MinosServerConnection *>(*i);
+            return dynamic_cast<MinosServerConnection *>(a);
         }
     }
     return nullptr;
@@ -305,12 +305,12 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
 
    // OK, it is for what might be one of our clients
 
-   for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+   for ( auto const &a: i_array )
    {
       // worry about the details
-      if ((*i) && ( *i ) ->checkUser( to ) )
+      if (a && a->checkUser( to ) )
       {
-         if ( !( *i ) ->tryForwardStanza( tix ) )
+         if ( !a->tryForwardStanza( tix ) )
          {
             // send failed
             break;    // OK, we can't send it, forget it
@@ -327,9 +327,9 @@ void MinosClientListener::buildTable(QTableWidget *tab)
     tab->setRowCount(i_array.count());
     tab->setColumnCount(1);
     int row = 0;
-    for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
+    for ( auto const &a: i_array )
     {
-        QString client = (*i)->getClientUser();
+        QString client = a->getClientUser();
         QTableWidgetItem *s = new QTableWidgetItem(client);
         tab->setItem(row++, 0, s);
     }

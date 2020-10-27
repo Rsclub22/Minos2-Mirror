@@ -201,10 +201,10 @@ MatchTreeItem::MatchTreeItem(MatchTreeItem *parent, BaseMatchContest *matchConte
 
 MatchTreeItem::~MatchTreeItem()
 {
-    for (int i = 0; i < children.size(); i++)
+    for (auto &i: children)
     {
-        delete children[i];
-        children[i] = nullptr;
+        delete i;
+        i = nullptr;
     }
 }
 
@@ -261,14 +261,14 @@ void QSOMatchGridModel::initialise(MatchType t, SharedMatchCollection pmatch )
     match = pmatch;  // preserve all the tree
     rootItem = new MatchTreeItem(nullptr, nullptr, QSharedPointer<MatchContact>());
     rootItem->setRow(0);
-    for (ContestMatchIterator i = pmatch->contestMatchList.begin(); i != pmatch->contestMatchList.end(); i++)
+    for (auto const &i: pmatch->contestMatchList)
     {
-        MatchTreeItem *ci = new MatchTreeItem(rootItem, i->wt.data(), QSharedPointer<MatchContact>());
+        MatchTreeItem *ci = new MatchTreeItem(rootItem, i.wt.data(), QSharedPointer<MatchContact>());
         rootItem->addChild(ci); // also sets row
         //(*i) is *BaseMatchContest
-        for(auto const &mct: i->wt->contactMatchList)
+        for(auto const &mct: i.wt->contactMatchList)
         {
-            MatchTreeItem *mi = new MatchTreeItem(ci, i->wt.data(), mct.wt);
+            MatchTreeItem *mi = new MatchTreeItem(ci, i.wt.data(), mct.wt);
             ci->addChild(mi);
             if (!firstIndex.isValid())
             {

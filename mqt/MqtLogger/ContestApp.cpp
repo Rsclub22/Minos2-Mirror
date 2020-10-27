@@ -208,9 +208,9 @@ void TContestApp::close()
 {
    writeContestList();
 
-   for (int i = 0; i < epMAXPROFILE; i++)
+   for (auto &b: BundleFile::bundleFiles)
    {
-        BundleFile::bundleFiles[ i ].clear();
+        b.clear();
    }
 
    TMatchThread::FinishMatchThread();
@@ -277,9 +277,8 @@ bool TContestApp::insertContest(BaseContestLog * p, int sno )
          return true;
       }
    }
-   for ( int i = 0; i < contestSlotList.size(); i++ )
+   for ( auto const &cs: contestSlotList )
    {
-      QSharedPointer<ContestSlot> cs = contestSlotList[ i ];
       if ( !cs->slot )
       {
          cs->slot = p;
@@ -316,9 +315,8 @@ bool TContestApp::insertList(ContactList * p, int sno )
          return true;
       }
    }
-   for ( int i = 0; i < listSlotList.size(); i++ )
+   for ( auto const &cs: listSlotList )
    {
-      QSharedPointer<ListSlot> cs = listSlotList[ i ];
       if (cs && !cs->slot )
       {
          cs->slot = p;
@@ -334,9 +332,9 @@ bool TContestApp::insertList(ContactList * p, int sno )
 int TContestApp::getOccupiedListSlotCount()
 {
    int cnt = 0;
-   for ( ListSlotIterator i = listSlotList.begin(); i != listSlotList.end(); i++ )
+   for (auto const &i: listSlotList )
    {
-      if ( ( *i ) && ( *i ) ->slot )
+      if ( i && i->slot )
       {
          cnt++;
       }
@@ -346,9 +344,9 @@ int TContestApp::getOccupiedListSlotCount()
 
 bool TContestApp::isListOpen( const QString fn )
 {
-   for ( ListSlotIterator i = listSlotList.begin(); i != listSlotList.end(); i++ )
+    for (auto const &i: listSlotList )
    {
-      if ( isOpen( i.value(), fn ) )
+      if ( isOpen( i, fn ) )
       {
          mshowMessage( "File " + fn + " is already open!" );
          return true;
@@ -358,9 +356,9 @@ bool TContestApp::isListOpen( const QString fn )
 }
 bool TContestApp::isContestOpen(const QString fn )
 {
-   for ( SlotIterator i = TContestApp::getContestApp() ->contestSlotList.begin(); i != TContestApp::getContestApp() ->contestSlotList.end(); i++ )
+   for ( auto const &i: TContestApp::getContestApp() ->contestSlotList )
    {
-      if ( isOpen( i.value(), fn ) )
+      if ( isOpen( i, fn ) )
       {
          MinosParameters::getMinosParameters() ->mshowMessage( "File " + fn + " is already open!" );
          return true;
@@ -372,9 +370,8 @@ bool TContestApp::isContestOpen(const QString fn )
 
 BaseContestLog * TContestApp::findFirstContest()
 {
-   for ( int i = 0; i < contestSlotList.size(); i++ )
+    for (auto const &cs: contestSlotList )
    {
-      QSharedPointer<ContestSlot> cs = contestSlotList[ i ];
       if ( cs->slot )
       {
          return cs->slot;
@@ -441,7 +438,7 @@ void TContestApp::writeContestList()
         // build a stripped, renumbered list
         int newSlotNo = 0;
         ContestSlotList newContestSlotList;
-        for ( auto &cs:  contestSlotList)
+        for ( auto const &cs:  contestSlotList)
         {
             if (cs)
             {
@@ -458,7 +455,7 @@ void TContestApp::writeContestList()
         contestSlotList = newContestSlotList;
 
         // and write it out
-        for ( auto &cs:  contestSlotList)
+        for ( auto const &cs:  contestSlotList)
         {
             BaseContestLog * ct = cs->slot;
             if ( !ct )
@@ -510,9 +507,8 @@ void TContestApp::writeListsList()
         // and write it out
         listsPreloadBundle.clearProfileSection( false );
 
-        for ( int i = 0; i < listSlotList.size(); i++ )
+        for ( auto const &cs: listSlotList)
         {
-            QSharedPointer<ListSlot> cs = listSlotList[ i ];
             if (cs)
             {
                 ContactList * ct = cs->slot;
@@ -530,9 +526,8 @@ void TContestApp::writeListsList()
 QVector<BaseContestLog *> TContestApp::getContestList()
 {
    QVector<BaseContestLog *> logList;
-   for ( int i = 0; i < contestSlotList.size(); i++ )
+   for ( auto const &cs: contestSlotList )
    {
-      QSharedPointer<ContestSlot> cs = contestSlotList[ i ];
       BaseContestLog * ct = cs->slot;
       if ( !ct )
          continue;

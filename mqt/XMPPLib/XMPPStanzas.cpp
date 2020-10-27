@@ -52,9 +52,9 @@ RPCAction::~RPCAction()
 QString RPCAction::print()
 {
    QString s = "From: " + getFrom() + " To: " + getTo() + "\r\n";
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = args.begin(); i != args.end(); i++ )
+   for ( auto const &i: args )
    {
-      s += ( *i ) ->print();
+      s += i->print();
    }
    return s;
 }
@@ -162,9 +162,9 @@ QString RPCRequest::print()
 QString RPCRequest::analyse()
 {
    QString s = methodName + " id " + getId() +(!from.isEmpty()?(" from " + from):QString()) + (!to.isEmpty()?(" to " + to):QString()) + " : ";
-   for ( QVector<QSharedPointer<RPCParam> >::iterator i = args.begin(); i != args.end(); i++ )
+   for ( auto const &i: args )
    {
-      s += ( *i ) ->analyse();
+      s += i->analyse();
    }
    return s;
 }

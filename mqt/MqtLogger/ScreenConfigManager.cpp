@@ -50,17 +50,17 @@ void ScreenConfigManager::showDetails()
     int crow = -1;
 
     int j = 0;
-    for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+    for(auto const &i: scf.configs )
     {
-        if ((*i).name == curConfigName)
+        if (i.name == curConfigName)
             crow = j;
-        if ((*i).name ==  defaultConfigName)
+        if (i.name ==  defaultConfigName)
         {
-            ui->layoutList->addItem((*i).name + " " + tr(defLayoutText));
+            ui->layoutList->addItem(i.name + " " + tr(defLayoutText));
         }
         else
         {
-            ui->layoutList->addItem((*i).name);
+            ui->layoutList->addItem(i.name);
         }
         j++;
     }

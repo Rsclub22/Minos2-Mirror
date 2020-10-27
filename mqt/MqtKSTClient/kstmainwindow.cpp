@@ -54,9 +54,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     QString chatSelection = settings.value("service", "1").toString();
     QStringList selections = chatSelection.split(":");
-    for (int i = 0; i < selections.count(); i++)
+    for (auto const &i: selections)
     {
-        int s = selections[i].toInt();
+        int s = i.toInt();
         if (s <= 4 && s > 0)
         {
             kstChatSelection.append(s);
@@ -263,9 +263,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
     connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
 
-    for(int i = 0; i < asbMaxBand; i++)
+    for(auto const &s: AirScoutLink::ASBandStrings)
     {
-        ui->asBandCombo->addItem(AirScoutLink::tr(AirScoutLink::ASBandStrings[i]));
+        ui->asBandCombo->addItem(AirScoutLink::tr(s));
     }
     ui->asBandCombo->setCurrentIndex(ASActiveBand);
 
@@ -641,9 +641,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         }
         kst->otherDistance = -2;
         bool found = false;
-        for(QVector<QSharedPointer<KstMessageLine> >::iterator i = messageVector->begin(); i != messageVector->end(); i++)
+        for(auto const &msg: *messageVector)
         {
-            QSharedPointer<KstMessageLine> msg = (*i);
             if (kst->fullLine == msg->fullLine)
             {
                 found = true;
@@ -737,14 +736,15 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         //Locator update
         // LOC|Unix time|callsign|locator|
 
-        for (QVector<QSharedPointer<KstUser> >::iterator l = callVector->begin(); l != callVector->end(); l++)
+        int row = 0;
+        for (auto const &l: *callVector)
         {
-            if (l->data()->call == sl[2] )
+            if (l->call == sl[2] )
             {
-                l->data()->loc = sl[3];
-                int row = l - callVector->begin();
+                l->loc = sl[3];
                 emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
             }
+            row++;
         }
     }
 
@@ -1356,12 +1356,12 @@ void KSTMainWindow::doLoginChanges()
     if (detached)
     {
         QSharedPointer<QVector<QSharedPointer<KstUser> > > newCallVector(new QVector<QSharedPointer<KstUser> >);
-        for(QVector<QSharedPointer<KstUser> >::iterator i = callVector->begin(); i != callVector->end(); i++)
+        for(auto const &i: *callVector)
         {
-            int c = (*i)->chat;
+            int c = i->chat;
             if (kstLoggedIn.contains(c))
             {
-                newCallVector->push_back((*i));
+                newCallVector->push_back(i);
             }
         }
         kstCallModel.setCallVector(newCallVector);
@@ -1647,9 +1647,8 @@ void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
     {
         if (asl && getASActive())
         {
-            for (int i = 0; i < callVector->size(); i++)
+            for (auto const &kstuser: *callVector)
             {
-                QSharedPointer<KstUser> kstuser = callVector->at(i);
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;
             }
@@ -1670,9 +1669,8 @@ void KSTMainWindow::on_ASActivecb_stateChanged(int state)
     {
         if (asl && getASActive())
         {
-            for (int i = 0; i < callVector->size(); i++)
+            for (auto const &kstuser: *callVector)
             {
-                QSharedPointer<KstUser> kstuser = callVector->at(i);
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;
             }

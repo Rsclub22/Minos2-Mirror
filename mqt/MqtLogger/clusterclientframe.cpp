@@ -208,7 +208,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    for(auto &m: filterProxyModelList)
+    for(auto const &m: filterProxyModelList)
     {
         delete m;
     }
@@ -688,9 +688,9 @@ void ClusterClientFrame::sendBrgToRot(QString brg)
 void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
 {
     //ui->StationList->clear();
-    for ( QVector<ClusterServer>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( auto const &s: serverList )
     {
-        QString state = QString(clusterStateList[(*i).state]) + " " + (*i).app + "\r\n";
+        QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
         traceMsg(QString("clusterClientServerList - state = %1").arg(state));
         //ui->StationList->addItem( state );
     }
@@ -936,9 +936,9 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         Callsign mcs;
         mcs.setFullCall(callsign);
 
-        for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
+        for ( auto const &c: ct->ctList )
         {
-            unsigned short cf = (*i).wt->contactFlags.getValue();
+            unsigned short cf = c.wt->contactFlags.getValue();
             if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
             {
                 continue;
@@ -946,7 +946,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 
             if (!callfound)
             {
-            if ((*i).wt->cs == mcs)
+            if (c.wt->cs == mcs)
             {
                 *callWorked = true;
                     callfound = true;
@@ -957,7 +957,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
             if (!locator.isEmpty())
             {
                 QString loc = locator.mid(0,4);
-                if ((*i).wt->loc.getLoc().mid(0,4) == loc)
+                if (c.wt->loc.getLoc().mid(0,4) == loc)
                 {
                     *locatorWorked = true;
                     locfound = true;

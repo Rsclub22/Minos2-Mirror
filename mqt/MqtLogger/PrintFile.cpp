@@ -152,11 +152,11 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    wr.lwrite(tr(fileHeader));
    wr.lwriteLine();
 
-   for ( int i = 0; i < LineCount; i++ )
+   for ( auto const &l:linelist )
    {
-      if (linelist[ i ].prefix.size())
+      if (l.prefix.size())
       {
-         sprintf( lbuff, "%s : %s", linelist[ i ].prefix.toStdString().c_str(), linelist[ i ].data.toStdString().c_str() );
+         sprintf( lbuff, "%s : %s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
          wr.lwrite( lbuff );
       }
    }
@@ -164,11 +164,11 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    wr.lwrite( "Remarks" );
    wr.lwrite( "=======" );
 
-   for ( int i = 0; i < remarks.size(); i++ )
+   for ( auto const &r: remarks )
    {
-      if (remarks[ i ].size())
+      if (r.size())
       {
-         wr.lwrite( remarks[ i ] );
+         wr.lwrite( r );
       }
    }
    wr.lwrite( "" );

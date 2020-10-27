@@ -8,17 +8,17 @@ RotatorCache::RotatorCache()
 }
 void RotatorCache::invalidate()
 {
-    for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
+    for(auto &i: rotStates )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, AntennaDetail>::iterator i = rotDetails.begin(); i != rotDetails.end(); i++ )
+    for(auto &i: rotDetails )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    for(auto &i: rotPresets )
     {
-        i->setDirty();
+        i.setDirty();
     }
 
 }
@@ -175,9 +175,9 @@ bool RotatorCache::rotatorPresetsIsDirty(const PubSubName &name)
 }
 void RotatorCache::rotatorPresetsClearDirty()
 {
-    for(QMap<PubSubName, MinosStringItem<QString> >::iterator i = rotPresets.begin(); i != rotPresets.end(); i++ )
+    for(auto &i: rotPresets )
     {
-        i->clearDirty();
+        i.clearDirty();
     }
 }
 

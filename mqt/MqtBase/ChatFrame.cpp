@@ -37,19 +37,19 @@ void ChatFrame::on_FontChanged()
 void ChatFrame::ChatServerList(QVector<Server> serverList)
 {
     ui->StationList->clear();
-    for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( auto const &i: serverList )
     {
-        QString state = ChatServer::tr(ChatServer::stateIndicator[(*i).state]) + " " + (*i).app + "\r\n" + (*i).freq.str();
+        QString state = ChatServer::tr(ChatServer::stateIndicator[i.state]) + " " + i.app + "\r\n" + i.freq.str();
         ui->StationList->addItem( state );
     }
 }
 
 void ChatFrame::ChatMessages(QVector<QString> chatQueue)
 {
-    for ( QVector<QString>::iterator i = chatQueue.begin(); i != chatQueue.end(); i++ )
+    for ( auto const &i: chatQueue )
     {
-       ui->ChatMemo->append( (*i) );
-       trace("syncChat " + (*i));
+       ui->ChatMemo->append( i );
+       trace("syncChat " + i);
     }
     chatQueue.clear();
 }

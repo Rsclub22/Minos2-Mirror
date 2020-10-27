@@ -152,9 +152,9 @@ MainWindow::MainWindow(QWidget *parent) :
     MinosConfig *config = MinosConfig::getMinosConfig();
 
     QStringList servers;
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
+    for ( auto const &i: config->elelist )
     {
-        QSharedPointer<Connectable> res = (*i)->connectable();
+        QSharedPointer<Connectable> res = i->connectable();
         servers.append(res->serverName);
     }
     servers.sort();

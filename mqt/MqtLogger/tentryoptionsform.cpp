@@ -224,9 +224,9 @@ void TEntryOptionsForm::getContestOperators()
 {
     OperatorList operators;
 
-    for ( OperatorIterator op = ct->oplist.begin(); op != ct->oplist.end(); op++ )
+    for ( auto const &op: ct->oplist )
     {
-        operators.insert(*op, *op);
+        operators.insert(op, op);
     }
 
     // now actual ops are a sorted list

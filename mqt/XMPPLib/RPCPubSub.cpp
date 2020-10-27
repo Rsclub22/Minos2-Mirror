@@ -42,18 +42,18 @@ void RPCPubSub::subscribeRemote( const QString &server, const QString &category 
 void RPCPubSub::reconnectPubSub( )
 {
    // iterate the publish and subscribe objects and re-do them
-   for ( QVector<RPCPublisher *>::iterator i = publishList.begin(); i != publishList.end(); i++ )
+   for ( auto const &i: publishList )
    {
-      if ( *i )
+      if ( i )
       {
-         ( *i ) ->rePublish();
+         i->rePublish();
       }
    }
-   for ( QVector<RPCSubscriber *>::iterator i = subscribeList.begin(); i != subscribeList.end(); i++ )
+   for ( auto const &i: subscribeList )
    {
-      if ( *i )
+      if ( i )
       {
-         ( *i ) ->reSubscribe();
+         i->reSubscribe();
       }
    }
    connected = true;
@@ -61,16 +61,16 @@ void RPCPubSub::reconnectPubSub( )
 
 void RPCPubSub::close( )
 {
-   for ( QVector<RPCPublisher *>::iterator i = publishList.begin(); i != publishList.end(); i++ )
+   for ( auto &i: publishList )
    {
-      delete ( *i );
-      ( *i ) = nullptr;
+      delete ( i );
+      i = nullptr;
    }
    publishList.clear();
-   for ( QVector<RPCSubscriber *>::iterator i = subscribeList.begin(); i != subscribeList.end(); i++ )
+   for ( auto &i: subscribeList )
    {
-      delete ( *i );
-      ( *i ) = nullptr;
+      delete ( i );
+      i = nullptr;
    }
    subscribeList.clear();
 }

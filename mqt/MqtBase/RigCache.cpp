@@ -8,13 +8,13 @@ RigCache::RigCache()
 
 void RigCache::invalidate()
 {
-    for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
+    for(auto &i: rigStates )
     {
-        i->setDirty();
+        i.setDirty();
     }
-    for(QMap<PubSubName, RigDetails>::iterator i = rigDetails.begin(); i != rigDetails.end(); i++ )
+    for(auto &i: rigDetails )
     {
-        i->setDirty();
+        i.setDirty();
     }
 }
 void RigCache::invalidate(const PubSubName &name)

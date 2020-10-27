@@ -142,12 +142,10 @@ bool select_keyer( const QString &kn )
    keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "" ) );
    int i = 0;
 
-   for ( std::deque <commonPort *>::iterator icp = portChain.begin(); icp != portChain.end(); icp++ )
+   for ( auto const &cp: portChain )
    {
-      commonPort *cp = *icp;
-      for ( std::deque <lineMonitor *>::iterator ilm = cp->monitors.begin(); ilm != cp->monitors.end(); ilm++ )
+      for ( auto const &lm: cp->monitors )
       {
-         lineMonitor *lm = ( *ilm );
          if ( kn.compare(lm->pName, Qt::CaseInsensitive ) == 0 )
          {
             if ( currentKeyer )
@@ -193,10 +191,10 @@ void unloadKeyers()
    currentKeyer = nullptr;
 
    // close down each port
-   for ( std::deque <commonPort *>::iterator icp = portChain.begin(); icp != portChain.end(); icp++ )
+   for (auto const &icp: portChain )
    {
-      if ( *icp )
-         ( *icp ) ->closePort();
+      if ( icp )
+         icp->closePort();
    }
 
    // close down the SB card
@@ -241,12 +239,10 @@ QVector < QString > get_keyer_list()
    QVector < QString > keylist;
    // go through portChain, and look down each namechain of linemonitors
    keylist.clear();
-   for ( std::deque <commonPort *>::iterator icp = portChain.begin(); icp != portChain.end(); icp++ )
+   for ( auto const &cp: portChain )
    {
-      commonPort *cp = *icp;
-      for ( std::deque <lineMonitor *>::iterator ilm = cp->monitors.begin(); ilm != cp->monitors.end(); ilm++ )
+      for ( auto const &lm: cp->monitors )
       {
-         lineMonitor *lm = ( *ilm );
          if ( dynamic_cast<commonKeyer *>( lm ) )
          {
             keylist.push_back( lm->pName );
@@ -452,9 +448,9 @@ bool commonKeyer::getStatus( QString &buff )
    buff += ( pttState ? "PTT " : "" );
    buff += ( L1State ? "1 " : "" );
    buff += ( L2State ? "2 " : "" );
-   for ( std::deque < KeyerAction *>::iterator isba = KeyerAction::currentAction.begin(); isba != KeyerAction::currentAction.end(); isba++ )
+   for ( auto const &isba: KeyerAction::currentAction )
    {
-      buff += ( *isba ) ->statusLetter();
+      buff += isba->statusLetter();
    }
    buff += "]";
 

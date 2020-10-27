@@ -36,11 +36,11 @@ commonController::commonController(QWidget *p ):parent(p)
 void commonController::closeDown()
 {
    // close down each port
-   for ( QVector <commonPort *>::iterator icp = portChain.begin(); icp != portChain.end(); icp++ )
+   for ( auto const &icp: portChain )
    {
-      if ( *icp )
-         ( *icp ) ->closePort();
-      delete ( *icp );
+      if ( icp )
+         icp ->closePort();
+      delete ( icp );
    }
    portChain.clear();
 }
@@ -60,9 +60,9 @@ void commonController::tickEvent()        // this will often be an interrupt rou
 void commonController::checkControls( )
 {
    // loop through ports, checkControls on each
-   for ( QVector < commonPort *>::iterator i = portChain.begin(); i != portChain.end(); i++ )
+    for ( auto const &icp: portChain )
    {
-      ( *i ) ->checkControls();
+      icp->checkControls();
    }
 }
 commonPort *commonController::createPort( const PortConfig &port )
@@ -105,9 +105,9 @@ commonPort *commonController::createPort( const PortConfig &port )
 commonLineControl *commonController::findLine( const QString &name, bool lineIn )
 {
    commonLineControl * clc = nullptr;
-   for ( QVector < commonPort *>::iterator i = portChain.begin(); i != portChain.end(); i++ )
+   for ( auto const &icp: portChain )
    {
-      clc = ( *i ) ->findLine( name, lineIn );
+      clc = icp->findLine( name, lineIn );
       if ( clc )
       {
          break;

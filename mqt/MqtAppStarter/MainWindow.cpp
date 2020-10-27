@@ -140,7 +140,7 @@ void MainWindow::FontEditAcceptActionExecute()
         {
             QApplication::setFont( f );
 
-            for(auto &widget: QApplication::allWidgets() )
+            for(auto const &widget: QApplication::allWidgets() )
             {
                 widget->setFont(f);
                 widget->update();

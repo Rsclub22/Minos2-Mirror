@@ -26,26 +26,26 @@ bool freqModeBandPlan::loadBandsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (QVector<QSharedPointer<BandInfo> >::iterator b = blist.bandList.begin(); b != blist.bandList.end(); b++)
+    for (auto const &b: blist.bandList)
     {
         QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-        for (QVector<QSharedPointer<ModeInfo> >::iterator m = (*b)->modes.begin(); m != (*b)->modes.end(); m++)
+        for (auto const &m: b->modes)
         {
             ModeFreqDetail<Frequency> mfl;
             QList<Frequency> freqHighLow;
 
-            Frequency fl = (*m)->fLow;
-            Frequency fh = (*m)->fHigh;
+            Frequency fl = m->fLow;
+            Frequency fh = m->fHigh;
 
             freqHighLow.append(fl);
             freqHighLow.append(fh);
             mfl.freq.append(freqHighLow);
 
-            modeFreqList.insert((*m)->getType(), mfl);
+            modeFreqList.insert(m->getType(), mfl);
         }
         if (modeFreqList.count())
         {
-            bandModeFreqList.insert((*b)->name(), modeFreqList);
+            bandModeFreqList.insert(b->name(), modeFreqList);
         }
     }
     loadedOk = bandModeFreqList.size() > 0;
@@ -63,38 +63,38 @@ bool freqModeBandPlan::loadExclusionsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (QVector<QSharedPointer<BandInfo> >::iterator b = blist.bandList.begin(); b != blist.bandList.end(); b++)
+    for (auto const &b: blist.bandList)
     {
         QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-        for (QVector<QSharedPointer<ModeInfo> >::iterator m = (*b)->modes.begin(); m != (*b)->modes.end(); m++)
+        for (auto const &m: b->modes)
         {
             ModeFreqDetail<Frequency> mfl;
-            if ((*b)->fLow < (*m)->fcLow1)
+            if (b->fLow < m->fcLow1)
             {
-                addPair(mfl, (*b)->fLow, (*m)->fcLow1);
+                addPair(mfl, b->fLow, m->fcLow1);
             }
-            for (QVector<QSharedPointer<ExclusionInfo> >::iterator e = (*m)->exclusions.begin(); e != (*m)->exclusions.end(); e++)
+            for (auto const &e: m->exclusions)
             {
-                addPair(mfl, (*e)->fLow, (*e)->fHigh);
+                addPair(mfl, e->fLow, e->fHigh);
             }
-            if (qint64((*m)->fcLow2) > 0)
+            if (qint64(m->fcLow2) > 0)
             {
                 // add the bit between contest segments as an exclusion
-                addPair(mfl, (*m)->fcHigh1, (*m)->fcLow2);
+                addPair(mfl, m->fcHigh1, m->fcLow2);
             }
-            Frequency fcHigh = std::max((*m)->fcHigh1, (*m)->fcHigh2);
-            if (fcHigh < (*b)->fHigh)
+            Frequency fcHigh = std::max(m->fcHigh1, m->fcHigh2);
+            if (fcHigh < b->fHigh)
             {
-                addPair(mfl, fcHigh, (*b)->fHigh);
+                addPair(mfl, fcHigh, b->fHigh);
             }
             if (mfl.freq.count())
             {
-                modeFreqList.insert((*m)->getType(), mfl);
+                modeFreqList.insert(m->getType(), mfl);
             }
         }
         if (modeFreqList.count())
         {
-            bandModeFreqList.insert((*b)->name(), modeFreqList);
+            bandModeFreqList.insert(b->name(), modeFreqList);
         }
     }
     loadedOk = bandModeFreqList.size() > 0;

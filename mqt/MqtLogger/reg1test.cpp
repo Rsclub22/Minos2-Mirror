@@ -182,9 +182,9 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    QString sbestdx = QString(bestdx ? ( bestdx->cs.getFullCall() + ";" + bestdx->loc.getLoc() + ";" + QString::number( bestdx->contactScore.getValue() )  ) : QString(";;") );
    linelist[ static_cast< int> (CODXC) ] = reg1testLine( "CODXC", sbestdx); /*, "(Best DX) Callsign; Locator; Distance"*/
 
-   for ( int i = 0; i < LineCount; i++ )
+   for ( auto const &l: linelist )
    {
-      sprintf( lbuff, "%s=%s", linelist[ i ].prefix.toStdString().c_str(), linelist[ i ].data.toStdString().c_str() );
+      sprintf( lbuff, "%s=%s", l.prefix.toStdString().c_str(), l.data.toStdString().c_str() );
       wr.lwrite( lbuff );
    }
    /*
@@ -193,9 +193,9 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    */
    wr.lwrite( "[Remarks]" );
 
-   for ( int i = 0; i < remarks.size(); i++ )
+   for ( auto const &r: remarks )
    {
-      wr.lwrite( remarks[ i ] );
+      wr.lwrite( r );
    }
 
    /*
@@ -593,9 +593,9 @@ bool reg1test::importReg1test()
       int nq = 0;
       int qcount = 0;
       // and here wade our way through
-      for ( int lineno = 0; lineno < sl.count(); lineno++ )
+      for ( auto const &l: sl )
       {
-         QString line = sl[ lineno ].trimmed();
+         QString line = l.trimmed();
 
          if ( line.size() == 0 )
          {

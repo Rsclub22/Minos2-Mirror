@@ -48,12 +48,11 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if ( an.getCategory() == rpcConstants::LocalStationCategory)
         {
             QString server = an.getKey();
-            QVector<Server>::iterator stat;
             bool pubNeeded = true;
             QString a = MinosRPC::getMinosRPC()->getAppName();
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            for ( auto const &stat: serverList )
             {
-                if ((*stat).app == a + "@" + server)
+                if (stat.app == a + "@" + server)
                 {
                     pubNeeded = false;
                     break;
@@ -67,11 +66,10 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString server = an.getKey();
-            QVector<Server>::iterator stat;
             bool subNeeded = true;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            for ( auto const &stat: serverList )
             {
-                if ((*stat).serverName == server)
+                if (stat.serverName == server)
                 {
                     subNeeded = false;
                     break;
@@ -87,15 +85,14 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         if ( an.getCategory() == rpcConstants::ChatServer )
         {
             trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
-            QVector<Server>::iterator stat;
             bool chatFound = false;
-            for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+            for ( auto &stat: serverList )
             {
-                if ((*stat).app == an.getKey())
+                if (stat.app == an.getKey())
                 {
-                    if ((*stat).state != an.getState())
+                    if (stat.state != an.getState())
                     {
-                        (*stat).state = an.getState();
+                        stat.state = an.getState();
                         QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
                         addChat( mess );
                         syncstat = true;
@@ -122,15 +119,14 @@ void ChatServer::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
             trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
             if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
-                QVector<Server>::iterator stat;
-                for ( stat = serverList.begin(); stat != serverList.end(); stat++ )
+                for ( auto &stat: serverList )
                 {
                     Frequency f = Frequency(an.getValue());
-                    if ((*stat).serverName == an.getPublisherServer())
+                    if (stat.serverName == an.getPublisherServer())
                     {
-                        if ((*stat).freq != f)
+                        if (stat.freq != f)
                         {
-                            (*stat).freq = f;
+                            stat.freq = f;
                             syncstat = true;
                         }
                         break;
@@ -202,13 +198,13 @@ void ChatServer::syncChat()
 void ChatServer::sendMessage(QString mess)
 {
     // We need to send the message to all connected stations
-    for ( QVector<Server>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+    for ( auto const &i: serverList )
     {
         RPCGeneralClient rpc(rpcConstants::chatMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( mess, rpcConstants::SendChatMessage );
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( (*i).app );
+        rpc.queueCall( i.app );
     }
 }
 void ChatServer::onRigFreqChanged(Frequency f, BaseContestLog * /*c*/)

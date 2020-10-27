@@ -64,9 +64,9 @@ int TreeNode::childNumber() const
 }
 void TreeNode::clear()
 {
-    for ( QVector<TreeNode *>::iterator tn = nodes.begin(); tn != nodes.end(); tn++ )
+    for ( auto const &tn: nodes )
     {
-        delete ( *tn );
+        delete tn;
     }
     nodes.clear();
 }
@@ -326,14 +326,14 @@ MonitorMain::MonitorMain(QWidget *parent) :
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
+    for ( auto const &s: stationList )
     {
-       for ( QVector< MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
+       for ( auto const &l: s->slotList )
        {
-          delete ( *j );
+          delete l;
        }
-       ( *i ) ->slotList.clear();
-       delete ( *i );
+       s->slotList.clear();
+       delete s;
     }
     stationList.clear();
     delete MultLists::getMultLists();
@@ -410,17 +410,17 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
+    for ( auto const &s: stationList )
     {
-        for ( QVector<MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
+        for ( auto const &l: s->slotList )
         {
-            if ((*j)->getFrame() == cttab)
+            if (l->getFrame() == cttab)
             {
                 // take it out of the slot list and close it
                 // and we need to redo the list
                 //treeModel->clear();
-                (*j)->setEnabled(false);
-                (*j)->setFrame(nullptr);
+                l->setEnabled(false);
+                l->setFrame(nullptr);
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
                 return;
@@ -624,18 +624,18 @@ void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                 {
                     trace( "Name " + logName + " stanza " + QString::number( stanza ) );
                     // Find the matching MonitoredLog and send the stanza their for processing
-                    for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
+                    for ( auto const &s: stationList )
                     {
                         // "from" is something like Logger@dev-station
                         // BUT it isn't necessarily Logger!
-                        if ( ( *i ) ->publisher + "@" + (*i)->stationName == from )
+                        if ( s->publisher + "@" + s->stationName == from )
                         {
-                            for ( QVector<MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
+                            for ( auto const &l: s->slotList )
                             {
-                                if ((*j) && ( *j ) ->getPublishedName() == logName )
+                                if (l && l->getPublishedName() == logName )
                                 {
                                     trace( "||" + stanzaData + "||" );
-                                    ( *j ) ->processLogStanza( stanza, stanzaData );
+                                    l ->processLogStanza( stanza, stanzaData );
                                     return ;
                                 }
                             }
@@ -667,18 +667,20 @@ void MonitorMain::syncStations()
       syncstat = false;
 
       TreeNode *root = new RootTreeNode(this);
-      for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
+      for ( auto const &s: stationList )
       {
-          TreeNode *snode = new ServerTreeNode(root, (*i)->stationName);
-          for ( QVector<MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
+          TreeNode *snode = new ServerTreeNode(root, s->stationName);
+          for ( auto const &l: s->slotList )
           {
-              /*TreeNode *lnode =*/ new LogTreeNode(snode, (*j));
+              /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
           }
       }
       treeModel->setRoot(root);
       int rc = treeModel->rowCount();
       for(int i = 0; i < rc; i++)
-      ui->monitorTree->setFirstColumnSpanned( i, QModelIndex(), true );
+      {
+        ui->monitorTree->setFirstColumnSpanned( i, QModelIndex(), true );
+      }
       ui->monitorTree->expandAll();
    }
 }
@@ -745,29 +747,29 @@ void MonitorMain::on_monitorTimeout()
        }
     }
     int icnt = 0;
-    for ( QVector<MonitoredStation *>::iterator i = stationList.begin(); i != stationList.end(); i++ )
+    for ( auto const &s: stationList )
     {
         icnt++;
         int jcnt = 0;
-       for ( QVector<MonitoredLog *>::iterator j = ( *i ) ->slotList.begin(); j != ( *i ) ->slotList.end(); j++ )
+       for ( auto &l: s->slotList )
        {
            jcnt++;
-          if ((*j)->getState() == psRevoked)
+          if (l->getState() == psRevoked)
           {
-             MonitoringFrame *cttab = findContestPage( (*j)->getContest() );
+             MonitoringFrame *cttab = findContestPage( l->getContest() );
              closeTab(cttab);
              // take it out of the slot list and close it
              // and we need to redo the list
-             delete (*j);
-             (*j) = nullptr;
-             (*i)->slotList.erase(j);
+             delete l;
+             l = nullptr;
+             s->slotList.erase(&l);
              syncstat = true;
              break;             // as we have changed the list - don't continue
 
           }
           else
           {
-             ( *j ) ->checkMonitor();
+             l->checkMonitor();
           }
        }
        if (syncstat)

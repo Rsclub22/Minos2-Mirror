@@ -417,57 +417,50 @@ void TSendDM::notifyRigDetailChanges()
             traceMsg(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
             if (selDetail.transverterOffset().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetTransVertOffset(selDetail.transverterOffset().getValue(), psn);
                 }
             }
             if (selDetail.transverterSwitch().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
                 }
             }
             if (selDetail.transverterEnabled().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
                 }
             }
             if (selDetail.transverterStatus().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetTransVertStatus(selDetail.transverterStatus().getValue(), psn);
                 }
             }
             if (selDetail.volumeStatus().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritEnableStatus().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritMaxKHzFreq().isDirty())
             {
-                for (int i =0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetRitMaxKHzFreq(selDetail.ritMaxKHzFreq().getValue(), psn);
 
                 }
@@ -475,9 +468,8 @@ void TSendDM::notifyRigDetailChanges()
 
             if (selDetail.bandList().isDirty())
             {
-                for (int i = 0; i < frames.size(); i++)
+                for (auto const &tslf: frames)
                 {
-                    TSingleLogFrame *tslf = frames[i];
                     tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
                 }
             }
@@ -502,9 +494,8 @@ void TSendDM::notifyRigChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (int i = 0; i < frames.size(); i++)
+            for (auto const &tslf: frames)
             {
-                TSingleLogFrame *tslf = frames[i];
                 QString frameUuid = tslf->getContest()->uuid;
 
                 if (selStateUuid == frameUuid)
@@ -562,9 +553,8 @@ void TSendDM::notifyRotChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (int i = 0; i < frames.size(); i++)
+            for (auto const &tslf: frames)
             {
-                TSingleLogFrame *tslf = frames[i];
                 QString frameUuid = tslf->getContest()->uuid;
 
                 if (selStateUuid == frameUuid)
@@ -633,16 +623,16 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
         if (category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
         {
             bool notificationOK = false;
-            for ( QVector <QSharedPointer<Connectable> >::iterator j = catMap[category].begin(); j != catMap[category].end(); j++ )
+            for ( auto const &j: catMap[category] )
             {
-                if ((*j)->runType == RunLocal)
+                if (j->runType == RunLocal)
                 {
-                    if (an.getPublisherServer() != (*j)->serverName)
+                    if (an.getPublisherServer() != j->serverName)
                     {
                         //trace("RunLocal server " + an.getPublisherServer() + " " + (*j)->serverName);
                         continue;
                     }
-                    if (an.getPublisherProgram() != (*j)->appName)
+                    if (an.getPublisherProgram() != j->appName)
                     {
                         //trace("RunLocal appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
@@ -651,24 +641,24 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
                     notificationOK = true;
                     break;
                 }
-                else if ((*j)->runType == ConnectServer)
+                else if (j->runType == ConnectServer)
                 {
-                    if ((*j)->serverName.isEmpty())
+                    if (j->serverName.isEmpty())
                     {
                         notificationOK = true;
                         break;
                     }
-                    else if (an.getPublisherServer() != (*j)->serverName)
+                    else if (an.getPublisherServer() != j->serverName)
                     {
                         //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j)->serverName);
                         continue;
                     }
-                    if ((*j)->remoteAppName.isEmpty())
+                    if (j->remoteAppName.isEmpty())
                     {
                         notificationOK = true;
                         break;
                     }
-                    else if (an.getPublisherProgram() != (*j)->remoteAppName)
+                    else if (an.getPublisherProgram() != j->remoteAppName)
                     {
                         //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j)->appName);
                         continue;
@@ -955,77 +945,77 @@ void TSendDM::subscribeApps()
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
 
-    for ( QVector <QSharedPointer<RunConfigElement> >::iterator i = config->elelist.begin(); i != config->elelist.end(); i++ )
+    for ( auto const &i: config->elelist )
     {
-        if (!(*i)->deleted)
+        if (i->deleted)
         {
-            QSharedPointer<Connectable> res = (*i)->connectable();
+            QSharedPointer<Connectable> res = i->connectable();
             connectables.push_back(res);
         }
     }
 
-    for ( QVector <QSharedPointer<Connectable> >::iterator i = connectables.begin(); i != connectables.end(); i++ )
+    for ( auto const &i: connectables)
     {
-        if ((*i)->appType == "None")
+        if (i->appType == "None")
         {
             // no action
         }
-        else if ((*i)->appType == "AppStarter")
+        else if (i->appType == "AppStarter")
         {
             // no action
         }
-        else if ((*i)->appType == "BandMap")
+        else if (i->appType == "BandMap")
         {
             // no action
         }
-        else if ((*i)->appType == "Chat")
+        else if (i->appType == "Chat")
         {
             // no action - done in chat server
         }
-        else if ((*i)->appType == "Keyer")
+        else if (i->appType == "Keyer")
         {
-            catMap[rpcConstants::KeyerCategory].push_back((*i));
+            catMap[rpcConstants::KeyerCategory].push_back(i);
         }
-        else if ((*i)->appType == "LineControl")
+        else if (i->appType == "LineControl")
         {
             // no action except in keyer
         }
-        else if ((*i)->appType == "Logger")
+        else if (i->appType == "Logger")
         {
             // no action
         }
-        else if ((*i)->appType == "Monitor")
+        else if (i->appType == "Monitor")
         {
             // no action
         }
-         else if ((*i)->appType == "Other")
+         else if (i->appType == "Other")
         {
             // no action
         }
-        else if ((*i)->appType == "RigControl")
+        else if (i->appType == "RigControl")
         {
-            catMap[rpcConstants::rigControlCategory].push_back((*i));
-            catMap[rpcConstants::rigDetailsCategory].push_back((*i));
-            catMap[rpcConstants::rigStateCategory].push_back((*i));
+            catMap[rpcConstants::rigControlCategory].push_back(i);
+            catMap[rpcConstants::rigDetailsCategory].push_back(i);
+            catMap[rpcConstants::rigStateCategory].push_back(i);
         }
-        else if ((*i)->appType == "Rotator")
+        else if (i->appType == "Rotator")
         {
-            catMap[rpcConstants::RotatorCategory].push_back((*i));
-            catMap[rpcConstants::rotatorDetailCategory].push_back((*i));
-            catMap[rpcConstants::rotatorStateCategory].push_back((*i));
-            catMap[rpcConstants::rotatorPresetsCategory].push_back((*i));
+            catMap[rpcConstants::RotatorCategory].push_back(i);
+            catMap[rpcConstants::rotatorDetailCategory].push_back(i);
+            catMap[rpcConstants::rotatorStateCategory].push_back(i);
+            catMap[rpcConstants::rotatorPresetsCategory].push_back(i);
         }
-        else if ((*i)->appType == "Server")
+        else if (i->appType == "Server")
         {
-            catMap[rpcConstants::LocalStationCategory].push_back((*i));
-            catMap[rpcConstants::StationCategory].push_back((*i));
+            catMap[rpcConstants::LocalStationCategory].push_back(i);
+            catMap[rpcConstants::StationCategory].push_back(i);
         }
-        else if ((*i)->appType == "Cluster")
+        else if (i->appType == "Cluster")
         {
-            catMap[rpcConstants::clusterClientServer].push_back((*i));
-            catMap[rpcConstants::clusterCategory].push_back((*i));
+            catMap[rpcConstants::clusterClientServer].push_back(i);
+            catMap[rpcConstants::clusterCategory].push_back(i);
         }
-        else if ((*i)->appType == "KSTClient")
+        else if (i->appType == "KSTClient")
         {
 
         }

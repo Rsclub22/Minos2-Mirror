@@ -108,7 +108,7 @@ public:
     AirScoutLink();
     ~AirScoutLink();
 
-    static const char *ASBandStrings[];
+    static QVector<const char *>ASBandStrings;
 
     void usersChanged(QSharedPointer<QVector<QSharedPointer<KstUser> > > callVector);
     void asSelected(QSharedPointer<KstUser> user);

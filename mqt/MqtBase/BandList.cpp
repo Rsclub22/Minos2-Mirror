@@ -311,31 +311,31 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     Frequency dvhffreq(ifreq * 1000000);
     Frequency dmwvfreq(ifreq * 1000000000);
 
-    for ( int i = 0; i < bandList.size(); i++ )
+    for ( auto const &b: bandList )
     {
         if (
-                sfreq.compare(bandList[ i ]->uk ) == 0
-                || sfreq.compare(bandList[ i ]->wlen ) == 0
-                || sfreq.compare(bandList[ i ]->adif ) == 0
-                || sfreq.compare(bandList[ i ]->cabrillo ) == 0
-                || sfreq.compare(bandList[ i ]->reg1test ) == 0
+                sfreq.compare(b->uk ) == 0
+                || sfreq.compare(b->wlen ) == 0
+                || sfreq.compare(b->adif ) == 0
+                || sfreq.compare(b->cabrillo ) == 0
+                || sfreq.compare(b->reg1test ) == 0
            )
         {
-            bi = bandList[ i ];
+            bi = b;
             return true;
         }
     }
-    for ( int i = 0; i < bandList.size(); i++ )
+    for ( auto const &b: bandList )
     {
-        QString bandType = bandList[ i ]->getType();
-        Frequency bfhigh = bandList[ i ]->fHigh;
-        Frequency bflow = bandList[ i ]->fLow;
+        QString bandType = b->getType();
+        Frequency bfhigh = b->fHigh;
+        Frequency bflow = b->fLow;
 
         if ( bandType == "HF" )
         {
             if ( dhffreq <= bfhigh && dhffreq >= bflow )
             {
-                bi = bandList[ i ];
+                bi = b;
                 return true;
             }
         }
@@ -344,7 +344,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             {
                 if ( dvhffreq <= bfhigh && dvhffreq >= bflow )
                 {
-                    bi = bandList[ i ];
+                    bi = b;
                     return true;
                 }
             }
@@ -353,27 +353,27 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                 {
                     if ( dmwvfreq <= bfhigh && dmwvfreq >= bflow )
                     {
-                        bi = bandList[ i ];
+                        bi = b;
                         return true;
                     }
                     if ( dvhffreq <= bfhigh && dvhffreq >= bflow )
                     {
-                        bi = bandList[ i ];
+                        bi = b;
                         return true;
                     }
                 }
     }
-    for ( int i = 0; i < bandList.size(); i++ )
+    for ( auto const &b: bandList )
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
-        if ( bandList[ i ]->uk.indexOf ( sfreq ) != -1
-             || bandList[ i ]->uk.indexOf ( sfreq ) != -1
-             || bandList[ i ]->adif.indexOf ( sfreq ) != -1
-             || bandList[ i ]->cabrillo.indexOf ( sfreq ) != -1
-             || bandList[ i ]->reg1test.indexOf ( sfreq ) != -1
+        if ( b->uk.indexOf ( sfreq ) != -1
+             || b->uk.indexOf ( sfreq ) != -1
+             || b->adif.indexOf ( sfreq ) != -1
+             || b->cabrillo.indexOf ( sfreq ) != -1
+             || b->reg1test.indexOf ( sfreq ) != -1
            )
         {
-            bi = bandList[ i ];
+            bi = b;
             return true;
         }
     }
@@ -383,11 +383,11 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 
 bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
-   for (QVector<QSharedPointer<BandInfo> >::iterator i = bandList.begin(); i != bandList.end(); i++)
+    for ( auto const &b: bandList )
    {
-      if ((*i)->fLow <= freq && (*i)->fHigh >= freq)
+      if (b->fLow <= freq && b->fHigh >= freq)
       {
-         bi = (*i);
+         bi = b;
          return true;
       }
    }
@@ -398,17 +398,17 @@ bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 
 void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
-    for (int i = 0; i < bandList.size(); i++)   // just load VHF/UHF bands
+    for ( auto const &b: bandList )       // just load VHF/UHF bands
     {
         // don't use bands > 10GHz (can't support Freq display)
-        if ( bandList[i]->uk != "24 GHz" && bandList[i]->uk != "47 GHz"
-             && bandList[i]->uk != "76 GHz" && bandList[i]->uk != "120 GHz"
-             && bandList[i]->uk != "134 GHz" && bandList[i]->uk != "248 GHz")
+        if ( b->uk != "24 GHz" && b->uk != "47 GHz"
+             && b->uk != "76 GHz" && b->uk != "120 GHz"
+             && b->uk != "134 GHz" && b->uk != "248 GHz")
 
         {
-            if (bandList[i]->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || bandList[i]->getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(bandList[i]);
+            if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
+                    || b->getType().compare("MWave", Qt::CaseInsensitive) == 0)
+                bands.append(b);
         }
     }
 

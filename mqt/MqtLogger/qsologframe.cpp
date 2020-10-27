@@ -126,9 +126,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->dateEdit->installEventFilter(this);
 
 
-    for (int i = 0; i < supModeList.count(); i++)
+    for (auto const &sm: supModeList)
     {
-        ui->ModeComboBoxGJV->addItem(supModeList[i]);
+        ui->ModeComboBoxGJV->addItem(sm);
     }
 
     ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
@@ -284,9 +284,9 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
 QSOLogFrame::~QSOLogFrame()
 {
     delete ui;
-    for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
+    for ( auto const & vcp: vcs )
     {
-       delete ( *vcp );
+       delete vcp;
     }
     killPartial();
 }
@@ -633,25 +633,25 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        QWidget *nextInvalid = nullptr;
        bool onCurrent = false;
        bool pastCurrent = false;
-       for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
+       for ( auto const &vcp: vcs )
        {
-          if ( !( *vcp ) ->wc->isVisible() || !( *vcp ) ->wc->isEnabled())
+          if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
           {
              continue;
           }
           if ( onCurrent )
              pastCurrent = true;
-          if ( ( *vcp ) ->wc == current )
+          if ( vcp ->wc == current )
              onCurrent = true;
-          if ( !( *vcp ) ->valid( cmValidStatus, screenContact ) )
+          if ( !vcp ->valid( cmValidStatus, screenContact ) )
           {
              if ( !firstInvalid )
-                firstInvalid = ( *vcp ) ->wc;
+                firstInvalid = vcp ->wc;
              if ( pastCurrent )
              {
                 if ( !nextInvalid )
                 {
-                   nextInvalid = ( *vcp ) ->wc;
+                   nextInvalid = vcp->wc;
                    break;
                 }
              }
@@ -1095,10 +1095,10 @@ void QSOLogFrame::showScreenEntry( )
       ui->MGMSubModeEdit->setText(temp.mgmSubmode);
 
       // and now we want to put the selection on each at the END of the text
-      for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
+      for ( auto const &vcp: vcs )
       {
-         int selpt = ( *vcp ) ->wc->text().length();
-         ( *vcp )->wc ->setSelection(selpt, 0);
+         int selpt = vcp->wc->text().length();
+         vcp->wc ->setSelection(selpt, 0);
       }
 
       valid( cmCheckValid ); // make sure contact is valid - display any errors
@@ -1351,26 +1351,26 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
 
     bool ret = true;
 
-    for ( QVector <ValidatedControl *>::iterator vcp = vcs.begin(); vcp != vcs.end(); vcp++ )
+    for ( auto const &vcp: vcs )
    {
         QString ss = ssLineEditOK;
-        if (!edit && (*vcp) == ssIl)
+        if (!edit && vcp == ssIl)
             ss = ssLineEditGreyBackground;
 
         if (
                 (
-                    (*vcp)->wc->isEnabled()
-                    || ((*vcp) == ssIl && contest->serialMandatoryField.getValue())
+                    vcp->wc->isEnabled()
+                    || (vcp == ssIl && contest->serialMandatoryField.getValue())
                     )
-                && (!( *vcp ) ->valid( command, screenContact ) )
+                && (!vcp ->valid( command, screenContact ) )
             )
         {
-            if (!(*vcp)->tIfValid)
+            if (!vcp->tIfValid)
             {
-                QString text = (*vcp)->wc->text().trimmed();
+                QString text = vcp->wc->text().trimmed();
                 if (!text.isEmpty())
                 {
-                    if ((*vcp) == csIl)
+                    if (vcp == csIl)
                     {
                         if ( screenContact.cs.getValRes() == ERR_DUPCS)
                         {
@@ -1381,15 +1381,15 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                             ss = ssLineEditFrRedBkWhite;
                         }
                     }
-                    else if ((*vcp) == rsIl && text == "5")
+                    else if (vcp == rsIl && text == "5")
                     {
                         // leave as no error
                     }
-                    else if ((*vcp) == rrIl && text == "5")
+                    else if (vcp == rrIl && text == "5")
                     {
                         // leave as no error
                     }
-                    else if ((*vcp) == locIl)
+                    else if (vcp == locIl)
                     {
                         // leave as no error
                         if (screenContact.loc.getValRes() == ERR_LOC_RANGE && screenContact.loc.getLoc().size() > 4)
@@ -1401,15 +1401,15 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                             ss = ssLineEditFrRedBkWhite;
                         }
                     }
-                    else if ((*vcp) == qthIl)
+                    else if (vcp == qthIl)
                     {
                         // leave as no error except if exchange is wrong??
                     }
-                    else if ((*vcp) == srIl)
+                    else if (vcp == srIl)
                     {
-                        if (QApplication::focusWidget () == (*vcp)->wc)
+                        if (QApplication::focusWidget () == vcp->wc)
                         {
-                            QString t = (*vcp)->wc->text();
+                            QString t = vcp->wc->text();
                             int val = toInt(t, -1);
                             if (val == -1)
                             {
@@ -1434,16 +1434,16 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
             }
         }
 
-        if ((*vcp)->wc->isEnabled())
+        if (vcp->wc->isEnabled())
         {
-            (*vcp)->wc->setStyleSheet(ss);
-            widgetStyles[(*vcp)->wc] = ss;
+            vcp->wc->setStyleSheet(ss);
+            widgetStyles[vcp->wc] = ss;
         }
         else
         {
             QString ss = QString("[readOnly=\"true\"] { background-color: %0 }").arg(qApp->palette().color(QPalette::Window).name(QColor::HexRgb));
-            (*vcp)->wc->setStyleSheet(ss);
-            widgetStyles[(*vcp)->wc] = ss;
+            vcp->wc->setStyleSheet(ss);
+            widgetStyles[vcp->wc] = ss;
         }
    }
    return ret;
@@ -1945,10 +1945,10 @@ void QSOLogFrame::refreshOps()
        ui->SecondOpComboBox->clear();
 
        QStringList ops;
-       for ( OperatorIterator i = contest->oplist.begin(); i != contest->oplist.end(); i++ )
+       for ( auto const &i: contest->oplist )
        {
-           if (!(*i).isEmpty())
-             ops.append(*i);
+           if (!i.isEmpty())
+             ops.append(i);
        }
        ops.append(mainOp);
        ops.append(secondOp);
@@ -1978,10 +1978,10 @@ void QSOLogFrame::refreshOps( ScreenContact &screenContact )
 
         BaseContestLog * contest = TContestApp::getContestApp() ->getCurrentContest();
         QStringList ops;
-        for ( OperatorIterator i = contest->oplist.begin(); i != contest->oplist.end(); i++ )
+        for ( auto const &i: contest->oplist )
         {
-            if (!(*i).isEmpty())
-              ops.append(*i);
+            if (!i.isEmpty())
+              ops.append(i);
         }
         ops.append(mainOp);
         ops.append(secondOp);
@@ -2079,9 +2079,9 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    for (int i = 0; i < supModeList.count(); i++)
+    for (auto const &sm: supModeList)
     {
-        if (newMode == supModeList[i])
+        if (newMode == sm)
         {
             oldMode = ui->ModeComboBoxGJV->currentText();
             if (newMode == ui->ModeComboBoxGJV->currentText())

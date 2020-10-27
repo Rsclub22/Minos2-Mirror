@@ -183,11 +183,11 @@ void ContestDetails::setDetails(  )
    {
        ui->BandComboBox->addItem( tr("All HF") );
    }
-   for (QVector<QSharedPointer<BandInfo> >::iterator i = blist.bandList.begin(); i != blist.bandList.end(); i++)
+   for (auto const &b: blist.bandList)
    {
-       if (allowHF || (*i)->getType() != "HF")
+       if (allowHF || b->getType() != "HF")
        {
-           ui->BandComboBox->addItem( (*i)->uk );
+           ui->BandComboBox->addItem( b->uk );
        }
    }
 
@@ -444,11 +444,11 @@ void ContestDetails::setDetails(  )
    int j = 0;
    int crow = 0;
 
-   for(QMap<QString, SC>::iterator i = scf.configs.begin(); i != scf.configs.end(); i++ )
+   for(auto const &c: scf.configs )
    {
-       if ((*i).name == curConfigName)
+       if (c.name == curConfigName)
            crow = j;
-       ui->screenLayoutCombo->addItem((*i).name);
+       ui->screenLayoutCombo->addItem(c.name);
        j++;
    }
    ui->screenLayoutCombo->setCurrentIndex(crow);
@@ -466,10 +466,10 @@ void ContestDetails::refreshOps()
       ui->SecondOpComboBox->clear();
       //bool addCall = true;
       QStringList ops;
-      for ( OperatorIterator i = contestTransferObject->oplist.begin(); i != contestTransferObject->oplist.end(); i++ )
+      for ( auto const &i: contestTransferObject->oplist )
       {
-          if (!(*i).isEmpty())
-            ops.append(*i);
+          if (!i.isEmpty())
+            ops.append(i);
       }
       ops.append(contestTransferObject->currentOp1.getValue());
       ops.append(contestTransferObject->currentOp2.getValue());
