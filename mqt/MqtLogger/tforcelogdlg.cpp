@@ -45,7 +45,7 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
 {
     for ( ErrorIterator i = errs.begin(); i != errs.end(); i++ )
     {
-        new QListWidgetItem(tr(( *i ) ->errStr), ui->ErrList);
+        new QListWidgetItem(Validator::tr(( *i ) ->errStr), ui->ErrList);
     }
     ui->ErrList->setCurrentRow(0);
 
