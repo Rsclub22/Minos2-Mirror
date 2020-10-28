@@ -24,6 +24,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctWsjtx, QT_TR_NOOP("WSJT-X Connector"), QT_TR_NOOP("WSJT-X Connector") },
     {sctBandmap, QT_TR_NOOP("Bandmap Display"), QT_TR_NOOP("Bandmap Display")},
     {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
+    {sctTxVmButtons, QT_TR_NOOP("TX Voice Mem. Buttons"), QT_TR_NOOP("TX Voice Mem. Buttons")},
     {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
 };
 SCType ScreenConfigElement::getScreenType(QString s)

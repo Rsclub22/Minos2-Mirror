@@ -256,6 +256,10 @@ void TSingleLogFrame::createScreenComponents()
     runButtonsFrame->setRigControl(FKHRigControlFrame);
     runButtonsFrame->setContest(contest);
 
+    txVmButtonsFrame = new TxVmButtonsFrame(this);
+    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
+    txVmButtonsFrame->setVisible(false);
+
     FKHRotControlFrame = new RotControlFrame(this);
 
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
@@ -565,6 +569,11 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
                     runButtonsFrame->setContest(ct);
+                    break;
+                }
+                case sctTxVmButtons:
+                {
+                    elementScrollArea->setWidget(txVmButtonsFrame);
                     break;
                 }
                 case sctRotControl:

@@ -91,6 +91,7 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txvmbuttonsframe.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp \
     radiodetails.cpp \
@@ -173,6 +174,7 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txvmbuttonsframe.h \
     volumeslider.h \
     tminosbshelpform.h \
     radiodetails.h \
@@ -241,7 +243,8 @@ FORMS    += \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
-    Clusterbandmapconfigure.ui
+    Clusterbandmapconfigure.ui \
+    txvmbuttonsframe.ui
 
 
 DISTFILES += \

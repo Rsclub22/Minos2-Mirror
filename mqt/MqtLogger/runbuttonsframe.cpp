@@ -548,7 +548,7 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
 }
 RunMemoryButton::~RunMemoryButton()
 {
-//    delete memButton;
+
 }
 
 void RunMemoryButton::memoryShortCutSelected()
