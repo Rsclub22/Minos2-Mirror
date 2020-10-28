@@ -10,8 +10,6 @@
 #include "dxccframe.h"
 #include "ui_dxccframe.h"
 
-extern ContList contlist[ CONTINENTS ];
-
 GridColumn DXCCGridModel::CountryTreeColumns[ ectMultMaxCol ] =
    {
       GridColumn( ectCall, "XXXXXX", QT_TR_NOOP("Call"), taLeftJustify ),
@@ -67,7 +65,7 @@ void DXCCFrame::reInitialiseCountries()
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
         int sourceRow = index.row();
         QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[sourceRow];
-        QString bp = ce->basePrefix;
+        QString bp = ce->getBasePrefix();
 
         if (bp == proxyModel.scrolledCountry)
         {
@@ -120,7 +118,7 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
     {
         if (role == Qt::DisplayRole)
         {
-            QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->basePrefix;
+            QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->getBasePrefix();
             QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ index.column() ].fieldId, ct );
             return disp.trimmed();
         }
@@ -187,18 +185,18 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
 
     QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCountryList()[sourceRow];
 
-    QString bp = ce->basePrefix;
+    QString bp = ce->getBasePrefix();
     if (scrolledCountry == bp)
         return true;
 
     int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
 
     bool makeVisible = false;
-    for ( int i = 0; i < CONTINENTS; i++ )
+    for ( auto const &c:contlist )
     {
-        if ( ce->continent == contlist[ i ].continent )
+        if ( ce->getContinent() == c.continent )
         {
-            makeVisible = contlist[ i ].allow;
+            makeVisible = c.allow;
             break;
         }
     }
@@ -222,7 +220,7 @@ void DXCCFrame::on_DXCCTable_clicked(const QModelIndex &index)
     const QModelIndex srcindex = proxyModel.mapToSource( index );
     int sourceRow = srcindex.row();
 
-    QString bp = MultLists::getMultLists() ->getCountryList()[sourceRow]->basePrefix;
+    QString bp = MultLists::getMultLists() ->getCountryList()[sourceRow]->getBasePrefix();
     QString disp = MultLists::getMultLists() ->getCtryListText( bp, 0, model.ct );
     MinosLoggerEvents::SendCountrySelect(disp, model.ct);
 

@@ -6,16 +6,6 @@
 
 #include "ui_StackedInfoFrame.h"
 
-ContList contlist[ CONTINENTS ] =
-   {
-      {"EU", true},
-      {"AS", false},
-      {"AF", false},
-      {"OC", false},
-      {"SA", false},
-      {"NA", false},
-   };
-
 QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
     {aeClock, QT_TR_NOOP("Clock"), QT_TR_NOOP("Clock")},
     {aeDXCC, QT_TR_NOOP("DXCC"), QT_TR_NOOP("DXCC")},
@@ -248,7 +238,7 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         QSharedPointer<CountryEntry> ctryMult = findCtryPrefix( cs );
         if ( ctryMult )
         {
-           dxccFrame->scrollToCountry( ctryMult->basePrefix, true );
+           dxccFrame->scrollToCountry( ctryMult->getBasePrefix(), true );
         }
     }
 }

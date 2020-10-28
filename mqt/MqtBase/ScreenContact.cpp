@@ -361,7 +361,7 @@ void ScreenContact::score()
 
         if ( ctryMult)
         {
-            int n = contest->getCountriesWorked(band, ctryMult->basePrefix);
+            int n = contest->getCountriesWorked(band, ctryMult->getBasePrefix());
             if ( n == 1 )
             {
                 if (!contest->nonGCountryMult.getValue() || !cs.isUK())

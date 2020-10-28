@@ -1157,7 +1157,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
       QSharedPointer<BaseContact> ct = i.wt;
       if ( ct->ctryMult )
       {
-         ( countries[ ct->ctryMult->basePrefix ] ) [ ct->cs.getFullCall() ] = ct;
+         ( countries[ ct->ctryMult->getBasePrefix() ] ) [ ct->cs.getFullCall() ] = ct;
       }
       else
          if ( ct->QSOValid )

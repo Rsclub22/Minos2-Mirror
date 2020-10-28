@@ -23,12 +23,15 @@ class CountryList;
 class MultEntry;
 class BaseContestLog;
 
-const int CONTINENTS = 6;
-struct ContList
+class ContList
 {
-   char continent[ 3 ];
+public:
+    ContList(const QString &c, bool a): continent(c), allow(a){}
+   QString continent;
    bool allow;
 };
+
+extern QVector<ContList> contlist;
 
 const int UKREGIONS = 10;
 
@@ -56,16 +59,18 @@ class GlistEntry
 };
 class MultEntry
 {
-   public:
-      Locator central;	// central point to take bearings to
-      QString realName;
+    Locator central;	// central point to take bearings to
+    QString realName;
 
+public:
       MultEntry( const QString &name, const QString &cloc );
       virtual ~MultEntry();
 
       virtual QString str( bool ) = 0;
 
       virtual void addSynonyms( QString & );
+      Locator getCentral() const;
+      QString getRealName() const;
 };
 #define DISTRICT_CODE_LENGTH 2
 class DistrictEntry : public MultEntry
@@ -112,9 +117,12 @@ class DistrictSynonym
 class CountryEntry : public MultEntry
 {
       int distLimit;
-   public:
       QString basePrefix;
       QString continent;
+
+      int ITUZone = 0;
+      int CQZone = 0;
+   public:
 
       int districtLimit( );
       bool hasDistricts( );
@@ -131,13 +139,22 @@ class CountryEntry : public MultEntry
       {
           return ::qHash(basePrefix);
       }
+      QString getBasePrefix() const;
+      QString getContinent() const;
+      int getITUZone() const;
+      int getCQZone() const;
 };
 
 class CountrySynonym
 {
-   public:
-      QString synPrefix;
-      QSharedPointer<CountryEntry> country;
+    QString synPrefix;
+    QSharedPointer<CountryEntry> country;
+
+    QString continent;
+
+    int ITUZone = 0;
+    int CQZone = 0;
+public:
 
       CountrySynonym( const QString &syn, const QString &prefix );
       CountrySynonym( const QString &syn );
@@ -155,12 +172,22 @@ class CountrySynonym
       {
           return ::qHash(synPrefix);
       }
+      QString getSynPrefix() const;
+
+      QSharedPointer<CountryEntry> getCountry() const;
+
+      QString getBasePrefix() const;
+      QString getRealName() const;
+      QString getContinent() const;
+      int getITUZone() const;
+      int getCQZone() const;
+      Locator getCentral() const;
 };
 
 class LocCount
 {
-   public:
-      unsigned short UKLocCount;
+public:
+    unsigned short UKLocCount;
       unsigned short nonUKLocCount;
       bool UKMultGiven;
       LocCount():UKLocCount(0), nonUKLocCount(0), UKMultGiven(false){}

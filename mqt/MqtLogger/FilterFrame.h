@@ -4,8 +4,6 @@
 #include "base_pch.h"
 #include "MinosLoggerEvents.h"
 
-extern ContList contlist[ CONTINENTS ];
-
 namespace Ui {
 class FilterFrame;
 }

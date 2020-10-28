@@ -13,6 +13,16 @@
 
 
 //============================================================================
+QVector<ContList> contlist =
+   {
+      ContList("EU", true),
+      ContList("AS", false),
+      ContList("AF", false),
+      ContList("OC", false),
+      ContList("SA", false),
+      ContList("NA", false)
+   };
+//============================================================================
 // prefix/mult count
 struct DistCount
 {
@@ -139,10 +149,10 @@ QString DistrictEntry::str( bool longdisp )
    {
       temp += "(";
       if ( country1 )
-         temp += country1->basePrefix;
+         temp += country1->getBasePrefix();
       if ( country2 )
       {
-         temp += "/" + country2->basePrefix;
+         temp += "/" + country2->getBasePrefix();
       }
       temp += ")";
    }
@@ -264,17 +274,10 @@ bool DistrictSynonymList::procLine( QStringList a )
 }
 static bool compdistnames( DistrictEntry *ce, const QString &syn )
 {
-   int len = ce->realName.length();
-   for ( int i = 0; i < len; i++ )
-   {
-      if ( ce->realName[ i ] == '(' )
-      {
-         len = i;
-         break;
-      }
-   }
+   QString rn = ce->getRealName();
+   int len = rn.indexOf('(');
 
-   if ( strnicmp( ce->realName, syn, len ) == 0 )
+   if ( strnicmp( ce->getRealName(), syn, len ) == 0 )
       return true;
 
    return false;
@@ -352,7 +355,7 @@ void CountryEntry::addSynonyms( QString &s )
    s = QString();
    for ( auto const &i: MultListsImpl::getMultLists() ->ctrySynList )
    {
-      if ( i.wt ->country == this )
+      if ( i.wt ->getCountry() == this )
       {
          if ( s.length() < 180 )   		// should really use the correct value here!
          {
@@ -389,20 +392,6 @@ static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
     else
         return cs.wt;
 
-//    MapWrapper <CountrySynonym> test(new CountrySynonym( syn, "" ));
-//   MultList < CountrySynonym > ::iterator cs = std::lower_bound( MultListsImpl::getMultLists() ->ctrySynList.begin(),
-//         MultListsImpl::getMultLists() ->ctrySynList.end(),
-//         test);
-
-//   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() || !( ( *cs->wt.data() ) == *test.wt.data() ) )
-//   {
-//      cs = MultListsImpl::getMultLists() ->ctrySynList.end();
-//   }
-//   if ( cs == MultListsImpl::getMultLists() ->ctrySynList.end() )
-//      return QSharedPointer<CountrySynonym>();
-//   else
-//      return cs->wt;
-
 }
 CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :
       country( nullptr )
@@ -416,7 +405,7 @@ CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :
       // search country list for the prefix
       for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
       {
-         if (  i.wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
+         if (  i.wt->getBasePrefix().compare( prefix, Qt::CaseInsensitive ) == 0 )
             country = i.wt;
       }
    }
@@ -697,7 +686,7 @@ void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString 
    QSharedPointer<CountryEntry> ctry;
    for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
    {
-      if ( i.wt->basePrefix.compare( prefix, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt->getBasePrefix().compare( prefix, Qt::CaseInsensitive ) == 0 )
       {
          ctry = i.wt;
          break;
@@ -707,12 +696,12 @@ void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString 
       return ;		// as it will be unsuccessfull anyway
 
    MapWrapper< CountrySynonym> cts(searchCountrySynonym ( syn ));
-   if ( cts.wt && ( cts.wt->country.data() == ctry.data() ) )
+   if ( cts.wt && ( cts.wt->getCountry().data() == ctry.data() ) )
       return ;		// as already there
 
    cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix ));
 
-   if ( cts.wt->country )
+   if ( cts.wt->getCountry() )
    {
        if (!MultListsImpl::getMultLists() ->ctrySynList.contains(cts))
            MultListsImpl::getMultLists() ->ctrySynList.insert ( cts, cts );   // must add to the syn list...
@@ -870,7 +859,7 @@ QSharedPointer<CountryEntry> MultListsImpl::getCtryForPrefix( const QString &for
    QSharedPointer<CountryEntry> ctryMult;
    for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
    {
-      if ( i.wt ->basePrefix.compare( forcedMult, Qt::CaseInsensitive ) == 0 )
+      if ( i.wt ->getBasePrefix().compare( forcedMult, Qt::CaseInsensitive ) == 0 )
       {
          ctryMult = i.wt;
          break;
@@ -905,7 +894,7 @@ bool MultListsImpl::isUKprefix(const Callsign &cs)
    }
    for ( auto dc: distCounts )
    {
-       if ( ctry->basePrefix.compare( dc.prefix, Qt::CaseSensitive ) == 0 )
+       if ( ctry->getBasePrefix().compare( dc.prefix, Qt::CaseSensitive ) == 0 )
        {
            return true;
        }
@@ -951,7 +940,7 @@ QVector<QSharedPointer<CountryEntry> > &MultListsImpl::getCountryList()
         std::sort(countryVector.begin(), countryVector.end(),
         [=](const QSharedPointer<CountryEntry> a, const QSharedPointer<CountryEntry> b)->bool
           {
-              return a->basePrefix < b->basePrefix;
+              return a->getBasePrefix() < b->getBasePrefix();
           }
         );
     }

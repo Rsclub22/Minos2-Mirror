@@ -14,7 +14,6 @@
 namespace Ui {
 class StackedInfoFrame;
 }
-extern ContList contlist[ CONTINENTS ];
 extern bool showWorked;
 extern bool showUnworked ;
 

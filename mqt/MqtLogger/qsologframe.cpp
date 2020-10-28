@@ -1663,7 +1663,7 @@ void QSOLogFrame::contactValid( )
       {
          bool LocOK;
 
-         QString prefix = vcct->ctryMult->basePrefix;
+         QString prefix = vcct->ctryMult->getBasePrefix();
          TContestApp::getContestApp() ->locsBundle.openSection(prefix);
          if (TContestApp::getContestApp() ->locsBundle.isCurrSectionPresent() )
          {

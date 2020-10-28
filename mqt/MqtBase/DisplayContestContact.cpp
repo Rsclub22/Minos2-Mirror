@@ -350,8 +350,8 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( ctryMult)
    {
-       clp->addCountryWorked(band, ctryMult->basePrefix);
-       int n = clp->getCountriesWorked(band, ctryMult->basePrefix);
+       clp->addCountryWorked(band, ctryMult->getBasePrefix());
+       int n = clp->getCountriesWorked(band, ctryMult->getBasePrefix());
        if ( n == 1 )
        {
            clp->nctry[band]++;
