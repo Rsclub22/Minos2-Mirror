@@ -41,6 +41,7 @@ signals:
     void setRitFreq(int);
     void setRitStatus(bool);
     void setVolume(int volLevel);
+    void setVoiceMessageNum(QString msgNum);
 
 private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );

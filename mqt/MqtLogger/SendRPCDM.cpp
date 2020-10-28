@@ -289,6 +289,30 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq)
 }
 
 
+void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum)
+{
+
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setVoiceMessageNum(rigSelected, msgNum);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+
+    st->addMember( msgNum, rpcConstants::rigVoiceMessageNum );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+    traceMsg(QString("SendRigVocieMessageNum = %1 uuid = %2").arg(msgNum).arg(tslf->getContest()->uuid));
+}
+
+
+
+
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);

@@ -18,6 +18,7 @@ class RigState: public PubSubValue
     MinosStringItem<QString> _status;
     MinosItem<double> _radioFreq;
     MinosItem<double> _logFreq;
+    MinosStringItem<QString> _radioVoiceMessageNum;
     MinosStringItem<QString> _radioMode;
     MinosStringItem<QString> _logMode;
     MinosItem<int> _radioVolLevel;
@@ -45,6 +46,7 @@ public:
     MinosItem<double> radioFreq() const;
     MinosItem<double> logFreq() const;
     MinosStringItem<QString> radioMode() const;
+    MinosStringItem<QString> radioVoiceMessageNum() const;
     MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosItem<bool> ritRadioStatus() const;
@@ -58,6 +60,7 @@ public:
     void setLogFreq(double freq);
     void setRadioMode(const QString &mode);
     void setLogMode(const QString &mode);
+    void setVoiceMessageNum(const QString msgNum);
     void setRadioVolume(int level);
     void setLogVolume(int level);
     void setStatus(const QString &status);

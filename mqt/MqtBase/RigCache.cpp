@@ -253,6 +253,10 @@ void RigCache::setRadioMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setRadioMode(mode);
 }
+void RigCache::setVoiceMessageNum(const PubSubName &name, const QString &msgNum)
+{
+    rigStates[name].setVoiceMessageNum(msgNum);
+}
 void RigCache::setLogMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setLogMode(mode);

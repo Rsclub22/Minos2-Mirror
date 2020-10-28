@@ -51,6 +51,7 @@ public:
     void setStatus(const PubSubName &name, const QString &status);
     void setRadioFreq(const PubSubName &name, double freq);
     void setLogFreq(const PubSubName &name, double freq);
+    void setVoiceMessageNum(const PubSubName &name, const QString &msgNum);
     void setRadioVolume(const PubSubName &name, const int level);
     void setLogVolume(const PubSubName &name, const int level);
     void setRadioMode(const PubSubName &name, const QString &mode);

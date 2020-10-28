@@ -72,6 +72,7 @@ public:  		// User declarations
       void changeRigSelectionTo(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
       void sendRigSelection(const PubSubName &name, const QString &freq, const QString &mode, const QString &uuid);
       void sendRigControlFreq(TSingleLogFrame *tslf,const QString &freq);
+      void sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum);
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);

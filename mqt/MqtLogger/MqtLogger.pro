@@ -70,6 +70,7 @@ SOURCES += \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
+    rigcontrolvoicekeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
     rotcontrolframe.cpp \
@@ -92,6 +93,8 @@ SOURCES += \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
     txvmbuttonsframe.cpp \
+    voicekeyerbase.cpp \
+    voicekeyerfactory.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp \
     radiodetails.cpp \
@@ -153,6 +156,7 @@ HEADERS  += \
     qsologframe.h \
     reg1test.h \
     rigcontrolframe.h \
+    rigcontrolvoicekeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotcontrolframe.h \
@@ -175,6 +179,8 @@ HEADERS  += \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
     txvmbuttonsframe.h \
+    voicekeyerbase.h \
+    voicekeyerfactory.h \
     volumeslider.h \
     tminosbshelpform.h \
     radiodetails.h \

@@ -72,6 +72,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psMode;
         QSharedPointer<RPCParam> psName;
         QSharedPointer<RPCParam> psLoggerUuid;
+        QSharedPointer<RPCParam> psVoiceMessageNum;
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
         QSharedPointer<RPCParam> psRitStatus;
@@ -176,6 +177,21 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Freq Command From Logger = %1").arg(freq));
                     emit (setFreq(freq));
+                }
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigVoiceMessageNum, psVoiceMessageNum ))
+        {
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
+            {
+                QString msgNum;
+                if ( psFreq->getString( msgNum ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: VoiceMessage Number From Logger = %1").arg(msgNum));
+                    emit (setVoiceMessageNum(msgNum));
                 }
             }
         }

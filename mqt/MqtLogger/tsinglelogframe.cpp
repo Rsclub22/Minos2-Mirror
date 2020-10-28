@@ -1851,7 +1851,15 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
 */
 //---- Send to RigController
 
+void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        //sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigTxVoiceMessage(this, msgNum);
 
+    }
+}
 
 
 void TSingleLogFrame::sendRadioFreq(QString freq)

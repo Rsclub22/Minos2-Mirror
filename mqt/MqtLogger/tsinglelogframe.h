@@ -291,6 +291,7 @@ private slots:
 
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
+    void sendRigTxVoiceMessage(QString msgNum);
 public:
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);

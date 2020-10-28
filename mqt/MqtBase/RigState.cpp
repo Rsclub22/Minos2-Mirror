@@ -25,6 +25,7 @@ bool RigState::isDirty() const
             _radioFreq.isDirty() ||
             _logFreq.isDirty() ||
             _radioMode.isDirty() ||
+            _radioVoiceMessageNum.isDirty() ||
             _logMode.isDirty() ||
             _radioVolLevel.isDirty() ||
             _logVolLevel.isDirty() ||
@@ -40,6 +41,7 @@ void RigState::clearDirty()
     _radioFreq.clearDirty();
     _logFreq.clearDirty();
     _radioMode.clearDirty();
+    _radioVoiceMessageNum.clearDirty();
     _logMode.clearDirty();
     _radioVolLevel.clearDirty();
     _logVolLevel.clearDirty();
@@ -55,6 +57,7 @@ void RigState::setDirty()
     _radioFreq.setDirty();
     _logFreq.setDirty();
     _radioMode.setDirty();
+    _radioVoiceMessageNum.setDirty();
     _logMode.setDirty();
     _radioVolLevel.setDirty();
     _logVolLevel.setDirty();
@@ -98,6 +101,10 @@ void RigState::setRadioMode(const QString &mode)
 {
     _radioMode.setValue(mode);
 }
+void RigState::setVoiceMessageNum(const QString msgNum)
+{
+    _radioVoiceMessageNum.setValue(msgNum);
+}
 void RigState::setLogMode(const QString &mode)
 {
     _logMode.setValue(mode);
@@ -124,6 +131,7 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigControlRadioFreq, radioFreq().getValue());
     jv.insert(rpcConstants::rigControlLogFreq, logFreq().getValue());
     jv.insert(rpcConstants::rigControlRadioMode, radioMode().getValue());
+    jv.insert(rpcConstants::rigVoiceMessageNum, radioVoiceMessageNum().getValue());
     jv.insert(rpcConstants::rigControlLogMode, logMode().getValue());
     jv.insert(rpcConstants::rigControlRadioRitFreq, radioRitFreq().getValue());
     jv.insert(rpcConstants::rigControlLogRitFreq, logRitFreq().getValue());
@@ -150,6 +158,7 @@ void RigState::unpack(QString s)
         _radioFreq.setValue(json.object().value(rpcConstants::rigControlRadioFreq).toDouble());
         _logFreq.setValue(json.object().value(rpcConstants::rigControlLogFreq).toDouble());
         _radioMode.setValue(json.object().value(rpcConstants::rigControlRadioMode).toString());
+        _radioVoiceMessageNum.setValue(json.object().value(rpcConstants::rigVoiceMessageNum).toString());
         _logMode.setValue(json.object().value(rpcConstants::rigControlLogMode).toString());
         _radioVolLevel.setValue(json.object().value(rpcConstants::rigRadioVolLevel).toInt());
         _logVolLevel.setValue(json.object().value(rpcConstants::rigLogVolLevel).toInt());
@@ -181,6 +190,10 @@ MinosItem<double> RigState::radioFreq() const
 MinosItem<double> RigState::logFreq() const
 {
     return _logFreq;
+}
+MinosStringItem<QString> RigState::radioVoiceMessageNum() const
+{
+    return _radioVoiceMessageNum;
 }
 
 MinosStringItem<QString> RigState::radioMode() const
