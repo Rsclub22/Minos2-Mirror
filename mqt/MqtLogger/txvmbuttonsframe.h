@@ -6,6 +6,8 @@
 #include <QShortcut>
 #include <QGroupBox>
 #include <QObject>
+#include "voicekeyerbase.h"
+#include "voicekeyerfactory.h"
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -28,11 +30,11 @@ public:
     QMenu* vmMenu;
     QShortcut* shortKey;
     QShortcut* shiftShortKey;
-    QAction* runOffAction;
     QAction* readAction;
-    QAction* writeAction;
+    QAction* newAction;
     QAction* editAction;
-    QAction* clearAction;
+    QAction* setupAction;
+
 
     void showButtonOnOff(bool state);
 
@@ -41,11 +43,12 @@ private slots:
     void readActionSelected();
     void editActionSelected();
     void writeActionSelected();
-    void clearActionSelected();
+
     void buttonSelected();
-    void runOffActionSelected();
+
+    void onSetupActionSelected();
 signals:
-    void clearActionSelected(int);
+
     void buttonActivated(int);
 
 
@@ -78,13 +81,24 @@ public:
 private:
     Ui::TxVmButtonsFrame *ui;
 
+
+    VoiceKeyerBase* txVoiceKeyer;
+    VoiceKeyerFactory* voiceKeyerFactory;
+
+
     int runButtonOnNum;
+
+    QList<QToolButton*> voiceMemButtonList;
+
+    QList<VoiceKeyerParams> vmKeyParamList;
+
     void initRunMemoryButton();
     void loadRunButtonLabels();
 
     void initTxVmButton();
 private slots:
     void radioIsConnected(bool on);
+    void onVoiceKeyerSelect(int idx);
 };
 
 #endif // TXVMBUTTONSFRAME_H

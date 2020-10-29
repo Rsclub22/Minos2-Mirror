@@ -27,28 +27,28 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QToolButton" name="toolButton">
+          <widget class="QToolButton" name="vmToolButton1">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_12">
+          <widget class="QToolButton" name="vmToolButton2">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_10">
+          <widget class="QToolButton" name="vmToolButton3">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_11">
+          <widget class="QToolButton" name="vmToolButton4">
            <property name="text">
             <string>...</string>
            </property>
@@ -59,28 +59,28 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QToolButton" name="toolButton_2">
+          <widget class="QToolButton" name="vmToolButton5">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_16">
+          <widget class="QToolButton" name="vmToolButton6">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_17">
+          <widget class="QToolButton" name="vmToolButton7">
            <property name="text">
             <string>...</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_18">
+          <widget class="QToolButton" name="vmToolButton8">
            <property name="text">
             <string>...</string>
            </property>
@@ -91,7 +91,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="vmStopPb">
        <property name="text">
         <string>Stop</string>
        </property>

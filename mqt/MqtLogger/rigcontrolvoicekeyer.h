@@ -19,6 +19,9 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
+const QString VOICE_MEMORY_PATH = "./Configuration/";
+const QString VOICE_MEMORY_BASE_FILE_NAME = "txVoiceMemory";
+
 class RigControlVoiceKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
@@ -34,9 +37,15 @@ public:
 
     int getKeyerState(int &state) override;
 
+    bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
+    void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
+
 signals:
 
+    void sendRigVoiceKeyerMessage(QString msgNum);
+
 private:
+
 
 
 

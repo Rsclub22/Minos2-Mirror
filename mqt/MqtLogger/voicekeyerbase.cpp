@@ -17,3 +17,27 @@ VoiceKeyerBase::VoiceKeyerBase(QObject *parent) : QObject(parent)
 {
 
 }
+
+VoiceKeyerParams::VoiceKeyerParams()
+{
+    clear();
+}
+
+void VoiceKeyerParams::clear()
+{
+    type.clear();
+    vmName.clear();
+    vmRepeatFlag = false;
+    vmRepeatDur = 0;
+    vmButtonNum = -1;   // None
+}
+
+
+void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
+{
+    type = vkp.type;
+    vmName = vkp.vmName;
+    vmRepeatFlag = vkp.vmRepeatFlag;
+    vmRepeatDur = vkp.vmRepeatDur;
+    vmButtonNum = vkp.vmButtonNum;
+}

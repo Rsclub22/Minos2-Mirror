@@ -29,7 +29,7 @@ class VoiceKeyerCapabilities
 {
 public:
 
-    VoiceKeyerCapabilities();
+    VoiceKeyerCapabilities(){};
 
     QString getKeyerName(){return keyerName;}
     void setKeyerName(QString keyerName_){keyerName = keyerName_;}
@@ -37,8 +37,14 @@ public:
     int getNumVoiceKeys(){return numVoiceKeys;}
     void setNumVoiceKeys(int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
 
+    int getVmIdNum(){return vmIdNum;}
+    void setVmIdNum(int vmIdNum_){vmIdNum = vmIdNum_;}
+
     bool getSupportSerial(){return supportSerial;}
     void setSupportSerial(bool supportSerial_){supportSerial = supportSerial_;}
+
+    bool getSupportRepeatMsg(){return supportRepeatMsg;}
+    void setSupportRepeatMsg(bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
 
     QString getComPort(){return comPort;}
     void setComPort(QString comPort_){comPort_ = comPort;}
@@ -47,11 +53,14 @@ public:
     void setComSpeed(QString comSpeed_){comSpeed_ = comSpeed;}
 private:
 
-   QString keyerName;
+   int vmIdNum;
+    QString keyerName;
    int numVoiceKeys;
-   bool supportSerial;
    QString comPort;
    QString comSpeed;
+   bool supportSerial;
+   bool supportRepeatMsg;
+
 };
 
 
@@ -70,6 +79,7 @@ public:
     void populateComboRigList(QComboBox* comBox);
 
 
+    VoiceKeyerFactory::VmKeyers *supportedVoiceKeyers();
 signals:
 
 private:

@@ -16,6 +16,46 @@
 
 #include <QObject>
 
+
+class VoiceKeyerParams
+{
+
+public:
+
+    explicit VoiceKeyerParams();
+
+    ~VoiceKeyerParams(){}
+
+    void operator = (const VoiceKeyerParams& vkp);
+
+
+    QString getType(){return type;}
+    void setType(const QString type_){type = type_;}
+
+
+    QString getVmName(){return vmName;}
+    void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
+
+    bool getVmRepeatFlag(){return vmRepeatFlag;}
+    void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
+
+    int getVmRepeatDur(){return vmRepeatDur;}
+    void setVmRepeatDur(const int vmRepeatDur_){vmRepeatDur = vmRepeatDur_;}
+
+    int getvmButtonNum(){return vmButtonNum;}
+    void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
+
+    void clear();
+
+private:
+
+    QString type;
+    QString vmName;
+    bool vmRepeatFlag;
+    int vmRepeatDur;
+    int vmButtonNum;
+};
+
 class VoiceKeyerBase  : public QObject
 {
     Q_OBJECT
@@ -28,6 +68,10 @@ public:
     virtual void stopMsg() = 0;
 
     virtual int getKeyerState(int &state) = 0;
+
+    virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) = 0;
+    virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams ) = 0;
+
 
     int getMaxNumButtons(){return MAXNUM_BUTTONS;}
 

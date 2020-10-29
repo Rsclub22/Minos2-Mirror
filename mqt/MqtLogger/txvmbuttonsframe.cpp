@@ -1,6 +1,7 @@
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
 
+
 const int NO_VM_BUTTON_ON = -1;
 const int VM_BUTTON_1_ON = 0;
 const int VM_BUTTON_2_ON = 1;
@@ -28,6 +29,10 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     runButtonOnNum(NO_VM_BUTTON_ON)
 {
     ui->setupUi(this);
+
+    txVoiceKeyer = nullptr;
+    voiceKeyerFactory = new VoiceKeyerFactory(this);
+
     initTxVmButton();
 }
 
@@ -43,6 +48,22 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 
 
 void TxVmButtonsFrame::initTxVmButton()
+{
+    voiceMemButtonList << ui->vmToolButton1 << ui->vmToolButton2 << ui->vmToolButton3 << ui->vmToolButton4
+                       << ui->vmToolButton5 << ui->vmToolButton6 << ui->vmToolButton7 << ui->vmToolButton8;
+
+    for (int i = 0; i < voiceMemButtonList.count(); i++)
+    {
+        txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
+        connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
+        connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
+        connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
+    }
+
+}
+
+
+void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 {
 
 }
@@ -120,34 +141,36 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *rcf, int no
     vmButton->setFocusPolicy(Qt::NoFocus);
     //vmButton->setText(runButData::runButTitle[memNo]);
 
-    shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), vmButton);
-    shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), vmButton);
-    runOffAction = new QAction(tr("&Off"), vmButton);
+    //shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), vmButton);
+    //shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), vmButton);
     readAction = new QAction(tr("&Read"), vmButton);
-    writeAction = new QAction(tr("&New"),vmButton);
+    newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
-    clearAction = new QAction(tr("&Clear"),vmButton);
-    vmMenu->addAction(runOffAction);
+    setupAction = new QAction(tr("&Setup"), vmButton);
     vmMenu->addAction(readAction);
-    vmMenu->addAction(writeAction);
+    vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
-    vmMenu->addAction(clearAction);
+    vmMenu->addAction(setupAction);
+
     vmButton->setMenu(vmMenu);
 
     //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
-    //connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
-    //connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(buttonSelected()) );
+    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
+    connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
     connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));
-    connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
-    connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
-    connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()) );
-    connect( runOffAction, SIGNAL( triggered() ), this, SLOT(runOffActionSelected()) );
+    //connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
+    //connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
+    connect( newAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()));
+    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()));
+    connect( setupAction, SIGNAL( triggered() ), this, SLOT(onSetupActionSelected()));
 
 }
 TxVoiceMemButton::~TxVoiceMemButton()
+{
+
+}
+
+void TxVoiceMemButton::onSetupActionSelected()
 {
 
 }
@@ -170,15 +193,9 @@ void TxVoiceMemButton::writeActionSelected()
 {
     //rigControlFrame->runButWriteActSel(memNo);
 }
-void TxVoiceMemButton::clearActionSelected()
-{
-    emit clearActionSelected(memNo);
-}
 
-void TxVoiceMemButton::runOffActionSelected()
-{
-    //rigControlFrame->runButOffActionSelected(memNo);
-}
+
+
 
 void TxVoiceMemButton::buttonSelected()
 {
