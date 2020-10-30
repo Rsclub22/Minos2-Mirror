@@ -13,8 +13,6 @@
 //---------------------------------------------------------------------------
 class ListContact;
 typedef QVector < ListContact *> ListList;
-typedef ListList::iterator ListIterator;
-
 
 class ContactList : public BaseLogList
 {

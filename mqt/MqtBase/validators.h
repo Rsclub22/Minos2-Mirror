@@ -61,7 +61,6 @@ class ErrEntry
       {
       }
       unsigned int priority = 0;
-      /*const*/
       const char * errStr;
 
       bool operator==( const ErrEntry& e2 ) const
@@ -90,7 +89,6 @@ class ErrEntry
 };
 
 typedef QMap < ErrEntry *, ErrEntry *> ErrorList;
-typedef ErrorList::iterator ErrorIterator;
 
 enum validTypes { /*cmNone, cmCancel, cmValid,*/ cmCheckValid, cmValidStatus /*, cmReleasedFocus*/};
 enum validatorTypes {vtNone, vtNotEmpty, vtNumeric, vtDate, vtTime, vtCallsign,

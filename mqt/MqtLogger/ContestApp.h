@@ -34,10 +34,7 @@ class ListSlot
       ~ListSlot();
 };
 typedef QMap < int, QSharedPointer<ContestSlot> > ContestSlotList;
-typedef ContestSlotList::iterator SlotIterator;
-
 typedef QMap < int, QSharedPointer<ListSlot> > ListSlotList;
-typedef ListSlotList::iterator ListSlotIterator;
 
 class TContestApp : public MinosParameters
 {

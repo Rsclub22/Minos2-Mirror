@@ -211,8 +211,6 @@ class LocSquare
 };
 
 typedef QMap < MapWrapper<LocSquare>, MapWrapper<LocSquare> > LocSquareList;
-typedef LocSquareList::iterator LocSquareIterator;
-typedef LocSquareList::const_iterator ConstLocSquareIterator;
 class LocList
 {
    public:

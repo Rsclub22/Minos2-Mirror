@@ -39,7 +39,7 @@ class DupContact
 };
 typedef QMap < MapWrapper<DupContact>, MapWrapper<DupContact> > DupList;
 typedef DupList::iterator DupIterator;
-typedef DupList::const_iterator ConstDupIterator;
+//typedef DupList::const_iterator ConstDupIterator;
 class dupsheet
 {
       // a dupsheet is a sorted collection of (full LoggerContestLog) ContestContact records,
@@ -65,10 +65,7 @@ enum SCOREMODE {PPKM, PPQSO};
 
 typedef QMap < MapWrapper<BaseContact>, MapWrapper<BaseContact> > LogList;
 typedef LogList::iterator LogIterator;
-typedef LogList::const_iterator ConstLogIterator;
-
 typedef QMap < QString, QString > OperatorList;
-typedef OperatorList::iterator OperatorIterator;
 
 class BaseContestLog: public BaseLogList
 {
