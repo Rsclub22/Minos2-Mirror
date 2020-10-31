@@ -42,7 +42,7 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     return nullptr;
 }
 
-void VoiceKeyerFactory::populateComboRigList(QComboBox* comBox)
+void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox)
 {
 
     comBox->clear();

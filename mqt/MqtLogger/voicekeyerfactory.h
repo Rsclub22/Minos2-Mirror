@@ -46,6 +46,10 @@ public:
     bool getSupportRepeatMsg(){return supportRepeatMsg;}
     void setSupportRepeatMsg(bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
 
+    bool getSetupButton(){return setupButton;}
+    void setSetupButton(bool setupButton_){setupButton = setupButton_;}
+
+
     QString getComPort(){return comPort;}
     void setComPort(QString comPort_){comPort_ = comPort;}
 
@@ -60,6 +64,7 @@ private:
    QString comSpeed;
    bool supportSerial;
    bool supportRepeatMsg;
+   bool setupButton;
 
 };
 
@@ -76,10 +81,11 @@ public:
 
     VoiceKeyerBase* createVoiceKeyer(int vmKeyerId);
 
-    void populateComboRigList(QComboBox* comBox);
 
+    void populateComboKeyerList(QComboBox *comBox);
 
     VoiceKeyerFactory::VmKeyers *supportedVoiceKeyers();
+
 signals:
 
 private:

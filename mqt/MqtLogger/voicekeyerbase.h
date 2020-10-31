@@ -17,6 +17,33 @@
 #include <QObject>
 
 
+
+class VoiceKeyerCommonParams
+{
+    public:
+
+    explicit VoiceKeyerCommonParams();
+    ~VoiceKeyerCommonParams();
+
+    void operator = (const VoiceKeyerCommonParams& vkcp);
+
+    void clear();
+
+    void setComport(const QString comport_){comport = comport_;}
+    QString getComport(){return comport;}
+
+private:
+
+    QString comport;
+
+
+};
+
+
+
+
+
+
 class VoiceKeyerParams
 {
 

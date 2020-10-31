@@ -33,6 +33,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     txVoiceKeyer = nullptr;
     voiceKeyerFactory = new VoiceKeyerFactory(this);
 
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
+
     initTxVmButton();
 }
 
@@ -65,50 +67,92 @@ void TxVmButtonsFrame::initTxVmButton()
 
 void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 {
+    Q_UNUSED(idx)
 
+    QString voiceKeyerType = ui->voiceKeyerSelect->currentText();
+
+    if (voiceKeyerType == "")
+    {
+        txVoiceKeyer = nullptr;
+    }
+    else
+    {
+        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerType);
+        txVoiceKeyer = voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum());
+        trace(QString("[Voice Keyer] Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
+    }
 }
 
-void TxVmButtonsFrame::runButtonUpdate(int)
+void TxVmButtonsFrame::buttonUpdate(int buttonNumber)
 {
 
 }
 
-void TxVmButtonsFrame::runButReadActSel(int buttonNumber)
+void TxVmButtonsFrame::editActionSelected(int buttonNumber)
+{
+    VoiceKeyerParams vmData;
+    if (txVoiceKeyer)
+    {
+        txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+        trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
+        TxVmButtonDialog vmButtonDialog(this);
+
+        vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+        vmButtonDialog.setVmData(&vmData);
+        if (vmButtonDialog.exec() == QDialog::Accepted)
+        {
+            if (txVoiceKeyer)
+            {
+                txVoiceKeyer->saveVmButtonParams(vmData);
+                setRunButtonText(buttonNumber, vmData.getVmName());
+            }
+
+        }
+    }
+
+}
+
+void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
 
 }
-void TxVmButtonsFrame::runButWriteActSel(int buttonNumber)
+
+void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 {
+    VoiceKeyerParams vmData;
+    vmData.clear();
+    trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
+
+    TxVmButtonDialog vmButtonDialog(this);
+
+    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Write").arg(buttonNumber + 1));
+    vmData.setvmButtonNum(buttonNumber);
+    //VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerType);
+
+    //vmData.setVmName(voiceCap.getKeyerName());
+    vmButtonDialog.setVmData(&vmData);
+
+    if (vmButtonDialog.exec() == QDialog::Accepted)
+    {
+        if (txVoiceKeyer)
+        {
+            txVoiceKeyer->saveVmButtonParams(vmData);
+            setRunButtonText(buttonNumber, vmData.getVmName());
+        }
+
+    }
 
 }
-void TxVmButtonsFrame::runButEditActSel(int buttonNumber)
-{
 
-}
-void TxVmButtonsFrame::runButOffActionSelected(int buttonNumber)
-{
 
-}
-void TxVmButtonsFrame::setRunButtonActive(int buttonNumber)
-{
 
-}
-void TxVmButtonsFrame::runModeOff(int buttonNumber)
+void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString name)
 {
-
+    QString buttonText = QString("%1: %2").arg(buttonNumber + 1).arg(name);
+    voiceMemButtonList[buttonNumber]->setText(buttonText);
 }
-void TxVmButtonsFrame::switchRunButton(int buttonNumber)
-{
 
-}
-void TxVmButtonsFrame::setRunFreq(int buttonNumber)
-{
 
-}
-void TxVmButtonsFrame::setRunButtonText(int buttonNumber)
-{
-
-}
 
 void TxVmButtonsFrame::initRunMemoryButton()
 {
@@ -127,10 +171,10 @@ void TxVmButtonsFrame::radioIsConnected(bool on)
 //*******************TX Voice Memory Button *************************//
 
 
-TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *rcf, int no)
+TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int no)
 {
     memNo = no;
-    //rigControlFrame = rcf;
+    txVmButtonsFrame = tvmbf;
 
     vmButton = b;
 
@@ -173,6 +217,7 @@ TxVoiceMemButton::~TxVoiceMemButton()
 void TxVoiceMemButton::onSetupActionSelected()
 {
 
+
 }
 
 void TxVoiceMemButton::memoryShortCutSelected()
@@ -183,15 +228,17 @@ void TxVoiceMemButton::memoryShortCutSelected()
 }
 void TxVoiceMemButton::readActionSelected()
 {
-    //rigControlFrame->runButReadActSel(memNo);
+    txVmButtonsFrame->readActionSelected(memNo);
 }
 void TxVoiceMemButton::editActionSelected()
 {
-    //rigControlFrame->runButEditActSel(memNo);
+
+    txVmButtonsFrame->editActionSelected(memNo);
+
 }
 void TxVoiceMemButton::writeActionSelected()
 {
-    //rigControlFrame->runButWriteActSel(memNo);
+    txVmButtonsFrame->writeActionSelected(memNo);
 }
 
 

@@ -25,6 +25,7 @@ void RigControlVoiceKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKey
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setSupportSerial(false);
+    voiceMemCap.setSetupButton(false);
 
 
     (*vmKeyersList)[keyerType] = voiceMemCap;

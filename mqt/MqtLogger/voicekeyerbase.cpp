@@ -13,10 +13,25 @@
 
 #include "voicekeyerbase.h"
 
-VoiceKeyerBase::VoiceKeyerBase(QObject *parent) : QObject(parent)
-{
 
+VoiceKeyerCommonParams::VoiceKeyerCommonParams()
+{
+    clear();
 }
+
+
+
+void VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
+{
+    comport = vkcp.comport;
+}
+
+void VoiceKeyerCommonParams::clear()
+{
+    comport.clear();
+}
+
+
 
 VoiceKeyerParams::VoiceKeyerParams()
 {
@@ -40,4 +55,10 @@ void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     vmRepeatFlag = vkp.vmRepeatFlag;
     vmRepeatDur = vkp.vmRepeatDur;
     vmButtonNum = vkp.vmButtonNum;
+}
+
+
+VoiceKeyerBase::VoiceKeyerBase(QObject *parent) : QObject(parent)
+{
+
 }

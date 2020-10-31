@@ -8,6 +8,7 @@
 #include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "txvmbuttondialog.h"
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -25,7 +26,7 @@ public:
     ~TxVoiceMemButton();
 
 
-    TxVmButtonsFrame *txVmButtonFrame;
+    TxVmButtonsFrame *txVmButtonsFrame;
     QToolButton* vmButton;
     QMenu* vmMenu;
     QShortcut* shortKey;
@@ -67,16 +68,15 @@ public:
 
     QMap<int, TxVoiceMemButton*> txVmButtonMap;
 
-    void runButtonUpdate(int);
-    void runButReadActSel(int buttonNumber);
-    void runButWriteActSel(int buttonNumber);
-    void runButEditActSel(int buttonNumber);
-    void runButOffActionSelected(int buttonNumber);
-    void setRunButtonActive(int buttonNumber);
-    void runModeOff(int buttonNumber);
-    void switchRunButton(int buttonNumber);
-    void setRunFreq(int buttonNumber);
-    void setRunButtonText(int buttonNumber);
+
+
+
+
+    void readActionSel(int buttonNumber);
+    void readActionSelected(int buttonNumber);
+    void editActionSelected(int buttonNumber);
+    void writeActionSelected(int buttonNumber);
+    void buttonUpdate(int buttonNumber);
 
 private:
     Ui::TxVmButtonsFrame *ui;
@@ -96,6 +96,8 @@ private:
     void loadRunButtonLabels();
 
     void initTxVmButton();
+
+    void setRunButtonText(const int buttonNumber, const QString name);
 private slots:
     void radioIsConnected(bool on);
     void onVoiceKeyerSelect(int idx);
