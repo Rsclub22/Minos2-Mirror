@@ -609,6 +609,8 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(CribSheet);
                     CribSheet->setVisible(true);
+                    NextContactDetailsLabel->setVisible(true);
+                    CurrentBandLabel->setVisible(true);
                     break;
                 }
                 case sctThisMatch:
