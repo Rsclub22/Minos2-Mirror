@@ -27,8 +27,9 @@ class ContList
 {
 public:
     ContList(const QString &c, bool a): continent(c), allow(a){}
+    ContList(){}
    QString continent;
-   bool allow;
+   bool allow = false;
 };
 
 extern QVector<ContList> contlist;
