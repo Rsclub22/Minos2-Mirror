@@ -442,11 +442,6 @@ void TSingleLogFrame::clearScreenLayout()
         CribSheet->setParent(this);
         CribSheet->hide();
 
-        NextContactDetailsLabel->setParent(this);
-        NextContactDetailsLabel->hide();
-        CurrentBandLabel->setParent(this);
-        CurrentBandLabel->hide();
-
         GJVQSOLogFrame->setParent(this);
         GJVQSOLogFrame->hide();
 
