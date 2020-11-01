@@ -441,10 +441,10 @@ void TSingleLogFrame::clearScreenLayout()
         CribSheet->setParent(this);
         CribSheet->hide();
 
-        NextContactDetailsLabel->setParent(this);
-        NextContactDetailsLabel->hide();
-        CurrentBandLabel->setParent(this);
-        CurrentBandLabel->hide();
+        //NextContactDetailsLabel->setParent(this);
+        //NextContactDetailsLabel->hide();
+        //CurrentBandLabel->setParent(this);
+        //CurrentBandLabel->hide();
 
         GJVQSOLogFrame->setParent(this);
         GJVQSOLogFrame->hide();
@@ -609,8 +609,8 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(CribSheet);
                     CribSheet->setVisible(true);
-                    NextContactDetailsLabel->setVisible(true);
-                    CurrentBandLabel->setVisible(true);
+                    //NextContactDetailsLabel->setVisible(true);
+                    //CurrentBandLabel->setVisible(true);
                     break;
                 }
                 case sctThisMatch:
