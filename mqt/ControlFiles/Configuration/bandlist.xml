@@ -45,10 +45,9 @@
 <Band type='VHF'   flow='144000'    fhigh='146000'    unit='K' wlen='2m'     UK='144 MHz'  Reg1Test='145 MHz' ADIF='2m'     Cabrillo='144'   Colour='blue'>
     <Mode type='CW' flow='144000' fclow1='144025' fchigh1='144150' fhigh='144150'>
     </Mode>
-    <Mode type='USB' flow='144150' fclow1='144150' fchigh1='144794' fhigh='144794'>
+    <Mode type='USB' flow='144150' fclow1='144150' fchigh1='144400' fclow2='144500' fchigh2='144794' fhigh='144794'>
         <Exclude flow='144295' fhigh='144305' reason=' SSB Centre of Activity'/>
         <Exclude flow='144369' fhigh='144371' reason='MGM MS calling'/>
-        <Exclude flow='144400' fhigh='144500' reason='Beacons'/>
     </Mode>
     <Mode type='FM' flow='144500' fclow1='144500' fchigh1='144794' fhigh='144794'/>
     <Mode type='FT8' flow='144174' fclow1='144174' fchigh1='144177' fhigh='144177'/>
