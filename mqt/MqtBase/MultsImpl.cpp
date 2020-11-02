@@ -24,8 +24,9 @@ QVector<ContList> contlist =
    };
 //============================================================================
 // prefix/mult count
-struct DistCount
+class DistCount
 {
+public:
     DistCount(QString p, int d):prefix(p), dcount(d){}
     DistCount():dcount(0){}
    QString prefix;
