@@ -32,9 +32,13 @@ class VoiceKeyerCommonParams
     void setComport(const QString comport_){comport = comport_;}
     QString getComport(){return comport;}
 
+    void setNumButtons(const int numButtons_){numButtons = numButtons_;}
+    int getNumButtons(){return numButtons;}
+
 private:
 
     QString comport;
+    int numButtons;
 
 
 };

@@ -9,6 +9,7 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 #include "txvmbuttondialog.h"
+#include "txvmsetupdialog.h"
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -47,7 +48,7 @@ private slots:
 
     void buttonSelected();
 
-    void onSetupActionSelected();
+
 signals:
 
     void buttonActivated(int);
@@ -55,6 +56,7 @@ signals:
 
 private:
     int memNo;
+
 
 };
 
@@ -85,7 +87,9 @@ private:
     VoiceKeyerBase* txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
+    VoiceKeyerCommonParams vmCommonParams;
 
+    QString voiceKeyerType;
     int runButtonOnNum;
 
     QList<QToolButton*> voiceMemButtonList;
@@ -98,9 +102,14 @@ private:
     void initTxVmButton();
 
     void setRunButtonText(const int buttonNumber, const QString name);
+    void saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
+    void readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
+    void setVoiceNumMemButtonsVisible();
+    void clearButtonLabels();
 private slots:
     void radioIsConnected(bool on);
     void onVoiceKeyerSelect(int idx);
+    void onVmSetupClicked();
 };
 
 #endif // TXVMBUTTONSFRAME_H

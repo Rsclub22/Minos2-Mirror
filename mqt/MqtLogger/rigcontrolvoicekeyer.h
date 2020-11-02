@@ -19,8 +19,6 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
-const QString VOICE_MEMORY_PATH = "./Configuration/";
-const QString VOICE_MEMORY_BASE_FILE_NAME = "txVoiceMemory";
 
 class RigControlVoiceKeyer : public VoiceKeyerBase
 {

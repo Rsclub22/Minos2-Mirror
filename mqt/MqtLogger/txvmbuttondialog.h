@@ -8,6 +8,9 @@ namespace Ui {
 class TxVmButtonDialog;
 }
 
+const int REPEAT_DUR_MIN = 0;
+const int REPEAT_DUR_MAX = 180; // secs
+
 class TxVmButtonDialog : public QDialog
 {
     Q_OBJECT
@@ -20,10 +23,12 @@ public:
 private slots:
     void on_okButton_clicked();
     void on_cancelbutton_clicked();
+    void onVmRepeatDurEditingFinished();
 private:
     Ui::TxVmButtonDialog *ui;
     VoiceKeyerParams* vmData;
 
+    bool validateRepeatDur(QString dur, int &dur_);
 };
 
 #endif // TXVMBUTTONDIALOG_H

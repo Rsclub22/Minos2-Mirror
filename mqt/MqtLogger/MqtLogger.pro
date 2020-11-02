@@ -94,6 +94,7 @@ SOURCES += \
     clusterclientframe.cpp \
     txvmbuttondialog.cpp \
     txvmbuttonsframe.cpp \
+    txvmsetupdialog.cpp \
     voicekeyerbase.cpp \
     voicekeyerfactory.cpp \
     volumeslider.cpp \
@@ -181,6 +182,7 @@ HEADERS  += \
     clusterclientframe.h \
     txvmbuttondialog.h \
     txvmbuttonsframe.h \
+    txvmsetupdialog.h \
     voicekeyerbase.h \
     voicekeyerfactory.h \
     volumeslider.h \
@@ -253,7 +255,8 @@ FORMS    += \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
     txvmbuttondialog.ui \
-    txvmbuttonsframe.ui
+    txvmbuttonsframe.ui \
+    txvmsetupdialog.ui
 
 
 DISTFILES += \

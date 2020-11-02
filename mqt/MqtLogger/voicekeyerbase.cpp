@@ -19,7 +19,10 @@ VoiceKeyerCommonParams::VoiceKeyerCommonParams()
     clear();
 }
 
+VoiceKeyerCommonParams::~VoiceKeyerCommonParams()
+{
 
+}
 
 void VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
 {

@@ -20,10 +20,20 @@ class QComboBox;
 
 enum VoiceKeyerId
 {
+    None = 0,
     RigControl,
     SerialControl
 };
 
+const QStringList keyerTypes = {"None", "RigControl", "SerialControl"};
+
+const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
+const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
+const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
+const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
+const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
+
+const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 
 class VoiceKeyerCapabilities
 {
@@ -32,38 +42,37 @@ public:
     VoiceKeyerCapabilities(){};
 
     QString getKeyerName(){return keyerName;}
-    void setKeyerName(QString keyerName_){keyerName = keyerName_;}
+    void setKeyerName(const QString keyerName_){keyerName = keyerName_;}
+
+    QString getKeyerType(){return keyerType;}
+    void setKeyerType(const QString keyerType_){keyerType = keyerType_;}
+
 
     int getNumVoiceKeys(){return numVoiceKeys;}
-    void setNumVoiceKeys(int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
+    void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
 
     int getVmIdNum(){return vmIdNum;}
-    void setVmIdNum(int vmIdNum_){vmIdNum = vmIdNum_;}
-
-    bool getSupportSerial(){return supportSerial;}
-    void setSupportSerial(bool supportSerial_){supportSerial = supportSerial_;}
+    void setVmIdNum(const int vmIdNum_){vmIdNum = vmIdNum_;}
 
     bool getSupportRepeatMsg(){return supportRepeatMsg;}
-    void setSupportRepeatMsg(bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
+    void setSupportRepeatMsg(const bool supportRepeatMsg_){supportRepeatMsg = supportRepeatMsg_;}
+
+    bool getSupportSerial(){return supportSerial;}
+    void setsupportSerial(const bool supportSerial_){supportSerial = supportSerial_;}
 
     bool getSetupButton(){return setupButton;}
-    void setSetupButton(bool setupButton_){setupButton = setupButton_;}
+    void setSetupButton(const bool setupButton_){setupButton = setupButton_;}
 
 
-    QString getComPort(){return comPort;}
-    void setComPort(QString comPort_){comPort_ = comPort;}
-
-    QString getComSpeed(){return comSpeed;}
-    void setComSpeed(QString comSpeed_){comSpeed_ = comSpeed;}
 private:
 
    int vmIdNum;
-    QString keyerName;
+   QString keyerName;
+   QString keyerType;
    int numVoiceKeys;
    QString comPort;
-   QString comSpeed;
-   bool supportSerial;
    bool supportRepeatMsg;
+   bool supportSerial;
    bool setupButton;
 
 };

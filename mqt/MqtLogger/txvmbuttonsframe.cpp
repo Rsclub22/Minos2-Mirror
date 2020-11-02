@@ -31,11 +31,19 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     ui->setupUi(this);
 
     txVoiceKeyer = nullptr;
+    voiceKeyerType = keyerTypes[VoiceKeyerId::None];
+
     voiceKeyerFactory = new VoiceKeyerFactory(this);
+
+    vmCommonParams.clear();
+
+    readVmCommonParams(vmCommonParams);
 
     voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
 
     initTxVmButton();
+
+
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -60,7 +68,44 @@ void TxVmButtonsFrame::initTxVmButton()
         connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
         connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
         connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
+        connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
     }
+
+    clearButtonLabels();
+
+}
+
+
+void TxVmButtonsFrame::setVoiceNumMemButtonsVisible()
+{
+    for (int i = 0; i < vmCommonParams.getNumButtons(); i++)
+    {
+        voiceMemButtonList[i]->setVisible(true);
+    }
+
+    for (int i = vmCommonParams.getNumButtons(); voiceMemButtonList.count(); i++)
+    {
+        voiceMemButtonList[i]->setVisible(false);
+    }
+}
+
+void TxVmButtonsFrame::onVmSetupClicked()
+{
+    if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
+    {
+        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(ui->voiceKeyerSelect->currentText());
+        TxVmSetupDialog txVmSetupDialog(voiceCap, this);
+        txVmSetupDialog.setWindowTitle(tr("Voice Memory Setup"));
+        txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+
+        if (txVmSetupDialog.exec() == QDialog::Accepted)
+        {
+
+
+
+        }
+    }
+
 
 }
 
@@ -69,17 +114,45 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 {
     Q_UNUSED(idx)
 
-    QString voiceKeyerType = ui->voiceKeyerSelect->currentText();
+    QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+    if (voiceKeyerName.isEmpty())
+    {
+       voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
-    if (voiceKeyerType == "")
-    {
-        txVoiceKeyer = nullptr;
+       txVoiceKeyer = nullptr;
+
+       clearButtonLabels();
+
+       return;
     }
-    else
+
+
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+    voiceKeyerType = voiceCap.getKeyerType();
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
-        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerType);
-        txVoiceKeyer = voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum());
         trace(QString("[Voice Keyer] Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
+        txVoiceKeyer = voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum());
+        if (txVoiceKeyer)
+        {
+
+           for (int i = 0; i < voiceMemButtonList.count(); i++)
+           {
+               VoiceKeyerParams vmData;
+               txVoiceKeyer->readVmButtonParams(i, vmData);
+               setRunButtonText(i, vmData.getVmName());
+           }
+        }
+
+    }
+}
+
+void TxVmButtonsFrame::clearButtonLabels()
+{
+    for(int i = 0;  i < voiceMemButtonList.count(); i++)
+    {
+        setRunButtonText(i, "");
     }
 }
 
@@ -90,6 +163,11 @@ void TxVmButtonsFrame::buttonUpdate(int buttonNumber)
 
 void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 {
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    {
+        return;
+    }
+
     VoiceKeyerParams vmData;
     if (txVoiceKeyer)
     {
@@ -114,22 +192,34 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
-
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    {
+        return;
+    }
 }
 
 void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 {
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    {
+        return;
+    }
     VoiceKeyerParams vmData;
     vmData.clear();
+
+
     trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
 
     TxVmButtonDialog vmButtonDialog(this);
 
     vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Write").arg(buttonNumber + 1));
     vmData.setvmButtonNum(buttonNumber);
-    //VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerType);
+    vmData.setType(voiceKeyerType);
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    {
+        return;
+    }
 
-    //vmData.setVmName(voiceCap.getKeyerName());
     vmButtonDialog.setVmData(&vmData);
 
     if (vmButtonDialog.exec() == QDialog::Accepted)
@@ -168,6 +258,30 @@ void TxVmButtonsFrame::radioIsConnected(bool on)
 
 }
 
+void TxVmButtonsFrame::saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+
+    config.setValue("numButtons", vmCommonParams.getNumButtons());
+
+    config.endGroup();
+
+}
+
+
+void TxVmButtonsFrame::readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams)
+{
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+
+    vmCommonParams.setNumButtons(config.value("numButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt());
+    config.endGroup();
+}
+
+
 //*******************TX Voice Memory Button *************************//
 
 
@@ -190,11 +304,10 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     readAction = new QAction(tr("&Read"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
-    setupAction = new QAction(tr("&Setup"), vmButton);
     vmMenu->addAction(readAction);
     vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
-    vmMenu->addAction(setupAction);
+
 
     vmButton->setMenu(vmMenu);
 
@@ -206,7 +319,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     //connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
     connect( newAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()));
     connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()));
-    connect( setupAction, SIGNAL( triggered() ), this, SLOT(onSetupActionSelected()));
+
 
 }
 TxVoiceMemButton::~TxVoiceMemButton()
@@ -214,11 +327,7 @@ TxVoiceMemButton::~TxVoiceMemButton()
 
 }
 
-void TxVoiceMemButton::onSetupActionSelected()
-{
 
-
-}
 
 void TxVoiceMemButton::memoryShortCutSelected()
 {
