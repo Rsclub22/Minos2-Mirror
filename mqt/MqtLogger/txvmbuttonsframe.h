@@ -80,6 +80,8 @@ public:
     void writeActionSelected(int buttonNumber);
     void buttonUpdate(int buttonNumber);
 
+
+
 private:
     Ui::TxVmButtonsFrame *ui;
 
@@ -104,7 +106,7 @@ private:
     void setRunButtonText(const int buttonNumber, const QString name);
     void saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
     void readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
-    void setVoiceNumMemButtonsVisible();
+    void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
 private slots:
     void radioIsConnected(bool on);

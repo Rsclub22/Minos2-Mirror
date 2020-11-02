@@ -67,26 +67,35 @@ void TxVmButtonsFrame::initTxVmButton()
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
         connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
         connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
-        connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
-        connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
+
     }
 
+    connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
+    connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
+
+
     clearButtonLabels();
+
+    setVoiceNumMemButtonsVisible(vmCommonParams.getNumButtons());
 
 }
 
 
-void TxVmButtonsFrame::setVoiceNumMemButtonsVisible()
+void TxVmButtonsFrame::setVoiceNumMemButtonsVisible(int num)
 {
-    for (int i = 0; i < vmCommonParams.getNumButtons(); i++)
+    for (int i = 0; i < voiceMemButtonList.count(); i++)
+    {
+        voiceMemButtonList[i]->setVisible(false);
+    }
+
+
+
+    for (int i = 0; i < num; i++)
     {
         voiceMemButtonList[i]->setVisible(true);
     }
 
-    for (int i = vmCommonParams.getNumButtons(); voiceMemButtonList.count(); i++)
-    {
-        voiceMemButtonList[i]->setVisible(false);
-    }
+
 }
 
 void TxVmButtonsFrame::onVmSetupClicked()
@@ -96,13 +105,24 @@ void TxVmButtonsFrame::onVmSetupClicked()
         VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(ui->voiceKeyerSelect->currentText());
         TxVmSetupDialog txVmSetupDialog(voiceCap, this);
         txVmSetupDialog.setWindowTitle(tr("Voice Memory Setup"));
-        txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+
+        VoiceKeyerCommonParams vmCommonParams_ = vmCommonParams;
+        txVmSetupDialog.setVmCommonParamsData(&vmCommonParams_);
 
         if (txVmSetupDialog.exec() == QDialog::Accepted)
         {
+            if (vmCommonParams_ != vmCommonParams)
+            {
+                if (vmCommonParams_.getNumButtons() != vmCommonParams.getNumButtons())
+                {
+                    setVoiceNumMemButtonsVisible(vmCommonParams_.getNumButtons());
+                }
+
+                vmCommonParams = vmCommonParams_;
+                saveVmCommonParams(vmCommonParams);
 
 
-
+            }
         }
     }
 

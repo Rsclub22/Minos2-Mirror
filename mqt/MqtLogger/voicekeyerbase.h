@@ -20,12 +20,15 @@
 
 class VoiceKeyerCommonParams
 {
-    public:
+
+public:
 
     explicit VoiceKeyerCommonParams();
     ~VoiceKeyerCommonParams();
 
     void operator = (const VoiceKeyerCommonParams& vkcp);
+    bool operator == (const VoiceKeyerCommonParams& vkcp);
+    bool operator != (const VoiceKeyerCommonParams& vkcp);
 
     void clear();
 

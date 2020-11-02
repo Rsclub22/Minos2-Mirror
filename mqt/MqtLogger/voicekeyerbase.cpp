@@ -26,9 +26,31 @@ VoiceKeyerCommonParams::~VoiceKeyerCommonParams()
 
 void VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
 {
+    numButtons = vkcp.numButtons;
     comport = vkcp.comport;
 }
 
+bool VoiceKeyerCommonParams::operator == (const VoiceKeyerCommonParams& vkcp)
+{
+    if (numButtons == vkcp.numButtons &&
+            comport == vkcp.comport)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool VoiceKeyerCommonParams::operator != (const VoiceKeyerCommonParams& vkcp)
+{
+    if (numButtons != vkcp.numButtons ||
+            comport != vkcp.comport)
+    {
+        return true;
+    }
+
+    return false;
+}
 void VoiceKeyerCommonParams::clear()
 {
     comport.clear();

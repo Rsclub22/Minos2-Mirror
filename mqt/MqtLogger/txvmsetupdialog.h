@@ -22,11 +22,18 @@ public:
 
 
     void setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_);
+
+private slots:
+
+    void onNumButtonsValueChanged(int num);
+
+
 private:
 
     Ui::TxVmSetupDialog *ui;
 
     VoiceKeyerCapabilities voiceCap;
+    VoiceKeyerCommonParams *vmCommonParams;
 
 
 

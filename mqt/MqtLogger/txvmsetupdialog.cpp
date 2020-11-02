@@ -21,6 +21,7 @@ void TxVmSetupDialog::initSetup()
 {
 
     ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+
     if (voiceCap.getSupportSerial())
     {
         ui->comportSel->setVisible(true);
@@ -32,17 +33,22 @@ void TxVmSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
+    connect(ui->numButtons, SIGNAL(valueChanged(int)), this, SLOT(onNumButtonsValueChanged(int)));
+
 
 
 }
 
 
+void TxVmSetupDialog::onNumButtonsValueChanged(int num)
+{
+    vmCommonParams->setNumButtons(num);
+}
 
 
-
-void TxVmSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams)
+void TxVmSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_)
 {
 
-
+    vmCommonParams = vmCommonParams_;
     ui->numButtons->setValue(vmCommonParams->getNumButtons());
 }

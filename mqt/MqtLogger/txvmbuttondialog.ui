@@ -34,7 +34,7 @@
        <item>
         <widget class="QLabel" name="txVmTypeLbl">
          <property name="text">
-          <string> </string>
+          <string/>
          </property>
         </widget>
        </item>
@@ -61,7 +61,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Voice Memory Name</string>
+          <string>VName</string>
          </property>
         </widget>
        </item>
