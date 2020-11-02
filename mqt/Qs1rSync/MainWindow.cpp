@@ -526,8 +526,9 @@ void MainWindow::trackBand()
     {
         return;
     }
-    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
-    if (mi == lastBandMode && bi == lastBand)
+    int modePart = -1;
+    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode, mainRigFreq, modePart);
+    if (mi == lastBandMode && modePart == lastModePart && bi == lastBand)
     {
         trace("band/mode unchanged");
         return;
@@ -540,10 +541,22 @@ void MainWindow::trackBand()
     else
     {
         trace("mode found OK");
-        QS1RCentre(mi->fLow, mi->fHigh);
+        if (modePart == 1)
+        {
+            QS1RCentre(mi->fcLow1, mi->fcHigh1);
+        }
+        else if (modePart == 2)
+        {
+            QS1RCentre(mi->fcLow2, mi->fcHigh2);
+        }
+        else
+        {
+            QS1RCentre(mi->fLow, mi->fHigh);
+        }
     }
     lastBand = bi;
     lastBandMode = mi;
+    lastModePart = modePart;
 }
 
 void MainWindow::on_noTrack_clicked()

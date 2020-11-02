@@ -81,6 +81,7 @@ private:
 
     QSharedPointer<BandInfo>  lastBand;
     QSharedPointer<ModeInfo>  lastBandMode;
+    int lastModePart = -1;
 
     PubSubName rigSelected;
 
