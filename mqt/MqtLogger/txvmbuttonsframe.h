@@ -17,6 +17,8 @@ class TxVmButtonsFrame;
 
 class TxVmButtonsFrame;
 
+
+
 class TxVoiceMemButton: public QObject
 {
 
@@ -78,7 +80,7 @@ public:
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
-    void buttonUpdate(int buttonNumber);
+
 
 
 
@@ -92,7 +94,10 @@ private:
     VoiceKeyerCommonParams vmCommonParams;
 
     QString voiceKeyerType;
-    int runButtonOnNum;
+
+
+    QTimer* repeatTimer;
+    int msgNumSent;
 
     QList<QToolButton*> voiceMemButtonList;
 
@@ -112,6 +117,8 @@ private slots:
     void radioIsConnected(bool on);
     void onVoiceKeyerSelect(int idx);
     void onVmSetupClicked();
+    void onRepeatTimerTimeout();
+    void onVmStopClicked();
 };
 
 #endif // TXVMBUTTONSFRAME_H

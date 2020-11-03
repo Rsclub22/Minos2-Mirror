@@ -1,4 +1,6 @@
 #include "rigcontrolvoicekeyer.h"
+#include "tlogcontainer.h"
+#include "tsinglelogframe.h"
 
 RigControlVoiceKeyer::RigControlVoiceKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -33,20 +35,26 @@ void RigControlVoiceKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKey
 
 void RigControlVoiceKeyer::voiceKeyerInit(int numButtons)
 {
-
+    Q_UNUSED(numButtons)
 }
 void RigControlVoiceKeyer::sendMsgNum(int msgNum)
 {
-    emit sendRigVoiceKeyerMessage(QString::number(msgNum));
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    tslf->sendRigTxVoiceMessage(QString::number(msgNum));
 }
 void RigControlVoiceKeyer::stopMsg()
 {
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
+    tslf->sendRigTxVoiceMessage(STOPCODE);
 }
 
 int RigControlVoiceKeyer::getKeyerState(int &state)
 {
+    Q_UNUSED(state)
 
+    return 0;
 }
 
 

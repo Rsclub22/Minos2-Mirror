@@ -161,6 +161,25 @@ public:
     void setCurScreenLayout(const QString &value);
 
 
+    void on_SetTransVertOffset(double offset, PubSubName psn);
+    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
+    void on_SetTransVertStatus(bool status, PubSubName psn);
+    void on_SetVolumeStatus(bool status, PubSubName psn);
+
+    void on_SetRitEnableStatus(bool status, PubSubName psn);
+    void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
+
+    void on_SetBandList(QString s, PubSubName psn);
+    void on_SetTransVertEnabled(bool status, PubSubName psn);
+
+    void setTuneAddBandMapSetting(bool state);
+    bool getTuneAddBandMapSetting();
+
+
+    void on_SupportStopCommand(bool state);
+    void setPauseRigControlUpdatesFlag(bool status);
+    void sendRigTxVoiceMessage(QString msgNum);
+
 private:
     BaseContestLog * contest;
     QSharedPointer<HtmlDelegate> delegate;
@@ -291,25 +310,8 @@ private slots:
 
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
-    void sendRigTxVoiceMessage(QString msgNum);
-public:
-    void on_SetTransVertOffset(double offset, PubSubName psn);
-    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
-    void on_SetTransVertStatus(bool status, PubSubName psn);
-    void on_SetVolumeStatus(bool status, PubSubName psn);
-
-    void on_SetRitEnableStatus(bool status, PubSubName psn);
-    void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
-
-    void on_SetBandList(QString s, PubSubName psn);
-    void on_SetTransVertEnabled(bool status, PubSubName psn);
-
-    void setTuneAddBandMapSetting(bool state);
-    bool getTuneAddBandMapSetting();
 
 
-    void on_SupportStopCommand(bool state);
-    void setPauseRigControlUpdatesFlag(bool status);
 };
 
 #endif // TSINGLELOGFRAME_H

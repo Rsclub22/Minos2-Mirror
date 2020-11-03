@@ -187,7 +187,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
             if (cursel == selContest)
             {
                 QString msgNum;
-                if ( psFreq->getString( msgNum ) )
+                if ( psVoiceMessageNum->getString( msgNum ) )
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: VoiceMessage Number From Logger = %1").arg(msgNum));

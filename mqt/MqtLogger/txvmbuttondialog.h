@@ -24,6 +24,7 @@ private slots:
     void on_okButton_clicked();
     void on_cancelbutton_clicked();
     void onVmRepeatDurEditingFinished();
+
 private:
     Ui::TxVmButtonDialog *ui;
     VoiceKeyerParams* vmData;

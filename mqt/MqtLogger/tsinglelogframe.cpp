@@ -123,7 +123,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(runButtonsFrame, SIGNAL(sendRunOnFlag(QString, bool)), this, SLOT(sendRunOnFlag(QString, bool)));
     connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(QString, bool)), this, SLOT(sendRunOffFreqFlag(QString, bool)));
 
-    connect(txVmButtonsFrame, SIGNAL(sendRigVoiceKeyerMessage(QString)), this, SLOT(sendTxVoiceMessage(QString)));
 
     // Rotator updates
     // From rotator controller

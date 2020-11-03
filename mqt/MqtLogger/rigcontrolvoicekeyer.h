@@ -20,6 +20,9 @@
 #include "voicekeyerfactory.h"
 
 
+const QString STOPCODE = "0";
+
+
 class RigControlVoiceKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
@@ -40,7 +43,7 @@ public:
 
 signals:
 
-    void sendRigVoiceKeyerMessage(QString msgNum);
+
 
 private:
 
