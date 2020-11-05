@@ -33,7 +33,7 @@ public:
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
     void voiceKeyerInit(int numButtons) override;
-    void sendMsgNum(int msgNum) override;
+    void sendMsgNum(int buttonNum) override;
     void stopMsg() override;
 
     int getKeyerState(int &state) override;

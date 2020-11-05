@@ -62,6 +62,11 @@ private:
 
 };
 
+
+const QString VM_BUTTON_ON_STYLE = QString("background-color: orange ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+const QString VM_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; color:black ; border-style: outset; border-width: 1px; border-color: black;\n");
+
+
 class TxVmButtonsFrame : public QGroupBox
 {
     Q_OBJECT
@@ -95,16 +100,13 @@ private:
 
     QString voiceKeyerType;
 
-
-    QTimer* repeatTimer;
-    int msgNumSent;
+    QTimer* msgDurTimer;
+    QTimer* repeatPauseTimer;
+    int buttonNumSent;
 
     QList<QToolButton*> voiceMemButtonList;
 
     QList<VoiceKeyerParams> vmKeyParamList;
-
-    void initRunMemoryButton();
-    void loadRunButtonLabels();
 
     void initTxVmButton();
 
@@ -113,12 +115,14 @@ private:
     void readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
     void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
+    void startVMMsg(int buttonNumber);
 private slots:
     void radioIsConnected(bool on);
     void onVoiceKeyerSelect(int idx);
     void onVmSetupClicked();
-    void onRepeatTimerTimeout();
+    void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
+    void onMsgDurTimerTimeout();
 };
 
 #endif // TXVMBUTTONSFRAME_H

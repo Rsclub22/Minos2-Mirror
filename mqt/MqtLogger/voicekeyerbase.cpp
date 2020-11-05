@@ -68,7 +68,8 @@ void VoiceKeyerParams::clear()
     type.clear();
     vmName.clear();
     vmRepeatFlag = false;
-    vmRepeatDur = 0;
+    vmDuration = 0;
+    vmRepeatPauseDur = 0;
     vmButtonNum = -1;   // None
 }
 
@@ -77,8 +78,10 @@ void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
 {
     type = vkp.type;
     vmName = vkp.vmName;
+
     vmRepeatFlag = vkp.vmRepeatFlag;
-    vmRepeatDur = vkp.vmRepeatDur;
+    vmDuration = vkp.vmDuration;
+    vmRepeatPauseDur = vkp.vmRepeatPauseDur;
     vmButtonNum = vkp.vmButtonNum;
 }
 

@@ -26,7 +26,7 @@ static QKeySequence runButShiftShortCut[] {
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     QGroupBox(parent),
     ui(new Ui::TxVmButtonsFrame),
-    msgNumSent(NO_VM_BUTTON_ON)
+    buttonNumSent(NO_VM_BUTTON_ON)
 {
     ui->setupUi(this);
 
@@ -41,8 +41,12 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
 
-    repeatTimer = new QTimer(this);
-    connect(repeatTimer, SIGNAL(timeout()), this, SLOT(onRepeatTimerTimeout()));
+    msgDurTimer = new QTimer(this);
+    connect(msgDurTimer, SIGNAL(timeout()), this, SLOT(onMsgDurTimerTimeout()));
+
+
+    repeatPauseTimer = new QTimer(this);
+    connect(repeatPauseTimer, SIGNAL(timeout()), this, SLOT(onRepeatPauseTimerTimeout()));
 
     initTxVmButton();
 
@@ -206,6 +210,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
             {
                 txVoiceKeyer->saveVmButtonParams(vmData);
                 setRunButtonText(buttonNumber, vmData.getVmName());
+                vmKeyParamList[buttonNumber] = vmData;
             }
 
         }
@@ -220,31 +225,37 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         return;
     }
 
-    msgNumSent = buttonNumber + 1;
-    txVoiceKeyer->sendMsgNum(msgNumSent);
+    startVMMsg(buttonNumber);
+}
 
 
-    if (vmKeyParamList[buttonNumber].getVmRepeatFlag())
-    {
-        int repeatDur = vmKeyParamList[buttonNumber].getVmRepeatDur() * 60 * 1000;
-        repeatTimer->start(repeatDur);
-    }
+void TxVmButtonsFrame::startVMMsg(int buttonNumber)
+{
+    buttonNumSent = buttonNumber;
+    txVoiceKeyer->sendMsgNum(buttonNumSent);
+
+   int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
+    msgDurTimer->start(msgDur);
+    txVmButtonMap[buttonNumber]->showButtonOnOff(true);
+
 }
 
 
 void TxVmButtonsFrame::onVmStopClicked()
 {
 
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
     {
         return;
     }
 
+
+
     txVoiceKeyer->stopMsg();
-    msgNumSent = NO_VM_BUTTON_ON;
-    repeatTimer->stop();
-
-
+    msgDurTimer->stop();
+    repeatPauseTimer->stop();
+    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    buttonNumSent = NO_VM_BUTTON_ON;
 
 
 }
@@ -279,6 +290,7 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
         {
             txVoiceKeyer->saveVmButtonParams(vmData);
             setRunButtonText(buttonNumber, vmData.getVmName());
+            vmKeyParamList[buttonNumber] = vmData;
         }
 
     }
@@ -293,32 +305,55 @@ void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString na
     voiceMemButtonList[buttonNumber]->setText(buttonText);
 }
 
-void TxVmButtonsFrame::onRepeatTimerTimeout()
+
+void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
-    if (msgNumSent - 1 > 0)
+
+
+    if (buttonNumSent >= 0)
     {
-       if (vmKeyParamList[msgNumSent - 1].getVmRepeatFlag())
+        if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+        {
+            int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
+            repeatPauseTimer->start(repeatPauseDur);
+        }
+        else
+        {
+            txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+            buttonNumSent = NO_VM_BUTTON_ON;
+        }
+    }
+
+    msgDurTimer->stop();
+
+
+}
+
+
+
+void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
+{
+    if (buttonNumSent >= 0)
+    {
+       if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
        {
-           int repeatDur = vmKeyParamList[msgNumSent - 1].getVmRepeatDur() * 60 * 1000;
-           repeatTimer->start(repeatDur);
-           txVoiceKeyer->sendMsgNum(msgNumSent);
+           startVMMsg(buttonNumSent);
+
+       }
+       else
+       {
+           onVmStopClicked();
+
+
        }
     }
-    else
-    {
-        repeatTimer->stop();
-    }
+
+    repeatPauseTimer->stop();
+
 
 }
 
-void TxVmButtonsFrame::initRunMemoryButton()
-{
 
-}
-void TxVmButtonsFrame::loadRunButtonLabels()
-{
-
-}
 
 void TxVmButtonsFrame::radioIsConnected(bool on)
 {
@@ -347,6 +382,9 @@ void TxVmButtonsFrame::readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams
     vmCommonParams.setNumButtons(config.value("numButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt());
     config.endGroup();
 }
+
+
+
 
 
 //*******************TX Voice Memory Button *************************//
@@ -429,11 +467,11 @@ void TxVoiceMemButton::showButtonOnOff(bool state)
 {
     if (state)
     {
-        //showRunToolButtonOnFreq();
+        vmButton->setStyleSheet(VM_BUTTON_ON_STYLE);
     }
     else
     {
-        //memButton->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+        vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
     }
 }
 

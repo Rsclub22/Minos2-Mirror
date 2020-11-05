@@ -73,8 +73,12 @@ public:
     bool getVmRepeatFlag(){return vmRepeatFlag;}
     void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
 
-    int getVmRepeatDur(){return vmRepeatDur;}
-    void setVmRepeatDur(const int vmRepeatDur_){vmRepeatDur = vmRepeatDur_;}
+    int getVmRepeatPauseDur(){return vmRepeatPauseDur;}
+    void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
+
+
+    int getVmDuration(){return vmDuration;}
+    void setVmDuration(const int vmDuration_){vmDuration = vmDuration_;}
 
     int getvmButtonNum(){return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
@@ -85,8 +89,9 @@ private:
 
     QString type;
     QString vmName;
+    int vmDuration;
     bool vmRepeatFlag;
-    int vmRepeatDur;
+    int vmRepeatPauseDur;
     int vmButtonNum;
 };
 

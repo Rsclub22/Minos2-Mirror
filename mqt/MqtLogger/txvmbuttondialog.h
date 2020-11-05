@@ -23,13 +23,16 @@ public:
 private slots:
     void on_okButton_clicked();
     void on_cancelbutton_clicked();
-    void onVmRepeatDurEditingFinished();
 
+
+    void onVmRepeatPauseDurEditingFinished();
+    void onVmMessageDurEditingFinished();
 private:
     Ui::TxVmButtonDialog *ui;
     VoiceKeyerParams* vmData;
 
-    bool validateRepeatDur(QString dur, int &dur_);
+
+    bool validateDur(QString durName, QString dur, int &dur_);
 };
 
 #endif // TXVMBUTTONDIALOG_H

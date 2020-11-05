@@ -37,11 +37,11 @@ void RigControlVoiceKeyer::voiceKeyerInit(int numButtons)
 {
     Q_UNUSED(numButtons)
 }
-void RigControlVoiceKeyer::sendMsgNum(int msgNum)
+void RigControlVoiceKeyer::sendMsgNum(int buttonNum)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxVoiceMessage(QString::number(msgNum));
+    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
 }
 void RigControlVoiceKeyer::stopMsg()
 {
@@ -67,7 +67,8 @@ bool RigControlVoiceKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &v
     vmParams.setType(config.value("type", "None").toString());
     vmParams.setVmName(config.value("name", "").toString());
     vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
-    vmParams.setVmRepeatDur(config.value("repeatDuration", 0).toInt());
+    vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
+    vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
     vmParams.setvmButtonNum(config.value("buttonNum", -1).toInt());
     config.endGroup();
 
@@ -85,7 +86,8 @@ void RigControlVoiceKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ 
     config.setValue("type", vmParams.getType());
     config.setValue("name", vmParams.getVmName());
     config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
-    config.setValue("repeatDuration", vmParams.getVmRepeatDur());
+    config.setValue("messageDuration", vmParams.getVmDuration());
+    config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
     config.setValue("buttonNum", vmParams.getvmButtonNum());
     config.endGroup();
 
