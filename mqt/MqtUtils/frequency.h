@@ -15,6 +15,7 @@ public:
     Frequency():f(0){}
     Frequency(const Frequency &fr):f(fr){}
     ~Frequency(){}
+    Frequency& operator=(const Frequency&);
     bool operator< ( const Frequency& rhs ) const;
     bool operator> ( const Frequency& rhs ) const;
     bool operator<= ( const Frequency& rhs ) const;
@@ -25,6 +26,7 @@ public:
     Frequency operator- (const Frequency& rhs ) const{return Frequency(f - rhs.f);}
     operator qint64() const{return f;}
     //operator double() const {return f;}
+
     QString str() const ;
     QString traceStr() const;
 

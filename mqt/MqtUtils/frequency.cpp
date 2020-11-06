@@ -59,6 +59,12 @@ Frequency::Frequency(QString frequency)
         }
     }
 }
+
+Frequency &Frequency::Frequency::operator=(const Frequency &fr)
+{
+    f = fr.f;
+    return *this;
+}
 QString Frequency::extractKhz()
 {
     QString khz = "***";
