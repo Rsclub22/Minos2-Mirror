@@ -464,6 +464,9 @@ void MainWindow::QS1RCentre(const Frequency &fLow, const Frequency &fHigh)
         trace(QString("%1 %2").arg(fLow.traceStr()).arg(fHigh.traceStr()));
         qint64 bandWidth = qint64(fHigh) - qint64(fLow);
         qint64 centre = qint64(fLow) + bandWidth/2;
+        centre += 12500;
+        centre /= 25000;
+        centre *= 25000;
 
         // search for nearest matching bandwidth on QS1R
 
