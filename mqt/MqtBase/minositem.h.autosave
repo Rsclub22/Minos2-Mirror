@@ -104,24 +104,6 @@ public:
        MinosItem<QString>::dirty = false;
        MinosItem<QString>::val = t;
     }
-//    MinosStringItem<QString>() = default;
-//    MinosStringItem<QString>(const MinosStringItem<QString> &s) = default;
-//    MinosStringItem<QString>():MinosItem<QString>()
-//    {
-
-//    }
-//    MinosStringItem<QString>(const MinosItem<QString> &s):MinosItem<QString>(s)
-//    {
-//        //MinosItem<QString>::dirty = false;
-//        //MinosItem<QString>::val = s.getValue();
-//    }
-//    MinosStringItem& operator = ( const MinosItem<QString> &rhs )
-//    {
-//        MinosItem<QString>::dirty = rhs.dirty;
-//        MinosItem<QString>::val = rhs.val;
-//        return *this;
-//    }
-
 };
 template < class Frequency >
 class MinosFrequencyItem : public MinosItem<Frequency>
@@ -148,12 +130,6 @@ public:
        MinosItem<Frequency>::dirty = false;
        MinosItem<Frequency>::val = t;
     }
-//    MinosFrequencyItem& operator = ( const MinosFrequencyItem &rhs )
-//    {
-//        MinosItem<Frequency>::dirty = rhs.dirty;
-//        MinosItem<Frequency>::val = rhs.val;
-//        return *this;
-//    }
     void addIfDirty( RPCParamStruct *st, const QString &stName, bool &d ) const
     {
        d |= this->isDirty();

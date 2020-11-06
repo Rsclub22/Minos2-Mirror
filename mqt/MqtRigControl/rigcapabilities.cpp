@@ -80,3 +80,9 @@ RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
     pollData = rigcap.pollData;
 
 }
+RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
+{
+    *this = rigcap;
+    return *this;
+}
+

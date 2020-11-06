@@ -433,9 +433,13 @@ void setIgnoreEmptyDistanceFlag(bool state, int band)
 }
 
 
+ClusterClientFilterSettings (const ClusterClientFilterSettings& ccfs)
+{
+    *this = ccfs;
+}
 
 
-void operator= (const ClusterClientFilterSettings& ccfs)
+ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings& ccfs)
 {
 
     callsignFilterList = ccfs.callsignFilterList;
@@ -486,7 +490,7 @@ void operator= (const ClusterClientFilterSettings& ccfs)
     ignoreEmptyDistanceFlag_5_6GHz = ccfs.ignoreEmptyDistanceFlag_5_6GHz;
     ignoreEmptyDistanceFlag_10GHz = ccfs.ignoreEmptyDistanceFlag_10GHz;
 
-
+    return *this;
 }
 
 
@@ -707,7 +711,11 @@ void setIgnoreEmptyDistanceFlag(bool state)
     ignoreDistanceFlag = state;
 }
 
-void operator= (const BandmapClientFilterSettings& bcfs)
+BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
+{
+    *this = bcfs;
+}
+BandmapClientFilterSettings &operator= (const BandmapClientFilterSettings& bcfs)
 {
 
     modeFilterNONE = bcfs.modeFilterNONE;
@@ -723,7 +731,7 @@ void operator= (const BandmapClientFilterSettings& bcfs)
     ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
     ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
 
-
+    return *this;
 }
 
 

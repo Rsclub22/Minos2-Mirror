@@ -45,6 +45,11 @@ public:
     {
         wt = m.wt;
     }
+    MapWrapper &operator= (const MapWrapper &m)
+    {
+        wt = m.wt;
+        return *this;
+    }
     operator bool()
     {
         return !wt.isNull();

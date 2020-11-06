@@ -63,6 +63,7 @@ public:
     ShortFreq():sf(0){}
     ShortFreq(const ShortFreq &fr):sf(fr){}
     ~ShortFreq(){}
+    ShortFreq &operator= (const ShortFreq &fr);
     bool operator< ( const ShortFreq& rhs ) const;
     bool operator> ( const ShortFreq& rhs ) const;
     bool operator<= ( const ShortFreq& rhs ) const;

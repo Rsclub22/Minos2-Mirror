@@ -170,6 +170,11 @@ QString Frequency::removeTrailingZeroes(QString sfreq)
 }
 
 
+ShortFreq & ShortFreq::operator= (const ShortFreq &fr)
+{
+    sf = fr.sf;
+    return *this;
+}
 
 bool ShortFreq::operator<(const ShortFreq &rhs) const
 {
