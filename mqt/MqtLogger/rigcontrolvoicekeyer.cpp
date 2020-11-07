@@ -64,7 +64,7 @@ bool RigControlVoiceKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &v
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(buttonNum));
 
-    vmParams.setType(config.value("type", "None").toString());
+    vmParams.setType(config.value("type", "").toString());
     vmParams.setVmName(config.value("name", "").toString());
     vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
     vmParams.setVmDuration(config.value("messageDuration", 0).toInt());

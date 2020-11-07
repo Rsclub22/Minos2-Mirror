@@ -7,19 +7,15 @@ const int VM_BUTTON_1_ON = 0;
 const int VM_BUTTON_2_ON = 1;
 
 
-static QKeySequence runButShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::Key_BracketRight)
-
-};
-
-static QKeySequence runButShiftShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight)
-
-};
 
 
+const QStringList vmButtonShortCutKeys = {
+                                    "Shift+F1", "Shift+F2",
+                                    "Shift+F3", "Shift+F4",
+                                    "Shift+F5", "Shift+F6",
+                                    "Shift+F7", "Shift+F8"
+
+                                    };
 
 
 
@@ -51,6 +47,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     initTxVmButton();
 
 
+
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -76,6 +73,8 @@ void TxVmButtonsFrame::initTxVmButton()
         connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
 
     }
+
+
 
     connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
     connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
@@ -150,7 +149,9 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
        txVoiceKeyer = nullptr;
 
+
        clearButtonLabels();
+       vmKeyParamList.clear();
 
        return;
     }
@@ -169,6 +170,11 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
            for (int i = 0; i < voiceMemButtonList.count(); i++)
            {
                VoiceKeyerParams vmData;
+               if (vmData.getType().isEmpty())
+               {
+                   vmData.setType(voiceKeyerType);
+               }
+
                txVoiceKeyer->readVmButtonParams(i, vmData);
                vmKeyParamList.append(vmData);
                setRunButtonText(i, vmData.getVmName());
@@ -196,10 +202,16 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
     }
 
     VoiceKeyerParams vmData;
+    vmData.setType(voiceKeyerType);
+
     if (txVoiceKeyer)
     {
         txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
-        trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
+        if (vmData.getType().isEmpty())    // in case read data is empty
+        {
+            vmData.setType(voiceKeyerType);
+        }
+        trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
         TxVmButtonDialog vmButtonDialog(this);
 
         vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
@@ -223,6 +235,11 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
     {
         return;
+    }
+
+    if (buttonNumSent != NO_VM_BUTTON_ON)
+    {
+        onVmStopClicked();
     }
 
     startVMMsg(buttonNumber);
@@ -274,14 +291,9 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
     TxVmButtonDialog vmButtonDialog(this);
 
-    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Write").arg(buttonNumber + 1));
+    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
-    {
-        return;
-    }
-
     vmButtonDialog.setVmData(&vmData);
 
     if (vmButtonDialog.exec() == QDialog::Accepted)
@@ -404,7 +416,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     vmButton->setFocusPolicy(Qt::NoFocus);
     //vmButton->setText(runButData::runButTitle[memNo]);
 
-    //shortKey = new QShortcut(QKeySequence(runButShortCut[memNo]), vmButton);
+    shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
     //shiftShortKey = new QShortcut(QKeySequence(runButShiftShortCut[memNo]), vmButton);
     readAction = new QAction(tr("&Read"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
@@ -416,7 +428,7 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
 
     vmButton->setMenu(vmMenu);
 
-    //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
+    connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
     connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
     connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
     connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));

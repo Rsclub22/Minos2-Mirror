@@ -96,6 +96,8 @@ private:
     VoiceKeyerBase* txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
+    QList<QShortcut *> shortCutKeyList;
+
     VoiceKeyerCommonParams vmCommonParams;
 
     QString voiceKeyerType;
