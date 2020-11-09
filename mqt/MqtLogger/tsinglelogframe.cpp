@@ -194,6 +194,8 @@ TSingleLogFrame::~TSingleLogFrame()
 }
 void TSingleLogFrame::createScreenComponents()
 {
+    setUpdatesEnabled(false);
+
     // create component frames, parentless
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     traceMsg("createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
@@ -385,9 +387,14 @@ void TSingleLogFrame::createScreenComponents()
     singleLogFrameSplitter->setChildrenCollapsible(false);
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+
+    setUpdatesEnabled(true);
+
 }
 void TSingleLogFrame::clearScreenLayout()
 {
+    setUpdatesEnabled(false);
+
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
 
@@ -478,6 +485,9 @@ void TSingleLogFrame::clearScreenLayout()
 
     }
     traceMsg("clearScreenLayout complete for " + msg);
+
+    setUpdatesEnabled(true);
+
 }
 void TSingleLogFrame::applyScreenLayout()
 {
@@ -485,12 +495,10 @@ void TSingleLogFrame::applyScreenLayout()
     if (!ct)
         return;
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
-    hide();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     clearScreenLayout();
     buildScreenLayout();
-    show();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     onSplitterMoved(-1, -1);
 }
@@ -682,7 +690,8 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
 }
 void TSingleLogFrame::buildScreenLayout()
 {
-
+    // disabling updates rather improves construction speed
+    setUpdatesEnabled(false);
     ScreenConfigFile scf;
     scf.loadFile(false, this);
 
@@ -735,7 +744,7 @@ void TSingleLogFrame::buildScreenLayout()
         }
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
-
+    setUpdatesEnabled(true);
 }
 
 
