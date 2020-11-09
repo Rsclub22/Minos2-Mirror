@@ -96,7 +96,10 @@ MinosStringItem<QString> CacheSelection::getSelectedContest(const QString logger
     }
     else
     {
-        return _selected[loggerUuid];
+        if (_selected.contains(loggerUuid))
+        {
+            return _selected[loggerUuid];
+        }
     }
     MinosStringItem<QString> s;
     return s;
