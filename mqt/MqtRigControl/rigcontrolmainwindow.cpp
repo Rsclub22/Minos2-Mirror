@@ -2401,6 +2401,7 @@ void RigControlMainWindow::initCacheData()
 
 
         }
+        msg->rigCache.invalidate();
     }
 
 
