@@ -712,5 +712,9 @@ int TContestApp::getListSlotCount()
 }
 ContactList *TContestApp::getListSlot(int s)
 {
+    if (s >= getListSlotCount() || !listSlotList[s])
+    {
+        return nullptr;
+    }
     return listSlotList[s]->slot;
 }
