@@ -47,13 +47,19 @@ public:
         potential = sl[acoffset++].toInt();
         minutes = sl[acoffset++].toInt();
     }
-    Aircraft(const Aircraft &ac):
-      call(ac.call),
-      category(ac.category),
-      distance(ac.distance),
-      potential(ac.potential),
-      minutes(ac.minutes)
-    {}
+    Aircraft(const Aircraft &ac)
+    {
+        *this = ac;
+    }
+    Aircraft& operator= ( const Aircraft &ac )
+    {
+        call = ac.call;
+        category = ac.category;
+        distance = ac.distance;
+        potential = ac.potential;
+        minutes = ac.minutes;
+        return *this;
+    }
 
     void traceAircaft() const
     {
