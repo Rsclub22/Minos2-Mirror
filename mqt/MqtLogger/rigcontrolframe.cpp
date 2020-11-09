@@ -1721,8 +1721,7 @@ void RigControlFrame::setRadioList()
 
             }
 
-
-
+            launchRadioSelectTimer->start(1000);
 
         }
         else
