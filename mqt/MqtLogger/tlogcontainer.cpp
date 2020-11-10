@@ -1549,6 +1549,10 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          TContestApp::getContestApp() ->setCurrentContest( contest );
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
+
+         setUpdatesEnabled(false);
+         f->buildFrame();
+
          f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
 
          int tno = ui->ContestPageControl->addTab(f, baseFName);
@@ -1561,6 +1565,8 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          sendDM->subscribeApps();
 
          on_ContestPageControl_currentChanged(tno);
+
+         setUpdatesEnabled(true);
 
          if ( contest->needsExport() )      // imported from an alien format (e.g. .log)
          {

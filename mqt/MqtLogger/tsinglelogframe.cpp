@@ -39,29 +39,8 @@
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
-TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
-    QFrame(parent),
-    ui(new Ui::TSingleLogFrame),
-    splittersChanged(false),
-    bandMapLoaded(false),
-    rotatorLoaded(false),
-    keyerLoaded(false),
-    radioLoaded(false),
-    contest(contest),
-    lastStanzaCount( 0 )
-
-
+void TSingleLogFrame::buildFrame()
 {
-    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
-
-#ifdef Q_OS_ANDROID
-    splitterHandleWidth = 20;
-#else
-    splitterHandleWidth = 6;
-#endif
-
-    ui->setupUi(this);
-
     createScreenComponents();
 
     buildScreenLayout();
@@ -178,6 +157,30 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
 
+TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
+    QFrame(parent),
+    ui(new Ui::TSingleLogFrame),
+    splittersChanged(false),
+    bandMapLoaded(false),
+    rotatorLoaded(false),
+    keyerLoaded(false),
+    radioLoaded(false),
+    contest(contest),
+    lastStanzaCount( 0 )
+
+
+{
+    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
+
+#ifdef Q_OS_ANDROID
+    splitterHandleWidth = 20;
+#else
+    splitterHandleWidth = 6;
+#endif
+
+    ui->setupUi(this);
+}
+
 void TSingleLogFrame::on_FontChanged()
 {
     applyScreenLayout();
@@ -194,8 +197,6 @@ TSingleLogFrame::~TSingleLogFrame()
 }
 void TSingleLogFrame::createScreenComponents()
 {
-    setUpdatesEnabled(false);
-
     // create component frames, parentless
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     traceMsg("createScreenComponents for " + ct->name.getValue() + " uuid " + ct->uuid);
@@ -387,14 +388,9 @@ void TSingleLogFrame::createScreenComponents()
     singleLogFrameSplitter->setChildrenCollapsible(false);
 
     connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
-
-    setUpdatesEnabled(true);
-
 }
 void TSingleLogFrame::clearScreenLayout()
 {
-    setUpdatesEnabled(false);
-
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
 
@@ -485,9 +481,6 @@ void TSingleLogFrame::clearScreenLayout()
 
     }
     traceMsg("clearScreenLayout complete for " + msg);
-
-    setUpdatesEnabled(true);
-
 }
 void TSingleLogFrame::applyScreenLayout()
 {
@@ -690,8 +683,6 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
 }
 void TSingleLogFrame::buildScreenLayout()
 {
-    // disabling updates rather improves construction speed
-    setUpdatesEnabled(false);
     ScreenConfigFile scf;
     scf.loadFile(false, this);
 
@@ -744,7 +735,6 @@ void TSingleLogFrame::buildScreenLayout()
         }
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
-    setUpdatesEnabled(true);
 }
 
 
