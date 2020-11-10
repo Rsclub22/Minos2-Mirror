@@ -141,13 +141,6 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         //}
 
-        bool supportVoiceMemory = false;
-        if (capsList[i]->rig_model == RIG_MODEL_IC7300 || capsList[i]->rig_model == RIG_MODEL_IC9700
-                || capsList[i]->rig_model == RIG_MODEL_IC7610)
-        {
-            supportVoiceMemory = true;
-        }
-
         // support Antenna Switch
         //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
 
@@ -168,7 +161,8 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,       // support volume
                                            true,        // support antenna switch
                                            true,            // support RigCtld
-                                           supportVoiceMemory,
+                                           true,        // support Voice Memory
+                                           true,     // support Cw Memory
                                            true);    // support poll data
     }
 
@@ -937,12 +931,57 @@ int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 /*************** Voice Memory Control  ********************************/
 
 
-int HamlibRigControl::setVoiceMessage(VFO vfo, int vmNum)
+int HamlibRigControl::sendVoiceMessage(VFO vfo, int vmNum)
 {
 
     return rig_send_voice_mem(my_rig, hamlibVfoNames[vfo], vmNum);
 
 }
+
+bool HamlibRigControl::supportVoiceMemory()
+{
+    if (my_rig->caps->send_voice_mem)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+/*************** CW Memory Control  ********************************/
+
+int HamlibRigControl::sendMorse(VFO vfo, QString msg)
+{
+    return rig_send_morse(my_rig, hamlibVfoNames[vfo], msg.toLocal8Bit());
+}
+int HamlibRigControl::stopMorse(VFO vfo)
+{
+    return rig_stop_morse(my_rig, hamlibVfoNames[vfo]);
+}
+//int HamlibRigControl::waitMorsePtt(VFO vfo)
+//{
+
+//    return wait_morse_ptt(my_rig, hamlibVfoNames[vfo]);
+//}
+int HamlibRigControl::waitMorse(VFO vfo)
+{
+
+    return rig_wait_morse(my_rig, hamlibVfoNames[vfo]);
+}
+
+bool HamlibRigControl::supportCwMemory()
+{
+
+    if (my_rig->caps->send_morse)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
 
 /*************** Level Control  ********************************/
 

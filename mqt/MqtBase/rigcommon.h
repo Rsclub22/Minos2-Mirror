@@ -77,6 +77,8 @@ public:
 };
 
 
+
+
 // This was the hamlib catParams structure, other fields have been added
 // to support other functions.
 
@@ -109,7 +111,7 @@ public:
       dest.networkAdd = srce->networkAdd;
       dest.networkPort = srce->networkPort;
       dest.enableCAT = srce->enableCAT;
-      dest.enableSerialPTT = srce->enableSerialPTT;
+      dest.enablePTT = srce->enablePTT;
       dest.pttSerialPort = srce->pttSerialPort;
       dest.rigCtldEnable = srce->rigCtldEnable;
       dest.startMinosRigCtld = srce->startMinosRigCtld;
@@ -173,14 +175,14 @@ public:
   QString networkAdd;
   QString networkPort;
   bool enableCAT = false;
-  bool enableSerialPTT  = false;
+  bool enablePTT  = false;
   QString pttSerialPort;
+  int pttType;
   bool rigCtldEnable = false;
   bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;
   QString rigCtldNetworkPort;
   QString mgmMode = "USB";
-  int pttType;
   bool antSwitchAvail = false;
   bool ritSupported = false;
   bool ritEnable = false;

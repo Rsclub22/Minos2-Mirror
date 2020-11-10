@@ -90,6 +90,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(rigCtldProcess, SIGNAL(started()), this, SLOT(rigCtldStarted()));
 
     setRigCltdIndicatorVisible(false);
+    setVoiceMemIndVisible(false);
+    setCwMemIndVisible(false);
+    setpttIndVisible(false);
 
     getRigCtldConnectDelay();
 
@@ -244,6 +247,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->selectRadioBox->clearFocus();
 
+    connect(ui->cwKeyerPb, SIGNAL(clicked()), this, SLOT(onCwKeyerPbClicked()));
+    connect(ui->cwKeyerStopPb, SIGNAL(clicked()), this, SLOT(onCwKeyerStopPbClicked()));
+
 
     if (appName.length() == 0)
     {
@@ -257,6 +263,25 @@ RigControlMainWindow::~RigControlMainWindow()
     trace("RigControlMainWindow::~RigControlMainWindow()");
     delete ui;
     delete msg;
+}
+
+
+void RigControlMainWindow::onCwKeyerPbClicked()
+{
+    QString msg = "Test M0DGB";
+    if (radio)
+    {
+        radio->sendMorse(curVfo,msg);
+    }
+
+}
+
+void RigControlMainWindow::onCwKeyerStopPbClicked()
+{
+    if(radio)
+    {
+        radio->stopMorse(curVfo);
+    }
 }
 
 void RigControlMainWindow::logMessage( QString s )
@@ -749,10 +774,13 @@ void RigControlMainWindow::upDateRadio()
 
                 }
 
-                // does radio support voice memories
+                // does library support voice memories
                 if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory)
                 {
-                    //setVoiceMemButtonsVisible(true);
+                    if (radio->supportVoiceMemory())
+                    {
+
+                    }
 
                 }
                 else
@@ -4210,7 +4238,60 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 }
 
 
+void RigControlMainWindow::setVoiceMemIndVisible(bool visible)
+{
+    ui->voiceMemInd->setVisible(visible);
+    ui->voiceMemLbl->setVisible(visible);
+}
 
+void RigControlMainWindow::setVoiceMemIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->voiceMemInd->setStyleSheet(VOICEMEM_INDICATOR_ON);
+    }
+    else
+    {
+        ui->voiceMemInd->setStyleSheet(VOICEMEM_INDICATOR_OFF);
+    }
+}
+
+
+void RigControlMainWindow::setCwMemIndVisible(bool visible)
+{
+    ui->cwMemInd->setVisible(visible);
+    ui->cwMemLbl->setVisible(visible);
+}
+
+void RigControlMainWindow::setCwMemIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->cwMemInd->setStyleSheet(CWMEM_INDICATOR_ON);
+    }
+    else
+    {
+        ui->cwMemInd->setStyleSheet(CWMEM_INDICATOR_OFF);
+    }
+}
+
+void RigControlMainWindow::setpttIndVisible(bool visible)
+{
+    ui->pttInd->setVisible(visible);
+    ui->pttLbl ->setVisible(visible);
+}
+
+void RigControlMainWindow::setPttIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->pttInd->setStyleSheet(PTT_INDICATOR_ON);
+    }
+    else
+    {
+        ui->pttInd->setStyleSheet(PTT_INDICATOR_OFF);
+    }
+}
 
 /*********************************** test *********************************************/
 
@@ -4316,7 +4397,7 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
     if (radio && ok)
     {
         trace(QString("Send Voice Memory %1 to rig").arg(msgNum));
-        radio->setVoiceMessage(curVfo, vmNum);
+        radio->sendVoiceMessage(curVfo, vmNum);
     }
     else
     {

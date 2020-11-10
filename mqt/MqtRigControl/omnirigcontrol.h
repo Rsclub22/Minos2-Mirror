@@ -88,7 +88,15 @@ public:
     int setConfigurationParameter(QString cfgparam, QString value) override;
     int getConfigurationParameter(QString cfgparam, QString *value) override;
 
-    int setVoiceMessage(VFO vfo, int vmNum) override;
+    int sendVoiceMessage(VFO vfo, int vmNum) override;
+    bool supportVoiceMemory() override;
+
+    int sendMorse(VFO vfo, QString msg) override;
+    int stopMorse(VFO vfo) override;
+    //int waitMorsePtt(VFO vfo) override;
+    int waitMorse(VFO vfo) override;
+    bool supportCwMemory() override;
+
 
 
 #if defined (WIN32)

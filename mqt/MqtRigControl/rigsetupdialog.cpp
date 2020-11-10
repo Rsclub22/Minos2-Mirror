@@ -257,6 +257,24 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->setRigctldCheckBoxVisible(false);
         radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
     }
+
+    // serial ptt comport loaded with other comports
+    radioTab[tabNum]->setPttTypeRadioButtons(radioTab[tabNum]->getRadioData()->pttType);
+
+    if (radioTab[tabNum]->getRadioData()->enablePTT)
+    {
+        radioTab[tabNum]->setPttControlsVisible(true);
+        radioTab[tabNum]->setPTTCheckBox(true);
+
+    }
+    else
+    {
+       radioTab[tabNum]->setPttControlsVisible(false);
+       radioTab[tabNum]->setPTTCheckBox(false);
+
+    }
+
+
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
     radioTab[tabNum]->setSupport50MHzChkBox(radioTab[tabNum]->getRadioData()->support50MHz);
@@ -525,6 +543,7 @@ void RigSetupDialog::loadAvailComports()
     for (int i = 0; i <radioTab.count(); i++)
     {
         loadAvailComportsToTab(i);
+        loadAvailPttComportsToTab(i);
     }
 
 
@@ -535,6 +554,12 @@ void RigSetupDialog::loadAvailComportsToTab(int tabNum)
 {
     radioTab[tabNum]->loadRadioComports();
     radioTab[tabNum]->setComport(availRadioData[tabNum]->comport);
+}
+
+void RigSetupDialog::loadAvailPttComportsToTab(int tabNum)
+{
+    radioTab[tabNum]->loadAvailPttComports();
+    radioTab[tabNum]->setPttComport(availRadioData[tabNum]->pttSerialPort);
 }
 
 void RigSetupDialog::doCloseEvent()
@@ -901,6 +926,9 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("handshake", radioTab[radNum]->getRadioData()->handshake);
     config.setValue("forceDTR", radioTab[radNum]->getRadioData()->forceDtr);
     config.setValue("forceRTS", radioTab[radNum]->getRadioData()->forceRts);
+    config.setValue("enablePtt", radioTab[radNum]->getRadioData()->enablePTT);
+    config.setValue("pttType", radioTab[radNum]->getRadioData()->pttType);
+    config.setValue("pttSerialPort", radioTab[radNum]->getRadioData()->pttSerialPort);
     config.setValue("radioPollInterval", radioTab[radNum]->getRadioData()->pollInterval);
     config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
     config.setValue("startMinosRigCtld", radioTab[radNum]->getRadioData()->startMinosRigCtld);
@@ -947,6 +975,9 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->handshake = config.value("handshake", 0).toInt();
     radioTab[radNum]->getRadioData()->forceDtr = config.value("forceDTR", 0).toInt();
     radioTab[radNum]->getRadioData()->forceRts= config.value("forceRTS", 0).toInt();
+    radioTab[radNum]->getRadioData()->enablePTT = config.value("enablePtt", false).toBool();
+    radioTab[radNum]->getRadioData()->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)).toInt();
+    radioTab[radNum]->getRadioData()->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioTab[radNum]->getRadioData()->pollInterval = config.value("radioPollInterval", "1").toString();
     radioTab[radNum]->getRadioData()->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
     radioTab[radNum]->getRadioData()->startMinosRigCtld = config.value("startMinosRigCtld", true).toBool();
@@ -1194,6 +1225,9 @@ void RigSetupDialog::saveMgmList()
 
 
 }
+
+
+
 
 
 

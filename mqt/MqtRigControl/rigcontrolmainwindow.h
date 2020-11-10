@@ -348,6 +348,12 @@ private:
     void onVoiceMemClicked(int vmNum);
     void setVoiceMemButtonsVisible(bool state);
 
+    void setPttIndOnOff(bool state);
+    void setpttIndVisible(bool visible);
+    void setCwMemIndOnOff(bool state);
+    void setCwMemIndVisible(bool visible);
+    void setVoiceMemIndOnOff(bool state);
+    void setVoiceMemIndVisible(bool visible);
 private slots:
 
     void onStdInRead(QString);
@@ -409,6 +415,8 @@ private slots:
 
 
     void onSetVoiceMessageNum(QString msgNum);
+    void onCwKeyerPbClicked();
+    void onCwKeyerStopPbClicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

@@ -157,6 +157,7 @@ private:
     void loadAvailComportsToTab(int tabNum);
     void updateAvailRadiosToVersion2(QSettings &settings);
     void isAnySupportedBandsAvail(QString &supRadNames);
+    void loadAvailPttComportsToTab(int tabNum);
 };
 
 #endif // SETUPDIALOG_H

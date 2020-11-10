@@ -165,6 +165,12 @@ public:
 
     bool isAnySupportBandChecked();
 
+    void setPttControlsVisible(bool visible);
+
+    void setPTTCheckBox(bool checked);
+    void loadAvailPttComports();
+    void setPttComport(QString p);
+    void setPttTypeRadioButtons(int type);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
@@ -215,6 +221,15 @@ private slots:
 
     void onAdvancedCommsSelected(bool selected);
     void onStartMinosRigCtldChkBox(bool);
+
+
+    void onPttEnableSelected(bool checked);
+    void onPttCatEnableClicked(bool checked);
+    void onPttDtrEnableClicked(bool checked);
+    void onPttRtsEnableClicked(bool checked);
+    void onPttComportSelActivated(int idx);
+
+
 private:
 
 
@@ -260,6 +275,7 @@ private:
 
     void rigCtldNetworkAddBoxVisible(bool visible);
     void rigCtldPortBoxVisible(bool visible);
+
 
 
 };

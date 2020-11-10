@@ -79,6 +79,13 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData, cons
     connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
     connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
 
+
+    connect(ui->pttEnable, SIGNAL(clicked(bool)), this, SLOT(onPttEnableSelected(bool)));
+    connect(ui->pttCatEnable, SIGNAL(clicked(bool)), this, SLOT(onPttCatEnableClicked(bool)));
+    connect(ui->pttDTREnable, SIGNAL(clicked(bool)), this, SLOT(onPttDtrEnableClicked(bool)));
+    connect(ui->pttRTSEnable, SIGNAL(clicked(bool)), this, SLOT(onPttRtsEnableClicked(bool)));
+    connect(ui->pttComportSel, SIGNAL(activated(int)), this, SLOT(onPttComportSelActivated(int)));
+
     connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
     connect(ui->startMinosRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(onStartMinosRigCtldChkBox(bool)));
     connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
@@ -1690,3 +1697,122 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
 
 
 }
+
+
+void RigSetupForm::setPttControlsVisible(bool visible)
+{
+    ui->pttComportLbl->setVisible(visible);
+    ui->pttCatEnable->setVisible(visible);
+    ui->pttDTREnable->setVisible(visible);
+    ui->pttRTSEnable->setVisible(visible);
+    ui->pttGroupBox->setVisible(visible);
+}
+
+void RigSetupForm::setPTTCheckBox(bool checked)
+{
+    ui->pttEnable->setChecked(checked);
+}
+
+void RigSetupForm::loadAvailPttComports()
+{
+    fillPortsInfo(ui->pttComportSel);
+}
+
+void RigSetupForm::setPttComport(QString p)
+{
+    ui->pttComportSel->setCurrentIndex(ui->pttComportSel->findText(p));
+}
+
+void RigSetupForm::setPttTypeRadioButtons(int type)
+{
+    serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(type);
+
+    if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
+    {
+        ui->pttCatEnable->setChecked(true);
+    }
+    else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
+    {
+        ui->pttRTSEnable->setChecked(true);
+    }
+    else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
+    {
+        ui->pttDTREnable->setChecked(true);
+    }
+}
+
+void RigSetupForm::onPttEnableSelected(bool /*checked*/)
+{
+
+    bool checked = ui->pttEnable->isChecked();
+    if (radioData->enablePTT != checked)
+    {
+        radioData->enablePTT = checked;
+        setPttControlsVisible(checked);
+
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
+{
+    if (ui->pttCatEnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_CAT))
+    {
+        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT);
+    }
+
+    if (ui->pttCatEnable->isChecked())
+    {
+        ui->pttComportSel->setDisabled(true);
+    }
+
+
+    radioValueChanged = true;
+
+}
+
+void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
+{
+    if (ui->pttDTREnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_DTR))
+    {
+        radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_DTR);
+    }
+
+    if (ui->pttDTREnable->isChecked())
+    {
+        ui->pttComportSel->setDisabled(false);
+    }
+
+    radioValueChanged = true;
+}
+
+
+void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
+{
+    if (ui->pttRTSEnable->isChecked() && (static_cast<serialCommonData::PTTMethodCodes>(radioData->pttType) != serialCommonData::PTTMethodCodes::PTT_METHOD_RTS))
+    {
+            radioData->pttType = static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_RTS);
+    }
+
+    if (ui->pttRTSEnable->isChecked())
+    {
+        ui->pttComportSel->setDisabled(false);
+    }
+
+    radioValueChanged = true;
+}
+
+void RigSetupForm::onPttComportSelActivated(int /*idx*/)
+{
+    if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
+    {
+        radioData->pttSerialPort = ui->pttComportSel->currentText();
+        radioValueChanged = true;
+    }
+}
+
+
+
+
+
