@@ -1567,9 +1567,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
 
          int tno = ui->ContestPageControl->addTab(f, baseFName);
 
-         // next line just keeps selecting "this" contest while loading a session
-         // we always "select contest" later anyway
-         //ui->ContestPageControl->setCurrentWidget(ui->ContestPageControl->widget(tno));
+         ui->ContestPageControl->setCurrentWidget(ui->ContestPageControl->widget(tno));
          ui->ContestPageControl->setTabToolTip(tno, contest->cfileName);
 
          f->columnsChanged = true;  // also causes show QSOs
