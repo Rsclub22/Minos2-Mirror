@@ -1506,10 +1506,20 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
 }
 BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
 {
-   MinosContestLoadDialog progress(this);
+//   MinosContestLoadDialog progress(this);
   //create and show a progress splash screen
-   progress.setLoadMessage(fname, newfile, false);
-   progress.doShow();
+//   progress.setLoadMessage(fname, newfile, false);
+//   progress.doShow();
+
+    QString m;
+
+    m += newfile?tr("Creating "):tr("Loading ");
+
+    m += tr("Contest file ");
+    m += fname;
+
+    sblabel0->setText( m );
+    repaint();
 
    static int namegen = 0;
    // openFile ends up calling ContestLog::initialise which then
@@ -1583,7 +1593,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
 
-   progress.hide();
+//   progress.hide();
 
    return contest;
 }
@@ -2016,13 +2026,23 @@ void TLogContainer::preloadLists( )
 void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slotno, bool preload )
 {
 
-    MinosContestLoadDialog progress(this);
+//    MinosContestLoadDialog progress(this);
    //create and show a progress splash screen
-    progress.setLoadMessage(fname, false, true);
-    progress.doShow();
+//    progress.setLoadMessage(fname, false, true);
+//    progress.doShow();
 
     // openFile ends up calling ContactList::initialise which then
     // calls TContestApp::insertList
+
+    QString m;
+
+    m += tr("Loading ");
+
+    m += tr("List file ");
+    m += fname;
+
+    sblabel0->setText( m );
+    repaint();
 
     ContactList * list = TContestApp::getContestApp() ->openListFile( fname, slotno );
     if ( list && !preload )
@@ -2037,7 +2057,7 @@ void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slot
 
     TContestApp::getContestApp() ->writeListsList();
     enableActions();
-    progress.hide();
+//    progress.hide();
 }
 
 void TLogContainer::ListOpenActionExecute()
