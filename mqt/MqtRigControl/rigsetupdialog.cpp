@@ -261,18 +261,31 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     // serial ptt comport loaded with other comports
     radioTab[tabNum]->setPttTypeRadioButtons(radioTab[tabNum]->getRadioData()->pttType);
 
-    if (radioTab[tabNum]->getRadioData()->enablePTT)
-    {
-        radioTab[tabNum]->setPttControlsVisible(true);
-        radioTab[tabNum]->setPTTCheckBox(true);
 
+    if (rigCap.supportGetPtt && rigCap.supportSetPtt)
+    {
+        radioTab[tabNum]->setPTTCheckBoxDisabled(false);
+        if (radioTab[tabNum]->getRadioData()->enablePTT)
+        {
+            radioTab[tabNum]->setPttControlsVisible(true);
+            radioTab[tabNum]->setPTTCheckBoxChecked(true);
+
+        }
+        else
+        {
+           radioTab[tabNum]->setPttControlsVisible(false);
+           radioTab[tabNum]->setPTTCheckBoxChecked(false);
+
+        }
     }
     else
     {
-       radioTab[tabNum]->setPttControlsVisible(false);
-       radioTab[tabNum]->setPTTCheckBox(false);
-
+        radioTab[tabNum]->setPttControlsVisible(false);
+        radioTab[tabNum]->setPTTCheckBoxChecked(false);
+        radioTab[tabNum]->setPTTCheckBoxDisabled(true);
     }
+
+
 
 
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);

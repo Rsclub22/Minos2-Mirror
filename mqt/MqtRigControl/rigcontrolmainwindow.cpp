@@ -774,20 +774,70 @@ void RigControlMainWindow::upDateRadio()
 
                 }
 
-                // does library support voice memories
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory
+                        || rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportCwMemory)
+                {
+                    setMemoryGroupVisible(true);
+                }
+                else
+                {
+                    setMemoryGroupVisible(false);
+                }
+
+                // does radio support voice memories
                 if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory)
                 {
-                    if (radio->supportVoiceMemory())
-                    {
-
-                    }
+                    setVoiceMemIndVisible(true);
+                    setVoiceMemIndOnOff(true);
 
                 }
                 else
                 {
-                    //setVoiceMemButtonsVisible(false);
+                    setVoiceMemIndVisible(false);
+                    setVoiceMemIndOnOff(false);
+
                 }
 
+
+
+                // does radio support CW memories
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportCwMemory)
+                {
+                    setCwMemIndVisible(true);
+                    setCwMemIndOnOff(true);
+
+                }
+                else
+                {
+                    setCwMemIndVisible(false);
+                    setCwMemIndOnOff(false);
+
+                }
+
+
+                // does radio support PTT
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportGetPtt
+                        && rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSetPtt)
+                {
+                    setPttGroupItemsVisible(true);
+
+                    if (setupRadio->currentRadio.enablePTT)
+                    {
+                      setPttIndOnOff(true);
+                    }
+                    else
+                    {
+                        setPttIndOnOff(false);
+                    }
+
+
+                }
+                else
+                {
+                    setPttGroupItemsVisible(false);
+                    setPttIndOnOff(false);
+
+                }
 
                 if (appName.count() > 0)
                 {
@@ -3002,6 +3052,7 @@ void RigControlMainWindow::setRitGetSetFreqIndicatorVisible(bool state)
     ui->SetRitFreqInd->setVisible(state);
     ui->GetRitFreqInd->setVisible(state);
     ui->ritEnableChk->setVisible(state);
+    ui->ritGroupBox->setVisible(state);
 }
 
 
@@ -4237,6 +4288,19 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 
 }
 
+
+void RigControlMainWindow::setMemoryGroupVisible(bool visible)
+{
+    ui->memGroupBox->setVisible(visible);
+
+}
+
+void RigControlMainWindow::setPttGroupItemsVisible(bool visible)
+{
+    ui->pttGroupBox->setVisible(visible);
+    setpttIndVisible(visible);
+
+}
 
 void RigControlMainWindow::setVoiceMemIndVisible(bool visible)
 {

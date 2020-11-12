@@ -167,10 +167,11 @@ public:
 
     void setPttControlsVisible(bool visible);
 
-    void setPTTCheckBox(bool checked);
+    void setPTTCheckBoxChecked(bool checked);
     void loadAvailPttComports();
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
+    void setPTTCheckBoxDisabled(bool disabled);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();

@@ -345,15 +345,18 @@ private:
     void showRitTestControl(bool state);
 
 
-    void onVoiceMemClicked(int vmNum);
-    void setVoiceMemButtonsVisible(bool state);
 
     void setPttIndOnOff(bool state);
     void setpttIndVisible(bool visible);
     void setCwMemIndOnOff(bool state);
-    void setCwMemIndVisible(bool visible);
+
     void setVoiceMemIndOnOff(bool state);
+
+
+    void setPttGroupItemsVisible(bool visible);
+    void setMemoryGroupVisible(bool visible);
     void setVoiceMemIndVisible(bool visible);
+    void setCwMemIndVisible(bool visible);
 private slots:
 
     void onStdInRead(QString);

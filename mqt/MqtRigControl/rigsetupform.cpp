@@ -1708,9 +1708,14 @@ void RigSetupForm::setPttControlsVisible(bool visible)
     ui->pttGroupBox->setVisible(visible);
 }
 
-void RigSetupForm::setPTTCheckBox(bool checked)
+void RigSetupForm::setPTTCheckBoxChecked(bool checked)
 {
     ui->pttEnable->setChecked(checked);
+}
+
+void RigSetupForm::setPTTCheckBoxDisabled(bool disabled)
+{
+    ui->pttEnable->setDisabled(disabled);
 }
 
 void RigSetupForm::loadAvailPttComports()

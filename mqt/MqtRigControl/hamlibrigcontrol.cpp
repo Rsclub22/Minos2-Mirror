@@ -125,9 +125,13 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         //bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
-        //bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
-        //bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+
+        bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
+
+        bool supportCwMem = capsList[i]->send_morse ? true:false;
 
         //bool supportVolume = false;
 
@@ -156,13 +160,13 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,        // support set rit state
                                            true,       // support get rit max Khz
                                            true,       // support s-meter
-                                           false,       // support get Ptt
-                                           false,       // support set Ptt
+                                           supportGetPtt,       // support get Ptt
+                                           supportSetPtt,       // support set Ptt
                                            true,       // support volume
                                            true,        // support antenna switch
                                            true,            // support RigCtld
-                                           true,        // support Voice Memory
-                                           true,     // support Cw Memory
+                                           supportVoiceMem,        // support Voice Memory
+                                           supportCwMem,     // support Cw Memory
                                            true);    // support poll data
     }
 
