@@ -126,6 +126,11 @@ bool BandList::parseFile (const QString &fname )
     TiXmlBase::SetCondenseWhiteSpace ( false );
     TiXmlDocument xdoc;
     xdoc.Parse ( buffer2.toStdString().c_str() );
+    if ( xdoc.Error())
+    {
+        trace(QString(fname + " parse failed; ") + xdoc.ErrorDesc());
+        return false;
+    }
     TiXmlElement *tix = xdoc.RootElement();
     if ( !tix || !checkElementName ( tix, "Bandlist" ) )
     {
