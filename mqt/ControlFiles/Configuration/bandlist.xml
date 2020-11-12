@@ -8,7 +8,9 @@
 </Band>
 <Band type='HF'    flow='3500'   fhigh='3800'   unit='K' wlen='80m'    UK='3.5 MHz'  Reg1Test=''        ADIF='80m'    Cabrillo='3500'  Colour='green'>
     <Mode type='CW' flow='3500' fclow1='3510' fchigh1='3560' fhigh='3570'/>
-    <Mode type='LSB' flow='3600' fclow1='3600' fchigh1='3650' fclow2='3700' fchigh2='3800' fhigh='3800'/>
+    <Mode type='LSB' flow='3600' fclow1='3600' fchigh1='3800' fhigh='3800'>
+    <Exclude flow='3650' fhigh='3700'/>
+    </Mode>
 </Band>
 <Band type='HF'    flow='7000'   fhigh='7200'   unit='K' wlen='40m'    UK='7 MHz'    Reg1Test=''        ADIF='40m'    Cabrillo='7000'  Colour='blue'>
     <Mode type='CW' flow='7000' fclow1='7000' fchigh1='7040' fhigh='7040'/>
