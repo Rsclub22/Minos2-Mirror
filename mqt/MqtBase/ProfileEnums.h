@@ -101,7 +101,8 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpShowWorked, edpShowUnworked,
                      edpShowOperators,
                      edpEditor, edpStatisticsPeriod1, edpStatisticsPeriod2,
-                     edpCurrentLayout,
+                     edpDefaultLayout,
+                     edpProtectedLayout,
                      edpListCompression,
                      edpQSOFieldFont
                     };

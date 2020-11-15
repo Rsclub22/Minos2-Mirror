@@ -196,7 +196,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
         if (rigMemFrame)
             rigMemFrame->setContest(contest);
 
-        if (contest)
+        if (contest && !contest->isReadOnly())
         {
             if (stackInstance < STACKITEMS)
             {

@@ -242,7 +242,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    showUnworked.setInitialValue(bTemp);
 
    QString temp;
-   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
+   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );
    screenLayout.setInitialValue(temp);
 
    temp.clear(); // Initial value now comes from the screen config

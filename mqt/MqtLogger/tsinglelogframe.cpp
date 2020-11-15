@@ -684,22 +684,27 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
 void TSingleLogFrame::buildScreenLayout()
 {
     ScreenConfigFile scf;
-    scf.loadFile(false, this);
+    scf.loadFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    QString curConfigName = ct->screenLayout.getValue();
+
+    QString curConfigName;
+    if (ct->isReadOnly())
+    {
+        curConfigName = defaultProtectedLayoutName();
+    }
+    else
+    {
+        curConfigName = ct->screenLayout.getValue();
+    }
     traceMsg("buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
         ct->screenLayout.setValue(curConfigName);
-        if ( !scf.configs.contains(curConfigName))
-        {
-            //we need to get the built in default
-            scf.loadFile(true, this);
-        }
     }
     curScreenLayout = curConfigName;
+
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;

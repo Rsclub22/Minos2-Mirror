@@ -15,6 +15,7 @@
 #include "bandmapcommon.h"
 //----------------------------------------------------------------------------
 extern QString defaultLayoutName();
+extern QString defaultProtectedLayoutName();
 
 class SettingsBundle;
 class ProfileEntry

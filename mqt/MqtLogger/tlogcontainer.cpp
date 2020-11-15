@@ -1683,10 +1683,10 @@ void TLogContainer::updateLayoutsMenu()
     {
         QString currentLayout = f->getCurScreenLayout();
         QString defaultLayout;
-        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultLayout );
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, defaultLayout );
 
         ScreenConfigFile scf;
-        scf.loadFile(false, this);
+        scf.loadFile(this);
         int j = 0;
         for(auto const &c: scf.configs )
         {

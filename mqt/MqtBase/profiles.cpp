@@ -17,6 +17,10 @@ QString defaultLayoutName()
 {
     return QCoreApplication::translate("Default Screen Config", "default");
 }
+QString defaultProtectedLayoutName()
+{
+    return QCoreApplication::translate("Default Protected Screen Config", "protected");
+}
 QString defaultSessionName()
 {
     return QCoreApplication::translate("Default Log Session", "Default Session");
@@ -168,7 +172,9 @@ BundleFile::BundleFile( PROFILES p )
 
         {
             QByteArray temp = defaultLayoutName().toUtf8();
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpDefaultLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
+            temp = defaultProtectedLayoutName().toUtf8();
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpProtectedLayout, "ProtectedLayout", temp.constData(), temp, "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );

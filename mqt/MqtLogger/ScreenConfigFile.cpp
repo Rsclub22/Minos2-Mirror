@@ -18,6 +18,21 @@
 [{"type": "This"},{"type": "Other"},{"type": "Arch"}]
 ]}]
 */
+/*
+[{"name" "protected",
+"rows":[[
+[{"rows": [
+[{"type": "Log List"}],
+[{"type": "QSO Edit"}],
+[{"type": "This Contest Match"}]
+],"type": "HSplit"},{
+"rows": [
+[{"auxtype": "Stats","type": "Auxiliary"}],
+[{"auxtype": "Locator Map","type": "Auxiliary"}],
+[{"auxtype": "Clock","type": "Auxiliary"}]
+],"type": "HSplit"}]
+]}
+*/
 static QString defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
         "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
@@ -25,6 +40,20 @@ static QString defaultConfig = "[{\"name\": \"%1\","
         "[{\"type\": \"%8\"},{\"type\": \"%9\"}],"
         "[{\"type\": \"%10\"},{\"type\": \"%11\"},{\"type\": \"%12\"}]"
         "]}]";
+
+static QString protectedConfig  = "[{\"name\" \"%1\","
+                               "\"rows\":[["
+                               "[{\"rows\": ["
+                               "[{\"type\": \"%2\"}],"
+                               "[{\"type\": \"%3\"}],"
+                               "[{\"type\": \"%4\"}]"
+                               "],\"type\": \"HSplit\"},{"
+                               "\"rows\": ["
+                               "[{\"auxtype\": \"%5\",\"type\": \"%6\"}],"
+                               "[{\"auxtype\": \"%7\",\"type\": \"%8\"}],"
+                               "[{\"auxtype\": \"%9\",\"type\": \"%10\"}]"
+                               "],\"type\": \"HSplit\"}]"
+                               "]}";
 
 ScreenConfigFile::ScreenConfigFile()
 {
@@ -34,9 +63,9 @@ ScreenConfigFile::~ScreenConfigFile()
 {
 
 }
-void ScreenConfigFile::loadFile(bool getDefault, QWidget *parent)
+void ScreenConfigFile::loadFile(QWidget *parent)
 {
-    readFile("./Configuration/ScreenConfigs.json", getDefault, parent);
+    readFile("./Configuration/ScreenConfigs.json", parent);
 }
 bool ScreenConfigFile::dumpFile()
 {
@@ -74,44 +103,59 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
         elerows.push_back(scrow);
     }
 }
-void ScreenConfigFile::readFile(QString f, bool getDefault, QWidget *parent)
+void ScreenConfigFile::readFile(QString f, QWidget *parent)
 {
     QString s;
+
+    configs.clear();
+
+    trace("Using default configuration");
+    s = defaultConfig
+            .arg(defaultLayoutName())
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctRunButtons))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctRotControl))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctRotPresets))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctNextQSODetails))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctOtherMatch))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctArchiveMatch));
+    parseConfigString(s);
+
+    trace("Using default protectected configuration");
+    s = protectedConfig
+            .arg(defaultProtectedLayoutName())
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
+
+            .arg(StackedInfoFrame::getRawAuxTypeString(aeStats))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
+            .arg(StackedInfoFrame::getRawAuxTypeString(aeLocatorMap))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
+
+            .arg(StackedInfoFrame::getRawAuxTypeString(aeClock))
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux));
+    parseConfigString(s);
+
     bool retval = false;
-    if (!getDefault)
+
+    QFile jf(f);
+    if (jf.open(QIODevice::ReadOnly))
     {
-        QFile jf(f);
-        if (jf.open(QIODevice::ReadOnly))
+        s = jf.readAll();
+        retval = parseConfigString(s);
+        if (retval == false)
         {
-            s = jf.readAll();
-            retval = parseConfigString(s);
-            if (retval == false)
-            {
-                mShowMessage(tr("Invalid or missing screen configurations; using built in defaults"), parent);
-            }
-        }
-        else
-        {
-            trace("Failed to open " + f );
+            mShowMessage(tr("Invalid or missing screen configurations; using built in defaults"), parent);
         }
     }
-    if (retval == false)
+    else
     {
-        trace("Using default configuration");
-        s = defaultConfig
-                .arg(defaultLayoutName())
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctRigControl))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctRunButtons))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctRotControl))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctRotPresets))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctNextQSODetails))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctOtherMatch))
-                .arg(ScreenConfigElement::getRawScreenTypeString(sctArchiveMatch));
-        parseConfigString(s);
+        trace("Failed to open " + f );
     }
 }
 bool ScreenConfigFile::parseConfigString(QString s)
@@ -122,7 +166,6 @@ bool ScreenConfigFile::parseConfigString(QString s)
     {
         if( json.isArray())
         {
-            configs.clear();
             QJsonArray namearray = json.array();
             for (auto const &n: namearray)
             {
