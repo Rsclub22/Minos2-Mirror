@@ -19,7 +19,7 @@
 ]}]
 */
 /*
-[{"name" "protected",
+[{"name": "protected",
 "rows":[[
 [{"rows": [
 [{"type": "Log List"}],
@@ -41,19 +41,12 @@ static QString defaultConfig = "[{\"name\": \"%1\","
         "[{\"type\": \"%10\"},{\"type\": \"%11\"},{\"type\": \"%12\"}]"
         "]}]";
 
-static QString protectedConfig  = "[{\"name\" \"%1\","
-                               "\"rows\":[["
-                               "[{\"rows\": ["
+static QString protectedConfig  = "[{\"name\": \"%1\","
+                               "\"rows\":["
                                "[{\"type\": \"%2\"}],"
                                "[{\"type\": \"%3\"}],"
                                "[{\"type\": \"%4\"}]"
-                               "],\"type\": \"HSplit\"},{"
-                               "\"rows\": ["
-                               "[{\"auxtype\": \"%5\",\"type\": \"%6\"}],"
-                               "[{\"auxtype\": \"%7\",\"type\": \"%8\"}],"
-                               "[{\"auxtype\": \"%9\",\"type\": \"%10\"}]"
-                               "],\"type\": \"HSplit\"}]"
-                               "]}";
+                               "]}]";
 
 ScreenConfigFile::ScreenConfigFile()
 {
@@ -130,15 +123,7 @@ void ScreenConfigFile::readFile(QString f, QWidget *parent)
             .arg(defaultProtectedLayoutName())
             .arg(ScreenConfigElement::getRawScreenTypeString(sctLog))
             .arg(ScreenConfigElement::getRawScreenTypeString(sctQSOEdit))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch))
-
-            .arg(StackedInfoFrame::getRawAuxTypeString(aeStats))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
-            .arg(StackedInfoFrame::getRawAuxTypeString(aeLocatorMap))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux))
-
-            .arg(StackedInfoFrame::getRawAuxTypeString(aeClock))
-            .arg(ScreenConfigElement::getRawScreenTypeString(sctAux));
+            .arg(ScreenConfigElement::getRawScreenTypeString(sctThisMatch));
     parseConfigString(s);
 
     bool retval = false;
