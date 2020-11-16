@@ -67,7 +67,7 @@
 <context>
     <name>Aircraft</name>
     <message>
-        <location filename="../airscoutlink.h" line="64"/>
+        <location filename="../airscoutlink.h" line="70"/>
         <source>Aircraft %1	category %2	distance %3	potential %4	minutes %5</source>
         <translation>Avion %1 catégorie %2 distance %3 potentiel %4 minutes %5</translation>
     </message>
@@ -392,47 +392,47 @@ l&apos;indicatif sélectionné</translation>
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="339"/>
+        <location filename="../kstcallgridmodel.cpp" line="338"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="342"/>
+        <location filename="../kstcallgridmodel.cpp" line="341"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="345"/>
+        <location filename="../kstcallgridmodel.cpp" line="344"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="348"/>
+        <location filename="../kstcallgridmodel.cpp" line="347"/>
         <source>Dist</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="351"/>
+        <location filename="../kstcallgridmodel.cpp" line="350"/>
         <source>Brg</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="354"/>
+        <location filename="../kstcallgridmodel.cpp" line="353"/>
         <source>AS</source>
         <translation>AS</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="357"/>
+        <location filename="../kstcallgridmodel.cpp" line="356"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="360"/>
+        <location filename="../kstcallgridmodel.cpp" line="359"/>
         <source>Prefix</source>
         <translation>Préfixe</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="363"/>
+        <location filename="../kstcallgridmodel.cpp" line="362"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
@@ -440,37 +440,37 @@ l&apos;indicatif sélectionné</translation>
 <context>
     <name>KstMessageGridModel</name>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="109"/>
+        <location filename="../kstmessagegridmodel.cpp" line="108"/>
         <source>Unknown</source>
         <translation>Inconnue</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="156"/>
+        <location filename="../kstmessagegridmodel.cpp" line="155"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="158"/>
+        <location filename="../kstmessagegridmodel.cpp" line="157"/>
         <source>Time(Z)</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="161"/>
+        <location filename="../kstmessagegridmodel.cpp" line="160"/>
         <source>Call</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="164"/>
+        <location filename="../kstmessagegridmodel.cpp" line="163"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="167"/>
+        <location filename="../kstmessagegridmodel.cpp" line="166"/>
         <source>Other Call</source>
         <translation>Autre indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmessagegridmodel.cpp" line="170"/>
+        <location filename="../kstmessagegridmodel.cpp" line="169"/>
         <source>Text</source>
         <translation>Texte du message</translation>
     </message>

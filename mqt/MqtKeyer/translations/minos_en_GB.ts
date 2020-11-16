@@ -331,7 +331,7 @@ Through</source>
 <context>
     <name>commonKeyer</name>
     <message>
-        <location filename="../keyers.cpp" line="441"/>
+        <location filename="../keyers.cpp" line="437"/>
         <source>No current actions</source>
         <translation type="unfinished"></translation>
     </message>
