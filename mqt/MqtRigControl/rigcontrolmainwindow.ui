@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>945</width>
-    <height>309</height>
+    <width>988</width>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -791,7 +791,7 @@
              <item>
               <widget class="QGroupBox" name="memGroupBox">
                <property name="title">
-                <string>Memory</string>
+                <string>Keyer</string>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_14">
                 <item>
@@ -871,27 +871,58 @@
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout_24">
                 <item>
-                 <widget class="QLabel" name="pttLbl">
-                  <property name="text">
-                   <string>PTT</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pttInd">
-                  <property name="enabled">
-                   <bool>false</bool>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>16</width>
-                    <height>16</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_26">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_27">
+                    <item>
+                     <widget class="QLabel" name="pttLbl">
+                      <property name="text">
+                       <string>PTT</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pttInd">
+                      <property name="enabled">
+                       <bool>false</bool>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>16</width>
+                        <height>16</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="txRxLbl">
+                    <property name="text">
+                     <string>TX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="txRxInd">
+                    <property name="enabled">
+                     <bool>false</bool>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16</width>
+                      <height>16</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
                 </item>
                 <item>
                  <spacer name="horizontalSpacer_9">
@@ -998,7 +1029,7 @@ Active</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>945</width>
+     <width>988</width>
      <height>21</height>
     </rect>
    </property>

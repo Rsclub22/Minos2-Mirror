@@ -122,6 +122,7 @@ private:
     bool logRitOn;
     bool supVolume;     // radio supports volume
     bool supSignalStrength;
+    bool supPtt;
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<BandDetail> bands;
@@ -147,6 +148,7 @@ private:
     bool ritKHzFlag;
     int curVol;
     int curSignalStrength = 0;
+    bool curPttStatus;
 
     // rit functions supported by current radio
 
@@ -357,6 +359,7 @@ private:
     void setMemoryGroupVisible(bool visible);
     void setVoiceMemIndVisible(bool visible);
     void setCwMemIndVisible(bool visible);
+    void setTxRxIndOnOff(bool state);
 private slots:
 
     void onStdInRead(QString);

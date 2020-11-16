@@ -50,12 +50,14 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    logRitOn(false),
    supVolume(false),
    supSignalStrength(false),
+   supPtt(false),
    curVfoFrq(0.0),
    curTransVertFrq(0.0),
    mgmModeFlag(false),
    rRitFreq(0),
    curVol(0),
    curSignalStrength(0),
+   curPttStatus(false),
    radioSupGetRit(false),
    radioSupSetRit(false),
    radioSupGetRitState(false),
@@ -820,7 +822,7 @@ void RigControlMainWindow::upDateRadio()
                         && rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSetPtt)
                 {
                     setPttGroupItemsVisible(true);
-
+                    supPtt = true;
                     if (setupRadio->currentRadio.enablePTT)
                     {
                       setPttIndOnOff(true);
@@ -830,10 +832,13 @@ void RigControlMainWindow::upDateRadio()
                         setPttIndOnOff(false);
                     }
 
+                    setTxRxIndOnOff(false);
+
 
                 }
                 else
                 {
+                    supPtt = false;
                     setPttGroupItemsVisible(false);
                     setPttIndOnOff(false);
 
@@ -1733,21 +1738,27 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     }
 
-/*
-    if (radioCommsOK)
+
+    if (radioCommsOK && supPtt)
     {
 
-        retCode = getTXStatus(RIG_VFO_CURR);
+        retCode = getTXStatus(curVfo);
         if (retCode < 0)
         {
             // error
             logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
-            hamlibError(retCode, "Request TX Status");
+            radioError(retCode, "Request TX Status");
+        }
+        else
+        {
+
+            setTxRxIndOnOff(curPttStatus);
+
         }
 
     }
 
-*/
+
     if (pubNow)
     {
        msg->rigCache.publish();
@@ -3516,26 +3527,18 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
 /********************* PTT ****************************************/
 
-// not implemented yet..
-/*
-int RigControlMainWindow::getTXStatus(vfo_t vfo)
+
+
+int RigControlMainWindow::getTXStatus(VFO vfo)
 {
 
-    ptt_t pttStatus;
-    int retCode = radio->getPttStatus(vfo, &pttStatus);
-    if (retCode == rigErrorCodes::RIG_OK)
-    {
-       if (pttStatus == RIG_PTT_ON)
-       {
-           // turn on indicator
-
-       }
-    }
+   curPttStatus;
+   int retCode = radio->getPttStatus(vfo, curPttStatus);
 
    return retCode;
 
 }
-*/
+
 
 bool RigControlMainWindow::readTestStandAloneFlag()
 {
@@ -4343,6 +4346,8 @@ void RigControlMainWindow::setpttIndVisible(bool visible)
 {
     ui->pttInd->setVisible(visible);
     ui->pttLbl ->setVisible(visible);
+    ui->txRxInd->setVisible(visible);
+    ui->txRxLbl->setVisible(visible);
 }
 
 void RigControlMainWindow::setPttIndOnOff(bool state)
@@ -4354,6 +4359,18 @@ void RigControlMainWindow::setPttIndOnOff(bool state)
     else
     {
         ui->pttInd->setStyleSheet(PTT_INDICATOR_OFF);
+    }
+}
+
+void RigControlMainWindow::setTxRxIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->txRxInd->setStyleSheet(TX_RX_INDICATOR_ON);
+    }
+    else
+    {
+        ui->txRxInd->setStyleSheet(TX_RX_INDICATOR_OFF);
     }
 }
 
