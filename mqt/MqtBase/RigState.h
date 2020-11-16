@@ -27,6 +27,7 @@ class RigState: public PubSubValue
     MinosItem<int> _logRitFreq;
     MinosItem<bool> _ritOnOffStatus;
     MinosItem<bool> _ritRadioStatus;
+    MinosItem<bool> _pttState;
 
 public:
     RigState();
@@ -54,6 +55,7 @@ public:
     MinosItem<int> logRitFreq() const;
     MinosItem<int> radioVolLevel() const;
     MinosItem<int> logVolLevel() const;
+    MinosItem<bool> pttState() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setRadioFreq(double freq);
@@ -68,6 +70,7 @@ public:
     void setLogRitFreq(int freq);
     void setRitOnOffStatus(const bool status);
     void setRitRadioStatus(const bool status);
+    void setPttState(const bool state);
 
     QStringList getSelectedLoggers();
 };

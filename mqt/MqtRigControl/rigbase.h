@@ -87,6 +87,9 @@ public:
     virtual int waitMorse(VFO vfo) = 0;
     virtual bool supportCwMemory() = 0;
 
+    virtual int getPttStatus(VFO vfo, bool& state) = 0;
+    virtual int setPtt(VFO vfo, bool state) = 0;
+
 
 
     //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;

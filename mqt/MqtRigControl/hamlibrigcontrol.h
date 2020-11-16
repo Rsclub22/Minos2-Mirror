@@ -113,7 +113,8 @@ public:
     QString convertVfoQStr(vfo_t vfo);
 
 
-
+    int getPttStatus(VFO vfo, bool &state) override;
+    int setPtt(VFO vfo, bool state) override;
 
 
 private:
@@ -161,6 +162,7 @@ private:
 
     VFO convert_Vfo_t_To_VFO(vfo_t vfo);
     vfo_t convert_VFO_to_vfo_t(VFO vfo);
+
 
 
 };

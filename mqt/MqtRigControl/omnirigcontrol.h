@@ -97,6 +97,10 @@ public:
     int waitMorse(VFO vfo) override;
     bool supportCwMemory() override;
 
+    int getPttStatus(VFO vfo, bool &state) override;
+    int setPtt(VFO vfo, bool state) override;
+
+
 
 
 #if defined (WIN32)

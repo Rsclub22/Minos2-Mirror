@@ -14,6 +14,9 @@ RigDetails::RigDetails()
     _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
     _ritMaxKHzFreq.setInitialValue(MAX_RITFREQ);
+    _pttEnabled.setInitialValue(false);
+    _voiceMemAvail.setInitialValue(false);
+    _cwMemAvail.setInitialValue(false);
 
 
 }
@@ -35,7 +38,10 @@ bool RigDetails::isDirty() const
             _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
             _ritEnableStatus.isDirty() ||
-            _ritMaxKHzFreq.isDirty();
+            _ritMaxKHzFreq.isDirty() ||
+            _pttEnabled.isDirty() ||
+            _voiceMemAvail.isDirty() ||
+            _cwMemAvail.isDirty();
 
 }
 void RigDetails::clearDirty()
@@ -49,6 +55,9 @@ void RigDetails::clearDirty()
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
     _ritMaxKHzFreq.clearDirty();
+    _pttEnabled.clearDirty();
+    _voiceMemAvail.clearDirty();
+    _cwMemAvail.clearDirty();
 
 }
 void RigDetails::setDirty()
@@ -62,6 +71,9 @@ void RigDetails::setDirty()
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
     _ritMaxKHzFreq.setDirty();
+    _pttEnabled.setDirty();
+    _voiceMemAvail.setDirty();
+    _cwMemAvail.setDirty();
 
 }
 
@@ -108,6 +120,19 @@ void RigDetails::setBandList(const QString &bandList)
     _bandList.setValue( bandList);
 }
 
+void RigDetails::setPttEnabled(bool pttEnabled)
+{
+    _pttEnabled.setValue(pttEnabled);
+}
+void RigDetails::setVoiceMemAvail(bool voiceMemAvail)
+{
+    _voiceMemAvail.setValue(voiceMemAvail);
+}
+void RigDetails::setCwMemAvail(bool cwMemAvail)
+{
+    _cwMemAvail.setValue(cwMemAvail);
+}
+
 QString RigDetails::pack() const
 {
     QJsonObject jv;
@@ -121,6 +146,9 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
     jv.insert(rpcConstants::rigRitMaxKHz, ritMaxKHzFreq().getValue());
+    jv.insert(rpcConstants::rigPttEnabled, pttEnabled().getValue());
+    jv.insert(rpcConstants::rigVoiceMemAvail, voiceMemAvail().getValue());
+    jv.insert(rpcConstants::rigCwMemAvail, cwMemAvail().getValue());
 
     QJsonDocument json(jv);
 
@@ -144,6 +172,9 @@ void RigDetails::unpack(QString s)
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
         _ritMaxKHzFreq.setValue(json.object().value(rpcConstants::rigRitMaxKHz).toInt());
+        _pttEnabled.setValue(json.object().value(rpcConstants::rigPttEnabled).toBool());
+        _voiceMemAvail.setValue(json.object().value(rpcConstants::rigVoiceMemAvail).toBool());
+        _cwMemAvail.setValue(json.object().value(rpcConstants::rigCwMemAvail).toBool());
     }
     else
     {
@@ -191,3 +222,15 @@ MinosItem<int> RigDetails::ritMaxKHzFreq() const
     return _ritMaxKHzFreq;
 }
 
+MinosItem<bool> RigDetails::pttEnabled() const
+{
+    return _pttEnabled;
+}
+MinosItem<bool> RigDetails::voiceMemAvail() const
+{
+    return _voiceMemAvail;
+}
+MinosItem<bool> RigDetails::cwMemAvail() const
+{
+    return _cwMemAvail;
+}

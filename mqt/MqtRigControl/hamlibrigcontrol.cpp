@@ -14,6 +14,7 @@
 
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
+#include "serialCommonData.h"
 #include "MTrace.h"
 
 const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
@@ -265,6 +266,38 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
+        }
+
+        if (currentRadio.enablePTT)
+        {
+
+            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
+
+            if (pttType != serialCommonData::PTT_METHOD_CAT)
+            {
+                if (!currentRadio.pttSerialPort.isEmpty())
+                {
+#if defined (WIN32)
+                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio.pttSerialPort).toLatin1 ().data ());
+#else
+                setConfigurationParameter("ptt_pathname", currentRadio.pttSerialPort.toLatin1().data());
+#endif
+
+                }
+
+                if (pttType == serialCommonData::PTT_METHOD_DTR)
+                {
+                   setConfigurationParameter("ptt_type", "DTR");
+
+                }
+                else if (pttType == serialCommonData::PTT_METHOD_RTS)
+                {
+
+                    setConfigurationParameter("ptt_type", "RTS");
+                }
+
+
+            }
         }
 
 
@@ -763,20 +796,42 @@ int HamlibRigControl::getMaxRitFreq(int rigNumber)
 /*************** PTT Control  ********************************/
 
 
-/*
-int  RigControl::getPttStatus(vfo_t vfo, ptt_t *pttStatus)
+int  HamlibRigControl::getPttStatus(VFO vfo, bool& state)
 {
-    return rig_get_ptt	(my_rig, vfo, pttStatus);
+    ptt_t pttStatus;
+    int retCode = rig_get_ptt(my_rig, hamlibVfoNames[vfo], &pttStatus);
+
+    if (pttStatus == RIG_PTT_ON )
+    {
+        state = true;
+    }
+    else if (pttStatus == RIG_PTT_OFF)
+    {
+        state = false;
+    }
+
+    return retCode;
 }
 
 
-int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
+int HamlibRigControl::setPtt(VFO vfo, bool state)
 {
-    return rig_set_ptt(my_rig, vfo, ptt);
+
+    ptt_t pttState;
+    if (state)
+    {
+        pttState = RIG_PTT_ON;
+    }
+    else
+    {
+        pttState = RIG_PTT_OFF;
+    }
+    int retcode = rig_set_ptt(my_rig, hamlibVfoNames[vfo], pttState);
+
 }
 
 
-*/
+
 
 
 /*************** Passband ********************************/

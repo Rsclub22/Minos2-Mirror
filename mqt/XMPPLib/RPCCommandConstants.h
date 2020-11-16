@@ -160,6 +160,10 @@ static const QString rigRitMaxKHz ("RitMaxKHz");
 static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");
+static const QString rigPttEnabled ("PttEnabled");
+static const QString rigPttState  ("PttState");
+static const QString rigVoiceMemAvail ("VoiceMemAvail");
+static const QString rigCwMemAvail ("CwMemAvail");
 
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");

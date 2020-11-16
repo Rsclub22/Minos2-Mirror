@@ -1194,6 +1194,21 @@ bool OmnirigControl::supportCwMemory()
 }
 
 
+int OmnirigControl::getPttStatus(VFO vfo, bool &state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+int OmnirigControl::setPtt(VFO vfo, bool state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+
 
 void OmnirigControl::setTraceCommsFlag(bool value)
 {

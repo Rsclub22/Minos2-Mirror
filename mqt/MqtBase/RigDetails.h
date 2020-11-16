@@ -25,6 +25,9 @@ class RigDetails: public PubSubValue
     MinosItem<bool> _ritEnableStatus;
     MinosItem<int> _ritMaxKHzFreq;
     MinosStringItem<QString> _bandList;
+    MinosItem<bool> _pttEnabled;
+    MinosItem<bool> _voiceMemAvail;
+    MinosItem<bool> _cwMemAvail;
 
 public:
     RigDetails();
@@ -48,6 +51,9 @@ public:
     MinosItem<bool> ritEnableStatus() const;
     MinosItem<int> ritMaxKHzFreq() const;
     MinosStringItem<QString> bandList() const;
+    MinosItem<bool> pttEnabled() const;
+    MinosItem<bool> voiceMemAvail() const;
+    MinosItem<bool> cwMemAvail() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setTransverterOffset(double transverterOffset);
@@ -58,6 +64,9 @@ public:
     void setBandList(const QString &bandList);
     void setRitEnableStatus(bool ritEnableStatus);
     void setRitMaxKHzFreq(int ritMaxKHz);
+    void setPttEnabled(bool pttEnabled);
+    void setVoiceMemAvail(bool voiceMemAvail);
+    void setCwMemAvail(bool cwMemAvail);
 
 
 
