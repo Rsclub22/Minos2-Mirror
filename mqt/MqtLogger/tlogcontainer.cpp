@@ -31,7 +31,6 @@
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
 #include "Clusterbandmapconfigure.h"
-#include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
 #include "MatchThread.h"
@@ -1506,11 +1505,6 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
 }
 BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
 {
-//   MinosContestLoadDialog progress(this);
-  //create and show a progress splash screen
-//   progress.setLoadMessage(fname, newfile, false);
-//   progress.doShow();
-
     QString m;
 
     m += newfile?tr("Creating "):tr("Loading ");
@@ -1593,8 +1587,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    }
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
-
-//   progress.hide();
 
    return contest;
 }
@@ -2028,12 +2020,6 @@ void TLogContainer::preloadLists( )
 
 void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slotno, bool preload )
 {
-
-//    MinosContestLoadDialog progress(this);
-   //create and show a progress splash screen
-//    progress.setLoadMessage(fname, false, true);
-//    progress.doShow();
-
     // openFile ends up calling ContactList::initialise which then
     // calls TContestApp::insertList
 
@@ -2060,7 +2046,6 @@ void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slot
 
     TContestApp::getContestApp() ->writeListsList();
     enableActions();
-//    progress.hide();
 }
 
 void TLogContainer::ListOpenActionExecute()
