@@ -72,12 +72,16 @@ public:
     void setIgnorePresetFreq(const PubSubName &name, bool ignorePresetFreqFlag);
     void setIgnorePreviousFreq(const PubSubName &name, bool ignorePreviousFreqFlag);
 
+
+    void setPttEnabled(const PubSubName &name, bool state);
+    void setPttType(const PubSubName &name, int type);
+    void setPttState(const PubSubName &name, bool state);
+
     QVector<PubSubName> getRigList()
     {
         return rigList;
     }
     
-
 
 
 };

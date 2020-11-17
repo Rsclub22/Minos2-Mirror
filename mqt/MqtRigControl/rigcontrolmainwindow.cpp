@@ -1749,12 +1749,6 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
             logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
             radioError(retCode, "Request TX Status");
         }
-        else
-        {
-
-            setTxRxIndOnOff(curPttStatus);
-
-        }
 
     }
 
@@ -3532,8 +3526,18 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 int RigControlMainWindow::getTXStatus(VFO vfo)
 {
 
-   curPttStatus;
-   int retCode = radio->getPttStatus(vfo, curPttStatus);
+   bool pttStatus = false;
+   int retCode = radio->getPttStatus(vfo, pttStatus);
+
+   if (retCode >= 0)
+   {
+       if (pttStatus != curPttStatus)
+       {
+           curPttStatus = pttStatus;
+           sendPttStateLogger();
+           setTxRxIndOnOff(curPttStatus);
+       }
+   }
 
    return retCode;
 
@@ -3904,6 +3908,37 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
         //msg->rigCache.publish();
 
     }
+}
+
+void RigControlMainWindow::sendPttTypeLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt Type = %1 to logger").arg(serialCommonData::pttMethodStr[setupRadio->currentRadio.pttType]));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttType(psname, setupRadio->currentRadio.pttType);
+    }
+}
+
+void RigControlMainWindow::sendPttEnabledLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt Enabled = %1 to logger").arg(setupRadio->currentRadio.enablePTT ? "Yes" : "No"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttEnabled(psname, setupRadio->currentRadio.enablePTT);
+    }
+
+}
+void RigControlMainWindow::sendPttStateLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt State = %1 to logger").arg(curPttStatus ? "TX" : "RX"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttState(psname, curPttStatus);
+    }
+
 }
 
 void RigControlMainWindow::onLaunchSetup()

@@ -360,6 +360,11 @@ private:
     void setVoiceMemIndVisible(bool visible);
     void setCwMemIndVisible(bool visible);
     void setTxRxIndOnOff(bool state);
+    void sendPttTypeLogger();
+    void sendPttEnabledLogger();
+    void sendPttStateLogger();
+
+
 private slots:
 
     void onStdInRead(QString);

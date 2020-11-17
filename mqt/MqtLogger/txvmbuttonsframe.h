@@ -10,6 +10,8 @@
 #include "voicekeyerfactory.h"
 #include "txvmbuttondialog.h"
 #include "txvmsetupdialog.h"
+#include "radiodetails.h"
+#include "rigcontrolframe.h"
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -89,6 +91,11 @@ public:
 
 
 
+    void setRadioLoaded();
+    void onSetPttEnabled(bool state, PubSubName psn);
+    void onSetPttType(int type, PubSubName psn);
+    void onSetPttState(bool state);
+    void setRigControl(RigControlFrame *rc);
 private:
     Ui::TxVmButtonsFrame *ui;
 
@@ -110,6 +117,13 @@ private:
 
     QList<VoiceKeyerParams> vmKeyParamList;
 
+    QMap<PubSubName, RadioDetails> allRadioDetails;
+
+    bool radioConnected;
+    bool radioLoaded;
+    bool pttState;
+    RigControlFrame *rigControl;
+
     void initTxVmButton();
 
     void setRunButtonText(const int buttonNumber, const QString name);
@@ -119,7 +133,7 @@ private:
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
 private slots:
-    void radioIsConnected(bool on);
+    void onRadioIsConnected(bool on);
     void onVoiceKeyerSelect(int idx);
     void onVmSetupClicked();
     void onRepeatPauseTimerTimeout();

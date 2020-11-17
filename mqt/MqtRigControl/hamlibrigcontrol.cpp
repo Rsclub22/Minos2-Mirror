@@ -136,18 +136,17 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         //bool supportVolume = false;
 
-        //
-       //if (capsList[i]->rig_model != RIG_MODEL_TS590SG || capsList[i]->rig_model != RIG_MODEL_TS590S) // if rig is TS590G ignore volume as it has a bug..
-        //{
-        //    if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
-        //    {
-        //        supportVolume =  true;
-        //    }
-
-        //}
 
         // support Antenna Switch
         //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+
+        /*
+        QString s = QString("RigModel = %1, GetPTT = %2, SetPTT = %3, Voice Keyer = %4, Cw Keyer = %5")
+            .arg(key).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No")
+            .arg(supportVoiceMem ? "Yes" : "No").arg(supportCwMem ? "Yes" : "No");
+
+        qDebug() << s;
+        */
 
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,

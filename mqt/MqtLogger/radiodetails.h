@@ -20,6 +20,10 @@ public:
     void setRitEnableStatus(bool status);
     bool getRitEnableStatus();
     void setBandList(QString bandList);
+    void setPttEnabled(bool state);
+    bool getPttEnabled();
+    void setPttType(int type);
+    int getPttType();
     QString getBandList();
     int getBandListCount();
 
@@ -27,6 +31,7 @@ public:
 
     void setRitMaxKHzFreq(int maxRitFreq_);
     int getRitMaxKHzFreq();
+
 
 private:
 
@@ -37,6 +42,8 @@ bool transVertStatus;
 bool volumeStatus;
 bool ritEnableStatus;
 int maxRitFreq;
+bool pttEnabled;
+int pttType;
 QString bandList;
 
 };

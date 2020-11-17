@@ -22,7 +22,12 @@ const QStringList vmButtonShortCutKeys = {
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     QGroupBox(parent),
     ui(new Ui::TxVmButtonsFrame),
-    buttonNumSent(NO_VM_BUTTON_ON)
+    buttonNumSent(NO_VM_BUTTON_ON),
+    radioConnected(false),
+    radioLoaded(false),
+    pttState(false),
+    rigControl(nullptr)
+
 {
     ui->setupUi(this);
 
@@ -365,11 +370,67 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 
 }
 
+void TxVmButtonsFrame::setRigControl(RigControlFrame *rc)
+{
+    rigControl = rc;
+
+    if (rigControl)
+    {
+        connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(onRadioIsConnected(bool)));
+
+    }
 
 
-void TxVmButtonsFrame::radioIsConnected(bool on)
+}
+
+void TxVmButtonsFrame::onRadioIsConnected(bool connected)
+{
+    radioConnected = connected;
+}
+
+void TxVmButtonsFrame::setRadioLoaded()
+{
+    radioLoaded = true;
+}
+
+
+void TxVmButtonsFrame::onSetPttEnabled(bool state, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setPttEnabled(state);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setPttEnabled (state);
+        allRadioDetails[psn] = rd;
+    }
+}
+
+void TxVmButtonsFrame::onSetPttType(int type, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setPttType(type);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setPttType(type);
+        allRadioDetails[psn] = rd;
+    }
+}
+
+
+void TxVmButtonsFrame::onSetPttState(bool state)
 {
 
+    pttState = state;
 }
 
 void TxVmButtonsFrame::saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams)

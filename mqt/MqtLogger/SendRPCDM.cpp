@@ -476,6 +476,22 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
                 }
             }
+            if (selDetail.pttEnabled().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetPttEnabled(selDetail.pttEnabled().getValue(), psn);
+                }
+            }
+            if (selDetail.pttType().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetPttType(selDetail.pttType().getValue(), psn);
+                }
+            }
 
         }
         selDetail.clearDirty();
@@ -532,6 +548,11 @@ void TSendDM::notifyRigChanges()
                     {
                         traceMsg(QString("Rig set volume =  %1, uuid = %2").arg(QString::number(selState.radioVolLevel().getValue())).arg(selStateUuid));
                         tslf->on_SetVolume(selState.radioVolLevel().getValue());
+                    }
+                    if (selState.pttState().isDirty())
+                    {
+                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx"));
+                        tslf->on_SetPttState(selState.pttState().getValue());
                     }
                     if (selState.status().isDirty())
                     {

@@ -180,6 +180,9 @@ public:
     void setPauseRigControlUpdatesFlag(bool status);
     void sendRigTxVoiceMessage(QString msgNum);
 
+    void onSetPttEnabled(bool state, PubSubName psn);
+    void onSetPttType(int type, PubSubName psn);
+    void on_SetPttState(bool state);
 private:
     BaseContestLog * contest;
     QSharedPointer<HtmlDelegate> delegate;
