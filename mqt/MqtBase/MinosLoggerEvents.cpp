@@ -97,6 +97,11 @@ void MinosLoggerEvents::SendClearContestInFrame(BaseContestLog *c)
     emit mle.clearContestInFrame(c);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendTabSandP()
+{
+    emit mle.tabSandP();
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendScreenContactChanged(ScreenContact *sct, BaseContestLog *c, QString b)
 {
     emit mle.ScreenContactChanged(sct, c, b);

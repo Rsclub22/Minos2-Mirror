@@ -45,8 +45,8 @@ public:
     void calcLoc( );
 
     QSharedPointer<BaseContact> selectedContact;   // contact from log list selected
-    bool catchup;
-    bool unfilled;
+    bool catchup = false;
+    bool unfilled = false;
 
     void setActiveControl( int *Key );
     void clearCurrentField();
@@ -305,6 +305,7 @@ private slots:
     void on_AfterTabFocusIn(QLineEdit *tle);
     void on_ValidateError (int mess_no );
     void on_ShowOperators();
+    void on_tabSandP();
 
     void on_ModeComboBoxGJV_activated(int index);
     void on_RSTTXEdit_textChanged(const QString &arg1);

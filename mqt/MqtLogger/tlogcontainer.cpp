@@ -120,6 +120,10 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
     ReportAutofillAction->setChecked(autoFill);
 
+    bool TabSandP;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
+    TabSandPAction->setChecked(TabSandP);
+
     bool oldBandMap;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
     OldBandMapAction->setChecked(oldBandMap);
@@ -449,6 +453,7 @@ void TLogContainer::setupMenus()
     restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+    TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
 
     OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
     ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
@@ -1265,7 +1270,14 @@ void TLogContainer::ReportAutofillActionExecute()
     bool autoFill = ReportAutofillAction->isChecked();
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, autoFill );
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+void TLogContainer::TabSandPActionExecute()
+{
+    bool TabSandP = TabSandPAction->isChecked();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpTabforSandP, TabSandP );
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
+    MinosLoggerEvents::SendTabSandP();
 }
 void TLogContainer::OldBandMap()
 {

@@ -167,6 +167,7 @@ private:
     QAction *WSJTXConfigAction;
     QAction *ClusterBandmapFilterConfigAction;
     QAction *ReportAutofillAction;
+    QAction *TabSandPAction;
     QAction *OldBandMapAction;
     QAction *ConfigureAgeProtctionAction;
 
@@ -234,6 +235,7 @@ private slots:
     void UDPConfigActionExecute();
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
+    void TabSandPActionExecute();
     void OldBandMap();
     void ConfigAgeProtection();
 
