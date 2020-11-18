@@ -1688,6 +1688,8 @@ void TLogContainer::updateLayoutsMenu()
         QString currentLayout = f->getCurScreenLayout();
         QString defaultLayout;
         MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, defaultLayout );
+        QString protectedConfigName;
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, protectedConfigName );
 
         ScreenConfigFile scf;
         scf.loadFile(this);
@@ -1698,6 +1700,10 @@ void TLogContainer::updateLayoutsMenu()
             if (c.name == defaultLayout)
             {
                 act->setText(c.name + " " + ScreenConfigManager::tr(ScreenConfigManager::defLayoutText));
+            }
+            else if (c.name == protectedConfigName)
+            {
+                act->setText(c.name + " " + ScreenConfigManager::tr(ScreenConfigManager::protectedLayoutText));
             }
             else
             {

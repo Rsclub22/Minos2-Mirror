@@ -254,7 +254,7 @@ void ScreenConfigManager::on_OKButton_clicked()
 {
     on_applyButton_clicked();
     MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, defaultConfigName );
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, defaultProtectedLayoutName() );
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, protectedConfigName );
     close();
 }
 

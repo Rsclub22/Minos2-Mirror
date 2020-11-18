@@ -691,7 +691,7 @@ void TSingleLogFrame::buildScreenLayout()
     QString curConfigName;
     if (ct->isReadOnly())
     {
-        curConfigName = defaultProtectedLayoutName();
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, curConfigName );
     }
     else
     {
