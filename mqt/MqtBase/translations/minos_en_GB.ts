@@ -376,7 +376,7 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="107"/>
-        <source>Load Progress Delay</source>
+        <source>Change Tab order for S&amp;P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
