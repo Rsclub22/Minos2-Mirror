@@ -65,11 +65,16 @@ public:
     bool getModeFilterChangedFlag(){return modefilterChanged;}
     bool getCallsignFilerChangedFlag(){return callsignfilterChanged;}
     bool getLocatorFilterChangedFlag(){return locatorfilterChanged;}
-    bool getDistanceFilterChangedFlag(){return distancefilterChanged;}
+    bool getHfDistanceFilterChangedFlag(){return hfDistancefilterChanged;}
+    bool getVhfDistanceFilterChangedFlag(){return vhfDistancefilterChanged;}
+    bool getMwDistanceFilterChangedFlag(){return mwDistancefilterChanged;}
     bool getSettingsChangedFlag(){return settingsChanged;}
-    bool getIgnoreDistChangedFlag(){return ignoreDistChanged;}
-    bool getIgnoreEmptyDistChangedFlag(){return ignoreEmptyDistChanged;}
-
+    bool getHfIgnoreDistChangedFlag(){return hfIgnoreDistChanged;}
+    bool getVhfIgnoreDistChangedFlag(){return vhfIgnoreDistChanged;}
+    bool getMwIgnoreDistChangedFlag(){return mwIgnoreDistChanged;}
+    bool getHfIgnoreEmptyDistChangedFlag(){return hfIgnoreEmptyDistChanged;}
+    bool getVhfIgnoreEmptyDistChangedFlag(){return vhfIgnoreEmptyDistChanged;}
+    bool getMwIgnoreEmptyDistChangedFlag(){return mwIgnoreEmptyDistChanged;}
 
 signals:
     //void filtersChanged(bool, bool, bool, bool);
@@ -144,9 +149,18 @@ private:
     bool modefilterChanged = false;
     bool callsignfilterChanged = false;
     bool locatorfilterChanged = false;
-    bool distancefilterChanged = false;
-    bool ignoreDistChanged = false;
-    bool ignoreEmptyDistChanged = false;
+    bool hfDistancefilterChanged = false;
+    bool vhfDistancefilterChanged = false;
+    bool mwDistancefilterChanged = false;
+
+    bool hfIgnoreDistChanged = false;
+    bool vhfIgnoreDistChanged = false;
+    bool mwIgnoreDistChanged = false;
+
+    bool hfIgnoreEmptyDistChanged = false;
+    bool vhfIgnoreEmptyDistChanged = false;
+    bool mwIgnoreEmptyDistChanged = false;
+
     bool settingsChanged = false;
 
 
@@ -191,7 +205,7 @@ private:
 
     void doCloseEvent();
     void enableDistanceFields();
-    void setDefaultDistValues(int start, int end, bool status);
+
 
 
     void setFilterTabCurrentIndex(int idx);
