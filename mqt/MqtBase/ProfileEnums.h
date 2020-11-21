@@ -61,6 +61,14 @@ enum LOGGERPROFILE {
    elpBandmapOldStyle,
    elpAddBandMapTuningTolerance,
 
+
+   elpDefaultFilterDistance_1_8MHz,
+   elpDefaultFilterDistance_3_5MHz,
+   elpDefaultFilterDistance_7MHz,
+   elpDefaultFilterDistance_14MHz,
+   elpDefaultFilterDistance_21MHz,
+   elpDefaultFilterDistance_28MHz,
+
    elpDefaultFilterDistance_50MHz,
    elpDefaultFilterDistance_70MHz,
    elpDefaultFilterDistance_144MHz,
@@ -70,6 +78,14 @@ enum LOGGERPROFILE {
    elpDefaultFilterDistance_3_4GHz,
    elpDefaultFilterDistance_5_6GHz,
    elpDefaultFilterDistance_10GHz,
+
+   elpBandmapStartZoomLevel_1_8MHz,
+   elpBandmapStartZoomLevel_3_5MHz,
+   elpBandmapStartZoomLevel_7MHz,
+   elpBandmapStartZoomLevel_14MHz,
+   elpBandmapStartZoomLevel_21MHz,
+   elpBandmapStartZoomLevel_28MHz,
+
 
    elpBandmapStartZoomLevel_50MHz,
    elpBandmapStartZoomLevel_70MHz,

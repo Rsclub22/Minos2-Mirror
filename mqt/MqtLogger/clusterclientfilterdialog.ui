@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>403</width>
+    <width>443</width>
     <height>586</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="bandsFilter">
       <attribute name="title">
@@ -494,7 +494,7 @@
        <item>
         <widget class="QTabWidget" name="filterDistancesTab">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="HF_DistanceTab">
           <attribute name="title">
@@ -1021,9 +1021,9 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="uhfDuistances">
+         <widget class="QWidget" name="MW_DistanceTab">
           <attribute name="title">
-           <string>UHF</string>
+           <string>MW</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
@@ -1244,35 +1244,35 @@
            <item>
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="1" column="1">
-              <widget class="QPushButton" name="uhfClearAllIgnorePb">
+              <widget class="QPushButton" name="mwClearAllIgnorePb">
                <property name="text">
                 <string>Clear All Ignore</string>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QPushButton" name="uhfSetAllIgnorePb">
+              <widget class="QPushButton" name="mwSetAllIgnorePb">
                <property name="text">
                 <string>Set All Ignore</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QPushButton" name="uhfSetAlDefaultDistPb">
+              <widget class="QPushButton" name="mwSetAlDefaultDistPb">
                <property name="text">
                 <string>Set All Default Distance</string>
                </property>
               </widget>
              </item>
              <item row="0" column="2">
-              <widget class="QPushButton" name="uhfSetAllEmptyDistPb">
+              <widget class="QPushButton" name="mwSetAllEmptyDistPb">
                <property name="text">
                 <string>Set All No Distance</string>
                </property>
               </widget>
              </item>
              <item row="1" column="2">
-              <widget class="QPushButton" name="uhfClearAllEmptyDistPb">
+              <widget class="QPushButton" name="mwClearAllEmptyDistPb">
                <property name="text">
                 <string>Clear All No Distance</string>
                </property>

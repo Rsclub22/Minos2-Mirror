@@ -89,18 +89,41 @@ private:
         bool ignoreEmptyDistanceChanged = false;
     };
 
-    QList<distValue>  distanceValues;
+    QList<distValue>  hfDistanceValues;
+    QList<distValue> vhfDistanceValues;
+    QList<distValue> mwDistanceValues;
 
-    QList<QCheckBox*> bandChkBoxList;
+
+    QList<QCheckBox*> allBandChkBoxList;
     QList<QCheckBox*> hfBandChkBoxList;
     QList<QCheckBox*> vhfBandChkBoxList;
-    QList<QCheckBox*> uhfBandChkBoxList;
+    QList<QCheckBox*> mwBandChkBoxList;
 
     QList<QCheckBox*> modeChkBoxList;
-    QList<QLineEdit*> distanceLineEditsList;
-    QList<QCheckBox*> ignoreDistanceChkBoxList;
-    QList<QCheckBox*> ignoreEmptyDistanceChkBoxList;
-    QList<QLabel*> distanceLabelsList;
+
+
+    QList<QLineEdit*> allDistanceLineEditsList;
+    QList<QCheckBox*> allIgnoreDistanceChkBoxList;
+    QList<QCheckBox*> allIgnoreEmptyDistanceChkBoxList;
+    QList<QLabel*> allDistanceLabelsList;
+
+
+    QList<QLineEdit*> hfDistanceLineEditsList;
+    QList<QCheckBox*> hfIgnoreDistanceChkBoxList;
+    QList<QCheckBox*> hfIgnoreEmptyDistanceChkBoxList;
+    QList<QLabel*> hfDistanceLabelsList;
+
+
+    QList<QLineEdit*> vhfDistanceLineEditsList;
+    QList<QCheckBox*> vhfIgnoreDistanceChkBoxList;
+    QList<QCheckBox*> vhfIgnoreEmptyDistanceChkBoxList;
+    QList<QLabel*> vhfDistanceLabelsList;
+
+
+    QList<QLineEdit*> mwDistanceLineEditsList;
+    QList<QCheckBox*> mwIgnoreDistanceChkBoxList;
+    QList<QCheckBox*> mwIgnoreEmptyDistanceChkBoxList;
+    QList<QLabel*> mwDistanceLabelsList;
 
 
     QListWidget* callsignListWidget;
@@ -169,9 +192,7 @@ private:
     void doCloseEvent();
     void enableDistanceFields();
     void setDefaultDistValues(int start, int end, bool status);
-    bool distanceValuesChanged();
-    bool ignoreDistanceChanged();
-    bool ignoreEmptyDistanceChanged();
+
 
     void setFilterTabCurrentIndex(int idx);
     int getFilterTabCurrentIndex();
@@ -179,6 +200,15 @@ private:
     int getDistanceFilterTabCurrentIndex();
 
     void setHFVisible(bool state);
+    bool hfDistanceValuesChanged();
+    bool vhfDistanceValuesChanged();
+    bool mwDistanceValuesChanged();
+    bool hfIgnoreDistanceChanged();
+    bool vhfIgnoreDistanceChanged();
+    bool mwIgnoreDistanceChanged();
+    bool hfIgnoreEmptyDistanceChanged();
+    bool vhfIgnoreEmptyDistanceChanged();
+    bool mwIgnoreEmptyDistanceChanged();
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -207,14 +237,15 @@ private slots:
     void onLocatorListImport();
     void callsignDelAllClicked();
     void locatorDelAllClicked();
-    void onUhfClearAllIgnorePbClicked();
+
     void onVhfClearAllIgnorePbClicked();
 
-    void onUhfSetAllIgnorePbClicked();
+
     void onVhfSetAllIgnorePbClicked();
 
-    void onUhfSetDefDistPbClicked();
+    void onHfSetDefDistPbClicked();
     void onVhfSetDefDistPbClicked();
+    void onMwSetDefDistPbClicked();
 
     void onIgnoreDistanceChecked(int);
     void onDistanceEditingFinished(int);
@@ -224,10 +255,20 @@ private slots:
     void onUhfSetAllEmptyPbClicked();
 
     void onVhfClearAllEmptyDistPbClicked();
-    void onUhfClearAllEmptyDistPbClicked();
+
     void onBandChkBoxChecked(int idx);
     void onFilterTabIndexChanged(int idx);
     void onDistanceFilterTabIndexChanged(int idx);
+
+
+    void onMwSetAllIgnorePbClicked();
+    void onHfSetAllIgnorePbClicked();
+    void onMwClearAllIgnorePbClicked();
+    void onHfClearAllIgnorePbClicked();
+    void onMwSetAllEmptyPbClicked();
+    void onHfSetAllEmptyPbClicked();
+    void onMwClearAllEmptyDistPbClicked();
+    void onHfClearAllEmptyDistPbClicked();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H
