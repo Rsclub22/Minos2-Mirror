@@ -142,6 +142,9 @@ namespace freqPresetData {
 enum bandOffSet { _50MHZ, _70MHZ, _144MHZ, _432MHZ, _1296MHZ, _2300MHZ,
                  _3_4GHZ, _5_6GHZ, _10GHZ};
 
+const QStringList bandNames = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 MHz"
+                                           << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz"
+                                           << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 

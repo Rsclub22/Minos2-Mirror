@@ -61,20 +61,14 @@ public:
     void saveClusterFilterToContest();
     void setModeFilter(bool state, int mode);
 
-    bool getBandFilterChangedFlag(){return bandfilterChanged;}
-    bool getModeFilterChangedFlag(){return modefilterChanged;}
-    bool getCallsignFilerChangedFlag(){return callsignfilterChanged;}
-    bool getLocatorFilterChangedFlag(){return locatorfilterChanged;}
-    bool getHfDistanceFilterChangedFlag(){return hfDistancefilterChanged;}
-    bool getVhfDistanceFilterChangedFlag(){return vhfDistancefilterChanged;}
-    bool getMwDistanceFilterChangedFlag(){return mwDistancefilterChanged;}
-    bool getSettingsChangedFlag(){return settingsChanged;}
-    bool getHfIgnoreDistChangedFlag(){return hfIgnoreDistChanged;}
-    bool getVhfIgnoreDistChangedFlag(){return vhfIgnoreDistChanged;}
-    bool getMwIgnoreDistChangedFlag(){return mwIgnoreDistChanged;}
-    bool getHfIgnoreEmptyDistChangedFlag(){return hfIgnoreEmptyDistChanged;}
-    bool getVhfIgnoreEmptyDistChangedFlag(){return vhfIgnoreEmptyDistChanged;}
-    bool getMwIgnoreEmptyDistChangedFlag(){return mwIgnoreEmptyDistChanged;}
+    bool getBandFilterChangedFlag(){return bandFilterChangedFlag;}
+    bool getModeFilterChangedFlag(){return modeFilterChangedFlag;}
+    bool getCallsignFilerChangedFlag(){return callsignFilterChangedFlag;}
+    bool getLocatorFilterChangedFlag(){return locatorFilterChangedFlag;}
+    bool getDistanceFilterChangedFlag(){return distanceFilterChangedFlag;}
+    bool getSettingsChangedFlag(){return settingsChangedFlag;}
+    bool getIgnoreDistChangedFlag(){return ignoreDistanceChangedFlag;}
+    bool getIgnoreEmptyDistChangedFlag(){return ignoreEmptyDistanceChangedFlag;}
 
 signals:
     //void filtersChanged(bool, bool, bool, bool);
@@ -85,18 +79,16 @@ private:
     LoggerContestLog *ct = nullptr;
     ClusterClientFilterSettings filterSettings;
 
-    struct distValue{
-        int distance;
-        bool distChanged = false;
-        bool ignoreDistance = false;
-        bool ignoreDistChanged = false;
-        bool ignoreEmptyDistance = false;
-        bool ignoreEmptyDistanceChanged = false;
-    };
+//    struct distValue{
+//        int distance;
+//        bool distChanged = false;
+//        bool ignoreDistance = false;
+//        bool ignoreDistChanged = false;
+//        bool ignoreEmptyDistance = false;
+//        bool ignoreEmptyDistanceChanged = false;
+//    };
 
-    QList<distValue>  hfDistanceValues;
-    QList<distValue> vhfDistanceValues;
-    QList<distValue> mwDistanceValues;
+    //QList<distValue>  allDistanceValues;
 
 
     QList<QCheckBox*> allBandChkBoxList;
@@ -108,6 +100,8 @@ private:
 
 
     QList<QLineEdit*> allDistanceLineEditsList;
+
+
     QList<QCheckBox*> allIgnoreDistanceChkBoxList;
     QList<QCheckBox*> allIgnoreEmptyDistanceChkBoxList;
     QList<QLabel*> allDistanceLabelsList;
@@ -145,23 +139,34 @@ private:
 
     QString contestUuid;
 
-    bool bandfilterChanged = false;
-    bool modefilterChanged = false;
-    bool callsignfilterChanged = false;
-    bool locatorfilterChanged = false;
-    bool hfDistancefilterChanged = false;
-    bool vhfDistancefilterChanged = false;
-    bool mwDistancefilterChanged = false;
 
-    bool hfIgnoreDistChanged = false;
-    bool vhfIgnoreDistChanged = false;
-    bool mwIgnoreDistChanged = false;
+    bool bandFilterChangedFlag;
+    bool modeFilterChangedFlag;
+    bool callsignFilterChangedFlag;
+    bool locatorFilterChangedFlag;
+    bool distanceFilterChangedFlag;
+    bool ignoreDistanceChangedFlag;
+    bool ignoreEmptyDistanceChangedFlag;
 
-    bool hfIgnoreEmptyDistChanged = false;
-    bool vhfIgnoreEmptyDistChanged = false;
-    bool mwIgnoreEmptyDistChanged = false;
+    bool settingsChangedFlag;
 
-    bool settingsChanged = false;
+    //bool bandfilterChanged = false;
+    //bool modefilterChanged = false;
+    //bool callsignfilterChanged = false;
+    //bool locatorfilterChanged = false;
+   // bool hfDistancefilterChanged = false;
+   // bool vhfDistancefilterChanged = false;
+   // bool mwDistancefilterChanged = false;
+
+   // bool hfIgnoreDistChanged = false;
+   // bool vhfIgnoreDistChanged = false;
+   // bool mwIgnoreDistChanged = false;
+
+   // bool hfIgnoreEmptyDistChanged = false;
+   // bool vhfIgnoreEmptyDistChanged = false;
+   // bool mwIgnoreEmptyDistChanged = false;
+
+   // bool settingsChanged = false;
 
 
 //    bool enableHFSpots;
@@ -193,14 +198,14 @@ private:
     QStringList getItemsTextFromListWidget(QListWidget *lw);
 
 
-    bool bandFiltersChanged();
+    //bool bandFiltersChanged();
     bool modeFiltersChanged();
     bool callsignFiltersChanged();
     bool locatorFiltersChanged();
 
-    void copyBandFiltersToFilterSettings();
+    //void copyBandFiltersToFilterSettings();
     void copyBandFiltersToDialog();
-    void copyModeFiltersToFilterSettings();
+    //void copyModeFiltersToFilterSettings();
 
 
     void doCloseEvent();
@@ -214,15 +219,12 @@ private:
     int getDistanceFilterTabCurrentIndex();
 
     void setHFVisible(bool state);
-    bool hfDistanceValuesChanged();
-    bool vhfDistanceValuesChanged();
-    bool mwDistanceValuesChanged();
-    bool hfIgnoreDistanceChanged();
-    bool vhfIgnoreDistanceChanged();
-    bool mwIgnoreDistanceChanged();
-    bool hfIgnoreEmptyDistanceChanged();
-    bool vhfIgnoreEmptyDistanceChanged();
-    bool mwIgnoreEmptyDistanceChanged();
+    //bool distanceValuesChanged();
+
+    //bool ignoreDistanceChanged();
+
+    //bool ignoreEmptyDistanceChanged();
+
 private slots:
     //void bandChecked(int checkBoxNum);
     //void modeChecked(int checkBoxNum);
@@ -266,7 +268,7 @@ private slots:
     void onIgnoreEmptyDistanceChecked(int idx);
 
     void onVhfSetAllEmptyPbClicked();
-    void onUhfSetAllEmptyPbClicked();
+
 
     void onVhfClearAllEmptyDistPbClicked();
 

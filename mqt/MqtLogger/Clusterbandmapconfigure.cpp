@@ -33,7 +33,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
      {
          distValue distItem;
          //distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
-         TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), distItem.distance );
+         TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(i), distItem.distance );
 
          distanceLineEdits[i]->setText(QString::number(distItem.distance));
          distItem.changed = false;
@@ -180,7 +180,7 @@ void ClusterBandmapConfigure::saveDistances()
     {
         if (distanceValues[i].changed && distanceValues[i].distance != DEFAULT_FILTER_DISTANCE)
         {
-            TContestApp::getContestApp()->loggerBundle.setIntProfile(clustId.getDefaultFilterId(i), distanceValues[i].distance);
+            TContestApp::getContestApp()->loggerBundle.setIntProfile(clustId.getAllDefaultFilterId(i), distanceValues[i].distance);
 
         }
     }

@@ -1192,10 +1192,10 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
                 //config.beginGroup("distanceFilter");
 
-                for (int i = 0; i < filterSettings.distanceFilters.count(); i++)
+                for (int i = 0; i < filterSettings.allDistanceFilters.count(); i++)
                 {
 
-                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(i), *filterSettings.distanceFilters[i]);
+                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(i), *filterSettings.allDistanceFilters[i]);
 
                 }
 
@@ -2030,14 +2030,14 @@ bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
     bool ok = false;
     int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
 
-    if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
+    if (ok && (bandMask >=0 && bandMask < filterSettings->allIgnoreDistanceFlags.count()) )
     {
-        if (!*filterSettings->ignoreDistanceFlags[bandMask])
+        if (!*filterSettings->allIgnoreDistanceFlags[bandMask])
         {
 
 
             QString distanceStr = sourceModel()->data(sourceModel()->index(sourceRow, DXDIST_COL_NUM), DataStoredRole).toString();
-            if (distanceStr.isEmpty() && *filterSettings->ignoreEmptyDistanceFlags[bandMask])
+            if (distanceStr.isEmpty() && *filterSettings->allIgnoreEmptyDistanceFlags[bandMask])
             {
                 return false;
             }

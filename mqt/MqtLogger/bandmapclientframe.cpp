@@ -763,7 +763,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             {
 
                 ClusterFilterIdAndNames clustId;
-                TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getDefaultFilterId(contestBand), filterSettings.distanceFilter );
+                TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
 
                 //config.endGroup();
 
