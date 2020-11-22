@@ -2639,7 +2639,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        connect(bandChkBoxList[i], &QCheckBox::clicked, [=](int state) {onbandCheckBoxStateChanged(i, state);});
+        connect(bandChkBoxList[i], &QCheckBox::stateChanged, [=](int state) {onbandCheckBoxStateChanged(i, state);});
 
     }
 
@@ -2733,10 +2733,7 @@ void ClusterMainWindow::setHF(bool hfFlag)
        // ensure hf Settings are correct
        readBandFilterSettings();
        loadBandFilterSettingsToTab();
-
-
-
-    }
+   }
     else
     {
         // set hf tab "invisible"
@@ -2755,7 +2752,7 @@ void ClusterMainWindow::setHF(bool hfFlag)
         }
     }
 
-    //setHfFilterControlsVisible(hfFlag);
+    setHfFilterControlsVisible(hfFlag);
 
 }
 
@@ -2878,7 +2875,11 @@ void ClusterMainWindow::setAllUHFBandsFilter(bool state)
 
 void ClusterMainWindow::updateDisplay()
 {
-    dxSpotProxyModel->setFilterRegExp("");
+    if (dxSpotProxyModel)
+    {
+        dxSpotProxyModel->setFilterRegExp("");
+    }
+
 }
 
 void ClusterMainWindow::showStatusMessage(const QString &message, const QString &raw)
