@@ -353,8 +353,6 @@ void ClusterMainWindow::doStartup()
     currentUserQTH = setupCluster->getUserQth();
 
 
-
-
     // get current node from file and then connect to host
     currentNodeName = setupCluster->getCurrentNodeName();
 
@@ -2131,6 +2129,11 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     LogTimer.stop();
 
+    if (setupCluster->getBandFilterOnSaveFlag())
+    {
+        saveBandFilterSettings();
+    }
+
 
     // and tidy up all loose ends
 
@@ -2670,23 +2673,89 @@ void ClusterMainWindow::initFilterCheckBoxs()
     connect(ui->vhfSelectBandPb, &QPushButton::pressed, [=]() {onVhfSelectBandPbPressed();});
     connect(ui->uhfSelectBandPb, &QPushButton::pressed, [=]() {onUhfSelectBandPbPressed();});
 
+    readBandFilterSettings();
+    loadBandFilterSettingsToTab();
+
+}
+
+void ClusterMainWindow::loadBandFilterSettingsToTab()
+{
+    for (int i = 0; i < allBandfilters.count(); i++)
+    {
+        bandChkBoxList[i]->setChecked(*allBandfilters[i]);
+    }
+}
+
+
+void ClusterMainWindow::saveBandFilterSettings()
+{
+    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
+    config.beginGroup("BandFilter");
+
+    for (int i = 0; i < allBandfilters.count(); i++)
+    {
+        config.setValue(QString("bandFilter_+%1").arg(clusterBands[i]), *allBandfilters[i]);
+    }
+
+    config.endGroup();
+
+
+}
+
+void ClusterMainWindow::readBandFilterSettings()
+{
+    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
+    config.beginGroup("BandFilter");
+    for (int i = 0; i < allBandfilters.count(); i++)
+    {
+        *allBandfilters[i] = config.value(QString("bandFilter_+%1").arg(clusterBands[i]), true).toBool();
+    }
+
+    config.endGroup();
 }
 
 
 void ClusterMainWindow::setHF(bool hfFlag)
 {
-    static QWidget* hfUserCommandTab = ui->clusterTab->widget(0);
+    QString hfTabName = "HF User Commands";
 
-    //setHfFilterControlsVisible(hfFlag);
     if (hfFlag)
     {
-        hfUserCommandTab = ui->clusterTab->widget(0);
-        ui->clusterTab->removeTab(0);
+       // set hf Tab "visible"
+       if (ui->clusterTab->tabText(0) != hfTabName)
+       {
+           QWidget *hfTab = ui->clusterTab->findChild<QWidget *>(hfTabName);
+           if (hfTab)
+           {
+               ui->clusterTab->insertTab(0, hfTab, hfTabName);
+           }
+       }
+       // ensure hf Settings are correct
+       readBandFilterSettings();
+       loadBandFilterSettingsToTab();
+
+
+
     }
     else
     {
-        ui->clusterTab->insertTab(0, hfUserCommandTab, tr("HF User Commands"));
+        // set hf tab "invisible"
+        QString n = ui->clusterTab->tabText(0);
+        if (ui->clusterTab->tabText(0) == hfTabName)
+        {
+            ui->clusterTab->removeTab(0);
+        }
+
+        // clear the HF Bandfilters
+        for (int i = 0; i < hfBandChkBoxList.count(); i++)
+        {
+            hfBandChkBoxList[i]->setChecked(false);
+            *hfBandfilters[i] = false;
+
+        }
     }
+
+    //setHfFilterControlsVisible(hfFlag);
 
 }
 
@@ -2694,14 +2763,13 @@ void ClusterMainWindow::setHF(bool hfFlag)
 void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 {
 
-    for(auto const &bc: bandChkBoxList)
+    for(auto const &bc: hfBandChkBoxList)
     {
         bc->setVisible(visible);
     }
 
     ui->hfSelectBandPb->setVisible(visible);
-    ui->vhfSelectBandPb->setVisible(visible);
-    ui->uhfSelectBandPb->setVisible(visible);
+
 }
 
 void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)

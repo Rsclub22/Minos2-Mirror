@@ -628,6 +628,9 @@ private:
     void updateDisplay();
 
 
+    void saveBandFilterSettings();
+    void readBandFilterSettings();
+    void loadBandFilterSettingsToTab();
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

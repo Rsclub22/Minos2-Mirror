@@ -79,17 +79,6 @@ private:
     LoggerContestLog *ct = nullptr;
     ClusterClientFilterSettings filterSettings;
 
-//    struct distValue{
-//        int distance;
-//        bool distChanged = false;
-//        bool ignoreDistance = false;
-//        bool ignoreDistChanged = false;
-//        bool ignoreEmptyDistance = false;
-//        bool ignoreEmptyDistanceChanged = false;
-//    };
-
-    //QList<distValue>  allDistanceValues;
-
 
     QList<QCheckBox*> allBandChkBoxList;
     QList<QCheckBox*> hfBandChkBoxList;
@@ -150,26 +139,6 @@ private:
 
     bool settingsChangedFlag;
 
-    //bool bandfilterChanged = false;
-    //bool modefilterChanged = false;
-    //bool callsignfilterChanged = false;
-    //bool locatorfilterChanged = false;
-   // bool hfDistancefilterChanged = false;
-   // bool vhfDistancefilterChanged = false;
-   // bool mwDistancefilterChanged = false;
-
-   // bool hfIgnoreDistChanged = false;
-   // bool vhfIgnoreDistChanged = false;
-   // bool mwIgnoreDistChanged = false;
-
-   // bool hfIgnoreEmptyDistChanged = false;
-   // bool vhfIgnoreEmptyDistChanged = false;
-   // bool mwIgnoreEmptyDistChanged = false;
-
-   // bool settingsChanged = false;
-
-
-//    bool enableHFSpots;
 
     void initCheckFilterTab();
     void clearVHFBands();
@@ -219,15 +188,8 @@ private:
     int getDistanceFilterTabCurrentIndex();
 
     void setHFVisible(bool state);
-    //bool distanceValuesChanged();
-
-    //bool ignoreDistanceChanged();
-
-    //bool ignoreEmptyDistanceChanged();
 
 private slots:
-    //void bandChecked(int checkBoxNum);
-    //void modeChecked(int checkBoxNum);
 
     void vhfButtonSelected();
     void mWaveButtonSelected();
@@ -241,8 +203,6 @@ private slots:
 
     void callsignAddClicked();
     void callsignDelClicked();
-    //void callsignCurrentRowChanged(int currentRow);
-    //void locatorCurrentRowChanged(int currentRow);
     void callsignEditClicked();
     void locatorAddClicked();
     void locatorEditClicked();

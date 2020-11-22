@@ -65,6 +65,8 @@ public:
     void loadPersonalToSetupTab();
 
     bool getSendToDXClusterEnabled();
+    bool getBandFilterOnSaveFlag(){return bandFilterOnSaveFlag;}
+
 signals:
 
     void personalDataUpdated(QString, QString, QString, QString);
@@ -102,6 +104,7 @@ private slots:
 
 
     void sendSpotsToDXClusterChkBoxChanged(int state);
+    void onSaveBandFilterChkBoxClicked(int state);
 private:
     Ui::SetupDialog *ui;
     UpperCaseValidator ucValidator;
@@ -131,6 +134,9 @@ private:
     bool sendSpotsToDXClusterChanged;
 
     bool personalDataChanged;
+
+    bool bandFilterOnSaveFlag;
+    bool bandFilterOnSaveChanged;
 
     void savePersonal();
 

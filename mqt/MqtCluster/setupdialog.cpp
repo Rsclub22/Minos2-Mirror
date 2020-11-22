@@ -32,7 +32,9 @@ SetupDialog::SetupDialog(QWidget *parent) :
     enableEndCmdFiles(false),
     sendSpotToDXCluster(false),
     sendSpotsToDXClusterChanged(false),
-    personalDataChanged(false)
+    personalDataChanged(false),
+    bandFilterOnSaveFlag(false),
+    bandFilterOnSaveChanged(false)
 {
     ui->setupUi(this);
 
@@ -44,11 +46,11 @@ SetupDialog::SetupDialog(QWidget *parent) :
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // General Tab
-    connect(ui->timeToLive, SIGNAL(editingFinished()), this, SLOT(timeToliveEditFinished()));
-    connect(ui->runStartCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runStartCmdFileChkBoxChanged(int)));
-    connect(ui->runEndCmdFileChkBox, SIGNAL(stateChanged(int)), this, SLOT(runEndCmdFileChkBoxChanged(int)));
-    connect(ui->sendSpotsToDXClusterChkBox, SIGNAL(stateChanged(int)), this, SLOT(sendSpotsToDXClusterChkBoxChanged(int)));
-
+    connect(ui->timeToLive, &QLineEdit::editingFinished, [=](){timeToliveEditFinished();});
+    connect(ui->runStartCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runStartCmdFileChkBoxChanged(state);});
+    connect(ui->runEndCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runEndCmdFileChkBoxChanged(state);});
+    connect(ui->sendSpotsToDXClusterChkBox, &QCheckBox::stateChanged, [=](int state){sendSpotsToDXClusterChkBoxChanged(state);});
+    connect(ui->saveBandFilterSettingChkBox, &QCheckBox::stateChanged, [=](int state){onSaveBandFilterChkBoxClicked(state);});
     readGeneralSettings();
     loadGeneralToSetupTab();
 
@@ -176,7 +178,9 @@ void SetupDialog::timeToliveEditFinished()
 
 void SetupDialog::saveGeneralSettings()
 {
-    if (timeToLiveChanged || runStartCmdFilesChanged || runEndCmdFilesChanged || sendSpotsToDXClusterChanged)
+    if (timeToLiveChanged || runStartCmdFilesChanged
+        || runEndCmdFilesChanged || sendSpotsToDXClusterChanged
+        || bandFilterOnSaveChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
         QString fileName = CLUSTER_SETTINGS_FILE;
@@ -214,6 +218,13 @@ void SetupDialog::saveGeneralSettings()
             config.endGroup();
             emit sendSpotToTxEnabled(sendSpotToDXCluster);
             sendSpotsToDXClusterChanged = false;
+        }
+
+        if (bandFilterOnSaveChanged)
+        {
+            config.beginGroup("General");
+            config.setValue("bandFilterSaveOnClose", bandFilterOnSaveFlag);
+            config.endGroup();
         }
 
     }
@@ -271,6 +282,9 @@ void SetupDialog::readGeneralSettings()
     config.beginGroup("EnableSendSpotsToDXCluster");
     sendSpotToDXCluster = config.value("enableSendToDXCluster", false).toBool();
     config.endGroup();
+    config.beginGroup("General");
+    bandFilterOnSaveFlag = config.value("bandFilterSaveOnClose", true).toBool();
+    config.endGroup();
 
 }
 
@@ -281,13 +295,40 @@ void SetupDialog::loadGeneralToSetupTab()
     ui->runStartCmdFileChkBox->setChecked(enableStartCmdFiles);
     ui->runEndCmdFileChkBox->setChecked(enableEndCmdFiles);
     ui->sendSpotsToDXClusterChkBox->setChecked(sendSpotToDXCluster);
+    ui->saveBandFilterSettingChkBox->setChecked(bandFilterOnSaveFlag);
 }
+
+
 
 
 QString SetupDialog::getTimeToLive()
 {
     return timeToLive;
 }
+
+
+
+void SetupDialog::onSaveBandFilterChkBoxClicked(int state)
+{
+    if (state == Qt::Checked)
+    {
+        if (!bandFilterOnSaveFlag)
+        {
+           bandFilterOnSaveFlag = true;
+           bandFilterOnSaveChanged = true;
+        }
+    }
+    else if (state == Qt::Unchecked)
+    {
+        if (bandFilterOnSaveFlag)
+        {
+            bandFilterOnSaveFlag = true;
+            bandFilterOnSaveChanged = true;
+        }
+    }
+}
+
+
 
 
 void SetupDialog::runStartCmdFileChkBoxChanged(int state)
