@@ -187,15 +187,19 @@ void RunConfigElement::createProcess()
         runner->start(program);
 #endif
 
-        if (hideApp)
-            sendCommand("HideServers");
-        else
-            sendCommand("ShowServers");
+        if (runner)
+        {
+            // and error will have removed runner!
+            if (hideApp)
+                sendCommand("HideServers");
+            else
+                sendCommand("ShowServers");
 
-        QString fontCommand = "Font " + QApplication::font().toString();
-        sendCommand(fontCommand);
+            QString fontCommand = "Font " + QApplication::font().toString();
+            sendCommand(fontCommand);
 
-         MinosConfigEvents::sendAppStarted();
+             MinosConfigEvents::sendAppStarted();
+        }
     }
 }
 void RunConfigElement::askStopProcess()
@@ -270,6 +274,8 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
 void RunConfigElement::on_error(QProcess::ProcessError error)
 {
     trace(name + ":error:" + QString::number(error));
+    runner->deleteLater();
+    runner = nullptr;
 }
 
 void RunConfigElement::on_readyReadStandardError()

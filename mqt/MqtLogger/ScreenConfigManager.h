@@ -17,6 +17,7 @@ class ScreenConfigManager : public QDialog
 
 public:
     static const char * defLayoutText;
+    static const char * protectedLayoutText;
     explicit ScreenConfigManager(QWidget *parent = nullptr);
     ~ScreenConfigManager() override;
 
@@ -51,6 +52,8 @@ private slots:
 
     void on_makeDefaultButton_clicked();
 
+    void on_protectedButton_clicked();
+
 private:
     Ui::ScreenConfigManager *ui;
     bool suppressItemSelect = false;
@@ -58,6 +61,7 @@ private:
     ScreenConfigFile scf;
     QString curConfigName;
     QString defaultConfigName;
+    QString protectedConfigName;
     void showDetails();
     void checkEnabled();
 

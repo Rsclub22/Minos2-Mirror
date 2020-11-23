@@ -82,7 +82,7 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
     else
         if ( contest->countryMult.getValue() && screenContact.ctryMult )
         {
-            ui->CtryMultIl->setText(screenContact.ctryMult->basePrefix);
+            ui->CtryMultIl->setText(screenContact.ctryMult->getBasePrefix());
         }
 
     bool tryagain = true;

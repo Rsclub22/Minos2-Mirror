@@ -781,8 +781,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
             if ( syn )
             {
-                test->prefix = syn->country->basePrefix;
-                test->country = syn->country->realName;
+                test->prefix = syn->getBasePrefix();
+                test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
                 test->distance = -2;
             }
@@ -958,8 +958,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( cs.locCtryPrefix );
             if ( syn )
             {
-                test->prefix = syn->country->basePrefix;
-                test->country = syn->country->realName;
+                test->prefix = syn->getBasePrefix();
+                test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
             }
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());

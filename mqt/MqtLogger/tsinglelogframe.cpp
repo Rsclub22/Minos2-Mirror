@@ -39,29 +39,8 @@
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
-TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
-    QFrame(parent),
-    ui(new Ui::TSingleLogFrame),
-    splittersChanged(false),
-    bandMapLoaded(false),
-    rotatorLoaded(false),
-    keyerLoaded(false),
-    radioLoaded(false),
-    contest(contest),
-    lastStanzaCount( 0 )
-
-
+void TSingleLogFrame::buildFrame()
 {
-    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
-
-#ifdef Q_OS_ANDROID
-    splitterHandleWidth = 20;
-#else
-    splitterHandleWidth = 6;
-#endif
-
-    ui->setupUi(this);
-
     createScreenComponents();
 
     buildScreenLayout();
@@ -176,6 +155,30 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+}
+
+TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
+    QFrame(parent),
+    ui(new Ui::TSingleLogFrame),
+    splittersChanged(false),
+    bandMapLoaded(false),
+    rotatorLoaded(false),
+    keyerLoaded(false),
+    radioLoaded(false),
+    contest(contest),
+    lastStanzaCount( 0 )
+
+
+{
+    qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
+
+#ifdef Q_OS_ANDROID
+    splitterHandleWidth = 20;
+#else
+    splitterHandleWidth = 6;
+#endif
+
+    ui->setupUi(this);
 }
 
 void TSingleLogFrame::on_FontChanged()
@@ -442,11 +445,6 @@ void TSingleLogFrame::clearScreenLayout()
         CribSheet->setParent(this);
         CribSheet->hide();
 
-        NextContactDetailsLabel->setParent(this);
-        NextContactDetailsLabel->hide();
-        CurrentBandLabel->setParent(this);
-        CurrentBandLabel->hide();
-
         GJVQSOLogFrame->setParent(this);
         GJVQSOLogFrame->hide();
 
@@ -490,12 +488,10 @@ void TSingleLogFrame::applyScreenLayout()
     if (!ct)
         return;
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
-    hide();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     clearScreenLayout();
     buildScreenLayout();
-    show();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     onSplitterMoved(-1, -1);
 }
@@ -687,24 +683,28 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
 }
 void TSingleLogFrame::buildScreenLayout()
 {
-
     ScreenConfigFile scf;
-    scf.loadFile(false, this);
+    scf.loadFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    QString curConfigName = ct->screenLayout.getValue();
+
+    QString curConfigName;
+    if (ct->isReadOnly())
+    {
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, curConfigName );
+    }
+    else
+    {
+        curConfigName = ct->screenLayout.getValue();
+    }
     traceMsg("buildScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid + " to layout " + curConfigName);
     if (curConfigName.isEmpty() || !scf.configs.contains(curConfigName))
     {
         curConfigName = defaultLayoutName();
         ct->screenLayout.setValue(curConfigName);
-        if ( !scf.configs.contains(curConfigName))
-        {
-            //we need to get the built in default
-            scf.loadFile(true, this);
-        }
     }
     curScreenLayout = curConfigName;
+
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
@@ -740,7 +740,6 @@ void TSingleLogFrame::buildScreenLayout()
         }
         connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
     }
-
 }
 
 

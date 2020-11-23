@@ -45,6 +45,7 @@ class TestDelegate : public HtmlDelegate
 
     public:
         TestDelegate(qreal wmult, qreal hmult):HtmlDelegate(wmult, hmult){}
+        QSize docSize(QString text) const;
     protected:
         void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const override;
         QSize sizeHint ( const QStyleOptionViewItem & option, const QModelIndex & index ) const override;

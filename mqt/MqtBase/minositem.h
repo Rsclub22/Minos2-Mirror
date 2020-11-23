@@ -30,7 +30,7 @@ class MinosItem
             val = t;
          }
       }
-      void setValue( MinosItem<itemtype> t )
+      void setValue( const MinosItem<itemtype> &t )
       {
          if ( val != t.getValue() )        // so all item classes need != operator
          {
@@ -57,11 +57,13 @@ class MinosItem
       }
       MinosItem()
       {}
-      MinosItem( itemtype d ) : val( d ), dirty( false )
+      MinosItem( const itemtype &d ) : val( d ), dirty( false )
+      {}
+      MinosItem<itemtype>(const MinosItem<itemtype> &s) : val(s.val), dirty(s.dirty)
       {}
       virtual ~MinosItem()
       {}
-      MinosItem& operator = ( const MinosItem&rhs )
+      MinosItem& operator = ( const MinosItem &rhs )
       {
           dirty = rhs.dirty;
           val = rhs.val;
@@ -89,7 +91,7 @@ public:
           MinosItem<QString>::val = t;
        }
     }
-    void setValue( MinosStringItem<QString> t )
+    void setValue( const MinosStringItem<QString> &t )
     {
        if ( MinosItem<QString>::val != t.getValue() )        // so all item classes need != operator
        {
@@ -102,13 +104,6 @@ public:
        MinosItem<QString>::dirty = false;
        MinosItem<QString>::val = t;
     }
-    MinosStringItem& operator = ( const MinosStringItem&rhs )
-    {
-        MinosItem<QString>::dirty = rhs.dirty;
-        MinosItem<QString>::val = rhs.val;
-        return *this;
-    }
-
 };
 template < class Frequency >
 class MinosFrequencyItem : public MinosItem<Frequency>
@@ -122,7 +117,7 @@ public:
           MinosItem<Frequency>::val = t;
        }
     }
-    void setValue( MinosFrequencyItem<Frequency> t )
+    void setValue( const MinosFrequencyItem<Frequency> &t )
     {
        if ( MinosItem<Frequency>::val != t.getValue() )        // so all item classes need != operator
        {
@@ -130,16 +125,10 @@ public:
           MinosItem<Frequency>::val = t.getValue();
        }
     }
-    virtual void setInitialValue( Frequency t )
+    virtual void setInitialValue( const Frequency &t )
     {
        MinosItem<Frequency>::dirty = false;
        MinosItem<Frequency>::val = t;
-    }
-    MinosFrequencyItem& operator = ( const MinosFrequencyItem&rhs )
-    {
-        MinosItem<Frequency>::dirty = rhs.dirty;
-        MinosItem<Frequency>::val = rhs.val;
-        return *this;
     }
     void addIfDirty( RPCParamStruct *st, const QString &stName, bool &d ) const
     {

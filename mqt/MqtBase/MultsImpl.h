@@ -112,7 +112,7 @@ public:
 
             case ectLocator:
                {
-                  dest = ce->central.getLoc().left( 6 );
+                  dest = ce->getCentral().getLoc().left( 6 );
                   break;
                }
 
@@ -125,7 +125,7 @@ public:
                   int useBearing = 0;
 
                   QString brgbuff;
-                  int valRes = lonlat( ce->central.getLoc(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+                  int valRes = lonlat( ce->getCentral().getLoc(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
                   if ( ( valRes == LOC_OK ) && ct ->locValid )
                      ct ->disbeara( longitude, latitude, useScore, useBearing );
                   else
@@ -144,7 +144,7 @@ public:
             case ectName:
                {
                   // want to list synonyms after the real name, for both countries and districts
-                  dest = ce->realName;
+                  dest = ce->getRealName();
                   break;
                }
 

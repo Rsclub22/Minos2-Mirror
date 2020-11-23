@@ -117,7 +117,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       if ( multCount )
       {
          if ( clp->countryMult.getValue() && newCtry )
-            catmult( multbuff, ctryMult->basePrefix );
+            catmult( multbuff, ctryMult->getBasePrefix() );
 
          if ( clp->districtMult.getValue() && newDistrict )
             catmult( multbuff, districtMult->districtCode );

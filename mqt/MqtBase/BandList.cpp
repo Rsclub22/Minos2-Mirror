@@ -29,11 +29,11 @@ void BandInfo::setType ( const QString &t )
 {
     type = t.toUpper();
 }
-QString BandInfo::getType()
+QString BandInfo::getType() const
 {
     return type;
 }
-QSharedPointer<ModeInfo> BandInfo::findMode(QString mstr)
+QSharedPointer<ModeInfo> BandInfo::findMode(const QString &mstr) const
 {
     for(auto m: modes)
     {
@@ -42,11 +42,31 @@ QSharedPointer<ModeInfo> BandInfo::findMode(QString mstr)
     }
     return QSharedPointer<ModeInfo>();
 }
+QSharedPointer<ModeInfo> BandInfo::findMode(const QString &mstr, const Frequency &f, int &mp) const
+{
+    QSharedPointer<ModeInfo> mi = findMode(mstr);
+    if (mi)
+    {
+        if (f >= mi->fcLow1 && f <= mi->fcHigh1)
+        {
+            mp = 1;
+        }
+        else if (f >= mi->fcLow2 && f <= mi->fcHigh2)
+        {
+            mp = 2;
+        }
+        else
+        {
+            mp = -1;
+        }
+    }
+    return mi;
+}
 void ModeInfo::setType ( const QString &t )
 {
     type = t.toUpper();
 }
-QString ModeInfo::getType()
+QString ModeInfo::getType() const
 {
     return type;
 }
@@ -106,6 +126,11 @@ bool BandList::parseFile (const QString &fname )
     TiXmlBase::SetCondenseWhiteSpace ( false );
     TiXmlDocument xdoc;
     xdoc.Parse ( buffer2.toStdString().c_str() );
+    if ( xdoc.Error())
+    {
+        trace(QString(fname + " parse failed; ") + xdoc.ErrorDesc());
+        return false;
+    }
     TiXmlElement *tix = xdoc.RootElement();
     if ( !tix || !checkElementName ( tix, "Bandlist" ) )
     {

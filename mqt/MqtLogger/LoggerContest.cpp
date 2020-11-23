@@ -242,7 +242,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    showUnworked.setInitialValue(bTemp);
 
    QString temp;
-   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, temp );
+   MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, temp );
    screenLayout.setInitialValue(temp);
 
    temp.clear(); // Initial value now comes from the screen config
@@ -423,7 +423,7 @@ void LoggerContestLog::checkAgeProtection()
         QDate endDate = end.date();
 
         endDate = endDate.addDays(ageDays);
-        if (endDate.isValid() && endDate <= QDate::currentDate())
+        if (endDate.isValid() && endDate < QDate::currentDate())
         {
             // e.g. if ageDays is 1, allow contest day and all the following day
             ageProtected = true;
@@ -1157,7 +1157,7 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
       QSharedPointer<BaseContact> ct = i.wt;
       if ( ct->ctryMult )
       {
-         ( countries[ ct->ctryMult->basePrefix ] ) [ ct->cs.getFullCall() ] = ct;
+         ( countries[ ct->ctryMult->getBasePrefix() ] ) [ ct->cs.getFullCall() ] = ct;
       }
       else
          if ( ct->QSOValid )

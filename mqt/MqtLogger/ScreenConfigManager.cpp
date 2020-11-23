@@ -10,6 +10,7 @@
 #include "ui_ScreenConfigManager.h"
 
 const char * ScreenConfigManager::defLayoutText = QT_TR_NOOP("(default)");
+const char * ScreenConfigManager::protectedLayoutText = QT_TR_NOOP("(protected)");
 
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),
@@ -23,14 +24,15 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
         restoreGeometry(geometry);
 
 
-    scf.loadFile(false, this);
+    scf.loadFile(this);
     curConfigName = defaultLayoutName();
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (tslf)
         curConfigName = tslf->getCurScreenLayout();
 
-    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultConfigName );
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, defaultConfigName );
+    MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, protectedConfigName );
 }
 int ScreenConfigManager::exec()
 {
@@ -54,14 +56,26 @@ void ScreenConfigManager::showDetails()
     {
         if (i.name == curConfigName)
             crow = j;
+
+        QString postText;
         if (i.name ==  defaultConfigName)
         {
-            ui->layoutList->addItem(i.name + " " + tr(defLayoutText));
+            postText = tr(defLayoutText);
         }
-        else
+        if (i.name ==  protectedConfigName)
+        {
+            postText += tr(protectedLayoutText);
+        }
+
+        if (postText.isEmpty())
         {
             ui->layoutList->addItem(i.name);
         }
+        else
+        {
+            ui->layoutList->addItem(i.name + " " + postText);
+        }
+
         j++;
     }
     ui->layoutList->setCurrentRow(crow);
@@ -72,11 +86,19 @@ void ScreenConfigManager::showDetails()
 
 void ScreenConfigManager::checkEnabled()
 {
-    bool enable = (curConfigName != defaultLayoutName());
+    QString dln = defaultLayoutName();
+    QString dpln = defaultProtectedLayoutName();
+    bool enable = (curConfigName != dln && curConfigName != dpln);
 
     ui->deleteButton->setEnabled(enable);
     ui->renameButton->setEnabled(enable);
     ui->editButton->setEnabled(enable);
+
+    enable = (curConfigName != defaultLayoutName());
+    ui->protectedButton->setEnabled(enable);
+
+    enable = (curConfigName != defaultProtectedLayoutName());
+    ui->makeDefaultButton->setEnabled(enable);
 }
 void ScreenConfigManager::doCloseEvent()
 {
@@ -95,6 +117,11 @@ void ScreenConfigManager::accept()
 }
 QString ScreenConfigManager::stripDefaultDecoration(QString s)
 {
+    if (s.endsWith(tr(ScreenConfigManager::protectedLayoutText)))
+    {
+        s.chop(tr(ScreenConfigManager::protectedLayoutText).size());
+        s = s.trimmed();
+    }
     if (s.endsWith(tr(ScreenConfigManager::defLayoutText)))
     {
         s.chop(tr(ScreenConfigManager::defLayoutText).size());
@@ -182,6 +209,10 @@ void ScreenConfigManager::on_deleteButton_clicked()
     {
         defaultConfigName = defaultLayoutName();
     }
+    if (curConfigName == protectedConfigName)
+    {
+        protectedConfigName = defaultProtectedLayoutName();
+    }
     curConfigName = defaultConfigName;
     showDetails();
 
@@ -203,6 +234,10 @@ void ScreenConfigManager::on_renameButton_clicked()
         {
             defaultConfigName = curConfigName;
         }
+        if (protectedConfigName == oldName)
+        {
+            protectedConfigName = curConfigName;
+        }
 
         // and we need to redo the map
         showDetails();
@@ -218,7 +253,8 @@ void ScreenConfigManager::on_editButton_clicked()
 void ScreenConfigManager::on_OKButton_clicked()
 {
     on_applyButton_clicked();
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, defaultConfigName );
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, defaultConfigName );
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, protectedConfigName );
     close();
 }
 
@@ -239,6 +275,13 @@ void ScreenConfigManager::on_cancelButton_clicked()
 void ScreenConfigManager::on_makeDefaultButton_clicked()
 {
     defaultConfigName = curConfigName;
-    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpCurrentLayout, curConfigName );
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpDefaultLayout, curConfigName );
+    showDetails();
+}
+
+void ScreenConfigManager::on_protectedButton_clicked()
+{
+    protectedConfigName = curConfigName;
+    MinosParameters::getMinosParameters() -> setStringDisplayProfile( edpProtectedLayout, curConfigName );
     showDetails();
 }

@@ -48,7 +48,7 @@ public:
     QVector<QSharedPointer<ExclusionInfo> > exclusions;
 
     void setType ( const QString &t );
-    QString getType();
+    QString getType() const;
 };
 
 class BandInfo
@@ -67,12 +67,13 @@ class BandInfo
 
         QVector<QSharedPointer<ModeInfo> > modes;
 
-        QSharedPointer<ModeInfo> findMode(QString m);
+        QSharedPointer<ModeInfo> findMode(const QString &m) const;
+        QSharedPointer<ModeInfo> findMode(const QString &mstr, const Frequency &f, int &mp) const;
 
         void setType ( const QString &t );
-        QString getType();
+        QString getType() const;
 
-        QString name()
+        QString name() const
         {
             return uk;
         }

@@ -31,7 +31,6 @@
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
 #include "Clusterbandmapconfigure.h"
-#include "minoscontestloaddialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
 #include "MatchThread.h"
@@ -120,6 +119,10 @@ bool TLogContainer::show(int argc, char *argv[])
     bool autoFill;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
     ReportAutofillAction->setChecked(autoFill);
+
+    bool TabSandP;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
+    TabSandPAction->setChecked(TabSandP);
 
     bool oldBandMap;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
@@ -450,6 +453,7 @@ void TLogContainer::setupMenus()
     restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
+    TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
 
     OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
     ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
@@ -1266,7 +1270,14 @@ void TLogContainer::ReportAutofillActionExecute()
     bool autoFill = ReportAutofillAction->isChecked();
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, autoFill );
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+void TLogContainer::TabSandPActionExecute()
+{
+    bool TabSandP = TabSandPAction->isChecked();
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpTabforSandP, TabSandP );
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
+    MinosLoggerEvents::SendTabSandP();
 }
 void TLogContainer::OldBandMap()
 {
@@ -1506,10 +1517,15 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
 }
 BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
 {
-   MinosContestLoadDialog progress(this);
-  //create and show a progress splash screen
-   progress.setLoadMessage(fname, newfile, false);
-   progress.doShow();
+    QString m;
+
+    m += newfile?tr("Creating "):tr("Loading ");
+
+    m += tr("Contest file ");
+    m += fname;
+
+    sblabel0->setText( m );
+    repaint();
 
    static int namegen = 0;
    // openFile ends up calling ContestLog::initialise which then
@@ -1549,9 +1565,14 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          TContestApp::getContestApp() ->setCurrentContest( contest );
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
+
+         setUpdatesEnabled(false);
+         f->buildFrame();
+
          f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
 
          int tno = ui->ContestPageControl->addTab(f, baseFName);
+
          ui->ContestPageControl->setCurrentWidget(ui->ContestPageControl->widget(tno));
          ui->ContestPageControl->setTabToolTip(tno, contest->cfileName);
 
@@ -1561,6 +1582,8 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          sendDM->subscribeApps();
 
          on_ContestPageControl_currentChanged(tno);
+
+         setUpdatesEnabled(true);
 
          if ( contest->needsExport() )      // imported from an alien format (e.g. .log)
          {
@@ -1576,8 +1599,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    }
    TContestApp::getContestApp() ->writeContestList();
    enableActions();
-
-   progress.hide();
 
    return contest;
 }
@@ -1666,10 +1687,12 @@ void TLogContainer::updateLayoutsMenu()
     {
         QString currentLayout = f->getCurScreenLayout();
         QString defaultLayout;
-        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpCurrentLayout, defaultLayout );
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpDefaultLayout, defaultLayout );
+        QString protectedConfigName;
+        MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, protectedConfigName );
 
         ScreenConfigFile scf;
-        scf.loadFile(false, this);
+        scf.loadFile(this);
         int j = 0;
         for(auto const &c: scf.configs )
         {
@@ -1677,6 +1700,10 @@ void TLogContainer::updateLayoutsMenu()
             if (c.name == defaultLayout)
             {
                 act->setText(c.name + " " + ScreenConfigManager::tr(ScreenConfigManager::defLayoutText));
+            }
+            else if (c.name == protectedConfigName)
+            {
+                act->setText(c.name + " " + ScreenConfigManager::tr(ScreenConfigManager::protectedLayoutText));
             }
             else
             {
@@ -1875,6 +1902,8 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             if ( ok )
             {
                 addSlot( nullptr, pathlst[ i ], false, slotno );
+                // spin the event loop...
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
         }
 
@@ -2009,14 +2038,18 @@ void TLogContainer::preloadLists( )
 
 void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slotno, bool preload )
 {
-
-    MinosContestLoadDialog progress(this);
-   //create and show a progress splash screen
-    progress.setLoadMessage(fname, false, true);
-    progress.doShow();
-
     // openFile ends up calling ContactList::initialise which then
     // calls TContestApp::insertList
+
+    QString m;
+
+    m += tr("Loading ");
+
+    m += tr("List file ");
+    m += fname;
+
+    sblabel0->setText( m );
+    repaint();
 
     ContactList * list = TContestApp::getContestApp() ->openListFile( fname, slotno );
     if ( list && !preload )
@@ -2031,7 +2064,6 @@ void TLogContainer::addListSlot( QWidget * /*p*/, const QString &fname, int slot
 
     TContestApp::getContestApp() ->writeListsList();
     enableActions();
-    progress.hide();
 }
 
 void TLogContainer::ListOpenActionExecute()

@@ -99,3 +99,7 @@ QSize TestDelegate::sizeHint ( const QStyleOptionViewItem & option, const QModel
     QString text = option.text;
     return s;
 }
+QSize TestDelegate::docSize(QString text) const
+{
+    return HtmlDelegate::docSize(text);
+}

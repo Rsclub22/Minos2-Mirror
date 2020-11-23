@@ -138,6 +138,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterTabFocusIn(QLineEdit*)), this, SLOT(on_AfterTabFocusIn(QLineEdit*)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(ValidateError(int)), this, SLOT(on_ValidateError(int)));
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
+    connect(&MinosLoggerEvents::mle, SIGNAL(tabSandP()), this, SLOT(on_tabSandP()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
@@ -153,6 +154,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     {
         trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
     }
+    on_tabSandP();  // show (or not) the Call/S&P choice
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -215,13 +217,33 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
         return true;
     }
-    if (Key == Qt::Key_Escape)
+    else if (Key == Qt::Key_Tab)
+    {
+         // Do we want "call" tab order or "S and P" tab order?
+         bool tabSandP;
+         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+
+         if (tabSandP)
+         {
+             tabSandP = ui->SandPrb->isChecked();
+         }
+
+         if (tabSandP && edit == false && catchup == false)
+         {
+             if (current == ui->CallsignEdit && !rrIl->valid( cmValidStatus, screenContact ))
+             {
+                 selectField( ui->RSTRXEdit );
+                 return true;
+             }
+         }
+         return false;
+    }
+    else if (Key == Qt::Key_Escape)
     {
         QMetaObject::invokeMethod(ui->GJVCancelButton, "clicked", Qt::QueuedConnection);
         return true;
     }
-
-    if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
+    else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
     {
         setActiveControl( &Key );
         return true;
@@ -370,6 +392,7 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
     {
         edit = true;
         ui->GJVCancelButton->setText(tr("Return to Log"));
+        on_tabSandP();
     }
 }
 
@@ -614,6 +637,14 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 //       logCurrentContact( );
 //       return;
     }
+    // Do we want "call" tab order or "S and P" tab order?
+    bool tabSandP;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+
+    if (tabSandP)
+    {
+        tabSandP = ui->SandPrb->isChecked();
+    }
 
     // validate the entry; if still invalid, spin round the invalid
     // controls (this should really be the job of tab, but...)
@@ -661,6 +692,17 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        // make sure we go to the invalid field
 
        QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
+
+       if (tabSandP && edit == false && catchup == false)
+       {
+           if (current == ui->CallsignEdit)
+           {
+               if (nextf == ui->RSTTXEdit && !rrIl->valid( cmValidStatus, screenContact ))
+               {
+                   nextf = ui->RSTRXEdit;
+               }
+           }
+       }
 
        // but if it is DTG, probably want CS instead (Unless post entry)
 
@@ -1663,7 +1705,7 @@ void QSOLogFrame::contactValid( )
       {
          bool LocOK;
 
-         QString prefix = vcct->ctryMult->basePrefix;
+         QString prefix = vcct->ctryMult->getBasePrefix();
          TContestApp::getContestApp() ->locsBundle.openSection(prefix);
          if (TContestApp::getContestApp() ->locsBundle.isCurrSectionPresent() )
          {
@@ -2008,6 +2050,26 @@ void QSOLogFrame::on_ShowOperators ( )
    ui->SecondOpLabel->setVisible(so);
    ui->MainOpComboBox->setVisible(so);
    ui->OperatorLabel->setVisible(so);
+}
+void QSOLogFrame::on_tabSandP()
+{
+    bool tabSandP;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+
+    if (edit || catchup)
+    {
+        tabSandP = false;
+    }
+    ui->tabSandPframe->setVisible(tabSandP);
+
+    if (!tabSandP || (runButtonOnFlag && !radioOffRunFreq))
+    {
+        ui->callRb->setChecked(true);
+    }
+    else
+    {
+        ui->SandPrb->setChecked(true);
+    }
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::closeContest()
@@ -3045,6 +3107,7 @@ void QSOLogFrame::setRunOnFlag(bool runModeOn)
         setClusterSendSpotControlsState();
 
     }
+    on_tabSandP();  // show (or not) the Call/S&P choiceon_
 }
 
 void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
@@ -3057,6 +3120,7 @@ void QSOLogFrame::setRunOffFreqFlag(bool offRunFreq)
         setClusterSendSpotControlsState();
 
     }
+    on_tabSandP();  // show (or not) the Call/S&P choice
 }
 
 

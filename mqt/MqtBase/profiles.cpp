@@ -17,6 +17,10 @@ QString defaultLayoutName()
 {
     return QCoreApplication::translate("Default Screen Config", "default");
 }
+QString defaultProtectedLayoutName()
+{
+    return QCoreApplication::translate("Default Protected Screen Config", "protected");
+}
 QString defaultSessionName()
 {
     return QCoreApplication::translate("Default Log Session", "Default Session");
@@ -100,7 +104,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpProgressDelay, "LoadProgressDelay", 150, QT_TR_NOOP("Load Progress Delay"), QT_TR_NOOP("Load Progress Delay"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", false, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
 
@@ -168,7 +172,9 @@ BundleFile::BundleFile( PROFILES p )
 
         {
             QByteArray temp = defaultLayoutName().toUtf8();
-            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpCurrentLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpDefaultLayout, "CurrentLayout", temp.constData(), temp, "hint", false ) ) );
+            temp = defaultProtectedLayoutName().toUtf8();
+            entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpProtectedLayout, "ProtectedLayout", temp.constData(), temp, "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );

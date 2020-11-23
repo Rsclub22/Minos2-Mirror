@@ -304,6 +304,7 @@ public:
 
     void on_SupportStopCommand(bool state);
     void setPauseRigControlUpdatesFlag(bool status);
+    void buildFrame();
 };
 
 #endif // TSINGLELOGFRAME_H

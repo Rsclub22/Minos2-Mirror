@@ -233,7 +233,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
     freq = floor(freq/10.0);
     QString sfreq = QString::number(freq, 'f', 0).remove('.');
 
-    QString continent = (tct->ctryMult?tct->ctryMult->continent:QString());
+    QString continent = (tct->ctryMult?tct->ctryMult->getContinent():QString());
 
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
                   + "<" + type + ">\n"

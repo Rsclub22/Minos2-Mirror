@@ -203,8 +203,8 @@ void RigControlFrame::clearFreqInputFocus()
 
 void RigControlFrame::checkRigDetailsAvail()
 {
-    traceMsg(QString("Checking RigDetails are available Count = %1").arg(launchRadioSelectCount--));
     launchRadioSelectCount--;
+    traceMsg(QString("Checking RigDetails are available Count = %1").arg(launchRadioSelectCount));
     if (launchRadioSelectCount == 0)
     {
         // timed out waiting for rigdetails
@@ -231,6 +231,7 @@ void RigControlFrame::checkRigDetailsAvail()
         traceMsg(QString("checkRigDetailsAvail: contest protected or not current contest count is %1 contest %2").arg(launchRadioSelectCount).arg(ct->uuid));
         //launchRadioSelectTimer->stop();
         rigFrameStartFlag = false;
+        launchRadioSelectCount = 1; // stop the sequence - rig won't be connecting
         return;
 
     }
@@ -1721,8 +1722,7 @@ void RigControlFrame::setRadioList()
 
             }
 
-
-
+            launchRadioSelectTimer->start(1000);
 
         }
         else

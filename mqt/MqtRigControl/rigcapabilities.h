@@ -70,6 +70,7 @@ public:
     bool pollData;
 
   RigCapabilities( const RigCapabilities &rigcap);
+  RigCapabilities &operator= ( const RigCapabilities &rigcap);
 
 
 };

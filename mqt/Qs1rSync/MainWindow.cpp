@@ -464,6 +464,9 @@ void MainWindow::QS1RCentre(const Frequency &fLow, const Frequency &fHigh)
         trace(QString("%1 %2").arg(fLow.traceStr()).arg(fHigh.traceStr()));
         qint64 bandWidth = qint64(fHigh) - qint64(fLow);
         qint64 centre = qint64(fLow) + bandWidth/2;
+        centre += 12500;
+        centre /= 25000;
+        centre *= 25000;
 
         // search for nearest matching bandwidth on QS1R
 
@@ -526,8 +529,9 @@ void MainWindow::trackBand()
     {
         return;
     }
-    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode);
-    if (mi == lastBandMode && bi == lastBand)
+    int modePart = -1;
+    QSharedPointer<ModeInfo> mi = bi->findMode(mainRigMode, mainRigFreq, modePart);
+    if (mi == lastBandMode && modePart == lastModePart && bi == lastBand)
     {
         trace("band/mode unchanged");
         return;
@@ -540,10 +544,22 @@ void MainWindow::trackBand()
     else
     {
         trace("mode found OK");
-        QS1RCentre(mi->fLow, mi->fHigh);
+        if (modePart == 1)
+        {
+            QS1RCentre(mi->fcLow1, mi->fcHigh1);
+        }
+        else if (modePart == 2)
+        {
+            QS1RCentre(mi->fcLow2, mi->fcHigh2);
+        }
+        else
+        {
+            QS1RCentre(mi->fLow, mi->fHigh);
+        }
     }
     lastBand = bi;
     lastBandMode = mi;
+    lastModePart = modePart;
 }
 
 void MainWindow::on_noTrack_clicked()

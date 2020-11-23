@@ -306,12 +306,12 @@ int Callsign::validate( )
     QString leadPart;
     int callOffset = 0;
 
-    while (  call[callOffset].isDigit() )    // leading digits (2 of 2E0...)
+    int csize = call.length();
+    while (  callOffset < csize && call[callOffset].isDigit() )    // leading digits (2 of 2E0...)
     {
         leadPart += call[callOffset++];
     }
 
-    int csize = call.length();
     while ( callOffset < csize )            // prefix letters (E of 2E0)
     {
         if ( call[callOffset].isDigit() )

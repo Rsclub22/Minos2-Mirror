@@ -224,7 +224,7 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
    }
 
    if (csyn)
-        ctryMult = csyn->country;
+        ctryMult = csyn->getCountry();
    return ctryMult;
 }
 

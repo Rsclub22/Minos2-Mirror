@@ -59,7 +59,10 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
 
 RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
 {
-
+    *this = rigcap;
+}
+RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
+{
     portType = rigcap.portType;
     rigManufacturer = rigcap.rigManufacturer;
     rigModelName = rigcap.rigModelName;
@@ -78,5 +81,6 @@ RigCapabilities:: RigCapabilities( const RigCapabilities &rigcap)
     supportAntSw = rigcap.supportAntSw;
     supportRigCtld = rigcap.supportRigCtld;
     pollData = rigcap.pollData;
-
+    return *this;
 }
+

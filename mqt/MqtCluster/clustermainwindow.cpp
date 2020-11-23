@@ -1284,7 +1284,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
     {
         return "";
     }
-    return syn.data()->country.data()->central.getLoc();
+    return syn->getCentral().getLoc();
 }
 
 

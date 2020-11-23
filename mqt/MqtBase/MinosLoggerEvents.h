@@ -57,6 +57,7 @@ signals:
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
    void clearContestInFrame(BaseContestLog *);
+   void tabSandP();
 
 
    void BrgStrToRot(QString);
@@ -116,6 +117,7 @@ public:
    static void SendNextUnfilled(BaseContestLog *);
    static void SendFormKey(unsigned int *, BaseContestLog *);
    static void SendClearContestInFrame(BaseContestLog *);
+   static void SendTabSandP();
 
 
    static void SendScreenContactChanged(ScreenContact *, BaseContestLog *, QString);
