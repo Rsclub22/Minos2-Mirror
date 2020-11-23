@@ -31,7 +31,7 @@ FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<QShar
 
     loadSettingsToDialog();
 
- //   connect (ui->lineEdit_28mhz, SIGNAL(editingFinished()), this, SLOT(b_28mhzSelected()));
+
     presetFreqLineEditList << ui->lineEdit_1_8mhz << ui->lineEdit_3_5mhz << ui->lineEdit_7mhz
                            << ui->lineEdit_14mhz << ui->lineEdit_21mhz << ui->lineEdit_28mhz
                            << ui->lineEdit_50mhz << ui->lineEdit_70mhz << ui->lineEdit_144mhz
@@ -50,19 +50,6 @@ FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<QShar
 
 
 
-
-/*
-    connect (ui->lineEdit_50mhz, SIGNAL(editingFinished()), this, SLOT(b_50mhzSelected()));
-    connect (ui->lineEdit_70mhz, SIGNAL(editingFinished()), this, SLOT(b_70mhzSelected()));
-    connect (ui->lineEdit_144mhz, SIGNAL(editingFinished()), this, SLOT(b_144mhzSelected()));
-    connect (ui->lineEdit_432mhz, SIGNAL(editingFinished()), this, SLOT(b_432mhzSelected()));
-
-    connect (, SIGNAL(editingFinished()), this, SLOT(b_1296mhzSelected()));
-    connect (, SIGNAL(editingFinished()), this, SLOT(b_2300mhzSelected()));
-    connect (, SIGNAL(editingFinished()), this, SLOT(b_3_4ghzSelected()));
-    connect (, SIGNAL(editingFinished()), this, SLOT(b_5_6ghzSelected()));
-    connect (, SIGNAL(editingFinished()), this, SLOT(b_10ghzSelected()));
-*/
     connect (ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
     connect (ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelSettings()));
 
