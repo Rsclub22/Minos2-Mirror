@@ -101,7 +101,10 @@ SOURCES += \
     bearinglineedit.cpp \
     callsigninputdialog.cpp \
     locatorinputdialog.cpp \
-    bandmapdatamodel.cpp
+    bandmapdatamodel.cpp \
+    WsjtxNetworkMessage.cpp \
+    WsjtxMessageServer.cpp \
+    Wsjtx_qt_helpers.cpp
 
 HEADERS += \
     AntennaDetail.h \
@@ -186,7 +189,13 @@ HEADERS += \
     callsigninputdialog.h \
     locatorinputdialog.h \
     bandmapdatamodel.h \
-    bandmapcommon.h
+    bandmapcommon.h \
+    WsjtxNetworkMessage.hpp \
+    WsjtxMessageServer.hpp \
+    Wsjtx_pimpl_h.hpp \
+    Wsjtx_pimpl_impl.hpp \
+    Wsjtx_qt_helpers.hpp
+
 
 FORMS += \
     ChatFrame.ui \
