@@ -44,6 +44,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     timeToLive(0),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
+    allowHF(false),
     contestBand(-1),
     contestMode(-1),
     isProtected(false)
@@ -73,27 +74,27 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
-    connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
+    connect (mouseInFrameTimer, &QTimer::timeout, [=](){mouseTimerCheckNewSpots();});
 
     purgeTimer = new QTimer(this);
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(checkNewSpots()));
+    connect (checkNewSpotsTimer, &QTimer::timeout, [=](){checkNewSpots();});
 
     spotQueue.clear();
 
     checkNewFilters = new QTimer(this);
-    connect (checkNewFilters, SIGNAL(timeout()), this, SLOT(checkSavedFilters()));
+    connect (checkNewFilters, &QTimer::timeout, [=](){checkSavedFilters();});
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
-    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+    connect (purgeTimer, &QTimer::timeout, [=](){purgeSpots();});
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    connect (ui->filtersBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
+    connect (ui->filtersBut, &QPushButton::clicked, [=](){filterButtonSelected();});
 
 
     spotsMenu = new QMenu(ui->actionsButton);
@@ -119,21 +120,21 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     //spotsMenu->addAction(memoryActionOveride);
 
     ui->actionsButton->setMenu(spotsMenu);
-    connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
+    connect(spotsMenu, &QMenu::aboutToShow, [=](){onMenuShow();});
 
-    connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
-    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
-    connect( logAction, SIGNAL( triggered() ), this, SLOT(logActionSelected()) );
-    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(memoryActionSelected()) );
-    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(clearSpotActionSelected()) );
-    connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(clearAllSpotsActionSelected()) );
+    connect( freqAction, &QAction::triggered, [=](){on_freqActionSelected();});
+    connect( bearingAction, &QAction::triggered, [=](){bearingActionSelected();});
+    connect( logAction, &QAction::triggered, [=](){logActionSelected();});
+    connect( memoryAction, &QAction::triggered, [=](){memoryActionSelected();});
+    connect( clearSpotAction, &QAction::triggered, [=](){clearSpotActionSelected();});
+    connect( clearAllSpotsAction, &QAction::triggered, [=](){clearAllSpotsActionSelected();});
     //connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
     ui->searchLineEdit->setValidator(&ucValidator);
-    connect(ui->searchLineEdit, SIGNAL(editingFinished()), this, SLOT(onSearchEditingFinished()));
+    connect(ui->searchLineEdit, &QLineEdit::editingFinished, [=](){onSearchEditingFinished();});
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotDataModel->delegate = dxDelegate;
@@ -164,7 +165,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
 
 
-    connect(ui->dxSpotTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
+    connect(ui->dxSpotTab, &QLogTabWidget::currentChanged, [=](int index){onSpotTabChanged(index);});
     restoreLocatorViewColumns();
 
     // all initial restores have been done
@@ -175,8 +176,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
-    connect(ui->unworkedCallsignsChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedCallsignsCheckBox(int)));
-    connect(ui->unworkedLocChkBox, SIGNAL(stateChanged(int)), this, SLOT(on_unworkedLocCheckBox(int)));
+    connect(ui->unworkedCallsignsChkBox, &QCheckBox::stateChanged, [=](int state){on_unworkedCallsignsCheckBox(state);});
+    connect(ui->unworkedLocChkBox, &QCheckBox::stateChanged, [=](int state){on_unworkedLocCheckBox(state);});
 
     purgeTimer->start(PURGE_TIME);
 
@@ -190,8 +191,11 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-    connect(ui->resendSpotsTestPb, SIGNAL(pressed()), this, SLOT(on_pushbuttonPressed()));
+    connect(ui->resendSpotsTestPb, &QPushButton::pressed, [=](){on_pushbuttonPressed();});
 
+    checkHfFlagTimer = new QTimer(this);
+    connect(checkHfFlagTimer, &QTimer::timeout, [=](){checkHfFlag();});
+    checkHfFlagTimer->start(1000);
 
     if (!isProtected)
     {
@@ -205,6 +209,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
 ClusterClientFrame::~ClusterClientFrame()
 {
+    checkHfFlagTimer->stop();
     delete ui;
     delete dxSpotDataModel;
 
@@ -538,6 +543,42 @@ void ClusterClientFrame::filterButtonSelected()
 
     filterSetup->close();
     delete filterSetup;
+
+}
+
+
+
+void ClusterClientFrame::checkHfFlag()
+{
+    bool hf = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, hf );
+    if (hf != allowHF)
+    {
+        allowHF = hf;
+        setHF(allowHF);
+    }
+
+
+}
+
+
+
+void ClusterClientFrame::setHF(bool hfOn)
+{
+
+    if (hfOn)
+    {
+       for (auto &bf:filterSettings.hfBandFilters)
+       {
+           *bf = false;
+       }
+    }
+    else
+    {
+        // this might not be the right thing to do...
+        LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+        filterSettings = contest->getClusterFilter();
+    }
 
 }
 

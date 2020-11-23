@@ -183,8 +183,12 @@ private:
     bool purgeSpotFlag;
     bool holdUpdateFlag;
 
+    bool allowHF;
+
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
+
+    QTimer* checkHfFlagTimer;
 
     MouseInObject* actionInObject;
 
@@ -291,6 +295,7 @@ private:
     bool checkspotExists(ClusterSpotData *spotData);
 
 
+    void setHF(bool hfOn);
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);
@@ -339,6 +344,7 @@ private slots:
     void on_unworkedCallsignsCheckBox(int state);
     void requestSpots();
     void on_pushbuttonPressed();  //*************** test remove
+    void checkHfFlag();
 };
 
 class MouseInObject : public QObject

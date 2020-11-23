@@ -186,7 +186,7 @@ void ClusterMainWindow::doStartup()
     enableHFSpots = config.value("enable", false).toBool();
     config.endGroup();
 
-    initFilterCheckBoxs();
+
 
     // in comming spot tab
 
@@ -363,6 +363,9 @@ void ClusterMainWindow::doStartup()
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
     connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
+
+    initFilterCheckBoxs();
+
     setHF(false);
 
 }
@@ -1611,7 +1614,7 @@ void ClusterMainWindow::onHandleSpotsInQueues()
 
     getSpotsFromSendToClientQueue();
 
-    // ******************** handleResendSpotToClientsCmds();
+    handleResendSpotToClientsCmds();
 
 
 }
@@ -1629,7 +1632,7 @@ void ClusterMainWindow::getSpotsFromSendToClientQueue()
             while (sendSpotsToClientQueue.count() > 0)
             {
                 trace(QString("Sending spot from send queue, queue length = %1, spot = %2").arg(sendSpotsToClientQueue.count()).arg(sendSpotsToClientQueue[0]));
-                //**********   clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "", resendFrameId::ALL_CLIENTS);      // uuid = space all logs
+                clusterRpc->sendDXSpot(sendSpotsToClientQueue[0], "", resendFrameId::ALL_CLIENTS);      // uuid = space all logs
                 sendSpotsToClientQueue.removeFirst();
             }
         }
@@ -2178,8 +2181,8 @@ void ClusterMainWindow::getStartCommands()
         startCommands.append(settings.value(commandkeys[i]).toString());
     }
 }
-
 */
+
 
 /**************************** User Command Buttons **************************/
 
