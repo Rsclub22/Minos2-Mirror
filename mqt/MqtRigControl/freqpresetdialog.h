@@ -66,6 +66,7 @@ private slots:
 
 
 
+    void onbandCheckBoxStateChanged(int i);
 private:
     Ui::FreqPresetDialog *ui;
     QStringList presetFreq;
@@ -73,10 +74,15 @@ private:
     bool freqChanged = false;
     bool* freqPresetChanged;
 
+    QList<QLineEdit*> presetFreqLineEditList;
 
 
-    bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
-    void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
+
+    //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
+    //void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
+
+    bool checkInBand(Frequency freq, int band);
+    void getFreq(QLineEdit* f_box, int band);
 
     void loadSettingsToDialog();
 };

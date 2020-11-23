@@ -117,7 +117,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigFactory = new RigFactory(false, this);
 
 
-    BandList::getBandList().loadVhfAndUpBands(bands);
+    BandList::getBandList().loadAllBands(bands);
     FreqPresetDialog::readSettings(presetFreq);
 
     setupRadio = new RigSetupDialog(rigFactory, bands);
@@ -4067,15 +4067,29 @@ void RigControlMainWindow::loadBands()
 void RigControlMainWindow::initialiseSupportedRadioDisplay()
 {
     // table of indicators
-    supRadioInd.append(ui->_50mhz_Indicator);
-    supRadioInd.append(ui->_70mhz_Indicator);
-    supRadioInd.append(ui->_144mhz_Indicator);
-    supRadioInd.append(ui->_432mhz_Indicator);
-    supRadioInd.append(ui->_1296mhz_Indicator);
-    supRadioInd.append(ui->_2300mhz_Indicator);
-    supRadioInd.append(ui->_3_4ghz_Indicator);
-    supRadioInd.append(ui->_5_6ghz_Indicator);
-    supRadioInd.append(ui->_10ghz_Indicator);
+    allSupRadioInd << ui->_1_8mhz_Indicator << ui->_3_5mhz_Indicator
+                   << ui->_7mhz_Indicator << ui->_14mhz_Indicator
+                   << ui->_21mhz_Indicator << ui->_28mhz_Indicator
+                   << ui->_50mhz_Indicator << ui->_50mhz_Indicator
+                   << ui->_144mhz_Indicator << ui->_432mhz_Indicator
+                   << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
+                   << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
+                   << ui->_10ghz_Indicator;
+
+    hfSupRadioInd << ui->_1_8mhz_Indicator << ui->_3_5mhz_Indicator
+                   << ui->_7mhz_Indicator << ui->_14mhz_Indicator
+                   << ui->_21mhz_Indicator << ui->_28mhz_Indicator;
+
+    hfSupRadioLabels << ui->_1_8_mhzIndLbl << ui->_3_5_mhzIndLbl
+                     << ui->_7_mhzIndLbl << ui->_14_mhzIndLbl
+                     << ui->_21_mhzIndLbl << ui->_28_mhzIndLbl;
+
+    vhfSupRadioInd << ui->_50mhz_Indicator << ui->_50mhz_Indicator
+                   << ui->_144mhz_Indicator << ui->_432mhz_Indicator
+                   << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
+                   << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
+                   << ui->_10ghz_Indicator;
+
 
     turnOffAllsupRadioIndicators();
 
@@ -4121,24 +4135,26 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
 
     for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
     {
-
-        for (int b = 0; b < freqPresetData::presetBands.count(); b++)
+        for (int b = 0; b < bands.count(); b++)
         {
-           if (setupRadio->currentRadio.radioTransSupBands[i] == freqPresetData::presetBands[b])
-            {
-               supRadioIndToggle(b, displayIndicator::RADIO);
-               break;
-           }
+            if (setupRadio->currentRadio.radioTransSupBands[i] == bands[b].data()->uk)
+             {
+                supRadioIndToggle(b, displayIndicator::RADIO);
+                break;
+            }
         }
+
     }
+
+
 
     if (setupRadio->currentRadio.transVertEnable)
     {
        for (int i = 0; i < setupRadio->currentRadio.transVertSettings.count(); i++)
        {
-          for (int b = 0; b < freqPresetData::presetBands.count(); b++)
+          for (int b = 0; b < bands.count(); b++)
           {
-                if (setupRadio->currentRadio.transVertSettings[i]->band == freqPresetData::presetBands[b])
+                if (setupRadio->currentRadio.transVertSettings[i]->band == bands[b].data()->uk)
                 {
                     supRadioIndToggle(b, displayIndicator::TRANSVERT);
                     break;
@@ -4155,7 +4171,7 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
 void RigControlMainWindow::turnOffAllsupRadioIndicators()
 {
 
-    for (int i = 0; i < supRadioInd.count(); i++)
+    for (int i = 0; i < allSupRadioInd.count(); i++)
     {
         supRadioIndToggle(i, displayIndicator::OFF);
     }
@@ -4168,19 +4184,19 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 
     if (type == displayIndicator::OFF)
     {
-        supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
+        allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
     }
     else if (type == displayIndicator::RADIO)
     {
-       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
+       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
     }
     else if (type == displayIndicator::TRANSVERT)
     {
-       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
+       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
     }
     else if (type == displayIndicator::TRANSVERT_ON)
     {
-       supRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
     }
 
 

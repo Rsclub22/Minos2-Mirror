@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1020</width>
-    <height>320</height>
+    <width>1028</width>
+    <height>328</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -150,170 +150,42 @@
           </item>
           <item>
            <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="4">
-             <widget class="QPushButton" name="_144mhz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
+            <item row="0" column="2">
+             <widget class="QLabel" name="_1_8_mhzIndLbl">
               <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="4">
-             <widget class="QPushButton" name="_5_6ghz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
+               <string>1.8 MHz</string>
               </property>
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QPushButton" name="_3_4ghz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
+             <widget class="QLabel" name="_14_mhzIndLbl">
               <property name="text">
-               <string/>
+               <string>14 MHz</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="6">
-             <widget class="QPushButton" name="_10ghz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
+            <item row="3" column="4">
+             <widget class="QLabel" name="label_10">
               <property name="text">
-               <string/>
+               <string>3.4 GHz</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QPushButton" name="_2300mhz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
+            <item row="3" column="6">
+             <widget class="QLabel" name="label_11">
               <property name="text">
-               <string/>
+               <string>5.6 GHz</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="2">
-             <widget class="QPushButton" name="_70mhz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
+            <item row="2" column="8">
+             <widget class="QLabel" name="label_7">
               <property name="text">
-               <string/>
+               <string>432 MHz</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="8">
-             <widget class="QPushButton" name="_1296mhz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLabel" name="label_9">
-              <property name="text">
-               <string>2300 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="3">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>70 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QPushButton" name="_50mhz_Indicator">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16</width>
-                <height>16</height>
-               </size>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="5">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>144 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>50 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="9">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>1296 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="6">
+            <item row="2" column="7">
              <widget class="QPushButton" name="_432mhz_Indicator">
               <property name="enabled">
                <bool>false</bool>
@@ -329,31 +201,297 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="7">
-             <widget class="QLabel" name="label_7">
+            <item row="3" column="2">
+             <widget class="QLabel" name="label_9">
               <property name="text">
-               <string>432 MHz</string>
+               <string>2300 MHz</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="3">
-             <widget class="QLabel" name="label_10">
+            <item row="2" column="2">
+             <widget class="QLabel" name="label_4">
               <property name="text">
-               <string>3.4 GHz</string>
+               <string>50 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="5">
+             <widget class="QPushButton" name="_144mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="4">
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>70 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="_2300mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="6">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>144 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="4">
+             <widget class="QLabel" name="_21_mhzIndLbl">
+              <property name="text">
+               <string>21 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="_50mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="5">
+             <widget class="QPushButton" name="_5_6ghz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QPushButton" name="_3_4ghz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QPushButton" name="_14mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QPushButton" name="_70mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="7">
+             <widget class="QPushButton" name="_10ghz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="6">
+             <widget class="QLabel" name="_7_mhzIndLbl">
+              <property name="text">
+               <string>7 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="8">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>10 GHz</string>
               </property>
              </widget>
             </item>
             <item row="1" column="5">
-             <widget class="QLabel" name="label_11">
+             <widget class="QPushButton" name="_28mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="text">
-               <string>5.6 GHz</string>
+               <string/>
               </property>
              </widget>
             </item>
-            <item row="1" column="7">
-             <widget class="QLabel" name="label_12">
+            <item row="0" column="5">
+             <widget class="QPushButton" name="_7mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="text">
-               <string>10 GHz</string>
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="6">
+             <widget class="QLabel" name="_28_mhzIndLbl">
+              <property name="text">
+               <string>28 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="_1_8mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QPushButton" name="_3_5mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QPushButton" name="_21mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="4">
+             <widget class="QLabel" name="_3_5_mhzIndLbl">
+              <property name="text">
+               <string>3.5 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="10">
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>1296 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="9">
+             <widget class="QPushButton" name="_1296mhz_Indicator">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16</width>
+                <height>16</height>
+               </size>
+              </property>
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>
@@ -595,7 +733,7 @@
                   </font>
                  </property>
                  <property name="text">
-                  <string> </string>
+                  <string/>
                  </property>
                 </widget>
                </item>
@@ -858,7 +996,7 @@ Active</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1020</width>
+     <width>1028</width>
      <height>21</height>
     </rect>
    </property>

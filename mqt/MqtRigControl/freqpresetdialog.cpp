@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2020
 //
 //
 //
@@ -32,24 +32,48 @@ FreqPresetDialog::FreqPresetDialog(QStringList& _presetFreq, const QVector<QShar
     loadSettingsToDialog();
 
  //   connect (ui->lineEdit_28mhz, SIGNAL(editingFinished()), this, SLOT(b_28mhzSelected()));
+    presetFreqLineEditList << ui->lineEdit_1_8mhz << ui->lineEdit_3_5mhz << ui->lineEdit_7mhz
+                           << ui->lineEdit_14mhz << ui->lineEdit_21mhz << ui->lineEdit_28mhz
+                           << ui->lineEdit_50mhz << ui->lineEdit_70mhz << ui->lineEdit_144mhz
+                           << ui->lineEdit_432mhz << ui->lineEdit_1296mhz << ui->lineEdit_2300mhz
+                           <<ui->lineEdit_3_4ghz << ui->lineEdit_5_6ghz << ui->lineEdit_10ghz;
+
+
+
+
+
+    for (int i = 0; i < presetFreqLineEditList.count(); i++)
+    {
+        connect(presetFreqLineEditList[i], &QLineEdit::editingFinished, [=]() {onbandCheckBoxStateChanged(i);});
+
+    }
+
+
+
+
+/*
     connect (ui->lineEdit_50mhz, SIGNAL(editingFinished()), this, SLOT(b_50mhzSelected()));
     connect (ui->lineEdit_70mhz, SIGNAL(editingFinished()), this, SLOT(b_70mhzSelected()));
     connect (ui->lineEdit_144mhz, SIGNAL(editingFinished()), this, SLOT(b_144mhzSelected()));
     connect (ui->lineEdit_432mhz, SIGNAL(editingFinished()), this, SLOT(b_432mhzSelected()));
 
-    connect (ui->lineEdit_1296mhz, SIGNAL(editingFinished()), this, SLOT(b_1296mhzSelected()));
-    connect (ui->lineEdit_2300mhz, SIGNAL(editingFinished()), this, SLOT(b_2300mhzSelected()));
-    connect (ui->lineEdit_3_4ghz, SIGNAL(editingFinished()), this, SLOT(b_3_4ghzSelected()));
-    connect (ui->lineEdit_5_6ghz, SIGNAL(editingFinished()), this, SLOT(b_5_6ghzSelected()));
-    connect (ui->lineEdit_10ghz, SIGNAL(editingFinished()), this, SLOT(b_10ghzSelected()));
-
-
+    connect (, SIGNAL(editingFinished()), this, SLOT(b_1296mhzSelected()));
+    connect (, SIGNAL(editingFinished()), this, SLOT(b_2300mhzSelected()));
+    connect (, SIGNAL(editingFinished()), this, SLOT(b_3_4ghzSelected()));
+    connect (, SIGNAL(editingFinished()), this, SLOT(b_5_6ghzSelected()));
+    connect (, SIGNAL(editingFinished()), this, SLOT(b_10ghzSelected()));
+*/
     connect (ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
     connect (ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelSettings()));
 
 
 
 
+}
+
+void FreqPresetDialog::onbandCheckBoxStateChanged(int i)
+{
+    getFreq(presetFreqLineEditList[i], i);
 }
 
 FreqPresetDialog::~FreqPresetDialog()
@@ -118,7 +142,7 @@ void FreqPresetDialog::b_10ghzSelected()
 
 
 
-void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band)
+void FreqPresetDialog::getFreq(QLineEdit* f_box, int band)
 {
 
     QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
@@ -143,7 +167,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band
 
 // check in band
 
-bool FreqPresetDialog::checkInBand(Frequency freq, freqPresetData::bandOffSet band)
+bool FreqPresetDialog::checkInBand(Frequency freq, int band)
 {
     if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {
@@ -179,7 +203,12 @@ void FreqPresetDialog::saveSettings()
 
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("FreqPresets");
-//    config.setValue("28MHz", presetFreq[_28MHZ]);
+    config.setValue("1_8MHz", presetFreq[freqPresetData::_1_8MHZ]);
+    config.setValue("3_5MHz", presetFreq[freqPresetData::_3_5MHZ]);
+    config.setValue("7MHz", presetFreq[freqPresetData::_7MHZ]);
+    config.setValue("14MHz", presetFreq[freqPresetData::_14MHZ]);
+    config.setValue("21MHz", presetFreq[freqPresetData::_21MHZ]);
+    config.setValue("28MHz", presetFreq[freqPresetData::_28MHZ]);
     config.setValue("50MHz", presetFreq[freqPresetData::_50MHZ]);
     config.setValue("70MHz", presetFreq[freqPresetData::_70MHZ]);
     config.setValue("144MHz", presetFreq[freqPresetData::_144MHZ]);
@@ -210,8 +239,12 @@ void FreqPresetDialog::readSettings(QStringList& presetFreq)  // static
     presetFreq.clear();
 
     config.beginGroup("FreqPresets");
-
- //   _presetFreq.append(config.value("28MHz", bandFreq[_28MHZ]).toString());
+    presetFreq.append(config.value("1_8MHz", freqPresetData::bandFreq[freqPresetData::_1_8MHZ]).toString());
+    presetFreq.append(config.value("3_5MHz", freqPresetData::bandFreq[freqPresetData::_3_5MHZ]).toString());
+    presetFreq.append(config.value("7MHz", freqPresetData::bandFreq[freqPresetData::_7MHZ]).toString());
+    presetFreq.append(config.value("14MHz", freqPresetData::bandFreq[freqPresetData::_14MHZ]).toString());
+    presetFreq.append(config.value("21MHz", freqPresetData::bandFreq[freqPresetData::_21MHZ]).toString());
+    presetFreq.append(config.value("28MHz", freqPresetData::bandFreq[freqPresetData::_28MHZ]).toString());
     presetFreq.append(config.value("50MHz", freqPresetData::bandFreq[freqPresetData::_50MHZ]).toString());
     presetFreq.append(config.value("70MHz", freqPresetData::bandFreq[freqPresetData::_70MHZ]).toString());
     presetFreq.append(config.value("144MHz", freqPresetData::bandFreq[freqPresetData::_144MHZ]).toString());

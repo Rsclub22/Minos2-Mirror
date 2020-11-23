@@ -166,7 +166,13 @@ private:
     QString geoStr;         // geometry registry location
 
 
-    QVector<QPushButton*> supRadioInd;
+    QVector<QPushButton*> allSupRadioInd;
+
+    QVector<QPushButton*> hfSupRadioInd;
+    QVector<QLabel*> hfSupRadioLabels;
+
+    QVector<QPushButton*> vhfSupRadioInd;
+
     QString selTransVertBandIndicator = "";
 
 
