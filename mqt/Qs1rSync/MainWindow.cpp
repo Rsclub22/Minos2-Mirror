@@ -84,7 +84,8 @@ QVector<BandWidth> bws =
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    n1mmLink(parent)
+    n1mmLink(parent),
+    wsjtxLink(parent)
 {
     ui->setupUi(this);
 
@@ -583,4 +584,16 @@ void MainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 {
     QSettings settings;
     settings.setValue("trackBand", ui->trackBandcb->isChecked());
+}
+
+void MainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
+{
+    if (ui->wsjtxCb->isChecked())
+    {
+        wsjtxLink.initialise();
+    }
+    else
+    {
+        wsjtxLink.disconnect();
+    }
 }
