@@ -152,7 +152,7 @@ private slots:
 
 
     void onCheckContestBandMatch();
-    void clearPauseRigControlUpdatesFlag();
+
 public slots:
     void returnChangeRadioFreq();
 private:

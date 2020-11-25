@@ -72,6 +72,10 @@ void RigState::setRadioFreq(Frequency freq)
 {
     _radioFreq.setValue(freq);
 }
+Frequency RigState::getRadioFreq()
+{
+    return _radioFreq.getValue();
+}
 void RigState::setLogFreq(Frequency freq)
 {
     _logFreq.setValue(freq);

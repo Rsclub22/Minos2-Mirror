@@ -67,6 +67,7 @@ public:
     void setRitRadioStatus(const bool status);
 
     QStringList getSelectedLoggers();
+    Frequency getRadioFreq();
 };
 
 #endif // RIGSTATE_H

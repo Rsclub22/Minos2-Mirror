@@ -882,35 +882,15 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        tslf->setPauseRigControlUpdatesFlag(true);
         sendFreq.clear();
 
         traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
         setRadioName(radNam, false);
 
-        delayedAction(this, [=]()
-        {
-           // NB a lambda function
-            if (ct)
-            {
-                // There are circumstances where ct has been cleared by now!
-                clearPauseRigControlUpdatesFlag();
-            }
-        }, 2000);
-
-
-
-
 
     }
 }
 
-void RigControlFrame::clearPauseRigControlUpdatesFlag()
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    tslf->setPauseRigControlUpdatesFlag(false);
-}
 
 
 bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
@@ -1393,13 +1373,18 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
        ignorePresetFreqFlag = readIgnorePresetFreqFlag();
        ignorePreviousFreqFlag = readIgnorePreviousFreqFlag();
 
-       if (fromStartRigControl && !lastFreq.isClear())
+       if (!fromStartRigControl /*&& !lastFreq.isClear()*/)
        {
            // frame has been running, so use lastFreq, except if ignorePreviousFreqFlag set
            if (!ignorePreviousFreqFlag)
            {
                traceMsg(QString("frame has been running, using lastFreq = %1").arg(lastFreq.traceStr()));
                sendFreq = lastFreq;
+           }
+           else
+           {
+               traceMsg(QString("frame has been running, ignore lastFreq"));
+
            }
 
            return;
@@ -1821,9 +1806,12 @@ void RigControlFrame::setRadioState(QString s)
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-                // set Display to sendFreq in case radio has been disconnected
-                displayFreqOnFreqEditDisplay(sendFreq);
 
+                // now connected update display freq
+                RigState rigSt = LogContainer->sendDM->getRigState(radioName);
+                QString fStr = rigSt.getRadioFreq().str();
+                traceMsg(QString("Radio State Connected, radio freq = %1").arg(fStr));
+                displayFreqOnFreqEditDisplay(fStr);
 
                 //restoreRadioFreq();
                 emit radioIsConnected(true);

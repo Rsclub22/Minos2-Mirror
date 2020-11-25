@@ -1706,21 +1706,8 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         runButtonsFrame->setFreq(f);
         GJVQSOLogFrame->setFreq(f);
         bandmapControlFrame->setFreq(f);
-        if (pauseRigControlUpdates)    // pausing updates while contest is changing
-        {
 
-            if (f == FKHRigControlFrame->getSendFreq()) // waiting for correct freq on contest change
-            {
-                pauseRigControlUpdates = false;
-                updateFreq(f);
-            }
-
-        }
-        else
-        {
-            updateFreq(f);
-        }
-
+        updateFreq(f);
 
         if (stopKeyer)
         {
@@ -1743,10 +1730,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
 }
 
 
-void TSingleLogFrame::setPauseRigControlUpdatesFlag(bool status)
-{
-    pauseRigControlUpdates = status;
-}
+
 
 void TSingleLogFrame::on_SetRitFreq(ShortFreq f)
 {

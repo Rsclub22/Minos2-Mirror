@@ -245,6 +245,10 @@ void RigCache::setRadioFreq(const PubSubName &name, Frequency freq)
 {
     rigStates[name].setRadioFreq(freq);
 }
+Frequency RigCache::getRadioFreq(const PubSubName &name)
+{
+    return rigStates[name].getRadioFreq();
+}
 void RigCache::setLogFreq(const PubSubName &name, Frequency freq)
 {
     rigStates[name].setLogFreq(freq);

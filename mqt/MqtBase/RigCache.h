@@ -79,6 +79,7 @@ public:
 
 
 
+    Frequency getRadioFreq(const PubSubName &name);
 };
 
 #endif // RIGCACHE_H
