@@ -391,7 +391,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, SIGNAL(setRitFreq(ShortFreq)), this, SLOT(setRitFreq(ShortFreq)));
     connect(msg, SIGNAL(setRitStatus(bool)), this, SLOT(setRitLogStatus(bool)));
     connect(msg, SIGNAL(setMode(QString)), this, SLOT(loggerSetMode(QString)));
-    connect(msg, SIGNAL(selectLoggerRadio(PubSubName, Frequency, QString)), this, SLOT(onSelectRadio(PubSubName, Frequency, QString)));
+    connect(msg, SIGNAL(selectLoggerRadio(PubSubName, QString, Frequency, QString)), this, SLOT(onSelectRadio(PubSubName, QString, Frequency, QString)));
     connect(msg, SIGNAL(setVolume(int)), this, SLOT(loggerSetVolume(int)));
 
 
@@ -1672,13 +1672,13 @@ void RigControlMainWindow::onNewVfo(QString omniRigVfo)
 
 
 
-void RigControlMainWindow::onSelectRadio(PubSubName s, Frequency freq, QString mode)
+void RigControlMainWindow::onSelectRadio(PubSubName s, QString band, Frequency freq, QString mode)
 {
     trace(QString("RigControlMainWindow::onSelectRadio closeApp is %1").arg(closeApp));
     if (closeApp)
         return;
 
-    logMessage(QString("**** Received SelectRadio from Logger = %1, freq = %2, mode = %3 ****").arg(s.toString()).arg(freq.traceStr()).arg(mode));
+    logMessage(QString("**** Received SelectRadio from Logger = %1, band = %2, freq = %3, mode = %4 ****").arg(s.toString()).arg(band).arg(freq.traceStr()).arg(mode));
 
 
     //if (mode.isEmpty() || freq.isEmpty() || s.isEmpty())

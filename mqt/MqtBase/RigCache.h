@@ -80,6 +80,7 @@ public:
 
 
     Frequency getRadioFreq(const PubSubName &name);
+    void setLogBand(const PubSubName &name, QString band);
 };
 
 #endif // RIGCACHE_H

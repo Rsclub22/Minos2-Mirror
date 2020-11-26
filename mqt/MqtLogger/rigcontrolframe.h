@@ -100,7 +100,7 @@ public:
 
     Frequency getSendFreq();
 signals:
-    void selectRadio(QString, Frequency, QString);  // radio name, freq, mode
+    void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);
     void sendVolumeToRadio(int);
     void noRadioSendFreq(Frequency);
@@ -192,6 +192,7 @@ private:
     bool ritKHzFlag;
     //QString curRit;
 
+    QString contestBand;
     Frequency contestBandFLow;
     Frequency contestBandFHigh;
 

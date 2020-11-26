@@ -253,6 +253,10 @@ void RigCache::setLogFreq(const PubSubName &name, Frequency freq)
 {
     rigStates[name].setLogFreq(freq);
 }
+void RigCache::setLogBand(const PubSubName &name, QString band)
+{
+    rigStates[name].setLogBand(band);
+}
 void RigCache::setRadioMode(const PubSubName &name, const QString &mode)
 {
     rigStates[name].setRadioMode(mode);

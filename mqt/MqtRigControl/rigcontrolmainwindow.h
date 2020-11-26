@@ -116,6 +116,7 @@ private:
     QString slogMode;
     QString selRadioMode;   // onSelectRadio mode from logger at startup
     Frequency selRadioFreq;
+    QString selBand;
     //rmode_t logMode;
     QString selTvBand;      // selected band from radio
     QString transVertSwNum;
@@ -363,7 +364,7 @@ private slots:
     void updateSelectRadioBox();
     void aboutRigConfig();
 
-    void onSelectRadio(PubSubName, Frequency freq, QString mode);
+    void onSelectRadio(PubSubName, QString, Frequency freq, QString mode);
     void selFreqClicked();
     void setupBandFreq();
     void selectRadio();

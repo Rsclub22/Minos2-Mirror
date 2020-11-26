@@ -90,7 +90,7 @@ void TSingleLogFrame::buildFrame()
     // To rig controller
 
     connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
-    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, Frequency, QString)));
+    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, QString, Frequency, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
     connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
@@ -1910,7 +1910,7 @@ void TSingleLogFrame::sendRadioMode(QString mode)
     }
 }
 
-void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &freq, const QString &mode)
+void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &band, const Frequency &freq, const QString &mode)
 {
 
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
@@ -1928,7 +1928,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const Frequency &f
 
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
-            LogContainer->sendDM->changeRigSelectionTo(radName, freq, mode, ct->uuid);  // send message including mode if it has been appended.
+            LogContainer->sendDM->changeRigSelectionTo(radName, band, freq, mode, ct->uuid);  // send message including mode if it has been appended.
             traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.traceStr()).arg(mode).arg(uuid));
 
 

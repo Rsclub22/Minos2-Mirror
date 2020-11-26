@@ -258,25 +258,26 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
     rpc.queueCall( s );
 }
 
-void TSendDM::changeRigSelectionTo(const PubSubName &name, const Frequency &freq, const QString &mode, const QString &uuid)
+void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
     // we should de-select the cached uuid on all rig apps
 
-    trace(QString("Change rig selection to name = %1, freq = %2, mode = %3, uuid = %4").arg(name.toString()).arg(freq.traceStr()).arg(mode).arg(uuid));
+    trace(QString("Change rig selection to name = %1, band = %2, freq = %3, mode = %4, uuid = %5").arg(name.toString()).arg(band).arg(freq.traceStr()).arg(mode).arg(uuid));
 
     PubSubName selected = rigCache.getSelected(loggerUuid);
 
     if (!selected.isEmpty() && selected != name)
     {
-        sendRigSelection(selected, Frequency(),"", "");
+        sendRigSelection(selected, "", Frequency(),"", "");
     }
-    sendRigSelection(name, freq, mode, uuid);
+    sendRigSelection(name, band, freq, mode, uuid);
 }
-void TSendDM::sendRigSelection(const PubSubName &s, const Frequency &freq, const QString &mode, const QString &uuid)
+void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const Frequency &freq, const QString &mode, const QString &uuid)
 {
     rigCache.setSelected(s, loggerUuid, uuid);
     rigCache.setLogMode(s, mode);
     rigCache.setLogFreq(s, freq);
+    rigCache.setLogBand(s, band);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
@@ -286,6 +287,7 @@ void TSendDM::sendRigSelection(const PubSubName &s, const Frequency &freq, const
     st->addMember( select, rpcConstants::selected );
 
     st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
+    st->addMember(band, rpcConstants::rigControlLogBand);
     st->addMember(freq.str(), rpcConstants::rigControlLogFreq);
     st->addMember( mode, rpcConstants::rigControlLogMode );
     rpc.getCallArgs() ->addParam( st );

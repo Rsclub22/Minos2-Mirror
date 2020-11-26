@@ -69,6 +69,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
     if ( !err )
     {
         QSharedPointer<RPCParam> psFreq;
+        QSharedPointer<RPCParam> psBand;
         QSharedPointer<RPCParam> psMode;
         QSharedPointer<RPCParam> psName;
         QSharedPointer<RPCParam> psLoggerUuid;
@@ -139,8 +140,17 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                         }
                     }
 
+                    QString sBand;
+                    if ( args->getStructArgMember(0, rpcConstants::rigControlLogBand, psBand))
+                    {
+                        if (psBand->getString(sBand))
+                        {
+                            trace(QString("Rig RPC: Select Radio Band Command From Logger = %1").arg(sBand));
+                        }
+                    }
+
                     psn = rigCache.getSelectedRadio(psn);
-                    emit selectLoggerRadio(psn, Frequency(sfreq), mode);
+                    emit selectLoggerRadio(psn, sBand, Frequency(sfreq), mode);
                 }
                 else
                 {
