@@ -145,6 +145,7 @@ public:
     explicit ClusterClientFrame(QWidget *parent);
     ~ClusterClientFrame() override;
 
+
     void setContest(BaseContestLog *contest);
 
     void mouseMoveEvent(QMouseEvent *event) override;

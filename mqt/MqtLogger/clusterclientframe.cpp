@@ -221,6 +221,9 @@ ClusterClientFrame::~ClusterClientFrame()
 
 }
 
+
+
+
 void ClusterClientFrame::on_pushbuttonPressed()
 {
     if (ct  && contestBand != -1)
@@ -551,12 +554,17 @@ void ClusterClientFrame::filterButtonSelected()
 void ClusterClientFrame::checkHfFlag()
 {
     bool hf = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, hf );
-    if (hf != allowHF)
+    if (TContestApp::getContestApp())
     {
-        allowHF = hf;
-        setHF(allowHF);
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, hf );
+        if (hf != allowHF)
+        {
+            allowHF = hf;
+            setHF(allowHF);
+        }
     }
+
+
 
 
 }
