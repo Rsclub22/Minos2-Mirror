@@ -68,6 +68,136 @@ void delay(int sec);
 void sleepFor(qint64 milliseconds);
 
 
+class LoggerRequests
+{
+
+public:
+
+    LoggerRequests(){clear();}
+
+    void clear()
+    {
+        logger_freq = Frequency(0);
+        selRadioFreq =  Frequency(0);
+        logRitOn = false;
+    }
+
+    Frequency logger_freq;
+    Frequency selRadioFreq;
+    QString selBand;
+    QString slogMode;
+    QString selRadioMode;   // onSelectRadio mode from logger at startup
+    bool logRitOn;
+};
+
+class RigCtldDetails
+{
+public:
+    RigCtldDetails(){clear();}
+
+    void clear()
+    {
+        irigctld_radioNumber = 0;
+        rigCtldConnectDelay = 0;
+    }
+
+
+    QString rigctld_radioNumber;
+    int irigctld_radioNumber;
+    QString rigctld_radioName;
+    QString rigctld_radioMfg;
+
+    int rigCtldConnectDelay;
+};
+
+class RigSupCapabilities
+{
+public:
+    RigSupCapabilities(){clear();}
+
+    void clear()
+    {
+        supVolume = false;
+        supSignalStrength = false;
+        radioSupGetRit = false;
+        radioSupSetRit = false;
+        radioSupGetRitState = false;
+        radioSupSetRitState = false;
+        supportGetVfo = false;
+        supportSetVfo = false;
+    }
+
+    bool supVolume;     // radio supports volume
+    bool supSignalStrength;
+    bool radioSupGetRit;
+    bool radioSupSetRit;
+    bool radioSupGetRitState;
+    bool radioSupSetRitState;
+    bool supportGetVfo;
+    bool supportSetVfo;
+
+};
+
+
+class RigStateDetails
+{
+
+public:
+
+  RigStateDetails(){clear();}
+
+  void clear()
+  {
+     radioIndex = 0;
+     pollTime = 1000;
+     rfrequency = Frequency(0);
+     curVfoFreq = Frequency(0);
+     curOtherFreq = Frequency(0);
+     selTransvertNum = 0;
+     mgmModeFlag = false;
+     radioRitOn = false;
+     ritMaxKHzFreq = MAX_RITFREQ;
+     ritEnable = false;
+     ritKHzFlag = false;
+     radioCommsOK = false;
+     rigErrorFlag = false;
+     traceCommsFlag = false;
+     curVol = 0;
+     curSignalStrength = 0;
+
+  }
+
+  RigCapabilities rigCap;
+  int radioIndex;
+  int pollTime;
+  Frequency rfrequency;
+  MODE rmode;
+  VFO curVfo;
+  Frequency curVfoFreq;
+  Frequency curTransVertFreq;
+  Frequency curOtherFreq;
+  QString curBand;
+  QString curTransvertBand;
+  int selTransvertNum;
+  QString selTvBand;
+  QString transVertSwNum;
+  QString selTransVertBandIndicator;
+  MODE curMode;
+  QString curModeStr;
+  bool mgmModeFlag;
+  QStringList mgmModes;
+  bool radioRitOn;
+  bool ritEnable;
+  ShortFreq rRitFreq;
+  int ritMaxKHzFreq;
+  bool ritKHzFlag;
+  bool radioCommsOK;
+  int curVol;
+  int curSignalStrength;
+  bool rigErrorFlag;
+  bool traceCommsFlag;
+
+};
 
 class RigControlMainWindow : public QMainWindow
 {
@@ -92,37 +222,48 @@ private:
     RigSetupDialog *setupRadio;
     RigBase  *radio;
     RigFactory* rigFactory;
-    RigCapabilities rigCap;
+
+    RigStateDetails *rigStateDetails;
+    QTimer *RigCtldStatusTimer = nullptr;
+    QProcess *rigCtldProcess = nullptr;
+
+    LoggerRequests *loggerRequests;
+    RigCtldDetails *rigCtldDetails;
+    RigSupCapabilities *selectedRigSupCap;
+
+    //RigCapabilities rigCap;
     QString appName = "";
     QLabel *status;
     int radioIndex;
     QTimer *pollTimer;
     class QTimer LogTimer;
-    int pollTime;
-    bool rigErrorFlag;
+    //int pollTime;
+    //bool rigErrorFlag;
     bool cmdLockFlag;
-    bool traceCommsFlag;
+    //bool traceCommsFlag;
     // data from rigctld
-    QProcess *rigCtldProcess;
-    QString rigctld_radioNumber;
-    int irigctld_radioNumber = 0;
-    QString rigctld_radioName;
-    QString rigctld_radioMfg;
-    QTimer *RigCtldStatusTimer;
-    int rigCtldConnectDelay;
+
+    //QString rigctld_radioNumber;
+    //int irigctld_radioNumber = 0;
+    //QString rigctld_radioName;
+    //QString rigctld_radioMfg;
+    //QTimer *RigCtldStatusTimer;
+    //int rigCtldConnectDelay;
 
     // data from logger
-    Frequency logger_freq;
-    QString slogMode;
-    QString selRadioMode;   // onSelectRadio mode from logger at startup
-    Frequency selRadioFreq;
-    QString selBand;
+    //Frequency logger_freq;
+    //QString slogMode;
+    //QString selRadioMode;   // onSelectRadio mode from logger at startup
+    //Frequency selRadioFreq;
+   // QString selBand;
     //rmode_t logMode;
-    QString selTvBand;      // selected band from radio
+    //QString selTvBand;      // selected transverter band radio
+    int selTransverterNum;
     QString transVertSwNum;
-    bool logRitOn;
-    bool supVolume;     // radio supports volume
-    bool supSignalStrength;
+    SerialTVSwitch *serialTVSw = nullptr;
+    //bool logRitOn;
+    //bool supVolume;     // radio supports volume
+    //bool supSignalStrength;
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<QSharedPointer<BandInfo>  > bands;
@@ -130,39 +271,42 @@ private:
 
 
     // data from radio
-    Frequency rfrequency;       // read frequency
-    MODE rmode;          // read radio mode
+    //Frequency rfrequency;       // read frequency
+    //MODE rmode;          // read radio mode
     //pbwidth_t rwidth;        // read radio rx bw
-    VFO curVfo;
-    bool supportGetVfo = false;
-    bool supportSetVfo = false;
-    Frequency curVfoFrq;
-    Frequency curTransVertFrq;
-    MODE curMode;
-    QString sCurMode;
-    bool mgmModeFlag;
-    QStringList  mgmModes;
-    ShortFreq rRitFreq;
-    int ritMaxKHzFreq;
-    bool ritKHzFlag;
-    int curVol;
-    int curSignalStrength = 0;
+    //VFO curVfo;
+    //bool supportGetVfo = false;
+    //bool supportSetVfo = false;
+    //Frequency curVfoFrq;
+    //Frequency curTransVertFrq;
+    //MODE curMode;
+    //QString sCurMode;
+    //bool mgmModeFlag;
+    //QStringList  mgmModes;
+    //ShortFreq rRitFreq;
+    //int ritMaxKHzFreq;
+    //bool ritKHzFlag;
+    //int curVol;
+    //int curSignalStrength = 0;
 
     // rit functions supported by current radio
 
-    bool radioSupGetRit;
-    bool radioSupSetRit;
-    bool radioSupGetRitState;
-    bool radioSupSetRitState;
-    bool radioRitOn;
+    //bool radioSupGetRit;
+   // bool radioSupSetRit;
+    //bool radioSupGetRitState;
+    //bool radioSupSetRitState;
+    //bool radioRitOn;
 
-    bool ritEnable;         // flag to enable rit
+    //bool ritEnable;         // flag to enable rit
+
+
 
     bool radioCommsOK;
 
     bool ritTestEnabled = false; // for test....
 
-    SerialTVSwitch *serialTVSw = nullptr;
+
+    //SerialTVSwitch *serialTVSw = nullptr;
 
     QString geoStr;         // geometry registry location
 
@@ -346,6 +490,8 @@ private:
 
 
 
+    void getAndSendTransVertSwNum(int transVerterNum);
+    bool findTransverter(int &transVerterNum, QString &transVerterBand, QString band);
 private slots:
 
     void onStdInRead(QString);

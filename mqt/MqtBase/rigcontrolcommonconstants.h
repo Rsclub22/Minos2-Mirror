@@ -83,6 +83,8 @@ const int RIGCTLD_FAILED = -2;
 const int RIGCTLD_FAILED_TO_STOP = -3;
 const int RIGCTLD_EXE_MISSING = -4;
 
+const int NO_TRANSVERTER_NUM = -1;
+
 const QStringList radioOpenMessages = {"Open OK", "Open Failed", "RigCtld Failed",
                                       "RigCtld Failed to Stop", "RigCtld Exe Missing"};
 
