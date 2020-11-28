@@ -14,6 +14,7 @@ RigDetails::RigDetails()
     _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
     _ritMaxKHzFreq.setInitialValue(MAX_RITFREQ);
+    _hfFlag.setInitialValue(false);
 
 
 }
@@ -35,7 +36,8 @@ bool RigDetails::isDirty() const
             _volumeStatus.isDirty() ||
             _bandList.isDirty() ||
             _ritEnableStatus.isDirty() ||
-            _ritMaxKHzFreq.isDirty();
+            _ritMaxKHzFreq.isDirty() ||
+            _hfFlag.isDirty();
 
 }
 void RigDetails::clearDirty()
@@ -49,6 +51,7 @@ void RigDetails::clearDirty()
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
     _ritMaxKHzFreq.clearDirty();
+    _hfFlag.clearDirty();
 
 }
 void RigDetails::setDirty()
@@ -62,6 +65,7 @@ void RigDetails::setDirty()
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
     _ritMaxKHzFreq.setDirty();
+    _hfFlag.setDirty();
 
 }
 
@@ -108,6 +112,11 @@ void RigDetails::setBandList(const QString &bandList)
     _bandList.setValue( bandList);
 }
 
+void RigDetails::setHfFlag(bool state)
+{
+    _hfFlag.setValue(state);
+}
+
 QString RigDetails::pack() const
 {
     QJsonObject jv;
@@ -121,6 +130,8 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
     jv.insert(rpcConstants::rigRitMaxKHz, ritMaxKHzFreq().getValue());
+    jv.insert(rpcConstants::rigHfFlag, hfFlag().getValue());
+
 
     QJsonDocument json(jv);
 
@@ -144,6 +155,7 @@ void RigDetails::unpack(QString s)
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
         _ritMaxKHzFreq.setValue(json.object().value(rpcConstants::rigRitMaxKHz).toInt());
+        _hfFlag.setValue(json.object().value(rpcConstants::rigHfFlag).toBool());
     }
     else
     {
@@ -189,5 +201,10 @@ MinosItem<bool> RigDetails::ritEnableStatus() const
 MinosItem<int> RigDetails::ritMaxKHzFreq() const
 {
     return _ritMaxKHzFreq;
+}
+
+MinosItem<bool> RigDetails::hfFlag() const
+{
+    return _hfFlag;
 }
 

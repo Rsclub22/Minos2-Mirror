@@ -44,6 +44,7 @@ static const QString clusterMethod      ("Minos:Cluster");
 static const QString clusterClientServer("MinosClusterClientServer");
 static const QString sendClusterSpot    ("SendClusterSpot");
 static const QString txSpotToCluster    ("txSpotToCluster");
+static const QString hfFlagToCluster    ("hfFlagToCluster");
 static const QString txSpotParamFreq    ("Freq");
 static const QString txSpotParamCallsign ("Callsign");
 static const QString txSpotParamLocator ("Locator");
@@ -55,6 +56,7 @@ static const QString clusterReport      ("Report");
 static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
 static const QString clusterBandmask ("ClusterBandmask");
 static const QString clusterFrameId ("ClusterFrameId");
+static const QString clusterHfFlag ("ClusterHfFlag");
 
 // Chat
 static const QString chatApp            ("mqtChat");
@@ -150,6 +152,7 @@ static const QString rigRitMaxKHz ("RitMaxKHz");
 static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");
+static const QString rigHfFlag           ("HfFlag");
 
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");

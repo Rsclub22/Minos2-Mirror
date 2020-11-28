@@ -126,6 +126,7 @@ void RigState::setStatus(const QString &status)
     _status.setValue(status);
 }
 
+
 QString RigState::pack() const
 {
     QJsonObject jv;

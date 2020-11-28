@@ -61,8 +61,11 @@ public:  		// User declarations
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
+
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const int bandMask, const QString &uuid);
+      void sendHfFlagToClusterServer(const bool state);
+
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
       void sendKeyerStop(TSingleLogFrame *tslf);
@@ -79,6 +82,7 @@ public:  		// User declarations
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
       void sendRigControlRitFreq(TSingleLogFrame *tslf, ShortFreq freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
+      void sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status);
 
       QStringList rotators();
       QStringList rigs();
@@ -96,8 +100,6 @@ public:  		// User declarations
       {
           return &rigCache;
       }
-
-
 
 
 

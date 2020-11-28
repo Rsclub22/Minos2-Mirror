@@ -178,6 +178,27 @@ void TSendDM::sendSpotToClusterServer(const Frequency &freq, const QString &call
 
 }
 
+void TSendDM::sendHfFlagToClusterServer(const bool state)
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        traceMsg(QString("Send HfFlag To Cluster Server - state = %1").arg(state ? "True": "False"));
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::hfFlagToCluster));
+        QSharedPointer<RPCParam>hfFlag(new RPCBooleanParam(state));
+
+
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( hfFlag, rpcConstants::clusterHfFlag );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
 
 void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const QString &cmd, const int bandMask, const QString &uuid )
 {
@@ -392,6 +413,25 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
     rpc.queueCall( rigSelected );
 }
 
+void TSendDM::sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setHfFlag(rigSelected, status);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( status, rpcConstants::rigHfFlag);
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+}
+
+
+
 void TSendDM::sendRotatorPreset(QString s)
 {
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
@@ -406,6 +446,8 @@ void TSendDM::sendRotatorPreset(QString s)
     PubSubName rotSelected = rotatorCache.getSelected(loggerUuid);
     rpc.queueCall( rotSelected );
 }
+
+
 //---------------------------------------------------------------------------
 void TSendDM::notifyRigDetailChanges()
 {

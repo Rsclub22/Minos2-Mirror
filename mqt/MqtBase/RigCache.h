@@ -81,6 +81,7 @@ public:
 
     Frequency getRadioFreq(const PubSubName &name);
     void setLogBand(const PubSubName &name, QString band);
+    void setHfFlag(const PubSubName &name, bool state);
 };
 
 #endif // RIGCACHE_H
