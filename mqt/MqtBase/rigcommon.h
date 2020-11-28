@@ -70,6 +70,50 @@ public:
 
 };
 
+// for non Hamlib Radios
+class SupportBands
+{
+public:
+
+    SupportBands()
+    {
+        for (int i = 0; i < 11; i++)
+        {
+            supportBands.append(false);
+        }
+    }
+
+
+
+    void clear()
+    {
+        for (auto &sB:supportBands)
+        {
+            sB = false;
+        }
+    }
+
+    int count()
+    {
+        return supportBands.count();
+    }
+
+    bool getSupportBandFlag(int i)
+    {
+        return supportBands[i];
+    }
+
+    void setSupportBandFlag(int i, bool state)
+    {
+        supportBands[i] = state;
+    }
+
+    QList<bool> supportBands;
+
+};
+
+
+
 
 // This was the hamlib catParams structure, other fields have been added
 // to support other functions.
@@ -109,10 +153,13 @@ public:
       dest.startMinosRigCtld = srce->startMinosRigCtld;
       dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
       dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
-      dest.support50MHz = srce->support50MHz;
-      dest.support144MHz = srce->support144MHz;
-      dest.support432MHz = srce->support432MHz;
-      dest.support1296MHz = srce->support1296MHz;
+
+      for (int i = 0; i < dest.supportBands.count(); i++ )
+      {
+          dest.supportBands.setSupportBandFlag(i, srce->supportBands.getSupportBandFlag(i));
+
+      }
+
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;
@@ -180,11 +227,7 @@ public:
   bool ritEnable = false;
   bool transVertEnable  = false;
   bool volAvail = false;
-  bool support50MHz = false;        // for non hamlib radios
-  bool support70MHz = false;
-  bool support144MHz = false;
-  bool support432MHz = false;
-  bool support1296MHz = false;
+  SupportBands supportBands;        // for non hamlib radios
   QStringList transVertNames;
   int numTransverters = 0;
   bool enableTransSwitch = false;

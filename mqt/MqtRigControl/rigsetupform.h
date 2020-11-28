@@ -24,7 +24,7 @@ class RigSetupForm : public QWidget
 
 public:
     explicit RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
-                          const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
+                          const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _radioTab, bool hfFlag_, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -151,12 +151,8 @@ public:
     void setForceRTS(int n);
 
     void setForceRTSDisabled(bool state);
-    void setSupport50MHzChkBox(bool checked);
-    void setSupport70MHzChkBox(bool checked);
-    void setSupport144MHzChkBox(bool checked);
-    void setSupport432MHzChkBox(bool checked);
-    void setSupport1296MHzChkBox(bool checked);
 
+    void setSupportBandChkBox(int i, bool checked);
     void setSupportBandCheckBoxVisible(bool visible);
 
     void checkAdvancedCommsCheckBox(bool checked);
@@ -165,6 +161,7 @@ public:
     void setStartMinosRigctldCheckbox(bool checked);
 
     bool isAnySupportBandChecked();
+
 
 public slots:
     void comSpeedSelected();
@@ -208,14 +205,9 @@ private slots:
     void on_forceDTRSelected();
 
 
-    void onSup50MhzChkBoxClicked(bool state);
-    void onSup70MhzChkBoxClicked(bool state);
-    void onSup144MhzChkBoxClicked(bool state);
-    void onSup432MhzChkBoxClicked(bool state);
-    void onSup1296MhzChkBoxClicked(bool state);
-
     void onAdvancedCommsSelected(bool selected);
     void onStartMinosRigCtldChkBox(bool);
+    void onSupbandCheckBoxStateChanged(int i, int state);
 private:
 
 
@@ -232,8 +224,15 @@ private:
     //TransVertSetupForm *transVerter;
     QString appName;
 
+    bool hfFlag = false;
+
     bool transverterRemoved;
     QString currentRadioName;
+
+    QList<QCheckBox*> allSupBandsChkBoxList;
+    QList<QCheckBox*> hfSupBandsChkBoxList;
+    QList<QCheckBox*> vhfSupBandsChkBoxList;
+
 
     void fillHandShakeInfo();
     void fillParityInfo();
@@ -261,6 +260,10 @@ private:
 
     void rigCtldNetworkAddBoxVisible(bool visible);
     void rigCtldPortBoxVisible(bool visible);
+
+
+    void initSupBandsChkBoxs();
+    void setSupportBandFlag(int i, bool checked);
 
 
 };

@@ -111,7 +111,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     BandList::getBandList().loadAllBands(bands);
     FreqPresetDialog::readSettings(presetFreq);
 
-    setupRadio = new RigSetupDialog(rigFactory, bands);
+    setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
     setupRadio->setAppName(appName);
 
     QString fileName;
@@ -499,19 +499,15 @@ void RigControlMainWindow::upDateRadio()
 
     pollTimer->stop();      // stop updates
 
-    //clrRigctldNames();
-    //clearSupportRitFlags();
-    //curTransVertFrq.clear();
-
-    rigStateDetails->clear();
-    rigCtldDetails->clear();
-    selectedRigSupCap->clear();
+    clrRigctldNames();
+    clearSupportRitFlags();
+    rigStateDetails->curTransVertFreq.clear();
 
     int ridx = 0;
     if (setupRadio->getCurrentRadioName() != "")
     {
         rigStateDetails->radioIndex = setupRadio->findCurrentRadio(setupRadio->getCurrentRadioName()); // make sure radio exits in available radios
-        ridx = radioIndex;
+        ridx = rigStateDetails->radioIndex;
         if (ridx > -1 && ridx < setupRadio->numAvailRadios)
         {
             if (radioCommsOK)
@@ -1713,12 +1709,6 @@ void RigControlMainWindow::loggerSetFreq(Frequency freq)
     if (radioCommsOK && !rigStateDetails->rigErrorFlag)
     {
         logMessage(QString("new freq %1, old freq %2").arg(freq.traceStr()).arg(loggerRequests->logger_freq.traceStr()));
-        //if (freq == NO_BAND_SUPPORT)
-        //{
-        //    logMessage(QString("loggerSetFreq: No transverter found for this band"));
-        //    clearTransVertSupport();
-        //    return;
-       // }
 
 
         loggerRequests->logger_freq = freq;
@@ -2479,28 +2469,15 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
     else
     {
         // non hamlib radios
-        if (setupRadio->availRadioData[radioIdx]->support50MHz)
+        for (int i = 0; setupRadio->availRadioData[radioIdx]->supportBands.count(); i++)
         {
-            supBandList.append(bands[0]->name());
-        }
-        if (setupRadio->availRadioData[radioIdx]->support70MHz)
-        {
-            supBandList.append(bands[1]->name());
-        }
-        if (setupRadio->availRadioData[radioIdx]->support144MHz)
-        {
-            supBandList.append(bands[2]->name());
-        }
-        if (setupRadio->availRadioData[radioIdx]->support432MHz)
-        {
-            supBandList.append(bands[3]->name());
-        }
-        if (setupRadio->availRadioData[radioIdx]->support1296MHz)
-        {
-            supBandList.append(bands[4]->name());
+            if (setupRadio->availRadioData[radioIdx]->supportBands.getSupportBandFlag(radioIdx))
+            {
+               supBandList.append(bands[i]->name());
+            }
         }
 
-    }
+   }
 
 }
 

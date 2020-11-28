@@ -30,10 +30,11 @@
 
 
 
-RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent) :
+RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, const bool hfFlag_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RigSetupDialog),
-    radioRemoved(false)
+    radioRemoved(false),
+    hfFlag(hfFlag_)
 
 {
     ui->setupUi(this);
@@ -176,7 +177,7 @@ void RigSetupDialog::addTab(int tabNum, QString tabName)
        availRadios.append(tabName);
     }
 
-    radioTab.append(new RigSetupForm(rigFactory, availRadioData[tabNum], bands, ui->radioTab));
+    radioTab.append(new RigSetupForm(rigFactory, availRadioData[tabNum], bands, ui->radioTab, hfFlag));
     ui->radioTab->insertTab(tabNum, radioTab[tabNum], tabName);
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
@@ -259,11 +260,11 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
     }
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
-    radioTab[tabNum]->setSupport50MHzChkBox(radioTab[tabNum]->getRadioData()->support50MHz);
-    radioTab[tabNum]->setSupport70MHzChkBox(radioTab[tabNum]->getRadioData()->support70MHz);
-    radioTab[tabNum]->setSupport144MHzChkBox(radioTab[tabNum]->getRadioData()->support144MHz);
-    radioTab[tabNum]->setSupport432MHzChkBox(radioTab[tabNum]->getRadioData()->support432MHz);
-    radioTab[tabNum]->setSupport1296MHzChkBox(radioTab[tabNum]->getRadioData()->support1296MHz);
+    for (int i =0; i < radioTab[tabNum]->getRadioData()->supportBands.count(); i++)
+    {
+       radioTab[tabNum]->setSupportBandChkBox(i, radioTab[tabNum]->getRadioData()->supportBands.getSupportBandFlag(i));
+    }
+
 
     if (rigCap.supportGetSupBands)
     {
@@ -911,11 +912,17 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    config.setValue("support50Mhz", radioTab[radNum]->getRadioData()->support50MHz);
-    config.setValue("support70Mhz", radioTab[radNum]->getRadioData()->support70MHz);
-    config.setValue("support144Mhz", radioTab[radNum]->getRadioData()->support144MHz);
-    config.setValue("support432Mhz", radioTab[radNum]->getRadioData()->support432MHz);
-    config.setValue("support1296Mhz", radioTab[radNum]->getRadioData()->support1296MHz);
+    for (int i = 0; i < radioTab[radNum]->getRadioData()->supportBands.count(); i++)
+    {
+        QString name = bands[i].data()->uk;
+        name.remove('\x20').replace('H', 'h').replace('.', '_');
+        config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(i));
+    }
+    //config.setValue("support50Mhz", radioTab[radNum]->getRadioData()->support50MHz);
+    //config.setValue("support70Mhz", radioTab[radNum]->getRadioData()->support70MHz);
+    //config.setValue("support144Mhz", radioTab[radNum]->getRadioData()->support144MHz);
+    //config.setValue("support432Mhz", radioTab[radNum]->getRadioData()->support432MHz);
+    //config.setValue("support1296Mhz", radioTab[radNum]->getRadioData()->support1296MHz);
     config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
     config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
     config.setValue("locTransVertSwComport", radioTab[radNum]->getRadioData()->locTVSwComport);
@@ -957,11 +964,17 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radioTab[radNum]->getRadioData()->support50MHz = config.value("support50Mhz", false).toBool();
-    radioTab[radNum]->getRadioData()->support70MHz = config.value("support70Mhz", false).toBool();
-    radioTab[radNum]->getRadioData()->support144MHz = config.value("support144Mhz", false).toBool();
-    radioTab[radNum]->getRadioData()->support432MHz = config.value("support432Mhz", false).toBool();
-    radioTab[radNum]->getRadioData()->support1296MHz = config.value("support1296Mhz", false).toBool();
+    for (int i = 0; i < radioTab[radNum]->getRadioData()->supportBands.count(); i++)
+    {
+        QString name = bands[i].data()->uk;
+        name.remove('\x20').replace('H', 'h').replace('.', '_');
+        radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(i, config.value("support" + name, false).toBool());
+    }
+    //radioTab[radNum]->getRadioData()->support50MHz = config.value("support50Mhz", false).toBool();
+    //radioTab[radNum]->getRadioData()->support70MHz = config.value("support70Mhz", false).toBool();
+    //radioTab[radNum]->getRadioData()->support144MHz = config.value("support144Mhz", false).toBool();
+    //radioTab[radNum]->getRadioData()->support432MHz = config.value("support432Mhz", false).toBool();
+    //radioTab[radNum]->getRadioData()->support1296MHz = config.value("support1296Mhz", false).toBool();
     radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
     radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
     radioTab[radNum]->getRadioData()->locTVSwComport = config.value("locTransVertSwComport", "").toString();
@@ -1151,8 +1164,7 @@ int RigSetupDialog::findCurrentRadio(QString currentRadioName)
     {
         if (currentRadioName == radioTab[i]->getRadioData()->radioName)
         {
-            // current antenna points to selected available antenna
-            //currentAntenna = availAntData[i];
+
             return i;
         }
     }

@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>791</width>
-    <height>300</height>
+    <height>332</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
@@ -372,41 +372,121 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
-         <widget class="QCheckBox" name="sup50MhzChkbox">
-          <property name="text">
-           <string>50 MHz</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="sup70MhzChkbox">
-          <property name="text">
-           <string>70 MHz</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="sup144MhzChkbox">
-          <property name="text">
-           <string>144 MHz</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="sup432MhzChkbox">
-          <property name="text">
-           <string>432 MHz</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="sup1296MhzChkbox">
-          <property name="text">
-           <string>1296MHz</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QCheckBox" name="sup1_8MhzChkbox">
+              <property name="text">
+               <string>1.8 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup3_5MhzChkbox">
+              <property name="text">
+               <string>3.5 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup7MhzChkbox">
+              <property name="text">
+               <string>7 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup14MhzChkbox">
+              <property name="text">
+               <string>14 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup21MhzChkbox">
+              <property name="text">
+               <string>21 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup28MhzChkbox">
+              <property name="text">
+               <string>28 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QCheckBox" name="sup50MhzChkbox">
+              <property name="text">
+               <string>50 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup70MhzChkbox">
+              <property name="text">
+               <string>70 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup144MhzChkbox">
+              <property name="text">
+               <string>144 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup432MhzChkbox">
+              <property name="text">
+               <string>432 MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="sup1296MhzChkbox">
+              <property name="text">
+               <string>1296MHz</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLabel" name="nativeBandLabel">
@@ -416,7 +496,7 @@
          </widget>
         </item>
         <item>
-         <spacer name="horizontalSpacer_3">
+         <spacer name="horizontalSpacer_6">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>

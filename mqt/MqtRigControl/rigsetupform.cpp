@@ -31,10 +31,12 @@
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
                            const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _ui_RadioTab,
-                           QWidget *parent):
+                           bool hfFlag_, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
+    hfFlag(hfFlag_),
     transverterRemoved(false)
+
 {
 
     ui->setupUi(this);
@@ -86,11 +88,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
     connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
     connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
 
-    connect(ui->sup50MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup50MhzChkBoxClicked(bool)));
-    connect(ui->sup70MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup70MhzChkBoxClicked(bool)));
-    connect(ui->sup144MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup144MhzChkBoxClicked(bool)));
-    connect(ui->sup432MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup432MhzChkBoxClicked(bool)));
-    connect(ui->sup1296MhzChkbox, SIGNAL(clicked(bool)), this, SLOT(onSup1296MhzChkBoxClicked(bool)));
+    initSupBandsChkBoxs();
 
 
     // transvert
@@ -1185,165 +1183,112 @@ void RigSetupForm::fillMgmModes()
 /****************** Support Bands Checkbox ***************************/
 
 
-void RigSetupForm::onSup50MhzChkBoxClicked(bool state)
+void RigSetupForm::initSupBandsChkBoxs()
 {
-    Q_UNUSED(state)
-    bool checked = ui->sup50MhzChkbox->isChecked();
-    if (radioData->support50MHz != checked)
+    allSupBandsChkBoxList << ui->sup1_8MhzChkbox << ui->sup3_5MhzChkbox << ui->sup7MhzChkbox
+                          << ui->sup14MhzChkbox << ui->sup21MhzChkbox << ui->sup28MhzChkbox
+                          << ui->sup50MhzChkbox << ui->sup70MhzChkbox << ui->sup144MhzChkbox
+                          << ui->sup432MhzChkbox << ui->sup1296MhzChkbox;
+
+    for (int i = 0; i < allSupBandsChkBoxList.count(); i++)
     {
-        radioData->support50MHz = checked;
+        connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
+
     }
 
-    radioValueChanged = true;
+    hfSupBandsChkBoxList << ui->sup1_8MhzChkbox << ui->sup3_5MhzChkbox << ui->sup7MhzChkbox
+                         << ui->sup14MhzChkbox << ui->sup21MhzChkbox << ui->sup28MhzChkbox;
+
+    vhfSupBandsChkBoxList << ui->sup50MhzChkbox << ui->sup70MhzChkbox << ui->sup144MhzChkbox
+                          << ui->sup432MhzChkbox << ui->sup1296MhzChkbox;
+
 }
 
-void RigSetupForm::onSup70MhzChkBoxClicked(bool state)
+
+void RigSetupForm::onSupbandCheckBoxStateChanged(int i, int state)
 {
-    Q_UNUSED(state)
-    bool checked = ui->sup70MhzChkbox->isChecked();
-    if (radioData->support70MHz != checked)
+    if (i < allSupBandsChkBoxList.count())
     {
-        radioData->support70MHz = checked;
-    }
+        if (state == Qt::Checked)
+        {
+            radioData->supportBands.setSupportBandFlag(i, true);
+        }
+        else if (state == Qt::Unchecked)
+        {
+            radioData->supportBands.setSupportBandFlag(i, false);
+        }
 
-    radioValueChanged = true;
+        radioValueChanged = true;
+
+    }
 }
 
-void RigSetupForm::onSup144MhzChkBoxClicked(bool state)
-{
-    Q_UNUSED(state)
-    bool checked = ui->sup144MhzChkbox->isChecked();
-    if (radioData->support144MHz != checked)
-    {
-        radioData->support144MHz = checked;
-    }
 
-    radioValueChanged = true;
-}
 
-void RigSetupForm::onSup432MhzChkBoxClicked(bool state)
-{
-    Q_UNUSED(state)
-    bool checked = ui->sup432MhzChkbox->isChecked();
-    if (radioData->support432MHz != checked)
-    {
-        radioData->support432MHz = checked;
-    }
-
-    radioValueChanged = true;
-}
-
-void RigSetupForm::onSup1296MhzChkBoxClicked(bool state)
-{
-    Q_UNUSED(state)
-    bool checked = ui->sup1296MhzChkbox->isChecked();
-    if (radioData->support1296MHz != checked)
-    {
-        radioData->support1296MHz = checked;
-    }
-
-    radioValueChanged = true;
-}
-
-void RigSetupForm::setSupport50MHzChkBox(bool checked)
+void RigSetupForm::setSupportBandChkBox(int i, bool checked)
 {
     if (checked)
     {
-        ui->sup50MhzChkbox->setCheckState(Qt::Checked);
+        allSupBandsChkBoxList[i]->setCheckState(Qt::Checked);
     }
     else
     {
-        ui->sup50MhzChkbox->setCheckState(Qt::Unchecked);
-    }
-
-}
-
-void RigSetupForm::setSupport70MHzChkBox(bool checked)
-{
-    if (checked)
-    {
-        ui->sup70MhzChkbox->setCheckState(Qt::Checked);
-    }
-    else
-    {
-        ui->sup70MhzChkbox->setCheckState(Qt::Unchecked);
+        allSupBandsChkBoxList[i]->setCheckState(Qt::Unchecked);
     }
 
 
 }
 
-void RigSetupForm::setSupport144MHzChkBox(bool checked)
-{
-    if (checked)
-    {
-        ui->sup144MhzChkbox->setCheckState(Qt::Checked);
-    }
-    else
-    {
-        ui->sup144MhzChkbox->setCheckState(Qt::Unchecked);
-    }
-}
 
-void RigSetupForm::setSupport432MHzChkBox(bool checked)
-{
-    if (checked)
-    {
-        ui->sup432MhzChkbox->setCheckState(Qt::Checked);
-    }
-    else
-    {
-        ui->sup432MhzChkbox->setCheckState(Qt::Unchecked);
-    }
-}
 
-void RigSetupForm::setSupport1296MHzChkBox(bool checked)
-{
-    if (checked)
-    {
-        ui->sup1296MhzChkbox->setCheckState(Qt::Checked);
-    }
-    else
-    {
-        ui->sup1296MhzChkbox->setCheckState(Qt::Unchecked);
-    }
-}
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
-    ui->sup50MhzChkbox->setVisible(visible);
-    ui->sup70MhzChkbox->setVisible(visible);
-    ui->sup144MhzChkbox->setVisible(visible);
-    ui->sup432MhzChkbox->setVisible(visible);
-    ui->sup1296MhzChkbox->setVisible(visible);
+    if (hfFlag)
+    {
+       for (auto &schk: allSupBandsChkBoxList)
+       {
+           schk->setVisible(visible);
+       }
+    }
+    else
+    {
+        for (auto &schk: vhfSupBandsChkBoxList)
+        {
+            schk->setVisible(visible);
+        }
+    }
+
     ui->supportedBandGroupBox->setVisible(visible);
     ui->nativeBandLabel->setVisible(visible);
 }
 
 bool RigSetupForm::isAnySupportBandChecked()
 {
-    if (ui->sup50MhzChkbox->isChecked())
+    if (hfFlag)
     {
-
-        return true;
+        for (auto &schk: allSupBandsChkBoxList)
+        {
+            if (schk->isChecked())
+            {
+                return true;
+            }
+        }
     }
-    else if (ui->sup70MhzChkbox->isChecked())
+    else
     {
-        return true;
-    }
-    else if (ui->sup144MhzChkbox->isChecked())
-    {
-        return true;
-    }
-    else if (ui->sup432MhzChkbox->isChecked())
-    {
-        return true;
-    }
-    else if (ui->sup1296MhzChkbox->isChecked())
-    {
-        return true;
+        for (auto &schk:vhfSupBandsChkBoxList)
+        {
+            if (schk->isChecked())
+            {
+                return true;
+            }
+        }
     }
 
     return false;
+
+
 }
 
 
