@@ -2469,7 +2469,7 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
     else
     {
         // non hamlib radios
-        for (int i = 0; setupRadio->availRadioData[radioIdx]->supportBands.count(); i++)
+        for (int i = 0; i < setupRadio->availRadioData[radioIdx]->supportBands.count(); i++)
         {
             if (setupRadio->availRadioData[radioIdx]->supportBands.getSupportBandFlag(radioIdx))
             {

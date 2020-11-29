@@ -415,6 +415,7 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
 
 void TSendDM::sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status)
 {
+
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
     rigCache.setHfFlag(rigSelected, status);
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
