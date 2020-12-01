@@ -79,12 +79,15 @@
        </sizepolicy>
       </property>
       <property name="autoFillBackground">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="currentIndex">
        <number>2</number>
       </property>
       <widget class="QWidget" name="hfUserCommands">
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <attribute name="title">
         <string>HF User Commands</string>
        </attribute>
@@ -166,6 +169,9 @@
        </layout>
       </widget>
       <widget class="QWidget" name="vhfUhfUserCommands">
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <attribute name="title">
         <string>VHF/ UHF User Commands</string>
        </attribute>
@@ -247,6 +253,9 @@
        </layout>
       </widget>
       <widget class="QWidget" name="bandFilter">
+       <property name="autoFillBackground">
+        <bool>true</bool>
+       </property>
        <attribute name="title">
         <string>Band Filter</string>
        </attribute>
