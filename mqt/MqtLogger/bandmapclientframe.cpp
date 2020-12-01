@@ -1773,9 +1773,11 @@ void BandmapClientFrame::filterButtonSelected()
     {
         filterSettings = filterSetup->getFilterSettings();
         bandmapView->bandmapUpdate();
-        filterSetup->close();
-        delete filterSetup;
+
     }
+
+    filterSetup->close();
+    delete filterSetup;
 
 }
 

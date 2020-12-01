@@ -109,7 +109,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 
     BandList::getBandList().loadAllBands(bands);
-    FreqPresetDialog::readSettings(presetFreq);
+    FreqPresetDialog::readSettings(presetFreq, bands);
 
     setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
     setupRadio->setAppName(appName);
@@ -347,9 +347,9 @@ void RigControlMainWindow::onStdInRead(QString cmd)
 void RigControlMainWindow::initActionsConnections()
 {
 
-    connect(ui->selectRadioBox, SIGNAL(activated()), this, SLOT(selectRadio()));
+    connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio(int)));
 
-    //connect(ui->actionSetup_Radios, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
+    //connect(ui->selectRadioBox, &QComboBox::activated, [=](int index){selectRadio(index);});
     connect(ui->actionSetup_Radios, &QAction::triggered, [=](){onLaunchSetup();});
     connect(ui->actionEdit_Preset_Freq, &QAction::triggered, [=](){setupBandFreq();});
     connect(ui->actionTraceComms, &QAction::toggled, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
@@ -395,17 +395,22 @@ void RigControlMainWindow::pollRadioInfo()
 void RigControlMainWindow::setupBandFreq()
 {
 
-    FreqPresetDialog  fPresetDialog(presetFreq, bands, &freqPresetChanged);
 
-    fPresetDialog.exec();
+    FreqPresetDialog*  fPresetDialog = new FreqPresetDialog(bands);
 
-    if (freqPresetChanged)
+    int ret = fPresetDialog->exec();
+    if (ret == QDialog::Accepted)
     {
-        fPresetDialog.readSettings(presetFreq);
-        logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
-        //sendBandListLogger();
-        freqPresetChanged = false;
+        if (fPresetDialog->getFreqChanged())
+        {
+            logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
+            presetFreq = fPresetDialog->getPresetSettings();
+            fPresetDialog->saveSettings();
+
+        }
     }
+
+
 }
 
 
@@ -464,8 +469,9 @@ void RigControlMainWindow::initSelectRadioBox()
 
 }
 
-void RigControlMainWindow::selectRadio()
+void RigControlMainWindow::selectRadio(int index)
 {
+    Q_UNUSED(index)
     setupRadio->setCurrentRadioName(ui->selectRadioBox->currentText());
     upDateRadio();
 }

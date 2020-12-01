@@ -207,7 +207,7 @@ public:
     explicit RigControlMainWindow(QWidget *parent = nullptr);
     ~RigControlMainWindow();
 
-    bool freqPresetChanged = false;
+    //bool freqPresetChanged = false;
 
     const QString version = "2.20";
 
@@ -515,7 +515,7 @@ private slots:
     void onSelectRadio(PubSubName, QString, Frequency freq, QString mode);
     void selFreqClicked();
     void setupBandFreq();
-    void selectRadio();
+    void selectRadio(int index);
     void onLaunchSetup();
 
     void setRitFreq(ShortFreq ritFreq);

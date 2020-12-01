@@ -37,36 +37,24 @@ class FreqPresetDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FreqPresetDialog(QStringList& _presetFreq, const QVector<QSharedPointer<BandInfo> > &_bands, bool* freqPresetChanged, QWidget *parent = nullptr);
+    explicit FreqPresetDialog(/*QStringList& _presetFreq, */const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
     ~FreqPresetDialog();
 
 
-    static void readSettings(QStringList& presetFreq);
+    static void readSettings(QStringList& presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
 
 
+
+    bool getFreqChanged(){return freqChanged;}
+    QStringList& getPresetSettings(){return presetFreq;}
+    void saveSettings();
 
 
 private slots:
-    //void b_28mhzSelected();
-    void b_50mhzSelected();
-    void b_70mhzSelected();
-    void b_144mhzSelected();
-    void b_432mhzSelected();
-    void b_1296mhzSelected();
-    void b_2300mhzSelected();
-    void b_3_4ghzSelected();
-    void b_5_6ghzSelected();
-    void b_10ghzSelected();
-
-
-
-
-    void saveSettings();
-    void cancelSettings();
-
 
 
     void onbandCheckBoxStateChanged(int i);
+
 private:
     Ui::FreqPresetDialog *ui;
     QStringList presetFreq;
