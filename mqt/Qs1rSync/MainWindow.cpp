@@ -231,14 +231,18 @@ void MainWindow::SyncTimerTimer(  )
 
     if (n1mmLink.isConnected())
     {
-        mainRigFreq = n1mmLink.getFrequency();
-        mainRigMode = n1mmLink.getMode();
-        ui->Rig1Label->setText(n1mmLink.getRadioName());
-        if (ui->trackRig->isChecked())
+        Frequency f = n1mmLink.getFrequency();
+        if (f.isOK() )
         {
-            on_transfer12Button_clicked();
+            mainRigFreq = n1mmLink.getFrequency();
+            mainRigMode = n1mmLink.getMode();
+            ui->Rig1Label->setText(n1mmLink.getRadioName());
+            if (ui->trackRig->isChecked())
+            {
+                on_transfer12Button_clicked();
+            }
+            trackBand();
         }
-        trackBand();
     }
     ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
 }
