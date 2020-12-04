@@ -2,8 +2,8 @@ C:
 
 setlocal
 
-set QtTools=C:\Qt\Tools\mingw730_32\bin
-set QtKit="C:\Qt\5.12.6\mingw73_32\bin"
+set QtTools=C:\Qt\Tools\mingw810_32\bin
+set QtKit="C:\Qt\5.15.2\mingw81_32\bin"
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
 set HamlibPath="C:\Projects\hamlib-w32-4.0"
@@ -22,7 +22,7 @@ REM go up from the batch file directory to the "root"
 set MROOT=%~dp0..\..
 cd %MROOT%
 
-git pull origin master
+git pull origin mqt_Release_2.4
 
 if not exist build mkdir build
 cd build
