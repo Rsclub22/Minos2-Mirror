@@ -166,8 +166,16 @@ void LevelMeter::paintEvent(QPaintEvent *event)
 
     QRect bar = rect();
 
+    bar.setBottom(rect().bottom());
 
-    if (peakHoldLevel > 0.98)
+    bar.setTop(rect().top() +  static_cast<int>((1.0 - rmsLevel) * rect().height()));
+    painter.fillRect(bar, m_rmsColor);
+
+    bar.setTop(rect().top() +  static_cast<int>((1.0 - maxLevel) * rect().height()));
+    bar.setBottom(bar.top() + 5);   // why 5? 5 pixels depth for peak hold bar
+    painter.fillRect(bar, m_maxColor);
+
+    if (peakHoldLevel > 0.95)
     {
         bar.setTop(rect().top());
         bar.setBottom(bar.top() + 15);   //depth for peak hold bar
@@ -179,15 +187,4 @@ void LevelMeter::paintEvent(QPaintEvent *event)
         bar.setBottom(bar.top() + 5);   // depth for peak hold bar
         painter.fillRect(bar, m_rmsColor);
     }
-    bar.setBottom(rect().bottom());
-
-//    bar.setTop(rect().top() + (1.0 - decayedPeakLevel) * rect().height());
-//    painter.fillRect(bar, m_peakColor);
-
-    bar.setTop(rect().top() +  static_cast<int>((1.0 - rmsLevel) * rect().height()));
-    painter.fillRect(bar, m_rmsColor);
-
-    bar.setTop(rect().top() +  static_cast<int>((1.0 - maxLevel) * rect().height()));
-    bar.setBottom(bar.top() + 5);   // why 5? 5 pixels depth for peak hold bar
-    painter.fillRect(bar, m_maxColor);
 }
