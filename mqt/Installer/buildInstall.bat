@@ -3,7 +3,7 @@ C:
 setlocal
 
 set QtTools=C:\Qt\Tools\mingw810_32\bin
-set QtKit="C:\Qt\5.15.2\mingw81_32\bin"
+set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Tools\Licenses"
 set HamlibPath="C:\Projects\hamlib-w32-4.0"
