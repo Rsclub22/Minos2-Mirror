@@ -22,10 +22,12 @@ Check out Minos:
 
 git clone git://git.code.sf.net/p/minos/minos Minos2
 
-Install hamlib from https://sourceforge.net/projects/hamlib/ into a directory under C:\projects`
+This gets the "bleeding edge" master branch, which should usually build and run; most development is done on "private"
+branches and merged to master when ready.
+
+Install hamlib 4.0 32 bit from https://sourceforge.net/projects/hamlib/files/hamlib/ into a directory under C:\projects`
 (it has to be in the correct position relative to Minos, or the build won't find the corect files).
 
- 
 To get Qt, go to (NB This really needs some pictures!)
 
 https://www1.qt.io/download-open-source
@@ -34,11 +36,13 @@ and click "Download now"; this gets you the "online installer", which is a small
 the rest of the download. using this also sets up the Qt Maintenance tool, which makes subsequent
 updates of Qt and its tools far easier.  It also installs icons for the main tools.
 
+(This has become more complicated; it can be quite difficult to find the right download option)
+
 Let Qt install into its "natural" home c:\Qt
 
 Click through until it updates its meta information, then under "select components" choose the required components
 
-Get Qt version 5.9.2 ; under "tools" make sure that MinGW 5.3.0 is ticked. 
+Get Qt version 5.15.2 and MinGW 8.1.0; under "tools" make sure that MinGW 8.1.0 32 bit is ticked. 
 
 Using MSVC and/or more recent Qt versions counts as an "advanced" option, but is quite possible.
 
@@ -50,8 +54,7 @@ wget - https://eternallybored.org/misc/wget/
 
 Inno Setup - http://www.jrsoftware.org/isinfo.php
  
-Then to fetch and build the current "bleeding edge" of the project (which will usually be safe to run,
-but may contain unfinished facilities)
+Then to build Minos
 
 C:\Projects\Minos2\mqt\Installer\buildInstall.bat
 
