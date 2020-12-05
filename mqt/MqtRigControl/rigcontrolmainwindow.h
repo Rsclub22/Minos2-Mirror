@@ -267,7 +267,7 @@ private:
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<QSharedPointer<BandInfo>  > bands;
-    QStringList presetFreq;
+
 
 
     // data from radio

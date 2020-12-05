@@ -30,6 +30,7 @@ class FreqPresetDialog;
 }
 
 
+QString convertBandKey(QString band);
 
 
 class FreqPresetDialog : public QDialog
@@ -37,17 +38,18 @@ class FreqPresetDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit FreqPresetDialog(/*QStringList& _presetFreq, */const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
+    explicit FreqPresetDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
     ~FreqPresetDialog();
 
 
-    static void readSettings(QStringList& presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
-
+    static void readSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
+    static void checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands);
 
 
     bool getFreqChanged(){return freqChanged;}
-    QStringList& getPresetSettings(){return presetFreq;}
+    PresetFreq& getPresetSettings(){return presetFreq;}
     void saveSettings();
+
 
 
 private slots:
@@ -57,13 +59,25 @@ private slots:
 
 private:
     Ui::FreqPresetDialog *ui;
-    QStringList presetFreq;
+    //QStringList presetFreq;
+    PresetFreq presetFreq;
     QVector<QSharedPointer<BandInfo> > bands;
     bool freqChanged = false;
     bool* freqPresetChanged;
 
     QList<QLineEdit*> presetFreqLineEditList;
 
+
+    QList<QLineEdit*> cwPresetLineEditList;
+
+    QList<QLineEdit*> phonePresetLineEditList;
+
+    QList<QLineEdit*> mgmPresetLineEditList;
+
+    QList<QLabel*> hfLabels;
+    QList<QLineEdit*> hfLineEdits;
+
+    bool hfFlag;
 
 
     //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
@@ -73,6 +87,11 @@ private:
     void getFreq(QLineEdit* f_box, int band);
 
     void loadSettingsToDialog();
+    void setHf(bool hfFlag);
+
+    void saveModePresetFreqSettings(QString mode, QSettings &config);
+
+
 };
 
 #endif // FREQPRESETDIALOG_H

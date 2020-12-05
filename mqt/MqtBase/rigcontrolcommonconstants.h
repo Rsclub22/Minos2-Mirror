@@ -3,6 +3,8 @@
 
 
 #include <QString>
+#include <QMap>
+#include <QMultiMap>
 #include <QStringList>
 #include "frequency.h"
 
@@ -141,12 +143,12 @@ namespace freqPresetData {
 
 
 
-enum bandOffSet { _1_8MHZ, _3_5MHZ, _7MHZ, _14MHZ, _21MHZ, _28MHZ,  _50MHZ, _70MHZ, _144MHZ, _432MHZ, _1296MHZ, _2300MHZ,
-                 _3_4GHZ, _5_6GHZ, _10GHZ};
+//enum bandOffSet { _1_8MHZ, _3_5MHZ, _7MHZ, _14MHZ, _21MHZ, _28MHZ,  _50MHZ, _70MHZ, _144MHZ, _432MHZ, _1296MHZ, _2300MHZ,
+//                 _3_4GHZ, _5_6GHZ, _10GHZ};
 
-const QStringList bandNames = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 MHz"
-                                           << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz"
-                                           << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
+//const QStringList bandNames = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 MHz"
+//                                           << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz"
+//                                           << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
 const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
@@ -169,9 +171,184 @@ const QStringList bandFreq = {  "1800000",
                               };
 
 
-
+const QString PRESET_MODE_CW = "CW";
+const QString PRESET_MODE_PHONE = "PHONE";
+const QString PRESET_MODE_MGM = "MGM";
 
 }
+
+class StoredPresetFreqs
+{
+
+
+public:
+
+    StoredPresetFreqs()
+    {
+
+    };
+
+    Frequency presetFreq;
+    Frequency lastFreq;
+};
+
+class PresetFreq
+{
+
+public:
+    PresetFreq()
+    {
+
+    };
+    ~PresetFreq()
+    {
+
+    };
+
+/*
+    PresetFreq operator= (const PresetFreq& presets)
+    {
+        QMap<QString, StoredPresetFreqs> mspf;
+        QMap<QString, StoredPresetFreqs>*  mspfptr = &mspf;
+
+        QMapIterator<PresetFreq> i(presets);
+
+    }
+*/
+   void clear()
+   {
+       modePresetFreqList.clear();
+   }
+
+
+   Frequency getPresetFreq(const QString mode, const QString band)
+   {
+
+       QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
+       return mspf->value(band).presetFreq;
+   }
+
+
+   Frequency getLastFreq(const QString mode, const QString band)
+   {
+
+       QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
+       return mspf->value(band).lastFreq;
+   }
+
+
+
+   void setPresetFreq(const QString mode, const QString band, const QString freq)
+   {
+        QMap<QString, StoredPresetFreqs>* mspf = nullptr;
+
+        if (mode == freqPresetData::PRESET_MODE_CW)
+        {
+            mspf = cwFreqPresetsPtr;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_PHONE)
+        {
+            mspf = phoneFreqPresetsPtr;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_MGM)
+        {
+            mspf = mgmFreqPresetsPtr;
+        }
+
+        StoredPresetFreqs spf{};
+        spf.presetFreq = Frequency(freq);
+        mspf->insert(band, spf);
+
+       modePresetFreqList.insert(mode, mspf);
+   }
+
+   void setPresetFreq(const QString mode, const QString band, const Frequency freq)
+   {
+       QMap<QString, StoredPresetFreqs>* mspf = nullptr;
+
+       if (mode == freqPresetData::PRESET_MODE_CW)
+       {
+           mspf = cwFreqPresetsPtr;
+       }
+       else if (mode == freqPresetData::PRESET_MODE_PHONE)
+       {
+           mspf = phoneFreqPresetsPtr;
+       }
+       else if (mode == freqPresetData::PRESET_MODE_MGM)
+       {
+           mspf = mgmFreqPresetsPtr;
+       }
+
+       StoredPresetFreqs spf{};
+       spf.presetFreq = freq;
+       mspf->insert(band, spf);
+
+      modePresetFreqList.insert(mode, mspf);
+   }
+
+
+   void setLastFreq(const QString mode, const QString band, const QString freq)
+   {
+        QMap<QString, StoredPresetFreqs>* mspf = nullptr;
+
+        if (mode == freqPresetData::PRESET_MODE_CW)
+        {
+            mspf = cwFreqPresetsPtr;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_PHONE)
+        {
+            mspf = phoneFreqPresetsPtr;
+        }
+        else if (mode == freqPresetData::PRESET_MODE_MGM)
+        {
+            mspf = mgmFreqPresetsPtr;
+        }
+
+        StoredPresetFreqs spf;
+        spf.lastFreq = Frequency(freq);
+        mspf->insert(band, spf);
+
+       modePresetFreqList.insert(mode, mspf);
+   }
+
+   void setLastFreq(const QString mode, const QString band, const Frequency freq)
+   {
+       QMap<QString, StoredPresetFreqs>* mspf = nullptr;
+
+       if (mode == freqPresetData::PRESET_MODE_CW)
+       {
+           mspf = cwFreqPresetsPtr;
+       }
+       else if (mode == freqPresetData::PRESET_MODE_PHONE)
+       {
+           mspf = phoneFreqPresetsPtr;
+       }
+       else if (mode == freqPresetData::PRESET_MODE_MGM)
+       {
+           mspf = mgmFreqPresetsPtr;
+       }
+
+       StoredPresetFreqs spf;
+       spf.lastFreq = freq;
+       mspf->insert(band, spf);
+
+      modePresetFreqList.insert(mode, mspf);
+   }
+
+
+private:
+
+    QMap<QString, QMap<QString, StoredPresetFreqs>* > modePresetFreqList;
+    QMap<QString, StoredPresetFreqs> cwFreqPresets;
+    QMap<QString, StoredPresetFreqs>* cwFreqPresetsPtr = &cwFreqPresets;
+    QMap<QString, StoredPresetFreqs> phoneFreqPresets;
+    QMap<QString, StoredPresetFreqs>* phoneFreqPresetsPtr = &phoneFreqPresets;
+    QMap<QString, StoredPresetFreqs> mgmFreqPresets;
+    QMap<QString, StoredPresetFreqs>* mgmFreqPresetsPtr = &mgmFreqPresets;
+
+
+
+};
 
 // TransVerter Switch Message
 const char TVSWMSG_START = ':';
