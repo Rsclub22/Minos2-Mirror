@@ -42,7 +42,7 @@ Let Qt install into its "natural" home c:\Qt
 
 Click through until it updates its meta information, then under "select components" choose the required components
 
-Get Qt version 5.15.2 and MinGW 8.1.0; under "tools" make sure that MinGW 8.1.0 32 bit is ticked. 
+Get Qt version 5.15.2 and MinGW 8.1.0; under "tools" make sure that MinGW 8.1.0 32 bit is ticked, and that "Qt Charts" is ticked. 
 
 Using MSVC and/or more recent Qt versions counts as an "advanced" option, but is quite possible.
 
