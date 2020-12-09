@@ -117,7 +117,6 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
 
 
 
-
 }
 
 

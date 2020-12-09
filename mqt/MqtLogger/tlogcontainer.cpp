@@ -38,6 +38,7 @@
 #include "defdirsdlg.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "freqpresetdialog.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -448,6 +449,7 @@ void TLogContainer::setupMenus()
 
     radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
 
+    editRadioFreqPresets = newAction(QT_TR_NOOP("Edit Freq Presets..."), radioMenu, SLOT(onEditFreqPresetsExecute()));
     ignorePresetFreqContestStart = newCheckableAction(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), radioMenu, SLOT(onIgnorePresetFreqChecked(bool)));
     ignorePreviousFreqContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), radioMenu, SLOT(onIgnorePreviousFreqChecked(bool)));
     restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
@@ -2273,6 +2275,29 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
    }
 
    return nullptr;
+}
+
+void TLogContainer::onEditFreqPresetsExecute()
+{
+    QVector<QSharedPointer<BandInfo>  > bands;
+    BandList::getBandList().loadAllBands(bands);
+    bool allowHF = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
+    FreqPresetDialog*  fPresetDialog = new FreqPresetDialog(allowHF, bands);
+
+    int ret = fPresetDialog->exec();
+    if (ret == QDialog::Accepted)
+    {
+        if (fPresetDialog->getFreqChanged())
+        {
+            //trace(QString("RigControl: Band Freq Change, send new bandlist to logger"));
+            //presetFreq = fPresetDialog->getPresetSettings();
+            fPresetDialog->saveSettings();
+
+        }
+    }
+
 }
 
 void TLogContainer::onIgnorePreviousFreqChecked(bool checked)

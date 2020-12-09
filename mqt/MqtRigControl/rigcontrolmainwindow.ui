@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1028</width>
-    <height>328</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1004,14 +1004,7 @@ Active</string>
     <property name="title">
      <string>Configure</string>
     </property>
-    <widget class="QMenu" name="menuSetup_Band_Freq">
-     <property name="title">
-      <string>Setup Band Freq.</string>
-     </property>
-     <addaction name="actionEdit_Preset_Freq"/>
-    </widget>
     <addaction name="actionSetup_Radios"/>
-    <addaction name="menuSetup_Band_Freq"/>
     <addaction name="actionTraceComms"/>
    </widget>
    <widget class="QMenu" name="menuAbout">

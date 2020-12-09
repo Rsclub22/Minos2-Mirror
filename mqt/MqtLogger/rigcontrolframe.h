@@ -24,6 +24,7 @@
 #include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
+#include "bandseltab.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -42,6 +43,9 @@ public:
 
 };
 
+
+
+
 class RigControlFrame : public QFrame
 {
     Q_OBJECT
@@ -51,6 +55,8 @@ public:
     ~RigControlFrame() override;
 
     Ui::RigControlFrame *ui;
+
+    BandSelTab *bandSelTab;
 
     void setContest(BaseContestLog *);
 
@@ -92,7 +98,7 @@ public:
     void setRitEnableStatus(bool status, PubSubName psn);
     void setRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
     void setBandList(QString s, PubSubName psn);
-    void createActiveBandList(QString);
+    void createSupportedBandList(QString);
 
     void setTransVertEnabled(bool status, PubSubName psn);
 
@@ -160,7 +166,8 @@ private:
 
     LoggerContestLog *ct = nullptr;
 
-    QVector<quickBandSelData> listOfBands;
+    //QVector<quickBandSelData> listOfBands;
+    QStringList listOfBands;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
@@ -269,11 +276,12 @@ private:
     bool readIgnorePresetFreqFlag();
     bool readIgnorePreviousFreqFlag();
     void setRitMaxKHzFreq(int maxRitFreq);
-    int setBandSelComboIndex(QString band);
+    //int setBandSelComboIndex(QString band);
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(const Frequency &freq);
     void setRadioFreq(Frequency &sendFreq, bool &rigFrameStartFlag);
-    int setBandSelComboFromFreq(const Frequency &freq);
+    int setBandSelButtonFromFreq(const Frequency &freq);
+    //int setBandSelComboFromFreq(const Frequency &freq);
     bool checkFreqOK(const Frequency &freq);
     bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);

@@ -19,7 +19,6 @@
 #include "rigcommon.h"
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
-#include "freqpresetdialog.h"
 #include "rigsetupdialog.h"
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
@@ -350,7 +349,7 @@ void RigControlMainWindow::initActionsConnections()
 
     //connect(ui->selectRadioBox, &QComboBox::activated, [=](int index){selectRadio(index);});
     connect(ui->actionSetup_Radios, &QAction::triggered, [=](){onLaunchSetup();});
-    connect(ui->actionEdit_Preset_Freq, &QAction::triggered, [=](){setupBandFreq();});
+    //connect(ui->actionEdit_Preset_Freq, &QAction::triggered, [=](){setupBandFreq();});
     connect(ui->actionTraceComms, &QAction::toggled, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
     connect(ui->actionAbout, &QAction::triggered, [=](){about();});
     connect(ui->actionAbout_Radio_Config, &QAction::triggered, [=](){aboutRigConfig();});
@@ -391,6 +390,7 @@ void RigControlMainWindow::pollRadioInfo()
     getRadioInfo(PUBLISH_NOW);
 }
 
+/*
 void RigControlMainWindow::setupBandFreq()
 {
 
@@ -411,8 +411,7 @@ void RigControlMainWindow::setupBandFreq()
 
 
 }
-
-
+*/
 
 void RigControlMainWindow::currentRadioSettingChanged(QString radioName)
 {
@@ -3530,57 +3529,15 @@ void RigControlMainWindow::sendRadioListLogger()
 void RigControlMainWindow::addBandListToRigCache(const int radioIdx, const QStringList& supBandList)
 {
 
-    PresetFreq presetFreq;
-    FreqPresetDialog::checkPreviousVersionIniFile(presetFreq, bands);
-    FreqPresetDialog::readSettings(presetFreq, bands);
-
-
-    QString bandList;
+    //PresetFreq presetFreq;
+    //FreqPresetDialog::checkPreviousVersionIniFile(presetFreq, bands);
+    //FreqPresetDialog::readSettings(presetFreq, bands);
 
     if (!supBandList.isEmpty())
     {
-        bandList.append(QString("%1{").arg(freqPresetData::PRESET_MODE_CW));
-
-        for (int i = 0; i < supBandList.count(); i++)
-        {
-            QString band = supBandList[i];
-            QString f = presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_CW, supBandList[i]).str();
-            if (i != 0)
-            {
-                bandList.append(',');
-            }
-            bandList.append(QString("%1:%2").arg(supBandList[i]).arg(f));
-        }
-        bandList.append("},");
-        bandList.append(QString("%1{").arg(freqPresetData::PRESET_MODE_PHONE));
-
-        for (int i = 0; i < supBandList.count(); i++)
-        {
-            QString band = supBandList[i];
-            QString f = presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PHONE, supBandList[i]).str();
-            if (i != 0)
-            {
-                bandList.append(',');
-            }
-            bandList.append(QString("%1:%2").arg(supBandList[i]).arg(f));
-        }
-        bandList.append("},");
-        bandList.append(QString("%1{").arg(freqPresetData::PRESET_MODE_PHONE));
-
-        for (int i = 0; i < supBandList.count(); i++)
-        {
-            QString band = supBandList[i];
-            QString f = presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_MGM, supBandList[i]).str();
-            if (i != 0)
-            {
-                bandList.append(',');
-            }
-            bandList.append(QString(":%1,%2").arg(supBandList[i]).arg(f));
-        }
-        bandList.append("}");
 
         PubSubName psname(setupRadio->availRadioData[radioIdx]->radioName);
-        //QString bands = bandList.join(":");
+        QString bandList = supBandList.join(":");
         logMessage(QString("Add bandlist to rigcache for radio %1 = %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bandList));
         msg->rigCache.setBandList(psname, bandList);
 

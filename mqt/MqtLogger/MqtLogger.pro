@@ -55,6 +55,7 @@ SOURCES += \
     bandmapclientfilterdialog.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
+    bandseltab.cpp \
     cabrillo.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
     dxccframe.cpp \
     enqdlg.cpp \
     freqlineedit.cpp \
+    freqpresetdialog.cpp \
     locTreeFrame.cpp \
     locframe.cpp \
     main.cpp \
@@ -135,6 +137,7 @@ HEADERS  += \
     bandmapclientfilterdialog.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
+    bandseltab.h \
     cabrillo.h \
     contestdetails.h \
     defdirsdlg.h \
@@ -142,6 +145,7 @@ HEADERS  += \
     dxccframe.h \
     enqdlg.h \
     freqlineedit.h \
+    freqpresetdialog.h \
     locTreeFrame.h \
     locframe.h \
     n1mmbroadcast.h \
@@ -199,6 +203,7 @@ FORMS    += \
     dxccframe.ui \
     FilterFrame.ui \
     LocCalcFrame.ui \
+    freqpresetdialog.ui \
     locframe.ui \
     locTreeFrame.ui \
     n1mmbroadcastconfig.ui \

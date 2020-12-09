@@ -514,7 +514,7 @@ private slots:
 
     void onSelectRadio(PubSubName, QString, Frequency freq, QString mode);
     void selFreqClicked();
-    void setupBandFreq();
+    //void setupBandFreq();
     void selectRadio(int index);
     void onLaunchSetup();
 

@@ -116,6 +116,7 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
+    QAction *editRadioFreqPresets = nullptr;
     QAction *ignorePresetFreqContestStart = nullptr;
     QAction *ignorePreviousFreqContestChange = nullptr;
     QAction *restoreContestModeContestChange = nullptr;
@@ -266,11 +267,13 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
     void ClusterBandmapConfigActionExecute();
+    void onEditFreqPresetsExecute();
     void onIgnorePreviousFreqChecked(bool);
     void onIgnorePresetFreqChecked(bool);
     void onRestorContestModeChecked(bool checked);
 
     void appStarted();
+
 
 public slots:
     void onArgsReceived(QString conarg);

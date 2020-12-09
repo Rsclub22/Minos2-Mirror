@@ -36,7 +36,6 @@ SOURCES += main.cpp\
     rigsetupform.cpp \
     transvertsetupform.cpp \
     addtransverterdialog.cpp \
-    freqpresetdialog.cpp \
     addradiodialog.cpp \
     rigsetupdialog.cpp \
     serialtvswitch.cpp \
@@ -52,7 +51,6 @@ HEADERS  += rigcontrolmainwindow.h \
     rigsetupform.h \
     transvertsetupform.h \
     addtransverterdialog.h \
-    freqpresetdialog.h \
     addradiodialog.h \
     rigsetupdialog.h \
     serialtvswitch.h \
@@ -70,5 +68,4 @@ FORMS    += rigcontrolmainwindow.ui \
     rigsetupform.ui \
     transvertsetupform.ui \
     addtransverterdialog.ui \
-    freqpresetdialog.ui \
     addradiodialog.ui
