@@ -2304,17 +2304,17 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1856"/>
+        <location filename="../rigcontrolframe.cpp" line="1855"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1863"/>
+        <location filename="../rigcontrolframe.cpp" line="1862"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1886"/>
+        <location filename="../rigcontrolframe.cpp" line="1885"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4586,22 +4586,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="764"/>
+        <location filename="../tsinglelogframe.cpp" line="775"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1328"/>
+        <location filename="../tsinglelogframe.cpp" line="1339"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1347"/>
+        <location filename="../tsinglelogframe.cpp" line="1358"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1369"/>
+        <location filename="../tsinglelogframe.cpp" line="1380"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>

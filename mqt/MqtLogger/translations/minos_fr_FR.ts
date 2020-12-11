@@ -2401,17 +2401,17 @@ Non - Ignorer les modifications</translation>
         <translation>Fréquence hors bande du Concours</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1856"/>
+        <location filename="../rigcontrolframe.cpp" line="1855"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1863"/>
+        <location filename="../rigcontrolframe.cpp" line="1862"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1886"/>
+        <location filename="../rigcontrolframe.cpp" line="1885"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -4747,22 +4747,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="764"/>
+        <location filename="../tsinglelogframe.cpp" line="775"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1328"/>
+        <location filename="../tsinglelogframe.cpp" line="1339"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1347"/>
+        <location filename="../tsinglelogframe.cpp" line="1358"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1369"/>
+        <location filename="../tsinglelogframe.cpp" line="1380"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
