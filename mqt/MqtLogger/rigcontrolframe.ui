@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
+    <width>859</width>
     <height>203</height>
    </rect>
   </property>
@@ -274,6 +274,18 @@
      </item>
      <item>
       <widget class="QFrame" name="selFrame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>303</width>
+         <height>115</height>
+        </size>
+       </property>
        <property name="frameShape">
         <enum>QFrame::Box</enum>
        </property>
@@ -282,29 +294,23 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="BandSelTab" name="bandSelTab">
-            <property name="autoFillBackground">
-             <bool>true</bool>
-            </property>
+           <widget class="QTabWidget" name="bandSelTab">
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="hfBandSelTab">
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
              <attribute name="title">
               <string>HF</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_2">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
-               <layout class="QGridLayout" name="hfGridLayout">
+               <layout class="QGridLayout" name="gridLayout">
                 <item row="0" column="2">
                  <widget class="QToolButton" name="_7MHzToolBut">
                   <property name="text">
-                   <string>7  </string>
+                   <string>7</string>
                   </property>
                  </widget>
                 </item>
@@ -325,21 +331,21 @@
                 <item row="1" column="0">
                  <widget class="QToolButton" name="_14MHzToolBut">
                   <property name="text">
-                   <string>14 </string>
+                   <string>14</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="1">
                  <widget class="QToolButton" name="_21MHzToolBut">
                   <property name="text">
-                   <string>21 </string>
+                   <string>21</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="2">
                  <widget class="QToolButton" name="_28MHzToolBut">
                   <property name="text">
-                   <string>28 </string>
+                   <string>28</string>
                   </property>
                  </widget>
                 </item>
@@ -348,15 +354,12 @@
              </layout>
             </widget>
             <widget class="QWidget" name="vhfBandSelTab">
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
              <attribute name="title">
               <string>VHF</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
+             <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
-               <layout class="QGridLayout" name="vhfGridLayout">
+               <layout class="QGridLayout" name="gridLayout_2">
                 <item row="0" column="1">
                  <widget class="QToolButton" name="_70MHzToolBut">
                   <property name="text">
@@ -364,38 +367,24 @@
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QToolButton" name="_50MHzToolBut">
-                  <property name="text">
-                   <string> 50  </string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="1">
-                 <widget class="QToolButton" name="_1296MHzToolBut">
-                  <property name="text">
-                   <string>1296</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="2" column="0">
-                 <widget class="QToolButton" name="_432MHzToolBut">
-                  <property name="text">
-                   <string>432 </string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="2">
                  <widget class="QToolButton" name="_144MHzToolBut">
                   <property name="text">
-                   <string>144 </string>
+                   <string>144</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="2">
-                 <widget class="QLabel" name="label_5">
+                <item row="0" column="0">
+                 <widget class="QToolButton" name="_50MHzToolBut">
                   <property name="text">
-                   <string>MHz</string>
+                   <string>50</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QToolButton" name="_432MHzToolBut">
+                  <property name="text">
+                   <string>432</string>
                   </property>
                  </widget>
                 </item>
@@ -404,50 +393,44 @@
              </layout>
             </widget>
             <widget class="QWidget" name="mwBandSelTab">
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
              <attribute name="title">
               <string>MW</string>
              </attribute>
-             <layout class="QVBoxLayout" name="verticalLayout_5">
+             <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
-               <layout class="QGridLayout" name="mwGridLayout">
-                <item row="0" column="2">
-                 <widget class="QToolButton" name="_5_6GHzToolBut">
+               <layout class="QGridLayout" name="gridLayout_3">
+                <item row="0" column="0">
+                 <widget class="QToolButton" name="_1296MHzToolBut">
                   <property name="text">
-                   <string>5.6</string>
+                   <string>1296</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
+                <item row="0" column="1">
                  <widget class="QToolButton" name="_2_3GHzToolBut">
                   <property name="text">
                    <string>2.3</string>
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QToolButton" name="_3_2GHzToolBut">
+                <item row="0" column="2">
+                 <widget class="QToolButton" name="_3_4GHzToolBut">
                   <property name="text">
-                   <string>3.2</string>
+                   <string>3.4</string>
                   </property>
                  </widget>
                 </item>
                 <item row="1" column="0">
-                 <widget class="QToolButton" name="_10GHzToolBut">
-                  <property name="autoFillBackground">
-                   <bool>true</bool>
-                  </property>
+                 <widget class="QToolButton" name="_5_6GHzToolBut">
                   <property name="text">
-                   <string>10 </string>
+                   <string>5.6</string>
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="2">
-                 <widget class="QLabel" name="label_4">
+                <item row="1" column="1">
+                 <widget class="QToolButton" name="_10GHzToolBut">
                   <property name="text">
-                   <string>GHZ</string>
+                   <string>10</string>
                   </property>
                  </widget>
                 </item>
@@ -458,7 +441,7 @@
            </widget>
           </item>
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
@@ -551,12 +534,6 @@
    <class>VolumeSlider</class>
    <extends>QSlider</extends>
    <header>volumeslider.h</header>
-  </customwidget>
-  <customwidget>
-   <class>BandSelTab</class>
-   <extends>QTabWidget</extends>
-   <header>bandseltab.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

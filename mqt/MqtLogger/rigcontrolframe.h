@@ -24,7 +24,7 @@
 #include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
-#include "bandseltab.h"
+#include "bandselbuttons.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -55,8 +55,6 @@ public:
     ~RigControlFrame() override;
 
     Ui::RigControlFrame *ui;
-
-    BandSelTab *bandSelTab;
 
     void setContest(BaseContestLog *);
 
@@ -165,6 +163,7 @@ private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     LoggerContestLog *ct = nullptr;
+    BandSelButtons *bandSelButtons = nullptr;
 
     //QVector<quickBandSelData> listOfBands;
     QStringList listOfBands;
@@ -285,6 +284,7 @@ private:
     bool checkFreqOK(const Frequency &freq);
     bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);
+    void initBandSelButtons();
 };
 
 

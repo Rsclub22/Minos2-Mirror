@@ -92,6 +92,7 @@ private:
     void saveModePresetFreqSettings(QString mode, QSettings &config);
 
 
+
 };
 
 #endif // FREQPRESETDIALOG_H

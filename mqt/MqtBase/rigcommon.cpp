@@ -50,6 +50,7 @@ VFO strToVfo(QString vfo)
 }
 
 
+
 void fillPortsInfo(QComboBox* comportSel)
 {
 
@@ -84,3 +85,6 @@ void fillPortsInfo(QComboBox* comportSel)
 
 
 }
+
+
+

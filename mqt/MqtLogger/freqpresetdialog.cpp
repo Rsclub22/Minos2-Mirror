@@ -18,12 +18,14 @@
 #include <QMessageBox>
 #include "freqpresetdialog.h"
 #include "ui_freqpresetdialog.h"
+#include "rigcommon.h"
 
 
 QString convertBandKey(QString band)
 {
     return band.remove('\x20').replace('.', '_');
-};
+}
+
 
 FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QWidget *parent) :
     QDialog(parent),
@@ -268,7 +270,7 @@ void FreqPresetDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const
 
 
 
-void FreqPresetDialog::readSettings(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
+void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -339,3 +341,4 @@ void FreqPresetDialog::loadSettingsToDialog()
     }
 
 }
+

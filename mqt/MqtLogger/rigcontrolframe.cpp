@@ -71,6 +71,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     rigFrameStartFlag = true;
 
+    initBandSelButtons();
+
     initRigFrame(parent);
 
     showRitButOff();
@@ -338,6 +340,46 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     {
         ui->modelbl->setVisible(false);
     }
+
+}
+
+
+void RigControlFrame::initBandSelButtons()
+{
+    QList<QToolButton *> bandButtons;
+
+    BandSelTabWidget bandSelTabWidget;
+
+    bandSelTabWidget.mainTab = ui->bandSelTab;
+    bandSelTabWidget.hfTab = ui->hfBandSelTab;
+    bandSelTabWidget.vhfTab = ui->vhfBandSelTab;
+    bandSelTabWidget.mwTab = ui->mwBandSelTab;
+
+    ui->hfBandSelTab->setAutoFillBackground(true);
+    ui->vhfBandSelTab->setAutoFillBackground(true);
+    ui->mwBandSelTab->setAutoFillBackground(true);
+
+    bandButtons.append(ui->_1_8MHzToolBut);
+    ui->_1_8MHzToolBut->setPopupMode(QToolButton::MenuButtonPopup);
+    ui->_1_8MHzToolBut->setToolButtonStyle(Qt::ToolButtonTextOnly);
+    bandButtons.append(ui->_3_5MHzToolBut);
+    bandButtons.append(ui->_7MHzToolBut);
+    bandButtons.append(ui->_14MHzToolBut);
+    bandButtons.append(ui->_21MHzToolBut);
+    bandButtons.append(ui->_28MHzToolBut);
+    bandButtons.append(ui->_50MHzToolBut);
+    bandButtons.append(ui->_70MHzToolBut);
+    bandButtons.append(ui->_144MHzToolBut);
+    bandButtons.append(ui->_432MHzToolBut);
+    bandButtons.append(ui->_1296MHzToolBut);
+    bandButtons.append(ui->_2_3GHzToolBut);
+    bandButtons.append(ui->_3_4GHzToolBut);
+    bandButtons.append(ui->_5_6GHzToolBut);
+    bandButtons.append(ui->_10GHzToolBut);
+
+    QVector<QSharedPointer<BandInfo> > bands;
+    BandList::getBandList().loadAllBands(bands);
+    bandSelButtons = new BandSelButtons(bands, bandButtons, bandSelTabWidget);
 
 }
 
@@ -1248,7 +1290,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // set Band Sel Combo to band of contest band
 
                     //if (setBandSelComboIndex(contestBand) == -1)
-                    if (bandSelTab->setButtonOnOff(contestBand, true)  == -1)
+                    if (bandSelButtons->setButtonOnOff(contestBand, true)  == -1)
                     {
                         traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
                     }
@@ -1535,7 +1577,7 @@ void RigControlFrame::restoreRadioFreq()
             disconnectFreq.clear();
             QString cb = ct->contestBands.getValue().trimmed();
             //int err = setBandSelComboIndex(cb);
-            int err = bandSelTab->setButtonOnOff(cb, true);
+            int err = bandSelButtons->setButtonOnOff(cb, true);
             if (err >= 0 )
             {
 
@@ -1574,10 +1616,10 @@ int RigControlFrame::setBandSelButtonFromFreq(const Frequency &freq)
 
     if (blist.findBand(freq, bi))
     {
-        if (bandSelTab->getCurrentButtonOn_Band() != bi->uk)
+        if (bandSelButtons->getCurrentButtonOn_Band() != bi->uk)
         {
             //retCode = setBandSelComboIndex(bi->uk);
-            retCode = bandSelTab->setButtonOnOff(bi->uk, true);
+            retCode = bandSelButtons->setButtonOnOff(bi->uk, true);
             traceMsg(QString("setBandSelButtonFromFreq = %1, band = %2, retCode = %3").arg(freq.traceStr()).arg(bi->uk).arg(retCode));
 
         }
@@ -1750,14 +1792,14 @@ void RigControlFrame::createSupportedBandList(QString b)
         //ui->bandSelCombo->clear();
         //ui->bandSelCombo->addItem("");
         //ui->bandSelCombo->addItems(listOfBands);
-        bandSelTab->selectSupportedBands(listOfBands);
+        bandSelButtons->selectSupportedBands(listOfBands);
 
         // set combo to current contest band
         if (ct && !ct->isReadOnly())
         {
             QString contestBand = ct->contestBands.getValue();
             // is band in combo sel
-            int retCode = bandSelTab->setButtonOnOff(contestBand, true);
+            int retCode = bandSelButtons->setButtonOnOff(contestBand, true);
 
             //if (ui->bandSelCombo->findText(contestBand)>= 0)
             if (retCode >= 0)
@@ -1776,7 +1818,7 @@ void RigControlFrame::createSupportedBandList(QString b)
     }
     else
     {
-        bandSelTab->setAllButtonsVisible(false);
+        bandSelButtons->setAllButtonsVisible(false);
         //ui->bandSelCombo->clear();
     }
 }
@@ -1847,7 +1889,7 @@ void RigControlFrame::setRadioState(QString s)
                ui->freqInput->setLineText(sf);
                emit setFreqDisplay(curFreq, legalFreq);
                //ui->bandSelCombo->clear();
-               bandSelTab->setAllButtonsVisible(false);
+               bandSelButtons->setAllButtonsVisible(false);
            }
            emit radioIsConnected(false);
            emit radioDisconnected();

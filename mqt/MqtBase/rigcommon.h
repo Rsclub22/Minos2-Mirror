@@ -45,12 +45,22 @@ enum VFO {CURRENT_VFO, VFOA, VFOB};
 QString vfoToStr(VFO curVfo);
 VFO strToVfo(QString vfo);
 
+
 // hamlib conf token strings
 const QString HAMLIB_RETRY = "retry";
 const QString HAMLIB_TIMEOUT = "timeout";
 
 
 const int MAX_RITFREQ = 9999;
+
+class BandSelTabWidget
+{
+public:
+    QTabWidget *mainTab;
+    QWidget *hfTab;
+    QWidget *vhfTab;
+    QWidget *mwTab;
+};
 
 class TransVertParams
 {
