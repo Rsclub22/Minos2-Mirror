@@ -38,7 +38,7 @@ signals:
    void ReportOverstrike(bool ov, BaseContestLog *c);
    void AfterLogContact(BaseContestLog *ct);
    void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
-   void AfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult);
+   void AfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct, bool cqResp);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
@@ -109,7 +109,7 @@ public:
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
    static void SendAfterLogContact(BaseContestLog *ct);
    static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
-   static void SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult);
+   static void SendAfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct, bool cqResp);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
