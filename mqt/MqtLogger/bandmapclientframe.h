@@ -333,7 +333,7 @@ private slots:
      void on_memoryActionSelected();
      void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
-     void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>, bool cqResp);
+     void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
      void filterButtonSelected();
      void onMenuShow();
 

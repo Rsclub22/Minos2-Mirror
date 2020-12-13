@@ -2235,8 +2235,7 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
-   bool responseToCq = (runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag;
-   MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct, responseToCq);
+   MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
