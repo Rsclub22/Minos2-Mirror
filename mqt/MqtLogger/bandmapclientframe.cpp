@@ -964,25 +964,16 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
     traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getDxCallStr()).arg(spot->getFreq().traceStr()).arg(spot->getMode()).arg(spot->getDxLocator()));
 
-    bandmapDataModel->rowData = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::LOGGED));
+    bandmapDataModel->rowData = spot;
+
     bandmapDataModel->rowData->setRxTime(logTime);
     bandmapDataModel->rowData->setSpotTime(logTimeStr);
-    bandmapDataModel->rowData->setFreq(spot->getFreq());
-    bandmapDataModel->rowData->setBand(spot->getBand());
-    bandmapDataModel->rowData->setBandMask(spot->getBandMask());
-    bandmapDataModel->rowData->setMode(spot->getMode());
-    bandmapDataModel->rowData->setModeMask(spot->getModeMask());
-    bandmapDataModel->rowData->setDxCall(spot->getDxCallStr());
-    bandmapDataModel->rowData->setDxCallWorked(spot->getDxCallWorked());
-    bandmapDataModel->rowData->setDxLocator(spot->getDxLocator());
+
     bandmapDataModel->rowData->setDxLocatorWorked(locWorked);
     bandmapDataModel->rowData->setDxDist(distance);
     bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
     bandmapDataModel->rowData->setRotBrg(rotBrg);
     bandmapDataModel->rowData->setRotConnected(rotatorConnected);
-    bandmapDataModel->rowData->setRunModeOn(spot->getRunModeOn());
-    bandmapDataModel->rowData->setOffRunFreq(spot->getOffRunFreq());
-    bandmapDataModel->rowData->setSpotType(spot->getSpotType());
 
     bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 }
