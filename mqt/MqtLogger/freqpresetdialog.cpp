@@ -23,7 +23,8 @@
 
 QString convertBandKey(QString band)
 {
-    return band.remove('\x20').replace('.', '_');
+    //return band.remove('\x20').replace('.', '_');
+    return band;
 }
 
 
@@ -36,27 +37,6 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
     hfFlag = hfFlag_;
 
 
-
-
-    presetFreqLineEditList << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
-                           << ui->cwLineEdit_14mhz << ui->cwLineEdit_21mhz << ui->cwLineEdit_28mhz
-                           << ui->cwLineEdit_50mhz << ui->cwLineEdit_70mhz << ui->cwLineEdit_144mhz
-                           << ui->cwLineEdit_432mhz << ui->cwLineEdit_1296mhz << ui->cwLineEdit_2300mhz
-                           <<ui->cwLineEdit_3_4ghz << ui->cwLineEdit_5_6ghz << ui->cwLineEdit_10ghz
-                           << ui->phoneLineEdit_1_8mhz << ui->phoneLineEdit_3_5mhz << ui->phoneLineEdit_7mhz
-                           << ui->phoneLineEdit_14mhz << ui->phoneLineEdit_21mhz << ui->phoneLineEdit_28mhz
-                           << ui->phoneLineEdit_50mhz << ui->phoneLineEdit_70mhz << ui->phoneLineEdit_144mhz
-                           << ui->phoneLineEdit_432mhz << ui->phoneLineEdit_1296mhz << ui->phoneLineEdit_2300mhz
-                           <<ui->phoneLineEdit_3_4ghz << ui->phoneLineEdit_5_6ghz << ui->phoneLineEdit_10ghz
-                           << ui->mgmLineEdit_1_8mhz << ui->mgmLineEdit_3_5mhz << ui->mgmLineEdit_7mhz
-                           << ui->mgmLineEdit_14mhz << ui->mgmLineEdit_21mhz << ui->mgmLineEdit_28mhz
-                           << ui->mgmLineEdit_50mhz << ui->mgmLineEdit_70mhz << ui->mgmLineEdit_144mhz
-                           << ui->mgmLineEdit_432mhz << ui->mgmLineEdit_1296mhz << ui->mgmLineEdit_2300mhz
-                           <<ui->mgmLineEdit_3_4ghz << ui->mgmLineEdit_5_6ghz << ui->mgmLineEdit_10ghz;
-
-
-
-
     cwPresetLineEditList << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
                          << ui->cwLineEdit_14mhz << ui->cwLineEdit_21mhz << ui->cwLineEdit_28mhz
                          << ui->cwLineEdit_50mhz << ui->cwLineEdit_70mhz << ui->cwLineEdit_144mhz
@@ -64,7 +44,11 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
                          <<ui->cwLineEdit_3_4ghz << ui->cwLineEdit_5_6ghz << ui->cwLineEdit_10ghz;
 
 
+    for (int i = 0; i < cwPresetLineEditList.count(); i++)
+    {
+        connect(cwPresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onCwPresetLineEditingFinished(i);});
 
+    }
 
     phonePresetLineEditList << ui->phoneLineEdit_1_8mhz << ui->phoneLineEdit_3_5mhz << ui->phoneLineEdit_7mhz
                             << ui->phoneLineEdit_14mhz << ui->phoneLineEdit_21mhz << ui->phoneLineEdit_28mhz
@@ -72,7 +56,11 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
                             << ui->phoneLineEdit_432mhz << ui->phoneLineEdit_1296mhz << ui->phoneLineEdit_2300mhz
                             <<ui->phoneLineEdit_3_4ghz << ui->phoneLineEdit_5_6ghz << ui->phoneLineEdit_10ghz;
 
+    for (int i = 0; i < phonePresetLineEditList.count(); i++)
+    {
+        connect(phonePresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onPhonePresetLineEditingFinished(i);});
 
+    }
 
     mgmPresetLineEditList << ui->mgmLineEdit_1_8mhz << ui->mgmLineEdit_3_5mhz << ui->mgmLineEdit_7mhz
                           << ui->mgmLineEdit_14mhz << ui->mgmLineEdit_21mhz << ui->mgmLineEdit_28mhz
@@ -80,7 +68,11 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
                           << ui->mgmLineEdit_432mhz << ui->mgmLineEdit_1296mhz << ui->mgmLineEdit_2300mhz
                           << ui->mgmLineEdit_3_4ghz << ui->mgmLineEdit_5_6ghz << ui->mgmLineEdit_10ghz;
 
+    for (int i = 0; i < mgmPresetLineEditList.count(); i++)
+    {
+        connect(mgmPresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onMgmPresetLineEditingFinished(i);});
 
+    }
 
     hfLineEdits << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
                 << ui->cwLineEdit_14mhz << ui->cwLineEdit_21mhz << ui->cwLineEdit_28mhz
@@ -101,11 +93,6 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
              << ui->mgm_14MHzLbl  << ui->mgm_21MHzLbl << ui->mgm_28MHzLbl;
 
 
-    for (int i = 0; i < presetFreqLineEditList.count(); i++)
-    {
-        connect(presetFreqLineEditList[i], &QLineEdit::editingFinished, [=]() {onbandCheckBoxStateChanged(i);});
-
-    }
 
 
     setHf(hfFlag);
@@ -135,9 +122,19 @@ void FreqPresetDialog::setHf(bool hfFlag)
 
 }
 
-void FreqPresetDialog::onbandCheckBoxStateChanged(int i)
+void FreqPresetDialog::onCwPresetLineEditingFinished(int i)
 {
-    getFreq(presetFreqLineEditList[i], i);
+    getFreq(cwPresetLineEditList[i], i);
+}
+
+void FreqPresetDialog::onPhonePresetLineEditingFinished(int i)
+{
+    getFreq(phonePresetLineEditList[i], i);
+}
+
+void FreqPresetDialog::onMgmPresetLineEditingFinished(int i)
+{
+    getFreq(mgmPresetLineEditList[i], i);
 }
 
 FreqPresetDialog::~FreqPresetDialog()
@@ -230,7 +227,7 @@ void FreqPresetDialog::saveModePresetFreqSettings(QString mode, QSettings &confi
     config.beginGroup(mode);
     for (int i = 0; i < bands.count(); i++)
     {
-        config.setValue(convertBandKey(bands[i].data()->uk), presetFreq.getPresetFreq(mode, bands[i].data()->uk).str());
+        config.setValue(bands[i].data()->uk, presetFreq.getPresetFreq(mode, bands[i].data()->uk).str());
     }
     config.endGroup();
 }
@@ -252,7 +249,7 @@ void FreqPresetDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const
         for (int i = 0; i < bands.count(); i++)
         {
 
-            presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(convertBandKey(bands[i].data()->uk), freqPresetData::bandFreq[i]).toString()));
+            presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
         }
         config.endGroup();
@@ -260,7 +257,7 @@ void FreqPresetDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const
         config.beginGroup(freqPresetData::PRESET_MODE_PHONE);
         for (int i = 0; i < bands.count(); i++)
         {
-            config.setValue(convertBandKey(bands[i].data()->uk), presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk).str());
+            config.setValue(bands[i].data()->uk, presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk).str());
         }
         config.endGroup();
 
@@ -284,7 +281,7 @@ void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QShar
 
     for (int i = 0; i < bands.count(); i++)
     {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, Frequency(config.value(convertBandKey(bands[i].data()->uk), freqPresetData::bandFreq[i]).toString()));
+        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 
@@ -294,7 +291,7 @@ void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QShar
 
     for (int i = 0; i < bands.count(); i++)
     {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(convertBandKey(bands[i].data()->uk), freqPresetData::bandFreq[i]).toString()));
+        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 
@@ -304,7 +301,7 @@ void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QShar
 
     for (int i = 0; i < bands.count(); i++)
     {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, Frequency(config.value(convertBandKey(bands[i].data()->uk), freqPresetData::bandFreq[i]).toString()));
+        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 

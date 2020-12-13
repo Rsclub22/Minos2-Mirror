@@ -1738,39 +1738,51 @@ void RigControlMainWindow::loggerSetFreq(Frequency freq)
 
 void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 {
+    logMessage(QString("SetFreq: Change to Freq = %1").arg(freq.traceStr()));
     cmdLockOn();    // lock get radio info
-    int retCode = 0;
-    //QString cb;
-    //int tvNum = 0;
 
+    int retCode = 0;
+    QString cb;
+    //int tvNum = 0;
     //bool usingTransVert = false;
 
-    logMessage(QString("SetFreq: Change to Freq = %1").arg(freq.traceStr()));
 
-    //BandList &blist = BandList::getBandList();
-    //QSharedPointer<BandInfo>  bi;
+    if (freq.operator long long() == 0)
+    {
+        cb = rigStateDetails->curBand;
+    }
+    else
+    {
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
 
-    //bool bandOK = blist.findBand(freq, bi);
-    //if (bandOK)
-    //{
-   //     cb = bi->uk;
-   //     logMessage(QString("SetFreq: Band found = %1").arg(cb));
-   // }
-   // else
-   // {
-   //     logMessage((QString("SetFreq: No band found for this freq")));
-   //     return;
-   // }
+        bool bandOK = blist.findBand(freq, bi);
+        if (bandOK)
+        {
+            cb = bi->uk;
+            logMessage(QString("SetFreq: Band found = %1").arg(cb));
+        }
+        else
+        {
+            logMessage((QString("SetFreq: No band found for this freq")));
+            return;
+        }
+    }
+
 
     Frequency f(freq);
 
-    if (/*cb != selTvBand &&*/ setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
+    if (cb != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
     {
 
         selTransverterNum = NO_TRANSVERTER_NUM;
-        if (findTransverter(selTransverterNum, rigStateDetails->selTvBand, rigStateDetails->curBand))
+        if (findTransverter(selTransverterNum, rigStateDetails->selTvBand, cb))
         {
             getAndSendTransVertSwNum(selTransverterNum);
+            // now calculate the freq
+            f = f - setupRadio->currentRadio.transVertSettings[selTransverterNum]->transVertOffset;
+            logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(f.traceStr()));
+
         }
 
     }
@@ -1852,6 +1864,32 @@ bool RigControlMainWindow::findTransverter(int &transVerterNum, QString &transVe
         ui->transVertBandDisp->setText(transVerterBand);
         showActiveTransVertIndicator(transVerterBand);
         sendTransVertStatusToLog(true);
+
+        if (setupRadio->currentRadio.enableTransSwitch)
+        {
+            if (setupRadio->currentRadio.transVertSettings[tvNum]->transSwitchNum != transVertSwNum)
+            {
+                transVertSwNum = setupRadio->currentRadio.transVertSettings[tvNum]->transSwitchNum;
+                ui->transVertSwNum->setText(transVertSwNum);
+                transVertSwNum = setupRadio->currentRadio.transVertSettings[tvNum]->transSwitchNum;
+                sendTransVertSwitchToLogger(transVertSwNum);
+                sendTransVertSwitchToComPort(transVertSwNum);
+                logMessage(QString("SetFreq: Send TransVert Switch number - %1").arg(transVertSwNum));
+
+            }
+        }
+        else
+        {
+            if (transVertSwNum != TRANSSW_NUM_DEFAULT)
+            {
+                transVertSwNum = TRANSSW_NUM_DEFAULT;
+                ui->transVertSwNum->setText(TRANSSW_NUM_DEFAULT);
+                sendTransVertSwitchToLogger(TRANSSW_NUM_DEFAULT);
+                sendTransVertSwitchToComPort(TRANSSW_NUM_DEFAULT);
+                updateSupportedRadioIndicators();
+            }
+            logMessage(QString("SetFreq: Transvert Switch not enabled - %1").arg(TRANSSW_NUM_DEFAULT));
+        }
 
         transVerterNum = tvNum;
         return true;

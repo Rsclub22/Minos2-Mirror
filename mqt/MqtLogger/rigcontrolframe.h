@@ -122,7 +122,7 @@ private slots:
     void on_FontChanged();
 
     void freqLineEditInFocus();
-    void radioBandFreq(int index);
+    void radioBandFreq(Frequency f);
     void noRadioSetFreq(Frequency);
     void noRadioSetMode(QString m);
     void freqEditSelected();

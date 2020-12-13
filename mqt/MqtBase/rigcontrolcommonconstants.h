@@ -223,9 +223,8 @@ public:
 
    Frequency getPresetFreq(const QString mode, const QString band)
    {
-
-       QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-       return mspf->value(band).presetFreq;
+      QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
+      return mspf->value(band).presetFreq;
    }
 
 

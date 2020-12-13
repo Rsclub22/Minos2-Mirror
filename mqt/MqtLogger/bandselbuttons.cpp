@@ -57,9 +57,10 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
 }
 
 
-void BandSelButtons::onBandSelButtonPressed(QString key)
+void BandSelButtons::onBandSelButtonPressed(QString band)
 {
-    int a = 0;
+    Frequency freq = presetFreqs.getPresetFreq(curMode, band);
+    emit sendPresetFreq(freq);
 }
 
 
@@ -144,7 +145,7 @@ void BandSelButtons::setTabToCurrentBandType(QString selectedBand)
     }
     else if (bandType == bandSelButtonData::VHF_BAND_TYPE)
     {
-        QWidget* w = bandSelTabWidget.mainTab->currentWidget();
+
         if (bandSelTabWidget.mainTab->currentWidget() != bandSelTabWidget.vhfTab)
         {
             bandSelTabWidget.mainTab->setCurrentWidget(bandSelTabWidget.vhfTab);
@@ -189,13 +190,13 @@ void BandSelButtons::setAllButtonsVisible(bool visible)
 void BandSelButtons::setButtonVisible(QString band, bool visible)
 {
 
-    bandToolButList.value(convertBandKey(band))->setVisible(visible);
+    bandToolButList.value(band)->setVisible(visible);
 
 }
 
 bool BandSelButtons::isBandAvailable(QString band)
 {
-    if (activeBands.contains(convertBandKey(band)))
+    if (activeBands.contains(band))
     {
         return true;
     }
@@ -230,7 +231,7 @@ void BandSelButtons::setAllButtonsOff()
 
 int BandSelButtons::setButtonOnOff(QString band, bool on)
 {
-    if (bandToolButList.contains(convertBandKey(band)))
+    if (bandToolButList.contains(band))
     {
         QString buttonStyle;
         if (on)
@@ -245,7 +246,7 @@ int BandSelButtons::setButtonOnOff(QString band, bool on)
             buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
         }
 
-        bandToolButList.value(convertBandKey(band))->setStyleSheet( buttonStyle);
+        bandToolButList.value(band)->setStyleSheet( buttonStyle);
 
         return 0;
     }
@@ -257,7 +258,7 @@ int BandSelButtons::setButtonOnOff(QString band, bool on)
 
 void BandSelButtons::setToolTip(QString band, QString tipTxt)
 {
-    bandToolButList.value(convertBandKey(band))->setToolTip(tipTxt);
+    bandToolButList.value(band)->setToolTip(tipTxt);
 }
 
 void BandSelButtons::setHf(bool allowHf)
@@ -316,4 +317,31 @@ QString BandSelButtons::selectedBandType(const QString selectedBand)
     }
 
     return "";
+}
+
+
+void BandSelButtons::setMode(QString mode)
+{
+    curMode = convertModeForPresets(mode);
+}
+
+QString BandSelButtons::convertModeForPresets(const QString mode)
+{
+    if (mode == "USB" || mode == "LSB" || mode == "FM")
+    {
+        return "PHONE";
+    }
+
+    return mode;
+}
+
+
+Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
+{
+    return presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
+}
+
+Frequency BandSelButtons::getLastFreq(const QString band, const QString mode)
+{
+    return presetFreqs.getLastFreq(convertModeForPresets(mode), band);
 }

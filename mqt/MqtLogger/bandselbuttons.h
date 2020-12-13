@@ -45,6 +45,12 @@ public:
     void setAllButtonsVisible(bool visible);
     void selectSupportedBands(const QStringList &listOfBands);
 
+    void setMode(QString _curMmode);
+    Frequency getLastFreq(const QString band, const QString mode);
+    Frequency getPresetFreq(const QString band, const QString mode);
+signals:
+void sendPresetFreq(Frequency freq);
+
 private slots:
     void onBandSelButtonPressed(QString key);
 
@@ -58,6 +64,7 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
 
     QString selectedBand;
+    QString curMode;
 
 
     PresetFreq presetFreqs;
@@ -79,6 +86,7 @@ private:
     bool isBandAvailable(QString band);
     QString selectedBandType(const QString selectedBand);
     void setTabToCurrentBandType(QString selectedBand);
+    QString convertModeForPresets(const QString mode);
 };
 
 #endif // BANDSELBUTTONS_H

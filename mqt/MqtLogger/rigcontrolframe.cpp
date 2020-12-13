@@ -330,7 +330,8 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(this, SIGNAL(noRadioSendMode(QString)), this, SLOT(noRadioSetMode(QString)));
 
 
-    //connect(ui->bandSelCombo, SIGNAL(activated(int)), this, SLOT(radioBandFreq(int)));
+    //connect(bandSelButtons , &BandSelButtons::sendPresetFreq, [=]() {radioBandFreq(Frequency f);});
+    connect(bandSelButtons , SIGNAL(sendPresetFreq(Frequency)), this, SLOT(radioBandFreq(Frequency)));
 
     //connect(this, SIGNAL(newBandList()), this, SLOT(setRadioFreq()));
 
@@ -857,28 +858,25 @@ void RigControlFrame::returnChangeRadioFreq()
     exitFreqEdit();
 }
 
-void RigControlFrame::radioBandFreq(int index)
+void RigControlFrame::radioBandFreq(Frequency f)
 {
-    int idx = index -1;
     setRadioBandWarning("");
-    if (idx >= 0 && idx < listOfBands.count())
-    {
-        Frequency f = Frequency(0); // listOfBands[idx].freq; *************************************************
-        if (f != curFreq)
-        {
 
-            if (isRadioLoaded())
+    if (f != curFreq)
+    {
+
+        if (isRadioLoaded())
+        {
+            if (radioConnected && !radioError)
             {
-                if (radioConnected && !radioError)
-                {
-                    sendRigFreq(f);
-                }
-                else if (!radioConnected && radioName.trimmed() == "No Radio")
-                {
-                     noRadioSendOutFreq(f);
-                }
+                sendRigFreq(f);
             }
-       }
+            else if (!radioConnected && radioName.trimmed() == "No Radio")
+            {
+                noRadioSendOutFreq(f);
+            }
+
+        }
     }
     else
     {
@@ -1193,6 +1191,7 @@ void RigControlFrame::setMode(QString m)
                 {
                     ui->modelbl->setText(mode[0]);
                     curMode = mode[0];
+                    bandSelButtons->setMode(curMode);
                     if (mode[0] == hamlibData::MGM)
                     {
                         mgmLabelVisible(true);
@@ -1472,9 +1471,9 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
                    if (b == cb)
                    {
                        traceMsg(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
-                       //ui->bandSelCombo->setCurrentIndex(i + 1);
+                         //ui->bandSelCombo->setCurrentIndex(i + 1);
 
-                       Frequency freq = Frequency(0);       /// ************************************************************
+                       Frequency freq = bandSelButtons->getPresetFreq(b, ct->currentMode.getValue());       /// ************************************************************
 
                        traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
                        if (checkValidFreq(freq))

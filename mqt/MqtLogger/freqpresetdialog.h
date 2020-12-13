@@ -54,8 +54,10 @@ public:
 
 private slots:
 
+void onCwPresetLineEditingFinished(int i);
+void onPhonePresetLineEditingFinished(int i);
+void onMgmPresetLineEditingFinished(int i);
 
-    void onbandCheckBoxStateChanged(int i);
 
 private:
     Ui::FreqPresetDialog *ui;
@@ -64,9 +66,6 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
     bool freqChanged = false;
     bool* freqPresetChanged;
-
-    QList<QLineEdit*> presetFreqLineEditList;
-
 
     QList<QLineEdit*> cwPresetLineEditList;
 
