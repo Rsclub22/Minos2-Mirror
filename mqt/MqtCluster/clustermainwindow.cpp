@@ -199,6 +199,8 @@ void ClusterMainWindow::doStartup()
 
     dxSpotDataModel->delegate = dxSpotViewDelegate;
 
+    initFilterCheckBoxs();
+
     dxSpotProxyModel = new DxSpotSortFilterProxyModel(allBandfilters);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
@@ -364,7 +366,7 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
 
-    initFilterCheckBoxs();
+    //initFilterCheckBoxs();
 
     setHF(false);
 

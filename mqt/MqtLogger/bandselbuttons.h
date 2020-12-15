@@ -6,7 +6,6 @@
 #include <QMap>
 #include "BandList.h"
 #include "rigcommon.h"
-#include "bandseltabbar.h"
 #include "freqpresetdialog.h"
 
 
