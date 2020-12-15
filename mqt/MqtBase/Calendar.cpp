@@ -425,10 +425,16 @@ bool Calendar::parseFile ( const QString &fname )
                             }
 
                             ic.ppKmScoring = ( i.scoring == CalendarContest::perkms );
-                            for ( auto const &j: i.sectionList )
+
+                            QVector<CalendarSectionList> sList;
+                            sList.append(bl.sectionList);
+                            sList.append(i.sectionList);
+                            std::sort(sList.begin(), sList.end());
+                            sList.erase( std::unique(sList.begin(), sList.end() ), sList.end() );//remove duplicates
+
+                            for ( auto const &j: sList )
                             {
                                 QString n = j.name;
-
                                 QMap<QString, CalendarSection>::iterator s = sections.find ( n );
 
                                 if ( s == sections.end() )
@@ -798,6 +804,22 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                     {
                                                         CalendarBandList bl;
                                                         bl.name = e->GetText();
+
+                                                        QString ss = getAttribute(e, "sections");
+                                                        if (ss.size())
+                                                        {
+                                                            // <band_list sections="6O,6S">432</band_list>
+                                                            CsvReader csv;
+                                                            QStringList readData;
+
+                                                            csv.parseCsvLine(ss, readData);
+                                                            for (auto s:readData)
+                                                            {
+                                                                CalendarSectionList sl;
+                                                                sl.name = s;
+                                                                bl.sectionList.append(sl);
+                                                            }
+                                                        }
                                                         c.bandList.push_back ( bl );
                                                     }
                                                     else
