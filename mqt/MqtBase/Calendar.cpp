@@ -431,10 +431,17 @@ bool Calendar::parseFile ( const QString &fname )
                             }
 
                             ic.ppKmScoring = ( i.value().scoring == CalendarContest::perkms );
-                            for ( int j = 0; j < i.value().sectionList.size(); j++ )
-                            {
-                                QString n = i.value().sectionList[ j ].name;
 
+                            QVector<CalendarSectionList> sList;
+                            sList.append((*bl).sectionList);
+                            sList.append(i.value().sectionList);
+                            std::sort(sList.begin(), sList.end());
+                            sList.erase( std::unique(sList.begin(), sList.end() ), sList.end() );//remove duplicates
+
+
+                            for ( int j = 0; j < sList.size(); j++ )
+                            {
+                                QString n = sList[ j ].name;
                                 QMap<QString, CalendarSection>::iterator s = sections.find ( n );
 
                                 if ( s == sections.end() )
@@ -802,6 +809,22 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                     {
                                                         CalendarBandList bl;
                                                         bl.name = e->GetText();
+
+                                                        QString ss = getAttribute(e, "sections");
+                                                        if (ss.size())
+                                                        {
+                                                            // <band_list sections="6O,6S">432</band_list>
+                                                            CsvReader csv;
+                                                            QStringList readData;
+
+                                                            csv.parseCsvLine(ss, readData);
+                                                            for (auto s:readData)
+                                                            {
+                                                                CalendarSectionList sl;
+                                                                sl.name = s;
+                                                                bl.sectionList.append(sl);
+                                                            }
+                                                        }
                                                         c.bandList.push_back ( bl );
                                                     }
                                                     else
