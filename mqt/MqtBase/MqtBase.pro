@@ -31,7 +31,6 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     bandmapmarkerdetails.cpp \
-    bandseltabbar.cpp \
     baseloglist.cpp \
     calcs.cpp \
     Calendar.cpp \
@@ -109,7 +108,6 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     bandmapmarkerdetails.h \
-    bandseltabbar.h \
     base_pch.h \
     CacheSelection.h \
     baseloglist.h \
