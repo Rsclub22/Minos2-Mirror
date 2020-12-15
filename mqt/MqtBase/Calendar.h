@@ -89,13 +89,21 @@ class CalendarSectionList
 {
     public:
         QString name;
-
+        bool operator< ( const CalendarSectionList& rhs ) const
+        {
+            return name < rhs.name;
+        }
+        bool operator== ( const CalendarSectionList& rhs ) const
+        {
+            return name == rhs.name;
+        }
 };
 class CalendarBandList
 {
     public:
         QString name;
 
+        QVector<CalendarSectionList> sectionList;
 };
 class SpecialRuleList
 {
