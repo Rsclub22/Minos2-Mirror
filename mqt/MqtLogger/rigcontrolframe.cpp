@@ -347,40 +347,10 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
 void RigControlFrame::initBandSelButtons()
 {
-    QList<QToolButton *> bandButtons;
-
-    BandSelTabWidget bandSelTabWidget;
-
-    bandSelTabWidget.mainTab = ui->bandSelTab;
-    bandSelTabWidget.hfTab = ui->hfBandSelTab;
-    bandSelTabWidget.vhfTab = ui->vhfBandSelTab;
-    bandSelTabWidget.mwTab = ui->mwBandSelTab;
-
-    ui->hfBandSelTab->setAutoFillBackground(true);
-    ui->vhfBandSelTab->setAutoFillBackground(true);
-    ui->mwBandSelTab->setAutoFillBackground(true);
-
-    bandButtons.append(ui->_1_8MHzToolBut);
-    ui->_1_8MHzToolBut->setPopupMode(QToolButton::MenuButtonPopup);
-    ui->_1_8MHzToolBut->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    bandButtons.append(ui->_3_5MHzToolBut);
-    bandButtons.append(ui->_7MHzToolBut);
-    bandButtons.append(ui->_14MHzToolBut);
-    bandButtons.append(ui->_21MHzToolBut);
-    bandButtons.append(ui->_28MHzToolBut);
-    bandButtons.append(ui->_50MHzToolBut);
-    bandButtons.append(ui->_70MHzToolBut);
-    bandButtons.append(ui->_144MHzToolBut);
-    bandButtons.append(ui->_432MHzToolBut);
-    bandButtons.append(ui->_1296MHzToolBut);
-    bandButtons.append(ui->_2_3GHzToolBut);
-    bandButtons.append(ui->_3_4GHzToolBut);
-    bandButtons.append(ui->_5_6GHzToolBut);
-    bandButtons.append(ui->_10GHzToolBut);
 
     QVector<QSharedPointer<BandInfo> > bands;
     BandList::getBandList().loadAllBands(bands);
-    bandSelButtons = new BandSelButtons(bands, bandButtons, bandSelTabWidget);
+    bandSelButtons = new BandSelButtons(bands, ui->bandSelGridLayout);
 
 }
 
@@ -1289,7 +1259,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // set Band Sel Combo to band of contest band
 
                     //if (setBandSelComboIndex(contestBand) == -1)
-                    if (bandSelButtons->setButtonOnOff(contestBand, true)  == -1)
+                    if (bandSelButtons->selectButtonGroupAndActiveBand(contestBand)  == -1)
                     {
                         traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
                     }
@@ -1576,7 +1546,7 @@ void RigControlFrame::restoreRadioFreq()
             disconnectFreq.clear();
             QString cb = ct->contestBands.getValue().trimmed();
             //int err = setBandSelComboIndex(cb);
-            int err = bandSelButtons->setButtonOnOff(cb, true);
+            int err = bandSelButtons->selectButtonGroupAndActiveBand(cb);
             if (err >= 0 )
             {
 

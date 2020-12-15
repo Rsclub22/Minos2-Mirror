@@ -53,14 +53,8 @@ const QString HAMLIB_TIMEOUT = "timeout";
 
 const int MAX_RITFREQ = 9999;
 
-class BandSelTabWidget
-{
-public:
-    QTabWidget *mainTab;
-    QWidget *hfTab;
-    QWidget *vhfTab;
-    QWidget *mwTab;
-};
+
+
 
 class TransVertParams
 {
