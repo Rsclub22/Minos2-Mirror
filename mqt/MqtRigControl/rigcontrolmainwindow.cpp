@@ -42,32 +42,8 @@ const bool DONT_PUBLISH_NOW = false;
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),
    ui(new Ui::RigControlMainWindow),
-
    cmdLockFlag(false)
-/*
-   radioIndex(0),
-   rigErrorFlag(false),
-   cmdLockFlag(false),
-   rigCtldConnectDelay(0),
-   logRitOn(false),
-   supVolume(false),
-   supSignalStrength(false),
-   supPtt(false),
-   curVfoFrq(0.0),
-   curTransVertFrq(0.0),
-   mgmModeFlag(false),
-   rRitFreq(0),
-   curVol(0),
-   curSignalStrength(0),
-   curPttStatus(false),
-   radioSupGetRit(false),
-   radioSupSetRit(false),
-   radioSupGetRitState(false),
-   radioSupSetRitState(false),
-   radioRitOn(false),
-   ritEnable(false),
-   radioCommsOK(false)
-*/
+
 {
     ui->setupUi(this);
 
@@ -269,7 +245,7 @@ void RigControlMainWindow::onCwKeyerPbClicked()
     QString msg = "Test M0DGB";
     if (radio)
     {
-        radio->sendMorse(curVfo,msg);
+        radio->sendMorse(rigStateDetails->curVfo,msg);
     }
 
 }
@@ -278,7 +254,7 @@ void RigControlMainWindow::onCwKeyerStopPbClicked()
 {
     if(radio)
     {
-        radio->stopMorse(curVfo);
+        radio->stopMorse(rigStateDetails->curVfo);
     }
 }
 
@@ -1754,7 +1730,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     if (radioCommsOK && supPtt)
     {
 
-        retCode = getTXStatus(curVfo);
+        retCode = getTXStatus(rigStateDetails->curVfo);
         if (retCode < 0)
         {
             // error
@@ -4545,7 +4521,7 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
     if (radio && ok)
     {
         trace(QString("Send Voice Memory %1 to rig").arg(msgNum));
-        radio->sendVoiceMessage(curVfo, vmNum);
+        radio->sendVoiceMessage(rigStateDetails->curVfo, vmNum);
     }
     else
     {

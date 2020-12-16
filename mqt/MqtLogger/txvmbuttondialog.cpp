@@ -1,5 +1,6 @@
 #include "txvmbuttondialog.h"
 #include "ui_txvmbuttondialog.h"
+#include <QMessageBox>
 
 
 TxVmButtonDialog::TxVmButtonDialog(QWidget *parent) :

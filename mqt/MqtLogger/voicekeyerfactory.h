@@ -14,6 +14,8 @@
 #define VOICEKEYERFACTORY_H
 
 #include <QObject>
+#include <QString>
+#include <QMap>
 #include "voicekeyerbase.h"
 
 class QComboBox;
@@ -84,6 +86,7 @@ class VoiceKeyerFactory : public QObject
 public:
 
     typedef QMap<QString, VoiceKeyerCapabilities> VmKeyers;
+
 
     explicit VoiceKeyerFactory(QObject *parent = nullptr);
     ~VoiceKeyerFactory();

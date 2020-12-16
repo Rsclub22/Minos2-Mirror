@@ -13,6 +13,7 @@
 #define RIGFACTORY_H
 
 #include <QObject>
+#include <QMap>
 #include "rigcapabilities.h"
 #include "rigbase.h"
 
