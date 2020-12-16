@@ -14,6 +14,7 @@
 
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
+#include "serialCommonData.h"
 #include "MTrace.h"
 
 const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
@@ -125,24 +126,27 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         //bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
 
-        //bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
-        //bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+
+        bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
+
+        bool supportCwMem = capsList[i]->send_morse ? true:false;
 
         //bool supportVolume = false;
 
-        //
-       //if (capsList[i]->rig_model != RIG_MODEL_TS590SG || capsList[i]->rig_model != RIG_MODEL_TS590S) // if rig is TS590G ignore volume as it has a bug..
-        //{
-        //    if ((HamlibRigControl::rigHasGetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (HamlibRigControl::rigHasSetLevel(capsList[i]->rig_model, RIG_LEVEL_AF) == RIG_LEVEL_AF))
-        //    {
-        //        supportVolume =  true;
-        //    }
-
-        //}
 
         // support Antenna Switch
         //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+
+        /*
+        QString s = QString("RigModel = %1, GetPTT = %2, SetPTT = %3, Voice Keyer = %4, Cw Keyer = %5")
+            .arg(key).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No")
+            .arg(supportVoiceMem ? "Yes" : "No").arg(supportCwMem ? "Yes" : "No");
+
+        qDebug() << s;
+        */
 
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
@@ -156,11 +160,13 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            true,        // support set rit state
                                            true,       // support get rit max Khz
                                            true,       // support s-meter
-                                           false,       // support get Ptt
-                                           false,       // support set Ptt
+                                           supportGetPtt,       // support get Ptt
+                                           supportSetPtt,       // support set Ptt
                                            true,       // support volume
                                            true,        // support antenna switch
                                            true,            // support RigCtld
+                                           supportVoiceMem,        // support Voice Memory
+                                           supportCwMem,     // support Cw Memory
                                            true);    // support poll data
     }
 
@@ -259,6 +265,38 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
+        }
+
+        if (currentRadio.enablePTT)
+        {
+
+            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
+
+            if (pttType != serialCommonData::PTT_METHOD_CAT)
+            {
+                if (!currentRadio.pttSerialPort.isEmpty())
+                {
+#if defined (WIN32)
+                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio.pttSerialPort).toLatin1 ().data ());
+#else
+                setConfigurationParameter("ptt_pathname", currentRadio.pttSerialPort.toLatin1().data());
+#endif
+
+                }
+
+                if (pttType == serialCommonData::PTT_METHOD_DTR)
+                {
+                   setConfigurationParameter("ptt_type", "DTR");
+
+                }
+                else if (pttType == serialCommonData::PTT_METHOD_RTS)
+                {
+
+                    setConfigurationParameter("ptt_type", "RTS");
+                }
+
+
+            }
         }
 
 
@@ -757,20 +795,42 @@ int HamlibRigControl::getMaxRitFreq(int rigNumber)
 /*************** PTT Control  ********************************/
 
 
-/*
-int  RigControl::getPttStatus(vfo_t vfo, ptt_t *pttStatus)
+int  HamlibRigControl::getPttStatus(VFO vfo, bool& state)
 {
-    return rig_get_ptt	(my_rig, vfo, pttStatus);
+    ptt_t pttStatus;
+    int retCode = rig_get_ptt(my_rig, hamlibVfoNames[vfo], &pttStatus);
+
+    if (pttStatus == RIG_PTT_ON )
+    {
+        state = true;
+    }
+    else if (pttStatus == RIG_PTT_OFF)
+    {
+        state = false;
+    }
+
+    return retCode;
 }
 
 
-int RigControl::setPtt(vfo_t vfo, ptt_t ptt)
+int HamlibRigControl::setPtt(VFO vfo, bool state)
 {
-    return rig_set_ptt(my_rig, vfo, ptt);
+
+    ptt_t pttState;
+    if (state)
+    {
+        pttState = RIG_PTT_ON;
+    }
+    else
+    {
+        pttState = RIG_PTT_OFF;
+    }
+    int retcode = rig_set_ptt(my_rig, hamlibVfoNames[vfo], pttState);
+
 }
 
 
-*/
+
 
 
 /*************** Passband ********************************/
@@ -924,6 +984,59 @@ int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
     }
 
     return retCode;
+}
+
+/*************** Voice Memory Control  ********************************/
+
+
+int HamlibRigControl::sendVoiceMessage(VFO vfo, int vmNum)
+{
+
+    return rig_send_voice_mem(my_rig, hamlibVfoNames[vfo], vmNum);
+
+}
+
+bool HamlibRigControl::supportVoiceMemory()
+{
+    if (my_rig->caps->send_voice_mem)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+
+/*************** CW Memory Control  ********************************/
+
+int HamlibRigControl::sendMorse(VFO vfo, QString msg)
+{
+    return rig_send_morse(my_rig, hamlibVfoNames[vfo], msg.toLocal8Bit());
+}
+int HamlibRigControl::stopMorse(VFO vfo)
+{
+    return rig_stop_morse(my_rig, hamlibVfoNames[vfo]);
+}
+//int HamlibRigControl::waitMorsePtt(VFO vfo)
+//{
+
+//    return wait_morse_ptt(my_rig, hamlibVfoNames[vfo]);
+//}
+int HamlibRigControl::waitMorse(VFO vfo)
+{
+
+    return rig_wait_morse(my_rig, hamlibVfoNames[vfo]);
+}
+
+bool HamlibRigControl::supportCwMemory()
+{
+
+    if (my_rig->caps->send_morse)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 

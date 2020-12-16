@@ -42,7 +42,32 @@ const bool DONT_PUBLISH_NOW = false;
 RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
    QMainWindow(parent),
    ui(new Ui::RigControlMainWindow),
+
    cmdLockFlag(false)
+/*
+   radioIndex(0),
+   rigErrorFlag(false),
+   cmdLockFlag(false),
+   rigCtldConnectDelay(0),
+   logRitOn(false),
+   supVolume(false),
+   supSignalStrength(false),
+   supPtt(false),
+   curVfoFrq(0.0),
+   curTransVertFrq(0.0),
+   mgmModeFlag(false),
+   rRitFreq(0),
+   curVol(0),
+   curSignalStrength(0),
+   curPttStatus(false),
+   radioSupGetRit(false),
+   radioSupSetRit(false),
+   radioSupGetRitState(false),
+   radioSupSetRitState(false),
+   radioRitOn(false),
+   ritEnable(false),
+   radioCommsOK(false)
+*/
 {
     ui->setupUi(this);
 
@@ -72,6 +97,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(rigCtldProcess, &QProcess::started, this, [=](){rigCtldStarted();});
 
     setRigCltdIndicatorVisible(false);
+    setVoiceMemIndVisible(false);
+    setCwMemIndVisible(false);
+    setpttIndVisible(false);
 
     getRigCtldConnectDelay();
 
@@ -217,6 +245,9 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->selectRadioBox->clearFocus();
 
+    connect(ui->cwKeyerPb, SIGNAL(clicked()), this, SLOT(onCwKeyerPbClicked()));
+    connect(ui->cwKeyerStopPb, SIGNAL(clicked()), this, SLOT(onCwKeyerStopPbClicked()));
+
 
     if (appName.length() == 0)
     {
@@ -230,6 +261,25 @@ RigControlMainWindow::~RigControlMainWindow()
     trace("RigControlMainWindow::~RigControlMainWindow()");
     delete ui;
     delete msg;
+}
+
+
+void RigControlMainWindow::onCwKeyerPbClicked()
+{
+    QString msg = "Test M0DGB";
+    if (radio)
+    {
+        radio->sendMorse(curVfo,msg);
+    }
+
+}
+
+void RigControlMainWindow::onCwKeyerStopPbClicked()
+{
+    if(radio)
+    {
+        radio->stopMorse(curVfo);
+    }
 }
 
 void RigControlMainWindow::logMessage( QString s )
@@ -366,6 +416,7 @@ void RigControlMainWindow::initActionsConnections()
 
 
     // Message from Logger
+
     connect(msg, &RigControlRpc::setFreq, [=](Frequency freq){loggerSetFreq(freq);});
     connect(msg, &RigControlRpc::setFreq, [=](Frequency freq){loggerSetFreq(freq);});
     connect(msg, &RigControlRpc::setRitFreq, [=](ShortFreq freq){setRitFreq(freq);});
@@ -373,6 +424,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setMode, [=](QString mode){loggerSetMode(mode);});
     connect(msg, &RigControlRpc::selectLoggerRadio, [=](PubSubName s, QString band, Frequency freq, QString mode){onSelectRadio(s, band, freq, mode);});
     connect(msg, &RigControlRpc::setVolume, [=](int vol){loggerSetVolume(vol);});
+    connect(msg, SIGNAL(setVoiceMessageNum(QString)), this, SLOT(onSetVoiceMessageNum(QString)));
+
 
 
 
@@ -731,6 +784,73 @@ void RigControlMainWindow::upDateRadio()
 
                 }
 
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory
+                        || rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportCwMemory)
+                {
+                    setMemoryGroupVisible(true);
+                }
+                else
+                {
+                    setMemoryGroupVisible(false);
+                }
+
+                // does radio support voice memories
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory)
+                {
+                    setVoiceMemIndVisible(true);
+                    setVoiceMemIndOnOff(true);
+
+                }
+                else
+                {
+                    setVoiceMemIndVisible(false);
+                    setVoiceMemIndOnOff(false);
+
+                }
+
+
+
+                // does radio support CW memories
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportCwMemory)
+                {
+                    setCwMemIndVisible(true);
+                    setCwMemIndOnOff(true);
+
+                }
+                else
+                {
+                    setCwMemIndVisible(false);
+                    setCwMemIndOnOff(false);
+
+                }
+
+
+                // does radio support PTT
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportGetPtt
+                        && rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSetPtt)
+                {
+                    setPttGroupItemsVisible(true);
+                    supPtt = true;
+                    if (setupRadio->currentRadio.enablePTT)
+                    {
+                      setPttIndOnOff(true);
+                    }
+                    else
+                    {
+                        setPttIndOnOff(false);
+                    }
+
+                    setTxRxIndOnOff(false);
+
+
+                }
+                else
+                {
+                    supPtt = false;
+                    setPttGroupItemsVisible(false);
+                    setPttIndOnOff(false);
+
+                }
 
                 if (appName.count() > 0)
                 {
@@ -1630,21 +1750,21 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     }
 
-/*
-    if (radioCommsOK)
+
+    if (radioCommsOK && supPtt)
     {
 
-        retCode = getTXStatus(RIG_VFO_CURR);
+        retCode = getTXStatus(curVfo);
         if (retCode < 0)
         {
             // error
             logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
-            hamlibError(retCode, "Request TX Status");
+            radioError(retCode, "Request TX Status");
         }
 
     }
 
-*/
+
     if (pubNow)
     {
        msg->rigCache.publish();
@@ -2983,6 +3103,7 @@ void RigControlMainWindow::setRitGetSetFreqIndicatorVisible(bool state)
     ui->SetRitFreqInd->setVisible(state);
     ui->GetRitFreqInd->setVisible(state);
     ui->ritEnableChk->setVisible(state);
+    ui->ritGroupBox->setVisible(state);
 }
 
 
@@ -3437,26 +3558,28 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 
 /********************* PTT ****************************************/
 
-// not implemented yet..
-/*
-int RigControlMainWindow::getTXStatus(vfo_t vfo)
+
+
+int RigControlMainWindow::getTXStatus(VFO vfo)
 {
 
-    ptt_t pttStatus;
-    int retCode = radio->getPttStatus(vfo, &pttStatus);
-    if (retCode == rigErrorCodes::RIG_OK)
-    {
-       if (pttStatus == RIG_PTT_ON)
-       {
-           // turn on indicator
+   bool pttStatus = false;
+   int retCode = radio->getPttStatus(vfo, pttStatus);
 
+   if (retCode >= 0)
+   {
+       if (pttStatus != curPttStatus)
+       {
+           curPttStatus = pttStatus;
+           sendPttStateLogger();
+           setTxRxIndOnOff(curPttStatus);
        }
-    }
+   }
 
    return retCode;
 
 }
-*/
+
 
 bool RigControlMainWindow::readTestStandAloneFlag()
 {
@@ -3801,6 +3924,37 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
         //msg->rigCache.publish();
 
     }
+}
+
+void RigControlMainWindow::sendPttTypeLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt Type = %1 to logger").arg(serialCommonData::pttMethodStr[setupRadio->currentRadio.pttType]));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttType(psname, setupRadio->currentRadio.pttType);
+    }
+}
+
+void RigControlMainWindow::sendPttEnabledLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt Enabled = %1 to logger").arg(setupRadio->currentRadio.enablePTT ? "Yes" : "No"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttEnabled(psname, setupRadio->currentRadio.enablePTT);
+    }
+
+}
+void RigControlMainWindow::sendPttStateLogger()
+{
+    if (appName.length() > 0)
+    {
+        logMessage(QString("Send Ptt State = %1 to logger").arg(curPttStatus ? "TX" : "RX"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttState(psname, curPttStatus);
+    }
+
 }
 
 void RigControlMainWindow::onLaunchSetup()
@@ -4205,7 +4359,87 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
 }
 
 
+void RigControlMainWindow::setMemoryGroupVisible(bool visible)
+{
+    ui->memGroupBox->setVisible(visible);
 
+}
+
+void RigControlMainWindow::setPttGroupItemsVisible(bool visible)
+{
+    ui->pttGroupBox->setVisible(visible);
+    setpttIndVisible(visible);
+
+}
+
+void RigControlMainWindow::setVoiceMemIndVisible(bool visible)
+{
+    ui->voiceMemInd->setVisible(visible);
+    ui->voiceMemLbl->setVisible(visible);
+}
+
+void RigControlMainWindow::setVoiceMemIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->voiceMemInd->setStyleSheet(VOICEMEM_INDICATOR_ON);
+    }
+    else
+    {
+        ui->voiceMemInd->setStyleSheet(VOICEMEM_INDICATOR_OFF);
+    }
+}
+
+
+void RigControlMainWindow::setCwMemIndVisible(bool visible)
+{
+    ui->cwMemInd->setVisible(visible);
+    ui->cwMemLbl->setVisible(visible);
+}
+
+void RigControlMainWindow::setCwMemIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->cwMemInd->setStyleSheet(CWMEM_INDICATOR_ON);
+    }
+    else
+    {
+        ui->cwMemInd->setStyleSheet(CWMEM_INDICATOR_OFF);
+    }
+}
+
+void RigControlMainWindow::setpttIndVisible(bool visible)
+{
+    ui->pttInd->setVisible(visible);
+    ui->pttLbl ->setVisible(visible);
+    ui->txRxInd->setVisible(visible);
+    ui->txRxLbl->setVisible(visible);
+}
+
+void RigControlMainWindow::setPttIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->pttInd->setStyleSheet(PTT_INDICATOR_ON);
+    }
+    else
+    {
+        ui->pttInd->setStyleSheet(PTT_INDICATOR_OFF);
+    }
+}
+
+void RigControlMainWindow::setTxRxIndOnOff(bool state)
+{
+    if (state)
+    {
+        ui->txRxInd->setStyleSheet(TX_RX_INDICATOR_ON);
+    }
+    else
+    {
+        ui->txRxInd->setStyleSheet(TX_RX_INDICATOR_OFF);
+    }
+}
 
 /*********************************** test *********************************************/
 
@@ -4297,4 +4531,25 @@ void RigControlMainWindow::showRitTestControl(bool state)
 {
     ui->testRitButton->setVisible(state);
     ui->setRitSpinner->setVisible(state);
+}
+
+
+
+
+
+void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
+{
+    bool ok = false;
+    int vmNum = msgNum.toInt(&ok);
+
+    if (radio && ok)
+    {
+        trace(QString("Send Voice Memory %1 to rig").arg(msgNum));
+        radio->sendVoiceMessage(curVfo, vmNum);
+    }
+    else
+    {
+        trace(QString("send Voice Memory - radio empty, msgNum invalid"));
+    }
+
 }

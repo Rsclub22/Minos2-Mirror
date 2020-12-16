@@ -261,6 +261,11 @@ void TSingleLogFrame::createScreenComponents()
     runButtonsFrame->setRigControl(FKHRigControlFrame);
     runButtonsFrame->setContest(contest);
 
+    txVmButtonsFrame = new TxVmButtonsFrame(this);
+    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
+    txVmButtonsFrame->setRigControl(FKHRigControlFrame);
+    txVmButtonsFrame->setVisible(false);
+
     FKHRotControlFrame = new RotControlFrame(this);
 
     FKHRotControlFrame->setObjectName(QStringLiteral("FKHRotControlFrame"));
@@ -580,6 +585,11 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
                     runButtonsFrame->setContest(ct);
+                    break;
+                }
+                case sctTxVmButtons:
+                {
+                    elementScrollArea->setWidget(txVmButtonsFrame);
                     break;
                 }
                 case sctRotControl:
@@ -1778,6 +1788,7 @@ void TSingleLogFrame::on_SetVolume(int level)
 void TSingleLogFrame::on_RadioLoaded()
 {
     FKHRigControlFrame->setRadioLoaded();
+    txVmButtonsFrame->setRadioLoaded();
     GJVQSOLogFrame->setRadioLoaded();
 }
 
@@ -1831,6 +1842,23 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
     FKHRigControlFrame->setBandList(s, psn);
 }
 
+void TSingleLogFrame::onSetPttEnabled(bool state, PubSubName psn)
+{
+    txVmButtonsFrame->onSetPttEnabled(state, psn);
+}
+
+void TSingleLogFrame::onSetPttType(int type, PubSubName psn)
+{
+    txVmButtonsFrame->onSetPttType(type, psn);
+}
+
+void TSingleLogFrame::on_SetPttState(bool state)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->onSetPttState(state);
+    }
+}
 
 void TSingleLogFrame::on_SetRadioStatus(QString s)
 {
@@ -1861,7 +1889,15 @@ void TSingleLogFrame::on_SetRitEnableState(bool s)
 */
 //---- Send to RigController
 
+void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        //sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigTxVoiceMessage(this, msgNum);
 
+    }
+}
 
 
 void TSingleLogFrame::sendRadioFreq(Frequency freq)

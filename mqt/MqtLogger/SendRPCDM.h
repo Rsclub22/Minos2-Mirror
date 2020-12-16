@@ -74,9 +74,12 @@ public:  		// User declarations
       void sendRotatorSelection(const PubSubName &name, const QString &uuid);
       void sendRotator(TSingleLogFrame *tslf,rpcConstants::RotateDirection direction, int angle );
 
+
       void changeRigSelectionTo(const PubSubName &name, const QString&band, const Frequency &freq, const QString &mode, const QString &uuid);
       void sendRigSelection(const PubSubName &name, const QString&band, const Frequency &freq, const QString &mode, const QString &uuid);
       void sendRigControlFreq(TSingleLogFrame *tslf,const Frequency &freq);
+      void sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum);
+
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);

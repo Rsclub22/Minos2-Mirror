@@ -18,6 +18,7 @@
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
+#include "txvmbuttonsframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -61,6 +62,7 @@ class TSingleLogFrame : public QFrame
     RigControlFrame *FKHRigControlFrame = nullptr;
     RunButtonsFrame *runButtonsFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
+    TxVmButtonsFrame *txVmButtonsFrame = nullptr;
 
     RotPresets *rotPresets = nullptr;
 
@@ -158,6 +160,31 @@ public:
 
     void setCurScreenLayout(const QString &value);
 
+
+    void on_SetTransVertOffset(double offset, PubSubName psn);
+    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
+    void on_SetTransVertStatus(bool status, PubSubName psn);
+    void on_SetVolumeStatus(bool status, PubSubName psn);
+
+    void on_SetRitEnableStatus(bool status, PubSubName psn);
+    void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
+
+    void on_SetBandList(QString s, PubSubName psn);
+    void on_SetTransVertEnabled(bool status, PubSubName psn);
+
+    void setTuneAddBandMapSetting(bool state);
+    bool getTuneAddBandMapSetting();
+
+
+    void on_SupportStopCommand(bool state);
+    void setPauseRigControlUpdatesFlag(bool status);
+    void sendRigTxVoiceMessage(QString msgNum);
+
+    void onSetPttEnabled(bool state, PubSubName psn);
+    void onSetPttType(int type, PubSubName psn);
+    void on_SetPttState(bool state);
+
+    void buildFrame();
 
 private:
     BaseContestLog * contest;
@@ -285,27 +312,15 @@ private slots:
 
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
+
     void on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, int bandmask, QString uuid);
 
-public:
-    void on_SetTransVertOffset(double offset, PubSubName psn);
-    void on_SetTransVertSwitch(int switchNum, PubSubName psn);
-    void on_SetTransVertStatus(bool status, PubSubName psn);
-    void on_SetVolumeStatus(bool status, PubSubName psn);
-
-    void on_SetRitEnableStatus(bool status, PubSubName psn);
-    void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
-
-    void on_SetBandList(QString s, PubSubName psn);
-    void on_SetTransVertEnabled(bool status, PubSubName psn);
-
-    void setTuneAddBandMapSetting(bool state);
-    bool getTuneAddBandMapSetting();
 
 
-    void on_SupportStopCommand(bool state);
 
-    void buildFrame();
+
+
+
 };
 
 #endif // TSINGLELOGFRAME_H

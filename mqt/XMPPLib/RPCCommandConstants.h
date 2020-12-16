@@ -136,6 +136,7 @@ static const QString rigControlErrorMsg    ("ErrorMsg");
 static const QString rigControlRadioFreq   ("RadioFrequency");
 static const QString rigControlLogFreq     ("LogFrequency");
 static const QString rigControlLogBand     ("LogBand");
+static const QString rigVoiceMessageNum    ("RigVoiceMessageNum");
 static const QString rigControlRadioMode   ("RadioMode");
 static const QString rigControlLogMode     ("LogMode");
 static const QString rigControlSelectRadioName   ("SelectRadioName");
@@ -153,6 +154,12 @@ static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");
 static const QString rigHfFlag           ("HfFlag");
+static const QString rigPttEnabled ("PttEnabled");
+static const QString rigPttType ("PttType");
+static const QString rigPttState  ("PttState");
+static const QString rigVoiceMemAvail ("VoiceMemAvail");
+static const QString rigCwMemAvail ("CwMemAvail");
+
 
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");

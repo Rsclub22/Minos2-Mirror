@@ -45,6 +45,8 @@ public:
                     bool supportVolume_ = false,
                     bool supportAntSw_ = false,
                     bool supportRigCtld_ = false,
+                    bool supportVoiceMemory_ = false,
+                    bool supportCwMemory_ = false,
                     bool pollData_= RigCapConstants::pollDataOn);
 
 
@@ -67,6 +69,8 @@ public:
     bool supportVolume;
     bool supportAntSw;
     bool supportRigCtld;
+    bool supportVoiceMemory;
+    bool supportCwMemory;
     bool pollData;
 
   RigCapabilities( const RigCapabilities &rigcap);

@@ -264,6 +264,10 @@ private:
     //bool logRitOn;
     //bool supVolume;     // radio supports volume
     //bool supSignalStrength;
+
+
+    bool supPtt;
+
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<QSharedPointer<BandInfo>  > bands;
@@ -274,6 +278,7 @@ private:
     //Frequency rfrequency;       // read frequency
     //MODE rmode;          // read radio mode
     //pbwidth_t rwidth;        // read radio rx bw
+
     //VFO curVfo;
     //bool supportGetVfo = false;
     //bool supportSetVfo = false;
@@ -288,6 +293,9 @@ private:
     //bool ritKHzFlag;
     //int curVol;
     //int curSignalStrength = 0;
+
+    bool curPttStatus;
+
 
     // rit functions supported by current radio
 
@@ -492,8 +500,28 @@ private:
 
 
 
+
     void getAndSendTransVertSwNum(int transVerterNum);
     bool findTransverter(int &transVerterNum, QString &transVerterBand, QString band);
+
+    void setPttIndOnOff(bool state);
+    void setpttIndVisible(bool visible);
+    void setCwMemIndOnOff(bool state);
+
+    void setVoiceMemIndOnOff(bool state);
+
+
+    void setPttGroupItemsVisible(bool visible);
+    void setMemoryGroupVisible(bool visible);
+    void setVoiceMemIndVisible(bool visible);
+    void setCwMemIndVisible(bool visible);
+    void setTxRxIndOnOff(bool state);
+    void sendPttTypeLogger();
+    void sendPttEnabledLogger();
+    void sendPttStateLogger();
+
+
+
 private slots:
 
     void onStdInRead(QString);
@@ -553,6 +581,10 @@ private slots:
 
     void pollRadioInfo();
 
+
+    void onSetVoiceMessageNum(QString msgNum);
+    void onCwKeyerPbClicked();
+    void onCwKeyerStopPbClicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

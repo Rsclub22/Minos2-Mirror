@@ -19,6 +19,7 @@ class RigState: public PubSubValue
     MinosFrequencyItem<Frequency> _radioFreq;
     MinosFrequencyItem<Frequency> _logFreq;
     MinosStringItem<QString> _logBand;
+    MinosStringItem<QString> _radioVoiceMessageNum;
     MinosStringItem<QString> _radioMode;
     MinosStringItem<QString> _logMode;
     MinosItem<int> _radioVolLevel;
@@ -27,6 +28,7 @@ class RigState: public PubSubValue
     MinosItem<ShortFreq> _logRitFreq;
     MinosItem<bool> _ritOnOffStatus;
     MinosItem<bool> _ritRadioStatus;
+    MinosItem<bool> _pttState;
 
 public:
     RigState();
@@ -47,6 +49,7 @@ public:
     MinosFrequencyItem<Frequency> logFreq() const;
     MinosItem<QString> logBand() const;
     MinosStringItem<QString> radioMode() const;
+    MinosStringItem<QString> radioVoiceMessageNum() const;
     MinosStringItem<QString> logMode() const;
     MinosItem<bool> ritOnOffStatus() const;
     MinosItem<bool> ritRadioStatus() const;
@@ -54,12 +57,14 @@ public:
     MinosItem<ShortFreq> logRitFreq() const;
     MinosItem<int> radioVolLevel() const;
     MinosItem<int> logVolLevel() const;
+    MinosItem<bool> pttState() const;
 
     void setSelected(const QString &loggeruuid, const QString &selected);
     void setRadioFreq(Frequency freq);
     void setLogFreq(Frequency freq);
     void setRadioMode(const QString &mode);
     void setLogMode(const QString &mode);
+    void setVoiceMessageNum(const QString msgNum);
     void setRadioVolume(int level);
     void setLogVolume(int level);
     void setStatus(const QString &status);
@@ -67,6 +72,7 @@ public:
     void setLogRitFreq(const ShortFreq &freq);
     void setRitOnOffStatus(const bool status);
     void setRitRadioStatus(const bool status);
+    void setPttState(const bool state);
 
     QStringList getSelectedLoggers();
     Frequency getRadioFreq();

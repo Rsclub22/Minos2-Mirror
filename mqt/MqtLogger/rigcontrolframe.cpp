@@ -898,10 +898,13 @@ void RigControlFrame::on_ContestPageChanged()
 
         onContestPageChangedFlag = true;
 
+
         sendFreq.clear();
+
 
         traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
         setRadioName(radNam, false);
+
 
 
     }

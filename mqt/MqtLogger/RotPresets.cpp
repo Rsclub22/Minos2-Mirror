@@ -95,6 +95,7 @@ void RotPresets::initPresetButtons()
     {
         buttonLabels.append(RotPresetData::tr(RotPresetData::presetButtonLabels[i]));
     }
+
     for (int i = 0; i < ui_presetbuttons.count(); i++)
     {
 

@@ -341,6 +341,30 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
 }
 
 
+void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum)
+{
+
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setVoiceMessageNum(rigSelected, msgNum);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+
+    st->addMember( msgNum, rpcConstants::rigVoiceMessageNum );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+    traceMsg(QString("SendRigVocieMessageNum = %1 uuid = %2").arg(msgNum).arg(tslf->getContest()->uuid));
+}
+
+
+
+
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
 {
     PubSubName rigSelected = rigCache.getSelected(loggerUuid);
@@ -518,6 +542,22 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
                 }
             }
+            if (selDetail.pttEnabled().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetPttEnabled(selDetail.pttEnabled().getValue(), psn);
+                }
+            }
+            if (selDetail.pttType().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetPttType(selDetail.pttType().getValue(), psn);
+                }
+            }
 
         }
         selDetail.clearDirty();
@@ -573,6 +613,11 @@ void TSendDM::notifyRigChanges()
                     {
                         traceMsg(QString("Rig set volume =  %1, uuid = %2").arg(QString::number(selState.radioVolLevel().getValue())).arg(selStateUuid));
                         tslf->on_SetVolume(selState.radioVolLevel().getValue());
+                    }
+                    if (selState.pttState().isDirty())
+                    {
+                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx"));
+                        tslf->on_SetPttState(selState.pttState().getValue());
                     }
                     if (selState.status().isDirty())
                     {

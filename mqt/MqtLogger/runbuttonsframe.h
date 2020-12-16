@@ -21,7 +21,7 @@ public:
     explicit RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no);
     ~RunMemoryButton();
 
-    RunButtonsFrame *rigControlFrame;
+    RunButtonsFrame *runButtonsFrame;
     QToolButton* memButton;
     QMenu* memoryMenu;
     QShortcut* shortKey;

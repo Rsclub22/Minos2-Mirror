@@ -95,9 +95,14 @@ public:
 
     int rig_message_cb(enum rig_debug_level_e debug_level, const char *fmt, va_list ap);
 
+    int sendVoiceMessage(VFO vfo, int vmNum) override;
+    bool supportVoiceMemory() override;
 
-
-
+    int sendMorse(VFO vfo, QString msg) override;
+    int stopMorse(VFO vfo) override;
+    //int waitMorsePtt(VFO vfo) override;
+    int waitMorse(VFO vfo) override;
+    bool supportCwMemory() override;
 
     int getVfo(VFO *vfo) override;
     int setVfo(VFO vfo) override;
@@ -107,6 +112,9 @@ public:
 
     QString convertVfoQStr(vfo_t vfo);
 
+
+    int getPttStatus(VFO vfo, bool &state) override;
+    int setPtt(VFO vfo, bool state) override;
 
 
 private:
@@ -154,6 +162,7 @@ private:
 
     VFO convert_Vfo_t_To_VFO(vfo_t vfo);
     vfo_t convert_VFO_to_vfo_t(VFO vfo);
+
 
 
 };

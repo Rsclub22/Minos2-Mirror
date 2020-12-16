@@ -72,6 +72,7 @@ SOURCES += \
     qsologframe.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
+    rigcontrolvoicekeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
     rotcontrolframe.cpp \
@@ -93,6 +94,11 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txvmbuttondialog.cpp \
+    txvmbuttonsframe.cpp \
+    txvmsetupdialog.cpp \
+    voicekeyerbase.cpp \
+    voicekeyerfactory.cpp \
     volumeslider.cpp \
     tminosbshelpform.cpp \
     radiodetails.cpp \
@@ -154,6 +160,7 @@ HEADERS  += \
     qsologframe.h \
     reg1test.h \
     rigcontrolframe.h \
+    rigcontrolvoicekeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotcontrolframe.h \
@@ -175,6 +182,11 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txvmbuttondialog.h \
+    txvmbuttonsframe.h \
+    txvmsetupdialog.h \
+    voicekeyerbase.h \
+    voicekeyerfactory.h \
     volumeslider.h \
     tminosbshelpform.h \
     radiodetails.h \
@@ -242,7 +254,10 @@ FORMS    += \
     WsjtxFrame.ui \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
-    Clusterbandmapconfigure.ui
+    Clusterbandmapconfigure.ui \
+    txvmbuttondialog.ui \
+    txvmbuttonsframe.ui \
+    txvmsetupdialog.ui
 
 
 DISTFILES += \

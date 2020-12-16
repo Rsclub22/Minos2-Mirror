@@ -79,6 +79,26 @@ public:
     virtual QString getErrorMsgText(int errorCode) = 0;
 
 
+
+    virtual int sendVoiceMessage(VFO vfo, int vmNum) = 0;
+    virtual bool supportVoiceMemory() = 0;
+
+    virtual int sendMorse(VFO vfo, QString msg) = 0;
+    virtual int stopMorse(VFO vfo) = 0;
+    //virtual int waitMorsePtt(VFO vfo) = 0;
+    virtual int waitMorse(VFO vfo) = 0;
+    virtual bool supportCwMemory() = 0;
+
+    virtual int getPttStatus(VFO vfo, bool& state) = 0;
+    virtual int setPtt(VFO vfo, bool state) = 0;
+
+
+
+    //virtual bool checkFreqRange(int rigNumber, Frequency freq, MODE mode) = 0;
+
+
+
+
 signals:
 
     // no polling signals

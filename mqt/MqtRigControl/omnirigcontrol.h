@@ -88,6 +88,20 @@ public:
     int setConfigurationParameter(QString cfgparam, QString value) override;
     int getConfigurationParameter(QString cfgparam, QString *value) override;
 
+    int sendVoiceMessage(VFO vfo, int vmNum) override;
+    bool supportVoiceMemory() override;
+
+    int sendMorse(VFO vfo, QString msg) override;
+    int stopMorse(VFO vfo) override;
+    //int waitMorsePtt(VFO vfo) override;
+    int waitMorse(VFO vfo) override;
+    bool supportCwMemory() override;
+
+    int getPttStatus(VFO vfo, bool &state) override;
+    int setPtt(VFO vfo, bool state) override;
+
+
+
 
 #if defined (WIN32)
     OmniRig::RigParamX map_mode(QString mode);

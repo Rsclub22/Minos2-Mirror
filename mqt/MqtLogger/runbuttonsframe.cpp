@@ -525,7 +525,7 @@ void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
 {
     memNo = no;
-    rigControlFrame = rcf;
+    runButtonsFrame = rcf;
 
     memButton = b;
 
@@ -565,7 +565,7 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
 }
 RunMemoryButton::~RunMemoryButton()
 {
-//    delete memButton;
+
 }
 
 void RunMemoryButton::memoryShortCutSelected()
@@ -576,15 +576,15 @@ void RunMemoryButton::memoryShortCutSelected()
 }
 void RunMemoryButton::readActionSelected()
 {
-    rigControlFrame->runButReadActSel(memNo);
+    runButtonsFrame->runButReadActSel(memNo);
 }
 void RunMemoryButton::editActionSelected()
 {
-    rigControlFrame->runButEditActSel(memNo);
+    runButtonsFrame->runButEditActSel(memNo);
 }
 void RunMemoryButton::writeActionSelected()
 {
-    rigControlFrame->runButWriteActSel(memNo);
+    runButtonsFrame->runButWriteActSel(memNo);
 }
 void RunMemoryButton::clearActionSelected()
 {
@@ -593,7 +593,7 @@ void RunMemoryButton::clearActionSelected()
 
 void RunMemoryButton::runOffActionSelected()
 {
-    rigControlFrame->runButOffActionSelected(memNo);
+    runButtonsFrame->runButOffActionSelected(memNo);
 }
 
 void RunMemoryButton::buttonSelected()

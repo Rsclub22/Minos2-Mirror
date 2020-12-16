@@ -519,6 +519,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
+                false,      // support voice memory
+                false,      // support Cw memory
                 false);     // polldata flag
 
     // note the library may support these features,
@@ -543,6 +545,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
+                false,      // support voice memory
+                false,      // support Cw memory
                 false);     // polldata flag
 
 
@@ -1148,6 +1152,60 @@ int OmnirigControl::getConfigurationParameter(QString cfgparam, QString *value)
     Q_UNUSED(value)
     int retCode = Rig_OK;
     return retCode;
+}
+
+int OmnirigControl::sendVoiceMessage(VFO vfo, int vmNum)
+{
+    Q_UNUSED(vmNum)
+    Q_UNUSED(vfo)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+bool OmnirigControl::supportVoiceMemory()
+{
+    return false;
+}
+
+int OmnirigControl::sendMorse(VFO vfo, QString msg)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(msg)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+int OmnirigControl::stopMorse(VFO vfo)
+{
+    Q_UNUSED(vfo)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+//int OmnirigControl::waitMorsePtt(VFO vfo)
+//{
+//    Q_UNUSED(vfo)
+//    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+//}
+int OmnirigControl::waitMorse(VFO vfo)
+{
+    Q_UNUSED(vfo)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+bool OmnirigControl::supportCwMemory()
+{
+    return false;
+}
+
+
+int OmnirigControl::getPttStatus(VFO vfo, bool &state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+int OmnirigControl::setPtt(VFO vfo, bool state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
 

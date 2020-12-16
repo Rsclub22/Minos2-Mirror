@@ -88,6 +88,21 @@ int RadioDetails::getBandListCount()
 {
     return bandList.count();
 }
-
+void RadioDetails::setPttType(int type)
+{
+    pttType = type;
+}
+int RadioDetails::getPttType()
+{
+    return pttType;
+}
+void RadioDetails::setPttEnabled(bool state)
+{
+    pttEnabled = state;
+}
+bool RadioDetails::getPttEnabled()
+{
+    return pttEnabled;
+}
 
 
