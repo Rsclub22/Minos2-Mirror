@@ -955,8 +955,7 @@ void ClusterMainWindow::parseDX(const QString txt)
     buf = txt;
 
     int retCode = SPOT_OK;
-    ClusterSpotData newSpot;
-    newSpot.clear();
+    QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
     QString line;
     if (loginSuccess)
@@ -997,12 +996,12 @@ void ClusterMainWindow::parseDX(const QString txt)
                     if (!qrzInfo.getGotAllData())
                     {
                         // still waiting
-                        trace(QString("ParseDx - waiting for qrzInfo for askcallsign = %1, spot callsign = %2").arg(askQraData.getAskCallsign()).arg(spotWaitingForQraFromNode.getDxCallStr()));
+                        trace(QString("ParseDx - waiting for qrzInfo for askcallsign = %1, spot callsign = %2").arg(askQraData.getAskCallsign()).arg(spotWaitingForQraFromNode->getDxCallStr()));
                     }
                     else
                     {
                         // got all the data
-                        trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode.getDxCallStr()));
+                        trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode->getDxCallStr()));
 
                         newSpot = spotWaitingForQraFromNode;
 
@@ -1011,8 +1010,8 @@ void ClusterMainWindow::parseDX(const QString txt)
                             trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
                             // asking qrz via node didn't give qra, use prefix
                             // let's lookup using prefix
-                            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
-                            newSpot.setDxLocatorIsFromNode(true);
+                            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+                            newSpot->setDxLocatorIsFromNode(true);
                         }
                         else if (qrzInfo.getCall() == askQraData.getAskCallsign())
                         {
@@ -1022,8 +1021,8 @@ void ClusterMainWindow::parseDX(const QString txt)
 
                             trace(QString("ParseDx - qrzInfo no error, add locator to spot = %1").arg(qrzInfo.getGrid()));
 
-                            newSpot.setDxLocator(qrzInfo.getGrid());
-                            newSpot.setDxLocatorIsFromNode(true);
+                            newSpot->setDxLocator(qrzInfo.getGrid());
+                            newSpot->setDxLocatorIsFromNode(true);
 
                          }
                          else
@@ -1054,32 +1053,32 @@ void ClusterMainWindow::parseDX(const QString txt)
 
 
 
-void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
+void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
 {
 
-    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14")
-                        .arg(newSpot.getDxCallStr()).arg(newSpot.getFreq().traceStr()).arg(newSpot.getBand()).arg(newSpot.getBandMask()).arg(newSpot.getMode()).arg(newSpot.getModeMask())
-                        .arg(newSpot.getSpotterCallStr()).arg(newSpot.getDxLocator()).arg(newSpot.getSpotterLocator()).arg(newSpot.getDxPropMode()).arg(newSpot.getSpotTime()).arg(newSpot.getSpotDate()).arg(newSpot.getSpotComment()).arg(setupCluster->getTimeToLive()));
+    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15")
+                        .arg(newSpot->getDxCallStr()).arg(newSpot->getFreq().traceStr()).arg(newSpot->getBand()).arg(newSpot->getBandMask()).arg(newSpot->getBandType()).arg(newSpot->getMode()).arg(newSpot->getModeMask())
+                        .arg(newSpot->getSpotterCallStr()).arg(newSpot->getDxLocator()).arg(newSpot->getSpotterLocator()).arg(newSpot->getDxPropMode()).arg(newSpot->getSpotTime()).arg(newSpot->getSpotDate()).arg(newSpot->getSpotComment()).arg(setupCluster->getTimeToLive()));
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
-    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(newSpot.getRxTime(), timeToLive)))
+    if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(newSpot->getRxTime(), timeToLive)))
     {
         trace(QString("ProcessNewSpot: Spot within timeToLive"));
         // does the spot have a dxLocator
-        if (newSpot.getDxLocator().isEmpty() && (newSpot.getBandType() == "VHF" || newSpot.getBandType() == "MWAVE"))
+        if (newSpot->getDxLocator().isEmpty() && (newSpot->getBandType() == "VHF" || newSpot->getBandType() == "MWAVE"))
         {
             // queue to ask Qrz for locator, only for VHF/UHF spots
-            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCallStr()));
+            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot->getDxCallStr()));
             spotListNoQra.append(newSpot);
         }
         else
         {
-            if (currentUserCallsign != newSpot.getSpotterCallStr())
+            if (currentUserCallsign != newSpot->getSpotterCallStr())
             {
                 // send spot to clients if spotter isn't this station
-                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot.getDxCallStr()));
-                sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(&newSpot, setupCluster->getTimeToLive())));
+                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot->getDxCallStr()));
+                sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(newSpot, setupCluster->getTimeToLive())));
 
             }
             else
@@ -1099,14 +1098,14 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
 
 */
 
-            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot.getDxCallStr()).arg(newSpot.getRxTime()));
-            spotsList.append(new ClusterSpotData(newSpot));
+            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
+            spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
 
         }
     }
     else
     {
-        trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot.getDxCallStr()).arg(timeToLive/60));
+        trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot->getDxCallStr()).arg(timeToLive/60));
     }
 
 
@@ -1122,10 +1121,10 @@ void ClusterMainWindow::handAskQraTimer()
 
            spotWaitingForQraFromNode = spotListNoQra.first();
            spotListNoQra.removeFirst();
-           trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode.getDxCallStr()));
+           trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode->getDxCallStr()));
 
            // use call to get QRA from node QRZ command
-           askQraData.setAskCallsign(spotWaitingForQraFromNode.getDxCall().realCall);
+           askQraData.setAskCallsign(spotWaitingForQraFromNode->getDxCall().realCall);
            // flag we are asking QRZ
            trace(QString("Get QRA from node with QRA command, callsign = %1").arg(askQraData.getAskCallsign()));
            askQraData.setAskQrz(true);
@@ -1262,7 +1261,7 @@ int ClusterMainWindow::getQrzReply(QString &line)
         if (qrzInfo.getCall().isEmpty())
         {
             // some sites return the qrz.com, but not the data
-            trace(QString("getQrzReply: end message, but no data for callsign = %1").arg(spotWaitingForQraFromNode.getDxCallStr()));
+            trace(QString("getQrzReply: end message, but no data for callsign = %1").arg(spotWaitingForQraFromNode->getDxCallStr()));
             qrzInfo.setError(true);
         }
         return SPOT_OK;
@@ -1297,7 +1296,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
 
 
 
-int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSpot)
+int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
@@ -1313,27 +1312,30 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
     {
         QString f = dxMsg[0] + "00";
         f.remove('.');
-        newSpot.setFreq(f);
+        newSpot->setFreq(f);
         QString dxBandStr;
         QString dxBandMask;
-        getBand(bands, newSpot.getFreq().str(), dxBandStr, dxBandMask);
-        newSpot.setBand(dxBandStr);
-        newSpot.setBandMask(dxBandMask);
+        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
+        newSpot->setBand(dxBandStr);
+        newSpot->setBandMask(dxBandMask);
 
-        if (dxBandStr.isEmpty() && !enableHFSpots)
+        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
+
+
+        if (newSpot->getBand() == "HF" && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot.getFreq().traceStr()));
+            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
         QString dxModeStr;
         QString dxModeMask;
-        getMode(modeBandPlan, newSpot.getFreq().str(), dxBandStr, dxModeStr, dxModeMask);
-        newSpot.setMode(dxModeStr);
-        newSpot.setModeMask(dxModeMask);
+        getMode(modeBandPlan, newSpot->getFreq().str(), dxBandStr, dxModeStr, dxModeMask);
+        newSpot->setMode(dxModeStr);
+        newSpot->setModeMask(dxModeMask);
 
-        newSpot.setDxCall(dxMsg[1]);
+        newSpot->setDxCall(dxMsg[1]);
         //newSpot.setSpotDate(dxMsg[2]);
         //newSpot.setSpotTime(dxMsg[3].remove('Z'));
         //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
@@ -1355,9 +1357,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
            return SPOT_DATETIME_INVALID * -1;
         }
 
-        newSpot.setSpotDateTime(dt);
+        newSpot->setSpotDateTime(dt);
 
-        QString sptCall = newSpot.getSpotterCallStr();
+        QString sptCall = newSpot->getSpotterCallStr();
         sptCall.prepend('<').append('>');
         // reassemble comment
         QString spotComment;
@@ -1369,37 +1371,36 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
             }
         }
 
-        newSpot.setSpotComment(spotComment);
+        newSpot->setSpotComment(spotComment);
 
-        qint64 rxTime = newSpot.getSpotDateTime().toMSecsSinceEpoch()/1000;
-        newSpot.setRxTime(rxTime);
+        qint64 rxTime = newSpot->getSpotDateTime().toMSecsSinceEpoch()/1000;
+        newSpot->setRxTime(rxTime);
 
 
         QString spotLocator;
         QString dxLocator;
         findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
-        newSpot.setSpotterLocator(spotLocator);
-        newSpot.setDxLocator(dxLocator);
+        newSpot->setSpotterLocator(spotLocator);
+        newSpot->setDxLocator(dxLocator);
 
-        newSpot.setBandType(BandList::getBandList().findType(newSpot.getBand()));
 
-        if (enableHFSpots && newSpot.getBandType() == "HF" && newSpot.getDxLocator().isEmpty())
+        if (enableHFSpots && newSpot->getBandType() == "HF" && newSpot->getDxLocator().isEmpty())
         {
             // get locator based up prefix
-            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
-            newSpot.setDxLocatorIsFromNode(true);
+            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            newSpot->setDxLocatorIsFromNode(true);
         }
 
 
-        newSpot.setDxPropMode(getPropMode(spotComment));
+        newSpot->setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode
         int commentModeNum;
         QString commentMode;
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
-            newSpot.setMode(commentMode);
-            newSpot.setModeMask(QString::number(commentModeNum));
+            newSpot->setMode(commentMode);
+            newSpot->setModeMask(QString::number(commentModeNum));
         }
 
         return SPOT_OK;
@@ -1410,7 +1411,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
 }
 
 
-bool ClusterMainWindow::checkShowDxMsg(const QString txt, ClusterSpotData &newSpot)
+bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
 
     QChar sep1 = '<';
@@ -1465,7 +1466,7 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, ClusterSpotData &newSp
             callsign.setFullCall(extractStr[i]);
             if (callsign.getValRes() == CS_OK)
             {
-                newSpot.setSpotterCall(extractStr[i]);
+                newSpot->setSpotterCall(extractStr[i]);
                 return true;
 
             }
@@ -1532,23 +1533,24 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 
 
 
-QString ClusterMainWindow::assembleSpotMsgToSendToClients(const ClusterSpotData* spotData, const QString timeToLive)
+QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
-    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14")
+    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
                        .arg(spotData->getDxCallStr())   // %1
                        .arg(spotData->getDxLocator())   // %2
                        .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")  // %3
                        .arg(spotData->getFreq().str())  // %4
                        .arg(spotData->getBand())        // %5
                        .arg(spotData->getBandMask())    // %6
-                       .arg(spotData->getMode())        // %7
-                       .arg(spotData->getModeMask())    // %8
-                       .arg(spotData->getSpotterCallStr())  //%9
-                       .arg(spotData->getSpotterLocator())  // %10
-                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %11
-                       .arg(spotData->getSpotComment())  // %12
-                       .arg(spotData->getDxPropMode())   // %13
-                       .arg(timeToLive);        // %14
+                       .arg(spotData->getBandType())    // %7
+                       .arg(spotData->getMode())        // %8
+                       .arg(spotData->getModeMask())    // %9
+                       .arg(spotData->getSpotterCallStr())  //%10
+                       .arg(spotData->getSpotterLocator())  // %11
+                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %12
+                       .arg(spotData->getSpotComment())  // %13
+                       .arg(spotData->getDxPropMode())   // %14
+                       .arg(timeToLive);        // %15
 
     return spotMsg;
 
@@ -1684,7 +1686,7 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
 }
 
 
-int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
+int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
@@ -1696,46 +1698,38 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
 
     if (dxMsg.count() > 5)
     {
-        newSpot.setSpotterCall(dxMsg[2].remove(':'));
+        newSpot->setSpotterCall(dxMsg[2].remove(':'));
         QString f = dxMsg[3] + "00";
         f.remove('.');
 
         //dxFreq = convertKhzToMhz(dxMsg[3]);
-        newSpot.setFreq(f);
+        newSpot->setFreq(f);
 
 
         QString dxBandStr;
         QString dxBandMask;
-        getBand(bands, newSpot.getFreq().str(), dxBandStr, dxBandMask);
-        newSpot.setBand(dxBandStr);
-        newSpot.setBandMask(dxBandMask);
+        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
+        newSpot->setBand(dxBandStr);
+        newSpot->setBandMask(dxBandMask);
 
-        if (enableHFSpots)
+        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
+
+
+        if (newSpot->getBand() == "HF" && !enableHFSpots)
         {
-            if (dxBandStr.isEmpty())
-            {
-                // discard spot as it is not a HF contest band
-                trace(QString("Unpack DX Spot: Discard Spot HF = %1, not a HF Contest Band").arg(newSpot.getFreq().traceStr()));
-
-                return DISCARD_HF_SPOT * -1;
-            }
-        }
-        else if (dxBandMask.toInt() < 5)
-        {
-            // discard spot as it is  HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot.getFreq().traceStr()));
-
+            // discard spot as it is HF
+            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
 
         QString dxModeStr;
         QString dxModeMask;
-        getMode(modeBandPlan, newSpot.getFreq().str(), newSpot.getBand(), dxModeStr, dxModeMask);
-        newSpot.setMode(dxModeStr);
-        newSpot.setModeMask(dxModeMask);
+        getMode(modeBandPlan, newSpot->getFreq().str(), newSpot->getBand(), dxModeStr, dxModeMask);
+        newSpot->setMode(dxModeStr);
+        newSpot->setModeMask(dxModeMask);
 
-        newSpot.setDxCall(dxMsg[4]);
+        newSpot->setDxCall(dxMsg[4]);
 
         // find time
 
@@ -1770,10 +1764,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
            return SPOT_DATETIME_INVALID * -1;
         }
 
-        newSpot.setSpotDateTime(dt);
+        newSpot->setSpotDateTime(dt);
 
         qint64 rxTime = dt.toMSecsSinceEpoch()/1000;
-        newSpot.setRxTime(rxTime);
+        newSpot->setRxTime(rxTime);
 
 
 
@@ -1781,11 +1775,11 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
         if (timePos + 1 >= dxMsg.count())  // make sure not out of range
         {
             // no spotlocator sent
-            newSpot.setSpotterLocator("");
+            newSpot->setSpotterLocator("");
         }
         else
         {
-            newSpot.setSpotterLocator(dxMsg[timePos + 1]);
+            newSpot->setSpotterLocator(dxMsg[timePos + 1]);
         }
         // reassemble the comment
         QString spotComment;
@@ -1797,34 +1791,33 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
             }
         }
 
-        newSpot.setSpotComment(spotComment);
+        newSpot->setSpotComment(spotComment);
 
         // remove seperator char from comment
         spotComment.remove(SPOT_DATA_SEPERATOR);
         QString spotLocator;
         QString dxLocator;
         findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
-        newSpot.setSpotterLocator(spotLocator);
-        newSpot.setDxLocator(dxLocator);
+        newSpot->setSpotterLocator(spotLocator);
+        newSpot->setDxLocator(dxLocator);
 
-        newSpot.setBandType(BandList::getBandList().findType(newSpot.getBand()));
 
-        if (enableHFSpots && newSpot.getBandType() == "HF" && newSpot.getDxLocator().isEmpty())
+        if (enableHFSpots && newSpot->getBandType() == "HF" && newSpot->getDxLocator().isEmpty())
         {
             // get locator based up prefix
-            newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
-            newSpot.setDxLocatorIsFromNode(true);
+            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            newSpot->setDxLocatorIsFromNode(true);
         }
 
-        newSpot.setDxPropMode(getPropMode(spotComment));
+        newSpot->setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode
         int commentModeNum;
         QString commentMode;
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
-            newSpot.setMode(commentMode);
-            newSpot.setModeMask(QString::number(commentModeNum));
+            newSpot->setMode(commentMode);
+            newSpot->setModeMask(QString::number(commentModeNum));
         }
 
         return SPOT_OK;

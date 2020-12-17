@@ -461,7 +461,7 @@ private:
 
     SetupDialog *setupCluster;
 
-    QVector<ClusterSpotData*> spotsList;
+    QVector<QSharedPointer<ClusterSpotData> > spotsList;
     //QTimer* getSpotsTimer;
 
     QTimer* handleSpotsInQueues;
@@ -503,8 +503,8 @@ private:
 
 
 
-    ClusterSpotData spotWaitingForQraFromNode;
-    QVector<ClusterSpotData> spotListNoQra;
+    QSharedPointer<ClusterSpotData> spotWaitingForQraFromNode;
+    QVector<QSharedPointer<ClusterSpotData> > spotListNoQra;
     QTimer *askQraTimer;
     QTimer *askQraTimeout;
 
@@ -528,7 +528,7 @@ private:
 
 
     int txText(QString msg);
-    int upackDxSpot(QString txt, ClusterSpotData &newSpot);
+    int upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> newSpot);
     void loadNodesSelectBox(QStringList listOfNodes);
 
     void restoreDxSpotViewColumns();
@@ -561,8 +561,8 @@ private:
     void echoMsg(QString msg);
     QString createSpotToSend(QString spot);
     QString createStatusToSend(QString status);
-    int upackShowDxSpot(const QString txt, ClusterSpotData &newSpot);
-    bool checkShowDxMsg(const QString txt, ClusterSpotData &newSpot);
+    int upackShowDxSpot(const QString txt, QSharedPointer<ClusterSpotData> newSpot);
+    bool checkShowDxMsg(const QString txt, QSharedPointer<ClusterSpotData> newSpot);
 
     void handleStartFile();
     void handleEndFile();
@@ -602,7 +602,7 @@ private:
 
 
 
-    void processNewSpot(const ClusterSpotData &newSpot);
+    void processNewSpot(const QSharedPointer<ClusterSpotData> newSpot);
     int getQrzReply(QString &line);
 
 
@@ -613,7 +613,7 @@ private:
 
 
     QString getQraFromCallsignPrefix(Callsign prefix);
-    QString assembleSpotMsgToSendToClients(const ClusterSpotData *spotData, const QString timeToLive);
+    QString assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive);
     void getLocatorFromPrefix(ClusterSpotData &newSpot);
 
     void updateToNewVhfUhfGroupKey();
@@ -631,6 +631,7 @@ private:
     void saveBandFilterSettings();
     void readBandFilterSettings();
     void loadBandFilterSettingsToTab();
+
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

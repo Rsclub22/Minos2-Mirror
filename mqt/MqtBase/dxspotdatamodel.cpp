@@ -87,7 +87,7 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
        }
        else if (role == Qt::ForegroundRole)
        {
-           ClusterSpotData* dxSpot = dxSpotData.at(section);
+           QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.at(section);
            if (dxSpot->getSentToMemory())
            {
                QColor c = SPOT_TO_MEMORY;
@@ -168,7 +168,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             return QVariant();
         }
 
-        ClusterSpotData* dxSpot = dxSpotData.at(row);
+        QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.at(row);
 
         QString d;
         switch (col)
@@ -247,7 +247,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
     if (role == DataStoredRole)
     {
 
-        ClusterSpotData* dxSpot = dxSpotData.at(index.row());
+        QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.at(index.row());
 
         QVariant d;
         switch (col)
@@ -329,7 +329,7 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
     if (index.isValid() && role == DataStoredRole)
     {
 
-        ClusterSpotData* dxSpot = dxSpotData.value(row);
+        QSharedPointer<ClusterSpotData> dxSpot = dxSpotData.value(row);
 
         switch (col)
         {
@@ -433,8 +433,8 @@ bool DxSpotDataModel::removeRows(int _row, int count, const QModelIndex &parent)
 
     for (int row = _row + count - 1; row > (_row - 1); row--)
     {
-        ClusterSpotData *s = dxSpotData.takeAt(row);
-        delete s;
+        QSharedPointer<ClusterSpotData> s = dxSpotData.takeAt(row);
+        //delete s;
     }
     endRemoveRows();
     return true;

@@ -28,6 +28,7 @@ public:
     SpotdataBase();
 
     SpotdataBase(const SpotdataBase &sdp);
+    SpotdataBase(const QSharedPointer<SpotdataBase> sdp);
 
     void clear();
 
@@ -133,6 +134,7 @@ public:
 
 
 
+
 protected:
 
     qint64 rxTime;
@@ -163,6 +165,7 @@ class ClusterSpotDataBase
 public:
     ClusterSpotDataBase();
     ClusterSpotDataBase(const ClusterSpotDataBase &sdp);
+    ClusterSpotDataBase(const QSharedPointer<ClusterSpotDataBase> cpd);
 
     ClusterSpotDataBase &operator =(const ClusterSpotDataBase &cpd);
 
@@ -193,6 +196,7 @@ public:
     void clear();
 
 
+
 protected:
 
 
@@ -216,12 +220,23 @@ public:
 
     ClusterSpotData();
     ClusterSpotData(const ClusterSpotData &csd);
+    ClusterSpotData(const QSharedPointer<ClusterSpotData> csd);
 
     ClusterSpotData &operator =(const ClusterSpotData &csd);
+    QSharedPointer<ClusterSpotData> operator =(const QSharedPointer<ClusterSpotData> csd);
+
     bool operator ==(const ClusterSpotData &csd) const;
+    bool operator ==(const QSharedPointer<ClusterSpotData> cpd) const;
+
     bool operator !=(const ClusterSpotData &csd) const;
+    bool operator !=(const QSharedPointer<ClusterSpotData> cpd) const;
 
     void clear();
+
+
+
+
+
 
 
 };

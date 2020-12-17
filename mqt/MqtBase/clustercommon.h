@@ -52,15 +52,15 @@ const int DXLOC_FROM_NODE_FLAG = 2;
 const int DXFREQ = 3;
 const int DXBANDSTR = 4;
 const int DXBANDMASK = 5;
-const int DXMODESTR = 6;
-const int DXMODEMASK = 7;
-const int SPOTCALL = 8;
-const int SPOTLOCATOR = 9;
-const int SPOTDATETIME = 10;
-//const int SPOTDATE = 11;
-const int SPOTCOMMENT = 11;
-const int DXPROPMODE = 12;
-const int TTLVALUE = 13;
+const int DXBANDTYPE = 6;
+const int DXMODESTR = 7;
+const int DXMODEMASK = 8;
+const int SPOTCALL = 9;
+const int SPOTLOCATOR = 10;
+const int SPOTDATETIME = 11;
+const int SPOTCOMMENT = 12;
+const int DXPROPMODE = 13;
+const int TTLVALUE = 14;
 
 
 // Cluster Data and View Columns

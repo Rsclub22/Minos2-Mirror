@@ -868,13 +868,15 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-            ClusterSpotData* newSpot = new ClusterSpotData();
+            //ClusterSpotData* newSpot = new ClusterSpotData();
+            QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
             newSpot->setRxTime(rxTime);
             newSpot->setSpotDateTime(spotDateTime);
             newSpot->setFreq(spotlist[DXFREQ]);
             newSpot->setBand(spotlist[DXBANDSTR]);
             newSpot->setBandMask(spotlist[DXBANDMASK]);
+            newSpot->setBandType(spotlist[DXBANDTYPE]);
             newSpot->setMode(spotlist[DXMODESTR]);
             newSpot->setModeMask(spotlist[DXMODEMASK]);
             newSpot->setDxCall(spotlist[DXCALL]);
@@ -911,7 +913,8 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 }
 
 
-bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
+//bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
+bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotData)
 {
     if (dxSpotDataModel->rowCount() == 0)
     {

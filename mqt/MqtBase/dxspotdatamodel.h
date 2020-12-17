@@ -52,16 +52,19 @@ public:
     // Remove data:
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
     bool removeColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
-    ClusterSpotData* rowData = nullptr;
+    //ClusterSpotData* rowData = nullptr;
+    QSharedPointer<ClusterSpotData> rowData;
     QSharedPointer<HtmlDelegate> delegate ;
 
     // used to access all the data directly
 
-    ClusterSpotData* getSpotData(int row){ return dxSpotData[row];}
+    QSharedPointer<ClusterSpotData> getSpotData(int row){ return dxSpotData[row];}
 
 private:
 
-    QVector<ClusterSpotData*> dxSpotData;
+    //QVector<ClusterSpotData*> dxSpotData;
+    QVector<QSharedPointer<ClusterSpotData> > dxSpotData;
+
 
 
 };

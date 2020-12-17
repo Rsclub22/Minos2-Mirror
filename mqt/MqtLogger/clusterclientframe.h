@@ -293,8 +293,8 @@ private:
     bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
     bool checkDbRowForMatch(Frequency incomingVal, int row, const int colNum);
 
-    bool checkspotExists(ClusterSpotData *spotData);
-
+    //bool checkspotExists(ClusterSpotData *spotData);
+    bool checkspotExists(QSharedPointer<ClusterSpotData> spotData);
 
     void setHF(bool hfOn);
 private slots:

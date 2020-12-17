@@ -21,12 +21,45 @@ SpotdataBase::SpotdataBase()
     clear();
 }
 
+
+SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
+{
+    rxTime = sdp->rxTime;
+    spotDateTime = sdp->spotDateTime;
+    band = sdp->band;
+    bandMask = sdp->bandMask;
+    bandType = sdp->bandType;
+    mode = sdp->mode;
+    modeMask = sdp->modeMask;
+    dxCall = sdp->dxCall;
+    dxCallValidateCode = sdp->dxCallValidateCode;
+    freq = sdp->freq;
+    dxLocator = sdp->dxLocator;
+    spotterCall = sdp->spotterCall;
+    spotterCallValidateCode = sdp->spotterCallValidateCode;
+    spotterLocator = sdp->spotterLocator;
+    dxPropMode = sdp->dxPropMode;
+    spotComment = sdp->spotComment;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
 {
     rxTime = sdp.rxTime;
     spotDateTime = sdp.spotDateTime;
     band = sdp.band;
     bandMask = sdp.bandMask;
+    bandType = sdp.bandType;
     mode = sdp.mode;
     modeMask = sdp.modeMask;
     dxCall = sdp.dxCall;
@@ -49,6 +82,7 @@ void SpotdataBase::clear()
     spotDateTime = QDateTime();
     band.clear();
     bandMask.clear();
+    bandType.clear();
     mode.clear();
     modeMask.clear();
     freq.clear();
@@ -85,7 +119,16 @@ ClusterSpotDataBase::ClusterSpotDataBase(const ClusterSpotDataBase &cpd)
     sentToMemory = cpd.sentToMemory;
 }
 
-
+ClusterSpotDataBase::ClusterSpotDataBase(const QSharedPointer<ClusterSpotDataBase> cpd)
+{
+    dxLocatorIsFromNode = cpd->dxLocatorIsFromNode;
+    askQrzFailed = cpd->askQrzFailed;
+    dxDist = cpd->dxDist;
+    dxBrg = cpd->dxBrg;
+    dxCallWorked = cpd->dxCallWorked;
+    dxLocatorWorked = cpd->dxLocatorWorked;
+    sentToMemory = cpd->sentToMemory;
+}
 
 
 
@@ -129,6 +172,16 @@ ClusterSpotData::ClusterSpotData(const ClusterSpotData &csd) : SpotdataBase(csd)
     dxLocatorWorked = csd.sentToMemory;
 }
 
+ClusterSpotData::ClusterSpotData(const QSharedPointer<ClusterSpotData> csd) : SpotdataBase(csd), ClusterSpotDataBase(csd)
+{
+    dxLocatorIsFromNode = csd->dxLocatorIsFromNode;
+    askQrzFailed = csd->askQrzFailed;
+    dxDist = csd->dxDist;
+    dxBrg = csd->dxBrg;
+    dxCallWorked = csd->dxCallWorked;
+    dxLocatorWorked = csd->sentToMemory;
+}
+
 
 ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
 {
@@ -136,6 +189,7 @@ ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
     spotDateTime = csd.spotDateTime;
     band = csd.band;
     bandMask = csd.bandMask;
+    bandType = csd.bandType;
     mode = csd.mode;
     modeMask = csd.modeMask;
     dxCall = csd.dxCall;
@@ -157,6 +211,60 @@ ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
 
 }
 
+QSharedPointer<ClusterSpotData> ClusterSpotData::operator = (const QSharedPointer<ClusterSpotData> csd)
+{
+    rxTime = csd->rxTime;
+    spotDateTime = csd->spotDateTime;
+    band = csd->band;
+    bandMask = csd->bandMask;
+    bandType = csd->bandType;
+    mode = csd->mode;
+    modeMask = csd->modeMask;
+    dxCall = csd->dxCall;
+    dxCallValidateCode = csd->dxCallValidateCode;
+    freq = csd->freq;
+    dxLocator = csd->dxLocator;
+    spotterCall = csd->spotterCall;
+    spotterCallValidateCode = csd->spotterCallValidateCode;
+    dxPropMode = csd->dxPropMode;
+    spotComment = csd->spotComment;
+    dxLocatorIsFromNode = csd->dxLocatorIsFromNode;
+    askQrzFailed = csd->askQrzFailed;
+    dxDist = csd->dxDist;
+    dxBrg = csd->dxBrg;
+    dxCallWorked = csd->dxCallWorked;
+    dxLocatorWorked = csd->sentToMemory;
+
+    return QSharedPointer<ClusterSpotData>(this);
+
+}
+
+
+bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) const
+{
+    return rxTime == cpd->rxTime &&
+            spotDateTime == cpd->spotDateTime &&
+            band == cpd->band &&
+            bandMask == cpd->bandMask &&
+            bandType == cpd->bandType &&
+            mode == cpd->mode &&
+            modeMask == cpd->modeMask &&
+            dxCall == cpd->dxCall &&
+            dxCallValidateCode == cpd->dxCallValidateCode &&
+            freq == cpd->freq &&
+            dxLocator == cpd->dxLocator &&
+            spotterCall == cpd->spotterCall &&
+            spotterCallValidateCode == cpd->spotterCallValidateCode &&
+            dxPropMode == cpd->dxPropMode &&
+            spotComment == cpd->spotComment &&
+            dxLocatorIsFromNode == cpd->dxLocatorIsFromNode &&
+            askQrzFailed == cpd->askQrzFailed &&
+            dxDist == cpd->dxDist &&
+            dxBrg == cpd->dxBrg &&
+            dxCallWorked == cpd->dxCallWorked &&
+            dxLocatorWorked == cpd->sentToMemory;
+}
+
 
 bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
 {
@@ -164,6 +272,7 @@ bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
             spotDateTime == cpd.spotDateTime &&
             band == cpd.band &&
             bandMask == cpd.bandMask &&
+            bandType == cpd.bandType &&
             mode == cpd.mode &&
             modeMask == cpd.modeMask &&
             dxCall == cpd.dxCall &&
@@ -182,6 +291,32 @@ bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
             dxLocatorWorked == cpd.sentToMemory;
 }
 
+bool ClusterSpotData::operator!=(const QSharedPointer<ClusterSpotData> cpd) const
+{
+
+    return  rxTime != cpd->rxTime ||
+            spotDateTime != cpd->spotDateTime ||
+            band != cpd->band ||
+            bandMask != cpd->bandMask ||
+            bandType != cpd->bandType ||
+            mode != cpd->mode ||
+            modeMask != cpd->modeMask ||
+            dxCall != cpd->dxCall ||
+            dxCallValidateCode != cpd->dxCallValidateCode ||
+            freq != cpd->freq ||
+            dxLocator != cpd->dxLocator ||
+            spotterCall != cpd->spotterCall ||
+            spotterCallValidateCode != cpd->spotterCallValidateCode ||
+            dxPropMode != cpd->dxPropMode ||
+            spotComment != cpd->spotComment ||
+            dxLocatorIsFromNode != cpd->dxLocatorIsFromNode ||
+            askQrzFailed != cpd->askQrzFailed ||
+            dxDist != cpd->dxDist ||
+            dxBrg != cpd->dxBrg ||
+            dxCallWorked != cpd->dxCallWorked ||
+            dxLocatorWorked != cpd->sentToMemory;
+}
+
 bool ClusterSpotData::operator!=(const ClusterSpotData &cpd) const
 {
 
@@ -189,6 +324,7 @@ bool ClusterSpotData::operator!=(const ClusterSpotData &cpd) const
             spotDateTime != cpd.spotDateTime ||
             band != cpd.band ||
             bandMask != cpd.bandMask ||
+            bandType != cpd.bandType ||
             mode != cpd.mode ||
             modeMask != cpd.modeMask ||
             dxCall != cpd.dxCall ||
@@ -251,6 +387,7 @@ bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
             spotDateTime == bsd.spotDateTime &&
             band == bsd.band &&
             bandMask == bsd.bandMask &&
+            bandType == bsd.bandType &&
             mode == bsd.mode &&
             modeMask == bsd.modeMask &&
             dxCall == bsd.dxCall &&
@@ -283,6 +420,7 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
             spotDateTime != bsd.spotDateTime ||
             band != bsd.band ||
             bandMask != bsd.bandMask ||
+            bandType != bsd.bandType ||
             mode != bsd.mode ||
             modeMask != bsd.modeMask ||
             dxCall != bsd.dxCall ||
