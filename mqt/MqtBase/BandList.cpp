@@ -475,4 +475,21 @@ bool BandList::checkValidBand(Frequency freq)
 }
 
 
+QString BandList::findType(const QString &band) const
+{
+    for (auto const &b:bandList)
+    {
+        if (b.data()->uk == band)
+        {
+            return b.data()->getType();
+        }
+
+    }
+
+    return "";
+}
+QString BandList::findType(const Frequency &freq) const
+{
+    return "";
+}
 

@@ -100,6 +100,9 @@ public:
     void setBandMask(const QString bandMask_){bandMask = bandMask_.trimmed();}
     QString getBandMask() const {return bandMask;}
 
+    void setBandType(const QString bandType_){bandType = bandType_;}
+    QString getBandType() const {return bandType;}
+
     void setMode(const QString mode_){mode = mode_.trimmed();}
     QString getMode() const {return mode;}
 
@@ -136,6 +139,7 @@ protected:
     QDateTime spotDateTime;
     QString band;
     QString bandMask;
+    QString bandType;
     QString mode;
     QString modeMask;
     Callsign dxCall;

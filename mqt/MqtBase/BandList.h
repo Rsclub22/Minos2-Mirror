@@ -86,8 +86,13 @@ class BandList
         ~BandList();
         QVector<QSharedPointer<BandInfo> > bandList;
         bool parseFile ( const QString &bandFile );
+
         bool findBand (const QString &freq, QSharedPointer<BandInfo> & );
         bool findBand ( const Frequency &freq, QSharedPointer<BandInfo>  &bi);
+
+        QString findType(const QString &band) const;
+        QString findType(const Frequency &freq) const;
+
 
         bool checkValidBand(Frequency freq);
         void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);

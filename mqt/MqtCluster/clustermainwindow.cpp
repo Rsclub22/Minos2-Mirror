@@ -317,6 +317,10 @@ void ClusterMainWindow::doStartup()
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
+    readBandFilterSettings();
+    loadBandFilterSettingsToTab();
+
+
     statusTimer = new QTimer(this);
     connect(statusTimer, SIGNAL(timeout()), this, SLOT(handleStatusTimer()));
     statusTimer->start(STATUS_TIMER_DUR);
@@ -1063,7 +1067,7 @@ void ClusterMainWindow::processNewSpot(const ClusterSpotData &newSpot)
     {
         trace(QString("ProcessNewSpot: Spot within timeToLive"));
         // does the spot have a dxLocator
-        if (newSpot.getDxLocator().isEmpty() && !enableHFSpots)
+        if (newSpot.getDxLocator().isEmpty() && (newSpot.getBandType() == "VHF" || newSpot.getBandType() == "MWAVE"))
         {
             // queue to ask Qrz for locator, only for VHF/UHF spots
             trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot.getDxCallStr()));
@@ -1377,7 +1381,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, ClusterSpotData &newSp
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
 
-        if (enableHFSpots && newSpot.getDxLocator().isEmpty())
+        newSpot.setBandType(BandList::getBandList().findType(newSpot.getBand()));
+
+        if (enableHFSpots && newSpot.getBandType() == "HF" && newSpot.getDxLocator().isEmpty())
         {
             // get locator based up prefix
             newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
@@ -1801,7 +1807,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, ClusterSpotData &newSpot)
         newSpot.setSpotterLocator(spotLocator);
         newSpot.setDxLocator(dxLocator);
 
-        if (enableHFSpots && newSpot.getDxLocator().isEmpty())
+        newSpot.setBandType(BandList::getBandList().findType(newSpot.getBand()));
+
+        if (enableHFSpots && newSpot.getBandType() == "HF" && newSpot.getDxLocator().isEmpty())
         {
             // get locator based up prefix
             newSpot.setDxLocator(getQraFromCallsignPrefix(newSpot.getDxCall()));
@@ -2678,8 +2686,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
     connect(ui->vhfSelectBandPb, &QPushButton::pressed, [=]() {onVhfSelectBandPbPressed();});
     connect(ui->uhfSelectBandPb, &QPushButton::pressed, [=]() {onUhfSelectBandPbPressed();});
 
-    readBandFilterSettings();
-    loadBandFilterSettingsToTab();
+
 
 }
 
