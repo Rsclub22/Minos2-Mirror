@@ -290,7 +290,7 @@ private:
     void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
-    void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
+    void checkSpotWorked(const QString &callsign, const QString &locator, bool *callWorked, bool *locatorWorked);
     bool checkSpotInTable(QSharedPointer<BandmapSpotData> spot);
     void sendFreqToRig(Frequency freq);
 
