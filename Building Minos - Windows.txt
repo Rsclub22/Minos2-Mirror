@@ -28,9 +28,9 @@ cd Minos2
 git checkout mqt_Release_2.4
 
 Install hamlib 4.0 32 bit from https://sourceforge.net/projects/hamlib/files/hamlib/ into a directory under C:\projects`
-(it has to be in the correct position relative to Minos, or the build won't find the corect files).
+(it has to be in the correct position relative to Minos, or the build won't find the correct files).
 
-    To get Qt, go to (NB This really needs some pictures!)
+To get Qt, go to (NB This really needs some pictures!)
 
 https://www1.qt.io/download-open-source
 

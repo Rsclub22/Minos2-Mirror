@@ -43,8 +43,7 @@ sudo ./tools.sh
 
 ===================== Building Hamlib 4 ========================================
 The current Minos (2.4, and the various preceeding beta releases) uses hamlib 4,
-which is not yet available in the various Linux repositories - at the time of 
-writing, it isn't even released, but is at Release Candidate status.
+which is not yet available in the various Linux repositories.
 
 Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
 including their build instructions, from which the following is derived.
@@ -71,8 +70,7 @@ make
 sudo make install
 
 
-Once hamlib 4 is fully released, or another release candidate comes out, you will
-need to execute
+You then need to execute
 
 cd ~/Hamlib
 git pull
