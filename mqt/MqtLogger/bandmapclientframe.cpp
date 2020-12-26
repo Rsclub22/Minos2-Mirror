@@ -1510,7 +1510,11 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
 
-        QString logContactDistrict = lct->districtMult->districtCode;
+        QString logContactDistrict;
+        if (lct->districtMult)
+        {
+            logContactDistrict = lct->districtMult->districtCode;
+        }
         QString logContactMode = lct->mode.getValue();
         QString logContactMgmSubMode = lct->mgmSubmode.getValue();
         Frequency freq = lct->frequency.getValue();
