@@ -460,7 +460,10 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         QString name = contest->name.getValue();
                         QString band = contest->contestBands.getValue();
 
-                        QString cell = "[" + band + "] " + name;
+                        QDateTime  contestStart = CanonicalToTDT(contest->DTGStart.getValue());
+                        QString dtg = contestStart.toString("yyyy/MM/dd");
+
+                        QString cell = "[" + band + " " + dtg + "] " + name;
                         if (currentModel && baseName.compare("Monitor") != 0)
                         {
                             cell = HtmlFontColour(lightRed) + "<b>" + cell;
