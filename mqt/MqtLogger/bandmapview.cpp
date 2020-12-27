@@ -910,6 +910,11 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset)
 {
+    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+    if (savedSpotType == bandmapSpotType::DELETED)
+    {
+        return;
+    }
     if (matchMode(row) && matchDistance(row))
     {
         int centreYCoord = dial->getYCoordOnDial(curFreq);
@@ -975,8 +980,6 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
 
         QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
         bandmapScene->addItem(markerLine);
-
-        bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
 
         QString spotMsg;
         QRectF spotRect;
@@ -1134,6 +1137,11 @@ void BandmapView::drawBandMapSpots()
         {
             for (int row = 0; row < numrows; ++row)
             {
+                bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                if (savedSpotType == bandmapSpotType::DELETED)
+                {
+                    continue;;
+                }
                // check mode and distance against the filter settings
                 if (matchMode(row) && matchDistance(row))
                 {
@@ -1165,8 +1173,6 @@ void BandmapView::drawBandMapSpots()
                                     BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
 
                                     bandmapScene->addItem(spot);
-
-                                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
 
                                     QString spotMsg;
                                     QRectF spotRect;
