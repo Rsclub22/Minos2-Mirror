@@ -872,6 +872,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
     if (spot->getSpotType() == bandmapSpotType::CQ)
     {
         addRemoveCQSpot(spot);
+        bandmapView->bandmapUpdate();
         return;
     }
 
@@ -965,6 +966,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                         f.setValue(spot->getFreq());
                         bandmapDataModel->setData(bandmapDataModel->index(row, FREQ_COL_NUM ), f, BMP_DataStoredRole);
                         bandmapDataModel->sortModel();
+                        bandmapView->bandmapUpdate();
 
                         // do we need to update the time as well????
                         // we don't need to save this incomming logger spot as we have moved it..
@@ -1024,6 +1026,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
         bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
+    bandmapView->bandmapUpdate();
 }
 
 void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
@@ -1036,7 +1039,9 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
             bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
             if (savedSpotType == bandmapSpotType::CQ)
             {
-                bandmapDataModel->removeRows(row, 1);
+                bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+
+               // bandmapDataModel->removeRows(row, 1);
             }
         }
     }
