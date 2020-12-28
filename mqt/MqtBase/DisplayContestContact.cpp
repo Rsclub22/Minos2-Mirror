@@ -329,7 +329,7 @@ void DisplayContestContact::checkContact( bool inScan)
        int n = clp->getCountriesWorked(band, ctryMult->listOffset);
        if ( n == 1 )
        {
-           clp->nctry[band]++;
+           // nonGCountryMult is always false...
            if (!clp->nonGCountryMult.getValue() || !cs.isUK())
            {
               clp->nctry[band]++;
