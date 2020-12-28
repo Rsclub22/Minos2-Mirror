@@ -1509,7 +1509,7 @@ void BandmapClientFrame::purgeSpots()
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
 {
     Q_UNUSED(c)
-    if (!isProtected)
+    if (!isProtected && ct == c)
     {
         Callsign cs = lct->cs;
         QString loc = lct->loc.getLoc();
