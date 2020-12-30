@@ -4199,7 +4199,7 @@ void RigControlMainWindow::loadBands()
 void RigControlMainWindow::initialiseSupportedRadioDisplay()
 {
     // table of indicators
-    allSupRadioInd << ui->_1_8mhz_Indicator << ui->_3_5mhz_Indicator
+    allSupRadioInd << ui->_1_8mhz_Indicator <<ui->_3_5mhz_Indicator
                    << ui->_7mhz_Indicator << ui->_14mhz_Indicator
                    << ui->_21mhz_Indicator << ui->_28mhz_Indicator
                    << ui->_50mhz_Indicator << ui->_70mhz_Indicator
@@ -4207,6 +4207,11 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
                    << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
                    << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
                    << ui->_10ghz_Indicator;
+
+    for (int i = 0; i < bands.count(); i++)
+    {
+        allBandSupRadioInd.insert(bands[i].data()->uk, allSupRadioInd[i]);
+    }
 
     hfSupRadioInd << ui->_1_8mhz_Indicator << ui->_3_5mhz_Indicator
                    << ui->_7mhz_Indicator << ui->_14mhz_Indicator
@@ -4236,26 +4241,13 @@ void RigControlMainWindow::showActiveTransVertIndicator(QString cb)
         // turn off previous active transverter indicator
         if (selTransVertBandIndicator != "")
         {
-            for (int i = 0; i < freqPresetData::presetBands.count(); i++)
-            {
-               if (selTransVertBandIndicator == freqPresetData::presetBands[i])
-                {
-                   supRadioIndToggle(i, displayIndicator::TRANSVERT);
-                   break;
-               }
-            }
+            supRadioIndToggle(selTransVertBandIndicator, displayIndicator::TRANSVERT);
         }
 
         // turn on new indicator
-        for (int i = 0; i < freqPresetData::presetBands.count(); i++)
-        {
-           if (cb == freqPresetData::presetBands[i])
-            {
-               supRadioIndToggle(i, displayIndicator::TRANSVERT_ON);
-               selTransVertBandIndicator = cb;
-               break;
-           }
-        }
+        supRadioIndToggle(cb, displayIndicator::TRANSVERT_ON);
+        selTransVertBandIndicator = cb;
+
     }
 }
 
@@ -4265,38 +4257,25 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
 {
     turnOffAllsupRadioIndicators();
 
-    for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
+    // turn on supported bands
+    if (!setupRadio->currentRadio.radioTransSupBands.isEmpty())
     {
-        for (int b = 0; b < bands.count(); b++)
+        for (int i = 0; i < setupRadio->currentRadio.radioTransSupBands.count(); i++)
         {
-            if (setupRadio->currentRadio.radioTransSupBands[i] == bands[b].data()->uk)
-             {
-                qDebug() << "radio" << setupRadio->currentRadio.radioTransSupBands[i];
-                supRadioIndToggle(b, displayIndicator::RADIO);
-                break;
-            }
+            supRadioIndToggle(setupRadio->currentRadio.radioTransSupBands[i], displayIndicator::RADIO);
         }
-
     }
 
 
-
-    if (setupRadio->currentRadio.transVertEnable)
+    // turn on supported transverters
+    if (!setupRadio->currentRadio.transVertSettings.isEmpty())
     {
-       for (int i = 0; i < setupRadio->currentRadio.transVertSettings.count(); i++)
-       {
-          for (int b = 0; b < bands.count(); b++)
-          {
-                if (setupRadio->currentRadio.transVertSettings[i]->band == bands[b].data()->uk)
-                {
-                    qDebug() << "transvert" << setupRadio->currentRadio.transVertSettings[i]->band;
-                    supRadioIndToggle(b, displayIndicator::TRANSVERT);
-                    break;
-                }
-            }
+        for (int i = 0; i < setupRadio->currentRadio.transVertSettings.count(); i++)
+        {
+            supRadioIndToggle(setupRadio->currentRadio.transVertSettings[i]->band, displayIndicator::TRANSVERT);
+
         }
     }
-
 
 
 }
@@ -4305,14 +4284,14 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
 void RigControlMainWindow::turnOffAllsupRadioIndicators()
 {
 
-    for (int i = 0; i < allSupRadioInd.count(); i++)
+    for (int i = 0; i < bands.count(); i++)
     {
-        supRadioIndToggle(i, displayIndicator::OFF);
+        supRadioIndToggle(bands[i].data()->uk, displayIndicator::OFF);
     }
 
 }
 
-
+/*
 void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
 {
 
@@ -4332,6 +4311,39 @@ void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indic
     {
        allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
     }
+
+
+}
+*/
+
+void RigControlMainWindow::supRadioIndToggle(QString band, displayIndicator::indicatorType type)
+{
+
+    if (allBandSupRadioInd.contains(band))
+    {
+        if (type == displayIndicator::OFF)
+        {
+            allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
+        }
+        else if (type == displayIndicator::RADIO)
+        {
+           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
+        }
+        else if (type == displayIndicator::TRANSVERT)
+        {
+           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
+        }
+        else if (type == displayIndicator::TRANSVERT_ON)
+        {
+           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+        }
+    }
+    else
+    {
+        trace(QString("supRadioIndToggle - band missing from indicator table = %1").arg(band));
+    }
+
+
 
 
 }

@@ -320,6 +320,7 @@ private:
 
 
     QVector<QPushButton*> allSupRadioInd;
+    QMap<QString, QPushButton*> allBandSupRadioInd;
 
     QVector<QPushButton*> hfSupRadioInd;
     QVector<QLabel*> hfSupRadioLabels;
@@ -420,7 +421,8 @@ private:
 
 
     void initialiseSupportedRadioDisplay();
-    void supRadioIndToggle(int offset, displayIndicator::indicatorType type);
+    //void supRadioIndToggle(int offset, displayIndicator::indicatorType type);
+    void supRadioIndToggle(QString band, displayIndicator::indicatorType type);
     void updateSupportedRadioIndicators();
     void turnOffAllsupRadioIndicators();
     void showActiveTransVertIndicator(QString cb);
@@ -519,6 +521,7 @@ private:
     void sendPttTypeLogger();
     void sendPttEnabledLogger();
     void sendPttStateLogger();
+
 
 
 
