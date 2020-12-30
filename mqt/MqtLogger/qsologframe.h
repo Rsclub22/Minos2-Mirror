@@ -53,7 +53,8 @@ public:
     void lgTraceerr( int err );
 
     virtual void selectField( QWidget *v );
-    virtual void initialise(BaseContestLog * contest);
+    virtual void initialise();
+    virtual void setContest(BaseContestLog * contest);
     virtual void setTimeStyles();
     virtual void refreshOps();
     virtual void refreshOps(ScreenContact &screenContact);

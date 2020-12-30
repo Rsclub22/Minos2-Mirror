@@ -396,18 +396,24 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
     }
 }
 
-void QSOLogFrame::initialise( BaseContestLog * pcontest )
+void QSOLogFrame::setContest(BaseContestLog *pcontest)
 {
     catchup = false;
-
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
+    setXferEnabled(false, contest, "Log");
 
     if (!pcontest)
     {
         return;
     }
 
+    updateQSODisplay();
+    refreshOps();
+    MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
+}
+void QSOLogFrame::initialise()
+{
 
     csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
     vcs.push_back( csIl );
@@ -456,14 +462,9 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
         widgetStyles[ui->SerTXEdit] = ssLineEditGreyBackground;
     }
 
-    updateQSODisplay();
-    refreshOps();
-
-
     current = nullptr;
     oldTimeOK = true;
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
-    MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
 
 
     connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
@@ -2905,7 +2906,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
     getLogDetails(logData, validCall);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-    emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
 
 }
 

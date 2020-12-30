@@ -244,8 +244,7 @@ void TSingleLogFrame::createScreenComponents()
 
     GJVQSOLogFrame->setVisible(false);
     GJVQSOLogFrame->setAsEdit(false, "Log");
-    GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
-    GJVQSOLogFrame->initialise( contest );
+    GJVQSOLogFrame->initialise( );
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
@@ -407,7 +406,7 @@ void TSingleLogFrame::clearScreenLayout()
     // CribSheet
     // NextContactDetailsLabel
     // CurrentBandLabel
-    GJVQSOLogFrame->initialise(nullptr);
+    GJVQSOLogFrame->setContest(nullptr);
     thisMatchFrame->setContest(nullptr);
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
@@ -597,7 +596,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctQSOEdit:
                 {
                     elementScrollArea->setWidget(GJVQSOLogFrame);
-                    GJVQSOLogFrame->initialise(ct);
+                    GJVQSOLogFrame->setContest(ct);
                     GJVQSOLogFrame->setVisible(true);
                     break;
                 }
