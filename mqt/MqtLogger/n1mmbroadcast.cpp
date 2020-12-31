@@ -235,6 +235,14 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
 
     QString continent = (tct->ctryMult?tct->ctryMult->getContinent():QString());
 
+    QString mode = tct->mode.getValue();
+    QString mgmSubmode = tct->mgmSubmode.getValue();
+    if ( (mode.compare( hamlibData::MGM) == 0 || mode.compare( "MFSK") == 0) && !mgmSubmode.trimmed().isEmpty())
+    {
+         mode = mgmSubmode;
+    }
+
+
     QString xml = QString("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n")
                   + "<" + type + ">\n"
                    + makeTag("app", "Minos")
