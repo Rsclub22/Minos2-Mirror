@@ -468,9 +468,21 @@ QString ContestContact::getADIFLine()
                 outstr += makeADIFField( "MODE", "FM" );
             else
                 if ( smode.compare( hamlibData::MGM) == 0 && !smgmSubmode.trimmed().isEmpty())
-                     outstr += makeADIFField( "MODE", smgmSubmode);
+                {
+                    if (smgmSubmode == "FT4")
+                    {
+                        outstr += makeADIFField( "MODE", "MFSK");
+                        outstr += makeADIFField("SUBMODE", "FT4");
+                    }
+                    else
+                    {
+                        outstr += makeADIFField( "MODE", smgmSubmode);
+                    }
+                }
                 else
+                {
                     outstr += makeADIFField( "MODE", mode.getValue() );
+                }
 
     if ( contactFlags.getValue() & COMMENT_ONLY )
     {
