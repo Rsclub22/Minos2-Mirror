@@ -70,7 +70,7 @@ void BandSelButtons::setupButtons()
     for (auto &tb:toolButList)
     {
         connect(tb, &QToolButton::pressed,
-                [=](QToolButton) {onBandSelButtonPressed(tb);});
+                [=]() {onBandSelButtonPressed(tb);});
 
         tb->setVisible(false);
         tb->setStyleSheet(buttonStyle);
