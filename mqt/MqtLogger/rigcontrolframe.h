@@ -223,6 +223,18 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
+    const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
+    const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
+    const QStringList USB_TUNING_STEPS = {"5 KHz", "10 KHz", "15 KHz", "20 Khz"};
+    const QStringList MGM_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
+    const QStringList CW_TUNING_STEPS = {"100 Hz", "200 Hz", "300 Hz", "400 Hz", "500 Hz"};
+    const QStringList FM_TUNING_STEPS = {"5 KHz", "10 KHz", "12.5 KHz", "25 KHz"};
+    const int USB_DEFAULT_STEP = 0;
+    const int MGM_DEFAULT_STEP = 4;
+    const int CW_DEFAULT_STEP = 4;
+    const int FM_DEFAULT_STEP = 2;
+
+
     void sendRigFreq(Frequency f);
     Frequency getCurFreq() const;
 

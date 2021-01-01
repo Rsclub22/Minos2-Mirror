@@ -4208,24 +4208,24 @@ void RigControlMainWindow::initialiseSupportedRadioDisplay()
                    << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
                    << ui->_10ghz_Indicator;
 
+    allSupRadioIndLabels << ui->_1_8_mhzIndLbl << ui->_3_5_mhzIndLbl
+                         << ui->_7_mhzIndLbl << ui->_14_mhzIndLbl
+                         << ui->_21_mhzIndLbl << ui->_28_mhzIndLbl
+                         << ui->_50_mhzIndLbl << ui->_70_mhzIndLbl
+                         << ui->_144_mhzIndLbl << ui->_432_mhzIndLbl
+                         << ui->_1296_mhzIndLbl << ui->_2300_mhzIndLbl
+                         << ui->_3_4_ghzIndLbl << ui->_5_6_ghzIndLbl
+                         << ui->_10_ghzIndLbl;
+
+
     for (int i = 0; i < bands.count(); i++)
     {
-        allBandSupRadioInd.insert(bands[i].data()->uk, allSupRadioInd[i]);
+        QSharedPointer<SupIndicatorDetails> supInd = QSharedPointer<SupIndicatorDetails>(new SupIndicatorDetails());
+        supInd->supIndicator = allSupRadioInd[i];
+        supInd->supIndicatorLabel = allSupRadioIndLabels[i];
+        supInd->bandType = bands[i].data()->getType();
+        allBandSupRadioInd.insert(bands[i].data()->uk, supInd);
     }
-
-    hfSupRadioInd << ui->_1_8mhz_Indicator << ui->_3_5mhz_Indicator
-                   << ui->_7mhz_Indicator << ui->_14mhz_Indicator
-                   << ui->_21mhz_Indicator << ui->_28mhz_Indicator;
-
-    hfSupRadioLabels << ui->_1_8_mhzIndLbl << ui->_3_5_mhzIndLbl
-                     << ui->_7_mhzIndLbl << ui->_14_mhzIndLbl
-                     << ui->_21_mhzIndLbl << ui->_28_mhzIndLbl;
-
-    vhfSupRadioInd << ui->_50mhz_Indicator << ui->_70mhz_Indicator
-                   << ui->_144mhz_Indicator << ui->_432mhz_Indicator
-                   << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
-                   << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
-                   << ui->_10ghz_Indicator;
 
 
     turnOffAllsupRadioIndicators();
@@ -4291,6 +4291,22 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
 }
 
+
+void RigControlMainWindow::setIndicatorVisible(const QString bandType, const bool visible)
+{
+
+    QMapIterator<QString, QSharedPointer<SupIndicatorDetails> > supIndIter(allBandSupRadioInd);
+    while (supIndIter.hasNext())
+    {
+        supIndIter.next();
+        if (supIndIter.value()->bandType == bandType)
+        {
+            supIndIter.value()->supIndicator->setVisible(visible);
+            supIndIter.value()->supIndicatorLabel->setVisible(visible);
+        }
+    }
+}
+
 /*
 void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
 {
@@ -4323,19 +4339,19 @@ void RigControlMainWindow::supRadioIndToggle(QString band, displayIndicator::ind
     {
         if (type == displayIndicator::OFF)
         {
-            allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
+            allBandSupRadioInd[band]->supIndicator->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
         }
         else if (type == displayIndicator::RADIO)
         {
-           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
+           allBandSupRadioInd[band]->supIndicator->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
         }
         else if (type == displayIndicator::TRANSVERT)
         {
-           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
+           allBandSupRadioInd[band]->supIndicator->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
         }
         else if (type == displayIndicator::TRANSVERT_ON)
         {
-           allBandSupRadioInd[band]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
+           allBandSupRadioInd[band]->supIndicator->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
         }
     }
     else

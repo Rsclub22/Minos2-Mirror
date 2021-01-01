@@ -199,6 +199,24 @@ public:
 
 };
 
+class SupIndicatorDetails
+{
+
+public:
+
+    SupIndicatorDetails(){
+        supIndicator = nullptr;
+        supIndicatorLabel = nullptr;
+    };
+
+
+QPushButton *supIndicator;
+QLabel *supIndicatorLabel;
+QString bandType;
+
+
+};
+
 class RigControlMainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -320,12 +338,10 @@ private:
 
 
     QVector<QPushButton*> allSupRadioInd;
-    QMap<QString, QPushButton*> allBandSupRadioInd;
+    QVector<QLabel*> allSupRadioIndLabels;
 
-    QVector<QPushButton*> hfSupRadioInd;
-    QVector<QLabel*> hfSupRadioLabels;
+    QMap<QString, QSharedPointer<SupIndicatorDetails> > allBandSupRadioInd;
 
-    QVector<QPushButton*> vhfSupRadioInd;
 
     QString selTransVertBandIndicator = "";
 
@@ -523,8 +539,7 @@ private:
     void sendPttStateLogger();
 
 
-
-
+    void setIndicatorVisible(const QString bandType, const bool visible);
 private slots:
 
     void onStdInRead(QString);
