@@ -128,12 +128,14 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
             QSharedPointer<BaseContact> h = tct->getHistory().at(tct->getHistory().size() - 1);
 
             QString stanza = genDeleteStanza(h);
+//            trace(stanza);
             bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
 
             if (!(tct->contactFlags.getValue() & DONT_PRINT) && (h->contactFlags.getValue() & DONT_PRINT))
             {
                 // was deleted, now isn't
                 stanza = genContactStanza("contactinfo", c, tct);
+//                trace(stanza);
                 bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
             }
             else if ((tct->contactFlags.getValue() & DONT_PRINT) && !(h->contactFlags.getValue() & DONT_PRINT))
@@ -144,12 +146,14 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
             {
                 // ordinary edit
                 stanza = genContactStanza("contactreplace", c, tct);
+//                trace(stanza);
                 bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
             }
         }
         else
         {
             QString stanza = genContactStanza("contactinfo", c, tct);
+//            trace(stanza);
             bc.writeDatagram(stanza.toUtf8(), contactsHost, contactsPort);
         }
     }
@@ -160,6 +164,7 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
         header += "<EOH>\r\n";
 
         QString adif = tct->getADIFLine();
+//        trace((header + adif).toUtf8());
 
         bc.writeDatagram((header + adif).toUtf8(), ADIFHost, ADIFPort);
     }
@@ -191,7 +196,7 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 
         QString stanza = genContactStanza("lookupinfo", c, tct);
         bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
-        trace("callsignLookup Datagram written " + stanza);
+ //       trace("callsignLookup Datagram written " + stanza);
     }
 }
 
@@ -254,7 +259,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>
                    + makeTag("txfreq", sfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
-                   + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
+                   + makeTag("mode", mode)                              //        <mode>USB</mode>
                    + makeTag("call", tct->cs.getFullCall())       //        <call>W2BBB</call>
                    + makeTag("countryprefix", tct->cs.locCtryPrefix)    //        <countryprefix>K</countryprefix>
                    + makeTag("wpxprefix", tct->cs.wpxPrefix)            //        <wpxprefix>W2</wpxprefix>
