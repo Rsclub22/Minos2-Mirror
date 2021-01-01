@@ -192,7 +192,7 @@ void N1MMBroadcast::callsignLookup(BaseContestLog *c, QString call)
 
         QString stanza = genContactStanza("lookupinfo", c, tct);
         bc.writeDatagram(stanza.toUtf8(), extCSHost, extCSPort);
-        trace("callsignLookup Datagram written " + stanza);
+//        trace("callsignLookup Datagram written " + stanza);
     }
 }
 
@@ -255,7 +255,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>
                    + makeTag("txfreq", sfreq)                          //        <txfreq>2125500</txfreq>
                    + makeTag("operator", tct->op1.getValue())           //        <operator>K8UT</operator>
-                   + makeTag("mode", tct->mode.getValue())              //        <mode>USB</mode>
+                   + makeTag("mode", mode)              //        <mode>USB</mode>
                    + makeTag("call", tct->cs.fullCall.getValue())       //        <call>W2BBB</call>
                    + makeTag("countryprefix", tct->cs.locCtryPrefix)    //        <countryprefix>K</countryprefix>
                    + makeTag("wpxprefix", tct->cs.wpxPrefix)            //        <wpxprefix>W2</wpxprefix>
