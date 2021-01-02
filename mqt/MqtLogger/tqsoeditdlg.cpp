@@ -71,7 +71,8 @@ int TQSOEditDlg::exec()
 {
     ui->GJVQSOEditFrame->unfilled = unfilled;
 
-    ui->GJVQSOEditFrame->initialise( contest );
+    ui->GJVQSOEditFrame->initialise( );
+    ui->GJVQSOEditFrame->setContest( contest );
 
     ui->GJVQSOEditFrame->selectEntryForEdit( firstContact );   // first contact for the dialog to deal with
     if ( unfilled )

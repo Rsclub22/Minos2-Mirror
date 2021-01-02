@@ -505,6 +505,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.locator = selectedSpot.getDxLocator();
         spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
+        spotData.exchange = selectedSpot.getDistrict();
 
         MinosLoggerEvents::SendSpotToLog(spotData);
 
@@ -897,6 +898,8 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
         selectedSpot.setDxBrg(model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setDxCallWorked(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
         selectedSpot.setDxLocatorWorked(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
+        selectedSpot.setDistrict(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDistrictWorked(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
         selectedSpot.setSpotType(static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt()));
 
     }
@@ -910,6 +913,11 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
 
 void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset)
 {
+    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+    if (savedSpotType == bandmapSpotType::DELETED)
+    {
+        return;
+    }
     if (matchMode(row) && matchDistance(row))
     {
         int centreYCoord = dial->getYCoordOnDial(curFreq);
@@ -975,8 +983,6 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
 
         QGraphicsLineItem* markerLine = new QGraphicsLineItem(markerLineCoordsF);
         bandmapScene->addItem(markerLine);
-
-        bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
 
         QString spotMsg;
         QRectF spotRect;
@@ -1134,6 +1140,11 @@ void BandmapView::drawBandMapSpots()
         {
             for (int row = 0; row < numrows; ++row)
             {
+                bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                if (savedSpotType == bandmapSpotType::DELETED)
+                {
+                    continue;;
+                }
                // check mode and distance against the filter settings
                 if (matchMode(row) && matchDistance(row))
                 {
@@ -1165,8 +1176,6 @@ void BandmapView::drawBandMapSpots()
                                     BandmapSpotMarker* spot = new BandmapSpotMarker(spotCoord);
 
                                     bandmapScene->addItem(spot);
-
-                                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
 
                                     QString spotMsg;
                                     QRectF spotRect;
