@@ -367,7 +367,7 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
                     p[i * outChannels + 1] = static_cast<qint16>(val1);
             }
 
-            int16_t sample = static_cast<int16_t>(std::abs( (val1 + val2)/2 ));
+            int16_t sample = static_cast<int16_t>(std::max( val1, val2 ));
             if ( sample > maxvol )
                maxvol = sample;
 

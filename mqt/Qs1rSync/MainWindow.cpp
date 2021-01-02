@@ -84,7 +84,8 @@ QVector<BandWidth> bws =
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    n1mmLink(parent)
+    n1mmLink(parent),
+    wsjtxLink(parent)
 {
     ui->setupUi(this);
 
@@ -230,14 +231,18 @@ void MainWindow::SyncTimerTimer(  )
 
     if (n1mmLink.isConnected())
     {
-        mainRigFreq = n1mmLink.getFrequency();
-        mainRigMode = n1mmLink.getMode();
-        ui->Rig1Label->setText(n1mmLink.getRadioName());
-        if (ui->trackRig->isChecked())
+        Frequency f = n1mmLink.getFrequency();
+        if (f.isOK() )
         {
-            on_transfer12Button_clicked();
+            mainRigFreq = n1mmLink.getFrequency();
+            mainRigMode = n1mmLink.getMode();
+            ui->Rig1Label->setText(n1mmLink.getRadioName());
+            if (ui->trackRig->isChecked())
+            {
+                on_transfer12Button_clicked();
+            }
+            trackBand();
         }
-        trackBand();
     }
     ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
 }
@@ -583,4 +588,16 @@ void MainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 {
     QSettings settings;
     settings.setValue("trackBand", ui->trackBandcb->isChecked());
+}
+
+void MainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
+{
+    if (ui->wsjtxCb->isChecked())
+    {
+        wsjtxLink.initialise();
+    }
+    else
+    {
+        wsjtxLink.disconnect();
+    }
 }

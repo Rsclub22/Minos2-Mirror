@@ -107,10 +107,7 @@ SOURCES += \
     WsjtxConfigure.cpp \
     WsjtxDecode.cpp \
     WsjtxDecodesModel.cpp \
-    WsjtxNetworkMessage.cpp \
-    WsjtxMessageServer.cpp \
-    Wsjtx_qt_helpers.cpp \
-        bandmapclientframe.cpp \
+    bandmapclientframe.cpp \
     bandmapcallsignmarker.cpp \
     bandmapfreqdial.cpp	\
     bandmapview.cpp \
@@ -195,11 +192,6 @@ HEADERS  += \
     WsjtxConfigure.h \
     WsjtxDecode.h \
     WsjtxDecodesModel.hpp \
-    WsjtxNetworkMessage.hpp \
-    WsjtxMessageServer.hpp \
-    Wsjtx_pimpl_h.hpp \
-    Wsjtx_pimpl_impl.hpp \
-    Wsjtx_qt_helpers.hpp \
     bandmapclientframe.h \
     bandmapcallsignmarker.h \
     bandmapfreqdial.h	\
