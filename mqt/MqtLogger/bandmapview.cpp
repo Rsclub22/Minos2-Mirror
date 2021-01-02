@@ -505,6 +505,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.locator = selectedSpot.getDxLocator();
         spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
+        spotData.exchange = selectedSpot.getDistrict();
 
         MinosLoggerEvents::SendSpotToLog(spotData);
 
@@ -897,6 +898,8 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
         selectedSpot.setDxBrg(model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setDxCallWorked(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
         selectedSpot.setDxLocatorWorked(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
+        selectedSpot.setDistrict(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_COL_NUM), BMP_DataStoredRole).toString());
+        selectedSpot.setDistrictWorked(model()->data(model()->index(selectedSpotDataRowNum, DX_DISTRICT_WORKED_COL_NUM), BMP_DataStoredRole).toBool());
         selectedSpot.setSpotType(static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(selectedSpotDataRowNum, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt()));
 
     }

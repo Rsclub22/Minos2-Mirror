@@ -123,6 +123,7 @@ public:
     Frequency freq;
     QString mode;
     QString locator;
+    QString exchange;
     int bearing = 0;
     QString time = "00:00";
     bool worked = false;
@@ -137,11 +138,13 @@ public:
                 && freq == rhs.freq
                 && mode.compare(rhs.mode, Qt::CaseInsensitive) == 0
                 && locator.compare(rhs.locator, Qt::CaseInsensitive) == 0
+                && exchange.compare(rhs.exchange, Qt::CaseInsensitive) == 0
                 && worked == rhs.worked
                 && fromBandmapOrMemory == rhs.fromBandmapOrMemory
                 && time.compare(rhs.time, Qt::CaseInsensitive) == 0
                 && bearing == rhs.bearing
-                && dxLocFromNode == rhs.dxLocFromNode)
+                && dxLocFromNode == rhs.dxLocFromNode
+                )
 
         {
             return true;

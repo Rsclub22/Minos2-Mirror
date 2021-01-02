@@ -132,10 +132,10 @@ void TSingleLogFrame::buildFrame()
 
 
     // to bandmap
-    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString)),
-            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString)));
-    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString)),
-            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString, QString)),
+            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString, QString)),
+            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString, QString)));
     //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
     connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
@@ -1144,7 +1144,7 @@ void TSingleLogFrame::transferDetails(memoryData::memData &m )
        return ;
     }
 
-    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.fromBandmapOrMemory );
+    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.exchange, m.fromBandmapOrMemory );
     FKHRigControlFrame->transferDetails(m);
 }
 void TSingleLogFrame::getDetails(memoryData::memData &m)
@@ -1496,15 +1496,15 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
 //}
 
 
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg);
+    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg, exchange);
 }
 
 
-void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
+    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg, exchange);
 }
 
 void TSingleLogFrame::sendBandmapRadioIsConnected(bool state)

@@ -328,6 +328,7 @@ void BandmapClientFrame::on_logActionSelected()
         spotData.freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
         spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
+        spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
         spotData.fromBandmapOrMemory = true;
 
         MinosLoggerEvents::SendSpotToLog(spotData);
@@ -347,6 +348,7 @@ void BandmapClientFrame::on_memoryActionSelected()
         spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
         spotData.dxLocFromNode = bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode();
+        spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
 
         MinosLoggerEvents::SendSpotToMemory(ct,spotData);
     }
@@ -460,6 +462,7 @@ void BandmapClientFrame::context_logActionSelected()
     spotData.locator = contextMenuSelectedSpotData.getDxLocator();
     spotData.bearing = contextMenuSelectedSpotData.getDxBrg().toInt();
     spotData.fromBandmapOrMemory = true;
+    spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
 
     MinosLoggerEvents::SendSpotToLog(spotData);
 }
@@ -475,6 +478,7 @@ void BandmapClientFrame::context_memoryActionSelected()
     spotData.locator = contextMenuSelectedSpotData.getDxLocator();
     spotData.bearing = contextMenuSelectedSpotData.getDxBrg().toInt();
     spotData.dxLocFromNode = contextMenuSelectedSpotData.getDxLocatorIsFromNode();
+    spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
 }
@@ -964,6 +968,43 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                         bandmapDataModel->setData(bandmapDataModel->index(row, DXSPOT_CALL_WORKED_COL_NUM ), spot->getDxCallWorked() ,BMP_DataStoredRole);
                         bandmapDataModel->setData(bandmapDataModel->index(row, DXLOC_WORKED_COL_NUM ), spot->getDxLocatorWorked() ,BMP_DataStoredRole);
 
+                        // override the call - it may now be /P (or not /P), etc
+                        bandmapDataModel->setData(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), spot->getDxCall().getFullCall() ,BMP_DataStoredRole);
+
+                        QString exchange = spot->getDistrict();
+                        if (!exchange.isEmpty())
+                        {
+                            bandmapDataModel->setData(bandmapDataModel->index(row, DX_DISTRICT_COL_NUM ), exchange ,BMP_DataStoredRole);
+                        }
+                        QString loc = spot->getDxLocator();
+
+                        if (!loc.isEmpty())
+                        {
+                            // and override the loc - it may now be provided or changed
+                            QString distance;
+
+                            if (!spot->getDxLocator().isEmpty())
+                            {
+                                double dist = 0;
+                                int brg = 0;
+                                calcSpotDistanceBearing(spot->getDxLocator(), &dist, &brg);
+                                distance = QString::number(static_cast<int>(dist));
+                            }
+                            QString rotBrg;
+                            if (rotatorConnected)
+                            {
+                                rotBrg = curRotBearing;   // get rotator bearing
+                            }
+                            else
+                            {
+                                rotBrg = "0";
+                            }
+                            bandmapDataModel->setData(bandmapDataModel->index(row, DXLOC_COL_NUM ), loc ,BMP_DataStoredRole);
+                            bandmapDataModel->rowData->setDxDist(distance);
+                            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
+                            bandmapDataModel->rowData->setRotBrg(rotBrg);
+                            bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+                        }
                         bandmapDataModel->sortModel();
                         bandmapView->bandmapUpdate();
 
@@ -1023,6 +1064,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
         bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
         bandmapDataModel->rowData->setRotBrg(rotBrg);
         bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+
 
         bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
@@ -1513,13 +1555,13 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
 
-        QString logContactDistrict;
-        if (lct->districtMult)
-        {
-            logContactDistrict = lct->districtMult->districtCode;
-        }
-        QString logContactMode = lct->mode.getValue();
-        QString logContactMgmSubMode = lct->mgmSubmode.getValue();
+//        QString logContactDistrict;
+//        if (lct->districtMult)
+//        {
+//            logContactDistrict = lct->districtMult->districtCode;
+//        }
+//        QString logContactMode = lct->mode.getValue();
+//        QString logContactMgmSubMode = lct->mgmSubmode.getValue();
         Frequency freq = lct->frequency.getValue();
 
         traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4")
@@ -1551,6 +1593,11 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         spot->setSpotDateTime(time);
         spot->setRunModeOn(runModeOn);
         spot->setOffRunFreq(offRunFreq);
+        if (!lct->extraText.getValue().isEmpty())
+        {
+            spot->setDistrict(lct->extraText.getValue());
+            spot->setDistrictWorked(true);
+        }
 
         logSpotQueue.append(spot);
     }
@@ -1605,7 +1652,7 @@ void BandmapClientFrame::setCQFreq()
     }
 }
 
-void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString loc, QString brg)
+void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString loc, QString brg, QString exchange)
 {
     Q_UNUSED(cs)
     if (!isProtected)
@@ -1634,12 +1681,13 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         spot->setSpotDateTime(time);
         spot->setRunModeOn(false);
         spot->setOffRunFreq(false);
+        spot->setDistrict(exchange);
 
         logSpotQueue.append(spot);
     }
 }
 
-void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString loc, QString brg)
+void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString loc, QString brg, QString exchange)
 {
     if (!isProtected)
     {
@@ -1666,6 +1714,7 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         spot->setSpotDateTime(time);
         spot->setRunModeOn(false);
         spot->setOffRunFreq(false);
+        spot->setDistrict(exchange);
 
         logSpotQueue.append(spot);
     }

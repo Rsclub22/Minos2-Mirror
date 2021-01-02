@@ -151,8 +151,8 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void setBandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg);
-    void setBandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg);
+    void setBandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
+    void setBandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
 
     void setRotatorBearing(QString s);
     void setRotatorConnected(bool connected);

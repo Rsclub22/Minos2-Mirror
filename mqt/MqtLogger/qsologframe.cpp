@@ -2457,7 +2457,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
         QString exch = lct->extraText;
         if (exch.size())
         {
-           ui->QTHEdit->setText(exch);
+            ui->QTHEdit->setText(exch);
         }
       }
    }
@@ -2474,7 +2474,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
    doGJVEditChange(ui->QTHEdit);
 }
 
-void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmapOrMemory )
+void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory )
 {
     if (fromBandmapOrMemory)
     {
@@ -2483,8 +2483,16 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool from
 
     ui->CallsignEdit->setText(cs);
     ui->LocEdit->setText(loc);
-
-
+    if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+    {
+       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+       {
+           if (exchange.size())
+           {
+                ui->QTHEdit->setText(exchange);
+           }
+       }
+    }
 
     valid( cmCheckValid ); // make sure all single and cross field
     // validation has been done
@@ -2496,6 +2504,7 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool from
 
     doGJVEditChange(ui->CallsignEdit);
     doGJVEditChange(ui->LocEdit);
+    doGJVEditChange(ui->QTHEdit);
 }
 
 void QSOLogFrame::sortUnfilledCatchupTime( )
@@ -2906,7 +2915,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
     getLogDetails(logData, validCall);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 }
 
@@ -2924,7 +2933,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         doGJVCancelButton_clicked();
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
-        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 
     }
@@ -2956,6 +2965,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
     logData.freq = curFreq;
     logData.locator = screenContact.loc.getLoc();
     logData.mode = screenContact.mode;
+    logData.exchange = screenContact.extraText;
     if (screenContact.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();
