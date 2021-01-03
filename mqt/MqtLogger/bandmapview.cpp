@@ -918,6 +918,11 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
     {
         return;
     }
+    if (savedSpotType == bandmapSpotType::CQ)
+    {
+        int a;
+        a = row;
+    }
     if (matchMode(row) && matchDistance(row))
     {
         int centreYCoord = dial->getYCoordOnDial(curFreq);

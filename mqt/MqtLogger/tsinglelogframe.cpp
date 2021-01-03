@@ -100,7 +100,7 @@ void TSingleLogFrame::buildFrame()
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, bool)), this, SLOT(sendRunOnFlag(Frequency, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, QString, bool)), this, SLOT(sendRunOnFlag(Frequency, QString, bool)));
     connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(Frequency, bool)), this, SLOT(sendRunOffFreqFlag(Frequency, bool)));
 
 
@@ -1522,10 +1522,10 @@ void TSingleLogFrame::sendBandmapRadioHasError(QString error)
 //    bandmapControlFrame->setCQFreq(runFreq, showMarker);
 //}
 
-void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, bool runModeOn)
+void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, QString mode, bool runModeOn)
 {
     GJVQSOLogFrame->setRunOnFlag(runModeOn);
-    bandmapControlFrame->setRunOnFlag(runFreq, runModeOn);
+    bandmapControlFrame->setRunOnFlag(runFreq, mode, runModeOn);
 }
 
 void TSingleLogFrame::sendRunOffFreqFlag(Frequency runFreq, bool offRunFreq)

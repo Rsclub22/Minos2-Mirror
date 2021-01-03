@@ -155,16 +155,16 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     }
 
-    operatingFreq = new CheckOperatingFreq();
-    if (operatingFreq->loadExclusionsFromBandList())
+    operatingFreqExclusions = new CheckOperatingFreq();
+    if (operatingFreqExclusions->loadExclusionsFromBandList())
     {
         traceMsg(QString("Operating frequency bandplan loaded OK"));
-        operatingFreqPlanOk = true;
+        operatingFreqExclusionsPlanOk = true;
     }
     else
     {
         traceMsg(QString("Operating frequency bandplan failed to load"));
-        operatingFreqPlanOk = false;
+        operatingFreqExclusionsPlanOk = false;
     }
 
     ui->freqDisplay->installEventFilter(this);
@@ -193,7 +193,7 @@ BandmapClientFrame::~BandmapClientFrame()
     delete ui;
 
     delete modeBandPlan;
-    delete operatingFreq;
+    delete operatingFreqExclusions;
     delete bandmapDataModel;
     delete actionInObject;
     delete freqDisplayPalette;
@@ -561,10 +561,10 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         }
     }
 
-    if (operatingFreqPlanOk)
+    if (operatingFreqExclusionsPlanOk)
     {
         // send operating freq to dial
-        bandmapView->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreq, operatingFreqPlanOk);
+        bandmapView->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreqExclusions, operatingFreqExclusionsPlanOk);
     }
 
     if (contestBand != -1)
@@ -651,9 +651,9 @@ int BandmapClientFrame::getModeOffSet(QString contestModeStr)
 bool BandmapClientFrame::isFreqLegal(const Frequency &freq, const QString band, const QString mode)
 {
     int retCode;
-    if (operatingFreqPlanOk)
+    if (operatingFreqExclusionsPlanOk)
     {
-            retCode =  operatingFreq->freqValid(band, mode, freq);
+            retCode =  operatingFreqExclusions->freqValid(band, mode, freq);
             switch (retCode)
             {
                 case FREQ_NOT_OK:
@@ -1581,9 +1581,10 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 }
 
 
-void BandmapClientFrame::setRunOnFlag(Frequency _runFreq, bool _runModeOn)
+void BandmapClientFrame::setRunOnFlag(Frequency _runFreq, QString _mode, bool _runModeOn)
 {
     runFreq = _runFreq;
+    runMode = _mode;
     runModeOn = _runModeOn;
     setCQFreq();
 }
@@ -1604,13 +1605,15 @@ void BandmapClientFrame::setCQFreq()
 
         QString logBandStr;
         QString logBandMask;
-        QString logModeStr;
-        QString logModeMask;
+//        QString logModeStr;
+//        QString logModeMask;
 
         Frequency freq = runFreq;
+        QString logModeStr = runMode;
+        QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
 
         getBand(bands, freq, logBandStr, logBandMask);
-        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        //getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
 
         QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::CQ));
         spot->setDxCall("???");

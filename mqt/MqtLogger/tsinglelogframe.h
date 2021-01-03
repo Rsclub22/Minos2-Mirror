@@ -274,7 +274,7 @@ private slots:
     void on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
     void on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
     void on_rotatorConnected(bool connected);
-    void sendRunOnFlag(Frequency, bool);
+    void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
