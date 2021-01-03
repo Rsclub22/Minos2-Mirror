@@ -797,24 +797,19 @@ void BandmapView::bandmapSelectSpot(QPoint p)
 {
     int spotViewNum = isClickInRegionOfSpot(p);
 
-    if (spotViewNum != -1)      // not in region
+    if (spotViewNum != -1)
     {
-        bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(listOfMarkers[spotViewNum]->getModelRowNum(), SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
-        if (spotType != bandmapSpotType::CQ)
+        if (spotViewNum >= 0)
         {
+            clearSelectedSpot();       // clear any spot previously selected
+            setSelectedSpot(spotViewNum);        // mark new selected spot
 
-            if (spotViewNum >= 0)
-            {
-                clearSelectedSpot();       // clear any spot previously selected
-                setSelectedSpot(spotViewNum);        // mark new selected spot
-
-                MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
-            }
-
+            MinosLoggerEvents::SendFreqToRig(selectedSpot.getFreq());
         }
     }
     else
     {
+        // not in region
         clearSelectedSpot();        // clear any selected spots
     }
 
@@ -917,11 +912,6 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
     if (savedSpotType == bandmapSpotType::DELETED)
     {
         return;
-    }
-    if (savedSpotType == bandmapSpotType::CQ)
-    {
-        int a;
-        a = row;
     }
     if (matchMode(row) && matchDistance(row))
     {
