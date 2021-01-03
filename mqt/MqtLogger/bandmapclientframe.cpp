@@ -716,7 +716,7 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 
 void BandmapClientFrame::timerCheckNewBandMapSpots()
 {
-    if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
+    if (ct && !purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
     {
         checkNewBandMapSpots();
     }
