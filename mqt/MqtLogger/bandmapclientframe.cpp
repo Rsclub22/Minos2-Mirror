@@ -17,8 +17,6 @@
 #include "ui_bandmapclientframe.h"
 #include "bandmapclientframe.h"
 
-const int MAX_CALL_SAME_FREQ = 3;
-
 BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     QFrame(parent),
     ui(new Ui::BandmapClientFrame)
@@ -1128,7 +1126,7 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
 
 bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
 {
-    QString dxCallsign = spot->getDxCall().getFullCall();
+    Callsign dxCallsign = spot->getDxCall();
     Frequency dxFreq = spot->getFreq();
 
     if (bandmapDataModel->rowCount() != 0)
@@ -1137,7 +1135,9 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
 
-            if (dxCallsign == bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString())
+            Callsign spotCall;
+            spotCall.setFullCall( bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());            spotCall.setFullCall(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());
+            if (dxCallsign == spotCall)
             {
                 bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), BMP_DataStoredRole).toInt());
                 if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED || spotType == bandmapSpotType::CLUSTER_MARKED)
@@ -1153,38 +1153,15 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
                     bandmapDataModel->sortModel();
                     return  false;          // don't save this spot to the bandmap spot list
 
-                } else if (spotType == bandmapSpotType::CLUSTER)
+                }
+                else if (spotType == bandmapSpotType::CLUSTER)
                 {
                     // yes, remove old spot
                     traceMsg(QString("CheckSpot In Table Remove - Cluster Spot %1").arg(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString()));
                     bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                    // and this spot will be used instead
                 }
             }
-        }
-        QMultiMap<qint64, int> freqMap;     // we could have several at the same time - but unlikely
-
-        // check for multiple spots on the same freq
-        for (int row = 0; row < bandmapDataModel->rowCount(); row++)
-        {
-            Frequency df = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-            if (dxFreq == df)
-            {
-                // found a spot on this freq
-                qint64 timeInt64 = bandmapDataModel->data(bandmapDataModel->index(row, TIME_COL_NUM), BMP_DataStoredRole).toLongLong();
-                freqMap.insert(timeInt64, row);
-            }
-        }
-
-        while (freqMap.count() >= MAX_CALL_SAME_FREQ)
-        {
-            // remove oldest spot
-            // oldest will be first in map
-
-            int row = freqMap.begin().value();
-            qint64 key = freqMap.begin().key();
-            traceMsg(QString("CheckSpot In Table - Remove Oldest Spot %1").arg(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString()));
-            bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
-            freqMap.remove(key);
         }
     }
     return true;
