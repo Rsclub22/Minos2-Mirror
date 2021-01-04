@@ -98,6 +98,7 @@ private:
     bool oldRadioOffRunFreq = false;  // used by on_ChkRunFreq()
 
     Frequency curRunFreq;
+    QString curRunMode;
     QTimer *chkRunFreqTimer;
 
 
@@ -110,7 +111,7 @@ private:
 
     void chkRunFreq();
 signals:
-    void sendRunOnFlag(Frequency, bool);
+    void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);
 private slots:
     void runButActivated(int buttonNumber);

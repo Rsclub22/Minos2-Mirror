@@ -168,7 +168,7 @@ public:
     bool readTuneAddBandMapSetting();
 
 
-    void setRunOnFlag(Frequency _runFreq, bool _runModeOn);
+    void setRunOnFlag(Frequency _runFreq, QString mode, bool _runModeOn);
     void setRunOffFreqFlag(Frequency _runFreq, bool _offRunFreq);
     void setBandmapRadioIsConnect(bool state);
     void setBandmapRadioHasError(QString error);
@@ -205,13 +205,14 @@ private:
     QTimer* checkNewSpotsTimer = nullptr;
 
     QVector<QSharedPointer<BandInfo> > bands;
+
     checkModeAgainstFreq* modeBandPlan = nullptr;
     bool modeBandPlanOk = false;
 
-    BandmapClientFilterSettings filterSettings;
+    CheckOperatingFreq* operatingFreqExclusions = nullptr;
+    bool operatingFreqExclusionsPlanOk = false;
 
-    CheckOperatingFreq* operatingFreq = nullptr;
-    bool operatingFreqPlanOk = false;
+    BandmapClientFilterSettings filterSettings;
 
     BMP_MouseInObject* actionInObject = nullptr;
 
@@ -223,6 +224,7 @@ private:
 
     // CQ Frequency
     Frequency runFreq;
+    QString runMode;
     bool runModeOn = false;
     bool offRunFreq = false;
 

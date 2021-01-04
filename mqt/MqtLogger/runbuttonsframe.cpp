@@ -172,7 +172,7 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
     chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);
     chkRunFreqTimer->start();
 
-    emit sendRunOnFlag(curRunFreq, true);
+    emit sendRunOnFlag(curRunFreq, curRunMode, true);
 }
 
 void RunButtonsFrame::runModeOff(int buttonNumber)
@@ -202,12 +202,6 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
         runButOffActionSelected(buttonNumber);
     }
 
-
-//    runButtonOnFlag = false;
-//    oldRadioOffRunFreq = false;
-//    runButtonOnNum = NO_RUN_BUTTON_ON;
-//    chkRunFreqTimer->stop();
-//    emit sendRunOnFlag(curRunFreq, runButtonOnFlag);
 }
 
 void RunButtonsFrame::switchRunButton(int buttonNumber)
@@ -234,7 +228,7 @@ void RunButtonsFrame::switchRunButton(int buttonNumber)
 
     chkRunFreqTimer->start(CHECK_RUN_FREQ_POLLTIME);
     runButtonOnNum = buttonNumber;
-    emit sendRunOnFlag(curRunFreq, true);
+    emit sendRunOnFlag(curRunFreq, curRunMode, true);
 
     chkRunFreq();
 }
@@ -304,6 +298,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
             }
 
             curRunFreq = m.freq;
+            curRunMode = m.mode;
 
             if (m.mode != rigControl->curMode)
             {
@@ -380,7 +375,7 @@ void RunButtonsFrame::runButOffActionSelected(int buttonNumber)
         runButtonOnNum = NO_RUN_BUTTON_ON;
         chkRunFreqTimer->stop();
 
-        emit sendRunOnFlag(curRunFreq, false);
+        emit sendRunOnFlag(curRunFreq, curRunMode, false);
     }
 
 }
@@ -423,7 +418,7 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
             runButtonMap[buttonNumber]->showButtonOnOff(false);
             runButtonOnNum = NO_RUN_BUTTON_ON;
             chkRunFreqTimer->stop();
-            emit sendRunOnFlag(curRunFreq, false);
+            emit sendRunOnFlag(curRunFreq, curRunMode, false);
         }
         else
         {
@@ -437,7 +432,8 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
                 chkRunFreqTimer->setInterval(CHECK_RUN_FREQ_POLLTIME);  // reset the interval
             }
             curRunFreq = m.freq;
-            emit sendRunOnFlag(curRunFreq, true);
+            curRunMode = m.mode;
+            emit sendRunOnFlag(curRunFreq, curRunMode, true);
         }
     }
 
