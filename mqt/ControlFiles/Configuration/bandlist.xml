@@ -42,7 +42,7 @@
         <Exclude flow='70195' fhigh='70205' reason='SSB Centre of Activity'/>
     </Mode>
     <Mode type='MGM' flow='702500' fclow1='70250' fchigh1='70294' fhigh='70294'/>
-    <Mode type='FT8' flow='570100' fclow1='70100' fchigh1='70103' fhigh='70103'/>
+    <Mode type='FT8' flow='70100' fclow1='70100' fchigh1='70103' fhigh='70103'/>
 </Band>
 <Band type='VHF'   flow='144000'    fhigh='146000'    unit='K' wlen='2m'     UK='144 MHz'  Reg1Test='145 MHz' ADIF='2m'     Cabrillo='144'   Colour='blue'>
     <Mode type='CW' flow='144000' fclow1='144025' fchigh1='144150'  fclow2='144500' fchigh2='144794' fhigh='144794'>
