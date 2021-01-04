@@ -1553,11 +1553,11 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 
         QString logBandStr;
         QString logBandMask;
-        QString logModeStr;
-        QString logModeMask;
 
         getBand(bands, freq, logBandStr, logBandMask);
-        getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+
+        QString logModeStr = lct->mode.getValue();
+        QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
 
         QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::LOGGED));
         spot->setCallsign(cs);

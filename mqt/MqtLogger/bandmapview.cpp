@@ -1482,8 +1482,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
 void BandmapView::assembleCqToolTip(int row, Frequency freq, QString& toolTipMsg)
 {
 
-    QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
-    QString msg = tr("CQ Frequency = %1\nThe computed mode is %2").arg(freq.convertFreqStrDisp()).arg(computedMode);
+    QString mode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
+    QString msg = tr("CQ Frequency = %1\nThe mode is %2").arg(freq.convertFreqStrDisp()).arg(mode);
     toolTipMsg = msg;
     //msg.detach();
 
@@ -1510,12 +1510,19 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
 
     QString spotterComment = model()->data(model()->index(row, COMMENT_COL_NUM), BMP_DataStoredRole).toString().replace('<', " (").replace('>', ") ");
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
+    bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
+
+    QString spotModeMsg = tr("The computed mode is");
+    if (spotType == bandmapSpotType::LOGGED)
+    {
+        spotModeMsg = tr("The mode is");
+    }
 
     qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \nThe computed mode is %9\n%10")
+    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11")
                                             .arg(callsign)
                                             .arg(freq.convertFreqStrDisp())
                                             .arg(locator)
@@ -1525,6 +1532,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
                                             .arg(spotterCallsign)
                                             .arg(spotterLocator)
                                             .arg(elapsedTimeStr)
+                                            .arg(spotModeMsg)
                                             .arg(computedMode)
                                             .arg(spotterComment);
 
