@@ -1380,6 +1380,9 @@ void BandmapClientFrame::setMode(QString mode)
 
         bandmapView->setDialRadioMode(radioMode);
         ui->mode->setText(radioMode);
+        Frequency temp = lastfreq;
+        lastfreq.clear();
+        setFreq(temp);  // get legal freqs correct
     }
 }
 
