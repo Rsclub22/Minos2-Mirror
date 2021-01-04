@@ -83,6 +83,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     spotQueue.clear();
 
+    BandList::getBandList().loadAllBands(bands);
+    filterSettings.initFilterSettings(bands, clusterModes);
+
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, &QTimer::timeout, [=](){checkSavedFilters();});
 
@@ -574,19 +577,11 @@ void ClusterClientFrame::checkHfFlag()
 void ClusterClientFrame::setHF(bool hfOn)
 {
 
-    if (hfOn)
-    {
-       for (auto &bf:filterSettings.hfBandFilters)
-       {
-           *bf = false;
-       }
-    }
-    else
-    {
+
         // this might not be the right thing to do...
         LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
         filterSettings = contest->getClusterFilter();
-    }
+
 
 }
 
@@ -1224,21 +1219,27 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
             if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
             {
                 // no, save current band filter for this contest
-                filterSettings.setBandFilter(true, contestBand);    // set cluster filter to current band - can be overidden
+                filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
+
+                for (auto m:mgmModes)
+                {
+
+                }
 
                 if (contestModeStr == "MGM")       //  have mode settings been saved before?
                 {
-                    for (int m = 4; m < clusterModes.count(); m++)
+
+                    for (auto m:mgmModes)
                     {
-                        //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
-                        *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+                        filterSettings.setModeFilter(m, true);
                     }
+
                 }
                 else
                 {
                     // no, save current mode filter for this contest
                     //filterSetup->setModeFilter(true, contestMode);
-                    *filterSettings.modeFilters[contestMode] = true;
+                    filterSettings.setModeFilter(contestModeStr, true);
                 }
 
                 //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
@@ -1753,7 +1754,9 @@ void ClusterClientFrame::checkSavedFilters()
     if (contest)
     {
         QString cUuuid = ct->uuid;
-        ClusterClientFilterSettings cfs = contest->clusterFilterSettings.getValue();
+        ClusterClientFilterSettings cfs;
+        cfs.initFilterSettings(bands, clusterModes);
+        cfs = contest->clusterFilterSettings.getValue();
         if (cfs != filterSettings)
         {
             filterSettings = cfs;
@@ -2058,38 +2061,23 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
-    bool ok = false;
-    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
 
-    if (ok && (bandMask >=0 && bandMask < NUMBANDS) )
-    {
-       return filterSettings->getBandFilter(bandMask);
-    }
-    else if (!ok && false/*filterSetup->getEnableHFSpotsFlag()*/) // need to modify this for HF
-    {
-        return true;        // if DXBandMask is empty it must be a HF Spot
-    }
-    else
-    {
-        return false;
-    }
-
+    return filterSettings->getBandFilter(band);
 }
 
 
 bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
 {
     bool ok = false;
-    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
+    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
 
-    if (ok && (bandMask >=0 && bandMask < filterSettings->allIgnoreDistanceFlags.count()) )
+    if (!filterSettings->getIgnoreDistanceFlag(band))
     {
-        if (!*filterSettings->allIgnoreDistanceFlags[bandMask])
-        {
 
 
             QString distanceStr = sourceModel()->data(sourceModel()->index(sourceRow, DXDIST_COL_NUM), DataStoredRole).toString();
-            if (distanceStr.isEmpty() && *filterSettings->allIgnoreEmptyDistanceFlags[bandMask])
+            if (distanceStr.isEmpty() && filterSettings->getIgnoreEmptyDistanceFlag(band))
             {
                 return false;
             }
@@ -2097,10 +2085,10 @@ bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
             int distance = distanceStr.toInt(&ok);
             if (ok)
             {
-                return filterSettings->testDistanceFilter(distance, bandMask);
+                return filterSettings->testDistanceFilter(distance, band);
             }
-        }
-    }
+     }
+
 
     return true;
 
@@ -2108,17 +2096,9 @@ bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
 
 bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
 {
-    bool ok = false;
-    int modeMask = sourceModel()->data(sourceModel()->index(sourceRow, DXMODEMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
-    if (ok && modeMask >=0)
-    {
-        return filterSettings->getModeFilter(modeMask);
-    }
-    else
-    {
-        return false;
-    }
+    QString mode = sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_MODE_COL_NUM), DataStoredRole).toString();
 
+    return filterSettings->getModeFilter(mode);
 }
 
 bool DxSpotSortFilterProxyModel::matchWorkedLoc(int sourceRow) const

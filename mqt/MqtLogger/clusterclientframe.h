@@ -229,6 +229,8 @@ private:
     QString contestBandStr;
     int contestBand;
 
+    QVector<QSharedPointer<BandInfo> > bands;
+
     QString contestModeStr;
     int contestMode;
 

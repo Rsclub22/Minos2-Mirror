@@ -69,7 +69,7 @@ void BandSelButtons::setupButtons()
     QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
     for (auto &tb:toolButList)
     {
-        connect(tb, &QToolButton::pressed,
+        connect(tb, &QToolButton::pressed, tb,
                 [=]() {onBandSelButtonPressed(tb);});
 
         tb->setVisible(false);
