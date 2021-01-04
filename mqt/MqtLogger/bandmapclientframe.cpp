@@ -1119,6 +1119,8 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
             QVariant f;
             f.setValue(spot->getFreq());
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
+            bandmapDataModel->setData(bandmapDataModel->index(rowNum, DXSPOT_MODE_COL_NUM ), spot->getMode() ,BMP_DataStoredRole);
+            bandmapDataModel->setData(bandmapDataModel->index(rowNum, DXMODEMASK_COL_NUM ), spot->getModeMask() ,BMP_DataStoredRole);
             bandmapDataModel->sortModel();
         }
     }
