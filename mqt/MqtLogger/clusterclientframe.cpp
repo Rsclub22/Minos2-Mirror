@@ -165,7 +165,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     ui->dxSpotTab->setTabColor(ui->dxSpotTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
 
 
-    connect(ui->dxSpotTab, &QLogTabWidget::currentChanged, [=](int index){onSpotTabChanged(index);});
+    connect(ui->dxSpotTab, &QLogTabWidget::currentChanged, this, [=](int index){onSpotTabChanged(index);});
     restoreLocatorViewColumns();
 
     // all initial restores have been done
@@ -176,8 +176,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
 
-    connect(ui->unworkedCallsignsChkBox, &QCheckBox::stateChanged, [=](int state){on_unworkedCallsignsCheckBox(state);});
-    connect(ui->unworkedLocChkBox, &QCheckBox::stateChanged, [=](int state){on_unworkedLocCheckBox(state);});
+    connect(ui->unworkedCallsignsChkBox, &QCheckBox::stateChanged, this, [=](int state){on_unworkedCallsignsCheckBox(state);});
+    connect(ui->unworkedLocChkBox, &QCheckBox::stateChanged, this, [=](int state){on_unworkedLocCheckBox(state);});
 
     purgeTimer->start(PURGE_TIME);
 
@@ -191,10 +191,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-    connect(ui->resendSpotsTestPb, &QPushButton::pressed, [=](){on_pushbuttonPressed();});
+    connect(ui->resendSpotsTestPb, &QPushButton::pressed, this, [=](){on_pushbuttonPressed();});
 
     checkHfFlagTimer = new QTimer(this);
-    connect(checkHfFlagTimer, &QTimer::timeout, [=](){checkHfFlag();});
+    connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
     checkHfFlagTimer->start(1000);
 
     if (!isProtected)

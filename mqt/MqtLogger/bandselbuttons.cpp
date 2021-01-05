@@ -35,19 +35,19 @@ void BandSelButtons::setupButtons()
     hfSelBut = new QToolButton();
     hfSelBut->setText("HF");
     hfSelBut->setVisible(false);
-    connect(hfSelBut, &QToolButton::pressed,
+    connect(hfSelBut, &QToolButton::pressed, this,
             [=]() {onHfSelButtonPressed();});
 
     vhfSelBut = new QToolButton();
     vhfSelBut->setText("VHF");
     vhfSelBut->setVisible(false);
-    connect(vhfSelBut, &QToolButton::pressed,
+    connect(vhfSelBut, &QToolButton::pressed, this,
             [=]() {onVhfSelButtonPressed();});
 
     mwSelBut = new QToolButton();
     mwSelBut->setText("MW");
     mwSelBut->setVisible(false);
-    connect(mwSelBut, &QToolButton::pressed,
+    connect(mwSelBut, &QToolButton::pressed, this,
             [=]() {onMwSelButtonPressed();});
 
     for (int i = 0; i < 6; i++)
@@ -69,7 +69,7 @@ void BandSelButtons::setupButtons()
     QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
     for (auto &tb:toolButList)
     {
-        connect(tb, &QToolButton::pressed,
+        connect(tb, &QToolButton::pressed, this,
                 [=]() {onBandSelButtonPressed(tb);});
 
         tb->setVisible(false);
