@@ -24,13 +24,15 @@ const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.i
 const QString CLUSTER_FILTER_FILE = "./Configuration/clusterBandmapFilter.ini";
 
 
-
-const int NO_BANDS = -1;
-const int NUMBANDS = 9;
-const int VHFBANDSTART = 0;
-const int VHFBANDEND = 4;
-const int MWBANDSTART = 4;
-const int MWBANDEND = 9;
+const QString HF_BANDTYPE = "HF";
+const QString VHF_BANDTYPE = "VHF";
+const QString MW_BANDTYPE = "MWAVE";
+//const int NO_BANDS = -1;
+//const int NUMBANDS = 9;
+//const int VHFBANDSTART = 0;
+//const int VHFBANDEND = 4;
+//const int MWBANDSTART = 4;
+//const int MWBANDEND = 9;
 
 enum allBandOffsets {_1_8M, _3_5M, _7M, _14M, _21M, _28M, _50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 Mhz" << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
@@ -211,11 +213,81 @@ private:
 class BandFilterSettings
 {
    public:
+
+    BandFilterSettings()
+    {
+        bandFilterFlag = false;
+        distanceFilter = 0;
+        ignoreDistanceFlag = false;
+        ignoreEmptyDistanceFlag = false;
+        bandType = "";
+    }
+
+
+    bool operator==( const BandFilterSettings& bfs ) const
+    {
+        if (bandFilterFlag == bfs.bandFilterFlag &&
+                distanceFilter == bfs.distanceFilter &&
+                ignoreDistanceFlag == bfs.ignoreDistanceFlag &&
+                ignoreEmptyDistanceFlag == bfs.ignoreEmptyDistanceFlag &&
+                bandType != bfs.bandType)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool operator!=( const BandFilterSettings& bfs )
+    {
+        return !(*this == bfs);
+    }
+
+
     bool bandFilterFlag;
     int distanceFilter;
     bool ignoreDistanceFlag;
     bool ignoreEmptyDistanceFlag;
     QString bandType;
+};
+
+
+
+class ClusterClientBandFilterDialogDetails
+{
+
+public:
+    ClusterClientBandFilterDialogDetails()
+    {
+        bandChkBox = nullptr;
+    }
+    QCheckBox *bandChkBox;
+    QString bandType;
+
+
+};
+
+
+class ClusterClientDistanceFilterDetails
+{
+public:
+
+    ClusterClientDistanceFilterDetails()
+    {
+        bandLineEdit = nullptr;
+        bandLabel = nullptr;
+        distFilterIgnoreCheckBox = nullptr;
+        distFilterIgnoreEmptyCheckBox = nullptr;
+
+    }
+
+    QLineEdit *bandLineEdit;
+    QLabel *bandLabel;
+    QCheckBox *distFilterIgnoreCheckBox;
+    QCheckBox *distFilterIgnoreEmptyCheckBox;
+    QString bandType;
+
+
 };
 
 
@@ -346,6 +418,17 @@ bool testDistanceFilter(int distance, QString band)
     return false;
 }
 
+int getDistanceFilter(QString band)
+{
+    if (bandFilterSettings.contains(band))
+    {
+        return bandFilterSettings.value(band).distanceFilter;
+    }
+
+    return 0;
+}
+
+
 void setDistanceFilter(QString band, int distance)
 {
     if (bandFilterSettings.contains(band))
@@ -433,8 +516,9 @@ ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings &ccfs
 bool operator==( const ClusterClientFilterSettings& ccfs ) const
 {
     if ( callsignFilterList == ccfs.callsignFilterList &&
-         locatorFilterList == ccfs.locatorFilterList/* &&
-         bandFilterSettings == ccfs.bandFilterSettings*/)
+         locatorFilterList == ccfs.locatorFilterList &&
+         bandFilterSettings == ccfs.bandFilterSettings &&
+         modeFilterFlag == ccfs.modeFilterFlag)
 
     {
         return true;

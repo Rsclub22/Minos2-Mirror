@@ -77,6 +77,9 @@ void ClusterClientFilterDialog::doCloseEvent()
 void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
+    BandList::getBandList().loadAllBands(bands);
+
+    clustermodes = clusterModes;
 
     setWindowTitle(tr("Cluster Spot Filters"));
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -88,62 +91,112 @@ void ClusterClientFilterDialog::initCheckFilterTab()
                    << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
+    ClusterClientBandFilterDialogDetails ccfd;
+    for (int i = 0; i < bands.count(); i++)
+    {
+        ccfd.bandChkBox = allBandChkBoxList[i];
+        ccfd.bandType = bands[i].data()->getType();
+        bandCheckBoxes.insert(bands[i].data()->uk, ccfd);
+    }
 
     for (int i = 0; i < allBandChkBoxList.count(); i++)
     {
         connect(allBandChkBoxList[i], &QCheckBox::clicked, [=](){onBandChkBoxChecked(i);});
     }
 
-    hfBandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
-                     << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox;
 
-    vhfBandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox;
-    mwBandChkBoxList << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
-
-
-
-    for (int i = 0; i < allBandChkBoxList.count(); i++)
+    for (auto &b: bands)
     {
-        if (*filterSettings.allBandFilters[i])
+        if (filterSettings.getBandFilter(b.data()->uk))
         {
-            allBandChkBoxList[i]->setCheckState(Qt::Checked);
+            bandCheckBoxes.value(b.data()->uk).bandChkBox->setCheckState(Qt::Checked);
         }
         else
         {
-            allBandChkBoxList[i]->setCheckState(Qt::Unchecked);
+           bandCheckBoxes.value(b.data()->uk).bandChkBox->setCheckState(Qt::Unchecked);
         }
     }
+
+
 
     modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (int i = 0; i < clustermodes.count(); i++)
     {
-        if (*filterSettings.modeFilters[i])
+        modeCheckBoxes.insert(clustermodes[i], modeChkBoxList[i]);
+    }
+
+    for (auto &b:clustermodes)
+    {
+        if (filterSettings.getModeFilter(b))
         {
-            modeChkBoxList[i]->setCheckState(Qt::Checked);
+            modeCheckBoxes.value(b)->setCheckState(Qt::Checked);
         }
         else
         {
-            modeChkBoxList[i]->setCheckState(Qt::Unchecked);
+            modeCheckBoxes.value(b)->setCheckState(Qt::Unchecked);
         }
     }
+
+
 
     allDistanceLineEditsList << ui->spotDistanceEdit_1_8MHz << ui->spotDistanceEdit_3_5MHz << ui->spotDistanceEdit_7MHz
                           << ui->spotDistanceEdit_14MHz << ui->spotDistanceEdit_21MHz << ui->spotDistanceEdit_28MHz
                           << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz
                           << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
 
-    hfDistanceLineEditsList << ui->spotDistanceEdit_1_8MHz << ui->spotDistanceEdit_3_5MHz << ui->spotDistanceEdit_7MHz
-                            << ui->spotDistanceEdit_14MHz << ui->spotDistanceEdit_21MHz << ui->spotDistanceEdit_28MHz;
 
-    vhfDistanceLineEditsList << ui->spotDistanceEdit_50MHz << ui->spotDistanceEdit_70MHz << ui->spotDistanceEdit_144MHz << ui->spotDistanceEdit_432MHz;
+    allDistanceLabelsList << ui->bandLabel_1_8MHz << ui->bandLabel_3_5MHz << ui->bandLabel_7MHz
+                          << ui->bandLabel_14MHz << ui->bandLabel_21MHz << ui->bandLabel_28MHz
+                          << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
+                          << ui->bandLabel_1296MHz << ui->bandLabel_2300MHz << ui->bandLabel_3_4GHz << ui->bandLabel_5_6GHz << ui->bandLabel_10GHz;
 
-    mwDistanceLineEditsList << ui->spotDistanceEdit_1296MHz << ui->spotDistanceEdit_2300MHz << ui->spotDistanceEdit_3_4GHz << ui->spotDistanceEdit_5_6GHz << ui->spotDistanceEdit_10GHz;
+    allIgnoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_1_8MHz << ui->distFilterIgnoreCheckBox_3_5MHz << ui->distFilterIgnoreCheckBox_7MHz
+                             << ui->distFilterIgnoreCheckBox_14MHz << ui->distFilterIgnoreCheckBox_21MHz << ui->distFilterIgnoreCheckBox_28MHz
+                             << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
+                             << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
 
-    for (int i = 0; i < filterSettings.allDistanceFilters.count(); i++)
+    allIgnoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_1_8MHz << ui->ignoreEmptyDistanceValuesChkBox_3_5MHz  << ui->ignoreEmptyDistanceValuesChkBox_7MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_14MHz << ui->ignoreEmptyDistanceValuesChkBox_21MHz << ui->ignoreEmptyDistanceValuesChkBox_28MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
+                                  << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
+
+
+
+    ClusterClientDistanceFilterDetails ccdfd;
+    for (int i = 0; i < bands.count(); i++)
+    {
+        ccdfd.bandLineEdit = allDistanceLineEditsList[i];
+        ccdfd.bandLabel = allDistanceLabelsList[i];
+        ccdfd.distFilterIgnoreCheckBox = allIgnoreDistanceChkBoxList[i];
+        ccdfd.distFilterIgnoreEmptyCheckBox = allIgnoreDistanceChkBoxList[i];
+        ccdfd.bandType = bands[i].data()->getType();
+        bandDistanceWidgets.insert(bands[i].data()->uk, ccdfd);
+    }
+
+
+    for (auto &b: bands)
     {
 
-        allDistanceLineEditsList[i]->setText(QString::number(*filterSettings.allDistanceFilters[i]));
+        bandDistanceWidgets.value(b.data()->uk).bandLineEdit->setText(QString::number(filterSettings.getDistanceFilter(b.data()->uk)));
+
+        if (filterSettings.getIgnoreDistanceFlag(b.data()->uk))
+        {
+            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+        }
+        else
+        {
+            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+        }
+
+        if (filterSettings.getIgnoreEmptyDistanceFlag(b.data()->uk))
+        {
+           bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+        }
+        else
+        {
+           bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+        }
 
     }
 
@@ -152,18 +205,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(allDistanceLineEditsList[i], &QLineEdit::editingFinished,  [=](){onDistanceEditingFinished(i);});
     }
 
-    allIgnoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_1_8MHz << ui->distFilterIgnoreCheckBox_3_5MHz << ui->distFilterIgnoreCheckBox_7MHz
-                             << ui->distFilterIgnoreCheckBox_14MHz << ui->distFilterIgnoreCheckBox_21MHz << ui->distFilterIgnoreCheckBox_28MHz
-                             << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz
-                             << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
-
-   hfIgnoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_1_8MHz << ui->distFilterIgnoreCheckBox_3_5MHz << ui->distFilterIgnoreCheckBox_7MHz
-                              << ui->distFilterIgnoreCheckBox_14MHz << ui->distFilterIgnoreCheckBox_21MHz << ui->distFilterIgnoreCheckBox_28MHz;
-
-   vhfIgnoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_50MHz << ui->distFilterIgnoreCheckBox_70MHz << ui->distFilterIgnoreCheckBox_144MHz << ui->distFilterIgnoreCheckBox_432MHz;
-
-   mwIgnoreDistanceChkBoxList << ui->distFilterIgnoreCheckBox_1296MHz << ui->distFilterIgnoreCheckBox_2300MHz << ui->distFilterIgnoreCheckBox_3_4GHz << ui->distFilterIgnoreCheckBox_5_6GHz << ui->distFilterIgnoreCheckBox_10GHz;
-
 
 
     for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
@@ -171,32 +212,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(allIgnoreDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreDistanceChecked(i);});
     }
 
-    for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (*filterSettings.allIgnoreDistanceFlags[i])
-        {
-
-            allIgnoreDistanceChkBoxList[i]->setCheckState(Qt::Checked);
-
-        }
-        else
-        {
-            allIgnoreDistanceChkBoxList[i]->setCheckState(Qt::Unchecked);
-        }
-
-    }
-
-    allIgnoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_1_8MHz << ui->ignoreEmptyDistanceValuesChkBox_3_5MHz  << ui->ignoreEmptyDistanceValuesChkBox_7MHz
-                                  << ui->ignoreEmptyDistanceValuesChkBox_14MHz << ui->ignoreEmptyDistanceValuesChkBox_21MHz << ui->ignoreEmptyDistanceValuesChkBox_28MHz
-                                  << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz
-                                  << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
-
-    hfIgnoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_1_8MHz << ui->ignoreEmptyDistanceValuesChkBox_3_5MHz  << ui->ignoreEmptyDistanceValuesChkBox_7MHz
-                                    << ui->ignoreEmptyDistanceValuesChkBox_14MHz << ui->ignoreEmptyDistanceValuesChkBox_21MHz << ui->ignoreEmptyDistanceValuesChkBox_28MHz;
-
-    vhfIgnoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_50MHz << ui->ignoreEmptyDistanceValuesChkBox_70MHz << ui->ignoreEmptyDistanceValuesChkBox_144MHz << ui->ignoreEmptyDistanceValuesChkBox_432MHz;
-
-    mwIgnoreEmptyDistanceChkBoxList << ui->ignoreEmptyDistanceValuesChkBox_1296MHz << ui->ignoreEmptyDistanceValuesChkBox_2300MHz << ui->ignoreEmptyDistanceValuesChkBox_3_4GHz << ui->ignoreEmptyDistanceValuesChkBox_5_6GHz << ui->ignoreEmptyDistanceValuesChkBox_10GHz;
 
 
 
@@ -205,53 +220,28 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         connect(allIgnoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreEmptyDistanceChecked(i);});
     }
 
-    for (int i = 0; i < allIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (*filterSettings.allIgnoreEmptyDistanceFlags[i])
-        {
-            allIgnoreEmptyDistanceChkBoxList[i]->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            allIgnoreEmptyDistanceChkBoxList[i]->setCheckState(Qt::Unchecked);
-        }
-    }
-
-    allDistanceLabelsList << ui->bandLabel_1_8MHz << ui->bandLabel_3_5MHz << ui->bandLabel_7MHz
-                          << ui->bandLabel_14MHz << ui->bandLabel_21MHz << ui->bandLabel_28MHz
-                          << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz
-                          << ui->bandLabel_1296MHz << ui->bandLabel_2300MHz << ui->bandLabel_3_4GHz << ui->bandLabel_5_6GHz << ui->bandLabel_10GHz;
 
 
-    hfDistanceLabelsList << ui->bandLabel_1_8MHz << ui->bandLabel_3_5MHz << ui->bandLabel_7MHz
-                         << ui->bandLabel_14MHz << ui->bandLabel_21MHz << ui->bandLabel_28MHz;
 
-    vhfDistanceLabelsList << ui->bandLabel_14MHz << ui->bandLabel_21MHz << ui->bandLabel_28MHz
-                          << ui->bandLabel_50MHz << ui->bandLabel_70MHz << ui->bandLabel_144MHz << ui->bandLabel_432MHz;
+    connect(ui->hfSetAlDefaultDistPb, &QPushButton::clicked, this, [=](){onHfSetDefDistPbClicked();});
+    connect(ui->vhfSetAlDefaultDistPb, &QPushButton::clicked, this, [=](){onVhfSetDefDistPbClicked();});
+    connect(ui->mwSetAlDefaultDistPb, &QPushButton::clicked, this, [=](){onMwSetDefDistPbClicked();});
 
-    mwDistanceLabelsList << ui->bandLabel_1296MHz << ui->bandLabel_2300MHz << ui->bandLabel_3_4GHz
-                         << ui->bandLabel_5_6GHz << ui->bandLabel_10GHz;
+    connect(ui->hfSetAllIgnorePb, &QPushButton::clicked, this, [=](){onHfSetAllIgnorePbClicked();});
+    connect(ui->vhfSetAllIgnorePb, &QPushButton::clicked, this, [=](){onVhfSetAllIgnorePbClicked();});
+    connect(ui->mwSetAllIgnorePb, &QPushButton::clicked, this, [=](){onMwSetAllIgnorePbClicked();});
 
+    connect(ui->hfClearAllIgnorePb, &QPushButton::clicked, this, [=](){onHfClearAllIgnorePbClicked();});
+    connect(ui->vhfClearAllIgnorePb, &QPushButton::clicked, this, [=](){onVhfClearAllIgnorePbClicked();});
+    connect(ui->mwClearAllIgnorePb, &QPushButton::clicked, this, [=](){onMwClearAllIgnorePbClicked();});
 
-    connect(ui->hfSetAlDefaultDistPb, &QPushButton::clicked, [=](){onHfSetDefDistPbClicked();});
-    connect(ui->vhfSetAlDefaultDistPb, &QPushButton::clicked, [=](){onVhfSetDefDistPbClicked();});
-    connect(ui->mwSetAlDefaultDistPb, &QPushButton::clicked, [=](){onMwSetDefDistPbClicked();});
+    connect(ui->hfSetAllEmptyDistPb, &QPushButton::clicked, this, [=](){onHfSetAllEmptyPbClicked();});
+    connect(ui->vhfSetAllEmptyDistPb, &QPushButton::clicked, this, [=](){onVhfSetAllEmptyPbClicked();});
+    connect(ui->mwSetAllEmptyDistPb, &QPushButton::clicked, this, [=](){onMwSetAllEmptyPbClicked();});
 
-    connect(ui->hfSetAllIgnorePb, &QPushButton::clicked, [=](){onHfSetAllIgnorePbClicked();});
-    connect(ui->vhfSetAllIgnorePb, &QPushButton::clicked, [=](){onVhfSetAllIgnorePbClicked();});
-    connect(ui->mwSetAllIgnorePb, &QPushButton::clicked, [=](){onMwSetAllIgnorePbClicked();});
-
-    connect(ui->hfClearAllIgnorePb, &QPushButton::clicked, [=](){onHfClearAllIgnorePbClicked();});
-    connect(ui->vhfClearAllIgnorePb, &QPushButton::clicked, [=](){onVhfClearAllIgnorePbClicked();});
-    connect(ui->mwClearAllIgnorePb, &QPushButton::clicked, [=](){onMwClearAllIgnorePbClicked();});
-
-    connect(ui->hfSetAllEmptyDistPb, &QPushButton::clicked, [=](){onHfSetAllEmptyPbClicked();});
-    connect(ui->vhfSetAllEmptyDistPb, &QPushButton::clicked, [=](){onVhfSetAllEmptyPbClicked();});
-    connect(ui->mwSetAllEmptyDistPb, &QPushButton::clicked, [=](){onMwSetAllEmptyPbClicked();});
-
-    connect(ui->hfClearAllEmptyDistPb, &QPushButton::clicked, [=](){onHfClearAllEmptyDistPbClicked();});
-    connect(ui->vhfClearAllEmptyDistPb, &QPushButton::clicked, [=](){onVhfClearAllEmptyDistPbClicked();});
-    connect(ui->mwClearAllEmptyDistPb, &QPushButton::clicked, [=](){onMwClearAllEmptyDistPbClicked();});
+    connect(ui->hfClearAllEmptyDistPb, &QPushButton::clicked, this, [=](){onHfClearAllEmptyDistPbClicked();});
+    connect(ui->vhfClearAllEmptyDistPb, &QPushButton::clicked, this, [=](){onVhfClearAllEmptyDistPbClicked();});
+    connect(ui->mwClearAllEmptyDistPb, &QPushButton::clicked, this, [=](){onMwClearAllEmptyDistPbClicked();});
 
 
 
@@ -262,36 +252,36 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     //connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
 
 
-    connect(ui->callsignAddButton, &QPushButton::clicked, [=](){callsignAddClicked();});
-    connect(ui->callsignEditButton, &QPushButton::clicked, [=](){callsignEditClicked();});
-    connect(ui->callsignDelButton, &QPushButton::clicked, [=](){callsignDelClicked();});
-    connect(ui->callsignDelAllButton, &QPushButton::clicked, [=](){callsignDelAllClicked();});
-    connect(ui->saveCallsignList, &QPushButton::clicked, [=](){onCallsignListSave();});
-    connect(ui->importCallsignList, &QPushButton::clicked, [=](){onCallsignListImport();});
+    connect(ui->callsignAddButton, &QPushButton::clicked, this, [=](){callsignAddClicked();});
+    connect(ui->callsignEditButton, &QPushButton::clicked, this, [=](){callsignEditClicked();});
+    connect(ui->callsignDelButton, &QPushButton::clicked, this, [=](){callsignDelClicked();});
+    connect(ui->callsignDelAllButton, &QPushButton::clicked, this, [=](){callsignDelAllClicked();});
+    connect(ui->saveCallsignList, &QPushButton::clicked, this, [=](){onCallsignListSave();});
+    connect(ui->importCallsignList, &QPushButton::clicked, this, [=](){onCallsignListImport();});
 
     locatorListWidget = ui->locatorListWidget;
     locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
 
     //connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
-    connect(ui->locatorAddButton, &QPushButton::clicked, [=](){locatorAddClicked();});
-    connect(ui->locatorEditButton, &QPushButton::clicked, [=](){locatorEditClicked();});
-    connect(ui->locatorDelButton, &QPushButton::clicked, [=](){locatorDelClicked();});
-    connect(ui->locatorDelAllButton, &QPushButton::clicked, [=](){locatorDelAllClicked();});
-    connect(ui->saveLocatorList, &QPushButton::clicked, [=](){onLocatorListSave();});
-    connect(ui->importLocatorList, &QPushButton::clicked, [=](){onLocatorListImport();});
+    connect(ui->locatorAddButton, &QPushButton::clicked, this, [=](){locatorAddClicked();});
+    connect(ui->locatorEditButton, &QPushButton::clicked, this, [=](){locatorEditClicked();});
+    connect(ui->locatorDelButton, &QPushButton::clicked, this, [=](){locatorDelClicked();});
+    connect(ui->locatorDelAllButton, &QPushButton::clicked, this, [=](){locatorDelAllClicked();});
+    connect(ui->saveLocatorList, &QPushButton::clicked, this, [=](){onLocatorListSave();});
+    connect(ui->importLocatorList, &QPushButton::clicked, this, [=](){onLocatorListImport();});
 
-    connect(ui->vhfSelectBut, &QPushButton::clicked, [=](){vhfButtonSelected();});
-    connect(ui->mWSelectBut, &QPushButton::clicked, [=](){mWaveButtonSelected();});
-    connect(ui->modeSelectBut, &QPushButton::clicked, [=](){modeButtonSelected();});
-    connect(ui->clearAllBut,   &QPushButton::clicked, [=](){clearAllButtonSelected();});
+    connect(ui->vhfSelectBut, &QPushButton::clicked, this, [=](){vhfButtonSelected();});
+    connect(ui->mWSelectBut, &QPushButton::clicked, this, [=](){mWaveButtonSelected();});
+    connect(ui->modeSelectBut, &QPushButton::clicked, this, [=](){modeButtonSelected();});
+    connect(ui->clearAllBut,   &QPushButton::clicked, this, [=](){clearAllButtonSelected();});
 
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, [=](){filtersAccepted();});
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){filtersAccepted();});
     connect(ui->buttonBox, &QDialogButtonBox::rejected, [=](){filtersRejected();});
 
-    connect(ui->ClusterClientFilterTab, &QTabWidget::currentChanged,  [=](int index){onFilterTabIndexChanged(index);});
-    connect(ui->filterDistancesTab,  &QTabWidget::currentChanged,  [=](int index){onDistanceFilterTabIndexChanged(index);});
+    connect(ui->ClusterClientFilterTab, &QTabWidget::currentChanged,  this, [=](int index){onFilterTabIndexChanged(index);});
+    connect(ui->filterDistancesTab,  &QTabWidget::currentChanged,  this, [=](int index){onDistanceFilterTabIndexChanged(index);});
 
     setFilterTabCurrentIndex(mainTabIndex);
     setDistanceFilterTabCurrentIndex(distanceTabIndex);
@@ -483,9 +473,9 @@ QStringList ClusterClientFilterDialog::getItemsTextFromListWidget(QListWidget* l
 
 bool ClusterClientFilterDialog::modeFiltersChanged()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clustermodes)
     {
-        if (*filterSettings.modeFilters[i] != modeChkBoxList[i]->isChecked())
+        if (filterSettings.getModeFilter(m) != modeCheckBoxes.value(m)->isChecked())
         {
             return true;
         }
@@ -556,10 +546,11 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 
 void ClusterClientFilterDialog::copyBandFiltersToDialog()
 {
-    for (int i = 0; i < allBandChkBoxList.count(); i++)
+    for (auto &b: bands)
     {
-       allBandChkBoxList[i]->setChecked(*filterSettings.allBandFilters[i]);
+        bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(filterSettings.getBandFilter(b.data()->uk));
     }
+
 }
 
 
@@ -568,12 +559,17 @@ void ClusterClientFilterDialog::copyBandFiltersToDialog()
 void ClusterClientFilterDialog::setHFVisible(bool state)
 {
     ui->hfSelectBut->setVisible(state);
-    ui->_1_8MHzCheckBox->setVisible(state);
-    ui->_3_5MHzCheckBox->setVisible(state);
-    ui->_7MHzCheckBox->setVisible(state);
-    ui->_14MHzCheckBox->setVisible(state);
-    ui->_21MHzCheckBox->setVisible(state);
-    ui->_28MHzCheckBox->setVisible(state);
+
+    for (auto &b:bands)
+    {
+        if (b->getType() == "HF")
+        {
+            bandDistanceWidgets.value(b.data()->uk).bandLabel->setVisible(state);
+            bandDistanceWidgets.value(b.data()->uk).bandLineEdit->setVisible(state);
+            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setVisible(state);
+            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreEmptyCheckBox->setVisible(state);
+        }
+    }
 
 
     //ui->HF_DistanceTab->setVisible(state);  // only works in Qt 5.15
@@ -611,12 +607,12 @@ void ClusterClientFilterDialog::vhfButtonSelected()
     if (!vhfButtonState)
     {
         vhfButtonState = true;
-        setVHFBands();
+        setVHFBandCheckBoxes();
     }
     else
     {
         vhfButtonState = false;
-        clearVHFBands();
+        clearVHFBandCheckBoxes();
     }
 }
 
@@ -625,12 +621,12 @@ void ClusterClientFilterDialog::mWaveButtonSelected()
     if (!mWaveButtonState)
     {
         mWaveButtonState = true;
-        setMWaveBands();
+        setMWaveBandCheckBoxes();
     }
     else
     {
         mWaveButtonState = false;
-        clearMWaveBands();
+        clearMWaveBandCheckBoxes();
     }
 }
 
@@ -649,21 +645,17 @@ void ClusterClientFilterDialog::modeButtonSelected()
 }
 
 
-void ClusterClientFilterDialog::setBandFilter(int band)
+void ClusterClientFilterDialog::setBandFilter(QString band, bool state)
 {
-    if (band > NO_BANDS && band < allBandChkBoxList.count())
-    {
-        *filterSettings.allBandFilters[band] = true;
-    }
+
+    filterSettings.setBandFilter(band, state);
+
 }
 
 
-void ClusterClientFilterDialog::setModeFilter(bool state, int mode)
+void ClusterClientFilterDialog::setModeFilter(QString mode, bool state)
 {
-    if (mode >= 0 && mode < clusterModes.count())
-    {
-        *filterSettings.modeFilters[mode] = state;
-    }
+    filterSettings.setModeFilter(mode, state);
 }
 
 void ClusterClientFilterDialog::clearAllButtonSelected()
@@ -674,90 +666,106 @@ void ClusterClientFilterDialog::clearAllButtonSelected()
 
 void ClusterClientFilterDialog::clearAllFilters()
 {
-    clearVHFBands();
-    clearMWaveBands();
+    clearHFBandCheckBoxes();
+    clearVHFBandCheckBoxes();
+    clearMWaveBandCheckBoxes();
     clearModes();
 
 }
 
 
-
-void ClusterClientFilterDialog::clearVHFBands()
+void ClusterClientFilterDialog::clearHFBandCheckBoxes()
 {
-    for (int i = 0; i < vhfBandChkBoxList.count(); i++)
-    {
-        vhfBandChkBoxList[i]->setCheckState(Qt::Unchecked);
-
-    }
-
-}
-
-void ClusterClientFilterDialog::setVHFBands()
-{
-    for (int i = 0; i < vhfBandChkBoxList.count(); i++)
-    {
-        vhfBandChkBoxList[i]->setCheckState(Qt::Checked);
-
-    }
+    setBandsCheckBox(HF_BANDTYPE, Qt::Unchecked);
 
 }
 
 
+void ClusterClientFilterDialog::setHFBandCheckBoxes()
+{
+
+    setBandsCheckBox(HF_BANDTYPE, Qt::Checked);
+}
+
+
+
+void ClusterClientFilterDialog::clearVHFBandCheckBoxes()
+{
+    setBandsCheckBox(VHF_BANDTYPE, Qt::Unchecked);
+
+}
+
+
+void ClusterClientFilterDialog::setVHFBandCheckBoxes()
+{
+
+    setBandsCheckBox(VHF_BANDTYPE, Qt::Checked);
+}
+
+
+
+
+void ClusterClientFilterDialog::clearMWaveBandCheckBoxes()
+{
+    setBandsCheckBox(MW_BANDTYPE, Qt::Unchecked);
+
+}
+
+void ClusterClientFilterDialog::setMWaveBandCheckBoxes()
+{
+    setBandsCheckBox(MW_BANDTYPE, Qt::Checked);
+
+}
+
+void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, Qt::CheckState state)
+{
+    for (auto &b:bands)
+    {
+        if (b->getType() == bandType)
+        {
+            bandCheckBoxes.value(b.data()->uk).bandChkBox->setCheckState(state);
+        }
+    }
+
+}
 
 void ClusterClientFilterDialog::restoreBands()
 {
 
-    for (int i = 0; allBandChkBoxList.count(); i++)
+    for (auto &b: bands)
     {
-        allBandChkBoxList[i]->setChecked(*filterSettings.allBandFilters[i]);
+        if (filterSettings.getBandFilter(b.data()->uk))
+        {
+           bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(Qt::Checked);
+        }
+        else
+        {
+           bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(Qt::Unchecked);
+        }
 
     }
-
-
-
 }
 
 
 
-void ClusterClientFilterDialog::clearMWaveBands()
-{
-    for (int i = 0; i < mwBandChkBoxList.count(); i++)
-    {
-        mwBandChkBoxList[i]->setCheckState(Qt::Unchecked);
-
-    }
-
-}
-
-void ClusterClientFilterDialog::setMWaveBands()
-{
-    for (int i = 0; i < mwBandChkBoxList.count(); i++)
-    {
-        mwBandChkBoxList[i]->setCheckState(Qt::Checked);
-
-    }
-
-}
 
 
 
 
 void ClusterClientFilterDialog::clearModes()
 {
-    for (int i = 0; i <modeChkBoxList.count(); i++)
+    for (auto &m:clustermodes)
     {
-        modeChkBoxList[i]->setCheckState(Qt::Unchecked);
-
+        modeCheckBoxes.value(m)->setChecked(false);
     }
 
 }
 
 void ClusterClientFilterDialog::setModes()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clustermodes)
     {
-        modeChkBoxList[i]->setCheckState(Qt::Checked);
-
+        modeCheckBoxes.value(m)->setChecked(true);
     }
 
 }
@@ -766,23 +774,23 @@ void ClusterClientFilterDialog::setModes()
 void ClusterClientFilterDialog::restoreModes()
 {
 
-    for (int i = 0; i < clusterModes.count(); i++)
+    for (auto &m: clustermodes)
     {
-
-        modeChkBoxList[i]->setChecked(filterSettings.modeFilters[i]);
+        modeCheckBoxes.value(m)->setChecked(filterSettings.getModeFilter(m));
 
     }
+
 }
 
 
-bool  ClusterClientFilterDialog::checkBandMatch(int bandNum)
+bool  ClusterClientFilterDialog::checkBandMatch(QString band)
 {
-    return *filterSettings.allBandFilters[bandNum];
+    return filterSettings.getBandFilter(band);
 }
 
-bool ClusterClientFilterDialog::checkModeMatch(int bandNum)
+bool ClusterClientFilterDialog::checkModeMatch(QString mode)
 {
-    return *filterSettings.modeFilters[bandNum];
+    return filterSettings.getModeFilter(mode);
 }
 
 
