@@ -234,7 +234,7 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
     }
     else
     {
-        dc.message = message_text.trimmed();
+        dc.message = message_text.trimmed() + " ";  // so we can test the 1st char for "?"
     }
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)

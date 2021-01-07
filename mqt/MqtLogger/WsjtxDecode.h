@@ -26,7 +26,7 @@ public:
 
     QTime decodeTime;
     QString message;
-    QString decodeInd;
+    QString decodeInd = QString(" ");
     bool best = false;
     bool autoresp = false;
     Callsign toCall;

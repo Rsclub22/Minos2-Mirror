@@ -440,7 +440,7 @@ void DisplayContestContact::checkContact( bool inScan)
 
       if ( !ls )
       {
-         if ( letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
+         if (letters.size() >= 2 && letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
          {
             ls = new LocSquare ( letters );
             MapWrapper<LocSquare> wls(ls);
