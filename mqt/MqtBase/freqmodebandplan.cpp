@@ -39,6 +39,7 @@ bool freqModeBandPlan::loadBandsFromBandList()
             {
                 addPair(mfl, m->fcLow2, m->fcHigh2);
             }
+            modeFreqList.insert(m->getType(), mfl);
         }
         if (modeFreqList.count())
         {
