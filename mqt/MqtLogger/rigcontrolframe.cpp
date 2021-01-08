@@ -1722,6 +1722,7 @@ void RigControlFrame::setRadioList()
 
             }
 
+            launchRadioSelectCount = 10;     // wait five seconds
             launchRadioSelectTimer->start(1000);
 
         }
