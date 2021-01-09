@@ -529,6 +529,68 @@ void WsjtxFrame::getAllTxtEnd()
       alltxtstr.readLine(255);
     }
 }
+decodeMessage *WsjtxFrame::parse_tx_message(QString atline)
+{
+    // 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
+
+    // 200424_160138     7.048 Rx FT4    -10  0.0  817 CQ YO4NF KN44
+    // 200424_160138     7.048 Rx FT4      2 -0.1 1399 AM4WARD <DL9DAJ> 73
+    // 200424_160138     7.048 Rx FT4     -8  0.2 2798 CQ R9SDO LO91
+    // 200424_160138     7.048 Rx FT4     -9  0.0  292 CQ ON5ZZ JO11                       ? a1
+    // 200424_160145     7.048 Rx FT4      1 -0.0  504 R9SDO R2ASY +05
+
+    // "? a1" is about a priori decodes and their possible validity
+
+    // date-time rigfreq txrx mode s/n dt df message
+
+    QString id = "WSJTX";
+    QTime time;
+    qint32 snr;
+    float delta_time;
+    quint32 delta_frequency;
+    QString mode;
+    QString message;
+    bool low_confidence = false;    // we sent it, after all
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
+#else
+    QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+#endif
+    if (sl[2] != "Tx")
+        return nullptr;
+
+    //trace("Tx scraped: " + atline);
+    time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
+    //double rigfreq = sl[1].toDouble();
+    // sl[2] == Tx
+    mode = sl[3];
+    snr = 0;    //sl[4]
+    delta_time = 0.0;   //sl[5]
+    delta_frequency = sl[6].toUInt();
+
+    for (int i = 0; i < 7; i++)
+    {
+        sl.removeFirst();
+    }
+    message = sl.join(' ');
+
+
+    decodeMessage dc = decoder.decode(id, eTX, time, snr, delta_time
+                                    , delta_frequency, mode
+                                    , message, low_confidence, true);
+
+    trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2 %3")
+          .arg(time.toString("HH:mm:ss")).arg(dc.getMStage(), atline));
+
+    currTxStage = dc.mstage;
+
+    messages.push_back(dc);
+
+    decodeMessage *last =  &messages.last();
+    return last;
+}
+
 decodeMessage *WsjtxFrame::scrapeAllTxt()
 {
     decodeMessage *last = nullptr;
@@ -543,65 +605,7 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
               continue;
 
           // now we need to parse for transmissions
-// 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
-
-// 200424_160138     7.048 Rx FT4    -10  0.0  817 CQ YO4NF KN44
-// 200424_160138     7.048 Rx FT4      2 -0.1 1399 AM4WARD <DL9DAJ> 73
-// 200424_160138     7.048 Rx FT4     -8  0.2 2798 CQ R9SDO LO91
-// 200424_160138     7.048 Rx FT4     -9  0.0  292 CQ ON5ZZ JO11                       ? a1
-// 200424_160145     7.048 Rx FT4      1 -0.0  504 R9SDO R2ASY +05
-
-// "? a1" is about a priori decodes and their possible validity
-
-// date-time rigfreq txrx mode s/n dt df message
-
-            QString id = "WSJTX";
-            QTime time;
-            qint32 snr;
-            float delta_time;
-            quint32 delta_frequency;
-            QString mode;
-            QString message;
-            bool low_confidence = false;    // we sent it, after all
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-            QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
-#else
-            QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
-#endif
-            if (sl[2] != "Tx")
-                continue;
-
-            //trace("Tx scraped: " + atline);
-            time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
-            //double rigfreq = sl[1].toDouble();
-            // sl[2] == Tx
-            mode = sl[3];
-            snr = 0;    //sl[4]
-            delta_time = 0.0;   //sl[5]
-            delta_frequency = sl[6].toUInt();
-
-            for (int i = 0; i < 7; i++)
-            {
-                sl.removeFirst();
-            }
-            message = sl.join(' ');
-
-
-            decodeMessage dc = decoder.decode(id, eTX, time, snr, delta_time
-                                            , delta_frequency, mode
-                                            , message, low_confidence, true);
-
-            trace(QString("WsjtxFrame::scrapeAllTxt - time %1 stage %2 %3")
-                  .arg(time.toString("HH:mm:ss")).arg(dc.getMStage(), atline));
-
-            currTxStage = dc.mstage;
-
-            messages.push_back(dc);
-            last = messages.end() - 1;
-
-            decodes_model_->add_decode ();
-            ui->decodes_table_view_->scrollToBottom (); // which normally happens in process_decodes
+            last = parse_tx_message(atline); // which normally happens in process_decodes
 
             // process_decodes(); - not wanted, we've just started transmitting; previous process_decodes should have stopped us!
         }
@@ -612,7 +616,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                 , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 so_mode)
+                                , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, quint8 so_mode
+                                , quint32 frequency_tolerance, quint32 tr_period
+                                , QString const& configuration_name, QString const& tx_message)
 {
 //    MinosParameters *mp = MinosParameters::getMinosParameters();
 //    if (!mp)
@@ -679,7 +685,16 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     if (transmitting && !currentlyTransmitting)
     {
         // try scraping the transmissions from the all.txt file
-        lastTx = scrapeAllTxt();
+        if (tx_message.isEmpty())
+        {
+            lastTx = scrapeAllTxt();
+        }
+        else
+        {
+            lastTx = parse_tx_message( tx_message);
+        }
+        decodes_model_->add_decode ();
+        ui->decodes_table_view_->scrollToBottom ();
     }
     currentlyDecoding = decoding;
     currentlyTransmitting = transmitting;
@@ -938,16 +953,18 @@ void WsjtxFrame::on_autoSelectButton_toggled(bool c)
 void WsjtxFrame::on_testButton_clicked()
 {
 
-//update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
-//        , QString const& report, QString const& tx_mode, bool tx_enabled
-//        , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
-//        , QString const& de_call, QString const& de_grid, QString const& dx_grid
-//        , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode)
+//    void WsjtxServer::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
+//                                      , QString const& report, QString const& tx_mode, bool tx_enabled
+//                                      , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
+//                                      , QString const& de_call, QString const& de_grid, QString const& dx_grid
+//                                      , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
+//                                     , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
+//                                     , QString const& configuration_name, QString const& tx_message)
 
 
             update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, true, 0, 0
                                     , "G0GJV", "IO91", "JO01"
-                                    , false, "", false, 0);
+                                    , false, "", false, 0, 0, 0, "", "");
 
 
 //void WsjtxFrame::decode_added (bool is_new, QString const& id, QTime time
@@ -1012,7 +1029,7 @@ void WsjtxFrame::on_testButton_clicked()
 
             update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
-                                    , false, "", false, 0);
+                                    , false, "", false, 0, 0, 0, "", "");
 
 }
 

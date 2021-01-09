@@ -17,6 +17,11 @@
 
 #include "moc_WsjtxMessageServer.cpp"
 
+namespace
+{
+  auto quint32_max = std::numeric_limits<quint32>::max ();
+}
+
 class MessageServer::impl
   : public QUdpSocket
 {
@@ -254,18 +259,26 @@ void MessageServer::impl::parse_message (QHostAddress const& sender, port_type s
                 QByteArray sub_mode;
                 bool fast_mode {false};
                 quint8 special_op_mode {0};
+                quint32 frequency_tolerance {quint32_max};
+                quint32 tr_period {quint32_max};
+                QByteArray configuration_name;
+                QByteArray tx_message;
                 in >> f >> mode >> dx_call >> report >> tx_mode >> tx_enabled >> transmitting >> decoding
                    >> rx_df >> tx_df >> de_call >> de_grid >> dx_grid >> watchdog_timeout >> sub_mode
-                   >> fast_mode >> special_op_mode;
+                   >> fast_mode >> special_op_mode >> frequency_tolerance >> tr_period >> configuration_name
+                   >> tx_message;
                 if (check_status (in) != Fail)
                   {
-                    Q_EMIT self_->status_update (id, f, QString::fromUtf8 (mode), QString::fromUtf8 (dx_call)
+                    Q_EMIT self_->status_update (id, f, QString::fromUtf8 (mode)
+                                                 , QString::fromUtf8 (dx_call)
                                                  , QString::fromUtf8 (report), QString::fromUtf8 (tx_mode)
                                                  , tx_enabled, transmitting, decoding, rx_df, tx_df
                                                  , QString::fromUtf8 (de_call), QString::fromUtf8 (de_grid)
                                                  , QString::fromUtf8 (dx_grid), watchdog_timeout
                                                  , QString::fromUtf8 (sub_mode), fast_mode
-                                                 , special_op_mode);
+                                                 , special_op_mode, frequency_tolerance, tr_period
+                                                 , QString::fromUtf8 (configuration_name)
+                                                 , QString::fromUtf8 (tx_message));
                   }
               }
               break;
