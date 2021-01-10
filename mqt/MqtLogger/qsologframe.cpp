@@ -1073,6 +1073,10 @@ void QSOLogFrame::getScreenEntry()
        screenContact.op1 = ui->MainOpComboBox->currentText();
        screenContact.op2 = ui->SecondOpComboBox->currentText();
    }
+   else
+   {
+       screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
+   }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
    screenContact.contactFlags &= ~NON_SCORING;

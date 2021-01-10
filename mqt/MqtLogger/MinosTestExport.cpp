@@ -372,6 +372,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    lct->contactScore.addIfDirty( st, "claimedScore", dirty );
    lct->op1.addIfDirty( st, "op1", dirty );
    lct->op2.addIfDirty( st, "op2", dirty );
+   lct->cqResponse.addIfDirty(st, "cqResponse", dirty);
 
    if ( dirty )
    {
