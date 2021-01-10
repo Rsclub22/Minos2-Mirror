@@ -79,10 +79,23 @@ void ClusterClientFilterSettings::setBandFilter(QString band, bool setting)
 
 }
 
+void ClusterClientFilterSettings::setBandType(QString band, QString bandType)
+{
+    if (bandFilterSettings.contains(band))
+    {
+        BandFilterSettings bfs = bandFilterSettings.value(band);
+        bfs.bandType = bandType;
+        bandFilterSettings.insert(band, bfs);
+    }
+}
 
-
-
-
+QString ClusterClientFilterSettings::getBandType(QString band)
+{
+    if (bandFilterSettings.contains(band))
+    {
+         return bandFilterSettings.value(band).bandType;
+    }
+}
 
 bool ClusterClientFilterSettings::getModeFilter(QString mode)
 {
@@ -198,16 +211,19 @@ ClusterClientFilterSettings& ClusterClientFilterSettings::operator= (const Clust
     callsignFilterList = ccfs.callsignFilterList;
     locatorFilterList = ccfs.locatorFilterList;
 
-
-    QMutableMapIterator<QString, BandFilterSettings> i(this->bandFilterSettings);
+    BandFilterSettings bfs;
+    QMapIterator<QString, BandFilterSettings> i(ccfs.bandFilterSettings);
     while (i.hasNext())
     {
         i.next();
-        i.value().bandFilterFlag = ccfs.bandFilterSettings.value(i.key()).bandFilterFlag;
-        i.value().distanceFilter = ccfs.bandFilterSettings.value(i.key()).distanceFilter;
-        i.value().ignoreDistanceFlag = ccfs.bandFilterSettings.value(i.key()).ignoreDistanceFlag;
-        i.value().ignoreEmptyDistanceFlag = ccfs.bandFilterSettings.value(i.key()).ignoreEmptyDistanceFlag;
-        i.value().bandType = ccfs.bandFilterSettings.value(i.key()).bandType;
+        bfs = i.value();
+        //bfs.bandFilterFlag = i.value().bandFilterFlag;
+        //bfs.distanceFilter = i.value().distanceFilter;
+        //bfs.ignoreDistanceFlag = i.value().ignoreDistanceFlag;
+        //bfs.ignoreEmptyDistanceFlag = i.value().ignoreEmptyDistanceFlag;
+       // bfs.bandType = i.value().bandType;
+        bandFilterSettings.insert(i.key(), bfs);
+
     }
 
     modeFilterFlag = ccfs.modeFilterFlag;

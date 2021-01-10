@@ -224,6 +224,18 @@ class BandFilterSettings
     }
 
 
+    BandFilterSettings& operator=(const BandFilterSettings &bfs)
+    {
+        bandFilterFlag = bfs.bandFilterFlag;
+        distanceFilter = bfs.distanceFilter;
+        ignoreDistanceFlag = bfs.ignoreDistanceFlag;
+        ignoreEmptyDistanceFlag = bfs.ignoreEmptyDistanceFlag;
+        bandType = bfs.bandType;
+
+        return *this;
+    }
+
+
     bool operator==( const BandFilterSettings& bfs ) const
     {
         if (bandFilterFlag == bfs.bandFilterFlag &&
@@ -310,6 +322,9 @@ public:
     bool getBandFilter(QString band);
     void setBandFilter(QString band, bool setting);
 
+    void setBandType(QString band, QString bandType);
+    QString getBandType(QString band);
+
     bool getModeFilter(QString mode);
     void setModeFilter(QString mode, bool setting);
 
@@ -333,6 +348,7 @@ public:
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
     QString callsignFilterList;
     QString locatorFilterList;
+
 
 private:
 
