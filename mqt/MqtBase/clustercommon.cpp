@@ -217,11 +217,6 @@ ClusterClientFilterSettings& ClusterClientFilterSettings::operator= (const Clust
     {
         i.next();
         bfs = i.value();
-        //bfs.bandFilterFlag = i.value().bandFilterFlag;
-        //bfs.distanceFilter = i.value().distanceFilter;
-        //bfs.ignoreDistanceFlag = i.value().ignoreDistanceFlag;
-        //bfs.ignoreEmptyDistanceFlag = i.value().ignoreEmptyDistanceFlag;
-       // bfs.bandType = i.value().bandType;
         bandFilterSettings.insert(i.key(), bfs);
 
     }
