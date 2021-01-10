@@ -297,277 +297,51 @@ class ClusterClientFilterSettings
 public:
     ClusterClientFilterSettings();
 
+    void initFilterSettings(const QVector<QSharedPointer<BandInfo> > &bands, const QStringList &modes);
+
+    ClusterClientFilterSettings (const ClusterClientFilterSettings& ccfs);
+    ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings &ccfs);
+    bool operator==( const ClusterClientFilterSettings& ccfs ) const;
+    bool operator!=( const ClusterClientFilterSettings& ccfs );
+
+    void setCallSignFilterList(QString cfl);
+    QString getCallSignFilterList();
+
+    bool getBandFilter(QString band);
+    void setBandFilter(QString band, bool setting);
+
+    bool getModeFilter(QString mode);
+    void setModeFilter(QString mode, bool setting);
 
 
-     void initFilterSettings(const QVector<QSharedPointer<BandInfo> > &bands, const QStringList &modes)
-     {
-        BandFilterSettings bfs;
-        bfs.bandFilterFlag = false;
-        bfs.distanceFilter = 0;
-        bfs.ignoreDistanceFlag = false;
-        bfs.ignoreEmptyDistanceFlag = false;
+    bool testDistanceFilter(int distance, QString band);
 
-        for (auto const &b: bands)
-        {
 
-            bfs.bandType = b.data()->getType();
-            bandFilterSettings.insert(b.data()->uk, bfs);
-        }
+    int getDistanceFilter(QString band);
+    void setDistanceFilter(QString band, int distance);
 
-        for (auto const &m: modes)
-        {
-            modeFilterFlag.insert(m, false);
-        }
-    }
+    bool getIgnoreDistanceFlag(QString band);
+    void setIgnoreDistanceFlag(QString band, bool state);
 
+    bool getIgnoreEmptyDistanceFlag(QString band);
+    void setIgnoreEmptyDistanceFlag(QString band, bool state);
+
+    QString packFilterList(QStringList l);
+    QStringList unpackFilterList(QString &sl);
 
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
-
-
-
     QString callsignFilterList;
     QString locatorFilterList;
+
+private:
 
 
     QMap<QString, BandFilterSettings> bandFilterSettings;  // QMap<band, filterSettings>
     QMap<QString, bool> modeFilterFlag;   // QMap<mode, flag>
 
 
-void setCallSignFilterList(QString cfl)
-{
-    callsignFilterList = cfl;
 
-}
-
-QString getCallSignFilterList()
-{
-    return callsignFilterList;
-}
-
-
-
-
-
-bool getBandFilter(QString band)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        return bandFilterSettings.value(band).bandFilterFlag;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-
-
-void setBandFilter(QString band, bool setting)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        BandFilterSettings bfs = bandFilterSettings.value(band);
-        bfs.bandFilterFlag = setting;
-        bandFilterSettings.insert(band, bfs);
-    }
-
-}
-
-
-
-
-
-
-bool getModeFilter(QString mode)
-{
-
-    if (modeFilterFlag.contains(mode))
-    {
-        return modeFilterFlag.value(mode);
-    }
-
-
-
-    return false;
-
-}
-
-void setModeFilter(QString mode, bool setting)
-{
-    modeFilterFlag.insert(mode, setting);
-}
-
-bool testDistanceFilter(int distance, QString band)
-{
-
-    if (bandFilterSettings.contains(band))
-    {
-
-        if (distance < bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    return false;
-}
-
-int getDistanceFilter(QString band)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        return bandFilterSettings.value(band).distanceFilter;
-    }
-
-    return 0;
-}
-
-
-void setDistanceFilter(QString band, int distance)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        BandFilterSettings bfs = bandFilterSettings.value(band);
-        bfs.distanceFilter = distance;
-        bandFilterSettings.insert(band, bfs);
-    }
-}
-
-
-bool getIgnoreDistanceFlag(QString band)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        return bandFilterSettings.value(band).ignoreDistanceFlag;
-    }
-
-    return false;
-}
-
-void setIgnoreDistanceFlag(QString band, bool state)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        BandFilterSettings bfs = bandFilterSettings.value(band);
-        bfs.ignoreDistanceFlag = state;
-        bandFilterSettings.insert(band, bfs);
-    }
-}
-
-
-bool getIgnoreEmptyDistanceFlag(QString band)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        return bandFilterSettings.value(band).ignoreEmptyDistanceFlag;
-    }
-
-    return false;
-}
-
-void setIgnoreEmptyDistanceFlag(QString band, bool state)
-{
-    if (bandFilterSettings.contains(band))
-    {
-        BandFilterSettings bfs = bandFilterSettings.value(band);
-        bfs.ignoreEmptyDistanceFlag = state;
-        bandFilterSettings.insert(band, bfs);
-    }
-}
-
-ClusterClientFilterSettings (const ClusterClientFilterSettings& ccfs)
-{
-    *this = ccfs;
-}
-
-
-
-ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings &ccfs)
-{
-
-    callsignFilterList = ccfs.callsignFilterList;
-    locatorFilterList = ccfs.locatorFilterList;
-
-
-    QMutableMapIterator<QString, BandFilterSettings> i(this->bandFilterSettings);
-    while (i.hasNext())
-    {
-        i.next();
-        i.value().bandFilterFlag = ccfs.bandFilterSettings.value(i.key()).bandFilterFlag;
-        i.value().distanceFilter = ccfs.bandFilterSettings.value(i.key()).distanceFilter;
-        i.value().ignoreDistanceFlag = ccfs.bandFilterSettings.value(i.key()).ignoreDistanceFlag;
-        i.value().ignoreEmptyDistanceFlag = ccfs.bandFilterSettings.value(i.key()).ignoreEmptyDistanceFlag;
-        i.value().bandType = ccfs.bandFilterSettings.value(i.key()).bandType;
-    }
-
-    modeFilterFlag = ccfs.modeFilterFlag;
-
-    return *this;
-}
-
-
-
-bool operator==( const ClusterClientFilterSettings& ccfs ) const
-{
-    if ( callsignFilterList == ccfs.callsignFilterList &&
-         locatorFilterList == ccfs.locatorFilterList &&
-         bandFilterSettings == ccfs.bandFilterSettings &&
-         modeFilterFlag == ccfs.modeFilterFlag)
-
-    {
-        return true;
-    }
-
-    return false;
-
-}
-
-bool operator!=( const ClusterClientFilterSettings& ccfs )
-{
-    return !(*this == ccfs);
-}
-
-
-
-
-QString packFilterList(QStringList l)
-{
-    QString s;
-    for (int i = 0; i < l.count(); i++)
-    {
-        if (i != l.count() - 1)
-        {
-            QString t = l[i].append(FILTER_DELIMITER);
-            s.append(t);
-        }
-        else
-        {
-            s.append(l[i]);  // last string
-        }
-    }
-    return s;
-}
-
-
-QStringList unpackFilterList(QString &sl)
-{
-    QStringList fl;
-    if (sl.isEmpty())
-    {
-        return fl;
-    }
-    else
-    {
-       fl = sl.split(FILTER_DELIMITER);
-    }
-    return fl;
-}
 
 };
 
@@ -625,156 +399,156 @@ public:
 
 
 
-void setAllModeFilters(QList<bool> mfl)
-{
-    for (int i = 0; i < mfl.count(); i++)
+    void setAllModeFilters(QList<bool> mfl)
     {
-        *modeFilters[i] = mfl[i];
-
-    }
-}
-
-
-bool testModeFilter(int mode)
-{
-    if (mode >= 0 && mode < modeFilters.count())
-    {
-        return *modeFilters[mode];
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setModeFilter(bool setting, int mode)
-{
-    *modeFilters[mode] = setting;
-}
-
-bool testDistanceFilter(int distance)
-{
-    if (distance < distanceFilter || distanceFilter == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setDistanceFilter(int distance)
-{
-    distanceFilter = distance;
-}
-
-bool getIgnoreDistanceFlag()
-{
-    return ignoreDistanceFlag;
-}
-
-void setIgnoreDistanceFlag(bool state)
-{
-    ignoreDistanceFlag = state;
-}
-
-
-bool getIgnoreEmptyDistanceFlag()
-{
-    return ignoreEmptyDistanceFlag;
-}
-
-void setIgnoreEmptyDistanceFlag(bool state)
-{
-    ignoreDistanceFlag = state;
-}
-
-BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
-{
-    *this = bcfs;
-}
-BandmapClientFilterSettings &operator= (const BandmapClientFilterSettings& bcfs)
-{
-
-    modeFilterNONE = bcfs.modeFilterNONE;
-    modeFilterCW = bcfs.modeFilterCW;
-    modeFilterUSBMODE = bcfs.modeFilterUSBMODE;
-    modeFilterFMMODE = bcfs.modeFilterFMMODE;
-    modeFilterRTTYMODE = bcfs.modeFilterRTTYMODE;
-    modeFilterPSK31MODE = bcfs.modeFilterPSK31MODE;
-    modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
-    modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
-    modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
-    distanceFilter = bcfs.distanceFilter;
-    ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
-    ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
-
-    return *this;
-}
-
-
-bool operator==( const BandmapClientFilterSettings& bcfs ) const
-{
-    if ( modeFilterNONE == bcfs.modeFilterNONE &&
-         modeFilterCW == bcfs.modeFilterCW &&
-         modeFilterUSBMODE == bcfs.modeFilterUSBMODE &&
-         modeFilterFMMODE == bcfs.modeFilterFMMODE &&
-         modeFilterRTTYMODE == bcfs.modeFilterRTTYMODE &&
-         modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
-         modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
-         modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
-         modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
-         distanceFilter == bcfs.distanceFilter &&
-         ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
-         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
-
-    {
-        return true;
-    }
-
-    return false;
-
-}
-
-
-bool operator!=( const BandmapClientFilterSettings& ccfs ) const
-{
-    return !(*this == ccfs);
-}
-
-QString packFilterList(QStringList l)
-{
-    QString s;
-    for (int i = 0; i < l.count(); i++)
-    {
-        if (i != l.count() - 1)
+        for (int i = 0; i < mfl.count(); i++)
         {
-            QString t = l[i].append(FILTER_DELIMITER);
-            s.append(t);
+            *modeFilters[i] = mfl[i];
+
+        }
+    }
+
+
+    bool testModeFilter(int mode)
+    {
+        if (mode >= 0 && mode < modeFilters.count())
+        {
+            return *modeFilters[mode];
         }
         else
         {
-            s.append(l[i]);  // last string
+            return false;
         }
     }
-    return s;
-}
 
-
-QStringList unpackFilterList(QString &sl)
-{
-    QStringList fl;
-    if (sl.isEmpty())
+    void setModeFilter(bool setting, int mode)
     {
+        *modeFilters[mode] = setting;
+    }
+
+    bool testDistanceFilter(int distance)
+    {
+        if (distance < distanceFilter || distanceFilter == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void setDistanceFilter(int distance)
+    {
+        distanceFilter = distance;
+    }
+
+    bool getIgnoreDistanceFlag()
+    {
+        return ignoreDistanceFlag;
+    }
+
+    void setIgnoreDistanceFlag(bool state)
+    {
+        ignoreDistanceFlag = state;
+    }
+
+
+    bool getIgnoreEmptyDistanceFlag()
+    {
+        return ignoreEmptyDistanceFlag;
+    }
+
+    void setIgnoreEmptyDistanceFlag(bool state)
+    {
+        ignoreDistanceFlag = state;
+    }
+
+    BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
+    {
+        *this = bcfs;
+    }
+    BandmapClientFilterSettings &operator= (const BandmapClientFilterSettings& bcfs)
+    {
+
+        modeFilterNONE = bcfs.modeFilterNONE;
+        modeFilterCW = bcfs.modeFilterCW;
+        modeFilterUSBMODE = bcfs.modeFilterUSBMODE;
+        modeFilterFMMODE = bcfs.modeFilterFMMODE;
+        modeFilterRTTYMODE = bcfs.modeFilterRTTYMODE;
+        modeFilterPSK31MODE = bcfs.modeFilterPSK31MODE;
+        modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
+        modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
+        modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
+        distanceFilter = bcfs.distanceFilter;
+        ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
+        ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
+
+        return *this;
+    }
+
+
+    bool operator==( const BandmapClientFilterSettings& bcfs ) const
+    {
+        if ( modeFilterNONE == bcfs.modeFilterNONE &&
+             modeFilterCW == bcfs.modeFilterCW &&
+             modeFilterUSBMODE == bcfs.modeFilterUSBMODE &&
+             modeFilterFMMODE == bcfs.modeFilterFMMODE &&
+             modeFilterRTTYMODE == bcfs.modeFilterRTTYMODE &&
+             modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
+             modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
+             modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
+             modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
+             distanceFilter == bcfs.distanceFilter &&
+             ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
+             ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
+
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    bool operator!=( const BandmapClientFilterSettings& ccfs ) const
+    {
+        return !(*this == ccfs);
+    }
+
+    QString packFilterList(QStringList l)
+    {
+        QString s;
+        for (int i = 0; i < l.count(); i++)
+        {
+            if (i != l.count() - 1)
+            {
+                QString t = l[i].append(FILTER_DELIMITER);
+                s.append(t);
+            }
+            else
+            {
+                s.append(l[i]);  // last string
+            }
+        }
+        return s;
+    }
+
+
+    QStringList unpackFilterList(QString &sl)
+    {
+        QStringList fl;
+        if (sl.isEmpty())
+        {
+            return fl;
+        }
+        else
+        {
+           fl = sl.split(FILTER_DELIMITER);
+        }
         return fl;
     }
-    else
-    {
-       fl = sl.split(FILTER_DELIMITER);
-    }
-    return fl;
-}
 
 };
 
@@ -790,7 +564,10 @@ class DefaultDistanceIniName
 {
 
 public:
-    DefaultDistanceIniName();
+    DefaultDistanceIniName()
+    {
+
+    };
 
     QString defaultDistanceName;
     QString bandType;
@@ -801,9 +578,12 @@ class ClusterFilterDefaultDistIniName
 {
 public:
 
-    ClusterFilterDefaultDistIniName();
+    ClusterFilterDefaultDistIniName()
+    {
 
-    DefaultDistanceIniName getDefaultDistIniName(const QString band){return defaultDistanceIniName.value(band);}
+    };
+
+    DefaultDistanceIniName getDefaultDistIniName(const QString band){return defaultDistanceIniNames.value(band);}
 
     void initClusterFilterIdAndNames(const QVector<QSharedPointer<BandInfo> > &bands)
     {
@@ -814,14 +594,14 @@ public:
 
             ddin.defaultDistanceName = defTxt.append(b.data()->uk.remove("\x20").replace(".", "_"));
             ddin.bandType = b.data()->getType();
-            defaultDistanceIniName.insert(b.data()->uk, ddin);
+            defaultDistanceIniNames.insert(b.data()->uk, ddin);
         }
     }
 
 private:
 
 
-    QMap <QString, DefaultDistanceIniName> defaultDistanceIniName;
+    QMap <QString, DefaultDistanceIniName> defaultDistanceIniNames;
 
 
 

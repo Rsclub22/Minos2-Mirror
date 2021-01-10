@@ -178,6 +178,10 @@ private:
     void clearMWaveBandCheckBoxes();
     void setMWaveBandCheckBoxes();
     void clearHFBandCheckBoxes();
+    void setDefDistances(QString bandType);
+    void setEmptyDistCheckBox(QString bandType, bool state);
+    void setIgnoreDistCheckBox(QString bandType, bool state);
+    void setDistanceFields(QString band, bool state);
 private slots:
 
     void vhfButtonSelected();
@@ -212,16 +216,16 @@ private slots:
     void onVhfSetDefDistPbClicked();
     void onMwSetDefDistPbClicked();
 
-    void onIgnoreDistanceChecked(int);
-    void onDistanceEditingFinished(int);
-    void onIgnoreEmptyDistanceChecked(int idx);
+    void onIgnoreDistanceChecked(QCheckBox *ignoreDistChkBox);
+    void onDistanceEditingFinished(QLineEdit *distanceLineEdit);
+    void onIgnoreEmptyDistanceChecked(QCheckBox* ignoreEmptyCheckBox);
 
     void onVhfSetAllEmptyPbClicked();
 
 
     void onVhfClearAllEmptyDistPbClicked();
 
-    void onBandChkBoxChecked(int idx);
+    void onBandChkBoxChecked(QCheckBox * bandChkBox);
     void onFilterTabIndexChanged(int idx);
     void onDistanceFilterTabIndexChanged(int idx);
 

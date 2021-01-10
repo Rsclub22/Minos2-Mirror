@@ -101,19 +101,21 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     for (int i = 0; i < allBandChkBoxList.count(); i++)
     {
-        connect(allBandChkBoxList[i], &QCheckBox::clicked, [=](){onBandChkBoxChecked(i);});
+        connect(allBandChkBoxList[i], &QCheckBox::clicked, this, [=](){onBandChkBoxChecked(allBandChkBoxList[i]);});
     }
 
 
     for (auto &b: bands)
     {
-        if (filterSettings.getBandFilter(b.data()->uk))
+        QString band = b.data()->uk;
+
+        if (filterSettings.getBandFilter(band))
         {
-            bandCheckBoxes.value(b.data()->uk).bandChkBox->setCheckState(Qt::Checked);
+            bandCheckBoxes.value(band).bandChkBox->setCheckState(Qt::Checked);
         }
         else
         {
-           bandCheckBoxes.value(b.data()->uk).bandChkBox->setCheckState(Qt::Unchecked);
+           bandCheckBoxes.value(band).bandChkBox->setCheckState(Qt::Unchecked);
         }
     }
 
@@ -126,15 +128,15 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         modeCheckBoxes.insert(clustermodes[i], modeChkBoxList[i]);
     }
 
-    for (auto &b:clustermodes)
+    for (auto &m:clustermodes)
     {
-        if (filterSettings.getModeFilter(b))
+        if (filterSettings.getModeFilter(m))
         {
-            modeCheckBoxes.value(b)->setCheckState(Qt::Checked);
+            modeCheckBoxes.value(m)->setCheckState(Qt::Checked);
         }
         else
         {
-            modeCheckBoxes.value(b)->setCheckState(Qt::Unchecked);
+            modeCheckBoxes.value(m)->setCheckState(Qt::Unchecked);
         }
     }
 
@@ -178,38 +180,40 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     for (auto &b: bands)
     {
 
-        bandDistanceWidgets.value(b.data()->uk).bandLineEdit->setText(QString::number(filterSettings.getDistanceFilter(b.data()->uk)));
+        QString band = b.data()->uk;
 
-        if (filterSettings.getIgnoreDistanceFlag(b.data()->uk))
+        bandDistanceWidgets.value(band).bandLineEdit->setText(QString::number(filterSettings.getDistanceFilter(band)));
+
+        if (filterSettings.getIgnoreDistanceFlag(band))
         {
-            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
         }
         else
         {
-            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
         }
 
-        if (filterSettings.getIgnoreEmptyDistanceFlag(b.data()->uk))
+        if (filterSettings.getIgnoreEmptyDistanceFlag(band))
         {
-           bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
         }
         else
         {
-           bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
         }
 
     }
 
     for (int i = 0; i < allDistanceLineEditsList.count(); i++)
     {
-        connect(allDistanceLineEditsList[i], &QLineEdit::editingFinished,  [=](){onDistanceEditingFinished(i);});
+        connect(allDistanceLineEditsList[i], &QLineEdit::editingFinished,  this, [=](){onDistanceEditingFinished(allDistanceLineEditsList[i]);});
     }
 
 
 
     for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
     {
-        connect(allIgnoreDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreDistanceChecked(i);});
+        connect(allIgnoreDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreDistanceChecked(allIgnoreDistanceChkBoxList[i]);});
     }
 
 
@@ -217,7 +221,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     for (int i = 0; i < allIgnoreEmptyDistanceChkBoxList.count(); i++)
     {
-        connect(allIgnoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, [=](){onIgnoreEmptyDistanceChecked(i);});
+        connect(allIgnoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreEmptyDistanceChecked(allIgnoreEmptyDistanceChkBoxList[i]);});
     }
 
 
@@ -278,7 +282,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){filtersAccepted();});
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, [=](){filtersRejected();});
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){filtersRejected();});
 
     connect(ui->ClusterClientFilterTab, &QTabWidget::currentChanged,  this, [=](int index){onFilterTabIndexChanged(index);});
     connect(ui->filterDistancesTab,  &QTabWidget::currentChanged,  this, [=](int index){onDistanceFilterTabIndexChanged(index);});
@@ -338,29 +342,32 @@ void ClusterClientFilterDialog::filtersAccepted()
     bool ignoreEmptyDistanceChangedFlag = false;
 
     // check bandfilter changed
-    for (int i = 0; i < allBandChkBoxList.count(); i++)
+    for (auto &b: bands)
     {
-        if (*filterSettings.allBandFilters[i] != allBandChkBoxList[i]->isChecked())
+        QString band = b.data()->uk;
+
+        if (filterSettings.getBandFilter(band) != bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
-            *filterSettings.allBandFilters[i] = allBandChkBoxList[i]->isChecked();
-            trace(QString("BandFilter Changed = %1 , State = %2, ContestUuid = %3").arg(i).arg(allBandChkBoxList[i]->isChecked()  ? "True" : "False").arg(contestUuid));
+            filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+            trace(QString("BandFilter Changed = %1 , State = %2, ContestUuid = %3").arg(band).arg(bandCheckBoxes.value(band).bandChkBox->isChecked()  ? "True" : "False").arg(contestUuid));
 
             bandFilterChangedFlag = true;
         }
-
     }
 
+
     //check modefilter changed
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m: clustermodes)
     {
-        if (*filterSettings.modeFilters[i] != modeChkBoxList[i]->isChecked())
+        if (filterSettings.getModeFilter(m) != modeCheckBoxes.value(m)->isChecked())
         {
-            *filterSettings.modeFilters[i] = modeChkBoxList[i]->isChecked();
-            trace(QString("ModeFilter Changed = %1 , State = %2, ContestUuid = %3").arg(i).arg(modeChkBoxList[i]->isChecked()  ? "True" : "False").arg(contestUuid));
+            filterSettings.setModeFilter(m, modeCheckBoxes.value(m)->isChecked());
+            trace(QString("ModeFilter Changed = %1 , State = %2, ContestUuid = %3").arg(m).arg(modeCheckBoxes.value(m)->isChecked()  ? "True" : "False").arg(contestUuid));
 
             modeFilterChangedFlag = true;
         }
     }
+
 
     if (callsignFiltersChanged())
     {
@@ -378,15 +385,15 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (int i = 0; i < allDistanceLineEditsList.count(); i++)
+    for (auto &b: bands)
     {
-        if (*filterSettings.allBandFilters[i])
+        QString band = b.data()->uk;
+        if (filterSettings.getBandFilter(band))
         {
-
-            if (allDistanceLineEditsList[i]->text() != QString::number(*filterSettings.allDistanceFilters[i]))
+            if(bandDistanceWidgets.value(band).bandLineEdit->text() != QString::number(filterSettings.getDistanceFilter(band)))
             {
-                *filterSettings.allDistanceFilters[i] = allDistanceLineEditsList[i]->text().trimmed().toInt();
-                trace(QString("Distance Filter Changed Band = %1 , Distance = %2, ContestUuid = %3").arg(i).arg(allDistanceLineEditsList[i]->text()).arg(contestUuid));
+                filterSettings.setDistanceFilter(band, bandDistanceWidgets.value(band).bandLineEdit->text().toInt());
+                trace(QString("Distance Filter Changed Band = %1 , Distance = %2, ContestUuid = %3").arg(band).arg(bandDistanceWidgets.value(band).bandLineEdit->text()).arg(contestUuid));
 
                 distanceFilterChangedFlag = true;
             }
@@ -394,39 +401,39 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-
-    for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
+    for (auto &b:bands)
     {
-        if (*filterSettings.allBandFilters[i])
+        QString band = b.data()->uk;
+
+        if (filterSettings.getBandFilter(band))
         {
-            if (allIgnoreDistanceChkBoxList[i]->isChecked() != *filterSettings.allIgnoreDistanceFlags[i])
+            if(bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked() != filterSettings.getIgnoreDistanceFlag(band))
             {
-                *filterSettings.allIgnoreDistanceFlags[i] = allIgnoreDistanceChkBoxList[i]->isChecked();
-                trace(QString("Ignore Distance Checked Band = %1 , State = %2, ContestUuid = %3").arg(i).arg(allIgnoreDistanceChkBoxList[i]->isChecked()  ? "True" : "False").arg(contestUuid));
+                filterSettings.setIgnoreDistanceFlag(band, bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked());
+                trace(QString("Ignore Distance Checked Band = %1 , State = %2, ContestUuid = %3").arg(band).arg(bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->isChecked()  ? "True" : "False").arg(contestUuid));
 
                 ignoreDistanceChangedFlag = true;
             }
-
         }
-
     }
 
 
-
-    for (int i = 0; i < allIgnoreEmptyDistanceChkBoxList.count();i++)
+    for (auto &b:bands)
     {
-        if (*filterSettings.allBandFilters[i])
+        QString band = b.data()->uk;
+
+        if (filterSettings.getBandFilter(band))
         {
-            if (allIgnoreEmptyDistanceChkBoxList[i]->isChecked() != *filterSettings.allIgnoreEmptyDistanceFlags[i])
+            if(bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->isChecked() != filterSettings.getIgnoreEmptyDistanceFlag(band))
             {
-                *filterSettings.allIgnoreEmptyDistanceFlags[i] = allIgnoreEmptyDistanceChkBoxList[i]->isChecked();
-                trace(QString("Ignore Empty Distance Checked Band = %1 , State = %2, ContestUuid = %3").arg(i).arg(allIgnoreEmptyDistanceChkBoxList[i]->isChecked()  ? "True" : "False").arg(contestUuid));
+                filterSettings.setIgnoreEmptyDistanceFlag(band, bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->isChecked());
+                trace(QString("Ignore Empty Distance Checked Band = %1 , State = %2, ContestUuid = %3").arg(band, bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->isChecked()  ? "True" : "False", contestUuid));
 
                 ignoreEmptyDistanceChangedFlag = true;
             }
-
         }
     }
+
 
 
     if (bandFilterChangedFlag || modeFilterChangedFlag
@@ -589,7 +596,7 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
     else
     {
         // set hf tab "invisible"
-        QString n = ui->filterDistancesTab->tabText(0);
+        //QString n = ui->filterDistancesTab->tabText(0);
         if (ui->filterDistancesTab->tabText(0) == hfTabName)
         {
             ui->filterDistancesTab->removeTab(0);
@@ -734,13 +741,15 @@ void ClusterClientFilterDialog::restoreBands()
 
     for (auto &b: bands)
     {
-        if (filterSettings.getBandFilter(b.data()->uk))
+        QString band = b.data()->uk;
+
+        if (filterSettings.getBandFilter(band))
         {
-           bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(Qt::Checked);
+           bandCheckBoxes.value(band).bandChkBox->setChecked(Qt::Checked);
         }
         else
         {
-           bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(Qt::Unchecked);
+           bandCheckBoxes.value(band).bandChkBox->setChecked(Qt::Unchecked);
         }
 
     }
@@ -1259,38 +1268,46 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
 
 void ClusterClientFilterDialog::enableDistanceFields()
 {
-    for (int i = 0; (i < allBandChkBoxList.count() && i < allDistanceLineEditsList.count()); i++)
+
+    for (auto &b: bands)
     {
-        if (allBandChkBoxList[i]->checkState() == Qt::Checked)
+        QString band = b.data()->uk;
+
+        if (bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
-            allDistanceLineEditsList[i]->setEnabled(true);
-            allIgnoreDistanceChkBoxList[i]->setEnabled(true);
-            allIgnoreEmptyDistanceChkBoxList[i]->setEnabled(true);
-            allDistanceLabelsList[i]->setEnabled(true);
+            setDistanceFields(band, true);
         }
         else
         {
-            allDistanceLineEditsList[i]->setEnabled(false);
-            allIgnoreDistanceChkBoxList[i]->setEnabled(false);
-            allIgnoreEmptyDistanceChkBoxList[i]->setEnabled(false);
-            allDistanceLabelsList[i]->setEnabled(false);
+           setDistanceFields(band, false);
         }
     }
 
+
+
 }
 
-
-void ClusterClientFilterDialog::onBandChkBoxChecked(int idx)
+void ClusterClientFilterDialog::setDistanceFields(QString band, bool state)
 {
-    Q_UNUSED(idx)
+    bandDistanceWidgets.value(band).bandLabel->setEnabled(state);
+    bandDistanceWidgets.value(band).bandLineEdit->setEnabled(state);
+    bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setEnabled(state);
+    bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->setEnabled(state);
+
+}
+
+void ClusterClientFilterDialog::onBandChkBoxChecked(QCheckBox * bandChkBox)
+{
+    Q_UNUSED(bandChkBox)
     enableDistanceFields();
 
 }
 
 
 
-void ClusterClientFilterDialog::onDistanceEditingFinished(int idx)
+void ClusterClientFilterDialog::onDistanceEditingFinished(QLineEdit *distanceLineEdit)
 {
+/*
     bool ok;
     int distance = 0;
     if(!allDistanceLineEditsList[idx]->text().isEmpty())
@@ -1309,9 +1326,10 @@ void ClusterClientFilterDialog::onDistanceEditingFinished(int idx)
                                       QMessageBox::NoButton, QMessageBox::NoButton);
         }
     }
+*/
 }
 
-void ClusterClientFilterDialog::onIgnoreDistanceChecked(int idx)
+void ClusterClientFilterDialog::onIgnoreDistanceChecked(QCheckBox *ignoreDistChkBox)
 {
     //if (ignoreDistanceChkBoxList[idx]->isChecked() != *filterSettings.ignoreDistanceFlags[idx])
     //{
@@ -1320,7 +1338,7 @@ void ClusterClientFilterDialog::onIgnoreDistanceChecked(int idx)
     //}
 }
 
-void ClusterClientFilterDialog::onIgnoreEmptyDistanceChecked(int idx)
+void ClusterClientFilterDialog::onIgnoreEmptyDistanceChecked(QCheckBox* ignoreEmptyCheckBox)
 {
     //if (ignoreEmptyDistanceChkBoxList[idx]->isChecked() != *filterSettings.ignoreEmptyDistanceFlags[idx])
     //{
@@ -1331,177 +1349,122 @@ void ClusterClientFilterDialog::onIgnoreEmptyDistanceChecked(int idx)
 
 void ClusterClientFilterDialog::onHfSetDefDistPbClicked()
 {
-    ClusterFilterIdAndNames clustId;
-    for (int i = 0; i < clustId.getHfDefaultFilterNameCount(); i++)
-    {
-        if (hfBandChkBoxList[i]->isChecked())
-        {
-            int hfDefault = 0;
-            TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getHfDefaultFilterId(i), hfDefault );
-            hfDistanceLineEditsList[i]->setText(QString::number(hfDefault));
 
-        }
-    }
+    setDefDistances(HF_BANDTYPE);
 
 }
-
-
 void ClusterClientFilterDialog::onVhfSetDefDistPbClicked()
 {
-    ClusterFilterIdAndNames clustId;
-    for (int i = 0; i < clustId.getVhfDefaultFilterNameCount(); i++)
-    {
-        if (vhfBandChkBoxList[i]->isChecked())
-        {
-            int vhfDefault = 0;
-            TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getVhfDefaultFilterId(i), vhfDefault );
-            vhfDistanceLineEditsList[i]->setText(QString::number(vhfDefault));
-
-        }
-    }
-
+    setDefDistances(VHF_BANDTYPE);
 }
-
-
-
-
 
 void ClusterClientFilterDialog::onMwSetDefDistPbClicked()
 {
-    ClusterFilterIdAndNames clustId;
-    for (int i = 0; i < clustId.getMwDefaultFilterNameCount(); i++)
+    setDefDistances(MW_BANDTYPE);
+}
+
+void ClusterClientFilterDialog::setDefDistances(QString bandType)
+{
+    QSettings settings(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    settings.beginGroup("Default Distance");
+
+    ClusterFilterDefaultDistIniName defaultDistIniNames;
+    defaultDistIniNames.initClusterFilterIdAndNames(bands);
+
+
+
+    for (auto &b:bands)
     {
-        if (mwBandChkBoxList[i]->isChecked())
+        QString band = b.data()->uk;
+
+        if (b->getType() == bandType)
         {
-            int mwDefault = 0;
-            TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getMwDefaultFilterId(i), mwDefault );
-            mwDistanceLineEditsList[i]->setText(QString::number(mwDefault));
+            if (bandCheckBoxes.value(band).bandChkBox->isChecked())
+            {
+                int hfDefault = settings.value(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt();
+                bandDistanceWidgets.value(band).bandLineEdit->setText(QString::number(hfDefault));
+            }
 
         }
     }
+
+    settings.endGroup();
+
 }
+
 
 
 
 void ClusterClientFilterDialog::onHfSetAllIgnorePbClicked()
 {
-    for (int i = 0; i < hfIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (hfBandChkBoxList[i]->isChecked())
-        {
-            hfIgnoreDistanceChkBoxList[i]->setChecked(true);
-        }
-
-    }
+    setIgnoreDistCheckBox(HF_BANDTYPE, true);
 }
-
-
 
 
 void ClusterClientFilterDialog::onVhfSetAllIgnorePbClicked()
 {
-    for (int i = 0; i < vhfIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (vhfBandChkBoxList[i]->isChecked())
-        {
-            vhfIgnoreDistanceChkBoxList[i]->setChecked(true);
-        }
-
-    }
+    setIgnoreDistCheckBox(VHF_BANDTYPE, true);
 }
 
 void ClusterClientFilterDialog::onMwSetAllIgnorePbClicked()
 {
-    for (int i = 0; i < mwIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (mwBandChkBoxList[i]->isChecked())
-        {
-            mwIgnoreDistanceChkBoxList[i]->setChecked(true);
-        }
-    }
+    setIgnoreDistCheckBox(MW_BANDTYPE, true);
 }
 
 
 void ClusterClientFilterDialog::onHfClearAllIgnorePbClicked()
 {
-    for (int i = 0; i < hfIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (hfBandChkBoxList[i]->isChecked())
-        {
-            hfIgnoreDistanceChkBoxList[i]->setChecked(false);
-        }
-    }
+    setIgnoreDistCheckBox(VHF_BANDTYPE, false);
 }
 
 
 void ClusterClientFilterDialog::onVhfClearAllIgnorePbClicked()
 {
-    for (int i = 0; i < vhfIgnoreDistanceChkBoxList.count(); i++)
-    {
-        if (vhfBandChkBoxList[i]->isChecked())
-        {
-            vhfIgnoreDistanceChkBoxList[i]->setChecked(false);
-        }
-    }
+    setIgnoreDistCheckBox(VHF_BANDTYPE, false);
 }
 
 void ClusterClientFilterDialog::onMwClearAllIgnorePbClicked()
 {
-    for (int i = 4; i < mwIgnoreDistanceChkBoxList.count(); i++)
+    setIgnoreDistCheckBox(MW_BANDTYPE, false);
+}
+
+void ClusterClientFilterDialog::setIgnoreDistCheckBox(QString bandType, bool state)
+{
+    for (auto &b:bands)
     {
-        if (mwBandChkBoxList[i]->isChecked())
+        QString band = b.data()->uk;
+
+        if(b->getType() == bandType)
         {
-            mwIgnoreDistanceChkBoxList[i]->setChecked(false);
+            if (bandCheckBoxes.value(band).bandChkBox->isChecked())
+            {
+               bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(state);
+            }
         }
+
     }
 }
 
 
 void ClusterClientFilterDialog::onHfSetAllEmptyPbClicked()
 {
-    for (int i = 0; i < hfIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (hfBandChkBoxList[i]->isChecked())
-        {
-            hfIgnoreEmptyDistanceChkBoxList[i]->setChecked(true);
-        }
-
-    }
+    setEmptyDistCheckBox(VHF_BANDTYPE, true);
 }
 
 
 void ClusterClientFilterDialog::onVhfSetAllEmptyPbClicked()
 {
-    for (int i = 0; i < vhfIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (vhfBandChkBoxList[i]->isChecked())
-        {
-            vhfIgnoreEmptyDistanceChkBoxList[i]->setChecked(true);
-        }
-
-    }
+    setEmptyDistCheckBox(VHF_BANDTYPE, true);
 }
 
 void ClusterClientFilterDialog::onMwSetAllEmptyPbClicked()
 {
-    for (int i = 4; i < mwIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (mwBandChkBoxList[i]->isChecked())
-        {
-            mwIgnoreEmptyDistanceChkBoxList[i]->setChecked(true);
-        }
-    }
+    setEmptyDistCheckBox(MW_BANDTYPE, true);
 }
 
 void ClusterClientFilterDialog::onHfClearAllEmptyDistPbClicked()
 {
-    for (int i = 0; i < hfIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (hfBandChkBoxList[i]->isChecked())
-        {
-            hfIgnoreEmptyDistanceChkBoxList[i]->setChecked(false);
-        }
-    }
+    setEmptyDistCheckBox(HF_BANDTYPE, false);
 }
 
 
@@ -1509,23 +1472,26 @@ void ClusterClientFilterDialog::onHfClearAllEmptyDistPbClicked()
 
 void ClusterClientFilterDialog::onVhfClearAllEmptyDistPbClicked()
 {
-    for (int i = 0; i < vhfIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        if (vhfBandChkBoxList[i]->isChecked())
-        {
-            vhfIgnoreEmptyDistanceChkBoxList[i]->setChecked(false);
-        }
-    }
+    setEmptyDistCheckBox(VHF_BANDTYPE, false);
 }
 
 void ClusterClientFilterDialog::onMwClearAllEmptyDistPbClicked()
 {
-    for (int i = 4; i < mwIgnoreEmptyDistanceChkBoxList.count(); i++)
+    setEmptyDistCheckBox(MW_BANDTYPE, false);
+}
+
+void ClusterClientFilterDialog::setEmptyDistCheckBox(QString bandType, bool state)
+{
+    for (auto &b:bands)
     {
-        if (mwBandChkBoxList[i]->isChecked())
+        if(b->getType() == bandType)
         {
-            mwIgnoreEmptyDistanceChkBoxList[i]->setChecked(false);
+            if (bandCheckBoxes.value(b.data()->uk).bandChkBox->isChecked())
+            {
+               bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreEmptyCheckBox->setChecked(state);
+            }
         }
+
     }
 }
 

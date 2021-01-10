@@ -394,90 +394,90 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().callsignFilterList, "callsignList");
         st->addMember(clusterFilter.getValue().locatorFilterList, "locatorList");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1.8 MHz").bandFilterFlag, "bandFilter1_8Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1.8 MHz").distanceFilter, "distanceFilter1_8MHz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1.8 MHz").ignoreDistanceFlag, "ignoreDistanceFlag1_8MHz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1.8 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag1_8MHz");
+        st->addMember(clusterFilter.getValue().getBandFilter("1.8 MHz"), "bandFilter1_8Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("1.8 MHz"), "distanceFilter1_8MHz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("1.8 MHz"), "ignoreDistanceFlag1_8MHz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("1.8 MHz"), "ignoreEmptyDistanceFlag1_8MHz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.5 MHz").bandFilterFlag, "bandFilter3_5Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.5 MHz").distanceFilter, "distanceFilter3_5Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.5 MHz").ignoreDistanceFlag, "ignoreDistanceFlag3_5Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.5 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag3_5Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("3.5 MHz"), "bandFilter3_5Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("3.5 MHz"), "distanceFilter3_5Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("3.5 MHz"), "ignoreDistanceFlag3_5Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("3.5 MHz"), "ignoreEmptyDistanceFlag3_5Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("7 MHz").bandFilterFlag, "bandFilter7Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("7 MHz").distanceFilter, "distanceFilter7Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("7 MHz").ignoreDistanceFlag, "ignoreDistanceFlag7Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("7 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag7Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("7 MHz"), "bandFilter7Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("7 MHz"), "distanceFilter7Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("7 MHz"), "ignoreDistanceFlag7Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("7 MHz"), "ignoreEmptyDistanceFlag7Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("14 MHz").bandFilterFlag, "bandFilter14Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("14 MHz").distanceFilter, "distanceFilter14Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("14 MHz").ignoreDistanceFlag, "ignoreDistanceFlag14Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("14 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag14Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("14 MHz"), "bandFilter14Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("14 MHz"), "distanceFilter14Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("14 MHz"), "ignoreDistanceFlag14Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("14 MHz"), "ignoreEmptyDistanceFlag14Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("21 MHz").bandFilterFlag, "bandFilter21Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("21 MHz").distanceFilter, "distanceFilter21Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("21 MHz").ignoreDistanceFlag, "ignoreDistanceFlag21Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("21 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag21Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("21 MHz"), "bandFilter21Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("21 MHz"), "distanceFilter21Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("21 MHz"), "ignoreDistanceFlag21Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("21 MHz"), "ignoreEmptyDistanceFlag21Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("28 MHz").bandFilterFlag, "bandFilter28Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("28 MHz").distanceFilter, "distanceFilter28Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("28 MHz").ignoreDistanceFlag, "ignoreDistanceFlag28Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("28 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag28Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("28 MHz"), "bandFilter28Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("28 MHz"), "distanceFilter28Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("28 MHz"), "ignoreDistanceFlag28Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("28 MHz"), "ignoreEmptyDistanceFlag28Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("50 MHz").bandFilterFlag, "bandFilter50Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("50 MHz").distanceFilter, "distanceFilter50Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("50 MHz").ignoreDistanceFlag, "ignoreDistanceFlag50Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("50 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag50Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("50 MHz"), "bandFilter50Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("50 MHz"), "distanceFilter50Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("50 MHz"), "ignoreDistanceFlag50Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("50 MHz"), "ignoreEmptyDistanceFlag50Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("70 MHz").bandFilterFlag, "bandFilter70Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("70 MHz").distanceFilter, "distanceFilter70Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("70 MHz").ignoreDistanceFlag, "ignoreDistanceFlag70Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("70 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag70Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("70 MHz"), "bandFilter70Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("70 MHz"), "distanceFilter70Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("70 MHz"), "ignoreDistanceFlag70Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("70 MHz"), "ignoreEmptyDistanceFlag70Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("144 MHz").bandFilterFlag, "bandFilter144Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("144 MHz").distanceFilter, "distanceFilter144Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("144 MHz").ignoreDistanceFlag, "ignoreDistanceFlag144Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("144 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag144Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("144 MHz"), "bandFilter144Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("144 MHz"), "distanceFilter144Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("144 MHz"), "ignoreDistanceFlag144Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("144 MHz"), "ignoreEmptyDistanceFlag144Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("432 MHz").bandFilterFlag, "bandFilter432Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("432 MHz").distanceFilter, "distanceFilter432Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("432 MHz").ignoreDistanceFlag, "ignoreDistanceFlag432Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("432 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag432Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("432 MHz"), "bandFilter432Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("432 MHz"), "distanceFilter432Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("432 MHz"), "ignoreDistanceFlag432Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("432 MHz"), "ignoreEmptyDistanceFlag432Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1296 MHz").bandFilterFlag, "bandFilter1296Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1296 MHz").distanceFilter, "distanceFilter1296Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1296 MHz").ignoreDistanceFlag, "ignoreDistanceFlag1296Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("1296 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag1296Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("1296 MHz"), "bandFilter1296Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("1296 MHz"), "distanceFilter1296Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("1296 MHz"), "ignoreDistanceFlag1296Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("1296 MHz"), "ignoreEmptyDistanceFlag1296Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("2300 MHz").bandFilterFlag, "bandFilter2300Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("2300 MHz").distanceFilter, "distanceFilter2300Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("2300 MHz").ignoreDistanceFlag, "ignoreDistanceFlag2300Mhz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("2300 MHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag2300Mhz");
+        st->addMember(clusterFilter.getValue().getBandFilter("2300 MHz"), "bandFilter2300Mhz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("2300 MHz"), "distanceFilter2300Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("2300 MHz"), "ignoreDistanceFlag2300Mhz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("2300 MHz"), "ignoreEmptyDistanceFlag2300Mhz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.4 GHz").bandFilterFlag, "bandFilter3_4Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.4 GHz").distanceFilter, "distanceFilter3_4Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.4 GHz").ignoreDistanceFlag, "ignoreDistanceFlag3_4Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("3.4 GHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag3_4Ghz");
+        st->addMember(clusterFilter.getValue().getBandFilter("3.4 GHz"), "bandFilter3_4Ghz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("3.4 GHz"), "distanceFilter3_4Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("3.4 GHz"), "ignoreDistanceFlag3_4Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("3.4 GHz"), "ignoreEmptyDistanceFlag3_4Ghz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("5.6 GHz").bandFilterFlag, "bandFilter5_6Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("5.6 GHz").distanceFilter, "distanceFilter5_6Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("5.6 GHz").ignoreDistanceFlag, "ignoreDistanceFlag5_6Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("5.6 GHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag5_6Ghz");
+        st->addMember(clusterFilter.getValue().getBandFilter("5.6 GHz"), "bandFilter5_6Ghz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("5.6 GHz"), "distanceFilter5_6Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("5.6 GHz"), "ignoreDistanceFlag5_6Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("5.6 GHz"), "ignoreEmptyDistanceFlag5_6Ghz");
 
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("10 GHz").bandFilterFlag, "bandFilter10Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("10 GHz").distanceFilter, "distanceFilter10Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("10 GHz").ignoreDistanceFlag, "ignoreDistanceFlag10Ghz");
-        st->addMember(clusterFilter.getValue().bandFilterSettings.value("10 GHz").ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag10Ghz");
+        st->addMember(clusterFilter.getValue().getBandFilter("10 GHz"), "bandFilter10Ghz");
+        st->addMember(clusterFilter.getValue().getDistanceFilter("10 GHz"), "distanceFilter10Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreDistanceFlag("10 GHz"), "ignoreDistanceFlag10Ghz");
+        st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("10 GHz"), "ignoreEmptyDistanceFlag10Ghz");
 
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("NONE"), "modeFilterNONE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("CW"), "modeFilterCW");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("USB"), "modeFilterUSBMODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("FM"), "modeFilterFMMODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("RTTY"), "modeFilterRTTYMODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("PSK31"), "modeFilterPSK31MODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("FT8"), "modeFilterFT8MODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("MSK144"), "modeFilterMSK144MODE");
-        st->addMember(clusterFilter.getValue().modeFilterFlag.value("JT65"), "modeFilterJT65MODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONE");
+        st->addMember(clusterFilter.getValue().getModeFilter("CW"), "modeFilterCW");
+        st->addMember(clusterFilter.getValue().getModeFilter("USB"), "modeFilterUSBMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("FM"), "modeFilterFMMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("RTTY"), "modeFilterRTTYMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("JT65"), "modeFilterJT65MODE");
 
 
         sendRequest(expfd, "MinosClusterFilter", st);

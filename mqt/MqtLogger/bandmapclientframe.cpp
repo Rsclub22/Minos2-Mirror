@@ -762,10 +762,20 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
             {
 
-                ClusterFilterIdAndNames clustId;
-                TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
+                //ClusterFilterIdAndNames clustId;
+                //TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
 
-                //config.endGroup();
+
+
+                ClusterFilterDefaultDistIniName defaultDistIniNames;
+                defaultDistIniNames.initClusterFilterIdAndNames(bands);
+
+                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                config.beginGroup("Default Distance");
+
+                filterSettings.setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
+
+                config.endGroup();
 
                 //set current mode
                 if (contestModeStr == "MGM")       //  have mode settings been saved before?
@@ -773,7 +783,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
                     for (int m = 4; m < clusterModes.count(); m++)
                     {
                         //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
-                        *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
+                        filterSettings.setModeFilter(true, m); // set all the mgm modes in filter
 
                     }
                 }
@@ -781,7 +791,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
                 {
                     // no, save current mode filter for this contest
                     //filterSetup->setModeFilter(true, contestMode);
-                    *filterSettings.modeFilters[contestMode] = true;
+                    filterSettings.setModeFilter(true, contestMode);
                 }
 
                 //filterSetup->saveBandmapFilterToContest();

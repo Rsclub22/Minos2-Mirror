@@ -1212,7 +1212,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
-        ClusterFilterIdAndNames clustId;
+
 
         if (contestBand != -1)
         {
@@ -1221,15 +1221,11 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 // no, save current band filter for this contest
                 filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
 
-                for (auto m:mgmModes)
-                {
-
-                }
 
                 if (contestModeStr == "MGM")       //  have mode settings been saved before?
                 {
 
-                    for (auto m:mgmModes)
+                    for (auto &m:mgmModes)
                     {
                         filterSettings.setModeFilter(m, true);
                     }
@@ -1242,17 +1238,21 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                     filterSettings.setModeFilter(contestModeStr, true);
                 }
 
-                //QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                //config.beginGroup("distanceFilter");
+                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+                config.beginGroup("distanceFilter");
 
-                for (int i = 0; i < filterSettings.allDistanceFilters.count(); i++)
+                ClusterFilterDefaultDistIniName defaultDistIniNames;
+                defaultDistIniNames.initClusterFilterIdAndNames(bands);
+
+
+                for (auto &b:bands)
                 {
-
-                    TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(i), *filterSettings.allDistanceFilters[i]);
-
+                    QString band = b.data()->uk;
+                    int dist = config.value(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt();
+                    filterSettings.setDistanceFilter(band, dist);
                 }
 
-                //config.endGroup();
+                config.endGroup();
 
                 //filterSetup->saveClusterFilterToContest();  // save these settings
                 contest->saveClusterFilter(filterSettings);
