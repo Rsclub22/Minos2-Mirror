@@ -261,12 +261,14 @@ public:
     bandmapSpotType::SPOT_TYPE getSpotType()const{return spotType;}
     void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
 
-
+    bool getCqResponse() const {return cqResponse;}
+    void setCqResponse(bool value) {cqResponse = value;}
 
 private:
 
     bool runModeOn;
     bool offRunFreq;
+    bool cqResponse;
     QString district;
     bool districtWorked;
     QString rotBrg;

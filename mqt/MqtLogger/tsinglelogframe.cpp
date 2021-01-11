@@ -790,6 +790,22 @@ void TSingleLogFrame::closeContest()
        contest = nullptr;
     }
 }
+
+void TSingleLogFrame::addAllQSOsToBandmap()
+{
+    bandmapControlFrame->setHoldUpdateFlag(true);
+    for ( auto const &c: contest->ctList )
+    {
+        QSharedPointer<BaseContact> cct = c.wt;
+        // Extract comments for "Remarks" section
+        //cct->addReg1TestComment( remarks );
+
+        if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+           continue;
+
+        bandmapControlFrame->on_AfterLogContact(contest, cct);
+    }
+}
 void TSingleLogFrame::restoreColumns()
 {
     QSettings settings;

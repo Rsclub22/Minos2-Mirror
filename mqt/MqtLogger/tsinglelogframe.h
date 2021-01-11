@@ -93,6 +93,8 @@ public:
     BaseContestLog * getContest();
     void closeContest();
 
+    void addAllQSOsToBandmap();
+
     void setActiveControl( int *Key );
     QString makeEntry( bool saveMinos );
     void exportContest();

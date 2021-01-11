@@ -222,6 +222,7 @@ BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotdataBase(bsd)
 {
     runModeOn = bsd.runModeOn;
     offRunFreq = bsd.offRunFreq;
+    cqResponse = bsd.cqResponse;
     district = bsd.district;
     districtWorked = bsd.districtWorked;
     rotBrg = bsd.rotBrg;
@@ -236,6 +237,7 @@ void BandmapSpotData::clear()
     ClusterSpotDataBase::clear();
     runModeOn = false;
     offRunFreq = false;
+    cqResponse = false;
     district.clear();
     districtWorked = false;
     rotBrg.clear();
@@ -243,8 +245,6 @@ void BandmapSpotData::clear()
     isSelected = false;
     spotType = bandmapSpotType::SPOT_TYPE::NONE;
 }
-
-
 bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
 {
     return rxTime == bsd.rxTime &&
@@ -269,6 +269,7 @@ bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
             dxLocatorWorked == bsd.sentToMemory &&
             runModeOn == bsd.runModeOn &&
             offRunFreq == bsd.offRunFreq &&
+            cqResponse == bsd.cqResponse &&
             district == bsd.district &&
             districtWorked == bsd.districtWorked &&
             rotBrg == bsd.rotBrg &&
@@ -301,6 +302,7 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
             dxLocatorWorked != bsd.sentToMemory ||
             runModeOn != bsd.runModeOn ||
             offRunFreq != bsd.offRunFreq ||
+            cqResponse != bsd.cqResponse ||
             district != bsd.district ||
             districtWorked != bsd.districtWorked ||
             rotBrg != bsd.rotBrg ||

@@ -92,8 +92,9 @@ const int ROT_BEARING_COL_NUM = 23;     // used in bandmap
 const int ROT_CONNECTED_COL_NUM = 24;   // used in bandmap
 const int RUN_MODE_ON_COL_NUM = 25;     // used in bandmap
 const int OFF_RUN_FREQ_COL_NUM = 26;    // used in bandmap
-const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
-const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
+const int CQ_RESPONSE_COL = 27;    // used in bandmap
+const int DX_DISTRICT_COL_NUM = 28;   // used in bandmap
+const int DX_DISTRICT_WORKED_COL_NUM = 29; // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;

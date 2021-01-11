@@ -335,7 +335,6 @@ private slots:
      void on_memoryActionSelected();
      void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
-     void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
      void filterButtonSelected();
      void onMenuShow();
 
@@ -346,8 +345,6 @@ private slots:
      void addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
-
-
 
      void context_markSpotActionSelected();
      void context_unMarkSpotActionSelected();
@@ -367,6 +364,9 @@ private slots:
      void requestSpots();
      void on_resendSpotsPushedPressed();
      void on_textFilterEdit_textChanged(const QString &arg1);
+
+public slots:
+     void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };
 
 

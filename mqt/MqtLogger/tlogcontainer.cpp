@@ -1594,6 +1594,10 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
                addSlot( nullptr, expName, false, -1 );
             }
          }
+         else
+         {
+             f->addAllQSOsToBandmap();
+         }
          removeCurrentFile( fname );
       }
    }

@@ -878,7 +878,13 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
 //    enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ};
 
-    bool cqResponse = spot->getRunModeOn() && !spot->getOffRunFreq();
+    bool cqResponse = spot->getCqResponse();    // for logged QSOs
+    if (spot->getSpotType() == bandmapSpotType::SAVED)
+    {
+        // If we are saving, we should ignore being on CQ freq (or not)?
+        // Possibly a problem if tuning off CQ freq, with details present
+        cqResponse = spot->getRunModeOn() && !spot->getOffRunFreq();
+    }
 
     if (spot->getSpotType() == bandmapSpotType::LOGGED || spot->getSpotType() == bandmapSpotType::SAVED)
     {
