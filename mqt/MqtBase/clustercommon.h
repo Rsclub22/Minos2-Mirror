@@ -39,7 +39,7 @@ const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 M
 
 
 enum allModeOffsets {NO_MODE, CW_MODE, USB_MODE, FM_MODE, RTTY_MODE, PSK31_MODE, FT8_MODE, MSK144_MODE, JT65_MODE};
-const QStringList clusterModes = QStringList() << "None" << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
+const QStringList clusterModes = QStringList() << "NONE" << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
 const QStringList mgmModes = QStringList() << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
 
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";

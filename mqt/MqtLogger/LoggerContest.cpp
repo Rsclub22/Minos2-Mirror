@@ -1764,16 +1764,16 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
 
 
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
-                                       ccfs.setModeFilter("NONE", filterFlag);
+                                       ccfs.setModeFilter("CW", filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterUSBMODE", filterFlag);
                                        ccfs.setModeFilter("USB", filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterFMMODE", filterFlag);
-                                       ccfs.setModeFilter("USB", filterFlag);
+                                       ccfs.setModeFilter("FM", filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterRTTYMODE", filterFlag);
-                                       ccfs.setModeFilter("FM", filterFlag);
+                                       ccfs.setModeFilter("RTTY", filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterPSK31MODE", filterFlag);
                                        ccfs.setModeFilter("PSK31", filterFlag);

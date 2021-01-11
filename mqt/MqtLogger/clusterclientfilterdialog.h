@@ -182,6 +182,7 @@ private:
     void setEmptyDistCheckBox(QString bandType, bool state);
     void setIgnoreDistCheckBox(QString bandType, bool state);
     void setDistanceFields(QString band, bool state);
+    QString findBandQLineEdit(QLineEdit *distanceLineEdit);
 private slots:
 
     void vhfButtonSelected();

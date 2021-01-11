@@ -109,14 +109,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     {
         QString band = b.data()->uk;
 
-        if (filterSettings.getBandFilter(band))
-        {
-            bandCheckBoxes.value(band).bandChkBox->setCheckState(Qt::Checked);
-        }
-        else
-        {
-           bandCheckBoxes.value(band).bandChkBox->setCheckState(Qt::Unchecked);
-        }
+        bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+
     }
 
 
@@ -130,14 +124,9 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     for (auto &m:clustermodes)
     {
-        if (filterSettings.getModeFilter(m))
-        {
-            modeCheckBoxes.value(m)->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            modeCheckBoxes.value(m)->setCheckState(Qt::Unchecked);
-        }
+
+        modeCheckBoxes.value(m)->setChecked(filterSettings.getModeFilter(m));
+
     }
 
 
@@ -186,43 +175,44 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
         if (filterSettings.getIgnoreDistanceFlag(band))
         {
-            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(true);
         }
         else
         {
-            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+            bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(false);
         }
 
         if (filterSettings.getIgnoreEmptyDistanceFlag(band))
         {
-           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Checked);
+           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(true);
         }
         else
         {
-           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(Qt::Unchecked);
+           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(false);
         }
 
     }
 
     for (int i = 0; i < allDistanceLineEditsList.count(); i++)
     {
+        // set the distance enable/disable
         connect(allDistanceLineEditsList[i], &QLineEdit::editingFinished,  this, [=](){onDistanceEditingFinished(allDistanceLineEditsList[i]);});
     }
 
 
 
-    for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
-    {
-        connect(allIgnoreDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreDistanceChecked(allIgnoreDistanceChkBoxList[i]);});
-    }
+    //for (int i = 0; i < allIgnoreDistanceChkBoxList.count(); i++)
+    //{
+    //    connect(allIgnoreDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreDistanceChecked(allIgnoreDistanceChkBoxList[i]);});
+    //}
 
 
 
 
-    for (int i = 0; i < allIgnoreEmptyDistanceChkBoxList.count(); i++)
-    {
-        connect(allIgnoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreEmptyDistanceChecked(allIgnoreEmptyDistanceChkBoxList[i]);});
-    }
+    //for (int i = 0; i < allIgnoreEmptyDistanceChkBoxList.count(); i++)
+    //{
+    //    connect(allIgnoreEmptyDistanceChkBoxList[i], &QCheckBox::clicked, this, [=](){onIgnoreEmptyDistanceChecked(allIgnoreEmptyDistanceChkBoxList[i]);});
+    //}
 
 
 
@@ -745,11 +735,11 @@ void ClusterClientFilterDialog::restoreBands()
 
         if (filterSettings.getBandFilter(band))
         {
-           bandCheckBoxes.value(band).bandChkBox->setChecked(Qt::Checked);
+           bandCheckBoxes.value(band).bandChkBox->setChecked(true);
         }
         else
         {
-           bandCheckBoxes.value(band).bandChkBox->setChecked(Qt::Unchecked);
+           bandCheckBoxes.value(band).bandChkBox->setChecked(false);
         }
 
     }
@@ -1307,26 +1297,49 @@ void ClusterClientFilterDialog::onBandChkBoxChecked(QCheckBox * bandChkBox)
 
 void ClusterClientFilterDialog::onDistanceEditingFinished(QLineEdit *distanceLineEdit)
 {
-/*
-    bool ok;
-    int distance = 0;
-    if(!allDistanceLineEditsList[idx]->text().isEmpty())
-    {
-        distance = allDistanceLineEditsList[idx]->text().toInt(&ok);
-        if (ok)
-        {
-            return;
 
-        }
-        else
+    QString band = findBandQLineEdit(distanceLineEdit);
+
+    if (band.isEmpty())
+    {
+        bool ok;
+        int distance = 0;
+        if(!bandDistanceWidgets.value(band).bandLineEdit->text().isEmpty())
         {
-            QMessageBox::information(this, tr("Distance Filter"),
-                                     tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
-                                      QMessageBox::Ok|QMessageBox::Default,
-                                      QMessageBox::NoButton, QMessageBox::NoButton);
+            distance = bandDistanceWidgets.value(band).bandLineEdit->text().toInt(&ok);
+            if (ok)
+            {
+                return;
+
+            }
+            else
+            {
+                QMessageBox::information(this, tr("Distance Filter"),
+                                         tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
+                                          QMessageBox::Ok|QMessageBox::Default,
+                                          QMessageBox::NoButton, QMessageBox::NoButton);
+            }
         }
     }
-*/
+
+
+
+}
+
+QString ClusterClientFilterDialog::findBandQLineEdit(QLineEdit *distanceLineEdit)
+{
+    QMapIterator<QString, ClusterClientDistanceFilterDetails> i(bandDistanceWidgets);
+    while (i.hasNext())
+    {
+        i.next();
+        if (i.value().bandLineEdit == distanceLineEdit)
+        {
+            return i.key();
+        }
+
+    }
+
+    return "";
 }
 
 void ClusterClientFilterDialog::onIgnoreDistanceChecked(QCheckBox *ignoreDistChkBox)
