@@ -3,6 +3,7 @@
 
 
 #include "base_pch.h"
+#include "BandList.h"
 #include <QList>
 #include <QColor>
 
@@ -23,13 +24,15 @@ const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.i
 const QString CLUSTER_FILTER_FILE = "./Configuration/clusterBandmapFilter.ini";
 
 
-
-const int NO_BANDS = -1;
-const int NUMBANDS = 9;
-const int VHFBANDSTART = 0;
-const int VHFBANDEND = 4;
-const int MWBANDSTART = 4;
-const int MWBANDEND = 9;
+const QString HF_BANDTYPE = "HF";
+const QString VHF_BANDTYPE = "VHF";
+const QString MW_BANDTYPE = "MWAVE";
+//const int NO_BANDS = -1;
+//const int NUMBANDS = 9;
+//const int VHFBANDSTART = 0;
+//const int VHFBANDEND = 4;
+//const int MWBANDSTART = 4;
+//const int MWBANDEND = 9;
 
 enum allBandOffsets {_1_8M, _3_5M, _7M, _14M, _21M, _28M, _50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 Mhz" << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
@@ -37,7 +40,7 @@ const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 M
 
 enum allModeOffsets {NO_MODE, CW_MODE, USB_MODE, FM_MODE, RTTY_MODE, PSK31_MODE, FT8_MODE, MSK144_MODE, JT65_MODE};
 const QStringList clusterModes = QStringList() << "None" << "CW" << "USB" << "FM" << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
-
+const QStringList mgmModes = QStringList() << "RTTY" << "PSK31" << "FT8" << "MSK144" << "JT65";
 
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
@@ -207,561 +210,154 @@ private:
 };
 
 
+class BandFilterSettings
+{
+   public:
+
+    BandFilterSettings()
+    {
+        bandFilterFlag = false;
+        distanceFilter = 0;
+        ignoreDistanceFlag = false;
+        ignoreEmptyDistanceFlag = false;
+        bandType = "";
+    }
+
+
+    BandFilterSettings& operator=(const BandFilterSettings &bfs)
+    {
+        bandFilterFlag = bfs.bandFilterFlag;
+        distanceFilter = bfs.distanceFilter;
+        ignoreDistanceFlag = bfs.ignoreDistanceFlag;
+        ignoreEmptyDistanceFlag = bfs.ignoreEmptyDistanceFlag;
+        bandType = bfs.bandType;
+
+        return *this;
+    }
+
+
+    bool operator==( const BandFilterSettings& bfs ) const
+    {
+        if (bandFilterFlag == bfs.bandFilterFlag &&
+                distanceFilter == bfs.distanceFilter &&
+                ignoreDistanceFlag == bfs.ignoreDistanceFlag &&
+                ignoreEmptyDistanceFlag == bfs.ignoreEmptyDistanceFlag &&
+                bandType != bfs.bandType)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool operator!=( const BandFilterSettings& bfs )
+    {
+        return !(*this == bfs);
+    }
+
+
+    bool bandFilterFlag;
+    int distanceFilter;
+    bool ignoreDistanceFlag;
+    bool ignoreEmptyDistanceFlag;
+    QString bandType;
+};
+
+
+
+class ClusterClientBandFilterDialogDetails
+{
+
+public:
+    ClusterClientBandFilterDialogDetails()
+    {
+        bandChkBox = nullptr;
+    }
+    QCheckBox *bandChkBox;
+    QString bandType;
+
+
+};
+
+
+class ClusterClientDistanceFilterDetails
+{
+public:
+
+    ClusterClientDistanceFilterDetails()
+    {
+        bandLineEdit = nullptr;
+        bandLabel = nullptr;
+        distFilterIgnoreCheckBox = nullptr;
+        distFilterIgnoreEmptyCheckBox = nullptr;
+
+    }
+
+    QLineEdit *bandLineEdit;
+    QLabel *bandLabel;
+    QCheckBox *distFilterIgnoreCheckBox;
+    QCheckBox *distFilterIgnoreEmptyCheckBox;
+    QString bandType;
+
+
+};
+
+
 class ClusterClientFilterSettings
 {
 
 public:
-    ClusterClientFilterSettings()
-{
+    ClusterClientFilterSettings();
 
-        // init class values
+    void initFilterSettings(const QVector<QSharedPointer<BandInfo> > &bands, const QStringList &modes);
 
-        for (auto *f: hfBandFilters)
-        {
-            *f = false;
-        }
+    ClusterClientFilterSettings (const ClusterClientFilterSettings& ccfs);
+    ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings &ccfs);
+    bool operator==( const ClusterClientFilterSettings& ccfs ) const;
+    bool operator!=( const ClusterClientFilterSettings& ccfs );
 
-        for (auto *f: vhfBandFilters)
-        {
-            *f = false;
-        }
+    void setCallSignFilterList(QString cfl);
+    QString getCallSignFilterList();
 
-        for (auto *f: mwBandFilters)
-        {
-            *f = false;
-        }
+    bool getBandFilter(QString band);
+    void setBandFilter(QString band, bool setting);
 
-        for (auto *mf: modeFilters)
-        {
-            *mf = false;
-        }
+    void setBandType(QString band, QString bandType);
+    QString getBandType(QString band);
 
-        for (auto *df: hfDistanceFilters)
-        {
-            *df = 0;
-        }
-
-        for (auto *df: vhfDistanceFilters)
-        {
-            *df = 0;
-        }
-
-        for (auto *df: mwDistanceFilters)
-        {
-            *df = 0;
-        }
+    bool getModeFilter(QString mode);
+    void setModeFilter(QString mode, bool setting);
 
 
-        for (auto *idf: hfIgnoreDistanceFlags)
-        {
-            *idf = false;
-        }
-
-        for (auto *idf: vhfIgnoreDistanceFlags)
-        {
-            *idf = false;
-        }
-
-        for (auto *idf: mwIgnoreDistanceFlags)
-        {
-            *idf = false;
-        }
-
-        for (auto *iedf: hfIgnoreEmptyDistanceFlags)
-        {
-            *iedf = false;
-        }
-
-        for (auto *iedf: vhfIgnoreEmptyDistanceFlags)
-        {
-            *iedf = false;
-        }
-
-        for (auto *iedf: mwIgnoreEmptyDistanceFlags)
-        {
-            *iedf = false;
-        }
+    bool testDistanceFilter(int distance, QString band);
 
 
+    int getDistanceFilter(QString band);
+    void setDistanceFilter(QString band, int distance);
 
+    bool getIgnoreDistanceFlag(QString band);
+    void setIgnoreDistanceFlag(QString band, bool state);
 
+    bool getIgnoreEmptyDistanceFlag(QString band);
+    void setIgnoreEmptyDistanceFlag(QString band, bool state);
 
-
-    }
+    QString packFilterList(QStringList l);
+    QStringList unpackFilterList(QString &sl);
 
 
     // note the list of callsign and locator filters strings are stored as QString for saving to contest.
-
-
-
     QString callsignFilterList;
     QString locatorFilterList;
 
-    const int HF_START = 0;
-    const int VHF_START = 6;
-    const int MW_START = 10;
 
+private:
 
-    QList<bool*> allBandFilters = {
-                                    &bandFilter1_8Mhz, &bandFilter3_5Mhz, &bandFilter7Mhz,
-                                    &bandFilter14Mhz, &bandFilter21Mhz, &bandFilter28Mhz,
-                                    &bandFilter50Mhz, &bandFilter70Mhz, &bandFilter144Mhz,
-                                    &bandFilter432Mhz, &bandFilter1296Mhz, &bandFilter2300Mhz,
-                                    &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz
-                                  };
 
+    QMap<QString, BandFilterSettings> bandFilterSettings;  // QMap<band, filterSettings>
+    QMap<QString, bool> modeFilterFlag;   // QMap<mode, flag>
 
-    QList<bool*> hfBandFilters = {
-                                    &bandFilter1_8Mhz, &bandFilter3_5Mhz, &bandFilter7Mhz,
-                                    &bandFilter14Mhz, &bandFilter21Mhz, &bandFilter28Mhz
-                                 };
 
-    QList<bool*> vhfBandFilters = {
-                                    &bandFilter50Mhz, &bandFilter70Mhz, &bandFilter144Mhz,
-                                    &bandFilter432Mhz
-                                  };
 
-    QList<bool*> mwBandFilters = {
-                                   &bandFilter1296Mhz, &bandFilter2300Mhz,
-                                   &bandFilter3_4Ghz, &bandFilter5_6Ghz, &bandFilter10Ghz
-                                 };
-
-    QList<bool*> modeFilters = {
-                                &modeFilterNONE, &modeFilterCW, &modeFilterUSBMODE, &modeFilterFMMODE,
-                                &modeFilterRTTYMODE, &modeFilterPSK31MODE, &modeFilterFT8MODE,
-                                &modeFilterMSK144MODE, &modeFilterJT65MODE
-                               };
-
-
-    QList<int*> allDistanceFilters = {
-                                        &distanceFilter1_8MHz, &distanceFilter3_5MHz, &distanceFilter7MHz,
-                                        &distanceFilter14MHz, &distanceFilter21MHz, &distanceFilter28MHz,
-                                        &distanceFilter50MHz, &distanceFilter70MHz, &distanceFilter144MHz,
-                                        &distanceFilter432MHz, &distanceFilter1296MHz, &distanceFilter2300MHz,
-                                        &distanceFilter3_4GHz, &distanceFilter5_6GHz, &distanceFilter10GHz
-                                     };
-
-    QList<int*> hfDistanceFilters = {
-                                     &distanceFilter1_8MHz, &distanceFilter3_5MHz, &distanceFilter7MHz,
-                                     &distanceFilter14MHz, &distanceFilter21MHz, &distanceFilter28MHz
-                                    };
-
-    QList<int*> vhfDistanceFilters = {
-                                      &distanceFilter50MHz, &distanceFilter70MHz, &distanceFilter144MHz,
-                                      &distanceFilter432MHz
-                                     };
-
-    QList<int*> mwDistanceFilters = {
-                                      &distanceFilter1296MHz, &distanceFilter2300MHz,
-                                      &distanceFilter3_4GHz, &distanceFilter5_6GHz, &distanceFilter10GHz
-                                    };
-
-
-    QList<bool*> allIgnoreDistanceFlags = {
-                                            &ignoreDistanceFlag_1_8MHz, &ignoreDistanceFlag_3_5MHz, &ignoreDistanceFlag_7MHz,
-                                            &ignoreDistanceFlag_14MHz, &ignoreDistanceFlag_21MHz, &ignoreDistanceFlag_28MHz,
-                                            &ignoreDistanceFlag_50MHz, &ignoreDistanceFlag_70MHz, &ignoreDistanceFlag_144MHz,
-                                            &ignoreDistanceFlag_432MHz, &ignoreDistanceFlag_1296MHz, &ignoreDistanceFlag_2300MHz,
-                                            &ignoreDistanceFlag_3_4GHz, &ignoreDistanceFlag_5_6GHz, &ignoreDistanceFlag_10GHz
-                                          };
-
-    QList<bool*> hfIgnoreDistanceFlags = {
-                                            &ignoreDistanceFlag_1_8MHz, &ignoreDistanceFlag_3_5MHz, &ignoreDistanceFlag_7MHz,
-                                            &ignoreDistanceFlag_14MHz, &ignoreDistanceFlag_21MHz, &ignoreDistanceFlag_28MHz
-                                         };
-
-    QList<bool*> vhfIgnoreDistanceFlags = {
-                                            &ignoreDistanceFlag_50MHz, &ignoreDistanceFlag_70MHz, &ignoreDistanceFlag_144MHz,
-                                            &ignoreDistanceFlag_432MHz
-                                          };
-
-    QList<bool*> mwIgnoreDistanceFlags = {
-                                            &ignoreDistanceFlag_1296MHz, &ignoreDistanceFlag_2300MHz,
-                                            &ignoreDistanceFlag_3_4GHz, &ignoreDistanceFlag_5_6GHz, &ignoreDistanceFlag_10GHz
-                                         };
-
-    QList<bool*> allIgnoreEmptyDistanceFlags = {
-                                                &ignoreEmptyDistanceFlag_1_8MHz, &ignoreEmptyDistanceFlag_3_5MHz, &ignoreEmptyDistanceFlag_7MHz,
-                                                &ignoreEmptyDistanceFlag_14MHz, &ignoreEmptyDistanceFlag_21MHz, &ignoreEmptyDistanceFlag_28MHz,
-                                                &ignoreEmptyDistanceFlag_50MHz, &ignoreEmptyDistanceFlag_70MHz, &ignoreEmptyDistanceFlag_144MHz,
-                                                &ignoreEmptyDistanceFlag_432MHz, &ignoreEmptyDistanceFlag_1296MHz, &ignoreEmptyDistanceFlag_2300MHz,
-                                                &ignoreEmptyDistanceFlag_3_4GHz, &ignoreEmptyDistanceFlag_5_6GHz, &ignoreEmptyDistanceFlag_10GHz
-                                              };
-
-
-    QList<bool*> hfIgnoreEmptyDistanceFlags = {
-                                                &ignoreEmptyDistanceFlag_1_8MHz, &ignoreEmptyDistanceFlag_3_5MHz, &ignoreEmptyDistanceFlag_7MHz,
-                                                &ignoreEmptyDistanceFlag_14MHz, &ignoreEmptyDistanceFlag_21MHz, &ignoreEmptyDistanceFlag_28MHz
-                                              };
-
-    QList<bool*> vhfIgnoreEmptyDistanceFlags = {
-                                                 &ignoreEmptyDistanceFlag_50MHz, &ignoreEmptyDistanceFlag_70MHz, &ignoreEmptyDistanceFlag_144MHz,
-                                                 &ignoreEmptyDistanceFlag_432MHz
-                                               };
-
-    QList<bool*> mwIgnoreEmptyDistanceFlags = {
-                                                &ignoreEmptyDistanceFlag_1296MHz, &ignoreEmptyDistanceFlag_2300MHz,
-                                                &ignoreEmptyDistanceFlag_3_4GHz, &ignoreEmptyDistanceFlag_5_6GHz, &ignoreEmptyDistanceFlag_10GHz
-                                              };
-
-
-    bool bandFilter1_8Mhz;
-    bool bandFilter3_5Mhz;
-    bool bandFilter7Mhz;
-    bool bandFilter14Mhz;
-    bool bandFilter21Mhz;
-    bool bandFilter28Mhz;
-    bool bandFilter50Mhz;
-    bool bandFilter70Mhz;
-    bool bandFilter144Mhz;
-    bool bandFilter432Mhz;
-    bool bandFilter1296Mhz;
-    bool bandFilter2300Mhz;
-    bool bandFilter3_4Ghz;
-    bool bandFilter5_6Ghz;
-    bool bandFilter10Ghz;
-
-    bool modeFilterNONE;
-    bool modeFilterCW;
-    bool modeFilterUSBMODE;
-    bool modeFilterFMMODE;
-    bool modeFilterRTTYMODE;
-    bool modeFilterPSK31MODE;
-    bool modeFilterFT8MODE;
-    bool modeFilterMSK144MODE;
-    bool modeFilterJT65MODE;
-
-    int distanceFilter1_8MHz;
-    int distanceFilter3_5MHz;
-    int distanceFilter7MHz;
-    int distanceFilter14MHz;
-    int distanceFilter21MHz;
-    int distanceFilter28MHz;
-    int distanceFilter50MHz;
-    int distanceFilter70MHz;
-    int distanceFilter144MHz;
-    int distanceFilter432MHz;
-    int distanceFilter1296MHz;
-    int distanceFilter2300MHz;
-    int distanceFilter3_4GHz;
-    int distanceFilter5_6GHz;
-    int distanceFilter10GHz;
-
-    bool ignoreDistanceFlag_1_8MHz;
-    bool ignoreDistanceFlag_3_5MHz;
-    bool ignoreDistanceFlag_7MHz;
-    bool ignoreDistanceFlag_14MHz;
-    bool ignoreDistanceFlag_21MHz;
-    bool ignoreDistanceFlag_28MHz;
-    bool ignoreDistanceFlag_50MHz;
-    bool ignoreDistanceFlag_70MHz;
-    bool ignoreDistanceFlag_144MHz;
-    bool ignoreDistanceFlag_432MHz;
-    bool ignoreDistanceFlag_1296MHz;
-    bool ignoreDistanceFlag_2300MHz;
-    bool ignoreDistanceFlag_3_4GHz;
-    bool ignoreDistanceFlag_5_6GHz;
-    bool ignoreDistanceFlag_10GHz;
-
-    bool ignoreEmptyDistanceFlag_1_8MHz;
-    bool ignoreEmptyDistanceFlag_3_5MHz;
-    bool ignoreEmptyDistanceFlag_7MHz;
-    bool ignoreEmptyDistanceFlag_14MHz;
-    bool ignoreEmptyDistanceFlag_21MHz;
-    bool ignoreEmptyDistanceFlag_28MHz;
-    bool ignoreEmptyDistanceFlag_50MHz;
-    bool ignoreEmptyDistanceFlag_70MHz;
-    bool ignoreEmptyDistanceFlag_144MHz;
-    bool ignoreEmptyDistanceFlag_432MHz;
-    bool ignoreEmptyDistanceFlag_1296MHz;
-    bool ignoreEmptyDistanceFlag_2300MHz;
-    bool ignoreEmptyDistanceFlag_3_4GHz;
-    bool ignoreEmptyDistanceFlag_5_6GHz;
-    bool ignoreEmptyDistanceFlag_10GHz;
-
-
-
-
-void setCallSignFilterList(QString cfl)
-{
-    callsignFilterList = cfl;
-
-}
-
-QString getCallSignFilterList()
-{
-    return callsignFilterList;
-}
-
-
-
-void setAllBandFilters(QList<bool> bfl)
-{
-    for (int i = 0; i < bfl.count(); i++)
-    {
-        *allBandFilters[i] = bfl[i];
-    }
-}
-
-
-bool getBandFilter(int band)
-{
-    if (band >= 0 && band < allBandFilters.count())
-    {
-        return *allBandFilters[band];
-    }
-    else
-    {
-        return false;
-    }
-}
-
-
-
-
-void setBandFilter(bool setting, int band)
-{
-    *allBandFilters[band] = setting;
-}
-
-
-
-void setAllModeFilters(QList<bool> mfl)
-{
-    for (int i = 0; i < mfl.count(); i++)
-    {
-        *modeFilters[i] = mfl[i];
-
-    }
-}
-
-
-bool getModeFilter(int mode)
-{
-    if (mode >= 0 && mode < modeFilters.count())
-    {
-        return *modeFilters[mode];
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setModeFilter(bool setting, int mode)
-{
-    *modeFilters[mode] = setting;
-}
-
-bool testDistanceFilter(int distance, int band)
-{
-
-    if (distance < *allDistanceFilters[band] || *allDistanceFilters[band] == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setDistanceFilter(int distance, int band)
-{
-    *allDistanceFilters[band] = distance;
-}
-
-
-bool getIgnoreDistanceFlag(int band)
-{
-    return *allIgnoreDistanceFlags[band];
-}
-
-void setIgnoreDistanceFlag(bool state, int band)
-{
-    *allIgnoreDistanceFlags[band] = state;
-}
-
-
-bool getIgnoreEmptyDistanceFlag(int band)
-{
-    return *allIgnoreEmptyDistanceFlags[band];
-}
-
-void setIgnoreEmptyDistanceFlag(bool state, int band)
-{
-    *allIgnoreEmptyDistanceFlags[band] = state;
-}
-
-
-ClusterClientFilterSettings (const ClusterClientFilterSettings& ccfs)
-{
-    *this = ccfs;
-}
-
-
-ClusterClientFilterSettings & operator= (const ClusterClientFilterSettings& ccfs)
-{
-
-    callsignFilterList = ccfs.callsignFilterList;
-    locatorFilterList = ccfs.locatorFilterList;
-    bandFilter1_8Mhz = ccfs.bandFilter1_8Mhz;
-    bandFilter3_5Mhz = ccfs.bandFilter3_5Mhz;
-    bandFilter7Mhz = ccfs.bandFilter7Mhz;
-    bandFilter14Mhz = ccfs.bandFilter14Mhz;
-    bandFilter21Mhz = ccfs.bandFilter21Mhz;
-    bandFilter28Mhz = ccfs.bandFilter28Mhz;
-    bandFilter50Mhz = ccfs.bandFilter50Mhz;
-    bandFilter70Mhz = ccfs.bandFilter70Mhz;
-    bandFilter144Mhz = ccfs.bandFilter144Mhz;
-    bandFilter432Mhz = ccfs.bandFilter432Mhz;
-    bandFilter1296Mhz = ccfs.bandFilter1296Mhz;
-    bandFilter2300Mhz = ccfs.bandFilter2300Mhz;
-    bandFilter3_4Ghz = ccfs.bandFilter3_4Ghz;
-    bandFilter5_6Ghz = ccfs.bandFilter5_6Ghz;
-    bandFilter10Ghz = ccfs.bandFilter10Ghz;
-    modeFilterNONE = ccfs.modeFilterNONE;
-    modeFilterCW = ccfs.modeFilterCW;
-    modeFilterUSBMODE = ccfs.modeFilterUSBMODE;
-    modeFilterFMMODE = ccfs.modeFilterFMMODE;
-    modeFilterRTTYMODE = ccfs.modeFilterRTTYMODE;
-    modeFilterPSK31MODE = ccfs.modeFilterPSK31MODE;
-    modeFilterFT8MODE = ccfs.modeFilterFT8MODE;
-    modeFilterMSK144MODE = ccfs.modeFilterMSK144MODE;
-    modeFilterJT65MODE = ccfs.modeFilterJT65MODE;
-    distanceFilter50MHz = ccfs.distanceFilter50MHz;
-    distanceFilter70MHz = ccfs.distanceFilter70MHz;
-    distanceFilter144MHz = ccfs.distanceFilter144MHz;
-    distanceFilter432MHz = ccfs.distanceFilter432MHz;
-    distanceFilter1296MHz = ccfs.distanceFilter1296MHz;
-    distanceFilter2300MHz = ccfs.distanceFilter2300MHz;
-    distanceFilter3_4GHz = ccfs.distanceFilter3_4GHz;
-    distanceFilter5_6GHz = ccfs.distanceFilter5_6GHz;
-    distanceFilter10GHz = ccfs.distanceFilter10GHz;
-    ignoreDistanceFlag_50MHz = ccfs.ignoreDistanceFlag_50MHz;
-    ignoreDistanceFlag_70MHz = ccfs.ignoreDistanceFlag_70MHz;
-    ignoreDistanceFlag_144MHz = ccfs.ignoreDistanceFlag_144MHz;
-    ignoreDistanceFlag_432MHz = ccfs.ignoreDistanceFlag_432MHz;
-    ignoreDistanceFlag_1296MHz = ccfs.ignoreDistanceFlag_1296MHz;
-    ignoreDistanceFlag_2300MHz = ccfs.ignoreDistanceFlag_2300MHz;
-    ignoreDistanceFlag_3_4GHz = ccfs.ignoreDistanceFlag_3_4GHz;
-    ignoreDistanceFlag_5_6GHz = ccfs.ignoreDistanceFlag_5_6GHz;
-    ignoreDistanceFlag_10GHz = ccfs.ignoreDistanceFlag_10GHz;
-    ignoreEmptyDistanceFlag_50MHz = ccfs.ignoreEmptyDistanceFlag_50MHz;
-    ignoreEmptyDistanceFlag_70MHz = ccfs.ignoreEmptyDistanceFlag_70MHz;
-    ignoreEmptyDistanceFlag_144MHz = ccfs.ignoreEmptyDistanceFlag_144MHz;
-    ignoreEmptyDistanceFlag_432MHz = ccfs.ignoreEmptyDistanceFlag_432MHz;
-    ignoreEmptyDistanceFlag_1296MHz = ccfs.ignoreEmptyDistanceFlag_1296MHz;
-    ignoreEmptyDistanceFlag_2300MHz = ccfs.ignoreEmptyDistanceFlag_2300MHz;
-    ignoreEmptyDistanceFlag_3_4GHz = ccfs.ignoreEmptyDistanceFlag_3_4GHz;
-    ignoreEmptyDistanceFlag_5_6GHz = ccfs.ignoreEmptyDistanceFlag_5_6GHz;
-    ignoreEmptyDistanceFlag_10GHz = ccfs.ignoreEmptyDistanceFlag_10GHz;
-
-    return *this;
-}
-
-
-bool operator==( const ClusterClientFilterSettings& ccfs ) const
-{
-    if ( callsignFilterList == ccfs.callsignFilterList &&
-         locatorFilterList == ccfs.locatorFilterList &&
-         bandFilter1_8Mhz == ccfs.bandFilter1_8Mhz &&
-         bandFilter3_5Mhz == ccfs.bandFilter3_5Mhz &&
-         bandFilter7Mhz == ccfs.bandFilter7Mhz &&
-         bandFilter14Mhz == ccfs.bandFilter14Mhz &&
-         bandFilter21Mhz == ccfs.bandFilter21Mhz &&
-         bandFilter28Mhz == ccfs.bandFilter28Mhz &&
-         bandFilter50Mhz == ccfs.bandFilter50Mhz &&
-         bandFilter70Mhz == ccfs.bandFilter70Mhz &&
-         bandFilter144Mhz == ccfs.bandFilter144Mhz &&
-         bandFilter432Mhz == ccfs.bandFilter432Mhz &&
-         bandFilter1296Mhz == ccfs.bandFilter1296Mhz &&
-         bandFilter2300Mhz == ccfs.bandFilter2300Mhz &&
-         bandFilter3_4Ghz == ccfs.bandFilter3_4Ghz &&
-         bandFilter5_6Ghz == ccfs.bandFilter5_6Ghz &&
-         bandFilter10Ghz == ccfs.bandFilter10Ghz &&
-         modeFilterNONE == ccfs.modeFilterNONE &&
-         modeFilterCW == ccfs.modeFilterCW &&
-         modeFilterUSBMODE == ccfs.modeFilterUSBMODE &&
-         modeFilterFMMODE == ccfs.modeFilterFMMODE &&
-         modeFilterRTTYMODE == ccfs.modeFilterRTTYMODE &&
-         modeFilterPSK31MODE == ccfs.modeFilterPSK31MODE &&
-         modeFilterFT8MODE == ccfs.modeFilterFT8MODE &&
-         modeFilterMSK144MODE == ccfs.modeFilterMSK144MODE &&
-         modeFilterJT65MODE == ccfs.modeFilterJT65MODE &&
-         distanceFilter50MHz == ccfs.distanceFilter50MHz &&
-         distanceFilter70MHz == ccfs.distanceFilter70MHz &&
-         distanceFilter144MHz == ccfs.distanceFilter144MHz &&
-         distanceFilter432MHz == ccfs.distanceFilter432MHz &&
-         distanceFilter1296MHz == ccfs.distanceFilter1296MHz &&
-         distanceFilter2300MHz == ccfs.distanceFilter2300MHz &&
-         distanceFilter3_4GHz == ccfs.distanceFilter3_4GHz &&
-         distanceFilter5_6GHz == ccfs.distanceFilter5_6GHz &&
-         distanceFilter10GHz == ccfs.distanceFilter10GHz &&
-         ignoreDistanceFlag_50MHz == ccfs.ignoreDistanceFlag_50MHz &&
-         ignoreDistanceFlag_70MHz == ccfs.ignoreDistanceFlag_70MHz &&
-         ignoreDistanceFlag_144MHz == ccfs.ignoreDistanceFlag_144MHz &&
-         ignoreDistanceFlag_432MHz == ccfs.ignoreDistanceFlag_432MHz &&
-         ignoreDistanceFlag_1296MHz == ccfs.ignoreDistanceFlag_1296MHz &&
-         ignoreDistanceFlag_2300MHz == ccfs.ignoreDistanceFlag_2300MHz &&
-         ignoreDistanceFlag_3_4GHz == ccfs.ignoreDistanceFlag_3_4GHz &&
-         ignoreDistanceFlag_5_6GHz == ccfs.ignoreDistanceFlag_5_6GHz &&
-         ignoreDistanceFlag_10GHz == ccfs.ignoreDistanceFlag_10GHz &&
-         ignoreEmptyDistanceFlag_50MHz == ccfs.ignoreEmptyDistanceFlag_50MHz &&
-         ignoreEmptyDistanceFlag_70MHz == ccfs.ignoreEmptyDistanceFlag_70MHz &&
-         ignoreEmptyDistanceFlag_144MHz == ccfs.ignoreEmptyDistanceFlag_144MHz &&
-         ignoreEmptyDistanceFlag_432MHz == ccfs.ignoreEmptyDistanceFlag_432MHz &&
-         ignoreEmptyDistanceFlag_1296MHz == ccfs.ignoreEmptyDistanceFlag_1296MHz &&
-         ignoreEmptyDistanceFlag_2300MHz == ccfs.ignoreEmptyDistanceFlag_2300MHz &&
-         ignoreEmptyDistanceFlag_3_4GHz == ccfs.ignoreEmptyDistanceFlag_3_4GHz &&
-         ignoreEmptyDistanceFlag_5_6GHz == ccfs.ignoreEmptyDistanceFlag_5_6GHz &&
-         ignoreEmptyDistanceFlag_10GHz == ccfs.ignoreEmptyDistanceFlag_10GHz)
-    {
-        return true;
-    }
-
-    return false;
-
-}
-
-
-bool operator!=( const ClusterClientFilterSettings& ccfs ) const
-{
-    return !(*this == ccfs);
-}
-
-QString packFilterList(QStringList l)
-{
-    QString s;
-    for (int i = 0; i < l.count(); i++)
-    {
-        if (i != l.count() - 1)
-        {
-            QString t = l[i].append(FILTER_DELIMITER);
-            s.append(t);
-        }
-        else
-        {
-            s.append(l[i]);  // last string
-        }
-    }
-    return s;
-}
-
-
-QStringList unpackFilterList(QString &sl)
-{
-    QStringList fl;
-    if (sl.isEmpty())
-    {
-        return fl;
-    }
-    else
-    {
-       fl = sl.split(FILTER_DELIMITER);
-    }
-    return fl;
-}
 
 };
 
@@ -819,156 +415,156 @@ public:
 
 
 
-void setAllModeFilters(QList<bool> mfl)
-{
-    for (int i = 0; i < mfl.count(); i++)
+    void setAllModeFilters(QList<bool> mfl)
     {
-        *modeFilters[i] = mfl[i];
-
-    }
-}
-
-
-bool testModeFilter(int mode)
-{
-    if (mode >= 0 && mode < modeFilters.count())
-    {
-        return *modeFilters[mode];
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setModeFilter(bool setting, int mode)
-{
-    *modeFilters[mode] = setting;
-}
-
-bool testDistanceFilter(int distance)
-{
-    if (distance < distanceFilter || distanceFilter == 0)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void setDistanceFilter(int distance)
-{
-    distanceFilter = distance;
-}
-
-bool getIgnoreDistanceFlag()
-{
-    return ignoreDistanceFlag;
-}
-
-void setIgnoreDistanceFlag(bool state)
-{
-    ignoreDistanceFlag = state;
-}
-
-
-bool getIgnoreEmptyDistanceFlag()
-{
-    return ignoreEmptyDistanceFlag;
-}
-
-void setIgnoreEmptyDistanceFlag(bool state)
-{
-    ignoreDistanceFlag = state;
-}
-
-BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
-{
-    *this = bcfs;
-}
-BandmapClientFilterSettings &operator= (const BandmapClientFilterSettings& bcfs)
-{
-
-    modeFilterNONE = bcfs.modeFilterNONE;
-    modeFilterCW = bcfs.modeFilterCW;
-    modeFilterUSBMODE = bcfs.modeFilterUSBMODE;
-    modeFilterFMMODE = bcfs.modeFilterFMMODE;
-    modeFilterRTTYMODE = bcfs.modeFilterRTTYMODE;
-    modeFilterPSK31MODE = bcfs.modeFilterPSK31MODE;
-    modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
-    modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
-    modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
-    distanceFilter = bcfs.distanceFilter;
-    ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
-    ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
-
-    return *this;
-}
-
-
-bool operator==( const BandmapClientFilterSettings& bcfs ) const
-{
-    if ( modeFilterNONE == bcfs.modeFilterNONE &&
-         modeFilterCW == bcfs.modeFilterCW &&
-         modeFilterUSBMODE == bcfs.modeFilterUSBMODE &&
-         modeFilterFMMODE == bcfs.modeFilterFMMODE &&
-         modeFilterRTTYMODE == bcfs.modeFilterRTTYMODE &&
-         modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
-         modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
-         modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
-         modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
-         distanceFilter == bcfs.distanceFilter &&
-         ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
-         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
-
-    {
-        return true;
-    }
-
-    return false;
-
-}
-
-
-bool operator!=( const BandmapClientFilterSettings& ccfs ) const
-{
-    return !(*this == ccfs);
-}
-
-QString packFilterList(QStringList l)
-{
-    QString s;
-    for (int i = 0; i < l.count(); i++)
-    {
-        if (i != l.count() - 1)
+        for (int i = 0; i < mfl.count(); i++)
         {
-            QString t = l[i].append(FILTER_DELIMITER);
-            s.append(t);
+            *modeFilters[i] = mfl[i];
+
+        }
+    }
+
+
+    bool testModeFilter(int mode)
+    {
+        if (mode >= 0 && mode < modeFilters.count())
+        {
+            return *modeFilters[mode];
         }
         else
         {
-            s.append(l[i]);  // last string
+            return false;
         }
     }
-    return s;
-}
 
-
-QStringList unpackFilterList(QString &sl)
-{
-    QStringList fl;
-    if (sl.isEmpty())
+    void setModeFilter(bool setting, int mode)
     {
+        *modeFilters[mode] = setting;
+    }
+
+    bool testDistanceFilter(int distance)
+    {
+        if (distance < distanceFilter || distanceFilter == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    void setDistanceFilter(int distance)
+    {
+        distanceFilter = distance;
+    }
+
+    bool getIgnoreDistanceFlag()
+    {
+        return ignoreDistanceFlag;
+    }
+
+    void setIgnoreDistanceFlag(bool state)
+    {
+        ignoreDistanceFlag = state;
+    }
+
+
+    bool getIgnoreEmptyDistanceFlag()
+    {
+        return ignoreEmptyDistanceFlag;
+    }
+
+    void setIgnoreEmptyDistanceFlag(bool state)
+    {
+        ignoreDistanceFlag = state;
+    }
+
+    BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
+    {
+        *this = bcfs;
+    }
+    BandmapClientFilterSettings &operator= (const BandmapClientFilterSettings& bcfs)
+    {
+
+        modeFilterNONE = bcfs.modeFilterNONE;
+        modeFilterCW = bcfs.modeFilterCW;
+        modeFilterUSBMODE = bcfs.modeFilterUSBMODE;
+        modeFilterFMMODE = bcfs.modeFilterFMMODE;
+        modeFilterRTTYMODE = bcfs.modeFilterRTTYMODE;
+        modeFilterPSK31MODE = bcfs.modeFilterPSK31MODE;
+        modeFilterFT8MODE = bcfs.modeFilterFT8MODE;
+        modeFilterMSK144MODE = bcfs.modeFilterMSK144MODE;
+        modeFilterJT65MODE = bcfs.modeFilterJT65MODE;
+        distanceFilter = bcfs.distanceFilter;
+        ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
+        ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
+
+        return *this;
+    }
+
+
+    bool operator==( const BandmapClientFilterSettings& bcfs ) const
+    {
+        if ( modeFilterNONE == bcfs.modeFilterNONE &&
+             modeFilterCW == bcfs.modeFilterCW &&
+             modeFilterUSBMODE == bcfs.modeFilterUSBMODE &&
+             modeFilterFMMODE == bcfs.modeFilterFMMODE &&
+             modeFilterRTTYMODE == bcfs.modeFilterRTTYMODE &&
+             modeFilterPSK31MODE == bcfs.modeFilterPSK31MODE &&
+             modeFilterFT8MODE == bcfs.modeFilterFT8MODE &&
+             modeFilterMSK144MODE == bcfs.modeFilterMSK144MODE &&
+             modeFilterJT65MODE == bcfs.modeFilterJT65MODE &&
+             distanceFilter == bcfs.distanceFilter &&
+             ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
+             ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
+
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+
+    bool operator!=( const BandmapClientFilterSettings& ccfs ) const
+    {
+        return !(*this == ccfs);
+    }
+
+    QString packFilterList(QStringList l)
+    {
+        QString s;
+        for (int i = 0; i < l.count(); i++)
+        {
+            if (i != l.count() - 1)
+            {
+                QString t = l[i].append(FILTER_DELIMITER);
+                s.append(t);
+            }
+            else
+            {
+                s.append(l[i]);  // last string
+            }
+        }
+        return s;
+    }
+
+
+    QStringList unpackFilterList(QString &sl)
+    {
+        QStringList fl;
+        if (sl.isEmpty())
+        {
+            return fl;
+        }
+        else
+        {
+           fl = sl.split(FILTER_DELIMITER);
+        }
         return fl;
     }
-    else
-    {
-       fl = sl.split(FILTER_DELIMITER);
-    }
-    return fl;
-}
 
 };
 
@@ -980,6 +576,81 @@ const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE = 1;   // khz
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE = 10;   // khz
 
 
+class DefaultDistanceIniName
+{
+
+public:
+    DefaultDistanceIniName()
+    {
+
+    };
+
+    QString defaultDistanceName;
+    QString bandType;
+};
+
+
+class ClusterFilterDefaultDistIniName
+{
+public:
+
+    ClusterFilterDefaultDistIniName()
+    {
+
+    };
+
+    DefaultDistanceIniName getDefaultDistIniName(const QString band){return defaultDistanceIniNames.value(band);}
+
+    void initClusterFilterIdAndNames(const QVector<QSharedPointer<BandInfo> > &bands)
+    {
+        DefaultDistanceIniName ddin;
+        QString defTxt = "defaultFilterDistance_";
+        for (auto &b:bands)
+        {
+
+            ddin.defaultDistanceName = defTxt.append(b.data()->uk.remove("\x20").replace(".", "_"));
+            ddin.bandType = b.data()->getType();
+            defaultDistanceIniNames.insert(b.data()->uk, ddin);
+        }
+    }
+
+private:
+
+
+    QMap <QString, DefaultDistanceIniName> defaultDistanceIniNames;
+
+
+
+
+};
+
+
+class LegacyClusterFilterDistanceId
+{
+public:
+    LegacyClusterFilterDistanceId()
+    {
+        clusterLegacyFilterDistanceId.insert("1.8 MHz", elpDefaultFilterDistance_1_8MHz);
+        clusterLegacyFilterDistanceId.insert("3.5 MHz", elpDefaultFilterDistance_3_5MHz);
+        clusterLegacyFilterDistanceId.insert("7 MHz", elpDefaultFilterDistance_7MHz);
+        clusterLegacyFilterDistanceId.insert("14 MHz", elpDefaultFilterDistance_14MHz);
+        clusterLegacyFilterDistanceId.insert("21 MHz", elpDefaultFilterDistance_21MHz);
+        clusterLegacyFilterDistanceId.insert("28 MHz", elpDefaultFilterDistance_28MHz);
+        clusterLegacyFilterDistanceId.insert("50 MHz", elpDefaultFilterDistance_50MHz);
+        clusterLegacyFilterDistanceId.insert("70 MHz", elpDefaultFilterDistance_70MHz);
+        clusterLegacyFilterDistanceId.insert("144 MHz", elpDefaultFilterDistance_144MHz);
+        clusterLegacyFilterDistanceId.insert("432 MHz", elpDefaultFilterDistance_432MHz);
+        clusterLegacyFilterDistanceId.insert("1296 MHz", elpDefaultFilterDistance_1296MHz);
+        clusterLegacyFilterDistanceId.insert("2300 MHz", elpDefaultFilterDistance_2300MHz);
+        clusterLegacyFilterDistanceId.insert("3.4 GHz", elpDefaultFilterDistance_3_4GHz);
+        clusterLegacyFilterDistanceId.insert("5.6 GHz", elpDefaultFilterDistance_5_6GHz);
+        clusterLegacyFilterDistanceId.insert("10 GHz", elpDefaultFilterDistance_10GHz);
+    }
+
+    QMap<QString, LOGGERPROFILE> clusterLegacyFilterDistanceId;
+};
+
+/*
 class ClusterFilterIdAndNames
 {
 public:
@@ -1001,7 +672,9 @@ public:
     int getMwDefaultFilterNameCount(){return mwDefaultFilterName.count();}
 
 
+
 private:
+
 
     const LOGGERPROFILE allDefaultFilterId [15] {
                                 elpDefaultFilterDistance_1_8MHz,
@@ -1085,6 +758,6 @@ private:
 
 };
 
-
+*/
 
 #endif // CLUSTERCOMMON_H

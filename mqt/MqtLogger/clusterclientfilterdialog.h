@@ -38,8 +38,8 @@ public:
     static int mainTabIndex;
     static int distanceTabIndex;
 
-    bool checkBandMatch(int bandNum);
-    bool checkModeMatch(int bandNum);
+    bool checkBandMatch(QString band);
+    bool checkModeMatch(QString mode);
 
 
     void copyCallsignFilterListToListWidget();
@@ -55,11 +55,11 @@ public:
     //void setContest(BaseContestLog *c);
     //ClusterClientFilterSettings filterSettings;
 
-    void setBandFilter(int band);
+    void setBandFilter(QString band, bool state);
     bool getEnableHFSpotsFlag();
 
     void saveClusterFilterToContest();
-    void setModeFilter(bool state, int mode);
+    void setModeFilter(QString mode, bool state);
 
     bool getBandFilterChangedFlag(){return bandFilterChangedFlag;}
     bool getModeFilterChangedFlag(){return modeFilterChangedFlag;}
@@ -79,16 +79,17 @@ private:
     LoggerContestLog *ct = nullptr;
     ClusterClientFilterSettings filterSettings;
 
+    QVector<QSharedPointer<BandInfo> > bands;
+    QStringList clustermodes;
 
     QList<QCheckBox*> allBandChkBoxList;
-    QList<QCheckBox*> hfBandChkBoxList;
-    QList<QCheckBox*> vhfBandChkBoxList;
-    QList<QCheckBox*> mwBandChkBoxList;
+    QMap<QString, ClusterClientBandFilterDialogDetails> bandCheckBoxes;
 
     QList<QCheckBox*> modeChkBoxList;
-
+    QMap<QString, QCheckBox*> modeCheckBoxes;
 
     QList<QLineEdit*> allDistanceLineEditsList;
+    QMap<QString, ClusterClientDistanceFilterDetails> bandDistanceWidgets;
 
 
     QList<QCheckBox*> allIgnoreDistanceChkBoxList;
@@ -96,25 +97,7 @@ private:
     QList<QLabel*> allDistanceLabelsList;
 
 
-    QList<QLineEdit*> hfDistanceLineEditsList;
-    QList<QCheckBox*> hfIgnoreDistanceChkBoxList;
-    QList<QCheckBox*> hfIgnoreEmptyDistanceChkBoxList;
-    QList<QLabel*> hfDistanceLabelsList;
-
-
-    QList<QLineEdit*> vhfDistanceLineEditsList;
-    QList<QCheckBox*> vhfIgnoreDistanceChkBoxList;
-    QList<QCheckBox*> vhfIgnoreEmptyDistanceChkBoxList;
-    QList<QLabel*> vhfDistanceLabelsList;
-
-
-    QList<QLineEdit*> mwDistanceLineEditsList;
-    QList<QCheckBox*> mwIgnoreDistanceChkBoxList;
-    QList<QCheckBox*> mwIgnoreEmptyDistanceChkBoxList;
-    QList<QLabel*> mwDistanceLabelsList;
-
-
-    QListWidget* callsignListWidget;
+     QListWidget* callsignListWidget;
     int callsignListWidgetCurrentRow;
 
 
@@ -141,11 +124,9 @@ private:
 
 
     void initCheckFilterTab();
-    void clearVHFBands();
-    void setVHFBands();
+
     void restoreBands();
-    void clearMWaveBands();
-    void setMWaveBands();
+
     void restoreMWBands();
     void clearModes();
     void setModes();
@@ -189,6 +170,18 @@ private:
 
     void setHFVisible(bool state);
 
+
+    void setBandsCheckBox(QString bandType, Qt::CheckState state);
+    void setHFBandCheckBoxes();
+    void clearVHFBandCheckBoxes();
+    void setVHFBandCheckBoxes();
+    void clearMWaveBandCheckBoxes();
+    void setMWaveBandCheckBoxes();
+    void clearHFBandCheckBoxes();
+    void setDefDistances(QString bandType);
+    void setEmptyDistCheckBox(QString bandType, bool state);
+    void setIgnoreDistCheckBox(QString bandType, bool state);
+    void setDistanceFields(QString band, bool state);
 private slots:
 
     void vhfButtonSelected();
@@ -223,16 +216,16 @@ private slots:
     void onVhfSetDefDistPbClicked();
     void onMwSetDefDistPbClicked();
 
-    void onIgnoreDistanceChecked(int);
-    void onDistanceEditingFinished(int);
-    void onIgnoreEmptyDistanceChecked(int idx);
+    void onIgnoreDistanceChecked(QCheckBox *ignoreDistChkBox);
+    void onDistanceEditingFinished(QLineEdit *distanceLineEdit);
+    void onIgnoreEmptyDistanceChecked(QCheckBox* ignoreEmptyCheckBox);
 
     void onVhfSetAllEmptyPbClicked();
 
 
     void onVhfClearAllEmptyDistPbClicked();
 
-    void onBandChkBoxChecked(int idx);
+    void onBandChkBoxChecked(QCheckBox * bandChkBox);
     void onFilterTabIndexChanged(int idx);
     void onDistanceFilterTabIndexChanged(int idx);
 

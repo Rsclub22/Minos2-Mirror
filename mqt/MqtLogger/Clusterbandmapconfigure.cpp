@@ -27,24 +27,29 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
                        << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
 
 
-     ClusterFilterIdAndNames clustId;
+     BandList::getBandList().loadAllBands(bands);
+     ClusterFilterDefaultDistIniName defaultDistIniNames;
+     defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
-     for (int i = 0; i < distanceLineEdits.count(); i++)
+     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+     config.beginGroup("Default Distance");
+
+     for (int i = 0; i < bands.count(); i++)
      {
+         QString band = bands[i].data()->uk;
          distValue distItem;
-         //distItem.distance = config.value(distanceIniNames[i], DEFAULT_FILTER_DISTANCE).toInt();
-         TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(i), distItem.distance );
-
-         distanceLineEdits[i]->setText(QString::number(distItem.distance));
+         distItem.distance = config.value(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt();
+         distItem.distLineEdit = distanceLineEdits[i];
+         distItem.distLineEdit->setText(QString::number(distItem.distance));
          distItem.changed = false;
-         distanceValues.append(distItem);
+         distanceValues.insert(band, distItem);
      }
 
-
+    config.endGroup();
 
      for (int i = 0; i < distanceLineEdits.count(); i++)
      {
-         connect(distanceLineEdits[i], &QLineEdit::editingFinished, [=]() {onDistanceEditingFinished(i);});
+         connect(distanceLineEdits[i], &QLineEdit::editingFinished, this, [=]() {onDistanceEditingFinished(distanceLineEdits[i]);});
      }
 
      connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(onAccepted()));
@@ -88,28 +93,42 @@ ClusterBandmapConfigure::~ClusterBandmapConfigure()
 }
 
 
-void ClusterBandmapConfigure::onDistanceEditingFinished(int idx)
+void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 {
     int distance = 0;
     bool ok = false;
-    if (!distanceLineEdits[idx]->text().isEmpty())
+    if (!distLineEdit->text().isEmpty())
     {
-        distance = distanceLineEdits[idx]->text().toInt(&ok);
+        QString band = findBandKey(distLineEdit);
+        distance = distLineEdit->text().toInt(&ok);
         if (!ok || distance < MIN_FILTER_DISTANCE || distance > MAX_FILTER_DISTANCE)
         {
             QMessageBox messageBox;
-            QString msg = tr("Distance Error - %1. Please enter a distance %2 to max %3").arg( distanceLineEdits[idx]->text()).arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE);
+            QString msg = tr("Distance Error - %1. Please enter a distance %2 to max %3").arg( distLineEdit->text()).arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE);
             messageBox.critical(this, tr("Distance Entry Error"), msg);
             return;
         }
         else
         {
-            distanceValues[idx].distance = distance;
-            distanceValues[idx].changed = true;
+            distanceValues[band].distance = distance;
+            distanceValues[band].changed = true;
         }
     }
 }
 
+QString ClusterBandmapConfigure::findBandKey(QLineEdit *distLineEdit)
+{
+    for (auto &b:bands)
+    {
+        QString band = b.data()->uk;
+        if (distanceValues.value(band).distLineEdit == distLineEdit)
+        {
+            return band;
+        }
+    }
+
+    return "";
+}
 
 void ClusterBandmapConfigure::onFreqToleranceValueChanged(int /*value*/)
 {
@@ -175,15 +194,23 @@ void ClusterBandmapConfigure::onRejected()
 void ClusterBandmapConfigure::saveDistances()
 {
 
-    ClusterFilterIdAndNames clustId;
-    for (int i = 0; i < distanceLineEdits.count(); i++)
-    {
-        if (distanceValues[i].changed && distanceValues[i].distance != DEFAULT_FILTER_DISTANCE)
-        {
-            TContestApp::getContestApp()->loggerBundle.setIntProfile(clustId.getAllDefaultFilterId(i), distanceValues[i].distance);
+    ClusterFilterDefaultDistIniName defaultDistIniNames;
+    defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("Default Distance");
+
+    for (auto &b:bands)
+    {
+        QString band = b.data()->uk;
+        if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)
+        {
+            config.setValue(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, distanceValues.value(band).distance);
         }
     }
+
+    config.endGroup();
+
 }
 
 
