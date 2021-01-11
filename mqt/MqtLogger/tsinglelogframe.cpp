@@ -793,7 +793,6 @@ void TSingleLogFrame::closeContest()
 
 void TSingleLogFrame::addAllQSOsToBandmap()
 {
-    bandmapControlFrame->setHoldUpdateFlag(true);
     for ( auto const &c: contest->ctList )
     {
         QSharedPointer<BaseContact> cct = c.wt;
