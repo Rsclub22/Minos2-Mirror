@@ -8,6 +8,8 @@
 
 QVector <SCTypeOption> ScreenConfigElement::scoptions =
 {
+    {sctMainScreen, QT_TR_NOOP("mainscreen"), QT_TR_NOOP("Main Screen")},
+    {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
     {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
     {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
     {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
@@ -116,6 +118,10 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     int row = -1;
     for(auto const  &opt: scoptions)
     {
+        if (opt.type == sctMainScreen || opt.type == sctScreen)
+        {
+            continue;   // don't allow these to be selected
+        }
         if (opt.type == sctSplit)
         {
             row = i;
