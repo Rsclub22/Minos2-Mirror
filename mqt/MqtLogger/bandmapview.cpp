@@ -77,6 +77,7 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     bandmapScene->addItem(dial);
     dial->setCurFreq(Frequency());
     dial->setCursorColour(Qt::black);
+    trace("BandmapView::bandmapUpdate() initBandMapView");
     bandmapUpdate();
 
     connect(dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
@@ -135,6 +136,7 @@ void BandmapView::setBandmapZoom(int level)
         zoomLevel = level;
         dial->setZoomLevel(level);
         setBandmapHeight(contestBandFlow, contestBandFhigh);
+        trace("BandmapView::bandmapUpdate()setBandMapZoom ");
         bandmapUpdate();
         scrollBandmapCenterToFreq(midScaleFreq);
         emit newZoomlevel(level);
@@ -158,6 +160,7 @@ void BandmapView::zoomUpdated(bool dir)
             ++zoomLevel;
             dial->setZoomLevel(zoomLevel);
             setBandmapHeight(contestBandFlow, contestBandFhigh);
+            trace("BandmapView::bandmapUpdate() zoomUpdated 1");
             bandmapUpdate();
             scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
@@ -170,6 +173,7 @@ void BandmapView::zoomUpdated(bool dir)
             --zoomLevel;
             dial->setZoomLevel(zoomLevel);
             setBandmapHeight(contestBandFlow, contestBandFhigh);
+            trace("BandmapView::bandmapUpdate() zoomUpdated 2");
             bandmapUpdate();
             scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
@@ -406,6 +410,7 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 {
 
     QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
+    trace("BandmapView::bandmapUpdate() BandmapView::dataChanged");
     bandmapUpdate();
 
 }
@@ -425,6 +430,7 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 {
 
     QAbstractItemView::rowsInserted(parent, start, end);
+    trace("BandmapView::bandmapUpdate() bandmapView::rowsInserted");
     bandmapUpdate();
 
 }
@@ -444,6 +450,7 @@ void BandmapView::onRowsRemoved(const QModelIndex &parent, int first, int last)
     Q_UNUSED(first)
     Q_UNUSED(last)
 
+    trace("BandmapView::bandmapUpdate() bandmapView::rowsRemoved");
     bandmapUpdate();
 
 }
@@ -658,6 +665,7 @@ void BandmapView::bandmapResize(int height, int width)
 {
     Q_UNUSED(height)
     Q_UNUSED(width)
+    trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
     bandmapUpdate();
 
 
@@ -711,6 +719,7 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
 
     if (!f.isClear())
     {
+        trace("BandmapView::bandmapUpdate() bandmapView::setFreq");
         bandmapUpdate();
     }
 
@@ -720,6 +729,7 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
 void BandmapView::setDialRadioMode(QString mode)
 {
     dial->setRadioMode(mode);
+    trace("BandmapView::bandmapUpdate() bandmapView::setDialRadioMode");
     bandmapUpdate();
 }
 
@@ -827,6 +837,7 @@ void BandmapView::clearSelectedSpot()
 
             clearSpotData(selectedSpot );
 
+            trace("BandmapView::bandmapUpdate() bandmapView::clearSelectedSpot");
             bandmapUpdate();
 
 
@@ -866,6 +877,7 @@ void BandmapView::setSelectedSpot(int spotViewNum)
 
     model()->setData(model()->index(selectedSpotDataRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
     selectedSpot.setIsSelected(true);
+    trace("BandmapView::bandmapUpdate() bandmapView::setSelectedSpot");
     bandmapUpdate();
 }
 

@@ -218,6 +218,7 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
 {
     if (state)
     {
+        trace("BandmapView::bandmapUpdate() on_FiltersChanged");
         bandmapView->bandmapUpdate();
     }
 }
@@ -823,8 +824,8 @@ void BandmapClientFrame::checkNewBandMapSpots()
         int sqsize = spotQueue.count();
         for (int i = sqsize -1 ; i > -1; i--)
         {
-             addDxSpotToBandmapTable(spotQueue[i]);
-             traceMsg("New Cluster Spot: " + spotQueue[i]->getDxCall().getFullCall());
+            traceMsg("New Cluster Spot: " + spotQueue[i]->getDxCall().getFullCall());
+            addDxSpotToBandmapTable(spotQueue[i]);
         }
         spotQueue.clear();
     }
@@ -834,11 +835,11 @@ void BandmapClientFrame::checkNewBandMapSpots()
     {
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
-            addLogSpotToBandmapTable(logSpotQueue[i]);
             traceMsg(QString("New Logger Spot: %1 %2 %3")
                      .arg(logSpotQueue[i]->getDxCallStr())
                      .arg(logSpotQueue[i]->getFreq().traceStr())
                      .arg(logSpotQueue[i]->getDxLocator()));
+            addLogSpotToBandmapTable(logSpotQueue[i]);
         }
         logSpotQueue.clear();
     }
@@ -870,6 +871,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
     if (spot->getSpotType() == bandmapSpotType::CQ)
     {
         addRemoveCQSpot(spot);
+        trace("BandmapView::bandmapUpdate() addRemoveCQSpot");
         bandmapView->bandmapUpdate();
         return;
     }
@@ -1072,6 +1074,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
         bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
+    trace("BandmapView::bandmapUpdate() addLogSpotToBandmapTable completion");
     bandmapView->bandmapUpdate();
 }
 
@@ -1402,6 +1405,7 @@ void BandmapClientFrame::filterButtonSelected()
     if (filterSetup->getSettingsChangedFlag())
     {
         filterSettings = filterSetup->getFilterSettings();
+        trace("BandmapView::bandmapUpdate() filterButtonSelected");
         bandmapView->bandmapUpdate();
         filterSetup->close();
         delete filterSetup;
@@ -1531,6 +1535,7 @@ void BandmapClientFrame::purgeSpots()
            purgeSpotFlag = false;
         }
     }
+    trace("BandmapView::bandmapUpdate() purgeSpots");
     bandmapView->bandmapUpdate();
 }
 
@@ -1842,5 +1847,6 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
 void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
     bandmapSpotProxyModel->setFilterString(filter);
+    trace("BandmapView::bandmapUpdate() on_textFilterEdit_textChanged");
     bandmapView->bandmapUpdate();
 }
