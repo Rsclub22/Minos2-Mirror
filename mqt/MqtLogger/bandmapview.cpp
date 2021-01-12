@@ -16,7 +16,7 @@
 #include "MinosLoggerEvents.h"
 #include "rigutils.h"
 #include "ContestApp.h"
-
+#include "delayedaction.h"
 #include <QDebug>
 
 const int DIAL_CURSOR_BELOW_VIEWSTART_FREQ = 0;
@@ -479,7 +479,9 @@ void BandmapView::bandmapUpdate()
     if (!getSuppressUpdate())
     {
         dial->update();
-        drawBandMapSpots();
+        // delay the spots until any dial update has happened
+        delayedAction(this, [=](){
+        drawBandMapSpots();});
     }
 }
 
