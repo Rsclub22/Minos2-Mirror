@@ -818,6 +818,8 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 }
 void BandmapClientFrame::checkNewBandMapSpots()
 {
+    bandmapView->setSuppressUpdate(true);
+    bool doUpdate = false;
     // any cluster spots
     if (!spotQueue.isEmpty())
     {
@@ -826,6 +828,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
         {
             traceMsg("New Cluster Spot: " + spotQueue[i]->getDxCall().getFullCall());
             addDxSpotToBandmapTable(spotQueue[i]);
+            doUpdate = true;
         }
         spotQueue.clear();
     }
@@ -840,9 +843,16 @@ void BandmapClientFrame::checkNewBandMapSpots()
                      .arg(logSpotQueue[i]->getFreq().traceStr())
                      .arg(logSpotQueue[i]->getDxLocator()));
             addLogSpotToBandmapTable(logSpotQueue[i]);
+            doUpdate = true;
         }
         logSpotQueue.clear();
     }
+    bandmapView->setSuppressUpdate(false);
+    if (doUpdate)
+    {
+        bandmapView->bandmapUpdate();
+    }
+
 }
 
 void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>  spot)

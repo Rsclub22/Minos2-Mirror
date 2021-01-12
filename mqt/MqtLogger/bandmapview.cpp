@@ -182,6 +182,16 @@ void BandmapView::zoomUpdated(bool dir)
 
 }
 
+bool BandmapView::getSuppressUpdate() const
+{
+    return suppressUpdate;
+}
+
+void BandmapView::setSuppressUpdate(bool value)
+{
+    suppressUpdate = value;
+}
+
 
 
 
@@ -191,7 +201,7 @@ void BandmapView::on_scrollMap(bool dir)
 
     if (dir)
     {
-       scrollValue -= KEY_SCROLL_STEP_SIZE;
+        scrollValue -= KEY_SCROLL_STEP_SIZE;
        if (scrollValue < bandmapGraphicsView->verticalScrollBar()->minimum())
        {
            scrollValue = bandmapGraphicsView->verticalScrollBar()->minimum();
@@ -466,10 +476,11 @@ void BandmapView::onRowsInserted(const QModelIndex &parent, int first, int last)
 
 void BandmapView::bandmapUpdate()
 {
-
-    dial->update();
-    drawBandMapSpots();
-
+    if (!getSuppressUpdate())
+    {
+        dial->update();
+        drawBandMapSpots();
+    }
 }
 
 

@@ -88,6 +88,9 @@ public:
 
 
     void setDialRadioMode(QString mode);
+    bool getSuppressUpdate() const;
+    void setSuppressUpdate(bool value);
+
 signals:
 
     void contextMenuSelected(const QPoint&, const QPoint&);
@@ -145,7 +148,7 @@ private:
     BandmapFreqDial *dial;
     Frequency curFreq;
 
-
+    bool suppressUpdate = false;
     int totalSize = 300; //for test
 
     int dialMinZoomLevel;
