@@ -43,6 +43,7 @@ void MinosTestExport::sendRequest(QSharedPointer<QFile> expfd, const QString &cm
    m->args = MArgs->args;
 
    TIXML_STRING req = m->getActionMessage() + "\r\n";
+   trace(QString(req.c_str()));
 
    qint64 fpos = expfd->size();
    if (!expfd->seek(fpos))
@@ -348,6 +349,10 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & XBAND ) != 0 ), "xBand" );
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & FORCE_LOG ) != 0 ), "Forced" );
    }
+   trace(QString("export QSO CS %1 dirty %2 Loc %3 dirts %4")
+         .arg(lct->cs.getFullCall()).arg(lct->cs.isDirty())
+         .arg(lct->loc.getLoc()).arg(lct->loc.isDirty())
+         );
    lct->cs.addIfDirty( st, "callRx", dirty );
    lct->reps.addIfDirty( st, "rstTx", dirty );
    lct->serials.addIfDirty( st, "serialTx", dirty );
