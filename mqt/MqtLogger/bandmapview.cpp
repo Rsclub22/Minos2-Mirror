@@ -1267,13 +1267,13 @@ void BandmapView::deleteItemsFromMarkerList()
 bool BandmapView::matchMode(int sourceRow)
 {
 
-    bool ok = false;
-    int modeMask = model()->data(model()->index(sourceRow, DXMODEMASK_COL_NUM), BMP_DataStoredRole).toString().toInt(&ok);
+    //bool ok = false;
+    QString mode = model()->data(model()->index(sourceRow, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
 
-    if (ok && modeMask >= 0)
+    if (!mode.isEmpty())
     {
 
-        return filterSettings->testModeFilter(modeMask);
+        return filterSettings->getModeFilter(mode);
     }
     else
     {
@@ -1286,7 +1286,7 @@ bool BandmapView::matchMode(int sourceRow)
 
 bool BandmapView::matchDistance(int sourceRow)
 {
-    if (!filterSettings->ignoreDistanceFlag)
+    if (!filterSettings->getIgnoreDistanceFlag())
     {
         bool ok = false;
 

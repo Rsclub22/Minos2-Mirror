@@ -567,91 +567,62 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
         bandmapView->setFreqOperatingInfo(contestBandStr, contestModeStr, operatingFreqExclusions, operatingFreqExclusionsPlanOk);
     }
 
-    if (contestBand != -1)
-     {
-         if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
-         {
-             ClusterFilterIdAndNames clustId;
-             TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
-
-             //set current mode
-             if (contestModeStr == "MGM")       //  have mode settings been saved before?
-             {
-                 for (int m = 4; m < clusterModes.count(); m++)
-                 {
-                     *filterSettings.modeFilters[m] = true; // set all the mgm modes in filter
-                 }
-             }
-             else if (contestMode >= 0)
-             {
-                 // no, save current mode filter for this contest
-                 *filterSettings.modeFilters[contestMode] = true;
-             }
-             contest->saveBandmapFilter(filterSettings);
-         }
-         else
-         {
-             filterSettings = contest->getBandmapFilter();
-         }
-    }
-
-    if (ct == TContestApp::getContestApp() ->getCurrentContest())
+    if (!contestBandStr.isEmpty())
     {
-        if (!ct->isReadOnly())
+
+        if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
         {
-<<<<<<< HEAD
 
-            if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
+            //ClusterFilterIdAndNames clustId;
+            //TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
+
+
+
+            ClusterFilterDefaultDistIniName defaultDistIniNames;
+            defaultDistIniNames.initClusterFilterIdAndNames(bands);
+
+            QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+            config.beginGroup("Default Distance");
+
+            filterSettings.setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
+
+            config.endGroup();
+
+            //set current mode
+            if (contestModeStr == "MGM")       //  have mode settings been saved before?
             {
-
-                //ClusterFilterIdAndNames clustId;
-                //TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
-
-
-
-                ClusterFilterDefaultDistIniName defaultDistIniNames;
-                defaultDistIniNames.initClusterFilterIdAndNames(bands);
-
-                QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-                config.beginGroup("Default Distance");
-
-                filterSettings.setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
-
-                config.endGroup();
-
-                //set current mode
-                if (contestModeStr == "MGM")       //  have mode settings been saved before?
+                for (auto &m: mgmModes)
                 {
-                    for (int m = 4; m < clusterModes.count(); m++)
-                    {
-                        //filterSetup->setModeFilter(true, m);  // set all the mgm modes in filter
-                        filterSettings.setModeFilter(true, m); // set all the mgm modes in filter
+                    filterSettings.setModeFilter(m, true); // set all the mgm modes in filter
 
-                    }
                 }
-                else if (contestMode >= 0)
-                {
-                    // no, save current mode filter for this contest
-                    //filterSetup->setModeFilter(true, contestMode);
-                    filterSettings.setModeFilter(true, contestMode);
-                }
-
-                //filterSetup->saveBandmapFilterToContest();
-                contest->saveBandmapFilter(filterSettings);
             }
-            else
+            else if (contestMode >= 0)
             {
-                filterSettings = contest->getBandmapFilter();
+                // no, save current mode filter for this contest
+                filterSettings.setModeFilter(contestModeStr, true);
             }
-=======
-            isProtected = false;
-            QTimer::singleShot(2000, this, SLOT(requestSpots()));
->>>>>>> 539f923d8a019e3163da0ad24a8391d82396b7f0
 
+            //filterSetup->saveBandmapFilterToContest();
+            contest->saveBandmapFilter(filterSettings);
         }
         else
         {
-            isProtected = true;
+            filterSettings = contest->getBandmapFilter();
+        }
+
+        if (ct == TContestApp::getContestApp() ->getCurrentContest())
+        {
+            if (!ct->isReadOnly())
+            {
+                isProtected = false;
+                QTimer::singleShot(2000, this, SLOT(requestSpots()));
+
+            }
+            else
+            {
+                isProtected = true;
+            }
         }
     }
 }

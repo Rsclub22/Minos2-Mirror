@@ -493,18 +493,18 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(bandmapFilter.getValue().modeFilterNONE, "modeFilterNONEMODE");
-        st->addMember(bandmapFilter.getValue().modeFilterCW, "modeFilterCW");
-        st->addMember(bandmapFilter.getValue().modeFilterUSBMODE, "modeFilterUSBMODE");
-        st->addMember(bandmapFilter.getValue().modeFilterFMMODE, "modeFilterFMMODE");
-        st->addMember(bandmapFilter.getValue().modeFilterRTTYMODE, "modeFilterRTTYMODE");
-        st->addMember(bandmapFilter.getValue().modeFilterPSK31MODE, "modeFilterPSK31MODE");
-        st->addMember(bandmapFilter.getValue().modeFilterFT8MODE, "modeFilterFT8MODE");
-        st->addMember(bandmapFilter.getValue().modeFilterMSK144MODE, "modeFilterMSK144MODE");
-        st->addMember(bandmapFilter.getValue().modeFilterJT65MODE, "modeFilterJT65MODE");
-        st->addMember(bandmapFilter.getValue().distanceFilter, "distanceFilter");
-        st->addMember(bandmapFilter.getValue().ignoreDistanceFlag, "ignoreDistanceFlag");
-        st->addMember(bandmapFilter.getValue().ignoreEmptyDistanceFlag, "ignoreEmptyDistanceFlag");
+        st->addMember(bandmapFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("CW"), "modeFilterCW");
+        st->addMember(bandmapFilter.getValue().getModeFilter("USB"), "modeFilterUSBMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("FM"), "modeFilterFMMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("RTTY"), "modeFilterRTTYMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("JT65"), "modeFilterJT65MODE");
+        st->addMember(bandmapFilter.getValue().getDistanceFilter(), "distanceFilter");
+        st->addMember(bandmapFilter.getValue().getIgnoreDistanceFlag(), "ignoreDistanceFlag");
+        st->addMember(bandmapFilter.getValue().getIgnoreEmptyDistanceFlag(), "ignoreEmptyDistanceFlag");
         sendRequest(expfd, "MinosBandmapFilter", st);
 
     }

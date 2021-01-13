@@ -84,7 +84,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotQueue.clear();
 
     BandList::getBandList().loadAllBands(bands);
-    filterSettings.initFilterSettings(bands, clusterModes);
+    filterSettings.initFilterSettings(bands);
 
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, &QTimer::timeout, [=](){checkSavedFilters();});
@@ -1755,7 +1755,7 @@ void ClusterClientFrame::checkSavedFilters()
     {
         QString cUuuid = ct->uuid;
         ClusterClientFilterSettings cfs;
-        cfs.initFilterSettings(bands, clusterModes);
+        cfs.initFilterSettings(bands);
         cfs = contest->clusterFilterSettings.getValue();
         if (cfs != filterSettings)
         {

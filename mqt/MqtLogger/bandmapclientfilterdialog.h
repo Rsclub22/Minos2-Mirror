@@ -56,6 +56,7 @@ private:
     LoggerContestLog *ct = nullptr;
 
     QList<QCheckBox*> modeChkBoxList;
+    QMap<QString, QCheckBox*> modeCheckBoxes;
 
     bool modeButtonState;
     bool distanceChanged;

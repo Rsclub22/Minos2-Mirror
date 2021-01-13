@@ -10,13 +10,94 @@ const char * clusterStateList[] =
 };
 
 
+
+ModeFilterSettings::ModeFilterSettings()
+{
+    for (auto &m: clusterModes)
+    {
+        modeFilterFlag.insert(m, false);
+    }
+}
+
+
+bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
+{
+
+    bool state = false;
+    QMapIterator<QString, bool> i(mfs.modeFilterFlag);
+    while(i.hasNext())
+    {
+        i.next();
+        if (modeFilterFlag.value(i.key()) == i.value())
+        {
+            state = true;
+        }
+        else
+        {
+            state = false;
+        }
+    }
+
+    return state;
+
+
+}
+
+
+bool ModeFilterSettings::contains(const QString mode)
+{
+    return modeFilterFlag.contains(mode);
+}
+
+bool ModeFilterSettings::testModeFilter(QString mode)
+{
+    if (modeFilterFlag.contains(mode))
+    {
+        return modeFilterFlag.value(mode);
+    }
+    else
+    {
+        trace(QString("testModeFilter: mode not in modeFilterFlag map"));
+        return false;
+    }
+}
+
+bool ModeFilterSettings::getModeFilter(QString mode)
+{
+    if (modeFilterFlag.contains(mode))
+    {
+        return modeFilterFlag.value(mode);
+    }
+    else
+    {
+        trace(QString("getModeFilter: mode not in modeFilterFlag map"));
+        return false;
+    }
+}
+
+
+void ModeFilterSettings::setModeFilter(QString mode, bool setting)
+{
+    if (clusterModes.contains(mode))
+    {
+        modeFilterFlag.insert(mode, setting);
+    }
+    else
+    {
+        trace(QString("setModeFilter: mode not in list of clustermodes"));
+    }
+
+}
+
+
+
 ClusterClientFilterSettings::ClusterClientFilterSettings()
 {
 
 }
 
 
-void ClusterClientFilterSettings::initFilterSettings(const QVector<QSharedPointer<BandInfo> > &bands, const QStringList &modes)
+void ClusterClientFilterSettings::initFilterSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 {
    BandFilterSettings bfs;
    bfs.bandFilterFlag = false;
@@ -31,10 +112,7 @@ void ClusterClientFilterSettings::initFilterSettings(const QVector<QSharedPointe
        bandFilterSettings.insert(b.data()->uk, bfs);
    }
 
-   for (auto const &m: modes)
-   {
-       modeFilterFlag.insert(m, false);
-   }
+
 }
 
 
@@ -95,6 +173,8 @@ QString ClusterClientFilterSettings::getBandType(QString band)
     {
          return bandFilterSettings.value(band).bandType;
     }
+
+    return "";
 }
 
 bool ClusterClientFilterSettings::getModeFilter(QString mode)
@@ -102,7 +182,7 @@ bool ClusterClientFilterSettings::getModeFilter(QString mode)
 
     if (modeFilterFlag.contains(mode))
     {
-        return modeFilterFlag.value(mode);
+        return modeFilterFlag.getModeFilter(mode);
     }
 
 
@@ -113,8 +193,10 @@ bool ClusterClientFilterSettings::getModeFilter(QString mode)
 
 void ClusterClientFilterSettings::setModeFilter(QString mode, bool setting)
 {
-    modeFilterFlag.insert(mode, setting);
+    modeFilterFlag.setModeFilter(mode, setting);
 }
+
+
 
 bool ClusterClientFilterSettings::testDistanceFilter(int distance, QString band)
 {
@@ -284,6 +366,151 @@ QStringList ClusterClientFilterSettings::unpackFilterList(QString &sl)
     return fl;
 }
 
+
+BandmapClientFilterSettings::BandmapClientFilterSettings() :
+
+    distanceFilter(0),
+    ignoreDistanceFlag(false),
+    ignoreEmptyDistanceFlag(false)
+
+{
+
+
+}
+
+
+void BandmapClientFilterSettings::setModeFilter(QString mode, bool setting)
+{
+    if (clusterModes.contains(mode))
+    {
+        modeFilterFlag.setModeFilter(mode, setting);
+    }
+}
+
+bool BandmapClientFilterSettings::getModeFilter(QString mode)
+{
+    if (modeFilterFlag.contains(mode))
+    {
+        return modeFilterFlag.getModeFilter(mode);
+    }
+
+    return false;
+}
+void BandmapClientFilterSettings::setDistanceFilter(int distance)
+{
+    distanceFilter = distance;
+}
+
+bool BandmapClientFilterSettings::testDistanceFilter(int distance)
+{
+    if (distance < distanceFilter || distanceFilter == 0)
+    {
+            return true;
+    }
+    else
+    {
+            return false;
+    }
+
+
+    return false;
+}
+
+int BandmapClientFilterSettings::getDistanceFilter()
+{
+    return distanceFilter;
+}
+
+bool BandmapClientFilterSettings::getIgnoreDistanceFlag()
+{
+    return ignoreDistanceFlag;
+}
+
+void BandmapClientFilterSettings::setIgnoreDistanceFlag(bool state)
+{
+    ignoreDistanceFlag = state;
+}
+
+
+bool BandmapClientFilterSettings::getIgnoreEmptyDistanceFlag()
+{
+    return ignoreEmptyDistanceFlag;
+}
+
+void BandmapClientFilterSettings::setIgnoreEmptyDistanceFlag(bool state)
+{
+    ignoreDistanceFlag = state;
+}
+
+BandmapClientFilterSettings::BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)
+{
+    *this = bcfs;
+}
+BandmapClientFilterSettings& BandmapClientFilterSettings::operator= (const BandmapClientFilterSettings& bcfs)
+{
+
+    modeFilterFlag = bcfs.modeFilterFlag;
+    distanceFilter = bcfs.distanceFilter;
+    ignoreDistanceFlag = bcfs.ignoreDistanceFlag;
+    ignoreEmptyDistanceFlag = bcfs.ignoreEmptyDistanceFlag;
+
+    return *this;
+}
+
+
+bool BandmapClientFilterSettings::operator==( const BandmapClientFilterSettings& bcfs ) const
+{
+    if ( modeFilterFlag == bcfs.modeFilterFlag &&
+         distanceFilter == bcfs.distanceFilter &&
+         ignoreDistanceFlag == bcfs.ignoreDistanceFlag &&
+         ignoreEmptyDistanceFlag == bcfs.ignoreEmptyDistanceFlag)
+
+    {
+        return true;
+    }
+
+    return false;
+
+}
+
+
+bool BandmapClientFilterSettings::operator!=( const BandmapClientFilterSettings& ccfs ) const
+{
+    return !(*this == ccfs);
+}
+
+QString BandmapClientFilterSettings::packFilterList(QStringList l)
+{
+    QString s;
+    for (int i = 0; i < l.count(); i++)
+    {
+        if (i != l.count() - 1)
+        {
+            QString t = l[i].append(FILTER_DELIMITER);
+            s.append(t);
+        }
+        else
+        {
+            s.append(l[i]);  // last string
+        }
+    }
+    return s;
+}
+
+
+QStringList BandmapClientFilterSettings::unpackFilterList(QString &sl)
+{
+    QStringList fl;
+    if (sl.isEmpty())
+    {
+        return fl;
+    }
+    else
+    {
+       fl = sl.split(FILTER_DELIMITER);
+    }
+    return fl;
+}
 
 
 

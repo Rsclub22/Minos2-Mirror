@@ -86,7 +86,21 @@ void BandmapClientFilterDialog::initCheckFilterTab()
 
     modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
-   connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
+    if (clusterModes.count() == modeChkBoxList.count())
+    {
+        for (int i = 0; i < clusterModes.count(); i++)
+        {
+            modeCheckBoxes.insert(clusterModes[i], modeChkBoxList[i]);
+        }
+    }
+    else
+    {
+        trace(QString("initCheckFilterTab: clusterModes %1 != modeChkBoxList %2").arg(clusterModes.count(), modeChkBoxList.count()));
+    }
+
+
+
+    connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
 
     connect(ui->spotDistanceEdit, SIGNAL(editingFinished()), this, SLOT(onDistanceEditFinished()));
     connect(ui->distFilterIgnoreCheckBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreDistanceChkBoxStateChanged(int)));
@@ -156,19 +170,23 @@ void BandmapClientFilterDialog::filtersAccepted()
         trace(QString("Bandmap Filters Changed - ContestUuid = %1").arg(contestUuid));
         if (modefilterChanged)
         {
-            trace(QString("Mode Filters CW = %1, USBMode = %2, FMMode = %3, RTTYMode = %4, PSK31Mode = %5, FT8Mode = %6, MSK144Mode = %7, JT65Mode = %8").arg(*filterSettings.modeFilters[CW_MODE]).arg(*filterSettings.modeFilters[USB_MODE]).arg(*filterSettings.modeFilters[FM_MODE]).arg(*filterSettings.modeFilters[RTTY_MODE]).arg(*filterSettings.modeFilters[PSK31_MODE]).arg(*filterSettings.modeFilters[FT8_MODE]).arg(*filterSettings.modeFilters[MSK144_MODE]).arg(*filterSettings.modeFilters[JT65_MODE]));
+            trace(QString("Mode Filters CW = %1, USBMode = %2, FMMode = %3, RTTYMode = %4, PSK31Mode = %5, FT8Mode = %6, MSK144Mode = %7, JT65Mode = %8")
+                  .arg(filterSettings.getModeFilter(CW_MODE) ? "true" : "false").arg(filterSettings.getModeFilter(USB_MODE)  ? "true" : "false")
+                  .arg(filterSettings.getModeFilter(FM_MODE)  ? "true" : "false").arg(filterSettings.getModeFilter(RTTY_MODE)  ? "true" : "false")
+                  .arg(filterSettings.getModeFilter(PSK31_MODE) ? "true" : "false").arg(filterSettings.getModeFilter(FT8_MODE)  ? "true" : "false")
+                  .arg(filterSettings.getModeFilter(MSK144_MODE)  ? "true" : "false").arg(filterSettings.getModeFilter(JT65_MODE)  ? "true" : "false"));
         }
         if (distanceChanged)
         {
-            trace(QString("Bandmap Filter Distance Changed = %1").arg(QString::number(filterSettings.distanceFilter)));
+            trace(QString("Bandmap Filter Distance Changed = %1").arg(QString::number(filterSettings.getDistanceFilter())));
         }
         if (distanceChkBoxChanged)
         {
-            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Distance = %1").arg(filterSettings.ignoreDistanceFlag ? "true" : "false"));
+            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Distance = %1").arg(filterSettings.getIgnoreDistanceFlag() ? "true" : "false"));
         }
         if (distanceEmptyChkBoxChanged)
         {
-            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Empty Distance = %1, Ignore Empty Distance = %2").arg(filterSettings.ignoreEmptyDistanceFlag ? "true" : "false"));
+            trace(QString("Bandmap Filter Distance Checkbox Changed Ignore Empty Distance = %1, Ignore Empty Distance = %2").arg(filterSettings.getIgnoreEmptyDistanceFlag() ? "true" : "false"));
         }
         trace(QString("Save to log"));
         saveBandmapFilterToContest();
@@ -199,9 +217,9 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
         distance = ui->spotDistanceEdit->text().toInt(&ok);
         if (ok)
         {
-            if (distance != filterSettings.distanceFilter)
+            if (distance != filterSettings.getDistanceFilter())
             {
-                filterSettings.distanceFilter = distance;
+                filterSettings.setDistanceFilter(distance);
                 distanceChanged = true;
             }
         }
@@ -222,15 +240,15 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
 void BandmapClientFilterDialog::loadDistanceFilterEditBox()
 {
 
-    ui->spotDistanceEdit->setText(QString::number(filterSettings.distanceFilter));
+    ui->spotDistanceEdit->setText(QString::number(filterSettings.getDistanceFilter()));
 }
 
 void BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged(int state)
 {
     Q_UNUSED(state)
-    if (ui->distFilterIgnoreCheckBox->isChecked() != filterSettings.ignoreDistanceFlag)
+    if (ui->distFilterIgnoreCheckBox->isChecked() != filterSettings.getIgnoreDistanceFlag())
     {
-        filterSettings.ignoreDistanceFlag = ui->distFilterIgnoreCheckBox->isChecked();
+        filterSettings.setIgnoreDistanceFlag(ui->distFilterIgnoreCheckBox->isChecked());
         distanceChkBoxChanged = true;
     }
 
@@ -240,7 +258,7 @@ void BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged(int state)
 
 void BandmapClientFilterDialog::loadIgnoreDistanceChkBoxState()
 {
-    if (filterSettings.ignoreDistanceFlag)
+    if (filterSettings.getIgnoreDistanceFlag())
     {
         ui->distFilterIgnoreCheckBox->setCheckState(Qt::Checked );
     }
@@ -253,15 +271,15 @@ void BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged(in
 {
     Q_UNUSED(state)
 
-    if (ui->ignoreEmptyDistanceValuesChkBox->isChecked() != filterSettings.ignoreEmptyDistanceFlag)
+    if (ui->ignoreEmptyDistanceValuesChkBox->isChecked() != filterSettings.getIgnoreEmptyDistanceFlag())
     {
-        filterSettings.ignoreEmptyDistanceFlag = ui->ignoreEmptyDistanceValuesChkBox->isChecked();
+        filterSettings.setIgnoreEmptyDistanceFlag(ui->ignoreEmptyDistanceValuesChkBox->isChecked());
         distanceEmptyChkBoxChanged = true;
     }
 }
 void BandmapClientFilterDialog::loadIgnoreEmptyDistanceValuesChkBoxState()
 {
-    if (filterSettings.ignoreEmptyDistanceFlag)
+    if (filterSettings.getIgnoreEmptyDistanceFlag())
     {
         ui->ignoreEmptyDistanceValuesChkBox->setCheckState(Qt::Checked );
     }
@@ -280,9 +298,9 @@ void BandmapClientFilterDialog::saveBandmapFilterToContest()
 
 bool BandmapClientFilterDialog::modeFiltersChanged()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clusterModes)
     {
-        if (*filterSettings.modeFilters[i] != modeChkBoxList[i]->isChecked())
+        if (filterSettings.getModeFilter(m) != modeCheckBoxes.value(m)->isChecked())
         {
             return true;
         }
@@ -293,17 +311,17 @@ bool BandmapClientFilterDialog::modeFiltersChanged()
 
 void BandmapClientFilterDialog::copyModeFiltersToFilterSettings()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clusterModes)
     {
-        *filterSettings.modeFilters[i] = modeChkBoxList[i]->isChecked();
+        filterSettings.setModeFilter(m, modeCheckBoxes.value(m)->isChecked());
     }
 }
 
 void BandmapClientFilterDialog::copyModeFiltersToDialog()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clusterModes)
     {
-        modeChkBoxList[i]->setChecked(*filterSettings.modeFilters[i]);
+        modeCheckBoxes.value(m)->setChecked(filterSettings.getModeFilter(m));
     }
 }
 
@@ -313,9 +331,9 @@ void BandmapClientFilterDialog::copyModeFiltersToDialog()
 
 void BandmapClientFilterDialog::clearModes()
 {
-    for (int i = 0; i <modeChkBoxList.count(); i++)
+    for (auto &m:clusterModes)
     {
-        modeChkBoxList[i]->setCheckState(Qt::Unchecked);
+        modeCheckBoxes.value(m)->setCheckState(Qt::Unchecked);
 
     }
 
@@ -323,9 +341,9 @@ void BandmapClientFilterDialog::clearModes()
 
 void BandmapClientFilterDialog::setModes()
 {
-    for (int i = 0; i < modeChkBoxList.count(); i++)
+    for (auto &m:clusterModes)
     {
-        modeChkBoxList[i]->setCheckState(Qt::Checked);
+        modeCheckBoxes.value(m)->setCheckState(Qt::Checked);
 
     }
 
