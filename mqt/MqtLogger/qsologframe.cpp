@@ -396,18 +396,24 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
     }
 }
 
-void QSOLogFrame::initialise( BaseContestLog * pcontest )
+void QSOLogFrame::setContest(BaseContestLog *pcontest)
 {
     catchup = false;
-
     contest = pcontest;
     screenContact.initialise( contest ); // get ops etc correct
+    setXferEnabled(false, contest, "Log");
 
     if (!pcontest)
     {
         return;
     }
 
+    updateQSODisplay();
+    refreshOps();
+    MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
+}
+void QSOLogFrame::initialise()
+{
 
     csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
     vcs.push_back( csIl );
@@ -456,14 +462,9 @@ void QSOLogFrame::initialise( BaseContestLog * pcontest )
         widgetStyles[ui->SerTXEdit] = ssLineEditGreyBackground;
     }
 
-    updateQSODisplay();
-    refreshOps();
-
-
     current = nullptr;
     oldTimeOK = true;
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
-    MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
 
 
     connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
@@ -2235,11 +2236,7 @@ void QSOLogFrame::logScreenEntry( )
    MinosLoggerEvents::SendAfterLogContact(ct);
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
-   if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)
-   {
-       QString mode = lct->mode.getValue() + ':' + lct->mgmSubmode.getValue();
-       MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct->cs, lct->loc.getLoc(), QString::number(lct->bearing), lct->frequency.getValue(), mode, lct->extraText.getValue());
-   }
+   MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
@@ -2460,7 +2457,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
         QString exch = lct->extraText;
         if (exch.size())
         {
-           ui->QTHEdit->setText(exch);
+            ui->QTHEdit->setText(exch);
         }
       }
    }
@@ -2477,7 +2474,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
    doGJVEditChange(ui->QTHEdit);
 }
 
-void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool fromBandmapOrMemory )
+void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory )
 {
     if (fromBandmapOrMemory)
     {
@@ -2486,8 +2483,16 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool from
 
     ui->CallsignEdit->setText(cs);
     ui->LocEdit->setText(loc);
-
-
+    if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+    {
+       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
+       {
+           if (exchange.size())
+           {
+                ui->QTHEdit->setText(exchange);
+           }
+       }
+    }
 
     valid( cmCheckValid ); // make sure all single and cross field
     // validation has been done
@@ -2499,6 +2504,7 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, const bool from
 
     doGJVEditChange(ui->CallsignEdit);
     doGJVEditChange(ui->LocEdit);
+    doGJVEditChange(ui->QTHEdit);
 }
 
 void QSOLogFrame::sortUnfilledCatchupTime( )
@@ -2909,7 +2915,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
     getLogDetails(logData, validCall);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-    emit bandmapMarkFreq(lastLoggedCallsign.realCall, logData.freq, logData.locator, QString::number(logData.bearing));
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 }
 
@@ -2927,7 +2933,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         doGJVCancelButton_clicked();
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
-        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing));
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 
     }
@@ -2959,6 +2965,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
     logData.freq = curFreq;
     logData.locator = screenContact.loc.getLoc();
     logData.mode = screenContact.mode;
+    logData.exchange = screenContact.extraText;
     if (screenContact.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();

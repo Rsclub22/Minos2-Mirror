@@ -58,6 +58,7 @@ void LocCalcFrame::on_CalcButton_clicked()
 
     BaseContestLog cnt;
     cnt.myloc.setLoc( ui->S1Loc->text());
+    cnt.validateLoc();
 
     if ( lonlat( ui->S2Loc->text().toUpper(), longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() ) == LOC_OK )
     {

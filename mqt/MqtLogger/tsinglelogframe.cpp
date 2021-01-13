@@ -100,7 +100,7 @@ void TSingleLogFrame::buildFrame()
     connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
 
-    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, bool)), this, SLOT(sendRunOnFlag(Frequency, bool)));
+    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, QString, bool)), this, SLOT(sendRunOnFlag(Frequency, QString, bool)));
     connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(Frequency, bool)), this, SLOT(sendRunOffFreqFlag(Frequency, bool)));
 
 
@@ -132,10 +132,10 @@ void TSingleLogFrame::buildFrame()
 
 
     // to bandmap
-    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString)),
-            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString)));
-    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString)),
-            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString, QString)),
+            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString, QString)));
+    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString, QString)),
+            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString, QString)));
     //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
     connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
@@ -244,8 +244,7 @@ void TSingleLogFrame::createScreenComponents()
 
     GJVQSOLogFrame->setVisible(false);
     GJVQSOLogFrame->setAsEdit(false, "Log");
-    GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
-    GJVQSOLogFrame->initialise( contest );
+    GJVQSOLogFrame->initialise( );
 
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
@@ -412,7 +411,7 @@ void TSingleLogFrame::clearScreenLayout()
     // CribSheet
     // NextContactDetailsLabel
     // CurrentBandLabel
-    GJVQSOLogFrame->initialise(nullptr);
+    GJVQSOLogFrame->setContest(nullptr);
     thisMatchFrame->setContest(nullptr);
     otherMatchFrame->setContest(nullptr);
     archiveMatchFrame->setContest(nullptr);
@@ -607,7 +606,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctQSOEdit:
                 {
                     elementScrollArea->setWidget(GJVQSOLogFrame);
-                    GJVQSOLogFrame->initialise(ct);
+                    GJVQSOLogFrame->setContest(ct);
                     GJVQSOLogFrame->setVisible(true);
                     break;
                 }
@@ -1155,7 +1154,7 @@ void TSingleLogFrame::transferDetails(memoryData::memData &m )
        return ;
     }
 
-    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.fromBandmapOrMemory );
+    GJVQSOLogFrame->transferDetails( m.callsign, m.locator, m.exchange, m.fromBandmapOrMemory );
     FKHRigControlFrame->transferDetails(m);
 }
 void TSingleLogFrame::getDetails(memoryData::memData &m)
@@ -1507,15 +1506,15 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
 //}
 
 
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg);
+    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg, exchange);
 }
 
 
-void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg)
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg);
+    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg, exchange);
 }
 
 void TSingleLogFrame::sendBandmapRadioIsConnected(bool state)
@@ -1533,10 +1532,10 @@ void TSingleLogFrame::sendBandmapRadioHasError(QString error)
 //    bandmapControlFrame->setCQFreq(runFreq, showMarker);
 //}
 
-void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, bool runModeOn)
+void TSingleLogFrame::sendRunOnFlag(Frequency runFreq, QString mode, bool runModeOn)
 {
     GJVQSOLogFrame->setRunOnFlag(runModeOn);
-    bandmapControlFrame->setRunOnFlag(runFreq, runModeOn);
+    bandmapControlFrame->setRunOnFlag(runFreq, mode, runModeOn);
 }
 
 void TSingleLogFrame::sendRunOffFreqFlag(Frequency runFreq, bool offRunFreq)

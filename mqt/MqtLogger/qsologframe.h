@@ -53,7 +53,8 @@ public:
     void lgTraceerr( int err );
 
     virtual void selectField( QWidget *v );
-    virtual void initialise(BaseContestLog * contest);
+    virtual void initialise();
+    virtual void setContest(BaseContestLog * contest);
     virtual void setTimeStyles();
     virtual void refreshOps();
     virtual void refreshOps(ScreenContact &screenContact);
@@ -66,7 +67,7 @@ public:
 
     void transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct );
     void transferDetails(const ListContact *lct, const ContactList *matct );
-    void transferDetails(QString cs, const QString loc, const bool fromBandmapOrMemory );
+    void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 
     void setFirstUnfilledButtonEnabled(bool);
     void logTabChanged();
@@ -278,8 +279,8 @@ signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
-    void bandmapMarkFreq(QString, Frequency, QString, QString);
-    void bandmapSaveFreq(QString, Frequency, QString, QString);
+    void bandmapMarkFreq(QString, Frequency, QString, QString, QString);
+    void bandmapSaveFreq(QString, Frequency, QString, QString, QString);
     void sendFreqControl(Frequency);
     void freqChanged(Frequency);
     void sendSpotToClusterServer(Frequency, QString, QString);

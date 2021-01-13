@@ -354,10 +354,11 @@ void DisplayContestContact::checkContact( bool inScan)
        int n = clp->getCountriesWorked(band, ctryMult->getBasePrefix());
        if ( n == 1 )
        {
-           clp->nctry[band]++;
+           // nonGCountryMult says M6 - non UK countries only
+           // since M6 died, always false
            if (!clp->nonGCountryMult.getValue() || !cs.isUK())
            {
-              clp->nctry[band]++;
+              clp->nctry[band]++;   // DXCC mults
               if ( clp->countryMult.getValue() )
               {
                   multCount++;
@@ -439,7 +440,7 @@ void DisplayContestContact::checkContact( bool inScan)
 
       if ( !ls )
       {
-         if ( letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
+         if (letters.size() >= 2 && letters[ 0 ].isLetter() && letters[ 1 ].isLetter() )
          {
             ls = new LocSquare ( letters );
             MapWrapper<LocSquare> wls(ls);

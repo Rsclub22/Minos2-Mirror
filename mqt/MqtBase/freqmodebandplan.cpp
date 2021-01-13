@@ -32,15 +32,13 @@ bool freqModeBandPlan::loadBandsFromBandList()
         for (auto const &m: b->modes)
         {
             ModeFreqDetail<Frequency> mfl;
-            QList<Frequency> freqHighLow;
 
-            Frequency fl = m->fLow;
-            Frequency fh = m->fHigh;
+            addPair(mfl, m->fcLow1, m->fcHigh1);
 
-            freqHighLow.append(fl);
-            freqHighLow.append(fh);
-            mfl.freq.append(freqHighLow);
-
+            if (qint64(m->fcLow2) > 0)
+            {
+                addPair(mfl, m->fcLow2, m->fcHigh2);
+            }
             modeFreqList.insert(m->getType(), mfl);
         }
         if (modeFreqList.count())

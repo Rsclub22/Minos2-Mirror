@@ -15,7 +15,7 @@ Callsign& Callsign::operator = ( const Callsign& rhs)
     valRes = rhs.valRes;
 
     locCtryPrefix = rhs.locCtryPrefix;
-    dupPrefix = rhs.locCtryPrefix;
+    dupPrefix = rhs.dupPrefix;
     number = rhs.number;
     body = rhs.body;
     suffix = rhs.suffix;
@@ -32,7 +32,7 @@ Callsign::Callsign(const Callsign &rhs)
     valRes = rhs.valRes;
 
     locCtryPrefix = rhs.locCtryPrefix;
-    dupPrefix = rhs.locCtryPrefix;
+    dupPrefix = rhs.dupPrefix;
     number = rhs.number;
     body = rhs.body;
     suffix = rhs.suffix;

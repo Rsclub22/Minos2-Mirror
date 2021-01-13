@@ -209,7 +209,6 @@ void N1MMLink::sendFrequencyRequest(Frequency f)
 
 void N1MMLink::onReceiveUDP()
 {
-    connected = true;
     connectTimer.start(N1MMTimerInterval);  // longer than the N1MM 10 sec repeat frequency
     trace("N1MMLink::onReadyRead()");
     while (qus->hasPendingDatagrams())
@@ -247,6 +246,9 @@ void N1MMLink::onReceiveUDP()
                if ( checkElementName( e, "Freq" ) )
                {
                     currFrequency = Frequency(QString(e->GetText()) + "0");    // as freq is in tens of Hz
+
+                    // only mark connected when we have real frequencies available
+                    connected = true;
                }
                if ( checkElementName( e, "RadioName" ) )
                {

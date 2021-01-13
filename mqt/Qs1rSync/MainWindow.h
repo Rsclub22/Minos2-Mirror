@@ -4,6 +4,7 @@
 #include "base_pch.h"
 #include "RigCache.h"
 #include "n1mmlink.h"
+#include "wsjtxlink.h"
 
 namespace Ui {
 class MainWindow;
@@ -46,10 +47,13 @@ private slots:
     void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
     void on_trackBandcb_stateChanged(int);
 
+    void on_wsjtxCb_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     RigCache rigCache;
     N1MMLink n1mmLink;
+    WsjtxLink wsjtxLink;
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;

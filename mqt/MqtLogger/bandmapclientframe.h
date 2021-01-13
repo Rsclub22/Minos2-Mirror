@@ -142,18 +142,17 @@ public:
     explicit BandmapClientFrame(QWidget* parent);
     ~BandmapClientFrame() override;
 
-    QTimer* mouseInFrameTimer;
+    QTimer* mouseInFrameTimer = nullptr;
 
     void setFreq(Frequency);
     void setContest(BaseContestLog *c);
     void setHoldUpdateFlag(bool state);
     bool getPurgeSpotFlag(){return purgeSpotFlag;}
-    bool isSpotQueueEmpty();
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void setBandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg);
-    void setBandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg);
+    void setBandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
+    void setBandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
 
     void setRotatorBearing(QString s);
     void setRotatorConnected(bool connected);
@@ -169,7 +168,7 @@ public:
     bool readTuneAddBandMapSetting();
 
 
-    void setRunOnFlag(Frequency _runFreq, bool _runModeOn);
+    void setRunOnFlag(Frequency _runFreq, QString mode, bool _runModeOn);
     void setRunOffFreqFlag(Frequency _runFreq, bool _offRunFreq);
     void setBandmapRadioIsConnect(bool state);
     void setBandmapRadioHasError(QString error);
@@ -183,60 +182,61 @@ signals:
 private:
 
     Ui::BandmapClientFrame *ui;
-    bool isProtected;
+    bool isProtected = false;
     BaseContestLog *ct = nullptr;
     QString contestUuid;
     QString contestBandStr;
-    int contestBand;
+    int contestBand = -1;
     Frequency contestBandFlow;
     Frequency contestBandFHigh;
     QString contestModeStr;
-    int contestMode;
+    int contestMode = -1;
 
     QString radioMode;
 
-    bool radioIsConnected;
+    bool radioIsConnected = false;
     QString radioError;
     Frequency lastfreq;
-    QPalette *freqDisplayPalette;
+    QPalette *freqDisplayPalette = nullptr;
     bool legalFreq = true;
 
 
-    QTimer* purgeTimer;
-    QTimer* checkNewSpotsTimer;
-    QTimer* checkNewFilters;
+    QTimer* purgeTimer = nullptr;
+    QTimer* checkNewSpotsTimer = nullptr;
 
     QVector<QSharedPointer<BandInfo> > bands;
-    checkModeAgainstFreq* modeBandPlan;
-    bool modeBandPlanOk;
+
+    checkModeAgainstFreq* modeBandPlan = nullptr;
+    bool modeBandPlanOk = false;
+
+    CheckOperatingFreq* operatingFreqExclusions = nullptr;
+    bool operatingFreqExclusionsPlanOk = false;
 
     BandmapClientFilterSettings filterSettings;
 
-    CheckOperatingFreq* operatingFreq;
-    bool operatingFreqPlanOk;
-
-    BMP_MouseInObject* actionInObject;
+    BMP_MouseInObject* actionInObject = nullptr;
 
 
     // cluster spots
-    QVector<QString> spotQueue;
-    bool clusterServerLoaded;
-    bool clusterServerConnected;
+    QVector<QSharedPointer<BandmapSpotData> > spotQueue;
+    bool clusterServerLoaded = false;
+    bool clusterServerConnected = false;
 
     // CQ Frequency
     Frequency runFreq;
-    bool runModeOn;
-    bool offRunFreq;
+    QString runMode;
+    bool runModeOn = false;
+    bool offRunFreq = false;
 
     // spots from logger
-    QVector<BandmapSpotData*> logSpotQueue;
+    QVector<QSharedPointer<BandmapSpotData> > logSpotQueue;
 
-    BandmapView *bandmapView;
-    QItemSelectionModel *selectionModel;
-    QGraphicsView* bandmapGraphicsView;
+    BandmapView *bandmapView = nullptr;
+    QItemSelectionModel *selectionModel = nullptr;
+    QGraphicsView* bandmapGraphicsView = nullptr;
 
-    BandmapSortFilterProxyModel* bandmapSpotProxyModel;
-    BandmapClientFilterDialog* filterSetup;
+    BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
+    BandmapClientFilterDialog* filterSetup = nullptr;
 
     UpperCaseValidator ucValidator;
 
@@ -244,46 +244,44 @@ private:
     Frequency curFreq;
     int mapViewHeight = 0;
 
-    BandmapDataModel *bandmapDataModel;
-    BandmapSpotData *bandmapData;
+    BandmapDataModel *bandmapDataModel = nullptr;
+//    BandmapSpotData *bandmapData = nullptr;
 
-    QMenu* spotsMenu;
-    QAction* markSpotAction;
-    QAction* unMarkSpotAction;
-    QAction* freqAction;
-    QAction* bearingAction;
-    QAction* logAction;
-    QAction* memoryAction;
-    QAction* saveZoomLevel;
-    QAction* readSavedZoomLevel;
+    QMenu* spotsMenu = nullptr;
+    QAction* markSpotAction = nullptr;
+    QAction* unMarkSpotAction = nullptr;
+    QAction* freqAction = nullptr;
+    QAction* bearingAction = nullptr;
+    QAction* logAction = nullptr;
+    QAction* memoryAction = nullptr;
+    QAction* saveZoomLevel = nullptr;
+    QAction* readSavedZoomLevel = nullptr;
 
-    QAction* clearSpotAction;
-    QAction* clearAllSpotsAction;
+    QAction* clearSpotAction = nullptr;
+    QAction* clearAllSpotsAction = nullptr;
 
-    QMenu* contextSpotsMenu;
-    QAction* contextSpotsMenu_markSpotAction;
-    QAction* contextSpotsMenu_unMarkSpotAction;
-    QAction* contextSpotsMenu_freqAction;
-    QAction* contextSpotsMenu_bearingAction;
-    QAction* contextSpotsMenu_logAction;
-    QAction* contextSpotsMenu_memoryAction;
-    QAction* contextSpotsMenu_clearSpotAction;
+    QMenu* contextSpotsMenu = nullptr;
+    QAction* contextSpotsMenu_markSpotAction = nullptr;
+    QAction* contextSpotsMenu_unMarkSpotAction = nullptr;
+    QAction* contextSpotsMenu_freqAction = nullptr;
+    QAction* contextSpotsMenu_bearingAction = nullptr;
+    QAction* contextSpotsMenu_logAction = nullptr;
+    QAction* contextSpotsMenu_memoryAction = nullptr;
+    QAction* contextSpotsMenu_clearSpotAction = nullptr;
 
-    QShortcut* zoomIn;
-    QShortcut* zoomOut;
+    QShortcut* zoomIn = nullptr;
+    QShortcut* zoomOut = nullptr;
 
 
-    //BandmapData actionMenuSelectedSpotData;
-    //int actionMenuSelectedSpotDataRowNum;
-    BandmapSpotData contextMenuSelectedSpotData;
-    int contextMenuSelectedSpotDataRowNum;
+    BandmapSpotData contextMenuSelectedSpotData = bandmapSpotType::NONE;
+    int contextMenuSelectedSpotDataRowNum = -1;
 
-    bool purgeSpotFlag;
-    bool holdUpdateFlag;
-    qlonglong timeToLive;
+    bool purgeSpotFlag = false;
+    bool holdUpdateFlag = false;
+    qlonglong timeToLive = 0;
 
     QString curRotBearing;
-    bool rotatorConnected;
+    bool rotatorConnected = false;
 
 
 
@@ -292,15 +290,14 @@ private:
     void handleDxSpots(QVector<QString> &spotQueue);
     //void handleClusterStatusMessage(QString &msg);
     void clusterStatusIndicatorToggle(bool on);
-    void addDxSpotToBandmapTable(const QString spot);
+    void addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
-    void checkSpotWorked(QString &callsign, QString &locator, bool *callWorked, bool *locatorWorked);
-    bool checkSpotInTable(QStringList &sl);
+    void checkSpotWorked(const QString &callsign, const QString &locator, bool *callWorked, bool *locatorWorked);
+    bool checkSpotInTable(QSharedPointer<BandmapSpotData> spot);
     void sendFreqToRig(Frequency freq);
 
     bool event(QEvent *event) override;
     bool eventFilter(QObject *obj, QEvent *event) override;
-    int findRowToInsert(QString f);
     bool isFreqLegal(const Frequency &freq, const QString band, const QString mode);
 
     QString readBandmapFreqLimit(QString band, QString mode);
@@ -308,7 +305,7 @@ private:
     void traceMsg(QString msg);
 
     void setCQFreq();
-    void addRemoveCQSpot(const BandmapSpotData *spot);
+    void addRemoveCQSpot(QSharedPointer<BandmapSpotData> spot);
 
     void radioStatusIndicatorToggle(bool on);
     bool checkContestBandMatch(Frequency curFreq);
@@ -316,6 +313,7 @@ private:
     int readBandmapZoomLevel();
     void setZoomLevelLabelText(int level);
 
+    QSharedPointer<BandmapSpotData> stringToDxSpot(QString spot);
 protected:
 
 
@@ -337,16 +335,15 @@ private slots:
      void on_memoryActionSelected();
      void on_clearSpotActionSelected();
      void sendBrgToRot(QString brg);
-     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc, QString brg, Frequency freq, QString mode, QString districtMult);
+     void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
      void filterButtonSelected();
-     void checkSavedFilters();
      void onMenuShow();
 
      void on_FiltersChanged(bool state);
      void purgeSpots();
      void on_markSpotActionSelected();
      void on_unMarkSpotActionSelected();
-     void addLogSpotToBandmapTable(const BandmapSpotData *spot);
+     void addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
      void mouseTimerCheckNewSpots();
      void on_FreqDisplayClicked();
 
@@ -368,7 +365,7 @@ private slots:
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
      void requestSpots();
-     void on_pushbuttonPressed();
+     void on_resendSpotsPushedPressed();
      void on_textFilterEdit_textChanged(const QString &arg1);
 };
 

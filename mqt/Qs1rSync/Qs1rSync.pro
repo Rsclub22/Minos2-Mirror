@@ -19,12 +19,14 @@ win32:RC_ICONS += ../minos.ico
 SOURCES += \
         main.cpp \
         MainWindow.cpp \
-        n1mmlink.cpp
+        n1mmlink.cpp \
+        wsjtxlink.cpp
 
 HEADERS += \
         MainWindow.h \
         n1mmlink.h \
-        qs_defines.h
+        qs_defines.h \
+        wsjtxlink.h
 
 FORMS += \
         MainWindow.ui

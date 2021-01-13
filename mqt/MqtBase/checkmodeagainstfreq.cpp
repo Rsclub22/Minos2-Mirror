@@ -9,18 +9,14 @@ checkModeAgainstFreq::checkModeAgainstFreq()
 
 QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
 {
-    QMap<QString, ModeFreqDetail<Frequency>> modeList;
-    ModeFreqDetail<Frequency> freqs;
-
     if (bandModeFreqList.contains(band))
     {
-
-        modeList = bandModeFreqList.value(band);
+        QMap<QString, ModeFreqDetail<Frequency>> modeList = bandModeFreqList.value(band);
         QMapIterator<QString, ModeFreqDetail<Frequency>> i(modeList);
         while (i.hasNext())
         {
             i.next();
-            freqs = i.value();
+            ModeFreqDetail<Frequency> freqs = i.value();
             for (auto const &freqLimits: freqs.freq)
             {
                 if (freqLimits.count() == 0)

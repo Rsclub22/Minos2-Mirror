@@ -57,9 +57,9 @@ void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, Callsig
     emit mle.AfterLogContactToCluster(ct, cs, loc);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContactToBandmap(BaseContestLog *ct, Callsign cs, QString loc, QString bearing, Frequency freq, QString mode, QString districtMult)
+void MinosLoggerEvents::SendAfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct)
 {
-    emit mle.AfterLogContactToBandmap(ct, cs, loc, bearing, freq, mode, districtMult);
+    emit mle.AfterLogContactToBandmap(ct, lct);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendAfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *c)
