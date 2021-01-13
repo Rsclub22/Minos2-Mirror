@@ -310,3 +310,36 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
             isSelected != bsd.isSelected ||
             spotType != bsd.spotType;
 }
+
+QString BandmapSpotData::spotName()
+{
+    switch(spotType)
+    {
+        case bandmapSpotType::NONE:
+        return "NONE";
+        break;
+        case bandmapSpotType::CLUSTER:
+        return "CLUSTER";
+        break;
+        case bandmapSpotType::CLUSTER_MARKED:
+        return "CLUSTER MARKED";
+        break;
+        case bandmapSpotType::LOGGED:
+        return "LOGGED";
+        break;
+        case bandmapSpotType::MARKED:
+        return "MARKED";
+        break;
+        case bandmapSpotType::SAVED:
+        return "SAVED";
+        break;
+        case bandmapSpotType::CQ:
+        return "CQ";
+        break;
+        case bandmapSpotType::DELETED:
+        return "DELETED";
+        break;
+
+    };
+
+}
