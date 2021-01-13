@@ -31,7 +31,7 @@ class ClusterClientFilterDialog : public QDialog
 
 public:
 
-    explicit ClusterClientFilterDialog(BaseContestLog *c, ClusterClientFilterSettings &filterSettings_, QWidget *parent);
+    explicit ClusterClientFilterDialog(BaseContestLog *c, const ClusterClientFilterSettings &filterSettings_, const QVector<QSharedPointer<BandInfo> > &bands_, const QStringList &clustermodes_, QWidget *parent);
 
     ~ClusterClientFilterDialog();
 
@@ -104,7 +104,7 @@ private:
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-
+    bool hfButtonState;
     bool vhfButtonState;
     bool mWaveButtonState;
     bool modeButtonState;
@@ -171,13 +171,13 @@ private:
     void setHFVisible(bool state);
 
 
-    void setBandsCheckBox(QString bandType, Qt::CheckState state);
-    void setHFBandCheckBoxes();
-    void clearVHFBandCheckBoxes();
-    void setVHFBandCheckBoxes();
-    void clearMWaveBandCheckBoxes();
-    void setMWaveBandCheckBoxes();
-    void clearHFBandCheckBoxes();
+    void setBandsCheckBox(QString bandType, bool state);
+
+
+
+
+
+
     void setDefDistances(QString bandType);
     void setEmptyDistCheckBox(QString bandType, bool state);
     void setIgnoreDistCheckBox(QString bandType, bool state);
@@ -239,6 +239,7 @@ private slots:
     void onHfSetAllEmptyPbClicked();
     void onMwClearAllEmptyDistPbClicked();
     void onHfClearAllEmptyDistPbClicked();
+    void hfButtonSelected();
 };
 
 #endif // CLUSTERCLIENTFILTERDIALOG_H

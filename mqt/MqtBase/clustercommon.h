@@ -608,9 +608,11 @@ public:
         for (auto &b:bands)
         {
 
-            ddin.defaultDistanceName = defTxt.append(b.data()->uk.remove("\x20").replace(".", "_"));
+            QString band = b.data()->uk;
+            QString iniBand = band.remove("\x20").replace(".", "_");
+            ddin.defaultDistanceName = defTxt.append(iniBand);
             ddin.bandType = b.data()->getType();
-            defaultDistanceIniNames.insert(b.data()->uk, ddin);
+            defaultDistanceIniNames.insert(band, ddin);
         }
     }
 

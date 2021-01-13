@@ -519,7 +519,7 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, this);
+    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, bands, clusterModes, this);
     //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
 
     filterSetup->exec();
