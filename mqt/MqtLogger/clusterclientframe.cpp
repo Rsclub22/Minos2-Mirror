@@ -579,8 +579,8 @@ void ClusterClientFrame::setHF(bool hfOn)
 
 
         // this might not be the right thing to do...
-        LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
-        filterSettings = contest->getClusterFilter();
+        //LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
+        //filterSettings = contest->getClusterFilter();
 
 
 }
