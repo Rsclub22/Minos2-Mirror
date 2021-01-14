@@ -34,13 +34,6 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="resendSpotsTestPb">
-         <property name="text">
-          <string>Test Resend Spots</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QLabel" name="clusterClientFrameTitle">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">

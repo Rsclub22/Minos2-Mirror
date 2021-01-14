@@ -73,6 +73,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     memoryAction = new QAction(tr("Send &Memory"), this);
     saveZoomLevel = new QAction(tr("Save ZoomLevel"), this);
     readSavedZoomLevel = new QAction(tr("Read Saved ZoomLevel"), this);
+    resendSpotsAction = new QAction(tr("&Resend Cluster Spots"), this);
     clearSpotAction = new QAction(tr("Clear &Spot"), this);
     clearAllSpotsAction = new QAction(tr("Clear All Spots"), this);
 
@@ -84,6 +85,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->addAction(memoryAction);
     spotsMenu->addAction(saveZoomLevel);
     spotsMenu->addAction(readSavedZoomLevel);
+    spotsMenu->addAction(resendSpotsAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
 
@@ -104,7 +106,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect( memoryAction, SIGNAL( triggered() ), this, SLOT(on_memoryActionSelected()) );
     connect( saveZoomLevel, SIGNAL( triggered() ), this, SLOT(on_saveZoomLevelActionSelected()) );
     connect( readSavedZoomLevel, SIGNAL( triggered() ), this, SLOT(on_readZoomLevelActionSelected()) );
-
+    connect(resendSpotsAction, SIGNAL(triggered()), this, SLOT(on_resendClusterSpotSelected()));
     connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(on_clearSpotActionSelected()) );
     connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(on_clearAllSpotsActionSelected()) );
 
@@ -172,7 +174,6 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     purgeTimer->start(PURGE_TIME);
 
-    connect(ui->resendSpotsTestPb, SIGNAL(pressed()), this, SLOT(on_resendSpotsPushedPressed()));
 
 }
 
@@ -222,7 +223,7 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
     }
 }
 
-void BandmapClientFrame::on_resendSpotsPushedPressed()
+void BandmapClientFrame::on_resendClusterSpotSelected()
 {
     if (ct  && contestBand != -1)
     {

@@ -110,6 +110,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     bearingAction = new QAction(tr("Set &Bearing"), this);
     logAction = new QAction(tr("Send &Log"), this);
     memoryAction = new QAction(tr("Send &Memory"), this);
+    resendSpotsAction = new QAction(tr("&Resend Cluster Spots"), this);
     clearSpotAction = new QAction(tr("Clear &Spot"), this);
     clearAllSpotsAction = new QAction(tr("Clear &All Spots"), this);
     //memoryActionOveride = new QAction(tr("Force &Send Memory"), this);
@@ -118,26 +119,28 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     spotsMenu->addAction(bearingAction);
     spotsMenu->addAction(logAction);
     spotsMenu->addAction(memoryAction);
+    spotsMenu->addAction(resendSpotsAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
     //spotsMenu->addAction(memoryActionOveride);
 
     ui->actionsButton->setMenu(spotsMenu);
-    connect(spotsMenu, &QMenu::aboutToShow, [=](){onMenuShow();});
+    connect(spotsMenu, &QMenu::aboutToShow, this, [=](){onMenuShow();});
 
-    connect( freqAction, &QAction::triggered, [=](){on_freqActionSelected();});
-    connect( bearingAction, &QAction::triggered, [=](){bearingActionSelected();});
-    connect( logAction, &QAction::triggered, [=](){logActionSelected();});
-    connect( memoryAction, &QAction::triggered, [=](){memoryActionSelected();});
-    connect( clearSpotAction, &QAction::triggered, [=](){clearSpotActionSelected();});
-    connect( clearAllSpotsAction, &QAction::triggered, [=](){clearAllSpotsActionSelected();});
+    connect( freqAction, &QAction::triggered, this, [=](){on_freqActionSelected();});
+    connect( bearingAction, &QAction::triggered, this, [=](){bearingActionSelected();});
+    connect( logAction, &QAction::triggered, this, [=](){logActionSelected();});
+    connect( memoryAction, &QAction::triggered, this, [=](){memoryActionSelected();});
+    connect(resendSpotsAction, &QAction::triggered, this, [=](){on_resendClusterSpots();});
+    connect( clearSpotAction, &QAction::triggered, this, [=](){clearSpotActionSelected();});
+    connect( clearAllSpotsAction, &QAction::triggered, this, [=](){clearAllSpotsActionSelected();});
     //connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
     //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
 
     ui->searchLineEdit->setValidator(&ucValidator);
-    connect(ui->searchLineEdit, &QLineEdit::editingFinished, [=](){onSearchEditingFinished();});
+    connect(ui->searchLineEdit, &QLineEdit::editingFinished, this, [=](){onSearchEditingFinished();});
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotDataModel->delegate = dxDelegate;
@@ -194,7 +197,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
     //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-    connect(ui->resendSpotsTestPb, &QPushButton::pressed, this, [=](){on_pushbuttonPressed();});
+
 
     checkHfFlagTimer = new QTimer(this);
     connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
@@ -227,7 +230,7 @@ ClusterClientFrame::~ClusterClientFrame()
 
 
 
-void ClusterClientFrame::on_pushbuttonPressed()
+void ClusterClientFrame::on_resendClusterSpots()
 {
     if (ct  && contestBand != -1)
     {

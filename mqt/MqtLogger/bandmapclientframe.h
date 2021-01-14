@@ -256,7 +256,7 @@ private:
     QAction* memoryAction = nullptr;
     QAction* saveZoomLevel = nullptr;
     QAction* readSavedZoomLevel = nullptr;
-
+    QAction* resendSpotsAction = nullptr;
     QAction* clearSpotAction = nullptr;
     QAction* clearAllSpotsAction = nullptr;
 
@@ -365,7 +365,7 @@ private slots:
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
      void requestSpots();
-     void on_resendSpotsPushedPressed();
+     void on_resendClusterSpotSelected();
      void on_textFilterEdit_textChanged(const QString &arg1);
 };
 

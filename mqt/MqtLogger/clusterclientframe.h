@@ -220,6 +220,7 @@ private:
     QAction* bearingAction;
     QAction* logAction;
     QAction* memoryAction;
+    QAction* resendSpotsAction;
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
     //QAction* memoryActionOveride;
@@ -345,8 +346,8 @@ private slots:
     void on_doSplitterChanges(BaseContestLog *);
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
+    void on_resendClusterSpots();
     void requestSpots();
-    void on_pushbuttonPressed();  //*************** test remove
     void checkHfFlag();
 };
 
