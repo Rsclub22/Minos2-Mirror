@@ -704,18 +704,24 @@ int BandmapView::getBandmapFrameWidth()
 
 void BandmapView::setFreq(Frequency f, bool legalFreq)
 {
+    // The 1000 and 2000 below aren't enough - should they be configurable?
+    // or a proportion of the freq range?
     curFreq = f;
 
-    if (dialCursorWithinViewport(f) == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
+    int dfwv = dialCursorWithinViewport(f);
+    Frequency freqWidth = dial->getScaleEndFreq() - dial->getScaleStartFreq();
+
+    Frequency edgeAmount = freqWidth/5;
+
+    if (dfwv == DIAL_CURSOR_BELOW_VIEWSTART_FREQ)
     {
         // tuning up, move viewport
-        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - Frequency(1000)));
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - edgeAmount));
     }
-    else if (dialCursorWithinViewport(f) == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
+    else if (dfwv == DIAL_CURSOR_ABOVE_VIEWSTART_FREQ)
     {
         // tuning down, move viewport
-        Frequency freqWidth = dial->getScaleEndFreq() - dial->getScaleStartFreq();
-        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - freqWidth + Frequency(2000)));
+        bandmapGraphicsView->verticalScrollBar()->setValue(dial->getYCoordOnDial(f - freqWidth + edgeAmount));
     }
 
 
@@ -754,12 +760,16 @@ int BandmapView::dialCursorWithinViewport(Frequency freq)
 
     dial->setViewPortStartEndFreq(sceneStartYCoord, sceneEndYCoord, contestBandFlow);
 
-    if (freq < dial->getScaleStartFreq())
+    Frequency freqWidth = dial->getScaleEndFreq() - dial->getScaleStartFreq();
+    Frequency edgeAmount = freqWidth/5;
+
+
+    if (freq < dial->getScaleStartFreq() + edgeAmount)
     {
         return DIAL_CURSOR_BELOW_VIEWSTART_FREQ;
 
     }
-    else if (freq > dial->getScaleEndFreq())
+    else if (freq > dial->getScaleEndFreq() - edgeAmount)
     {
         return DIAL_CURSOR_ABOVE_VIEWSTART_FREQ;
 
