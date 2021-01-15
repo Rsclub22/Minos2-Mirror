@@ -19,7 +19,7 @@ Locator::Locator(const Locator& rhs)
 Locator& Locator::operator =(const Locator& rhs)
 {
     valRes = rhs.valRes;
-    loc = rhs.loc;
+    loc.setValue(rhs.loc);
 
     return *this;
 }

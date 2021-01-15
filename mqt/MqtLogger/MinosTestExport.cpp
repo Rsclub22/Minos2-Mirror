@@ -349,7 +349,7 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & XBAND ) != 0 ), "xBand" );
       st->addMember( bool( ( lct->contactFlags.getValue( dirty ) & FORCE_LOG ) != 0 ), "Forced" );
    }
-   trace(QString("export QSO CS %1 dirty %2 Loc %3 dirts %4")
+   trace(QString("export QSO CS %1 dirty %2 Loc %3 dirty %4")
          .arg(lct->cs.getFullCall()).arg(lct->cs.isDirty())
          .arg(lct->loc.getLoc()).arg(lct->loc.isDirty())
          );
