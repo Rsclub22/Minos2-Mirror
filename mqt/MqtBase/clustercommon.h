@@ -351,14 +351,16 @@ public:
     void setCallSignFilterList(QString cfl);
     QString getCallSignFilterList();
 
-    bool getBandFilter(QString band);
+    bool getBandFilter(QString band) const;
     void setBandFilter(QString band, bool setting);
+
 
     void setBandType(QString band, QString bandType);
     QString getBandType(QString band);
 
     bool getModeFilter(QString mode);
     void setModeFilter(QString mode, bool setting);
+
 
 
     bool testDistanceFilter(int distance, QString band);

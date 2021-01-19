@@ -105,6 +105,9 @@ void ClusterMainWindow::doStartup()
     //BandList::getBandList().loadVhfAndUpBands(bands);
     BandList::getBandList().loadAllBands(bands);
 
+    filterSettings.initFilterSettings(bands);
+    initFilterCheckBoxs();
+
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadBandsFromBandList())
     {
@@ -199,9 +202,9 @@ void ClusterMainWindow::doStartup()
 
     dxSpotDataModel->delegate = dxSpotViewDelegate;
 
-    initFilterCheckBoxs();
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(allBandfilters);
+
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -2638,46 +2641,33 @@ void ClusterMainWindow::initFilterCheckBoxs()
 {
 
 
+    QList<QCheckBox*> bandChkBoxList;
+
     bandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
                    << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox
                    << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
                    << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
 
+    ClusterClientBandFilterDialogDetails ccfd;
+    for (int i = 0; i <bands.count(); i++)
+    {
+        ccfd.bandChkBox = bandChkBoxList[i];
+        ccfd.bandType = bands[i].data()->getType();
+        bandCheckBoxes.insert(bands[i].data()->uk, ccfd);
+    }
+
+
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        connect(bandChkBoxList[i], &QCheckBox::stateChanged, [=](int state) {onbandCheckBoxStateChanged(i, state);});
+        connect(bandChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onbandCheckBoxStateChanged(i, state);});
 
     }
 
 
-    hfBandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
-                     << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox;
 
-    vhfBandChkBoxList << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox;
-    uhfBandChkBoxList << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
-
-
-    allBandfilters << &bandFilter1_8Mhz << &bandFilter3_5Mhz << &bandFilter7Mhz
-                   << &bandFilter14Mhz << &bandFilter21Mhz << &bandFilter28Mhz
-                   << &bandFilter50Mhz << &bandFilter70Mhz << &bandFilter144Mhz<< &bandFilter432Mhz
-                   << &bandFilter1296Mhz << &bandFilter2300Mhz << &bandFilter3_4Ghz << &bandFilter5_6Ghz << &bandFilter10Ghz;
-
-    hfBandfilters << &bandFilter1_8Mhz << &bandFilter3_5Mhz << &bandFilter7Mhz
-                  << &bandFilter14Mhz << &bandFilter21Mhz << &bandFilter28Mhz;
-
-    vhfBandfilters << &bandFilter50Mhz << &bandFilter70Mhz << &bandFilter144Mhz<< &bandFilter432Mhz;
-
-    uhfBandfilters << &bandFilter1296Mhz << &bandFilter2300Mhz << &bandFilter3_4Ghz << &bandFilter5_6Ghz << &bandFilter10Ghz;
-
-    for (auto &bf:allBandfilters)
-    {
-        *bf = false;
-    }
-
-
-    connect(ui->hfSelectBandPb, &QPushButton::pressed, [=]() {onHfSelectBandPbPressed();});
-    connect(ui->vhfSelectBandPb, &QPushButton::pressed, [=]() {onVhfSelectBandPbPressed();});
-    connect(ui->uhfSelectBandPb, &QPushButton::pressed, [=]() {onUhfSelectBandPbPressed();});
+    connect(ui->hfSelectBandPb, &QPushButton::pressed, this, [=]() {onHfSelectBandPbPressed();});
+    connect(ui->vhfSelectBandPb, &QPushButton::pressed, this, [=]() {onVhfSelectBandPbPressed();});
+    connect(ui->uhfSelectBandPb, &QPushButton::pressed, this, [=]() {onUhfSelectBandPbPressed();});
 
 
 
@@ -2685,9 +2675,10 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
 void ClusterMainWindow::loadBandFilterSettingsToTab()
 {
-    for (int i = 0; i < allBandfilters.count(); i++)
+    for (auto const &b:bands)
     {
-        bandChkBoxList[i]->setChecked(*allBandfilters[i]);
+        QString band = b.data()->uk;
+        bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
     }
 }
 
@@ -2697,9 +2688,10 @@ void ClusterMainWindow::saveBandFilterSettings()
     QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
     config.beginGroup("BandFilter");
 
-    for (int i = 0; i < allBandfilters.count(); i++)
+    for (auto const &b:bands)
     {
-        config.setValue(QString("bandFilter_+%1").arg(clusterBands[i]), *allBandfilters[i]);
+        QString band = b.data()->uk;
+        config.setValue(QString("bandFilter_+%1").arg(band), filterSettings.getBandFilter(band));
     }
 
     config.endGroup();
@@ -2711,9 +2703,11 @@ void ClusterMainWindow::readBandFilterSettings()
 {
     QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
     config.beginGroup("BandFilter");
-    for (int i = 0; i < allBandfilters.count(); i++)
+    for (auto const &b:bands)
     {
-        *allBandfilters[i] = config.value(QString("bandFilter_+%1").arg(clusterBands[i]), true).toBool();
+        QString band = b.data()->uk;
+        filterSettings.setBandFilter(band, config.value(QString("bandFilter_+%1").arg(band), true).toBool());
+
     }
 
     config.endGroup();
@@ -2749,10 +2743,15 @@ void ClusterMainWindow::setHF(bool hfFlag)
         }
 
         // clear the HF Bandfilters
-        for (int i = 0; i < hfBandChkBoxList.count(); i++)
+        for (auto const &b:bands)
         {
-            hfBandChkBoxList[i]->setChecked(false);
-            *hfBandfilters[i] = false;
+            if (b->getType() == HF_BANDTYPE)
+            {
+                QString band = b.data()->uk;
+                bandCheckBoxes.value(band).bandChkBox->setChecked(false);
+                filterSettings.setBandFilter(band, false);
+            }
+
 
         }
     }
@@ -2765,9 +2764,14 @@ void ClusterMainWindow::setHF(bool hfFlag)
 void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 {
 
-    for(auto const &bc: hfBandChkBoxList)
+    for(auto const &b: bands)
     {
-        bc->setVisible(visible);
+        if (b->getType() == HF_BANDTYPE)
+        {
+            QString band = b.data()->uk;
+            bandCheckBoxes.value(band).bandChkBox->setVisible(visible);
+        }
+
     }
 
     ui->hfSelectBandPb->setVisible(visible);
@@ -2776,18 +2780,24 @@ void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 
 void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)
 {
-    if (i < bandChkBoxList.count())
+    Q_UNUSED(i)
+    Q_UNUSED(state)
+    bool changed = false;
+    for (auto const &b: bands)
     {
-        if (state == Qt::Checked)
+        QString band = b.data()->uk;
+
+        if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
         {
-            *allBandfilters[i] = true;
-        }
-        else if (state == Qt::Unchecked)
-        {
-            *allBandfilters[i] = false;
+            filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+            changed = true;
         }
 
-         updateDisplay();
+        if (changed)
+        {
+           updateDisplay();
+        }
+
 
     }
 
@@ -2813,13 +2823,22 @@ void ClusterMainWindow::onHfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllHFBandsFilter(bool state)
 {
-    for (int i = 0; i < hfBandChkBoxList.count(); i++)
+    for (auto const &b:bands)
     {
-        *hfBandfilters[i] =state;
-        hfBandChkBoxList[i]->setChecked(state);
+        if (b->getType() == HF_BANDTYPE)
+        {
+            setBandsCheckBoxAndFilterFlag(b.data()->uk, state);
+        }
     }
 
      updateDisplay();
+}
+
+
+void ClusterMainWindow::setBandsCheckBoxAndFilterFlag(const QString band, const bool state)
+{
+    filterSettings.setBandFilter(band, state);
+    bandCheckBoxes.value(band).bandChkBox->setChecked(state);
 }
 
 void ClusterMainWindow::onVhfSelectBandPbPressed()
@@ -2840,10 +2859,12 @@ void ClusterMainWindow::onVhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllVHFBandsFilter(bool state)
 {
-    for (int i = 0; i < vhfBandChkBoxList.count(); i++)
+    for (auto const &b:bands)
     {
-        *vhfBandfilters[i] =state;
-        vhfBandChkBoxList[i]->setChecked(state);
+        if (b->getType() == VHF_BANDTYPE)
+        {
+            setBandsCheckBoxAndFilterFlag(b.data()->uk, state);
+        }
     }
 
      updateDisplay();
@@ -2868,10 +2889,12 @@ void ClusterMainWindow::onUhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllUHFBandsFilter(bool state)
 {
-    for (int i = 0; i < uhfBandChkBoxList.count(); i++)
+    for (auto const &b:bands)
     {
-        *uhfBandfilters[i] =state;
-        uhfBandChkBoxList[i]->setChecked(state);
+        if (b->getType() == MW_BANDTYPE)
+        {
+            setBandsCheckBoxAndFilterFlag(b.data()->uk, state);
+        }
     }
 
     updateDisplay();
@@ -2990,15 +3013,11 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
-    bool ok = false;
-    int bandMask = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt(&ok);
 
-    if (ok && (bandMask >= 0 && bandMask < allBandFilters.count()) )
-    {
-       return *allBandFilters[bandMask];
-    }
+    QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
 
-    return false;
+    return filterSettings.getBandFilter(band);
+
 }
 
 

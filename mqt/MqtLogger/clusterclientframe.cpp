@@ -2067,6 +2067,7 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
     QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
 
     return filterSettings->getBandFilter(band);
+
 }
 
 
@@ -2102,6 +2103,8 @@ bool DxSpotSortFilterProxyModel::matchMode(int sourceRow) const
     QString mode = sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_MODE_COL_NUM), DataStoredRole).toString();
 
     return filterSettings->getModeFilter(mode);
+
+
 }
 
 bool DxSpotSortFilterProxyModel::matchWorkedLoc(int sourceRow) const

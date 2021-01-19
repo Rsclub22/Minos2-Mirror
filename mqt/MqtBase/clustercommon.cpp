@@ -131,7 +131,7 @@ QString ClusterClientFilterSettings::getCallSignFilterList()
 
 
 
-bool ClusterClientFilterSettings::getBandFilter(QString band)
+bool ClusterClientFilterSettings::getBandFilter(QString band) const
 {
     if (bandFilterSettings.contains(band))
     {
@@ -140,12 +140,13 @@ bool ClusterClientFilterSettings::getBandFilter(QString band)
     else
     {
         return false;
+        trace(QString("getBandFilter: band %1 not in list of bands").arg(band));
     }
 }
 
 
 
-
+// assumes band has been already placed in bandFilterSettings
 void ClusterClientFilterSettings::setBandFilter(QString band, bool setting)
 {
     if (bandFilterSettings.contains(band))
@@ -156,6 +157,8 @@ void ClusterClientFilterSettings::setBandFilter(QString band, bool setting)
     }
 
 }
+
+
 
 void ClusterClientFilterSettings::setBandType(QString band, QString bandType)
 {
@@ -174,6 +177,7 @@ QString ClusterClientFilterSettings::getBandType(QString band)
          return bandFilterSettings.value(band).bandType;
     }
 
+    trace(QString("getBandType: band %1 missing").arg(band));
     return "";
 }
 
@@ -186,7 +190,7 @@ bool ClusterClientFilterSettings::getModeFilter(QString mode)
     }
 
 
-
+    trace(QString("getModeFilter: mode = %1 missing").arg(mode));
     return false;
 
 }
@@ -195,6 +199,8 @@ void ClusterClientFilterSettings::setModeFilter(QString mode, bool setting)
 {
     modeFilterFlag.setModeFilter(mode, setting);
 }
+
+
 
 
 
@@ -214,6 +220,7 @@ bool ClusterClientFilterSettings::testDistanceFilter(int distance, QString band)
         }
     }
 
+    trace(QString("testDistanceFilter: band = %1 missing").arg(band));
     return false;
 }
 
@@ -224,6 +231,7 @@ int ClusterClientFilterSettings::getDistanceFilter(QString band)
         return bandFilterSettings.value(band).distanceFilter;
     }
 
+    trace(QString("getDistanceFilter: band = %1 is missing").arg(band));
     return 0;
 }
 
@@ -246,6 +254,7 @@ bool ClusterClientFilterSettings::getIgnoreDistanceFlag(QString band)
         return bandFilterSettings.value(band).ignoreDistanceFlag;
     }
 
+    trace(QString("getIgnoreDistanceFlag: band = %1 is missing").arg(band));
     return false;
 }
 
@@ -267,6 +276,7 @@ bool ClusterClientFilterSettings::getIgnoreEmptyDistanceFlag(QString band)
         return bandFilterSettings.value(band).ignoreEmptyDistanceFlag;
     }
 
+    trace(QString("getIgnoreEmptyDistanceFlag: band = %1 is missing").arg(band));
     return false;
 }
 

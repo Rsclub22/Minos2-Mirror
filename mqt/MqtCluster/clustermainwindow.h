@@ -325,12 +325,12 @@ public:
 
     bool traceDebugFlag;
 
-    DxSpotSortFilterProxyModel(QList<bool *> &allBandFilters_)
+    DxSpotSortFilterProxyModel(ClusterClientFilterSettings &filterSettings_)
     {
-        allBandFilters = allBandFilters_;
+        filterSettings = filterSettings_;
     }
 
-    QList<bool *> allBandFilters;
+    ClusterClientFilterSettings filterSettings;
 
 };
 
@@ -416,32 +416,38 @@ private:
     QList<QShortcut *> hfCommandShortCutKeyList;
     QList<QShortcut *> hfMenuShortCutKeyList;
 
-    QList<QCheckBox*> hfBandChkBoxList;
-    QList<QCheckBox*> vhfBandChkBoxList;
-    QList<QCheckBox*> uhfBandChkBoxList;
 
-    QList<QCheckBox*> bandChkBoxList;
+    QMap<QString, ClusterClientBandFilterDialogDetails> bandCheckBoxes;
 
-    QList<bool*> allBandfilters;
-    QList<bool*> hfBandfilters;
-    QList<bool*> vhfBandfilters;
-    QList<bool*> uhfBandfilters;
+    ClusterClientFilterSettings filterSettings;
 
-    bool bandFilter1_8Mhz;
-    bool bandFilter3_5Mhz;
-    bool bandFilter7Mhz;
-    bool bandFilter14Mhz;
-    bool bandFilter21Mhz;
-    bool bandFilter28Mhz;
-    bool bandFilter50Mhz;
-    bool bandFilter70Mhz;
-    bool bandFilter144Mhz;
-    bool bandFilter432Mhz;
-    bool bandFilter1296Mhz;
-    bool bandFilter2300Mhz;
-    bool bandFilter3_4Ghz;
-    bool bandFilter5_6Ghz;
-    bool bandFilter10Ghz;
+
+    //QList<QCheckBox*> hfBandChkBoxList;
+    //QList<QCheckBox*> vhfBandChkBoxList;
+    //QList<QCheckBox*> uhfBandChkBoxList;
+
+    //QList<QCheckBox*> bandChkBoxList;
+
+    //QList<bool*> allBandfilters;
+    //QList<bool*> hfBandfilters;
+    //QList<bool*> vhfBandfilters;
+    //QList<bool*> uhfBandfilters;
+
+    //bool bandFilter1_8Mhz;
+    //bool bandFilter3_5Mhz;
+    //bool bandFilter7Mhz;
+    //bool bandFilter14Mhz;
+    //bool bandFilter21Mhz;
+    //bool bandFilter28Mhz;
+    //bool bandFilter50Mhz;
+    //bool bandFilter70Mhz;
+    //bool bandFilter144Mhz;
+    //bool bandFilter432Mhz;
+    //bool bandFilter1296Mhz;
+    //bool bandFilter2300Mhz;
+    //bool bandFilter3_4Ghz;
+    //bool bandFilter5_6Ghz;
+    //bool bandFilter10Ghz;
 
 
 
@@ -632,6 +638,7 @@ private:
     void readBandFilterSettings();
     void loadBandFilterSettingsToTab();
 
+    void setBandsCheckBoxAndFilterFlag(const QString band, const bool state);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
