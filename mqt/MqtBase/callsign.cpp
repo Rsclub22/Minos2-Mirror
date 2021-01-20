@@ -11,7 +11,7 @@ Callsign::Callsign( )
 
 Callsign& Callsign::operator = ( const Callsign& rhs)
 {
-    fullCall = rhs.fullCall;
+    fullCall.setValue(rhs.fullCall);
     valRes = rhs.valRes;
 
     locCtryPrefix = rhs.locCtryPrefix;

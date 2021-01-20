@@ -867,6 +867,7 @@ void QSOLogFrame::startNextEntry( )
 
    if ( !restorePartial() )
    {
+       // no partial to restore
       screenContact.initialise( contest );
    }
 

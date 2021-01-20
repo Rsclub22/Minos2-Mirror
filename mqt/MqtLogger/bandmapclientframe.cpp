@@ -838,7 +838,8 @@ void BandmapClientFrame::checkNewBandMapSpots()
     {
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
-            traceMsg(QString("New Logger Spot: %1 %2 %3")
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
+                     .arg(logSpotQueue[i]->spotName())
                      .arg(logSpotQueue[i]->getDxCallStr())
                      .arg(logSpotQueue[i]->getFreq().traceStr())
                      .arg(logSpotQueue[i]->getDxLocator()));
@@ -912,6 +913,13 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 Callsign loggedCall = spot->getDxCall();
                 if (savedCs == loggedCall)
                 {
+                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                    if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
+                    {
+                        // delete the old logged/saved entry, add the new one
+                        bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                        continue;
+                    }
                     bandmapDataModel->setData(bandmapDataModel->index(row, DXSPOT_CALL_WORKED_COL_NUM ), true ,BMP_DataStoredRole);
                 }
 
@@ -1554,6 +1562,9 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
     Q_UNUSED(c)
     if (!isProtected && ct == c)
     {
+        if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            return;
+
         Callsign cs = lct->cs;
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
@@ -1596,6 +1607,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         spot->setSpotDateTime(time);
         spot->setRunModeOn(runModeOn);
         spot->setOffRunFreq(offRunFreq);
+        spot->setCqResponse(lct->cqResponse.getValue());
         if (!lct->extraText.getValue().isEmpty())
         {
             spot->setDistrict(lct->extraText.getValue());

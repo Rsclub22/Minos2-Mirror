@@ -1189,7 +1189,11 @@ void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
    TQSOEditDlg qdlg( this, false );
    qdlg.selectContact( contest, lct );
 
+   trace(QString("TSingleLogFrame::EditContact %1").arg(lct->cs.getFullCall()));
+
    qdlg.exec();
+
+   trace(QString("TSingleLogFrame::EditContact finished %1").arg(lct->cs.getFullCall()));
 
    contest->scanContest();
 
