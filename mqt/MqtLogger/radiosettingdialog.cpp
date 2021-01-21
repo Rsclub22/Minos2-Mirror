@@ -12,27 +12,20 @@
 
 
 
-
-
-
 #include <QMessageBox>
-#include "freqpresetdialog.h"
-#include "ui_freqpresetdialog.h"
+#include "radiosettingdialog.h"
+#include "ui_radiosettingdialog.h"
 #include "rigcommon.h"
 
 
-QString convertBandKey(QString band)
-{
-    //return band.remove('\x20').replace('.', '_');
-    return band;
-}
 
 
-FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QWidget *parent) :
+RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::FreqPresetDialog)
+    ui(new Ui::RadioSettingDialog)
 {
     ui->setupUi(this);
+
     bands = band;
     hfFlag = hfFlag_;
 
@@ -105,11 +98,15 @@ FreqPresetDialog::FreqPresetDialog(bool hfFlag_, const QVector<QSharedPointer<Ba
     loadSettingsToDialog();
 
 
+}
 
+RadioSettingDialog::~RadioSettingDialog()
+{
+    delete ui;
 }
 
 
-void FreqPresetDialog::setHf(bool hfFlag)
+void RadioSettingDialog::setHf(bool hfFlag)
 {
     for(auto &lbl: hfLabels)
     {
@@ -122,30 +119,25 @@ void FreqPresetDialog::setHf(bool hfFlag)
 
 }
 
-void FreqPresetDialog::onCwPresetLineEditingFinished(int i)
+void RadioSettingDialog::onCwPresetLineEditingFinished(int i)
 {
     getFreq(cwPresetLineEditList[i], i);
 }
 
-void FreqPresetDialog::onPhonePresetLineEditingFinished(int i)
+void RadioSettingDialog::onPhonePresetLineEditingFinished(int i)
 {
     getFreq(phonePresetLineEditList[i], i);
 }
 
-void FreqPresetDialog::onMgmPresetLineEditingFinished(int i)
+void RadioSettingDialog::onMgmPresetLineEditingFinished(int i)
 {
     getFreq(mgmPresetLineEditList[i], i);
 }
 
-FreqPresetDialog::~FreqPresetDialog()
-{
-    delete ui;
-}
 
 
 
-
-void FreqPresetDialog::getFreq(QLineEdit* f_box, int band)
+void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 {
 
     QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
@@ -187,7 +179,7 @@ void FreqPresetDialog::getFreq(QLineEdit* f_box, int band)
 
 // check in band
 
-bool FreqPresetDialog::checkInBand(Frequency freq, int band)
+bool RadioSettingDialog::checkInBand(Frequency freq, int band)
 {
     if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
     {
@@ -208,7 +200,7 @@ bool FreqPresetDialog::checkInBand(Frequency freq, int band)
 
 
 
-void FreqPresetDialog::saveSettings()
+void RadioSettingDialog::saveSettings()
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -222,7 +214,7 @@ void FreqPresetDialog::saveSettings()
 }
 
 
-void FreqPresetDialog::saveModePresetFreqSettings(QString mode, QSettings &config)
+void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &config)
 {
     config.beginGroup(mode);
     for (int i = 0; i < bands.count(); i++)
@@ -236,7 +228,7 @@ void FreqPresetDialog::saveModePresetFreqSettings(QString mode, QSettings &confi
 
 
 
-void FreqPresetDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
+void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
 {
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
 
@@ -267,7 +259,7 @@ void FreqPresetDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const
 
 
 
-void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
+void RadioSettingDialog::readSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -316,7 +308,7 @@ void FreqPresetDialog::readSettings(PresetFreq  &presetFreq, const QVector<QShar
 
 
 
-void FreqPresetDialog::loadSettingsToDialog()
+void RadioSettingDialog::loadSettingsToDialog()
 {
 
     for (int i = 0; i < cwPresetLineEditList.count(); i++)
@@ -338,4 +330,3 @@ void FreqPresetDialog::loadSettingsToDialog()
     }
 
 }
-

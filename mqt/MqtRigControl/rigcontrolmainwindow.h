@@ -540,6 +540,7 @@ private:
 
 
     void setIndicatorVisible(const QString bandType, const bool visible);
+    void sendRadioSwitchCompleteToLogger();
 private slots:
 
     void onStdInRead(QString);
@@ -603,6 +604,7 @@ private slots:
     void onSetVoiceMessageNum(QString msgNum);
     void onCwKeyerPbClicked();
     void onCwKeyerStopPbClicked();
+
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

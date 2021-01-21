@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -68,8 +68,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     rigCtldProcess = new QProcess(this);
 
-    connect(rigCtldProcess, &QProcess::readyReadStandardOutput, [=](){rigCtldMessage();});
-    connect(rigCtldProcess, &QProcess::readyReadStandardError, [=](){rigCtldErrorMessage();});
+    connect(rigCtldProcess, &QProcess::readyReadStandardOutput, this, [=](){rigCtldMessage();});
+    connect(rigCtldProcess, &QProcess::readyReadStandardError, this, [=](){rigCtldErrorMessage();});
     connect(rigCtldProcess, &QProcess::started, this, [=](){rigCtldStarted();});
 
     setRigCltdIndicatorVisible(false);
@@ -80,7 +80,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     getRigCtldConnectDelay();
 
     RigCtldStatusTimer = new QTimer(this);
-    connect(RigCtldStatusTimer, &QTimer::timeout, [=](){rigCtldStatusTimeout();});
+    connect(RigCtldStatusTimer, &QTimer::timeout, this, [=](){rigCtldStatusTimeout();});
 
 
     selectedRigSupCap = new RigSupCapabilities();
@@ -551,6 +551,8 @@ void RigControlMainWindow::upDateRadio()
 
 
             // found radio, update currentRadio from selected radiodata
+
+
             updateCurrentRadioFromAvailRadios(ridx);
 
             setupRadio->currentRadio.radioNumber = QString::number(ridx);           // save radio number
@@ -896,9 +898,6 @@ void RigControlMainWindow::upDateRadio()
                     connect(radio, SIGNAL(rit0()), this, SLOT(onRit0()), Qt::QueuedConnection);
                 }
 
-
-
-
             }
             else
             {
@@ -918,6 +917,7 @@ void RigControlMainWindow::upDateRadio()
 
                 trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
                 sendStatusToLogDisConnected();
+
             }
 
 
@@ -942,7 +942,11 @@ void RigControlMainWindow::upDateRadio()
     if (appName.length() > 0)
     {
         trace(QString("publish to logger"));
+        // this publishes all the changes
         msg->rigCache.publish();
+        sendRadioSwitchCompleteToLogger();
+        msg->rigCache.publish();
+
     }
 }
 
@@ -982,6 +986,8 @@ void RigControlMainWindow::refreshRadio()
             writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
+            msg->rigCache.publish();
+            sendRadioSwitchCompleteToLogger();
             msg->rigCache.publish();
         }
         else
@@ -3721,7 +3727,11 @@ void RigControlMainWindow::sendStatusToLogError(QString errMsg)
     sendStatusLogger(QString("%1:%2").arg(tr(RIG_STATUS_ERROR)).arg(errMsg));
 }
 
-
+void RigControlMainWindow::sendRadioSwitchCompleteToLogger()
+{
+    logMessage(QString("Send status to logger radio switch complete"));
+    sendStatusLogger(RIG_SWITCH_COMPLETED);
+}
 
 
 void RigControlMainWindow::sendFreqToLog(const Frequency &freq)

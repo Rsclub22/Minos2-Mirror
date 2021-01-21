@@ -43,7 +43,7 @@ public:
 
 };
 
-
+const int CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT = 1000;
 
 
 class RigControlFrame : public QFrame
@@ -115,6 +115,7 @@ signals:
     void radioIsConnected(bool);
     void radioHasError(QString);
     void radioDisconnected();
+    void radioSwitchCompleted();
 
     void setFreqDisplay(Frequency, bool);
 
@@ -157,8 +158,10 @@ private slots:
 
     void onCheckContestBandMatch();
 
-public slots:
+    void setRadioSwitchCompleted();
     void returnChangeRadioFreq();
+
+
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -215,6 +218,8 @@ private:
 
     QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
+
+    QTimer *checkFreqContestBandTimer;
 
 
     CheckOperatingFreq *operatingFreq;

@@ -421,6 +421,7 @@ bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 
 
 
+
 void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
     for ( auto const &b: bandList )       // just load VHF/UHF bands

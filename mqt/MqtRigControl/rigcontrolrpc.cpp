@@ -170,7 +170,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Mode Command From Logger = %1").arg(mode));
-                    emit (setMode(mode));
+                    emit setMode(mode);
                 }
             }
         }
@@ -186,7 +186,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Freq Command From Logger = %1").arg(sfreq));
-                    emit (setFreq(Frequency(sfreq)));
+                    emit setFreq(Frequency(sfreq));
                 }
             }
         }
@@ -201,7 +201,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: VoiceMessage Number From Logger = %1").arg(msgNum));
-                    emit (setVoiceMessageNum(msgNum));
+                    emit setVoiceMessageNum(msgNum);
                 }
             }
         }
@@ -217,7 +217,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Rit Freq Command From Logger = %1").arg(ritFreq));
-                    emit (setRitFreq(ShortFreq(ritFreq)));
+                    emit setRitFreq(ShortFreq(ritFreq));
                 }
             }
         }
@@ -232,7 +232,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Rit Status Command From Logger = %1").arg(ritStatus ? "On" : "Off"));
-                    emit (setRitStatus(ritStatus));
+                    emit setRitStatus(ritStatus);
                 }
             }
         }

@@ -102,48 +102,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
 
 
- /*
 
-    // now check if we have the details to launch a radio selection
-
-    if (listOfRadios.isEmpty() && LogContainer->sendDM->getRigCache()->getRigListCount() > 0)
-    {
-        launchRadioSelectTimer = new QTimer(this);
-        traceMsg(QString("list of radios available - get list"));
-        listOfRadios = LogContainer->sendDM->rigs();
-    }
-    else
-    {
-        traceMsg(QString("list of radios empty - wait for list from rigcontrol"));
-        // start timer to wait for bandlist and rigdetails to launch
-        launchRadioSelectTimer = new QTimer(this);
-        launchRadioSelectCount = 5;     // wait five seconds
-        connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
-        launchRadioSelectTimer->start(1000);
-    }
-
-    if (allRadioDetails.isEmpty())
-    {
-        traceMsg(QString("AllRadioDetails Empty - get details"));
-        if (LogContainer->sendDM->getRigCache()->getRigDetailCount() == listOfRadios.count())
-        {
-            QVector<PubSubName> rigList = LogContainer->sendDM->getRigCache()->getRigList();
-            foreach (PubSubName psn, rigList)
-            {
-                RigDetails& selDetail = LogContainer->sendDM->getRigCache()->getDetails(psn);
-                setTransVertOffset(selDetail.transverterOffset().getValue(), psn);
-                setTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
-                setTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
-                setTransVertStatus(selDetail.transverterStatus().getValue(), psn);
-                setVolumeStatus(selDetail.volumeStatus().getValue(), psn);
-                setRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
-                setBandList(selDetail.bandList().getValue(), psn);
-            }
-        }
-    }
-
-
-*/
     operatingFreq = new CheckOperatingFreq();
     if (operatingFreq->loadExclusionsFromBandList())
     {
@@ -163,12 +122,12 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     traceMsg(QString("Frame Init Complete - Start timer to wait for rig and contest details"));
     launchRadioSelectTimer = new QTimer(this);
     launchRadioSelectCount = 10;     // wait five seconds
-    connect(launchRadioSelectTimer, SIGNAL(timeout()), this, SLOT(checkRigDetailsAvail()));
+    connect(launchRadioSelectTimer, &QTimer::timeout, this, [=](){checkRigDetailsAvail();});
     launchRadioSelectTimer->start(1000);
 
-    //checkFreqContestBandTimer = new QTimer(this);
-    //connect(checkFreqContestBandTimer, SIGNAL(timeout()), this, SLOT(onCheckContestBandMatch()));
-    //checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
+    checkFreqContestBandTimer = new QTimer(this);
+    connect(checkFreqContestBandTimer, &QTimer::timeout, this, [=](){onCheckContestBandMatch();});
+    checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
 }
 
 RigControlFrame::~RigControlFrame()
@@ -289,6 +248,12 @@ void RigControlFrame::setContest(BaseContestLog *c)
     if (ct)
     {
         contestBand = ct->contestBands.getValue();
+
+    }
+
+    if (bandSelButtons)
+    {
+        bandSelButtons->setContest(contestBand);
     }
 
 
@@ -324,6 +289,8 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(bandSelButtons , SIGNAL(sendPresetFreq(Frequency)), this, SLOT(radioBandFreq(Frequency)));
 
     //connect(this, SIGNAL(newBandList()), this, SLOT(setRadioFreq()));
+
+    connect(this, SIGNAL(radioSwitchCompleted()), this, SLOT(setRadioSwitchCompleted()));
 
     setVolControlVisible(false);
 
@@ -604,6 +571,7 @@ void RigControlFrame::setFreq(Frequency freq)
     }
     checkContestBandMatch(freq);        // to show error on panel
     displayFreqOnFreqEditDisplay(freq);
+    bandSelButtons->selectButtonGroupAndActiveBand(freq);
     curFreq = freq;
     emit setFreqDisplay(freq, legalFreq);
 }
@@ -1252,16 +1220,18 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     // set Band Sel Combo to band of contest band
 
                     //if (setBandSelComboIndex(contestBand) == -1)
+                    /*
                     if (bandSelButtons->selectButtonGroupAndActiveBand(contestBand)  == -1)
                     {
                         traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
                     }
                     else
                     {
+                    */
                         traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
                         traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
                         setContestBandLimits(contestBand);
-                    }
+                    //}
 
 
                     QString contestMode = ct->currentMode.getValue();
@@ -1811,18 +1781,13 @@ void RigControlFrame::setRadioState(QString s)
         }
         else if (s == RIG_STATUS_CONNECTED)
         {
+            qDebug() << "rigconnected";
             radioConnected = true;
             ui->rigState->setText(tr("Connected"));
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);
-
-                // now connected update display freq
-                RigState rigSt = LogContainer->sendDM->getRigState(radioName);
-                QString fStr = rigSt.getRadioFreq().str();
-                traceMsg(QString("Radio State Connected, radio freq = %1").arg(fStr));
-                displayFreqOnFreqEditDisplay(fStr);
 
                 //restoreRadioFreq();
                 emit radioIsConnected(true);
@@ -1857,9 +1822,26 @@ void RigControlFrame::setRadioState(QString s)
            emit radioIsConnected(false);
            emit radioDisconnected();
         }
+        else if (s == RIG_SWITCH_COMPLETED)
+        {
+            emit radioSwitchCompleted();
+        }
 
         radioState = s;
     }
+}
+
+
+void RigControlFrame::setRadioSwitchCompleted()
+{
+    // now connected update display freq
+    RigState rigSt = LogContainer->sendDM->getRigState(radioName);
+    QString fStr = rigSt.getRadioFreq().str();
+    traceMsg(QString("Radio State RadioSwitch Completed, radio freq = %1").arg(fStr));
+    qDebug() << "switch complete" << fStr;
+    displayFreqOnFreqEditDisplay(fStr);
+
+
 }
 
 // volume level from radio

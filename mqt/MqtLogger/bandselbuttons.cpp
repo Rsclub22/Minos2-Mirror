@@ -135,7 +135,7 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
     availVhfBands.clear();
     availMwBands.clear();
 
-    for (auto b:listOfBands)
+    for (auto &b:listOfBands)
     {
         if (getBandType(b) == bandSelButtonData::HF_BAND_TYPE)
         {
@@ -294,7 +294,47 @@ void BandSelButtons::setAllButtonsOff()
 }
 
 
-int BandSelButtons::selectButtonGroupAndActiveBand(QString band)
+bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand )
+{
+    for (auto const &b: bands)
+    {
+        if (b->fLow <= freq && b->fHigh >= freq)
+        {
+            foundBand = b.data()->uk;
+            return true;
+        }
+        else
+        {
+            foundBand = "";
+        }
+    }
+
+    return false;
+}
+
+
+int BandSelButtons::selectButtonGroupAndActiveBand(const Frequency &freq)
+{
+    static Frequency f;
+
+    int retCode = 0;
+    if (f != freq)
+    {
+        f = freq;
+        QString band;
+        bool ok = findBand(freq, bands, band);
+        if (ok && !band.isEmpty())
+        {
+           retCode = selectButtonGroupAndActiveBand(band);
+        }
+    }
+
+
+    return retCode;
+}
+
+
+int BandSelButtons::selectButtonGroupAndActiveBand(const QString band)
 {
     selectedBand = band;
     setButtonsToBandType(getBandType(band));
@@ -302,15 +342,22 @@ int BandSelButtons::selectButtonGroupAndActiveBand(QString band)
 }
 
 
-int BandSelButtons::setButtonOnOff(QString band, bool on)
+int BandSelButtons::setButtonOnOff(const QString band, const bool on)
 {
     if (bandToolButList.contains(band))
     {
         QString buttonStyle;
         if (on)
         {
-            buttonStyle = bandSelButtonData::BUTTON_ON_STYLE;
-            //setTabToCurrentBandType(selectedBand);
+            if (band != contestBand)
+            {
+                buttonStyle = bandSelButtonData::BUTTON_NOT_CONTEST_STYLE;
+            }
+            else
+            {
+               buttonStyle = bandSelButtonData::BUTTON_ON_STYLE;
+            }
+
         }
         else
         {
@@ -394,6 +441,11 @@ QString BandSelButtons::getBandType(const QString selectedBand)
 void BandSelButtons::setMode(QString mode)
 {
     curMode = convertModeForPresets(mode);
+}
+
+void BandSelButtons::setContest(QString contestBand_)
+{
+    contestBand = contestBand_;
 }
 
 QString BandSelButtons::convertModeForPresets(const QString mode)

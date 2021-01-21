@@ -13,6 +13,7 @@
 extern const char * RIG_STATUS_CONNECTED;
 extern const char * RIG_STATUS_DISCONNECTED;
 extern const char * RIG_STATUS_ERROR;
+extern const char * RIG_SWITCH_COMPLETED;
 
 //#define TXVERT_ON "TXVERTON"
 //#define TXVERT_OFF "TXVERTOFF"

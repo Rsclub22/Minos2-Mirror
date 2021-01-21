@@ -70,6 +70,7 @@ SOURCES += \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
     qsologframe.cpp \
+    radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
     rigcontrolvoicekeyer.cpp \
@@ -155,6 +156,7 @@ HEADERS  += \
     n1mmbroadcastconfig.h \
     printfile.h \
     qsologframe.h \
+    radiosettingdialog.h \
     reg1test.h \
     rigcontrolframe.h \
     rigcontrolvoicekeyer.h \
@@ -212,6 +214,7 @@ FORMS    += \
     locTreeFrame.ui \
     n1mmbroadcastconfig.ui \
     qsologframe.ui \
+    radiosettingdialog.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \
     RigMemoryFrame.ui \

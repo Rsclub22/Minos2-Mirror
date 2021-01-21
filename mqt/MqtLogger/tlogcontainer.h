@@ -93,7 +93,7 @@ private:
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
     QMenu *languagesMenu;
-    QMenu *radioMenu;
+    //QMenu *radioMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -116,10 +116,10 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
-    QAction *editRadioFreqPresets = nullptr;
-    QAction *ignorePresetFreqContestStart = nullptr;
-    QAction *ignorePreviousFreqContestChange = nullptr;
-    QAction *restoreContestModeContestChange = nullptr;
+    //QAction *editRadioFreqPresets = nullptr;
+    //QAction *ignorePresetFreqContestStart = nullptr;
+    //QAction *ignorePreviousFreqContestChange = nullptr;
+    //QAction *restoreContestModeContestChange = nullptr;
 
     QAction *newAction(const char *text, QMenu *m, const char *atype );
     QMenu *newMenu(QMenu *m, const char *text);
@@ -167,6 +167,7 @@ private:
     QAction *UDPConfigAction;
     QAction *WSJTXConfigAction;
     QAction *ClusterBandmapFilterConfigAction;
+    QAction *RadioConfigAction;
     QAction *ReportAutofillAction;
     QAction *TabSandPAction;
     QAction *OldBandMapAction;
@@ -275,6 +276,7 @@ private slots:
     void appStarted();
 
 
+    void RadioConfigActionExecute();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

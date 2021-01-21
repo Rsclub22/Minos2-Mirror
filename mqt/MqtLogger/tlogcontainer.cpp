@@ -31,6 +31,7 @@
 #include "WsjtxServer.h"
 #include "WsjtxConfigure.h"
 #include "Clusterbandmapconfigure.h"
+#include "radiosettingdialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
 #include "MatchThread.h"
@@ -129,9 +130,9 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
     OldBandMapAction->setChecked(oldBandMap);
 
-    ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
-    ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
-    restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
+    //ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
+    //ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
+    //restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
@@ -446,13 +447,13 @@ void TLogContainer::setupMenus()
     UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
+    RadioConfigAction = newAction(QT_TR_NOOP("Radio configuration..."), ui->menuTools, SLOT(RadioConfigActionExecute()));
+    //radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
 
-    radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
-
-    editRadioFreqPresets = newAction(QT_TR_NOOP("Edit Freq Presets..."), radioMenu, SLOT(onEditFreqPresetsExecute()));
-    ignorePresetFreqContestStart = newCheckableAction(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), radioMenu, SLOT(onIgnorePresetFreqChecked(bool)));
-    ignorePreviousFreqContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), radioMenu, SLOT(onIgnorePreviousFreqChecked(bool)));
-    restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
+    //editRadioFreqPresets = newAction(QT_TR_NOOP("Edit Freq Presets..."), radioMenu, SLOT(onEditFreqPresetsExecute()));
+    //ignorePresetFreqContestStart = newCheckableAction(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), radioMenu, SLOT(onIgnorePresetFreqChecked(bool)));
+    //ignorePreviousFreqContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), radioMenu, SLOT(onIgnorePreviousFreqChecked(bool)));
+    //restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
@@ -1266,6 +1267,15 @@ void TLogContainer::ClusterBandmapConfigActionExecute()
     ClusterBandmapConfigure clusterBandmapConfig;
 
     clusterBandmapConfig.exec();
+}
+void TLogContainer::RadioConfigActionExecute()
+{
+    QVector<QSharedPointer<BandInfo> > bands;
+    BandList::getBandList().loadAllBands(bands);
+    bool hfFlag = true;
+    RadioSettingDialog radioSettingConfig(hfFlag, bands, this);
+
+    radioSettingConfig.exec();
 }
 void TLogContainer::ReportAutofillActionExecute()
 {
