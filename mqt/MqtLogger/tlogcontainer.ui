@@ -31,7 +31,7 @@
      <number>2</number>
     </property>
     <item>
-     <widget class="QLogTabWidget" name="ContestPageControl">
+     <widget class="QLogTabWidget" name="contestPageControl">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>

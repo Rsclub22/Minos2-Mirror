@@ -2,7 +2,7 @@
 #define SCREENCONFIGFILE_H
 #include "base_pch.h"
 #include "StackedInfoFrame.h"
-
+class ScreenConfigScreen;
 enum SCType
 {
     sctMainScreen,
@@ -67,8 +67,19 @@ public:
 class ScreenConfigFile
 {
     Q_DECLARE_TR_FUNCTIONS(ScreenConfigFie)
+
+    static ScreenConfigFile scf;
+    bool loaded = false;
 public:
 
+    static ScreenConfigFile &getScreenConfigFile(QWidget *p)
+    {
+        if (!scf.loaded)
+        {
+            scf.loadFile(p);
+        }
+        return scf;
+    }
     ScreenConfigFile();
     ~ScreenConfigFile();
     void loadFile(QWidget *parent);
@@ -76,6 +87,8 @@ public:
 
     QMap <QString, SC> configs;
     
+    void getScreenConfig(const SCScreen &scb, QJsonObject &scr);
+
 private:
     void readFile(QString s, QWidget *parent);
     bool writeFile(QString s);

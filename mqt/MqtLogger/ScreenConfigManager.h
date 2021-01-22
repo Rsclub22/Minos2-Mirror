@@ -58,7 +58,7 @@ private:
     Ui::ScreenConfigManager *ui;
     bool suppressItemSelect = false;
 
-    ScreenConfigFile scf;
+    ScreenConfigFile &scf;
     QString curConfigName;
     QString defaultConfigName;
     QString protectedConfigName;

@@ -45,6 +45,7 @@ class MinosSplitter;
 
 class BaseMatchContest;
 class MatchContact;
+class SCScreen;
 class SCRow;
 
 class TSingleLogFrame : public QFrame
@@ -197,6 +198,7 @@ private:
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
+    void buildScreen(SCScreen &s);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 

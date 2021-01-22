@@ -1,4 +1,5 @@
 #include "ScreenConfigFile.h"
+#include "ScreenConfigScreen.h"
 #include "ScreenConfigRow.h"
 #include <QStandardItemModel>
 #include <QListView>
@@ -95,7 +96,7 @@ void ScreenConfigElement::setIsSplitElement(bool value)
     ui->auxTypeCombo->setVisible(!value);
 }
 
-ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfig *sc) :
+ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc) :
     QFrame(nullptr)
   , ui(new Ui::ScreenConfigElement)
   , parentRow(parentrow)
@@ -212,7 +213,7 @@ void ScreenConfigElement::on_removeButton_clicked()
     }
     parentRow->remove(this);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 }
 
 void ScreenConfigElement::on_splitAboveButton_clicked()
@@ -283,7 +284,7 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 
 }
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
@@ -314,7 +315,7 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
         }
     }
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 
 }
 void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
@@ -332,7 +333,7 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 }
 bool ScreenConfigElement::checkOk(ScreenConfigElement *e)
 {

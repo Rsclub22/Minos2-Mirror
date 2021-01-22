@@ -67,10 +67,10 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     setupMenus();
 
-    ui->ContestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
-    ui->ContestPageControl->setTabsClosable(true);
-    connect(ui->ContestPageControl->tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(onTabClosebutton(int)));
-    connect(ui->ContestPageControl->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int,int)));
+    ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->contestPageControl->setTabsClosable(true);
+    connect(ui->contestPageControl->tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(onTabClosebutton(int)));
+    connect(ui->contestPageControl->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int,int)));
 
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
@@ -90,6 +90,9 @@ TLogContainer::TLogContainer(QWidget *parent) :
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
     connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));
+
+    ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
+
 }
 TLogContainer::~TLogContainer()
 {
@@ -108,6 +111,7 @@ TLogContainer::~TLogContainer()
         delete MinosAppConnection::minosAppConnection;
     }
     MinosRPCObj::clearRPCObjects();
+    ScreenConfigFile::getScreenConfigFile(this).configs.clear();
 }
 
 
@@ -518,7 +522,7 @@ void TLogContainer::setupMenus()
 
 void TLogContainer::enableActions()
 {
-   bool f = ( ui->ContestPageControl->currentIndex() >= 0 );
+   bool f = ( ui->contestPageControl->currentIndex() >= 0 );
 
    LocCalcAction->setEnabled(true);
    FileNewAction->setEnabled(true);
@@ -535,11 +539,11 @@ void TLogContainer::enableActions()
    MakeEntryAction->setEnabled(f);
    AppendAdifAction->setEnabled(f);
 
-   if ( ui->ContestPageControl->currentIndex() >= 0 )
+   if ( ui->contestPageControl->currentIndex() >= 0 )
    {
-      int tno = ui->ContestPageControl->currentIndex();
+      int tno = ui->contestPageControl->currentIndex();
       ShiftTabLeftAction->setEnabled( tno > 0 );
-      ShiftTabRightAction->setEnabled( tno < ui->ContestPageControl->count() - 1 );
+      ShiftTabRightAction->setEnabled( tno < ui->contestPageControl->count() - 1 );
    }
    else
    {
@@ -802,7 +806,7 @@ void TLogContainer::FileNewActionExecute()
    suggestedfName += ".minos";
 
    // close the slot - we will re-open it later under the new name
-   closeSlot(ui->ContestPageControl->currentIndex(), false );
+   closeSlot(ui->contestPageControl->currentIndex(), false );
 
    while ( repeatDialog )
    {
@@ -928,7 +932,7 @@ void TLogContainer::FileImportActionExecute()
 
 void TLogContainer::ContestDetailsActionExecute()
 {
-    QWidget *tw = ui->ContestPageControl->currentWidget();
+    QWidget *tw = ui->contestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
 
     if (f)
@@ -966,7 +970,7 @@ void TLogContainer::ContestDetailsActionExecute()
 
 void TLogContainer::FileCloseActionExecute()
 {
-   int t = ui->ContestPageControl->currentIndex();
+   int t = ui->contestPageControl->currentIndex();
    closeSlot(t, true);
 }
 void TLogContainer::onTabClosebutton(int t)
@@ -977,11 +981,11 @@ void TLogContainer::onTabClosebutton(int t)
 
 void TLogContainer::CloseAllActionExecute()
 {
-    QWidget *thisContest = ui->ContestPageControl->currentWidget();
-    while ( ui->ContestPageControl->count() > 1)
+    QWidget *thisContest = ui->contestPageControl->currentWidget();
+    while ( ui->contestPageControl->count() > 1)
     {
-        int t = ui->ContestPageControl->count() - 1;
-        QWidget *ctab = ui->ContestPageControl->widget(t);
+        int t = ui->contestPageControl->count() - 1;
+        QWidget *ctab = ui->contestPageControl->widget(t);
         if (ctab == thisContest)
         {
             t -= 1;
@@ -996,11 +1000,11 @@ void TLogContainer::CloseAllActionExecute()
 
 void TLogContainer::CloseAllButActionExecute()
 {
-   QWidget *thisContest = ui->ContestPageControl->currentWidget();
-   while ( ui->ContestPageControl->count() > 1)
+   QWidget *thisContest = ui->contestPageControl->currentWidget();
+   while ( ui->contestPageControl->count() > 1)
    {
-       int t = ui->ContestPageControl->count() - 1;
-      QWidget *ctab = ui->ContestPageControl->widget(t);
+       int t = ui->contestPageControl->count() - 1;
+      QWidget *ctab = ui->contestPageControl->widget(t);
       if (ctab == thisContest)
       {
          t -= 1;
@@ -1440,13 +1444,13 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
     sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
     updateSessionActions();
 
-    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    for (int i = 0; i < ui->contestPageControl->count(); i++)
     {
-        QWidget *ctab = ui->ContestPageControl->widget(i);
+        QWidget *ctab = ui->contestPageControl->widget(i);
         TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
         BaseContestLog *pc = f->getContest();
 
-        QSharedPointer<QAction> ma(newCheckableAction(ui->ContestPageControl->tabText(i), ui->menuLogs, SLOT(menuLogsActionExecute())));
+        QSharedPointer<QAction> ma(newCheckableAction(ui->contestPageControl->tabText(i), ui->menuLogs, SLOT(menuLogsActionExecute())));
 
         QVariant qpc(i);
         ma->setData(qpc);
@@ -1455,18 +1459,18 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
         if ( f )
         {
 
-            if (f == ui->ContestPageControl->currentWidget())
+            if (f == ui->contestPageControl->currentWidget())
             {
-                ui->ContestPageControl->setTabColor(i, Qt::red);
+                ui->contestPageControl->setTabColor(i, Qt::red);
                 ma->setChecked(true);
             }
             else if (pc->isReadOnly())
             {
-                ui->ContestPageControl->setTabColor(i, Qt::darkGreen);
+                ui->contestPageControl->setTabColor(i, Qt::darkGreen);
             }
             else
             {
-                ui->ContestPageControl->setTabColor(i, Qt::darkBlue);
+                ui->contestPageControl->setTabColor(i, Qt::darkBlue);
             }
         }
     }
@@ -1480,7 +1484,7 @@ void TLogContainer::selectTab(int curTab)
 {
     if (curTab >= 0)
     {
-        QWidget *ctab = ui->ContestPageControl->widget(curTab);
+        QWidget *ctab = ui->contestPageControl->widget(curTab);
         TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
         BaseContestLog *pc = f->getContest();
         selectContest(pc, QSharedPointer<BaseContact>());
@@ -1491,11 +1495,11 @@ void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoin
 {
     setMemoryAction->setVisible(false);
 
-    int curtab = ui->ContestPageControl->tabBar()->tabAt(pos);
+    int curtab = ui->contestPageControl->tabBar()->tabAt(pos);
     // -1 if not on a tab
     selectTab(curtab);
 
-    QPoint globalPos = ui->ContestPageControl->mapToGlobal( pos );
+    QPoint globalPos = ui->contestPageControl->mapToGlobal( pos );
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
     QObject *w = qa->widgetAt(globalPos);
@@ -1571,10 +1575,10 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
 
          f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
 
-         int tno = ui->ContestPageControl->addTab(f, baseFName);
+         int tno = ui->contestPageControl->addTab(f, baseFName);
 
-         ui->ContestPageControl->setCurrentWidget(ui->ContestPageControl->widget(tno));
-         ui->ContestPageControl->setTabToolTip(tno, contest->cfileName);
+         ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
+         ui->contestPageControl->setTabToolTip(tno, contest->cfileName);
 
          f->columnsChanged = true;  // also causes show QSOs
          f->splittersChanged = true;
@@ -1608,7 +1612,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
 }
 TSingleLogFrame *TLogContainer::getCurrentLogFrame()
 {
-    QWidget *w = ui->ContestPageControl->currentWidget();
+    QWidget *w = ui->contestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>(w);
     return f;
 }
@@ -1636,9 +1640,9 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
             TMatchThread::InitialiseMatchThread();
           }
 
-          QWidget *tab = ui->ContestPageControl->widget(t);
+          QWidget *tab = ui->contestPageControl->widget(t);
           tab->deleteLater();
-          ui->ContestPageControl->removeTab(t);
+          ui->contestPageControl->removeTab(t);
           on_ContestPageControl_currentChanged(-1);
       }
       enableActions();
@@ -1650,7 +1654,7 @@ TSingleLogFrame *TLogContainer::findLogFrame(int t)
     // now ONLY used in closeSlot!
     if ( t < 0 )
         return nullptr;
-    QWidget *tw = ui->ContestPageControl->widget(t);
+    QWidget *tw = ui->contestPageControl->widget(t);
     if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( tw ))
     {
         return f;
@@ -1685,7 +1689,7 @@ void TLogContainer::updateLayoutsMenu()
 
     screenLayoutMenu->addSeparator();
 
-    QWidget *tw = ui->ContestPageControl->currentWidget();
+    QWidget *tw = ui->contestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
     if (f)
     {
@@ -1695,8 +1699,8 @@ void TLogContainer::updateLayoutsMenu()
         QString protectedConfigName;
         MinosParameters::getMinosParameters() -> getStringDisplayProfile( edpProtectedLayout, protectedConfigName );
 
-        ScreenConfigFile scf;
-        scf.loadFile(this);
+        ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
+
         int j = 0;
         for(auto const &c: scf.configs )
         {
@@ -1747,7 +1751,7 @@ void TLogContainer::selectLayout()
 }
 void TLogContainer::selectLayout(QString layout)
 {
-    QWidget *tw = ui->ContestPageControl->currentWidget();
+    QWidget *tw = ui->contestPageControl->currentWidget();
     TSingleLogFrame *f = dynamic_cast<TSingleLogFrame *>( tw );
     if (f)
     {
@@ -1764,9 +1768,9 @@ void TLogContainer::applyScreenLayouts()
     QSettings settings;
     settings.remove("Splitters");
 
-    for (int i = 0; i < ui->ContestPageControl->count(); i++)
+    for (int i = 0; i < ui->contestPageControl->count(); i++)
     {
-        QWidget *ctab = ui->ContestPageControl->widget(i);
+        QWidget *ctab = ui->contestPageControl->widget(i);
         TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
         f->applyScreenLayout();
     }
@@ -2110,10 +2114,10 @@ void TLogContainer::ManageListsActionExecute(  )
 void TLogContainer::ShiftTabRightActionExecute( )
 {
    // We want to reorder the tabs so that this one goes right
-   if ( !ui->ContestPageControl->currentWidget() )
+   if ( !ui->contestPageControl->currentWidget() )
       return ;
-   int tno = ui->ContestPageControl->currentIndex();
-   if ( tno < ui->ContestPageControl->count() - 1 )
+   int tno = ui->contestPageControl->currentIndex();
+   if ( tno < ui->contestPageControl->count() - 1 )
    {
       QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ tno ];
       int s = cs->slotno;
@@ -2129,7 +2133,7 @@ void TLogContainer::ShiftTabRightActionExecute( )
 
       TContestApp::getContestApp() ->writeContestList();
 
-      ui->ContestPageControl->tabBar()->moveTab(tno, tno + 1);
+      ui->contestPageControl->tabBar()->moveTab(tno, tno + 1);
 
       enableActions();
    }
@@ -2139,7 +2143,7 @@ void TLogContainer::onTabMoved(int from, int to)
 
     while (from < to)
     {
-        if ( from < ui->ContestPageControl->count() - 1 )
+        if ( from < ui->contestPageControl->count() - 1 )
         {
            QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ from ];
            int s = cs->slotno;
@@ -2190,9 +2194,9 @@ void TLogContainer::mleSetMemoryAction(BaseContestLog *cnt, QString call, QStrin
 
 void TLogContainer::ShiftTabLeftActionExecute( )
 {
-   if ( !ui->ContestPageControl->currentWidget() )
+   if ( !ui->contestPageControl->currentWidget() )
       return ;
-   int tno = ui->ContestPageControl->currentIndex();
+   int tno = ui->contestPageControl->currentIndex();
    if ( tno > 0 )
    {
       QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ tno ];
@@ -2207,7 +2211,7 @@ void TLogContainer::ShiftTabLeftActionExecute( )
 
       TContestApp::getContestApp() ->writeContestList();
 
-      ui->ContestPageControl->tabBar()->moveTab(tno, tno - 1);
+      ui->contestPageControl->tabBar()->moveTab(tno, tno - 1);
 
       enableActions();
    }
@@ -2218,14 +2222,14 @@ void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContac
     // so we want to (a) switch tabs and (b) go to that contact edit
 
 
-    for ( int j = 0; j < ui->ContestPageControl->count(); j++ )
+    for ( int j = 0; j < ui->contestPageControl->count(); j++ )
     {
-        QWidget *ctab = ui->ContestPageControl->widget(j);
+        QWidget *ctab = ui->contestPageControl->widget(j);
         if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
         {
             if ( f->getContest() == pc )
             {
-                ui->ContestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
+                ui->contestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
                 on_ContestPageControl_currentChanged(-1);       // so the contest gets properly switched
                 f->QSOTreeSelectContact( pct );         // which triggers edit on the contact
                 return ;
@@ -2248,9 +2252,9 @@ void TLogContainer::setCaption(QString captionToSet)
 //---------------------------------------------------------------------------
 TSingleLogFrame *TLogContainer::findContest(const QString &pubname )
 {
-   for ( int j = 0; j < ui->ContestPageControl->count(); j++ )
+   for ( int j = 0; j < ui->contestPageControl->count(); j++ )
    {
-       QWidget *ctab = ui->ContestPageControl->widget(j);
+       QWidget *ctab = ui->contestPageControl->widget(j);
        if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
        {
            if ( f->getContest() ->publishedName == pubname )
@@ -2264,9 +2268,9 @@ TSingleLogFrame *TLogContainer::findContest(const QString &pubname )
 }
 TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 {
-   for ( int j = 0; j < ui->ContestPageControl->count(); j++ )
+   for ( int j = 0; j < ui->contestPageControl->count(); j++ )
    {
-       QWidget *ctab = ui->ContestPageControl->widget(j);
+       QWidget *ctab = ui->contestPageControl->widget(j);
        if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
        {
            if ( f->getContest() == ct )
@@ -2335,9 +2339,9 @@ bool TLogContainer::readRestoreContestModeFlag()
 QVector<TSingleLogFrame *> TLogContainer::getLogFrames()
 {
     QVector<TSingleLogFrame *> logs;
-    for ( int j = 0; j < ui->ContestPageControl->count(); j++ )
+    for ( int j = 0; j < ui->contestPageControl->count(); j++ )
     {
-        QWidget *ctab = ui->ContestPageControl->widget(j);
+        QWidget *ctab = ui->contestPageControl->widget(j);
         if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
         {
             logs.push_back(f);
@@ -2349,5 +2353,5 @@ QVector<TSingleLogFrame *> TLogContainer::getLogFrames()
 
 int TLogContainer::getLogFrameCount()
 {
-    return ui->ContestPageControl->count();
+    return ui->contestPageControl->count();
 }

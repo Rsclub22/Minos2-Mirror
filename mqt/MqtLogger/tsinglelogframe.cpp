@@ -549,6 +549,8 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
             switch (type)
             {
                 case sctNone:
+                case sctMainScreen:
+                case sctScreen:
                 {
                     break;
                 }
@@ -680,10 +682,17 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
     }
 
 }
+void TSingleLogFrame::buildScreen(SCScreen &s)
+{
+    int auxInstance = 0;
+    for (auto &r: s.baseElement->rows)
+    {
+        buildRow(r, auxInstance, singleLogFrameSplitter);
+    }
+}
 void TSingleLogFrame::buildScreenLayout()
 {
-    ScreenConfigFile scf;
-    scf.loadFile(this);
+    ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
@@ -706,12 +715,9 @@ void TSingleLogFrame::buildScreenLayout()
 
     SC sc = scf.configs[curConfigName];
 
-    int auxInstance = 0;
-    for (auto &r: sc.baseElement->rows)
+    for (auto &s: sc.baseElement->screens)
     {
-
-        buildRow(r, auxInstance, singleLogFrameSplitter);
-
+        buildScreen(s);
     }
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);

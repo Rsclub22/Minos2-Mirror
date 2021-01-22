@@ -14,7 +14,8 @@ const char * ScreenConfigManager::protectedLayoutText = QT_TR_NOOP("(protected)"
 
 ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ScreenConfigManager)
+    ui(new Ui::ScreenConfigManager),
+    scf(ScreenConfigFile::getScreenConfigFile(parent))
 {
     ui->setupUi(this);
 

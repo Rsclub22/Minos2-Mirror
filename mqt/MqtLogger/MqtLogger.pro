@@ -47,6 +47,7 @@ SOURCES += \
     ScreenConfigFile.cpp \
     ScreenConfigManager.cpp \
     ScreenConfigRow.cpp \
+    ScreenConfigScreen.cpp \
     SendRPCDM.cpp \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
@@ -124,6 +125,7 @@ HEADERS  += \
     ScreenConfigFile.h \
     ScreenConfigManager.h \
     ScreenConfigRow.h \
+    ScreenConfigScreen.h \
     SendRPCDM.h \
     StackedInfoFrame.h \
     TClockFrame.h \
@@ -183,6 +185,7 @@ HEADERS  += \
     Clusterbandmapconfigure.h
 
 FORMS    += \
+    ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \
