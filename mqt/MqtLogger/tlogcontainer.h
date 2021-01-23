@@ -17,6 +17,7 @@ class TContactListDetails;
 class ContactList;
 class MatchContact;
 class TSendDM;
+class ContestPageControl;
 
 class SetMemoryAction: public QAction
 {
@@ -50,6 +51,7 @@ public:
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
 
+    QVector<ContestPageControl *> contestPageControls;
     SetMemoryAction *setMemoryAction;
 
     static QString getDefaultDirectory( bool IsList );
@@ -75,6 +77,8 @@ public:
 
     QAction *newAction(int n, QMenu *m, const char *atype);
     void doListOpenActionExecute(QWidget *p);
+    void setMenuLog(int current);
+    void selectContest(BaseContestLog *pc);
 private:
     Ui::TLogContainer *ui;
 
@@ -255,9 +259,9 @@ private slots:
     void QSOFieldFontActionExecute();
     void styleActionExecute();
 
-    void on_ContestPageControl_currentChanged(int index);
-    void on_ContestPageControl_tabBarDoubleClicked(int index);
-    void on_ContestPageControl_customContextMenuRequested(const QPoint &pos);
+    void on_contestPageControl_currentChanged(int index);
+    void on_contestPageControl_tabBarDoubleClicked(int index);
+    void on_contestPageControl_customContextMenuRequested(const QPoint &pos);
     void onTabClosebutton(int);
 
     void on_TimeDisplayTimer( );

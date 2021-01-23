@@ -34,6 +34,8 @@ SOURCES += \
     AdifImport.cpp \
     ContestApp.cpp \
     ContestDetailsTransferObject.cpp \
+    ContestPage.cpp \
+    ContestPageControl.cpp \
     FilterFrame.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
@@ -113,6 +115,8 @@ HEADERS  += \
     AdifImport.h \
     ContestApp.h \
     ContestDetailsTransferObject.h \
+    ContestPage.h \
+    ContestPageControl.h \
     FilterFrame.h \
     LocCalcFrame.h \
     LoggerContacts.h \
@@ -185,6 +189,8 @@ HEADERS  += \
     Clusterbandmapconfigure.h
 
 FORMS    += \
+    ContestPage.ui \
+    ContestPageControl.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \

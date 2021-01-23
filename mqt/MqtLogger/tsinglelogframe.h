@@ -3,6 +3,7 @@
 
 #include "base_pch.h"
 
+#include "ContestPage.h"
 #include "StackedInfoFrame.h"
 #include "ConfigFile.h"
 #include "rotatorcommon.h"
@@ -23,40 +24,21 @@ namespace Ui {
 class TSingleLogFrame;
 }
 
-class TMatchCollection;
-class MatchNodeData;
-class MatchTreeItem;
-class ProtoContest;
-class BaseContestLog;
-class BaseContact;
-class ContactList;
-class ListContact;
-class FocusWatcher;
-class MatchTreeFrame;
-class ChatFrame;
-class ClusterClientFrame;
-class BandmapClientFrame;
-class MinosSplitter;
 
 // We may need to define our own validation controls with valid methods
 // for each needed type...
 //==========================================================
 
-
-class BaseMatchContest;
-class MatchContact;
-class SCScreen;
-class SCRow;
-
-class TSingleLogFrame : public QFrame
+class TSingleLogFrame : public ContestPage
 {
     friend class TSendDM;
     Q_OBJECT
 
     Ui::TSingleLogFrame *ui;
 
-    QVBoxLayout *verticalLayout = nullptr;
-    MinosSplitter *singleLogFrameSplitter = nullptr;
+public:
+    explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
+    ~TSingleLogFrame();
 
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
@@ -82,16 +64,10 @@ class TSingleLogFrame : public QFrame
 
     BandmapClientFrame *bandmapControlFrame = nullptr;
 
-    QVector <MinosSplitter *> rowSplitters;
-
-public:
-    explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
-    ~TSingleLogFrame();
+    void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 
     void showQSOs();
-    void getSplitters();
     void goSerial( );
-    BaseContestLog * getContest();
     void closeContest();
 
     void addAllQSOsToBandmap();
@@ -108,7 +84,6 @@ public:
     void refreshMults();
 
     bool columnsChanged;
-    bool splittersChanged;
 
     // From rigcontrol
     Frequency sCurFreq;
@@ -163,10 +138,8 @@ public:
 
 
 private:
-    BaseContestLog * contest;
     QSharedPointer<HtmlDelegate> delegate;
     QSOGridModel qsoModel;
-    int splitterHandleWidth;
     QString curScreenLayout;
 
     QString clusterServerState;
@@ -187,10 +160,10 @@ private:
 
     MatchTreeItem *getXferItem();
 
-    void buildScreenLayout();
     void createScreenComponents();
+
+    void buildScreenLayout();
     void clearScreenLayout();
-    void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
@@ -198,7 +171,8 @@ private:
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
-    void buildScreen(SCScreen &s);
+    void buildScreen(SCScreen &s, int t, int auxInstance);
+
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -222,7 +196,6 @@ private slots:
     void on_SetMemory(BaseContestLog *, QString, QString);
 
     void onColumnsChanged();
-    void onSplittersChanged();
     void on_sectionResized(int, int, int);
     void EditContact(QSharedPointer<BaseContact> lct );
 
@@ -264,7 +237,6 @@ private slots:
 
     void sendSelectRadio(const QString &, const Frequency &freq, const QString &mode);
     void sendSelectRotator(const QString &);
-    void onSplitterMoved(int, int);
 
     void sendRadioVolume(int);
 
@@ -273,7 +245,6 @@ private slots:
     void dxSpotToLog(memoryData::memData);
 
     void on_doColumnChanges(BaseContestLog*);
-    void on_doSplitterChanges(BaseContestLog*);
     //void sendIgnoreRunChkBoxState(int num, bool checked);
     void on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
     void on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);

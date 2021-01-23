@@ -38,6 +38,7 @@
 #include "defdirsdlg.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "ContestPageControl.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -92,6 +93,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
     connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
+
+    contestPageControls.append(ui->contestPageControl);
 
 }
 TLogContainer::~TLogContainer()
@@ -993,7 +996,16 @@ void TLogContainer::CloseAllActionExecute()
         closeSlot(t, true );
     }
     closeSlot(0, true);
-    on_ContestPageControl_currentChanged(-1);
+    on_contestPageControl_currentChanged(-1);
+    for (int i = 0; i < LogContainer->contestPageControls.count(); i++)
+    {
+        if (LogContainer->contestPageControls[i]->getInstance() > 0)
+        {
+            LogContainer->contestPageControls[i]->close();
+            LogContainer->contestPageControls[i] = nullptr;
+        }
+    }
+
     enableActions();
 }
 //---------------------------------------------------------------------------
@@ -1011,7 +1023,7 @@ void TLogContainer::CloseAllButActionExecute()
       }
       closeSlot(t, true );
    }
-   on_ContestPageControl_currentChanged(-1);
+   on_contestPageControl_currentChanged(-1);
    enableActions();
 }
 //---------------------------------------------------------------------------
@@ -1410,28 +1422,9 @@ void TLogContainer::QSOFieldFontActionExecute()
         selectSession(TContestApp::getContestApp()->currSession);
     }
 }
-
-void TLogContainer::on_ContestPageControl_currentChanged(int index)
+void TLogContainer::setMenuLog(int current)
 {
-    trace(QString("TLogContainer::on_ContestPageControl_currentChanged index %1").arg(index));
-    if (loggerClosing)
-    {
-        return;
-    }
-    enableActions();
-
-    if (index >= 0)
-    {
-        MinosLoggerEvents::SendContestPageChanged();
-    }
-
-    TContestApp::getContestApp() ->writeContestList();
-    enableActions();
-
-    updateLayoutsMenu();
-
-    ui->menuLogs->clear();
-    menuLogsActions.clear();
+    // why doesn't this happen at startup?
 
     ui->menuLogs->addAction(FileOpenAction);
     ui->menuLogs->addMenu(recentFilesMenu);
@@ -1441,42 +1434,47 @@ void TLogContainer::on_ContestPageControl_currentChanged(int index)
     ui->menuLogs->addAction(CloseAllButAction);
     ui->menuLogs->addSeparator();
 
-    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
-    updateSessionActions();
-
     for (int i = 0; i < ui->contestPageControl->count(); i++)
     {
-        QWidget *ctab = ui->contestPageControl->widget(i);
-        TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
-        BaseContestLog *pc = f->getContest();
-
         QSharedPointer<QAction> ma(newCheckableAction(ui->contestPageControl->tabText(i), ui->menuLogs, SLOT(menuLogsActionExecute())));
 
         QVariant qpc(i);
         ma->setData(qpc);
         menuLogsActions.push_back(ma);
 
-        if ( f )
+        if (current == i)
         {
-
-            if (f == ui->contestPageControl->currentWidget())
-            {
-                ui->contestPageControl->setTabColor(i, Qt::red);
-                ma->setChecked(true);
-            }
-            else if (pc->isReadOnly())
-            {
-                ui->contestPageControl->setTabColor(i, Qt::darkGreen);
-            }
-            else
-            {
-                ui->contestPageControl->setTabColor(i, Qt::darkBlue);
-            }
+            ma->setChecked(true);
         }
     }
+    sessionsMenu = newMenu(ui->menuLogs, QT_TR_NOOP("Contest Sets"));
+    updateSessionActions();
+}
+void TLogContainer::on_contestPageControl_currentChanged(int index)
+{
+    trace(QString("TLogContainer::on_contestPageControl_currentChanged index %1").arg(index));
+    if (loggerClosing)
+    {
+        return;
+    }
+    enableActions();
+
+    TContestApp::getContestApp() ->writeContestList();
+    enableActions();
+
+    updateLayoutsMenu();
+
+    ui->menuLogs->clear();
+    menuLogsActions.clear();
+
+    if (index >= 0)
+    {
+        MinosLoggerEvents::SendContestPageChanged();
+    }
+
 }
 
-void TLogContainer::on_ContestPageControl_tabBarDoubleClicked(int /*index*/)
+void TLogContainer::on_contestPageControl_tabBarDoubleClicked(int /*index*/)
 {
     ContestDetailsActionExecute();
 }
@@ -1491,7 +1489,7 @@ void TLogContainer::selectTab(int curTab)
     }
 
 }
-void TLogContainer::on_ContestPageControl_customContextMenuRequested(const QPoint &pos)
+void TLogContainer::on_contestPageControl_customContextMenuRequested(const QPoint &pos)
 {
     setMemoryAction->setVisible(false);
 
@@ -1580,12 +1578,12 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
          ui->contestPageControl->setTabToolTip(tno, contest->cfileName);
 
-         f->columnsChanged = true;  // also causes show QSOs
-         f->splittersChanged = true;
+         MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
+         MinosLoggerEvents::SendSplittersChanged();
 
          sendDM->subscribeApps();
 
-         on_ContestPageControl_currentChanged(tno);
+         on_contestPageControl_currentChanged(tno);
 
          setUpdatesEnabled(true);
 
@@ -1643,7 +1641,7 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
           QWidget *tab = ui->contestPageControl->widget(t);
           tab->deleteLater();
           ui->contestPageControl->removeTab(t);
-          on_ContestPageControl_currentChanged(-1);
+          on_contestPageControl_currentChanged(-1);
       }
       enableActions();
    }
@@ -1875,7 +1873,7 @@ void TLogContainer::selectSession(QString sessName)
         app->setCurrentContest(ct);
     }
     app->logsPreloadBundle.flushProfile();
-    on_ContestPageControl_currentChanged(-1);
+    on_contestPageControl_currentChanged(-1);
     enableActions();
 }
 
@@ -2230,8 +2228,25 @@ void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContac
             if ( f->getContest() == pc )
             {
                 ui->contestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
-                on_ContestPageControl_currentChanged(-1);       // so the contest gets properly switched
+                on_contestPageControl_currentChanged(-1);       // so the contest gets properly switched
                 f->QSOTreeSelectContact( pct );         // which triggers edit on the contact
+                return ;
+            }
+        }
+    }
+}
+void TLogContainer::selectContest( BaseContestLog *pc)
+{
+    // select this contest on all screens
+    for ( int j = 0; j < ui->contestPageControl->count(); j++ )
+    {
+        QWidget *ctab = ui->contestPageControl->widget(j);
+        if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
+        {
+            if ( f->getContest() == pc )
+            {
+                ui->contestPageControl->setCurrentIndex(j);         // This doesn't call ContestPageControlChange (see TPageControl::OnChange in  help)
+                on_contestPageControl_currentChanged(-1);       // so the contest gets properly switched
                 return ;
             }
         }
