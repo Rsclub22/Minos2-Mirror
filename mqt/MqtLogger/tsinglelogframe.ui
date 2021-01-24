@@ -16,19 +16,21 @@
   <property name="autoFillBackground">
    <bool>true</bool>
   </property>
-  <property name="frameShape">
-   <enum>QFrame::NoFrame</enum>
-  </property>
-  <property name="frameShadow">
-   <enum>QFrame::Plain</enum>
-  </property>
-  <property name="lineWidth">
+  <property name="lineWidth" stdset="0">
    <number>0</number>
   </property>
-  <property name="midLineWidth">
+  <property name="midLineWidth" stdset="0">
    <number>0</number>
   </property>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ContestPage</class>
+   <extends>QWidget</extends>
+   <header>ContestPage.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
