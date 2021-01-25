@@ -31,9 +31,13 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
 private slots:
-    void on_ContestShownChanged();
+    void onContestShownChanged();
 
-    void on_TabBarClicked(int index);
+    void onTabBarClicked(int index);
+
+    void onCustomContextMenuRequested(const QPoint &pos);
+
+    void onTabBarDoubleClicked(int);
 };
 
 #endif // CONTESTPAGECONTROL_H

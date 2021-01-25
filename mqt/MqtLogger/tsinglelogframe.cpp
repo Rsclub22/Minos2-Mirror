@@ -450,6 +450,10 @@ void TSingleLogFrame::clearScreenLayout()
 
         for (auto cpc = LogContainer->contestPageControls.begin(); cpc != LogContainer->contestPageControls.end(); cpc++)
         {
+            if ((*cpc) == nullptr)
+            {
+                continue;
+            }
             for  (auto cp = (*cpc)->pages.begin(); cp != (*cpc)->pages.end(); cp++)
             {
                 if (cp.key() == contest)
@@ -679,14 +683,24 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int auxInstance)
     ContestPage *cp = this;
     if (t > 0)
     {
-        int offset = LogContainer->contestPageControls.count();
-        while (LogContainer->contestPageControls.count() <= t)
+        for (int i = 0; i <= t; i++)
         {
-            ContestPageControl *cpc = new ContestPageControl();
-            cpc->setInstance(offset++);
-            LogContainer->contestPageControls.append(cpc);
-            cpc->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint);
-            cpc->show();
+            if (LogContainer->contestPageControls.count() <= i
+               || LogContainer->contestPageControls[i] == nullptr)
+            {
+                ContestPageControl *cpc = new ContestPageControl();
+                cpc->setInstance(i);
+                if (i < LogContainer->contestPageControls.count())
+                {
+                    LogContainer->contestPageControls[i] = cpc;
+                }
+                else
+                {
+                    LogContainer->contestPageControls.append(cpc);
+                }
+                cpc->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+                cpc->show();
+            }
         }
         cp = new ContestPage(nullptr, contest);
         QString n = QString("contestpage%1").arg(t);

@@ -104,6 +104,10 @@ void ContestPage::clearScreen()
 }
 void ContestPage::getSplitters()
 {
+    if (!singleLogFrameSplitter)
+    {
+        return;
+    }
     QSettings settings;
     QByteArray state;
 

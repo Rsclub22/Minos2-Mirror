@@ -68,7 +68,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     setupMenus();
 
-    ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
+    // These are specific to THIS ContestPageControl
     ui->contestPageControl->setTabsClosable(true);
     connect(ui->contestPageControl->tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(onTabClosebutton(int)));
     connect(ui->contestPageControl->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int,int)));
@@ -336,14 +336,20 @@ QAction *TLogContainer::newAction( const char *text, QMenu *m, const char *atype
     QAction * newAct = new QAction( tr(text), this );
     actionList[newAct] = text;
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered() ), this, atype );
+    if (atype)
+    {
+        connect( newAct, SIGNAL( triggered() ), this, atype );
+    }
     return newAct;
 }
 QAction *TLogContainer::newAction( int n, QMenu *m, const char *atype )
 {
     QAction * newAct = new QAction( QString::number(n), this );
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered() ), this, atype );
+    if (atype)
+    {
+        connect( newAct, SIGNAL( triggered() ), this, atype );
+    }
     return newAct;
 }
 SetMemoryAction *TLogContainer::newMemoryAction(const char *text, QMenu *m, const char *atype )
@@ -351,7 +357,10 @@ SetMemoryAction *TLogContainer::newMemoryAction(const char *text, QMenu *m, cons
     SetMemoryAction * newAct = new SetMemoryAction( tr(text), this );
     actionList[newAct] = text;
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered() ), this, atype );
+    if (atype)
+    {
+        connect( newAct, SIGNAL( triggered() ), this, atype );
+    }
     return newAct;
 }
 QAction *TLogContainer::newCheckableAction( const char *text, QMenu *m, const char *atype )
@@ -360,7 +369,10 @@ QAction *TLogContainer::newCheckableAction( const char *text, QMenu *m, const ch
     actionList[newAct] = text;
     newAct->setCheckable( true );
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    if (atype)
+    {
+        connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    }
     return newAct;
 }
 QAction *TLogContainer::newCheckableAction( const QString text, QMenu *m, const char *atype )
@@ -368,7 +380,10 @@ QAction *TLogContainer::newCheckableAction( const QString text, QMenu *m, const 
     QAction * newAct = new QAction( text, this );
     newAct->setCheckable( true );
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    if (atype)
+    {
+        connect( newAct, SIGNAL( triggered( bool ) ), this, atype );
+    }
     return newAct;
 }
 
@@ -395,7 +410,7 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
 
     ui->menuFile->addSeparator();
-    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
+    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, nullptr);  // has to be connected to by recepient
     MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, SLOT(MakeEntryActionExecute()));
     ui->menuFile->addSeparator();
 
@@ -999,10 +1014,11 @@ void TLogContainer::CloseAllActionExecute()
     on_contestPageControl_currentChanged(-1);
     for (int i = 0; i < LogContainer->contestPageControls.count(); i++)
     {
-        if (LogContainer->contestPageControls[i]->getInstance() > 0)
+        ContestPageControl * &cpc = LogContainer->contestPageControls[i];
+        if (cpc && cpc->getInstance() > 0)
         {
-            LogContainer->contestPageControls[i]->close();
-            LogContainer->contestPageControls[i] = nullptr;
+            cpc->close();
+            cpc = nullptr;
         }
     }
 
@@ -1467,17 +1483,9 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     ui->menuLogs->clear();
     menuLogsActions.clear();
 
-    if (index >= 0)
-    {
-        MinosLoggerEvents::SendContestPageChanged();
-    }
-
+    MinosLoggerEvents::SendContestPageChanged();
 }
 
-void TLogContainer::on_contestPageControl_tabBarDoubleClicked(int /*index*/)
-{
-    ContestDetailsActionExecute();
-}
 void TLogContainer::selectTab(int curTab)
 {
     if (curTab >= 0)
@@ -1488,34 +1496,6 @@ void TLogContainer::selectTab(int curTab)
         selectContest(pc, QSharedPointer<BaseContact>());
     }
 
-}
-void TLogContainer::on_contestPageControl_customContextMenuRequested(const QPoint &pos)
-{
-    setMemoryAction->setVisible(false);
-
-    int curtab = ui->contestPageControl->tabBar()->tabAt(pos);
-    // -1 if not on a tab
-    selectTab(curtab);
-
-    QPoint globalPos = ui->contestPageControl->mapToGlobal( pos );
-
-    QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
-    QObject *w = qa->widgetAt(globalPos);
-
-    while (w)
-    {
-        MatchTreeFrame *mtf = dynamic_cast<MatchTreeFrame *>(w);
-
-        if (mtf)
-        {
-            mtf->doCustomContextMenuRequested();
-            break;
-        }
-
-        w = w->parent();
-    }
-
-    TabPopup.popup( globalPos );
 }
 BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
 {
@@ -2138,7 +2118,7 @@ void TLogContainer::ShiftTabRightActionExecute( )
 }
 void TLogContainer::onTabMoved(int from, int to)
 {
-
+    // we need to apply this across ALL ContestPageControl
     while (from < to)
     {
         if ( from < ui->contestPageControl->count() - 1 )

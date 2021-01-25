@@ -16,8 +16,12 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     ui(new Ui::ContestPageControl)
 {
     ui->setupUi(this);
-    connect(&MinosLoggerEvents::mle, SIGNAL(ContestShownChanged()), this, SLOT(on_ContestShownChanged()));
-    connect(this, SIGNAL(tabBarClicked(int)), this, SLOT(on_TabBarClicked(int)));
+    setWindowTitle(tr("Minos Contest Logger"));
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    connect(&MinosLoggerEvents::mle, SIGNAL(ContestShownChanged()), this, SLOT(onContestShownChanged()));
+    connect(this, SIGNAL(tabBarClicked(int)), this, SLOT(onTabBarClicked(int)));
+    connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(onCustomContextMenuRequested(const QPoint)));
+    connect(this, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(onTabBarDoubleClicked(int)));
 }
 
 ContestPageControl::~ContestPageControl()
@@ -76,7 +80,7 @@ void ContestPageControl::changeEvent( QEvent* e )
 }
 
 
-void ContestPageControl::on_ContestShownChanged()
+void ContestPageControl::onContestShownChanged()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
 
@@ -120,11 +124,49 @@ void ContestPageControl::on_ContestShownChanged()
         }
     }
 }
-void ContestPageControl::on_TabBarClicked(int index)
+void ContestPageControl::onTabBarClicked(int index)
 {
-    trace(QString("on_TabBarClicked %1").arg(index));
+    trace(QString("onTabBarClicked %1").arg(index));
     ContestPage *ctab = dynamic_cast<ContestPage *>(widget(index));
     BaseContestLog *pc = ctab->getContest();
 
     LogContainer->selectContest(pc);
+}
+void ContestPageControl::onCustomContextMenuRequested(const QPoint &pos)
+{
+    LogContainer->setMemoryAction->setVisible(false);
+
+    int curtab = tabBar()->tabAt(pos);
+    if (curtab >= 0)
+    {
+        ContestPage *ctab = dynamic_cast<ContestPage *>(widget(curtab));
+        BaseContestLog *pc = ctab->getContest();
+
+        LogContainer->selectContest(pc);
+    }
+
+    QPoint globalPos = mapToGlobal( pos );
+
+    QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
+    QObject *w = qa->widgetAt(globalPos);
+
+    while (w)
+    {
+        MatchTreeFrame *mtf = dynamic_cast<MatchTreeFrame *>(w);
+
+        if (mtf)
+        {
+            mtf->doCustomContextMenuRequested();
+            break;
+        }
+
+        w = w->parent();
+    }
+
+    LogContainer->TabPopup.popup( globalPos );
+}
+
+void ContestPageControl::onTabBarDoubleClicked(int /*index*/)
+{
+    LogContainer->ContestDetailsActionExecute();
 }
