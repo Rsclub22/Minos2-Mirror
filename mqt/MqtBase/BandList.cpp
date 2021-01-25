@@ -491,6 +491,13 @@ QString BandList::findType(const QString &band) const
 }
 QString BandList::findType(const Frequency &freq) const
 {
+    for (auto const &b:bandList)
+    {
+        if (freq >= b.data()->fLow && freq <= b.data()->fHigh)
+        {
+            return b.data()->getType();
+        }
+    }
     return "";
 }
 

@@ -16,6 +16,9 @@
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <widget class="QTabWidget" name="radioSettingsTabWidget">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -27,32 +30,45 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="turnOffColourRadioFreqDialChkBox">
            <property name="text">
             <string>Turn Off Operating Frequency Colour in Radio Freq Dial</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_2">
+          <widget class="QCheckBox" name="contestStartIgnorePresetFreqChkBox">
            <property name="text">
             <string>Contest Start - Ignore Preset Frequency</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_3">
+          <widget class="QCheckBox" name="contestChangeIgnorePreviousFreqChkBox">
            <property name="text">
             <string>Contest Change - Ignore Previous Frequency</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_4">
+          <widget class="QCheckBox" name="constestChangeRestoreContestModeChkBox">
            <property name="text">
             <string>Contest Change - Restore Contest Mode</string>
            </property>
           </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
          </item>
         </layout>
        </item>

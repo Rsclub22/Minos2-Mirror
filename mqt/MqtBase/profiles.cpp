@@ -120,6 +120,9 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_5_6GHz , "defaultFilterDistance_5_6GHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 5.6GHz"), QT_TR_NOOP("Default Filter Distance 5.6GHz"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_10GHz , "defaultFilterDistance_10GHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 10GHz"), QT_TR_NOOP("Default Filter Distance 10GHz"), false ) ) );
 
+
+        entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestTurnOffOperatingFreqColorRadioDial, "turnOffOperatingColorRadioDial", false, QT_TR_NOOP("Radio Dial - Turn Off Operating Colour"), QT_TR_NOOP("Radio Dial - Turn Off Operating Colour"), false)));
+
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestStartIgnorePresetFreq, "contestStartIgnorePresetFreq", false, QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeIgnorePreviousFreq, "contestChangeIgnorePreviousFreq", false, QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), false)));
         entries.push_back( QSharedPointer<ProfileEntry> (new ProfileEntry(elpContestChangeRestoreContestMode, "contestChangeRestoreContestMode", false, QT_TR_NOOP("Contest Change - Restore Contest Mode"), QT_TR_NOOP("Contest Change - Restore Contest Mode"), false)));

@@ -39,7 +39,7 @@
 #include "defdirsdlg.h"
 #include "BandList.h"
 #include "delayedaction.h"
-#include "freqpresetdialog.h"
+
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -447,13 +447,7 @@ void TLogContainer::setupMenus()
     UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
     WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
     ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
-    RadioConfigAction = newAction(QT_TR_NOOP("Radio configuration..."), ui->menuTools, SLOT(RadioConfigActionExecute()));
-    //radioMenu = newMenu(ui->menuTools, QT_TR_NOOP("Radio"));
-
-    //editRadioFreqPresets = newAction(QT_TR_NOOP("Edit Freq Presets..."), radioMenu, SLOT(onEditFreqPresetsExecute()));
-    //ignorePresetFreqContestStart = newCheckableAction(QT_TR_NOOP("Contest Start - Ignore Preset Frequency"), radioMenu, SLOT(onIgnorePresetFreqChecked(bool)));
-    //ignorePreviousFreqContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Ignore Previous Frequency"), radioMenu, SLOT(onIgnorePreviousFreqChecked(bool)));
-    //restoreContestModeContestChange = newCheckableAction(QT_TR_NOOP("Contest Change - Restore Contest Mode"), radioMenu, SLOT(onRestorContestModeChecked(bool)));
+    RadioConfigAction = newAction(QT_TR_NOOP("Log Radio Settings..."), ui->menuTools, SLOT(RadioConfigActionExecute()));
 
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
@@ -2287,62 +2281,7 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
    return nullptr;
 }
 
-void TLogContainer::onEditFreqPresetsExecute()
-{
-    QVector<QSharedPointer<BandInfo>  > bands;
-    BandList::getBandList().loadAllBands(bands);
-    bool allowHF = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
-    FreqPresetDialog*  fPresetDialog = new FreqPresetDialog(allowHF, bands);
-
-    int ret = fPresetDialog->exec();
-    if (ret == QDialog::Accepted)
-    {
-        if (fPresetDialog->getFreqChanged())
-        {
-            //trace(QString("RigControl: Band Freq Change, send new bandlist to logger"));
-            //presetFreq = fPresetDialog->getPresetSettings();
-            fPresetDialog->saveSettings();
-
-        }
-    }
-
-}
-
-void TLogContainer::onIgnorePreviousFreqChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeIgnorePreviousFreq, checked);
-
-}
-
-void TLogContainer::onIgnorePresetFreqChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestStartIgnorePresetFreq, checked);
-
-}
-
-bool TLogContainer::readIgnorePreviousFreqFlag()
-{
-
-    bool state;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, state );
-    return state;
-}
-
-bool TLogContainer::readIgnorePresetFreqFlag()
-{
-
-    bool state;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestStartIgnorePresetFreq, state );
-    return state;
-}
-
-void TLogContainer::onRestorContestModeChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
-
-}
 
 void TLogContainer::appStarted()
 {

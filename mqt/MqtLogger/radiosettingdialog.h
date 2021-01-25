@@ -28,6 +28,9 @@ namespace Ui {
 class RadioSettingDialog;
 }
 
+
+
+
 class RadioSettingDialog : public QDialog
 {
     Q_OBJECT
@@ -37,7 +40,7 @@ public:
     ~RadioSettingDialog();
 
 
-    static void readSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
+    static void freqPresetReadSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
     static void checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands);
 
 
@@ -52,6 +55,12 @@ private slots:
     void onMgmPresetLineEditingFinished(int i);
 
 
+
+    void onIgnorePresetFreqChecked(bool checked);
+    void onIgnorePreviousFreqChecked(bool checked);
+    void onTurnOffColourRadioFreqDialChkChanged(bool checked);
+    void onRestoreContestModeChecked(bool checked);
+    void onAccepted();
 private:
     Ui::RadioSettingDialog *ui;
     //QStringList presetFreq;
@@ -86,6 +95,10 @@ private:
 
 
 
+
+    bool readRadioSettingsCheckBox(LOGGERPROFILE profile);
+    void saveRadioSettingsCheckBox(QCheckBox *chkbox, LOGGERPROFILE profile);
+    void saveRadioSettingsCheckBoxes();
 };
 
 #endif // RADIOSETTINGDIALOG_H

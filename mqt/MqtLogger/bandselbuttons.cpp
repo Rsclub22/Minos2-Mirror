@@ -25,7 +25,7 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     bandSelGridLayout = _bandSelGrid;
     setupButtons();
 
-    FreqPresetDialog::readSettings(presetFreqs, bands);
+    RadioSettingDialog::freqPresetReadSettings(presetFreqs, bands);
 
 }
 

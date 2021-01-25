@@ -268,15 +268,13 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
     void ClusterBandmapConfigActionExecute();
-    void onEditFreqPresetsExecute();
-    void onIgnorePreviousFreqChecked(bool);
-    void onIgnorePresetFreqChecked(bool);
-    void onRestorContestModeChecked(bool checked);
+    void RadioConfigActionExecute();
+
 
     void appStarted();
 
 
-    void RadioConfigActionExecute();
+
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

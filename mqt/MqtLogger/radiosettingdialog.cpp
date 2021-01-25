@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
 //
 //
 //
@@ -16,6 +16,8 @@
 #include "radiosettingdialog.h"
 #include "ui_radiosettingdialog.h"
 #include "rigcommon.h"
+#include "ContestApp.h"
+
 
 
 
@@ -25,6 +27,9 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
     ui(new Ui::RadioSettingDialog)
 {
     ui->setupUi(this);
+
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowTitle(tr("Log Radio Settings"));
 
     bands = band;
     hfFlag = hfFlag_;
@@ -39,7 +44,7 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     for (int i = 0; i < cwPresetLineEditList.count(); i++)
     {
-        connect(cwPresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onCwPresetLineEditingFinished(i);});
+        connect(cwPresetLineEditList[i], &QLineEdit::editingFinished, this, [=]() {onCwPresetLineEditingFinished(i);});
 
     }
 
@@ -51,7 +56,7 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     for (int i = 0; i < phonePresetLineEditList.count(); i++)
     {
-        connect(phonePresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onPhonePresetLineEditingFinished(i);});
+        connect(phonePresetLineEditList[i], &QLineEdit::editingFinished, this, [=]() {onPhonePresetLineEditingFinished(i);});
 
     }
 
@@ -63,7 +68,7 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     for (int i = 0; i < mgmPresetLineEditList.count(); i++)
     {
-        connect(mgmPresetLineEditList[i], &QLineEdit::editingFinished, [=]() {onMgmPresetLineEditingFinished(i);});
+        connect(mgmPresetLineEditList[i], &QLineEdit::editingFinished, this, [=]() {onMgmPresetLineEditingFinished(i);});
 
     }
 
@@ -90,10 +95,20 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     setHf(hfFlag);
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){accept();});
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){reject();});
+    //connect(ui->turnOffColourRadioFreqDialChkBox, &QCheckBox::clicked, this, [=](bool checked){onTurnOffColourRadioFreqDialChkChanged(checked);});
+    //connect(ui->contestStartIgnorePresetFreqChkBox, &QCheckBox::clicked, this, [=](bool checked){onIgnorePreviousFreqChecked(checked);});
+    //connect(ui->contestChangeIgnorePreviousFreqChkBox, &QCheckBox::clicked, this, [=](bool checked){onIgnorePresetFreqChecked(checked);});
+    //connect(ui->constestChangeRestoreContestModeChkBox, &QCheckBox::clicked, this, [=](bool checked){onRestoreContestModeChecked(checked);});
 
-    readSettings(presetFreq, bands); // static
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){onAccepted();});
+
+
+    freqPresetReadSettings(presetFreq, bands); // static
+
+    ui->turnOffColourRadioFreqDialChkBox->setChecked(readRadioSettingsCheckBox(elpContestTurnOffOperatingFreqColorRadioDial));
+    ui->contestStartIgnorePresetFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestStartIgnorePresetFreq));
+    ui->contestChangeIgnorePreviousFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeIgnorePreviousFreq));
+    ui->constestChangeRestoreContestModeChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeRestoreContestMode));
 
     loadSettingsToDialog();
 
@@ -196,7 +211,10 @@ bool RadioSettingDialog::checkInBand(Frequency freq, int band)
 }
 
 
-
+void RadioSettingDialog::onAccepted()
+{
+    saveSettings();
+}
 
 
 
@@ -210,6 +228,8 @@ void RadioSettingDialog::saveSettings()
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_CW, config);
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_PHONE, config);
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_MGM, config);
+
+    saveRadioSettingsCheckBoxes();
 
 }
 
@@ -225,7 +245,15 @@ void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &con
 }
 
 
+void RadioSettingDialog::saveRadioSettingsCheckBoxes()
+{
+    saveRadioSettingsCheckBox(ui->turnOffColourRadioFreqDialChkBox, elpContestTurnOffOperatingFreqColorRadioDial);
+    saveRadioSettingsCheckBox(ui->contestStartIgnorePresetFreqChkBox, elpContestStartIgnorePresetFreq);
+    saveRadioSettingsCheckBox(ui->contestChangeIgnorePreviousFreqChkBox, elpContestChangeIgnorePreviousFreq);
+    saveRadioSettingsCheckBox(ui->constestChangeRestoreContestModeChkBox, elpContestChangeRestoreContestMode);
 
+
+}
 
 
 void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
@@ -259,7 +287,7 @@ void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, con
 
 
 
-void RadioSettingDialog::readSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
+void RadioSettingDialog::freqPresetReadSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -328,5 +356,52 @@ void RadioSettingDialog::loadSettingsToDialog()
 
         mgmPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
     }
+
+}
+
+
+
+
+void RadioSettingDialog::onTurnOffColourRadioFreqDialChkChanged(bool checked)
+{
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestTurnOffOperatingFreqColorRadioDial, checked);
+
+}
+
+
+void RadioSettingDialog::onIgnorePreviousFreqChecked(bool checked)
+{
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeIgnorePreviousFreq, checked);
+
+}
+
+void RadioSettingDialog::onIgnorePresetFreqChecked(bool checked)
+{
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestStartIgnorePresetFreq, checked);
+
+}
+
+bool RadioSettingDialog::readRadioSettingsCheckBox(LOGGERPROFILE profile)
+{
+
+    bool state;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( profile, state );
+    return state;
+}
+
+
+void RadioSettingDialog::saveRadioSettingsCheckBox(QCheckBox* chkbox, LOGGERPROFILE profile)
+{
+    if (chkbox->isChecked() != readRadioSettingsCheckBox(profile))
+    {
+       TContestApp::getContestApp()->loggerBundle.setBoolProfile(profile, chkbox->isChecked());
+    }
+
+}
+
+
+void RadioSettingDialog::onRestoreContestModeChecked(bool checked)
+{
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
 
 }

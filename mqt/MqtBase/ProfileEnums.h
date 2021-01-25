@@ -101,6 +101,7 @@ enum LOGGERPROFILE {
    elpContestChangeIgnorePreviousFreq,
    elpContestChangeRestoreContestMode,
 
+   elpContestTurnOffOperatingFreqColorRadioDial,
    elpBandMapTurnOffOperatingFreqStrip,
    elpBandMapFollowRadioModeOperatingFreqStrip,
 
