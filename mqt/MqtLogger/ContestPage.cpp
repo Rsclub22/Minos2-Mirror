@@ -104,6 +104,10 @@ void ContestPage::clearScreen()
 }
 void ContestPage::getSplitters()
 {
+    if (!singleLogFrameSplitter)
+    {
+        return;
+    }
     QSettings settings;
     QByteArray state;
 
@@ -166,4 +170,6 @@ void ContestPage::on_ContestShownChanged ()
         MinosLoggerEvents::SendDoSplitterChanges(getContest());
         splittersChanged = false;
     }
+    //MinosConfigEvents::sendAppStarted();
+
 }

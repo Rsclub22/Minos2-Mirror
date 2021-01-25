@@ -316,6 +316,8 @@ void QSOLogFrame::on_TimeDisplayTimer()
 {
     updateQSOTime(true);
 
+    checkQsoFrameColour();
+
     checkBandMapAndClusterLoaded();
 }
 
@@ -384,6 +386,25 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
             SecondOpComboBox_Exit();
         }
     }
+    checkQsoFrameColour();
+}
+bool QSOLogFrame::frameHasFocus()
+{
+    if (ui->CallsignEdit->hasFocus()
+            || ui->RSTTXEdit->hasFocus()
+            || ui->SerTXEdit->hasFocus()
+            || ui->RSTRXEdit->hasFocus()
+            || ui->SerRXEdit->hasFocus()
+            || ui->LocEdit->hasFocus()
+            || ui->QTHEdit->hasFocus()
+            || ui->CommentsEdit->hasFocus()
+            )
+    {
+        return true;
+    }
+
+    return false;
+
 }
 void QSOLogFrame::setAsEdit(bool s, QString b)
 {
@@ -1897,6 +1918,41 @@ void QSOLogFrame::clearCurrentField()
    current = nullptr;
 }
 //---------------------------------------------------------------------------
+void QSOLogFrame::checkQsoFrameColour()
+{
+    QString ssQsoFrame = ssQsoFrameBlue;
+    if (contest->isReadOnly())
+    {
+        ssQsoFrame = ssQsoFrameRed;
+        if (contest->isUnwriteable())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
+        }
+        else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
+        }
+        else if (contest->isAgeProtected())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+        }
+    }
+    else
+    {
+        if (!frameHasFocus())
+        {
+            ssQsoFrame = ssQsoFrameRed;
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("QSO Entry Frame not focussed!"));
+        }
+        else
+        {
+            ui->protectionLabel->setText("");
+        }
+    }
+    ui->qsoFrame->setStyleSheet(ssQsoFrame);
+    widgetStyles[ui->qsoFrame] = ssQsoFrame;
+ }
+
 void QSOLogFrame::updateQSODisplay()
 {
    if ( contest->districtMult.getValue() )
@@ -1950,29 +2006,7 @@ void QSOLogFrame::updateQSODisplay()
    ui->ModeComboBoxGJV->setEnabled(!mgm);
    ui->ModeButton->setEnabled(!mgm);
 
-   QString ssQsoFrame = ssQsoFrameBlue;
-   if (contest->isReadOnly())
-   {
-       ssQsoFrame = ssQsoFrameRed;
-       if (contest->isUnwriteable())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
-       }
-       else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
-       }
-       else if (contest->isAgeProtected())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
-       }
-   }
-   else
-   {
-       ui->protectionLabel->setText("");
-   }
-   ui->qsoFrame->setStyleSheet(ssQsoFrame);
-   widgetStyles[ui->qsoFrame] = ssQsoFrame;
+   checkQsoFrameColour();
 
    on_FontChanged();    // do all style sheets again
 }

@@ -275,6 +275,9 @@ private:
     void setClusterSendSpotControlsState();
     void setBandMapControlsDisabled(bool disabled);
     void setClusterSendSpotControlsDisabled(bool disabled);
+    void checkQsoFrameColour();
+    
+    bool frameHasFocus();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

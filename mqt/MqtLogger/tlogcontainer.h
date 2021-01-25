@@ -46,6 +46,8 @@ public:
     QLabel *sblabel1;
     QLabel *sblabel2;
 
+    QMenu TabPopup;
+
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
@@ -79,11 +81,13 @@ public:
     void doListOpenActionExecute(QWidget *p);
     void setMenuLog(int current);
     void selectContest(BaseContestLog *pc);
+    void selectTab(int t);
+    void ContestDetailsActionExecute();
+
 private:
     Ui::TLogContainer *ui;
 
     QTimer TimerUpdateQSOTimer;
-    QMenu TabPopup;
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -114,7 +118,6 @@ private:
     BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno );
     void closeSlot(int t, bool addToMRU );
     TSingleLogFrame *findLogFrame(int t);
-    void selectTab(int t);
 
     QAction *lastSessionSelected = nullptr;
     QAction *lastLayoutSelected = nullptr;
@@ -212,7 +215,6 @@ private slots:
     void FileOpenActionExecute();
     void FileImportActionExecute();
     void ManageListsActionExecute();
-    void ContestDetailsActionExecute();
     void FileCloseActionExecute();
     void CloseAllActionExecute();
     void CloseAllButActionExecute();
@@ -260,8 +262,6 @@ private slots:
     void styleActionExecute();
 
     void on_contestPageControl_currentChanged(int index);
-    void on_contestPageControl_tabBarDoubleClicked(int index);
-    void on_contestPageControl_customContextMenuRequested(const QPoint &pos);
     void onTabClosebutton(int);
 
     void on_TimeDisplayTimer( );
