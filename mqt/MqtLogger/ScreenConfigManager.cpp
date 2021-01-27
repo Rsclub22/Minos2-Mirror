@@ -265,7 +265,7 @@ void ScreenConfigManager::on_applyButton_clicked()
     scf.dumpFile();
 
     LogContainer->selectLayout(curConfigName);
-    LogContainer->applyScreenLayouts();
+    LogContainer->selectSession(TContestApp::getContestApp()->currSession);
 }
 
 void ScreenConfigManager::on_cancelButton_clicked()

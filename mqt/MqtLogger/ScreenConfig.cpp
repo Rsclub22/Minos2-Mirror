@@ -73,6 +73,25 @@ ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s)
     screens.push_back(scr);
     return scr;
 }
+bool ScreenConfig::checkOk(ScreenConfigElement *e)
+{
+    int auxCount = 0;
+    int sct = screens.count();
+    for (int i = 0; i < sct; i++)
+    {
+        if (!screens[i]->checkScreenOk(e, auxCount))
+        {
+            return false;
+        }
+    }
+    QString etype = e->getType();
+    if (etype != ScreenConfigElement::getTrScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    {
+        return true;
+    }
+
+    return true;
+}
 SC ScreenConfig::getConfig()
 {
     SC sc;
@@ -136,7 +155,7 @@ void ScreenConfig::on_applyButton_clicked()
     scf.dumpFile();
 
     LogContainer->selectLayout(curConfigName);
-    LogContainer->applyScreenLayouts();
+    LogContainer->selectSession(TContestApp::getContestApp()->currSession);
 }
 
 void ScreenConfig::on_cancelButton_clicked()

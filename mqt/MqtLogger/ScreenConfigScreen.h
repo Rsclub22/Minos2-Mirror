@@ -38,6 +38,7 @@ public:
     QVector<ScreenConfigRow *> getSelected();
     void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
     void getConfig(SCScreen &sc);
+    bool checkScreenOk(ScreenConfigElement *e, int auxCount);
 public slots:
     void on_addRowButton_clicked();
 

@@ -26,6 +26,7 @@ public:
     QVector<ScreenConfigScreen *> screens;
 
     ScreenConfigScreen *curScreen = nullptr;
+    bool checkOk(ScreenConfigElement *s);
 public slots:
     void reject() override;
     void accept() override;

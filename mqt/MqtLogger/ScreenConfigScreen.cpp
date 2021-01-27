@@ -67,7 +67,10 @@ bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElem
 
 bool ScreenConfigScreen::checkOk(ScreenConfigElement *e)
 {
-    int auxCount = 0;
+    return parentElement->checkOk(e);
+}
+bool ScreenConfigScreen::checkScreenOk(ScreenConfigElement *e, int auxCount)
+{
     for (int i = 0; i < vbl->count(); i++)
     {
         const QWidget *w = vbl->itemAt(i)->widget();
@@ -76,16 +79,7 @@ bool ScreenConfigScreen::checkOk(ScreenConfigElement *e)
             return false;
 
     }
-    QString etype = e->getType();
-    if (etype != ScreenConfigElement::getTrScreenTypeString(sctAux) || auxCount < STACKITEMS)
-    {
-        return true;
-    }
-    else if (etype != ScreenConfigElement::getTrScreenTypeString(sctCluster))
-    {
-        return true;
-    }
-    return false;
+    return true;
 }
 void ScreenConfigScreen::buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl)
 {

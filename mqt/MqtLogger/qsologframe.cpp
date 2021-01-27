@@ -1920,6 +1920,10 @@ void QSOLogFrame::clearCurrentField()
 //---------------------------------------------------------------------------
 void QSOLogFrame::checkQsoFrameColour()
 {
+    if (!contest)
+    {
+        return;
+    }
     QString ssQsoFrame = ssQsoFrameBlue;
     if (contest->isReadOnly())
     {

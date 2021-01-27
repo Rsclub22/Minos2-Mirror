@@ -1742,6 +1742,8 @@ void TLogContainer::applyScreenLayouts()
 {
     TWaitCursor wc(this);
 
+    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+
     // clear old splitter settings
     QSettings settings;
     settings.remove("Splitters");
@@ -1752,6 +1754,8 @@ void TLogContainer::applyScreenLayouts()
         TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab );
         f->applyScreenLayout();
     }
+    if (ct)
+        selectContest(ct);
 }
 void TLogContainer::updateSessionActions()
 {
@@ -2218,7 +2222,8 @@ void TLogContainer::selectContest( BaseContestLog *pc, QSharedPointer<BaseContac
 void TLogContainer::selectContest( BaseContestLog *pc)
 {
     // select this contest on all screens
-    for ( int j = 0; j < ui->contestPageControl->count(); j++ )
+    int pct = ui->contestPageControl->count();
+    for ( int j = 0; j < pct; j++ )
     {
         QWidget *ctab = ui->contestPageControl->widget(j);
         if ( TSingleLogFrame * f = dynamic_cast<TSingleLogFrame *>( ctab ) )
