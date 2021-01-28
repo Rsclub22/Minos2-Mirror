@@ -90,7 +90,6 @@ void ContestPage::clearScreen()
     while (s)
     {
         s->setParent(nullptr);
-//        s->deleteLater();
         delete(s);
         s = singleLogFrameSplitter->widget(0);
     }

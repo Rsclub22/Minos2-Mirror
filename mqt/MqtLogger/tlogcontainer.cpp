@@ -1603,10 +1603,10 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
       if (f)
       {
-          if ( addToMRU )
+          BaseContestLog *bct = f->getContest();
+          if ( bct && addToMRU )
           {
-             BaseContestLog * contest = f->getContest();
-             QString curPath = contest->cfileName;
+             QString curPath = bct->cfileName;
              setCurrentFile( curPath );
           }
 
@@ -1618,9 +1618,16 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
             TMatchThread::InitialiseMatchThread();
           }
 
-          QWidget *tab = ui->contestPageControl->widget(t);
-          tab->deleteLater();
-          ui->contestPageControl->removeTab(t);
+          for(auto cpc: contestPageControls)
+          {
+              auto page = cpc->pages.find(bct);
+              if (page != cpc->pages.end())
+              {
+                  cpc->removeTab(cpc->indexOf(*page));
+                  delete *page;
+                  cpc->pages.remove(bct);
+              }
+          }
           on_contestPageControl_currentChanged(-1);
       }
       enableActions();

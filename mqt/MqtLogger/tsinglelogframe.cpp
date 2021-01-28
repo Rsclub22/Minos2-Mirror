@@ -185,6 +185,7 @@ TSingleLogFrame::~TSingleLogFrame()
 
     // we need to delete all the dependant ContestPage as well
 
+
     delete clusterControlFrame;
     delete wsjtxFrame;
 }
@@ -400,6 +401,12 @@ void TSingleLogFrame::clearScreenLayout()
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
 
+    clusterControlFrame->setParent(this);
+    clusterControlFrame->hide();
+
+    bandmapControlFrame->setParent(this);
+    bandmapControlFrame->hide();
+
     if (LogContainer->isLoggerClosing())
     {
         // do nothing more...
@@ -441,12 +448,6 @@ void TSingleLogFrame::clearScreenLayout()
 
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
-
-        clusterControlFrame->setParent(this);
-        clusterControlFrame->hide();
-
-        bandmapControlFrame->setParent(this);
-        bandmapControlFrame->hide();
 
         for (auto cpc = LogContainer->contestPageControls.begin(); cpc != LogContainer->contestPageControls.end(); cpc++)
         {
