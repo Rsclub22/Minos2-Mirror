@@ -29,6 +29,7 @@ public:
     bool mainScreen = false;
     QString name;
 
+    void setName(QString n);
     bool checkOk(ScreenConfigElement *e);
 
     void checkAddButtons();
@@ -45,6 +46,9 @@ public slots:
     void on_addColumnRightButton_clicked();
 
     void on_addColumnLeftButton_clicked();
+private slots:
+    void on_screenNameEdit_textEdited(const QString &arg1);
+
 private:
     Ui::ScreenConfigScreen *ui;
 

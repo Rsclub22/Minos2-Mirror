@@ -718,8 +718,12 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int auxInstance)
 
     bool temp = TContestApp::getContestApp() ->suppressWritePreload;
     TContestApp::getContestApp() ->suppressWritePreload = true;
-    QString baseFName = ExtractFileName( contest->cfileName );
-    LogContainer->contestPageControls[t]->addTab(cp, baseFName);
+    QString sname  = s.name;
+    if (t == 0 || sname.isEmpty())
+    {
+        sname = ExtractFileName( contest->cfileName );
+    }
+    LogContainer->contestPageControls[t]->addTab(cp, sname);
     TContestApp::getContestApp() ->suppressWritePreload = temp;
 }
 void TSingleLogFrame::buildScreenLayout()

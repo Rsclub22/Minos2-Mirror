@@ -55,6 +55,7 @@ public:
     ~ContestPage();
 
     int pageNo = -1;
+    QString pageName;
 
     BaseContestLog * getContest();
 

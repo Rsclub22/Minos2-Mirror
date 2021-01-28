@@ -27,6 +27,12 @@ ScreenConfigScreen::~ScreenConfigScreen()
 {
     delete ui;
 }
+
+void ScreenConfigScreen::setName(QString n)
+{
+    name = n;
+    ui->screenNameEdit->setText(n);
+}
 bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount)
 {
     QString etype = e->getType();
@@ -147,6 +153,7 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
 }
 void ScreenConfigScreen::getConfig(SCScreen &sc)
 {
+    name = ui->screenNameEdit->text();
     int vCt = vbl->count();
     for (int i = 0; i < vCt; i++)
     {
@@ -378,4 +385,10 @@ void ScreenConfigScreen::on_addColumnLeftButton_clicked()
         }
         addColumnLeft(e, topRow, bottomRow);
     }
+}
+
+void ScreenConfigScreen::on_screenNameEdit_textEdited(const QString &arg1)
+{
+    name = arg1;
+    parentElement->setScreenName(this);
 }

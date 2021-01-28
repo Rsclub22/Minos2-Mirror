@@ -57,7 +57,7 @@ ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s)
 {
     // create a tab in pageTabs, with a scroll area and vertical box layout
     ScreenConfigScreen *scr = new ScreenConfigScreen(this) ;
-    scr->name = s.name;
+    scr->setName(s.name);
     scr->mainScreen = s.mainScreen;
 
     int tno = ui->screenTabs->addTab(scr, s.name);
@@ -186,4 +186,10 @@ void ScreenConfig::on_screenTabs_currentChanged(int index)
         QWidget *ctab = ui->screenTabs->widget(index);
         curScreen = dynamic_cast<ScreenConfigScreen *>(ctab);
     }
+}
+void ScreenConfig::setScreenName(ScreenConfigScreen *scr)
+{
+    ui->screenTabs->setTabText(ui->screenTabs->currentIndex(), scr->name);
+
+
 }

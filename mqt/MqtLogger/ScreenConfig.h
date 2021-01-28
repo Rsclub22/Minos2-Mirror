@@ -27,6 +27,7 @@ public:
 
     ScreenConfigScreen *curScreen = nullptr;
     bool checkOk(ScreenConfigElement *s);
+    void setScreenName(ScreenConfigScreen *scr);
 public slots:
     void reject() override;
     void accept() override;

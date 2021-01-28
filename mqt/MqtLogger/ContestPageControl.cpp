@@ -102,13 +102,11 @@ void ContestPageControl::onContestShownChanged()
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if ( tslf )
     {
-        BaseContestLog *pc = tslf->getContest();
-        QString baseFName = ExtractFileName( pc->cfileName );
-        setWindowTitle(baseFName);
-
         for (int i = 0; i < count(); i++)
         {
             ContestPage *ctab = dynamic_cast<ContestPage *>(widget(i));
+            setWindowTitle(ctab->pageName);
+
             BaseContestLog *pc = tslf->getContest();
 
             if (pc == ctab->getContest())
