@@ -153,7 +153,7 @@ public:
      rfrequency = Frequency(0);
      curVfoFreq = Frequency(0);
      curOtherFreq = Frequency(0);
-     selTransvertNum = 0;
+     selTransverterNum = NO_TRANSVERTER_NUM;
      mgmModeFlag = false;
      radioRitOn = false;
      ritMaxKHzFreq = MAX_RITFREQ;
@@ -178,7 +178,7 @@ public:
   Frequency curOtherFreq;
   QString curBand;
   QString curTransvertBand;
-  int selTransvertNum;
+  int selTransverterNum = 0;
   QString selTvBand;
   QString transVertSwNum;
   QString selTransVertBandIndicator;

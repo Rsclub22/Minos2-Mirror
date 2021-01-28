@@ -1228,7 +1228,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                     else
                     {
                     */
-                        traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
+                        //traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
                         traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
                         setContestBandLimits(contestBand);
                     //}

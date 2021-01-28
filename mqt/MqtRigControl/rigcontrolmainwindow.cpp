@@ -978,11 +978,25 @@ void RigControlMainWindow::refreshRadio()
         {
             logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(loggerRequests->selRadioMode));
             loggerSetMode(loggerRequests->selRadioMode);
-            loggerSetFreq(loggerRequests->selRadioFreq);
-            if (loggerRequests->selBand != rigStateDetails->selTvBand)
-            {
 
+            if (loggerRequests->selRadioFreq.isClear())
+            {
+                if (loggerRequests->selBand != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
+                {
+                    rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
+                    if (findTransverter(rigStateDetails->selTransverterNum, rigStateDetails->selTvBand, loggerRequests->selBand))
+                    {
+                        getAndSendTransVertSwNum(rigStateDetails->selTransverterNum);
+                        logMessage(QString("Refresh radio: Transvert Enabled select Transverter for %1").arg(loggerRequests->selBand));
+
+                    }
+                }
             }
+            else
+            {
+                loggerSetFreq(loggerRequests->selRadioFreq);
+            }
+
             writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
@@ -1877,12 +1891,12 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
     if (cb != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
     {
 
-        selTransverterNum = NO_TRANSVERTER_NUM;
-        if (findTransverter(selTransverterNum, rigStateDetails->selTvBand, cb))
+        rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
+        if (findTransverter(rigStateDetails->selTransverterNum, rigStateDetails->selTvBand, cb))
         {
-            getAndSendTransVertSwNum(selTransverterNum);
+            getAndSendTransVertSwNum(rigStateDetails->selTransverterNum);
             // now calculate the freq
-            f = f - setupRadio->currentRadio.transVertSettings[selTransverterNum]->transVertOffset;
+            f = f - setupRadio->currentRadio.transVertSettings[rigStateDetails->selTransverterNum]->transVertOffset;
             logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(f.traceStr()));
 
         }
