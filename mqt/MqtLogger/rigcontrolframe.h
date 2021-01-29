@@ -43,7 +43,7 @@ public:
 
 };
 
-const int CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT = 1000;
+const int CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT = 1500;
 
 
 class RigControlFrame : public QFrame
@@ -103,6 +103,7 @@ public:
     void closeContest();
 
     Frequency getSendFreq();
+    void logRadioSettingsChanged();
 signals:
     void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);

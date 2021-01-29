@@ -48,6 +48,7 @@ public:
     PresetFreq& getPresetSettings(){return presetFreq;}
     void saveSettings();
 
+
 private slots:
 
     void onCwPresetLineEditingFinished(int i);

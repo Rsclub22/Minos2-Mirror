@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QToolButton>
+#include <QRadioButton>
 #include <QMap>
 #include "BandList.h"
 #include "rigcommon.h"
@@ -15,7 +16,7 @@ namespace bandSelButtonData
 {
     const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
-    const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Blue ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
+    const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString TYPE_BUTTON_ON_STYLE = QString("background-color: White ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString TYPE_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString HF_TAB_NAME = "HF";
@@ -56,6 +57,12 @@ public:
     void setContest(QString contestBand_);
     bool findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand);
 
+    void setPreSetFreqRadioButVisible(bool visible);
+    void setPrevFreqRadioButVisible(bool visible);
+    void setbandOnlyButVisible(bool visible);
+    void setPresetFreqRadioButChecked(bool checked);
+    void setsetPrevFreqRadioButChecked(bool checked);
+    void setPrevFreqRadioButChecked(bool checked);
 signals:
 void sendPresetFreq(Frequency freq);
 
@@ -71,6 +78,10 @@ private:
     QToolButton *hfSelBut = nullptr;
     QToolButton *vhfSelBut = nullptr;
     QToolButton *mwSelBut = nullptr;
+
+    QRadioButton *preSetFreqRadBut = nullptr;
+    QRadioButton *prevFreqRadBut = nullptr;
+    QRadioButton *bandOnlyRadBut = nullptr;
 
     QMap<QString, QToolButton*> bandToolButList;
     QList<QString> availHfBands;

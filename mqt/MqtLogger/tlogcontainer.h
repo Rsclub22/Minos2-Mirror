@@ -288,6 +288,8 @@ signals:
 
     void setAuxWindows();
 
+    void logRadioSettingsChanged();
+
 };
 extern TLogContainer *LogContainer;
 

@@ -321,6 +321,7 @@ private slots:
 
 
 
+    void onLogRadioSettingsChanged();
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -100,9 +100,6 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
     on_FontChanged();
 
-
-
-
     operatingFreq = new CheckOperatingFreq();
     if (operatingFreq->loadExclusionsFromBandList())
     {
@@ -128,6 +125,11 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     checkFreqContestBandTimer = new QTimer(this);
     connect(checkFreqContestBandTimer, &QTimer::timeout, this, [=](){onCheckContestBandMatch();});
     checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
+
+    logRadioSettingsChanged();
+    bandSelButtons->setPresetFreqRadioButChecked(true);
+
+
 }
 
 RigControlFrame::~RigControlFrame()
@@ -715,7 +717,18 @@ void RigControlFrame::showRitButOff()
     ui->RitButton->setText(tr("Off"));
 }
 
+void RigControlFrame::logRadioSettingsChanged()
+{
+    if (!readIgnorePresetFreqFlag() && !readIgnorePreviousFreqFlag())
+    {
+        bandSelButtons->setbandOnlyButVisible(false);
+    }
+    else
+    {
+        bandSelButtons->setbandOnlyButVisible(true);
+    }
 
+}
 
 
 void RigControlFrame::changeMainRadioFreq()
@@ -1595,31 +1608,28 @@ void RigControlFrame::onCheckContestBandMatch()
 bool RigControlFrame::checkContestBandMatch(const Frequency &freq)
 {
 
-    if (freq >= contestBandFLow && freq <= contestBandFHigh)
+    if (!contestBandFHigh.isClear() && !contestBandFLow.isClear() && radioConnected)
     {
-
-        setRadioBandWarning("");
-        return true;
-    }
-    else
-    {
-        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Freq out of contest band"));
-
-        if (!freq.isClear() || (freq >= contestBandFLow && freq <= contestBandFHigh) || !radioConnected)
+        if (freq >= contestBandFLow && freq <= contestBandFHigh)
         {
 
             setRadioBandWarning("");
+            freqLineEditBkgnd(false);
             return true;
         }
         else
         {
             setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Freq out of contest band"));
-
+            freqLineEditBkgnd(true);
         }
+
     }
 
     return false;
 }
+
+
+
 
 
 void RigControlFrame::setContestBandLimits(QString band)

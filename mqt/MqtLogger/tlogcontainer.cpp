@@ -1270,6 +1270,7 @@ void TLogContainer::RadioConfigActionExecute()
     RadioSettingDialog radioSettingConfig(hfFlag, bands, this);
 
     radioSettingConfig.exec();
+    emit logRadioSettingsChanged();     // flag settings may have changed
 }
 void TLogContainer::ReportAutofillActionExecute()
 {

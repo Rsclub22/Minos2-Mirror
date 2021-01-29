@@ -50,6 +50,15 @@ void BandSelButtons::setupButtons()
     connect(mwSelBut, &QToolButton::pressed, this,
             [=]() {onMwSelButtonPressed();});
 
+    preSetFreqRadBut = new QRadioButton();
+    preSetFreqRadBut->setText(tr("Preset"));
+
+    prevFreqRadBut = new QRadioButton();
+    prevFreqRadBut->setText(tr("Prev"));
+
+    bandOnlyRadBut = new QRadioButton();
+    bandOnlyRadBut->setText(tr("Band"));
+
     for (int i = 0; i < 6; i++)
     {
         toolButList.append(new QToolButton());
@@ -65,6 +74,9 @@ void BandSelButtons::setupButtons()
     bandSelGridLayout->addWidget(toolButList[3], 2, 0, Qt::AlignHCenter);
     bandSelGridLayout->addWidget(toolButList[4], 2, 1, Qt::AlignHCenter);
     bandSelGridLayout->addWidget(toolButList[5], 2, 2, Qt::AlignHCenter);
+    bandSelGridLayout->addWidget(preSetFreqRadBut, 0, 3, Qt::AlignLeft);
+    bandSelGridLayout->addWidget(prevFreqRadBut, 1, 3, Qt::AlignLeft);
+    bandSelGridLayout->addWidget(bandOnlyRadBut, 2, 3, Qt::AlignLeft);
 
     QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
     for (auto &tb:toolButList)
@@ -406,7 +418,7 @@ bool BandSelButtons::checkMWaveButtonsVisible()
 bool BandSelButtons::checkButtonsAvailable(QString bandType)
 {
 
-    for (auto b:bands)
+    for (auto &b:bands)
     {
 
         if (b.data()->getType() == bandType)
@@ -425,7 +437,7 @@ bool BandSelButtons::checkButtonsAvailable(QString bandType)
 
 QString BandSelButtons::getBandType(const QString selectedBand)
 {
-    for (auto b:bands)
+    for (auto &b:bands)
     {
         if (b.data()->uk == selectedBand)
         {
@@ -467,4 +479,35 @@ Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
 Frequency BandSelButtons::getLastFreq(const QString band, const QString mode)
 {
     return presetFreqs.getLastFreq(convertModeForPresets(mode), band);
+}
+
+void BandSelButtons::setPreSetFreqRadioButVisible(bool visible)
+{
+    preSetFreqRadBut->setVisible(visible);
+}
+
+void BandSelButtons::setPrevFreqRadioButVisible(bool visible)
+{
+    prevFreqRadBut->setVisible(visible);
+}
+
+void BandSelButtons::setbandOnlyButVisible(bool visible)
+{
+    bandOnlyRadBut->setVisible(visible);
+}
+
+
+void BandSelButtons::setPresetFreqRadioButChecked(bool checked)
+{
+    preSetFreqRadBut->setChecked(checked);
+}
+
+void BandSelButtons::setsetPrevFreqRadioButChecked(bool checked)
+{
+    prevFreqRadBut->setChecked(checked);
+}
+
+void BandSelButtons::setPrevFreqRadioButChecked(bool checked)
+{
+    prevFreqRadBut->setChecked(checked);
 }

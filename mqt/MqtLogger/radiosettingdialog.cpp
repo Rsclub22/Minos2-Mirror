@@ -395,6 +395,7 @@ void RadioSettingDialog::saveRadioSettingsCheckBox(QCheckBox* chkbox, LOGGERPROF
     if (chkbox->isChecked() != readRadioSettingsCheckBox(profile))
     {
        TContestApp::getContestApp()->loggerBundle.setBoolProfile(profile, chkbox->isChecked());
+
     }
 
 }
