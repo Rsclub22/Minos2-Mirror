@@ -2930,9 +2930,9 @@ void QSOLogFrame::on_SpotPbClicked()
         else
         {
             memoryData::memData logData;
-            bool validCall = false;
-            getLogDetails(logData, validCall);
-            if (validCall)
+            int valRes = -1;
+            getLogDetails(logData, valRes);
+            if (valRes == CS_OK)
             {
                 // callsign valid
                 if (!logData.callsign.isEmpty() || !logData.freq.isClear())
@@ -2964,8 +2964,8 @@ void QSOLogFrame::on_SpotPbClicked()
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
     memoryData::memData logData;
-    bool validCall = false;
-    getLogDetails(logData, validCall);
+    int valRes = -1;
+    getLogDetails(logData, valRes);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
     emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
@@ -2976,9 +2976,9 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
     memoryData::memData logData;
-    bool validCall = false;
-    getLogDetails(logData, validCall);
-    if (validCall)
+    int callRes = -1;
+    getLogDetails(logData, callRes);
+    if (callRes == CS_OK)
     {
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq.clear();
@@ -2992,7 +2992,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     }
     else
     {
-       trace(QString("bandmapSave: save clicked callsign %1 not valid").arg(logData.callsign));
+       trace(QString("bandmapSave: save clicked callsign %1 not valid %2").arg(logData.callsign).arg(callRes));
     }
 
 
@@ -3001,16 +3001,15 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 
 
-void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
+void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     getScreenEntry();
     calcLoc();
-    validCall = true;
-    if (screenContact.cs.getValRes() != CS_OK)
+    callRes = screenContact.cs.getValRes();
+    if (callRes != CS_OK)
     {
         logData.callsign = screenContact.cs.getFullCall();
-        validCall = false;
 
     }
 

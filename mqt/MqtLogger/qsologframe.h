@@ -251,7 +251,7 @@ private:
 
     void checkBandMapAndClusterLoaded();
 
-    void getLogDetails(memoryData::memData&, bool& validCall);
+    void getLogDetails(memoryData::memData&, int &callRes);
 
     Callsign lastLoggedCallsign;        // saved to send to cluster
     QString lastLoggedLocator;
