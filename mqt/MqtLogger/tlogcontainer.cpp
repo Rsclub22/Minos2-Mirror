@@ -1612,25 +1612,12 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
           // clear down matching, as it may have pointers to this contest
           TMatchThread::FinishMatchThread();
-          f->closeContest();    // which should close the contest
+          f->closeContest();    // which should close the contest - and takes TSingleLogFrame out of pages
           if (!loggerClosing)
           {
             TMatchThread::InitialiseMatchThread();
           }
 
-          for(auto cpc: contestPageControls)
-          {
-              // This deletes TSingleLogFrame first, along
-              // with all of the screen components
-
-              auto page = cpc->pages.find(bct);
-              if (page != cpc->pages.end())
-              {
-                  cpc->removeTab(cpc->indexOf(*page));
-                  delete *page;
-                  cpc->pages.remove(bct);
-              }
-          }
           on_contestPageControl_currentChanged(-1);
       }
       enableActions();

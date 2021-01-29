@@ -163,7 +163,7 @@ private:
     void createScreenComponents();
 
     void buildScreenLayout();
-    void clearScreenLayout();
+    void clearScreenLayout(bool clearAllTabs);
 
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);

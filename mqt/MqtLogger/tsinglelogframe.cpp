@@ -369,7 +369,7 @@ void TSingleLogFrame::createScreenComponents()
     wsjtxFrame->setVisible(false);
 
 }
-void TSingleLogFrame::clearScreenLayout()
+void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
@@ -449,23 +449,26 @@ void TSingleLogFrame::clearScreenLayout()
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
 
-        for (auto cpc = LogContainer->contestPageControls.begin(); cpc != LogContainer->contestPageControls.end(); cpc++)
+        if (clearAllTabs)
         {
-            if ((*cpc) == nullptr)
+            for (auto cpc = LogContainer->contestPageControls.begin(); cpc != LogContainer->contestPageControls.end(); cpc++)
             {
-                continue;
-            }
-            for  (auto cp = (*cpc)->pages.begin(); cp != (*cpc)->pages.end(); cp++)
-            {
-                if (cp.key() == contest)
+                if ((*cpc) == nullptr)
                 {
-                    cp.value()->clearScreen();
-                    if (cp.value() != this)
+                    continue;
+                }
+                for  (auto cp = (*cpc)->pages.begin(); cp != (*cpc)->pages.end(); cp++)
+                {
+                    if (cp.key() == contest)
                     {
-                        cp.value()->deleteLater();
+                        cp.value()->clearScreen();
+                        if (cp.value() != this)
+                        {
+                            cp.value()->deleteLater();
+                        }
+                        (*cpc)->pages.remove(cp.key());
+                        break;
                     }
-                    (*cpc)->pages.remove(cp.key());
-                    break;
                 }
             }
         }
@@ -480,7 +483,7 @@ void TSingleLogFrame::applyScreenLayout()
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
-    clearScreenLayout();
+    clearScreenLayout(true);
     buildScreenLayout();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
@@ -809,7 +812,7 @@ void TSingleLogFrame::closeContest()
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
        }
 
-       clearScreenLayout();
+       clearScreenLayout(false);
        TContestApp::getContestApp() ->closeFile( contest );
        qsoModel.initialise(nullptr);
 
