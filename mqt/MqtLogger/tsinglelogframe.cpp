@@ -375,8 +375,17 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     // BUT on contest creation, the contest address may change, so clear the contest
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    QString msg = ct->name.getValue() + " uuid " + ct->uuid;
-    traceMsg("clearScreenLayout starts for " + msg);
+    QString msg;
+    if (ct != nullptr)
+    {
+        msg = ct->name.getValue() + " uuid " + ct->uuid;
+        traceMsg("clearScreenLayout starts for " + msg);
+    }
+    else
+    {
+        msg = "null contest";
+        traceMsg("clearScreenLayout starts for " + msg);
+    }
 
     qsoModel.initialise(nullptr);
 
@@ -876,6 +885,11 @@ void TSingleLogFrame::on_ContestPageChanged ()
 {
     if (!ui)
         return;
+
+    if (contest == nullptr)
+    {
+        return;
+    }
 
     if ( this != LogContainer->getCurrentLogFrame() )
     {
