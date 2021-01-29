@@ -877,6 +877,10 @@ void QSOLogFrame::killPartial( )
 
 void QSOLogFrame::startNextEntry( )
 {
+    if (contest == nullptr)
+    {
+        return;
+    }
     if (!contest)
         return;
    if (contest->unfilledCount <= 0 || contest->isReadOnly())
@@ -1961,8 +1965,10 @@ void QSOLogFrame::checkQsoFrameColour()
 
 void QSOLogFrame::updateQSODisplay()
 {
-    if (!contest)
+    if (contest == nullptr)
+    {
         return;
+    }
    if ( contest->districtMult.getValue() )
    {
 //      ui->QTHEdit->CharCase = ecUpperCase;
