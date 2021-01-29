@@ -1620,6 +1620,9 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
           for(auto cpc: contestPageControls)
           {
+              // This deletes TSingleLogFrame first, along
+              // with all of the screen components
+
               auto page = cpc->pages.find(bct);
               if (page != cpc->pages.end())
               {

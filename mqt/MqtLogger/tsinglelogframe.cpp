@@ -673,7 +673,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
     }
 
 }
-void TSingleLogFrame::buildScreen(SCScreen &s, int t, int auxInstance)
+void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
 {
     // we need to add this contest page to the relevant contestPageControl
     // as a new tab
@@ -710,7 +710,7 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int auxInstance)
         cp = new ContestPage(nullptr, contest);
         QString n = QString("contestpage%1").arg(t);
         cp->setObjectName(n);
-//        cp->setStyleSheet(QString(" #%1 { border: 2px solid blue; }").arg(n));
+        cp->setStyleSheet(QString(" #%1 { border: 2px solid blue; }").arg(n));
     }
     ContestPageControl *cpc = LogContainer->contestPageControls[t];
     cpc->pages[contest] = cp;
@@ -804,7 +804,10 @@ void TSingleLogFrame::closeContest()
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
        GJVQSOLogFrame->closeContest();
-       RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
+       if (contest)
+       {
+            RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
+       }
 
        clearScreenLayout();
        TContestApp::getContestApp() ->closeFile( contest );
@@ -879,7 +882,14 @@ void TSingleLogFrame::on_ContestPageChanged ()
     }
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    traceMsg("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
+    if (ct)
+    {
+        traceMsg("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
+    }
+    else
+    {
+        traceMsg("on_ContestPageChanged, no contest set in page");
+    }
     TContestApp::getContestApp() ->setCurrentContest( ct );
 
     MinosLoggerEvents::SendContestShownChanged();

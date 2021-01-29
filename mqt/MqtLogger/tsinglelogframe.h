@@ -171,7 +171,7 @@ private:
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
-    void buildScreen(SCScreen &s, int t, int auxInstance);
+    void buildScreen(SCScreen &s, int t, int &auxInstance);
 
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);

@@ -34,9 +34,12 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
 
     SC sc = scf.configs[curConfigName];
 
-    buildScreens(sc);
+    curScreen = buildScreens(sc);
 
-    curScreen->checkAddButtons();
+    if (curScreen)
+    {
+        curScreen->checkAddButtons();
+    }
 }
 
 ScreenConfig::~ScreenConfig()
@@ -47,9 +50,12 @@ ScreenConfig::~ScreenConfig()
 ScreenConfigScreen *ScreenConfig::buildScreens(SC &sc)
 {
     ScreenConfigScreen *scr = nullptr;
-    for (auto s:sc.baseElement->screens)
+    if (sc.baseElement)
     {
-        scr = buildScreen(s);
+        for (auto s:sc.baseElement->screens)
+        {
+            scr = buildScreen(s);
+        }
     }
     return scr;
 }

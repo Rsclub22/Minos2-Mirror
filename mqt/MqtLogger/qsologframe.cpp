@@ -877,6 +877,8 @@ void QSOLogFrame::killPartial( )
 
 void QSOLogFrame::startNextEntry( )
 {
+    if (!contest)
+        return;
    if (contest->unfilledCount <= 0 || contest->isReadOnly())
    {
       ui->FirstUnfilledButton->setVisible(false);
@@ -1959,6 +1961,8 @@ void QSOLogFrame::checkQsoFrameColour()
 
 void QSOLogFrame::updateQSODisplay()
 {
+    if (!contest)
+        return;
    if ( contest->districtMult.getValue() )
    {
 //      ui->QTHEdit->CharCase = ecUpperCase;

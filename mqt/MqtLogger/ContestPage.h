@@ -59,7 +59,7 @@ public:
 
     BaseContestLog * getContest();
 
-    void buildScreen(TSingleLogFrame *tslf, SCScreen &s, int auxInstance);
+    void buildScreen(TSingleLogFrame *tslf, SCScreen &s, int &auxInstance);
     void clearScreen();
 private:
     Ui::ContestPage *ui;

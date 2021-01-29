@@ -45,7 +45,7 @@ BaseContestLog * ContestPage::getContest()
    return contest;
 }
 
-void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int auxInstance)
+void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInstance)
 {
     pageName = s.name;
     tslf = tslfp;

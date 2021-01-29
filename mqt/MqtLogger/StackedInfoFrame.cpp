@@ -70,6 +70,13 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     connect(&MinosLoggerEvents::mle, SIGNAL(refreshStackMults(BaseContestLog *)), this, SLOT(onRefreshStackMults(BaseContestLog *)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(clearContestInFrame(BaseContestLog *)), this, SLOT(clearContestInFrame(BaseContestLog *)));
+
+    connect(ui->infoCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(onInfoComboCurrentIndexChanged(int)));
+
+    QString n = QString("stackframe%1").arg(instance);
+    setObjectName(n);
+    setStyleSheet(QString(" #%1 { border: 2px solid red; }").arg(n));
+
 }
 
 StackedInfoFrame::~StackedInfoFrame()
@@ -81,7 +88,7 @@ void StackedInfoFrame::setCurrentFrameType(QString s)
     ui->infoCombo->setCurrentText(s);
 }
 
-void StackedInfoFrame::on_infoCombo_currentIndexChanged(int /*arg1*/)
+void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 {
     if (currStackFrame)
     {
@@ -181,20 +188,26 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
 
         if (filterFrame)
             filterFrame->setContest(contest);
-        if (dxccFrame)
+        else if (dxccFrame)
             dxccFrame->setContest(contest);
-        if (districtFrame)
+        else if (districtFrame)
             districtFrame->setContest(contest);
-        if (statsFrame)
+        else if (statsFrame)
             statsFrame->setContest(contest);
-        if (locFrame)
+        else if (locFrame)
             locFrame->setContest(contest);
-        if (locTreeFrame)
+        else if (locTreeFrame)
             locTreeFrame->setContest(contest);
-        if (clockFrame)
+        else if (clockFrame)
             clockFrame->setContest(contest);
-        if (rigMemFrame)
+        else if (rigMemFrame)
             rigMemFrame->setContest(contest);
+        else
+        {
+            onInfoComboCurrentIndexChanged(-1);
+            if (clockFrame)
+                clockFrame->setContest(contest);
+        }
 
         if (contest && !contest->isReadOnly())
         {
