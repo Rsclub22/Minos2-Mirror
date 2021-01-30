@@ -3,6 +3,7 @@
 #include "cutils.h"
 #include "contest.h"
 #include "htmldelegate.h"
+#include "MinosLoggerEvents.h"
 
 #include "locframe.h"
 #include "ui_locframe.h"
@@ -350,4 +351,34 @@ int LocGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
 //    return 10;
     return cols;
+}
+
+void LocFrame::on_LocView_clicked(const QModelIndex &index)
+{
+    if (!ct || model->getTl().isEmpty())
+        return;
+
+    QString disp = lConv(model->getTl(), index.column(), index.row());
+
+    QString brgbuff;
+
+    double lon = 0.0;
+    double lat = 0.0;
+
+    Locator loc;
+    loc.setLoc(disp);
+
+    int lres = lonlat( loc.getLoc(), lon, lat, true );
+    if ( lres == LOC_OK )
+    {
+       int brg;
+       double dist;
+
+       ct->disbeara( lon, lat, dist, brg );
+
+       int offset = ct->bearingOffset.getValue();
+       brgbuff = QString( "%1").arg( varBrg(brg + offset), 3);
+    }
+
+    MinosLoggerEvents::SendBrgStrToRot(brgbuff);
 }
