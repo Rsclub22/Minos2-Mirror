@@ -2900,7 +2900,10 @@ bool QSOLogFrame::getTuneAddBandMapSetting()
     if (bandMapLoaded)
     {
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        state = tslf->getTuneAddBandMapSetting();
+        if (tslf)
+        {
+            state = tslf->getTuneAddBandMapSetting();
+        }
     }
 
     return state;

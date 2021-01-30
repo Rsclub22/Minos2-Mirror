@@ -1483,7 +1483,14 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     ui->menuLogs->clear();
     menuLogsActions.clear();
 
-    MinosLoggerEvents::SendContestPageChanged();
+    if (index > 0)
+    {
+        MinosLoggerEvents::SendContestPageChanged();
+    }
+
+    TSingleLogFrame *tslf = getCurrentLogFrame();
+    int tab = ui->contestPageControl->indexOf(tslf);
+    setMenuLog(tab);
 }
 
 void TLogContainer::selectTab(int curTab)
@@ -1618,6 +1625,22 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
             TMatchThread::InitialiseMatchThread();
           }
 
+          for(auto cpc: LogContainer->contestPageControls)
+          {
+              // This deletes TSingleLogFrame first, along
+              // with all of the screen components
+              if (cpc)
+              {
+                  auto page = cpc->pages.find(bct);
+                  if (page != cpc->pages.end())
+                  {
+                      ContestPage *cp = (*page);
+                      cpc->pages.remove(bct);
+                      cp->deleteLater();
+                      cpc->removeTab(cpc->indexOf(cp));
+                  }
+              }
+          }
           on_contestPageControl_currentChanged(-1);
       }
       enableActions();

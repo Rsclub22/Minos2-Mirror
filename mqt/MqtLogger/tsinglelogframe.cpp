@@ -722,7 +722,7 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
         cp = new ContestPage(nullptr, contest);
         QString n = QString("contestpage%1").arg(t);
         cp->setObjectName(n);
-        cp->setStyleSheet(QString(" #%1 { border: 2px solid blue; }").arg(n));
+        //cp->setStyleSheet(QString(" #%1 { border: 2px solid blue; }").arg(n));
     }
     ContestPageControl *cpc = LogContainer->contestPageControls[t];
     cpc->pages[contest] = cp;

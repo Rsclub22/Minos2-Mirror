@@ -53,6 +53,7 @@ BandmapView::BandmapView(QWidget *parent) :
 
 BandmapView::~BandmapView()
 {
+    setSuppressUpdate(true);
     clearListOfMarkers();
     delete bandmapScene;
     //delete dial;
@@ -1046,7 +1047,8 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
 
 void BandmapView::drawBandMapSpots()
 {
-
+    if (!parent())
+        return;     // lambda fired after we have been detached
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 

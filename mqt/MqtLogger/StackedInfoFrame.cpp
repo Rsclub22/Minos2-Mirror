@@ -75,7 +75,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
     QString n = QString("stackframe%1").arg(instance);
     setObjectName(n);
-    setStyleSheet(QString(" #%1 { border: 2px solid red; }").arg(n));
+    //setStyleSheet(QString(" #%1 { border: 2px solid red; }").arg(n));
 
 }
 
