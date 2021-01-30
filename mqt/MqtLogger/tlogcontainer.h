@@ -82,7 +82,6 @@ public:
     void setMenuLog(int current);
     void selectContest(BaseContestLog *pc);
     void selectTab(int t);
-    void ContestDetailsActionExecute();
 
 private:
     Ui::TLogContainer *ui;
@@ -279,6 +278,7 @@ private slots:
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();
+    void ContestDetailsActionExecute();
 
 signals:
     void sendKeyerPlay( int fno );

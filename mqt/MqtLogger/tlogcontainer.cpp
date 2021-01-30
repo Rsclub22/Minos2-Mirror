@@ -410,7 +410,7 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
 
     ui->menuFile->addSeparator();
-    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, nullptr);  // has to be connected to by recepient
+    ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
     MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, SLOT(MakeEntryActionExecute()));
     ui->menuFile->addSeparator();
 
