@@ -85,7 +85,18 @@ StackedInfoFrame::~StackedInfoFrame()
 }
 void StackedInfoFrame::setCurrentFrameType(QString s)
 {
-    ui->infoCombo->setCurrentText(s);
+    int n = getAuxEntryType(s);
+    if (ui->infoCombo->currentIndex() == n)
+    {
+        if (!currStackFrame)
+        {
+            onInfoComboCurrentIndexChanged(n);
+        }
+    }
+    else
+    {
+        ui->infoCombo->setCurrentIndex(n);
+    }
 }
 
 void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
@@ -167,13 +178,9 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         break;
     }
 
-    if (contest)
+    if (contest && stackInstance < STACKITEMS)
     {
-        if (contest)
-        {
-            if (stackInstance < STACKITEMS)
-                contest->currentStackItems[stackInstance].setValue(ui->infoCombo->currentText());
-        }
+        contest->currentStackItems[stackInstance].setValue(ui->infoCombo->currentText());
         contest->commonSave(false);
     }
 }
@@ -202,12 +209,6 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             clockFrame->setContest(contest);
         else if (rigMemFrame)
             rigMemFrame->setContest(contest);
-        else
-        {
-            onInfoComboCurrentIndexChanged(-1);
-            if (clockFrame)
-                clockFrame->setContest(contest);
-        }
 
         if (contest && !contest->isReadOnly())
         {

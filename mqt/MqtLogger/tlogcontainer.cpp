@@ -1483,7 +1483,7 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     ui->menuLogs->clear();
     menuLogsActions.clear();
 
-    if (index > 0)
+    if (index >= 0)
     {
         MinosLoggerEvents::SendContestPageChanged();
     }
