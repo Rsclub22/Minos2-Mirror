@@ -711,7 +711,7 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
                 {
                     LogContainer->contestPageControls.append(cpc);
                 }
-                cpc->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+                cpc->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
                 if (i != 0)
                 {
                     cpc->setAttribute(Qt::WA_ShowWithoutActivating);

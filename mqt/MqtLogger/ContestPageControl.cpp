@@ -76,6 +76,12 @@ void ContestPageControl::changeEvent( QEvent* e )
             QSettings settings;
             settings.setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
         }
+        if (isMinimized())
+        {
+            ContestPage *ctab = dynamic_cast<ContestPage *>(currentWidget());
+
+            setWindowTitle(ctab->pageName + tr(" (min)"));
+        }
     }
 
     QLogTabWidget::changeEvent(e);
