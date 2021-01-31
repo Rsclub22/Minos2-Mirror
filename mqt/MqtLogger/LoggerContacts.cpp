@@ -540,7 +540,7 @@ QString ContestContact::getADIFLine()
     outstr += makeADIFField("FREQ", freq);
 
     outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
-    outstr += makeADIFField("OPERATOR", clp->currentOp1.getValue());
+    outstr += makeADIFField( "OPERATOR", op1.getValue() );
     outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
     int zone = 0;
     lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
@@ -640,7 +640,6 @@ QString ContestContact::getADIFLine()
             if ( contactScore.getValue() < 0 )
                 temp = 0;
         }
-    outstr += makeADIFField( "OPERATOR", op1.getValue() );
     outstr += makeADIFField( "QSO_PTS", temp );
     outstr += makeADIFField( "QSO_COMPL", temp ? "YES" : "NO" );
 
