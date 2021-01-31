@@ -38,7 +38,7 @@ class TSingleLogFrame : public ContestPage
 
 public:
     explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
-    ~TSingleLogFrame();
+    virtual ~TSingleLogFrame();
 
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
@@ -153,8 +153,6 @@ private:
     bool pauseRigControlUpdates = false;
 
     void transferDetails( MatchTreeItem *MatchTreeIndex );
-
-    void keyPressEvent( QKeyEvent* event );
 
     void restoreColumns();
 
@@ -280,6 +278,7 @@ public:
     void on_SupportStopCommand(bool state);
     void setPauseRigControlUpdatesFlag(bool status);
     void buildFrame();
+    bool doKeyPressEvent(QKeyEvent *event);
 };
 
 #endif // TSINGLELOGFRAME_H

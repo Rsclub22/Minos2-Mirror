@@ -160,6 +160,13 @@ void ContestPage::on_doSplitterChanges(BaseContestLog *b)
         getSplitters();
     }
 }
+void ContestPage::keyPressEvent( QKeyEvent* event )
+{
+    // each dependant ContestPage also needs this
+    if (!tslf->doKeyPressEvent(event))
+        QFrame::keyPressEvent(event);
+}
+
 void ContestPage::on_ContestShownChanged ()
 {
     if (!ui)

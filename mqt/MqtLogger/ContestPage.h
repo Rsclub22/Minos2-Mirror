@@ -52,7 +52,7 @@ protected:
 
 public:
     explicit ContestPage(QWidget *parent, BaseContestLog *ct);
-    ~ContestPage();
+    virtual ~ContestPage();
 
     int pageNo = -1;
     QString pageName;
@@ -71,6 +71,9 @@ private:
 
     TSingleLogFrame *tslf = nullptr;
     void getSplitters();
+
+    void keyPressEvent( QKeyEvent* event ) override;
+
  private slots:
     void onSplittersChanged();
     void onSplitterMoved(int, int);

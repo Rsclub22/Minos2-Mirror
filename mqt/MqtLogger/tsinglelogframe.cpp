@@ -783,10 +783,10 @@ void TSingleLogFrame::buildScreenLayout()
 }
 
 
-void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
+bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
 {
     // each dependant ContestPage also needs this
-    GJVQSOLogFrame->doKeyPressEvent(event);
+    return GJVQSOLogFrame->doKeyPressEvent(event);
 }
 
 QString TSingleLogFrame::makeEntry( bool saveMinos )

@@ -215,6 +215,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter)
     {
         QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
+        raise();
         return true;
     }
     else if (Key == Qt::Key_Tab)
@@ -241,16 +242,15 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     else if (Key == Qt::Key_Escape)
     {
         QMetaObject::invokeMethod(ui->GJVCancelButton, "clicked", Qt::QueuedConnection);
+        raise();
         return true;
     }
     else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
     {
         setActiveControl( &Key );
+        raise();
         return true;
     }
-
-
-
 
     bool doReturn = false;
     if ( ( Key == Qt::Key_Insert ) && !shift && !ctrl )
@@ -261,7 +261,6 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     bool ovr = overstrike;
 
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
-
 
     MinosLoggerEvents::SendReportOverstrike(ovr, contest);  // queued
 

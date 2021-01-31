@@ -129,7 +129,8 @@ void TQSOEditDlg::onArchiveTreeFocused(QObject *, bool in, QFocusEvent * )
 //---------------------------------------------------------------------------
 void TQSOEditDlg::keyPressEvent( QKeyEvent* event )
 {
-    ui->GJVQSOEditFrame->doKeyPressEvent(event);
+    if (!ui->GJVQSOEditFrame->doKeyPressEvent(event))
+        return QDialog::keyPressEvent(event);
 }
 void TQSOEditDlg::on_EditFrameCancelled()
 {
