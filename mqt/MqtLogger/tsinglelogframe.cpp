@@ -778,6 +778,8 @@ void TSingleLogFrame::buildScreenLayout()
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
+
+    LogContainer->raise();  // get it back in front
 }
 
 

@@ -163,7 +163,10 @@ void ScreenConfigScreen::getConfig(SCScreen &sc)
         {
             SCRow scrow;
             procRow(row, scrow);
-            sc.baseElement->rows.append(scrow);
+            if (scrow.elements.size())
+            {
+                sc.baseElement->rows.append(scrow);
+            }
         }
     }
 }

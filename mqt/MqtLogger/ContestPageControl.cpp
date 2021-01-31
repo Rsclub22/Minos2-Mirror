@@ -89,14 +89,22 @@ void ContestPageControl::onContestShownChanged()
     QMap<BaseContestLog *, ContestPage *>::iterator p = pages.find(ct);
     if (p == pages.end())
     {
-        trace(QString("Hide CPC %1").arg(instance));
+        trace(QString("Hide CPC %1 %2").arg(instance).arg(ct->name.getValue()));
         hide();
     }
     else
     {
         setCurrentWidget(*p);
-        trace(QString("Show CPC %1").arg(instance));
-        show();
+        trace(QString("Show CPC %1 %2").arg(instance).arg(ct->name.getValue()));
+        if (instance == 0 || (*p)->hasElements())
+        {
+            // we always want TLogContainer shown, or we can't do much
+            show();
+        }
+        else
+        {
+            hide();
+        }
     }
 
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -105,12 +113,14 @@ void ContestPageControl::onContestShownChanged()
         for (int i = 0; i < count(); i++)
         {
             ContestPage *ctab = dynamic_cast<ContestPage *>(widget(i));
-            setWindowTitle(ctab->pageName);
 
             BaseContestLog *pc = tslf->getContest();
 
             if (pc == ctab->getContest())
             {
+                setWindowTitle(ctab->pageName);
+                trace(QString("setWindowTitle %1").arg(ctab->pageName));
+
                 setTabColor(i, Qt::red);
                 if (ctab == tslf)
                 {

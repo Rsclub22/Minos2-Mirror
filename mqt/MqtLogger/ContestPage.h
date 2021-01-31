@@ -61,12 +61,13 @@ public:
 
     void buildScreen(TSingleLogFrame *tslf, SCScreen &s, int &auxInstance);
     void clearScreen();
+    bool hasElements();
 private:
     Ui::ContestPage *ui;
     bool splittersChanged;
     int splitterHandleWidth;
-
     MinosSplitter *singleLogFrameSplitter = nullptr;
+
 
     TSingleLogFrame *tslf = nullptr;
     void getSplitters();

@@ -15,7 +15,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     ui->setupUi(this);
 
     QSettings settings;
-    QByteArray geometry = settings.value("startConfigGeometry").toByteArray();
+    QByteArray geometry = settings.value("startConfig/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -113,13 +113,13 @@ void StartConfig::accept()
 void StartConfig::moveEvent(QMoveEvent *event)
 {
     QSettings settings;
-    settings.setValue("startConfigGeometry", saveGeometry());
+    settings.setValue("startConfig/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
 void StartConfig::resizeEvent(QResizeEvent * event)
 {
     QSettings settings;
-    settings.setValue("startConfigGeometry", saveGeometry());
+    settings.setValue("startConfig/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
 void StartConfig::changeEvent( QEvent* e )
@@ -127,7 +127,7 @@ void StartConfig::changeEvent( QEvent* e )
     if( e->type() == QEvent::WindowStateChange )
     {
         QSettings settings;
-        settings.setValue("startConfigGeometry", saveGeometry());
+        settings.setValue("startConfig/geometry", saveGeometry());
     }
 }
 

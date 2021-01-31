@@ -101,6 +101,11 @@ void ContestPage::clearScreen()
         verticalLayout = nullptr;
     }
 }
+
+bool ContestPage::hasElements()
+{
+    return singleLogFrameSplitter->count() > 0;
+}
 void ContestPage::getSplitters()
 {
     if (!singleLogFrameSplitter)
