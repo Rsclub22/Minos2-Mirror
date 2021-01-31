@@ -38,9 +38,13 @@ private slots:
 
     void on_cancelButton_clicked();
 
-    void on_addScreenButton_clicked();
+    void on_addScreenBeforeButton_clicked();
+
+    void on_addScreenAfterButton_clicked();
 
     void on_screenTabs_currentChanged(int index);
+
+    void on_removeScreenButton_clicked();
 
 private:
     Ui::ScreenConfig *ui;
@@ -51,8 +55,9 @@ private:
     void doCloseEvent();
     SC getConfig();
     ScreenConfigScreen *buildScreens(SC &sc);
-    ScreenConfigScreen *buildScreen(SCScreen &s);
+    ScreenConfigScreen *buildScreen(SCScreen &s, int pos);
 
+    void checkScreens();
 };
 
 extern ScreenConfig *screenConfigDialog;

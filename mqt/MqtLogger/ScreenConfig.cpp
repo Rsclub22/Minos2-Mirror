@@ -54,19 +54,20 @@ ScreenConfigScreen *ScreenConfig::buildScreens(SC &sc)
     {
         for (auto s:sc.baseElement->screens)
         {
-            scr = buildScreen(s);
+            scr = buildScreen(s, -1);
         }
     }
+    checkScreens();
     return scr;
 }
-ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s)
+ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s, int pos)
 {
     // create a tab in pageTabs, with a scroll area and vertical box layout
     ScreenConfigScreen *scr = new ScreenConfigScreen(this) ;
     scr->setName(s.name);
     scr->mainScreen = s.mainScreen;
 
-    int tno = ui->screenTabs->addTab(scr, s.name);
+    int tno = ui->screenTabs->insertTab(pos, scr, s.name);
 
     ui->screenTabs->setCurrentWidget(ui->screenTabs->widget(tno));
     ui->screenTabs->setTabToolTip(tno, s.name);
@@ -76,7 +77,14 @@ ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s)
         scr->buildRows(s.baseElement->rows, scr->baseElement, scr->vbl);
     }
 
-    screens.push_back(scr);
+    if (pos == -1)
+    {
+        screens.push_back(scr);
+    }
+    else
+    {
+        screens.insert(pos, scr);
+    }
     return scr;
 }
 bool ScreenConfig::checkOk(ScreenConfigElement *e)
@@ -170,16 +178,53 @@ void ScreenConfig::on_cancelButton_clicked()
     close();
 }
 
-void ScreenConfig::on_addScreenButton_clicked()
+void ScreenConfig::on_addScreenBeforeButton_clicked()
 {
-    trace("ScreenConfig::on_addScreenButton_clicked()");
+    trace("ScreenConfig::on_addScreenBeforeButton_clicked()");
     // create a new screen, and its tab, switch to it, and add a row
 
+    int curPos = ui->screenTabs->currentIndex();
     SCScreen s;
-    buildScreen(s);
+    int np = std::max(curPos - 1, 0);
+    buildScreen(s, np);
+    ui->screenTabs->setCurrentIndex(np);
     curScreen->on_addRowButton_clicked();
+    curScreen->setNameFocus();
+}
+void ScreenConfig::on_addScreenAfterButton_clicked()
+{
+    trace("ScreenConfig::on_addScreenAfterButton_clicked()");
+    // create a new screen, and its tab, switch to it, and add a row
+
+    int curPos = ui->screenTabs->currentIndex();
+    SCScreen s;
+    buildScreen(s, curPos + 1);
+    ui->screenTabs->setCurrentIndex(curPos + 1);
+    curScreen->on_addRowButton_clicked();
+    curScreen->setNameFocus();
 }
 
+void ScreenConfig::checkScreens()
+{
+    if (ui->screenTabs->count() == 0)
+    {
+        on_addScreenAfterButton_clicked();
+    }
+}
+
+
+void ScreenConfig::on_removeScreenButton_clicked()
+{
+    int curPos = ui->screenTabs->currentIndex();
+
+    QWidget *tab = ui->screenTabs->widget(curPos);
+    ui->screenTabs->removeTab(curPos);
+    tab->deleteLater();
+
+    screens.remove(curPos);
+
+    checkScreens();
+}
 
 void ScreenConfig::on_screenTabs_currentChanged(int index)
 {
@@ -196,6 +241,5 @@ void ScreenConfig::on_screenTabs_currentChanged(int index)
 void ScreenConfig::setScreenName(ScreenConfigScreen *scr)
 {
     ui->screenTabs->setTabText(ui->screenTabs->currentIndex(), scr->name);
-
-
 }
+

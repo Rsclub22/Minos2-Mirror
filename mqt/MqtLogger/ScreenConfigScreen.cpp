@@ -33,6 +33,10 @@ void ScreenConfigScreen::setName(QString n)
     name = n;
     ui->screenNameEdit->setText(n);
 }
+void ScreenConfigScreen::setNameFocus()
+{
+    ui->screenNameEdit->setFocus();
+}
 bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount)
 {
     QString etype = e->getType();

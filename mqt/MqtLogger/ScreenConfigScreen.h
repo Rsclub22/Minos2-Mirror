@@ -31,6 +31,7 @@ public:
 
     void setName(QString n);
     bool checkOk(ScreenConfigElement *e);
+    void setNameFocus();
 
     void checkAddButtons();
     void addColumnLeft(ScreenConfigElement * e, int top, int bottom);
