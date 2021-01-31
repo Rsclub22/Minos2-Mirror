@@ -6,7 +6,9 @@
 #include <QMap>
 #include <QMultiMap>
 #include <QStringList>
+#include <QSettings>
 #include "frequency.h"
+
 
 
 // Status messages sent to minos logger
@@ -197,14 +199,10 @@ class PresetFreq
 {
 
 public:
-    PresetFreq()
-    {
+    PresetFreq();
 
-    };
-    ~PresetFreq()
-    {
+    ~PresetFreq();
 
-    };
 
 /*
     PresetFreq operator= (const PresetFreq& presets)
@@ -216,135 +214,34 @@ public:
 
     }
 */
-   void clear()
-   {
-       modePresetFreqList.clear();
-   }
 
+    void clear();
 
-   Frequency getPresetFreq(const QString mode, const QString band)
-   {
-      QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-      return mspf->value(band).presetFreq;
-   }
+    Frequency getPresetFreq(const QString mode, const QString band);
+    void setPresetFreq(const QString mode, const QString band, const QString freq);
+    void setPresetFreq(const QString mode, const QString band, const Frequency freq);
 
+    Frequency getLastFreq(const QString mode, const QString band);
+    void setLastFreq(const QString mode, const QString band, const QString freq);
+    void setLastFreq(const QString mode, const QString band, const Frequency freq);
+    bool contains(QString mode, QString band);
 
-   Frequency getLastFreq(const QString mode, const QString band)
-   {
-
-       QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-       return mspf->value(band).lastFreq;
-   }
+    void readSettings(const QStringList &listOfBands);
+    void copyAllPrevFreqToLastFreqByMode(const QString mode, const QStringList &listOfBands);
 
 
 
-   void setPresetFreq(const QString mode, const QString band, const QString freq)
-   {
-        QMap<QString, StoredPresetFreqs>* mspf = nullptr;
-
-        if (mode == freqPresetData::PRESET_MODE_CW)
-        {
-            mspf = cwFreqPresetsPtr;
-        }
-        else if (mode == freqPresetData::PRESET_MODE_PHONE)
-        {
-            mspf = phoneFreqPresetsPtr;
-        }
-        else if (mode == freqPresetData::PRESET_MODE_MGM)
-        {
-            mspf = mgmFreqPresetsPtr;
-        }
-
-        StoredPresetFreqs spf{};
-        spf.presetFreq = Frequency(freq);
-        mspf->insert(band, spf);
-
-       modePresetFreqList.insert(mode, mspf);
-   }
-
-   void setPresetFreq(const QString mode, const QString band, const Frequency freq)
-   {
-       QMap<QString, StoredPresetFreqs>* mspf = nullptr;
-
-       if (mode == freqPresetData::PRESET_MODE_CW)
-       {
-           mspf = cwFreqPresetsPtr;
-       }
-       else if (mode == freqPresetData::PRESET_MODE_PHONE)
-       {
-           mspf = phoneFreqPresetsPtr;
-       }
-       else if (mode == freqPresetData::PRESET_MODE_MGM)
-       {
-           mspf = mgmFreqPresetsPtr;
-       }
-
-       StoredPresetFreqs spf{};
-       spf.presetFreq = freq;
-       mspf->insert(band, spf);
-
-      modePresetFreqList.insert(mode, mspf);
-   }
-
-
-   void setLastFreq(const QString mode, const QString band, const QString freq)
-   {
-        QMap<QString, StoredPresetFreqs>* mspf = nullptr;
-
-        if (mode == freqPresetData::PRESET_MODE_CW)
-        {
-            mspf = cwFreqPresetsPtr;
-        }
-        else if (mode == freqPresetData::PRESET_MODE_PHONE)
-        {
-            mspf = phoneFreqPresetsPtr;
-        }
-        else if (mode == freqPresetData::PRESET_MODE_MGM)
-        {
-            mspf = mgmFreqPresetsPtr;
-        }
-
-        StoredPresetFreqs spf;
-        spf.lastFreq = Frequency(freq);
-        mspf->insert(band, spf);
-
-       modePresetFreqList.insert(mode, mspf);
-   }
-
-   void setLastFreq(const QString mode, const QString band, const Frequency freq)
-   {
-       QMap<QString, StoredPresetFreqs>* mspf = nullptr;
-
-       if (mode == freqPresetData::PRESET_MODE_CW)
-       {
-           mspf = cwFreqPresetsPtr;
-       }
-       else if (mode == freqPresetData::PRESET_MODE_PHONE)
-       {
-           mspf = phoneFreqPresetsPtr;
-       }
-       else if (mode == freqPresetData::PRESET_MODE_MGM)
-       {
-           mspf = mgmFreqPresetsPtr;
-       }
-
-       StoredPresetFreqs spf;
-       spf.lastFreq = freq;
-       mspf->insert(band, spf);
-
-      modePresetFreqList.insert(mode, mspf);
-   }
 
 
 private:
 
     QMap<QString, QMap<QString, StoredPresetFreqs>* > modePresetFreqList;
     QMap<QString, StoredPresetFreqs> cwFreqPresets;
-    QMap<QString, StoredPresetFreqs>* cwFreqPresetsPtr = &cwFreqPresets;
+
     QMap<QString, StoredPresetFreqs> phoneFreqPresets;
-    QMap<QString, StoredPresetFreqs>* phoneFreqPresetsPtr = &phoneFreqPresets;
+
     QMap<QString, StoredPresetFreqs> mgmFreqPresets;
-    QMap<QString, StoredPresetFreqs>* mgmFreqPresetsPtr = &mgmFreqPresets;
+
 
 
 

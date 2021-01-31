@@ -40,7 +40,7 @@ public:
     ~RadioSettingDialog();
 
 
-    static void freqPresetReadSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
+    void freqPresetReadSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
     static void checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands);
 
 
