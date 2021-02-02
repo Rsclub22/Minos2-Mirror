@@ -70,7 +70,7 @@ private:
     decodeMessage *scrapeAllTxt();
     void getAllTxtEnd();
     void getCQStrings();
-    decodeMessage *parse_tx_message(QString atline);
+    decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);

@@ -529,7 +529,7 @@ void WsjtxFrame::getAllTxtEnd()
       alltxtstr.readLine(255);
     }
 }
-decodeMessage *WsjtxFrame::parse_tx_message(QString atline)
+decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
 {
     // 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
 
@@ -545,37 +545,43 @@ decodeMessage *WsjtxFrame::parse_tx_message(QString atline)
 
     QString id = "WSJTX";
     QTime time;
-    qint32 snr;
-    float delta_time;
-    quint32 delta_frequency;
+    qint32 snr = 0;
+    float delta_time = 0;
+    quint32 delta_frequency = 0;
     QString mode;
     QString message;
     bool low_confidence = false;    // we sent it, after all
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
-#else
-    QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
-#endif
-    if (sl[2] != "Tx")
-        return nullptr;
-
-    //trace("Tx scraped: " + atline);
-    time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
-    //double rigfreq = sl[1].toDouble();
-    // sl[2] == Tx
-    mode = sl[3];
-    snr = 0;    //sl[4]
-    delta_time = 0.0;   //sl[5]
-    delta_frequency = sl[6].toUInt();
-
-    for (int i = 0; i < 7; i++)
+    if (fromScrape)
     {
-        sl.removeFirst();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QStringList sl = atline.trimmed().split(' ', Qt::SkipEmptyParts);
+#else
+        QStringList sl = atline.trimmed().split(' ', QString::SkipEmptyParts);
+#endif
+        if (sl[2] != "Tx")
+            return nullptr;
+
+        //trace("Tx scraped: " + atline);
+        time = QDateTime::fromString(sl[0], "yyMMdd_HHmmss").time();
+        //double rigfreq = sl[1].toDouble();
+        // sl[2] == Tx
+        mode = sl[3];
+        snr = 0;    //sl[4]
+        delta_time = 0.0;   //sl[5]
+        delta_frequency = sl[6].toUInt();
+
+        for (int i = 0; i < 7; i++)
+        {
+            sl.removeFirst();
+        }
+        message = sl.join(' ');
+
     }
-    message = sl.join(' ');
-
-
+    else
+    {
+        message = atline;
+    }
     decodeMessage dc = decoder.decode(id, eTX, time, snr, delta_time
                                     , delta_frequency, mode
                                     , message, low_confidence, true);
@@ -605,7 +611,7 @@ decodeMessage *WsjtxFrame::scrapeAllTxt()
               continue;
 
           // now we need to parse for transmissions
-            last = parse_tx_message(atline); // which normally happens in process_decodes
+            last = parse_tx_message(atline, true); // which normally happens in process_decodes
 
             // process_decodes(); - not wanted, we've just started transmitting; previous process_decodes should have stopped us!
         }
@@ -691,7 +697,20 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         }
         else
         {
-            lastTx = parse_tx_message( tx_message);
+            //lastTx = parse_tx_message( tx_message, false);
+
+            decodeMessage dc = decoder.decode(id, eTX, QTime::currentTime(), 0, 0
+                                            , 0, mode
+                                            , tx_message, false, true);
+
+            trace(QString("WsjtxFrame::parse_tx_message - stage %1 %2")
+                  .arg(dc.getMStage(), tx_message));
+
+            currTxStage = dc.mstage;
+
+            messages.push_back(dc);
+
+            lastTx =  &messages.last();
         }
         decodes_model_->add_decode ();
         ui->decodes_table_view_->scrollToBottom ();
