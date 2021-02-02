@@ -484,6 +484,7 @@ void TLogContainer::setupMenus()
     DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
     OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
     OptionsAction->setVisible(false);
+    StyleAction = newAction(QT_TR_NOOP("Set control style..."), ui->menuTools, SLOT(StyleActionExecute()));
 
     // end of tools manu
 
@@ -1398,18 +1399,10 @@ void TLogContainer::StartConfigActionExecute()
     // in case we are now running more apps
     sendDM->subscribeApps();
 }
-void TLogContainer::styleActionExecute()
+void TLogContainer::StyleActionExecute()
 {
-    QStringList keys = QStyleFactory::keys();
-    QString styleName = QApplication::style()->objectName();
-    if (enquireDialog(this, tr("Qt style"), styleName, keys, false))
-    {
-        QStyle *s = QStyleFactory::create(styleName);
-        styleName = s->objectName();
-        QApplication::setStyle(s);
-        TWaitCursor wc(this);
-        selectSession(TContestApp::getContestApp()->currSession);
-    }
+    // not yet useful
+    mShowMessage("Not yet implemented", this);
 }
 void TLogContainer::listCompressionActionExecute()
 {
@@ -1679,9 +1672,6 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
-#ifndef NDEBUG
-    styleAction = newAction(QT_TR_NOOP("Set style..."), screenLayoutMenu, SLOT(styleActionExecute()));
-#endif
     QSOFieldFontAction = newAction(QT_TR_NOOP("Set extra QSO field size..."), screenLayoutMenu, SLOT(QSOFieldFontActionExecute()));
     listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 

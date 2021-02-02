@@ -159,7 +159,6 @@ private:
     QAction *startConfigAction;
     QAction *listCompressionAction;
     QAction *QSOFieldFontAction;
-    QAction *styleAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
@@ -176,6 +175,7 @@ private:
     QAction *TabSandPAction;
     QAction *OldBandMapAction;
     QAction *ConfigureAgeProtctionAction;
+    QAction *StyleAction;
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
@@ -258,7 +258,7 @@ private slots:
     void StartConfigActionExecute();
     void listCompressionActionExecute();
     void QSOFieldFontActionExecute();
-    void styleActionExecute();
+    void StyleActionExecute();
 
     void on_contestPageControl_currentChanged(int index);
     void onTabClosebutton(int);
