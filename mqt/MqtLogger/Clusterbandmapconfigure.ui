@@ -379,7 +379,7 @@
          <item>
           <widget class="QCheckBox" name="modeOperatingFreqChkBox">
            <property name="text">
-            <string>Follow Radio Mode Operating Freq Colour Band</string>
+            <string>Operating Freq Colour Band Follow Radio Mode </string>
            </property>
           </widget>
          </item>

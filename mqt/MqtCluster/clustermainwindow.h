@@ -394,6 +394,7 @@ private:
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
     //QTimer *startUpTimer;
+    bool hfFlag = false;
 
     QString appName;
     QLabel* status;
@@ -682,7 +683,7 @@ private slots:
     void showHfUserCmdButtonMenu(int buttonNumber);
     void userVhfUhfCmdButtonRead(int buttonNumber);
     void userHfCmdButtonRead(int buttonNumber);
-    void onbandCheckBoxStateChanged(int i, int state);
+    void onbandCheckBoxStateChanged(int i, bool state);
     void onHfSelectBandPbPressed();
     void onVhfSelectBandPbPressed();
     void onUhfSelectBandPbPressed();

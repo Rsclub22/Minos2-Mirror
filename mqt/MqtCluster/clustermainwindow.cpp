@@ -320,6 +320,7 @@ void ClusterMainWindow::doStartup()
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
+    setHF(false);
     readBandFilterSettings();
     loadBandFilterSettingsToTab();
 
@@ -373,9 +374,9 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
 
-    //initFilterCheckBoxs();
 
-    setHF(false);
+
+
 
 }
 
@@ -2659,7 +2660,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        connect(bandChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onbandCheckBoxStateChanged(i, state);});
+        connect(bandChkBoxList[i], &QCheckBox::clicked, this, [=](bool state) {onbandCheckBoxStateChanged(i, state);});
 
     }
 
@@ -2675,23 +2676,47 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
 void ClusterMainWindow::loadBandFilterSettingsToTab()
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+        if (hfFlag)
+        {
+           bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+               bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+            }
+        }
+
     }
 }
 
 
 void ClusterMainWindow::saveBandFilterSettings()
 {
-    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("BandFilter");
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("DXSPOT_Display_BandFilter");
 
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        config.setValue(QString("bandFilter_+%1").arg(band), filterSettings.getBandFilter(band));
+        QString iniBandName = band;
+        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        if (hfFlag)
+        {
+            config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
+            }
+        }
+
     }
 
     config.endGroup();
@@ -2701,24 +2726,37 @@ void ClusterMainWindow::saveBandFilterSettings()
 
 void ClusterMainWindow::readBandFilterSettings()
 {
-    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("BandFilter");
-    for (auto const &b:bands)
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("DXSPOT_Display_BandFilter");
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        filterSettings.setBandFilter(band, config.value(QString("bandFilter_+%1").arg(band), true).toBool());
-
+        QString iniBandName = band;
+        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        if (hfFlag)
+        {
+            filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
+            }
+        }
     }
 
     config.endGroup();
 }
 
 
-void ClusterMainWindow::setHF(bool hfFlag)
+void ClusterMainWindow::setHF(bool hfFlag_)
 {
     QString hfTabName = "HF User Commands";
 
-    if (hfFlag)
+    hfFlag = hfFlag_;
+
+    if (hfFlag_)
     {
        // set hf Tab "visible"
        if (ui->clusterTab->tabText(0) != hfTabName)
@@ -2743,7 +2781,7 @@ void ClusterMainWindow::setHF(bool hfFlag)
         }
 
         // clear the HF Bandfilters
-        for (auto const &b:bands)
+        foreach (auto const &b, bands)
         {
             if (b->getType() == HF_BANDTYPE)
             {
@@ -2764,7 +2802,7 @@ void ClusterMainWindow::setHF(bool hfFlag)
 void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 {
 
-    for(auto const &b: bands)
+    foreach(auto const &b, bands)
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2778,20 +2816,35 @@ void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 
 }
 
-void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)
+void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
 {
     Q_UNUSED(i)
     Q_UNUSED(state)
     bool changed = false;
-    for (auto const &b: bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
 
-        if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+        if (hfFlag)
         {
-            filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
-            changed = true;
+            if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+            {
+                filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+                changed = true;
+            }
         }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+                {
+                    filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+                    changed = true;
+                }
+            }
+        }
+
 
         if (changed)
         {
@@ -2994,27 +3047,24 @@ void ClusterMainWindow::clusterNodeCommandsShortcutHelp()
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
     bool match_band = matchBand(sourceRow);
-    //bool match_distance = matchDistance(sourceRow);
-    //bool match_mode = matchMode(sourceRow);
-    bool matchFlag = match_band /*&& match_distance && match_mode*/;
+
     if (traceDebugFlag)
     {
-        trace(QString("filter - callsign = %1, matchBand = %2, matchFlag = %3")
+        trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
             .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
-            .arg(match_band ? "True" : "False")
-            //.arg(match_distance ? "True" : "False")
-            //.arg(match_mode ? "True" : "False")
-
-            .arg(matchFlag ? "True" : "False"));
-
-    }
-    return matchFlag;
+            .arg(match_band ? "True" : "False"));
+   }
+    return match_band;
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
 
     QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    if (traceDebugFlag)
+    {
+        trace(QString("matchBand: band = %1").arg(band));
+    }
 
     return filterSettings.getBandFilter(band);
 
