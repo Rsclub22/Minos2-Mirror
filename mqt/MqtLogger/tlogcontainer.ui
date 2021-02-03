@@ -31,7 +31,7 @@
      <number>2</number>
     </property>
     <item>
-     <widget class="QLogTabWidget" name="ContestPageControl">
+     <widget class="ContestPageControl" name="contestPageControl">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
       </property>
@@ -103,15 +103,15 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QLogTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>qlogtabwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>MinosKeyboard</class>
    <extends>QFrame</extends>
    <header>../MqtBase/minoskeyboard.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ContestPageControl</class>
+   <extends>QTabWidget</extends>
+   <header location="global">ContestPageControl.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

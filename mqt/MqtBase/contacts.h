@@ -135,6 +135,7 @@ class BaseContact: public QObject
       MinosStringItem<QString> op2;         // current second op - derived from contacts
 
       MinosItem<int> contactScore;
+      MinosItem<bool> cqResponse;           // QSO was in response to a CQ call (or at least, on CQ frequency)
 
       virtual void clearDirty();
       virtual void setDirty();

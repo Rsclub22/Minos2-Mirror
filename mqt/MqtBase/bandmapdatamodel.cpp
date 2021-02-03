@@ -144,6 +144,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case OFF_RUN_FREQ_COL_NUM:
                 d = bandmapSpot->getOffRunFreq();
             break;
+            case CQ_RESPONSE_COL:
+                d = bandmapSpot->getCqResponse();
+            break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
                 d = bandmapSpot->getDxLocatorIsFromNode();
             break;
@@ -235,6 +238,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
             case OFF_RUN_FREQ_COL_NUM:
                 d = bandmapSpot->getOffRunFreq();
+            break;
+            case CQ_RESPONSE_COL:
+                d = bandmapSpot->getCqResponse();
             break;
             case DX_DISTRICT_COL_NUM:
                 d = bandmapSpot->getDistrict();
@@ -334,6 +340,9 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             break;
             case OFF_RUN_FREQ_COL_NUM:
                 bandmapSpot->setOffRunFreq(value.toBool());
+            break;
+            case CQ_RESPONSE_COL:
+                bandmapSpot->setCqResponse(value.toBool());
             break;
             case DX_DISTRICT_COL_NUM:
                 bandmapSpot->setDistrict(value.toString());

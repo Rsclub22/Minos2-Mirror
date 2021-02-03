@@ -76,7 +76,7 @@ private slots:
     void on_ScrollToCountry( const QString &csCs, BaseContestLog* );
 
     void on_FontChanged();
-    void on_infoCombo_currentIndexChanged(int arg1);
+    void onInfoComboCurrentIndexChanged(int arg1);
 
     void onFiltersChanged(BaseContestLog *ct);
     void onUpdateStats(BaseContestLog *ct);

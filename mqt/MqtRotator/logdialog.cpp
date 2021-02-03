@@ -143,6 +143,7 @@ void LogDialog::keyPressEvent(QKeyEvent *event)
         break;
 
     }
+    return QDialog::keyPressEvent(event);
 }
 
 void LogDialog::on_logDialogOkPb_accepted()

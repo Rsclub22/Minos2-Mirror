@@ -36,6 +36,8 @@
 #include "bandmapclientframe.h"
 #include "delayedaction.h"
 
+#include "ContestPageControl.h"
+
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
@@ -54,7 +56,6 @@ void TSingleLogFrame::buildFrame()
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
 
-
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
     connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(HideTimerTimer()));
@@ -67,7 +68,6 @@ void TSingleLogFrame::buildFrame()
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(ColumnsChanged()), this, SLOT(onColumnsChanged()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(SplittersChanged()), this, SLOT(onSplittersChanged()));
     connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
     connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
 
@@ -79,7 +79,6 @@ void TSingleLogFrame::buildFrame()
             this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
 
 
     // RigControl Updates
@@ -158,25 +157,17 @@ void TSingleLogFrame::buildFrame()
 }
 
 TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
-    QFrame(parent),
+    ContestPage(parent, contest),
     ui(new Ui::TSingleLogFrame),
-    splittersChanged(false),
     bandMapLoaded(false),
     rotatorLoaded(false),
     keyerLoaded(false),
     radioLoaded(false),
-    contest(contest),
     lastStanzaCount( 0 )
 
 
 {
     qRegisterMetaType< QSharedPointer<BaseContact> > ( "QSharedPointer<BaseContact>" );
-
-#ifdef Q_OS_ANDROID
-    splitterHandleWidth = 20;
-#else
-    splitterHandleWidth = 6;
-#endif
 
     ui->setupUi(this);
 }
@@ -191,6 +182,9 @@ TSingleLogFrame::~TSingleLogFrame()
 
     ui = nullptr;
     contest = nullptr;
+
+    // we need to delete all the dependant ContestPage as well
+
 
     delete clusterControlFrame;
     delete wsjtxFrame;
@@ -379,28 +373,24 @@ void TSingleLogFrame::createScreenComponents()
 
     wsjtxFrame->setVisible(false);
 
-    // set frame to Vertical Layout, insert LogFrameSplitter
-    verticalLayout = new QVBoxLayout(this);
-    verticalLayout->setSpacing(0);
-    verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-    verticalLayout->setContentsMargins(0, 0, 0, 0);
-
-    singleLogFrameSplitter = new MinosSplitter(this);
-
-    singleLogFrameSplitter->setObjectName(QStringLiteral("singleLogFrameSplitter"));
-    singleLogFrameSplitter->setOrientation(Qt::Vertical);
-    singleLogFrameSplitter->setChildrenCollapsible(false);
-
-    connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
 }
-void TSingleLogFrame::clearScreenLayout()
+void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
     // clear down the screen elements, but don't delete them (except for the aux frames) - they will be used to rebuild the screen
     // BUT on contest creation, the contest address may change, so clear the contest
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    QString msg = ct->name.getValue() + " uuid " + ct->uuid;
-    traceMsg("clearScreenLayout starts for " + msg);
+    QString msg;
+    if (ct != nullptr)
+    {
+        msg = ct->name.getValue() + " uuid " + ct->uuid;
+        traceMsg("clearScreenLayout starts for " + msg);
+    }
+    else
+    {
+        msg = "null contest";
+        traceMsg("clearScreenLayout starts for " + msg);
+    }
 
     qsoModel.initialise(nullptr);
 
@@ -424,6 +414,12 @@ void TSingleLogFrame::clearScreenLayout()
 
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
+
+    clusterControlFrame->setParent(this);
+    clusterControlFrame->hide();
+
+    bandmapControlFrame->setParent(this);
+    bandmapControlFrame->hide();
 
     if (LogContainer->isLoggerClosing())
     {
@@ -467,22 +463,29 @@ void TSingleLogFrame::clearScreenLayout()
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
 
-        clusterControlFrame->setParent(this);
-        clusterControlFrame->hide();
-
-        bandmapControlFrame->setParent(this);
-        bandmapControlFrame->hide();
-
-        QWidget *s = singleLogFrameSplitter->widget(0);
-        while (s)
+        if (clearAllTabs)
         {
-            s->setParent(nullptr);
-    //        s->deleteLater();
-            delete(s);
-            s = singleLogFrameSplitter->widget(0);
+            for (auto cpc = LogContainer->contestPageControls.begin(); cpc != LogContainer->contestPageControls.end(); cpc++)
+            {
+                if ((*cpc) == nullptr)
+                {
+                    continue;
+                }
+                for  (auto cp = (*cpc)->pages.begin(); cp != (*cpc)->pages.end(); cp++)
+                {
+                    if (cp.key() == contest)
+                    {
+                        cp.value()->clearScreen();
+                        if (cp.value() != this)
+                        {
+                            cp.value()->deleteLater();
+                        }
+                        (*cpc)->pages.remove(cp.key());
+                        break;
+                    }
+                }
+            }
         }
-        rowSplitters.clear();
-
     }
     traceMsg("clearScreenLayout complete for " + msg);
 }
@@ -494,10 +497,9 @@ void TSingleLogFrame::applyScreenLayout()
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
-    clearScreenLayout();
+    clearScreenLayout(true);
     buildScreenLayout();
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    onSplitterMoved(-1, -1);
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -514,6 +516,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
 }
 void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
+    // This builds the dependant ContestPage (including the one we derive from)
     if (scrow.elements.count())
     {
         LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
@@ -554,6 +557,8 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
             switch (type)
             {
                 case sctNone:
+                case sctMainScreen:
+                case sctScreen:
                 {
                     break;
                 }
@@ -690,10 +695,63 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
     }
 
 }
+void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
+{
+    // we need to add this contest page to the relevant contestPageControl
+    // as a new tab
+
+    // How do we make sure that ALL contests are in ALL page controls, even when
+    // they have no such screen?
+
+    ContestPage *cp = this;
+    if (t > 0)
+    {
+        for (int i = 0; i <= t; i++)
+        {
+            if (LogContainer->contestPageControls.count() <= i
+               || LogContainer->contestPageControls[i] == nullptr)
+            {
+                ContestPageControl *cpc = new ContestPageControl();
+                cpc->setInstance(i);
+                if (i < LogContainer->contestPageControls.count())
+                {
+                    LogContainer->contestPageControls[i] = cpc;
+                }
+                else
+                {
+                    LogContainer->contestPageControls.append(cpc);
+                }
+                cpc->setWindowFlags(/*Qt::Tool |*/ Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowMinMaxButtonsHint);
+                if (i != 0)
+                {
+                    cpc->setAttribute(Qt::WA_ShowWithoutActivating);
+                }
+                cpc->show();
+            }
+        }
+        cp = new ContestPage(nullptr, contest);
+        QString n = QString("contestpage%1").arg(t);
+        cp->setObjectName(n);
+        //cp->setStyleSheet(QString(" #%1 { border: 2px solid blue; }").arg(n));
+    }
+    ContestPageControl *cpc = LogContainer->contestPageControls[t];
+    cpc->pages[contest] = cp;
+    cp->pageNo = t;
+    cp->buildScreen(this, s, auxInstance);
+
+    bool temp = TContestApp::getContestApp() ->suppressWritePreload;
+    TContestApp::getContestApp() ->suppressWritePreload = true;
+    QString sname  = s.name;
+    if (t == 0 || sname.isEmpty())
+    {
+        sname = ExtractFileName( contest->cfileName );
+    }
+    LogContainer->contestPageControls[t]->addTab(cp, sname);
+    TContestApp::getContestApp() ->suppressWritePreload = temp;
+}
 void TSingleLogFrame::buildScreenLayout()
 {
-    ScreenConfigFile scf;
-    scf.loadFile(this);
+    ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
@@ -717,11 +775,10 @@ void TSingleLogFrame::buildScreenLayout()
     SC sc = scf.configs[curConfigName];
 
     int auxInstance = 0;
-    for (auto &r: sc.baseElement->rows)
+    int t = 0;
+    for (auto &s: sc.baseElement->screens)
     {
-
-        buildRow(r, auxInstance, singleLogFrameSplitter);
-
+        buildScreen(s, t++, auxInstance);
     }
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
@@ -731,31 +788,15 @@ void TSingleLogFrame::buildScreenLayout()
     wsjtxFrame->setContest(ct);
     FKHRigControlFrame->setContest(ct);
     FKHRotControlFrame->setContest(ct);
-    verticalLayout->addWidget(singleLogFrameSplitter);
 
-    getSplitters();
-
-    // and force matters that may have been saved
-
-    for (int i = 0; i < singleLogFrameSplitter->count(); i++)
-    {
-        singleLogFrameSplitter->setStretchFactor(i, 0);
-    }
-    for (int i = 0; i < rowSplitters.count(); i++)
-    {
-        for (int j = 0; j < rowSplitters[i]->count(); j++)
-        {
-            rowSplitters[i]->setStretchFactor(j, 0);
-        }
-        connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
-    }
+    LogContainer->raise();  // get it back in front
 }
 
 
-void TSingleLogFrame::keyPressEvent( QKeyEvent* event )
+bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
 {
-
-    GJVQSOLogFrame->doKeyPressEvent(event);
+    // each dependant ContestPage also needs this
+    return GJVQSOLogFrame->doKeyPressEvent(event);
 }
 
 QString TSingleLogFrame::makeEntry( bool saveMinos )
@@ -779,10 +820,6 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    }
    return "";
 }
-BaseContestLog * TSingleLogFrame::getContest()
-{
-   return contest;
-}
 
 void TSingleLogFrame::closeContest()
 {
@@ -791,13 +828,31 @@ void TSingleLogFrame::closeContest()
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
        GJVQSOLogFrame->closeContest();
-       RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
+       if (contest)
+       {
+            RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
+       }
 
-       clearScreenLayout();
+       clearScreenLayout(false);
        TContestApp::getContestApp() ->closeFile( contest );
        qsoModel.initialise(nullptr);
 
        contest = nullptr;
+    }
+}
+
+void TSingleLogFrame::addAllQSOsToBandmap()
+{
+    for ( auto const &c: contest->ctList )
+    {
+        QSharedPointer<BaseContact> cct = c.wt;
+        // Extract comments for "Remarks" section
+        //cct->addReg1TestComment( remarks );
+
+        if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+           continue;
+
+        bandmapControlFrame->on_AfterLogContact(contest, cct);
     }
 }
 void TSingleLogFrame::restoreColumns()
@@ -843,6 +898,11 @@ void TSingleLogFrame::on_ContestPageChanged ()
     if (!ui)
         return;
 
+    if (contest == nullptr)
+    {
+        return;
+    }
+
     if ( this != LogContainer->getCurrentLogFrame() )
     {
 
@@ -851,8 +911,17 @@ void TSingleLogFrame::on_ContestPageChanged ()
     }
 
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
-    traceMsg("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
+    if (ct)
+    {
+        traceMsg("on_ContestPageChanged to " + ct->name.getValue() + " uuid " + ct->uuid);
+    }
+    else
+    {
+        traceMsg("on_ContestPageChanged, no contest set in page");
+    }
     TContestApp::getContestApp() ->setCurrentContest( ct );
+
+    MinosLoggerEvents::SendContestShownChanged();
 
     if ( columnsChanged )
     {
@@ -860,11 +929,11 @@ void TSingleLogFrame::on_ContestPageChanged ()
         columnsChanged = false;
     }
 
-    if (splittersChanged)
-    {
-        MinosLoggerEvents::SendDoSplitterChanges(ct);
-        splittersChanged = false;
-    }
+//    if (splittersChanged)
+//    {
+//        MinosLoggerEvents::SendDoSplitterChanges(ct);
+//        splittersChanged = false;
+//    }
 
     refreshMults();
 
@@ -896,13 +965,6 @@ void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
     if (b == contest)
     {
         showQSOs();             // this does a restorePartial
-    }
-}
-void TSingleLogFrame::on_doSplitterChanges(BaseContestLog *b)
-{
-    if (b == contest)
-    {
-        getSplitters();
     }
 }
 
@@ -1184,7 +1246,11 @@ void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
    TQSOEditDlg qdlg( this, false );
    qdlg.selectContact( contest, lct );
 
+   trace(QString("TSingleLogFrame::EditContact %1").arg(lct->cs.getFullCall()));
+
    qdlg.exec();
+
+   trace(QString("TSingleLogFrame::EditContact finished %1").arg(lct->cs.getFullCall()));
 
    contest->scanContest();
 
@@ -1267,47 +1333,6 @@ void TSingleLogFrame::updateTrees()
 bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
 {
    return contest->getStanza( stanza, stanzaData );
-}
-void TSingleLogFrame::getSplitters()
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("Splitters/singleLogFrameSplitter/state/" + curScreenLayout).toByteArray();
-    singleLogFrameSplitter->restoreState(state);
-
-    // and reset some of the saved state
-
-    singleLogFrameSplitter->setChildrenCollapsible(true);
-    singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
-
-    for(auto const &s: rowSplitters)
-    {
-        QByteArray sstate;
-        QString name = s->objectName();
-        sstate = settings.value("Splitters/" + name + "/state/" + curScreenLayout, sstate).toByteArray();
-        s->restoreState(sstate);
-        s->setHandleWidth(splitterHandleWidth);
-        s->setChildrenCollapsible(true);
-    }
-}
-void TSingleLogFrame::onSplittersChanged()
-{
-    splittersChanged = true;
-}
-void TSingleLogFrame::onSplitterMoved(int /*pos*/, int /*index*/)
-{
-    QByteArray state = singleLogFrameSplitter->saveState();
-    QSettings settings;
-    settings.setValue("Splitters/singleLogFrameSplitter/state/" + curScreenLayout, state);
-
-    for(auto const &s: rowSplitters)
-    {
-        state = s->saveState();
-        QString name = s->objectName();
-        settings.setValue("Splitters/" + name + "/state/" + curScreenLayout, state);
-        MinosLoggerEvents::SendSplittersChanged();
-    }
 }
 void TSingleLogFrame::on_sectionResized(int, int, int)
 {

@@ -58,9 +58,8 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
 
     connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
-    //connect(ui->BrgSt, SIGNAL(textChanged(const QString)), this, SLOT(on_BearingStTextChange(const QString)));
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(getBrgFrmQSOLog(QString)));
+    connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(setBrgFromQSOLog(QString)));
 
     // from match frame
     connect(&MinosLoggerEvents::mle, SIGNAL(MatchBrgStrToRot(QString)), this, SLOT(setBrgFromMatchFrame(QString)));
@@ -70,6 +69,7 @@ RotControlFrame::RotControlFrame(QWidget *parent):
 
     // from memory frame
     connect(&MinosLoggerEvents::mle, SIGNAL(MemBrgStrToRot(QString)), this, SLOT(setBrgFromFrmMemory(QString)));
+
     rot_left_button_off();
     rot_right_button_off();
     showTurnButOff();
@@ -153,7 +153,7 @@ QString RotControlFrame::convertBearingForDisplay(QString bearing)
 
 
 
-void RotControlFrame::getBrgFrmQSOLog(QString brg)
+void RotControlFrame::setBrgFromQSOLog(QString brg)
 {
     // bearing arrives here correctly formatted for display
     if (!brg.isEmpty())
@@ -410,45 +410,9 @@ void RotControlFrame::on_RotateRight_clicked()
         traceMsg("Send RotRight to Rotator Control");
         emit sendRotator(rpcConstants::eRotateRight, angle);
         movingCCW = true;
-        }
+     }
 
 }
-
-/*
-void RotControlFrame::on_BearingStTextChange(const QString brg)
-{
-
-    if (validateBearingEntry(brg) || brg.isEmpty())
-    {
-        // set frame to black
-        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black}");
-    }
-    else
-    {
-        // set frame to red
-        ui->BrgSt->setStyleSheet("QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}");
-    }
-}
-
-
-bool RotControlFrame::validateBearingEntry(const QString brg)
-{
-    QString bearing = brg;
-
-    bearing = bearing.trimmed().remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
-    bool ok;
-    int br = bearing.toInt(&ok);
-    if ((br >= COMPASS_MIN0 && br <= COMPASS_MAX360 && ok) )
-    {
-       return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-*/
 
 void RotControlFrame::keyPressEvent(QKeyEvent *event)
 {

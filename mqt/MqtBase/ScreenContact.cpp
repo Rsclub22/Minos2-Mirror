@@ -120,6 +120,7 @@ void ScreenContact::initialise( BaseContestLog *ct )
     multCount = 0;
     bonus = 0;
     newBonus = false;
+    cqResponse = false;
 
 }
 void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
@@ -170,6 +171,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     bearing = cct->bearing;
     mode = cct->mode.getValue();
     mgmSubmode = cct->mgmSubmode.getValue();
+    cqResponse = cct->cqResponse.getValue();
 }
 void ScreenContact::copyFromArg( ScreenContact &cct )
 {
@@ -219,6 +221,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     bearing = cct.bearing;
     mode = cct.mode;
     mgmSubmode = cct.mgmSubmode;
+    cqResponse = cct.cqResponse;
 }
 void ScreenContact::checkScreenContact( )
 {

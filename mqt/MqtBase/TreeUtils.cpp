@@ -143,6 +143,12 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
                      setHighlight = true;
                  }
                  break;
+              case egFrequency:
+                 {
+                    if (ct->cqResponse.getValue())
+                        line += "(CQ)";
+                 }
+                 break;
            }
            if (setHighlight)
                line = HtmlFontColour(multhighlight) + "<b>" + line;

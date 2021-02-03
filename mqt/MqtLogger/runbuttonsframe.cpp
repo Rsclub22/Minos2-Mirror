@@ -130,7 +130,9 @@ void RunButtonsFrame::setRunButtonActive(int buttonNumber)
     memoryData::memData m = getRunMemoryData(buttonNumber);
     Frequency curFreq = rigControl->getCurFreq();
 
-    if (m.freq == curFreq)
+    qint64 offset = curFreq - m.freq;
+
+    if (std::abs(offset) < 1000)
     {
         runButtonMap[buttonNumber]->returnFrequency.clear();
     }
@@ -154,7 +156,8 @@ void RunButtonsFrame::setRunFreq(int buttonNumber)
 
     runButReadActSel(buttonNumber);
 
-    if (rigControl->getCurFreq() != oldfreq)
+    qint64 offset = oldfreq - rigControl->getCurFreq();
+    if (std::abs(offset) > 1000)
     {
         runButtonMap[buttonNumber]->returnFrequency = oldfreq;
         runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();

@@ -16,6 +16,11 @@ void MinosLoggerEvents::SendContestPageChanged()
 {
     emit mle.ContestPageChanged();
 }
+
+void MinosLoggerEvents::SendContestShownChanged()
+{
+    emit mle.ContestShownChanged();
+}
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendColumnsChanged()
 {

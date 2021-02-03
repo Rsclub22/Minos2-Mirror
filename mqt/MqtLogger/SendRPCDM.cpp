@@ -581,6 +581,10 @@ void TSendDM::notifyRigChanges()
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
             for (auto const &tslf: frames)
             {
+                if (tslf->getContest() == nullptr)
+                {
+                    continue;
+                }
                 QString frameUuid = tslf->getContest()->uuid;
 
                 if (selStateUuid == frameUuid)
@@ -645,6 +649,10 @@ void TSendDM::notifyRotChanges()
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
             for (auto const &tslf: frames)
             {
+                if (tslf->getContest() == nullptr)
+                {
+                    continue;
+                }
                 QString frameUuid = tslf->getContest()->uuid;
 
                 if (selStateUuid == frameUuid)

@@ -5,6 +5,7 @@
 #include "ScreenConfigFile.h"
 #include "ScreenConfig.h"
 
+class ScreenConfigScreen;
 class ScreenConfigRow;
 class SCTypeOption
 {
@@ -26,7 +27,7 @@ public:
     Ui::ScreenConfigElement *ui;
     QVBoxLayout *vbl = nullptr;
 
-    explicit ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfig *sc = nullptr);
+    explicit ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc = nullptr);
     ~ScreenConfigElement();
 
     void setType(SCType);
@@ -64,7 +65,7 @@ private slots:
 
 private:
     ScreenConfigRow *parentRow = nullptr;
-    ScreenConfig *parentDialog = nullptr;
+    ScreenConfigScreen *parentDialog = nullptr;
     bool isSplitElement = false;
 
 };

@@ -148,17 +148,16 @@ private slots:
     void on_RotateLeft_clicked();
     void on_RotateRight_clicked();
     void on_StopRotate_clicked();
-    void getBrgFrmQSOLog(QString);
 
     void on_nudgeLeft_clicked();
     void on_nudgeRight_clicked();
     void on_antennaName_activated(const QString &arg1);
 
 
+    void setBrgFromQSOLog(QString);
     void setBrgFromSpot(QString brg);
     void setBrgFromFrmMemory(QString Brg);
     void setBrgFromMatchFrame(QString brg);
-    //void on_BearingStTextChange(const QString);
 };
 
 #endif // ROTCONTROLFRAME_H

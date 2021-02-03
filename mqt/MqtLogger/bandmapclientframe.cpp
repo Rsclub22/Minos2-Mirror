@@ -33,7 +33,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapDataModel = new BandmapDataModel();
 
-    bandmapView = new BandmapView();
+    bandmapView = new BandmapView(this);
     bandmapView->setFilterSettings(&filterSettings);
 
     bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
@@ -219,6 +219,7 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
 {
     if (state)
     {
+        trace("BandmapView::bandmapUpdate() on_FiltersChanged");
         bandmapView->bandmapUpdate();
     }
 }
@@ -835,14 +836,17 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 }
 void BandmapClientFrame::checkNewBandMapSpots()
 {
+    bandmapView->setSuppressUpdate(true);
+    bool doUpdate = false;
     // any cluster spots
     if (!spotQueue.isEmpty())
     {
         int sqsize = spotQueue.count();
         for (int i = sqsize -1 ; i > -1; i--)
         {
-             addDxSpotToBandmapTable(spotQueue[i]);
-             traceMsg("New Cluster Spot: " + spotQueue[i]->getDxCall().getFullCall());
+            traceMsg("New Cluster Spot: " + spotQueue[i]->getDxCall().getFullCall());
+            addDxSpotToBandmapTable(spotQueue[i]);
+            doUpdate = true;
         }
         spotQueue.clear();
     }
@@ -852,14 +856,22 @@ void BandmapClientFrame::checkNewBandMapSpots()
     {
         for (int i = 0; i < logSpotQueue.count(); i++)
         {
-            addLogSpotToBandmapTable(logSpotQueue[i]);
-            traceMsg(QString("New Logger Spot: %1 %2 %3")
+            traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
+                     .arg(logSpotQueue[i]->spotName())
                      .arg(logSpotQueue[i]->getDxCallStr())
                      .arg(logSpotQueue[i]->getFreq().traceStr())
                      .arg(logSpotQueue[i]->getDxLocator()));
+            addLogSpotToBandmapTable(logSpotQueue[i]);
+            doUpdate = true;
         }
         logSpotQueue.clear();
     }
+    bandmapView->setSuppressUpdate(false);
+    if (doUpdate)
+    {
+        bandmapView->bandmapUpdate();
+    }
+
 }
 
 void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>  spot)
@@ -888,6 +900,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
     if (spot->getSpotType() == bandmapSpotType::CQ)
     {
         addRemoveCQSpot(spot);
+        trace("BandmapView::bandmapUpdate() addRemoveCQSpot");
         bandmapView->bandmapUpdate();
         return;
     }
@@ -896,7 +909,13 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
 //    enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ};
 
-    bool cqResponse = spot->getRunModeOn() && !spot->getOffRunFreq();
+    bool cqResponse = spot->getCqResponse();    // for logged QSOs
+    if (spot->getSpotType() == bandmapSpotType::SAVED)
+    {
+        // If we are saving, we should ignore being on CQ freq (or not)?
+        // Possibly a problem if tuning off CQ freq, with details present
+        cqResponse = spot->getRunModeOn() && !spot->getOffRunFreq();
+    }
 
     if (spot->getSpotType() == bandmapSpotType::LOGGED || spot->getSpotType() == bandmapSpotType::SAVED)
     {
@@ -912,6 +931,13 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 Callsign loggedCall = spot->getDxCall();
                 if (savedCs == loggedCall)
                 {
+                    bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                    if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
+                    {
+                        // delete the old logged/saved entry, add the new one
+                        bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                        continue;
+                    }
                     bandmapDataModel->setData(bandmapDataModel->index(row, DXSPOT_CALL_WORKED_COL_NUM ), true ,BMP_DataStoredRole);
                 }
 
@@ -1084,6 +1110,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
         bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
+    trace("BandmapView::bandmapUpdate() addLogSpotToBandmapTable completion");
     bandmapView->bandmapUpdate();
 }
 
@@ -1414,6 +1441,7 @@ void BandmapClientFrame::filterButtonSelected()
     if (filterSetup->getSettingsChangedFlag())
     {
         filterSettings = filterSetup->getFilterSettings();
+        trace("BandmapView::bandmapUpdate() filterButtonSelected");
         bandmapView->bandmapUpdate();
 
     }
@@ -1545,6 +1573,7 @@ void BandmapClientFrame::purgeSpots()
            purgeSpotFlag = false;
         }
     }
+    trace("BandmapView::bandmapUpdate() purgeSpots");
     bandmapView->bandmapUpdate();
 }
 
@@ -1553,6 +1582,9 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
     Q_UNUSED(c)
     if (!isProtected && ct == c)
     {
+        if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            return;
+
         Callsign cs = lct->cs;
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
@@ -1595,6 +1627,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         spot->setSpotDateTime(time);
         spot->setRunModeOn(runModeOn);
         spot->setOffRunFreq(offRunFreq);
+        spot->setCqResponse(lct->cqResponse.getValue());
         if (!lct->extraText.getValue().isEmpty())
         {
             spot->setDistrict(lct->extraText.getValue());
@@ -1856,5 +1889,6 @@ void BandmapClientFrame::setZoomLevelLabelText(int level)
 void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
     bandmapSpotProxyModel->setFilterString(filter);
+    trace("BandmapView::bandmapUpdate() on_textFilterEdit_textChanged");
     bandmapView->bandmapUpdate();
 }

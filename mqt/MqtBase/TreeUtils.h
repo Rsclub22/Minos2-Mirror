@@ -50,7 +50,7 @@ class QSOGridModel: public QAbstractItemModel
 {
     Q_OBJECT
     protected:
-        BaseContestLog *contest;
+        BaseContestLog *contest = nullptr;
     public:
         static GridColumn QSOTreeColumns[ LOGTREECOLS ];
 

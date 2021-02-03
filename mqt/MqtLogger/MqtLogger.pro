@@ -34,6 +34,8 @@ SOURCES += \
     AdifImport.cpp \
     ContestApp.cpp \
     ContestDetailsTransferObject.cpp \
+    ContestPage.cpp \
+    ContestPageControl.cpp \
     FilterFrame.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
@@ -47,6 +49,7 @@ SOURCES += \
     ScreenConfigFile.cpp \
     ScreenConfigManager.cpp \
     ScreenConfigRow.cpp \
+    ScreenConfigScreen.cpp \
     SendRPCDM.cpp \
     StackedInfoFrame.cpp \
     TClockFrame.cpp \
@@ -120,6 +123,8 @@ HEADERS  += \
     AdifImport.h \
     ContestApp.h \
     ContestDetailsTransferObject.h \
+    ContestPage.h \
+    ContestPageControl.h \
     FilterFrame.h \
     LocCalcFrame.h \
     LoggerContacts.h \
@@ -132,6 +137,7 @@ HEADERS  += \
     ScreenConfigFile.h \
     ScreenConfigManager.h \
     ScreenConfigRow.h \
+    ScreenConfigScreen.h \
     SendRPCDM.h \
     StackedInfoFrame.h \
     TClockFrame.h \
@@ -199,6 +205,9 @@ HEADERS  += \
     Clusterbandmapconfigure.h
 
 FORMS    += \
+    ContestPage.ui \
+    ContestPageControl.ui \
+    ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
     contestdetails.ui \

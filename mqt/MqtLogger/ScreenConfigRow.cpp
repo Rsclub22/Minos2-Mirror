@@ -3,6 +3,7 @@
 
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
+#include "ScreenConfigScreen.h"
 #include "ScreenConfig.h"
 
 #include "ui_ScreenConfigRow.h"
@@ -99,32 +100,6 @@ void ScreenConfigRow::remove(ScreenConfigElement *e)
         }
     }
 }
-//ScreenConfigRow *ScreenConfig::combineRows(int top, int bottom)
-//{
-//    QWidget *qli = vbl->itemAt(top)->widget();
-//    ScreenConfigRow *scr = dynamic_cast<ScreenConfigRow *>(qli);
-
-//    scr->parentElement->addRowBefore(scr);
-//    ScreenConfigRow *newRow = dynamic_cast<ScreenConfigRow *>(scr->parentElement->vbl->itemAt(top)->widget());
-
-//    //new row needs a split element, to which we add our old rows
-
-//    QWidget *w = newRow->hbl->itemAt(0)->widget();
-//    ScreenConfigElement *split = dynamic_cast<ScreenConfigElement *>(w);
-//    split->setIsSplitElement(true);
-//    split->setType(sctSplit);
-
-//    for (int i = top + 1; i <= bottom + 1; i++)
-//    {
-//        // keep taking the top of the old, and put it back at the bottom of the new
-//        QLayoutItem *l = scr->parentElement->vbl->takeAt(top + 1);
-
-//        split->vbl->addItem(l);
-//        // reset the parentage, or it all displays in the wrong place
-//        l->widget()->setParent(split);
-//    }
-//    return  newRow;
-//}
 void ScreenConfigRow::unsplit()
 {
     // we need to take the rows of the split element, and make them this rows rows
@@ -196,7 +171,7 @@ bool ScreenConfigRow::checkOk(ScreenConfigElement *e)
 
 void ScreenConfigRow::mousePressEvent(QMouseEvent *)
 {
-    QVector<ScreenConfigRow *> sel = screenConfigDialog->getSelected();
+    QVector<ScreenConfigRow *> sel = screenConfigDialog->curScreen->getSelected();
     if ( sel.count() == 0 || sel[0]->parentElement == parentElement)
     {
         mouseDown = true;

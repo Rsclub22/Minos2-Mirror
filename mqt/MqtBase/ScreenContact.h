@@ -58,6 +58,8 @@ class ScreenContact
 
       QString op1;
       QString op2;
+
+      bool cqResponse;
       //------------------
 
       bool screenQSOValid =false;
