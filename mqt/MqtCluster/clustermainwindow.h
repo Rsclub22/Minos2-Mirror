@@ -325,12 +325,10 @@ public:
 
     bool traceDebugFlag;
 
-    DxSpotSortFilterProxyModel(ClusterClientFilterSettings &filterSettings_)
-    {
-        filterSettings = filterSettings_;
-    }
+    DxSpotSortFilterProxyModel(ClusterClientFilterSettings *filterSettings_);
 
-    ClusterClientFilterSettings filterSettings;
+
+    ClusterClientFilterSettings *filterSettings;
 
 };
 

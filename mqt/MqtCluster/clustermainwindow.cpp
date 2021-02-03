@@ -90,10 +90,6 @@ void ClusterMainWindow::doStartup()
 
 
     spotsList.clear();
-    //getSpotsTimer = new QTimer();
-    //connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
-    //getSpotsTimer->start(1000);
-
 
     setWindowTitle(tr("Minos Cluster Server"));
     status = new QLabel;
@@ -204,7 +200,7 @@ void ClusterMainWindow::doStartup()
 
 
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSettings);
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(&filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -1665,6 +1661,24 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
     {
         trace(QString("GetSpotsFromDisplayQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
+        while (!spotsList.empty())
+        {
+            if (purgeSpotFlag)
+            {
+                trace(QString("GetSpotsFromDisplayQueue: PurgeFlag On"));
+                return;
+            }
+
+            dxSpotDataModel->rowData = spotsList.last();
+            spotsList.removeLast();
+
+            dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
+            trace(QString("GetSpotsFromDisplayQueue: finished loop"));
+
+
+        }
+
+/*
         int slsize= spotsList.count();
         for (int i = slsize -1 ; i > -1; i--)
         {
@@ -1684,7 +1698,7 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
 
 
         }
-
+*/
         trace(QString("GetSpotsFromDisplayQueue: finished"));
     }
 }
@@ -2238,12 +2252,12 @@ void ClusterMainWindow::initUserCommandButtons()
 
         userVHFUHFCmdButton.append(new PresetButton(ui_userVHFUHFCommandButtons[i], i, vhfUhfCommandShortCutKeyList[i], vhfUhfMenuShortCutKeyList[i], buttonLabels));
 
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userVhfUhfCmdButtonRead(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showVhfUhfUserCmdButtonMenu(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userVhfUhfCmdButtonRead(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userVhfUhfCmdButtonEdit(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userVhfUhfCmdButtonWrite(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userVhfUhfCmdButtonClear(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showVhfUhfUserCmdButtonMenu(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetReadAction, this, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetEditAction, this, [this, i]() {userVhfUhfCmdButtonEdit(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetWriteAction, this, [this, i]() {userVhfUhfCmdButtonWrite(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetClearAction, this, [this, i]() {userVhfUhfCmdButtonClear(i);});
 
 
 
@@ -2255,12 +2269,12 @@ void ClusterMainWindow::initUserCommandButtons()
 
         userHFCmdButton.append(new PresetButton(ui_userHFCommandButtons[i], i, hfCommandShortCutKeyList[i], hfMenuShortCutKeyList[i], buttonLabels));
 
-        connect(userHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userHfCmdButtonRead(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showHfUserCmdButtonMenu(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userHfCmdButtonRead(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userHfCmdButtonEdit(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userHfCmdButtonWrite(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userHfCmdButtonClear(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showHfUserCmdButtonMenu(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetReadAction, this, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetEditAction, this, [this, i]() {userHfCmdButtonEdit(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetWriteAction, this, [this, i]() {userHfCmdButtonWrite(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetClearAction, this, [this, i]() {userHfCmdButtonClear(i);});
 
 
     }
@@ -2774,7 +2788,7 @@ void ClusterMainWindow::setHF(bool hfFlag_)
     else
     {
         // set hf tab "invisible"
-        QString n = ui->clusterTab->tabText(0);
+        //QString n = ui->clusterTab->tabText(0);
         if (ui->clusterTab->tabText(0) == hfTabName)
         {
             ui->clusterTab->removeTab(0);
@@ -2876,7 +2890,7 @@ void ClusterMainWindow::onHfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2912,7 +2926,7 @@ void ClusterMainWindow::onVhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllVHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == VHF_BANDTYPE)
         {
@@ -2942,7 +2956,7 @@ void ClusterMainWindow::onUhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllUHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == MW_BANDTYPE)
         {
@@ -3043,6 +3057,10 @@ void ClusterMainWindow::clusterNodeCommandsShortcutHelp()
                                 "C - Clear cmd\n"));
 }
 
+DxSpotSortFilterProxyModel::DxSpotSortFilterProxyModel(ClusterClientFilterSettings *filterSettings_)
+{
+    filterSettings = filterSettings_;
+}
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
@@ -3066,9 +3084,11 @@ bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
         trace(QString("matchBand: band = %1").arg(band));
     }
 
-    return filterSettings.getBandFilter(band);
+    return filterSettings->getBandFilter(band);
 
 }
+
+
 
 
 
