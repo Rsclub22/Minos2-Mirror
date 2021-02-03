@@ -122,7 +122,6 @@ void ClusterMainWindow::doStartup()
     if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
     {
         ui->testSpotsPb->setVisible(true);
-        ui->testSpotsLab->setVisible(true);
         connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
         spotTestTimer = new QTimer();
         connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(onSpotTestTimerTimeOut()));
@@ -130,7 +129,7 @@ void ClusterMainWindow::doStartup()
     else
     {
         ui->testSpotsPb->setVisible(false);
-        ui->testSpotsLab->setVisible(false);
+
     }
 
 #endif
