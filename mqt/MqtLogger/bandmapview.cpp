@@ -1048,7 +1048,9 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
 void BandmapView::drawBandMapSpots()
 {
     if (!parent())
-        return;     // lambda fired after we have been detached
+    {
+        return;     // lambda in BandmapView::bandmapUpdate() fired after we have been detached
+    }
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 

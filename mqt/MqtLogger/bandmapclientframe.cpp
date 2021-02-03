@@ -33,7 +33,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     bandmapDataModel = new BandmapDataModel();
 
-    bandmapView = new BandmapView();
+    bandmapView = new BandmapView(this);
     bandmapView->setFilterSettings(&filterSettings);
 
     bandmapSpotProxyModel = new BandmapSortFilterProxyModel(parent);
