@@ -194,126 +194,7 @@ private:
 };
 
 
-class ClusterQRZDetails
-{
-public:
-    ClusterQRZDetails()
-    {
-        clear();
-    }
 
-    void setCall(const QString call_){call = call_.trimmed();}
-    QString getCall()const {return call;}
-
-    void setAdif(const QString adif_){adif = adif_.trimmed();}
-    QString getAdif()const {return adif;}
-
-    void setError(const bool error_){error = error_;}
-    bool getError()const {return error;}
-
-    void setFound(const bool found_){found = found_;}
-    bool getFound()const {return found;}
-
-
-    void setGotAllData(const bool gotAllData_){gotAllData = gotAllData_;}
-    bool getGotAllData()const {return gotAllData;}
-
-    void setFname(const QString fname_){fname = fname_.trimmed();}
-    QString getFname()const{return fname;}
-
-    void setName(const QString name_){name = name_.trimmed();}
-    QString getName()const {return name;}
-
-    void setAddr2(const QString addr2_){addr2 = addr2_.trimmed();}
-    QString getAddr2()const {return addr2;}
-
-    void setCountry(const QString country_){country = country_.trimmed();}
-    QString getCountry(){return country;}
-
-    void setLat(const QString lat_){lat = lat_.trimmed();}
-    QString getLat()const {return lat;}
-
-    void setLon(const QString lon_){lon = lon_.trimmed();}
-    QString getLon()const {return lon;}
-
-    void setGrid(const QString grid_){grid = grid_.trimmed();}
-    QString getGrid()const{return grid;}
-
-
-    void setModdate(const QString moddate_){moddate = moddate_.trimmed();}
-    QString getHomeNode()const {return moddate;}
-
-    void clear()
-    {
-        call.clear();
-        adif.clear();
-        error = false;
-        found = false;
-        gotAllData = false;
-        fname.clear();
-        name.clear();
-        addr2.clear();
-        country.clear();
-        lat.clear();
-        lon.clear();
-        grid.clear();
-        moddate.clear();
-    }
-
-private:
-
-    QString call;
-    QString adif;
-    bool error;
-    bool found;
-    bool gotAllData;
-    QString fname;
-    QString name;
-    QString addr2;
-    QString country;
-    QString lat;
-    QString lon;
-    QString grid;
-    QString moddate;
-
-
-};
-
-class AskQraData
-{
-
-public:
-    AskQraData()
-    {
-        clear();
-    }
-
-    void setAskCallsign(const QString askCallsign_){askCallsign = askCallsign_;}
-    QString getAskCallsign(){return askCallsign;}
-
-    void setAskQrz(const bool askQrz_){askQrz = askQrz_;}
-    bool getAskQrz()const {return askQrz;}
-
-
-
-    void clear()
-    {
-        askQrz = false;
-
-        askCallsign.clear();
-
-    }
-
-
-private:
-
-
-
-   bool askQrz;
-   QString askCallsign;
-
-
-};
 
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
@@ -502,18 +383,6 @@ private:
 
     ClusterSpotData curSpot;
 
-    ClusterQRZDetails qrzInfo;
-
-    AskQraData askQraData;
-
-
-
-    QSharedPointer<ClusterSpotData> spotWaitingForQraFromNode;
-    QVector<QSharedPointer<ClusterSpotData> > spotListNoQra;
-    QTimer *askQraTimer;
-    QTimer *askQraTimeout;
-
-
 
     bool loginStart;
     bool loginSuccess;
@@ -662,9 +531,7 @@ private slots:
 
     void onHandleSpotsInQueues();
 
-    void handAskQraTimer();
 
-    void handleAskQraTimeout();
 
     void cancelPingTimeOut(QString msg);
     void handlePingClusterNodeTimeout();
