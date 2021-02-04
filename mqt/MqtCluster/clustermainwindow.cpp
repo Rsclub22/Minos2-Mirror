@@ -941,7 +941,7 @@ void ClusterMainWindow::parseDX(const QString txt)
     buf = txt;
 
     int retCode = SPOT_OK;
-    QSharedPointer<ClusterSpotData> newSpot; //= QSharedPointer<ClusterSpotData>(new ClusterSpotData());
+    QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
     QString line;
     if (loginSuccess)

@@ -681,10 +681,10 @@ bool BandmapClientFrame::isFreqLegal(const Frequency &freq, const QString band, 
                 case FREQ_NO_MATCH:
                     return false;
                 case MODE_MISSING:
-                    traceMsg(QString("isFreqLegal: mode is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("isFreqLegal: mode is missing from file - band %1, mode %2").arg(band, mode));
                     return true;
                 case BAND_MISSING:
-                    traceMsg(QString("isFreqLegal: band is missing from file - band %1, mode %2").arg(band).arg(mode));
+                    traceMsg(QString("isFreqLegal: band is missing from file - band %1, mode %2").arg(band, mode));
                     return true;
             }
     }
