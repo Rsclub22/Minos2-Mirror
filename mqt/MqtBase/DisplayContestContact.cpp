@@ -125,6 +125,8 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    mode.setValue( cct.mode );
    mgmSubmode.setValue( cct.mgmSubmode );
 
+   cqResponse.setValue(cct.cqResponse);
+
 }
 // used to test if anything has changed
 
@@ -180,6 +182,9 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
 
    if (frequency.getValue() != mct.frequency)
       return true; // i.e. not equal
+
+   if (cqResponse.getValue() != mct.cqResponse)
+       return true;
 
    if ( strcmpsp( mct.rotatorHeading, rotatorHeading.getValue() ) )
       return true; // i.e. not equal
@@ -873,6 +878,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          {
             contest->maxSerial = maxct;
          }
+         mt->getStructArgMemberValue( "cqResponse", cqResponse );
 
          contest->validationPoint = getLogSequence();
          checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history

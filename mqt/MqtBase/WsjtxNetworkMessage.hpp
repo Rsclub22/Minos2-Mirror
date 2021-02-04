@@ -6,8 +6,8 @@
  * ======================
  *
  * All messages are written or  read using the QDataStream derivatives
- * defined below, note that we are using the default for floating
- * point precision which means all are double precision i.e. 64-bit
+ * defined  below, note  that we  are using  the default  for floating
+ * point precision  which means all  are double precision  i.e. 64-bit
  * IEEE format.
  *
  *  Message is big endian format
@@ -19,12 +19,12 @@
  *
  *   Payload format:
  *
- *      As per  the QDataStream format,  see below for version  used and
+ *      As per the QDataStream format,  see below for version used and
  *      here:
  *
  *        http://doc.qt.io/qt-5/datastreamformat.html
  *
- *      for the serialization details for each type, at the time of
+ *      for the  serialization details for  each type, at the  time of
  *      writing the above document is for Qt_5_0 format which is buggy
  *      so we use Qt_5_4 format, differences are:
  *
@@ -37,17 +37,19 @@
  *           offset     qint32    only present if timespec=2
  *           timezone   several-fields only present if timespec=3
  *
- *      we will avoid using QDateTime fields with time zones for simplicity.
+ *      we  will avoid  using  QDateTime fields  with  time zones  for
+ *      simplicity.
  *
  * Type utf8  is a  utf-8 byte  string formatted  as a  QByteArray for
  * serialization purposes  (currently a quint32 size  followed by size
  * bytes, no terminator is present or counted).
  *
- * The QDataStream format document linked above is not complete for
- * the QByteArray serialization format, it is similar to the QString
- * serialization format in that it differentiates between empty
- * strings and null strings. Empty strings have a length of zero
+ * The QDataStream  format document linked  above is not  complete for
+ * the QByteArray serialization  format, it is similar  to the QString
+ * serialization  format  in  that  it  differentiates  between  empty
+ * strings  and null  strings. Empty  strings  have a  length of  zero
  * whereas null strings have a length field of 0xffffffff.
+ *
  *
  * Schema Negotiation
  * ------------------
@@ -72,6 +74,36 @@
  * Schema Version 3:- this schema uses the QDataStream::Qt_5_4 version.
  *
  *
+ * Backward Compatibility
+ * ----------------------
+ *
+ * It  is important  that  applications developed  at different  times
+ * remain  compatible  with this  protocol  and  with older  or  newer
+ * versions  of   WSJT-X.   This  is  achieved   by  both  third-party
+ * applications and WSJT-X honouring two basic rules.
+ *
+ * 1. New  message types may be  added to the protocol  in the future,
+ *    third-party applications  and WSJT-X  shall ignore  silently any
+ *    message types they do not recognize.
+ *
+ * 2. New  fields may be  added to  existing message types,  they will
+ *    always be added to the end of the existing fields and the number
+ *    and type  of existing fields shall  not change. If a  field type
+ *    must be  changed; a  new field  will be  added and  the existing
+ *    field  will  remain. The  originator  of  such a  message  shall
+ *    populate   both  the   new   and  old   field  with   reasonable
+ *    values.  Third-party   applications  and  WSJT-X   shall  ignore
+ *    silently any extra  data received in datagrams  after the fields
+ *    they know about.
+ *
+ * Note  that these  rules are  unrelated to  the schema  number above
+ * whose purpose is to distinguish between non-compatible encodings of
+ * field data  types. New message  types and extra fields  in existing
+ * messages can and will be added without any change in schema number.
+ *
+ *
+ * Message Types
+ * -------------
  *
  * Message       Direction Value                  Type
  * ------------- --------- ---------------------- -----------
@@ -116,15 +148,19 @@
  *                         Tx Enabled             bool
  *                         Transmitting           bool
  *                         Decoding               bool
- *                         Rx DF                  qint32
- *                         Tx DF                  qint32
+ *                         Rx DF                  quint32
+ *                         Tx DF                  quint32
  *                         DE call                utf8
  *                         DE grid                utf8
  *                         DX grid                utf8
  *                         Tx Watchdog            bool
  *                         Sub-mode               utf8
  *                         Fast mode              bool
- *                         Special operation mode quint8
+ *                         Special Operation Mode quint8
+ *                         Frequency Tolerance    quint32
+ *                         T/R Period             quint32
+ *                         Configuration Name     utf8
+ *                         Tx Message             utf8
  *
  *    WSJT-X  sends this  status message  when various  internal state
  *    changes to allow the server to  track the relevant state of each
@@ -133,19 +169,23 @@
  *
  *      Application start up,
  *      "Enable Tx" button status changes,
- *      Dial frequency changes,
- *      Changes to the "DX Call" field,
- *      Operating mode, sub-mode or fast mode changes,
- *      Transmit mode changed (in dual JT9+JT65 mode),
- *      Changes to the "Rpt" spinner,
- *      After an old decodes replay sequence (see Replay below),
- *      When switching between Tx and Rx mode,
- *      At the start and end of decoding,
- *      When the Rx DF changes,
- *      When the Tx DF changes,
- *      When settings are exited,
- *      When the DX call or grid changes,
- *      When the Tx watchdog is set or reset.
+ *      dial frequency changes,
+ *      changes to the "DX Call" field,
+ *      operating mode, sub-mode or fast mode changes,
+ *      transmit mode changed (in dual JT9+JT65 mode),
+ *      changes to the "Rpt" spinner,
+ *      after an old decodes replay sequence (see Replay below),
+ *      when switching between Tx and Rx mode,
+ *      at the start and end of decoding,
+ *      when the Rx DF changes,
+ *      when the Tx DF changes,
+ *      when settings are exited,
+ *      when the DX call or grid changes,
+ *      when the Tx watchdog is set or reset,
+ *      when the frequency tolerance is changed,
+ *      when the T/R period is changed,
+ *      when the configuration name changes,
+ *      when the message being transmitted changes.
  *
  *    The Special operation mode is  an enumeration that indicates the
  *    setting  selected  in  the  WSJT-X  "Settings->Advanced->Special
@@ -156,8 +196,13 @@
  *       2 -> EU VHF
  *       3 -> FIELD DAY
  *       4 -> RTTY RU
- *       5 -> FOX
- *       6 -> HOUND
+ *       5 -> WW DIGI
+ *       6 -> FOX
+ *       7 -> HOUND
+ *
+ *    The Frequency Tolerance  and T/R period fields may  have a value
+ *    of  the maximum  quint32 value  which implies  the field  is not
+ *    applicable.
  *
  *
  * Decode        Out       2                      quint32
@@ -265,17 +310,19 @@
  *                         My grid                utf8
  *                         Exchange sent          utf8
  *                         Exchange received      utf8
+ *                         ADIF Propagation mode  utf8
  *
  *      The  QSO logged  message is  sent  to the  server(s) when  the
  *      WSJT-X user accepts the "Log  QSO" dialog by clicking the "OK"
  *      button.
  *
  *
- * Close         Out       6                      quint32
+ * Close         Out/In    6                      quint32
  *                         Id (unique key)        utf8
  *
- *      Close is sent by a client immediately prior to it shutting
- *      down gracefully.
+ *      Close is  sent by  a client immediately  prior to  it shutting
+ *      down gracefully. When sent by  a server it requests the target
+ *      client to close down gracefully.
  *
  *
  * Replay        In        7                      quint32
@@ -404,16 +451,49 @@
  *      The server  may send  this message at  any time.   The message
  *      specifies  the background  and foreground  color that  will be
  *      used  to  highlight  the  specified callsign  in  the  decoded
- *      messages  printed  in  the  Band Activity  panel.  The  WSJT-X
+ *      messages  printed  in the  Band  Activity  panel.  The  WSJT-X
  *      clients maintain a list of such instructions and apply them to
  *      all decoded  messages in the  band activity window.   To clear
- *      highlighting send an  invalid QColor value for  either or both
- *      of the background and foreground fields.
+ *      and  cancel  highlighting send  an  invalid  QColor value  for
+ *      either or both  of the background and  foreground fields. When
+ *      using  this mode  the  total number  of callsign  highlighting
+ *      requests should be limited otherwise the performance of WSJT-X
+ *      decoding may be  impacted. A rough rule of thumb  might be too
+ *      limit the  number of active  highlighting requests to  no more
+ *      than 100.
  *
  *      The "Highlight last"  field allows the sender  to request that
- *      the  last  instance  only  instead of  all  instances  of  the
- *      specified  call  be  highlighted  or  have  it's  highlighting
- *      cleared.
+ *      all instances of  "Callsign" in the last  period only, instead
+ *      of all instances in all periods, be highlighted.
+ *
+ *
+ * SwitchConfiguration  In 14                     quint32
+ *                         Id (unique key)        utf8
+ *                         Configuration Name     utf8
+ *
+ *      The server  may send  this message at  any time.   The message
+ *      specifies the name of the  configuration to switch to. The new
+ *      configuration must exist.
+ *
+ *
+ * Configure      In       15                     quint32
+ *                         Id (unique key)        utf8
+ *                         Mode                   utf8
+ *                         Frequency Tolerance    quint32
+ *                         Submode                utf8
+ *                         Fast Mode              bool
+ *                         T/R Period             quint32
+ *                         Rx DF                  quint32
+ *                         DX Call                utf8
+ *                         DX Grid                utf8
+ *                         Generate Messages      bool
+ *
+ *      The server  may send  this message at  any time.   The message
+ *      specifies  various  configuration  options.  For  utf8  string
+ *      fields an empty value implies no change, for the quint32 Rx DF
+ *      and  Frequency  Tolerance  fields the  maximum  quint32  value
+ *      implies  no change.   Invalid or  unrecognized values  will be
+ *      silently ignored.
  */
 
 #include <QDataStream>
@@ -443,6 +523,8 @@ namespace NetworkMessage
       Location,
       LoggedADIF,
       HighlightCallsign,
+      SwitchConfiguration,
+      Configure,
       maximum_message_type_     // ONLY add new message types
                                 // immediately before here
     };
@@ -460,9 +542,9 @@ namespace NetworkMessage
 
     // increment this if a newer Qt schema is required and add decode
     // logic to the Builder and Reader class implementations
-#if QT_VERSION >= QT_VERSION_CHECK(5, 4, 0)
+#if QT_VERSION >= QT_VERSION_CHECK (5, 4, 0)
     static quint32 constexpr schema_number {3};
-#elif QT_VERSION >= QT_VERSION_CHECK(5, 2, 0)
+#elif QT_VERSION >= QT_VERSION_CHECK (5, 2, 0)
     static quint32 constexpr schema_number {2};
 #else
     // Schema 1 (Qt_5_0) is broken

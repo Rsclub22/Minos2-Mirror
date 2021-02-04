@@ -35,7 +35,9 @@ private slots:
                                , QString const& report, QString const& tx_mode, bool tx_enabled
                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode);
+                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
+                               , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
+                               , const QString &configuration_name, const QString &tx_message);
 
     void decode_added (bool is_new, QString const& client_id, QTime time, qint32 snr
                               , float delta_time, quint32 delta_frequency, QString const& mode
@@ -58,7 +60,9 @@ signals:
                                , QString const& report, QString const& tx_mode, bool tx_enabled
                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
                                , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode, qint8 special_op_mode);
+                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
+                               , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
+                               , QString const& configuration_name, QString const& tx_message);
 };
 
 #endif // WSJTXLINK_H

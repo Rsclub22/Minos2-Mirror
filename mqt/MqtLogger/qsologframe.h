@@ -251,7 +251,7 @@ private:
 
     void checkBandMapAndClusterLoaded();
 
-    void getLogDetails(memoryData::memData&, bool& validCall);
+    void getLogDetails(memoryData::memData&, int &callRes);
 
     Callsign lastLoggedCallsign;        // saved to send to cluster
     QString lastLoggedLocator;
@@ -275,6 +275,9 @@ private:
     void setClusterSendSpotControlsState();
     void setBandMapControlsDisabled(bool disabled);
     void setClusterSendSpotControlsDisabled(bool disabled);
+    void checkQsoFrameColour();
+    
+    bool frameHasFocus();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

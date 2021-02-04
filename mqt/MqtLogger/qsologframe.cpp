@@ -215,6 +215,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter)
     {
         QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
+        raise();
         return true;
     }
     else if (Key == Qt::Key_Tab)
@@ -241,16 +242,15 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     else if (Key == Qt::Key_Escape)
     {
         QMetaObject::invokeMethod(ui->GJVCancelButton, "clicked", Qt::QueuedConnection);
+        raise();
         return true;
     }
     else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
     {
         setActiveControl( &Key );
+        raise();
         return true;
     }
-
-
-
 
     bool doReturn = false;
     if ( ( Key == Qt::Key_Insert ) && !shift && !ctrl )
@@ -261,7 +261,6 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     bool ovr = overstrike;
 
     QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
-
 
     MinosLoggerEvents::SendReportOverstrike(ovr, contest);  // queued
 
@@ -315,6 +314,8 @@ QSOLogFrame::~QSOLogFrame()
 void QSOLogFrame::on_TimeDisplayTimer()
 {
     updateQSOTime(true);
+
+    checkQsoFrameColour();
 
     checkBandMapAndClusterLoaded();
 }
@@ -384,6 +385,25 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
             SecondOpComboBox_Exit();
         }
     }
+    checkQsoFrameColour();
+}
+bool QSOLogFrame::frameHasFocus()
+{
+    if (ui->CallsignEdit->hasFocus()
+            || ui->RSTTXEdit->hasFocus()
+            || ui->SerTXEdit->hasFocus()
+            || ui->RSTRXEdit->hasFocus()
+            || ui->SerRXEdit->hasFocus()
+            || ui->LocEdit->hasFocus()
+            || ui->QTHEdit->hasFocus()
+            || ui->CommentsEdit->hasFocus()
+            )
+    {
+        return true;
+    }
+
+    return false;
+
 }
 void QSOLogFrame::setAsEdit(bool s, QString b)
 {
@@ -856,6 +876,12 @@ void QSOLogFrame::killPartial( )
 
 void QSOLogFrame::startNextEntry( )
 {
+    if (contest == nullptr)
+    {
+        return;
+    }
+    if (!contest)
+        return;
    if (contest->unfilledCount <= 0 || contest->isReadOnly())
    {
       ui->FirstUnfilledButton->setVisible(false);
@@ -867,6 +893,7 @@ void QSOLogFrame::startNextEntry( )
 
    if ( !restorePartial() )
    {
+       // no partial to restore
       screenContact.initialise( contest );
    }
 
@@ -1072,6 +1099,10 @@ void QSOLogFrame::getScreenEntry()
 
        screenContact.op1 = ui->MainOpComboBox->currentText();
        screenContact.op2 = ui->SecondOpComboBox->currentText();
+   }
+   else
+   {
+       screenContact.cqResponse = runButtonOnFlag && !radioOffRunFreq;
    }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
@@ -1892,8 +1923,51 @@ void QSOLogFrame::clearCurrentField()
    current = nullptr;
 }
 //---------------------------------------------------------------------------
+void QSOLogFrame::checkQsoFrameColour()
+{
+    if (!contest)
+    {
+        return;
+    }
+    QString ssQsoFrame = ssQsoFrameBlue;
+    if (contest->isReadOnly())
+    {
+        ssQsoFrame = ssQsoFrameRed;
+        if (contest->isUnwriteable())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
+        }
+        else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
+        }
+        else if (contest->isAgeProtected())
+        {
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
+        }
+    }
+    else
+    {
+        if (!frameHasFocus())
+        {
+            ssQsoFrame = ssQsoFrameRed;
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("QSO Entry Frame not focussed!"));
+        }
+        else
+        {
+            ui->protectionLabel->setText("");
+        }
+    }
+    ui->qsoFrame->setStyleSheet(ssQsoFrame);
+    widgetStyles[ui->qsoFrame] = ssQsoFrame;
+ }
+
 void QSOLogFrame::updateQSODisplay()
 {
+    if (contest == nullptr)
+    {
+        return;
+    }
    if ( contest->districtMult.getValue() )
    {
 //      ui->QTHEdit->CharCase = ecUpperCase;
@@ -1945,29 +2019,7 @@ void QSOLogFrame::updateQSODisplay()
    ui->ModeComboBoxGJV->setEnabled(!mgm);
    ui->ModeButton->setEnabled(!mgm);
 
-   QString ssQsoFrame = ssQsoFrameBlue;
-   if (contest->isReadOnly())
-   {
-       ssQsoFrame = ssQsoFrameRed;
-       if (contest->isUnwriteable())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Read Only"));
-       }
-       else if (contest->getProtectedState().getValue() && !contest->isProtectedSuppressed())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected"));
-       }
-       else if (contest->isAgeProtected())
-       {
-           ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("Protected by age of contest"));
-       }
-   }
-   else
-   {
-       ui->protectionLabel->setText("");
-   }
-   ui->qsoFrame->setStyleSheet(ssQsoFrame);
-   widgetStyles[ui->qsoFrame] = ssQsoFrame;
+   checkQsoFrameColour();
 
    on_FontChanged();    // do all style sheets again
 }
@@ -2847,7 +2899,10 @@ bool QSOLogFrame::getTuneAddBandMapSetting()
     if (bandMapLoaded)
     {
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        state = tslf->getTuneAddBandMapSetting();
+        if (tslf)
+        {
+            state = tslf->getTuneAddBandMapSetting();
+        }
     }
 
     return state;
@@ -2877,9 +2932,9 @@ void QSOLogFrame::on_SpotPbClicked()
         else
         {
             memoryData::memData logData;
-            bool validCall = false;
-            getLogDetails(logData, validCall);
-            if (validCall)
+            int valRes = -1;
+            getLogDetails(logData, valRes);
+            if (valRes == CS_OK)
             {
                 // callsign valid
                 if (!logData.callsign.isEmpty() || !logData.freq.isClear())
@@ -2911,8 +2966,8 @@ void QSOLogFrame::on_SpotPbClicked()
 void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 {
     memoryData::memData logData;
-    bool validCall = false;
-    getLogDetails(logData, validCall);
+    int valRes = -1;
+    getLogDetails(logData, valRes);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
     emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
@@ -2923,9 +2978,9 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
 void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 {
     memoryData::memData logData;
-    bool validCall = false;
-    getLogDetails(logData, validCall);
-    if (validCall)
+    int callRes = -1;
+    getLogDetails(logData, callRes);
+    if (callRes == CS_OK)
     {
         logData.freq = callsignEnterTextFreq;
         callsignEnterTextFreq.clear();
@@ -2939,7 +2994,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
     }
     else
     {
-       trace(QString("bandmapSave: save clicked callsign %1 not valid").arg(logData.callsign));
+       trace(QString("bandmapSave: save clicked callsign %1 not valid %2").arg(logData.callsign).arg(callRes));
     }
 
 
@@ -2948,16 +3003,15 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 
 
-void QSOLogFrame::getLogDetails(memoryData::memData &logData, bool& validCall)
+void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     getScreenEntry();
     calcLoc();
-    validCall = true;
-    if (screenContact.cs.getValRes() != CS_OK)
+    callRes = screenContact.cs.getValRes();
+    if (callRes != CS_OK)
     {
         logData.callsign = screenContact.cs.getFullCall();
-        validCall = false;
 
     }
 

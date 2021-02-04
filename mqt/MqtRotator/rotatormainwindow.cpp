@@ -713,7 +713,7 @@ void RotatorMainWindow::keyPressEvent(QKeyEvent *event)
     {
         emit escapePressed();
     }
-
+    return QMainWindow::keyPressEvent(event);
 }
 
 // receives updates from rotator

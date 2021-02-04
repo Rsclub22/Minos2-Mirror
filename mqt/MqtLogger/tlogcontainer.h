@@ -17,6 +17,7 @@ class TContactListDetails;
 class ContactList;
 class MatchContact;
 class TSendDM;
+class ContestPageControl;
 
 class SetMemoryAction: public QAction
 {
@@ -45,11 +46,14 @@ public:
     QLabel *sblabel1;
     QLabel *sblabel2;
 
+    QMenu TabPopup;
+
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
 
+    QVector<ContestPageControl *> contestPageControls;
     SetMemoryAction *setMemoryAction;
 
     static QString getDefaultDirectory( bool IsList );
@@ -75,11 +79,14 @@ public:
 
     QAction *newAction(int n, QMenu *m, const char *atype);
     void doListOpenActionExecute(QWidget *p);
+    void setMenuLog(int current);
+    void selectContest(BaseContestLog *pc);
+    void selectTab(int t);
+
 private:
     Ui::TLogContainer *ui;
 
     QTimer TimerUpdateQSOTimer;
-    QMenu TabPopup;
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -110,7 +117,6 @@ private:
     BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno );
     void closeSlot(int t, bool addToMRU );
     TSingleLogFrame *findLogFrame(int t);
-    void selectTab(int t);
 
     QAction *lastSessionSelected = nullptr;
     QAction *lastLayoutSelected = nullptr;
@@ -154,7 +160,6 @@ private:
     QAction *startConfigAction;
     QAction *listCompressionAction;
     QAction *QSOFieldFontAction;
-    QAction *styleAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
@@ -172,6 +177,7 @@ private:
     QAction *TabSandPAction;
     QAction *OldBandMapAction;
     QAction *ConfigureAgeProtctionAction;
+    QAction *StyleAction;
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
@@ -210,7 +216,6 @@ private slots:
     void FileOpenActionExecute();
     void FileImportActionExecute();
     void ManageListsActionExecute();
-    void ContestDetailsActionExecute();
     void FileCloseActionExecute();
     void CloseAllActionExecute();
     void CloseAllButActionExecute();
@@ -255,11 +260,9 @@ private slots:
     void StartConfigActionExecute();
     void listCompressionActionExecute();
     void QSOFieldFontActionExecute();
-    void styleActionExecute();
+    void StyleActionExecute();
 
-    void on_ContestPageControl_currentChanged(int index);
-    void on_ContestPageControl_tabBarDoubleClicked(int index);
-    void on_ContestPageControl_customContextMenuRequested(const QPoint &pos);
+    void on_contestPageControl_currentChanged(int index);
     void onTabClosebutton(int);
 
     void on_TimeDisplayTimer( );
@@ -278,6 +281,7 @@ private slots:
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();
+    void ContestDetailsActionExecute();
 
 signals:
     void sendKeyerPlay( int fno );

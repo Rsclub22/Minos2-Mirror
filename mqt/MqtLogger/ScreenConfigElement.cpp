@@ -1,4 +1,5 @@
 #include "ScreenConfigFile.h"
+#include "ScreenConfigScreen.h"
 #include "ScreenConfigRow.h"
 #include <QStandardItemModel>
 #include <QListView>
@@ -8,6 +9,8 @@
 
 QVector <SCTypeOption> ScreenConfigElement::scoptions =
 {
+    {sctMainScreen, QT_TR_NOOP("mainscreen"), QT_TR_NOOP("Main Screen")},
+    {sctScreen, QT_TR_NOOP("screen"), QT_TR_NOOP("Secondary Screen")},
     {sctAux, QT_TR_NOOP("Auxiliary"), QT_TR_NOOP("Auxiliary Display")},
     {sctChat, QT_TR_NOOP("Chat Display"), QT_TR_NOOP("Chat Display")},
     {sctCluster, QT_TR_NOOP("Cluster Display"), QT_TR_NOOP("Cluster Display")},
@@ -94,7 +97,7 @@ void ScreenConfigElement::setIsSplitElement(bool value)
     ui->auxTypeCombo->setVisible(!value);
 }
 
-ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfig *sc) :
+ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfigScreen *sc) :
     QFrame(nullptr)
   , ui(new Ui::ScreenConfigElement)
   , parentRow(parentrow)
@@ -117,6 +120,10 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     int row = -1;
     for(auto const  &opt: scoptions)
     {
+        if (opt.type == sctMainScreen || opt.type == sctScreen)
+        {
+            continue;   // don't allow these to be selected
+        }
         if (opt.type == sctSplit)
         {
             row = i;
@@ -207,7 +214,7 @@ void ScreenConfigElement::on_removeButton_clicked()
     }
     parentRow->remove(this);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 }
 
 void ScreenConfigElement::on_splitAboveButton_clicked()
@@ -278,7 +285,7 @@ void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
     vbl->insertWidget( pos, baseRow);
     baseRow->addLeft(nullptr);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 
 }
 void ScreenConfigElement::removeRow(ScreenConfigRow *r)
@@ -309,7 +316,7 @@ void ScreenConfigElement::removeRow(ScreenConfigRow *r)
         }
     }
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 
 }
 void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
@@ -327,7 +334,7 @@ void ScreenConfigElement::addRowAfter(ScreenConfigRow *r)
     vbl->insertWidget( pos + 1, baseRow);
     baseRow->addLeft(nullptr);
 
-    screenConfigDialog->checkAddButtons();
+    screenConfigDialog->curScreen->checkAddButtons();
 }
 bool ScreenConfigElement::checkOk(ScreenConfigElement *e)
 {

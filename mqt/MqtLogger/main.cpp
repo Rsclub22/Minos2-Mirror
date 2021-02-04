@@ -53,16 +53,17 @@ int main(int argc, char *argv[])
 
         //a.setStyle("fusion");
 
-        TLogContainer w;
-        w.connect(&a, SIGNAL(argsReceived(QString)), &w, SLOT(onArgsReceived(QString)));
+        TLogContainer *w = new TLogContainer();
+        w->connect(&a, SIGNAL(argsReceived(QString)), w, SLOT(onArgsReceived(QString)));
 
         setAppFont();
 
-        bool ret = w.show(argc, argv);
+        bool ret = w->show(argc, argv);
         if (ret == true)
         {
             appError = a.exec();
         }
+        delete w;
     }
 
     return appError;

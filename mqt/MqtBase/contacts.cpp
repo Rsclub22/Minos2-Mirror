@@ -68,6 +68,8 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
    contactScore = ct.contactScore;
    bearing = ct.bearing;
 
+   cqResponse = ct.cqResponse;
+
    return *this;
 }
 //==========================================================================
@@ -97,6 +99,7 @@ void BaseContact::clearDirty()
    rigName.clearDirty();
    op1.clearDirty();
    op2.clearDirty();
+   cqResponse.clearDirty();
    contactScore.clearDirty();
 }
 void BaseContact::setDirty()
@@ -120,6 +123,7 @@ void BaseContact::setDirty()
    rigName.setDirty();
    op1.setDirty();
    op2.setDirty();
+   cqResponse.setDirty();
    contactScore.setDirty();
 }
 //==========================================================================

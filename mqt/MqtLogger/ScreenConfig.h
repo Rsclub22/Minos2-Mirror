@@ -6,6 +6,7 @@
 
 #include "ScreenConfigFile.h"
 
+class ScreenConfigScreen;
 class ScreenConfigRow;
 class ScreenConfigElement;
 class ScreenConfigAddColumn;
@@ -19,22 +20,14 @@ class ScreenConfig : public QDialog
     Q_OBJECT
 
 public:
-    QVBoxLayout *vbl;
-
     explicit ScreenConfig(QWidget *parent, ScreenConfigFile &scf, QString curConfigName);
     ~ScreenConfig() override;
 
-    ScreenConfigElement *baseElement = nullptr;
+    QVector<ScreenConfigScreen *> screens;
 
-    int topRowCount();
-
-    bool checkOk(ScreenConfigElement *e);
-
-    void checkAddButtons();
-    void addColumnLeft(ScreenConfigElement * e, int top, int bottom);
-    void addColumnRight(ScreenConfigElement * e, int top, int bottom);
-    void procRowSel(ScreenConfigRow *row, QVector<ScreenConfigRow *> &sel);
-    QVector<ScreenConfigRow *> getSelected();
+    ScreenConfigScreen *curScreen = nullptr;
+    bool checkOk(ScreenConfigElement *s);
+    void setScreenName(ScreenConfigScreen *scr);
 public slots:
     void reject() override;
     void accept() override;
@@ -45,11 +38,13 @@ private slots:
 
     void on_cancelButton_clicked();
 
-    void on_addRowButton_clicked();
+    void on_addScreenBeforeButton_clicked();
 
-    void on_addColumnRightButton_clicked();
+    void on_addScreenAfterButton_clicked();
 
-    void on_addColumnLeftButton_clicked();
+    void on_screenTabs_currentChanged(int index);
+
+    void on_removeScreenButton_clicked();
 
 private:
     Ui::ScreenConfig *ui;
@@ -59,12 +54,10 @@ private:
 
     void doCloseEvent();
     SC getConfig();
-    void buildRows(QVector<SCRow> rows, ScreenConfigElement *bele, QVBoxLayout *vbl);
-    void procRow(ScreenConfigRow *row, SCRow &scrow);
-    bool checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount);
-    ScreenConfigRow *combineRows(ScreenConfigElement * e, int top, int bottom);
-    int getTopRow(ScreenConfigElement * e);
-    int getBottomRow(ScreenConfigElement *e);
+    ScreenConfigScreen *buildScreens(SC &sc);
+    ScreenConfigScreen *buildScreen(SCScreen &s, int pos);
+
+    void checkScreens();
 };
 
 extern ScreenConfig *screenConfigDialog;

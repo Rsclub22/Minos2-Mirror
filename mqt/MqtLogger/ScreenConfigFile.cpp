@@ -9,6 +9,7 @@
 
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
+#include "ScreenConfigScreen.h"
 /*
 [{"name": "default",
 "rows":[
@@ -33,6 +34,50 @@
 ],"type": "HSplit"}]
 ]}
 */
+// test example for multiple screen layout
+/*
+[
+    {
+        "name": "multiscreen",
+          "screens": [
+            [
+              { "mainscreen": "Main Screen" },
+              { "rows": [
+                  [
+                    { "type": "Log" },
+                    { "type": "Aux" }
+                  ],
+                  [
+                    { "type": "Rig" },
+                    { "type": "Call" },
+                    { "type": "Rot" },
+                    { "type": "RotP" }
+                  ],
+                  [
+                    { "type": "QSO" },
+                    { "type": "Crib" }
+                  ],
+                  [
+                    { "type": "This" },
+                    { "type": "Other" },
+                    { "type": "Arch" }
+                  ]
+                ]
+              }
+            ],
+            [
+              { "screen": "WSJT-X Screen" },
+              { "rows": [
+                  [
+                    { "type": "WSJT-X Connector" }
+                  ]
+                ]
+              }
+            ]
+          ]
+    }
+]
+*/
 static QString defaultConfig = "[{\"name\": \"%1\","
         "\"rows\":["
         "[{\"type\": \"%2\"},{\"type\": \"%3\"}],"
@@ -48,6 +93,8 @@ static QString protectedConfig  = "[{\"name\": \"%1\","
                                "[{\"type\": \"%4\"}]"
                                "]}]";
 
+ScreenConfigFile ScreenConfigFile::scf;
+
 ScreenConfigFile::ScreenConfigFile()
 {
 }
@@ -59,11 +106,64 @@ ScreenConfigFile::~ScreenConfigFile()
 void ScreenConfigFile::loadFile(QWidget *parent)
 {
     readFile("./Configuration/ScreenConfigs.json", parent);
+    loaded = true;
 }
 bool ScreenConfigFile::dumpFile()
 {
     return writeFile("./Configuration/ScreenConfigs.json");
 }
+void ScreenConfigFile::procScreens(QVector<SCScreen> &elescr, QJsonArray &screens)
+{
+    for (auto const &s: screens)
+    {
+        SCScreen screen;
+
+        QJsonValue mainScreenObject = s.toObject().value("mainscreen");
+        if ( mainScreenObject != QJsonValue::Undefined)
+        {
+            screen.baseElement = QSharedPointer<SCElement>(new SCElement());
+            screen.baseElement->type = sctMainScreen;
+            screen.name = mainScreenObject.toString();
+            screen.mainScreen = true;
+        }
+        else
+        {
+            QJsonValue screenObject = s.toObject().value("screen");
+            if ( screenObject != QJsonValue::Undefined)
+            {
+                screen.baseElement = QSharedPointer<SCElement>(new SCElement());
+                screen.baseElement->type = sctScreen;
+                screen.name = screenObject.toString();
+                screen.mainScreen = false;
+            }
+        }
+
+        if (!screen.baseElement.isNull())
+        {
+            QJsonValue rowsObject = s.toObject().value("rows");
+            if ( rowsObject != QJsonValue::Undefined)
+            {
+                QJsonArray rows = rowsObject.toArray();
+                procRows(screen.baseElement->rows, rows);
+            }
+            elescr.push_back(screen);
+        }
+    }
+}
+void ScreenConfigFile::procSingleScreen(SC &config, QJsonValue &base)
+{
+    // Wrap an old style config in new style mainScreen
+    config.baseElement->screens.append(SCScreen());
+
+    SCScreen &scs = config.baseElement->screens[0] ;
+    scs.baseElement = QSharedPointer<SCElement>(new SCElement());
+    scs.baseElement->type = sctMainScreen;
+    scs.mainScreen = true;
+
+    QJsonArray rows = base.toArray();
+    procRows(scs.baseElement->rows, rows);
+}
+
 void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
 {
     for (auto const &r: rows)
@@ -90,7 +190,6 @@ void ScreenConfigFile::procRows(QVector<SCRow> &elerows, QJsonArray &rows)
             {
                 scele.auxType = aeClock;
             }
-//                        trace(QString("Name %1 row %2 ele %3 type %4").arg(name).arg(j).arg(k).arg(eletype));
             scrow.elements.push_back(scele);
         }
         elerows.push_back(scrow);
@@ -159,9 +258,19 @@ bool ScreenConfigFile::parseConfigString(QString s)
                 QString name = namestruct.value("name").toString();
                 config.name = name;
                 config.baseElement = QSharedPointer<SCElement>(new SCElement());
-                QJsonArray rows = namestruct.value("rows").toArray();
-                procRows(config.baseElement->rows, rows);
-                configs[name] = config;
+                QJsonValue base = namestruct.value("screens");
+                if (base != QJsonValue::Undefined)
+                {
+                    QJsonArray screens = base.toArray();
+                    procScreens(config.baseElement->screens, screens);
+                    configs[name] = config;
+                }
+                base = namestruct.value("rows");
+                if (base != QJsonValue::Undefined)
+                {
+                    procSingleScreen(config, base);
+                    configs[name] = config;
+                }
             }
             return true;
         }
@@ -204,6 +313,22 @@ void ScreenConfigFile::writeTypetoRow(SCElement &e, QJsonArray &scrow)
     }
     scrow.append(scele);
 }
+void ScreenConfigFile::getScreenConfig(const SCScreen &scb, QJsonObject &scr)
+{
+
+    QJsonArray scrows;
+    for (auto &j: scb.baseElement->rows)
+    {
+       QJsonArray scrow;
+       for (auto &k: j.elements)
+       {
+           writeTypetoRow(k, scrow);
+       }
+       scrows.append(scrow);
+    }
+    scr.insert("rows", scrows);
+}
+
 bool ScreenConfigFile::writeFile(QString f)
 {
     QFile jf(f);
@@ -218,20 +343,38 @@ bool ScreenConfigFile::writeFile(QString f)
      for(auto &i: configs )
      {
          QJsonObject sc;
-         QJsonArray scrows;
+         QJsonArray screens;
          QString name = i.name;
          SC &scb = i;
-         for (auto &j: scb.baseElement->rows)
-         {
-            QJsonArray scrow;
-            for (auto &k: j.elements)
-            {
-                writeTypetoRow(k, scrow);
-            }
-            scrows.append(scrow);
-         }
          sc.insert("name", name);
-         sc.insert("rows", scrows);
+
+         if (i.baseElement->screens.count() == 1)
+         {
+             // for single screen, keep old format
+             getScreenConfig(scb.baseElement->screens[0], sc);
+         }
+         else
+         {
+             bool ms = true;
+             for (auto &screen:i.baseElement->screens)
+             {
+                 QJsonObject scr;
+                 if (ms)
+                 {
+                    scr.insert("mainscreen", screen.name);
+                    ms = false;
+                 }
+                 else
+                 {
+                     scr.insert("screen", screen.name);
+                 }
+                 getScreenConfig(screen, scr);
+
+                 screens.append(scr);
+
+             }
+             sc.insert("screens", screens);
+         }
 
          scarray.append(sc);
      }
@@ -244,3 +387,4 @@ bool ScreenConfigFile::writeFile(QString f)
 
      return true;
 }
+
