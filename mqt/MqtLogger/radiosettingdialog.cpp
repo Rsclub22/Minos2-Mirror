@@ -287,45 +287,15 @@ void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, con
 
 
 
-void RadioSettingDialog::freqPresetReadSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
+void RadioSettingDialog::freqPresetReadSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)
 {
 
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
-
-    QSettings config(fileName, QSettings::IniFormat);
-
-    presetFreq.clear();
-
-
-    config.beginGroup(freqPresetData::PRESET_MODE_CW);
-
-    for (int i = 0; i < bands.count(); i++)
+    QStringList listOfBands;
+    for(auto &b:bands)
     {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
-
+        listOfBands.append(b->uk);
     }
-
-    config.endGroup();
-
-    config.beginGroup(freqPresetData::PRESET_MODE_PHONE);
-
-    for (int i = 0; i < bands.count(); i++)
-    {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
-
-    }
-
-    config.endGroup();
-
-    config.beginGroup(freqPresetData::PRESET_MODE_MGM);
-
-    for (int i = 0; i < bands.count(); i++)
-    {
-        presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
-
-    }
-
-    config.endGroup();
+    presetFreq.readSettings(listOfBands);
 
 
 }

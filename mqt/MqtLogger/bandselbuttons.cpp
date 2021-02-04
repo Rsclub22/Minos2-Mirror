@@ -25,7 +25,17 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     bandSelGridLayout = _bandSelGrid;
     setupButtons();
 
-    RadioSettingDialog::freqPresetReadSettings(presetFreqs, bands);
+    QStringList listOfBands;
+    for (auto &b:bands)
+    {
+        listOfBands.append(b->uk);
+    }
+    presetFreqs.readSettings(listOfBands);
+
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, listOfBands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, listOfBands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, listOfBands);
+
 
 }
 
@@ -35,14 +45,12 @@ void BandSelButtons::setupButtons()
     hfSelBut = new QToolButton();
     hfSelBut->setText("HF");
     hfSelBut->setVisible(false);
-    connect(hfSelBut, &QToolButton::pressed, this,
-            [=]() {onHfSelButtonPressed();});
+    connect(hfSelBut, &QToolButton::pressed, this, [=]() {onHfSelButtonPressed();});
 
     vhfSelBut = new QToolButton();
     vhfSelBut->setText("VHF");
     vhfSelBut->setVisible(false);
-    connect(vhfSelBut, &QToolButton::pressed, this,
-            [=]() {onVhfSelButtonPressed();});
+    connect(vhfSelBut, &QToolButton::pressed, this, [=]() {onVhfSelButtonPressed();});
 
     mwSelBut = new QToolButton();
     mwSelBut->setText("MW");
@@ -53,11 +61,18 @@ void BandSelButtons::setupButtons()
     preSetFreqRadBut = new QRadioButton();
     preSetFreqRadBut->setText(tr("Preset"));
 
+    connect(preSetFreqRadBut, &QRadioButton::pressed, this, [=]() {onPresetFreqRadButPressed();});
+
     prevFreqRadBut = new QRadioButton();
     prevFreqRadBut->setText(tr("Prev"));
 
+    connect(prevFreqRadBut, &QRadioButton::pressed, this, [=]() {onPrevFreqRadButPressed();});
+
     bandOnlyRadBut = new QRadioButton();
     bandOnlyRadBut->setText(tr("Band"));
+
+    connect(bandOnlyRadBut, &QRadioButton::pressed, this, [=]() {onBandOnlyRadButPressed();});
+
 
     for (int i = 0; i < 6; i++)
     {
@@ -82,8 +97,7 @@ void BandSelButtons::setupButtons()
     for (auto &tb:toolButList)
     {
 
-        connect(tb, &QToolButton::pressed, this,
-               [=]() {onBandSelButtonPressed(tb);});
+        connect(tb, &QToolButton::pressed, this, [=]() {onBandSelButtonPressed(tb);});
 
         tb->setVisible(false);
         tb->setStyleSheet(buttonStyle);
@@ -115,9 +129,23 @@ void BandSelButtons::buildBandButtonLabels()
 
 void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
 {
+    Frequency freq;
     QString band = buttonLabelsToBand.value(button->text());
-    Frequency freq = presetFreqs.getPresetFreq(curMode, band);
-    emit sendPresetFreq(freq);
+    if (preSetFreqRadButIsChecked())
+    {
+        freq = presetFreqs.getPresetFreq(convertModeForPresets(curMode), band);
+        emit sendPresetFreq(freq);
+    }
+    else if (prevFreqRadButIsChecked())
+    {
+        freq = presetFreqs.getLastFreq(convertModeForPresets(curMode), band);
+        emit sendPresetFreq(freq);
+    }
+    else if (bandOnlyRadButIsChecked())
+    {
+        emit sendBandChange(band);
+    }
+
     selectButtonGroupAndActiveBand(band);
 
 }
@@ -138,6 +166,28 @@ void BandSelButtons::onMwSelButtonPressed()
     setButtonsToBandType(bandSelButtonData::MW_BAND_TYPE);
 }
 
+void BandSelButtons::onPresetFreqRadButPressed()
+{
+    if (!curMode.isEmpty())
+    {
+       setPresetFreqToolTip(curMode);
+    }
+
+}
+
+void BandSelButtons::onPrevFreqRadButPressed()
+{
+    if (!curMode.isEmpty())
+    {
+        setPrevFreqToolTip(curMode);
+    }
+}
+
+
+void BandSelButtons::onBandOnlyRadButPressed()
+{
+    setBandsToolTip();
+}
 
 void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
 {
@@ -306,6 +356,21 @@ void BandSelButtons::setAllButtonsOff()
 }
 
 
+void BandSelButtons::setPreviousFreq(QString mode, Frequency freq)
+{
+    QString foundBand;
+    if (findBand(freq, bands, foundBand))
+    {
+       presetFreqs.setLastFreq(convertModeForPresets(mode), foundBand, freq);
+       if (prevFreqRadBut->isChecked())
+       {
+           setToolTip(foundBand, freq.extractKhz());
+       }
+
+    }
+
+}
+
 bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand )
 {
     for (auto const &b: bands)
@@ -318,6 +383,7 @@ bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<Band
         else
         {
             foundBand = "";
+
         }
     }
 
@@ -388,12 +454,76 @@ int BandSelButtons::setButtonOnOff(const QString band, const bool on)
 
 void BandSelButtons::setToolTip(QString band, QString tipTxt)
 {
-    bandToolButList.value(band)->setToolTip(tipTxt);
+    if (bandToolButList.contains(band))
+    {
+       bandToolButList.value(band)->setToolTip(tipTxt);
+    }
+
 }
+
+void BandSelButtons::setBandsToolTip()
+{
+    for(auto &b:bands)
+    {
+       setToolTip(b->uk, b->uk);
+    }
+}
+
+void BandSelButtons::setPresetFreqToolTip(const QString mode)
+{
+    QString m = convertModeForPresets(mode);
+    for (auto &b:bands)
+    {
+       if (presetFreqs.contains(m, b->uk))
+       {
+           Frequency f = presetFreqs.getPresetFreq(m, b->uk);
+           if (f.isClear())
+           {
+               setToolTip(b->uk, "***");
+           }
+           else
+           {
+               setToolTip(b->uk, f.extractKhz());
+           }
+       }
+
+
+    }
+}
+
+void BandSelButtons::setPrevFreqToolTip(QString mode)
+{
+    QString m = convertModeForPresets(mode);
+    for (auto &b:bands)
+    {
+        if (presetFreqs.contains(m, b->uk))
+        {
+           Frequency f = presetFreqs.getLastFreq(m, b->uk);
+           if (f.isClear())
+           {
+               setToolTip(b->uk, "***");
+           }
+           else
+           {
+                setToolTip(b->uk, f.extractKhz());
+           }
+        }
+    }
+}
+
 
 void BandSelButtons::setHf(bool allowHf)
 {
+    for (auto &b:bands)
+    {
+        if (b.data()->getType() == bandSelButtonData::HF_BAND_TYPE)
+        {
 
+            setButtonVisible(b.data()->uk, allowHf);
+        }
+
+    }
+        hfSelBut->setVisible(allowHf);
 }
 
 
@@ -452,8 +582,33 @@ QString BandSelButtons::getBandType(const QString selectedBand)
 
 void BandSelButtons::setMode(QString mode)
 {
-    curMode = convertModeForPresets(mode);
+    curMode = mode;
+    setBandSelButtonsFromMode(curMode);
 }
+
+
+
+void BandSelButtons::setBandSelButtonsFromMode(QString curMode)
+{
+    // sets tooltips
+    if (!curMode.isEmpty())
+    {
+        if(preSetFreqRadBut->isChecked())
+        {
+
+            setPresetFreqToolTip(curMode);
+        }
+        else if (prevFreqRadBut->isChecked())
+        {
+            setPrevFreqToolTip(curMode);
+        }
+        else if (bandOnlyRadBut->isChecked())
+        {
+            setBandsToolTip();
+        }
+    }
+}
+
 
 void BandSelButtons::setContest(QString contestBand_)
 {
@@ -473,12 +628,23 @@ QString BandSelButtons::convertModeForPresets(const QString mode)
 
 Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
 {
-    return presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
+    Frequency f;
+    if (presetFreqs.contains(mode, band))
+    {
+         f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
+    }
+
+    return f;
 }
 
 Frequency BandSelButtons::getLastFreq(const QString band, const QString mode)
 {
-    return presetFreqs.getLastFreq(convertModeForPresets(mode), band);
+    Frequency f;
+    if (presetFreqs.contains(mode, band))
+    {
+         f = presetFreqs.getLastFreq(convertModeForPresets(mode), band);
+    }
+    return f;
 }
 
 void BandSelButtons::setPreSetFreqRadioButVisible(bool visible)
@@ -496,7 +662,18 @@ void BandSelButtons::setbandOnlyButVisible(bool visible)
     bandOnlyRadBut->setVisible(visible);
 }
 
-
+bool BandSelButtons::preSetFreqRadButIsChecked()
+{
+    return preSetFreqRadBut->isChecked();
+}
+bool BandSelButtons::prevFreqRadButIsChecked()
+{
+    return prevFreqRadBut->isChecked();
+}
+bool BandSelButtons::bandOnlyRadButIsChecked()
+{
+    return bandOnlyRadBut->isChecked();
+}
 void BandSelButtons::setPresetFreqRadioButChecked(bool checked)
 {
     preSetFreqRadBut->setChecked(checked);
@@ -511,3 +688,5 @@ void BandSelButtons::setPrevFreqRadioButChecked(bool checked)
 {
     prevFreqRadBut->setChecked(checked);
 }
+
+

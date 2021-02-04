@@ -14,11 +14,19 @@
 
 namespace bandSelButtonData
 {
+    /*
     const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString TYPE_BUTTON_ON_STYLE = QString("background-color: White ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
     const QString TYPE_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; max-width: 20px; max-height: 19px;  padding: 3px;\n");
+    */
+    const QString BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black");
+    const QString BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black");
+    const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black");
+    const QString TYPE_BUTTON_ON_STYLE = QString("background-color: White ; border-style: outset; border-width: 1px; border-color: black");
+    const QString TYPE_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black");
+
     const QString HF_TAB_NAME = "HF";
     const QString VHF_TAB_NAME = "VHF";
     const QString MW_TAB_NAME = "MW";
@@ -63,8 +71,14 @@ public:
     void setPresetFreqRadioButChecked(bool checked);
     void setsetPrevFreqRadioButChecked(bool checked);
     void setPrevFreqRadioButChecked(bool checked);
+    void setPreviousFreq(QString mode, Frequency freq);
+    void setBandsToolTip();
+    void setPresetFreqToolTip(QString mode);
+    void setPrevFreqToolTip(QString mode);
+
 signals:
-void sendPresetFreq(Frequency freq);
+    void sendPresetFreq(Frequency freq);
+    void sendBandChange(QString band);
 
 private slots:
     void onBandSelButtonPressed(QToolButton *button);
@@ -73,6 +87,9 @@ private slots:
     void onVhfSelButtonPressed();
     void onMwSelButtonPressed();
 
+    void onPresetFreqRadButPressed();
+    void onPrevFreqRadButPressed();
+    void onBandOnlyRadButPressed();
 private:
 
     QToolButton *hfSelBut = nullptr;
@@ -126,6 +143,10 @@ private:
     void clearAllButtonLabels();
     void setButtonsToBandType(QString bandType);
     void removeAllButtons();
+    bool preSetFreqRadButIsChecked();
+    bool prevFreqRadButIsChecked();
+    bool bandOnlyRadButIsChecked();
+    void setBandSelButtonsFromMode(QString curMode);
 };
 
 #endif // BANDSELBUTTONS_H

@@ -574,6 +574,7 @@ void RigControlFrame::setFreq(Frequency freq)
     checkContestBandMatch(freq);        // to show error on panel
     displayFreqOnFreqEditDisplay(freq);
     bandSelButtons->selectButtonGroupAndActiveBand(freq);
+    bandSelButtons->setPreviousFreq(curMode, freq);
     curFreq = freq;
     emit setFreqDisplay(freq, legalFreq);
 }
@@ -1146,7 +1147,7 @@ void RigControlFrame::setMode(QString m)
                        mgmLabelVisible(false);
                     }
                     setFreqStepCombo(curMode);
-                   return;
+                    return;
                 }
         }
 
@@ -1576,6 +1577,9 @@ int RigControlFrame::setBandSelButtonFromFreq(const Frequency &freq)
     traceMsg(QString("setBandSelButtonFromFreq retCode = %1").arg(retCode));
     return retCode;
 }
+
+
+
 
 /*
 int RigControlFrame::setBandSelComboIndex(QString band)

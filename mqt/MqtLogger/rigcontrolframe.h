@@ -303,6 +303,7 @@ private:
     bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);
     void initBandSelButtons();
+
 };
 
 

@@ -90,10 +90,6 @@ void ClusterMainWindow::doStartup()
 
 
     spotsList.clear();
-    //getSpotsTimer = new QTimer();
-    //connect(getSpotsTimer, SIGNAL(timeout()), this, SLOT(getSpotsFromDisplayQueue()));
-    //getSpotsTimer->start(1000);
-
 
     setWindowTitle(tr("Minos Cluster Server"));
     status = new QLabel;
@@ -126,7 +122,6 @@ void ClusterMainWindow::doStartup()
     if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
     {
         ui->testSpotsPb->setVisible(true);
-        ui->testSpotsLab->setVisible(true);
         connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
         spotTestTimer = new QTimer();
         connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(onSpotTestTimerTimeOut()));
@@ -134,7 +129,7 @@ void ClusterMainWindow::doStartup()
     else
     {
         ui->testSpotsPb->setVisible(false);
-        ui->testSpotsLab->setVisible(false);
+
     }
 
 #endif
@@ -204,7 +199,7 @@ void ClusterMainWindow::doStartup()
 
 
 
-    dxSpotProxyModel = new DxSpotSortFilterProxyModel(filterSettings);
+    dxSpotProxyModel = new DxSpotSortFilterProxyModel(&filterSettings);
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
 
@@ -320,6 +315,7 @@ void ClusterMainWindow::doStartup()
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
+    setHF(false);
     readBandFilterSettings();
     loadBandFilterSettingsToTab();
 
@@ -328,19 +324,6 @@ void ClusterMainWindow::doStartup()
     connect(statusTimer, SIGNAL(timeout()), this, SLOT(handleStatusTimer()));
     statusTimer->start(STATUS_TIMER_DUR);
 
-    askQraData.clear();
-
-    askQraTimer = new QTimer(this);
-    connect(askQraTimer, SIGNAL(timeout()), this, SLOT(handAskQraTimer()));
-    askQraTimer->start(ASKQRA_QUEUE_TIMER_PERIOD);
-
-    askQraTimeout = new QTimer(this);
-    connect(askQraTimeout, SIGNAL(timeout()), this, SLOT(handleAskQraTimeout()));
-
-
-
-    //testQrzTimeout = new QTimer(this);
-    //connect(testQrzTimeout, SIGNAL(timeout()), this, SLOT(handleTestQrzTimeout()));
 
     pingClusterNodeTimer = new QTimer(this);
     connect(pingClusterNodeTimer, SIGNAL(timeout()), this, SLOT(handlePingClusterNodeTimeout()));
@@ -373,9 +356,9 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
 
-    //initFilterCheckBoxs();
 
-    setHF(false);
+
+
 
 }
 
@@ -958,7 +941,7 @@ void ClusterMainWindow::parseDX(const QString txt)
     buf = txt;
 
     int retCode = SPOT_OK;
-    QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
+    QSharedPointer<ClusterSpotData> newSpot; //= QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
     QString line;
     if (loginSuccess)
@@ -990,61 +973,6 @@ void ClusterMainWindow::parseDX(const QString txt)
                         processNewSpot(newSpot);
                     }
                 }
-                // look for qrz info
-
-                else if (askQraData.getAskQrz() && line.contains("qrz"))
-                {
-
-                    retCode = getQrzReply(line);        // not using retCode here...
-                    if (!qrzInfo.getGotAllData())
-                    {
-                        // still waiting
-                        trace(QString("ParseDx - waiting for qrzInfo for askcallsign = %1, spot callsign = %2").arg(askQraData.getAskCallsign()).arg(spotWaitingForQraFromNode->getDxCallStr()));
-                    }
-                    else
-                    {
-                        // got all the data
-                        trace(QString("ParseDx - got all the data from qrz for callsign = %1, spot callsign = %2").arg(qrzInfo.getCall()).arg(spotWaitingForQraFromNode->getDxCallStr()));
-
-                        newSpot = spotWaitingForQraFromNode;
-
-                        if (qrzInfo.getError())
-                        {
-                            trace(QString("ParseDx - qrzInfo error no data found for callsign = %1, lookup using prefix").arg(qrzInfo.getCall()));
-                            // asking qrz via node didn't give qra, use prefix
-                            // let's lookup using prefix
-                            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
-                            newSpot->setDxLocatorIsFromNode(true);
-                        }
-                        else if (qrzInfo.getCall() == askQraData.getAskCallsign())
-                        {
-
-                            trace(QString("ParseDx - qrz info matches waiting callsign = %1").arg(askQraData.getAskCallsign()));
-
-
-                            trace(QString("ParseDx - qrzInfo no error, add locator to spot = %1").arg(qrzInfo.getGrid()));
-
-                            newSpot->setDxLocator(qrzInfo.getGrid());
-                            newSpot->setDxLocatorIsFromNode(true);
-
-                         }
-                         else
-                         {
-                              trace(QString("ParseDx - QrzInfo call = %1, does not match waiting call %2").arg(qrzInfo.getCall()).arg(askQraData.getAskCallsign()));
-                         }
-
-                        //spotListNoQra.remove(qrzInfo.getCall());
-                        spotWaitingForQraFromNode.clear();
-                        qrzInfo.clear();
-                        askQraData.clear();
-                        //getQrzInfo = false;
-                        retCode = SPOT_OK;
-
-                        processNewSpot(newSpot);
-
-                    }
-
-                }
 
             }
        } while (!line.isNull());
@@ -1068,43 +996,34 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
     if (timeToLive == 0 || (timeToLive > 0 && !spotTimedOut(newSpot->getRxTime(), timeToLive)))
     {
         trace(QString("ProcessNewSpot: Spot within timeToLive"));
-        // does the spot have a dxLocator
-        if (newSpot->getDxLocator().isEmpty() && (newSpot->getBandType() == "VHF" || newSpot->getBandType() == "MWAVE"))
+
+        if (currentUserCallsign != newSpot->getSpotterCallStr())
         {
-            // queue to ask Qrz for locator, only for VHF/UHF spots
-            trace(QString("ProcessNewSpot: No DxCall locator, queue to ask qrz call = %1").arg(newSpot->getDxCallStr()));
-            spotListNoQra.append(newSpot);
+            // send spot to clients if spotter isn't this station
+            trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot->getDxCallStr()));
+            sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(newSpot, setupCluster->getTimeToLive())));
+
         }
         else
         {
-            if (currentUserCallsign != newSpot->getSpotterCallStr())
-            {
-                // send spot to clients if spotter isn't this station
-                trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot->getDxCallStr()));
-                sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(newSpot, setupCluster->getTimeToLive())));
-
-            }
-            else
-            {
-                trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
-            }
+            trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
+        }
 /*
-            // is spot already in the display list?
-            for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
+        // is spot already in the display list?
+        for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
+        {
+            if (*dxSpotDataModel->getSpotData(i) == newSpot)
             {
-                if (*dxSpotDataModel->getSpotData(i) == newSpot)
-                {
-                    trace(QString("Spot Call = %1, already in display, skip").arg(newSpot.getDxCall().realCall));
-                    return;
-                }
+                trace(QString("Spot Call = %1, already in display, skip").arg(newSpot.getDxCall().realCall));
+                return;
             }
+        }
 
 */
 
-            trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
-            spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
+        trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
+        spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
 
-        }
     }
     else
     {
@@ -1112,165 +1031,6 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
     }
 
 
-}
-
-
-void ClusterMainWindow::handAskQraTimer()
-{
-
-
-    if (!spotListNoQra.isEmpty() && !askQraData.getAskQrz())
-    {
-
-           spotWaitingForQraFromNode = spotListNoQra.first();
-           spotListNoQra.removeFirst();
-           trace(QString("Get QRA for callsign %1").arg(spotWaitingForQraFromNode->getDxCallStr()));
-
-           // use call to get QRA from node QRZ command
-           askQraData.setAskCallsign(spotWaitingForQraFromNode->getDxCall().realCall);
-           // flag we are asking QRZ
-           trace(QString("Get QRA from node with QRA command, callsign = %1").arg(askQraData.getAskCallsign()));
-           askQraData.setAskQrz(true);
-           askQraTimeout->start(ASKQRA_TIMEOUT);
-           txText(dxClusterCommand->showQRZMsg(askQraData.getAskCallsign()));
-
-
-     }
-
-}
-
-
-void ClusterMainWindow::handleAskQraTimeout()
-{
-
-    askQraTimeout->stop();
-    trace(QString("handleAsKQraTimeout: timeout expired for callsign = %1").arg(askQraData.getAskCallsign()));
-
-
-}
-
-
-
-
-int ClusterMainWindow::getQrzReply(QString &line)
-{
-    if (line.contains("Error"))
-    {
-        // callsign not found
-        QStringList sl = line.split(':');
-        if (sl.count() == 3)
-        {
-            qrzInfo.setCall(sl[2]);
-            qrzInfo.setError(true);
-            qrzInfo.setGotAllData(true);
-        }
-        return SPOT_OK;
-    }
-
-    else if (line.contains("call") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setCall(sl[1]);
-            qrzInfo.setFound(true);
-
-        }
-    }
-    else if (line.contains("ADIF") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setAdif(sl[1]);
-
-        }
-    }
-    else if (line.contains("fname") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setFname(sl[1]);
-
-        }
-    }
-    else if (line.contains("name") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setName(sl[1]);
-
-        }
-    }
-    else if (line.contains("addr2") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setAddr2(sl[1]);
-
-        }
-    }
-    else if (line.contains("country") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setCountry(sl[1]);
-
-        }
-    }
-    else if (line.contains("lat") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setLat(sl[1]);
-
-        }
-    }
-    else if (line.contains("lon") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setLon(sl[1]);
-
-        }
-    }
-    else if (line.contains("grid") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 2)
-        {
-            qrzInfo.setGrid(sl[1].toUpper());
-
-        }
-    }
-    else if (line.contains("moddate") && line.contains(':'))
-    {
-        QStringList sl = line.split(':');
-        if (sl.count() == 4)
-        {
-            QString modDate = sl[1] + ":" + sl[2] + ":" + sl[3];
-            qrzInfo.setModdate(modDate);
-        }
-    }
-    else if (line.contains("www.qrz.com"))
-    {
-        qrzInfo.setGotAllData(true);
-        if (qrzInfo.getCall().isEmpty())
-        {
-            // some sites return the qrz.com, but not the data
-            trace(QString("getQrzReply: end message, but no data for callsign = %1").arg(spotWaitingForQraFromNode->getDxCallStr()));
-            qrzInfo.setError(true);
-        }
-        return SPOT_OK;
-    }
-
-    return ASKQRZ_FAILED_QRA;
 }
 
 
@@ -1387,9 +1147,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setDxLocator(dxLocator);
 
 
-        if (enableHFSpots && newSpot->getBandType() == "HF" && newSpot->getDxLocator().isEmpty())
+        if (/*enableHFSpots && newSpot->getBandType() == "HF" && */newSpot->getDxLocator().isEmpty())
         {
-            // get locator based up prefix
+            // get locator based upon prefix
             newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
             newSpot->setDxLocatorIsFromNode(true);
         }
@@ -1453,7 +1213,6 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<Cluster
 
     for (int i = 0; i < SepIdx1.count(); i++)
     {
-        QString str;
         if (SepIdx2[i] - SepIdx1[i] > 0)
         {
             extractStr += txt.mid(SepIdx1[i], SepIdx2[i] - SepIdx1[i]);
@@ -1664,25 +1423,23 @@ void ClusterMainWindow::getSpotsFromDisplayQueue()
     {
         trace(QString("GetSpotsFromDisplayQueue: spots available = %1").arg(spotsList.count()));
         // get spots from queue
-        int slsize= spotsList.count();
-        for (int i = slsize -1 ; i > -1; i--)
+        while (!spotsList.empty())
         {
-
             if (purgeSpotFlag)
             {
                 trace(QString("GetSpotsFromDisplayQueue: PurgeFlag On"));
                 return;
             }
 
-            dxSpotDataModel->rowData = spotsList[i];
-            spotsList.remove(i);
-            //dxSpotDataModel->insertRows(0, 1);
+            dxSpotDataModel->rowData = spotsList.last();
+            spotsList.removeLast();
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             trace(QString("GetSpotsFromDisplayQueue: finished loop"));
 
 
         }
+
 
         trace(QString("GetSpotsFromDisplayQueue: finished"));
     }
@@ -2237,12 +1994,12 @@ void ClusterMainWindow::initUserCommandButtons()
 
         userVHFUHFCmdButton.append(new PresetButton(ui_userVHFUHFCommandButtons[i], i, vhfUhfCommandShortCutKeyList[i], vhfUhfMenuShortCutKeyList[i], buttonLabels));
 
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userVhfUhfCmdButtonRead(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showVhfUhfUserCmdButtonMenu(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userVhfUhfCmdButtonRead(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userVhfUhfCmdButtonEdit(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userVhfUhfCmdButtonWrite(i);});
-        connect(userVHFUHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userVhfUhfCmdButtonClear(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showVhfUhfUserCmdButtonMenu(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetReadAction, this, [this, i]() {userVhfUhfCmdButtonRead(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetEditAction, this, [this, i]() {userVhfUhfCmdButtonEdit(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetWriteAction, this, [this, i]() {userVhfUhfCmdButtonWrite(i);});
+        connect(userVHFUHFCmdButton[i], &PresetButton::presetClearAction, this, [this, i]() {userVhfUhfCmdButtonClear(i);});
 
 
 
@@ -2254,12 +2011,12 @@ void ClusterMainWindow::initUserCommandButtons()
 
         userHFCmdButton.append(new PresetButton(ui_userHFCommandButtons[i], i, hfCommandShortCutKeyList[i], hfMenuShortCutKeyList[i], buttonLabels));
 
-        connect(userHFCmdButton[i], &PresetButton::presetShortCutRecall, [this, i]() {userHfCmdButtonRead(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, [this, i]() {showHfUserCmdButtonMenu(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetReadAction, [this, i]() {userHfCmdButtonRead(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetEditAction, [this, i]() {userHfCmdButtonEdit(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetWriteAction, [this, i]() {userHfCmdButtonWrite(i);});
-        connect(userHFCmdButton[i], &PresetButton::presetClearAction, [this, i]() {userHfCmdButtonClear(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetShortCutRecall, this, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetShiftShortCutRecall, this, [this, i]() {showHfUserCmdButtonMenu(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetReadAction, this, [this, i]() {userHfCmdButtonRead(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetEditAction, this, [this, i]() {userHfCmdButtonEdit(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetWriteAction, this, [this, i]() {userHfCmdButtonWrite(i);});
+        connect(userHFCmdButton[i], &PresetButton::presetClearAction, this, [this, i]() {userHfCmdButtonClear(i);});
 
 
     }
@@ -2659,7 +2416,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
     for (int i = 0; i < bandChkBoxList.count(); i++)
     {
-        connect(bandChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onbandCheckBoxStateChanged(i, state);});
+        connect(bandChkBoxList[i], &QCheckBox::clicked, this, [=](bool state) {onbandCheckBoxStateChanged(i, state);});
 
     }
 
@@ -2675,23 +2432,47 @@ void ClusterMainWindow::initFilterCheckBoxs()
 
 void ClusterMainWindow::loadBandFilterSettingsToTab()
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+        if (hfFlag)
+        {
+           bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+               bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+            }
+        }
+
     }
 }
 
 
 void ClusterMainWindow::saveBandFilterSettings()
 {
-    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("BandFilter");
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("DXSPOT_Display_BandFilter");
 
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        config.setValue(QString("bandFilter_+%1").arg(band), filterSettings.getBandFilter(band));
+        QString iniBandName = band;
+        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        if (hfFlag)
+        {
+            config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
+            }
+        }
+
     }
 
     config.endGroup();
@@ -2701,24 +2482,37 @@ void ClusterMainWindow::saveBandFilterSettings()
 
 void ClusterMainWindow::readBandFilterSettings()
 {
-    QSettings config(CLUSTER_COMMANDS, QSettings::IniFormat);
-    config.beginGroup("BandFilter");
-    for (auto const &b:bands)
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("DXSPOT_Display_BandFilter");
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        filterSettings.setBandFilter(band, config.value(QString("bandFilter_+%1").arg(band), true).toBool());
-
+        QString iniBandName = band;
+        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        if (hfFlag)
+        {
+            filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
+        }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
+            }
+        }
     }
 
     config.endGroup();
 }
 
 
-void ClusterMainWindow::setHF(bool hfFlag)
+void ClusterMainWindow::setHF(bool hfFlag_)
 {
     QString hfTabName = "HF User Commands";
 
-    if (hfFlag)
+    hfFlag = hfFlag_;
+
+    if (hfFlag_)
     {
        // set hf Tab "visible"
        if (ui->clusterTab->tabText(0) != hfTabName)
@@ -2736,14 +2530,14 @@ void ClusterMainWindow::setHF(bool hfFlag)
     else
     {
         // set hf tab "invisible"
-        QString n = ui->clusterTab->tabText(0);
+        //QString n = ui->clusterTab->tabText(0);
         if (ui->clusterTab->tabText(0) == hfTabName)
         {
             ui->clusterTab->removeTab(0);
         }
 
         // clear the HF Bandfilters
-        for (auto const &b:bands)
+        foreach (auto const &b, bands)
         {
             if (b->getType() == HF_BANDTYPE)
             {
@@ -2764,7 +2558,7 @@ void ClusterMainWindow::setHF(bool hfFlag)
 void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 {
 
-    for(auto const &b: bands)
+    foreach(auto const &b, bands)
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2778,20 +2572,35 @@ void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 
 }
 
-void ClusterMainWindow::onbandCheckBoxStateChanged(int i, int state)
+void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
 {
     Q_UNUSED(i)
     Q_UNUSED(state)
     bool changed = false;
-    for (auto const &b: bands)
+    foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
 
-        if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+        if (hfFlag)
         {
-            filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
-            changed = true;
+            if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+            {
+                filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+                changed = true;
+            }
         }
+        else
+        {
+            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
+            {
+                if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
+                {
+                    filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+                    changed = true;
+                }
+            }
+        }
+
 
         if (changed)
         {
@@ -2823,7 +2632,7 @@ void ClusterMainWindow::onHfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == HF_BANDTYPE)
         {
@@ -2859,7 +2668,7 @@ void ClusterMainWindow::onVhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllVHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == VHF_BANDTYPE)
         {
@@ -2889,7 +2698,7 @@ void ClusterMainWindow::onUhfSelectBandPbPressed()
 
 void ClusterMainWindow::setAllUHFBandsFilter(bool state)
 {
-    for (auto const &b:bands)
+    foreach (auto const &b, bands)
     {
         if (b->getType() == MW_BANDTYPE)
         {
@@ -2990,35 +2799,38 @@ void ClusterMainWindow::clusterNodeCommandsShortcutHelp()
                                 "C - Clear cmd\n"));
 }
 
+DxSpotSortFilterProxyModel::DxSpotSortFilterProxyModel(ClusterClientFilterSettings *filterSettings_)
+{
+    filterSettings = filterSettings_;
+}
 
 bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
     bool match_band = matchBand(sourceRow);
-    //bool match_distance = matchDistance(sourceRow);
-    //bool match_mode = matchMode(sourceRow);
-    bool matchFlag = match_band /*&& match_distance && match_mode*/;
+
     if (traceDebugFlag)
     {
-        trace(QString("filter - callsign = %1, matchBand = %2, matchFlag = %3")
+        trace(QString("filterAcceptsRow: callsign = %1, matchBand = %2")
             .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
-            .arg(match_band ? "True" : "False")
-            //.arg(match_distance ? "True" : "False")
-            //.arg(match_mode ? "True" : "False")
-
-            .arg(matchFlag ? "True" : "False"));
-
-    }
-    return matchFlag;
+            .arg(match_band ? "True" : "False"));
+   }
+    return match_band;
 }
 
 bool DxSpotSortFilterProxyModel::matchBand(int sourceRow) const
 {
 
     QString band = sourceModel()->data(sourceModel()->index(sourceRow, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+    if (traceDebugFlag)
+    {
+        trace(QString("matchBand: band = %1").arg(band));
+    }
 
-    return filterSettings.getBandFilter(band);
+    return filterSettings->getBandFilter(band);
 
 }
+
+
 
 
 
@@ -3109,7 +2921,7 @@ void ClusterMainWindow::onSpotTestTimerTimeOut()
         {
             minStr = QString("%1").arg(time.minute());
         }
-        timeStr = QString("   %1%2Z").arg(hourStr).arg(minStr);
+        timeStr = QString("   %1%2Z").arg(hourStr, minStr);
         spot = spot.append(timeStr).append('\n');
         parseDX(spot);
         spotNum++;
