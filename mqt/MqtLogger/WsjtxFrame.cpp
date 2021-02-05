@@ -1046,6 +1046,19 @@ void WsjtxFrame::on_testButton_clicked()
             decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ RR73", false, true);
             decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC 73", false, true);
 
+            // test for Ken
+
+            //One thing I did notice was the predicted scores for unworked stations.
+            //It said 17 for IO83, 22 for IO93, and 78 for IO92 - they seem radically wrong.
+
+            //In my log G3YDY (JO01) is shown as 243Km and G4RRA (IO80) is shown as 297Km.
+            //The robot works out ODX as G3YDY at 351Km
+
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G1FFF IO83", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G2FFF IO93", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3FFF IO92", false, true);
+
             update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");

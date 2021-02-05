@@ -69,6 +69,7 @@ private slots:
     void on_minosViewScrolled();
 
     void on_LocView_clicked(const QModelIndex &index);
+    void on_LocView_doubleClicked(const QModelIndex &index);
 };
 
 #endif // LOCFRAME_H
