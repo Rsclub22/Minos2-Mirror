@@ -2074,7 +2074,7 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
                     if (nodeConnected)
                     {
                         d[1].append('\n');
-                        trace(QString("UserCmdButton %1 Read - Send Command to cluster = %2").arg(tabSelected).arg(d[1]));
+                        trace(QString("UserCmdButton %1 Read - Send Command to cluster = %2").arg(tabSelected, d[1]));
 
                         if (setupCluster->getRunEndFileFlag())
                         {
@@ -2098,16 +2098,15 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
-    {
-        userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
-    }
+
+   userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+
 }
 
 
 void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
     }
@@ -2118,7 +2117,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
 {
 
 
-    trace(QString("UserCmdButton %1 Edit Selected = %2").arg(tabSelected).arg(QString::number(buttonNumber + 1)));
+    trace(QString("UserCmdButton %1 Edit Selected = %2").arg(tabSelected, QString::number(buttonNumber + 1)));
     if (!userCommands[buttonNumber].isEmpty() && buttonNumber < userVHFUHFCmdButton.count())
     {
 
@@ -2130,7 +2129,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
                 ClusterUserCommandData editData(d[0], d[1]);
                 ClusterUserCommandData curData(d[0], d[1]);
 
-                trace(QString("UserCmdButton %1 - Edit Data - name = %2, cmdString = %3").arg(tabSelected).arg(d[0]).arg(d[1]));
+                trace(QString("UserCmdButton %1 - Edit Data - name = %2, cmdString = %3").arg(tabSelected, d[0], d[1]));
                 userClusterCommandDialog cmdStringDialog(this, tabSelected, buttonNumber, &editData, &curData, QString("Edit"));
 
 
@@ -2138,7 +2137,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
                 {
                     if (editData.name != curData.name || editData.cmdString != curData.cmdString)
                     {
-                        trace(QString("UserCmdButton - Saving Edited Data - name = %1, cmdString = %2").arg(editData.name).arg(editData.cmdString));
+                        trace(QString("UserCmdButton - Saving Edited Data - name = %1, cmdString = %2").arg(editData.name, editData.cmdString));
                         saveUserCommandString(tabSelected, buttonNumber, editData);
                         userCommandButtonUpdate(tabSelected, buttonNumber, editData);
                     }
@@ -2152,16 +2151,15 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
 
 void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
-    {
-        userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
-    }
+
+    userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+
 }
 
 
 void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
     }
@@ -2198,15 +2196,13 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
 void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
-    {
-        userCmdButtonWrite("VHF/UHF", buttonNumber);
-    }
+    userCmdButtonWrite("VHF/UHF", buttonNumber);
+
 }
 
 void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonWrite("HF", buttonNumber);
     }
@@ -2216,7 +2212,7 @@ void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 
 void ClusterMainWindow::userCmdButtonWrite(QString tabSelected, int buttonNumber)
 {
-    trace(QString("UserCommand %1 New Selected = %2").arg(tabSelected).arg(QString::number(buttonNumber +1)));
+    trace(QString("UserCommand %1 New Selected = %2").arg(tabSelected, QString::number(buttonNumber +1)));
     if (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count())
     {
 
@@ -2229,7 +2225,7 @@ void ClusterMainWindow::userCmdButtonWrite(QString tabSelected, int buttonNumber
         {
             if (editData.name != curData.name || editData.cmdString != curData.cmdString)
             {
-                trace(QString("%1 UserCommand New Selected - Saving new data name = %2, cmdString = %3").arg(tabSelected).arg(editData.name).arg(editData.cmdString));
+                trace(QString("%1 UserCommand New Selected - Saving new data name = %2, cmdString = %3").arg(tabSelected, editData.name, editData.cmdString));
                 saveUserCommandString(tabSelected, buttonNumber, editData);
                 userCommandButtonUpdate(tabSelected, buttonNumber, editData);
             }
