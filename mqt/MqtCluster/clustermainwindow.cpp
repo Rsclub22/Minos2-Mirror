@@ -941,7 +941,6 @@ void ClusterMainWindow::parseDX(const QString txt)
     buf = txt;
 
     int retCode = SPOT_OK;
-    QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
 
     QString line;
     if (loginSuccess)
@@ -950,6 +949,7 @@ void ClusterMainWindow::parseDX(const QString txt)
 
         do
         {
+            QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
             line = in.readLine();
             trace(QString("ParseDx - readLine = %1").arg(line));
             if (!line.isEmpty())
@@ -1085,7 +1085,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
 
-        if (newSpot->getBand() == "HF" && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
         {
             // discard spot as it is HF
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
@@ -1147,10 +1147,11 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setDxLocator(dxLocator);
 
 
-        if (/*enableHFSpots && newSpot->getBandType() == "HF" && */newSpot->getDxLocator().isEmpty())
+        if (newSpot->getDxLocator().isEmpty())
         {
             // get locator based upon prefix
             newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            trace(QString("Unpack Show DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
             newSpot->setDxLocatorIsFromNode(true);
         }
 
@@ -1188,7 +1189,6 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<Cluster
     QList<int> SepIdx1;
     QList<int> SepIdx2;
     QStringList extractStr;
-    //bool foundCall = false;
 
 
     if (((countSep1 - countSep2) == 0) && countSep1 >= 1 && countSep2 >= 1)
@@ -1475,10 +1475,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
 
-        if (newSpot->getBand() == "HF" && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
         {
             // discard spot as it is HF
-            trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
+            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
@@ -1562,10 +1562,11 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setDxLocator(dxLocator);
 
 
-        if (enableHFSpots && newSpot->getBandType() == "HF" && newSpot->getDxLocator().isEmpty())
+        if (newSpot->getDxLocator().isEmpty())
         {
             // get locator based up prefix
             newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            trace(QString("Unpack DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
             newSpot->setDxLocatorIsFromNode(true);
         }
 
@@ -1672,7 +1673,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
         dxLoc = comment.mid(firstIndex, 4).toUpper();
     }
 
-    trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc).arg(spotLoc));
+    trace(QString("Extracted dxLoc = %1 spotLoc= %2").arg(dxLoc, spotLoc));
 
 }
 
@@ -1869,10 +1870,10 @@ QString ClusterMainWindow::assembleSpotForDXCluster(Frequency freq, QString call
     sentLoc = loc;
 
 
-    QString spotmsg = QString("DX %1 %2").arg(call).arg(QString::number(f));
+    QString spotmsg = QString("DX %1 %2").arg(call, QString::number(f));
     if (!loc.isEmpty())
     {
-        spotmsg = QString("%1 %2").arg(spotmsg).arg(sentComment);
+        spotmsg = QString("%1 %2").arg(spotmsg, sentComment);
     }
 
     return spotmsg + QChar('\n');
@@ -2244,13 +2245,13 @@ void ClusterMainWindow::userCommandButtonUpdate(QString tabSelected, int buttonN
 {
     if (tabSelected == "VHF/UHF")
     {
-        userVHFUHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+        userVHFUHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), buttonData.name) );
         // update store
         vhfUhfUserCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
     }
     else if (tabSelected == "HF")
     {
-        userHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1)).arg(buttonData.name) );
+        userHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), buttonData.name) );
         // update store
         hfUserCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
     }
@@ -2336,10 +2337,12 @@ void ClusterMainWindow::readUserCommandStrings()
 void ClusterMainWindow::updateToNewVhfUhfGroupKey()
 {
     QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
+
     config.beginGroup("UserCommandStrings");
-    if (userVHFUHFCmdButton.count() > 0)
+    QStringList keys = config.allKeys();
+    if (keys.count() > 0)
     {
-        for (int i = 0; i < userVHFUHFCmdButton.count(); i++)
+        for (int i = 0; i < keys.count(); i++)
         {
             vhfUhfUserCommands.append(config.value(QString("command%1").arg(QString::number(i+1)), "").toString());
         }
@@ -2373,9 +2376,8 @@ void ClusterMainWindow::updateToNewVhfUhfGroupKey()
 void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData& buttonData)
 {
 
-    QString cmd = buttonData.name + ":" + buttonData.cmdString;
     QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
-    if (tabSelected == "VHF/UHF")
+    if (tabSelected == "VHFUHF")
     {
        config.beginGroup("VHF_UHF_UserCommandStrings");
     }
