@@ -2510,19 +2510,21 @@ void ClusterMainWindow::readBandFilterSettings()
 
 void ClusterMainWindow::setHF(bool hfFlag_)
 {
-    QString hfTabName = "HF User Commands";
+    QString hfTabText = "HF User Commands";
+    QString hfTabName = "hfUserCommands";
 
     hfFlag = hfFlag_;
 
     if (hfFlag_)
     {
-       // set hf Tab "visible"
-       if (ui->clusterTab->tabText(0) != hfTabName)
+       // set hf Tab "visible" Can be replaced with Qt5.15 setTabInvisible - not supported yet in Linux
+        //QString t = ui->clusterTab->tabText(0);
+       if (ui->clusterTab->tabText(0) != hfTabText)
        {
            QWidget *hfTab = ui->clusterTab->findChild<QWidget *>(hfTabName);
            if (hfTab)
            {
-               ui->clusterTab->insertTab(0, hfTab, hfTabName);
+               ui->clusterTab->insertTab(0, hfTab, hfTabText);
            }
        }
        // ensure hf Settings are correct
@@ -2533,7 +2535,7 @@ void ClusterMainWindow::setHF(bool hfFlag_)
     {
         // set hf tab "invisible"
         //QString n = ui->clusterTab->tabText(0);
-        if (ui->clusterTab->tabText(0) == hfTabName)
+        if (ui->clusterTab->tabText(0) == hfTabText)
         {
             ui->clusterTab->removeTab(0);
         }
