@@ -10,6 +10,10 @@
 
 static QString lConv(const QString &tlsq, int col, int row)
 {
+    if (tlsq.isEmpty())
+    {
+        return tlsq;
+    }
     //convert column and row to an actual display
    char cvxl = tlsq[0].toLatin1();
    char cvyl = tlsq[1].toLatin1();
@@ -105,12 +109,12 @@ static QString l_sub(const QString &sq, int x, int y)
    QString res = QString(cvxl) + cvyl + cvxn + cvyn;
    return res;
 }
-bool oldAL (QString tl, QString oldTl, bool &above, bool &left)
+bool oldAL (QString tl, QString oldTl)
 {
     // is oldTl above/left of tl?
 
-    above = false;
-    left = false;
+    bool above = false;
+    bool left = false;
 
     char oldxl = oldTl[0].toLatin1();
     char oldyl = oldTl[1].toLatin1();
@@ -146,10 +150,36 @@ bool oldAL (QString tl, QString oldTl, bool &above, bool &left)
         if (oldyn > yn) // yn increments to S
             above = true;
     }
-    return left ||  above;
+    return left || above;
 }
+int rowSpan(const QString &tl, const QString &oldTl)
+{
+    int oldyl = oldTl[1].toLatin1();
+    int oldyn = oldTl[3].toLatin1();
 
+    int yl = tl[1].toLatin1();
+    int yn = tl[3].toLatin1();
 
+     int curRow = (yl - 'A') * 10 + yn;
+     int oldRow = (oldyl - 'A') * 10 + oldyn;
+
+     int span = std::abs(curRow - oldRow);
+     return span;
+}
+int colSpan(const QString &tl, const QString &oldTl)
+{
+    int oldxl = oldTl[0].toLatin1();
+    int oldxn = oldTl[2].toLatin1();
+
+    int xl = tl[0].toLatin1();
+    int xn = tl[2].toLatin1();
+
+     int curCol = (xl - 'A') * 10 + xn;
+     int oldCol = (oldxl - 'A') * 10 + oldxn;
+
+     int span = std::abs(curCol - oldCol);
+     return span;
+}
 LocFrame::LocFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::LocFrame), ct(nullptr)
@@ -193,6 +223,7 @@ void LocFrame::reInitialiseLocators()
     QString oldTl = model->getTl();
     int oldRows = model->rowCount();
     int oldCols = model->columnCount();
+    QString oldBr = lConv(oldTl, oldCols, oldRows);
 
     model->beginReset();
     model->locMap.clear();
@@ -255,14 +286,23 @@ void LocFrame::reInitialiseLocators()
     int cols = (ELoc[0].toLatin1() - WLoc[0].toLatin1()) * 10 + (ELoc[1].toLatin1() - WLoc[1].toLatin1()) + 1;
 
     QString tl = QString(WLoc[0]) + NLoc[0] + WLoc[1] + NLoc[1];
+    QString br = lConv(tl, cols, rows);
 
-    bool xxabove;
-    bool xxleft;
-    bool xxl;
-    xxl = oldAL(tl, oldTl, xxabove, xxleft);
-    if (xxl)
+    if (!oldTl.isEmpty())
     {
+        if (oldAL(tl, oldTl))
+        {
+            rows += rowSpan(tl, oldTl);
+            cols += colSpan(tl, oldTl);
+            tl = oldTl;
+        }
 
+        if (oldAL( oldBr, br))  // if br is above/left
+        {
+            rows += rowSpan(br, oldBr);
+            cols += colSpan(br, oldBr);
+        }
+        br = lConv(tl, cols, rows);
     }
 
     model->rows = rows;
