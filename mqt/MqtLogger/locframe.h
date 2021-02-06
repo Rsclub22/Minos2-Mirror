@@ -33,6 +33,7 @@ class LocGridModel: public QAbstractItemModel
         {
             return tlLoc;
         }
+        QString getBearing(QString disp) const;
 
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const Q_DECL_OVERRIDE;

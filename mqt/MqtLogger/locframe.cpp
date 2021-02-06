@@ -342,25 +342,7 @@ void LocFrame::on_LocView_clicked(const QModelIndex &index)
 
     QString disp = lConv(model->getTl(), index.column(), index.row());
 
-    QString brgbuff;
-
-    double lon = 0.0;
-    double lat = 0.0;
-
-    Locator loc;
-    loc.setLoc(disp);
-
-    int lres = lonlat( loc.getLoc(), lon, lat, true );
-    if ( lres == LOC_OK )
-    {
-       int brg;
-       double dist;
-
-       ct->disbeara( lon, lat, dist, brg );
-
-       int offset = ct->bearingOffset.getValue();
-       brgbuff = QString( "%1").arg( varBrg(brg + offset), 3);
-    }
+    QString brgbuff = model->getBearing(disp);
 
     MinosLoggerEvents::SendBrgStrToRot(brgbuff);
 }
@@ -399,6 +381,30 @@ LocGridModel::LocGridModel():ct(nullptr), rows(10), cols(10)
 {}
 LocGridModel::~LocGridModel()
 {
+}
+QString LocGridModel::getBearing(QString disp) const
+{
+    double lon = 0.0;
+    double lat = 0.0;
+
+    Locator loc;
+    loc.setLoc(disp);
+
+    QString brgbuff;
+
+    int lres = lonlat( loc.getLoc(), lon, lat, true );
+    if ( lres == LOC_OK )
+    {
+       int brg;
+       double dist;
+
+       ct->disbeara( lon, lat, dist, brg );
+
+       int offset = ct->bearingOffset.getValue();
+       brgbuff = QString( "%1").arg( varBrg(brg + offset), 3);
+    }
+
+    return brgbuff;
 }
 
 void LocGridModel::beginReset()
@@ -464,6 +470,14 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
         {
             return multhighlight.lighter(140);
         }
+    }
+    if (role == Qt::ToolTipRole)
+    {
+        QString brgbuff = getBearing(disp);
+
+        return tr("Single click to transfer the square centre bearing ( %1 ) to rotator control;\n"
+                  "Double click on an edge square to extend the area of the map."
+                ).arg(brgbuff.trimmed());
     }
     return QVariant();
 }
