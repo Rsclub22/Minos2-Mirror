@@ -2558,7 +2558,11 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
     doGJVEditChange(ui->LocEdit);
     doGJVEditChange(ui->QTHEdit);
 }
-
+void QSOLogFrame::transferFromWSJTX(QString call)
+{
+    ui->CallsignEdit->setText(call);
+    doGJVEditChange(ui->CallsignEdit);
+}
 void QSOLogFrame::sortUnfilledCatchupTime( )
 {
     if (contest && !contest->isReadOnly() && ((screenContact.contactFlags & TO_BE_ENTERED) || catchup))

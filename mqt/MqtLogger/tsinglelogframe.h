@@ -279,6 +279,7 @@ public:
     void setPauseRigControlUpdatesFlag(bool status);
     void buildFrame();
     bool doKeyPressEvent(QKeyEvent *event);
+    void transferFromWSJTX(QString call);
 };
 
 #endif // TSINGLELOGFRAME_H

@@ -119,6 +119,7 @@ private slots:
     void on_sectionMoved(int, int, int);
     void on_sectionResized(int, int, int);
     void on_configCQButton_clicked();
+    void on_decodes_table_view__clicked(const QModelIndex &index);
 };
 
 #endif // WSJTXFRAME_H

@@ -1197,6 +1197,10 @@ void TSingleLogFrame::on_ResendSpotsFromClusterCommand(resendFrameId frameId, QS
 }
 
 
+void TSingleLogFrame::transferFromWSJTX(QString call)
+{
+    GJVQSOLogFrame->transferFromWSJTX(call);
+}
 
 
 void TSingleLogFrame::transferDetails(memoryData::memData &m )
