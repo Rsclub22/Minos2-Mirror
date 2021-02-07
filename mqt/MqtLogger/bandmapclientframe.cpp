@@ -226,18 +226,18 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
 
 void BandmapClientFrame::on_resendClusterSpotSelected()
 {
-    if (ct  && contestBand != -1)
+    if (ct  && !contestBandStr.isEmpty())
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
 
 
 void BandmapClientFrame::requestSpots()
 {
-    if (ct && contestBand != -1)
+    if (ct && !contestBandStr.isEmpty())
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
 
@@ -782,7 +782,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             // check to see if spot is for this contest band
 
-            if (spotlist[DXBANDMASK].toInt() != contestBand)
+            if (spotlist[DXBANDSTR] != contestBandStr)
             {
                 return res;  // not for this contest band
             }
@@ -816,9 +816,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             res->setSpotDateTime(spotDateTime);
             res->setFreq(spotlist[DXFREQ]);
             res->setBand(spotlist[DXBANDSTR]);
-            res->setBandMask(spotlist[DXBANDMASK]);
             res->setMode(spotlist[DXMODESTR]);
-            res->setModeMask(spotlist[DXMODEMASK]);
             res->setDxCall(spotlist[DXCALL]);
             res->setDxCallWorked(callWorked);
             res->setDxLocator(spotlist[DXLOCATOR]);
@@ -1165,7 +1163,6 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
             f.setValue(spot->getFreq());
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, FREQ_COL_NUM ), f ,BMP_DataStoredRole);
             bandmapDataModel->setData(bandmapDataModel->index(rowNum, DXSPOT_MODE_COL_NUM ), spot->getMode() ,BMP_DataStoredRole);
-            bandmapDataModel->setData(bandmapDataModel->index(rowNum, DXMODEMASK_COL_NUM ), spot->getModeMask() ,BMP_DataStoredRole);
             bandmapDataModel->sortModel();
         }
     }
@@ -1618,11 +1615,9 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);
         spot->setMode(logModeStr);
-        spot->setModeMask(logModeMask);
         spot->setFreq(freq);
         spot->setBand(logBandStr);
-        spot->setBandMask(logBandMask);
-        spot->setDxCallWorked(true);
+         spot->setDxCallWorked(true);
         spot->setDxLocatorWorked(true);
         spot->setSpotDateTime(time);
         spot->setRunModeOn(runModeOn);
@@ -1678,7 +1673,6 @@ void BandmapClientFrame::setCQFreq()
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
-        spot->setModeMask(logModeMask);
         spot->setFreq(freq);
         spot->setBand(logBandStr);
         spot->setDxCallWorked(false);
@@ -1712,7 +1706,6 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         spot->setDxLocator("");
         spot->setDxBrg("");
         spot->setMode(logModeStr);
-        spot->setModeMask(logModeMask);
         spot->setFreq(_freq);
         spot->setBand(logBandStr);
         spot->setDxCallWorked(false);
@@ -1733,9 +1726,9 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
-        QString logBandMask;
+        QString logBandMask; // not using bandMask
         QString logModeStr;
-        QString logModeMask;
+        QString logModeMask; // not using modeMask
 
         getBand(bands, _freq, logBandStr, logBandMask);
         getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
@@ -1745,7 +1738,6 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         spot->setDxLocator(loc);
         spot->setDxBrg(brg);
         spot->setMode(logModeStr);
-        spot->setModeMask(logModeMask);
         spot->setFreq(_freq);
         spot->setBand(logBandStr);
         spot->setDxCallWorked(false);

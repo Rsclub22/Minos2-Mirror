@@ -200,18 +200,18 @@ void TSendDM::sendHfFlagToClusterServer(const bool state)
 }
 
 
-void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const QString &cmd, const int bandMask, const QString &uuid )
+void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const QString &cmd, const QString bandMask, const QString &uuid )
 {
 
     if (!clusterApp.isEmpty())
     {
-        traceMsg(QString("Send Request Spot Resend Command = %1, loggerUuid %2").arg(cmd).arg(uuid));
+        traceMsg(QString("Send Request Spot Resend Command = %1, loggerUuid %2").arg(cmd, uuid));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));
         QSharedPointer<RPCParam>logUuid(new RPCStringParam(uuid ));
         QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
-        QSharedPointer<RPCParam>bandmask(new RPCIntParam(bandMask));
+        QSharedPointer<RPCParam>bandmask(new RPCStringParam(bandMask));
         QSharedPointer<RPCParam>frameId(new RPCIntParam(id));
 
         st->addMember( sName, rpcConstants::paramName );
@@ -247,7 +247,7 @@ void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection d
 void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uuid)
 {
     // we should de-select the cached uuid on all rotator apps
-    traceMsg(QString("Change rotator selection to %1 %2").arg(name.toString()).arg(uuid));
+    traceMsg(QString("Change rotator selection to %1 %2").arg(name.toString(), uuid));
 
     PubSubName selected = rotatorCache.getSelected(loggerUuid);
 
@@ -262,7 +262,7 @@ void TSendDM::changeRotatorSelectionTo(const PubSubName &name, const QString &uu
 }
 void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
 {
-    traceMsg(QString("Send rotator selection to %1 %2").arg(s.toString()).arg(uuid));
+    traceMsg(QString("Send rotator selection to %1 %2").arg(s.toString(), uuid));
 
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -283,7 +283,7 @@ void TSendDM::changeRigSelectionTo(const PubSubName &name, const QString &band, 
 {
     // we should de-select the cached uuid on all rig apps
 
-    trace(QString("Change rig selection to name = %1, band = %2, freq = %3, mode = %4, uuid = %5").arg(name.toString()).arg(band).arg(freq.traceStr()).arg(mode).arg(uuid));
+    trace(QString("Change rig selection to name = %1, band = %2, freq = %3, mode = %4, uuid = %5").arg(name.toString(), band, freq.traceStr(), mode, uuid));
 
     PubSubName selected = rigCache.getSelected(loggerUuid);
 
@@ -337,7 +337,7 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr()).arg(tslf->getContest()->uuid));
+    traceMsg(QString("SendRigControlFreq = %1 uuid = %2").arg(freq.traceStr(), tslf->getContest()->uuid));
 }
 
 
@@ -359,7 +359,7 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigVocieMessageNum = %1 uuid = %2").arg(msgNum).arg(tslf->getContest()->uuid));
+    traceMsg(QString("SendRigVocieMessageNum = %1 uuid = %2").arg(msgNum, tslf->getContest()->uuid));
 }
 
 

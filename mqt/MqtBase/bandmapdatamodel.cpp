@@ -212,12 +212,6 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 d = bandmapSpot->getSentToMemory();
             break;
-            case DXBANDMASK_COL_NUM:
-                d = bandmapSpot->getBandMask();
-            break;
-            case DXMODEMASK_COL_NUM:
-                d = bandmapSpot->getModeMask();
-            break;
             case RXTIME_COL_NUM:
                 d = bandmapSpot->getRxTime();
             break;
@@ -313,12 +307,6 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 break;
             case COMMENT_COL_NUM:
                 bandmapSpot->setSpotComment(value.toString());
-                break;
-            case DXBANDMASK_COL_NUM:
-                bandmapSpot->setBandMask(value.toString());
-                break;
-            case DXMODEMASK_COL_NUM:
-                bandmapSpot->setModeMask(value.toString());
                 break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 bandmapSpot->setSentToMemory(value.toBool());

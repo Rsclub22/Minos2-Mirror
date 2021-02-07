@@ -61,10 +61,6 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
                     return tr("Loc");
                 case COMMENT_COL_NUM:
                     return tr("Comment");
-                case DXBANDMASK_COL_NUM:
-                    return tr("Band Mask");
-                case DXMODEMASK_COL_NUM:
-                    return tr("mode Mask");
                 case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                     return tr("Spot to Mem Flag");
                 case DXSPOT_PROP_MODE_COL_NUM:
@@ -291,12 +287,6 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 d = dxSpot->getSentToMemory();
             break;
-            case DXBANDMASK_COL_NUM:
-                d = dxSpot->getBandMask();
-            break;
-            case DXMODEMASK_COL_NUM:
-                d = dxSpot->getModeMask();
-            break;
             case RXTIME_COL_NUM:
                 d = dxSpot->getRxTime();
             break;
@@ -369,9 +359,6 @@ bool DxSpotDataModel::setData(const QModelIndex & index, const QVariant & value,
             case COMMENT_COL_NUM:
                 dxSpot->setSpotComment(value.toString());
                 break;
-            case DXBANDMASK_COL_NUM:
-                dxSpot->setModeMask(value.toString());
-            break;
             case DXSPOT_TO_MEMORY_FLAG_COL_NUM:
                 dxSpot->setSentToMemory(value.toBool());
             break;

@@ -87,7 +87,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
               psCall->getString(call);
               psLoc->getString(loc);
 
-              trace(QString("Cluster RPC: send spot to cluster node, call = %1, loc = %2, freq = %3").arg(call).arg(loc).arg(freq));
+              trace(QString("Cluster RPC: send spot to cluster node, call = %1, loc = %2, freq = %3").arg(call, loc, freq));
 
               emit sendSpotToDXCluster(Frequency(freq), call, loc);
 
@@ -100,7 +100,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       {
           QString cmd;
           QString logUuid;
-          int bandMask;
+          QString bandMask;
           int frameId;
           if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd)
                   && args->getStructArgMember(0, rpcConstants::clusterFrameId, clusterFrameId)
@@ -109,7 +109,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
           {
               resendSpotCmd->getString(cmd);
               loggerUuid->getString(logUuid);
-              bandmask->getInt(bandMask);
+              bandmask->getString(bandMask);
               clusterFrameId->getInt(frameId);
 
 

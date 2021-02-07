@@ -228,7 +228,7 @@ private:
     QString contestUuid;
 
     QString contestBandStr;
-    int contestBand;
+    //int contestBand;
 
     QVector<QSharedPointer<BandInfo> > bands;
 

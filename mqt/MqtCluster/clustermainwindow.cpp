@@ -147,7 +147,7 @@ void ClusterMainWindow::doStartup()
 
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, int)), this, SLOT(onResendSpotToClients(int, QString, QString, int)));
+    connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
 
 
     handleSpotsInQueues = new QTimer();
@@ -233,8 +233,6 @@ void ClusterMainWindow::doStartup()
 
     // hide these columns
     dxSpotView->setColumnHidden(DXBRG_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
@@ -987,8 +985,8 @@ void ClusterMainWindow::parseDX(const QString txt)
 void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
 {
 
-    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13 %14 %15")
-                        .arg(newSpot->getDxCallStr()).arg(newSpot->getFreq().traceStr()).arg(newSpot->getBand()).arg(newSpot->getBandMask()).arg(newSpot->getBandType()).arg(newSpot->getMode()).arg(newSpot->getModeMask())
+    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
+                        .arg(newSpot->getDxCallStr()).arg(newSpot->getFreq().traceStr()).arg(newSpot->getBand()).arg(newSpot->getBandType()).arg(newSpot->getMode())
                         .arg(newSpot->getSpotterCallStr()).arg(newSpot->getDxLocator()).arg(newSpot->getSpotterLocator()).arg(newSpot->getDxPropMode()).arg(newSpot->getSpotTime()).arg(newSpot->getSpotDate()).arg(newSpot->getSpotComment()).arg(setupCluster->getTimeToLive()));
 
     // is spot older than time to live time
@@ -1080,7 +1078,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         QString dxBandMask;
         getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
         newSpot->setBand(dxBandStr);
-        newSpot->setBandMask(dxBandMask);
 
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
@@ -1093,10 +1090,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         }
 
         QString dxModeStr;
-        QString dxModeMask;
+        QString dxModeMask;  // not using modemask
         getMode(modeBandPlan, newSpot->getFreq().str(), dxBandStr, dxModeStr, dxModeMask);
         newSpot->setMode(dxModeStr);
-        newSpot->setModeMask(dxModeMask);
 
         newSpot->setDxCall(dxMsg[1]);
         //newSpot.setSpotDate(dxMsg[2]);
@@ -1142,7 +1138,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
+        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1164,7 +1160,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
             newSpot->setMode(commentMode);
-            newSpot->setModeMask(QString::number(commentModeNum));
+
         }
 
         return SPOT_OK;
@@ -1241,11 +1237,11 @@ bool ClusterMainWindow::checkShowDxMsg(const QString txt, QSharedPointer<Cluster
 
 
 
-void ClusterMainWindow::onResendSpotToClients(int frameId, QString loggerUuid, QString cmd, int bandMask)
+void ClusterMainWindow::onResendSpotToClients(int frameId, QString loggerUuid, QString cmd, QString bandMask)
 {
     ResendSpotCommand spotCmd;
     spotCmd.setCmd(cmd);
-    spotCmd.setBandmak(bandMask);
+    spotCmd.setBandmask(bandMask);
     spotCmd.setUuid(loggerUuid);
     spotCmd.setFrameId(frameId);
     resendSpotsToClientQueue.append(spotCmd);
@@ -1280,10 +1276,10 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            if (cmd.getBandmask() | dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDMASK_COL_NUM), DataStoredRole).toString().toInt())
+            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString())
             {
                 QString spot = createResendSpotToSend(assembleSpotMsgToSendToClients(dxSpotDataModel->getSpotData(row), setupCluster->getTimeToLive()));
-                trace(QString("resending this spot - %1 to uuid = %2").arg(spot).arg(cmd.getuuid()));
+                trace(QString("resending this spot - %1 to uuid = %2").arg(spot, cmd.getuuid()));
                 clusterRpc->sendDXSpot(spot, cmd.getuuid(), cmd.getFrameId());   // send spot and loggeruuid
             }
 
@@ -1297,22 +1293,20 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 
 QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
-    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14:%15")
+    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13")
                        .arg(spotData->getDxCallStr())   // %1
                        .arg(spotData->getDxLocator())   // %2
                        .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")  // %3
                        .arg(spotData->getFreq().str())  // %4
                        .arg(spotData->getBand())        // %5
-                       .arg(spotData->getBandMask())    // %6
-                       .arg(spotData->getBandType())    // %7
-                       .arg(spotData->getMode())        // %8
-                       .arg(spotData->getModeMask())    // %9
-                       .arg(spotData->getSpotterCallStr())  //%10
-                       .arg(spotData->getSpotterLocator())  // %11
-                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %12
-                       .arg(spotData->getSpotComment())  // %13
-                       .arg(spotData->getDxPropMode())   // %14
-                       .arg(timeToLive);        // %15
+                       .arg(spotData->getBandType())    // %6
+                       .arg(spotData->getMode())        // %7
+                       .arg(spotData->getSpotterCallStr())  //%8
+                       .arg(spotData->getSpotterLocator())  // %9
+                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %10
+                       .arg(spotData->getSpotComment())  // %11
+                       .arg(spotData->getDxPropMode())   // %12
+                       .arg(timeToLive);        // %13
 
     return spotMsg;
 
@@ -1467,10 +1461,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
 
         QString dxBandStr;
-        QString dxBandMask;
+        QString dxBandMask;  // not using bandMask anymore
         getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
         newSpot->setBand(dxBandStr);
-        newSpot->setBandMask(dxBandMask);
 
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
@@ -1484,10 +1477,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
 
         QString dxModeStr;
-        QString dxModeMask;
+        QString dxModeMask;  // not using modemask anymore
         getMode(modeBandPlan, newSpot->getFreq().str(), newSpot->getBand(), dxModeStr, dxModeMask);
         newSpot->setMode(dxModeStr);
-        newSpot->setModeMask(dxModeMask);
 
         newSpot->setDxCall(dxMsg[4]);
 
@@ -1557,7 +1549,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         spotComment.remove(SPOT_DATA_SEPERATOR);
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask.toInt());
+        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1578,7 +1570,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         if (lookforModeInComment(spotComment, commentModeNum, commentMode))
         {
             newSpot->setMode(commentMode);
-            newSpot->setModeMask(QString::number(commentModeNum));
+
         }
 
         return SPOT_OK;
@@ -1605,8 +1597,10 @@ QString ClusterMainWindow::getPropMode(const QString comment)
 
 }
 
-void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, int bandmask)
+void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask)
 {
+    Q_UNUSED(bandMask)
+
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
     // this should hopefully cope with different scenarios, independent of seperation chars
@@ -1615,7 +1609,7 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     QRegularExpression full_loc_exp;
     QRegularExpression part_loc_exp;
 
-    if (!enableHFSpots || (enableHFSpots && bandmask > END_HF))
+    /*if (!enableHFSpots || (enableHFSpots && bandmask > END_HF))
     {
         full_loc_exp = FULL_LOC_EXP;
         part_loc_exp = PART_LOC_EXP;
@@ -1626,6 +1620,10 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
         full_loc_exp = FULL_LOC_EXP_HF;
         part_loc_exp = PART_LOC_EXP_HF;
     }
+*/
+
+    full_loc_exp = FULL_LOC_EXP_HF;
+    part_loc_exp = PART_LOC_EXP_HF;
 
 
     int fullLocExpCount = comment.count(full_loc_exp);

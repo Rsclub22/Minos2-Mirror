@@ -286,7 +286,7 @@ private slots:
     void sendBandmapRadioIsConnected(bool state);
     void sendBandmapRadioHasError(QString error);
 
-    void on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, int bandmask, QString uuid);
+    void on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, QString bandmask, QString uuid);
     void onLogRadioSettingsChanged();
 public:
     bool doKeyPressEvent(QKeyEvent *event);

@@ -56,22 +56,21 @@ enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAN
 enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, GET_PREFIX_FAILED, ASKQRZ_FAILED_QRA};
 const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not found" << "Spot DateTime Invalid" << "Spot too many sections"
                                                   << "Discard HF Spot" << "getPrefix failed to find QRA" << "AskQrz Failed to Find QRA";
+
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
 const int DXCALL = 0;
 const int DXLOCATOR = 1;
 const int DXLOC_FROM_NODE_FLAG = 2;
 const int DXFREQ = 3;
 const int DXBANDSTR = 4;
-const int DXBANDMASK = 5;
-const int DXBANDTYPE = 6;
-const int DXMODESTR = 7;
-const int DXMODEMASK = 8;
-const int SPOTCALL = 9;
-const int SPOTLOCATOR = 10;
-const int SPOTDATETIME = 11;
-const int SPOTCOMMENT = 12;
-const int DXPROPMODE = 13;
-const int TTLVALUE = 14;
+const int DXBANDTYPE = 5;
+const int DXMODESTR = 6;
+const int SPOTCALL = 7;
+const int SPOTLOCATOR = 8;
+const int SPOTDATETIME = 9;
+const int SPOTCOMMENT = 10;
+const int DXPROPMODE = 11;
+const int TTLVALUE = 12;
 
 
 // Cluster Data and View Columns
@@ -90,22 +89,20 @@ const int SPOTTER_CALL_COL_NUM = 10;
 const int SPOTTER_LOC_COL_NUM = 11;
 const int COMMENT_COL_NUM = 12;
 const int DXBANDSTR_COL_NUM = 13;
-const int DXBANDMASK_COL_NUM = 14;
-const int DXMODEMASK_COL_NUM = 15;
-const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 16;
-const int DXSPOT_PROP_MODE_COL_NUM = 17;
-const int RXTIME_COL_NUM = 18;
-const int DATE_COL_NUM = 19;
-const int DATE_TIME_COL_NUM = 20;
-const int SPOT_TYPE_COL_NUM = 21;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 22;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 23;     // used in bandmap
-const int ROT_CONNECTED_COL_NUM = 24;   // used in bandmap
-const int RUN_MODE_ON_COL_NUM = 25;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 26;    // used in bandmap
-const int CQ_RESPONSE_COL = 27;    // used in bandmap
-const int DX_DISTRICT_COL_NUM = 28;   // used in bandmap
-const int DX_DISTRICT_WORKED_COL_NUM = 29; // used in bandmap
+const int DXSPOT_TO_MEMORY_FLAG_COL_NUM = 14;
+const int DXSPOT_PROP_MODE_COL_NUM = 15;
+const int RXTIME_COL_NUM = 16;
+const int DATE_COL_NUM = 17;
+const int DATE_TIME_COL_NUM = 18;
+const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 21;     // used in bandmap
+const int ROT_CONNECTED_COL_NUM = 22;   // used in bandmap
+const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
+const int CQ_RESPONSE_COL = 25;    // used in bandmap
+const int DX_DISTRICT_COL_NUM = 26;   // used in bandmap
+const int DX_DISTRICT_WORKED_COL_NUM = 27; // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;

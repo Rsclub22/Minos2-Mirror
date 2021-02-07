@@ -112,8 +112,8 @@ class ResendSpotCommand
 public:
     QString getCmd(){return cmd;}
     void setCmd(QString cmd_){cmd = cmd_;}
-    int getBandmask(){return bandmask;}
-    void setBandmak(int bandmask_){bandmask = bandmask_;}
+    QString getBandmask(){return bandmask;}
+    void setBandmask(QString bandmask_){bandmask = bandmask_;}
     QString getuuid(){return uuid;}
     void setUuid(QString uuid_){uuid = uuid_;}
     int getFrameId(){return frameId;}
@@ -122,7 +122,7 @@ public:
 private:
 
     QString cmd;
-    int bandmask;
+    QString bandmask;
     QString uuid;
     int frameId;
 };
@@ -422,7 +422,7 @@ private:
     void saveRotPresetButton(ClusterUserCommandData &buttonData);
     void saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
-    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, int bandmask);
+    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask);
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp);
 
@@ -514,7 +514,7 @@ private slots:
     void about();
     void clusterNodeCommandsShortcutHelp();
     void handleStatusTimer();
-    void onResendSpotToClients(int frameId,  QString loggerUuid, QString cmd, int bandmask );
+    void onResendSpotToClients(int frameId,  QString loggerUuid, QString cmd, QString bandmask );
 
 
 #ifdef TEST_SPOTS

@@ -45,7 +45,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     allowHF(false),
-    contestBand(-1),
+    //contestBand(-1),
     contestMode(-1),
     isProtected(false)
 {
@@ -232,9 +232,9 @@ ClusterClientFrame::~ClusterClientFrame()
 
 void ClusterClientFrame::on_resendClusterSpots()
 {
-    if (ct  && contestBand != -1)
+    if (ct  && !contestBandStr.isEmpty())
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
 
@@ -242,10 +242,10 @@ void ClusterClientFrame::on_resendClusterSpots()
 void ClusterClientFrame::requestSpots()
 {
 
-    if (ct && contestBand != -1)
+    if (ct && !contestBandStr.isEmpty())
     {
 
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBand, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
 
@@ -317,7 +317,6 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(COMMENT_COL_NUM, false);
 
     // hide these columns
-    dxSpotView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
@@ -325,7 +324,6 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(RXTIME_COL_NUM, true);
     //dxSpotView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    dxSpotView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
@@ -374,7 +372,6 @@ void ClusterClientFrame::setupSearchSpotView()
 
 
     // hide these columns
-    searchView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     searchView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
@@ -382,7 +379,6 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(RXTIME_COL_NUM, true);
     //searchView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    searchView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     searchView->setColumnHidden(DATE_COL_NUM, true);
     searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
@@ -442,7 +438,6 @@ void ClusterClientFrame::setupCallsignSpotView()
 
 
     // hide these columns
-    callSignView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     callSignView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
@@ -450,7 +445,6 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(RXTIME_COL_NUM, true);
     //callSignView->setColumnHidden(DXSPOT_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    callSignView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     callSignView->setColumnHidden(DATE_COL_NUM, true);
     callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 
@@ -506,14 +500,12 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 
     // hide these columns
-    locatorView->setColumnHidden(DXMODEMASK_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_CALL_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_WORKED_COL_NUM, true);
     locatorView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_TO_MEMORY_FLAG_COL_NUM, true);
     locatorView->setColumnHidden(RXTIME_COL_NUM, true);
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
-    locatorView->setColumnHidden(DXBANDMASK_COL_NUM, true);
     locatorView->setColumnHidden(DATE_COL_NUM, true);
     locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
 }
@@ -577,7 +569,7 @@ void ClusterClientFrame::checkHfFlag()
 
 
 
-void ClusterClientFrame::setHF(bool hfOn)
+void ClusterClientFrame::setHF(bool hfFlag)
 {
 
 
@@ -842,7 +834,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             bool callWorked = false;
             bool locWorked = false;
 
-            if (spotlist[DXBANDMASK].toInt() == contestBand) // if contestband matches spotband
+            if (spotlist[DXBANDSTR] == contestBandStr) // if contestband matches spotband
             {
                 checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
             }
@@ -862,21 +854,18 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
-            //spotDateTime = getSpotDateTime(spotlist[SPOTDATE], spotlist[SPOTTIME]);
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
-            //ClusterSpotData* newSpot = new ClusterSpotData();
-            QSharedPointer<ClusterSpotData> newSpot = QSharedPointer<ClusterSpotData>(new ClusterSpotData());
+            QSharedPointer<ClusterSpotData> newSpot(new ClusterSpotData());
+
 
             newSpot->setRxTime(rxTime);
             newSpot->setSpotDateTime(spotDateTime);
             newSpot->setFreq(spotlist[DXFREQ]);
             newSpot->setBand(spotlist[DXBANDSTR]);
-            newSpot->setBandMask(spotlist[DXBANDMASK]);
             newSpot->setBandType(spotlist[DXBANDTYPE]);
             newSpot->setMode(spotlist[DXMODESTR]);
-            newSpot->setModeMask(spotlist[DXMODEMASK]);
             newSpot->setDxCall(spotlist[DXCALL]);
             newSpot->setDxCallWorked(callWorked);
             newSpot->setDxLocator(spotlist[DXLOCATOR]);
@@ -901,7 +890,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
                 }
             }
 
-            //dxSpotDataModel->rowData = newSpot;
+
 
             dxSpotDataModel->insertRows(dxSpotDataModel->rowCount(), 1);
             traceMsg(QString("addDxSpotToTable: adding %1 to cluster data table").arg(spotlist[DXCALL]));
@@ -986,7 +975,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         Callsign mcs;
         mcs.setFullCall(callsign);
 
-        for ( auto const &c: ct->ctList )
+        foreach ( auto const &c, ct->ctList )
         {
             unsigned short cf = c.wt->contactFlags.getValue();
             if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
@@ -1211,13 +1200,13 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->contestBands.getValue();
-        contestBand = getBandOffSet(contestBandStr);
+        //contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
         contestMode = getModeOffSet(contestModeStr);
 
 
 
-        if (contestBand != -1)
+        if (!contestBandStr.isEmpty())
         {
             if (!contest->clusterFilterSettingsExist)       // have band settings been saved before?
             {
@@ -1267,7 +1256,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         }
         else
         {
-            traceMsg(QString("set Contest - ContestBand error %1").arg(contestBand));
+            traceMsg(QString("set Contest - ContestBand error %1").arg(contestBandStr));
         }
 
 
@@ -1579,8 +1568,8 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
           for (int spotNumber = 0; spotNumber < dxSpotDataModel->rowCount(); spotNumber++)
           {
-              int bandMask = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXBANDMASK_COL_NUM,  QModelIndex()), DataStoredRole).toString().toInt();
-              if (bandMask == contestBand)
+              QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXBANDSTR_COL_NUM,  QModelIndex()), DataStoredRole).toString();
+              if (bandMask == contestBandStr)
               {
               QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
                   //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();

@@ -27,10 +27,8 @@ SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
     rxTime = sdp->rxTime;
     spotDateTime = sdp->spotDateTime;
     band = sdp->band;
-    bandMask = sdp->bandMask;
     bandType = sdp->bandType;
     mode = sdp->mode;
-    modeMask = sdp->modeMask;
     dxCall = sdp->dxCall;
     dxCallValidateCode = sdp->dxCallValidateCode;
     freq = sdp->freq;
@@ -58,10 +56,8 @@ SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
     rxTime = sdp.rxTime;
     spotDateTime = sdp.spotDateTime;
     band = sdp.band;
-    bandMask = sdp.bandMask;
     bandType = sdp.bandType;
     mode = sdp.mode;
-    modeMask = sdp.modeMask;
     dxCall = sdp.dxCall;
     dxCallValidateCode = sdp.dxCallValidateCode;
     freq = sdp.freq;
@@ -81,10 +77,8 @@ void SpotdataBase::clear()
     rxTime = 0;
     spotDateTime = QDateTime();
     band.clear();
-    bandMask.clear();
     bandType.clear();
     mode.clear();
-    modeMask.clear();
     freq.clear();
     dxCall = Callsign();
     dxCallValidateCode = 0;
@@ -188,10 +182,8 @@ ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
     rxTime = csd.rxTime;
     spotDateTime = csd.spotDateTime;
     band = csd.band;
-    bandMask = csd.bandMask;
     bandType = csd.bandType;
     mode = csd.mode;
-    modeMask = csd.modeMask;
     dxCall = csd.dxCall;
     dxCallValidateCode = csd.dxCallValidateCode;
     freq = csd.freq;
@@ -216,10 +208,8 @@ QSharedPointer<ClusterSpotData> ClusterSpotData::operator = (const QSharedPointe
     rxTime = csd->rxTime;
     spotDateTime = csd->spotDateTime;
     band = csd->band;
-    bandMask = csd->bandMask;
     bandType = csd->bandType;
     mode = csd->mode;
-    modeMask = csd->modeMask;
     dxCall = csd->dxCall;
     dxCallValidateCode = csd->dxCallValidateCode;
     freq = csd->freq;
@@ -245,10 +235,8 @@ bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) cons
     return rxTime == cpd->rxTime &&
             spotDateTime == cpd->spotDateTime &&
             band == cpd->band &&
-            bandMask == cpd->bandMask &&
             bandType == cpd->bandType &&
             mode == cpd->mode &&
-            modeMask == cpd->modeMask &&
             dxCall == cpd->dxCall &&
             dxCallValidateCode == cpd->dxCallValidateCode &&
             freq == cpd->freq &&
@@ -271,10 +259,8 @@ bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
     return rxTime == cpd.rxTime &&
             spotDateTime == cpd.spotDateTime &&
             band == cpd.band &&
-            bandMask == cpd.bandMask &&
             bandType == cpd.bandType &&
             mode == cpd.mode &&
-            modeMask == cpd.modeMask &&
             dxCall == cpd.dxCall &&
             dxCallValidateCode == cpd.dxCallValidateCode &&
             freq == cpd.freq &&
@@ -297,10 +283,8 @@ bool ClusterSpotData::operator!=(const QSharedPointer<ClusterSpotData> cpd) cons
     return  rxTime != cpd->rxTime ||
             spotDateTime != cpd->spotDateTime ||
             band != cpd->band ||
-            bandMask != cpd->bandMask ||
             bandType != cpd->bandType ||
             mode != cpd->mode ||
-            modeMask != cpd->modeMask ||
             dxCall != cpd->dxCall ||
             dxCallValidateCode != cpd->dxCallValidateCode ||
             freq != cpd->freq ||
@@ -323,10 +307,8 @@ bool ClusterSpotData::operator!=(const ClusterSpotData &cpd) const
     return  rxTime != cpd.rxTime ||
             spotDateTime != cpd.spotDateTime ||
             band != cpd.band ||
-            bandMask != cpd.bandMask ||
             bandType != cpd.bandType ||
             mode != cpd.mode ||
-            modeMask != cpd.modeMask ||
             dxCall != cpd.dxCall ||
             dxCallValidateCode != cpd.dxCallValidateCode ||
             freq != cpd.freq ||
@@ -386,10 +368,8 @@ bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
     return rxTime == bsd.rxTime &&
             spotDateTime == bsd.spotDateTime &&
             band == bsd.band &&
-            bandMask == bsd.bandMask &&
             bandType == bsd.bandType &&
             mode == bsd.mode &&
-            modeMask == bsd.modeMask &&
             dxCall == bsd.dxCall &&
             dxCallValidateCode == bsd.dxCallValidateCode &&
             freq == bsd.freq &&
@@ -420,10 +400,8 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
     return  rxTime != bsd.rxTime ||
             spotDateTime != bsd.spotDateTime ||
             band != bsd.band ||
-            bandMask != bsd.bandMask ||
             bandType != bsd.bandType ||
             mode != bsd.mode ||
-            modeMask != bsd.modeMask ||
             dxCall != bsd.dxCall ||
             dxCallValidateCode != bsd.dxCallValidateCode ||
             freq != bsd.freq ||

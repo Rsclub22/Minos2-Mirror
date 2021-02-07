@@ -559,10 +559,13 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
 {
     ui->hfSelectBut->setVisible(state);
 
+
+
     for (auto &b:bands)
     {
         if (b->getType() == "HF")
         {
+            bandCheckBoxes.value(b.data()->uk).bandChkBox->setVisible(state);
             bandDistanceWidgets.value(b.data()->uk).bandLabel->setVisible(state);
             bandDistanceWidgets.value(b.data()->uk).bandLineEdit->setVisible(state);
             bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setVisible(state);
