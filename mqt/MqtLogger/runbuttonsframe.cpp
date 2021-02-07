@@ -320,7 +320,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
 
 void RunButtonsFrame::runButWriteActSel(int buttonNumber)
 {
-    trace(QString("Memory Write Selected %1 = ").arg(QString::number(buttonNumber + 1)));
+    trace(QString("Run Button Write Selected = %1").arg(QString::number(buttonNumber + 1)));
     memoryData::memData runData;
     runData.callsign = tr("Run") + QString::number(buttonNumber + 1);
     runData.freq = rigControl->getCurFreq();

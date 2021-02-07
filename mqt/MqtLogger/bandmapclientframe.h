@@ -314,6 +314,7 @@ private:
     void setZoomLevelLabelText(int level);
 
     QSharedPointer<BandmapSpotData> stringToDxSpot(QString spot);
+    void setTextToFrameTitle(QString text1, QString col, QString text2);
 protected:
 
 
