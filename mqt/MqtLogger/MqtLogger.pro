@@ -42,6 +42,7 @@ SOURCES += \
     LoggerContest.cpp \
     MinosTestExport.cpp \
     PrintFile.cpp \
+    QSOTextEditFrame.cpp \
     RigMemoryFrame.cpp \
     RotPresets.cpp \
     ScreenConfig.cpp \
@@ -122,6 +123,7 @@ HEADERS  += \
     LoggerContacts.h \
     LoggerContest.h \
     MinosTestExport.h \
+    QSOTextEditFrame.h \
     RigMemoryFrame.h \
     RotPresets.h \
     ScreenConfig.h \

@@ -51,52 +51,53 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
 
-    CallsignFW = new FocusWatcher(ui->CallsignEdit);
-    CallsignLabelString = ui->Callsignlabel->text();
-    ui->CallsignEdit->setValidator(&ucValidator);
-    ui->CallsignEdit->installEventFilter(this);
-    ui->Callsignlabel->setText("<b>" + CallsignLabelString);
+    ui->CallsignFrame->setup("Call");
+    CallsignLabelString = tr("Callsign (F1)");
+    CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
+    ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
+    connect(ui->CallsignFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onCallsignEdit_textChanged(const QString &)));
 
-    RSTTXFW = new FocusWatcher(ui->RSTTXEdit);
-    RSTTXLabelString = ui->RSTTXLabel->text();
-    ui->RSTTXEdit->setValidator(&ucValidator);
-    ui->RSTTXEdit->installEventFilter(this);
-    ui->RSTTXLabel->setText("<b>" + RSTTXLabelString);
+    ui->RSTTxFrame->setup("RstTx");
+    RSTTXLabelString = tr("RS(T)Tx(F2)");
+    RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
+    ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
+    connect(ui->RSTTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTTXEdit_textChanged(const QString &)));
 
-    SerTXFW = new FocusWatcher(ui->SerTXEdit);
-    SerTXLabelString = ui->SerTXLabel->text();
-    ui->SerTXEdit->setValidator(&ucValidator);
-    ui->SerTXEdit->installEventFilter(this);
-    ui->SerTXLabel->setText("<b>" + SerTXLabelString);
+    ui->SerTxFrame->setup("serTx");
+    SerTXLabelString = tr("Serial Tx");
+    SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
+    ui->SerTxFrame->getTextEditlabel()->setText("<b>" + SerTXLabelString);
+    ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::ClickFocus);
+    connect(ui->SerTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerTXEdit_textChanged(const QString &)));
 
-    RSTRXFW = new FocusWatcher(ui->RSTRXEdit);
-    RSTRXLabelString = ui->RSTRXLabel->text();
-    ui->RSTRXEdit->setValidator(&ucValidator);
-    ui->RSTRXEdit->installEventFilter(this);
-    ui->RSTRXLabel->setText("<b>" + RSTRXLabelString);
+    ui->RSTRxFrame->setup("RstRx");
+    RSTRXLabelString = tr("RS(T)Rx(F3)");
+    RSTRXFW = new FocusWatcher(ui->RSTRxFrame->getTextEditEdit());
+    ui->RSTRxFrame->getTextEditlabel()->setText("<b>" + RSTRXLabelString);
+    connect(ui->RSTRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTRXEdit_textChanged(const QString &)));
 
-    SerRXFW = new FocusWatcher(ui->SerRXEdit);
-    SerRXLabelString = ui->SerRXLabel->text();
-    ui->SerRXEdit->setValidator(&ucValidator);
-    ui->SerRXEdit->installEventFilter(this);
-    ui->SerRXLabel->setText("<b>" + SerRXLabelString);
+    ui->SerRxFrame->setup("SerRx");
+    SerRXLabelString = tr("Serial Rx (F4)");
+    SerRXFW = new FocusWatcher(ui->SerRxFrame->getTextEditEdit());
+    ui->SerRxFrame->getTextEditlabel()->setText("<b>" + SerRXLabelString);
+    connect(ui->SerRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerRXEdit_textChanged(const QString &)));
 
-    LocFW = new FocusWatcher(ui->LocEdit);
-    LocLabelString = ui->LocLabel->text();
-    ui->LocEdit->setValidator(&ucValidator);
-    ui->LocEdit->installEventFilter(this);
-    ui->LocLabel->setText("<b>" + LocLabelString);
+    ui->LocFrame->setup("Loc");
+    LocLabelString = tr("Loc (F5)");
+    LocFW = new FocusWatcher(ui->LocFrame->getTextEditEdit());
+    ui->LocFrame->getTextEditlabel()->setText("<b>" + LocLabelString);
+    connect(ui->LocFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onLocEdit_textChanged(const QString &)));
 
-    QTHFW = new FocusWatcher(ui->QTHEdit);
-    QTHLabelString = ui->QTHLabel->text();
-    ui->QTHEdit->setValidator(&ucValidator);
-    ui->QTHEdit->installEventFilter(this);
-    ui->QTHLabel->setText("<b>" + QTHLabelString);
+    ui->QTHFrame->setup("QTH");
+    QTHLabelString = tr("Exchange (F6)");
+    QTHFW = new FocusWatcher(ui->QTHFrame->getTextEditEdit());
+    ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
+    connect(ui->QTHFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onQTHEdit_textChanged(const QString &)));
 
-    CommentsFW = new FocusWatcher(ui->CommentsEdit);
-    CommentsLabelString = ui->CommentsLabel->text();
-    ui->CommentsEdit->installEventFilter(this);
-    ui->CommentsLabel->setText("<b>" + CommentsLabelString);
+    ui->commentsFrame->setup("Comments");
+    CommentsLabelString = tr("Comments");
+    CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
+    ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
 
     MainOpFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->setValidator(&ucValidator);
@@ -166,14 +167,14 @@ void QSOLogFrame::on_FontChanged()
     qreal fs = cf.pointSizeF();
     int fsi = static_cast<int>(fs * lcf/100.0);
     cf.setPointSize(fsi);
-    ui->CallsignEdit->setFont(cf);
+    ui->CallsignFrame->getTextEditEdit()->setFont(cf);
 
-    ui->RSTTXEdit->setFont(cf);
-    ui->SerTXEdit->setFont(cf);
-    ui->RSTRXEdit->setFont(cf);
-    ui->SerRXEdit->setFont(cf);
-    ui->LocEdit->setFont(cf);
-    ui->QTHEdit->setFont(cf);
+    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
+    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
+    ui->LocFrame->getTextEditEdit()->setFont(cf);
+    ui->QTHFrame->getTextEditEdit()->setFont(cf);
 
 
     for (QMap<QWidget *, QString>::iterator i = widgetStyles.begin(); i != widgetStyles.end(); i++)
@@ -192,7 +193,7 @@ bool QSOLogFrame::eventFilter(QObject *obj, QEvent *event)
     }
     else if (event->type() == QEvent::MouseButtonDblClick)
     {
-        if (obj == ui->SerTXEdit || (edit && (obj == ui->timeEdit || obj == ui->dateEdit)))
+        if (obj == ui->SerTxFrame->getTextEditEdit() || (edit && (obj == ui->timeEdit || obj == ui->dateEdit)))
         {
             do_mouseDoubleClickEvent(obj);
         }
@@ -231,9 +232,9 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
 
          if (tabSandP && edit == false && catchup == false)
          {
-             if (current == ui->CallsignEdit && !rrIl->valid( cmValidStatus, screenContact ))
+             if (current == ui->CallsignFrame->getTextEditEdit() && !rrIl->valid( cmValidStatus, screenContact ))
              {
-                 selectField( ui->RSTRXEdit );
+                 selectField( ui->RSTRxFrame->getTextEditEdit() );
                  return true;
              }
          }
@@ -293,10 +294,10 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
                 }
             }
         }
-        if (ed == ui->CallsignEdit)
+        if (ed == ui->CallsignFrame->getTextEditEdit())
         {
-            ui->CallsignEdit->setStyleSheet(ssLineEditOK);
-            widgetStyles[ui->CallsignEdit] = ssLineEditOK;
+            ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
+            widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditOK;
         }
     }
     return false;
@@ -330,44 +331,44 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     QColor colour = in?Qt::blue:Qt::black;
     QString colStr = HtmlFontColour(colour) + "<b>";
 
-    if (obj == ui->CallsignEdit)
+    if (obj == ui->CallsignFrame->getTextEditEdit())
     {
-        ui->Callsignlabel->setText(colStr + CallsignLabelString);
+        ui->CallsignFrame->getTextEditlabel()->setText(colStr + CallsignLabelString);
     }
 
-    if (obj == ui->RSTTXEdit)
+    if (obj == ui->RSTTxFrame->getTextEditEdit())
     {
-        ui->RSTTXLabel->setText(colStr + RSTTXLabelString);
+        ui->RSTTxFrame->getTextEditlabel()->setText(colStr + RSTTXLabelString);
     }
 
-    if (obj == ui->SerTXEdit)
+    if (obj == ui->SerTxFrame->getTextEditEdit())
     {
-        ui->SerTXLabel->setText(colStr + SerTXLabelString);
+        ui->SerTxFrame->getTextEditlabel()->setText(colStr + SerTXLabelString);
     }
 
-    if (obj == ui->RSTRXEdit)
+    if (obj == ui->RSTRxFrame->getTextEditEdit())
     {
-        ui->RSTRXLabel->setText(colStr + RSTRXLabelString);
+        ui->RSTRxFrame->getTextEditlabel()->setText(colStr + RSTRXLabelString);
     }
 
-    if (obj == ui->SerRXEdit)
+    if (obj == ui->SerRxFrame->getTextEditEdit())
     {
-        ui->SerRXLabel->setText(colStr + SerRXLabelString);
+        ui->SerRxFrame->getTextEditlabel()->setText(colStr + SerRXLabelString);
     }
 
-    if (obj == ui->LocEdit)
+    if (obj == ui->LocFrame->getTextEditEdit())
     {
-        ui->LocLabel->setText(colStr + LocLabelString);
+        ui->LocFrame->getTextEditlabel()->setText(colStr + LocLabelString);
     }
 
-    if (obj == ui->QTHEdit)
+    if (obj == ui->QTHFrame->getTextEditEdit())
     {
-        ui->QTHLabel->setText(colStr + QTHLabelString);
+        ui->QTHFrame->getTextEditlabel()->setText(colStr + QTHLabelString);
     }
 
-    if (obj == ui->CommentsEdit)
+    if (obj == ui->commentsFrame->getTextEditEdit())
     {
-        ui->CommentsLabel->setText(colStr + CommentsLabelString);
+        ui->commentsFrame->getTextEditlabel()->setText(colStr + CommentsLabelString);
     }
     if (obj == ui->MainOpComboBox)
     {
@@ -389,14 +390,14 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
 }
 bool QSOLogFrame::frameHasFocus()
 {
-    if (ui->CallsignEdit->hasFocus()
-            || ui->RSTTXEdit->hasFocus()
-            || ui->SerTXEdit->hasFocus()
-            || ui->RSTRXEdit->hasFocus()
-            || ui->SerRXEdit->hasFocus()
-            || ui->LocEdit->hasFocus()
-            || ui->QTHEdit->hasFocus()
-            || ui->CommentsEdit->hasFocus()
+    if (ui->CallsignFrame->getTextEditEdit()->hasFocus()
+            || ui->RSTTxFrame->getTextEditEdit()->hasFocus()
+            || ui->SerTxFrame->getTextEditEdit()->hasFocus()
+            || ui->RSTRxFrame->getTextEditEdit()->hasFocus()
+            || ui->SerRxFrame->getTextEditEdit()->hasFocus()
+            || ui->LocFrame->getTextEditEdit()->hasFocus()
+            || ui->QTHFrame->getTextEditEdit()->hasFocus()
+            || ui->commentsFrame->getTextEditEdit()->hasFocus()
             )
     {
         return true;
@@ -435,21 +436,21 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 void QSOLogFrame::initialise()
 {
 
-    csIl = new ValidatedControl( ui->CallsignEdit, vtCallsign );
+    csIl = new ValidatedControl( ui->CallsignFrame->getTextEditEdit(), vtCallsign );
     vcs.push_back( csIl );
-    rsIl = new ValidatedControl( ui->RSTTXEdit, vtRST );
+    rsIl = new ValidatedControl( ui->RSTTxFrame->getTextEditEdit(), vtRST );
     vcs.push_back( rsIl );
-    ssIl = new ValidatedControl( ui->SerTXEdit, vtSN );
+    ssIl = new ValidatedControl( ui->SerTxFrame->getTextEditEdit(), vtSN );
     vcs.push_back( ssIl );
-    rrIl = new ValidatedControl( ui->RSTRXEdit, vtRST );
+    rrIl = new ValidatedControl( ui->RSTRxFrame->getTextEditEdit(), vtRST );
     vcs.push_back( rrIl );
-    srIl = new ValidatedControl( ui->SerRXEdit, vtSN );
+    srIl = new ValidatedControl( ui->SerRxFrame->getTextEditEdit(), vtSN );
     vcs.push_back( srIl );
-    locIl = new ValidatedControl( ui->LocEdit, vtLoc );
+    locIl = new ValidatedControl( ui->LocFrame->getTextEditEdit(), vtLoc );
     vcs.push_back( locIl );
-    qthIl = new ValidatedControl( ui->QTHEdit, vtQTH );
+    qthIl = new ValidatedControl( ui->QTHFrame->getTextEditEdit(), vtQTH );
     vcs.push_back( qthIl );
-    cmntIl = new ValidatedControl( ui->CommentsEdit, vtComments );
+    cmntIl = new ValidatedControl( ui->commentsFrame->getTextEditEdit(), vtComments );
     vcs.push_back( cmntIl );
 
     if (edit)
@@ -471,15 +472,15 @@ void QSOLogFrame::initialise()
     {
         ui->radioDetailsFrame->setVisible(true);
         ui->EditFrame->setVisible(true);
-        ui->SerTXEdit->setStyleSheet(ssLineEditOK);
-        widgetStyles[ui->SerTXEdit] = ssLineEditOK;
+        ui->SerTxFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
+        widgetStyles[ui->SerTxFrame->getTextEditEdit()] = ssLineEditOK;
     }
     else
     {
         ui->radioDetailsFrame->setVisible(false);
         ui->EditFrame->setVisible(false);
-        ui->SerTXEdit->setStyleSheet(ssLineEditGreyBackground);
-        widgetStyles[ui->SerTXEdit] = ssLineEditGreyBackground;
+        ui->SerTxFrame->getTextEditEdit()->setStyleSheet(ssLineEditGreyBackground);
+        widgetStyles[ui->SerTxFrame->getTextEditEdit()] = ssLineEditGreyBackground;
     }
 
     current = nullptr;
@@ -644,8 +645,8 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     {
        return;
     }
-    ui->SerTXEdit->setReadOnly(!edit);
-    ui->SerTXEdit->setClearButtonEnabled(edit);
+    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+    ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
     getScreenEntry(); // make sure it is saved
 
@@ -671,7 +672,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     // controls (this should really be the job of tab, but...)
 
     QWidget *currn = current;
-    if ( !valid( cmCheckValid ) || ( currn == ui->RSTTXEdit ) || ( currn == ui->RSTRXEdit ) )
+    if ( !valid( cmCheckValid ) || ( currn == ui->RSTTxFrame->getTextEditEdit() ) || ( currn == ui->RSTRxFrame->getTextEditEdit() ) )
        // make sure all single and cross field
        // validation has been done
     {
@@ -716,11 +717,11 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
        if (tabSandP && edit == false && catchup == false)
        {
-           if (current == ui->CallsignEdit)
+           if (current == ui->CallsignFrame->getTextEditEdit())
            {
-               if (nextf == ui->RSTTXEdit && !rrIl->valid( cmValidStatus, screenContact ))
+               if (nextf == ui->RSTTxFrame->getTextEditEdit() && !rrIl->valid( cmValidStatus, screenContact ))
                {
-                   nextf = ui->RSTRXEdit;
+                   nextf = ui->RSTRxFrame->getTextEditEdit();
                }
            }
        }
@@ -835,8 +836,8 @@ void QSOLogFrame::on_GJVForceButton_clicked()
     {
        return;
     }
-    ui->SerTXEdit->setReadOnly(!edit);
-    ui->SerTXEdit->setClearButtonEnabled(edit);
+    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+    ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
     if (dlgForced())
         emit QSOFrameCancelled();
@@ -913,8 +914,8 @@ void QSOLogFrame::doGJVCancelButton_clicked()
     }
     else
     {
-        ui->SerTXEdit->setReadOnly(!edit);
-        ui->SerTXEdit->setClearButtonEnabled(edit);
+        ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+        ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
         ScreenContact *temp = nullptr;
         if ( !partialContact )
@@ -924,7 +925,7 @@ void QSOLogFrame::doGJVCancelButton_clicked()
            partialContact = nullptr;
         }
         startNextEntry();
-        ui->CallsignEdit->setFocus();
+        ui->CallsignFrame->getTextEditEdit()->setFocus();
 
         if ( temp )
            partialContact = temp;
@@ -941,18 +942,18 @@ void QSOLogFrame::on_MatchXferButton_clicked()
     MinosLoggerEvents::sendXferPressed(contest, baseName);
 }
 
-void QSOLogFrame::on_QTHEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onQTHEdit_textChanged(const QString &/*arg1*/)
 {
-    doGJVEditChange( ui->QTHEdit );
+    doGJVEditChange( ui->QTHFrame->getTextEditEdit() );
 }
 
-void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
+void QSOLogFrame::onCallsignEdit_textChanged(const QString &text)
 {
-    doGJVEditChange( ui->CallsignEdit );
+    doGJVEditChange( ui->CallsignFrame->getTextEditEdit() );
 
     if (logDataFromBandmapOrMemory)
     {
-       if (ui->CallsignEdit->text().isEmpty())
+       if (ui->CallsignFrame->getTextEditEdit()->text().isEmpty())
        {
            logDataFromBandmapOrMemory = false;
        }
@@ -970,31 +971,31 @@ void QSOLogFrame::on_CallsignEdit_textChanged(const QString &text)
 
 }
 
-void QSOLogFrame::on_LocEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onLocEdit_textChanged(const QString &/*arg1*/)
 {
    // force bearing calc
    getScreenEntry();
    calcLoc();
-   doGJVEditChange( ui->LocEdit );
+   doGJVEditChange( ui->LocFrame->getTextEditEdit() );
 }
 
-void QSOLogFrame::on_RSTTXEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onRSTTXEdit_textChanged(const QString &/*arg1*/)
 {
-    doGJVEditChange( ui->RSTTXEdit );
+    doGJVEditChange( ui->RSTTxFrame->getTextEditEdit() );
 }
 
-void QSOLogFrame::on_RSTRXEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onRSTRXEdit_textChanged(const QString &/*arg1*/)
 {
-    doGJVEditChange( ui->RSTRXEdit );
+    doGJVEditChange( ui->RSTRxFrame->getTextEditEdit() );
 }
-void QSOLogFrame::on_SerRXEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onSerRXEdit_textChanged(const QString &/*arg1*/)
 {
-    doGJVEditChange( ui->SerRXEdit );
+    doGJVEditChange( ui->SerRxFrame->getTextEditEdit() );
 }
 
-void QSOLogFrame::on_SerTXEdit_textChanged(const QString &/*arg1*/)
+void QSOLogFrame::onSerTXEdit_textChanged(const QString &/*arg1*/)
 {
-    doGJVEditChange( ui->SerTXEdit );
+    doGJVEditChange( ui->SerTxFrame->getTextEditEdit() );
 
 }
 void QSOLogFrame::on_frequencyEdit_textChanged(const QString &/*arg1*/)
@@ -1008,10 +1009,10 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
     if (contest->isReadOnly())
         return;
 
-    if (w == ui->SerTXEdit)
+    if (w == ui->SerTxFrame->getTextEditEdit())
     {
-        ui->SerTXEdit->setReadOnly(false);
-        ui->SerTXEdit->setClearButtonEnabled(true);
+        ui->SerTxFrame->getTextEditEdit()->setReadOnly(false);
+        ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(true);
     }
     if (edit && (w == ui->timeEdit || w == ui->dateEdit))
     {
@@ -1036,27 +1037,27 @@ void QSOLogFrame::setActiveControl( int *Key )
    switch ( *Key )
    {
       case Qt::Key_F1:
-         selectField( ui->CallsignEdit );
+         selectField( ui->CallsignFrame->getTextEditEdit() );
          *Key = 0;
          break;
       case Qt::Key_F2:
-         selectField( ui->RSTTXEdit );
+         selectField( ui->RSTTxFrame->getTextEditEdit() );
          *Key = 0;
          break;
       case Qt::Key_F3:
-         selectField( ui->RSTRXEdit );
+         selectField( ui->RSTRxFrame->getTextEditEdit() );
          *Key = 0;
          break;
       case Qt::Key_F4:
-         selectField( ui->SerRXEdit );
+         selectField( ui->SerRxFrame->getTextEditEdit() );
          *Key = 0;
          break;
       case Qt::Key_F5:
-         selectField( ui->LocEdit );
+         selectField( ui->LocFrame->getTextEditEdit() );
          *Key = 0;
          break;
       case Qt::Key_F6:
-         selectField( ui->QTHEdit );
+         selectField( ui->QTHFrame->getTextEditEdit() );
          *Key = 0;
          break;
    case Qt::Key_F12:
@@ -1071,20 +1072,20 @@ void QSOLogFrame::getScreenEntry()
    getScreenContactTime();
    getScreenRigData();
    getscreenRotatorData();
-   screenContact.cs.setFullCall( ui->CallsignEdit->text() );
+   screenContact.cs.setFullCall( ui->CallsignFrame->getTextEditEdit()->text() );
 
-   screenContact.reps = ui->RSTTXEdit->text().trimmed();
-   screenContact.serials = ui->SerTXEdit->text().trimmed();
-   screenContact.repr = ui->RSTRXEdit->text().trimmed();
-   screenContact.serialr = ui->SerRXEdit->text().trimmed();
+   screenContact.reps = ui->RSTTxFrame->getTextEditEdit()->text().trimmed();
+   screenContact.serials = ui->SerTxFrame->getTextEditEdit()->text().trimmed();
+   screenContact.repr = ui->RSTRxFrame->getTextEditEdit()->text().trimmed();
+   screenContact.serialr = ui->SerRxFrame->getTextEditEdit()->text().trimmed();
 
-   QString loc = ui->LocEdit->text();
+   QString loc = ui->LocFrame->getTextEditEdit()->text();
    screenContact.loc.setLoc( loc );
 
-   QString extra = ui->QTHEdit->text().trimmed();
+   QString extra = ui->QTHFrame->getTextEditEdit()->text().trimmed();
    screenContact.extraText = extra;
 
-   QString comments = ui->CommentsEdit->text().trimmed();
+   QString comments = ui->commentsFrame->getTextEditEdit()->text().trimmed();
    screenContact.comments = comments;
    if (edit)
    {
@@ -1138,14 +1139,14 @@ void QSOLogFrame::showScreenEntry( )
       temp.copyFromArg( screenContact ); // as screen contact gets corrupted by auto changes
       // op1, op2 in ScreenContact get corrupted as well
       showScreenContactTime();
-      ui->CallsignEdit->setText(temp.cs.getFullCall());
-      ui->RSTTXEdit->setText(temp.reps.trimmed());
-      ui->SerTXEdit->setText(temp.serials.trimmed());
-      ui->RSTRXEdit->setText(temp.repr.trimmed());
-      ui->SerRXEdit->setText(temp.serialr.trimmed());
-      ui->LocEdit->setText(temp.loc.getLoc());  // also forces update of score etc
-      ui->QTHEdit->setText(temp.extraText.trimmed());
-      ui->CommentsEdit->setText(temp.comments.trimmed());
+      ui->CallsignFrame->getTextEditEdit()->setText(temp.cs.getFullCall());
+      ui->RSTTxFrame->getTextEditEdit()->setText(temp.reps.trimmed());
+      ui->SerTxFrame->getTextEditEdit()->setText(temp.serials.trimmed());
+      ui->RSTRxFrame->getTextEditEdit()->setText(temp.repr.trimmed());
+      ui->SerRxFrame->getTextEditEdit()->setText(temp.serialr.trimmed());
+      ui->LocFrame->getTextEditEdit()->setText(temp.loc.getLoc());  // also forces update of score etc
+      ui->QTHFrame->getTextEditEdit()->setText(temp.extraText.trimmed());
+      ui->commentsFrame->getTextEditEdit()->setText(temp.comments.trimmed());
       ui->NonScoreCheckBox->setChecked(temp.contactFlags & NON_SCORING);
       ui->DeletedCheckBox->setChecked(temp.contactFlags & DONT_PRINT);
       if (edit)
@@ -1178,13 +1179,13 @@ void QSOLogFrame::showScreenEntry( )
       valid( cmCheckValid ); // make sure contact is valid - display any errors
       if ( temp.contactFlags & ( COMMENT_ONLY | LOCAL_COMMENT ) )
       {
-         selectField( ui->CommentsEdit );
+         selectField( ui->commentsFrame->getTextEditEdit() );
       }
       else
          selectField( nullptr );
 
-      ui->SerTXEdit->setReadOnly(!edit);
-      ui->SerTXEdit->setClearButtonEnabled(edit);
+      ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+      ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
    }
 }
@@ -1221,17 +1222,17 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
    {
       return;
    }
-   ui->SerTXEdit->setReadOnly(!edit);
-   ui->SerTXEdit->setClearButtonEnabled(edit);
+   ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+   ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
-   if ( current == ui->LocEdit )
+   if ( current == ui->LocFrame->getTextEditEdit() )
    {
       // do any required character substitutions, but only when we have a full
       // locator
 
       // This does something to correct sloppy typing
 
-      QString loc = ui->LocEdit->text().trimmed().toUpper();
+      QString loc = ui->LocFrame->getTextEditEdit()->text().trimmed().toUpper();
       if (loc.size() == 6 || loc.size() == 8)
       {
          if (loc[0] == '1')
@@ -1287,24 +1288,24 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
          {
             loc[5] = 'O';
          }
-         if (loc != ui->LocEdit->text().trimmed())
+         if (loc != ui->LocFrame->getTextEditEdit()->text().trimmed())
          {
-            ui->LocEdit->setText(loc);
-            doGJVEditChange( ui->LocEdit );   // start the match thread
+            ui->LocFrame->getTextEditEdit()->setText(loc);
+            doGJVEditChange( ui->LocFrame->getTextEditEdit() );   // start the match thread
          }
       }
    }
-   if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit )
-        || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit )
+   if ( ( current == ui->CallsignFrame->getTextEditEdit() ) || ( current == ui->LocFrame->getTextEditEdit() )
+        || ( current == ui->SerRxFrame->getTextEditEdit() ) || ( current == ui->SerTxFrame->getTextEditEdit() )
         || ( current == ui->frequencyEdit ))
    {
       getScreenEntry(); // make sure it is saved
       valid( cmCheckValid ); // make sure all single and cross field
       doAutofill();           // should only be time to be filled
 
-      if (current == ui->CallsignEdit)
+      if (current == ui->CallsignFrame->getTextEditEdit())
       {
-          MinosLoggerEvents::sendCallsignLookup(contest, ui->CallsignEdit->text());
+          MinosLoggerEvents::sendCallsignLookup(contest, ui->CallsignFrame->getTextEditEdit()->text());
       }
    }
 }
@@ -1328,7 +1329,7 @@ void QSOLogFrame::setScoreText( int dist, bool partial, bool xband )
 //---------------------------------------------------------------------------
 void QSOLogFrame::calcLoc( )
 {
-    QString gridref = ui->LocEdit->text().trimmed();
+    QString gridref = ui->LocFrame->getTextEditEdit()->text().trimmed();
 
     if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
     {
@@ -1555,7 +1556,7 @@ void QSOLogFrame::selectField( QWidget *v )
 {
     if ( v == nullptr )
     {
-        v = ui->CallsignEdit;
+        v = ui->CallsignFrame->getTextEditEdit();
 
         if ( catchup || screenContact.contactFlags & TO_BE_ENTERED )
         {
@@ -1570,15 +1571,15 @@ void QSOLogFrame::selectField( QWidget *v )
         return ;
     }
 
-    if ( ( current == ui->CallsignEdit ) || ( current == ui->LocEdit )
-         || ( current == ui->SerRXEdit ) || ( current == ui->SerTXEdit )
+    if ( ( current == ui->CallsignFrame->getTextEditEdit() ) || ( current == ui->LocFrame->getTextEditEdit() )
+         || ( current == ui->SerRxFrame->getTextEditEdit() ) || ( current == ui->SerTxFrame->getTextEditEdit() )
          || (current == ui->frequencyEdit)
          )
     {
         valid( cmCheckValid ); // make sure all single and cross field
         doAutofill();
     }
-    if ( v == ui->SerTXEdit )
+    if ( v == ui->SerTxFrame->getTextEditEdit() )
     {
         ( static_cast< QLineEdit * > (v) ) ->setReadOnly(false);
     }
@@ -1631,8 +1632,8 @@ void QSOLogFrame::doAutofill()
 
    //rst sent (autofill S9)
 
-   fillRst( ui->RSTTXEdit, vcct->reps, vcct->mode );
-   fillRst( ui->RSTRXEdit, vcct->repr, vcct->mode );
+   fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode );
+   fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode );
 }
 //==============================================================================
 void QSOLogFrame::lgTraceerr( int err )
@@ -1986,12 +1987,12 @@ void QSOLogFrame::updateQSODisplay()
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
-   ui->LocEdit->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
+   ui->LocFrame->getTextEditEdit()->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
    ui->LocFrame->setVisible(contest->locatorMandatoryField.getValue());
    bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
    ui->QTHFrame->setEnabled( exchangeNeeded );
    ui->QTHFrame->setVisible(exchangeNeeded);
-   ui->CommentsEdit->setEnabled(notProtected);
+   ui->commentsFrame->setEnabled(notProtected);
 
 
    ui->ModeComboBoxGJV->setEnabled(notProtected);
@@ -2143,13 +2144,13 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
    {
       getScreenEntry();
 
-      if ( current == ui->CallsignEdit || Sender == ui->CallsignEdit )
+      if ( current == ui->CallsignFrame->getTextEditEdit() || Sender == ui->CallsignFrame->getTextEditEdit() )
       {
          // clear the error list
          contest->DupSheet.clearCurDup();	// as edited, no longer a dup(?)
 
       }
-      if ( current == ui->LocEdit || Sender == ui->LocEdit )
+      if ( current == ui->LocFrame->getTextEditEdit() || Sender == ui->LocFrame->getTextEditEdit() )
       {
          // force bearing calc
          calcLoc();
@@ -2396,7 +2397,7 @@ void QSOLogFrame::logCurrentContact( )
       {
          // reset focus to serial sent
          //????????????? But its disabled...
-         selectField( ui->SerTXEdit );
+         selectField( ui->SerTxFrame->getTextEditEdit() );
          return ;
       }
    }
@@ -2464,8 +2465,8 @@ void QSOLogFrame::setDtgSection()
 
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
-   ui->CallsignEdit->setText(lct->cs.getFullCall());
-   ui->LocEdit->setText(lct->loc.getLoc());  // also forces update of score etc
+   ui->CallsignFrame->getTextEditEdit()->setText(lct->cs.getFullCall());
+   ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());  // also forces update of score etc
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2479,7 +2480,7 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
         QString exch = lct->extraText.getValue();
         if (exch.size())
         {
-           ui->QTHEdit->setText(exch);
+           ui->QTHFrame->getTextEditEdit()->setText(exch);
         }
       }
    }
@@ -2487,18 +2488,18 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
    // validation has been done
 
    // make sure dtg gets entered if needed
-   ui->CallsignEdit->setFocus();
+   ui->CallsignFrame->getTextEditEdit()->setFocus();
    doAutofill();
-   ui->CallsignEdit->setFocus();
+   ui->CallsignFrame->getTextEditEdit()->setFocus();
 
-   doGJVEditChange(ui->CallsignEdit);
-   doGJVEditChange(ui->LocEdit);
-   doGJVEditChange(ui->QTHEdit);
+   doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+   doGJVEditChange(ui->LocFrame->getTextEditEdit());
+   doGJVEditChange(ui->QTHFrame->getTextEditEdit());
 }
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
-   ui->CallsignEdit->setText(lct->cs.getFullCall());
-   ui->LocEdit->setText(lct->loc.getLoc());
+   ui->CallsignFrame->getTextEditEdit()->setText(lct->cs.getFullCall());
+   ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());
 
    // only transfer qth info if required for this ContestLog
    // and it might be valid...
@@ -2509,7 +2510,7 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
         QString exch = lct->extraText;
         if (exch.size())
         {
-            ui->QTHEdit->setText(exch);
+            ui->QTHFrame->getTextEditEdit()->setText(exch);
         }
       }
    }
@@ -2517,13 +2518,13 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
    // validation has been done
 
    // make sure dtg gets entered if needed
-   ui->CallsignEdit->setFocus();
+   ui->CallsignFrame->getTextEditEdit()->setFocus();
    doAutofill();
-   ui->CallsignEdit->setFocus();
+   ui->CallsignFrame->getTextEditEdit()->setFocus();
 
-   doGJVEditChange(ui->CallsignEdit);
-   doGJVEditChange(ui->LocEdit);
-   doGJVEditChange(ui->QTHEdit);
+   doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+   doGJVEditChange(ui->LocFrame->getTextEditEdit());
+   doGJVEditChange(ui->QTHFrame->getTextEditEdit());
 }
 
 void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory )
@@ -2533,15 +2534,15 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
         logDataFromBandmapOrMemory = fromBandmapOrMemory;
     }
 
-    ui->CallsignEdit->setText(cs);
-    ui->LocEdit->setText(loc);
+    ui->CallsignFrame->getTextEditEdit()->setText(cs);
+    ui->LocFrame->getTextEditEdit()->setText(loc);
     if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
     {
        if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
        {
            if (exchange.size())
            {
-                ui->QTHEdit->setText(exchange);
+                ui->QTHFrame->getTextEditEdit()->setText(exchange);
            }
        }
     }
@@ -2550,18 +2551,18 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
     // validation has been done
 
     // make sure dtg gets entered if needed
-    ui->CallsignEdit->setFocus();
+    ui->CallsignFrame->getTextEditEdit()->setFocus();
     doAutofill();
-    ui->CallsignEdit->setFocus();
+    ui->CallsignFrame->getTextEditEdit()->setFocus();
 
-    doGJVEditChange(ui->CallsignEdit);
-    doGJVEditChange(ui->LocEdit);
-    doGJVEditChange(ui->QTHEdit);
+    doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+    doGJVEditChange(ui->LocFrame->getTextEditEdit());
+    doGJVEditChange(ui->QTHFrame->getTextEditEdit());
 }
 void QSOLogFrame::transferFromWSJTX(QString call)
 {
-    ui->CallsignEdit->setText(call);
-    doGJVEditChange(ui->CallsignEdit);
+    ui->CallsignFrame->getTextEditEdit()->setText(call);
+    doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
 }
 void QSOLogFrame::sortUnfilledCatchupTime( )
 {
@@ -2630,8 +2631,8 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    ui->MainOpComboBox->setCurrentText(slct->op1.getValue());
    ui->SecondOpComboBox->setCurrentText(slct->op2.getValue());
    sortUnfilledCatchupTime();
-   ui->SerTXEdit->setReadOnly(!edit);
-   ui->SerTXEdit->setClearButtonEnabled(edit);
+   ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
+   ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
    int tne = screenContact.time.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0
@@ -2788,13 +2789,13 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     }
     if (ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
     {
-        if (ui->RSTTXEdit->text().trimmed() == "5")
+        if (ui->RSTTxFrame->getTextEditEdit()->text().trimmed() == "5")
         {
-            ui->RSTTXEdit->clear();
+            ui->RSTTxFrame->getTextEditEdit()->clear();
         }
-        if (ui->RSTRXEdit->text().trimmed() == "5")
+        if (ui->RSTRxFrame->getTextEditEdit()->text().trimmed() == "5")
         {
-            ui->RSTRXEdit->clear();
+            ui->RSTRxFrame->getTextEditEdit()->clear();
         }
     }
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
