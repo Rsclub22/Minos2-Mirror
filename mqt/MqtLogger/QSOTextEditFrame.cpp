@@ -9,7 +9,7 @@ QSOTextEditFrame::~QSOTextEditFrame()
 {
 
 }
-void QSOTextEditFrame::setup(QString name, bool uc, bool horizontal)
+void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool horizontal)
 {
     setFrameShape(QFrame::NoFrame);
     QVBoxLayout *TextEditLayout = nullptr;
@@ -69,7 +69,7 @@ void QSOTextEditFrame::setup(QString name, bool uc, bool horizontal)
     {
         TextEditEdit->setValidator(&ucValidator);
     }
-    TextEditEdit->installEventFilter(parent());
+    TextEditEdit->installEventFilter(filterWidget);
 
     setFocusPolicy(Qt::NoFocus);
 }
@@ -102,4 +102,5 @@ void QSOTextEditFrame::onTextEdit_textChanged(const QString &arg)
 void QSOTextEditFrame::onClearButtonClicked()
 {
     TextEditEdit->clear();
+    TextEditEdit->setFocus();
 }

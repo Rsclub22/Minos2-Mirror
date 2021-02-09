@@ -51,50 +51,50 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
 
-    ui->CallsignFrame->setup("Call");
+    ui->CallsignFrame->setup("Call", this);
     CallsignLabelString = tr("Callsign (F1)");
     CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
     ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
     connect(ui->CallsignFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onCallsignEdit_textChanged(const QString &)));
 
-    ui->RSTTxFrame->setup("RstTx");
+    ui->RSTTxFrame->setup("RstTx", this);
     RSTTXLabelString = tr("RS(T)Tx(F2)");
     RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
     ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
     connect(ui->RSTTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTTXEdit_textChanged(const QString &)));
 
-    ui->SerTxFrame->setup("serTx");
+    ui->SerTxFrame->setup("serTx", this);
     SerTXLabelString = tr("Serial Tx");
     SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
     ui->SerTxFrame->getTextEditlabel()->setText("<b>" + SerTXLabelString);
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::ClickFocus);
     connect(ui->SerTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerTXEdit_textChanged(const QString &)));
 
-    ui->RSTRxFrame->setup("RstRx");
+    ui->RSTRxFrame->setup("RstRx", this);
     RSTRXLabelString = tr("RS(T)Rx(F3)");
     RSTRXFW = new FocusWatcher(ui->RSTRxFrame->getTextEditEdit());
     ui->RSTRxFrame->getTextEditlabel()->setText("<b>" + RSTRXLabelString);
     connect(ui->RSTRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTRXEdit_textChanged(const QString &)));
 
-    ui->SerRxFrame->setup("SerRx");
+    ui->SerRxFrame->setup("SerRx", this);
     SerRXLabelString = tr("Serial Rx (F4)");
     SerRXFW = new FocusWatcher(ui->SerRxFrame->getTextEditEdit());
     ui->SerRxFrame->getTextEditlabel()->setText("<b>" + SerRXLabelString);
     connect(ui->SerRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerRXEdit_textChanged(const QString &)));
 
-    ui->LocFrame->setup("Loc");
+    ui->LocFrame->setup("Loc", this);
     LocLabelString = tr("Loc (F5)");
     LocFW = new FocusWatcher(ui->LocFrame->getTextEditEdit());
     ui->LocFrame->getTextEditlabel()->setText("<b>" + LocLabelString);
     connect(ui->LocFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onLocEdit_textChanged(const QString &)));
 
-    ui->QTHFrame->setup("QTH");
+    ui->QTHFrame->setup("QTH", this);
     QTHLabelString = tr("Exchange (F6)");
     QTHFW = new FocusWatcher(ui->QTHFrame->getTextEditEdit());
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
     connect(ui->QTHFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onQTHEdit_textChanged(const QString &)));
 
-    ui->commentsFrame->setup("Comments");
+    ui->commentsFrame->setup("Comments", this);
     CommentsLabelString = tr("Comments");
     CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
     ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
@@ -1132,6 +1132,7 @@ void QSOLogFrame::showScreenEntry( )
    if ( contest )
    {
       // we only validate this contact up to the validation point
+       ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
 
       contest->validationPoint = selectedContact?selectedContact->getLogSequence():0;
       ScreenContact temp;
@@ -1183,7 +1184,6 @@ void QSOLogFrame::showScreenEntry( )
       else
          selectField( nullptr );
 
-      ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
    }
 }
