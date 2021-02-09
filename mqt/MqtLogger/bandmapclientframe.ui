@@ -60,6 +60,9 @@
    </item>
    <item>
     <widget class="QPushButton" name="resendSpotsTestPb">
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="text">
       <string>Test Resend Spots</string>
      </property>

@@ -38,7 +38,7 @@ BandmapView::BandmapView(QWidget *parent) :
     selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
 {
 
-    setFocusPolicy((Qt::WheelFocus));
+    setFocusPolicy((Qt::ClickFocus));
     //setMinimumSize(minimumSizeHint());
 
     bandmapScene = new QGraphicsScene(parent);

@@ -84,15 +84,19 @@ QLabel *QSOTextEditFrame::getTextEditlabel() const
 }
 void QSOTextEditFrame::onTextEdit_textChanged(const QString &arg)
 {
-    clearButton->setEnabled(!arg.isEmpty());
 
     if (arg.isEmpty())
     {
         clearButton->setText("");
+        clearButton->setEnabled(false);
     }
     else
     {
-        clearButton->setText("x");
+        if (!TextEditEdit->isReadOnly())
+        {
+            clearButton->setText("x");
+            clearButton->setEnabled(true);
+        }
     }
 }
 void QSOTextEditFrame::onClearButtonClicked()

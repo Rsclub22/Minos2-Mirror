@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>754</width>
+    <width>846</width>
     <height>317</height>
    </rect>
   </property>
@@ -531,14 +531,7 @@ to</string>
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>Spot Last Logged: </string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="lastLoggedCallsignLbl">
-         <property name="text">
-          <string/>
+          <string>Spot Last Logged ()</string>
          </property>
         </widget>
        </item>
@@ -737,19 +730,6 @@ to</string>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_9">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QPushButton" name="GJVOKButton">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
@@ -761,19 +741,6 @@ to</string>
         <string>Log</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="GJVForceButton">
@@ -795,19 +762,6 @@ to</string>
       </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_11">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QPushButton" name="GJVCancelButton">
        <property name="focusPolicy">
         <enum>Qt::NoFocus</enum>
@@ -816,19 +770,6 @@ to</string>
         <string>Cancel</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_12">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>10</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="MatchXferButton">
@@ -867,6 +808,19 @@ to</string>
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <widget class="QPushButton" name="InsertBeforeButton">
         <property name="focusPolicy">
@@ -919,6 +873,19 @@ to</string>
          <string>Next</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

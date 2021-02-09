@@ -212,7 +212,7 @@ void TLogContainer::on_TimeDisplayTimer( )
 #ifdef FINDFOCUS
        QWidget *f = QApplication::focusWidget ();
        if(f)
-            sblabel1->setText(f->metaObject()->className());
+            sblabel1->setText(f->metaObject()->className() + QString("|") + f->objectName());
        else
            sblabel1->setText("<unknown>");
 #endif

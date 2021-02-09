@@ -414,6 +414,8 @@ void QSOLogFrame::setAsEdit(bool s, QString b)
         edit = true;
         ui->GJVCancelButton->setText(tr("Return to Log"));
         on_tabSandP();
+        ui->SerTxFrame->getTextEditEdit()->setReadOnly(false);
+        ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::StrongFocus);
     }
 }
 
@@ -646,7 +648,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        return;
     }
     ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-    ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
+    ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
 
     getScreenEntry(); // make sure it is saved
 
@@ -837,7 +839,6 @@ void QSOLogFrame::on_GJVForceButton_clicked()
        return;
     }
     ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-    ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
     if (dlgForced())
         emit QSOFrameCancelled();
@@ -915,7 +916,6 @@ void QSOLogFrame::doGJVCancelButton_clicked()
     else
     {
         ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-        ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
         ScreenContact *temp = nullptr;
         if ( !partialContact )
@@ -1012,7 +1012,6 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
     if (w == ui->SerTxFrame->getTextEditEdit())
     {
         ui->SerTxFrame->getTextEditEdit()->setReadOnly(false);
-        ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(true);
     }
     if (edit && (w == ui->timeEdit || w == ui->dateEdit))
     {
@@ -1185,7 +1184,6 @@ void QSOLogFrame::showScreenEntry( )
          selectField( nullptr );
 
       ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-      ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
    }
 }
@@ -1223,7 +1221,6 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
       return;
    }
    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-   ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
    if ( current == ui->LocFrame->getTextEditEdit() )
    {
@@ -2293,7 +2290,7 @@ void QSOLogFrame::logScreenEntry( )
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
-   ui->lastLoggedCallsignLbl->setText(lct->cs.getFullCall());
+   ui->lastLoggedChkBx->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
    lastLoggedLocator = lct->loc.getLoc();
    lastLoggedFreq = lct->frequency.getValue();
 
@@ -2632,7 +2629,6 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    ui->SecondOpComboBox->setCurrentText(slct->op2.getValue());
    sortUnfilledCatchupTime();
    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
-   ui->SerTxFrame->getTextEditEdit()->setClearButtonEnabled(edit);
 
    int tne = screenContact.time.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0
@@ -3071,7 +3067,6 @@ void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 {
 
     ui->lastLoggedChkBx->setVisible(visible);
-    ui->lastLoggedCallsignLbl->setVisible(visible);
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
@@ -3083,7 +3078,6 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 {
 
     ui->lastLoggedChkBx->setDisabled(disabled);
-    ui->lastLoggedCallsignLbl->setDisabled(disabled);
     ui->spotPb->setDisabled(disabled);
     ui->lastSpotSentTitleLbl->setDisabled(disabled);
     ui->lastSpotSentLbl->setDisabled(disabled);
