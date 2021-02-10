@@ -166,13 +166,22 @@ void QSOLogFrame::adjustMargins(QLayout *layout)
     {
         QLayoutItem *li = layout->itemAt(i);
         QLayout *l = li->layout();
+        QWidget *w = li->widget();
         if (l)
         {
             adjustMargins(l);
-            l->setMargin(0);
-            l->setContentsMargins(0, 0, 0, 0);
+        }
+        if (w)
+        {
+            trace(li->widget()->objectName());
+            if (w->layout())
+            {
+                adjustMargins(w->layout());
+            }
         }
     }
+    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 void QSOLogFrame::on_FontChanged()
 {
