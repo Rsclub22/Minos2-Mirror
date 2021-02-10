@@ -169,8 +169,8 @@ void QSOLogFrame::adjustMargins(QLayout *layout)
         if (l)
         {
             adjustMargins(l);
-            l->setMargin(1);
-            l->setContentsMargins(1, 1, 1, 1);
+            l->setMargin(0);
+            l->setContentsMargins(0, 0, 0, 0);
         }
     }
 }
