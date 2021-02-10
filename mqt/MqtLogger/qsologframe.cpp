@@ -156,8 +156,24 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
     }
     on_tabSandP();  // show (or not) the Call/S&P choice
+
+    adjustMargins(layout());
 }
 
+void QSOLogFrame::adjustMargins(QLayout *layout)
+{
+    for(int i = 0; i < layout->count(); i++)
+    {
+        QLayoutItem *li = layout->itemAt(i);
+        QLayout *l = li->layout();
+        if (l)
+        {
+            adjustMargins(l);
+            l->setMargin(1);
+            l->setContentsMargins(1, 1, 1, 1);
+        }
+    }
+}
 void QSOLogFrame::on_FontChanged()
 {
     int lcf;
