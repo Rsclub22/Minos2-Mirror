@@ -16,6 +16,7 @@
 #include "radiosettingdialog.h"
 #include "ui_radiosettingdialog.h"
 #include "rigcommon.h"
+#include "rigcontrolcommonconstants.h"
 #include "ContestApp.h"
 
 
@@ -91,6 +92,37 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
              << ui->mgm_14MHzLbl  << ui->mgm_21MHzLbl << ui->mgm_28MHzLbl;
 
 
+    bandSwLineEdits << ui->bandSwLineEdit_1_8mhz << ui->bandSwLineEdit_3_5mhz << ui->bandSwLineEdit_7mhz
+                    << ui->bandSwLineEdit_14mhz << ui->bandSwLineEdit_21mhz << ui->bandSwLineEdit_28mhz
+                    << ui->bandSwLineEdit_50mhz << ui->bandSwLineEdit_70mhz << ui->bandSwLineEdit_144mhz
+                    << ui->bandSwLineEdit_432mhz << ui->bandSwLineEdit_1296mhz << ui->bandSwLineEdit_2300mhz
+                    << ui->bandSwLineEdit_3_4ghz << ui->bandSwLineEdit_5_6ghz << ui->bandSwLineEdit_10ghz;
+
+    for (int i = 0; i < bandSwLineEdits.count(); i++)
+    {
+        connect(bandSwLineEdits[i], &QLineEdit::editingFinished, this, [=]() {onBandSwLineEditingFinished(i);});
+    }
+
+    bandSwLabels << ui->bandSw_1_8MHzLbl << ui->bandSw_3_5MHzLbl << ui->bandSw_7MHzLbl
+                 << ui->bandSw_14MHzLbl << ui->bandSw_21MHzLbl << ui->bandSw_28MHzLbl
+                 << ui->bandSw_50MHzLbl << ui->bandSw_70MHzLbl << ui->bandSw_144MHzLbl
+                 << ui->bandSw_432MHzLbl << ui->bandSw_1296MHzLbl <<ui->bandSw_2300MHzLbl
+                 << ui->bandSw_3_4GHzLbl << ui->bandSw_5_6GHzLbl << ui->bandSw_10GHzLbl;
+
+
+
+    for (int i = 0; i < bands.count(); i++)
+    {
+        BandSwDetails bswd;
+        bswd.bandSwLineEdit = bandSwLineEdits[i];
+        bswd.bandSwLabel = bandSwLabels[i];
+        bswd.bandType = bands[i]->getType();
+        bandSwDetails.insert(bands[i].data()->uk, bswd);
+    }
+
+    fillPortsInfo(ui->bandSwCombo);
+    connect(ui->enableBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableBandSwChkBox();});
+    connect(ui->enableSerialBandSwChkBox, &QCheckBox::stateChanged, this, [=]() {onEnableSerialBandSwChkBox();});
 
 
     setHf(hfFlag);
@@ -105,10 +137,20 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     freqPresetReadSettings(presetFreq, bands); // static
 
+
+
     ui->turnOffColourRadioFreqDialChkBox->setChecked(readRadioSettingsCheckBox(elpContestTurnOffOperatingFreqColorRadioDial));
     ui->contestStartIgnorePresetFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestStartIgnorePresetFreq));
     ui->contestChangeIgnorePreviousFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeIgnorePreviousFreq));
     ui->constestChangeRestoreContestModeChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeRestoreContestMode));
+
+    ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
+    enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
+
+    ui->enableSerialBandSwChkBox->setChecked(readEnableSerialBandSwitchFromIni());
+    ui->bandSwCombo->setVisible(ui->enableSerialBandSwChkBox->isChecked());
+    ui->comportLabel->setVisible(ui->enableSerialBandSwChkBox->isChecked());
+
 
     loadSettingsToDialog();
 
@@ -123,14 +165,27 @@ RadioSettingDialog::~RadioSettingDialog()
 
 void RadioSettingDialog::setHf(bool hfFlag)
 {
-    for(auto &lbl: hfLabels)
+    foreach(auto &lbl, hfLabels)
     {
        lbl->setVisible(hfFlag);
     }
-    for(auto &ledt: hfLineEdits)
+    foreach(auto &ledt, hfLineEdits)
     {
         ledt->setVisible(hfFlag);
     }
+
+
+    foreach(auto &bswd, bandSwDetails)
+    {
+        if (bswd.bandType == HF_BANDTYPE)
+        {
+            bswd.bandSwLineEdit->setVisible(hfFlag);
+            bswd.bandSwLabel->setVisible(hfFlag);
+        }
+
+    }
+
+
 
 }
 
@@ -211,6 +266,25 @@ bool RadioSettingDialog::checkInBand(Frequency freq, int band)
 }
 
 
+void RadioSettingDialog::onBandSwLineEditingFinished(int i)
+{
+    Q_UNUSED(i)
+}
+
+void RadioSettingDialog::onEnableBandSwChkBox()
+{
+    enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
+}
+
+void RadioSettingDialog::onEnableSerialBandSwChkBox()
+{
+    ui->bandSwCombo->setVisible(ui->enableSerialBandSwChkBox->isChecked());
+    ui->comportLabel->setVisible(ui->enableSerialBandSwChkBox->isChecked());
+
+}
+
+
+
 void RadioSettingDialog::onAccepted()
 {
     saveSettings();
@@ -230,6 +304,8 @@ void RadioSettingDialog::saveSettings()
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_MGM, config);
 
     saveRadioSettingsCheckBoxes();
+    saveBandSwComport();
+    saveBandSwData();
 
 }
 
@@ -253,6 +329,29 @@ void RadioSettingDialog::saveRadioSettingsCheckBoxes()
     saveRadioSettingsCheckBox(ui->constestChangeRestoreContestModeChkBox, elpContestChangeRestoreContestMode);
 
 
+}
+
+void RadioSettingDialog::saveBandSwData()
+{
+    foreach(auto &b, bands)
+    {
+        QString bandIni;
+        bandIni = b.data()->uk;
+        bandIni = bandIni.remove('\x20').replace('.', '_');
+        QString storedData = readBandSwitchDataFromIni(bandIni);
+        if (bandSwDetails.value(b.data()->uk).bandSwLineEdit->text() != storedData)
+        {
+            writeBandSwitchDataToIni(bandIni, bandSwDetails.value(b.data()->uk).bandSwLineEdit->text().trimmed());
+        }
+    }
+}
+
+void RadioSettingDialog::saveBandSwComport()
+{
+    if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
+    {
+        writeSerialComportBandSwitchDataToIni(ui->bandSwCombo->currentText());
+    }
 }
 
 
@@ -327,9 +426,38 @@ void RadioSettingDialog::loadSettingsToDialog()
         mgmPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
     }
 
+    foreach(auto &b, bands)
+    {
+        QString iniBand = b.data()->uk;
+        iniBand = iniBand.remove('\x20').replace('.', '_');
+        QString bandData = readBandSwitchDataFromIni(iniBand);
+        if (bandSwDetails.contains(b.data()->uk))
+        {
+            bandSwDetails.value(b.data()->uk).bandSwLineEdit->setText(bandData);
+        }
+
+    }
+
+    QString comport = readSerialComportBandSwitchFromIni();
+    if (!comport.isEmpty())
+    {
+        ui->bandSwCombo->setCurrentText(comport);
+    }
+
+
 }
 
+void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
+{
+    foreach (auto &b, bands)
+    {
+        bandSwDetails.value(b.data()->uk).bandSwLineEdit->setEnabled(enabled);
+        bandSwDetails.value(b.data()->uk).bandSwLabel->setEnabled(enabled);
+        ui->bandSwMsgsLabel->setEnabled(enabled);
+    }
 
+    ui->enableSerialBandSwChkBox->setEnabled(enabled);
+}
 
 
 void RadioSettingDialog::onTurnOffColourRadioFreqDialChkChanged(bool checked)

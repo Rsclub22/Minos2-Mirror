@@ -88,6 +88,7 @@ SOURCES += \
     StartConfig.cpp \
     TreeUtils.cpp \
     serialdata.cpp \
+    serialtvswitch.cpp \
     spotdatabase.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
@@ -173,6 +174,7 @@ HEADERS += \
     StartConfig.h \
     TreeUtils.h \
     serialdata.h \
+    serialtvswitch.h \
     spotdatabase.h \
     validators.h \
     waitcursor.h \

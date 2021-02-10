@@ -137,6 +137,12 @@ const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
 const QString DEFAULT_FT817_RADIO_RETRY = "3";
 const QString DEFAULT_FT817_RADIO_TIMEOUT = "1000";
 
+const QString BANDSWITCH_INI_FILENAME = "./Configuration/BandSwitchData.ini";
+const QString BANDSWITCH_KEY_TEXT = "_bandSwData";
+const QString BANDSWITCH_ENABLE_KEY_TEXT = "bandSwEnable";
+const QString BANDSWITCH_SERIAL_ENABLE_KEY_TEXT = "bandSwSerialEnable";
+const QString BANDSWITCH_COMPORT_KEY_TEXT = "comport";
+
 // RadioName when no radio is connected
 //const QString NORADIO = "NoRadio";
 
@@ -337,5 +343,15 @@ const int DEFAULT_RIGCTLD_CONNECT_DELAY = 2;
 const int MAX_RIGCTLD_CONNECT_DELAY = 5;
 
 const int CHECK_CONTEST_FREQ_MATCH_TIMEOUT = 2000;
+
+
+QString readBandSwitchDataFromIni(QString band);
+void writeBandSwitchDataToIni(QString band, QString data);
+bool readEnableBandSwitchFromIni();
+void writeEnableBandSwitchDataToIni(bool data);
+bool readEnableSerialBandSwitchFromIni();
+void writeEnableSerialBandSwitchDataToIni(bool data);
+QString readSerialComportBandSwitchFromIni();
+void writeSerialComportBandSwitchDataToIni(QString comport)
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H

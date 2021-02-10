@@ -38,7 +38,6 @@ SOURCES += main.cpp\
     addtransverterdialog.cpp \
     addradiodialog.cpp \
     rigsetupdialog.cpp \
-    serialtvswitch.cpp \
     smeterbar.cpp \
     rigctldclient.cpp
 
@@ -53,7 +52,6 @@ HEADERS  += rigcontrolmainwindow.h \
     addtransverterdialog.h \
     addradiodialog.h \
     rigsetupdialog.h \
-    serialtvswitch.h \
     smeterbar.h \
     rigctldclient.h
 

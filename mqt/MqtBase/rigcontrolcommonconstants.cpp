@@ -247,3 +247,79 @@ void PresetFreq::readSettings(const QStringList &listOfBands)
 }
 
 
+QString readBandSwitchDataFromIni(QString band)
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString iniBand = band;
+    iniBand.remove('\x20').replace('.', '_');
+    QSettings config(fileName, QSettings::IniFormat);
+    QString value = config.value(iniBand + BANDSWITCH_KEY_TEXT, "").toString();
+    return value;
+
+}
+
+void writeBandSwitchDataToIni(QString band, QString data)
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+    QString iniBand = band;
+    iniBand.remove('\x20').replace('.', '_');
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue(iniBand + BANDSWITCH_KEY_TEXT, data);
+}
+
+
+bool readEnableBandSwitchFromIni()
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool value = config.value(BANDSWITCH_ENABLE_KEY_TEXT, false).toBool();
+    return value;
+
+}
+
+void writeEnableBandSwitchDataToIni(bool data)
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue(BANDSWITCH_ENABLE_KEY_TEXT, data);
+}
+
+bool readEnableSerialBandSwitchFromIni()
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    bool value = config.value(BANDSWITCH_SERIAL_ENABLE_KEY_TEXT, false).toBool();
+    return value;
+
+}
+
+void writeEnableSerialBandSwitchDataToIni(bool data)
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue(BANDSWITCH_SERIAL_ENABLE_KEY_TEXT, data);
+}
+
+
+QString readSerialComportBandSwitchFromIni()
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    QString value = config.value(BANDSWITCH_COMPORT_KEY_TEXT, "").toString();
+    return value;
+
+}
+
+void writeSerialComportBandSwitchDataToIni(QString comport)
+{
+    QString fileName = BANDSWITCH_INI_FILENAME;
+
+    QSettings config(fileName, QSettings::IniFormat);
+    config.setValue(BANDSWITCH_COMPORT_KEY_TEXT, comport);
+}
+

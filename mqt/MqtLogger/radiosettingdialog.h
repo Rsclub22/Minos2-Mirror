@@ -28,7 +28,15 @@ namespace Ui {
 class RadioSettingDialog;
 }
 
+class BandSwDetails
+{
 
+public:
+    QLineEdit *bandSwLineEdit;
+    QLabel *bandSwLabel;
+    QString bandType;
+
+};
 
 
 class RadioSettingDialog : public QDialog
@@ -62,6 +70,9 @@ private slots:
     void onTurnOffColourRadioFreqDialChkChanged(bool checked);
     void onRestoreContestModeChecked(bool checked);
     void onAccepted();
+    void onBandSwLineEditingFinished(int i);
+    void onEnableBandSwChkBox();
+    void onEnableSerialBandSwChkBox();
 private:
     Ui::RadioSettingDialog *ui;
     //QStringList presetFreq;
@@ -78,6 +89,14 @@ private:
 
     QList<QLabel*> hfLabels;
     QList<QLineEdit*> hfLineEdits;
+
+    QList<QLineEdit*> bandSwLineEdits;
+    QList<QLabel*> bandSwLabels;
+
+
+    QMap<QString, BandSwDetails> bandSwDetails;
+
+
 
     bool hfFlag;
 
@@ -100,6 +119,9 @@ private:
     bool readRadioSettingsCheckBox(LOGGERPROFILE profile);
     void saveRadioSettingsCheckBox(QCheckBox *chkbox, LOGGERPROFILE profile);
     void saveRadioSettingsCheckBoxes();
+    void saveBandSwData();
+    void enableBandSwLineEdits(bool enabled);
+    void saveBandSwComport();
 };
 
 #endif // RADIOSETTINGDIALOG_H
