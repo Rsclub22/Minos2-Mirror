@@ -42,6 +42,7 @@
 #include "ContestPageControl.h"
 
 
+
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
 
@@ -96,6 +97,31 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
+    serialTVSw = new SerialTVSwitch();     // create local serial sw for band switching
+
+    if (readEnableBandSwitchFromIni() && readEnableSerialBandSwitchFromIni())
+    {
+        trace(QString("Opening Bandswitch comport"));
+        QString comport = readSerialComportBandSwitchFromIni();
+        if (comport.isEmpty())
+        {
+            trace(QString("BandSwitch Comport is empty"));
+        }
+        else
+        {
+            if (serialTVSw->openComport(comport))
+            {
+                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+            }
+            else
+            {
+                QString errMsg = serialTVSw->error();
+                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+            }
+        }
+    }
+
+
     contestPageControls.append(ui->contestPageControl);
 
 }
@@ -133,9 +159,9 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
     TabSandPAction->setChecked(TabSandP);
 
-    bool oldBandMap;
-    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
-    OldBandMapAction->setChecked(oldBandMap);
+    //bool oldBandMap;
+    //TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
+    //OldBandMapAction->setChecked(oldBandMap);
 
     //ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
     //ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
@@ -474,7 +500,7 @@ void TLogContainer::setupMenus()
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
 
-    OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
+    //OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
     ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
@@ -1300,10 +1326,39 @@ void TLogContainer::RadioConfigActionExecute()
     QVector<QSharedPointer<BandInfo> > bands;
     BandList::getBandList().loadAllBands(bands);
     bool hfFlag = true;
-    RadioSettingDialog radioSettingConfig(hfFlag, bands, this);
+    bool comportChanged = false;
+    RadioSettingDialog radioSettingConfig(hfFlag, bands, &comportChanged, this);
 
     radioSettingConfig.exec();
-    emit logRadioSettingsChanged();     // flag settings may have changed
+    if (comportChanged)
+    {
+        QString comport = readSerialComportBandSwitchFromIni();
+        if (!comport.isEmpty())
+        {
+            trace(QString("Bandswitch comport changed to %1").arg(comport));
+            if (serialTVSw->getOpenFlag())
+            {
+                trace(QString("Bandswitch comport open - closing"));
+                serialTVSw->closeComport();
+            }
+
+            if (serialTVSw->openComport(comport))
+            {
+                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+
+            }
+            else
+            {
+                QString errMsg = serialTVSw->error();
+                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+            }
+        }
+        else
+        {
+            trace(QString("Bandswitch comport changed, but comport is empty!"));
+        }
+
+    }
 }
 void TLogContainer::ReportAutofillActionExecute()
 {
@@ -1319,12 +1374,14 @@ void TLogContainer::TabSandPActionExecute()
 
     MinosLoggerEvents::SendTabSandP();
 }
+/* Moved to Bandmap/Cluster Menu
 void TLogContainer::OldBandMap()
 {
     bool oldBandMap = OldBandMapAction->isChecked();
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
+*/
 void TLogContainer::ConfigAgeProtection()
 {
     int cap;
@@ -1491,6 +1548,46 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     TSingleLogFrame *tslf = getCurrentLogFrame();
     int tab = ui->contestPageControl->indexOf(tslf);
     setMenuLog(tab);
+
+    if (tslf)
+    {
+        static QString oldContestBand = "";
+        QString contestBand = tslf->getContest()->contestBands.getValue();
+
+        if (oldContestBand != contestBand)
+        {
+            oldContestBand = contestBand;
+            QByteArray msg;
+
+            if (readEnableBandSwitchFromIni())
+            {
+                // send bandswitch data to control
+                msg = readBandSwitchDataFromIni(contestBand).toUtf8();
+                if (!msg.isEmpty())
+                {
+                    // need to add send data code here
+                }
+
+                if ( readEnableSerialBandSwitchFromIni() && serialTVSw->getOpenFlag())
+                {
+                    if (!msg.isEmpty())
+                    {
+                        msg.prepend(TVSWMSG_START);
+                        msg.append(TVSWMSG_TERM);
+                        serialTVSw->sendTVSwMessage(msg);
+                        trace(QString("%1LF send to bandswitch serial port").arg(QString(msg).remove('\n')));
+                    }
+                    else
+                    {
+                        trace(QString("bandswitch data is empty for band %1").arg(contestBand));
+                    }
+                }
+            }
+        }
+    }
+
+
+
 }
 
 void TLogContainer::selectTab(int curTab)
@@ -2312,12 +2409,7 @@ void TLogContainer::appStarted()
     });
 }
 
-bool TLogContainer::readRestoreContestModeFlag()
-{
-    bool state;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, state );
-    return state;
-}
+
 
 //---------------------------------------------------------------------------
 

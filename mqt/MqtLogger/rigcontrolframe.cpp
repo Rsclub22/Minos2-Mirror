@@ -1361,7 +1361,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
     }
 
     setRadioBandWarning(QString(""));
-    traceMsg(QString("setRadioFreq: list of bands for radio %1 is %2").arg(selRadioName.toString()).arg(selRadioDetails.getBandList()));
+    traceMsg(QString("setRadioFreq: list of bands for radio %1 is %2").arg(selRadioName.toString(), selRadioDetails.getBandList()));
 
     if (ct /*== TContestApp::getContestApp() ->getCurrentContest()*/)
     {
@@ -1407,42 +1407,33 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            QString cb = ct->contestBands.getValue().trimmed();
            traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
 
-           BandList &blist = BandList::getBandList();
+           BandList &blist = BandList::getBandList();       // not sure need this check now
            QSharedPointer<BandInfo>  bi;
            bool bandOK = blist.findBand(cb, bi);
            if (bandOK)
            {
 
-               for (auto const &b: listOfBands)
+               Frequency freq = bandSelButtons->getPresetFreq(cb, ct->currentMode.getValue());       /// ************************************************************
+
+               traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
+               if (checkValidFreq(freq))
                {
-                   if (b == cb)
-                   {
-                       traceMsg(QString("setRadioFreq: found band %1 on radio, set band select").arg(cb));
-                         //ui->bandSelCombo->setCurrentIndex(i + 1);
+                     traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.traceStr()));
+                     sendFreq = freq;
+                     curFreq = freq;
+                     lastFreq = freq;
+                     traceMsg(QString("setRadioFreq: sendFreq = %1, curFreq = %2, lastFreq = %3")
+                             .arg(sendFreq.traceStr(), curFreq.traceStr(), lastFreq.traceStr()));
 
-                       Frequency freq = bandSelButtons->getPresetFreq(b, ct->currentMode.getValue());       /// ************************************************************
-
-                       traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
-                       if (checkValidFreq(freq))
-                       {
-                           traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.traceStr()));
-                           sendFreq = freq;
-                           curFreq = freq;
-                           lastFreq = freq;
-                           traceMsg(QString("setRadioFreq: sendFreq = %1, curFreq = %2, lastFreq = %3")
-                                    .arg(sendFreq.traceStr()).arg(curFreq.traceStr()).arg(lastFreq.traceStr()));
-
-                       }
-                       else
-                       {
-                           traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.traceStr()));
-                           sendFreq.clear();
-
-                       }
-
-                       return;
-                   }
                }
+               else
+               {
+                     traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.traceStr()));
+                     sendFreq.clear();
+
+               }
+
+
            }
            else
            {

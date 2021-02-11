@@ -4,6 +4,7 @@
 #include "base_pch.h"
 #include "helpbrowser.h"
 #include "n1mmbroadcast.h"
+#include "serialtvswitch.h"
 
 namespace Ui {
 class TLogContainer;
@@ -122,11 +123,6 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
-    //QAction *editRadioFreqPresets = nullptr;
-    //QAction *ignorePresetFreqContestStart = nullptr;
-    //QAction *ignorePreviousFreqContestChange = nullptr;
-    //QAction *restoreContestModeContestChange = nullptr;
-
     QAction *newAction(const char *text, QMenu *m, const char *atype );
     QMenu *newMenu(QMenu *m, const char *text);
     SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
@@ -192,6 +188,9 @@ private:
     QVector< QSharedPointer<QAction> > menuLogsActions;
 
     BaseContestLog *loadSession(QString sessName);
+
+    SerialTVSwitch *serialTVSw;
+
     void preloadLists( );
     void preloadFiles( const QString &conarg );
     void addListSlot(QWidget *p, const QString &fname, int slotno , bool preload);
@@ -202,9 +201,9 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
     void updateLayoutsMenu();
-    bool readIgnorePreviousFreqFlag();
-    bool readIgnorePresetFreqFlag();
-    bool readRestoreContestModeFlag();
+
+
+
 private slots:
     void CancelClick();
     void HelpActionExecute();
@@ -243,7 +242,7 @@ private slots:
     void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
     void TabSandPActionExecute();
-    void OldBandMap();
+    //void OldBandMap();
     void ConfigAgeProtection();
 
     void GoToSerialActionExecute();
@@ -292,7 +291,7 @@ signals:
 
     void setAuxWindows();
 
-    void logRadioSettingsChanged();
+
 
 };
 extern TLogContainer *LogContainer;

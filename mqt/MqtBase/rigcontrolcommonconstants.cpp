@@ -200,7 +200,7 @@ bool PresetFreq::contains(QString mode, QString band)
         }
     }
 
-    return modeTrue;
+    return false;
 }
 
 void PresetFreq::readSettings(const QStringList &listOfBands)
@@ -251,7 +251,7 @@ QString readBandSwitchDataFromIni(QString band)
 {
     QString fileName = BANDSWITCH_INI_FILENAME;
     QString iniBand = band;
-    iniBand.remove('\x20').replace('.', '_');
+    iniBand = convertBandForIni(iniBand);
     QSettings config(fileName, QSettings::IniFormat);
     QString value = config.value(iniBand + BANDSWITCH_KEY_TEXT, "").toString();
     return value;
@@ -262,7 +262,7 @@ void writeBandSwitchDataToIni(QString band, QString data)
 {
     QString fileName = BANDSWITCH_INI_FILENAME;
     QString iniBand = band;
-    iniBand.remove('\x20').replace('.', '_');
+    iniBand = convertBandForIni(iniBand);
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(iniBand + BANDSWITCH_KEY_TEXT, data);
 }
@@ -321,5 +321,10 @@ void writeSerialComportBandSwitchDataToIni(QString comport)
 
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(BANDSWITCH_COMPORT_KEY_TEXT, comport);
+}
+
+QString convertBandForIni(QString band)
+{
+    return band.remove('\x20').replace('.', '_');
 }
 

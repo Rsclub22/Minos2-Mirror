@@ -629,7 +629,7 @@ QString BandSelButtons::convertModeForPresets(const QString mode)
 Frequency BandSelButtons::getPresetFreq(const QString band, const QString mode)
 {
     Frequency f;
-    if (presetFreqs.contains(mode, band))
+    if (presetFreqs.contains(convertModeForPresets(mode), band))
     {
          f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
     }

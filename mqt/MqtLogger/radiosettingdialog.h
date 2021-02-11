@@ -44,7 +44,7 @@ class RadioSettingDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RadioSettingDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
+    explicit RadioSettingDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, bool *comportChanged, QWidget *parent = nullptr);
     ~RadioSettingDialog();
 
 
@@ -100,6 +100,8 @@ private:
 
     bool hfFlag;
 
+    bool *comportChanged = nullptr;
+
 
     //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
     //void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
@@ -122,6 +124,7 @@ private:
     void saveBandSwData();
     void enableBandSwLineEdits(bool enabled);
     void saveBandSwComport();
+    void saveBandSwCheckBoxes();
 };
 
 #endif // RADIOSETTINGDIALOG_H

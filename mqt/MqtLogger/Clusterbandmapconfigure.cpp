@@ -184,6 +184,15 @@ void ClusterBandmapConfigure::onAccepted()
 
     }
 
+    bool oldBandMap = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, oldBandMap );
+    if ( ui->oldBandmapChkBox->isChecked() != oldBandMap)
+    {
+        oldBandMap = ui->oldBandmapChkBox->isChecked();
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+    }
+
 }
 
 void ClusterBandmapConfigure::onRejected()

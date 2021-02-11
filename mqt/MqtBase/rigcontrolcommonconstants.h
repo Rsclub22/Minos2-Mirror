@@ -352,6 +352,7 @@ void writeEnableBandSwitchDataToIni(bool data);
 bool readEnableSerialBandSwitchFromIni();
 void writeEnableSerialBandSwitchDataToIni(bool data);
 QString readSerialComportBandSwitchFromIni();
-void writeSerialComportBandSwitchDataToIni(QString comport)
+void writeSerialComportBandSwitchDataToIni(QString comport);
+QString convertBandForIni(QString band);
 
 #endif // RIGCONTROLCOMMONCONSTANTS_H

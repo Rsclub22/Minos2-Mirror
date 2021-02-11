@@ -23,7 +23,7 @@
 
 
 
-RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QWidget *parent) :
+RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, bool *comportChanged_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RadioSettingDialog)
 {
@@ -34,6 +34,7 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     bands = band;
     hfFlag = hfFlag_;
+    comportChanged = comportChanged_;
 
 
     cwPresetLineEditList << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
@@ -306,6 +307,7 @@ void RadioSettingDialog::saveSettings()
     saveRadioSettingsCheckBoxes();
     saveBandSwComport();
     saveBandSwData();
+    saveBandSwCheckBoxes();
 
 }
 
@@ -350,7 +352,22 @@ void RadioSettingDialog::saveBandSwComport()
 {
     if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
+        *comportChanged = true;
         writeSerialComportBandSwitchDataToIni(ui->bandSwCombo->currentText());
+    }
+}
+
+
+void RadioSettingDialog::saveBandSwCheckBoxes()
+{
+    if (readEnableBandSwitchFromIni() != ui->enableBandSwChkBox->isChecked())
+    {
+        writeEnableBandSwitchDataToIni(ui->enableBandSwChkBox->isChecked());
+    }
+
+    if (readSerialComportBandSwitchFromIni() != ui->enableSerialBandSwChkBox->isChecked())
+    {
+        writeEnableSerialBandSwitchDataToIni(ui->enableSerialBandSwChkBox->isChecked());
     }
 }
 
