@@ -157,32 +157,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     }
     on_tabSandP();  // show (or not) the Call/S&P choice
 
-    adjustMargins(layout());
+    adjustMargins(layout(), 1);
 }
 
-void QSOLogFrame::adjustMargins(QLayout *layout)
-{
-    for(int i = 0; i < layout->count(); i++)
-    {
-        QLayoutItem *li = layout->itemAt(i);
-        QLayout *l = li->layout();
-        QWidget *w = li->widget();
-        if (l)
-        {
-            adjustMargins(l);
-        }
-        if (w)
-        {
-            trace(li->widget()->objectName());
-            if (w->layout())
-            {
-                adjustMargins(w->layout());
-            }
-        }
-    }
-    layout->setMargin(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-}
 void QSOLogFrame::on_FontChanged()
 {
     int lcf;

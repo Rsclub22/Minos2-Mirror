@@ -28,7 +28,7 @@
   <property name="midLineWidth">
    <number>1</number>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_5">
+  <layout class="QVBoxLayout" name="verticalLayout_6">
    <item>
     <widget class="QFrame" name="radioDetailsFrame">
      <property name="frameShape">
@@ -111,7 +111,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_19">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -308,7 +308,54 @@ to</string>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <widget class="QFrame" name="tabSandPframe">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QRadioButton" name="SandPrb">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>S&amp;&amp;P</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">SandPbuttonGroup</string>
+          </attribute>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="callRb">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>Call</string>
+          </property>
+          <attribute name="buttonGroup">
+           <string notr="true">SandPbuttonGroup</string>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -323,11 +370,18 @@ to</string>
            <property name="text">
             <string>(12345)</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="margin">
             <number>0</number>
            </property>
           </widget>
          </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_19">
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
@@ -340,59 +394,15 @@ to</string>
            <property name="text">
             <string>1234</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
            <property name="margin">
             <number>0</number>
            </property>
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QFrame" name="tabSandPframe">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_3">
-          <item>
-           <widget class="QRadioButton" name="callRb">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="text">
-             <string>Call</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">SandPbuttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-          <item>
-           <widget class="QRadioButton" name="SandPrb">
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
-            </property>
-            <property name="text">
-             <string>S&amp;&amp;P</string>
-            </property>
-            <attribute name="buttonGroup">
-             <string notr="true">SandPbuttonGroup</string>
-            </attribute>
-           </widget>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </item>

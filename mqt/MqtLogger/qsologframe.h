@@ -279,7 +279,6 @@ private:
     void checkQsoFrameColour();
     
     bool frameHasFocus();
-    void adjustMargins(QLayout *layout);
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
