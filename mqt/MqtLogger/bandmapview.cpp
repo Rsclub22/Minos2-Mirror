@@ -1051,6 +1051,11 @@ void BandmapView::drawBandMapSpots()
     {
         return;     // lambda in BandmapView::bandmapUpdate() fired after we have been detached
     }
+    TContestApp *ta = TContestApp::getContestApp();
+    if (!ta)
+    {
+        return;
+    }
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 
@@ -1088,7 +1093,7 @@ void BandmapView::drawBandMapSpots()
 
     bool centreTextOnFrequency = true;
     bool btemp;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
+    ta->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
     centreTextOnFrequency = !btemp;
 
     if (!centreTextOnFrequency)
@@ -1109,7 +1114,7 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
+        ta ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
         if (traceDebugFlag)
         {
             traceMsg(QString("dump list of spots and freq"));
