@@ -393,20 +393,14 @@ bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<Band
 
 int BandSelButtons::selectButtonGroupAndActiveBand(const Frequency &freq)
 {
-    static Frequency f;
+    int retCode = -1;
 
-    int retCode = 0;
-    if (f != freq)
+    QString band;
+    bool ok = findBand(freq, bands, band);
+    if (ok && !band.isEmpty())
     {
-        f = freq;
-        QString band;
-        bool ok = findBand(freq, bands, band);
-        if (ok && !band.isEmpty())
-        {
-           retCode = selectButtonGroupAndActiveBand(band);
-        }
+       retCode = selectButtonGroupAndActiveBand(band);
     }
-
 
     return retCode;
 }
@@ -679,9 +673,9 @@ void BandSelButtons::setPresetFreqRadioButChecked(bool checked)
     preSetFreqRadBut->setChecked(checked);
 }
 
-void BandSelButtons::setsetPrevFreqRadioButChecked(bool checked)
+void BandSelButtons::setBandOnlyRadioButChecked(bool checked)
 {
-    prevFreqRadBut->setChecked(checked);
+    bandOnlyRadBut->setChecked(checked);
 }
 
 void BandSelButtons::setPrevFreqRadioButChecked(bool checked)

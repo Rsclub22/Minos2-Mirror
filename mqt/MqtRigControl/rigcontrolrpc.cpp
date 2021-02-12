@@ -108,7 +108,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                 {
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Vol Level From Logger = %1").arg(volLevel));
-                    emit (setVolume(volLevel));
+                    emit setVolume(volLevel);
                 }
             }
         }
@@ -187,6 +187,21 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Freq Command From Logger = %1").arg(sfreq));
                     emit setFreq(Frequency(sfreq));
+                }
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogBand, psBand ))
+        {
+            PubSubName psn("test"); // just uses server/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
+            {
+                QString sBand;
+                if ( psBand->getString( sBand ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Band Command From Logger = %1").arg(sBand));
+                    emit setBand(sBand);
                 }
             }
         }

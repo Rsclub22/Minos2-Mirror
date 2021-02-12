@@ -92,6 +92,7 @@ void TSingleLogFrame::buildFrame()
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, QString, Frequency, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
+    connect(FKHRigControlFrame, SIGNAL(sendBandToRigControl(QString)), this, SLOT(sendBandToRig(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(ShortFreq)), this, SLOT(sendRadioRitFreq(ShortFreq)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
@@ -1939,6 +1940,17 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
+
+    }
+}
+
+void TSingleLogFrame::sendBandToRig(QString band)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        trace("sendKeyerStop from TSingleLogFrame::sendBandToRig");
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlBand(this, band);
 
     }
 }

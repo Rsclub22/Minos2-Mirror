@@ -69,7 +69,7 @@ public:
     void setPrevFreqRadioButVisible(bool visible);
     void setbandOnlyButVisible(bool visible);
     void setPresetFreqRadioButChecked(bool checked);
-    void setsetPrevFreqRadioButChecked(bool checked);
+    void setBandOnlyRadioButChecked(bool checked);
     void setPrevFreqRadioButChecked(bool checked);
     void setPreviousFreq(QString mode, Frequency freq);
     void setBandsToolTip();

@@ -288,6 +288,7 @@ private slots:
 
     void on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, QString bandmask, QString uuid);
     void onLogRadioSettingsChanged();
+    void sendBandToRig(QString band);
 public:
     bool doKeyPressEvent(QKeyEvent *event);
 };

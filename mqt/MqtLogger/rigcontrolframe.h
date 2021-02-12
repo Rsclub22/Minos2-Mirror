@@ -107,6 +107,7 @@ public:
 signals:
     void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);
+    void sendBandToRigControl(QString);
     void sendVolumeToRadio(int);
     void noRadioSendFreq(Frequency);
     void noRadioSendMode(QString);
@@ -162,6 +163,8 @@ private slots:
     void setRadioSwitchCompleted();
     void returnChangeRadioFreq();
 
+
+    void onRadioBandChange(QString band);
 
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
