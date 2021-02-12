@@ -444,7 +444,7 @@ QString BandmapFreqDial::convertFreqDialDisplay(const Frequency &freq)
 {
 
     QString sfreq = freq.str();
-    sfreq = sfreq.left(sfreq.length() - 3); // convert to KHz
+    sfreq = sfreq.left(sfreq.length() - 3); // convert to Mhz.xxx
 
     int len = sfreq.length();
 
@@ -463,6 +463,9 @@ QString BandmapFreqDial::convertFreqDialDisplay(const Frequency &freq)
         break;
     case 5:
         sfreq = sfreq.insert(2, '.');
+        break;
+    case 4:
+        sfreq = sfreq.insert(1, '.');
         break;
     default:
         sfreq = "000.000";  // error

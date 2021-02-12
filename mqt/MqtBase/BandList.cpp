@@ -447,7 +447,7 @@ void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
 
-    for ( auto const &b: bandList )
+    foreach ( auto const &b,  bandList )
     {
         // don't use bands > 10GHz (can't support Freq display)
         if ( b->uk != "24 GHz" && b->uk != "47 GHz"

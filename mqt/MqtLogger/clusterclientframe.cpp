@@ -74,12 +74,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
-    connect (mouseInFrameTimer, &QTimer::timeout, [=](){mouseTimerCheckNewSpots();});
+    connect (mouseInFrameTimer, &QTimer::timeout, this, [=](){mouseTimerCheckNewSpots();});
 
     purgeTimer = new QTimer(this);
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, &QTimer::timeout, [=](){checkNewSpots();});
+    connect (checkNewSpotsTimer, &QTimer::timeout, this, [=](){checkNewSpots();});
 
     spotQueue.clear();
 
@@ -87,7 +87,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     filterSettings.initFilterSettings(bands);
 
     checkNewFilters = new QTimer(this);
-    connect (checkNewFilters, &QTimer::timeout, [=](){checkSavedFilters();});
+    connect (checkNewFilters, &QTimer::timeout, this, [=](){checkSavedFilters();});
 
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
