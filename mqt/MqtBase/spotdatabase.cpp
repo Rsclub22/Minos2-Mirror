@@ -431,6 +431,7 @@ QString BandmapSpotData::spotName()
 {
     switch(spotType)
     {
+        default:
         case bandmapSpotType::NONE:
         return "NONE";
         break;
