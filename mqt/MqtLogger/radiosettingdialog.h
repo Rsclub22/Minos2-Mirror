@@ -44,7 +44,8 @@ class RadioSettingDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RadioSettingDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, bool *comportChanged, QWidget *parent = nullptr);
+
+    explicit RadioSettingDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, QSharedPointer<RadioSettingsDialogChangeFlag> radioSettingsDialogFlags, QWidget *parent = nullptr);
     ~RadioSettingDialog();
 
 
@@ -100,7 +101,7 @@ private:
 
     bool hfFlag;
 
-    bool *comportChanged = nullptr;
+    QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsChangeFlag;
 
 
     //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);

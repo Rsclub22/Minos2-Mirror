@@ -1326,37 +1326,45 @@ void TLogContainer::RadioConfigActionExecute()
     QVector<QSharedPointer<BandInfo> > bands;
     BandList::getBandList().loadAllBands(bands);
     bool hfFlag = true;
-    bool comportChanged = false;
-    RadioSettingDialog radioSettingConfig(hfFlag, bands, &comportChanged, this);
+    QSharedPointer<RadioSettingsDialogChangeFlag> radioSettingsDialogChangeFlag = QSharedPointer<RadioSettingsDialogChangeFlag>(new RadioSettingsDialogChangeFlag()) ;
+    RadioSettingDialog radioSettingConfig(hfFlag, bands, radioSettingsDialogChangeFlag, this);
 
     radioSettingConfig.exec();
-    if (comportChanged)
+
+    if (radioSettingsDialogChangeFlag->isChanged())
     {
-        QString comport = readSerialComportBandSwitchFromIni();
-        if (!comport.isEmpty())
+        if (radioSettingsDialogChangeFlag->serialComport)
         {
-            trace(QString("Bandswitch comport changed to %1").arg(comport));
-            if (serialTVSw->getOpenFlag())
+            QString comport = readSerialComportBandSwitchFromIni();
+            if (!comport.isEmpty())
             {
-                trace(QString("Bandswitch comport open - closing"));
-                serialTVSw->closeComport();
-            }
+                trace(QString("Bandswitch comport changed to %1").arg(comport));
+                if (serialTVSw->getOpenFlag())
+                {
+                    trace(QString("Bandswitch comport open - closing"));
+                    serialTVSw->closeComport();
+                }
 
-            if (serialTVSw->openComport(comport))
-            {
-                trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+                if (serialTVSw->openComport(comport))
+                {
+                    trace(QString("Bandswitch comport %1 opened OK").arg(comport));
 
+                }
+                else
+                {
+                    QString errMsg = serialTVSw->error();
+                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+                }
             }
             else
             {
-                QString errMsg = serialTVSw->error();
-                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+                trace(QString("Bandswitch comport changed, but comport is empty!"));
             }
         }
-        else
-        {
-            trace(QString("Bandswitch comport changed, but comport is empty!"));
-        }
+
+        emit logRadioSettingsChanged(radioSettingsDialogChangeFlag);
+
+
 
     }
 }

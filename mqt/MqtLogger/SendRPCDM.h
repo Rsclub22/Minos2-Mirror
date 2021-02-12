@@ -78,6 +78,7 @@ public:  		// User declarations
       void changeRigSelectionTo(const PubSubName &name, const QString&band, const Frequency &freq, const QString &mode, const QString &uuid);
       void sendRigSelection(const PubSubName &name, const QString&band, const Frequency &freq, const QString &mode, const QString &uuid);
       void sendRigControlFreq(TSingleLogFrame *tslf,const Frequency &freq);
+      void sendRigControlBand(TSingleLogFrame *tslf, const QString &band);
       void sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum);
 
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
@@ -103,6 +104,7 @@ public:  		// User declarations
       {
           return &rigCache;
       }
+
 
 
 

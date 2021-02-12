@@ -394,7 +394,7 @@ void RigControlMainWindow::initActionsConnections()
     // Message from Logger
 
     connect(msg, &RigControlRpc::setFreq, [=](Frequency freq){loggerSetFreq(freq);});
-    connect(msg, &RigControlRpc::setFreq, [=](Frequency freq){loggerSetFreq(freq);});
+    connect(msg, &RigControlRpc::setBand, [=](QString band){loggerSetBand(band);});
     connect(msg, &RigControlRpc::setRitFreq, [=](ShortFreq freq){setRitFreq(freq);});
     connect(msg, &RigControlRpc::setRitStatus, [=](bool status){setRitLogStatus(status);});
     connect(msg, &RigControlRpc::setMode, [=](QString mode){loggerSetMode(mode);});
@@ -1848,7 +1848,22 @@ void RigControlMainWindow::loggerSetFreq(Frequency freq)
 }
 
 
+void RigControlMainWindow::loggerSetBand(QString band)
+{
+    logMessage((QString("loggerSetBand: band requested = %1").arg(band)));
 
+    Frequency f(0); // not used
+
+    if (band != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
+    {
+
+        logMessage(QString("loggerSetBand: Look for transverter for band %1").arg(band));
+        selectTransverter(band, f);
+
+    }
+
+
+}
 
 
 
@@ -1891,6 +1906,11 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
     if (cb != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
     {
 
+        logMessage(QString("SetFreq: Look for transverter for band %1").arg(cb));
+        selectTransverter(cb, f);
+
+
+        /*
         rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
         if (findTransverter(rigStateDetails->selTransverterNum, rigStateDetails->selTvBand, cb))
         {
@@ -1900,6 +1920,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
             logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(f.traceStr()));
 
         }
+        */
 
     }
 
@@ -1950,6 +1971,26 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
 
     cmdLockOff();
+}
+
+
+bool RigControlMainWindow::selectTransverter(QString &band, Frequency &f)
+{
+    rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
+    if (findTransverter(rigStateDetails->selTransverterNum, rigStateDetails->selTvBand, band))
+    {
+        logMessage(QString("SelectTransverter: transverter found for band %1").arg(band));
+        getAndSendTransVertSwNum(rigStateDetails->selTransverterNum);
+        // now calculate the freq
+        f = f - setupRadio->currentRadio.transVertSettings[rigStateDetails->selTransverterNum]->transVertOffset;
+        logMessage(QString("SelectTransverter: Transvert Enabled Freq = %1").arg(f.traceStr()));
+
+        return true;
+    }
+
+    logMessage(QString("SelectTransverter: No transverter found for band %1").arg(band));
+
+    return false;
 }
 
 

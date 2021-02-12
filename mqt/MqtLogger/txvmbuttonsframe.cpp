@@ -314,7 +314,15 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
 }
 
+void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
+{
 
+}
+
+void TxVmButtonsFrame::runButActivated(int buttonNumber)
+{
+
+}
 
 void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString name)
 {

@@ -23,7 +23,7 @@
 
 
 
-RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, bool *comportChanged_, QWidget *parent) :
+RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsChangeFlag_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RadioSettingDialog)
 {
@@ -34,8 +34,7 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
     bands = band;
     hfFlag = hfFlag_;
-    comportChanged = comportChanged_;
-
+    logRadioSettingsChangeFlag = logRadioSettingsChangeFlag_;
 
     cwPresetLineEditList << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
                          << ui->cwLineEdit_14mhz << ui->cwLineEdit_21mhz << ui->cwLineEdit_28mhz
@@ -352,7 +351,7 @@ void RadioSettingDialog::saveBandSwComport()
 {
     if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
-        *comportChanged = true;
+        logRadioSettingsChangeFlag->serialComport = true;
         writeSerialComportBandSwitchDataToIni(ui->bandSwCombo->currentText());
     }
 }
@@ -510,7 +509,23 @@ void RadioSettingDialog::saveRadioSettingsCheckBox(QCheckBox* chkbox, LOGGERPROF
     if (chkbox->isChecked() != readRadioSettingsCheckBox(profile))
     {
        TContestApp::getContestApp()->loggerBundle.setBoolProfile(profile, chkbox->isChecked());
-
+       // flag change
+       if (chkbox == ui->turnOffColourRadioFreqDialChkBox)
+       {
+           logRadioSettingsChangeFlag->operatingFreqColor = true;
+       }
+       else if (chkbox == ui->contestStartIgnorePresetFreqChkBox)
+       {
+           logRadioSettingsChangeFlag->ignorePresetFreq = true;
+       }
+       else if (chkbox == ui->contestChangeIgnorePreviousFreqChkBox)
+       {
+           logRadioSettingsChangeFlag->ignorePreviousFreq = true;
+       }
+       else if (chkbox == ui->constestChangeRestoreContestModeChkBox)
+       {
+           logRadioSettingsChangeFlag->restoreContestMode = true;
+       }
     }
 
 }

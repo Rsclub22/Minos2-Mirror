@@ -291,6 +291,8 @@ signals:
 
     void setAuxWindows();
 
+    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>);
+
 
 
 };

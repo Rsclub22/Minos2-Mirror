@@ -92,6 +92,7 @@ void TSingleLogFrame::buildFrame()
     connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, QString, Frequency, QString)));
 
     connect(FKHRigControlFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
+    connect(FKHRigControlFrame, SIGNAL(sendBandToRigControl(QString)), this, SLOT(sendBandToRig(QString)));
     connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
     connect(FKHRigControlFrame, SIGNAL(sendRitFreq(ShortFreq)), this, SLOT(sendRadioRitFreq(ShortFreq)));
     connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
@@ -151,7 +152,7 @@ void TSingleLogFrame::buildFrame()
     connect(LogContainer, SIGNAL(sendKeyerTone()), this, SLOT(sendKeyerTone()));
     connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
     connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
-    connect(LogContainer, SIGNAL(logRadioSettingsChanged()), this, SLOT(onLogRadioSettingsChanged()));
+    connect(LogContainer, SIGNAL(logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)), this, SLOT(onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
@@ -1820,13 +1821,15 @@ void TSingleLogFrame::on_RadioLoaded()
     GJVQSOLogFrame->setRadioLoaded();
 }
 
-void TSingleLogFrame::onLogRadioSettingsChanged()
+
+void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
 {
     if(FKHRigControlFrame)
     {
-        FKHRigControlFrame->logRadioSettingsChanged();
+        FKHRigControlFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 }
+
 
 bool TSingleLogFrame::isRadioLoaded()
 {
@@ -1943,6 +1946,17 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
         LogContainer->sendDM->sendRigControlFreq(this, freq);
+
+    }
+}
+
+void TSingleLogFrame::sendBandToRig(QString band)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        trace("sendKeyerStop from TSingleLogFrame::sendBandToRig");
+        sendKeyerStop();    // don't keep calling while tuning!
+        LogContainer->sendDM->sendRigControlBand(this, band);
 
     }
 }
