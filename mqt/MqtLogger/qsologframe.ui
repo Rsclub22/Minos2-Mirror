@@ -536,7 +536,7 @@ to</string>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QCheckBox" name="lastLoggedChkBx">
+        <widget class="QPushButton" name="spotLastLoggedPb">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>
@@ -551,7 +551,7 @@ to</string>
           <enum>Qt::NoFocus</enum>
          </property>
          <property name="text">
-          <string>Spot</string>
+          <string>Spot Current</string>
          </property>
         </widget>
        </item>

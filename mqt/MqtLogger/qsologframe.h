@@ -329,6 +329,7 @@ private slots:
     void on_bandmapSaveFreqPbClicked();
 
     void on_SpotPbClicked();
+    void on_SpotLastLoggedPbClicked();
 
     void on_FreqChanged(Frequency f);
 
