@@ -217,18 +217,10 @@ void RunButtonsFrame::runModeOff(int buttonNumber)
 
 void RunButtonsFrame::switchRunButton(int buttonNumber)
 {
-    if (radioOffRunFreq)
-    {
-        trace(QString("switchRunButton returnFrequency set %1 to %2").arg(buttonNumber).arg(rigControl->getCurFreq()));
-        runButtonMap[buttonNumber]->returnFrequency = rigControl->getCurFreq();
-        runButtonMap[otherButton(buttonNumber)]->returnFrequency.clear();
-    }
-    else
-    {
-        trace(QString("switchRunButton returnFrequency clear both"));
-        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
-        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
-    }
+    trace(QString("switchRunButton returnFrequency clear both"));
+    runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+    runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+
     // other run button frequency active, so switch over
     runButtonMap[buttonNumber]->showButtonOnOff(true);
     runButtonMap[otherButton(buttonNumber)]->showButtonOnOff(false);
