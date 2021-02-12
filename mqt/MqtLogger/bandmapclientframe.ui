@@ -40,7 +40,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="callLocLabel">
        <property name="text">
         <string>Call/Locator Filter</string>
        </property>

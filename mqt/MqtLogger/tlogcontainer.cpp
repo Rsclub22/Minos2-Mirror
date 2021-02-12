@@ -240,7 +240,7 @@ void TLogContainer::on_TimeDisplayTimer( )
 #ifdef FINDFOCUS
        QWidget *f = QApplication::focusWidget ();
        if(f)
-            sblabel1->setText(f->metaObject()->className());
+            sblabel1->setText(f->metaObject()->className() + QString("|") + f->objectName());
        else
            sblabel1->setText("<unknown>");
 #endif
@@ -1832,6 +1832,7 @@ void TLogContainer::selectLayout()
     QAction *action = qobject_cast<QAction *>(sender());
     if (action)
     {
+        BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
         if (lastLayoutSelected)
             lastLayoutSelected->setChecked(false);
         action->setChecked(true);
@@ -1839,6 +1840,12 @@ void TLogContainer::selectLayout()
         QString selText = action->text();
         selText = ScreenConfigManager::stripDefaultDecoration(selText);
         selectLayout(selText);
+
+        // The action of changing layouts closes and re-loads the frame, so
+        // it appears as though current has switched, so we have to switch back.
+
+        selectContest( ct, QSharedPointer<BaseContact>() );
+        TContestApp::getContestApp() ->setCurrentContest(ct);
     }
 }
 void TLogContainer::selectLayout(QString layout)

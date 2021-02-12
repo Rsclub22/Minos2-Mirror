@@ -200,62 +200,66 @@ void ADIFImport::ADIFImportEndOfRecord( )
     if ( !c )
        return false;
 
+    // read only has already been checked, so we should only have live contests
+
     bool qsoOK = true;
+
+    LoggerContestLog test;
+    test.contestBands = c->contestBands;
+    test.currentBand = c->currentBand;
+    test.DTGStart = c->DTGStart;
+    test.DTGEnd = c->DTGEnd;
+
+    ADIFImport aimp( &test, QSharedPointer<QFile>() );
+
+    aimp.fileContent = adif;
+    aimp.limit = aimp.fileContent.size();
+    aimp.offset = 0;
+
+    if (aimp.executeImport())
     {
-        LoggerContestLog test;
-        test.contestBands = c->contestBands;
-        test.currentBand = c->currentBand;
-        test.DTGStart = c->DTGStart;
-        test.DTGEnd = c->DTGEnd;
+        QSharedPointer<BaseContact> bct = test.pcontactAt(0);
 
-        ADIFImport aimp( &test, QSharedPointer<QFile>() );
-
-        aimp.fileContent = adif;
-        aimp.limit = aimp.fileContent.size();
-        aimp.offset = 0;
-
-        if (aimp.executeImport())
+        if (!bct->frequency.getValue().isClear())
         {
-            QSharedPointer<BaseContact> bct = test.pcontactAt(0);
-            dtg d = bct->time;
-            if (c->checkTime(d))
+            bool ok = false;
+            BandList &blist = BandList::getBandList();
+            QSharedPointer<BandInfo>  bi;
+            bool bandOK = false;
+            QString current = test.currentBand.getValue();
+
+            ok = blist.findBand(current, bi);
+
+            if (ok)
             {
-                if (!bct->frequency.getValue().isClear())
+                Frequency freq = bct->frequency.getValue();
+                if (freq <= bi->fHigh && freq >= bi->fLow)
                 {
-                    bool ok = false;
-                    BandList &blist = BandList::getBandList();
-                    QSharedPointer<BandInfo>  bi;
-                    bool bandOK = false;
-                    QString current = test.currentBand.getValue();
-
-                    ok = blist.findBand(current, bi);
-
-                    if (ok)
-                    {
-                        Frequency freq = bct->frequency.getValue();
-                        if (freq <= bi->fHigh && freq >= bi->fLow)
-                        {
-                            bandOK = true;
-                        }
-                    }
-
-                    if (!bandOK )
-                    {
-                        trace("ADIF frequency not in contest band");
-                        qsoOK = false;
-                    }
+                    bandOK = true;
                 }
             }
-            else
+
+            if (!bandOK )
             {
-                trace("ADIF date/time not in contest period");
+                trace("ADIF frequency not in contest band");
                 qsoOK = false;
             }
-
         }
-        else
-            qsoOK = false;
+
+        dtg d = bct->time;
+        if (!c->checkTime(d))
+        {
+            // with multiple simultaneous contests (FT8 UK/EU) we can find not logging inconvenient
+            trace("ADIF date/time not in contest period");
+            //qsoOK = false;
+        }
+
     }
+    else
+    {
+        qsoOK = false;
+    }
+
     if (qsoOK)
     {
         ADIFImport aimp( c, QSharedPointer<QFile>() );

@@ -77,7 +77,7 @@
          <x>0</x>
          <y>0</y>
          <width>657</width>
-         <height>183</height>
+         <height>195</height>
         </rect>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -304,15 +304,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QLogTabWidget</class>
-   <extends>QTabWidget</extends>
-   <header>qlogtabwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>MinosSplitter</class>
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QLogTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header>qlogtabwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

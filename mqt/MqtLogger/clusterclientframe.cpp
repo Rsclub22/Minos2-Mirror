@@ -569,7 +569,7 @@ void ClusterClientFrame::checkHfFlag()
 
 
 
-void ClusterClientFrame::setHF(bool hfFlag)
+void ClusterClientFrame::setHF(bool /*hfFlag*/)
 {
 
 

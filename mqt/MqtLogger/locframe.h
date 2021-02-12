@@ -33,6 +33,7 @@ class LocGridModel: public QAbstractItemModel
         {
             return tlLoc;
         }
+        QString getBearing(QString disp) const;
 
         QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
         QVariant headerData(int section, Qt::Orientation orientation, int role) const Q_DECL_OVERRIDE;
@@ -69,6 +70,7 @@ private slots:
     void on_minosViewScrolled();
 
     void on_LocView_clicked(const QModelIndex &index);
+    void on_LocView_doubleClicked(const QModelIndex &index);
 };
 
 #endif // LOCFRAME_H

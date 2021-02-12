@@ -291,6 +291,7 @@ private slots:
     void sendBandToRig(QString band);
 public:
     bool doKeyPressEvent(QKeyEvent *event);
+    void transferFromWSJTX(QString call);
 };
 
 #endif // TSINGLELOGFRAME_H

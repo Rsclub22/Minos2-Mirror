@@ -827,6 +827,8 @@ int HamlibRigControl::setPtt(VFO vfo, bool state)
     }
     int retcode = rig_set_ptt(my_rig, hamlibVfoNames[vfo], pttState);
 
+    return retcode;
+
 }
 
 
