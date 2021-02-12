@@ -290,6 +290,7 @@ private slots:
     void onLogRadioSettingsChanged();
 public:
     bool doKeyPressEvent(QKeyEvent *event);
+    void transferFromWSJTX(QString call);
 };
 
 #endif // TSINGLELOGFRAME_H

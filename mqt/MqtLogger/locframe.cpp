@@ -10,6 +10,11 @@
 
 static QString lConv(const QString &tlsq, int col, int row)
 {
+    if (tlsq.isEmpty())
+    {
+        return tlsq;
+    }
+    //convert column and row to an actual display
    char cvxl = tlsq[0].toLatin1();
    char cvyl = tlsq[1].toLatin1();
    char cvxn = tlsq[2].toLatin1();
@@ -104,8 +109,77 @@ static QString l_sub(const QString &sq, int x, int y)
    QString res = QString(cvxl) + cvyl + cvxn + cvyn;
    return res;
 }
+bool oldAL (QString tl, QString oldTl)
+{
+    // is oldTl above/left of tl?
 
+    bool above = false;
+    bool left = false;
 
+    char oldxl = oldTl[0].toLatin1();
+    char oldyl = oldTl[1].toLatin1();
+    char oldxn = oldTl[2].toLatin1();
+    char oldyn = oldTl[3].toLatin1();
+
+    char xl = tl[0].toLatin1();
+    char yl = tl[1].toLatin1();
+    char xn = tl[2].toLatin1();
+    char yn = tl[3].toLatin1();
+
+    //  IO91 JO01 JO11
+    //  IO90 JO00 JO10
+    //  IN99 JN09 JN19
+    //  IN98 JN08 JN18
+
+    if (oldxl < xl) // xl increments to E
+    {
+        left = true;
+    }
+    else if (oldxl == xl)
+    {
+        if (oldxn < xn) // xn increments to E
+            left = true;
+    }
+
+    if (oldyl > yl)  // yl increments to N
+    {
+        above = true;
+    }
+    else if (oldyl == yl)
+    {
+        if (oldyn > yn) // yn increments to S
+            above = true;
+    }
+    return left || above;
+}
+int rowSpan(const QString &tl, const QString &oldTl)
+{
+    int oldyl = oldTl[1].toLatin1();
+    int oldyn = oldTl[3].toLatin1();
+
+    int yl = tl[1].toLatin1();
+    int yn = tl[3].toLatin1();
+
+     int curRow = (yl - 'A') * 10 + yn;
+     int oldRow = (oldyl - 'A') * 10 + oldyn;
+
+     int span = std::abs(curRow - oldRow);
+     return span;
+}
+int colSpan(const QString &tl, const QString &oldTl)
+{
+    int oldxl = oldTl[0].toLatin1();
+    int oldxn = oldTl[2].toLatin1();
+
+    int xl = tl[0].toLatin1();
+    int xn = tl[2].toLatin1();
+
+     int curCol = (xl - 'A') * 10 + xn;
+     int oldCol = (oldxl - 'A') * 10 + oldxn;
+
+     int span = std::abs(curCol - oldCol);
+     return span;
+}
 LocFrame::LocFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::LocFrame), ct(nullptr)
@@ -144,9 +218,13 @@ void LocFrame::setContest(BaseContestLog *contest)
         reInitialiseLocators();
     }
 }
-
 void LocFrame::reInitialiseLocators()
 {
+    QString oldTl = model->getTl();
+    int oldRows = model->rowCount();
+    int oldCols = model->columnCount();
+    QString oldBr = lConv(oldTl, oldCols, oldRows);
+
     model->beginReset();
     model->locMap.clear();
 
@@ -204,12 +282,31 @@ void LocFrame::reInitialiseLocators()
     }
 
     int rows = (NLoc[0].toLatin1() - SLoc[0].toLatin1()) * 10 + (NLoc[1].toLatin1() - SLoc[1].toLatin1()) + 1;
-    model->rows = rows;
 
     int cols = (ELoc[0].toLatin1() - WLoc[0].toLatin1()) * 10 + (ELoc[1].toLatin1() - WLoc[1].toLatin1()) + 1;
-    model->cols = cols;
 
     QString tl = QString(WLoc[0]) + NLoc[0] + WLoc[1] + NLoc[1];
+    QString br = lConv(tl, cols, rows);
+
+    if (!oldTl.isEmpty())
+    {
+        if (oldAL(tl, oldTl))
+        {
+            rows += rowSpan(tl, oldTl);
+            cols += colSpan(tl, oldTl);
+            tl = oldTl;
+        }
+
+        if (oldAL( oldBr, br))  // if br is above/left
+        {
+            rows += rowSpan(br, oldBr);
+            cols += colSpan(br, oldBr);
+        }
+        br = lConv(tl, cols, rows);
+    }
+
+    model->rows = rows;
+    model->cols = cols;
     model->setTl(tl);
 
     model->endReset();
@@ -238,11 +335,76 @@ void LocFrame::on_minosViewScrolled()
     QModelIndex index = ui->LocView->indexAt(ui->LocView->rect().center());
     currentCentre = ui->LocView->model()->data(index, Qt::UserRole).toString();
 }
+void LocFrame::on_LocView_clicked(const QModelIndex &index)
+{
+    if (!ct || model->getTl().isEmpty())
+        return;
+
+    QString disp = lConv(model->getTl(), index.column(), index.row());
+
+    QString brgbuff = model->getBearing(disp);
+
+    MinosLoggerEvents::SendBrgStrToRot(brgbuff);
+}
+
+void LocFrame::on_LocView_doubleClicked(const QModelIndex &index)
+{
+    model->beginReset();
+    QString tl = model->getTl();
+    QString oldTl = tl;
+    if (index.row() == 0)
+    {
+        tl = l_add(tl, 0, 5);
+        model->setTl(tl);
+        model->rows += 5;
+    }
+    if (index.column() == 0)
+    {
+        tl = l_sub(tl, 5, 0);
+        model->setTl(tl);
+        model->cols += 5;
+    }
+    if (index.row() == model->rowCount() - 1)
+    {
+        model->rows += 5;
+    }
+    if (index.column() == model->columnCount() - 1)
+    {
+        model->cols += 5;
+    }
+    model->endReset();
+    ui->LocView->resizeColumnsToContents();
+    ui->LocView->resizeRowsToContents();
+}
 
 LocGridModel::LocGridModel():ct(nullptr), rows(10), cols(10)
 {}
 LocGridModel::~LocGridModel()
 {
+}
+QString LocGridModel::getBearing(QString disp) const
+{
+    double lon = 0.0;
+    double lat = 0.0;
+
+    Locator loc;
+    loc.setLoc(disp);
+
+    QString brgbuff;
+
+    int lres = lonlat( loc.getLoc(), lon, lat, true );
+    if ( lres == LOC_OK )
+    {
+       int brg;
+       double dist;
+
+       ct->disbeara( lon, lat, dist, brg );
+
+       int offset = ct->bearingOffset.getValue();
+       brgbuff = QString( "%1").arg( varBrg(brg + offset), 3);
+    }
+
+    return brgbuff;
 }
 
 void LocGridModel::beginReset()
@@ -309,6 +471,14 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
             return multhighlight.lighter(140);
         }
     }
+    if (role == Qt::ToolTipRole)
+    {
+        QString brgbuff = getBearing(disp);
+
+        return tr("Single click to transfer the square centre bearing ( %1 ) to rotator control;\n"
+                  "Double click on an edge square to extend the area of the map."
+                ).arg(brgbuff.trimmed());
+    }
     return QVariant();
 }
 QVariant LocGridModel::headerData( int section, Qt::Orientation orientation,
@@ -353,32 +523,3 @@ int LocGridModel::columnCount( const QModelIndex &/*parent*/ ) const
     return cols;
 }
 
-void LocFrame::on_LocView_clicked(const QModelIndex &index)
-{
-    if (!ct || model->getTl().isEmpty())
-        return;
-
-    QString disp = lConv(model->getTl(), index.column(), index.row());
-
-    QString brgbuff;
-
-    double lon = 0.0;
-    double lat = 0.0;
-
-    Locator loc;
-    loc.setLoc(disp);
-
-    int lres = lonlat( loc.getLoc(), lon, lat, true );
-    if ( lres == LOC_OK )
-    {
-       int brg;
-       double dist;
-
-       ct->disbeara( lon, lat, dist, brg );
-
-       int offset = ct->bearingOffset.getValue();
-       brgbuff = QString( "%1").arg( varBrg(brg + offset), 3);
-    }
-
-    MinosLoggerEvents::SendBrgStrToRot(brgbuff);
-}

@@ -96,6 +96,7 @@ public:
     void setRunOffFreqFlag(bool offRunFreq);
 
 
+    void transferFromWSJTX(QString call);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -296,9 +297,9 @@ private slots:
     void on_GJVForceButton_clicked();
     void on_GJVCancelButton_clicked();
     void on_MatchXferButton_clicked();
-    void on_QTHEdit_textChanged(const QString &arg1);
-    void on_CallsignEdit_textChanged(const QString &arg1);
-    void on_LocEdit_textChanged(const QString &arg1);
+    void onQTHEdit_textChanged(const QString &arg1);
+    void onCallsignEdit_textChanged(const QString &arg1);
+    void onLocEdit_textChanged(const QString &arg1);
     void on_ModeButton_clicked();
     void on_InsertBeforeButton_clicked();
     void on_InsertAfterButton_clicked();
@@ -312,14 +313,14 @@ private slots:
     void on_tabSandP();
 
     void on_ModeComboBoxGJV_activated(int index);
-    void on_RSTTXEdit_textChanged(const QString &arg1);
-    void on_RSTRXEdit_textChanged(const QString &arg1);
+    void onRSTTXEdit_textChanged(const QString &arg1);
+    void onRSTRXEdit_textChanged(const QString &arg1);
 
     void on_FontChanged();
 
-    void on_SerRXEdit_textChanged(const QString &);
+    void onSerRXEdit_textChanged(const QString &);
 
-    void on_SerTXEdit_textChanged(const QString &);
+    void onSerTXEdit_textChanged(const QString &);
 
     void on_frequencyEdit_textChanged(const QString &arg1);
 

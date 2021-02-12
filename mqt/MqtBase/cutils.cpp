@@ -592,3 +592,27 @@ int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
     return -1;
 }
 
+void adjustMargins(QLayout *layout, int sp)
+{
+    for(int i = 0; i < layout->count(); i++)
+    {
+        QLayoutItem *li = layout->itemAt(i);
+        QLayout *l = li->layout();
+        QWidget *w = li->widget();
+        if (l)
+        {
+            adjustMargins(l, sp);
+        }
+        if (w)
+        {
+            trace(li->widget()->objectName());
+            if (w->layout())
+            {
+                adjustMargins(w->layout(), sp);
+            }
+        }
+    }
+    layout->setMargin(sp);
+    layout->setSpacing(sp);
+    layout->setContentsMargins(sp, sp, sp, sp);
+}

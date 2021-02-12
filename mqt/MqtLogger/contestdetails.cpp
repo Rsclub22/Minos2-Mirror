@@ -1453,7 +1453,7 @@ void ContestDetails::on_BonusComboBox_currentIndexChanged(int /*index*/)
     ui->NonGCtryMult->setChecked(false);
     ui->DXCCMult->setChecked(false);
     ui->M7LocatorMults->setChecked(false);
-    ui->MGMCheckBox->setChecked(false);
+//    ui->MGMCheckBox->setChecked(false);  // bonus doesn't preclude MGM
     noMultRipple = false;
 }
 
