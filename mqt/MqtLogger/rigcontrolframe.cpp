@@ -123,20 +123,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(checkFreqContestBandTimer, &QTimer::timeout, this, [=](){onCheckContestBandMatch();});
     checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
 
-    logRadioSettingsChanged();
+    setStateOfBandOnlyRadButtons();
 
-    bool ignorePresetf, ignorePreviousf;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestStartIgnorePresetFreq, ignorePresetf);
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, ignorePreviousf);
-
-    if (ignorePresetf || ignorePreviousf)
-    {
-        bandSelButtons->setBandOnlyRadioButChecked(true);
-    }
-    else
-    {
-       bandSelButtons->setPresetFreqRadioButChecked(true);
-    }
 
 
 
@@ -726,17 +714,29 @@ void RigControlFrame::showRitButOff()
     ui->RitButton->setText(tr("Off"));
 }
 
-void RigControlFrame::logRadioSettingsChanged()
+void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
+{
+    if (logRadioSettingsFlags->ignorePresetFreq || logRadioSettingsFlags->ignorePreviousFreq)
+    {
+        setStateOfBandOnlyRadButtons();
+    }
+
+
+
+}
+
+void RigControlFrame::setStateOfBandOnlyRadButtons()
 {
     if (!readIgnorePresetFreqFlag() && !readIgnorePreviousFreqFlag())
     {
         bandSelButtons->setbandOnlyButVisible(false);
+        bandSelButtons->setPresetFreqRadioButChecked(true);
     }
     else
     {
         bandSelButtons->setbandOnlyButVisible(true);
+        bandSelButtons->setBandOnlyRadioButChecked(true);
     }
-
 }
 
 

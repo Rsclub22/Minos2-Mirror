@@ -139,6 +139,8 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
+    void clearActionSelected(int buttonNumber);
+    void runButActivated(int buttonNumber);
 };
 
 #endif // TXVMBUTTONSFRAME_H

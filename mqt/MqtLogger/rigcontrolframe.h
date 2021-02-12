@@ -103,7 +103,7 @@ public:
     void closeContest();
 
     Frequency getSendFreq();
-    void logRadioSettingsChanged();
+    void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
 signals:
     void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);
@@ -307,6 +307,7 @@ private:
     void setContestBandLimits(QString band);
     void initBandSelButtons();
 
+    void setStateOfBandOnlyRadButtons();
 };
 
 

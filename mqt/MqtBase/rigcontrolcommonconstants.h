@@ -355,4 +355,57 @@ QString readSerialComportBandSwitchFromIni();
 void writeSerialComportBandSwitchDataToIni(QString comport);
 QString convertBandForIni(QString band);
 
+class RadioSettingsDialogChangeFlag
+{
+public:
+    RadioSettingsDialogChangeFlag()
+    {
+        clear();
+    }
+
+    void clear()
+    {
+        operatingFreqColor = false;
+        ignorePresetFreq = false;
+        ignorePreviousFreq = false;
+        restoreContestMode = false;
+        cwPresetsChanged = false;
+        phonePresetsChanged = false;
+        mgmPresetsChanged = false;
+        enableBandSwitch = false;
+        enableSerialBandSwitch = false;
+        serialComport = false;
+    }
+
+    bool isChanged()
+    {
+        return operatingFreqColor ||
+        ignorePresetFreq ||
+        ignorePreviousFreq ||
+        restoreContestMode ||
+        cwPresetsChanged ||
+        phonePresetsChanged ||
+        mgmPresetsChanged ||
+        enableBandSwitch ||
+        enableSerialBandSwitch ||
+        serialComport;
+    }
+
+
+    bool operatingFreqColor;
+    bool ignorePresetFreq;
+    bool ignorePreviousFreq;
+    bool restoreContestMode;
+    bool cwPresetsChanged;
+    bool phonePresetsChanged;
+    bool mgmPresetsChanged;
+    bool enableBandSwitch;
+    bool enableSerialBandSwitch;
+    bool serialComport;
+
+
+
+
+};
+
 #endif // RIGCONTROLCOMMONCONSTANTS_H

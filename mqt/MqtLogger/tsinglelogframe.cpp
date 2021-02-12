@@ -152,7 +152,7 @@ void TSingleLogFrame::buildFrame()
     connect(LogContainer, SIGNAL(sendKeyerTone()), this, SLOT(sendKeyerTone()));
     connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
     connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
-    connect(LogContainer, SIGNAL(logRadioSettingsChanged()), this, SLOT(onLogRadioSettingsChanged()));
+    connect(LogContainer, SIGNAL(logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)), this, SLOT(onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)));
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 }
@@ -1821,13 +1821,15 @@ void TSingleLogFrame::on_RadioLoaded()
     GJVQSOLogFrame->setRadioLoaded();
 }
 
-void TSingleLogFrame::onLogRadioSettingsChanged()
+
+void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
 {
     if(FKHRigControlFrame)
     {
-        FKHRigControlFrame->logRadioSettingsChanged();
+        FKHRigControlFrame->logRadioSettingsChanged(logRadioSettingsFlags);
     }
 }
+
 
 bool TSingleLogFrame::isRadioLoaded()
 {
