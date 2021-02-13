@@ -272,6 +272,7 @@ public:
     bandmapSpotType::SPOT_TYPE getSpotType()const{return spotType;}
     void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
     QString spotName();
+    static QString spotName(bandmapSpotType::SPOT_TYPE _spotType);
 
 
     bool getCqResponse() const {return cqResponse;}

@@ -1550,6 +1550,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
+    QString spotName = BandmapSpotData::spotName(spotType);
     QString spotModeMsg = tr("The computed mode is");
     if (spotType == bandmapSpotType::LOGGED)
     {
@@ -1560,7 +1561,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11")
+    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11\n%12")
                                             .arg(callsign)
                                             .arg(freq.convertFreqStrDisp())
                                             .arg(locator)
@@ -1572,7 +1573,8 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
                                             .arg(elapsedTimeStr)
                                             .arg(spotModeMsg)
                                             .arg(computedMode)
-                                            .arg(spotterComment);
+                                            .arg(spotterComment)
+                                            .arg(spotName);
 
     toolTipMsg = msg;
     //msg.detach();

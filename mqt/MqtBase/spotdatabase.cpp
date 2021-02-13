@@ -429,7 +429,12 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
 
 QString BandmapSpotData::spotName()
 {
-    switch(spotType)
+    return spotName(spotType);
+}
+
+/*static*/ QString BandmapSpotData::spotName(bandmapSpotType::SPOT_TYPE _spotType)
+{
+    switch(_spotType)
     {
         default:
         case bandmapSpotType::NONE:
