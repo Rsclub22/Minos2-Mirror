@@ -491,13 +491,7 @@ void BandmapView::leftMouseButtonPressed(QPoint p)
 {
     QPoint mappedP = bandmapGraphicsView->mapToScene(p).toPoint();
 
-    Frequency freq = dial->checkSelectedFreqTextOnDial(mappedP);
-
-    if (!freq.isClear())
-    {
-        sendFreqToRig(freq);
-    }
-    else if (mappedP.x() <= dial->getCurWidth() && mappedP.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    if (mappedP.x() < dial->getCurWidth() && mappedP.x() >= 0)
     {
         // select the freq
         bandmapSelectFreq(mappedP.y());
