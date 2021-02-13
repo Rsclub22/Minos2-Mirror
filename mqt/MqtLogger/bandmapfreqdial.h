@@ -102,6 +102,7 @@ signals:
 protected:
     //void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
     void wheelEvent(QGraphicsSceneWheelEvent * event) override;
+    virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
 
 
 private:

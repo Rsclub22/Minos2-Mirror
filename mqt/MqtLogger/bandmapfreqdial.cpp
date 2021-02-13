@@ -31,7 +31,7 @@ BandmapFreqDial::BandmapFreqDial(int _width, int _height):
 
 {
     changeBoundingRect(dialHeight, dialWidth);
-
+    setAcceptHoverEvents(true);
 }
 
 void BandmapFreqDial::onFontChanged(QFont cf)
@@ -629,6 +629,12 @@ void BandmapFreqDial::setFreqOperatingInfo(const QString _contestBandStr, const 
 
 }
 
+void BandmapFreqDial::hoverMoveEvent(QGraphicsSceneHoverEvent* event)
+{
+    QPoint p = event->pos().toPoint();
+    Frequency freq = getFreqFromYCoordOnDial(p.y());
 
+    setToolTip(freq.convertFreqStrDisp());
+}
 
 
