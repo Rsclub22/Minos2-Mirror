@@ -238,6 +238,7 @@ public:
 
 class BandmapSpotData: public SpotdataBase, public ClusterSpotDataBase
 {
+    Q_DECLARE_TR_FUNCTIONS(BandmapSpotData)
 public:
     BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_);
     BandmapSpotData(const BandmapSpotData &sdp);
