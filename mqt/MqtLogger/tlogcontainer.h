@@ -49,6 +49,8 @@ public:
 
     QMenu TabPopup;
 
+    SerialTVSwitch *serialTVSw;
+
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
@@ -140,6 +142,7 @@ private:
     QAction *FileCloseAction;
     QAction *CloseAllAction;
     QAction *CloseAllButAction;
+    QAction *OptionsAction;
 
     QAction *sessionManagerAction;
 
@@ -162,7 +165,7 @@ private:
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
     QAction *DefDirsAction;
-    QAction *OptionsAction;
+    QAction *AdvancedOptionsAction;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
     QAction *UDPConfigAction;
@@ -188,8 +191,6 @@ private:
     QVector< QSharedPointer<QAction> > menuLogsActions;
 
     BaseContestLog *loadSession(QString sessName);
-
-    SerialTVSwitch *serialTVSw;
 
     void preloadLists( );
     void preloadFiles( const QString &conarg );
@@ -218,6 +219,7 @@ private slots:
     void FileCloseActionExecute();
     void CloseAllActionExecute();
     void CloseAllButActionExecute();
+    void OptionsActionExecute();
     void ExitClearActionExecute();
     void ExitActionExecute();
 
@@ -235,7 +237,7 @@ private slots:
     void CorrectDateTimeActionExecute();
     void ShowOperatorsActionExecute();
     void DefDirsActionExecute();
-    void OptionsActionExecute();
+    void AdvancedOptionsActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
     void UDPConfigActionExecute();

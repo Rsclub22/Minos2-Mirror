@@ -74,6 +74,7 @@ private slots:
     void onBandSwLineEditingFinished(int i);
     void onEnableBandSwChkBox();
     void onEnableSerialBandSwChkBox();
+
 private:
     Ui::RadioSettingDialog *ui;
     //QStringList presetFreq;

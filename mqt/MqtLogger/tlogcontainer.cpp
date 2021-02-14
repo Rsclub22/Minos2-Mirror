@@ -40,7 +40,7 @@
 #include "BandList.h"
 #include "delayedaction.h"
 #include "ContestPageControl.h"
-
+#include "OptionsDialog.h"
 
 
 #include "tlogcontainer.h"
@@ -435,7 +435,6 @@ void TLogContainer::setupMenus()
     FileCloseAction = newAction(QT_TR_NOOP("Close Contest"), ui->menuFile, SLOT(FileCloseActionExecute()));
     CloseAllAction = newAction(QT_TR_NOOP("Close all Contests"), ui->menuFile, SLOT(CloseAllActionExecute()));
     CloseAllButAction = newAction(QT_TR_NOOP("Close all but this Contest"), ui->menuFile, SLOT(CloseAllButActionExecute()));
-    ui->menuFile->addSeparator();
 
     ui->menuFile->addSeparator();
     ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, SLOT(ContestDetailsActionExecute()));
@@ -447,6 +446,9 @@ void TLogContainer::setupMenus()
 
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, SLOT(ListOpenActionExecute()));
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
+    ui->menuFile->addSeparator();
+
+    OptionsAction = newAction(QT_TR_NOOP("Options"), ui->menuFile, SLOT(OptionsActionExecute()));
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
     ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, SLOT(ExitClearActionExecute()));
@@ -505,8 +507,8 @@ void TLogContainer::setupMenus()
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
     DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
-    OptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
-    OptionsAction->setVisible(false);
+    AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(AdvancedOptionsActionExecute()));
+    AdvancedOptionsAction->setVisible(false);
     StyleAction = newAction(QT_TR_NOOP("Set control style..."), ui->menuTools, SLOT(StyleActionExecute()));
 
     // end of tools manu
@@ -1066,6 +1068,13 @@ void TLogContainer::CloseAllButActionExecute()
    on_contestPageControl_currentChanged(-1);
    enableActions();
 }
+void TLogContainer::OptionsActionExecute()
+{
+    OptionsDialog od;
+
+    od.exec();
+}
+
 //---------------------------------------------------------------------------
 
 void TLogContainer::ExitActionExecute()
@@ -1221,7 +1230,7 @@ void TLogContainer::DefDirsActionExecute()
     DefDirsDlg ed(this);
     ed.exec();
 }
-void TLogContainer::OptionsActionExecute()
+void TLogContainer::AdvancedOptionsActionExecute()
 {
     TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
 
