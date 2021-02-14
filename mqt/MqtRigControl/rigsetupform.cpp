@@ -1199,30 +1199,32 @@ void RigSetupForm::initSupBandsChkBoxs()
 
     for (int i = 0; i < allSupBandsChkBoxList.count(); i++)
     {
-        connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
+        SupCheckBoxData scbd;
+        scbd.supBandChkBox = allSupBandsChkBoxList[i];
+        scbd.bandType = bands[i].data()->getType();
+        allSupBandsChkBoxesMap.insert(bands[i].data()->name(), scbd);
+
+        connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
 
     }
 
-    hfSupBandsChkBoxList << ui->sup1_8MhzChkbox << ui->sup3_5MhzChkbox << ui->sup7MhzChkbox
-                         << ui->sup14MhzChkbox << ui->sup21MhzChkbox << ui->sup28MhzChkbox;
-
-    vhfSupBandsChkBoxList << ui->sup50MhzChkbox << ui->sup70MhzChkbox << ui->sup144MhzChkbox
-                          << ui->sup432MhzChkbox << ui->sup1296MhzChkbox;
 
 }
 
 
 void RigSetupForm::onSupbandCheckBoxStateChanged(int i, int state)
 {
+    QString selBand = BandList::findBandNameFromIndex(i, bands);
+
     if (i < allSupBandsChkBoxList.count())
     {
         if (state == Qt::Checked)
         {
-            radioData->supportBands.setSupportBandFlag(i, true);
+            radioData->supportBands.setSupportBandFlag(selBand, true);
         }
         else if (state == Qt::Unchecked)
         {
-            radioData->supportBands.setSupportBandFlag(i, false);
+            radioData->supportBands.setSupportBandFlag(selBand, false);
         }
 
         radioValueChanged = true;
@@ -1234,35 +1236,45 @@ void RigSetupForm::onSupbandCheckBoxStateChanged(int i, int state)
 
 void RigSetupForm::setSupportBandChkBox(int i, bool checked)
 {
-    if (checked)
-    {
-        allSupBandsChkBoxList[i]->setCheckState(Qt::Checked);
-    }
-    else
-    {
-        allSupBandsChkBoxList[i]->setCheckState(Qt::Unchecked);
-    }
-
-
+        allSupBandsChkBoxList[i]->setChecked(checked);
 }
 
+void RigSetupForm::setSupportBandChkBox(QString band, bool checked)
+{
+    if (allSupBandsChkBoxesMap.contains(band))
+    {
+        allSupBandsChkBoxesMap.value(band).supBandChkBox->setChecked(checked);
+    }
 
+}
 
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
     if (hfFlag)
     {
-       for (auto &schk: allSupBandsChkBoxList)
+       foreach (auto &b, bands)
        {
-           schk->setVisible(visible);
+           if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+           {
+                allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->setVisible(visible);
+
+           }
        }
     }
     else
     {
-        for (auto &schk: vhfSupBandsChkBoxList)
+        foreach (auto &b, bands)
         {
-            schk->setVisible(visible);
+            if (b.data()->getType() != HF_BANDTYPE)
+            {
+                if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+                {
+                    allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->setVisible(visible);
+
+                }
+            }
+
         }
     }
 
@@ -1274,21 +1286,30 @@ bool RigSetupForm::isAnySupportBandChecked()
 {
     if (hfFlag)
     {
-        for (auto &schk: allSupBandsChkBoxList)
+        foreach (auto &b, bands)
         {
-            if (schk->isChecked())
+            if (allSupBandsChkBoxesMap.contains(b.data()->name()))
             {
-                return true;
+                if (allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->isChecked())
+                {
+                    return true;
+                }
             }
         }
     }
     else
     {
-        for (auto &schk:vhfSupBandsChkBoxList)
+        foreach (auto &b, bands)
         {
-            if (schk->isChecked())
+            if (b.data()->getType() != HF_BANDTYPE)
             {
-                return true;
+                if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+                {
+                    if (allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->isChecked())
+                    {
+                        return true;
+                    }
+                }
             }
         }
     }
@@ -1493,7 +1514,7 @@ void RigSetupForm::changeBand()
     {
         // can't change transverter band on current RadioName
         QMessageBox msgBox;
-        msgBox.setText(tr("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.setText(tr("You can not change band on this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName, currentRadioName));
         msgBox.exec();
         return;
     }
@@ -1531,12 +1552,12 @@ void RigSetupForm::changeBand()
     radioData->transVertSettings[tabNum]->transVertName = transVertName;
 
 
-    for (int i = 0; i < bands.count(); i++)
+    foreach (auto &b, bands)
     {
-         if (bands[i]->name() == transVertName)
+         if (b->name() == transVertName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
+             radioData->transVertSettings[tabNum]->fLow = b->fLow;
+             radioData->transVertSettings[tabNum]->fHigh = b->fHigh;
          }
     }
     //renamedTransVertTabs.append(oldName);

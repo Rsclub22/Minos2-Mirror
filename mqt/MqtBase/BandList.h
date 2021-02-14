@@ -26,6 +26,11 @@
 //---------------------------------------------------------------------------
 extern const QString allHF;
 
+const QString HF_BANDTYPE = "HF";
+const QString VHF_BANDTYPE = "VHF";
+const QString MW_BANDTYPE = "MWAVE";
+
+
 class ExclusionInfo
 {
 public:
@@ -101,6 +106,8 @@ class BandList
 
 
         void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands);
+
+        static QString findBandNameFromIndex(int i, QVector<QSharedPointer<BandInfo> > &bands);
 private:
         bool parseBand ( TiXmlElement * e );
         bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);

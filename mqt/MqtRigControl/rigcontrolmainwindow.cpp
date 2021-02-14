@@ -59,7 +59,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     createCloseEvent();
 
-    connect(&LogTimer, &QTimer::timeout, [=](){LogTimerTimer();});
+    connect(&LogTimer, &QTimer::timeout, this, [=](){LogTimerTimer();});
     LogTimer.start(100);
 
     msg = new RigControlRpc(this);
@@ -1828,7 +1828,7 @@ void RigControlMainWindow::loggerSetFreq(Frequency freq)
     logMessage(QString("Received Freq from Logger = %1").arg(freq.traceStr()));
     if (radioCommsOK && !rigStateDetails->rigErrorFlag)
     {
-        logMessage(QString("new freq %1, old freq %2").arg(freq.traceStr()).arg(loggerRequests->logger_freq.traceStr()));
+        logMessage(QString("new freq %1, old freq %2").arg(freq.traceStr(), loggerRequests->logger_freq.traceStr()));
 
 
         loggerRequests->logger_freq = freq;
@@ -1903,7 +1903,8 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
 
     Frequency f(freq);
 
-    if (cb != rigStateDetails->selTvBand && setupRadio->currentRadio.transVertEnable && setupRadio->currentRadio.numTransverters != 0)
+
+    if ((cb != rigStateDetails->selTvBand) && setupRadio->currentRadio.transVertEnable && (setupRadio->currentRadio.numTransverters != 0))
     {
 
         logMessage(QString("SetFreq: Look for transverter for band %1").arg(cb));
@@ -1922,6 +1923,13 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
         }
         */
 
+    }
+    else if ((cb == rigStateDetails->selTvBand) && setupRadio->currentRadio.transVertEnable && (setupRadio->currentRadio.numTransverters != 0))
+    {
+        logMessage(QString("SetFeq: Transverter Selected for %1 band, calculate frequency").arg(rigStateDetails->selTvBand));
+        // now calculate the freq
+        f = f - setupRadio->currentRadio.transVertSettings[rigStateDetails->selTransverterNum]->transVertOffset;
+        logMessage(QString("SetFreq: Transvert Enabled Freq = %1").arg(f.traceStr()));
     }
 
     if (radioCommsOK)
@@ -1999,7 +2007,7 @@ bool RigControlMainWindow::findTransverter(int &transVerterNum, QString &transVe
     int tvNum = 0;
 
     // does a transverter support this band?
-    logMessage((QString("FindTransverter: Looking for Transverters that support this band ").arg(band)));
+    logMessage((QString("FindTransverter: Looking for Transverters that support this band %1").arg(band)));
 
     bool b = false;
     while (tvNum < setupRadio->currentRadio.numTransverters)
@@ -2627,16 +2635,15 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
     // merge radio bands and transverter bands
     if(setupRadio->availRadioData[radioIdx]->transVertEnable)
     {
-        if (bands.count() > 0)
+
+        foreach (auto const &b, bands)
         {
-            for (int i = 0; i < bands.count(); i++)
+            if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioIdx))
             {
-                if (findSupRadioBand(bands[i]->name(), supBandsList) ||  findSupTransBand(bands[i]->name(), radioIdx))
-                {
-                    bandList.append(bands[i]->name());
-                }
+                bandList.append(b->name());
             }
         }
+
     }
     else
     {
@@ -2655,12 +2662,12 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
 
     if (radioModelNumber <= RigId::NonHamlibBaseId)
     {
-        for (int i = 0; i < bands.count(); i++)
+        foreach (auto const &b, bands)
         {
 
-            if (rigFactory->checkForBands(radioModelNumber, bands[i]->fLow))
+            if (rigFactory->checkForBands(radioModelNumber, b->fLow))
             {
-                supBandList.append(bands[i]->name());
+                supBandList.append(b->name());
 
             }
         }
@@ -2668,11 +2675,11 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
     else
     {
         // non hamlib radios
-        for (int i = 0; i < setupRadio->availRadioData[radioIdx]->supportBands.count(); i++)
+        foreach (auto &b, bands)
         {
-            if (setupRadio->availRadioData[radioIdx]->supportBands.getSupportBandFlag(radioIdx))
+            if (setupRadio->availRadioData[radioIdx]->supportBands.getSupportBandFlag(b.data()->name()))
             {
-               supBandList.append(bands[i]->name());
+               supBandList.append(b.data()->name());
             }
         }
 
