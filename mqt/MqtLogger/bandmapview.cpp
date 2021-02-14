@@ -491,13 +491,7 @@ void BandmapView::leftMouseButtonPressed(QPoint p)
 {
     QPoint mappedP = bandmapGraphicsView->mapToScene(p).toPoint();
 
-    Frequency freq = dial->checkSelectedFreqTextOnDial(mappedP);
-
-    if (!freq.isClear())
-    {
-        sendFreqToRig(freq);
-    }
-    else if (mappedP.x() <= dial->getCurWidth() && mappedP.x() >= dial->getCurWidth() - FREQ_SEL_WIDTH)
+    if (mappedP.x() < dial->getCurWidth() && mappedP.x() >= 0)
     {
         // select the freq
         bandmapSelectFreq(mappedP.y());
@@ -1051,6 +1045,11 @@ void BandmapView::drawBandMapSpots()
     {
         return;     // lambda in BandmapView::bandmapUpdate() fired after we have been detached
     }
+    TContestApp *ta = TContestApp::getContestApp();
+    if (!ta)
+    {
+        return;
+    }
 
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 
@@ -1088,7 +1087,7 @@ void BandmapView::drawBandMapSpots()
 
     bool centreTextOnFrequency = true;
     bool btemp;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
+    ta->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
     centreTextOnFrequency = !btemp;
 
     if (!centreTextOnFrequency)
@@ -1109,7 +1108,7 @@ void BandmapView::drawBandMapSpots()
         traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
+        ta ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
         if (traceDebugFlag)
         {
             traceMsg(QString("dump list of spots and freq"));
@@ -1551,6 +1550,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     QString computedMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
+    QString spotName = BandmapSpotData::spotName(spotType);
     QString spotModeMsg = tr("The computed mode is");
     if (spotType == bandmapSpotType::LOGGED)
     {
@@ -1561,7 +1561,7 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime);
 
-    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11")
+    QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11\n%12")
                                             .arg(callsign)
                                             .arg(freq.convertFreqStrDisp())
                                             .arg(locator)
@@ -1573,7 +1573,8 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
                                             .arg(elapsedTimeStr)
                                             .arg(spotModeMsg)
                                             .arg(computedMode)
-                                            .arg(spotterComment);
+                                            .arg(spotterComment)
+                                            .arg(spotName);
 
     toolTipMsg = msg;
     //msg.detach();

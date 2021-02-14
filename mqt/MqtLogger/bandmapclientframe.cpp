@@ -115,6 +115,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     contextSpotsMenu = new QMenu(this);
     contextSpotsMenu_markSpotAction = new QAction(tr("M&ark Spot"), this);
     contextSpotsMenu_unMarkSpotAction = new QAction(tr("&Unmark Spot"), this);
+    contextMoveFreqAction = new QAction(tr("Move spot to current frequency"));
     contextSpotsMenu_freqAction = new QAction(tr("Set &Freq"), this);
     contextSpotsMenu_bearingAction = new QAction(tr("Set &Bearing"), this);
     contextSpotsMenu_logAction = new QAction(tr("Send &Log"), this);
@@ -123,6 +124,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     contextSpotsMenu->addAction(contextSpotsMenu_markSpotAction);
     contextSpotsMenu->addAction(contextSpotsMenu_unMarkSpotAction);
+    contextSpotsMenu->addAction(contextMoveFreqAction);
     contextSpotsMenu->addAction(contextSpotsMenu_freqAction);
     contextSpotsMenu->addAction(contextSpotsMenu_bearingAction);
     contextSpotsMenu->addAction(contextSpotsMenu_logAction);
@@ -131,6 +133,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect( contextSpotsMenu_markSpotAction, SIGNAL( triggered() ), this, SLOT(context_markSpotActionSelected()) );
     connect( contextSpotsMenu_unMarkSpotAction, SIGNAL( triggered() ), this, SLOT(context_unMarkSpotActionSelected()) );
+    connect( contextMoveFreqAction, SIGNAL( triggered() ), this, SLOT(context_moveFreqActionSelected()) );
     connect( contextSpotsMenu_freqAction, SIGNAL( triggered() ), this, SLOT(context_freqActionSelected()) );
     connect( contextSpotsMenu_bearingAction, SIGNAL( triggered() ), this, SLOT(context_bearingActionSelected()) );
     connect( contextSpotsMenu_logAction, SIGNAL( triggered() ), this, SLOT(context_logActionSelected()) );
@@ -429,6 +432,17 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
         bandmapView->bandmapUpdate();
     }
+}
+
+void BandmapClientFrame::context_moveFreqActionSelected()
+{
+    traceMsg(QString("menu move frequency of spot selected for callsign %1").arg(contextMenuSelectedSpotData.getDxCallStr()));
+
+    QVariant f;
+    f.setValue(curFreq);
+    bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, FREQ_COL_NUM), f, BMP_DataStoredRole);
+    bandmapView->bandmapUpdate();
+
 }
 
 void BandmapClientFrame::context_freqActionSelected()

@@ -496,6 +496,7 @@ void QSOLogFrame::initialise()
     connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
 
     connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
+    connect(ui->spotLastLoggedPb, SIGNAL(clicked()), this, SLOT(on_SpotLastLoggedPbClicked()));
     setClusterSendSpotControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
     connect(this, SIGNAL(freqChanged(Frequency)), this, SLOT(on_FreqChanged(Frequency)));
@@ -2292,7 +2293,7 @@ void QSOLogFrame::logScreenEntry( )
 
    // save for send spot to DX cluster
    lastLoggedCallsign = lct->cs;
-   ui->lastLoggedChkBx->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
+   ui->spotLastLoggedPb->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
    lastLoggedLocator = lct->loc.getLoc();
    lastLoggedFreq = lct->frequency.getValue();
 
@@ -2920,42 +2921,45 @@ void QSOLogFrame::setTuneAddBandMapSetting(bool state)
     }
 }
 
+void QSOLogFrame::on_SpotLastLoggedPbClicked()
+{
+    if (!lastLoggedCallsign.realCall.isEmpty() && !lastLoggedFreq.isClear())     // don't send a spot when running a freq
+    {
+        // send last spot logged
+        trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
+        emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
+        ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.convertFreqStrDisp());
+    }
+    else
+    {
+        trace(QString("spotLastLoggedButton: don't send spot, no valid call/frequency"));
+    }
 
+}
 void QSOLogFrame::on_SpotPbClicked()
 {
     if ((runButtonOnFlag && radioOffRunFreq) || !runButtonOnFlag)     // don't send a spot when running a freq
     {
-        if (ui->lastLoggedChkBx->isChecked())
+        memoryData::memData logData;
+        int valRes = -1;
+        getLogDetails(logData, valRes);
+        if (valRes == CS_OK)
         {
-            // send last spot logged
-            trace(QString("spotButton: send last logged call %1 to dxCluster").arg(lastLoggedCallsign.realCall));
-            emit sendSpotToClusterServer( lastLoggedFreq, lastLoggedCallsign.realCall, lastLoggedLocator );
-            ui->lastSpotSentLbl->setText(lastLoggedCallsign.realCall + " " + lastLoggedFreq.convertFreqStrDisp());
-        }
-        else
-        {
-            memoryData::memData logData;
-            int valRes = -1;
-            getLogDetails(logData, valRes);
-            if (valRes == CS_OK)
+            // callsign valid
+            if (!logData.callsign.isEmpty() || !logData.freq.isClear())
             {
-                // callsign valid
-                if (!logData.callsign.isEmpty() || !logData.freq.isClear())
-                {
-                   trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
-                    emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
-                   ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.convertFreqStrDisp());
-                }
-                else
-                {
-                    trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.traceStr()));
-                }
+               trace(QString("spotButton: send logged call %1 to dxCluster").arg(logData.callsign));
+                emit sendSpotToClusterServer(logData.freq, logData.callsign, logData.locator);
+               ui->lastSpotSentLbl->setText(logData.callsign + " " + logData.freq.convertFreqStrDisp());
             }
             else
             {
-                trace(QString("spotButton: callsign - %1 invalid").arg(logData.callsign));
+                trace(QString("spotButton: callsign - %1 or freq - %2 is empty").arg(logData.callsign).arg(curFreq.traceStr()));
             }
-
+        }
+        else
+        {
+            trace(QString("spotButton: callsign - %1 invalid").arg(logData.callsign));
         }
     }
     else
@@ -3068,7 +3072,7 @@ void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 {
 
-    ui->lastLoggedChkBx->setVisible(visible);
+    ui->spotLastLoggedPb->setVisible(visible);
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
@@ -3079,7 +3083,7 @@ void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 {
 
-    ui->lastLoggedChkBx->setDisabled(disabled);
+    //ui->lastLoggedChkBx->setDisabled(disabled);
     ui->spotPb->setDisabled(disabled);
     ui->lastSpotSentTitleLbl->setDisabled(disabled);
     ui->lastSpotSentLbl->setDisabled(disabled);

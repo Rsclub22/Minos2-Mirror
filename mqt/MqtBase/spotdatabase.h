@@ -238,6 +238,7 @@ public:
 
 class BandmapSpotData: public SpotdataBase, public ClusterSpotDataBase
 {
+    Q_DECLARE_TR_FUNCTIONS(BandmapSpotData)
 public:
     BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_);
     BandmapSpotData(const BandmapSpotData &sdp);
@@ -272,6 +273,7 @@ public:
     bandmapSpotType::SPOT_TYPE getSpotType()const{return spotType;}
     void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
     QString spotName();
+    static QString spotName(bandmapSpotType::SPOT_TYPE _spotType);
 
 
     bool getCqResponse() const {return cqResponse;}

@@ -263,6 +263,7 @@ private:
     QMenu* contextSpotsMenu = nullptr;
     QAction* contextSpotsMenu_markSpotAction = nullptr;
     QAction* contextSpotsMenu_unMarkSpotAction = nullptr;
+    QAction* contextMoveFreqAction = nullptr;
     QAction* contextSpotsMenu_freqAction = nullptr;
     QAction* contextSpotsMenu_bearingAction = nullptr;
     QAction* contextSpotsMenu_logAction = nullptr;
@@ -349,6 +350,7 @@ private slots:
 
      void context_markSpotActionSelected();
      void context_unMarkSpotActionSelected();
+     void context_moveFreqActionSelected();
      void context_freqActionSelected();
      void context_logActionSelected();
      void context_memoryActionSelected();

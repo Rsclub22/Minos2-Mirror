@@ -429,32 +429,37 @@ bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
 
 QString BandmapSpotData::spotName()
 {
-    switch(spotType)
+    return spotName(spotType);
+}
+
+/*static*/ QString BandmapSpotData::spotName(bandmapSpotType::SPOT_TYPE _spotType)
+{
+    switch(_spotType)
     {
         default:
         case bandmapSpotType::NONE:
-        return "NONE";
+        return tr("NONE");
         break;
         case bandmapSpotType::CLUSTER:
-        return "CLUSTER";
+        return tr("CLUSTER");
         break;
         case bandmapSpotType::CLUSTER_MARKED:
-        return "CLUSTER MARKED";
+        return tr("CLUSTER MARKED");
         break;
         case bandmapSpotType::LOGGED:
-        return "LOGGED";
+        return tr("LOGGED");
         break;
         case bandmapSpotType::MARKED:
-        return "MARKED";
+        return tr("MARKED");
         break;
         case bandmapSpotType::SAVED:
-        return "SAVED";
+        return tr("SAVED");
         break;
         case bandmapSpotType::CQ:
-        return "CQ";
+        return tr("CQ");
         break;
         case bandmapSpotType::DELETED:
-        return "DELETED";
+        return tr("DELETED");
         break;
 
     };
