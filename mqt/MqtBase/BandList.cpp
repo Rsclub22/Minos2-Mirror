@@ -336,7 +336,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     Frequency dvhffreq(ifreq * 1000000);
     Frequency dmwvfreq(ifreq * 1000000000);
 
-    for ( auto const &b: bandList )
+    foreach ( auto const &b, bandList )
     {
         if (
                 sfreq.compare(b->uk ) == 0
@@ -350,7 +350,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             return true;
         }
     }
-    for ( auto const &b: bandList )
+    foreach ( auto const &b, bandList )
     {
         QString bandType = b->getType();
         Frequency bfhigh = b->fHigh;
@@ -388,7 +388,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                     }
                 }
     }
-    for ( auto const &b: bandList )
+    foreach ( auto const &b, bandList )
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
         if ( b->uk.indexOf ( sfreq ) != -1
@@ -408,7 +408,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 
 bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
-    for ( auto const &b: bandList )
+   foreach ( auto const &b, bandList )
    {
       if (b->fLow <= freq && b->fHigh >= freq)
       {
@@ -424,7 +424,7 @@ bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 
 void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
-    for ( auto const &b: bandList )       // just load VHF/UHF bands
+    foreach ( auto const &b, bandList )       // just load VHF/UHF bands
     {
         // don't use bands > 10GHz (can't support Freq display)
         if ( b->uk != "24 GHz" && b->uk != "47 GHz"
@@ -447,7 +447,7 @@ void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
 void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
 
-    for ( auto const &b: bandList )
+    foreach ( auto const &b,  bandList )
     {
         // don't use bands > 10GHz (can't support Freq display)
         if ( b->uk != "24 GHz" && b->uk != "47 GHz"
@@ -501,3 +501,18 @@ QString BandList::findType(const Frequency &freq) const
     return "";
 }
 
+QString BandList::findBandNameFromIndex(int idx, QVector<QSharedPointer<BandInfo> > &bands)
+{
+    if (idx < bands.count() || idx >= 0)
+    {
+        for (int i = 0; i < bands.count(); i++)
+        {
+            if (i == idx)
+            {
+                return bands[i].data()->name();
+            }
+        }
+    }
+
+    return "";
+}

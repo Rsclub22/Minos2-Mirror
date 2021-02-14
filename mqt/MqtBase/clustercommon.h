@@ -24,10 +24,6 @@ const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.i
 const QString CLUSTER_FILTER_FILE = "./Configuration/clusterBandmapFilter.ini";
 
 
-const QString HF_BANDTYPE = "HF";
-const QString VHF_BANDTYPE = "VHF";
-const QString MW_BANDTYPE = "MWAVE";
-
 
 enum allBandOffsets {_1_8M, _3_5M, _7M, _14M, _21M, _28M, _50M, _70M, _144M, _432M, _1296M, _2300M, _3_4G, _5_6G, _10G};
 const QStringList clusterBands = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 Mhz" << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";

@@ -13,6 +13,7 @@
 #define RIGCOMMON_H
 
 #include <QComboBox>
+#include "BandList.h"
 #include "rigcontrolcommonconstants.h"
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
@@ -74,6 +75,9 @@ public:
 
 };
 
+
+
+
 // for non Hamlib Radios
 class SupportBands
 {
@@ -81,19 +85,34 @@ public:
 
     SupportBands()
     {
-        for (int i = 0; i < 11; i++)
+
+        BandList::getBandList().loadAllBands(bands);
+
+        foreach (auto &b, bands)
         {
-            supportBands.append(false);
+
+            supportBands.insert(b.data()->name(), false);
         }
     }
 
 
+    SupportBands& operator=(const SupportBands &sbd)
+    {
+
+        foreach (auto &b, bands)
+        {
+            supportBands.insert(b.data()->name(), sbd.getSupportBandFlag(b.data()->name()));
+        }
+
+        return *this;
+    }
+
 
     void clear()
     {
-        for (auto &sB:supportBands)
+        foreach (auto &b, bands)
         {
-            sB = false;
+            supportBands.insert(b.data()->name(), false);
         }
     }
 
@@ -102,17 +121,28 @@ public:
         return supportBands.count();
     }
 
-    bool getSupportBandFlag(int i)
+    bool getSupportBandFlag(const QString band) const
     {
-        return supportBands[i];
+        if (supportBands.contains(band))
+        {
+            return supportBands.value(band);
+
+        }
+
+        return false;
     }
 
-    void setSupportBandFlag(int i, bool state)
+    void setSupportBandFlag(QString band, bool state)
     {
-        supportBands[i] = state;
+        if (supportBands.contains(band))
+        {
+
+            supportBands.insert(band, state);
+        }
     }
 
-    QList<bool> supportBands;
+    QVector<QSharedPointer<BandInfo> > bands;
+    QMap<QString, bool> supportBands;
 
 };
 
@@ -159,13 +189,7 @@ public:
       dest.startMinosRigCtld = srce->startMinosRigCtld;
       dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
       dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
-
-      for (int i = 0; i < dest.supportBands.count(); i++ )
-      {
-          dest.supportBands.setSupportBandFlag(i, srce->supportBands.getSupportBandFlag(i));
-
-      }
-
+      dest.supportBands = srce->supportBands;
       dest.mgmMode = srce->mgmMode;
       dest.pttType = srce->pttType;
       dest.antSwitchAvail = srce->antSwitchAvail;

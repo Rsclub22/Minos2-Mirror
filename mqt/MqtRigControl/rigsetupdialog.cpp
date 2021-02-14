@@ -291,9 +291,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
 
     radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
 
-    for (int i =0; i < radioTab[tabNum]->getRadioData()->supportBands.count(); i++)
+    //for (int i =0; i < radioTab[tabNum]->getRadioData()->supportBands.count(); i++)
+    foreach(auto &b, bands)
     {
-       radioTab[tabNum]->setSupportBandChkBox(i, radioTab[tabNum]->getRadioData()->supportBands.getSupportBandFlag(i));
+       radioTab[tabNum]->setSupportBandChkBox(b.data()->name(), radioTab[tabNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
     }
 
 
@@ -925,10 +926,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 
     config.beginGroup(radioTab[radNum]->getRadioData()->radioName);
     config.setValue("radioName", radioTab[radNum]->getRadioData()->radioName);
-    //config.setValue("radioMfgName", radioTab[radNum]->getRadioData()->rigMfg_Name);
     config.setValue("radioModel", radioTab[radNum]->getRadioData()->rigModel);
-    //config.setValue("radioModelName", radioTab[radNum]->getRadioData()->rigModelName);
-   // config.setValue("radioModelNumber", radioTab[radNum]->getRadioData()->rigModelNumber);
     config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
     config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
     config.setValue("advancedComms", radioTab[radNum]->getRadioData()->advancedCommsFlag);
@@ -948,22 +946,29 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("startMinosRigCtld", radioTab[radNum]->getRadioData()->startMinosRigCtld);
     config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
     config.setValue("rigCtldPortNumber", radioTab[radNum]->getRadioData()->rigCtldNetworkPort);
-    //config.setValue("antSwitchAvail", radioTab[radNum]->getRadioData()->antSwitchAvail);
     config.setValue("transVertEnable", radioTab[radNum]->getRadioData()->transVertEnable);
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    for (int i = 0; i < radioTab[radNum]->getRadioData()->supportBands.count(); i++)
+    foreach (auto &b, bands)
     {
-        QString name = bands[i].data()->uk;
-        name.remove('\x20').replace('H', 'h').replace('.', '_');
-        config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(i));
+        if (hfFlag)
+        {
+            QString name = b.data()->name();
+            name.remove('\x20').replace('H', 'h').replace('.', '_');
+            config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
+        }
+        else
+        {
+            if (b.data()->getType() != HF_BANDTYPE)
+            {
+                QString name = b.data()->name();
+                name.remove('\x20').replace('H', 'h').replace('.', '_');
+                config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
+            }
+        }
+
     }
-    //config.setValue("support50Mhz", radioTab[radNum]->getRadioData()->support50MHz);
-    //config.setValue("support70Mhz", radioTab[radNum]->getRadioData()->support70MHz);
-    //config.setValue("support144Mhz", radioTab[radNum]->getRadioData()->support144MHz);
-    //config.setValue("support432Mhz", radioTab[radNum]->getRadioData()->support432MHz);
-    //config.setValue("support1296Mhz", radioTab[radNum]->getRadioData()->support1296MHz);
     config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
     config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
     config.setValue("locTransVertSwComport", radioTab[radNum]->getRadioData()->locTVSwComport);
@@ -979,11 +984,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
 {
     config.beginGroup(availRadios[radNum]);
     radioTab[radNum]->getRadioData()->radioName = config.value("radioName", "").toString();
-    //radioTab[radNum]->getRadioData()->radioNumber = config.value("radioNumber", QString::number(radNum)).toString();
-    //radioTab[radNum]->getRadioData()->rigMfg_Name = config.value("radioMfgName", "").toString();
     radioTab[radNum]->getRadioData()->rigModel = config.value("radioModel", "").toString();
-    //radioTab[radNum]->getRadioData()->rigModelName = config.value("radioModelName", "").toString();
-    //radioTab[radNum]->getRadioData()->rigModelNumber = config.value("radioModelNumber", "").toInt();
     radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
     radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
     radioTab[radNum]->getRadioData()->advancedCommsFlag = config.value("advancedComms", false).toBool();
@@ -1008,17 +1009,26 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    for (int i = 0; i < radioTab[radNum]->getRadioData()->supportBands.count(); i++)
+    foreach (auto &b, bands)
     {
-        QString name = bands[i].data()->uk;
-        name.remove('\x20').replace('H', 'h').replace('.', '_');
-        radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(i, config.value("support" + name, false).toBool());
+        if (hfFlag)
+        {
+            QString name = b.data()->uk;
+            name.remove('\x20').replace('H', 'h').replace('.', '_');
+            radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+        }
+        else
+        {
+            if (b.data()->getType() != HF_BANDTYPE)
+            {
+                QString name = b.data()->uk;
+                name.remove('\x20').replace('H', 'h').replace('.', '_');
+                radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+            }
+        }
+
+
     }
-    //radioTab[radNum]->getRadioData()->support50MHz = config.value("support50Mhz", false).toBool();
-    //radioTab[radNum]->getRadioData()->support70MHz = config.value("support70Mhz", false).toBool();
-    //radioTab[radNum]->getRadioData()->support144MHz = config.value("support144Mhz", false).toBool();
-    //radioTab[radNum]->getRadioData()->support432MHz = config.value("support432Mhz", false).toBool();
-    //radioTab[radNum]->getRadioData()->support1296MHz = config.value("support1296Mhz", false).toBool();
     radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
     radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
     radioTab[radNum]->getRadioData()->locTVSwComport = config.value("locTransVertSwComport", "").toString();

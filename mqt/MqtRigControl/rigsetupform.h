@@ -15,7 +15,18 @@ namespace Ui {
 }
 
 
+class SupCheckBoxData
+{
+public:
 
+    SupCheckBoxData()
+    {
+        supBandChkBox = nullptr;
+    }
+
+    QCheckBox *supBandChkBox;
+    QString bandType;
+};
 
 
 class RigSetupForm : public QWidget
@@ -153,6 +164,7 @@ public:
     void setForceRTSDisabled(bool state);
 
     void setSupportBandChkBox(int i, bool checked);
+    void setSupportBandChkBox(QString band, bool checked);
     void setSupportBandCheckBoxVisible(bool visible);
 
     void checkAdvancedCommsCheckBox(bool checked);
@@ -169,6 +181,7 @@ public:
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
+
 
 public slots:
     void comSpeedSelected();
@@ -248,8 +261,8 @@ private:
     QString currentRadioName;
 
     QList<QCheckBox*> allSupBandsChkBoxList;
-    QList<QCheckBox*> hfSupBandsChkBoxList;
-    QList<QCheckBox*> vhfSupBandsChkBoxList;
+
+    QMap<QString, SupCheckBoxData> allSupBandsChkBoxesMap;
 
 
     void fillHandShakeInfo();

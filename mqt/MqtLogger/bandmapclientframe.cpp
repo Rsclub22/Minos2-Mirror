@@ -146,7 +146,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
 
-    BandList::getBandList().loadVhfAndUpBands(bands);
+    BandList::getBandList().loadAllBands(bands);
 
     modeBandPlan = new checkModeAgainstFreq();
     if (modeBandPlan->loadBandsFromBandList())
@@ -1813,7 +1813,7 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
         QStringList limitBands = settings.childGroups();
         if (limitBands.contains(band))
         {
-            traceMsg(QString("bandmapLimit band = %1, mode = %2").arg(band).arg(mode));
+            traceMsg(QString("bandmapLimit band = %1, mode = %2").arg(band, mode));
             if (mode.isEmpty())
             {
                 mode = "USB";
