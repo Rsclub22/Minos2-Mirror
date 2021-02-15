@@ -19,12 +19,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="111"/>
+        <location filename="../MainWindow.ui" line="118"/>
         <source>QS1R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="118"/>
+        <location filename="../MainWindow.ui" line="125"/>
         <source>QS1R freq</source>
         <translation type="unfinished"></translation>
     </message>
@@ -44,22 +44,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="89"/>
-        <source>Track band</source>
+        <location filename="../MainWindow.ui" line="76"/>
+        <source>WSJT-X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="96"/>
+        <source>Track band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.ui" line="103"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="129"/>
+        <location filename="../MainWindow.ui" line="136"/>
         <source>Transfer 1-&gt; QS1R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.ui" line="136"/>
+        <location filename="../MainWindow.ui" line="143"/>
         <source>Transfer QS1R -&gt; 1</source>
         <translation type="unfinished"></translation>
     </message>

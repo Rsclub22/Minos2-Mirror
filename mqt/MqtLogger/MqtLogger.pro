@@ -44,6 +44,7 @@ SOURCES += \
     LoggerContacts.cpp \
     LoggerContest.cpp \
     MinosTestExport.cpp \
+    OptionsDialog.cpp \
     PrintFile.cpp \
     QSOTextEditFrame.cpp \
     RigMemoryFrame.cpp \
@@ -134,6 +135,7 @@ HEADERS  += \
     LoggerContacts.h \
     LoggerContest.h \
     MinosTestExport.h \
+    OptionsDialog.h \
     QSOTextEditFrame.h \
     RigMemoryFrame.h \
     RotPresets.h \
@@ -212,6 +214,7 @@ HEADERS  += \
 FORMS    += \
     ContestPage.ui \
     ContestPageControl.ui \
+    OptionsDialog.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \

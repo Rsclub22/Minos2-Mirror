@@ -49,6 +49,8 @@ public:
 
     QMenu TabPopup;
 
+    SerialTVSwitch *serialTVSw;
+
     TSingleLogFrame *findContest( const QString &pubname );
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
@@ -140,6 +142,7 @@ private:
     QAction *FileCloseAction;
     QAction *CloseAllAction;
     QAction *CloseAllButAction;
+    QAction *OptionsAction;
 
     QAction *sessionManagerAction;
 
@@ -161,17 +164,11 @@ private:
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
-    QAction *DefDirsAction;
-    QAction *OptionsAction;
+    QAction *AdvancedOptionsAction;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
-    QAction *UDPConfigAction;
-    QAction *WSJTXConfigAction;
-    QAction *ClusterBandmapFilterConfigAction;
-    QAction *RadioConfigAction;
     QAction *ReportAutofillAction;
     QAction *TabSandPAction;
-    QAction *OldBandMapAction;
     QAction *ConfigureAgeProtctionAction;
     QAction *StyleAction;
 
@@ -188,8 +185,6 @@ private:
     QVector< QSharedPointer<QAction> > menuLogsActions;
 
     BaseContestLog *loadSession(QString sessName);
-
-    SerialTVSwitch *serialTVSw;
 
     void preloadLists( );
     void preloadFiles( const QString &conarg );
@@ -218,6 +213,7 @@ private slots:
     void FileCloseActionExecute();
     void CloseAllActionExecute();
     void CloseAllButActionExecute();
+    void OptionsActionExecute();
     void ExitClearActionExecute();
     void ExitActionExecute();
 
@@ -234,15 +230,11 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void ShowOperatorsActionExecute();
-    void DefDirsActionExecute();
-    void OptionsActionExecute();
+    void AdvancedOptionsActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
-    void UDPConfigActionExecute();
-    void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
     void TabSandPActionExecute();
-    //void OldBandMap();
     void ConfigAgeProtection();
 
     void GoToSerialActionExecute();
@@ -269,13 +261,8 @@ private slots:
     void onTabMoved(int, int);
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
-    void ClusterBandmapConfigActionExecute();
-    void RadioConfigActionExecute();
-
 
     void appStarted();
-
-
 
 public slots:
     void onArgsReceived(QString conarg);

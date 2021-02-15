@@ -5,39 +5,26 @@
 #include "ui_defdirsdlg.h"
 
 DefDirsDlg::DefDirsDlg(QWidget *parent) :
-    QDialog(parent),
+    QFrame(parent),
     ui(new Ui::DefDirsDlg)
 {
     ui->setupUi(this);
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    QSettings settings;
-    QByteArray geometry = settings.value("DefDirsDlg/geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
-
-    QString deflog = TLogContainer::getDefaultDirectory(false);
-    ui->logsDirEdit->setText(deflog);
-    QString deflist =TLogContainer::getDefaultDirectory(true);
-    ui->listsDirEdit->setText(deflist);
 }
 
 DefDirsDlg::~DefDirsDlg()
 {
     delete ui;
 }
-void DefDirsDlg::doCloseEvent()
+
+void DefDirsDlg::initialise()
 {
-    QSettings settings;
-    settings.setValue("DefDirsDlg/geometry", saveGeometry());
+    QString deflog = TLogContainer::getDefaultDirectory(false);
+    ui->logsDirEdit->setText(deflog);
+    QString deflist =TLogContainer::getDefaultDirectory(true);
+    ui->listsDirEdit->setText(deflist);
 }
-void DefDirsDlg::reject()
-{
-    doCloseEvent();
-    QDialog::reject();
-}
-void DefDirsDlg::accept()
+void DefDirsDlg::finalise()
 {
     QString temp;
 
@@ -48,18 +35,6 @@ void DefDirsDlg::accept()
     temp = ui->listsDirEdit->text().trimmed();
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpListDirectory, temp );
 
-    doCloseEvent();
-    QDialog::accept();
-}
-
-void DefDirsDlg::on_OKButton_clicked()
-{
-    accept();
-}
-
-void DefDirsDlg::on_cancelButton_clicked()
-{
-    reject();
 }
 
 QString DefDirsDlg::browseDefDir(const QString &prompt)
