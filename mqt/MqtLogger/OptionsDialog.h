@@ -13,15 +13,19 @@ class OptionsDialog : public QDialog
 
 public:
     explicit OptionsDialog(QWidget *parent = nullptr);
-    ~OptionsDialog();
-
-public Q_SLOTS:
-        virtual int exec() override;
+    virtual ~OptionsDialog() override;
 
 private slots:
     void on_OKButton_clicked();
 
     void on_cancelButton_clicked();
+
+    void doCloseEvent();
+
+public Q_SLOTS:
+    virtual int exec() override;
+    virtual void accept() override;
+    virtual void reject() override;
 
 private:
     Ui::OptionsDialog *ui;

@@ -1,27 +1,31 @@
 #include "base_pch.h"
 #include "ContestApp.h"
+#include "tlogcontainer.h"
 
 #include "n1mmbroadcastconfig.h"
 #include "ui_n1mmbroadcastconfig.h"
 
 N1MMBroadcastConfig::N1MMBroadcastConfig(QWidget *parent) :
-    QDialog(parent),
+    QFrame(parent),
     ui(new Ui::N1MMBroadcastConfig)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    ui->LookupFrame->setVisible(false);
+}
 
-    QSettings settings;
-    QByteArray geometry = settings.value("N1MMBroadcastConfig/geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
+N1MMBroadcastConfig::~N1MMBroadcastConfig()
+{
+    delete ui;
+}
+
+void N1MMBroadcastConfig::initialise()
+{
+    ui->LookupFrame->setVisible(false);
 
     ui->contactsPort->setValidator(new QIntValidator(0, 0xffff, this));
     ui->extCSPort->setValidator(new QIntValidator(0, 0xffff, this));
     ui->ADIFPort->setValidator(new QIntValidator(0, 0xffff, this));
-
 
     bool contactsSelect;
     bool extCSSelect;
@@ -55,31 +59,7 @@ N1MMBroadcastConfig::N1MMBroadcastConfig(QWidget *parent) :
     ui->ADIFPort->setText(QString::number(ADIFPort));
 }
 
-N1MMBroadcastConfig::~N1MMBroadcastConfig()
-{
-    delete ui;
-}
-
-void N1MMBroadcastConfig::on_OKButton_clicked()
-{
-    accept();
-}
-
-void N1MMBroadcastConfig::on_cancelButton_clicked()
-{
-    reject();
-}
-void N1MMBroadcastConfig::doCloseEvent()
-{
-    QSettings settings;
-    settings.setValue("N1MMBroadcastConfig/geometry", saveGeometry());
-}
-void N1MMBroadcastConfig::reject()
-{
-    doCloseEvent();
-    QDialog::reject();
-}
-void N1MMBroadcastConfig::accept()
+void N1MMBroadcastConfig::finalise()
 {
     bool contactsSelect = ui->contactsSelect->isChecked();
     QString contactsAddr = ui->contactsAddr->text();
@@ -102,6 +82,5 @@ void N1MMBroadcastConfig::accept()
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpADIFAddr, ADIFAddr );
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpADIFPort, ADIFPort );
 
-    doCloseEvent();
-    QDialog::accept();
+    LogContainer->n1mmBroadcast.configure();
 }

@@ -164,17 +164,11 @@ private:
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *ShowOperatorsAction;
-    QAction *DefDirsAction;
     QAction *AdvancedOptionsAction;
     QAction *FontEditAcceptAction;
     QAction *LanguageAcceptAction;
-    QAction *UDPConfigAction;
-    QAction *WSJTXConfigAction;
-    QAction *ClusterBandmapFilterConfigAction;
-    QAction *RadioConfigAction;
     QAction *ReportAutofillAction;
     QAction *TabSandPAction;
-    QAction *OldBandMapAction;
     QAction *ConfigureAgeProtctionAction;
     QAction *StyleAction;
 
@@ -236,15 +230,11 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void ShowOperatorsActionExecute();
-    void DefDirsActionExecute();
     void AdvancedOptionsActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
-    void UDPConfigActionExecute();
-    void WsjtConfigActionExecute();
     void ReportAutofillActionExecute();
     void TabSandPActionExecute();
-    //void OldBandMap();
     void ConfigAgeProtection();
 
     void GoToSerialActionExecute();
@@ -271,13 +261,8 @@ private slots:
     void onTabMoved(int, int);
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
-    void ClusterBandmapConfigActionExecute();
-    void RadioConfigActionExecute();
-
 
     void appStarted();
-
-
 
 public slots:
     void onArgsReceived(QString conarg);

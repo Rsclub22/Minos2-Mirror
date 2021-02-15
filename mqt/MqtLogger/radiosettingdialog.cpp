@@ -10,31 +10,32 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
 #include <QMessageBox>
-#include "radiosettingdialog.h"
-#include "ui_radiosettingdialog.h"
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
 #include "ContestApp.h"
+#include "tlogcontainer.h"
 
+#include "radiosettingdialog.h"
+#include "ui_radiosettingdialog.h"
 
-
-
-
-RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointer<BandInfo> > &band, QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsChangeFlag_, QWidget *parent) :
-    QDialog(parent),
+RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
+    QFrame(parent),
     ui(new Ui::RadioSettingDialog)
 {
     ui->setupUi(this);
+}
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-    setWindowTitle(tr("Log Radio Settings"));
+RadioSettingDialog::~RadioSettingDialog()
+{
+    delete ui;
+}
 
-    bands = band;
-    hfFlag = hfFlag_;
-    logRadioSettingsChangeFlag = logRadioSettingsChangeFlag_;
+void RadioSettingDialog::initialise()
+{
+    BandList::getBandList().loadAllBands(bands);
+    hfFlag = true;
+    logRadioSettingsChangeFlag = QSharedPointer<RadioSettingsDialogChangeFlag>(new RadioSettingsDialogChangeFlag());
 
     cwPresetLineEditList << ui->cwLineEdit_1_8mhz << ui->cwLineEdit_3_5mhz << ui->cwLineEdit_7mhz
                          << ui->cwLineEdit_14mhz << ui->cwLineEdit_21mhz << ui->cwLineEdit_28mhz
@@ -132,9 +133,6 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
     //connect(ui->contestChangeIgnorePreviousFreqChkBox, &QCheckBox::clicked, this, [=](bool checked){onIgnorePresetFreqChecked(checked);});
     //connect(ui->constestChangeRestoreContestModeChkBox, &QCheckBox::clicked, this, [=](bool checked){onRestoreContestModeChecked(checked);});
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){onAccepted();});
-
-
     freqPresetReadSettings(presetFreq, bands); // static
 
 
@@ -153,15 +151,47 @@ RadioSettingDialog::RadioSettingDialog(bool hfFlag_, const QVector<QSharedPointe
 
 
     loadSettingsToDialog();
-
-
 }
 
-RadioSettingDialog::~RadioSettingDialog()
+void RadioSettingDialog::finalise()
 {
-    delete ui;
-}
+    saveSettings();
 
+    if (logRadioSettingsChangeFlag->isChanged())
+    {
+        if (logRadioSettingsChangeFlag->serialComport)
+        {
+            QString comport = readSerialComportBandSwitchFromIni();
+            if (!comport.isEmpty())
+            {
+                trace(QString("Bandswitch comport changed to %1").arg(comport));
+                if (LogContainer->serialTVSw->getOpenFlag())
+                {
+                    trace(QString("Bandswitch comport open - closing"));
+                    LogContainer->serialTVSw->closeComport();
+                }
+
+                if (LogContainer->serialTVSw->openComport(comport))
+                {
+                    trace(QString("Bandswitch comport %1 opened OK").arg(comport));
+
+                }
+                else
+                {
+                    QString errMsg = LogContainer->serialTVSw->error();
+                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+                }
+            }
+            else
+            {
+                trace(QString("Bandswitch comport changed, but comport is empty!"));
+            }
+        }
+
+        emit LogContainer->logRadioSettingsChanged(logRadioSettingsChangeFlag);
+    }
+
+}
 
 void RadioSettingDialog::setHf(bool hfFlag)
 {
@@ -282,16 +312,6 @@ void RadioSettingDialog::onEnableSerialBandSwChkBox()
     ui->comportLabel->setVisible(ui->enableSerialBandSwChkBox->isChecked());
 
 }
-
-
-
-void RadioSettingDialog::onAccepted()
-{
-    saveSettings();
-}
-
-
-
 void RadioSettingDialog::saveSettings()
 {
 

@@ -1,7 +1,7 @@
 #ifndef CLUSTERBANDMAPCONFIGURE_H
 #define CLUSTERBANDMAPCONFIGURE_H
 
-#include <QDialog>
+#include <QFrame>
 #include "clustercommon.h"
 
 namespace Ui {
@@ -10,7 +10,7 @@ class ClusterBandmapConfigure;
 
 
 
-class ClusterBandmapConfigure : public QDialog
+class ClusterBandmapConfigure : public QFrame
 {
     Q_OBJECT
 
@@ -18,10 +18,11 @@ public:
     explicit ClusterBandmapConfigure(QWidget *parent = nullptr);
     ~ClusterBandmapConfigure();
 
+    void initialise();
+    void finalise();
+
 private slots:
     void onDistanceEditingFinished(QLineEdit *distLineEdit);
-    void onAccepted();
-    void onRejected();
     void onFreqToleranceValueChanged(int value);
 private:
     Ui::ClusterBandmapConfigure *ui;
@@ -40,8 +41,6 @@ private:
 
     int addBandmapTuningTolerance;
 
-
-    void doClose();
     void saveDistances();
     QString findBandKey(QLineEdit *distLineEdit);
 };

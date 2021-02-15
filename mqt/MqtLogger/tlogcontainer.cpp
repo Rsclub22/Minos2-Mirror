@@ -159,14 +159,6 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
     TabSandPAction->setChecked(TabSandP);
 
-    //bool oldBandMap;
-    //TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapOldStyle, oldBandMap);
-    //OldBandMapAction->setChecked(oldBandMap);
-
-    //ignorePresetFreqContestStart->setChecked(readIgnorePresetFreqFlag());
-    //ignorePreviousFreqContestChange->setChecked(readIgnorePreviousFreqFlag());
-    //restoreContestModeContestChange->setChecked(readRestoreContestModeFlag());
-
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     TimerUpdateQSOTimer.start(1000);
@@ -494,19 +486,12 @@ void TLogContainer::setupMenus()
     ui->menuTools->addSeparator();
     LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator..."), ui->menuTools, SLOT(LocCalcActionExecute()));
 
-    UDPConfigAction = newAction(QT_TR_NOOP("UDP broadcast configuration..."), ui->menuTools, SLOT(UDPConfigActionExecute()));
-    WSJTXConfigAction = newAction(QT_TR_NOOP("WSJT-X link configuration..."), ui->menuTools, SLOT(WsjtConfigActionExecute()));
-    ClusterBandmapFilterConfigAction = newAction(QT_TR_NOOP("Cluster/Bandmap configuration..."), ui->menuTools, SLOT(ClusterBandmapConfigActionExecute()));
-    RadioConfigAction = newAction(QT_TR_NOOP("Log Radio Settings..."), ui->menuTools, SLOT(RadioConfigActionExecute()));
-
     ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
     TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
 
-    //OldBandMapAction = newCheckableAction(QT_TR_NOOP("Old Bandmap layout"), ui->menuTools, SLOT(OldBandMap()));
     ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
-    DefDirsAction = newAction(QT_TR_NOOP("Configure Default Directories..."), ui->menuTools, SLOT(DefDirsActionExecute()));
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(AdvancedOptionsActionExecute()));
     AdvancedOptionsAction->setVisible(false);
     StyleAction = newAction(QT_TR_NOOP("Set control style..."), ui->menuTools, SLOT(StyleActionExecute()));
@@ -1225,11 +1210,6 @@ void TLogContainer::ShowOperatorsActionExecute()
     MinosLoggerEvents::SendShowOperators();
 }
 
-void TLogContainer::DefDirsActionExecute()
-{
-    DefDirsDlg ed(this);
-    ed.exec();
-}
 void TLogContainer::AdvancedOptionsActionExecute()
 {
     TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
@@ -1308,75 +1288,6 @@ void TLogContainer::LanguageAcceptActionExecute()
         }
     }
 }
-
-void TLogContainer::UDPConfigActionExecute()
-{
-    N1MMBroadcastConfig udpConfig;
-
-    if (udpConfig.exec() == QDialog::Accepted)
-    {
-        n1mmBroadcast.configure();
-    }
-}
-void TLogContainer::WsjtConfigActionExecute()
-{
-    WsjtxConfigure wsjtConfig;
-
-    wsjtConfig.exec();
-}
-void TLogContainer::ClusterBandmapConfigActionExecute()
-{
-    ClusterBandmapConfigure clusterBandmapConfig;
-
-    clusterBandmapConfig.exec();
-}
-void TLogContainer::RadioConfigActionExecute()
-{
-    QVector<QSharedPointer<BandInfo> > bands;
-    BandList::getBandList().loadAllBands(bands);
-    bool hfFlag = true;
-    QSharedPointer<RadioSettingsDialogChangeFlag> radioSettingsDialogChangeFlag = QSharedPointer<RadioSettingsDialogChangeFlag>(new RadioSettingsDialogChangeFlag()) ;
-    RadioSettingDialog radioSettingConfig(hfFlag, bands, radioSettingsDialogChangeFlag, this);
-
-    radioSettingConfig.exec();
-
-    if (radioSettingsDialogChangeFlag->isChanged())
-    {
-        if (radioSettingsDialogChangeFlag->serialComport)
-        {
-            QString comport = readSerialComportBandSwitchFromIni();
-            if (!comport.isEmpty())
-            {
-                trace(QString("Bandswitch comport changed to %1").arg(comport));
-                if (serialTVSw->getOpenFlag())
-                {
-                    trace(QString("Bandswitch comport open - closing"));
-                    serialTVSw->closeComport();
-                }
-
-                if (serialTVSw->openComport(comport))
-                {
-                    trace(QString("Bandswitch comport %1 opened OK").arg(comport));
-
-                }
-                else
-                {
-                    QString errMsg = serialTVSw->error();
-                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
-                }
-            }
-            else
-            {
-                trace(QString("Bandswitch comport changed, but comport is empty!"));
-            }
-        }
-
-        emit logRadioSettingsChanged(radioSettingsDialogChangeFlag);
-
-
-
-    }
-}
 void TLogContainer::ReportAutofillActionExecute()
 {
     bool autoFill = ReportAutofillAction->isChecked();
@@ -1391,14 +1302,7 @@ void TLogContainer::TabSandPActionExecute()
 
     MinosLoggerEvents::SendTabSandP();
 }
-/* Moved to Bandmap/Cluster Menu
-void TLogContainer::OldBandMap()
-{
-    bool oldBandMap = OldBandMapAction->isChecked();
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
-    TContestApp::getContestApp() ->loggerBundle.flushProfile();
-}
-*/
+
 void TLogContainer::ConfigAgeProtection()
 {
     int cap;

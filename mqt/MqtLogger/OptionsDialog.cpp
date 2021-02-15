@@ -16,65 +16,68 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    QSettings settings;
+    QByteArray geometry = settings.value("OptionsDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
 }
 
 OptionsDialog::~OptionsDialog()
 {
     delete ui;
 }
+void OptionsDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("OptionsDialog/geometry", saveGeometry());
+}
+void OptionsDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void OptionsDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
+}
 
 int OptionsDialog::exec()
 {
     // the radiosettings pre and post-amble should go to the RadioSettingDialog class
 
-    QVector<QSharedPointer<BandInfo> > bands;
-    BandList::getBandList().loadAllBands(bands);
-    bool hfFlag = true;
-    QSharedPointer<RadioSettingsDialogChangeFlag> radioSettingsDialogChangeFlag = QSharedPointer<RadioSettingsDialogChangeFlag>(new RadioSettingsDialogChangeFlag()) ;
+    ClusterBandmapConfigure *cbc = new ClusterBandmapConfigure();
+    DefDirsDlg *ddd = new DefDirsDlg();
+    RadioSettingDialog *rdc = new RadioSettingDialog ();
+    N1MMBroadcastConfig *nbc= new N1MMBroadcastConfig();
+    WsjtxConfigure *wc = new WsjtxConfigure();
 
-    ui->optionTabs->addTab(new ClusterBandmapConfigure(), tr("Cluster/Bandmap"));
-    ui->optionTabs->addTab(new DefDirsDlg(), tr("Default Directories"));
-    ui->optionTabs->addTab(new RadioSettingDialog (hfFlag, bands, radioSettingsDialogChangeFlag, nullptr), tr("Log Radio Settings"));
-    ui->optionTabs->addTab(new N1MMBroadcastConfig(), tr("UDP Broadcast"));
-    ui->optionTabs->addTab(new WsjtxConfigure(), tr("WSJT-X"));
+    cbc->initialise();
+    ddd->initialise();
+    rdc->initialise();
+    nbc->initialise();
+    wc->initialise();
+
+    ui->optionTabs->addTab(cbc, tr("Cluster/Bandmap"));
+    ui->optionTabs->addTab(ddd, tr("Default Directories"));
+    ui->optionTabs->addTab(rdc, tr("Log Radio Settings"));
+    ui->optionTabs->addTab(nbc, tr("UDP Broadcast"));
+    ui->optionTabs->addTab(wc, tr("WSJT-X"));
 
 
     int ret = QDialog::exec();
 
-    if (radioSettingsDialogChangeFlag->isChanged())
+    if (ret == QDialog::Accepted)
     {
-        if (radioSettingsDialogChangeFlag->serialComport)
-        {
-            QString comport = readSerialComportBandSwitchFromIni();
-            if (!comport.isEmpty())
-            {
-                trace(QString("Bandswitch comport changed to %1").arg(comport));
-                if (LogContainer->serialTVSw->getOpenFlag())
-                {
-                    trace(QString("Bandswitch comport open - closing"));
-                    LogContainer->serialTVSw->closeComport();
-                }
+        cbc->finalise();
+        ddd->finalise();
+        rdc->finalise();
+        nbc->finalise();
+        wc->finalise();
 
-                if (LogContainer->serialTVSw->openComport(comport))
-                {
-                    trace(QString("Bandswitch comport %1 opened OK").arg(comport));
-
-                }
-                else
-                {
-                    QString errMsg = LogContainer->serialTVSw->error();
-                    trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
-                }
-            }
-            else
-            {
-                trace(QString("Bandswitch comport changed, but comport is empty!"));
-            }
-        }
-
-        emit LogContainer->logRadioSettingsChanged(radioSettingsDialogChangeFlag);
     }
-
     return ret;
 
 }

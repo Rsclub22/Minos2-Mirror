@@ -10,19 +10,18 @@ using port_type = MessageServer::port_type;
 
 
 WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
-    QDialog(parent),
+    QFrame(parent),
     ui(new Ui::WsjtxConfigure)
 {
     ui->setupUi(this);
+}
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    QSettings settings;
-    QByteArray geometry = settings.value("WsjtxConfigure/geometry/").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
-
-
+WsjtxConfigure::~WsjtxConfigure()
+{
+    delete ui;
+}
+void WsjtxConfigure::initialise()
+{
     ui->portSpinBox->setMinimum (1);
     ui->portSpinBox->setMaximum (std::numeric_limits<port_type>::max ());
 
@@ -99,23 +98,8 @@ WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
     ui->wsjtxSelect->setChecked(wsjtxRbSelect);
     ui->wsjtxAddr->setText(wsjtxRbAddr);
     ui->wsjtxPort->setText(QString::number(wsjtxRbPort));
-
-
 }
-
-WsjtxConfigure::~WsjtxConfigure()
-{
-    delete ui;
-}
-
-void WsjtxConfigure::doClose()
-{
-    QSettings settings;
-    settings.setValue("WsjtxConfigure/geometry/", saveGeometry());
-
-    close();
-}
-void WsjtxConfigure::on_OKButton_clicked()
+void WsjtxConfigure::finalise()
 {
     {
         bool enabled = ui->enabledcb->isChecked();
@@ -162,13 +146,6 @@ void WsjtxConfigure::on_OKButton_clicked()
     TContestApp::getContestApp() ->loggerBundle.setIntProfile( elpwsjtxRbPort, wsjtxRbPort );
 
     WsjtxServer::getWsjtxServer()->start();
-
-    doClose();
-}
-
-void WsjtxConfigure::on_CancelButton_clicked()
-{
-    doClose();
 }
 
 void WsjtxConfigure::on_alltxtBrowseButton_clicked()

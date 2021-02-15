@@ -16,7 +16,7 @@
 #ifndef RADIOSETTINGDIALOG_H
 #define RADIOSETTINGDIALOG_H
 
-#include <QDialog>
+#include <QFrame>
 #include <QSettings>
 #include <QLineEdit>
 #include "BandList.h"
@@ -39,15 +39,17 @@ public:
 };
 
 
-class RadioSettingDialog : public QDialog
+class RadioSettingDialog : public QFrame
 {
     Q_OBJECT
 
 public:
 
-    explicit RadioSettingDialog(bool hfFlag, const QVector<QSharedPointer<BandInfo> > &_bands, QSharedPointer<RadioSettingsDialogChangeFlag> radioSettingsDialogFlags, QWidget *parent = nullptr);
+    explicit RadioSettingDialog(QWidget *parent = nullptr);
     ~RadioSettingDialog();
 
+    void initialise();
+    void finalise();
 
     void freqPresetReadSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
     static void checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands);
@@ -70,7 +72,6 @@ private slots:
     void onIgnorePreviousFreqChecked(bool checked);
     void onTurnOffColourRadioFreqDialChkChanged(bool checked);
     void onRestoreContestModeChecked(bool checked);
-    void onAccepted();
     void onBandSwLineEditingFinished(int i);
     void onEnableBandSwChkBox();
     void onEnableSerialBandSwChkBox();
