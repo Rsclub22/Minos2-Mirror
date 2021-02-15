@@ -243,6 +243,7 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 
 
 
@@ -2907,8 +2908,11 @@ void ClusterMainWindow::purgeSpots()
 void ClusterMainWindow::onSpotTestTimerTimeOut()
 {
     QString spot;
+    QStringList splitSpot;
     QTime time;
     QString timeStr;
+    const QRegularExpression TIME = QRegularExpression("\\d\\d\\d\\dZ");
+
     if (spotNum >= testSpotList.count())
     {
         spotTestTimer->stop();
@@ -2917,27 +2921,33 @@ void ClusterMainWindow::onSpotTestTimerTimeOut()
     if (!testSpotList.isEmpty())
     {
         spot = testSpotList[spotNum].remove('\n');
-        time = QDateTime::currentDateTimeUtc().time();
-        QString hourStr;
-        QString minStr;
-        if (time.hour() < 10)
+        splitSpot = spot.split(TIME);
+
+        if (splitSpot.count() == 2)
         {
-            hourStr = QString("0%1").arg(time.hour());
+            time = QDateTime::currentDateTimeUtc().time();
+            QString hourStr;
+            QString minStr;
+            if (time.hour() < 10)
+            {
+                hourStr = QString("0%1").arg(time.hour());
+            }
+            else
+            {
+                hourStr = QString("%1").arg(time.hour());
+            }
+            if (time.minute() < 10)
+            {
+                minStr = QString("0%1").arg(time.minute());
+            }
+            else
+            {
+                minStr = QString("%1").arg(time.minute());
+            }
+            timeStr = QString("   %1%2Z").arg(hourStr, minStr);
+            spot = splitSpot[0].append(timeStr).append(splitSpot[1]).append('\n');
         }
-        else
-        {
-            hourStr = QString("%1").arg(time.hour());
-        }
-        if (time.minute() < 10)
-        {
-            minStr = QString("0%1").arg(time.minute());
-        }
-        else
-        {
-            minStr = QString("%1").arg(time.minute());
-        }
-        timeStr = QString("   %1%2Z").arg(hourStr, minStr);
-        spot = spot.append(timeStr).append('\n');
+
         parseDX(spot);
         spotNum++;
 
