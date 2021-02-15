@@ -59,7 +59,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     nodeConnected(false),
     purgeSpotFlag(false),
     reconnectFlag(false),
-    enableHFSpots(false)
+    hfFlag(false)
 {
     ui->setupUi(this);
 
@@ -181,7 +181,7 @@ void ClusterMainWindow::doStartup()
     QString fileName = CLUSTER_SETTINGS_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("HFSpots");
-    enableHFSpots = config.value("enable", false).toBool();
+    hfFlag = config.value("enable", false).toBool();
     config.endGroup();
 
 
@@ -313,7 +313,6 @@ void ClusterMainWindow::doStartup()
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
-    setHF(false);
     readBandFilterSettings();
     loadBandFilterSettingsToTab();
 
@@ -360,7 +359,7 @@ void ClusterMainWindow::doStartup()
 
 }
 
-
+// this is for testing
 void ClusterMainWindow::onpbpressed()
 {
     static bool state = false;
@@ -374,6 +373,12 @@ void ClusterMainWindow::onpbpressed()
         state = false;
         setHF(state);
     }
+
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("HFSpots");
+    config.setValue("enable", state);
+    config.endGroup();
 }
 
 /*
@@ -1082,7 +1087,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
 
-        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
         {
             // discard spot as it is HF
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
@@ -1095,9 +1100,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setMode(dxModeStr);
 
         newSpot->setDxCall(dxMsg[1]);
-        //newSpot.setSpotDate(dxMsg[2]);
-        //newSpot.setSpotTime(dxMsg[3].remove('Z'));
-        //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
 
         // get date/time
         QDate d;
@@ -1276,7 +1278,7 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString())
+            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString() || cmd.getBandmask() == IGNORE_BANDMASK)
             {
                 QString spot = createResendSpotToSend(assembleSpotMsgToSendToClients(dxSpotDataModel->getSpotData(row), setupCluster->getTimeToLive()));
                 trace(QString("resending this spot - %1 to uuid = %2").arg(spot, cmd.getuuid()));
@@ -1468,10 +1470,10 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
 
-        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
         {
             // discard spot as it is HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
+            trace(QString("Unpack DX Spot: Discard Spot HF Call = %1, Freq = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
@@ -2025,7 +2027,7 @@ void ClusterMainWindow::initUserCommandButtons()
 
 void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
+    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
     {
        userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2033,7 +2035,7 @@ void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
+    if (hfFlag && ui->clusterTab->currentIndex() == 0)
     {
         userHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2041,7 +2043,7 @@ void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
+    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2049,7 +2051,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
+    if (hfFlag && ui->clusterTab->currentIndex() == 0)
     {
         userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
     }

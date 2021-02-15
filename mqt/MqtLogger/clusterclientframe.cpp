@@ -92,12 +92,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
-    connect (purgeTimer, &QTimer::timeout, [=](){purgeSpots();});
+    connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    connect (ui->filtersBut, &QPushButton::clicked, [=](){filterButtonSelected();});
+    connect (ui->filtersBut, &QPushButton::clicked, this, [=](){filterButtonSelected();});
 
 
     spotsMenu = new QMenu(ui->actionsButton);
@@ -219,7 +219,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    for(auto const &m: filterProxyModelList)
+    foreach(auto const &m, filterProxyModelList)
     {
         delete m;
     }
@@ -229,12 +229,12 @@ ClusterClientFrame::~ClusterClientFrame()
 
 
 
-
+// we send ignore bandmask as we want all available spots in cluster
 void ClusterClientFrame::on_resendClusterSpots()
 {
     if (ct  && !contestBandStr.isEmpty())
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
     }
 }
 
@@ -245,7 +245,7 @@ void ClusterClientFrame::requestSpots()
     if (ct && !contestBandStr.isEmpty())
     {
 
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
     }
 }
 
@@ -900,7 +900,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 }
 
 
-//bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
+
 bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotData)
 {
     if (dxSpotDataModel->rowCount() == 0)

@@ -547,7 +547,7 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
             if (modeMask == -1)
             {
                 trace(QString("getmode: mode will be none"));
-                dxModeStr = "None";
+                dxModeStr = NONE_MODE;
                 dxModeMask = "0";
             }
             else
@@ -560,7 +560,7 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
         {
             // modeplan file missing
             trace(QString("getMode - modeplan missing"));
-            dxModeStr = "None";
+            dxModeStr = NONE_MODE;
             dxModeMask = "0";
 
         }

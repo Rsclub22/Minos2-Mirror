@@ -177,7 +177,7 @@ const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange
 // resend clusterspots to client commands
 enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
 const QString RESEND_ALL_SPOTS = "resendAll";
-
+const QString IGNORE_BANDMASK = "ignore_bandmask";
 
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
