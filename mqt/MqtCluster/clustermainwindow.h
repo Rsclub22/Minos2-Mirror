@@ -393,7 +393,7 @@ private:
     void saveRotPresetButton(ClusterUserCommandData &buttonData);
     void saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
-    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask);
+    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp);
 

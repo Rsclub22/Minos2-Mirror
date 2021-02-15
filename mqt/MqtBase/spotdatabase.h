@@ -22,6 +22,13 @@ enum SPOT_TYPE {NONE, CLUSTER, CLUSTER_MARKED, LOGGED, MARKED, SAVED, CQ, DELETE
 
 }
 
+namespace clusterSpotType {
+
+const QString DXSPOT_TYPE = "dxSpotType";
+const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
+
+}
+
 class SpotdataBase
 {
 public:
@@ -31,6 +38,9 @@ public:
     SpotdataBase(const QSharedPointer<SpotdataBase> sdp);
 
     void clear();
+
+    void setClusterSpotType(const QString clusterSpotType_){clusterSpotType = clusterSpotType_;}
+    QString getClusterSpotType()const {return clusterSpotType;}
 
     void setRxTime(const qint64 rxTime_){rxTime = rxTime_;}
     qint64 getRxTime() const {return rxTime;}
@@ -133,6 +143,7 @@ protected:
 
     qint64 rxTime;
     QDateTime spotDateTime;
+    QString clusterSpotType;
     QString band;
     QString bandType;
     QString mode;

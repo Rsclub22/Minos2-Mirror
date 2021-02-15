@@ -242,6 +242,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case DX_DISTRICT_WORKED_COL_NUM:
                 d = bandmapSpot->getDistrictWorked();
             break;
+            case DXCLUSTER_SPOT_TYPE:
+                d = bandmapSpot->getClusterSpotType();
+            break;
             default:
             d = "";
 
@@ -337,6 +340,9 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
                 bandmapSpot->setDistrictWorked(value.toBool());
+            break;
+            case DXCLUSTER_SPOT_TYPE:
+                bandmapSpot->setClusterSpotType(value.toString());
             break;
 
             default:

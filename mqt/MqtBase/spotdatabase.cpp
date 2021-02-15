@@ -25,6 +25,7 @@ SpotdataBase::SpotdataBase()
 SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
 {
     rxTime = sdp->rxTime;
+    clusterSpotType= sdp->clusterSpotType;
     spotDateTime = sdp->spotDateTime;
     band = sdp->band;
     bandType = sdp->bandType;
@@ -54,6 +55,7 @@ SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
 SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
 {
     rxTime = sdp.rxTime;
+    clusterSpotType = sdp.clusterSpotType;
     spotDateTime = sdp.spotDateTime;
     band = sdp.band;
     bandType = sdp.bandType;
@@ -75,6 +77,7 @@ SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
 void SpotdataBase::clear()
 {
     rxTime = 0;
+    clusterSpotType.clear();
     spotDateTime = QDateTime();
     band.clear();
     bandType.clear();
@@ -180,6 +183,7 @@ ClusterSpotData::ClusterSpotData(const QSharedPointer<ClusterSpotData> csd) : Sp
 ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
 {
     rxTime = csd.rxTime;
+    clusterSpotType = csd.clusterSpotType;
     spotDateTime = csd.spotDateTime;
     band = csd.band;
     bandType = csd.bandType;
@@ -206,6 +210,7 @@ ClusterSpotData& ClusterSpotData::operator = (const ClusterSpotData& csd)
 QSharedPointer<ClusterSpotData> ClusterSpotData::operator = (const QSharedPointer<ClusterSpotData> csd)
 {
     rxTime = csd->rxTime;
+    clusterSpotType = csd->clusterSpotType;
     spotDateTime = csd->spotDateTime;
     band = csd->band;
     bandType = csd->bandType;
@@ -233,6 +238,7 @@ QSharedPointer<ClusterSpotData> ClusterSpotData::operator = (const QSharedPointe
 bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) const
 {
     return rxTime == cpd->rxTime &&
+            clusterSpotType == cpd->clusterSpotType &&
             spotDateTime == cpd->spotDateTime &&
             band == cpd->band &&
             bandType == cpd->bandType &&
@@ -257,6 +263,7 @@ bool ClusterSpotData::operator==(const QSharedPointer<ClusterSpotData> cpd) cons
 bool ClusterSpotData::operator==(const ClusterSpotData &cpd) const
 {
     return rxTime == cpd.rxTime &&
+            clusterSpotType == cpd.clusterSpotType &&
             spotDateTime == cpd.spotDateTime &&
             band == cpd.band &&
             bandType == cpd.bandType &&
@@ -281,6 +288,7 @@ bool ClusterSpotData::operator!=(const QSharedPointer<ClusterSpotData> cpd) cons
 {
 
     return  rxTime != cpd->rxTime ||
+            clusterSpotType != cpd->clusterSpotType ||
             spotDateTime != cpd->spotDateTime ||
             band != cpd->band ||
             bandType != cpd->bandType ||
@@ -305,6 +313,7 @@ bool ClusterSpotData::operator!=(const ClusterSpotData &cpd) const
 {
 
     return  rxTime != cpd.rxTime ||
+            clusterSpotType != cpd.clusterSpotType ||
             spotDateTime != cpd.spotDateTime ||
             band != cpd.band ||
             bandType != cpd.bandType ||
@@ -366,6 +375,7 @@ void BandmapSpotData::clear()
 bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
 {
     return rxTime == bsd.rxTime &&
+            clusterSpotType == bsd.clusterSpotType &&
             spotDateTime == bsd.spotDateTime &&
             band == bsd.band &&
             bandType == bsd.bandType &&
@@ -398,6 +408,7 @@ bool BandmapSpotData::operator==(const BandmapSpotData &bsd) const
 bool BandmapSpotData::operator!=(const BandmapSpotData &bsd) const
 {
     return  rxTime != bsd.rxTime ||
+            clusterSpotType != bsd.clusterSpotType ||
             spotDateTime != bsd.spotDateTime ||
             band != bsd.band ||
             bandType != bsd.bandType ||

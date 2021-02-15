@@ -1080,11 +1080,15 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         f.remove('.');
         newSpot->setFreq(f);
         QString dxBandStr;
-        QString dxBandMask;
-        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
-        newSpot->setBand(dxBandStr);
+        QString dxBandType;
+        if (!getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandType))
+        {
+            trace(QString("Spot is not in contest band list discard - Call = %1, Freq. = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+            return DISCARD_SPOT_NOT_CONTEST_BAND * -1;
+        }
 
-        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
+        newSpot->setBand(dxBandStr);
+        newSpot->setBandType(dxBandType);
 
 
         if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
@@ -1140,7 +1144,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
+        findLocInComment(spotLocator, dxLocator, spotComment);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1463,11 +1467,15 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
 
         QString dxBandStr;
-        QString dxBandMask;  // not using bandMask anymore
-        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
-        newSpot->setBand(dxBandStr);
+        QString dxBandType;
+        if (!getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandType))
+        {
+            trace(QString("Spot is not in contest band list discard - Call = %1, Freq. = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+            return DISCARD_SPOT_NOT_CONTEST_BAND * -1;
+        }
 
-        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
+        newSpot->setBand(dxBandStr);
+        newSpot->setBandType(dxBandType);
 
 
         if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
@@ -1551,7 +1559,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         spotComment.remove(SPOT_DATA_SEPERATOR);
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
+        findLocInComment(spotLocator, dxLocator, spotComment);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1599,9 +1607,9 @@ QString ClusterMainWindow::getPropMode(const QString comment)
 
 }
 
-void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask)
+void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
 {
-    Q_UNUSED(bandMask)
+
 
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
