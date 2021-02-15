@@ -1067,6 +1067,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
 
+    newSpot->setClusterSpotType(clusterSpotType::SHOW_DXSPOT_TYPE);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
@@ -1168,6 +1169,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
             newSpot->setMode(commentMode);
 
         }
+
+
 
         return SPOT_OK;
     }
@@ -1299,20 +1302,21 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 
 QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
-    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13")
-                       .arg(spotData->getDxCallStr())   // %1
-                       .arg(spotData->getDxLocator())   // %2
-                       .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")  // %3
-                       .arg(spotData->getFreq().str())  // %4
-                       .arg(spotData->getBand())        // %5
-                       .arg(spotData->getBandType())    // %6
-                       .arg(spotData->getMode())        // %7
-                       .arg(spotData->getSpotterCallStr())  //%8
-                       .arg(spotData->getSpotterLocator())  // %9
-                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %10
-                       .arg(spotData->getSpotComment())  // %11
-                       .arg(spotData->getDxPropMode())   // %12
-                       .arg(timeToLive);        // %13
+    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14")
+                       .arg(spotData->getClusterSpotType()) // %1
+                       .arg(spotData->getDxCallStr())           // %2
+                       .arg(spotData->getDxLocator())            // %3
+                       .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false") // %4
+                       .arg(spotData->getFreq().str())           // %5
+                       .arg(spotData->getBand())                 // %6
+                       .arg(spotData->getBandType())             // %7
+                       .arg(spotData->getMode())                 // %8
+                       .arg(spotData->getSpotterCallStr())      // %9
+                       .arg(spotData->getSpotterLocator())       // %10
+                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %11
+                       .arg(spotData->getSpotComment())         // %12
+                       .arg(spotData->getDxPropMode())         // %13
+                       .arg(timeToLive);        // %14
 
     return spotMsg;
 
@@ -1450,6 +1454,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 {
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
+
+    newSpot->setClusterSpotType(clusterSpotType::DXSPOT_TYPE);
+
     int timePos = 0;
 
     txt.remove('\x07');

@@ -54,19 +54,20 @@ const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not 
                                                   << "Discard HF Spot" << "getPrefix failed to find QRA" << "AskQrz Failed to Find QRA";
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
-const int DXCALL = 0;
-const int DXLOCATOR = 1;
-const int DXLOC_FROM_NODE_FLAG = 2;
-const int DXFREQ = 3;
-const int DXBANDSTR = 4;
-const int DXBANDTYPE = 5;
-const int DXMODESTR = 6;
-const int SPOTCALL = 7;
-const int SPOTLOCATOR = 8;
-const int SPOTDATETIME = 9;
-const int SPOTCOMMENT = 10;
-const int DXPROPMODE = 11;
-const int TTLVALUE = 12;
+const int DX_CLUSTER_SPOT_TYPE = 0;
+const int DXCALL = 1;
+const int DXLOCATOR = 2;
+const int DXLOC_FROM_NODE_FLAG = 3;
+const int DXFREQ = 4;
+const int DXBANDSTR = 5;
+const int DXBANDTYPE = 6;
+const int DXMODESTR = 7;
+const int SPOTCALL = 8;
+const int SPOTLOCATOR = 9;
+const int SPOTDATETIME = 10;
+const int SPOTCOMMENT = 11;
+const int DXPROPMODE = 12;
+const int TTLVALUE = 13;
 
 
 // Cluster Data and View Columns
