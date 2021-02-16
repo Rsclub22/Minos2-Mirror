@@ -791,6 +791,8 @@ void TSingleLogFrame::buildScreenLayout()
     FKHRotControlFrame->setContest(ct);
 
     LogContainer->raise();  // get it back in front
+
+    MinosLoggerEvents::SendMainRaised();
 }
 
 

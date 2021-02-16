@@ -102,8 +102,6 @@ private:
     QMenu *sessionsMenu;
     QMenu *keyerRecordMenu;
     QMenu *keyerPlaybackMenu;
-    QMenu *languagesMenu;
-    //QMenu *radioMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -157,20 +155,11 @@ private:
     QAction *ShiftTabRightAction;
 
     QAction *startConfigAction;
-    QAction *listCompressionAction;
-    QAction *QSOFieldFontAction;
     QAction *LocCalcAction;
     QAction *AnalyseMinosLogAction;
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
-    QAction *ShowOperatorsAction;
     QAction *AdvancedOptionsAction;
-    QAction *FontEditAcceptAction;
-    QAction *LanguageAcceptAction;
-    QAction *ReportAutofillAction;
-    QAction *TabSandPAction;
-    QAction *ConfigureAgeProtctionAction;
-    QAction *StyleAction;
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
@@ -229,13 +218,7 @@ private slots:
     void LocCalcActionExecute();
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
-    void ShowOperatorsActionExecute();
     void AdvancedOptionsActionExecute();
-    void FontEditAcceptActionExecute();
-    void LanguageAcceptActionExecute();
-    void ReportAutofillActionExecute();
-    void TabSandPActionExecute();
-    void ConfigAgeProtection();
 
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
@@ -249,9 +232,6 @@ private slots:
     void menuLogsActionExecute();
 
     void StartConfigActionExecute();
-    void listCompressionActionExecute();
-    void QSOFieldFontActionExecute();
-    void StyleActionExecute();
 
     void on_contestPageControl_currentChanged(int index);
     void onTabClosebutton(int);

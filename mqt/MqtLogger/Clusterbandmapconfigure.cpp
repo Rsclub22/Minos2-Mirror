@@ -37,7 +37,15 @@ void ClusterBandmapConfigure::initialise()
     {
         QString band = bands[i].data()->uk;
         distValue distItem;
-        distItem.distance = config.value(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt();
+        QString dKey = defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName;
+        if (dKey.isEmpty())
+        {
+            distItem.distance = DEFAULT_FILTER_DISTANCE;
+        }
+        else
+        {
+            distItem.distance = config.value(dKey, DEFAULT_FILTER_DISTANCE).toInt();
+        }
         distItem.distLineEdit = distanceLineEdits[i];
         distItem.distLineEdit->setText(QString::number(distItem.distance));
         distItem.changed = false;

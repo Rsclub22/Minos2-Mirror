@@ -20,9 +20,12 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="radioGeneralSettingsTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Radio General Settings</string>
       </attribute>
@@ -75,6 +78,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="radioFreqPresetsTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Radio Frequency Presets</string>
       </attribute>
@@ -92,7 +98,7 @@
           <bool>true</bool>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="cwPresetTab">
           <property name="autoFillBackground">
@@ -906,6 +912,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="bandSwitchTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Band Switch</string>
       </attribute>

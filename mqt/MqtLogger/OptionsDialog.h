@@ -2,6 +2,7 @@
 #define OPTIONSDIALOG_H
 
 #include <QDialog>
+#include <QTimer>
 
 namespace Ui {
 class OptionsDialog;
@@ -21,6 +22,9 @@ private slots:
     void on_cancelButton_clicked();
 
     void doCloseEvent();
+
+    void onMainRaised();
+    void on_optionTabs_currentChanged(int index);
 
 public Q_SLOTS:
     virtual int exec() override;

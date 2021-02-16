@@ -107,6 +107,11 @@ void MinosLoggerEvents::SendTabSandP()
     emit mle.tabSandP();
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendMainRaised()
+{
+    emit mle.MainRaised();
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendScreenContactChanged(ScreenContact *sct, BaseContestLog *c, QString b)
 {
     emit mle.ScreenContactChanged(sct, c, b);

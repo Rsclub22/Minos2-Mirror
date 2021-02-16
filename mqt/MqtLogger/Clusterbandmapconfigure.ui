@@ -16,10 +16,16 @@
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <item>
     <widget class="QTabWidget" name="ClusterBandmapConfiguretabWidget">
+     <property name="autoFillBackground">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="bandmapGeneralTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Bandmap General</string>
       </attribute>
@@ -96,6 +102,9 @@
       </layout>
      </widget>
      <widget class="QWidget" name="clusterBandmapTab">
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>Cluster/Bandmap Default Distance</string>
       </attribute>

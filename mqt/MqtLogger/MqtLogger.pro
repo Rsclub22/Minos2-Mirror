@@ -39,6 +39,7 @@ SOURCES += \
     ContestDetailsTransferObject.cpp \
     ContestPage.cpp \
     ContestPageControl.cpp \
+    DisplayOptions.cpp \
     FilterFrame.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
@@ -130,6 +131,7 @@ HEADERS  += \
     ContestDetailsTransferObject.h \
     ContestPage.h \
     ContestPageControl.h \
+    DisplayOptions.h \
     FilterFrame.h \
     LocCalcFrame.h \
     LoggerContacts.h \
@@ -214,6 +216,7 @@ HEADERS  += \
 FORMS    += \
     ContestPage.ui \
     ContestPageControl.ui \
+    DisplayOptions.ui \
     OptionsDialog.ui \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \

@@ -148,17 +148,6 @@ TLogContainer::~TLogContainer()
 
 bool TLogContainer::show(int argc, char *argv[])
 {
-    bool so = isShowOperators();
-    ShowOperatorsAction->setChecked(so);
-
-    bool autoFill;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
-    ReportAutofillAction->setChecked(autoFill);
-
-    bool TabSandP;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
-    TabSandPAction->setChecked(TabSandP);
-
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     TimerUpdateQSOTimer.start(1000);
@@ -440,7 +429,6 @@ void TLogContainer::setupMenus()
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, SLOT(ManageListsActionExecute()));
     ui->menuFile->addSeparator();
 
-    OptionsAction = newAction(QT_TR_NOOP("Options"), ui->menuFile, SLOT(OptionsActionExecute()));
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
     ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, SLOT(ExitClearActionExecute()));
@@ -458,43 +446,14 @@ void TLogContainer::setupMenus()
     screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
     ui->menuTools->addSeparator();
-    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
-    languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
-
-    QString currentLang = getCurrentLanguage();
-
-    QVector<Translation> languages = getLanguages();
-    for(auto const &l: languages)
-    {
-        QAction *act =  new QAction(this);
-        act->setText(l.dispName);
-
-        connect(act, SIGNAL(triggered()),
-                this, SLOT(LanguageAcceptActionExecute()));
-        act->setCheckable(true);
-
-        languagesMenu->addAction(act);
-
-        if (l.code == currentLang)
-        {
-            act->setChecked(true);
-            lastLanguageSelected = act;
-        }
-
-    }
-
-    ui->menuTools->addSeparator();
     LocCalcAction = newAction(QT_TR_NOOP("Locator Calculator..."), ui->menuTools, SLOT(LocCalcActionExecute()));
 
-    ReportAutofillAction = newCheckableAction(QT_TR_NOOP("Signal Report AutoFill"), ui->menuTools, SLOT(ReportAutofillActionExecute()));
-    TabSandPAction = newCheckableAction(QT_TR_NOOP("Change Tab Order for S&&P"), ui->menuTools, SLOT(TabSandPActionExecute()));
-
-    ConfigureAgeProtctionAction = newAction(QT_TR_NOOP("Configure Contest Age Protection"), ui->menuTools, SLOT(ConfigAgeProtection()));
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, SLOT(CorrectDateTimeActionExecute()));
     ui->menuTools->addSeparator();
+    OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, SLOT(OptionsActionExecute()));
+
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, SLOT(AdvancedOptionsActionExecute()));
     AdvancedOptionsAction->setVisible(false);
-    StyleAction = newAction(QT_TR_NOOP("Set control style..."), ui->menuTools, SLOT(StyleActionExecute()));
 
     // end of tools manu
 
@@ -518,9 +477,6 @@ void TLogContainer::setupMenus()
 
     TabPopup.addAction(GoToSerialAction);
     TabPopup.addAction(NextUnfilledAction);
-    TabPopup.addSeparator();
-
-    ShowOperatorsAction = newCheckableAction(QT_TR_NOOP("Show Operators"), &TabPopup, SLOT(ShowOperatorsActionExecute()));
     TabPopup.addSeparator();
 
     ShiftTabLeftAction = newAction(QT_TR_NOOP("Shift Active Tab Left"), &TabPopup, SLOT(ShiftTabLeftActionExecute()));
@@ -1201,15 +1157,6 @@ void TLogContainer::CorrectDateTimeActionExecute()
     cdlg.exec();
 }
 
-void TLogContainer::ShowOperatorsActionExecute()
-{
-    bool so = !isShowOperators();
-    ShowOperatorsAction->setChecked(so);
-    TContestApp::getContestApp() ->displayBundle.setBoolProfile( edpShowOperators, so );
-    TContestApp::getContestApp() ->displayBundle.flushProfile();
-    MinosLoggerEvents::SendShowOperators();
-}
-
 void TLogContainer::AdvancedOptionsActionExecute()
 {
     TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
@@ -1218,102 +1165,6 @@ void TLogContainer::AdvancedOptionsActionExecute()
     if (ed.exec() == QDialog::Accepted)
     {
        mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
-    }
-}
-
-void TLogContainer::FontEditAcceptActionExecute()
-{
-    QString qpa = qgetenv("QT_QPA_PLATFORMTHEME");
-    if (qpa.compare("qt5ct", Qt::CaseInsensitive) == 0)
-    {
-        mShowMessage(tr("Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct"), this);
-        QSettings settings;
-        settings.remove( "font");
-    }
-    else
-    {
-        QFont f = font();
-        bool ok;
-        f = QFontDialog::getFont( &ok, f );
-        if (ok)
-        {
-            bool serverRunning = checkServerReady();
-            QApplication::setFont( f );
-
-            for ( auto const &widget: QApplication::allWidgets() )
-            {
-                widget->setFont(f);
-                widget->update();
-            }
-
-            QSettings settings;
-            settings.setValue( "font", font() );
-
-            MinosLoggerEvents::SendFontChanged();
-            if (serverRunning)
-            {
-                MinosConfig::getMinosConfig() ->bounce();
-            }
-        }
-    }
-}
-void TLogContainer::LanguageAcceptActionExecute()
-{
-    TWaitCursor wc(this);
-    QAction *action = qobject_cast<QAction *>(sender());
-
-    if (action)
-    {
-        bool serverRunning = checkServerReady();
-
-        if (lastLanguageSelected)
-            lastLanguageSelected->setChecked(false);
-        action->setChecked(true);
-        lastLanguageSelected = action;
-        QString selText = action->text();
-
-        QVector<Translation> languages = getLanguages();
-        for(auto const &l: languages)
-        {
-            if (l.dispName == selText)
-            {
-                // this propagates a changeEvent that causes all contests to reload
-                switchTranslation(l.code);
-                break;
-            }
-        }
-        if (serverRunning)
-        {
-            MinosConfig::getMinosConfig() ->bounce();
-        }
-    }
-}
-void TLogContainer::ReportAutofillActionExecute()
-{
-    bool autoFill = ReportAutofillAction->isChecked();
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, autoFill );
-    TContestApp::getContestApp() ->loggerBundle.flushProfile();
-}
-void TLogContainer::TabSandPActionExecute()
-{
-    bool TabSandP = TabSandPAction->isChecked();
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpTabforSandP, TabSandP );
-    TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
-    MinosLoggerEvents::SendTabSandP();
-}
-
-void TLogContainer::ConfigAgeProtection()
-{
-    int cap;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
-    if (enquireDialog(this, tr("Set days after which to protect contests (-1 for never)"), cap, -1, 365))
-    {
-        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
-        TWaitCursor wc(this);
-        selectSession(TContestApp::getContestApp()->currSession);
     }
 }
 
@@ -1383,38 +1234,6 @@ void TLogContainer::StartConfigActionExecute()
     configBox.exec();
     // in case we are now running more apps
     sendDM->subscribeApps();
-}
-void TLogContainer::StyleActionExecute()
-{
-    // not yet useful
-    mShowMessage("Not yet implemented", this);
-}
-void TLogContainer::listCompressionActionExecute()
-{
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    if (enquireDialog(this, tr("Set List Spacing Compression Value as percentage"), lcf, 50, 150))
-    {
-        TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, lcf);
-        MinosLoggerEvents::sendListCompressionChanged(lcf/100.0);
-
-        TWaitCursor wc(this);
-        selectSession(TContestApp::getContestApp()->currSession);
-    }
-}
-
-void TLogContainer::QSOFieldFontActionExecute()
-{
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpQSOFieldFont, lcf);
-    if (enquireDialog(this, tr("QSO Field expansion as percentage"), lcf, 100, 200))
-    {
-        TContestApp::getContestApp() ->setIntDisplayProfile(edpQSOFieldFont, lcf);
-        MinosLoggerEvents::SendFontChanged();
-
-        TWaitCursor wc(this);
-        selectSession(TContestApp::getContestApp()->currSession);
-    }
 }
 void TLogContainer::setMenuLog(int current)
 {
@@ -1697,8 +1516,6 @@ void TLogContainer::updateLayoutsMenu()
 {
     screenLayoutMenu->clear();
     ScreenConfigAction = newAction(QT_TR_NOOP("Configure Screen Layouts..."), screenLayoutMenu, SLOT(doScreenConfigAction()));
-    QSOFieldFontAction = newAction(QT_TR_NOOP("Set extra QSO field size..."), screenLayoutMenu, SLOT(QSOFieldFontActionExecute()));
-    listCompressionAction = newAction(QT_TR_NOOP("Set List Spacing Compression..."), screenLayoutMenu, SLOT(listCompressionActionExecute()));
 
     screenLayoutMenu->addSeparator();
 
