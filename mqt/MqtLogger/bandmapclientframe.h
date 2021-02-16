@@ -366,7 +366,6 @@ private slots:
      void on_saveZoomLevelActionSelected();
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
-     void requestSpots();
      void on_resendClusterSpotSelected();
      void on_textFilterEdit_textChanged(const QString &arg1);
 

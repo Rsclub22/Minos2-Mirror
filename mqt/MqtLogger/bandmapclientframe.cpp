@@ -271,13 +271,7 @@ void BandmapClientFrame::on_resendClusterSpotSelected()
 }
 
 
-void BandmapClientFrame::requestSpots()
-{
-    if (ct && !contestBandStr.isEmpty())
-    {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
-    }
-}
+
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
@@ -662,19 +656,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             filterSettings = contest->getBandmapFilter();
         }
 
-        if (ct == TContestApp::getContestApp() ->getCurrentContest())
-        {
-            if (!ct->isReadOnly())
-            {
-                isProtected = false;
-                QTimer::singleShot(2000, this, SLOT(requestSpots()));
 
-            }
-            else
-            {
-                isProtected = true;
-            }
-        }
     }
 }
 
@@ -1486,6 +1468,7 @@ void BandmapClientFrame::filterButtonSelected()
 
     if (filterSetup->getSettingsChangedFlag())
     {
+        // reload filtersettings after change
         filterSettings = filterSetup->getFilterSettings();
         trace("BandmapView::bandmapUpdate() filterButtonSelected");
         bandmapView->bandmapUpdate();
