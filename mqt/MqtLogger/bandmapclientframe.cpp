@@ -179,6 +179,15 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     purgeTimer->start(PURGE_TIME);
 
+    waitClusterServerLoadedTimer = new QTimer(this);
+    if (!isProtected)
+    {
+        // wait for clusterserver to load before asking for spots
+        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+        waitClusterServerLoadedTimer->start(250);
+
+    }
+
 
 }
 
@@ -206,6 +215,30 @@ BandmapClientFrame::~BandmapClientFrame()
     bandmapView->deleteLater();
 
 }
+
+
+void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
+{
+    static int timeoutCount = 0;
+    if (clusterServerLoaded)
+    {
+        waitClusterServerLoadedTimer->stop();
+        on_resendClusterSpotSelected();
+
+    }
+    else
+    {
+        timeoutCount++;
+        if (timeoutCount == 30 * 4)
+        {
+            //timed out
+            waitClusterServerLoadedTimer->stop();
+            traceMsg(QString("waitClusterServerLoadedTimed Out at %1 secs").arg(timeoutCount));
+        }
+
+    }
+}
+
 
 void BandmapClientFrame::on_FontChanged()
 {

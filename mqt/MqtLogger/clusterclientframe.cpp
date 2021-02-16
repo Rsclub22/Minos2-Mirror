@@ -210,7 +210,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
         // wait for clusterserver to load before asking for spots
         connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
         waitClusterServerLoadedTimer->start(250);
-        //QTimer::singleShot(5000, this, SLOT(on_resendClusterSpots()));
 
     }
 
