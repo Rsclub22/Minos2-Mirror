@@ -191,6 +191,9 @@ private:
 
     QTimer* checkHfFlagTimer;
 
+    QTimer* waitClusterServerLoadedTimer;
+
+
     MouseInObject* actionInObject;
 
     QVector<QString> spotQueue;
@@ -233,7 +236,6 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
 
     QString contestModeStr;
-    int contestMode;
 
     bool isProtected;
 
@@ -347,8 +349,8 @@ private slots:
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
     void on_resendClusterSpots();
-    void requestSpots();
     void checkHfFlag();
+    void on_waitClusterServerLoadedTimeout();
 };
 
 class MouseInObject : public QObject

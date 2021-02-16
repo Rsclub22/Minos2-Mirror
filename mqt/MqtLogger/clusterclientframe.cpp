@@ -45,8 +45,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     allowHF(false),
-    //contestBand(-1),
-    contestMode(-1),
+    clusterServerLoaded(false),
+    clusterServerConnected(false),
     isProtected(false)
 {
 
@@ -203,9 +203,14 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
     checkHfFlagTimer->start(1000);
 
+
+    waitClusterServerLoadedTimer = new QTimer(this);
     if (!isProtected)
     {
-        QTimer::singleShot(2000, this, SLOT(requestSpots()));
+        // wait for clusterserver to load before asking for spots
+        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+        waitClusterServerLoadedTimer->start(250);
+        //QTimer::singleShot(5000, this, SLOT(on_resendClusterSpots()));
 
     }
 
@@ -228,26 +233,41 @@ ClusterClientFrame::~ClusterClientFrame()
 }
 
 
+void ClusterClientFrame::on_waitClusterServerLoadedTimeout()
+{
+    static int timeoutCount = 0;
+    if (clusterServerLoaded)
+    {
+        waitClusterServerLoadedTimer->stop();
+        on_resendClusterSpots();
+
+    }
+    else
+    {
+        timeoutCount++;
+        if (timeoutCount == 30 * 4)
+        {
+            //timed out
+            waitClusterServerLoadedTimer->stop();
+            traceMsg(QString("waitClusterServerLoadedTimed Out at %1 secs").arg(timeoutCount));
+        }
+
+    }
+}
+
+
 
 // we send ignore bandmask as we want all available spots in cluster
 void ClusterClientFrame::on_resendClusterSpots()
 {
     if (ct  && !contestBandStr.isEmpty())
     {
+        traceMsg(QString("on_resendClusterSpots: uuid: %1").arg(ct->uuid));
         MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
     }
 }
 
 
-void ClusterClientFrame::requestSpots()
-{
-
-    if (ct && !contestBandStr.isEmpty())
-    {
-
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
-    }
-}
 
 
 
@@ -1204,8 +1224,6 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBandStr = ct->contestBands.getValue();
         //contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
-        contestMode = getModeOffSet(contestModeStr);
-
 
 
         if (!contestBandStr.isEmpty())

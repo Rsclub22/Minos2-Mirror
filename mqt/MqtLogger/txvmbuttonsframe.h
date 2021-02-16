@@ -39,7 +39,7 @@ public:
     QAction* readAction;
     QAction* newAction;
     QAction* editAction;
-    QAction* setupAction;
+    QAction* clearAction;
 
 
     void showButtonOnOff(bool state);

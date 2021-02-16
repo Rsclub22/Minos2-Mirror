@@ -74,7 +74,7 @@ void TxVmButtonsFrame::initTxVmButton()
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
-        connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
+        //connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
         connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
 
     }
@@ -490,9 +490,11 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     readAction = new QAction(tr("&Read"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
+    clearAction = new QAction(tr("&Clear"), vmButton);
     vmMenu->addAction(readAction);
     vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
+    vmMenu->addAction(clearAction);
 
 
     vmButton->setMenu(vmMenu);

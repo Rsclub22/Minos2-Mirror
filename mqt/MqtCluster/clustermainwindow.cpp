@@ -660,8 +660,8 @@ void ClusterMainWindow::connectToHost(QString hostName)
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
-    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort), "Connected");
-    QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
+    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName, currentAddress, currentPort), "Connected");
+    QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName, currentAddress, currentPort);
     trace(msg);
     echoMsg(msg);
 
