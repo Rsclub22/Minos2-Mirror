@@ -12,12 +12,12 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
     if (bandModeFreqList.contains(band))
     {
         QMap<QString, ModeFreqDetail<Frequency>> modeList = bandModeFreqList.value(band);
-        QMapIterator<QString, ModeFreqDetail<Frequency>> i(modeList);
-        while (i.hasNext())
+
+        for (QMap<QString, ModeFreqDetail<Frequency> >::const_iterator i = modeList.begin(); i != modeList.end(); i++)
         {
-            i.next();
+
             ModeFreqDetail<Frequency> freqs = i.value();
-            for (auto const &freqLimits: freqs.freq)
+            foreach (auto const &freqLimits, freqs.freq)
             {
                 if (freqLimits.count() == 0)
                     continue;
@@ -30,7 +30,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
 
     }
 
-    return tr("None");
+    return NONE_MODE;
 }
 
 

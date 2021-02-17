@@ -344,13 +344,10 @@ QString BandSelButtons::getCurrentButtonOn_Band()
 void BandSelButtons::setAllButtonsOff()
 {
 
+    for (QMap<QString, QToolButton*>::const_iterator i = bandToolButList.begin(); i != bandToolButList.end(); i++)
+    {
 
-    QMapIterator<QString, QToolButton*> btb(bandToolButList);
-    while (btb.hasNext())
-     {
-        btb.next();
-        setButtonOnOff(btb.key(), false);
-
+        setButtonOnOff(i.key(), false);
 
     }
 }

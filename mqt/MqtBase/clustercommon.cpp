@@ -26,15 +26,12 @@ bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
     bool state = true;
 
     for (QMap<QString, bool>::const_iterator i = mfs.modeFilterFlag.begin(); i != mfs.modeFilterFlag.end(); i++)
-//    QMapIterator<QString, bool> i(mfs.modeFilterFlag);
-//    while(i != mfs.modeFilterFlag.end())
     {
         if (modeFilterFlag.value(i.key()) == i.value())
         {
             state = false;
             break;
         }
-//        i.next();
     }
 
     return state;
@@ -303,10 +300,10 @@ ClusterClientFilterSettings& ClusterClientFilterSettings::operator= (const Clust
     locatorFilterList = ccfs.locatorFilterList;
 
     BandFilterSettings bfs;
-    QMapIterator<QString, BandFilterSettings> i(ccfs.bandFilterSettings);
-    while (i.hasNext())
+
+    for (QMap<QString, BandFilterSettings>::const_iterator i = ccfs.bandFilterSettings.begin(); i != ccfs.bandFilterSettings.end(); i++)
     {
-        i.next();
+
         bfs = i.value();
         bandFilterSettings.insert(i.key(), bfs);
 

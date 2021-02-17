@@ -1312,9 +1312,8 @@ void ClusterClientFilterDialog::onDistanceEditingFinished(QLineEdit *distanceLin
 QString ClusterClientFilterDialog::findBandQLineEdit(QLineEdit *distanceLineEdit)
 {
     QMapIterator<QString, ClusterClientDistanceFilterDetails> i(bandDistanceWidgets);
-    while (i.hasNext())
+    for (QMap<QString, ClusterClientDistanceFilterDetails>::const_iterator i = bandDistanceWidgets.begin(); i != bandDistanceWidgets.end(); i++)
     {
-        i.next();
         if (i.value().bandLineEdit == distanceLineEdit)
         {
             return i.key();
