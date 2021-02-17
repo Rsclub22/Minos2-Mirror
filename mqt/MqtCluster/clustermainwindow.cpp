@@ -991,9 +991,15 @@ void ClusterMainWindow::parseDX(const QString txt)
 void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
 {
 
-    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
-                        .arg(newSpot->getDxCallStr()).arg(newSpot->getFreq().traceStr()).arg(newSpot->getBand()).arg(newSpot->getBandType()).arg(newSpot->getMode())
-                        .arg(newSpot->getSpotterCallStr()).arg(newSpot->getDxLocator()).arg(newSpot->getSpotterLocator()).arg(newSpot->getDxPropMode()).arg(newSpot->getSpotTime()).arg(newSpot->getSpotDate()).arg(newSpot->getSpotComment()).arg(setupCluster->getTimeToLive()));
+    QString msg = QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5").arg(newSpot->getDxCallStr(), newSpot->getFreq().traceStr(),
+                                                                 newSpot->getBand(),newSpot->getBandType(), newSpot->getMode())
+                   + QString(" %6 %7 %8 %9 %10 %11 %12 %13").arg(newSpot->getSpotterCallStr(),
+                                                                 newSpot->getDxLocator(), newSpot->getSpotterLocator(),
+                                                                 newSpot->getDxPropMode(), newSpot->getSpotTime(),
+                                                                 newSpot->getSpotDate(), newSpot->getSpotComment(),
+                                                                 setupCluster->getTimeToLive());
+    trace(msg);
+
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
@@ -1303,21 +1309,23 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 
 QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
-    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13:%14")
-                       .arg(spotData->getClusterSpotType()) // %1
-                       .arg(spotData->getDxCallStr())           // %2
-                       .arg(spotData->getDxLocator())            // %3
-                       .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false") // %4
-                       .arg(spotData->getFreq().str())           // %5
-                       .arg(spotData->getBand())                 // %6
-                       .arg(spotData->getBandType())             // %7
-                       .arg(spotData->getMode())                 // %8
-                       .arg(spotData->getSpotterCallStr())      // %9
-                       .arg(spotData->getSpotterLocator())       // %10
-                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %11
-                       .arg(spotData->getSpotComment())         // %12
-                       .arg(spotData->getDxPropMode())         // %13
-                       .arg(timeToLive);        // %14
+    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8")
+                       .arg(spotData->getClusterSpotType(), // %1
+                       spotData->getDxCallStr(),           // %2
+                       spotData->getDxLocator(),            // %3
+                       spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false", // %4
+                       spotData->getFreq().str(),           // %5
+                       spotData->getBand(),                 // %6
+                       spotData->getBandType(),             // %7
+                       spotData->getMode())                 // %8
+
+            + QString(":%9:%10:%11:%12:%13:%14")
+                       .arg(spotData->getSpotterCallStr(),      // %9
+                       spotData->getSpotterLocator(),       // %10
+                       spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"),  // %11
+                       spotData->getSpotComment(),         // %12
+                       spotData->getDxPropMode(),         // %13
+                       timeToLive);                      // %14
 
     return spotMsg;
 
@@ -1354,6 +1362,8 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
     else
     {
         trace(QString("ping response was not received ok - connection lost?"));
+        trace(QString("logging out - node connected ").arg(nodeConnected ? "True" : "False"));
+        loggedOut();
     }
 
 }
@@ -1517,7 +1527,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
             }
         }
 
-        //if (newSpot.getSpotTime() == "")
+
         if (time == "")
         {
             //error
@@ -1868,7 +1878,7 @@ QString ClusterMainWindow::assembleSpotForDXCluster(Frequency freq, QString call
     bool testMsg = true;
 
 #endif
-    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator()).arg(loc);
+    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator(), loc);
 
 
 #ifdef TEST_PLEASE_IGNORE
