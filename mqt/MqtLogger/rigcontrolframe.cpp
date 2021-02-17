@@ -1798,7 +1798,6 @@ void RigControlFrame::setRadioState(QString s)
         }
         else if (s == RIG_STATUS_CONNECTED)
         {
-            qDebug() << "rigconnected";
             radioConnected = true;
             ui->rigState->setText(tr("Connected"));
             int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
@@ -1855,7 +1854,6 @@ void RigControlFrame::setRadioSwitchCompleted()
     RigState rigSt = LogContainer->sendDM->getRigState(radioName);
     QString fStr = rigSt.getRadioFreq().str();
     traceMsg(QString("Radio State RadioSwitch Completed, radio freq = %1").arg(fStr));
-    qDebug() << "switch complete" << fStr;
     displayFreqOnFreqEditDisplay(fStr);
 
 
