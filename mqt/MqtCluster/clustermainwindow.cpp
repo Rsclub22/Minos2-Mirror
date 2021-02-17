@@ -59,7 +59,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     nodeConnected(false),
     purgeSpotFlag(false),
     reconnectFlag(false),
-    enableHFSpots(false)
+    hfFlag(false)
 {
     ui->setupUi(this);
 
@@ -148,7 +148,7 @@ void ClusterMainWindow::doStartup()
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
-
+    connect(clusterRpc, &Clusterrpc::reconnectCmdFromLog, this, [=](bool state){onReconnectCommandFromLog(state);});
 
     handleSpotsInQueues = new QTimer();
     connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
@@ -181,7 +181,7 @@ void ClusterMainWindow::doStartup()
     QString fileName = CLUSTER_SETTINGS_FILE;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("HFSpots");
-    enableHFSpots = config.value("enable", false).toBool();
+    hfFlag = config.value("enable", false).toBool();
     config.endGroup();
 
 
@@ -243,6 +243,7 @@ void ClusterMainWindow::doStartup()
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXLOC_FROM_NODE_FLAG_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_TIME_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 
 
 
@@ -313,7 +314,6 @@ void ClusterMainWindow::doStartup()
     //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
     //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
 
-    setHF(false);
     readBandFilterSettings();
     loadBandFilterSettingsToTab();
 
@@ -360,7 +360,7 @@ void ClusterMainWindow::doStartup()
 
 }
 
-
+// this is for testing
 void ClusterMainWindow::onpbpressed()
 {
     static bool state = false;
@@ -374,6 +374,12 @@ void ClusterMainWindow::onpbpressed()
         state = false;
         setHF(state);
     }
+
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("HFSpots");
+    config.setValue("enable", state);
+    config.endGroup();
 }
 
 /*
@@ -654,8 +660,8 @@ void ClusterMainWindow::connectToHost(QString hostName)
 void ClusterMainWindow::connectionEstab()
 {
     nodeConnected = true;
-    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName).arg(currentAddress).arg(currentPort), "Connected");
-    QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName).arg(currentAddress).arg(currentPort);
+    showStatusMessage(tr("Connected to: %1 %2 %3").arg(currentNodeName, currentAddress, currentPort), "Connected");
+    QString msg = tr("Connection Established with host %1 %2:%3").arg(currentNodeName, currentAddress, currentPort);
     trace(msg);
     echoMsg(msg);
 
@@ -728,7 +734,16 @@ void ClusterMainWindow::disconnectNode()
 
 }
 
+void ClusterMainWindow::onReconnectCommandFromLog(bool state)
+{
 
+    trace(QString("reconnect command from log = %1, connection = %2").arg(state ? "True" : "False", nodeConnected ? "True" : "False"));
+    if (state && !nodeConnected)
+    {
+        trace(QString("reconnecting node to cluster node %1").arg(ui->nodeCb->currentText()));
+        connectToNode(ui->nodeCb->currentText());
+    }
+}
 
 
 void ClusterMainWindow::messageRx(QString msg)
@@ -985,9 +1000,15 @@ void ClusterMainWindow::parseDX(const QString txt)
 void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> newSpot)
 {
 
-    trace(QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5 %6 %7 %8 %9 %10 %11 %12 %13")
-                        .arg(newSpot->getDxCallStr()).arg(newSpot->getFreq().traceStr()).arg(newSpot->getBand()).arg(newSpot->getBandType()).arg(newSpot->getMode())
-                        .arg(newSpot->getSpotterCallStr()).arg(newSpot->getDxLocator()).arg(newSpot->getSpotterLocator()).arg(newSpot->getDxPropMode()).arg(newSpot->getSpotTime()).arg(newSpot->getSpotDate()).arg(newSpot->getSpotComment()).arg(setupCluster->getTimeToLive()));
+    QString msg = QString("ProcessNewSpot: DX de %1 %2 %3 %4 %5").arg(newSpot->getDxCallStr(), newSpot->getFreq().traceStr(),
+                                                                 newSpot->getBand(),newSpot->getBandType(), newSpot->getMode())
+                   + QString(" %6 %7 %8 %9 %10 %11 %12 %13").arg(newSpot->getSpotterCallStr(),
+                                                                 newSpot->getDxLocator(), newSpot->getSpotterLocator(),
+                                                                 newSpot->getDxPropMode(), newSpot->getSpotTime(),
+                                                                 newSpot->getSpotDate(), newSpot->getSpotComment(),
+                                                                 setupCluster->getTimeToLive());
+    trace(msg);
+
 
     // is spot older than time to live time
     int timeToLive = setupCluster->getTimeToLive().toInt() * 60;
@@ -1062,6 +1083,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
     trace(QString("UnpackShowDXSpot - %1").arg(txt));
 
+    newSpot->setClusterSpotType(clusterSpotType::SHOW_DXSPOT_TYPE);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
@@ -1075,14 +1097,18 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         f.remove('.');
         newSpot->setFreq(f);
         QString dxBandStr;
-        QString dxBandMask;
-        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
+        QString dxBandType;
+        if (!getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandType))
+        {
+            trace(QString("Spot is not in contest band list discard - Call = %1, Freq. = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+            return DISCARD_SPOT_NOT_CONTEST_BAND * -1;
+        }
+
         newSpot->setBand(dxBandStr);
+        newSpot->setBandType(dxBandType);
 
-        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
-
-        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
         {
             // discard spot as it is HF
             trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
@@ -1095,9 +1121,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setMode(dxModeStr);
 
         newSpot->setDxCall(dxMsg[1]);
-        //newSpot.setSpotDate(dxMsg[2]);
-        //newSpot.setSpotTime(dxMsg[3].remove('Z'));
-        //newSpot.setSpotDateTime(getSpotDateTime(newSpot.getSpotDate(), newSpot.getSpotTime()));
 
         // get date/time
         QDate d;
@@ -1138,7 +1161,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
 
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
+        findLocInComment(spotLocator, dxLocator, spotComment);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1162,6 +1185,8 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
             newSpot->setMode(commentMode);
 
         }
+
+
 
         return SPOT_OK;
     }
@@ -1276,7 +1301,7 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString())
+            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString() || cmd.getBandmask() == IGNORE_BANDMASK)
             {
                 QString spot = createResendSpotToSend(assembleSpotMsgToSendToClients(dxSpotDataModel->getSpotData(row), setupCluster->getTimeToLive()));
                 trace(QString("resending this spot - %1 to uuid = %2").arg(spot, cmd.getuuid()));
@@ -1293,20 +1318,23 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 
 QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<ClusterSpotData> spotData, const QString timeToLive)
 {
-    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8:%9:%10:%11:%12:%13")
-                       .arg(spotData->getDxCallStr())   // %1
-                       .arg(spotData->getDxLocator())   // %2
-                       .arg(spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false")  // %3
-                       .arg(spotData->getFreq().str())  // %4
-                       .arg(spotData->getBand())        // %5
-                       .arg(spotData->getBandType())    // %6
-                       .arg(spotData->getMode())        // %7
-                       .arg(spotData->getSpotterCallStr())  //%8
-                       .arg(spotData->getSpotterLocator())  // %9
-                       .arg(spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"))  // %10
-                       .arg(spotData->getSpotComment())  // %11
-                       .arg(spotData->getDxPropMode())   // %12
-                       .arg(timeToLive);        // %13
+    QString spotMsg = QString("%1:%2:%3:%4:%5:%6:%7:%8")
+                       .arg(spotData->getClusterSpotType(), // %1
+                       spotData->getDxCallStr(),           // %2
+                       spotData->getDxLocator(),            // %3
+                       spotData->getDxLocatorIsFromNode() ? "locFromNode-true" : "locFromNode-false", // %4
+                       spotData->getFreq().str(),           // %5
+                       spotData->getBand(),                 // %6
+                       spotData->getBandType(),             // %7
+                       spotData->getMode())                 // %8
+
+            + QString(":%9:%10:%11:%12:%13:%14")
+                       .arg(spotData->getSpotterCallStr(),      // %9
+                       spotData->getSpotterLocator(),       // %10
+                       spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"),  // %11
+                       spotData->getSpotComment(),         // %12
+                       spotData->getDxPropMode(),         // %13
+                       timeToLive);                      // %14
 
     return spotMsg;
 
@@ -1343,6 +1371,8 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
     else
     {
         trace(QString("ping response was not received ok - connection lost?"));
+        trace(QString("logging out - node connected ").arg(nodeConnected ? "True" : "False"));
+        loggedOut();
     }
 
 }
@@ -1444,6 +1474,9 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 {
 
     trace(QString("UnpackDXSpot - %1").arg(txt));
+
+    newSpot->setClusterSpotType(clusterSpotType::DXSPOT_TYPE);
+
     int timePos = 0;
 
     txt.remove('\x07');
@@ -1461,17 +1494,21 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
 
 
         QString dxBandStr;
-        QString dxBandMask;  // not using bandMask anymore
-        getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandMask);
+        QString dxBandType;
+        if (!getBand(bands, newSpot->getFreq().str(), dxBandStr, dxBandType))
+        {
+            trace(QString("Spot is not in contest band list discard - Call = %1, Freq. = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
+            return DISCARD_SPOT_NOT_CONTEST_BAND * -1;
+        }
+
         newSpot->setBand(dxBandStr);
+        newSpot->setBandType(dxBandType);
 
-        newSpot->setBandType(BandList::getBandList().findType(newSpot->getBand()));
 
-
-        if (newSpot->getBandType() == HF_BANDTYPE && !enableHFSpots)
+        if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
         {
             // discard spot as it is HF
-            trace(QString("Unpack DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
+            trace(QString("Unpack DX Spot: Discard Spot HF Call = %1, Freq = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
             return DISCARD_HF_SPOT * -1;
         }
 
@@ -1499,7 +1536,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
             }
         }
 
-        //if (newSpot.getSpotTime() == "")
+
         if (time == "")
         {
             //error
@@ -1549,7 +1586,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         spotComment.remove(SPOT_DATA_SEPERATOR);
         QString spotLocator;
         QString dxLocator;
-        findLocInComment(spotLocator, dxLocator, spotComment, dxBandMask);
+        findLocInComment(spotLocator, dxLocator, spotComment);
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
@@ -1597,9 +1634,9 @@ QString ClusterMainWindow::getPropMode(const QString comment)
 
 }
 
-void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask)
+void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment)
 {
-    Q_UNUSED(bandMask)
+
 
     QStringList loc;
     trace(QString("Extract locators - comment = %1").arg(comment));
@@ -1850,7 +1887,7 @@ QString ClusterMainWindow::assembleSpotForDXCluster(Frequency freq, QString call
     bool testMsg = true;
 
 #endif
-    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator()).arg(loc);
+    sentComment = QString("%1< >%2").arg(setupCluster->getUserLocator(), loc);
 
 
 #ifdef TEST_PLEASE_IGNORE
@@ -2025,7 +2062,7 @@ void ClusterMainWindow::initUserCommandButtons()
 
 void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
+    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
     {
        userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2033,7 +2070,7 @@ void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
+    if (hfFlag && ui->clusterTab->currentIndex() == 0)
     {
         userHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2041,7 +2078,7 @@ void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
-    if ((enableHFSpots && ui->clusterTab->currentIndex() == 1) || (!enableHFSpots && ui->clusterTab->currentIndex() == 0))
+    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
     {
         userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2049,7 +2086,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
-    if (enableHFSpots && ui->clusterTab->currentIndex() == 0)
+    if (hfFlag && ui->clusterTab->currentIndex() == 0)
     {
         userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
     }
@@ -2890,8 +2927,11 @@ void ClusterMainWindow::purgeSpots()
 void ClusterMainWindow::onSpotTestTimerTimeOut()
 {
     QString spot;
+    QStringList splitSpot;
     QTime time;
     QString timeStr;
+    const QRegularExpression TIME = QRegularExpression("\\d\\d\\d\\dZ");
+
     if (spotNum >= testSpotList.count())
     {
         spotTestTimer->stop();
@@ -2900,27 +2940,33 @@ void ClusterMainWindow::onSpotTestTimerTimeOut()
     if (!testSpotList.isEmpty())
     {
         spot = testSpotList[spotNum].remove('\n');
-        time = QDateTime::currentDateTimeUtc().time();
-        QString hourStr;
-        QString minStr;
-        if (time.hour() < 10)
+        splitSpot = spot.split(TIME);
+
+        if (splitSpot.count() == 2)
         {
-            hourStr = QString("0%1").arg(time.hour());
+            time = QDateTime::currentDateTimeUtc().time();
+            QString hourStr;
+            QString minStr;
+            if (time.hour() < 10)
+            {
+                hourStr = QString("0%1").arg(time.hour());
+            }
+            else
+            {
+                hourStr = QString("%1").arg(time.hour());
+            }
+            if (time.minute() < 10)
+            {
+                minStr = QString("0%1").arg(time.minute());
+            }
+            else
+            {
+                minStr = QString("%1").arg(time.minute());
+            }
+            timeStr = QString("   %1%2Z").arg(hourStr, minStr);
+            spot = splitSpot[0].append(timeStr).append(splitSpot[1]).append('\n');
         }
-        else
-        {
-            hourStr = QString("%1").arg(time.hour());
-        }
-        if (time.minute() < 10)
-        {
-            minStr = QString("0%1").arg(time.minute());
-        }
-        else
-        {
-            minStr = QString("%1").arg(time.minute());
-        }
-        timeStr = QString("   %1%2Z").arg(hourStr, minStr);
-        spot = spot.append(timeStr).append('\n');
+
         parseDX(spot);
         spotNum++;
 

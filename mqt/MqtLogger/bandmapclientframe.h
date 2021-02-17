@@ -203,6 +203,8 @@ private:
 
     QTimer* purgeTimer = nullptr;
     QTimer* checkNewSpotsTimer = nullptr;
+    QTimer* waitClusterServerLoadedTimer = nullptr;
+
 
     QVector<QSharedPointer<BandInfo> > bands;
 
@@ -364,10 +366,11 @@ private slots:
      void on_saveZoomLevelActionSelected();
      void on_readZoomLevelActionSelected();
      void on_newZoomlevel(int level);
-     void requestSpots();
      void on_resendClusterSpotSelected();
      void on_textFilterEdit_textChanged(const QString &arg1);
 
+     void on_waitClusterServerLoadedTimeout();
+     void on_clusterStatusIndicatorClicked();
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };

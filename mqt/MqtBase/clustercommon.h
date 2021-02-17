@@ -49,24 +49,25 @@ const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MOD
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
 
-enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, GET_PREFIX_FAILED, ASKQRZ_FAILED_QRA};
+enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, DISCARD_SPOT_NOT_CONTEST_BAND, GET_PREFIX_FAILED, ASKQRZ_FAILED_QRA};
 const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not found" << "Spot DateTime Invalid" << "Spot too many sections"
                                                   << "Discard HF Spot" << "getPrefix failed to find QRA" << "AskQrz Failed to Find QRA";
 
 // OffSet to items in spot message - Note! add 1 for raw message as that has "DXSPOT" as header
-const int DXCALL = 0;
-const int DXLOCATOR = 1;
-const int DXLOC_FROM_NODE_FLAG = 2;
-const int DXFREQ = 3;
-const int DXBANDSTR = 4;
-const int DXBANDTYPE = 5;
-const int DXMODESTR = 6;
-const int SPOTCALL = 7;
-const int SPOTLOCATOR = 8;
-const int SPOTDATETIME = 9;
-const int SPOTCOMMENT = 10;
-const int DXPROPMODE = 11;
-const int TTLVALUE = 12;
+const int DX_CLUSTER_SPOT_TYPE = 0;
+const int DXCALL = 1;
+const int DXLOCATOR = 2;
+const int DXLOC_FROM_NODE_FLAG = 3;
+const int DXFREQ = 4;
+const int DXBANDSTR = 5;
+const int DXBANDTYPE = 6;
+const int DXMODESTR = 7;
+const int SPOTCALL = 8;
+const int SPOTLOCATOR = 9;
+const int SPOTDATETIME = 10;
+const int SPOTCOMMENT = 11;
+const int DXPROPMODE = 12;
+const int TTLVALUE = 13;
 
 
 // Cluster Data and View Columns
@@ -90,15 +91,16 @@ const int DXSPOT_PROP_MODE_COL_NUM = 15;
 const int RXTIME_COL_NUM = 16;
 const int DATE_COL_NUM = 17;
 const int DATE_TIME_COL_NUM = 18;
-const int SPOT_TYPE_COL_NUM = 19;       // used in bandmap
-const int SPOT_IS_SELECTED_COL_NUM = 20;    // used in bandmap
-const int ROT_BEARING_COL_NUM = 21;     // used in bandmap
-const int ROT_CONNECTED_COL_NUM = 22;   // used in bandmap
-const int RUN_MODE_ON_COL_NUM = 23;     // used in bandmap
-const int OFF_RUN_FREQ_COL_NUM = 24;    // used in bandmap
-const int CQ_RESPONSE_COL = 25;    // used in bandmap
-const int DX_DISTRICT_COL_NUM = 26;   // used in bandmap
-const int DX_DISTRICT_WORKED_COL_NUM = 27; // used in bandmap
+const int DXCLUSTER_SPOT_TYPE = 19;
+const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
+const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
+const int ROT_BEARING_COL_NUM = 22;     // used in bandmap
+const int ROT_CONNECTED_COL_NUM = 23;   // used in bandmap
+const int RUN_MODE_ON_COL_NUM = 24;     // used in bandmap
+const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
+const int CQ_RESPONSE_COL = 26;    // used in bandmap
+const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
+const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
 
 const bool BOOL_YES = true;
 const bool BOOL_NO = false;
@@ -177,7 +179,7 @@ const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: orange
 // resend clusterspots to client commands
 enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
 const QString RESEND_ALL_SPOTS = "resendAll";
-
+const QString IGNORE_BANDMASK = "ignore_bandmask";
 
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
@@ -188,7 +190,7 @@ qlonglong spotElapsedTime(qlonglong spotTime);
 
 void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
 
-void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency freq, QString &band, QString &bandMask);
+bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandType);
 
 bool extractDxLocFromNodeFlag(QString locFlagMsg);
 

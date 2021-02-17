@@ -201,10 +201,8 @@ void BandmapClientFilterDialog::filtersAccepted()
 void BandmapClientFilterDialog::filtersRejected()
 {
 
-
-    //restoreModes();
     doCloseEvent();
-    //close();
+
 }
 
 

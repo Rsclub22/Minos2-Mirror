@@ -179,6 +179,17 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     purgeTimer->start(PURGE_TIME);
 
+    waitClusterServerLoadedTimer = new QTimer(this);
+    if (!isProtected)
+    {
+        // wait for clusterserver to load before asking for spots
+        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+        waitClusterServerLoadedTimer->start(250);
+
+    }
+
+    connect(ui->clusterStatusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
+
 
 }
 
@@ -206,6 +217,30 @@ BandmapClientFrame::~BandmapClientFrame()
     bandmapView->deleteLater();
 
 }
+
+
+void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
+{
+    static int timeoutCount = 0;
+    if (clusterServerLoaded)
+    {
+        waitClusterServerLoadedTimer->stop();
+        on_resendClusterSpotSelected();
+
+    }
+    else
+    {
+        timeoutCount++;
+        if (timeoutCount == 30 * 4)
+        {
+            //timed out
+            waitClusterServerLoadedTimer->stop();
+            traceMsg(QString("waitClusterServerLoadedTimed Out at %1 secs").arg(timeoutCount));
+        }
+
+    }
+}
+
 
 void BandmapClientFrame::on_FontChanged()
 {
@@ -238,13 +273,7 @@ void BandmapClientFrame::on_resendClusterSpotSelected()
 }
 
 
-void BandmapClientFrame::requestSpots()
-{
-    if (ct && !contestBandStr.isEmpty())
-    {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::BANDMAP_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
-    }
-}
+
 
 void BandmapClientFrame::on_markSpotActionSelected()
 {
@@ -629,19 +658,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             filterSettings = contest->getBandmapFilter();
         }
 
-        if (ct == TContestApp::getContestApp() ->getCurrentContest())
-        {
-            if (!ct->isReadOnly())
-            {
-                isProtected = false;
-                QTimer::singleShot(2000, this, SLOT(requestSpots()));
 
-            }
-            else
-            {
-                isProtected = true;
-            }
-        }
     }
 }
 
@@ -1313,11 +1330,13 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     {
          clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
+         ui->clusterStatusIndicator->setEnabled(false);
     }
     else
     {
          clusterStatusIndicatorToggle(false);
          clusterServerConnected = false;
+         ui->clusterStatusIndicator->setEnabled(true);  // enable to allow reconnect request
     }
 
     if (clusterServerLoaded )
@@ -1328,6 +1347,18 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     else
     {
         ui->clusterStatusIndicator->setToolTip(tr("Cluster Server Not Running"));
+    }
+}
+
+void BandmapClientFrame::on_clusterStatusIndicatorClicked()
+{
+    if (!ui->clusterStatusIndicator->toolTip().isEmpty())  // haven't connected yet?
+    {
+            if (!clusterServerConnected && ui->clusterStatusIndicator->toolTip() != "Connected")
+            {
+                trace(QString("cluster server disconnected - request reconnect"));
+                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+            }
     }
 }
 
@@ -1453,6 +1484,7 @@ void BandmapClientFrame::filterButtonSelected()
 
     if (filterSetup->getSettingsChangedFlag())
     {
+        // reload filtersettings after change
         filterSettings = filterSetup->getFilterSettings();
         trace("BandmapView::bandmapUpdate() filterButtonSelected");
         bandmapView->bandmapUpdate();

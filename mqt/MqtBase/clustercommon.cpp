@@ -546,8 +546,8 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
 
             if (modeMask == -1)
             {
-                trace(QString("getmode: mode will be none"));
-                dxModeStr = "None";
+                trace(QString("getmode: mode will be NONE"));
+                dxModeStr = NONE_MODE;
                 dxModeMask = "0";
             }
             else
@@ -559,8 +559,8 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
         else
         {
             // modeplan file missing
-            trace(QString("getMode - modeplan missing"));
-            dxModeStr = "None";
+            trace(QString("getMode - modeplan missing, mode will be NONE"));
+            dxModeStr = NONE_MODE;
             dxModeMask = "0";
 
         }
@@ -568,17 +568,19 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
 }
 
 
-void getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandMask)
+bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandType)
 {
-    for (int i = 0; i < bands.count(); i++)
+    foreach (auto &b, bands)
     {
-        if (fr <= bands[i]->fHigh && fr >= bands[i]->fLow)
+        if (fr <= b->fHigh && fr >= b->fLow)
         {
-            band = bands[i]->name();
-            bandMask = QString::number(i);
-            break;
+            band = b->name();
+            bandType = b->getType();
+            return true;
         }
     }
+
+    return false; // no band found
 }
 
 

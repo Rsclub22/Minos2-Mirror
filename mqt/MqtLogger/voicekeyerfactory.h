@@ -2,7 +2,7 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rig Control
+//                      Voice Keyer
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 //

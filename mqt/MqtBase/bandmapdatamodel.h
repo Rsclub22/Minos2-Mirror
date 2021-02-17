@@ -19,7 +19,7 @@
 #include "spotdatabase.h"
 #include "cutils.h"
 
-const int bandmapColCount = 27;
+const int bandmapColCount = 28;
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 
 class BandmapDataModel : public QAbstractTableModel

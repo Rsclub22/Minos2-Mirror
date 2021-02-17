@@ -45,8 +45,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     allowHF(false),
-    //contestBand(-1),
-    contestMode(-1),
+    clusterServerLoaded(false),
+    clusterServerConnected(false),
     isProtected(false)
 {
 
@@ -92,12 +92,12 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
     connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
 
-    connect (purgeTimer, &QTimer::timeout, [=](){purgeSpots();});
+    connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
 
 
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
-    connect (ui->filtersBut, &QPushButton::clicked, [=](){filterButtonSelected();});
+    connect (ui->filtersBut, &QPushButton::clicked, this, [=](){filterButtonSelected();});
 
 
     spotsMenu = new QMenu(ui->actionsButton);
@@ -203,9 +203,15 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
     checkHfFlagTimer->start(1000);
 
+    connect(ui->statusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
+
+
+    waitClusterServerLoadedTimer = new QTimer(this);
     if (!isProtected)
     {
-        QTimer::singleShot(2000, this, SLOT(requestSpots()));
+        // wait for clusterserver to load before asking for spots
+        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+        waitClusterServerLoadedTimer->start(250);
 
     }
 
@@ -219,7 +225,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    for(auto const &m: filterProxyModelList)
+    foreach(auto const &m, filterProxyModelList)
     {
         delete m;
     }
@@ -228,26 +234,41 @@ ClusterClientFrame::~ClusterClientFrame()
 }
 
 
+void ClusterClientFrame::on_waitClusterServerLoadedTimeout()
+{
+    static int timeoutCount = 0;
+    if (clusterServerLoaded)
+    {
+        waitClusterServerLoadedTimer->stop();
+        on_resendClusterSpots();
+
+    }
+    else
+    {
+        timeoutCount++;
+        if (timeoutCount == 30 * 4)
+        {
+            //timed out
+            waitClusterServerLoadedTimer->stop();
+            traceMsg(QString("waitClusterServerLoadedTimed Out at %1 secs").arg(timeoutCount));
+        }
+
+    }
+}
 
 
+
+// we send ignore bandmask as we want all available spots in cluster
 void ClusterClientFrame::on_resendClusterSpots()
 {
     if (ct  && !contestBandStr.isEmpty())
     {
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
+        traceMsg(QString("on_resendClusterSpots: uuid: %1").arg(ct->uuid));
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
     }
 }
 
 
-void ClusterClientFrame::requestSpots()
-{
-
-    if (ct && !contestBandStr.isEmpty())
-    {
-
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
-    }
-}
 
 
 
@@ -326,6 +347,7 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     dxSpotView->setColumnHidden(DATE_COL_NUM, true);
     dxSpotView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+    dxSpotView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 }
 
 
@@ -381,9 +403,7 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     searchView->setColumnHidden(DATE_COL_NUM, true);
     searchView->setColumnHidden(DXBANDSTR_COL_NUM, true);
-
-
-
+    searchView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 
 }
 
@@ -447,6 +467,7 @@ void ClusterClientFrame::setupCallsignSpotView()
     callSignView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     callSignView->setColumnHidden(DATE_COL_NUM, true);
     callSignView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+    callSignView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 
 
 
@@ -508,6 +529,7 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->setColumnHidden(DXSPOT_PROP_MODE_COL_NUM, true);
     locatorView->setColumnHidden(DATE_COL_NUM, true);
     locatorView->setColumnHidden(DXBANDSTR_COL_NUM, true);
+    locatorView->setColumnHidden(DXCLUSTER_SPOT_TYPE, true);
 }
 
 
@@ -881,11 +903,12 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             dxSpotDataModel->rowData = newSpot;
 
 
-
-            if (resentSpot)
+            // if spot has been resent or is a ShowDx spot requested by a command or restart of server
+            if (resentSpot || spotlist[DX_CLUSTER_SPOT_TYPE] == clusterSpotType::SHOW_DXSPOT_TYPE)
             {
                 if (checkspotExists(newSpot))
                 {
+                    traceMsg(QString("addDxSpotToTable: spot already exists in table, discard Call = %1, Freq: %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
                     return;     // spot exists in table
                 }
             }
@@ -900,7 +923,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 }
 
 
-//bool ClusterClientFrame::checkspotExists(ClusterSpotData *spotData)
+
 bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotData)
 {
     if (dxSpotDataModel->rowCount() == 0)
@@ -1202,8 +1225,6 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         contestBandStr = ct->contestBands.getValue();
         //contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
-        contestMode = getModeOffSet(contestModeStr);
-
 
 
         if (!contestBandStr.isEmpty())
@@ -1819,12 +1840,14 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
          statusIndicatorToggle(true);
          clusterServerConnected = true;
+         ui->statusIndicator->setEnabled(false);
 
     }
     else
     {
          statusIndicatorToggle(false);
          clusterServerConnected = false;
+         ui->statusIndicator->setEnabled(true);     // enable to allow reconnection
 
     }
 
@@ -1839,6 +1862,19 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
         ui->statusIndicator->setToolTip("");
     }
+}
+
+void ClusterClientFrame::on_clusterStatusIndicatorClicked()
+{
+    if (!ui->statusIndicator->toolTip().isEmpty())  // haven't connected yet?
+    {
+            if (!clusterServerConnected && ui->statusIndicator->toolTip() != "Connected")
+            {
+                trace(QString("cluster server disconnected - request reconnect"));
+                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+            }
+    }
+
 }
 
 

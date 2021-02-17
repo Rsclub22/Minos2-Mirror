@@ -69,6 +69,7 @@ signals:
    void SpotBrgStrToRot(QString);
    void MemBrgStrToRot(QString);
    void SendResendSpotsCommand(QString);
+   void SendReconnectFlagToServer(bool);
    void DxSpotToLog(memoryData::memData);         // cluster spot
 
    void DxSpotToMemory(BaseContestLog *, memoryData::memData);      // cluster spot
@@ -170,6 +171,7 @@ public:
     static void sendWsjtxDatagram(QByteArray *);
     static void sendCallsignLookup(BaseContestLog *, QString);
 
+    static void sendReconnectFlagToClusterServer(bool state);
 };
 //---------------------------------------------------------------------------
 #endif

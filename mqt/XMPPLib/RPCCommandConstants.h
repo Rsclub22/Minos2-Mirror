@@ -56,6 +56,7 @@ static const QString clusterReport      ("Report");
 static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
 static const QString clusterBandmask ("ClusterBandmask");
 static const QString clusterFrameId ("ClusterFrameId");
+static const QString clusterReconnect ("ClusterReconnect");
 static const QString clusterHfFlag ("ClusterHfFlag");
 
 // Chat

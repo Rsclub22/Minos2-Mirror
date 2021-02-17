@@ -272,8 +272,7 @@ private:
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
 
-    //QTimer *startUpTimer;
-    bool hfFlag = false;
+
 
     QString appName;
     QLabel* status;
@@ -288,7 +287,7 @@ private:
     QList<QShortcut *> vhfUhfCommandShortCutKeyList;
     QList<QShortcut *> vhfUhfMenuShortCutKeyList;
 
-    //QStringList startCommands;
+
 
     QStringList vhfUhfUserCommands;
     QStringList hfUserCommands;
@@ -300,34 +299,6 @@ private:
     QMap<QString, ClusterClientBandFilterDialogDetails> bandCheckBoxes;
 
     ClusterClientFilterSettings filterSettings;
-
-
-    //QList<QCheckBox*> hfBandChkBoxList;
-    //QList<QCheckBox*> vhfBandChkBoxList;
-    //QList<QCheckBox*> uhfBandChkBoxList;
-
-    //QList<QCheckBox*> bandChkBoxList;
-
-    //QList<bool*> allBandfilters;
-    //QList<bool*> hfBandfilters;
-    //QList<bool*> vhfBandfilters;
-    //QList<bool*> uhfBandfilters;
-
-    //bool bandFilter1_8Mhz;
-    //bool bandFilter3_5Mhz;
-    //bool bandFilter7Mhz;
-    //bool bandFilter14Mhz;
-    //bool bandFilter21Mhz;
-    //bool bandFilter28Mhz;
-    //bool bandFilter50Mhz;
-    //bool bandFilter70Mhz;
-    //bool bandFilter144Mhz;
-    //bool bandFilter432Mhz;
-    //bool bandFilter1296Mhz;
-    //bool bandFilter2300Mhz;
-    //bool bandFilter3_4Ghz;
-    //bool bandFilter5_6Ghz;
-    //bool bandFilter10Ghz;
 
 
 
@@ -392,7 +363,7 @@ private:
 
     bool reconnectFlag;
 
-    bool enableHFSpots;
+    bool hfFlag;
 
     QTimer *statusTimer;
 
@@ -422,7 +393,7 @@ private:
     void saveRotPresetButton(ClusterUserCommandData &buttonData);
     void saveUserCommandString(QString tabSelected, int buttonNumber, ClusterUserCommandData &buttonData);
     void readUserCommandStrings();
-    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment, QString bandMask);
+    void findLocInComment(QString &spotLoc, QString &dxLoc, const QString &comment);
     void setAllTabsColor(QColor c);
     QString extractLocator(const QString &text, const QRegularExpression fullLocExp, const QRegularExpression partLocExp);
 
@@ -553,6 +524,7 @@ private slots:
     void onVhfSelectBandPbPressed();
     void onUhfSelectBandPbPressed();
     void onpbpressed(); // for test .. remove
+    void onReconnectCommandFromLog(bool state);
 };
 
 #endif // CLUSTERMAINWINDOW_H

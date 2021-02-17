@@ -199,6 +199,27 @@ void TSendDM::sendHfFlagToClusterServer(const bool state)
 
 }
 
+void TSendDM::sendReconnectFlagToClusterServer(const bool state)
+{
+
+    if (!clusterApp.isEmpty())
+    {
+        traceMsg(QString("Send Reconnect Flag To Cluster Server - state = %1").arg(state ? "True": "False"));
+        RPCGeneralClient rpc(rpcConstants::clusterMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterReconnect));
+        QSharedPointer<RPCParam>hfFlag(new RPCBooleanParam(state));
+
+
+        st->addMember( sName, rpcConstants::paramName );
+        st->addMember( hfFlag, rpcConstants::clusterReconnect );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( clusterApp  );
+    }
+
+
+}
+
 
 void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const QString &cmd, const QString bandMask, const QString &uuid )
 {

@@ -289,6 +289,8 @@ private slots:
     void on_ResendSpotsFromClusterCommand(resendFrameId frameId, QString cmd, QString bandmask, QString uuid);
     void onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>);
     void sendBandToRig(QString band);
+    void on_sendReconnectFlagToClusterServer(bool state);
+
 public:
     bool doKeyPressEvent(QKeyEvent *event);
     void transferFromWSJTX(QString call);
