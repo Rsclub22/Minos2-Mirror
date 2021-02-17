@@ -524,6 +524,7 @@ private slots:
     void onVhfSelectBandPbPressed();
     void onUhfSelectBandPbPressed();
     void onpbpressed(); // for test .. remove
+    void onReconnectCommandFromLog(bool state);
 };
 
 #endif // CLUSTERMAINWINDOW_H

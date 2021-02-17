@@ -68,6 +68,7 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       QSharedPointer<RPCParam> clusterFrameId;
       QSharedPointer<RPCParam> resendSpotCmd;
       QSharedPointer<RPCParam> bandmask;
+      QSharedPointer<RPCParam> reconnectState;
       RPCArgs *args = mro->getCallArgs();
 
       QString paraName;
@@ -119,6 +120,16 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
           }
 
 
+      }
+      else if (paraName == rpcConstants::clusterReconnect)
+      {
+          bool state;
+          if (args->getStructArgMember(0, rpcConstants::clusterReconnect, reconnectState))
+          {
+              reconnectState->getBoolean(state);
+              trace(QString("Cluster RPC: reconnect command to cluster = %1").arg(state));
+              emit reconnectCmdFromLog(state);
+          }
       }
 
       mro->clearCallArgs();

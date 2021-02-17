@@ -370,6 +370,7 @@ private slots:
      void on_textFilterEdit_textChanged(const QString &arg1);
 
      void on_waitClusterServerLoadedTimeout();
+     void on_clusterStatusIndicatorClicked();
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };

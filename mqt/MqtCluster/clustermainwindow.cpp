@@ -148,7 +148,7 @@ void ClusterMainWindow::doStartup()
     clusterRpc = new Clusterrpc();
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
-
+    connect(clusterRpc, &Clusterrpc::reconnectCmdFromLog, this, [=](bool state){onReconnectCommandFromLog(state);});
 
     handleSpotsInQueues = new QTimer();
     connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
@@ -734,7 +734,16 @@ void ClusterMainWindow::disconnectNode()
 
 }
 
+void ClusterMainWindow::onReconnectCommandFromLog(bool state)
+{
 
+    trace(QString("reconnect command from log = %1, connection = %2").arg(state ? "True" : "False", nodeConnected ? "True" : "False"));
+    if (state && !nodeConnected)
+    {
+        trace(QString("reconnecting node"));
+        connectToNode(ui->nodeCb->currentText());
+    }
+}
 
 
 void ClusterMainWindow::messageRx(QString msg)

@@ -65,6 +65,7 @@ public:  		// User declarations
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const QString bandMask, const QString &uuid);
       void sendHfFlagToClusterServer(const bool state);
+      void sendReconnectFlagToClusterServer(const bool state);
 
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
@@ -104,6 +105,7 @@ public:  		// User declarations
       {
           return &rigCache;
       }
+
 
 
 

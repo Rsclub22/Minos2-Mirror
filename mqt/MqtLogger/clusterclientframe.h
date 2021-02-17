@@ -351,6 +351,7 @@ private slots:
     void on_resendClusterSpots();
     void checkHfFlag();
     void on_waitClusterServerLoadedTimeout();
+    void on_clusterStatusIndicatorClicked();
 };
 
 class MouseInObject : public QObject

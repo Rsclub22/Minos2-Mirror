@@ -263,6 +263,11 @@ void MinosLoggerEvents::SendSpotToMemory(BaseContestLog *c, memoryData::memData 
     emit mle.DxSpotToMemory(c, spotData);
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::sendReconnectFlagToClusterServer(bool state)
+{
+    emit mle.SendReconnectFlagToServer(state);
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)
 {
     emit mle.XferEnabled(s, c, basename);

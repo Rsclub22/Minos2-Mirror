@@ -188,6 +188,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     }
 
+    connect(ui->clusterStatusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
+
 
 }
 
@@ -1344,6 +1346,11 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     {
         ui->clusterStatusIndicator->setToolTip(tr("Cluster Server Not Running"));
     }
+}
+
+void BandmapClientFrame::on_clusterStatusIndicatorClicked()
+{
+
 }
 
 void BandmapClientFrame::setClusterServerLoaded(bool loaded)

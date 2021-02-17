@@ -34,6 +34,7 @@ signals:
 
     void sendSpotToDXCluster(Frequency, QString, QString);
     void resendSpotToClients(int, QString, QString, QString);
+    void reconnectCmdFromLog(bool);
 
 
 private slots:

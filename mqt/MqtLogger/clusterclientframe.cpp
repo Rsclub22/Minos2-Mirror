@@ -203,6 +203,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
     checkHfFlagTimer->start(1000);
 
+    connect(ui->statusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
+
 
     waitClusterServerLoadedTimer = new QTimer(this);
     if (!isProtected)
@@ -1838,12 +1840,14 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
          statusIndicatorToggle(true);
          clusterServerConnected = true;
+         ui->statusIndicator->setEnabled(false);
 
     }
     else
     {
          statusIndicatorToggle(false);
          clusterServerConnected = false;
+         ui->statusIndicator->setEnabled(true);     // enable to allow reconnection
 
     }
 
@@ -1858,6 +1862,19 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     {
         ui->statusIndicator->setToolTip("");
     }
+}
+
+void ClusterClientFrame::on_clusterStatusIndicatorClicked()
+{
+    if (!ui->statusIndicator->toolTip().isEmpty())  // haven't connected yet?
+    {
+            if (!clusterServerConnected && ui->statusIndicator->toolTip() != "Connected")
+            {
+                trace(QString("cluster server disconnected - request reconnect"));
+                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+            }
+    }
+
 }
 
 
