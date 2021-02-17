@@ -23,19 +23,18 @@ ModeFilterSettings::ModeFilterSettings()
 bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
 {
 
-    bool state = false;
-    QMapIterator<QString, bool> i(mfs.modeFilterFlag);
-    while(i.hasNext())
+    bool state = true;
+
+    for (QMap<QString, bool>::const_iterator i = mfs.modeFilterFlag.begin(); i != mfs.modeFilterFlag.end(); i++)
+//    QMapIterator<QString, bool> i(mfs.modeFilterFlag);
+//    while(i != mfs.modeFilterFlag.end())
     {
-        i.next();
         if (modeFilterFlag.value(i.key()) == i.value())
         {
-            state = true;
-        }
-        else
-        {
             state = false;
+            break;
         }
+//        i.next();
     }
 
     return state;
@@ -80,7 +79,7 @@ void ModeFilterSettings::setModeFilter(QString mode, bool setting)
 {
     if (clusterModes.contains(mode))
     {
-        modeFilterFlag.insert(mode, setting);
+        modeFilterFlag[mode] = setting;
     }
     else
     {
@@ -449,7 +448,7 @@ bool BandmapClientFilterSettings::getIgnoreEmptyDistanceFlag()
 
 void BandmapClientFilterSettings::setIgnoreEmptyDistanceFlag(bool state)
 {
-    ignoreDistanceFlag = state;
+    ignoreEmptyDistanceFlag = state;
 }
 
 BandmapClientFilterSettings::BandmapClientFilterSettings (const BandmapClientFilterSettings& bcfs)

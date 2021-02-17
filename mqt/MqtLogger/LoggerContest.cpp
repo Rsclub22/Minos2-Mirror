@@ -1800,6 +1800,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        bandmapFilterSettingsExist = true;
                                        BandmapClientFilterSettings bcfs;
                                        bool filterFlag = false;
+                                       bool filterFlag1 = false;
 
 
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
@@ -1825,8 +1826,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        bcfs.setDistanceFilter(distance);
                                        mt->getStructArgMemberValue("ignoreDistanceFlag", filterFlag);
                                        bcfs.setIgnoreDistanceFlag(filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag", filterFlag);
-                                       bcfs.setIgnoreEmptyDistanceFlag(filterFlag);
+                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag", filterFlag1);
+                                       bcfs.setIgnoreEmptyDistanceFlag(filterFlag1);
 
 
                                        saveInitialBandmapFilter(bcfs);
