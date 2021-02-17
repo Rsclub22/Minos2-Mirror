@@ -161,7 +161,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
         ccdfd.bandLineEdit = allDistanceLineEditsList[i];
         ccdfd.bandLabel = allDistanceLabelsList[i];
         ccdfd.distFilterIgnoreCheckBox = allIgnoreDistanceChkBoxList[i];
-        ccdfd.distFilterIgnoreEmptyCheckBox = allIgnoreDistanceChkBoxList[i];
+        ccdfd.distFilterIgnoreEmptyCheckBox = allIgnoreEmptyDistanceChkBoxList[i];
         ccdfd.bandType = bands[i].data()->getType();
         bandDistanceWidgets.insert(bands[i].data()->uk, ccdfd);
     }
@@ -1248,11 +1248,11 @@ void ClusterClientFilterDialog::enableDistanceFields()
 
         if (bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
-            setDistanceFields(band, true);
+            setEnableDistanceFields(band, true);
         }
         else
         {
-           setDistanceFields(band, false);
+           setEnableDistanceFields(band, false);
         }
     }
 
@@ -1260,7 +1260,7 @@ void ClusterClientFilterDialog::enableDistanceFields()
 
 }
 
-void ClusterClientFilterDialog::setDistanceFields(QString band, bool state)
+void ClusterClientFilterDialog::setEnableDistanceFields(QString band, bool state)
 {
     bandDistanceWidgets.value(band).bandLabel->setEnabled(state);
     bandDistanceWidgets.value(band).bandLineEdit->setEnabled(state);

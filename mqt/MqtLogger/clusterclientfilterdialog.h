@@ -181,7 +181,7 @@ private:
     void setDefDistances(QString bandType);
     void setEmptyDistCheckBox(QString bandType, bool state);
     void setIgnoreDistCheckBox(QString bandType, bool state);
-    void setDistanceFields(QString band, bool state);
+    void setEnableDistanceFields(QString band, bool state);
     QString findBandQLineEdit(QLineEdit *distanceLineEdit);
 private slots:
 
