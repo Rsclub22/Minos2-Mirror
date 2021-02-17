@@ -740,7 +740,7 @@ void ClusterMainWindow::onReconnectCommandFromLog(bool state)
     trace(QString("reconnect command from log = %1, connection = %2").arg(state ? "True" : "False", nodeConnected ? "True" : "False"));
     if (state && !nodeConnected)
     {
-        trace(QString("reconnecting node"));
+        trace(QString("reconnecting node to cluster node %1").arg(ui->nodeCb->currentText()));
         connectToNode(ui->nodeCb->currentText());
     }
 }

@@ -1330,11 +1330,13 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
     {
          clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
+         ui->clusterStatusIndicator->setEnabled(false);
     }
     else
     {
          clusterStatusIndicatorToggle(false);
          clusterServerConnected = false;
+         ui->clusterStatusIndicator->setEnabled(true);  // enable to allow reconnect request
     }
 
     if (clusterServerLoaded )
@@ -1350,7 +1352,14 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
 
 void BandmapClientFrame::on_clusterStatusIndicatorClicked()
 {
-
+    if (!ui->clusterStatusIndicator->toolTip().isEmpty())  // haven't connected yet?
+    {
+            if (!clusterServerConnected && ui->clusterStatusIndicator->toolTip() != "Connected")
+            {
+                trace(QString("cluster server disconnected - request reconnect"));
+                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+            }
+    }
 }
 
 void BandmapClientFrame::setClusterServerLoaded(bool loaded)
