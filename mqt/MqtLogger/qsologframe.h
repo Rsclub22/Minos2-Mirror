@@ -311,19 +311,15 @@ private slots:
     void on_ValidateError (int mess_no );
     void on_ShowOperators();
     void on_tabSandP();
+    void on_FontChanged();
+    void on_QSOMargins();
 
     void on_ModeComboBoxGJV_activated(int index);
     void onRSTTXEdit_textChanged(const QString &arg1);
     void onRSTRXEdit_textChanged(const QString &arg1);
-
-    void on_FontChanged();
-
     void onSerRXEdit_textChanged(const QString &);
-
     void onSerTXEdit_textChanged(const QString &);
-
     void on_frequencyEdit_textChanged(const QString &arg1);
-
 
     void on_BandmapMarkFreqPbClicked();
     void on_bandmapSaveFreqPbClicked();
@@ -332,8 +328,6 @@ private slots:
     void on_SpotLastLoggedPbClicked();
 
     void on_FreqChanged(Frequency f);
-
-
 
     void tuningAddMapChkBoxStateChange(int state);
 public slots:

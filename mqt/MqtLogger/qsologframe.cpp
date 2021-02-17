@@ -141,6 +141,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
     connect(&MinosLoggerEvents::mle, SIGNAL(tabSandP()), this, SLOT(on_tabSandP()));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, SIGNAL(QSOMargins()), this, SLOT(on_QSOMargins()));
 
     connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
 
@@ -157,7 +158,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     }
     on_tabSandP();  // show (or not) the Call/S&P choice
 
-    adjustMargins(layout(), 1);
+    on_QSOMargins();
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -184,6 +185,25 @@ void QSOLogFrame::on_FontChanged()
         QWidget *w = i.key();
         w->setStyleSheet(i.value());
     }
+}
+
+void QSOLogFrame::on_QSOMargins()
+{
+    int lm;
+    int ls;
+    int cml;
+    int cmt;
+    int cmr;
+    int cmb;
+
+    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+
+    adjustMargins(layout(), lm, ls, cml, cmt, cmr, cmb);
 }
 
 bool QSOLogFrame::eventFilter(QObject *obj, QEvent *event)

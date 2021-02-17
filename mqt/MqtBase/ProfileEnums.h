@@ -121,7 +121,13 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpDefaultLayout,
                      edpProtectedLayout,
                      edpListCompression,
-                     edpQSOFieldFont
+                     edpQSOFieldFont,
+                     edplm,
+                     edpls,
+                     edpcml,
+                     edpcmt,
+                     edpcmr,
+                     edpcmb
                     };
 enum ENTRYPROFILE {eepCall,
                    eepMainOp, eepSecondOp,

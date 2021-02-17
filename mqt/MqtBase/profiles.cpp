@@ -182,6 +182,13 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edplm, "Layout Margin", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpls, "Layout Spacing", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcml, "Content Margin Left", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmt, "Content Margin Top", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmr, "Content Margin Right", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmb, "Content Margin Bottom", 2, "", "hint", false ) ) );
+
         break;
     case epENTRYPROFILE:
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( eepCall, "Call", "", QT_TR_NOOP("Call Used"), QT_TR_NOOP("Call sign used"), false ) ) );

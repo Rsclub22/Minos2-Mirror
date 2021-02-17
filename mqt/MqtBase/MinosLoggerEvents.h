@@ -60,6 +60,7 @@ signals:
    void clearContestInFrame(BaseContestLog *);
    void tabSandP();
    void MainRaised();
+   void QSOMargins();
 
 
    void BrgStrToRot(QString);
@@ -122,6 +123,7 @@ public:
    static void SendClearContestInFrame(BaseContestLog *);
    static void SendTabSandP();
    static void SendMainRaised();
+   static void SendQSOMargins();
 
    static void SendScreenContactChanged(ScreenContact *, BaseContestLog *, QString);
    static void SendReplaceThisLogList(SharedMatchCollection matchCollection, BaseContestLog *, QString b);

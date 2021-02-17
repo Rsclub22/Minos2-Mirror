@@ -112,6 +112,11 @@ void MinosLoggerEvents::SendMainRaised()
     emit mle.MainRaised();
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendQSOMargins()
+{
+    emit mle.QSOMargins();
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendScreenContactChanged(ScreenContact *sct, BaseContestLog *c, QString b)
 {
     emit mle.ScreenContactChanged(sct, c, b);

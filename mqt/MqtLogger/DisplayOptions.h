@@ -36,6 +36,13 @@ private:
     int currLang = -1;
     bool doBounceOnExit = false;
 
+    int lm;
+    int ls;
+    int cml;
+    int cmt;
+    int cmr;
+    int cmb;
+
     void doFontChange();
 
     void doLanguageChange();

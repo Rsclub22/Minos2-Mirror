@@ -60,6 +60,19 @@ void DisplayOptions::initialise()
     }
     ui->LanguageComboBox->addItems(sl);
     ui->LanguageComboBox->setCurrentIndex(currLang);
+
+    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
+    ui->lm->setValue(lm);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+    ui->ls->setValue(ls);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+    ui->cml->setValue(cml);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+    ui->cmt->setValue(cmt);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+    ui->cmr->setValue(cmr);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+    ui->cmb->setValue(cmb);
 }
 
 void DisplayOptions::finalise()
@@ -126,6 +139,44 @@ void DisplayOptions::finalise()
         doSelectSession = true;
     }
 
+    bool sendMargins = false;
+    int nlm = ui->lm->value();
+    if (nlm != lm)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edplm, nlm);
+        sendMargins = true;
+    }
+    int nls = ui->ls->value();
+    if (nls != ls)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpls, nls);
+        sendMargins = true;
+    }
+    int ncml = ui->cml->value();
+    if (ncml != cml)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpcml, ncml);
+        sendMargins = true;
+    }
+    int ncmt = ui->cmt->value();
+    if (ncmt != cmt)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpcmt, ncmt);
+        sendMargins = true;
+    }
+    int ncmr = ui->cmr->value();
+    if (ncmr != cmr)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpcmr, ncmr);
+        sendMargins = true;
+    }
+    int ncmb = ui->cmb->value();
+    if (ncmb != cmb)
+    {
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpcmb, ncmb);
+        sendMargins = true;
+    }
+
     if (doBounceOnExit)
     {
         TWaitCursor wc(this);
@@ -136,6 +187,10 @@ void DisplayOptions::finalise()
     {
         TWaitCursor wc(this);
         LogContainer->selectSession(TContestApp::getContestApp()->currSession);
+    }
+    else if (sendMargins)
+    {
+        MinosLoggerEvents::SendQSOMargins();
     }
 }
 
