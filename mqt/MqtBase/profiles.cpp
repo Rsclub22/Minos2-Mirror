@@ -109,6 +109,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpCQRit , "CQRit", true, QT_TR_NOOP("RIT on CQ"), QT_TR_NOOP("RIT on CQ"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_50MHz , "defaultFilterDistance_50MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 50MHz"), QT_TR_NOOP("Default Filter Distance 50MHz"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpDefaultFilterDistance_70MHz , "defaultFilterDistance_70MHz", DEFAULT_FILTER_DISTANCE, QT_TR_NOOP("Default Filter Distance 70MHz"), QT_TR_NOOP("Default Filter Distance 70MHz"), false ) ) );

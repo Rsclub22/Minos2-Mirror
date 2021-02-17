@@ -60,7 +60,7 @@ enum LOGGERPROFILE {
    elpAgeToProtectContests,
    elpBandmapOldStyle,
    elpAddBandMapTuningTolerance,
-
+   elpCQRit,
 
    elpDefaultFilterDistance_1_8MHz,
    elpDefaultFilterDistance_3_5MHz,

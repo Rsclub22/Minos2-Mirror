@@ -1,3 +1,4 @@
+#include "ContestApp.h"
 #include "LoggerContest.h"
 #include "rotatorcommon.h"
 #include "runbuttondialog.h"
@@ -308,6 +309,12 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
             if (m.mode != rigControl->curMode)
             {
                 rigControl->sendModeToRadio(m.mode);
+            }
+            bool rit;
+            TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpCQRit, rit );
+            if (rit)
+            {
+                rigControl->ritButtonOn();
             }
 
         }

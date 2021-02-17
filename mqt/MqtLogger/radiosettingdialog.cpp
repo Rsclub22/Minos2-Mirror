@@ -141,6 +141,7 @@ void RadioSettingDialog::initialise()
     ui->contestStartIgnorePresetFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestStartIgnorePresetFreq));
     ui->contestChangeIgnorePreviousFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeIgnorePreviousFreq));
     ui->constestChangeRestoreContestModeChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeRestoreContestMode));
+    ui->CQRitChkBox->setChecked(readRadioSettingsCheckBox(elpCQRit));
 
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
@@ -348,6 +349,7 @@ void RadioSettingDialog::saveRadioSettingsCheckBoxes()
     saveRadioSettingsCheckBox(ui->contestStartIgnorePresetFreqChkBox, elpContestStartIgnorePresetFreq);
     saveRadioSettingsCheckBox(ui->contestChangeIgnorePreviousFreqChkBox, elpContestChangeIgnorePreviousFreq);
     saveRadioSettingsCheckBox(ui->constestChangeRestoreContestModeChkBox, elpContestChangeRestoreContestMode);
+    saveRadioSettingsCheckBox(ui->CQRitChkBox, elpCQRit);
 
 
 }
