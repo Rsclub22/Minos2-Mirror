@@ -43,6 +43,8 @@ BandmapView::BandmapView(QWidget *parent) :
 
     bandmapScene = new QGraphicsScene(parent);
 
+    lessGreaterThanDistanceFlag = readLessGreaterThanDistanceFlag();
+
 
 
     //horizontalScrollBar()->setRange(0, 0);
@@ -1339,7 +1341,7 @@ bool BandmapView::matchDistance(int sourceRow)
         int distance = distanceStr.toInt(&ok);
         if (ok)
         {
-            return filterSettings->testDistanceFilter(distance);
+            return filterSettings->testDistance(distance, lessGreaterThanDistanceFlag);
         }
     }
 
@@ -1591,7 +1593,12 @@ void BandmapView::setFreqOperatingInfo(const QString contestBandStr, const QStri
 
 }
 
+bool BandmapView::readLessGreaterThanDistanceFlag()
+{
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    return config.value(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, false).toBool();
 
+}
 
 void BandmapView::traceMsg(QString msg)
 {

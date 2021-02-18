@@ -318,6 +318,9 @@ private:
 
     QSharedPointer<BandmapSpotData> stringToDxSpot(QString spot);
     void setTextToFrameTitle(QString text1, QString col, QString text2);
+    void readDefaultDistanceFilterSettings(BandmapClientFilterSettings *filterSettings);
+
+
 protected:
 
 

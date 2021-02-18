@@ -200,13 +200,24 @@ void ClusterClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 
 
-bool ClusterClientFilterSettings::testDistanceFilter(int distance, QString band)
+bool ClusterClientFilterSettings::testDistance(int distance, QString band, bool lessGreaterFlag)
 {
 
     if (bandFilterSettings.contains(band))
     {
 
-        if (distance < bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
+        if (lessGreaterFlag)
+        {
+            if (distance > bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (distance < bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
         {
             return true;
         }
@@ -407,15 +418,18 @@ void BandmapClientFilterSettings::setDistanceFilter(int distance)
     distanceFilter = distance;
 }
 
-bool BandmapClientFilterSettings::testDistanceFilter(int distance)
+bool BandmapClientFilterSettings::testDistance(int distance, bool lessGreaterFlag)
 {
-    if (distance < distanceFilter || distanceFilter == 0)
+    if (lessGreaterFlag)
+    {
+        if (distance > distanceFilter || distanceFilter == 0)
+        {
+            return true;
+        }
+    }
+    else if (distance < distanceFilter || distanceFilter == 0)
     {
             return true;
-    }
-    else
-    {
-            return false;
     }
 
 
