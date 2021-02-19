@@ -82,7 +82,8 @@ const QString ExcludeTrailingBackslash( const QString &s )
 //---------------------------------------------------------------------------
 bool CreateDir(const QString &s )
 {
-    QDir dir( s );
+    QString s1 = ExcludeTrailingBackslash(s);
+    QDir dir( s1 );
     if ( !dir.exists() )
     {
         dir.mkpath( "." );
