@@ -49,8 +49,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     QString agent = "Minos";
 
-    bool b1 = logonCallsign.isEmpty();
-    bool b2 = password.isEmpty();
+
     if (logonCallsign.isEmpty() || password.isEmpty())
     {
         onConfigure();
