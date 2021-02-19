@@ -136,7 +136,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="groupBox1">
      <property name="title">
       <string>Send Message for all QSOs</string>
      </property>

@@ -173,7 +173,7 @@ INIFile::INIFile( const QString &name ) :
     QFileInfo checkFile( loadedFileName );
     if ( !checkFile.exists() || !checkFile.isFile() )
     {
-        StaticForceDirectories( ExtractFilePath( loadedFileName ) );
+        CreateDir( ExtractFilePath( loadedFileName ) );
         QFile fh(loadedFileName);
         bool ret = fh.open(QIODevice::ReadWrite);
         if ( ret )
