@@ -371,7 +371,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    else
       if ( minosFile )
       {
-          CreateDir(fn);
+          //CreateDir(fn);
           QIODevice::OpenMode om = QIODevice::ReadWrite | QIODevice::Unbuffered;
           if (isUnwriteable())
           {
