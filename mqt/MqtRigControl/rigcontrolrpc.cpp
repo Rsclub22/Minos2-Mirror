@@ -20,7 +20,7 @@
 
 RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), parent(parent)
 {
-//    rigControlRpc = this;
+
 
         trace("rigcontrol rpc init");
         trace(QString("app name %1").arg(getAppStartupName()));

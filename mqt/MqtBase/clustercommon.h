@@ -194,6 +194,15 @@ bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &b
 
 bool extractDxLocFromNodeFlag(QString locFlagMsg);
 
+class ClusterServer
+{
+public:
+    QString serverName;
+    QString app;
+    PublishState state;
+};
+
+
 
 class ClusterMessage
 {

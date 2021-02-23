@@ -1,3 +1,19 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Qrz Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+
 #ifndef QRZSERVERMAINWINDOW_H
 #define QRZSERVERMAINWINDOW_H
 
@@ -8,6 +24,7 @@
 #include <QTimer>
 
 #include "mqtUtils_pch.h"
+#include "qrzserverrpc.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
@@ -143,11 +160,15 @@ private slots:
     void LogTimerTimer();
     void onConfigure();
     void onStdInRead(QString cmd);
+    void qrzRequestMsg(QVector<ClusterMessage> qrzRequestMsg);
+    void clusterClientServerList(QVector<ClusterServer> serverList);
 private:
     Ui::QrzServerMainWindow *ui;
 
     StdInReader stdinReader;
     QString appName = "";
+
+
 
     QTimer LogTimer;
 

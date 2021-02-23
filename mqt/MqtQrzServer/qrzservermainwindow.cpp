@@ -1,3 +1,18 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Qrz Server
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
+//
+// Interprocess Control Logic
+// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
 #include <QFile>
 #include <QDebug>
 #include <QSharedPointer>
@@ -30,6 +45,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     }
 
+
+
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
     if (geometry.size() > 0)
@@ -37,8 +54,16 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     createCloseEvent();
 
-    connect(&LogTimer, &QTimer::timeout, this, [=](){LogTimerTimer();});
-    LogTimer.start(100);
+    //connect(&LogTimer, &QTimer::timeout, this, [=](){LogTimerTimer();});
+    //LogTimer.start(100);
+
+    trace(QString("AppName = %1").arg(appName));
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    Q_UNUSED(rpc)
+
+    //connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
+    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(qrzRequestMsg(QVector<ClusterMessage>)), this, SLOT(onQrzRequests(QVector<ClusterMessage>)));
+
 
     connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=]{onConfigure();});
 
@@ -93,7 +118,7 @@ void QrzServerMainWindow::LogTimerTimer()
 
 void QrzServerMainWindow::onStdInRead(QString cmd)
 {
-/*
+
     bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
@@ -103,7 +128,7 @@ void QrzServerMainWindow::onStdInRead(QString cmd)
     executeStdIn(cmd);
     if (doClose)
         close();
-*/
+
 }
 
 
@@ -422,4 +447,55 @@ void QrzServerMainWindow::onConfigure()
 
 }
 
+void QrzServerMainWindow::clusterClientServerList(QVector<ClusterServer> serverList)
+{
 
+    foreach ( auto const &s, serverList )
+    {
+        QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
+        trace(QString("clusterClientServerList - state = %1").arg(state));
+
+    }
+}
+
+
+
+void QrzServerMainWindow::qrzRequestMsg(QVector<ClusterMessage> qrzRequestMsg)
+{
+/*
+    // if contest is protected ignore
+    if (!isProtected && ct)
+    {
+        //get spot Message from queue
+        for (int i = 0; i < spotMsg.count(); i++)
+        {
+            ClusterMessage msg = spotMsg[i];
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid).arg(msg.getFrameId()));
+
+            // if loggerUuid is empty, message is for all frames
+            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::CLUSTER_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
+            {
+                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
+                {
+                    traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
+                    spotQueue += msg.getMessage();
+                }
+            }
+
+        }
+    }
+    else
+    {
+        // protected
+        spotQueue.clear();
+        return;
+    }
+
+
+
+    if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
+    {
+        handleDxSpots(spotQueue);
+    }
+*/
+}

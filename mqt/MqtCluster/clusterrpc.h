@@ -6,13 +6,7 @@
 //#include "clusterClientServer.h"
 #include "MinosLoggerEvents.h"
 
-class ClusterServer
-{
-public:
-    QString serverName;
-    QString app;
-    PublishState state;
-};
+
 
 class Clusterrpc : public QObject
 {
@@ -30,6 +24,7 @@ public:
 
     void publishTXEnable(const QString txOnOff);
 
+    void publishQrzDataRequest(QString dxCallsign, QString spotterCallsign);
 signals:
 
     void sendSpotToDXCluster(Frequency, QString, QString);
