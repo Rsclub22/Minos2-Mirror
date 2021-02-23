@@ -26,15 +26,12 @@ bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
     bool state = true;
 
     for (QMap<QString, bool>::const_iterator i = mfs.modeFilterFlag.begin(); i != mfs.modeFilterFlag.end(); i++)
-//    QMapIterator<QString, bool> i(mfs.modeFilterFlag);
-//    while(i != mfs.modeFilterFlag.end())
     {
         if (modeFilterFlag.value(i.key()) == i.value())
         {
             state = false;
             break;
         }
-//        i.next();
     }
 
     return state;
@@ -203,13 +200,24 @@ void ClusterClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 
 
-bool ClusterClientFilterSettings::testDistanceFilter(int distance, QString band)
+bool ClusterClientFilterSettings::testDistance(int distance, QString band, bool lessGreaterFlag)
 {
 
     if (bandFilterSettings.contains(band))
     {
 
-        if (distance < bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
+        if (lessGreaterFlag)
+        {
+            if (distance > bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else if (distance < bandFilterSettings.value(band).distanceFilter || bandFilterSettings.value(band).distanceFilter == 0)
         {
             return true;
         }
@@ -303,10 +311,10 @@ ClusterClientFilterSettings& ClusterClientFilterSettings::operator= (const Clust
     locatorFilterList = ccfs.locatorFilterList;
 
     BandFilterSettings bfs;
-    QMapIterator<QString, BandFilterSettings> i(ccfs.bandFilterSettings);
-    while (i.hasNext())
+
+    for (QMap<QString, BandFilterSettings>::const_iterator i = ccfs.bandFilterSettings.begin(); i != ccfs.bandFilterSettings.end(); i++)
     {
-        i.next();
+
         bfs = i.value();
         bandFilterSettings.insert(i.key(), bfs);
 
@@ -410,15 +418,18 @@ void BandmapClientFilterSettings::setDistanceFilter(int distance)
     distanceFilter = distance;
 }
 
-bool BandmapClientFilterSettings::testDistanceFilter(int distance)
+bool BandmapClientFilterSettings::testDistance(int distance, bool lessGreaterFlag)
 {
-    if (distance < distanceFilter || distanceFilter == 0)
+    if (lessGreaterFlag)
+    {
+        if (distance > distanceFilter || distanceFilter == 0)
+        {
+            return true;
+        }
+    }
+    else if (distance < distanceFilter || distanceFilter == 0)
     {
             return true;
-    }
-    else
-    {
-            return false;
     }
 
 

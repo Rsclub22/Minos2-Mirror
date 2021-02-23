@@ -623,17 +623,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             //ClusterFilterIdAndNames clustId;
             //TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
 
-
-
-            ClusterFilterDefaultDistIniName defaultDistIniNames;
-            defaultDistIniNames.initClusterFilterIdAndNames(bands);
-
-            QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
-            config.beginGroup("Default Distance");
-
-            filterSettings.setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
-
-            config.endGroup();
+            readDefaultDistanceFilterSettings(&filterSettings);
 
             //set current mode
             if (contestModeStr == "MGM")       //  have mode settings been saved before?
@@ -661,6 +651,23 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     }
 }
+
+
+void BandmapClientFrame::readDefaultDistanceFilterSettings(BandmapClientFilterSettings *filterSettings)
+{
+
+    ClusterFilterDefaultDistIniName defaultDistIniNames;
+    defaultDistIniNames.initClusterFilterIdAndNames(bands);
+
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    config.beginGroup("Default Distance");
+
+    filterSettings->setDistanceFilter(config.value(defaultDistIniNames.getDefaultDistIniName(contestBandStr).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt());
+
+    config.endGroup();
+}
+
+
 
 void BandmapClientFrame::getBandLimitsFromBandListXML()
 {

@@ -54,6 +54,7 @@ public:
     bool matchDistance(int sourceRow) const;
     bool matchWorkedLoc(int sourceRow) const;
     bool matchWorkedCallsign(int sourceRow) const;
+    void setLessGreaterThanDistanceFlag(bool lessGreaterThanDistannceFlag);
 
     bool traceDebugFlag;
 
@@ -65,7 +66,8 @@ public:
 
     DxSpotSortFilterProxyModel(ClusterClientFilterSettings* filterSettings_) :
         unWorkedLocFlag(false),
-        unWorkedCallsignFlag(false)
+        unWorkedCallsignFlag(false),
+        lessGreaterThanDistanceFlag(false)
     {
         filterSettings = filterSettings_;
     }
@@ -75,6 +77,7 @@ public:
 
     bool unWorkedLocFlag;
     bool unWorkedCallsignFlag;
+    bool lessGreaterThanDistanceFlag;
 
 
 
@@ -185,6 +188,7 @@ private:
     bool holdUpdateFlag;
 
     bool allowHF;
+
 
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
@@ -302,6 +306,7 @@ private:
     bool checkspotExists(QSharedPointer<ClusterSpotData> spotData);
 
     void setHF(bool hfOn);
+    bool readLessGreaterThanDistanceFlag();
 private slots:
 
     void on_AfterLogContact(BaseContestLog *c, Callsign cs, QString loc);

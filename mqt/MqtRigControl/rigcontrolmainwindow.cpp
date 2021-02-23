@@ -4366,43 +4366,18 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
 void RigControlMainWindow::setIndicatorVisible(const QString bandType, const bool visible)
 {
-
-    QMapIterator<QString, QSharedPointer<SupIndicatorDetails> > supIndIter(allBandSupRadioInd);
-    while (supIndIter.hasNext())
+    for (QMap<QString, QSharedPointer<SupIndicatorDetails>>::const_iterator i = allBandSupRadioInd.begin(); i != allBandSupRadioInd.end(); i++)
     {
-        supIndIter.next();
-        if (supIndIter.value()->bandType == bandType)
+
+        if (i.value()->bandType == bandType)
         {
-            supIndIter.value()->supIndicator->setVisible(visible);
-            supIndIter.value()->supIndicatorLabel->setVisible(visible);
+            i.value()->supIndicator->setVisible(visible);
+            i.value()->supIndicatorLabel->setVisible(visible);
         }
     }
 }
 
-/*
-void RigControlMainWindow::supRadioIndToggle(int offset, displayIndicator::indicatorType type)
-{
 
-    if (type == displayIndicator::OFF)
-    {
-        allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_OFF_STYLE);
-    }
-    else if (type == displayIndicator::RADIO)
-    {
-       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_RADIO_STYLE);
-    }
-    else if (type == displayIndicator::TRANSVERT)
-    {
-       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_STYLE);
-    }
-    else if (type == displayIndicator::TRANSVERT_ON)
-    {
-       allSupRadioInd[offset]->setStyleSheet(SUP_RADIO_INDICATOR_TRANSVERT_ON_STYLE);
-    }
-
-
-}
-*/
 
 void RigControlMainWindow::supRadioIndToggle(QString band, displayIndicator::indicatorType type)
 {

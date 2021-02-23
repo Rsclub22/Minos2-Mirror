@@ -24,6 +24,8 @@ public:
 private slots:
     void onDistanceEditingFinished(QLineEdit *distLineEdit);
     void onFreqToleranceValueChanged(int value);
+    void onSpotLessThanDistanceRadioButClicked();
+    void onSpotGreaterThanDistanceRadioButClicked();
 private:
     Ui::ClusterBandmapConfigure *ui;
 
@@ -40,6 +42,7 @@ private:
     QMap<QString, distValue> distanceValues;
 
     int addBandmapTuningTolerance;
+    bool lessGreaterThanDistanceFlag = false;   // less than = false, greater than = true;
 
     void saveDistances();
     QString findBandKey(QLineEdit *distLineEdit);
