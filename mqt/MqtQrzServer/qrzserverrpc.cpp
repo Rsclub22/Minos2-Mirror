@@ -101,6 +101,8 @@ void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 
 void QrzServerRpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
 {
+/*
+
     AnalysePubSubNotify an( err, mro );
     trace("on_notify");
     if ( an.getOK() )
@@ -184,6 +186,7 @@ void QrzServerRpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QS
         }
 
     }
+*/
 }
 
 
