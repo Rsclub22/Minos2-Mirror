@@ -32,7 +32,7 @@ static QTextStream &getLogFile( QString name )
 //---------------------------------------------------------------------------
 void MLogFile::createLogFile(const QString &path, const QString filePrefix, int keepDays )
 {
-    StaticDirectoryCreate ( path );
+    CreateDir( path );
 
     QString TidyPrefix = path + "/" + filePrefix + "*";
     tidyFiles ( TidyPrefix, keepDays );

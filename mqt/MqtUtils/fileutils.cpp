@@ -13,19 +13,13 @@ bool FileExists(const QString &path )
         return false;
     }
 }
-bool DirectoryExists( const QString &path )
+bool DirectoryExists (const QString &Name )
 {
-    QFileInfo checkFile( path );
-    // check if file exists and if yes: Is it really a file and no directory?
-    if ( checkFile.exists() && checkFile.isDir() )
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    QFileInfo qinf( Name );
+    bool dir = qinf.isDir();
+    return dir;
 }
+
 QString GetCurrentDir()
 {
     QDir dir( "." );
@@ -85,49 +79,11 @@ const QString ExcludeTrailingBackslash( const QString &s )
     return s;
 }
 
-bool StaticDirectoryExists (const QString &Name )
-{
-    QFileInfo qinf( Name );
-    bool dir = qinf.isDir();
-    return dir;
-}
-bool StaticForceDirectories ( const QString & pDir )
-{
-    // translated from Pascal so we can static link
-
-    if ( pDir.size() == 0 )
-        return false;
-
-    QString Dir = pDir;
-    Dir = ExcludeTrailingBackslash ( Dir );
-    if ( ( Dir.size() < 3 ) || StaticDirectoryExists ( Dir )
-         || ( ExtractFilePath ( Dir ) == Dir ) )
-        return true; // avoid 'xyz:\' problem.
-    bool Result = StaticForceDirectories ( ExtractFilePath ( Dir ) );
-    if ( Result )
-    {
-        Result = CreateDir ( Dir );
-    }
-
-    return Result;
-}
-
 //---------------------------------------------------------------------------
-bool StaticDirectoryCreate (const QString &Path )
-{
-    if ( !StaticDirectoryExists ( Path ) )
-    {
-        bool res = StaticForceDirectories ( Path );
-        if ( !res )
-        {
-            return false;
-        }
-    }
-    return true;
-}
 bool CreateDir(const QString &s )
 {
-    QDir dir( s );
+    QString s1 = ExcludeTrailingBackslash(s);
+    QDir dir( s1 );
     if ( !dir.exists() )
     {
         dir.mkpath( "." );

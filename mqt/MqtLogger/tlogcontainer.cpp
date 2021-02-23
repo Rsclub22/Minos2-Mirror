@@ -689,6 +689,10 @@ QString TLogContainer::getDefaultDirectory( bool IsList )
    else
    {
       TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpLogDirectory, fileName );
+      if (!DirectoryExists( fileName ))
+      {
+          CreateDir(fileName);
+      }
    }
 
    // we default to "./logs" or "./lists. On Vista this won't be relative to

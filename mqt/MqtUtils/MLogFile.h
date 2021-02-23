@@ -13,14 +13,7 @@
 #include <QMutexLocker>
 #include <QTextStream>
 //---------------------------------------------------------------------------
-bool CreateDir(const QString &s );
-bool FileExists(const QString &path );
-bool DirectoryExists( const QString &path );
-QString GetCurrentDir();
-QString ExtractFileDir(const QString &fname );
-QString ExtractFilePath( const QString &fname );
-QString ExtractFileName(const QString &fname );
-QString ExtractFileExt( const QString &fname );
+#include "fileutils.h"
 
 class CsGuard:public QMutexLocker
 {
