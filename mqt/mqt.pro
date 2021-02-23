@@ -1,7 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    MqtQrzServer \
     MqtUtils \
     TinyXML \
     XMPPLib \
@@ -18,6 +17,7 @@ SUBDIRS += \
     MqtRotator \
     MqtMonitor \
     MqtRigControl \
+    #    MqtQrzServer \
     Qs1rSync
 
 win32 {
@@ -39,6 +39,7 @@ MqtMonitor.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtServer.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRigControl.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRotator.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtQrzServer.depends = MqtUtils TinyXML XMPPLib MqtBase
 Qs1rSync.depends = MqtUtils TinyXML XMPPLib MqtBase
 
 
