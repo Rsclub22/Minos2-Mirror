@@ -151,7 +151,7 @@ void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QStr
         {
             QString server = an.getKey();
             bool subNeeded = true;
-            for ( auto const &stat: serverList )
+            foreach ( auto const &stat, serverList )
             {
                 if (stat.serverName == server)
                 {
@@ -219,4 +219,9 @@ void Clusterrpc::publishTXEnable(const QString txOnOff)
         RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterTXSpotEnableState, txOnOff, psPublished );
 
     }
+}
+
+void Clusterrpc::publishQrzDataRequest(QString dxCallsign, QString spotterCallsign)
+{
+    RPCPubSub::publish(rpcConstants::clusterCategory, rpcConstants::qrzCallsign, dxCallsign + ":" + spotterCallsign, psPublished);
 }

@@ -52,7 +52,21 @@ void ClusterBandmapConfigure::initialise()
         distanceValues.insert(band, distItem);
     }
 
+
    config.endGroup();
+
+   lessGreaterThanDistanceFlag = config.value(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, false).toBool();
+
+   if (lessGreaterThanDistanceFlag)
+   {
+       ui->spotLessThanDistanceRadioButton->setChecked(false);
+       ui->spotGreaterThanDistanceRadioButton->setChecked(true);
+   }
+   else
+   {
+       ui->spotLessThanDistanceRadioButton->setChecked(true);
+       ui->spotGreaterThanDistanceRadioButton->setChecked(false);
+   }
 
     for (int i = 0; i < distanceLineEdits.count(); i++)
     {
@@ -63,7 +77,10 @@ void ClusterBandmapConfigure::initialise()
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
 
-     ui->hf_frame->setVisible(allowHF);  // don't show Hf for this release
+    connect(ui->spotLessThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotLessThanDistanceRadioButClicked();});
+    connect(ui->spotGreaterThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotGreaterThanDistanceRadioButClicked();});
+
+     ui->hfFrame->setVisible(allowHF);  // don't show Hf for this release
 
    // get addBandmapTuningTolerance
 
@@ -209,4 +226,16 @@ void ClusterBandmapConfigure::saveDistances()
 
     config.endGroup();
 
+    config.setValue(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, lessGreaterThanDistanceFlag);
+
+}
+
+void ClusterBandmapConfigure::onSpotLessThanDistanceRadioButClicked()
+{
+    lessGreaterThanDistanceFlag = false;
+}
+
+void ClusterBandmapConfigure::onSpotGreaterThanDistanceRadioButClicked()
+{
+    lessGreaterThanDistanceFlag = true;
 }

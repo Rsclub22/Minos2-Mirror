@@ -177,6 +177,8 @@ private:
 
     bool traceDebugFlag = false;
 
+    bool lessGreaterThanDistanceFlag = false;
+
 
     void assembleSpotMsg(int row, QString& markerMsg);
     void assembleToolTip(int row, Frequency freq, QString& toolTipMsg);
@@ -203,6 +205,7 @@ private:
     bool matchDistance(int sourceRow);
 
     void drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset);
+    bool readLessGreaterThanDistanceFlag();
 };
 
 #endif // BANDMAPVIEW_H

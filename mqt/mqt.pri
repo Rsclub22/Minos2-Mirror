@@ -24,8 +24,8 @@ DEFINES *= QT_DEPRECATED_WARNINGS
 
 
 CONFIG += lrelease
-TRANSLATIONS += translations/minos_en_GB.ts \
-                translations/minos_fr_FR.ts
+#TRANSLATIONS += translations/minos_en_GB.ts \
+#                translations/minos_fr_FR.ts
 
 # Others we may want eventually
 #                translations/minos_da.ts \

@@ -18,13 +18,6 @@
 #include "clustercommon.h"
 
 
-class ClusterServer
-{
-public:
-    QString serverName;
-    QString app;
-    PublishState state;
-};
 
 
 

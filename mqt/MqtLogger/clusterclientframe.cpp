@@ -298,6 +298,8 @@ void ClusterClientFrame::setupDXSpotView()
     dxSpotProxyModel->traceDebugFlag = traceDebugFlag;
     dxSpotProxyModel->setSourceModel(dxSpotDataModel);
     dxSpotProxyModel->sort(RXTIME_COL_NUM, Qt::DescendingOrder);
+    bool lessGreaterThanDistanceFlag = readLessGreaterThanDistanceFlag();
+    dxSpotProxyModel->setLessGreaterThanDistanceFlag(lessGreaterThanDistanceFlag);
     //dxSpotProxyModel->setDynamicSortFilter(true);
 
     ui->dxSpotTab->addTab(dxSpotView, tr("DX Spots"));
@@ -922,7 +924,12 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
 
 }
 
+bool ClusterClientFrame::readLessGreaterThanDistanceFlag()
+{
+    QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
+    return config.value(LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME, false).toBool();
 
+}
 
 bool ClusterClientFrame::checkspotExists(QSharedPointer<ClusterSpotData> spotData)
 {
@@ -2075,13 +2082,13 @@ bool DxSpotSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelInd
     if (traceDebugFlag)
     {
         trace(QString("[ClusterClientFrame] filter - callsign = %1, matchBand = %2, matchDistance = %3, matchmode = %4, matchWorkedLoc = %5, matchWorkedCallsign = %6, matchFlag = %7")
-            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString())
-            .arg(match_band ? "True" : "False")
-            .arg(match_distance ? "True" : "False")
-            .arg(match_mode ? "True" : "False")
-            .arg(match_WorkedLoc ? "True" : "False")
-            .arg(match_WorkedCallsign ? "True" : "False")
-            .arg(matchFlag ? "True" : "False"));
+            .arg(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString(),
+            match_band ? "True" : "False",
+            match_distance ? "True" : "False",
+            match_mode ? "True" : "False",
+            match_WorkedLoc ? "True" : "False",
+            match_WorkedCallsign ? "True" : "False",
+            matchFlag ? "True" : "False"));
 
     }
     return matchFlag;
@@ -2114,7 +2121,7 @@ bool DxSpotSortFilterProxyModel::matchDistance(int sourceRow) const
             int distance = distanceStr.toInt(&ok);
             if (ok)
             {
-                return filterSettings->testDistanceFilter(distance, band);
+                return filterSettings->testDistance(distance, band, lessGreaterThanDistanceFlag);
             }
      }
 
@@ -2169,7 +2176,10 @@ void DxSpotSortFilterProxyModel::setUnworkedCallsignFlag(bool state)
     unWorkedCallsignFlag = state;
 }
 
-
+void DxSpotSortFilterProxyModel::setLessGreaterThanDistanceFlag(bool lessGreaterThanDistannceFlag_)
+{
+    lessGreaterThanDistanceFlag = lessGreaterThanDistannceFlag_;
+}
 
 
 bool SearchSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const

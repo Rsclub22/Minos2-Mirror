@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    MqtQrzServer \
     MqtUtils \
     TinyXML \
     XMPPLib \

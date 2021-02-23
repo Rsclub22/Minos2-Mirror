@@ -194,6 +194,15 @@ bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &b
 
 bool extractDxLocFromNodeFlag(QString locFlagMsg);
 
+class ClusterServer
+{
+public:
+    QString serverName;
+    QString app;
+    PublishState state;
+};
+
+
 
 class ClusterMessage
 {
@@ -359,7 +368,7 @@ public:
 
 
 
-    bool testDistanceFilter(int distance, QString band);
+    bool testDistance(int distance, QString band, bool lessGreaterFlag);
 
 
     int getDistanceFilter(QString band);
@@ -414,7 +423,7 @@ public:
     void setModeFilter(QString mode, bool setting);
     bool getModeFilter(QString mode);
 
-    bool testDistanceFilter(int distance);
+    bool testDistance(int distance, bool lessGreaterFlag);
     int getDistanceFilter();
     void setDistanceFilter(int distance);
 
@@ -447,6 +456,7 @@ const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE = 5;   // khz
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE = 1;   // khz
 const int ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE = 10;   // khz
 
+const QString LESS_GREATER_THAN_DISTANCE_FLAG_INI_NAME = "lessGreaterThanDistanceFlag";
 
 class DefaultDistanceIniName
 {
