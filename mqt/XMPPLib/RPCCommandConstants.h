@@ -60,7 +60,7 @@ static const QString clusterReconnect ("ClusterReconnect");
 static const QString clusterHfFlag ("ClusterHfFlag");
 
 // QRZ Server
-static const QString qrzServer  ("qrzServer");
+static const QString qrzServerApp  ("qrzServerApp");
 static const QString qrzCategory  ("MinosQRZ");
 static const QString qrzMethod     ("Minos:QrzServer");
 static const QString qrzCluster    ("qrzCluster");
