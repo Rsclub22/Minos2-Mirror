@@ -6,6 +6,7 @@
 #include "XMPPRPCObj.h"
 #include "RPCPubSub.h"
 #include "AnalysePubSubNotify.h"
+#include "ConfigFile.h"
 
 class RPCGeneralClient: public MinosRPCClient
 {
@@ -36,7 +37,13 @@ class RPCGeneralServer: public MinosRPCServer
       }
 
 };
-
+class RPCServer
+{
+public:
+    QString serverName;
+    QString app;
+    PublishState state;
+};
 class MinosRPC: public QObject
 {
     Q_OBJECT
@@ -54,10 +61,19 @@ class MinosRPC: public QObject
     QSet <QString> subscriptions;
     QSet <QPair <QString, QString> > remoteSubscriptions;
 
+    QVector<RPCServer> serverList;
+    QStringList serverSubs;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    QVector<QString> servers;
+
+    bool serversInitialised = false;
+
+
     void setAppName(const QString &);
     void notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
     void serverCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
+    void serverNotify(AnalysePubSubNotify &an);
 public:
 
     static MinosRPC *getMinosRPC(QString defaultName = QString(), bool useEnvVar = true)
@@ -84,9 +100,15 @@ public:
 
     void publish( const QString &category, const QString &key, const QString &value, PublishState pState );
 
+    void setServerAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
+    void initialiseServers(QStringList subs);
+    QVector<RPCServer> getServerList()
+    {
+        return serverList;
+    }
 signals:
-    void notify( bool err, QSharedPointer<MinosRPCObj>, const QString &from );
-    void serverCall( bool err, QSharedPointer<MinosRPCObj>, const QString &from );
+    void notify( AnalysePubSubNotify an, const QString from);
+    void serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
 private slots:
     void on_connectedTimeout();
 };

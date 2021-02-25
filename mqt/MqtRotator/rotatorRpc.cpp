@@ -25,7 +25,7 @@ RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(pare
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     // we aren't subscribing to anything!
 
@@ -45,10 +45,9 @@ void RotatorRpc::publishPresetList(QString presets)
     rpc->publish( rpcConstants::RotatorCategory, rpcConstants::rotPresetList, presets, psPublished );
 }
 
-void RotatorRpc::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
-   trace( "Rot Rpc: Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
-   AnalysePubSubNotify an( err, mro );
+   trace( "Rot Rpc: Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
    // called whenever soemthing we subscribe to changes
    if ( an.getOK() )
@@ -62,7 +61,7 @@ void RotatorRpc::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QStr
    }
 }
 //---------------------------------------------------------------------------
-void RotatorRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void RotatorRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
     trace( "Rot RPC: rotator callback from " + from + ( err ? ":Error" : ":Normal" ) );
 

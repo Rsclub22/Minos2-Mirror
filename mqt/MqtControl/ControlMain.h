@@ -19,7 +19,9 @@ class ControlMain : public QMainWindow
 public:
     explicit ControlMain(QWidget *parent = nullptr);
     ~ControlMain() override;
-    commonController monitor;
+
+    void subscribeApps();
+    void getServerAppCatMap();
 
     void setPTTIn(bool s);
     void setPTTOut(bool s);
@@ -41,15 +43,10 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
-    void subscribeApps();
+    commonController monitor;
 
     RigCache rigCache;
-    QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
-    QVector<QSharedPointer<Connectable> > connectables;
-    QVector<QString> servers;
     PubSubName rigSelected;
-
-
 
     StdInReader stdinReader;
     QTimer LogTimer;
@@ -59,8 +56,8 @@ private slots:
     void onStdInRead(QString);
 
     void on_formShown();
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );
-    void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
+    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
+    void on_notify( AnalysePubSubNotify an, const QString from );
     void LogTimerTimer( );
     void linesChangedEvent();
 };

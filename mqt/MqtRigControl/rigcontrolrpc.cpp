@@ -27,7 +27,7 @@ RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), pa
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     // we aren't subscribing to anything!
 }
@@ -45,10 +45,9 @@ void RigControlRpc::publishRadioNames(QStringList radios)
     rpc->publish( rpcConstants::rigControlCategory, rpcConstants::rigControlRadioList, nameList, psPublished );
 }
 
-void RigControlRpc::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
-    trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    AnalysePubSubNotify an( err, mro );
+    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
     // called whenever soemthing we subscribe to changes
     if ( an.getOK() )
@@ -62,7 +61,7 @@ void RigControlRpc::on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const Q
     }
 }
 //---------------------------------------------------------------------------
-void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
     trace("Rig RPC: Rigcontrol callback from " + from + ( err ? ":Error" : ":Normal" ) );
 

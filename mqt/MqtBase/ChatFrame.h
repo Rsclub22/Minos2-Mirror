@@ -16,7 +16,6 @@ class ChatFrame : public QFrame
 public:
     explicit ChatFrame(QWidget *parent = nullptr);
     ~ChatFrame() override;
-    void setStandAlone();
 
 private:
     Ui::ChatFrame *ui;
@@ -25,7 +24,7 @@ private:
 private slots:
     void on_SendButton_clicked();
 
-    void ChatServerList(QVector<Server>);
+    void ChatServerList(QVector<ChatServerApp>);
     void ChatMessages(QVector<QString>);
     void on_FontChanged();
 };

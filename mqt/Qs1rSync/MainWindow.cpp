@@ -148,14 +148,15 @@ MainWindow::MainWindow(QWidget *parent) :
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     MinosConfig *config = MinosConfig::getMinosConfig();
 
+    QVector<QSharedPointer<Connectable> >connectables = config->getConnectables();
+
     QStringList servers;
-    for ( auto const &i: config->elelist )
+    for ( auto const &res: connectables )
     {
-        QSharedPointer<Connectable> res = i->connectable();
         servers.append(res->serverName);
     }
     servers.sort();
@@ -389,11 +390,10 @@ void MainWindow::on_transfer21Button_clicked()
     }
 }
 
-void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void MainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    AnalysePubSubNotify an( err, mro );
+    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )    // won't be true now
     {
@@ -456,7 +456,7 @@ void MainWindow::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QSt
     }
 }
 //---------------------------------------------------------------------------
-void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     trace( "server callback from " + from + ( err ? ":Error" : ":Normal" ) );
     trace("method is " + mro->getMethodName());

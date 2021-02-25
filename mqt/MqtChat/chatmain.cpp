@@ -28,9 +28,6 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     QByteArray geometry = settings.value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
-
-    ui->chatFrame->setStandAlone();
-
 }
 
 TMinosChatForm::~TMinosChatForm()

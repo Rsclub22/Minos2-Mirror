@@ -57,9 +57,9 @@ private:
     void addQrzRequestsQueue(const ClusterMessage spot);
 private slots:
     void SyncTimerTimer( );
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
+    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
-    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &);
+    void on_notify(AnalysePubSubNotify an, const QString );
 signals:
     void QrzServerRpcServerList(QVector<QrzServer>);
     void qrzRequests(QVector<ClusterMessage>);

@@ -64,7 +64,7 @@ int TreeNode::childNumber() const
 }
 void TreeNode::clear()
 {
-    for ( auto const &tn: nodes )
+    for ( auto const &tn: qAsConst(nodes) )
     {
         delete tn;
     }
@@ -269,10 +269,10 @@ MonitorMain::MonitorMain(QWidget *parent) :
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
-    //rpc->subscribe(rpcConstants::StationCategory);
-    rpc->subscribe(rpcConstants::LocalStationCategory);
+    QStringList sv = {rpcConstants::LoggerCategory};
+    rpc->initialiseServers(sv);
 
     QByteArray state;
 
@@ -326,9 +326,9 @@ MonitorMain::MonitorMain(QWidget *parent) :
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    for ( auto const &s: stationList )
+    for ( auto const &s: qAsConst(stationList) )
     {
-       for ( auto const &l: s->slotList )
+       for ( auto const &l: qAsConst(s->slotList) )
        {
           delete l;
        }
@@ -410,9 +410,9 @@ void MonitorMain::on_searchSplitter_splitterMoved(int /*pos*/, int /*index*/)
 
 void MonitorMain::closeTab(MonitoringFrame *cttab)
 {
-    for ( auto const &s: stationList )
+    for ( auto const &s: qAsConst(stationList) )
     {
-        for ( auto const &l: s->slotList )
+        for ( auto const &l: qAsConst(s->slotList) )
         {
             if (l->getFrame() == cttab)
             {
@@ -478,11 +478,10 @@ void MonitorMain::CancelClick()
     // do nothing...
 }
 
-void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
 {
     // pubsub notify
-    trace( "Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
-    AnalysePubSubNotify an( err, mro );
+    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {
@@ -490,16 +489,6 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
        QString key = an.getKey();
        QString value = an.getValue();
 
-       if ( an.getCategory() == rpcConstants::LocalStationCategory )
-       {
-          // This state better not be anything other than published!
-          localServerName = an.getKey();
-          RPCPubSub::subscribe( rpcConstants::StationCategory );  //want ALL keys - but do it once we know who WE are!
-       }
-       if ( an.getCategory() == rpcConstants::StationCategory )
-       {
-           RPCPubSub::subscribeRemote( key, rpcConstants::LoggerCategory );  //want ALL keys - but do it once we know who WE are!
-       }
        if ( an.getCategory() == rpcConstants::LoggerCategory )
        {
 
@@ -592,7 +581,7 @@ void MonitorMain::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
     }
 }
 //---------------------------------------------------------------------------
-void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     trace( "logger server callback from " + from + ( err ? ":Error" : ":Normal" ) );
     if ( !err )
@@ -624,13 +613,13 @@ void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                 {
                     trace( "Name " + logName + " stanza " + QString::number( stanza ) );
                     // Find the matching MonitoredLog and send the stanza their for processing
-                    for ( auto const &s: stationList )
+                    for ( auto const &s: qAsConst(stationList) )
                     {
                         // "from" is something like Logger@dev-station
                         // BUT it isn't necessarily Logger!
                         if ( s->publisher + "@" + s->stationName == from )
                         {
-                            for ( auto const &l: s->slotList )
+                            for ( auto const &l: qAsConst(s->slotList) )
                             {
                                 if (l && l->getPublishedName() == logName )
                                 {
@@ -667,10 +656,10 @@ void MonitorMain::syncStations()
       syncstat = false;
 
       TreeNode *root = new RootTreeNode(this);
-      for ( auto const &s: stationList )
+      for ( auto const &s: qAsConst(stationList) )
       {
           TreeNode *snode = new ServerTreeNode(root, s->stationName);
-          for ( auto const &l: s->slotList )
+          for ( auto const &l: qAsConst(s->slotList) )
           {
               /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
           }
@@ -747,7 +736,7 @@ void MonitorMain::on_monitorTimeout()
        }
     }
     int icnt = 0;
-    for ( auto const &s: stationList )
+    for ( auto const &s: qAsConst(stationList) )
     {
         icnt++;
         int jcnt = 0;

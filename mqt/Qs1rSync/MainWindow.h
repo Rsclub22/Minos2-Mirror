@@ -36,7 +36,7 @@ private slots:
     void onError(QAbstractSocket::SocketError);
     void onReadyRead();
 
-    void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
+    void on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
 
     void on_noTrack_clicked();
 
@@ -44,7 +44,7 @@ private slots:
 
     void on_trackQS1R_clicked();
 
-    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from);
+    void on_notify(AnalysePubSubNotify an, const QString from);
     void on_trackBandcb_stateChanged(int);
 
     void on_wsjtxCb_stateChanged(int arg1);

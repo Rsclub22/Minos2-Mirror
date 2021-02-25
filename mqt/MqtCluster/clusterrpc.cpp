@@ -11,12 +11,11 @@ Clusterrpc::Clusterrpc()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
+    QStringList sv = {rpcConstants::clusterClientServer};
+    rpc->initialiseServers(sv);
+
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
-
-
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 }
 
 Clusterrpc::~Clusterrpc()
@@ -37,7 +36,7 @@ int Clusterrpc::getServerListCount()
 void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 {
     // We need to send the message to all connected cluster clients, except the spot server
-    for ( auto const &s: serverList )
+    for ( auto const &s: qAsConst(serverList) )
     {
 
         trace(QString("SendDxSpot to station = %1").arg(s.app));
@@ -54,7 +53,7 @@ void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 
 
 
-void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
    trace( "Cluster RPC: callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -141,29 +140,10 @@ void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
 
 
-void Clusterrpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
+void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
-    AnalysePubSubNotify an( err, mro );
-
     if ( an.getOK() )
     {
-        if (an.getCategory() == rpcConstants::StationCategory)
-        {
-            QString server = an.getKey();
-            bool subNeeded = true;
-            foreach ( auto const &stat, serverList )
-            {
-                if (stat.serverName == server)
-                {
-                    subNeeded = false;
-                    break;
-                }
-            }
-            if (subNeeded)
-            {
-                RPCPubSub::subscribeRemote(server, rpcConstants::clusterClientServer);
-            }
-        }
         if ( an.getCategory() == rpcConstants::clusterClientServer )
         {
             trace( QString("***") + clusterStateList[an.getState()] + " " + an.getCategory() + " " + an.getKey());

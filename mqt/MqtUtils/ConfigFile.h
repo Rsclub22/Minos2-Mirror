@@ -142,6 +142,8 @@ public:  		// User declarations
     QSharedPointer<Connectable> getApp(QString appName);
     AppConfigElement getAppConfigElement(QString appType);
 
+    QVector<QSharedPointer<Connectable> > getConnectables();
+
 //    void cleanElementsOnCancel();
     void saveAll();
 

@@ -27,17 +27,14 @@ class TSendDM : public QObject
    private:  	// User declarations
       RigCache rigCache;
       RotatorCache rotatorCache;
-      QMap<QString,QVector< QSharedPointer<Connectable> > > catMap;
-      QVector<QSharedPointer<Connectable> > connectables;
-      QVector<QString> servers;
 
       PubSubName keyerApp;
       PubSubName clusterApp;
 
       QString loggerUuid;
 
-
       void traceMsg(QString msg);
+      void getServerAppCatMap();
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
@@ -112,8 +109,8 @@ public:  		// User declarations
 
 
 private slots:
-      void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
-      void on_notify( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
+      void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
+      void on_notify(AnalysePubSubNotify an, const QString from );
 
 signals:
       //void setBandMapLoaded();

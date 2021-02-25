@@ -25,13 +25,100 @@ TSendDM::TSendDM(QWidget* Owner )
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
 }
 TSendDM::~TSendDM()
 {
     delete MinosRPC::getMinosRPC(getAppStartupName());
 }
+//---------------------------------------------------------------------------
+void TSendDM::getServerAppCatMap()
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    MinosConfig *config = MinosConfig::getMinosConfig();
+
+    QVector<QSharedPointer<Connectable> > connectables;
+    connectables = config->getConnectables();
+
+    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    for ( const auto &i: qAsConst(connectables))
+    {
+        if (i->appType == "None")
+        {
+            // no action
+        }
+        else if (i->appType == "AppStarter")
+        {
+            // no action
+        }
+        else if (i->appType == "BandMap")
+        {
+            // no action
+        }
+        else if (i->appType == "Chat")
+        {
+            // no action - done in chat server
+        }
+        else if (i->appType == "Keyer")
+        {
+            serverAppCatMap[rpcConstants::KeyerCategory].push_back(i);
+        }
+        else if (i->appType == "LineControl")
+        {
+            // no action except in keyer
+        }
+        else if (i->appType == "Logger")
+        {
+            // no action
+        }
+        else if (i->appType == "Monitor")
+        {
+            // no action
+        }
+         else if (i->appType == "Other")
+        {
+            // no action
+        }
+        else if (i->appType == "RigControl")
+        {
+            serverAppCatMap[rpcConstants::rigControlCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rigStateCategory].push_back(i);
+        }
+        else if (i->appType == "Rotator")
+        {
+            serverAppCatMap[rpcConstants::RotatorCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rotatorDetailCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rotatorStateCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rotatorPresetsCategory].push_back(i);
+        }
+        else if (i->appType == "Server")
+        {
+//            serverAppCatMap[rpcConstants::LocalStationCategory].push_back(i);
+//            serverAppCatMap[rpcConstants::StationCategory].push_back(i);
+        }
+        else if (i->appType == "Cluster")
+        {
+            serverAppCatMap[rpcConstants::clusterClientServer].push_back(i);
+            serverAppCatMap[rpcConstants::clusterCategory].push_back(i);
+        }
+        else if (i->appType == "KSTClient")
+        {
+
+        }
+    }
+    rpc->setServerAppCatMap(serverAppCatMap);
+}
+void TSendDM::subscribeApps()
+{
+    // This is called whenever the possible set of apps may have changed
+
+    traceMsg("subscribeApps");
+    invalidateCache();
+    getServerAppCatMap();
+}
+
 void TSendDM::invalidateCache()
 {
     rigCache.invalidate();
@@ -519,7 +606,7 @@ void TSendDM::notifyRigDetailChanges()
 {
     QVector<PubSubName> riglist = rigCache.getRigList();
     QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-    for (auto const &psn: riglist)
+    for (auto const &psn: qAsConst(riglist))
     {
         RigDetails& selDetail = rigCache.getDetails(psn);
         if (selDetail.isDirty())
@@ -527,49 +614,49 @@ void TSendDM::notifyRigDetailChanges()
             traceMsg(QString("notifyRigDetailChanges: %1 is dirty, send to rigcontrol").arg(psn.toString()));
             if (selDetail.transverterOffset().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetTransVertOffset(selDetail.transverterOffset().getValue(), psn);
                 }
             }
             if (selDetail.transverterSwitch().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetTransVertSwitch(selDetail.transverterSwitch().getValue(), psn);
                 }
             }
             if (selDetail.transverterEnabled().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetTransVertEnabled(selDetail.transverterEnabled().getValue(), psn);
                 }
             }
             if (selDetail.transverterStatus().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetTransVertStatus(selDetail.transverterStatus().getValue(), psn);
                 }
             }
             if (selDetail.volumeStatus().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetVolumeStatus(selDetail.volumeStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritEnableStatus().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetRitEnableStatus(selDetail.ritEnableStatus().getValue(), psn);
                 }
             }
             if (selDetail.ritMaxKHzFreq().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetRitMaxKHzFreq(selDetail.ritMaxKHzFreq().getValue(), psn);
 
@@ -578,7 +665,7 @@ void TSendDM::notifyRigDetailChanges()
 
             if (selDetail.bandList().isDirty())
             {
-                for (auto const &tslf: frames)
+                for (auto const &tslf: qAsConst(frames))
                 {
                     tslf->on_SetBandList(selDetail.bandList().getValue(), psn);
                 }
@@ -620,7 +707,7 @@ void TSendDM::notifyRigChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (auto const &tslf: frames)
+            for (auto const &tslf: qAsConst(frames))
             {
                 if (tslf->getContest() == nullptr)
                 {
@@ -688,7 +775,7 @@ void TSendDM::notifyRotChanges()
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
-            for (auto const &tslf: frames)
+            for (auto const &tslf: qAsConst(frames))
             {
                 if (tslf->getContest() == nullptr)
                 {
@@ -749,69 +836,13 @@ void TSendDM::notifyRotChanges()
     }
 }
 
-void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    AnalysePubSubNotify an( err, mro );
-    traceMsg( "Notify callback from " + from + ( err ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
+    traceMsg( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
 
-    // Need to check that the server/app is in the category map; if not, don't pass it on
     if ( an.getOK())
     {
-        QString category = an.getCategory();
-        if (category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
-        {
-            bool notificationOK = false;
-            for ( auto const &j: catMap[category] )
-            {
-                if (j->runType == RunLocal)
-                {
-                    if (an.getPublisherServer() != j->serverName)
-                    {
-                        //trace("RunLocal server " + an.getPublisherServer() + " " + (*j)->serverName);
-                        continue;
-                    }
-                    if (an.getPublisherProgram() != j->appName)
-                    {
-                        //trace("RunLocal appName " + an.getPublisherProgram() + " " + (*j)->appName);
-                        continue;
-                    }
-
-                    notificationOK = true;
-                    break;
-                }
-                else if (j->runType == ConnectServer)
-                {
-                    if (j->serverName.isEmpty())
-                    {
-                        notificationOK = true;
-                        break;
-                    }
-                    else if (an.getPublisherServer() != j->serverName)
-                    {
-                        //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j)->serverName);
-                        continue;
-                    }
-                    if (j->remoteAppName.isEmpty())
-                    {
-                        notificationOK = true;
-                        break;
-                    }
-                    else if (an.getPublisherProgram() != j->remoteAppName)
-                    {
-                        //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j)->appName);
-                        continue;
-                    }
-
-                    notificationOK = true;
-                    break;
-                }
-            }
-
-            if (!notificationOK)
-                return;
-
-        }
         if ( an.getState() == psPublished)
         {
             traceMsg(QString("Category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
@@ -853,21 +884,6 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
             }
             else if ( an.getCategory() == rpcConstants::StationCategory)
             {
-                QString server = an.getKey();
-                if (!servers.contains(server))
-                {
-                    servers.append(server);
-                    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
-                    {
-                        for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
-                        {
-                            if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
-                            {
-                                RPCPubSub::subscribeRemote(server, i.key());
-                            }
-                        }
-                    }
-                }
             }
         }
         else if (an.getState() == psRevoked)
@@ -934,7 +950,7 @@ void TSendDM::on_notify( bool err, QSharedPointer<MinosRPCObj> mro, const QStrin
         tslf->checkConnections();
 }
 //---------------------------------------------------------------------------
-void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     // responds to pull calls from the monitoring client
     traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );
@@ -1006,7 +1022,7 @@ QStringList TSendDM::rotators()
 {
     QStringList sl;
     QVector<PubSubName> rotlist = rotatorCache.getRotList();
-    for(auto const &psn: rotlist)
+    for(auto const &psn: qAsConst(rotlist))
     {
         QString antname = psn.toString();
         sl.append(antname);
@@ -1018,7 +1034,7 @@ QStringList TSendDM::rigs()
 {
     QStringList sl;
     QVector<PubSubName> riglist = rigCache.getRigList();
-    for (auto const &psn: riglist)
+    for (const auto &psn: qAsConst(riglist))
     {
         QString rigname = psn.toString();
         sl.append(rigname);
@@ -1034,152 +1050,6 @@ const RigDetails &TSendDM::getRigDetails(const QString &name)
 {
     return rigCache.getDetails(PubSubName(name));
 }
-//---------------------------------------------------------------------------
-
-void TSendDM::subscribeApps()
-{
-    /*
-        for each type of interest (i.e. not chat or monitor)
-
-        We need to subscribe to all server names - cf chatserver
-
-    rpc->subscribe(rpcConstants::LocalStationCategory);
-
-        NB we should try to integrate chat and monitor into this part
-
-        look for all config entries
-
-        If local, then we subscribe to it
-
-        if remote and server is empty, then we want all servers as they become available
-        if remote and a named server, then subscribe to that server only
-
-        We need to save all this, and restrict on the app name as well
-
-        So, we need some structures
-
-        ?? key a list by category subscribed - each entry a chain of entries?
-
-        type of app
-        server name
-        app name
-        state
-
-        When we get a LocalStationCategory notification, we need to look down the list
-        and if this servername or server name is blank, then subcribe to the relevant
-        category on this server. Extra subscriptions are harmless(I am pretty certain -
-        maybe they will force a set of notifications).
-
-        When we get an "other category" notification we need to find the relevant entries
-        and check the app name before responding to it.
-
-    */
-    traceMsg("subscribeApps");
-    invalidateCache();
-
-    catMap.clear();
-    connectables.clear();
-    servers.clear();
-
-    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
-    MinosConfig *config = MinosConfig::getMinosConfig();
-
-    for ( auto const &i: config->elelist )
-    {
-        if (!i->deleted)
-        {
-            QSharedPointer<Connectable> res = i->connectable();
-            connectables.push_back(res);
-        }
-    }
-
-    for ( auto const &i: connectables)
-    {
-        if (i->appType == "None")
-        {
-            // no action
-        }
-        else if (i->appType == "AppStarter")
-        {
-            // no action
-        }
-        else if (i->appType == "BandMap")
-        {
-            // no action
-        }
-        else if (i->appType == "Chat")
-        {
-            // no action - done in chat server
-        }
-        else if (i->appType == "Keyer")
-        {
-            catMap[rpcConstants::KeyerCategory].push_back(i);
-        }
-        else if (i->appType == "LineControl")
-        {
-            // no action except in keyer
-        }
-        else if (i->appType == "Logger")
-        {
-            // no action
-        }
-        else if (i->appType == "Monitor")
-        {
-            // no action
-        }
-         else if (i->appType == "Other")
-        {
-            // no action
-        }
-        else if (i->appType == "RigControl")
-        {
-            catMap[rpcConstants::rigControlCategory].push_back(i);
-            catMap[rpcConstants::rigDetailsCategory].push_back(i);
-            catMap[rpcConstants::rigStateCategory].push_back(i);
-        }
-        else if (i->appType == "Rotator")
-        {
-            catMap[rpcConstants::RotatorCategory].push_back(i);
-            catMap[rpcConstants::rotatorDetailCategory].push_back(i);
-            catMap[rpcConstants::rotatorStateCategory].push_back(i);
-            catMap[rpcConstants::rotatorPresetsCategory].push_back(i);
-        }
-        else if (i->appType == "Server")
-        {
-            catMap[rpcConstants::LocalStationCategory].push_back(i);
-            catMap[rpcConstants::StationCategory].push_back(i);
-        }
-        else if (i->appType == "Cluster")
-        {
-            catMap[rpcConstants::clusterClientServer].push_back(i);
-            catMap[rpcConstants::clusterCategory].push_back(i);
-        }
-        else if (i->appType == "KSTClient")
-        {
-
-        }
-    }
-
-    if (!servers.contains(config->getThisServerName()))
-    {
-        servers.append(config->getThisServerName());
-        for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = catMap.begin(); i != catMap.end(); i++)
-        {
-            for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
-            {
-                if ((*j)->runType == RunLocal)
-                {
-                    rpc->subscribeRemote(config->getThisServerName(), i.key());
-                }
-                else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
-                {
-                    rpc->subscribeRemote((*j)->serverName, i.key());
-                }
-            }
-        }
-    }
-}
-
 
 void TSendDM::traceMsg(QString msg)
 {

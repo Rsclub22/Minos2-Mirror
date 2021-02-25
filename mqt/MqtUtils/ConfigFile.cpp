@@ -694,6 +694,21 @@ AppConfigElement MinosConfig::getAppConfigElement(QString appType)
     }
     return ace;
 }
+
+QVector<QSharedPointer<Connectable> > MinosConfig::getConnectables()
+{
+    QVector<QSharedPointer<Connectable> >  connectables;
+
+    for ( auto const &e: elelist )
+    {
+        if (!e->deleted)
+        {
+            QSharedPointer<Connectable> res = e->connectable();
+            connectables.push_back(res);
+        }
+    }
+    return connectables;
+}
 void MinosConfig::checkAllStopped()
 {
     if (!anyRunning())

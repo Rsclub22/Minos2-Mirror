@@ -49,11 +49,14 @@ QrzServerRpc::QrzServerRpc()
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
+
+    QStringList sv{
+        rpcConstants::clusterCategory
+    };
+    rpc->initialiseServers(sv);
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_notify(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
 }
 
@@ -62,7 +65,7 @@ QrzServerRpc::~QrzServerRpc()
 }
 
 
-void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     trace(QString("ClusterClientServer: on_serverCall - Message from %1").arg(from));
     if ( !err )
@@ -99,54 +102,13 @@ void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 }
 
 
-void QrzServerRpc::on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &/*from*/ )
+void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
 /*
 
-    AnalysePubSubNotify an( err, mro );
     trace("on_notify");
     if ( an.getOK() )
     {
-        if ( an.getCategory() == rpcConstants::LocalStationCategory)
-        {
-            trace("localStationCategory");
-
-            QString server = an.getKey();
-            bool pubNeeded = true;
-            QString a = MinosRPC::getMinosRPC()->getAppName();
-            for ( auto const &stat: serverList )
-            {
-                if (stat.app == a + "@" + server)
-                {
-                    pubNeeded = false;
-                    break;
-                }
-            }
-            if (pubNeeded)
-            {
-                trace("pubneeded");
-                RPCPubSub::publish(rpcConstants::qrzServer,  a + "@" + server, "", psPublished);
-            }
-        }
-        if (an.getCategory() == rpcConstants::StationCategory)
-        {
-           trace("station category");
-            QString server = an.getKey();
-            bool subNeeded = true;
-            for ( auto const &stat: serverList )
-            {
-                if (stat.serverName == server)
-                {
-                    subNeeded = false;
-                    break;
-                }
-            }
-            if (subNeeded)
-            {
-                RPCPubSub::subscribeRemote(server, rpcConstants::clusterCategory);
-                RPCPubSub::subscribeRemote(server, rpcConstants::qrzServer);
-            }
-        }
 
         if ( an.getCategory() == rpcConstants::clusterCategory )
         {

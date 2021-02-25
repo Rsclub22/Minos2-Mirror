@@ -51,7 +51,15 @@ including their build instructions, from which the following is derived.
 
 This means that you have to download and build it yourself; here is one recipe:
 
-Make sure you have downloaded Minos, and run tools.sh (as above)
+Make sure you have downloaded Minos, 
+
+cd ~
+
+to be sure you are in your home directory,
+
+and run tools.sh (as above)
+
+sudo ./tools.sh
 
 Then
 

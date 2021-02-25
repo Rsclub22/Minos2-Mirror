@@ -38,8 +38,8 @@ signals:
     void setRotPreset(QString);
 
 private slots:
-    void on_notify(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from );
-    void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
+    void on_notify(AnalysePubSubNotify an, const QString from );
+    void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
 };
 
 #endif // ROTATORRPC_H

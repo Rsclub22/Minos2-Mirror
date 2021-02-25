@@ -10,7 +10,7 @@ ChatFrame::ChatFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect (ChatServer::getChatServer(), SIGNAL(ChatServerList(QVector<Server>)), this, SLOT(ChatServerList(QVector<Server>)));
+    connect (ChatServer::getChatServer(), SIGNAL(ChatServerList(QVector<ChatServerApp>)), this, SLOT(ChatServerList(QVector<ChatServerApp>)));
     connect (ChatServer::getChatServer(), SIGNAL(ChatMessages(QVector<QString>)), this, SLOT(ChatMessages(QVector<QString>)));
     connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
 
@@ -22,11 +22,6 @@ ChatFrame::~ChatFrame()
     delete ui;
 }
 
-void ChatFrame::setStandAlone()
-{
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
-}
 void ChatFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
@@ -34,12 +29,13 @@ void ChatFrame::on_FontChanged()
 }
 
 //---------------------------------------------------------------------------
-void ChatFrame::ChatServerList(QVector<Server> serverList)
+void ChatFrame::ChatServerList(QVector<ChatServerApp> serverList)
 {
     ui->StationList->clear();
     for ( auto const &i: serverList )
     {
-        QString state = ChatServer::tr(ChatServer::stateIndicator[i.state]) + " " + i.app + "\r\n" + i.freq.str();
+        Frequency f = i.freq;
+        QString state = ChatServer::tr(ChatServer::stateIndicator[i.state]) + " " + i.app + "\r\n" + f.str();
         ui->StationList->addItem( state );
     }
 }
