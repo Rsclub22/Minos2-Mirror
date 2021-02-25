@@ -2385,16 +2385,18 @@ void ClusterMainWindow::updateToNewVhfUhfGroupKey()
     for (int i = 0; i < userVHFUHFCmdButton.count(); i++)
     {
         ClusterUserCommandData buttonData;
-        QStringList cl = vhfUhfUserCommands[i].split(':');
-
-        if (cl.count() == 2)
+        if (i < vhfUhfUserCommands.count())
         {
-            buttonData.name = cl[0];
-            buttonData.cmdString = cl[0];
+            QStringList cl = vhfUhfUserCommands[i].split(':');
+
+            if (cl.count() == 2)
+            {
+                buttonData.name = cl[0];
+                buttonData.cmdString = cl[0];
+            }
+
+            saveUserCommandString("VHFUHF", i, buttonData);
         }
-
-        saveUserCommandString("VHFUHF", i, buttonData);
-
     }
 
     config.remove("UserCommandStrings");
