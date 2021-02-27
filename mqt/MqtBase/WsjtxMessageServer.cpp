@@ -111,7 +111,7 @@ void MessageServer::impl::leave_multicast_group ()
 #endif
       )
     {
-      for (auto const& interface : QNetworkInterface::allInterfaces ())
+      for (auto & interface : QNetworkInterface::allInterfaces ())
         {
           if (QNetworkInterface::CanMulticast & interface.flags ())
             {
@@ -138,7 +138,7 @@ void MessageServer::impl::join_multicast_group ()
           bind (QHostAddress::AnyIPv4, port_, bind_mode_);
         }
       bool joined {false};
-      for (auto const& interface : QNetworkInterface::allInterfaces ())
+      for (auto & interface : QNetworkInterface::allInterfaces ())
         {
           if (QNetworkInterface::CanMulticast & interface.flags ())
             {
@@ -414,7 +414,7 @@ void MessageServer::impl::tick ()
     {
       if (now > (*iter).last_activity_.addSecs (NetworkMessage::pulse))
         {
-          Q_EMIT self_->clear_decodes (iter.key ());
+                 self_->clear_decodes (iter.key ());
           Q_EMIT self_->client_closed (iter.key ());
           iter = clients_.erase (iter); // safe while iterating as doesn't rehash
         }

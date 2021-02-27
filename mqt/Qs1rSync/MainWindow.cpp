@@ -155,7 +155,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QVector<QSharedPointer<Connectable> >connectables = config->getConnectables();
 
     QStringList servers;
-    for ( auto const &res: connectables )
+    for ( auto const &res: qAsConst(connectables) )
     {
         servers.append(res->serverName);
     }

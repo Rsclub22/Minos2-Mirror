@@ -52,7 +52,7 @@ ScreenConfigScreen *ScreenConfig::buildScreens(SC &sc)
     ScreenConfigScreen *scr = nullptr;
     if (sc.baseElement)
     {
-        for (auto s:sc.baseElement->screens)
+        for (auto s: qAsConst(sc.baseElement->screens))
         {
             scr = buildScreen(s, -1);
         }

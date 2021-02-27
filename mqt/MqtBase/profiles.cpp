@@ -325,7 +325,7 @@ bool SettingsBundle::newSection( const QString &newname )
    if (!isSectionPresent(newname))
    {
       currsection = newname;
-      for ( auto const &i: bundleFile->entries )
+      for ( auto const &i: qAsConst(bundleFile->entries) )
       {
          i->createEntry( this );
       }
@@ -371,7 +371,7 @@ QString SettingsBundle::displayNameOf( int enumKey )
 {
    if ( bool( bundleFile ) /*&& currsection != noneBundle*/ )
    {
-       for ( auto const &i: bundleFile->entries )
+       for ( auto const &i: qAsConst(bundleFile->entries) )
       {
          if ( i->id == enumKey )
          {
@@ -389,7 +389,7 @@ bool SettingsBundle::isReadOnly( int enumKey )
 {
    if ( bool( bundleFile ) && currsection != noneBundle )
    {
-       for ( auto const &i: bundleFile->entries )
+       for ( auto const &i: qAsConst(bundleFile->entries) )
       {
          if ( i->id == enumKey )
          {
@@ -536,7 +536,7 @@ QVector<int> SettingsBundle::getBundleEntries( )
    QVector<int> e;
    if ( bundleFile )
    {
-       for ( auto const &i: bundleFile->entries )
+       for ( auto const &i: qAsConst(bundleFile->entries ))
       {
          e.push_back( i->id );
       }
@@ -549,7 +549,7 @@ QStringList SettingsBundle::getBundleHints( )
    QStringList e;
    if ( bundleFile )
    {
-       for ( auto const &i: bundleFile->entries )
+       for ( auto const &i: qAsConst(bundleFile->entries ))
       {
          e.append( BundleFile::tr(i->hint) );
       }

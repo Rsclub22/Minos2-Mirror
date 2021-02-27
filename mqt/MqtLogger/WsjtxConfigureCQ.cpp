@@ -20,14 +20,14 @@ WsjtxConfigureCQ::WsjtxConfigureCQ(QWidget *parent) :
     QStringList sl;
     CSVToStringList(testCQ, sl);
 
-    for(auto s:sl)
+    for(auto &s: qAsConst(sl))
     {
         ui->testCQ->appendPlainText(s);
     }
 
     CSVToStringList(nontestCQ, sl);
 
-    for(auto s:sl)
+    for(auto &s: qAsConst(sl))
     {
         ui->notTestCQ->appendPlainText(s);
     }

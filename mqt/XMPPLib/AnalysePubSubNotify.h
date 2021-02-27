@@ -16,9 +16,10 @@ class AnalysePubSubNotify
       QString value;
       PublishState state;
 
-      bool OK;
+      bool OK = false;
    public:
       AnalysePubSubNotify( bool err, QSharedPointer<MinosRPCObj>mro );
+      AnalysePubSubNotify();
       QString getPublisherProgram() const
       {
          return publisherProgram;

@@ -62,7 +62,7 @@ void TManageListsDlg::DrawList()
    int row = 0;
    int toSelect = 0;
 
-   for ( auto const &l: TContestApp::getContestApp() ->listSlotList )
+   for ( auto const &l: qAsConst(TContestApp::getContestApp() ->listSlotList) )
    {
       if ( l&& l->slot )
       {
@@ -106,7 +106,7 @@ void TManageListsDlg::on_CloseListButton_clicked()
        return;
 
    int slotno = items[0]->data(Qt::UserRole).toInt();
-    for ( auto const &l: TContestApp::getContestApp() ->listSlotList )
+    for ( auto const &l: qAsConst(TContestApp::getContestApp() ->listSlotList ))
     {
        if ( l && l->slotno == slotno )
        {

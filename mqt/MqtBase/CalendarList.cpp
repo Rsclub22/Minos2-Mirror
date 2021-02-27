@@ -136,9 +136,6 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
         QByteArray data = reply->readAll();
         if (raw == 200 && data.size() > 0)
         {
-            QUrl aUrl( calendarURL );
-            QFileInfo fileInfo = aUrl.path();
-
             QFile file( getPath() );
             file.open( QIODevice::WriteOnly );
             file.write( data );

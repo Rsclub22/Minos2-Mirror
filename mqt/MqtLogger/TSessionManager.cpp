@@ -77,7 +77,7 @@ void TSessionManager::parseSessions()
 
        if (slotlst.count())
        {
-           for ( auto const &s: slotlst )
+           for ( auto const &s: qAsConst(slotlst ))
            {
                QString ent;
                preloadBundle.getStringProfile( s, ent, "" );
@@ -100,7 +100,7 @@ void TSessionManager::writeSessions()
     SettingsBundle &preloadBundle = app ->logsPreloadBundle;
     QStringList sessionlst = app ->logsPreloadBundle.getSections();
 
-    for (auto const &i: sessionlst)
+    for (auto const &i: qAsConst(sessionlst))
     {
         preloadBundle.openSection(i);
         preloadBundle.clearProfileSection(true);
@@ -142,7 +142,7 @@ void TSessionManager::showSessions()
         ui->sessionsList->clear();
         ui->sessionEntries->clear();
 
-        for ( auto const &i: sessionList.sessions )
+        for ( auto const &i: qAsConst(sessionList.sessions ))
         {
            ui->sessionsList->addItem(i.sessionName );
         }
@@ -288,7 +288,7 @@ void TSessionManager::on_AddEntryButton_clicked()
                        InitialDir,  // dir
                        Filter
                        );
-    for (auto const &fname: fnames)
+    for (auto const &fname: qAsConst(fnames))
     {
         if ( !fname.isEmpty() )
         {

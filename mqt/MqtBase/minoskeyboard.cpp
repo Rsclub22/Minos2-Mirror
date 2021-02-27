@@ -12,7 +12,7 @@ MinosKeyboard::MinosKeyboard(QWidget *parent) :
     QList<QPushButton *> pushButtons = findChildren<QPushButton *>();
 
     setFocusPolicy(Qt::NoFocus);
-    for (auto const &t: pushButtons)
+    for (auto const &t: qAsConst(pushButtons))
     {
         t->setFocusPolicy(Qt::NoFocus);
         if (t == ui->tabButton)
@@ -53,7 +53,8 @@ void MinosKeyboard::onKeyButton()
     QObject *s = sender();
     if (s)
     {
-        sendChar(s->objectName()[0]);
+        QString o = s->objectName();
+        sendChar(o[0]);
     }
 }
 void MinosKeyboard::onTabButton()

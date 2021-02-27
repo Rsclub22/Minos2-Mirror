@@ -192,7 +192,7 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
     int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
 
     bool makeVisible = false;
-    for ( auto const &c:contlist )
+    for ( auto const &c: qAsConst(contlist ))
     {
         if ( ce->getContinent() == c.continent )
         {

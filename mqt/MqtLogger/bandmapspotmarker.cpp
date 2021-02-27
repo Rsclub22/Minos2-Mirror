@@ -73,5 +73,5 @@ void BandmapSpotMarker::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << x() << " " << y();
     //qDebug() << displayText;
-    QGraphicsItem::mousePressEvent(event);
+    QGraphicsTextItem::mousePressEvent(event);
 }

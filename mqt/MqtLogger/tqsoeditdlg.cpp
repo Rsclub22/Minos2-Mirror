@@ -196,7 +196,7 @@ void TQSOEditDlg::on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseCon
   ui->QSOHistoryTree->clear();
   if (lct)
   {
-      for (auto const &h: lct->getHistory())
+      for (auto const &h: qAsConst(lct->getHistory()))
       {
           addTreeRoot(h);
       }

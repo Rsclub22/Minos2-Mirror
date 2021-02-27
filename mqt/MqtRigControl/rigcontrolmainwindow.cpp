@@ -4366,7 +4366,7 @@ void RigControlMainWindow::turnOffAllsupRadioIndicators()
 
 void RigControlMainWindow::setIndicatorVisible(const QString bandType, const bool visible)
 {
-    for (QMap<QString, QSharedPointer<SupIndicatorDetails>>::const_iterator i = allBandSupRadioInd.begin(); i != allBandSupRadioInd.end(); i++)
+    for (QMap<QString, QSharedPointer<SupIndicatorDetails>>::const_iterator i = allBandSupRadioInd.constBegin(); i != allBandSupRadioInd.constEnd(); i++)
     {
 
         if (i.value()->bandType == bandType)

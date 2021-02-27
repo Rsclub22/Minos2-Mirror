@@ -25,7 +25,7 @@ CallsignLineEdit::CallsignLineEdit(QWidget * parent): QLineEdit (parent),
 {
 
     setValidator(&ucValidator);
-    connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
+    connect(this, SIGNAL(textChanged(const QString &)), this, SLOT(onTextChanged(const QString &)));
     connect(this, SIGNAL(editingFinished()), this, SLOT(onEditingFinished()));
 
 }

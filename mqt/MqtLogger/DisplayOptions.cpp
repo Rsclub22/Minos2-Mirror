@@ -49,7 +49,7 @@ void DisplayOptions::initialise()
     QStringList sl;
 
     int n = 0;
-    for(auto const &l: languages)
+    for(auto const &l: qAsConst(languages))
     {
         sl.append(l.dispName);
         if (l.code == currentLang)
@@ -222,7 +222,7 @@ void DisplayOptions::doFontChange()
         bool serverRunning = checkServerReady();
         QApplication::setFont( nf );
 
-        for ( auto const &widget: QApplication::allWidgets() )
+        for ( auto &widget: QApplication::allWidgets() )
         {
             widget->setFont(nf);
             widget->update();
@@ -250,7 +250,7 @@ void DisplayOptions::doLanguageChange()
         QString selText = ui->LanguageComboBox->currentText();
 
         QVector<Translation> languages = getLanguages();
-        for(auto const &l: languages)
+        for(auto const &l: qAsConst(languages))
         {
             if (l.dispName == selText)
             {

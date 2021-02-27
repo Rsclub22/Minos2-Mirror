@@ -785,7 +785,7 @@ void ClusterClientFilterDialog::copyCallsignFilterListToListWidget()
     //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
     //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     callsignListWidget->clear();
-    for (auto const &str: filterSettings.unpackFilterList(filterSettings.callsignFilterList))
+    for (auto &str: filterSettings.unpackFilterList(filterSettings.callsignFilterList))
     {
         callsignListWidget->addItem(str);
     }
@@ -964,7 +964,7 @@ void ClusterClientFilterDialog::copyLocatorFilterListToListWidget()
     //LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
     //ClusterClientFilterSettings ccfs = ct->clusterFilterSettings.getValue();
     locatorListWidget->clear();
-    for(auto const &str: filterSettings.unpackFilterList( filterSettings.locatorFilterList))
+    for(auto &str: filterSettings.unpackFilterList( filterSettings.locatorFilterList))
     {
         locatorListWidget->addItem(str);
     }
@@ -1312,7 +1312,7 @@ void ClusterClientFilterDialog::onDistanceEditingFinished(QLineEdit *distanceLin
 QString ClusterClientFilterDialog::findBandQLineEdit(QLineEdit *distanceLineEdit)
 {
     QMapIterator<QString, ClusterClientDistanceFilterDetails> i(bandDistanceWidgets);
-    for (QMap<QString, ClusterClientDistanceFilterDetails>::const_iterator i = bandDistanceWidgets.begin(); i != bandDistanceWidgets.end(); i++)
+    for (QMap<QString, ClusterClientDistanceFilterDetails>::const_iterator i = bandDistanceWidgets.constBegin(); i != bandDistanceWidgets.constEnd(); i++)
     {
         if (i.value().bandLineEdit == distanceLineEdit)
         {

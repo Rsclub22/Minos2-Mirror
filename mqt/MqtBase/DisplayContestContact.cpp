@@ -432,7 +432,7 @@ void DisplayContestContact::checkContact( bool inScan)
 
       LocSquare *ls = nullptr;
 
-      for ( auto const &i: clp->locs[band].llist )
+      for ( auto const &i: qAsConst(clp->locs[band].llist) )
       {
           LocSquare *locsq = i.wt.data();
           if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )

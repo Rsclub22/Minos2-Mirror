@@ -90,7 +90,7 @@ void PortConfigure::SetEnable( TiXmlElement *e, commonController &monitor )
       // now create the port
       commonPort *p = monitor.createPort( pc );
       // and loop through the lines adding the relevant lineConfig lines to it
-      for ( auto const &i: linemap )
+      for ( auto const &i: qAsConst(linemap) )
       {
          if ( pname == i.portName )
          {

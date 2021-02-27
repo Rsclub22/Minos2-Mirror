@@ -327,7 +327,7 @@ void MinosConfig::initialise()
 
     QStringList lsect = config.getSections();
 
-    for ( auto const &s: lsect )
+    for ( auto const &s: qAsConst(lsect ))
     {
         QString sect = s.trimmed();
         if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
@@ -379,7 +379,7 @@ void MinosConfig::start()
 {
    terminated = false;
 
-   for ( auto const &i: elelist )
+   for ( auto const &i: qAsConst(elelist ))
    {
        i->createProcess();
    }
@@ -389,7 +389,7 @@ void MinosConfig::askStop()
 {
    terminated = true;
 
-   for ( auto const &i: elelist )
+   for ( auto const &i: qAsConst(elelist ))
    {
       if ( i )
       {
@@ -401,7 +401,7 @@ void MinosConfig::forceStop()
 {
    terminated = true;
 
-   for ( auto const &i: elelist )
+   for ( auto const &i: qAsConst(elelist ))
    {
       if ( i )
       {
@@ -412,7 +412,7 @@ void MinosConfig::forceStop()
 
 void MinosConfig::bounce()
 {
-    for ( auto const &i: elelist )
+    for ( auto const &i: qAsConst(elelist ))
     {
        if ( i )
        {
@@ -437,7 +437,7 @@ void MinosConfig::setAutoStart(bool s)
 QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
 {
     QSharedPointer<Connectable> res;
-    for ( auto const &i: elelist )
+    for ( auto const &i: qAsConst(elelist ))
     {
         if (appName.compare(i->name, Qt::CaseInsensitive) == 0)
         {
@@ -451,7 +451,7 @@ QSharedPointer<Connectable> MinosConfig::getApp(QString appName)
 QStringList MinosConfig::getAppTypes()
 {
     QStringList apps;
-    for (auto const &a: appConfigList)
+    for (auto const &a: qAsConst(appConfigList))
     {
         if (a.appType != tr(appNone) && a.appType != tr(appOther))
         {
@@ -559,7 +559,7 @@ QString MinosConfig::checkConfig()
 
     bool serverPresent = false;
     int eleListSize = 0;
-    for ( auto const &ele: elelist )
+    for ( auto const &ele: qAsConst(elelist ))
     {
         if (ele->deleted)
             continue;
@@ -616,7 +616,7 @@ QString MinosConfig::checkConfig()
     }
 
     // Go through the configured elements, and check that their requirements are also present
-    for ( auto const &ele: elelist )
+    for ( auto const &ele: qAsConst(elelist ))
     {
         if (ele->deleted)
             continue;
@@ -626,7 +626,7 @@ QString MinosConfig::checkConfig()
             if ( ele->requiresApps.size() > 0 && ele->runType == RunLocal)
             {
                 // "Requires" elements must be present
-                for(auto const &req: ele->requiresApps)
+                for(auto const &req: qAsConst(ele->requiresApps))
                 {
                     if (req.isEmpty())
                         continue;
@@ -636,7 +636,7 @@ QString MinosConfig::checkConfig()
 
 
                     bool reqFound = false;
-                    for ( auto const &j: elelist )
+                    for ( auto const &j: qAsConst(elelist ))
                     {
                         if (j->deleted)
                             continue;
@@ -672,7 +672,7 @@ QString MinosConfig::checkConfig()
 
 bool MinosConfig::anyRunning()
 {
-    for ( auto const &i: elelist )
+    for ( auto const &i: qAsConst(elelist ))
     {
        if ( i && i->isRunning() )
        {
@@ -684,7 +684,7 @@ bool MinosConfig::anyRunning()
 AppConfigElement MinosConfig::getAppConfigElement(QString appType)
 {
     AppConfigElement ace;
-    for ( auto const &a: appConfigList)
+    for ( auto const &a: qAsConst(appConfigList))
     {
         if (a.appType == appType)
         {
@@ -699,7 +699,7 @@ QVector<QSharedPointer<Connectable> > MinosConfig::getConnectables()
 {
     QVector<QSharedPointer<Connectable> >  connectables;
 
-    for ( auto const &e: elelist )
+    for ( auto const &e: qAsConst(elelist ))
     {
         if (!e->deleted)
         {

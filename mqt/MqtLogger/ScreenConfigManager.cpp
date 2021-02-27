@@ -53,7 +53,7 @@ void ScreenConfigManager::showDetails()
     int crow = -1;
 
     int j = 0;
-    for(auto const &i: scf.configs )
+    for(auto const &i: qAsConst(scf.configs ))
     {
         if (i.name == curConfigName)
             crow = j;

@@ -124,7 +124,7 @@ void ContestPage::getSplitters()
     singleLogFrameSplitter->setChildrenCollapsible(true);
     singleLogFrameSplitter->setHandleWidth(splitterHandleWidth);
 
-    for(auto const &s: rowSplitters)
+    for(auto const &s: qAsConst(rowSplitters))
     {
         QByteArray sstate;
         QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName()).arg(tslf->getCurScreenLayout()).arg(pageNo);
@@ -145,7 +145,7 @@ void ContestPage::onSplitterMoved(int /*pos*/, int /*index*/)
     QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter").arg(tslf->getCurScreenLayout()).arg(pageNo);
     settings.setValue(name, state);
 
-    for(auto const &s: rowSplitters)
+    for(auto const &s: qAsConst(rowSplitters))
     {
         state = s->saveState();
         QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName()).arg(tslf->getCurScreenLayout()).arg(pageNo);

@@ -107,9 +107,12 @@ public:
         return serverList;
     }
 signals:
+
     void notify( AnalysePubSubNotify an, const QString from);
     void serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
+
 private slots:
+
     void on_connectedTimeout();
 };
 

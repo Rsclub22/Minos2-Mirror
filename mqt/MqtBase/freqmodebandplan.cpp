@@ -26,10 +26,10 @@ bool freqModeBandPlan::loadBandsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (auto const &b: blist.bandList)
+    for (auto const &b: qAsConst(blist.bandList))
     {
         QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-        for (auto const &m: b->modes)
+        for (auto const &m: qAsConst(b->modes))
         {
             ModeFreqDetail<Frequency> mfl;
 
@@ -61,17 +61,17 @@ bool freqModeBandPlan::loadExclusionsFromBandList()
 {
     bandModeFreqList.clear();
     BandList &blist = BandList::getBandList();
-    for (auto const &b: blist.bandList)
+    for (auto const &b: qAsConst(blist.bandList))
     {
         QMap<QString, ModeFreqDetail<Frequency>> modeFreqList;
-        for (auto const &m: b->modes)
+        for (auto const &m: qAsConst(b->modes))
         {
             ModeFreqDetail<Frequency> mfl;
             if (b->fLow < m->fcLow1)
             {
                 addPair(mfl, b->fLow, m->fcLow1);
             }
-            for (auto const &e: m->exclusions)
+            for (auto const &e: qAsConst(m->exclusions))
             {
                 addPair(mfl, e->fLow, e->fHigh);
             }

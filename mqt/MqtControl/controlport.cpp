@@ -84,7 +84,7 @@ void commonPort::addLine( const LineConfig &line )
 
 commonPort::~commonPort()
 {
-   for ( auto const &i: lines )
+   for ( auto const &i: qAsConst(lines) )
    {
       delete i;
    }
@@ -102,7 +102,7 @@ bool commonPort::initialise( const PortConfig & /*port*/, commonController &mon 
 }
 commonLineControl *commonPort::findLine(const QString &name, bool lineIn )
 {
-    for ( auto const &i: lines )
+    for ( auto const &i: qAsConst(lines) )
    {
       if ( i->lineIn == lineIn && i->lineName == name )
          return i;
@@ -112,7 +112,7 @@ commonLineControl *commonPort::findLine(const QString &name, bool lineIn )
 void commonPort::checkControls( )
 {
    getLineState();
-   for ( auto const &i: lines )
+   for ( auto const &i: qAsConst(lines) )
    {
       // output lines can't sort their state in the same way
       if ( i->lineIn )

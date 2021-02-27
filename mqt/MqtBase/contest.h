@@ -264,7 +264,7 @@ class BaseContestLog: public BaseLogList
       int getDistrictsWorked( const QString &item )
       {
           int n = 0;
-          for(auto dc: districtWorked)
+          for(auto &dc: qAsConst(districtWorked))
           {
               if (dc.contains(item))
               {
@@ -277,7 +277,7 @@ class BaseContestLog: public BaseLogList
       int getCountriesWorked( const QString &item )
       {
           int n = 0;
-          for(auto dc: countryWorked)
+          for(auto &dc: qAsConst(countryWorked))
           {
               if (dc.contains(item))
               {

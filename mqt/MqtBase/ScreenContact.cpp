@@ -467,7 +467,7 @@ void ScreenContact::score()
 
            LocSquare *ls = nullptr;
 
-           for ( auto const &i: contest->locs[band].llist )
+           for ( auto const &i: qAsConst(contest->locs[band].llist) )
            {
                LocSquare *locsq = i.wt.data();
                if ( strnicmp ( locsq ->loc, letters, 2 ) == 0 )

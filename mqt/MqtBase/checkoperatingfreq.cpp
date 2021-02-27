@@ -18,7 +18,7 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
         if (modeList.contains(mode))
         {
             freqs = modeList.value(mode);
-            for (auto const &freqLimits: freqs.freq)
+            for (auto const &freqLimits: qAsConst(freqs.freq))
             {
                 if (freqLimits.count() == 0)
                     continue;

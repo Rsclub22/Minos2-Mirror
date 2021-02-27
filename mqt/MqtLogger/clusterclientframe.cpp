@@ -2222,7 +2222,7 @@ bool CallsignSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
             Callsign spotCall;
             spotCall.setFullCall(sourceModel()->data(sourceModel()->index(sourceRow, DXSPOT_CALL_COL_NUM), DataStoredRole).toString());
 
-            for (auto const &str: filterSettings->unpackFilterList(filterSettings->callsignFilterList))
+            for (auto &str: filterSettings->unpackFilterList(filterSettings->callsignFilterList))
             {
                 if (spotCall.realCall.contains(str, Qt::CaseInsensitive))
                 {

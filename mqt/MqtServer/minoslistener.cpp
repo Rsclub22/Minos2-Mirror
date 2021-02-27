@@ -176,7 +176,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 
     // OK, it is not for us... look at connected servers
 
-    for ( auto const &a: i_array )
+    for ( auto const &a: qAsConst(i_array ))
     {
         if ( a ->checkServer( to ) )
         {
@@ -202,7 +202,7 @@ void MinosServerListener::buildTable(QTableWidget *tab)
     QStringList h = {"name", "address", "uuid"};
     tab->setHorizontalHeaderLabels(h);
     int row = 0;
-    for ( auto const &a: i_array )
+    for ( auto const &a: qAsConst(i_array ))
     {
         MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(a);
         QString server = msc->getClientServer();
@@ -223,7 +223,7 @@ void MinosServerListener::closeDown()
 
 MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h)
 {
-    for ( auto const &a: i_array )
+    for ( auto const &a: qAsConst(i_array ))
     {
         if (h.toIPv4Address() == a->connectHost.toIPv4Address())
         {
@@ -305,7 +305,7 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
 
    // OK, it is for what might be one of our clients
 
-   for ( auto const &a: i_array )
+   for ( auto const &a: qAsConst(i_array ))
    {
       // worry about the details
       if (a && a->checkUser( to ) )
@@ -327,7 +327,7 @@ void MinosClientListener::buildTable(QTableWidget *tab)
     tab->setRowCount(i_array.count());
     tab->setColumnCount(1);
     int row = 0;
-    for ( auto const &a: i_array )
+    for ( auto const &a: qAsConst(i_array ))
     {
         QString client = a->getClientUser();
         QTableWidgetItem *s = new QTableWidgetItem(client);

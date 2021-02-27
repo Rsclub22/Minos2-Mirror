@@ -84,8 +84,6 @@ public slots:
 //                         , QString const& my_call, QString const& my_grid);
     void log_ADIF(QString const& id, QByteArray const& ADIF);
 
-    bool fast_mode () const {return fast_mode_;}
-
     void update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                , QString const& report, QString const& tx_mode, bool tx_enabled
                                , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df

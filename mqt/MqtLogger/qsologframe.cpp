@@ -328,7 +328,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
 QSOLogFrame::~QSOLogFrame()
 {
     delete ui;
-    for ( auto const & vcp: vcs )
+    for ( auto const & vcp: qAsConst(vcs) )
     {
        delete vcp;
     }
@@ -711,7 +711,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
        QWidget *nextInvalid = nullptr;
        bool onCurrent = false;
        bool pastCurrent = false;
-       for ( auto const &vcp: vcs )
+       for ( auto const &vcp: qAsConst(vcs) )
        {
           if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
           {
@@ -1193,7 +1193,7 @@ void QSOLogFrame::showScreenEntry( )
       ui->MGMSubModeEdit->setText(temp.mgmSubmode);
 
       // and now we want to put the selection on each at the END of the text
-      for ( auto const &vcp: vcs )
+      for ( auto const &vcp: qAsConst(vcs) )
       {
          int selpt = vcp->wc->text().length();
          vcp->wc ->setSelection(selpt, 0);
@@ -1446,7 +1446,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
 
     bool ret = true;
 
-    for ( auto const &vcp: vcs )
+    for ( auto const &vcp: qAsConst(vcs) )
    {
         QString ss = ssLineEditOK;
         if (!edit && vcp == ssIl)
@@ -2061,7 +2061,7 @@ void QSOLogFrame::refreshOps()
        ui->SecondOpComboBox->clear();
 
        QStringList ops;
-       for ( auto const &i: contest->oplist )
+       for ( auto const &i: qAsConst(contest->oplist) )
        {
            if (!i.isEmpty())
              ops.append(i);
@@ -2094,7 +2094,7 @@ void QSOLogFrame::refreshOps( ScreenContact &screenContact )
 
         BaseContestLog * contest = TContestApp::getContestApp() ->getCurrentContest();
         QStringList ops;
-        for ( auto const &i: contest->oplist )
+        for ( auto const &i: qAsConst(contest->oplist ))
         {
             if (!i.isEmpty())
               ops.append(i);

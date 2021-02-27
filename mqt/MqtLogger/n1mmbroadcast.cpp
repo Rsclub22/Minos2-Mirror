@@ -22,7 +22,7 @@ N1MMBroadcast::N1MMBroadcast()
 bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)
 {
     QHostInfo haddr = QHostInfo::fromName( addr );
-    for (auto const &a: haddr.addresses())
+    for (auto &a: haddr.addresses())
     {
         bool ok = true;
         quint32 iaddr;

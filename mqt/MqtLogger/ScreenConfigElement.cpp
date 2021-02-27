@@ -32,7 +32,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
 };
 SCType ScreenConfigElement::getScreenType(QString s)
 {
-    for(auto const  &opt: scoptions)
+    for(auto const  &opt: qAsConst(scoptions))
     {
         if ((opt.s == s) || (tr(opt.s) == s))
             return opt.type;
@@ -41,7 +41,7 @@ SCType ScreenConfigElement::getScreenType(QString s)
 }
 const char * ScreenConfigElement::getRawScreenTypeString(SCType t)
 {
-    for(auto const  &opt: scoptions)
+    for(auto const  &opt: qAsConst(scoptions))
     {
         if (opt.type == t)
             return opt.s;
@@ -118,7 +118,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     ui->elementTypeCombo->clear();
     int i = 0;
     int row = -1;
-    for(auto const  &opt: scoptions)
+    for(auto const  &opt: qAsConst(scoptions))
     {
         if (opt.type == sctMainScreen || opt.type == sctScreen)
         {
@@ -138,7 +138,7 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
     qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(row, true);
 
     i = 0;
-    for(auto const &opt: StackedInfoFrame::auxoptions)
+    for(auto const &opt: qAsConst(StackedInfoFrame::auxoptions))
     {
         QString s = StackedInfoFrame::getTrAuxTypeString(opt.type);
         ui->auxTypeCombo->addItem(s, opt.type);

@@ -183,7 +183,7 @@ void ContestDetails::setDetails(  )
    {
        ui->BandComboBox->addItem( tr("All HF") );
    }
-   for (auto const &b: blist.bandList)
+   for (auto const &b: qAsConst(blist.bandList))
    {
        if (allowHF || b->getType() != "HF")
        {
@@ -443,7 +443,7 @@ void ContestDetails::setDetails(  )
    int j = 0;
    int crow = 0;
 
-   for(auto const &c: scf.configs )
+   for(auto const &c: qAsConst(scf.configs) )
    {
        if (c.name == curConfigName)
            crow = j;
@@ -465,7 +465,7 @@ void ContestDetails::refreshOps()
       ui->SecondOpComboBox->clear();
       //bool addCall = true;
       QStringList ops;
-      for ( auto const &i: contestTransferObject->oplist )
+      for ( auto const &i: qAsConst(contestTransferObject->oplist ))
       {
           if (!i.isEmpty())
             ops.append(i);

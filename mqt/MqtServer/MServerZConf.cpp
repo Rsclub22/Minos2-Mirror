@@ -71,7 +71,7 @@ TZConf::TZConf( )
 }
 TZConf::~TZConf( )
 {
-    for ( auto const &s: serverList )
+    for ( auto const &s: qAsConst(serverList ))
    {
       delete s;
    }
@@ -201,7 +201,7 @@ bool TZConf::sendMessage( )
         sendBeaconResponse = QDateTime();
         reqBeacon = true;
     }
-    for (auto const &t: TxSocks)
+    for (auto const &t: qAsConst(TxSocks))
     {
         QString mess = getZConfString(reqBeacon, t->qua.ip().toString());
         t->sendMessage(mess);
@@ -269,7 +269,7 @@ void TZConf::readServerListFile()
    QStringList sl = servers.childGroups();
 
 //   trace(QString::number(sl.size()) + " child groups");
-   for ( auto const &i: sl )
+   for ( auto const &i: qAsConst(sl ))
    {
       servers.beginGroup(i);
 

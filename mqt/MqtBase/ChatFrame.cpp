@@ -64,7 +64,7 @@ void ChatFrame::keyPressEvent( QKeyEvent* event )
 
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter)
     {
-        ui->SendButton->clicked();
+        QMetaObject::invokeMethod(ui->SendButton, "clicked");
     }
     else
     {

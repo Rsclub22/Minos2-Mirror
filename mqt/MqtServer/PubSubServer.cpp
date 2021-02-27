@@ -32,7 +32,7 @@ void RPCServerPubSub::serverSubscribeRemote( const QString &server, const QStrin
 }
 void RPCServerPubSub::serverReconnectRemotePubSub( const QString &server )
 {
-   for ( auto const &s: serverSubscribeList )
+   for ( auto const &s: qAsConst(serverSubscribeList ))
    {
       if ( s && s->getServer() == server )
       {
@@ -64,7 +64,7 @@ RPCServerSubscriber::RPCServerSubscriber(const QString &server, const QString &c
 void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &cat )
 {
     RPCServerSubscriber * sub = nullptr;
-    for ( auto const &s: serverSubscribeList )
+    for ( auto const &s: qAsConst(serverSubscribeList ))
    {
       if ( s ->isRemoteEqual( server, cat ) )
       {

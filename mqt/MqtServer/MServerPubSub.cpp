@@ -382,7 +382,7 @@ void Published::clearPublist()
 int Published::GetSubscribedCount()
 {
    int scount = 0;
-   for ( auto const &p: Published::publist )
+   for ( auto const &p: qAsConst(Published::publist) )
    {
       scount += p->GetSubscribedCount();
    }
@@ -391,7 +391,7 @@ int Published::GetSubscribedCount()
 int Published::GetPublishedCount()
 {
    int pcount = 0;
-   for ( auto const &p: Published::publist )
+   for ( auto const &p: qAsConst(Published::publist) )
    {
       pcount += p->pubkeylist.size();
    }
@@ -403,12 +403,12 @@ void Published::buildPublishedTree(QTreeWidget *tree)
     tree->setColumnCount(3);
     QStringList h = {tr("key"), tr("state"), tr("value")};
     tree->setHeaderLabels(h);
-    for ( auto const &p: Published::publist )
+    for ( auto const &p: qAsConst(Published::publist) )
     {
         QString cat = p->getCategory();
         QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
         catItem->setText(0, cat);
-        for ( auto const &j: p->pubkeylist)
+        for ( auto const &j: qAsConst(p->pubkeylist))
         {
            QString key = j->getPubKey();
            QString value = j->getPubValue();
@@ -427,7 +427,7 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
 {
     tree->clear();
 
-    for ( auto const &p: Published::publist )
+    for ( auto const &p: qAsConst(Published::publist ))
     {
         QString cat = p->getCategory();
         QTreeWidgetItem *catItem = new QTreeWidgetItem(tree);
@@ -435,7 +435,7 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
 
         QTreeWidgetItem *stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Local");
-        for ( auto const &i: p->subscribedLocal )
+        for ( auto const &i: qAsConst(p->subscribedLocal ))
         {
             QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
@@ -443,7 +443,7 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
         }
         stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Server");
-        for ( auto const &i: p->subscribedServer )
+        for ( auto const &i:qAsConst( p->subscribedServer ))
         {
             QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
@@ -451,7 +451,7 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
         }
         stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Remote");
-        for ( auto const &i: p->subscribedRemote )
+        for ( auto const &i: qAsConst(p->subscribedRemote ))
         {
             QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
@@ -501,7 +501,7 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( auto const &pk: ( *f ) ->pubkeylist )
+      for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
          // Here we are sending all the already published values
          if ( pk->getServer().size() == 0 || pk->getServer() == "localhost" || pk ->getServer() == ThisMinosServer::getThisMinosServer() ->getServerName() )
@@ -535,7 +535,7 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( auto const &pk: ( *f ) ->pubkeylist )
+      for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
          // Here we are sending all the already published values
          if ( pk->getServer() == server )
@@ -568,7 +568,7 @@ int PublishedCategory::GetSubscribedCount()
       }
 
       // and we now need to send them all...
-      for ( auto const &pk: ( *f ) ->pubkeylist )
+      for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
          // make sure that the key is one published by THIS server; we don't
          // want to re-publish
@@ -692,7 +692,7 @@ void PublishedCategory::serverPublish( const QString &pubId, const QString &svr,
    {
       ( *kl ) ->setPubValue( v );
       ( *kl ) ->setPubState( pState );
-      for ( auto const &s: subscribedRemote )
+      for ( auto const &s: qAsConst(subscribedRemote ))
       {
          // send to all who have subscribed to the category
          s->SendTo( *( *kl ) );
@@ -733,7 +733,7 @@ PublishedCategory::~PublishedCategory()
 //---------------------------------------------------------------------------
 Subscriber * PublishedCategory::getClientSubscribed( const QString &subId )
 {
-   for ( auto const &i: subscribedLocal )
+   for ( auto const &i: qAsConst(subscribedLocal ))
    {
       if ( i->getSjid() == subId )
          return i;
@@ -743,7 +743,7 @@ Subscriber * PublishedCategory::getClientSubscribed( const QString &subId )
 //---------------------------------------------------------------------------
 RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId )
 {
-   for ( auto const &i: subscribedRemote )
+   for ( auto const &i: qAsConst(subscribedRemote ))
    {
       if ( i ->getSjid() == subId )
          return i;
@@ -753,7 +753,7 @@ RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId 
 //---------------------------------------------------------------------------
 ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId )
 {
-   for ( auto const &i: subscribedServer )
+   for ( auto const &i: qAsConst(subscribedServer ))
    {
       if ( i->getSjid() == subId )
          return i;

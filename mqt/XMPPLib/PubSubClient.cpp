@@ -15,12 +15,12 @@ QVector<RPCPublisher *> publishList;
 
 void clearPubSub()
 {
-    for(auto const &v: subscribeList)
+    for(auto const &v: qAsConst(subscribeList))
     {
         delete v;
     }
     subscribeList.clear();
-    for(auto const &v: publishList)
+    for(auto const &v: qAsConst(publishList))
     {
         delete v;
     }
@@ -50,7 +50,7 @@ bool RPCSubscriber::isRemoteEqual( const QString &/*pserver*/, const QString &/*
 void RPCSubscriber::testAndSubscribe( const QString &category )
 {
    RPCSubscriber * sub = nullptr;
-   for ( auto const &i: subscribeList )
+   for ( auto const &i: qAsConst(subscribeList ))
    {
       if ( i ->isEqual( category ) )
       {
@@ -75,7 +75,7 @@ bool RPCRemoteSubscriber::isRemoteEqual( const QString &pServer, const QString &
 void RPCRemoteSubscriber::testAndSubscribe( const QString &server, const QString &cat )
 {
    RPCRemoteSubscriber * sub = nullptr;
-   for ( auto const &i: subscribeList )
+   for ( auto const &i: qAsConst(subscribeList ))
    {
       if ( i->isRemoteEqual( server, cat ) )
       {
@@ -123,7 +123,7 @@ void RPCRemoteSubscriber::reSubscribe()
 void RPCPublisher::testAndPublish( const QString &category, const QString &key, const QString &value, PublishState pState )
 {
    RPCPublisher * pub = nullptr;
-   for ( auto const &i: publishList )
+   for ( auto const &i: qAsConst(publishList ))
    {
       if ( i->category == category && i->key == key )
       {

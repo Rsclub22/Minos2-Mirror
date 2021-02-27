@@ -330,7 +330,7 @@ int CountryEntry::districtLimit()
     if ( distLimit >= 0 )
         return distLimit;
 
-    for (auto dc: distCounts)
+    for (auto &dc: qAsConst(distCounts))
     {
         if ( basePrefix.compare( dc.prefix, Qt::CaseSensitive ) == 0 )
         {
@@ -893,7 +893,7 @@ bool MultListsImpl::isUKprefix(const Callsign &cs)
    {
       return false;
    }
-   for ( auto dc: distCounts )
+   for ( auto &dc: qAsConst(distCounts) )
    {
        if ( ctry->getBasePrefix().compare( dc.prefix, Qt::CaseSensitive ) == 0 )
        {
@@ -916,7 +916,7 @@ QVector<QSharedPointer<DistrictEntry> > &MultListsImpl::getDistList()
 {
     if (distVector.size() == 0)
     {
-        for (auto d: distList)
+        for (auto &d: qAsConst(distList))
         {
             distVector.push_back(d.wt);
         }
@@ -934,7 +934,7 @@ QVector<QSharedPointer<CountryEntry> > &MultListsImpl::getCountryList()
 {
     if (countryVector.size() == 0)
     {
-        for (auto d: ctryList)
+        for (auto &d: qAsConst(ctryList))
         {
             countryVector.push_back(d.wt);
         }

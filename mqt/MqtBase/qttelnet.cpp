@@ -968,7 +968,7 @@ void QtTelnet::close()
 
     \sa Control sendData() sendSync()
 */
-void QtTelnet::sendControl(Control ctrl)
+void QtTelnet::sendControl(QtTelnet::Control ctrl)
 {
     bool sendsync = false;
     char c;

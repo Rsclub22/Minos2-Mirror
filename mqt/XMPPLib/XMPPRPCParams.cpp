@@ -742,7 +742,7 @@ TiXmlElement *RPCArgs::makeParamsNode( )
 {
    TiXmlElement * pNode = new TiXmlElement( "params" );
 
-   for ( auto const &i: args )
+   for ( auto const &i: qAsConst(args ))
    {
       i->addParam( *pNode );
    }
@@ -827,7 +827,7 @@ QString RPCArgs::PrintArgs()
 {
    QString s;
 
-   for ( auto const &i: args )
+   for ( auto const &i: qAsConst(args ))
    {
       s += i->print();
    }

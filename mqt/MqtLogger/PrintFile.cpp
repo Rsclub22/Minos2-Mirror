@@ -94,7 +94,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
    remarks.append( ct->entCondx3.getValue() );
    remarks.append( ct->entCondx4.getValue() );
 
-   for(auto const &dct: ct->ctList)
+   for(auto const &dct: qAsConst(ct->ctList))
    {
       QSharedPointer<BaseContact> cct = dct.wt;
 
@@ -177,7 +177,7 @@ bool PrintFile::exportTest(QSharedPointer<QFile> expfd )
 
    wr.lwrite( "QSOs" );
    wr.lwrite( "====" );
-   for(auto const &dct: ct->ctList)
+   for(auto const &dct: qAsConst(ct->ctList))
    {
        QSharedPointer<BaseContact> cct = dct.wt;
 

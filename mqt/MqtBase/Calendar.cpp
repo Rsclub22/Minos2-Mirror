@@ -276,7 +276,7 @@ bool Calendar::parseFile ( const QString &fname )
     // Now we have the raw info; we need to go through it and
     // generate all the individual contest details for logger/adjsql
     setYear ( calendarYear );
-    for ( auto const &i: contests )
+    for ( auto const &i: qAsConst(contests) )
     {
 
         for ( auto const &bl: i.bandList )
@@ -294,7 +294,7 @@ bool Calendar::parseFile ( const QString &fname )
                 tll = i.timeList;
             }
 
-            for ( auto const &tl: tll )
+            for ( auto const &tl: qAsConst(tll) )
             {
                 for ( auto const &ml: tl.monthList )
                 {
@@ -445,7 +445,7 @@ bool Calendar::parseFile ( const QString &fname )
                                 if ( mls )
                                 {
                                     bool monthOK = false;
-                                    for ( auto const &ml: s.value().monthList )
+                                    for ( auto const &ml: qAsConst(s.value().monthList) )
                                     {
                                         if ( ml.month.compare(monthTable[ sm - 1 ], Qt::CaseInsensitive) == 0 )
                                         {
@@ -813,7 +813,7 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                             QStringList readData;
 
                                                             csv.parseCsvLine(ss, readData);
-                                                            for (auto s:readData)
+                                                            for (auto &s:qAsConst(readData))
                                                             {
                                                                 CalendarSectionList sl;
                                                                 sl.name = s;

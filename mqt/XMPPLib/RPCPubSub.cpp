@@ -42,14 +42,14 @@ void RPCPubSub::subscribeRemote( const QString &server, const QString &category 
 void RPCPubSub::reconnectPubSub( )
 {
    // iterate the publish and subscribe objects and re-do them
-   for ( auto const &i: publishList )
+   for ( auto const &i: qAsConst(publishList ))
    {
       if ( i )
       {
          i->rePublish();
       }
    }
-   for ( auto const &i: subscribeList )
+   for ( auto const &i: qAsConst(subscribeList ))
    {
       if ( i )
       {

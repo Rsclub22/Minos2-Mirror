@@ -56,7 +56,7 @@ void RigCache::addRigList(const QString &s)
         PubSubName lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRigList;
 
-        for(auto const &psn: rigList)
+        for(auto const &psn: qAsConst(rigList))
         {
             if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
                 newRigList.push_back(psn);
@@ -64,7 +64,7 @@ void RigCache::addRigList(const QString &s)
         rigList = newRigList;
 
     }
-    for(auto const &l: list)
+    for(auto const &l: qAsConst(list))
     {
         // add all of the list to rig list
         PubSubName psn(l);
@@ -101,7 +101,7 @@ void RigCache::addRigList(const QString &s)
         }
         rigStates = newstates;
     }
-    for(auto const &psn: rigList)
+    for(auto const &psn: qAsConst(rigList))
     {
         if (!rigDetails.contains(psn))
         {

@@ -54,7 +54,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     QString chatSelection = settings.value("service", "1").toString();
     QStringList selections = chatSelection.split(":");
-    for (auto const &i: selections)
+    for (auto const &i: qAsConst(selections))
     {
         int s = i.toInt();
         if (s <= 4 && s > 0)
@@ -263,7 +263,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
     connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
 
-    for(auto const &s: AirScoutLink::ASBandStrings)
+    for(auto const &s: qAsConst(AirScoutLink::ASBandStrings))
     {
         ui->asBandCombo->addItem(AirScoutLink::tr(s));
     }
@@ -641,7 +641,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         }
         kst->otherDistance = -2;
         bool found = false;
-        for(auto const &msg: *messageVector)
+        for(auto const &msg: qAsConst(*messageVector))
         {
             if (kst->fullLine == msg->fullLine)
             {
@@ -737,7 +737,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         // LOC|Unix time|callsign|locator|
 
         int row = 0;
-        for (auto const &l: *callVector)
+        for (auto const &l: qAsConst(*callVector))
         {
             if (l->call == sl[2] )
             {
@@ -865,8 +865,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
-        if (l != callVector->end() && l->data()->call == test->call && l->data()->chat == test->chat)
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
             l->data()->away = test->away;
@@ -894,8 +894,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         if (istate & 2)
             test->recent = true;
 
-        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
-        if (l != callVector->end() && l->data()->call == test->call && l->data()->chat == test->chat)
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
             l->data()->name = test->name;
@@ -918,8 +918,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->chat = sl[1].toInt();
         test->call = sl[2];
 
-        QVector<QSharedPointer<KstUser> >::iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
-        if (l != callVector->end() && l->data()->call == test->call && l->data()->chat == test->chat)
+        QVector<QSharedPointer<KstUser> >::const_iterator l = std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare);
+        if (l != callVector->constEnd() && l->data()->call == test->call && l->data()->chat == test->chat)
         {
             // as it should be...
 
@@ -1356,7 +1356,7 @@ void KSTMainWindow::doLoginChanges()
     if (detached)
     {
         QSharedPointer<QVector<QSharedPointer<KstUser> > > newCallVector(new QVector<QSharedPointer<KstUser> >);
-        for(auto const &i: *callVector)
+        for(auto const &i: qAsConst(*callVector))
         {
             int c = i->chat;
             if (kstLoggedIn.contains(c))
@@ -1647,7 +1647,7 @@ void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
     {
         if (asl && getASActive())
         {
-            for (auto const &kstuser: *callVector)
+            for (auto const &kstuser: qAsConst(*callVector))
             {
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;
@@ -1669,7 +1669,7 @@ void KSTMainWindow::on_ASActivecb_stateChanged(int state)
     {
         if (asl && getASActive())
         {
-            for (auto const &kstuser: *callVector)
+            for (auto const &kstuser: qAsConst(*callVector))
             {
                 kstuser->planes.clear();
                 kstuser->planeResponseSeen = false;

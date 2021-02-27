@@ -967,7 +967,7 @@ void rotSetupForm::fillPortsInfo()
 
     ui->comPortBox->addItem("");
 
-    for(auto const &info: QSerialPortInfo::availablePorts())
+    for(auto &info: QSerialPortInfo::availablePorts())
     {
         QStringList list;
         description = info.description();

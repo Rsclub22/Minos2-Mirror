@@ -100,7 +100,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    remarks.append( ct->entCondx4.getValue() );
    int nvalid = 0;      // valid QSOs
    int nlines = 0;      // QSO records
-   for(auto const &dct: ct->ctList)
+   for(auto const &dct:qAsConst( ct->ctList))
    {
       QSharedPointer<BaseContact> cct = dct.wt;
       // Extract comments for "Remarks" section
@@ -193,7 +193,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    */
    wr.lwrite( "[Remarks]" );
 
-   for ( auto const &r: remarks )
+   for ( auto const &r: qAsConst(remarks ))
    {
       wr.lwrite( r );
    }
@@ -205,7 +205,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    wr.lwrite( lbuff );
    // and then the contact list
 
-   for(auto const &dct: ct->ctList)
+   for(auto const &dct: qAsConst(ct->ctList))
    {
        QSharedPointer<BaseContact> cct = dct.wt;
 

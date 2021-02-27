@@ -35,7 +35,7 @@ public:
   // start or restart the server, if the multicast_group_address
   // argument is given it is assumed to be a multicast group address
   // which the server will join
-  Q_SLOT void start (port_type port,
+  Q_SLOT void start (MessageServer::port_type port,
                      QHostAddress const& multicast_group_address = QHostAddress {});
 
   // ask the client to clear one or both of the decode windows
@@ -96,7 +96,7 @@ public:
   Q_SIGNAL void logged_ADIF (QString const& id, QByteArray const& ADIF);
 
   // this signal is emitted when a network error occurs
-  Q_SIGNAL void error (QString const&) const;
+  Q_SIGNAL void error (QString const&);
 
   void stop();
 private:

@@ -234,7 +234,7 @@ QString dtg::getDate( DTG dstyle, bool &d ) const
 }
 QString dtg::getDate( DTG dstyle ) const
 {
-   bool dirty;
+   bool dirty = false;
    return getDate( dstyle, dirty );
 }
 QString dtg::getTime( DTG dstyle, bool &d ) const

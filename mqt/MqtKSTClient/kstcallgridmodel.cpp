@@ -35,7 +35,7 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
 {
     beginResetModel();
     callVector = pcallVector;
-    for (auto const &kstuser: *callVector)
+    for (auto const &kstuser: qAsConst(*callVector))
     {
         if (kstuser->distance == -2)
         {
@@ -194,7 +194,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QString col;
             if (crec->planes.count())
             {
-                for (auto const &i: crec->planes)
+                for (auto const &i: qAsConst(crec->planes))
                 {
                     if (i.minutes != 0)
                         break;
@@ -302,7 +302,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             QString col;
             if (crec->planes.count())
             {
-                for (auto const &i: crec->planes)
+                for (auto const &i: qAsConst(crec->planes))
                 {
                     if (i.minutes != 0)
                         break;

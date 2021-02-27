@@ -21,7 +21,7 @@ ContactList::ContactList() :
 }
 ContactList::~ContactList()
 {
-    for ( auto const &i: ctList )
+    for ( auto const &i: qAsConst(ctList) )
        delete i;
 }
 bool ContactList::initialise( int sno )
@@ -78,7 +78,7 @@ bool ContactList::cslLoad( )
        name = fn;
 
        bool firstLine = true;
-       for ( auto const &parts:  readData )
+       for ( auto const &parts:  qAsConst(readData) )
        {
            if (parts.size() == 0 || parts[0].size() == 0 ||  !(parts[0][0].isLetter() || parts[0][0].isNumber()))
                continue;

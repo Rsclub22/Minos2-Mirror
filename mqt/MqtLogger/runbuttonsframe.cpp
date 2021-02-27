@@ -50,7 +50,7 @@ RunButtonsFrame::~RunButtonsFrame()
 {
     delete ui;
 
-    for(auto const &b: runButtonMap)
+    for(auto const &b: qAsConst(runButtonMap))
     {
         delete b;
     }

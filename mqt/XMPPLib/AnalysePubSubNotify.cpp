@@ -4,6 +4,8 @@
 AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> mro ) :
       OK( false )
 {
+    qRegisterMetaType< AnalysePubSubNotify > ( "AnalysePubSubNotify" );
+
    if ( !err )
    {
       QSharedPointer<RPCParam> psPublisher;
@@ -55,3 +57,5 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
       }
    }
 }
+AnalysePubSubNotify::AnalysePubSubNotify()
+{}

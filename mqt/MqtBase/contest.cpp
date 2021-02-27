@@ -70,7 +70,7 @@ void BaseContestLog::setVersion(QString v)
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
     int i = 0;
-    for (auto const &m: ctList)
+    for (auto const &m: qAsConst(ctList))
     {
       if (m.wt.data() == item.data())
           return i;
@@ -242,7 +242,7 @@ void BaseContestLog::clearDirty()
    DTGEnd.clearDirty();
    currentOp1.clearDirty();
    currentOp2.clearDirty();
-   for ( auto const &i: ctList )
+   for ( auto const &i: qAsConst(ctList) )
    {
       i.wt->clearDirty();
    }
@@ -286,7 +286,7 @@ void BaseContestLog::setDirty()
    currentOp1.setDirty();
    currentOp2.setDirty();
 
-   for ( auto const &i: ctList )
+   for ( auto const &i: qAsConst(ctList) )
    {
       i.wt->setDirty();
    }
@@ -677,7 +677,7 @@ void BaseContestLog::updateStats( int p1, int p2 )
 int BaseContestLog::getValidQSOs()
 {
    int nvalid = 0;
-   for(auto const &i: ctList)
+   for(auto const &i: qAsConst(ctList))
    {
       QSharedPointer<BaseContact> dct = i.wt;
 
@@ -705,7 +705,7 @@ static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContac
 QSharedPointer<BaseContact> BaseContestLog::getBestDX( )
 {
    QSharedPointer<BaseContact> bestDX;
-   for ( auto const &i: ctList )
+   for ( auto const &i: qAsConst(ctList) )
       isBestDX( i.wt, &bestDX );
    return bestDX;
 }
@@ -774,7 +774,7 @@ void BaseContestLog::scanContest( )
    QString curop2 = currentOp2.getValue();
    oplist.insert( curop2, curop2 );
 
-   for(auto const &wnct: ctList)
+   for(auto const &wnct: qAsConst(ctList))
    {
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
@@ -846,14 +846,12 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.bonus = 0;
    cs.nbonus = 0;
 
-   for(auto const &i: ctList)
+   for(auto const &i: qAsConst(ctList))
    {
        // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = i.wt;
 
 // NB this doesn't cope with crazy times from test contests and QSOs
-
-      QDateTime start = CanonicalToTDT( DTGStart.getValue() );
 
       QString dtgstr = nct->time.getDate(DTGFULL) + nct->time.getTime(DTGLOG);
       QDateTime ncheck = CanonicalToTDT( dtgstr );
@@ -1322,7 +1320,7 @@ bool BaseContestLog::getStanza( unsigned int /*stanza*/, QString & /*stanzaData*
 //====================================================================
 QSharedPointer<BaseContact> BaseContestLog::findNextUnfilledContact()
 {
-    for ( auto const &i: ctList )
+    for ( auto const &i: qAsConst( ctList) )
    {
       if ( i.wt ->contactFlags.getValue() & TO_BE_ENTERED )
       {
