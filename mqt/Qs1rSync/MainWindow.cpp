@@ -150,25 +150,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
-    MinosConfig *config = MinosConfig::getMinosConfig();
-
-    QVector<QSharedPointer<Connectable> >connectables = config->getConnectables();
-
-    QStringList servers;
-    for ( auto const &res: qAsConst(connectables) )
-    {
-        servers.append(res->serverName);
-    }
-    servers.sort();
-    servers.removeDuplicates();
-
-    for (int i = 0; i < servers.size(); i++)
-    {
-        // this only works for local servers - so OK for me, but...
-        rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
-    }
+    getServerAppCatMap();
 
     n1mmLink.initialise();
 }
@@ -177,6 +159,27 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::getServerAppCatMap()
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    MinosConfig *config = MinosConfig::getMinosConfig();
+
+    QVector<QSharedPointer<Connectable> > connectables;
+    connectables = config->getConnectables();
+
+    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    for ( const auto &i: qAsConst(connectables))
+    {
+        if (i->appType == "RigControl")
+        {
+            serverAppCatMap[rpcConstants::rigControlCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
+            serverAppCatMap[rpcConstants::rigStateCategory].push_back(i);
+        }
+    }
+    rpc->setServerAppCatMap(serverAppCatMap);
+}
+
 void MainWindow::onStdInRead(QString cmd)
 {
     trace(QString("MainWindow::onStdInRead %1").arg(cmd));
@@ -395,7 +398,7 @@ void MainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     // PubSub notifications
     trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
-    if ( an.getOK() )    // won't be true now
+    if ( an.getOK() )
     {
         if ( an.getState() == psPublished)
         {
@@ -588,6 +591,17 @@ void MainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 {
     QSettings settings;
     settings.setValue("trackBand", ui->trackBandcb->isChecked());
+
+    mainRigMode.clear();
+    lastMainRigMode.clear();
+
+    mainRigFreq.clear();
+    lastMainRigFreq.clear();
+    lastTransverterOffset.clear();
+
+    lastBand.clear();
+    lastBandMode.clear();
+
 }
 
 void MainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)

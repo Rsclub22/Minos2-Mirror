@@ -75,7 +75,6 @@ private:
     int ftf = 0;
     int sampleRate = 0;
 
-    QString state;
     QString mainRigMode;
     QString lastMainRigMode;
 
@@ -94,6 +93,7 @@ private:
 
     void trackBand();
     void QS1RCentre(const Frequency &fLow, const Frequency &fHigh);
+    void getServerAppCatMap();
 };
 
 #endif // MAINWINDOW_H
