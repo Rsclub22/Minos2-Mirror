@@ -160,7 +160,19 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
    /*
     start record/playback!
    */ 
-   return soundSystem->startDMA( play, ( ( ihand >= 0 ) ? recfil[ ihand ] ->fileName : QString( "" ) ) );
+   unsigned long psamples = 0;
+   int16_t *pdataptr = nullptr;
+   KeyerAction * sba = KeyerAction::getCurrentAction();
+   int pipSDS = 0;
+   if (sba && sba->tailWithPip)
+   {
+       psamples = pipSamples * 2;
+       pdataptr = pipptr;
+       pipSDS = sba->pipStartDelaySamples;
+   }
+
+   return soundSystem->startDMA( play, ( ( ihand >= 0 ) ? recfil[ ihand ] ->fileName : QString( "" ) ),
+                                 psamples, pdataptr, pipSDS);
 }
 
 
@@ -539,6 +551,10 @@ SoundSystemDriver *SoundSystemDriver::getSbDriver()
 SoundSystemDriver::SoundSystemDriver()
 {
    soundSystem = RtAudioSoundSystem::createSoundSystem();
+   connect(soundSystem, SIGNAL(interruptOK()), this, SLOT(interruptOK()));
+   connect(soundSystem, SIGNAL(setActionTime1()), this, SLOT(setActionTime1()));
+   connect(soundSystem, SIGNAL(actionQueueFinished()), this, SLOT(actionQueueFinished()));
+   connect(soundSystem, SIGNAL(setVU(unsigned int, unsigned int, unsigned int)), this, SLOT(setVU(unsigned int, unsigned int, unsigned int)));
 }
 SoundSystemDriver::~SoundSystemDriver()
 {
@@ -547,6 +563,34 @@ SoundSystemDriver::~SoundSystemDriver()
       trace( "sbDriver::~sbDriver" );
    }
    delete soundSystem;
+}
+void SoundSystemDriver::interruptOK()
+{
+    KeyerAction * sba = KeyerAction::getCurrentAction();
+    if ( sba )
+       sba->interruptOK();	// so as we do not time it out immediately
+
+}
+void SoundSystemDriver::setActionTime1()
+{
+    KeyerAction * sba = KeyerAction::getCurrentAction();
+     if ( sba )
+     {
+        sba->actionTime = 1;    // force to stop
+     }
+}
+void SoundSystemDriver::actionQueueFinished()
+{
+    KeyerAction * sba = KeyerAction::getCurrentAction();
+     if ( sba )
+     {
+        sba->queueFinished();
+     }
+}
+void SoundSystemDriver::setVU(unsigned int a, unsigned int b, unsigned int c)
+{
+    WinVUCallback( a, b, c );
+
 }
 //==============================================================================
 void SoundSystemDriver::initTone1( int t1 )

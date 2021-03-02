@@ -6,6 +6,10 @@ TEMPLATE = lib
 CONFIG += staticlib
 Target = KeyerBase
 
+INCLUDEPATH += $$PWD/../rtaudio
+INCLUDEPATH += $$PWD/../Chunkware
+INCLUDEPATH += ../MqtUtils
+
 unix:!macos{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_DS__}
 
@@ -16,7 +20,8 @@ SOURCES += \
     ../Chunkware/SimpleEnvelope.cpp \
     VKMixer.cpp \
     levelmeter.cpp \
-    riff.cpp
+    riff.cpp \
+    soundsys.cpp
 
 HEADERS += \
     ../rtaudio/RtAudio.h \
@@ -30,8 +35,10 @@ HEADERS += \
     ../Chunkware/SimpleHeader.h \
     VKMixer.h \
     ddc.h \
+    keyerlog.h \
     levelmeter.h \
-    riff.h
+    riff.h \
+    soundsys.h
 
 # Default rules for deployment.
 unix {

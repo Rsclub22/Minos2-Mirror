@@ -47,7 +47,6 @@ QMap <int, MORSEMSG> MORSEMSGS;
 // some of these might not belong here, but they were in sbdvp or tlkeyer
 // and I still need them somewhere
 bool sblog = false;
-bool sbintrlog = false;
 unsigned long MORSEINTCOUNT = 0;
 
 int tuneTime = 10;

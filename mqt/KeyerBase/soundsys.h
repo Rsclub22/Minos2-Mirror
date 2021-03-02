@@ -9,9 +9,14 @@
 #ifndef soundsysH
 #define soundsysH
 
-#include "base_pch.h"
-#if !defined (_MSC_VER)
+#include "mqtUtils_pch.h"
 
+#include "riff.h"
+#include "SimpleComp.h"
+
+
+class RtAudioSoundSystem;
+#if !defined (_MSC_VER)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-result"
 #pragma GCC diagnostic ignored "-Wold-style-cast"
@@ -22,11 +27,7 @@
 #pragma GCC diagnostic pop
 #endif
 
-#include "riff.h"
 #include "SimpleComp.h"
-
-class RtAudio;
-class RtAudioSoundSystem;
 
 class RiffWriter : public QThread
 {
@@ -64,6 +65,12 @@ class RtAudioSoundSystem: public QObject
 
 private slots:
 
+signals:
+    void interruptOK();
+    void setActionTime1();
+    void actionQueueFinished();
+    void setVU(unsigned int a, unsigned int b, unsigned int c);
+
 protected:
     void readFromFile(void *outputBuffer, unsigned int nFrames, int16_t &maxvol, qreal &rmsval);
 
@@ -71,13 +78,13 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
-    virtual bool initialise( QString &errmess );
+    bool initialise( QString &errmess );
 
-    virtual unsigned int setRate(unsigned int rate);
-    virtual void setFilter(int cf);
+    unsigned int setRate(unsigned int rate);
+    void setFilter(int cf);
 
-    virtual bool startDMA( bool play, const QString &fname );
-    virtual void stopDMA();
+    bool startDMA( bool play, const QString &fname, int pipSamples, int16_t *pipptr, int pipStartDelaySamples );
+    void stopDMA();
 
     static RtAudioSoundSystem *createSoundSystem();
 
@@ -87,8 +94,8 @@ public:
     void stopInput();
     bool startInput( QString fn );
 
-    virtual bool startMicPassThrough();
-    virtual bool stopMicPassThrough();
+    bool startMicPassThrough();
+    bool stopMicPassThrough();
 
     void setVolumeMults(qreal record, qreal replay, qreal passThrough);
 
@@ -105,7 +112,7 @@ public:
     int audioCallback( void *outputBuffer, void *inputBuffer,
                                     unsigned int nFrames,
                                     double streamTime,
-                                    RtAudioStreamStatus status );
+                                    unsigned int status );
 
 private:
 

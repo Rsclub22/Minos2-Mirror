@@ -13,10 +13,11 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKeyer.ico
 
-unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
 INCLUDEPATH += $$PWD/../rtaudio
 INCLUDEPATH += $$PWD/../Chunkware
+
+unix:!macos{DEFINES += __LINUX_ALSA__}
+win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += main.cpp\
         KeyerMain.cpp \
@@ -26,19 +27,16 @@ SOURCES += main.cpp\
     keyers.cpp \
     portcon.cpp \
     sbdriver.cpp \
-    soundsys.cpp \
     windowMonitor.cpp
 
 HEADERS  += KeyerMain.h \
     keyerAbout.h \
     keyconf.h \
     keyctrl.h \
-    keyerlog.h \
     KeyerRPCServer.h \
     keyers.h \
     portcon.h \
     sbdriver.h \
-    soundsys.h \
     windowMonitor.h
 
 FORMS    += KeyerMain.ui \
