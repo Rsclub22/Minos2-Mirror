@@ -105,6 +105,7 @@ private slots:
 
     void sendSpotsToDXClusterChkBoxChanged(int state);
     void onSaveBandFilterChkBoxClicked(int state);
+    void onQrzCheckBoxChkBoxClicked(int state);
 private:
     Ui::SetupDialog *ui;
     UpperCaseValidator ucValidator;
@@ -137,6 +138,9 @@ private:
 
     bool bandFilterOnSaveFlag;
     bool bandFilterOnSaveChanged;
+
+    bool useQrzForQraFlag;
+    bool useQrzForQraChanged;
 
     void savePersonal();
 

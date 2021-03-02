@@ -300,7 +300,7 @@ private:
 
     ClusterClientFilterSettings filterSettings;
 
-
+    QMap<QString, QSharedPointer<ClusterSpotData> > askQrzQueue;
 
     QtTelnet* client;
     Clusterrpc* clusterRpc;
@@ -478,6 +478,8 @@ private:
     void loadBandFilterSettingsToTab();
 
     void setBandsCheckBoxAndFilterFlag(const QString band, const bool state);
+    bool getUseQrzForQraFlag();
+    void askQrzForQraLocator(QSharedPointer<ClusterSpotData> newSpot);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

@@ -27,7 +27,9 @@ class QrzServer
 public:
     QString serverName;
     QString app;
+    QString publisherProgram;
     PublishState state;
+    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
 };
 
 class QrzServerRpc : public QObject
@@ -42,10 +44,11 @@ public:
 
     static QrzServerRpc *getQrzServerRpc();
 
-    void sendQraToClusterServer(QString dxQra, QString spotterQra, QString state);
+    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
 signals:
-    //void QrzServerList(QVector<ClusterServer>);
-    void qrzRequest(QVector<ClusterMessage>);
+
+    //void qrzRequestQueue(QVector<QrzServerMessage>);
+    void clusterQrzMsg(QrzServerMessage);
 
 private:
 
@@ -54,15 +57,15 @@ private:
 
      QVector<QrzServer> serverList;
 
-    void addQrzRequestsQueue(const ClusterMessage spot);
+
 private slots:
+
     void SyncTimerTimer( );
     void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );
-signals:
-    void QrzServerRpcServerList(QVector<QrzServer>);
-    void qrzRequests(QVector<ClusterMessage>);
+
+
 
 };
 

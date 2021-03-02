@@ -34,7 +34,9 @@ SetupDialog::SetupDialog(QWidget *parent) :
     sendSpotsToDXClusterChanged(false),
     personalDataChanged(false),
     bandFilterOnSaveFlag(false),
-    bandFilterOnSaveChanged(false)
+    bandFilterOnSaveChanged(false),
+    useQrzForQraFlag(false),
+    useQrzForQraChanged(false)
 {
     ui->setupUi(this);
 
@@ -51,6 +53,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
     connect(ui->runEndCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runEndCmdFileChkBoxChanged(state);});
     connect(ui->sendSpotsToDXClusterChkBox, &QCheckBox::stateChanged, [=](int state){sendSpotsToDXClusterChkBoxChanged(state);});
     connect(ui->saveBandFilterSettingChkBox, &QCheckBox::stateChanged, [=](int state){onSaveBandFilterChkBoxClicked(state);});
+    connect(ui->useQrzCheckBox, &QCheckBox::stateChanged, [=](int state){onQrzCheckBoxChkBoxClicked(state);});
     readGeneralSettings();
     loadGeneralToSetupTab();
 
@@ -180,7 +183,7 @@ void SetupDialog::saveGeneralSettings()
 {
     if (timeToLiveChanged || runStartCmdFilesChanged
         || runEndCmdFilesChanged || sendSpotsToDXClusterChanged
-        || bandFilterOnSaveChanged)
+        || bandFilterOnSaveChanged || useQrzForQraChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
         QString fileName = CLUSTER_SETTINGS_FILE;
@@ -226,6 +229,12 @@ void SetupDialog::saveGeneralSettings()
             config.setValue("bandFilterSaveOnClose", bandFilterOnSaveFlag);
             config.endGroup();
         }
+        if (useQrzForQraChanged)
+        {
+            config.beginGroup("UseQRZServer");
+            config.setValue("enableGetQraFromQrz", useQrzForQraFlag);
+            config.endGroup();
+        }
 
     }
 }
@@ -260,7 +269,9 @@ void SetupDialog::createDefaultGeneralSettingsFile()
     config.beginGroup("EnableSendSpotsToDXCluster");
     config.setValue("enableSendToDXCluster", false);
     config.endGroup();
-
+    config.beginGroup("UseQRZServer");
+    config.setValue("enableGetQraFromQrz", false);
+    config.endGroup();
 
 }
 
@@ -285,8 +296,14 @@ void SetupDialog::readGeneralSettings()
     config.beginGroup("General");
     bandFilterOnSaveFlag = config.value("bandFilterSaveOnClose", true).toBool();
     config.endGroup();
+    config.beginGroup("UseQRZServer");
+    useQrzForQraFlag =  config.value("enableGetQraFromQrz", false).toBool();
+    config.endGroup();
 
 }
+
+
+
 
 void SetupDialog::loadGeneralToSetupTab()
 {
@@ -296,6 +313,8 @@ void SetupDialog::loadGeneralToSetupTab()
     ui->runEndCmdFileChkBox->setChecked(enableEndCmdFiles);
     ui->sendSpotsToDXClusterChkBox->setChecked(sendSpotToDXCluster);
     ui->saveBandFilterSettingChkBox->setChecked(bandFilterOnSaveFlag);
+    ui->useQrzCheckBox->setChecked(useQrzForQraFlag);
+
 }
 
 
@@ -322,13 +341,29 @@ void SetupDialog::onSaveBandFilterChkBoxClicked(int state)
     {
         if (bandFilterOnSaveFlag)
         {
-            bandFilterOnSaveFlag = true;
+            bandFilterOnSaveFlag = false;
             bandFilterOnSaveChanged = true;
         }
     }
 }
 
+void SetupDialog::onQrzCheckBoxChkBoxClicked(int state)
+{
+    if (state == Qt::Checked)
+    {
+       if (!useQrzForQraFlag)
+       {
+           useQrzForQraFlag = true;
+           useQrzForQraChanged = true;
+       }
+    }
+    else if (state == Qt::Unchecked)
+    {
+        useQrzForQraFlag = false;
+        useQrzForQraChanged = true;
+    }
 
+}
 
 
 void SetupDialog::runStartCmdFileChkBoxChanged(int state)
@@ -417,6 +452,8 @@ bool SetupDialog::getSendToDXClusterEnabled()
 {
     return sendSpotToDXCluster;
 }
+
+
 
 void SetupDialog::nameEditFinshed()
 {
@@ -781,3 +818,6 @@ bool SetupDialog::getRunEndFileFlag()
 {
    return enableEndCmdFiles;
 }
+
+
+

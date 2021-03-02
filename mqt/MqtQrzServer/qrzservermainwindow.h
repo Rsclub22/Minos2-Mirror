@@ -30,6 +30,9 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
 QT_END_NAMESPACE
 
+const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
+const QString AGENT = "Minos";
+
 // SubExp response
 
 const QString NONSUBCRIBER = "non-subscriber";
@@ -68,7 +71,7 @@ public:
     void setLat(QString lat_){lat = lat_;}
     QString getLat(){return lat;}
 
-    void setLon(QString lon_){lat = lon_;}
+    void setLon(QString lon_){lon = lon_;}
     QString getLon(){return lon;}
 
     void setQra(QString qra_){qra = qra_;}
@@ -160,8 +163,12 @@ private slots:
     void LogTimerTimer();
     void onConfigure();
     void onStdInRead(QString cmd);
-    void qrzRequestMsg(QVector<ClusterMessage> qrzRequestMsg);
+
     void clusterClientServerList(QVector<ClusterServer> serverList);
+
+
+    void onClusterQrzMessage(QrzServerMessage qrzRequest);
+    void handleQrzRequests();
 private:
     Ui::QrzServerMainWindow *ui;
 
@@ -174,6 +181,9 @@ private:
 
     QString logonCallsign;
     QString password;
+
+    QVector<QrzServerMessage> qrzRequestQueue;
+    QrzServerMessage requestedStation;
 
     int parseTest();
 
@@ -190,5 +200,10 @@ private:
     void parseDXCCData(QXmlStreamReader &xmlData);
     void getData(QNetworkReply *netReply);
 
+    void logon();
+    QString stripPasswordFromUrl(QString url);
+    void askCallsignData(QString callsign);
+    void sessionDataReceived();
+    void callsignDataReceived();
 };
 #endif // QRZSERVERMAINWINDOW_H

@@ -199,6 +199,7 @@ class ClusterServer
 public:
     QString serverName;
     QString app;
+    QString publisherProgram;
     PublishState state;
 };
 
@@ -218,8 +219,40 @@ public:
 
 private:
     QString message;
+    QString dxCall;         // used in qrzServer
+    QString spotterCall;    // used in qrzServer
     QString loggerUuid;
     resendFrameId frameId;
+};
+
+class QrzServerMessage
+{
+
+public:
+    QrzServerMessage(){clear();}
+
+    void setDxCall(QString dxCall_){dxCall = dxCall_;}
+    QString getDxCall(){return dxCall;}
+
+    void setSpotterCall(QString spotterCall_){spotterCall = spotterCall_;}
+    QString getSpotterCall(){return spotterCall;}
+
+    void setLoggerFlag(bool state){loggerFlag = state;}
+    bool getLoggerFlag(){return loggerFlag;}
+
+    void clear(){
+        dxCall.clear();
+        spotterCall.clear();
+        loggerFlag = false;
+    }
+
+private:
+
+    QString dxCall;
+    QString spotterCall;
+    bool loggerFlag;           // true from logger, false from cluster
+
+
 };
 
 
