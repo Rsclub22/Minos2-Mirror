@@ -76,7 +76,6 @@ void KeyerMain::syncSetLines()
 KeyerMain::KeyerMain(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::KeyerMain),
-    mixer(nullptr),
     PTT(false), PTTRef(false), L1Ref(false), L2Ref(false),
     recordWait(false),
     recording(false),
@@ -114,9 +113,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->setupScriptEdit->setText(alsaFileName);
 
     runAlsaScript(alsaFileName, alsaRestore);
-
-
-    mixer = VKMixer::OpenMixer();
 
     keyerMain = this;
     setLineCallBack( lcallback );
@@ -223,7 +219,7 @@ void KeyerMain::LineTimerTimer( )
          recording = false;
       }
    KeyerServer::publishCommand( ui->recind->text() );
-   eMixerSets m = mixer->GetCurrentMixerSet();
+   eMixerSets m = VKMixer::GetVKMixer()->GetCurrentMixerSet();
 
    ui->levelLabel->setText(tr(levelLabels[m]));
 

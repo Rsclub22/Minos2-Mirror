@@ -1,6 +1,6 @@
 include($$PWD/../mqt.pri)
 
-QT -= gui
+QT       += core gui network widgets
 
 TEMPLATE = lib
 CONFIG += staticlib
@@ -13,7 +13,10 @@ SOURCES += \
     ../rtaudio/RtAudio.cpp \
     ../Chunkware/SimpleComp.cpp \
     ../Chunkware/SimpleCompProcess.inl \
-    ../Chunkware/SimpleEnvelope.cpp
+    ../Chunkware/SimpleEnvelope.cpp \
+    VKMixer.cpp \
+    levelmeter.cpp \
+    riff.cpp
 
 HEADERS += \
     ../rtaudio/RtAudio.h \
@@ -24,7 +27,11 @@ HEADERS += \
     ../Chunkware/SimpleComp.h \
     ../Chunkware/SimpleEnvelope.h \
     ../Chunkware/SimpleGain.h \
-    ../Chunkware/SimpleHeader.h
+    ../Chunkware/SimpleHeader.h \
+    VKMixer.h \
+    ddc.h \
+    levelmeter.h \
+    riff.h
 
 # Default rules for deployment.
 unix {

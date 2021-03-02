@@ -23,10 +23,8 @@ class VKMixer
 {
 private:
     static VKMixer *currentMixer;
-public:
-
     eMixerSets CurrMixerSet;
-
+public:
       VKMixer();
 
       virtual ~VKMixer();
@@ -35,8 +33,6 @@ public:
 
       eMixerSets GetCurrentMixerSet();
       void SetCurrentMixerSet( eMixerSets cms );
-
-      static VKMixer *OpenMixer();
 };
 //======================================================================================
 #endif

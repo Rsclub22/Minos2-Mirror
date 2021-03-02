@@ -25,27 +25,20 @@ SOURCES += main.cpp\
     KeyerRPCServer.cpp \
     keyers.cpp \
     portcon.cpp \
-    riff.cpp \
     sbdriver.cpp \
     soundsys.cpp \
-    VKMixer.cpp \
-    levelmeter.cpp \
     windowMonitor.cpp
 
 HEADERS  += KeyerMain.h \
     keyerAbout.h \
-    ddc.h \
     keyconf.h \
     keyctrl.h \
     keyerlog.h \
     KeyerRPCServer.h \
     keyers.h \
     portcon.h \
-    riff.h \
     sbdriver.h \
     soundsys.h \
-    VKMixer.h \
-    levelmeter.h \
     windowMonitor.h
 
 FORMS    += KeyerMain.ui \
