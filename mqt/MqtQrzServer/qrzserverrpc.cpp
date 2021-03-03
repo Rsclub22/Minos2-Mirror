@@ -44,14 +44,14 @@ QrzServerRpc *QrzServerRpc::qrzServerRpc = nullptr;
 
 QrzServerRpc::QrzServerRpc()
 {
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
-    SyncTimer.start(100);
+    //connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    //SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
 
     QStringList sv{
-        rpcConstants::clusterCategory
+        rpcConstants::clusterApp
     };
     rpc->initialiseServers(sv);
 
@@ -140,7 +140,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
     if ( an.getOK() )
     {
 
-        if ( an.getCategory() == rpcConstants::clusterCategory )
+        if ( an.getCategory() == rpcConstants::clusterApp )
         {
             trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             bool stationFound = false;
@@ -178,7 +178,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 
 }
 
-
+/*
 void QrzServerRpc::SyncTimerTimer(  )
 {
     if (qrzRequestsQueue.count())
@@ -188,7 +188,7 @@ void QrzServerRpc::SyncTimerTimer(  )
     }
 }
 
-
+*/
 
 
 

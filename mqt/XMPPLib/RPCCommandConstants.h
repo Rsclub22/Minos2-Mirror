@@ -84,6 +84,9 @@ static const QString qrzItuZone         ("qrzItuZone");
 static const QString qrzDxReplyState      ("qrzDxReplyState");
 static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
 
+static const QString qrzServerLoggedOut ("qrzServerLoggedOut");
+static const QString qrzServerLoggerIn  ("qrzServerLoggedIn");
+static const QString qrzServerCallOK    ("qrzServerCallOK");
 
 // Chat
 static const QString chatApp            ("mqtChat");

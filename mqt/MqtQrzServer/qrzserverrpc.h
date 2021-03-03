@@ -53,14 +53,14 @@ signals:
 private:
 
     static QrzServerRpc *qrzServerRpc;
-    QTimer SyncTimer;
+    //QTimer SyncTimer;
 
      QVector<QrzServer> serverList;
 
 
 private slots:
 
-    void SyncTimerTimer( );
+    //void SyncTimerTimer( );
     void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );

@@ -527,6 +527,7 @@ private slots:
     void onUhfSelectBandPbPressed();
     void onpbpressed(); // for test .. remove
     void onReconnectCommandFromLog(bool state);
+    void onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState);
 };
 
 #endif // CLUSTERMAINWINDOW_H

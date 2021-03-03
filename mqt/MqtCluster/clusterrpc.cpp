@@ -16,6 +16,12 @@ Clusterrpc::Clusterrpc()
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+
+    QString a = rpc->getAppName();
+    QString station = MinosConfig::getMinosConfig()->getThisServerName();
+    RPCPubSub::publish(rpcConstants::clusterApp,  a + "@" + station, "", psPublished);
+
+
 }
 
 Clusterrpc::~Clusterrpc()
@@ -237,13 +243,9 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 //---------------------------------------------------------------------------
 void Clusterrpc::publishState( const QString &raw, const QString &state )
 {
-  //static QString old;
 
-  //if ( state != old )
-  //{
-  //   old = state;
   RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, raw + "<>" + state, psPublished );
-  //}
+
 }
 
 void Clusterrpc::publishTXEnable(const QString txOnOff)

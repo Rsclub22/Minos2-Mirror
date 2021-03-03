@@ -33,6 +33,12 @@ QT_END_NAMESPACE
 const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
 const QString AGENT = "Minos";
 
+const int QUERYTIMEOUT = 2000;
+
+const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
 // SubExp response
 
 const QString NONSUBCRIBER = "non-subscriber";
@@ -125,12 +131,16 @@ public:
     void clear()
     {
         error.clear();
+        message.clear();
         key.clear();
         subExp.clear();
     }
 
     void setError(QString error_){error = error_;}
     QString getError(){return error;}
+
+    void setMessage(QString message_){message = message_;}
+    QString getMessage(){return message;}
 
     void setKey(QString key_){key = key_;}
     QString getKey(){return key;}
@@ -141,6 +151,7 @@ public:
 private:
 
     QString error;
+    QString message;
     QString key;
     QString subExp;
 
@@ -169,6 +180,7 @@ private slots:
 
     void onClusterQrzMessage(QrzServerMessage qrzRequest);
     void handleQrzRequests();
+    void onQueryTimeout();
 private:
     Ui::QrzServerMainWindow *ui;
 
@@ -190,7 +202,15 @@ private:
     QrzCallsignData qrzCallsignData;
     QrzSessionData qrzSessionData;
 
-    bool loggedOn = false;
+
+    QTimer *queryTimer;
+    QTimer *checkQrzRequestsTimer;
+
+    bool askLogonFlag = false;
+    bool askCallsignFlag = false;
+
+    bool qrzLoggedOn = false;
+
 
     QString key;
 
@@ -205,5 +225,9 @@ private:
     void askCallsignData(QString callsign);
     void sessionDataReceived();
     void callsignDataReceived();
+    void addTextToLogWindow(QString message);
+    void addToErrorTextLabel(QString message);
+    void addToMessageTextLabel(QString message);
+    void setQrzStatusConnected(bool state);
 };
 #endif // QRZSERVERMAINWINDOW_H

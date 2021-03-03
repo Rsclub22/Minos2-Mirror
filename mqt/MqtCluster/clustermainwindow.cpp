@@ -149,6 +149,8 @@ void ClusterMainWindow::doStartup()
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
     connect(clusterRpc, &Clusterrpc::reconnectCmdFromLog, this, [=](bool state){onReconnectCommandFromLog(state);});
+    connect(clusterRpc, &Clusterrpc::clusterQrzResponse,
+            this, [=](QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState){onclusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);});
 
     handleSpotsInQueues = new QTimer();
     connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
@@ -1033,6 +1035,13 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
                 newSpot->setDxLocatorIsFromNode(true);
             }
         }
+        else if (newSpot->getDxLocator() == ASKQRZ_FAILEDQRA)
+        {
+            // failed to get QRA from QRZ, use prefix
+            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            trace(QString("Process DX Spot: failed to get qra from qrz, get from prefix = %1").arg(newSpot->getDxLocator()));
+            newSpot->setDxLocatorIsFromNode(true);
+        }
 
 
 
@@ -1374,6 +1383,35 @@ QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<C
 
 }
 
+
+void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState)
+{
+    Q_UNUSED(spotterGrid)
+    Q_UNUSED(spotterState)
+
+    QString callsignKey = dxCall + ":" + spotterCall;
+
+    if (askQrzQueue.contains(callsignKey))
+    {
+        QSharedPointer<ClusterSpotData> newSpot = askQrzQueue.value(callsignKey);
+        askQrzQueue.remove(callsignKey);
+
+        if (!dxGrid.isEmpty() && dxCallState == rpcConstants::qrzServerCallOK)
+        {
+            trace(QString("Qrz Server Response for callsign = %1, qra = %2").arg(dxCall, dxGrid));
+            newSpot->setDxLocator(dxGrid);
+            processNewSpot(newSpot);
+        }
+        else
+        {
+            // flag no Qra found for callsign from Qrz
+            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);
+            processNewSpot(newSpot);
+        }
+    }
+
+
+}
 
 void ClusterMainWindow::cancelPingTimeOut(QString msg)
 {
