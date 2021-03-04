@@ -21,7 +21,7 @@ PubSubName::PubSubName()
 
 PubSubName::PubSubName(const AnalysePubSubNotify &an)
 {
-    _server = an.getPublisherServer();
+    _router = an.getPublisherRouter();
     _appName = an.getPublisherProgram();
     _key = PubSubName(an.getKey()).key();
 }
@@ -40,15 +40,15 @@ PubSubName::PubSubName(const QString &s)
             _appName = sl[1];
             if (sl.size() > 2)
             {
-                _server = sl[2];
+                _router = sl[2];
             }
         }
 
         if (_key.isEmpty())
             return;
-        if (_server.isEmpty())
+        if (_router.isEmpty())
         {
-            _server = MinosConfig::getMinosConfig()->getThisServerName();
+            _router = MinosConfig::getMinosConfig()->getThisRouterName();
         }
         if (_appName.isEmpty())
         {
@@ -62,18 +62,18 @@ PubSubName::PubSubName(const QString &s)
 }
 bool PubSubName::isEmpty() const
 {
-    return _server.isEmpty() && _appName.isEmpty() && _key.isEmpty();
+    return _router.isEmpty() && _appName.isEmpty() && _key.isEmpty();
 }
 QString PubSubName::toString() const
 {
     if (isEmpty())
         return QString();
 
-    return _server + "/" + _appName + "/" + _key;
+    return _router + "/" + _appName + "/" + _key;
 }
 bool PubSubName::operator< ( const PubSubName& rhs ) const
 {
-    int scomp = _server.compare(rhs.server(), Qt::CaseInsensitive);
+    int scomp = _router.compare(rhs.router(), Qt::CaseInsensitive);
     if (scomp == 0)
     {
         int acomp = _appName.compare(rhs.appName(), Qt::CaseInsensitive);
@@ -86,7 +86,7 @@ bool PubSubName::operator< ( const PubSubName& rhs ) const
 }
 bool PubSubName::operator== ( const PubSubName& rhs ) const
 {
-    int scomp = _server.compare(rhs.server(), Qt::CaseInsensitive);
+    int scomp = _router.compare(rhs.router(), Qt::CaseInsensitive);
     if (scomp == 0)
     {
         int acomp = _appName.compare(rhs.appName(), Qt::CaseInsensitive);
@@ -120,12 +120,12 @@ void PubSubName::setKey(const QString &key)
     _key = key;
 }
 
-QString PubSubName::server() const
+QString PubSubName::router() const
 {
-    return _server;
+    return _router;
 }
 
-void PubSubName::setServer(const QString &server)
+void PubSubName::setRouter(const QString &router)
 {
-    _server = server;
+    _router = router;
 }

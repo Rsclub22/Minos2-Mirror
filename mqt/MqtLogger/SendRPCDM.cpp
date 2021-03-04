@@ -24,7 +24,7 @@ TSendDM::TSendDM(QWidget* Owner )
     traceMsg("logger uuid is " + loggerUuid);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
 }
@@ -33,7 +33,7 @@ TSendDM::~TSendDM()
     delete MinosRPC::getMinosRPC(getAppStartupName());
 }
 //---------------------------------------------------------------------------
-void TSendDM::getServerAppCatMap()
+void TSendDM::getRouterAppCatMap()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
@@ -41,7 +41,7 @@ void TSendDM::getServerAppCatMap()
     QVector<QSharedPointer<Connectable> > connectables;
     connectables = config->getConnectables();
 
-    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
     for ( const auto &i: qAsConst(connectables))
     {
         if (i->appType == "None")
@@ -62,7 +62,7 @@ void TSendDM::getServerAppCatMap()
         }
         else if (i->appType == "Keyer")
         {
-            serverAppCatMap[rpcConstants::KeyerCategory].push_back(i);
+            routerAppCatMap[rpcConstants::KeyerCategory].push_back(i);
         }
         else if (i->appType == "LineControl")
         {
@@ -82,33 +82,33 @@ void TSendDM::getServerAppCatMap()
         }
         else if (i->appType == "RigControl")
         {
-            serverAppCatMap[rpcConstants::rigControlCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rigStateCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigControlCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigStateCategory].push_back(i);
         }
         else if (i->appType == "Rotator")
         {
-            serverAppCatMap[rpcConstants::RotatorCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rotatorDetailCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rotatorStateCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rotatorPresetsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::RotatorCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rotatorDetailCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rotatorStateCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rotatorPresetsCategory].push_back(i);
         }
         else if (i->appType == "Server")
         {
-//            serverAppCatMap[rpcConstants::LocalStationCategory].push_back(i);
-//            serverAppCatMap[rpcConstants::StationCategory].push_back(i);
+//            routerAppCatMap[rpcConstants::LocalStationCategory].push_back(i);
+//            routerAppCatMap[rpcConstants::StationCategory].push_back(i);
         }
         else if (i->appType == "Cluster")
         {
-            serverAppCatMap[rpcConstants::clusterClientServer].push_back(i);
-            serverAppCatMap[rpcConstants::clusterCategory].push_back(i);
+            routerAppCatMap[rpcConstants::clusterClientServer].push_back(i);
+            routerAppCatMap[rpcConstants::clusterCategory].push_back(i);
         }
         else if (i->appType == "KSTClient")
         {
 
         }
     }
-    rpc->setServerAppCatMap(serverAppCatMap);
+    rpc->setRouterAppCatMap(routerAppCatMap);
 }
 void TSendDM::subscribeApps()
 {
@@ -116,7 +116,7 @@ void TSendDM::subscribeApps()
 
     traceMsg("subscribeApps");
     invalidateCache();
-    getServerAppCatMap();
+    getRouterAppCatMap();
 }
 
 void TSendDM::invalidateCache()
@@ -839,7 +839,7 @@ void TSendDM::notifyRotChanges()
 void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    traceMsg( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
+    traceMsg( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {
@@ -950,7 +950,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
         tslf->checkConnections();
 }
 //---------------------------------------------------------------------------
-void TSendDM::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     // responds to pull calls from the monitoring client
     traceMsg( "request callback from " + from + ( err ? ":Error" : ":Normal" ) );

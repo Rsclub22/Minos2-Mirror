@@ -56,16 +56,16 @@ class RPCRemoteSubscribeClient: public RPCPubSub
          return QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeClient( callback ));
       }
 };
-class RPCNotifyServer: public MinosRPCServer
+class RPCNotifyRouter: public MinosRPCRouter
 {
    public:
-      RPCNotifyServer( TRPCFunctor *cb ) : MinosRPCServer( rpcConstants::clientNotify, cb )
+      RPCNotifyRouter( TRPCFunctor *cb ) : MinosRPCRouter( rpcConstants::clientNotify, cb )
       {}
-      virtual ~RPCNotifyServer() override;
+      virtual ~RPCNotifyRouter() override;
 
       virtual QSharedPointer<MinosRPCObj>makeObj() override
       {
-         return QSharedPointer<MinosRPCObj>(new RPCNotifyServer( callback ));
+         return QSharedPointer<MinosRPCObj>(new RPCNotifyRouter( callback ));
       }
 };
 //---------------------------------------------------------------------------
@@ -81,24 +81,24 @@ class RPCSubscriber
       virtual ~RPCSubscriber(){}
       virtual void reSubscribe();
       virtual bool isEqual( const QString &category );
-      virtual bool isRemoteEqual( const QString &server, const QString &category );
+      virtual bool isRemoteEqual( const QString &router, const QString &category );
 };
 class RPCRemoteSubscriber : public RPCSubscriber
 {
    private:
-      QString server;
-      RPCRemoteSubscriber( const QString &server, const QString &cat )
-            : RPCSubscriber( cat ), server( server )
+      QString router;
+      RPCRemoteSubscriber( const QString &router, const QString &cat )
+            : RPCSubscriber( cat ), router( router )
       {}
       ~RPCRemoteSubscriber() override
       {}
    public:
-      static void testAndSubscribe( const QString &server, const QString &category );
-      virtual bool isRemoteEqual( const QString &server, const QString &category ) override;
+      static void testAndSubscribe( const QString &router, const QString &category );
+      virtual bool isRemoteEqual( const QString &router, const QString &category ) override;
       virtual void reSubscribe() override;
-      QString getServer()
+      QString getRouter()
       {
-         return server;
+         return router;
       }
 };
 class RPCPublisher

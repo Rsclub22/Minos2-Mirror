@@ -6,7 +6,7 @@
 #include "MServerZConf.h"
 #include "MServer.h"
 
-MinosServerListener *MinosServerListener::MSL = nullptr;
+MinosRouterListener *MinosRouterListener::MSL = nullptr;
 MinosClientListener *MinosClientListener::MCL = nullptr;
 
 //=============================================================================
@@ -50,7 +50,7 @@ bool MinosListener::initialise( QString type, quint16 port )
 
 void MinosListener::addListenerSlot( MinosCommonConnection *il )
 {
-    trace( QString("addListenerSlot: from %1 %2").arg(isServer()?"Server":"Client").arg(il->connectHost.toString() ));
+    trace( QString("addListenerSlot: from %1 %2").arg(isRouter()?"Server":"Client").arg(il->connectHost.toString() ));
 
     i_array.push_back( il );
     il->initialise();
@@ -89,18 +89,18 @@ void MinosListener::on_newConnection()
 }
 void MinosListener::on_timeout()
 {
-    if (isServer())
+    if (isRouter())
     {
         // This is intended to remove the second link each process
         // gets initially
         for ( CommonIterator i = i_array.begin(); i != i_array.end(); i++ )
         {
-            QString hi = (*i)->getClientServer();
+            QString hi = (*i)->getClientRouter();
             if ((*i)->remove_socket)
                 continue;
             for ( CommonIterator j = i + 1; j != i_array.end(); j++ )
             {
-                QString hj = (*j)->getClientServer();
+                QString hj = (*j)->getClientRouter();
                 if (hi == hj)
                 {
                     quint32 remIP = (*j)->sock->peerAddress().toIPv4Address();
@@ -112,7 +112,7 @@ void MinosListener::on_timeout()
                         (*j)->remove_socket = true;
                         (*j)->publish_disconnect = false;
                         (*j)->sendCloseSocket();
-                        trace("removing socket for " + (*j)->getClientServer());
+                        trace("removing socket for " + (*j)->getClientRouter());
                     }
                 }
             }
@@ -152,10 +152,10 @@ void MinosListener::clearSockets()
 }
 //==============================================================================
 
-MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
+MinosCommonConnection *MinosRouterListener::makeConnection(QTcpSocket *s)
 {
-    trace("Creating MinosServerConnection makeConnection");
-    MinosServerConnection *c = new MinosServerConnection(false);
+    trace("Creating MinosRouterConnection makeConnection");
+    MinosRouterConnection *c = new MinosRouterConnection(false);
 
     c->sock = QSharedPointer<QTcpSocket>(s);
     c->connectHost = c->sock->peerAddress();
@@ -163,22 +163,22 @@ MinosCommonConnection *MinosServerListener::makeConnection(QTcpSocket *s)
     return c;
 }
 
-bool MinosServerListener::sendServer( TiXmlElement *tix )
+bool MinosRouterListener::sendRouter( TiXmlElement *tix )
 {
     MinosId to( getAttribute( tix, "to" ) );
 
-    if ( to.server.size() == 0 )
+    if ( to.router.size() == 0 )
         return false;
-    if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive) == 0 )
+    if ( to.router.compare( ThisMinosRouter::getThisMinosRouter() ->getRouterName(), Qt::CaseInsensitive) == 0 )
         return false;
-    if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
+    if ( to.router.compare( DEFAULT_ROUTER_NAME, Qt::CaseInsensitive ) == 0 )
         return false;
 
     // OK, it is not for us... look at connected servers
 
     for ( auto const &a: qAsConst(i_array ))
     {
-        if ( a ->checkServer( to ) )
+        if ( a ->checkRouter( to ) )
         {
             if ( !a->tryForwardStanza( tix ) )
             {
@@ -194,7 +194,7 @@ bool MinosServerListener::sendServer( TiXmlElement *tix )
 return true;   // don't pass it on - either we have dealt with it, or its not useful
 }
 
-void MinosServerListener::buildTable(QTableWidget *tab)
+void MinosRouterListener::buildTable(QTableWidget *tab)
 {
     tab->clear();
     tab->setRowCount(i_array.count());
@@ -204,30 +204,30 @@ void MinosServerListener::buildTable(QTableWidget *tab)
     int row = 0;
     for ( auto const &a: qAsConst(i_array ))
     {
-        MinosServerConnection *msc = dynamic_cast<MinosServerConnection *>(a);
-        QString server = msc->getClientServer();
-        QTableWidgetItem *s = new QTableWidgetItem(server);
+        MinosRouterConnection *msc = dynamic_cast<MinosRouterConnection *>(a);
+        QString router = msc->getClientRouter();
+        QTableWidgetItem *s = new QTableWidgetItem(router);
         tab->setItem(row, 0, s);
-        s = new QTableWidgetItem(msc->server()->host.toString());
+        s = new QTableWidgetItem(msc->router()->host.toString());
         tab->setItem(row, 1, s);
-        s = new QTableWidgetItem(msc->server()->uuid);
+        s = new QTableWidgetItem(msc->router()->uuid);
         tab->setItem(row, 2, s);
         row++;
     }
 }
 
-void MinosServerListener::closeDown()
+void MinosRouterListener::closeDown()
 {
     MSL = nullptr;
 }
 
-MinosServerConnection *MinosServerListener::findConnection(const QHostAddress &h)
+MinosRouterConnection *MinosRouterListener::findConnection(const QHostAddress &h)
 {
     for ( auto const &a: qAsConst(i_array ))
     {
         if (h.toIPv4Address() == a->connectHost.toIPv4Address())
         {
-            return dynamic_cast<MinosServerConnection *>(a);
+            return dynamic_cast<MinosRouterConnection *>(a);
         }
     }
     return nullptr;
@@ -269,16 +269,16 @@ bool MinosClientListener::sendClient( TiXmlElement *tix )
 
    bool addressOK = false;
 
-   if ( from.empty() || from.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( from.empty() || from.router.compare( ThisMinosRouter::getThisMinosRouter() ->getRouterName(), Qt::CaseInsensitive ) == 0 )
       fromLocal = true;
 
-   if ( from.empty() && from.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
+   if ( from.empty() && from.router.compare( DEFAULT_ROUTER_NAME, Qt::CaseInsensitive ) == 0 )
       fromLocalHost = true;
 
-   if ( to.server.compare( ThisMinosServer::getThisMinosServer() ->getServerName(), Qt::CaseInsensitive ) == 0 )
+   if ( to.router.compare( ThisMinosRouter::getThisMinosRouter() ->getRouterName(), Qt::CaseInsensitive ) == 0 )
       toLocal = true;
 
-   if ( to.server.compare( DEFAULT_SERVER_NAME, Qt::CaseInsensitive ) == 0 )
+   if ( to.router.compare( DEFAULT_ROUTER_NAME, Qt::CaseInsensitive ) == 0 )
       toLocalHost = true;
 
    if ( toLocal )

@@ -26,7 +26,7 @@ class MinosId
 {
    public:
       QString user;
-      QString server;
+      QString router;
       QString fullId;
 
       bool empty();
@@ -54,7 +54,7 @@ class MinosCommonConnection: public QObject
        qint64 lastRx = 0;
 
       // who is connected?
-      QString clientServer;     // server name
+      QString clientRouter;     // router name
       QString clientUser;       // client name (or empty)
       QString makeJid();        // return the Jabber ID
 
@@ -80,17 +80,17 @@ class MinosCommonConnection: public QObject
       virtual bool analyseNode( TiXmlElement *pak );
       virtual bool tryForwardStanza( TiXmlElement *pak );
 
-      virtual bool isServer() = 0;
+      virtual bool isRouter() = 0;
       virtual bool checkFrom( TiXmlElement *pak ) = 0;
       virtual void setFromId( MinosId &from, RPCRequest *req ) = 0;
 
-      virtual bool checkServer( const MinosId &s )
+      virtual bool checkRouter( const MinosId &s )
       {
-         return ( clientServer.compare(s.server, Qt::CaseInsensitive) == 0 );
+         return ( clientRouter.compare(s.router, Qt::CaseInsensitive) == 0 );
       }
-      virtual bool checkServer( const QString &s )
+      virtual bool checkRouter( const QString &s )
       {
-          return ( clientServer.compare(s, Qt::CaseInsensitive) == 0 );
+          return ( clientRouter.compare(s, Qt::CaseInsensitive) == 0 );
       }
       virtual bool checkUser( const MinosId &u )
       {
@@ -106,7 +106,7 @@ class MinosCommonConnection: public QObject
       {}
       virtual void sendCloseSocket( )
       {}
-      QString getClientServer() const;
+      QString getClientRouter() const;
 
       QString getClientUser() const;
 

@@ -23,7 +23,7 @@ void RPCPubSub::initialisePubSub( TRPCFunctor *notifycb )
    if ( !objAdded )
    {
       objAdded = true;
-      MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCNotifyServer( notifycb )) );
+      MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCNotifyRouter( notifycb )) );
    }
 }
 void RPCPubSub::publish( const QString &category, const QString &key, const QString &value, PublishState pState )
@@ -35,9 +35,9 @@ void RPCPubSub::subscribe( const QString &category )
 {
    RPCSubscriber::testAndSubscribe( category );
 }
-void RPCPubSub::subscribeRemote( const QString &server, const QString &category )
+void RPCPubSub::subscribeRemote( const QString &router, const QString &category )
 {
-   RPCRemoteSubscriber::testAndSubscribe( server, category );
+   RPCRemoteSubscriber::testAndSubscribe( router, category );
 }
 void RPCPubSub::reconnectPubSub( )
 {

@@ -2,23 +2,23 @@
 
 WsjtxLink::WsjtxLink(QObject *parent):
     QObject(parent),
-    server {new MessageServer {this}}
+    msgServer {new MessageServer {this}}
 
 {
-    connect (server, &MessageServer::status_update, this, &WsjtxLink::update_status);
+    connect (msgServer, &MessageServer::status_update, this, &WsjtxLink::update_status);
     //connect (server_, &MessageServer::qso_logged, this, &WsjtxServer::log_qso);
-    connect (server, &MessageServer::logged_ADIF, this, &WsjtxLink::log_ADIF);
-    connect (server, &MessageServer::client_opened, this, &WsjtxLink::add_client);
-    connect (server, &MessageServer::client_closed, this, &WsjtxLink::remove_client);
-    connect (server, &MessageServer::decode, this, &WsjtxLink::decode_added);
-    connect (server, &MessageServer::decodes_cleared,  this, &WsjtxLink::decodes_cleared);
+    connect (msgServer, &MessageServer::logged_ADIF, this, &WsjtxLink::log_ADIF);
+    connect (msgServer, &MessageServer::client_opened, this, &WsjtxLink::add_client);
+    connect (msgServer, &MessageServer::client_closed, this, &WsjtxLink::remove_client);
+    connect (msgServer, &MessageServer::decode, this, &WsjtxLink::decode_added);
+    connect (msgServer, &MessageServer::decodes_cleared,  this, &WsjtxLink::decodes_cleared);
 
 
 }
 WsjtxLink::~WsjtxLink()
 {
-    server->stop();
-    server->deleteLater();
+    msgServer->stop();
+    msgServer->deleteLater();
 }
 void WsjtxLink::initialise()
 {
@@ -31,12 +31,12 @@ void WsjtxLink::initialise()
 
     trace(QString("Wsjtxlink::start  1 port %1 address %2").arg(port).arg(multicast_group_address));
 
-    server->start(static_cast<MessageServer::port_type>( port), QHostAddress {multicast_group_address});
+    msgServer->start(static_cast<MessageServer::port_type>( port), QHostAddress {multicast_group_address});
 }
 
 void WsjtxLink::disconnect()
 {
-    server->stop();
+    msgServer->stop();
 }
 void WsjtxLink::log_ADIF(QString const& id, QByteArray const& ADIF)
 {

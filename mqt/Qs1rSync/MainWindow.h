@@ -36,7 +36,7 @@ private slots:
     void onError(QAbstractSocket::SocketError);
     void onReadyRead();
 
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
 
     void on_noTrack_clicked();
 
@@ -93,7 +93,7 @@ private:
 
     void trackBand();
     void QS1RCentre(const Frequency &fLow, const Frequency &fHigh);
-    void getServerAppCatMap();
+    void getRouterAppCatMap();
 };
 
 #endif // MAINWINDOW_H

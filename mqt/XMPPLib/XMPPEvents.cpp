@@ -17,7 +17,7 @@ void makeXMPPEvent( XStanza *xs )
    if ( RPCRequest * rq = dynamic_cast<RPCRequest *>( xs ) )
    {
       // external RPC request - decode and action
-        QSharedPointer<MinosRPCObj> mro = MinosRPCObj::makeServerObj( rq->methodName );
+        QSharedPointer<MinosRPCObj> mro = MinosRPCObj::makeRouterObj( rq->methodName );
 
         if (mro)
         {

@@ -86,7 +86,7 @@ void MinosAppConnection::startConnection()
 }
 void MinosAppConnection::on_waitConnectTimeout()
 {
-    if (!checkServerReady())
+    if (!checkRouterReady())
     {
         return;
     }
@@ -97,7 +97,7 @@ void MinosAppConnection::on_connected()
 {
     connected = true;
 
-    RPCRequest *rpa = new RPCRequest( "", myId, "ClientSetFromId" );   // for our local server, this one MUST have a from
+    RPCRequest *rpa = new RPCRequest( "", myId, "ClientSetFromId" );   // for our local router, this one MUST have a from
     rpa->addParam( myId );
     trace("TX " + rpa->analyse());
     sendAction( rpa );

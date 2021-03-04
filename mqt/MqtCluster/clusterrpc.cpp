@@ -12,9 +12,9 @@ Clusterrpc::Clusterrpc()
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     QStringList sv = {rpcConstants::clusterClientServer};
-    rpc->initialiseServers(sv);
+    rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 }
 
@@ -53,7 +53,7 @@ void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 
 
 
-void Clusterrpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
    trace( "Cluster RPC: callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -166,7 +166,7 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             {
                 // We have received notification from a previously unknown station - so report on it
                 ClusterServer s;
-                s.serverName = an.getPublisherServer();
+                s.routerName = an.getPublisherRouter();
                 s.state = an.getState();
                 s.app = an.getKey();
                 serverList.push_back( s );

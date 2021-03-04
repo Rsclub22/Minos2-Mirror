@@ -16,8 +16,8 @@
 #include <QTableWidget>
 
 #include "MinosLink.h"
-class Server;
-class MinosServerConnection;
+class Router;
+class MinosRouterConnection;
 
 extern bool closeApp;
 
@@ -32,7 +32,7 @@ class MinosListener:public QObject
 
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) = 0;
 
-      virtual bool isServer() const = 0;
+      virtual bool isRouter() const = 0;
     public:
 
       void clearSockets();
@@ -51,37 +51,37 @@ private slots:
 };
 typedef QVector<MinosCommonConnection *>::iterator CommonIterator;
 //==============================================================================
-class MinosServerListener: public MinosListener
+class MinosRouterListener: public MinosListener
 {
     //Q_OBJECT
    private:
-      static MinosServerListener *MSL;
+      static MinosRouterListener *MSL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
-      virtual bool isServer() const override
+      virtual bool isRouter() const override
       {
           return true;
       }
    public:
-      static MinosServerListener *getListener()
+      static MinosRouterListener *getListener()
       {
          return MSL;
       }
-      MinosServerListener()
+      MinosRouterListener()
       {
          MSL = this;
       }
-      ~MinosServerListener() override
+      ~MinosRouterListener() override
       {
          MSL = nullptr;
       }
-      bool sendServer(TiXmlElement *pak );
+      bool sendRouter(TiXmlElement *pak );
 
       void buildTable(QTableWidget *tab);
 
       void closeDown() override;
 
-      MinosServerConnection *findConnection(const QHostAddress &h);
+      MinosRouterConnection *findConnection(const QHostAddress &h);
 };
 //==============================================================================
 class MinosClientListener: public MinosListener
@@ -91,7 +91,7 @@ class MinosClientListener: public MinosListener
       static MinosClientListener *MCL;
    protected:
       virtual MinosCommonConnection *makeConnection(QTcpSocket *s) override;
-      virtual bool isServer() const override
+      virtual bool isRouter() const override
       {
           return false;
       }

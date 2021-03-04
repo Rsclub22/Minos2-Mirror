@@ -13,10 +13,10 @@ MonitoredLog::~MonitoredLog()
    delete contest;
    contest = nullptr;
 }
-void MonitoredLog::initialise( const QString &srv, const QString &name )
+void MonitoredLog::initialise(const QString &prouter, const QString &name )
 {
    publishedName = name;
-   server = srv;
+   router = prouter;
 
    delete contest;
    contest = new MonitoredContestLog();
@@ -47,7 +47,7 @@ void MonitoredLog::stopMonitor()
 
    frame = nullptr;
 
-   initialise( server, publishedName );  // make sure reset for next time
+   initialise( router, publishedName );  // make sure reset for next time
 }
 void MonitoredLog::getLogStanza( int stanza )
 {
@@ -61,7 +61,7 @@ void MonitoredLog::getLogStanza( int stanza )
     st->addMember( sName, "LogName" );
     st->addMember( iStanza, "Stanza" );
     rpc.getCallArgs() ->addParam( st );
-    rpc.queueCall( rpcConstants::loggerApp + "@" + server );
+    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }
 
 QString MonitoredLog::getDisplayName() const

@@ -54,7 +54,7 @@ struct MonitoredLogCmp
    }
 };
 //=============================================================================================
-enum NodeType{entRoot, entServer, entLog};
+enum NodeType{entRoot, entRouter, entLog};
 class TreeNode: public QObject
 {
     NodeType ntype;
@@ -115,10 +115,10 @@ public:
     }
     virtual QString data( int column );
 };
-class ServerTreeNode:public TreeNode
+class RouterTreeNode:public TreeNode
 {
 public:
-    ServerTreeNode(TreeNode *parent, QString name):TreeNode(entServer, parent, name, parent->monmain)
+    RouterTreeNode(TreeNode *parent, QString name):TreeNode(entRouter, parent, name, parent->monmain)
     {
     }
     virtual QString data( int column );
@@ -178,7 +178,7 @@ public:
 
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );
-    void on_serverCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
+    void on_routerCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
 
     void onStdInRead(QString cmd);
 
@@ -222,7 +222,7 @@ private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     StdInReader stdinReader;
-    QString localServerName;
+    QString localRouterName;
 
     MonitorTreeModel *treeModel;
 

@@ -9,7 +9,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
    if ( !err )
    {
       QSharedPointer<RPCParam> psPublisher;
-      QSharedPointer<RPCParam> psServer;
+      QSharedPointer<RPCParam> psRouter;
       QSharedPointer<RPCParam> psCategory;
       QSharedPointer<RPCParam> psKey;
       QSharedPointer<RPCParam> psValue;
@@ -19,7 +19,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
               // NB publisher is initiated by the "from" from the publisher
               // and persists with the publihe entity
          args->getStructArgMember( 0, "Publisher", psPublisher )
-         && args->getStructArgMember( 0, "Server", psServer )
+         && args->getStructArgMember( 0, "Server", psRouter )
          && args->getStructArgMember( 0, "Category", psCategory )
          && args->getStructArgMember( 0, "Key", psKey )
          && args->getStructArgMember( 0, "Value", psValue )
@@ -30,7 +30,7 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
          QString pub;
          if (
             psPublisher->getString(pub) &&
-            psServer->getString( server ) &&
+            psRouter->getString( router ) &&
             psCategory->getString( category ) &&
             psKey->getString( key ) &&
             psValue->getString( value ) &&
@@ -44,11 +44,11 @@ AnalysePubSubNotify::AnalysePubSubNotify(bool err, QSharedPointer<MinosRPCObj> m
 #endif
             if (p.size() > 1)
             {
-                publisherServer = p[1];
+                publisherRouter = p[1];
             }
-            if (publisherServer == "localhost")
+            if (publisherRouter == "localhost")
             {
-                publisherServer = MinosConfig::getMinosConfig()->getThisServerName();
+                publisherRouter = MinosConfig::getMinosConfig()->getThisRouterName();
             }
             publisherProgram = p[0];
             state = static_cast<PublishState>(stemp);

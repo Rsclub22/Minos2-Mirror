@@ -267,7 +267,7 @@ void RigControlMainWindow::logMessage( QString s )
 
 void RigControlMainWindow::LogTimerTimer()
 {
-    bool show = getShowServers();
+    bool show = getShowApp();
     if ( !isVisible() && show )
     {
         setVisible(true);

@@ -14,27 +14,27 @@
 #ifndef MServerH
 #define MServerH 
 //---------------------------------------------------------------------------
-#define DEFAULT_SERVER_NAME "localhost"
+#define DEFAULT_ROUTER_NAME "localhost"
 
 class MinosCommonConnection;
 
-class ThisMinosServer
+class ThisMinosRouter
 {
    private:
-      static ThisMinosServer *singleton;
-      QString serverName;
+      static ThisMinosRouter *singleton;
+      QString routerName;
    public:
-      QString getServerName()
+      QString getRouterName()
       {
-         return serverName;
+         return routerName;
       }
 
-      static ThisMinosServer *getThisMinosServer();
+      static ThisMinosRouter *getThisMinosRouter();
       bool forwardStanza( MinosCommonConnection *, TiXmlElement *pak );
       virtual bool analyseNode( MinosCommonConnection *il, TiXmlElement * pak );
       virtual void dispatchStanza( MinosCommonConnection *il, RPCRequest *a );
 
-      ThisMinosServer();
-      virtual ~ThisMinosServer();
+      ThisMinosRouter();
+      virtual ~ThisMinosRouter();
 };
 #endif

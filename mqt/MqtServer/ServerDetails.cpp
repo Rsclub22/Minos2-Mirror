@@ -59,7 +59,7 @@ void ServerDetails::changeEvent( QEvent* e )
 void ServerDetails::refresh()
 {
 
-    MinosServerListener *msl = MinosServerListener::getListener();
+    MinosRouterListener *msl = MinosRouterListener::getListener();
     ui->serversTable->clear();
     msl->buildTable(ui->serversTable);
 

@@ -33,7 +33,7 @@ class KeyerServer:public QObject
       bool getState( const QString &line );
 
 private slots:
-      void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
+      void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
 };
 extern KeyerServer *KS;

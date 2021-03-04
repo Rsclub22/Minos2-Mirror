@@ -147,10 +147,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
-    getServerAppCatMap();
+    getRouterAppCatMap();
 
     n1mmLink.initialise();
 }
@@ -159,7 +159,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::getServerAppCatMap()
+void MainWindow::getRouterAppCatMap()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
@@ -167,17 +167,17 @@ void MainWindow::getServerAppCatMap()
     QVector<QSharedPointer<Connectable> > connectables;
     connectables = config->getConnectables();
 
-    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
     for ( const auto &i: qAsConst(connectables))
     {
         if (i->appType == "RigControl")
         {
-            serverAppCatMap[rpcConstants::rigControlCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
-            serverAppCatMap[rpcConstants::rigStateCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigControlCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigStateCategory].push_back(i);
         }
     }
-    rpc->setServerAppCatMap(serverAppCatMap);
+    rpc->setRouterAppCatMap(routerAppCatMap);
 }
 
 void MainWindow::onStdInRead(QString cmd)
@@ -459,9 +459,9 @@ void MainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     }
 }
 //---------------------------------------------------------------------------
-void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void MainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace( "server callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
     trace("method is " + mro->getMethodName());
 }
 //---------------------------------------------------------------------------

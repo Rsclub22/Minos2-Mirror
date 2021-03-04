@@ -24,7 +24,7 @@ SUBDIRS += \
 win32 {
 greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
    SUBDIRS += mqtKeyerTest
-   MqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
+   mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 }
 }
 

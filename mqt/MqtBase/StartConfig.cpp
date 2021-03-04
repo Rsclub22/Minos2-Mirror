@@ -41,7 +41,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
         cef->setElement(c);
         elementFrames.append(cef);
     }
-    ui->StationIdEdit->setText(minosConfig->getThisServerName());
+    ui->StationIdEdit->setText(minosConfig->getThisRouterName());
     ui->autoStartCheckBox->setChecked(minosConfig->getAutoStart());
 
     QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
@@ -168,7 +168,7 @@ void StartConfig::on_autoStartCheckBox_clicked()
 void StartConfig::on_SetButton_clicked()
 {
     QString coh = ui->StationIdEdit->text();
-    MinosConfig::getMinosConfig() ->setThisServerName( coh );
+    MinosConfig::getMinosConfig() ->setThisRouterName( coh );
 }
 
 void StartConfig::copyFromScreen()

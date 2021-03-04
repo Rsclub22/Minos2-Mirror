@@ -7,11 +7,11 @@
 
 #define TIME_OUT                (500)    // 500ms
 
-SingleApplication::SingleApplication(QString serverName, int &argc, char **argv)
+SingleApplication::SingleApplication(QString routerName, int &argc, char **argv)
     :QApplication(argc, argv)
     , _isRunning(false)
     , _localServer(nullptr),
-    _serverName(serverName)
+    _routerName(routerName)
 {
 
 
@@ -53,10 +53,10 @@ void SingleApplication::_initLocalConnection() {
     _isRunning = false;
 
     QLocalSocket socket;
-    socket.connectToServer(_serverName);
+    socket.connectToServer(_routerName);
     if(socket.waitForConnected(TIME_OUT)) {
         fprintf(stderr, "%s already running.\n",
-                _serverName.toLocal8Bit().constData());
+                _routerName.toLocal8Bit().constData());
         _isRunning = true;
         // Other treatments, such as: the start-up parameters are sent to the server
         return;
@@ -73,11 +73,11 @@ void SingleApplication::_initLocalConnection() {
 void SingleApplication::_newLocalServer() {
     _localServer = new QLocalServer(this);
     connect(_localServer, SIGNAL(newConnection()), this, SLOT(_newLocalConnection()));
-    if(!_localServer->listen(_serverName)) {
+    if(!_localServer->listen(_routerName)) {
         // The monitor failure, may beWhen a program crashes, residual process service led, removal
         if(_localServer->serverError() == QAbstractSocket::AddressInUseError) {
-            QLocalServer::removeServer(_serverName); // <-- A key
-            _localServer->listen(_serverName); // Listen again
+            QLocalServer::removeServer(_routerName); // <-- A key
+            _localServer->listen(_routerName); // Listen again
         }
     }
 }
@@ -93,7 +93,7 @@ void SingleApplication::clearRegistry()
 void SingleApplication::sendArgs()
 {
     QLocalSocket  *socket = new QLocalSocket;
-    socket->connectToServer(_serverName);
+    socket->connectToServer(_routerName);
     if(socket->waitForConnected(TIME_OUT))
     {
         QString args = arguments()[1];

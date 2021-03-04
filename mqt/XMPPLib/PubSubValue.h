@@ -26,7 +26,7 @@ public:
 class PubSubName
 {
 private:
-    QString _server;
+    QString _router;
     QString _appName;
     QString _key;
     bool operator== ( const QString& rhs ) const ;   // not implemented
@@ -41,8 +41,8 @@ public:
 
     bool isEmpty() const;
     QString toString() const;
-    QString server() const;
-    void setServer(const QString &server);
+    QString router() const;
+    void setRouter(const QString &router);
     QString appName() const;
     void setAppName(const QString &appName);
     QString key() const;

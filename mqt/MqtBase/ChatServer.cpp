@@ -36,9 +36,9 @@ ChatServer::ChatServer()
         rpcConstants::ChatServer
     };
 
-    rpc->initialiseServers(chatCats);
+    rpc->initialiseRouters(chatCats);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify,QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
 }
@@ -73,7 +73,7 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             {
                 // We have received notification from a previously unknown station - so report on it
                 ChatServerApp s;
-                s.serverName = an.getPublisherServer();
+                s.routerName = an.getPublisherRouter();
                 s.state = an.getState();
                 s.app = an.getKey();
                 chatServerList.push_back( s );
@@ -89,7 +89,7 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             {
                 for ( auto &stat: chatServerList )
                 {
-                    if (stat.serverName == an.getPublisherServer())
+                    if (stat.routerName == an.getPublisherRouter())
                     {
                         Frequency f = Frequency(an.getValue());
                         if (stat.freq != f)
@@ -106,7 +106,7 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
     }
 }
 //---------------------------------------------------------------------------
-void ChatServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void ChatServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
 
     // Should we use QMap to give a list of name/value pairs?

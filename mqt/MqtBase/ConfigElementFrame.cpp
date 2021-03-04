@@ -50,7 +50,7 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     {
         ui->rbRunLocally->setChecked(true);
     }
-    else if (remoteOK && c->runType == ConnectServer)
+    else if (remoteOK && c->runType == ConnectRouter)
     {
         ui->rbConnectRemote->setChecked(true);
         c->showAdvanced = true;
@@ -63,7 +63,7 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     else if (remoteOK)
     {
         ui->rbConnectRemote->setChecked(true);
-        c->runType = ConnectServer;
+        c->runType = ConnectRouter;
         c->showAdvanced = true;
     }
     else if (!localOK && !remoteOK)
@@ -89,7 +89,7 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     ui->programNameEdit->setText(c->commandLine);
     ui->homeDirectoryEdit->setText(c->rundir);
     ui->parametersEdit->setText(c->params);
-    ui->serverNameEdit->setText(c->server);
+    ui->serverNameEdit->setText(c->router);
     ui->remoteAppNameEdit->setText(c->remoteApp);
 
     ui->advancedCheckbox->setChecked(c->showAdvanced);
@@ -114,7 +114,7 @@ void ConfigElementFrame::saveElement()
         if (ui->rbRunLocally->isChecked())
             configElement->runType = RunLocal;
         if (ui->rbConnectRemote->isChecked())
-            configElement->runType = ConnectServer;
+            configElement->runType = ConnectRouter;
 
         configElement->showAdvanced = ui->advancedCheckbox->isChecked();
         configElement->rEnabled = ui->enabledCheckbox->isChecked();
@@ -134,7 +134,7 @@ void ConfigElementFrame::saveElement()
         configElement->rundir = ui->homeDirectoryEdit->text().trimmed();
         configElement->commandLine = ui->programNameEdit->text().trimmed();
         configElement->params = ui->parametersEdit->text().trimmed();
-        configElement->server = ui->serverNameEdit->text().trimmed();
+        configElement->router = ui->serverNameEdit->text().trimmed();
         configElement->remoteApp = ui->remoteAppNameEdit->text().trimmed();
 
         configElement->localOK = localOK;
@@ -235,7 +235,7 @@ void ConfigElementFrame::checkEnabled()
     }
     else
     {
-        ui->LocalRemote->setText(configElement->server);
+        ui->LocalRemote->setText(configElement->router);
     }
     ui->advancedGroup->setVisible( ui->advancedCheckbox->isChecked());
 }

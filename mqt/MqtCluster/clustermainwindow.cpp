@@ -1791,7 +1791,7 @@ void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)
 
 void ClusterMainWindow::LogTimerTimer()
 {
-    bool show = getShowServers();
+    bool show = getShowApp();
     if ( !isVisible() && show )
     {
         setVisible(true);

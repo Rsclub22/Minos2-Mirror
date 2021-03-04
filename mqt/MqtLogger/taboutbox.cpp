@@ -172,7 +172,7 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     }
 
-    if (  onStartup && !checkServerReady() )
+    if (  onStartup && !checkRouterReady() )
     {
         doStartup = true; // click the start button on form close
     }

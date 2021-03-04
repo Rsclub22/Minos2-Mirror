@@ -13,7 +13,7 @@
 #include <QString>
 //---------------------------------------------------------------------------
 
-extern void makeServerEvent( bool create );
-extern bool checkServerReady();
+extern void makeRouterEvent( bool create );
+extern bool checkRouterReady();
 #endif
 

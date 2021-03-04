@@ -43,12 +43,12 @@ void MinosId::setId( const QString &s )
    int atpos = s.indexOf( "@" );
    if ( atpos < 0 )
    {
-      server = s;
+      router = s;
    }
    else
    {
       user = s.left(atpos );
-      server = s.right( s.size() - atpos - 1 );
+      router = s.right( s.size() - atpos - 1 );
    }
 }
 
@@ -71,7 +71,7 @@ static void serverSendAction( XStanza *a )
    {
       // insert a from of ourselves.
 
-      QString from = ThisMinosServer::getThisMinosServer() ->getServerName();
+      QString from = ThisMinosRouter::getThisMinosRouter() ->getRouterName();
       if ( from.length() )
       {
          x->SetAttribute( "from", from.toStdString() );
@@ -84,11 +84,11 @@ static void serverSendAction( XStanza *a )
    }
    // and now dispatch to its destination
 
-   if ( !ThisMinosServer::getThisMinosServer() ->forwardStanza( nullptr, x ) )              // our own services
+   if ( !ThisMinosRouter::getThisMinosRouter() ->forwardStanza( nullptr, x ) )              // our own services
    {
       if ( !MinosClientListener::getListener() ->sendClient( x ) )         // look at real and potential clients
       {
-         if ( !MinosServerListener::getListener() ->sendServer( x ) )         // look at real and potential servers
+         if ( !MinosRouterListener::getListener() ->sendRouter( x ) )         // look at real and potential servers
          {
             // or no valid destination found
             return ;
@@ -106,9 +106,9 @@ MinosCommonConnection::MinosCommonConnection()
 }
 MinosCommonConnection::~MinosCommonConnection()
 {}
-QString MinosCommonConnection::getClientServer() const
+QString MinosCommonConnection::getClientRouter() const
 {
-    return clientServer;
+    return clientRouter;
 }
 
 QString MinosCommonConnection::getClientUser() const
@@ -121,7 +121,7 @@ QString MinosCommonConnection::makeJid()
     QString id;
     if ( clientUser.length() )
       id = clientUser + "@";
-   id += clientServer;
+   id += clientRouter;
 
    return id;
 }
@@ -277,7 +277,7 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
 
     if ( !checkFrom( tix ) )
    {
-      if ( isServer() )
+      if ( isRouter() )
       {
          closeSocket();
          trace("Bad checkFrom in MinosCommonConnection::analyseNode; remove_socket = true");
@@ -291,11 +291,11 @@ bool MinosCommonConnection::analyseNode( TiXmlElement *tix )
    // ZConf is a possibility, but it (currently) works via PubSub
    // Actually, we could build these in to the server as RPC calls
    // - don't need a decent "to", just the server name
-   if ( !ThisMinosServer::getThisMinosServer() ->forwardStanza( this, tix ) )              // our own services
+   if ( !ThisMinosRouter::getThisMinosRouter() ->forwardStanza( this, tix ) )              // our own services
    {
       if ( !MinosClientListener::getListener() ->sendClient( tix ) )         // look at real and potential clients
       {
-         if ( !MinosServerListener::getListener() ->sendServer( tix ) )         // look at real and potential servers
+         if ( !MinosRouterListener::getListener() ->sendRouter( tix ) )         // look at real and potential servers
          {
             // or no valid destination found
             return false;
@@ -309,6 +309,6 @@ void MinosCommonConnection::on_disconnected()
 {
     // All disconnects come through here
     // if server we need to see if is a true disconnect, or a "spare"
-    trace("MinosCommonConnection::on_disconnected() " + clientServer + " " + clientUser + "; remove_socket = true");
+    trace("MinosCommonConnection::on_disconnected() " + clientRouter + " " + clientUser + "; remove_socket = true");
     remove_socket = true;
 }

@@ -53,9 +53,9 @@ QrzServerRpc::QrzServerRpc()
     QStringList sv{
         rpcConstants::clusterCategory
     };
-    rpc->initialiseServers(sv);
+    rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
 }
@@ -65,9 +65,9 @@ QrzServerRpc::~QrzServerRpc()
 }
 
 
-void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace(QString("ClusterClientServer: on_serverCall - Message from %1").arg(from));
+    trace(QString("ClusterClientServer: on_routerCall - Message from %1").arg(from));
     if ( !err )
     {
         RPCArgs *args = mro->getCallArgs();
@@ -88,7 +88,7 @@ void QrzServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                 psMess->getString(pmess);
                 loggerUuid->getString(uuid);
                 frameId->getInt(frame_id);
-                trace(QString("QrzServerRpc: on_serverCall - receive cluster spot = %1, uuid = %2").arg(pmess, uuid));
+                trace(QString("QrzServerRpc: on_routerCall - receive cluster spot = %1, uuid = %2").arg(pmess, uuid));
                 ClusterMessage msg;
                 msg.setMessage(pmess);
                 msg.setFrameId(frame_id);
@@ -133,12 +133,12 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             {
                 // We have received notification from a previously unknown station - so report on it
                 QrzServer s;
-                s.serverName = an.getPublisherServer();
+                s.routerName = an.getPublisherServer();
                 s.state = an.getState();
                 s.app = an.getKey();
                 foreach (auto &s, serverList)
                 {
-                    trace(QString("servername = %1, app = %2").arg(s.serverName, s.app));
+                    trace(QString("routerName = %1, app = %2").arg(s.routerName, s.app));
                 }
                 serverList.push_back( s );
                 QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));

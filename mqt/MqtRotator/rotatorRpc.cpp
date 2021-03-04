@@ -24,7 +24,7 @@ RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(pare
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     // we aren't subscribing to anything!
@@ -61,7 +61,7 @@ void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
    }
 }
 //---------------------------------------------------------------------------
-void RotatorRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void RotatorRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
     trace( "Rot RPC: rotator callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -92,7 +92,7 @@ void RotatorRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const Q
             int direction;
             int angle;
 
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rotatorCache.getSelectedContest(psn, loggeruuid);
             if ( cursel == selContest)
             {

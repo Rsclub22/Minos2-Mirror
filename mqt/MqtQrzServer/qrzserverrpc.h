@@ -25,7 +25,7 @@
 class QrzServer
 {
 public:
-    QString serverName;
+    QString routerName;
     QString app;
     PublishState state;
 };
@@ -57,7 +57,7 @@ private:
     void addQrzRequestsQueue(const ClusterMessage spot);
 private slots:
     void SyncTimerTimer( );
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );
 signals:

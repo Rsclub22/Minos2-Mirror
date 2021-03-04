@@ -30,7 +30,7 @@ class RPCPubSub : public MinosRPCClient
       }
 
       static void subscribe( const QString &category );
-      static void subscribeRemote( const QString &server, const QString &category );
+      static void subscribeRemote( const QString &router, const QString &category );
 
       static void publish( const QString &category, const QString &key, const QString &value, PublishState pState );
 

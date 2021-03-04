@@ -33,8 +33,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     QSettings settings;
 
-    serverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
-    serverPort = settings.value("port", "23001").toString().trimmed();
+    KSTserverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
+    KSTserverPort = settings.value("port", "23001").toString().trimmed();
     myCallsign = settings.value("username", "").toString().trimmed();
     password = settings.value("password", "").toString().trimmed();
     maxDistance = settings.value("maxDistance", 99999).toInt();
@@ -368,7 +368,7 @@ void KSTMainWindow::connectToHost()
            && kstclient->state() != QAbstractSocket::ClosingState
            && kstclient->state() != QAbstractSocket::HostLookupState)
         {
-            kstclient->connectToHost(serverName, serverPort.toUShort());
+            kstclient->connectToHost(KSTserverName, KSTserverPort.toUShort());
         }
     }
 }
@@ -1126,8 +1126,8 @@ bool KSTMainWindow::doConfiguration()
 {
     KSTConfigure conf;
 
-    conf.hostname = serverName;
-    conf.port = serverPort;
+    conf.hostname = KSTserverName;
+    conf.port = KSTserverPort;
     conf.username = myCallsign;
     conf.password = password;
     conf.autoConnect = autoConnect;
@@ -1147,8 +1147,8 @@ bool KSTMainWindow::doConfiguration()
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
     {
-        serverName = conf.hostname.trimmed();
-        serverPort = conf.port.trimmed();
+        KSTserverName = conf.hostname.trimmed();
+        KSTserverPort = conf.port.trimmed();
         myCallsign = conf.username.trimmed();
         password = conf.password.trimmed();
         autoConnect = conf.autoConnect;
@@ -1166,8 +1166,8 @@ bool KSTMainWindow::doConfiguration()
 
         QSettings settings;
 
-        settings.setValue("hostname", serverName);
-        settings.setValue("port", serverPort);
+        settings.setValue("hostname", KSTserverName);
+        settings.setValue("port", KSTserverPort);
         settings.setValue("username", myCallsign);
         settings.setValue("password", password);
         settings.setValue("autoConnect", autoConnect);
@@ -1347,7 +1347,7 @@ void KSTMainWindow::doLoginChanges()
                    && kstclient->state() != QAbstractSocket::ClosingState
                    && kstclient->state() != QAbstractSocket::HostLookupState)
                 {
-                    kstclient->connectToHost(serverName, serverPort.toUShort());
+                    kstclient->connectToHost(KSTserverName, KSTserverPort.toUShort());
                 }
             }
         }

@@ -34,7 +34,7 @@ class TSendDM : public QObject
       QString loggerUuid;
 
       void traceMsg(QString msg);
-      void getServerAppCatMap();
+      void getRouterAppCatMap();
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
@@ -109,7 +109,7 @@ public:  		// User declarations
 
 
 private slots:
-      void on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
+      void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
       void on_notify(AnalysePubSubNotify an, const QString from );
 
 signals:

@@ -45,7 +45,7 @@ void RotatorCache::addRotList(const QString &s)
 
         for(auto const &psn: qAsConst(rotList))
         {
-            if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
+            if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
                 newRotList.push_back(psn);
         }
         rotList = newRotList;
@@ -263,7 +263,7 @@ QString RotatorCache::getSelectedContest(PubSubName psn, QString loggerid)
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
         if (i.value().getSelectedLoggers().count() > 0
-                && i.key().server() == psn.server()
+                && i.key().router() == psn.router()
                 && i.key().appName() == psn.appName())
         {
             return i.value().getSelectedContest(loggerid).getValue(); // antenna selected on this app
@@ -282,7 +282,7 @@ PubSubName RotatorCache::getSelectedAntenna(PubSubName psn)
     for(QMap<PubSubName, AntennaState>::iterator i = rotStates.begin(); i != rotStates.end(); i++ )
     {
         if (i.value().getSelectedLoggers().count() > 0
-                && i.key().server() == psn.server()
+                && i.key().router() == psn.router()
                 && i.key().appName() == psn.appName())
         {
             return i.key(); // antenna selected on this app

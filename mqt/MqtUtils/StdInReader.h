@@ -2,8 +2,8 @@
 #define STDINREADER_H
 #include <QThread>
 
-bool getShowServers( );
-void setShowServers(bool /*state*/);
+bool getShowApp( );
+void setShowApp(bool /*state*/);
 
 class StdInReader: public QThread
 {

@@ -34,7 +34,7 @@ RPCSubscribeClient::~RPCSubscribeClient()
 {}
 RPCRemoteSubscribeClient::~RPCRemoteSubscribeClient()
 {}
-RPCNotifyServer::~RPCNotifyServer()
+RPCNotifyRouter::~RPCNotifyRouter()
 {}
 RPCPublisher::~RPCPublisher()
 {}
@@ -43,7 +43,7 @@ bool RPCSubscriber::isEqual( const QString &pcategory )
 {
    return ( pcategory == category );
 }
-bool RPCSubscriber::isRemoteEqual( const QString &/*pserver*/, const QString &/*pcategory*/ )
+bool RPCSubscriber::isRemoteEqual( const QString &/*prouter*/, const QString &/*pcategory*/ )
 {
    return false;
 }
@@ -68,16 +68,16 @@ void RPCSubscriber::testAndSubscribe( const QString &category )
       sub->reSubscribe();
    }
 }
-bool RPCRemoteSubscriber::isRemoteEqual( const QString &pServer, const QString &cat )
+bool RPCRemoteSubscriber::isRemoteEqual( const QString &pRouter, const QString &cat )
 {
-   return server == pServer && isEqual( cat );
+   return router == pRouter && isEqual( cat );
 }
-void RPCRemoteSubscriber::testAndSubscribe( const QString &server, const QString &cat )
+void RPCRemoteSubscriber::testAndSubscribe( const QString &router, const QString &cat )
 {
    RPCRemoteSubscriber * sub = nullptr;
    for ( auto const &i: qAsConst(subscribeList ))
    {
-      if ( i->isRemoteEqual( server, cat ) )
+      if ( i->isRemoteEqual( router, cat ) )
       {
          sub = dynamic_cast<RPCRemoteSubscriber *>( i );
          if (sub)
@@ -88,7 +88,7 @@ void RPCRemoteSubscriber::testAndSubscribe( const QString &server, const QString
    }
    if ( !sub )
    {
-      sub = new RPCRemoteSubscriber( server, cat );
+      sub = new RPCRemoteSubscriber( router, cat );
       subscribeList.push_back( sub );
    }
    if ( RPCPubSub::isConnected() )
@@ -100,9 +100,9 @@ void RPCSubscriber::reSubscribe()
 {
    RPCSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( "localhost" ));
+   QSharedPointer<RPCParam>sRouter(new RPCStringParam( "localhost" ));
    QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sServer, "Server" );
+   st->addMember( sRouter, "Server" );
    st->addMember( sCat, "Category" );
    rsc.getCallArgs() ->addParam( st );
    rsc.queueCall( "localhost" );
@@ -112,12 +112,12 @@ void RPCRemoteSubscriber::reSubscribe()
 {
    RPCRemoteSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( server ));
+   QSharedPointer<RPCParam>sRouter(new RPCStringParam( router ));
    QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sServer, "Server" );
+   st->addMember( sRouter, "Server" );
    st->addMember( sCat, "Category" );
    rsc.getCallArgs() ->addParam( st );
-   rsc.queueCall( "localhost" );       // localhost just causes the server to loop
+   rsc.queueCall( "localhost" );       // localhost just causes the router to loop
 }
 
 void RPCPublisher::testAndPublish( const QString &category, const QString &key, const QString &value, PublishState pState )

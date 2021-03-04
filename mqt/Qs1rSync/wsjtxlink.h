@@ -16,7 +16,7 @@ public:
     void disconnect();
 
 private:
-    MessageServer * server = nullptr;
+    MessageServer * msgServer = nullptr;
 
 private slots:
     void add_client (QString const& id, QString const& version, QString const& revision);

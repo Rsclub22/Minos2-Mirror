@@ -151,8 +151,8 @@ void MainWindow::FontEditAcceptActionExecute()
 
             QString fs = f.toString();
 
-            bool serverRunning = checkServerReady();
-            if (serverRunning)
+            bool routerRunning = checkRouterReady();
+            if (routerRunning)
             {
                 MinosConfig::getMinosConfig() ->bounce();
             }
@@ -166,7 +166,7 @@ void MainWindow::LanguageAcceptActionExecute()
 
     if (action)
     {
-        bool serverRunning = checkServerReady();
+        bool routerRunning = checkRouterReady();
 
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
@@ -183,7 +183,7 @@ void MainWindow::LanguageAcceptActionExecute()
                 break;
             }
         }
-        if (serverRunning)
+        if (routerRunning)
         {
             MinosConfig::getMinosConfig() ->bounce();
         }

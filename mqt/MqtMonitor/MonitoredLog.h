@@ -18,7 +18,7 @@ class MonitoredLog
       int lastScannedStanza = -1;
 
       PublishState state = psNotConnected;
-      QString server;
+      QString router;
       QString publishedName;
       QString displayName;
       int expectedStanzaCount = 0;
@@ -41,7 +41,7 @@ class MonitoredLog
           monitorEnabled = s;
       }
 
-      void initialise( const QString &server, const QString &name );
+      void initialise( const QString &router, const QString &name );
       BaseContestLog * getContest() const
       {
          return contest;

@@ -90,7 +90,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     sendDM = new TSendDM(this);
 
-    QString station = MinosConfig::getMinosConfig()->getThisServerName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
     connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));

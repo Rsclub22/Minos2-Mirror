@@ -5,7 +5,7 @@
 #include "INIFile.h"
 //---------------------------------------------------------------------------
 extern QString RunLocal;
-extern QString ConnectServer;
+extern QString ConnectRouter;
 
 class MinosConfigEvents: public QObject
 {
@@ -30,7 +30,7 @@ public:
     QString appType;
     QString appPath;
     QStringList requiresApps;
-    bool server = false;
+    bool router = false;
     bool localOK = false;
     bool remoteOK = false;
     bool defaultHide = false;
@@ -42,7 +42,7 @@ class Connectable
 public:
     Connectable(){}
 
-    QString serverName;
+    QString routerName;
     QString remoteAppName;
     QString appName;
     QString runType;
@@ -61,7 +61,7 @@ public:  		// User declarations
     QString rundir;
     QString commandLine;
     QString params;
-    QString server;
+    QString router;
     QString remoteApp;
     bool localOK = false;
     bool remoteOK = false;
@@ -121,7 +121,7 @@ private:  	// User declarations
 
     void buildAppConfigList();
 
-    QString thisServerName;
+    QString thisRouterName;
     bool autoStart;
 
 public:  		// User declarations
@@ -136,7 +136,7 @@ public:  		// User declarations
 
     QVector <QSharedPointer<RunConfigElement> > elelist;
 
-    QString getThisServerName();
+    QString getThisRouterName();
 
     QStringList getAppTypes();
     QSharedPointer<Connectable> getApp(QString appName);
@@ -147,7 +147,7 @@ public:  		// User declarations
 //    void cleanElementsOnCancel();
     void saveAll();
 
-    void setThisServerName( const QString &circle );
+    void setThisRouterName( const QString &circle );
 
     bool getAutoStart();
     void setAutoStart(bool);

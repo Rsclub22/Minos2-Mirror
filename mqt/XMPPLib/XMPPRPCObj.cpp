@@ -17,15 +17,15 @@ void setSendAction(sendActionCall sa)
 //---------------------------------------------------------------------------
 TRPCFunctor::~TRPCFunctor()
 {}
-MinosRPCServer::~MinosRPCServer()
+MinosRPCRouter::~MinosRPCRouter()
 {}
 
 //---------------------------------------------------------------------------
 
-QMap <QString, QSharedPointer<MinosRPCObj>> &getServerMethodMap()
+QMap <QString, QSharedPointer<MinosRPCObj>> &getRouterMethodMap()
 {
-   static QMap <QString, QSharedPointer<MinosRPCObj> > serverMethodMap;
-   return serverMethodMap;
+   static QMap <QString, QSharedPointer<MinosRPCObj> > routerMethodMap;
+   return routerMethodMap;
 }
 //==============================================================================
 MinosRPCObj::MinosRPCObj(const QString &methodName, TRPCFunctor *cb , bool gen)
@@ -42,30 +42,30 @@ void MinosRPCObj::clearCallArgs()
 }
 /*static*/ void MinosRPCObj::clearRPCObjects()
 {
-   for ( auto &i: getServerMethodMap() )
+   for ( auto &i: getRouterMethodMap() )
    {
       delete i->callback;
       i.reset();
    }
-   getServerMethodMap().clear();
+   getRouterMethodMap().clear();
 }
 
-/*static*/ void MinosRPCObj::addServerObj(  QSharedPointer<MinosRPCObj> mro )
+/*static*/ void MinosRPCObj::addRouterObj(  QSharedPointer<MinosRPCObj> mro )
 {
-   getServerMethodMap().insert( mro->methodName, mro );
+   getRouterMethodMap().insert( mro->methodName, mro );
 }
 
-/*static*/ QSharedPointer<MinosRPCObj> MinosRPCObj::makeServerObj(  QString call )
+/*static*/ QSharedPointer<MinosRPCObj> MinosRPCObj::makeRouterObj(  QString call )
 {
-   QMap <QString, QSharedPointer<MinosRPCObj> >::iterator mo = getServerMethodMap().find( call );
+   QMap <QString, QSharedPointer<MinosRPCObj> >::iterator mo = getRouterMethodMap().find( call );
    QSharedPointer<MinosRPCObj> res;
-   if ( mo != getServerMethodMap().end() )
+   if ( mo != getRouterMethodMap().end() )
    {
       res = mo.value()->makeObj();
       res->methodName = call;
       return res;
    }
-   for (auto &mo: getServerMethodMap())
+   for (auto &mo: getRouterMethodMap())
    {
        if (mo->isGeneralObject())
        {
@@ -88,11 +88,11 @@ void MinosRPCClient::queueCall( QString to )
 }
 void MinosRPCClient::queueCall(const PubSubName &psn)
 {
-    QString server = psn.server();
+    QString router = psn.router();
     QString app = psn.appName();
-    if (!app.isEmpty() && !server.isEmpty())
+    if (!app.isEmpty() && !router.isEmpty())
     {
-        queueCall(app + "@" + server);
+        queueCall(app + "@" + router);
     }
 }
 //==============================================================================

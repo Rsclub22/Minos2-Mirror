@@ -8,10 +8,10 @@ namespace rpcConstants
 // PubSub
 
 static const QString publish            ("Minos:PubSub:Publish");
-static const QString serverSubscribe    ("Minos:PubSub:ServerSubscribe");
+static const QString routerSubscribe    ("Minos:PubSub:ServerSubscribe");
 static const QString remoteSubscribe    ("Minos:PubSub:RemoteSubscribe");
 static const QString subscribe          ("Minos:PubSub:Subscribe");
-static const QString serverNotify       ("Minos:PubSub:ServerNotify");
+static const QString routerNotify       ("Minos:PubSub:ServerNotify");
 static const QString clientNotify       ("Minos:PubSub:ClientNotify");
 
 static const QString selected           ("Selected");

@@ -19,7 +19,7 @@ KeyerServer::KeyerServer()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCalll(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     RPCPubSub::subscribe( rpcConstants::lineControlCategory );
@@ -69,7 +69,7 @@ void KeyerServer::doPublishCommand( const QString &cmd )
     KS->doPublishCommand( cmd );
 }
 //---------------------------------------------------------------------------
-void KeyerServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
    trace( "Keyer callback from " + from + ( err ? ":Error" : ":Normal" ) );
 

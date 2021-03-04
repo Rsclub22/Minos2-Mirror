@@ -74,7 +74,7 @@ QString RootTreeNode::data(int /*column*/)
 {
     return Name();
 }
-QString ServerTreeNode::data(int column)
+QString RouterTreeNode::data(int column)
 {
     if (column == 0)
         return Name();
@@ -128,7 +128,7 @@ void MonitorTreeModel::setRoot(  TreeNode *root )
 int MonitorTreeModel::columnCount( const QModelIndex & parent  ) const
 {
     TreeNode *parentItem = getItem( parent );
-    if (parentItem && parentItem->GetNodeType() == entServer)
+    if (parentItem && parentItem->GetNodeType() == entRouter)
         return 2;
 
     return 2;
@@ -268,11 +268,11 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     QStringList sv = {rpcConstants::LoggerCategory};
-    rpc->initialiseServers(sv);
+    rpc->initialiseRouters(sv);
 
     QByteArray state;
 
@@ -518,17 +518,17 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
        }
        if ( an.getCategory() == rpcConstants::monitorLogCategory )
        {
-          QString server = an.getServer();
-          if ( server.size() == 0 )
+          QString router = an.getRouter();
+          if ( router.size() == 0 )
           {
              // it is for us...
-             server = localServerName;
+             router = localRouterName;
           }
 
-          QString logval = server + " : " + key ;
+          QString logval = router + " : " + key ;
           trace( "ContestLog " + logval + " " + value );
 
-          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( server, an.getPublisherProgram() ) );
+          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( router, an.getPublisherProgram() ) );
           if ( stat != stationList.end() )
           {
              QVector< MonitoredLog *>::iterator log = std::find_if( ( *stat ) ->slotList.begin(), ( *stat ) ->slotList.end(), MonitoredLogCmp( key ) );
@@ -538,7 +538,7 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
                 if ( log == ( *stat ) ->slotList.end() )
                 {
                    MonitoredLog * ml = new MonitoredLog();
-                   ml->initialise( server, key );
+                   ml->initialise( router, key );
 
 
                    if (args.count() >= 1)
@@ -581,9 +581,9 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
     }
 }
 //---------------------------------------------------------------------------
-void MonitorMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void MonitorMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace( "logger server callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "logger router callback from " + from + ( err ? ":Error" : ":Normal" ) );
     if ( !err )
     {
         // This will return stanza id, pubname, and stanza content
@@ -658,7 +658,7 @@ void MonitorMain::syncStations()
       TreeNode *root = new RootTreeNode(this);
       for ( auto const &s: qAsConst(stationList) )
       {
-          TreeNode *snode = new ServerTreeNode(root, s->stationName);
+          TreeNode *snode = new RouterTreeNode(root, s->stationName);
           for ( auto const &l: qAsConst(s->slotList) )
           {
               /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
