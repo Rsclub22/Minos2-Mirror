@@ -397,6 +397,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
+    //txVmButtonsFrame
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
     // CribSheet
@@ -436,6 +437,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         runButtonsFrame->setParent(this);
         runButtonsFrame->hide();
+
+        txVmButtonsFrame->setParent(this);
+        txVmButtonsFrame->hide();
 
         FKHRotControlFrame->setParent(this);
         FKHRotControlFrame->hide();
