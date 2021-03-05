@@ -41,6 +41,12 @@ ChatServer::ChatServer()
     connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify,QString)));
     connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
+
+    QString a = MinosRPC::getMinosRPC()->getAppName();
+    QString s = MinosConfig::getMinosConfig()->getThisRouterName();
+
+    RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + s, "", psPublished);
+
 }
 
 ChatServer::~ChatServer()

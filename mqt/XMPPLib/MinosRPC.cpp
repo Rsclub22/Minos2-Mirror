@@ -98,7 +98,7 @@ void MinosRPC::setRouterAppCatMap(QMap<QString, QVector<QSharedPointer<Connectab
 
     routers.clear();    // so StationCategory can re-populate it
 
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);   // this might not be needed?
+//    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);   // this might not be needed?
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
 
@@ -125,7 +125,7 @@ void MinosRPC::initialiseRouters(QStringList subs)
 {
     // we need to add (and subscribe to) any new subs
     routersInitialised = true;
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
+    //RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
     routerSubs = subs;
@@ -135,24 +135,24 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
 {
     if ( an.getOK() )
     {
-        if ( an.getCategory() == rpcConstants::LocalStationCategory)
-        {
-            QString router = an.getKey();
-            bool pubNeeded = true;
-            QString a = MinosRPC::getMinosRPC()->getAppName();
-            for ( auto const &stat: qAsConst(routerList) )
-            {
-                if (stat.app == a + "@" + router)
-                {
-                    pubNeeded = false;
-                    break;
-                }
-            }
-            if (pubNeeded)
-            {
-                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + router, "", psPublished);
-            }
-        }
+//        if ( an.getCategory() == rpcConstants::LocalStationCategory)
+//        {
+//            QString router = an.getKey();
+//            bool pubNeeded = true;
+//            QString a = MinosRPC::getMinosRPC()->getAppName();
+//            for ( auto const &stat: qAsConst(routerList) )
+//            {
+//                if (stat.app == a + "@" + router)
+//                {
+//                    pubNeeded = false;
+//                    break;
+//                }
+//            }
+//            if (pubNeeded)
+//            {
+//                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + router, "", psPublished);
+//            }
+//        }
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString router = an.getKey();
