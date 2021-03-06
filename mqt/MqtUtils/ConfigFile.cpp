@@ -173,7 +173,7 @@ void RunConfigElement::createProcess()
 
         connect (runner, &QProcess::started, this, &RunConfigElement::on_started);
         connect (runner, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RunConfigElement::on_finished);
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
         connect (runner, &QProcess::errorOccurred, this, &RunConfigElement::on_error);
 #else
         connect (runner, &QProcess::error, this, &RunConfigElement::on_error);

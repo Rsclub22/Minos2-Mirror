@@ -143,7 +143,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(&ClientSocket1, &QTcpSocket::errorOccurred, this, &MainWindow::onError);
 #else
-    connect(&ClientSocket1, &QTcpSocket::error, this, &MainWindow::onError);
+    connect(&ClientSocket1, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
 #endif
 
     connect(&SyncTimer, &QTimer::timeout, this, &MainWindow::SyncTimerTimer);

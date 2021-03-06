@@ -468,7 +468,7 @@ void QtTelnetPrivate::setSocket(QTcpSocket *s)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         connect(socket , &QTcpSocket::errorOccurred, this, &QtTelnetPrivate::socketError);
 #else
-        connect(socket, &QTcpSocket::error, this, &QtTelnetPrivate::onError);
+        connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
 #endif
     }
 }
