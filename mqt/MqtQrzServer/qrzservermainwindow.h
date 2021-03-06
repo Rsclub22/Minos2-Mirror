@@ -25,93 +25,25 @@
 
 #include "mqtUtils_pch.h"
 #include "qrzserverrpc.h"
+#include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
 QT_END_NAMESPACE
 
+const QString QRZURL = "https://xmldata.qrz.com/xml/current/?";
+const QString AGENT = "Minos";
+
+const int QUERYTIMEOUT = 2000;
+
+const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
 // SubExp response
 
 const QString NONSUBCRIBER = "non-subscriber";
 
-class QrzCallsignData
-{
-
-public:
-    QrzCallsignData()
-    {
-        clear();
-    }
-    ~QrzCallsignData()
-    {
-
-    }
-
-    void setCallsign(QString callsign_){callsign = callsign_;}
-    QString getCallsign(){return callsign;}
-
-    void setFirstName(QString firstName_){firstName = firstName_;}
-    QString getFirstName(){return firstName;}
-
-    void setName(QString name_){name = name_;}
-    QString getName(){return name;}
-
-    void setQth(QString qth_){qth = qth_;}
-    QString getQth(){return qth;}
-
-    void setCounty(QString county_){county = county_;}
-    QString getCounty(){return county;}
-
-    void setCountry(QString country_){country = country_;}
-    QString getCountry(){return country;}
-
-    void setLat(QString lat_){lat = lat_;}
-    QString getLat(){return lat;}
-
-    void setLon(QString lon_){lat = lon_;}
-    QString getLon(){return lon;}
-
-    void setQra(QString qra_){qra = qra_;}
-    QString getQra(){return qra;}
-
-    void setCqZone(QString cqZone_){cqZone = cqZone_;}
-    QString getCqZone(){return cqZone;}
-
-    void setItuZone(QString ituZone_){ituZone = ituZone_;}
-    QString getItuZone(){return ituZone;}
-
-    void clear()
-    {
-        callsign.clear();
-        firstName.clear();
-        name.clear();
-        qth.clear();
-        county.clear();
-        country.clear();
-        lat.clear();
-        lon.clear();
-        qra.clear();
-        cqZone.clear();
-        ituZone.clear();
-    }
-
-
-
-private:
-
-    QString callsign;
-    QString firstName;
-    QString name;
-    QString qth;
-    QString county;
-    QString country;
-    QString lat;
-    QString lon;
-    QString qra;
-    QString cqZone;
-    QString ituZone;
-
-};
 
 
 class QrzSessionData
@@ -122,12 +54,16 @@ public:
     void clear()
     {
         error.clear();
+        message.clear();
         key.clear();
         subExp.clear();
     }
 
     void setError(QString error_){error = error_;}
     QString getError(){return error;}
+
+    void setMessage(QString message_){message = message_;}
+    QString getMessage(){return message;}
 
     void setKey(QString key_){key = key_;}
     QString getKey(){return key;}
@@ -138,6 +74,7 @@ public:
 private:
 
     QString error;
+    QString message;
     QString key;
     QString subExp;
 
@@ -160,10 +97,18 @@ private slots:
     void LogTimerTimer();
     void onConfigure();
     void onStdInRead(QString cmd);
-    void qrzRequestMsg(QVector<ClusterMessage> qrzRequestMsg);
+
     void clusterClientServerList(QVector<ClusterServer> serverList);
+
+
+    void onClusterQrzMessage(QrzServerMessage qrzRequest);
+    void handleQrzRequests();
+    void onQueryTimeout();
+    void onLoggerQrzMsg(QrzServerMessage qrzRequest);
+
 private:
     Ui::QrzServerMainWindow *ui;
+
 
     StdInReader stdinReader;
     QString appName = "";
@@ -175,12 +120,23 @@ private:
     QString logonCallsign;
     QString password;
 
+    QVector<QrzServerMessage> qrzRequestQueue;
+    QrzServerMessage requestedStation;
+
     int parseTest();
 
     QrzCallsignData qrzCallsignData;
     QrzSessionData qrzSessionData;
 
-    bool loggedOn = false;
+
+    QTimer *queryTimer;
+    QTimer *checkQrzRequestsTimer;
+
+    bool askLogonFlag = false;
+    bool askCallsignFlag = false;
+
+    bool qrzLoggedOn = false;
+
 
     QString key;
 
@@ -190,5 +146,14 @@ private:
     void parseDXCCData(QXmlStreamReader &xmlData);
     void getData(QNetworkReply *netReply);
 
+    void logon();
+    QString stripPasswordFromUrl(QString url);
+    void askCallsignData(QString callsign);
+    void sessionDataReceived();
+    void callsignDataReceived();
+    void addTextToLogWindow(QString message);
+    void addToErrorTextLabel(QString message);
+    void addToMessageTextLabel(QString message);
+    void setQrzStatusConnected(bool state);
 };
 #endif // QRZSERVERMAINWINDOW_H

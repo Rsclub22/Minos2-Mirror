@@ -21,14 +21,7 @@
 #include "base_pch.h"
 #include "ConfigFile.h"
 #include "clustercommon.h"
-
-class QrzServer
-{
-public:
-    QString routerName;
-    QString app;
-    PublishState state;
-};
+#include "qrzServerCommon.h"
 
 class QrzServerRpc : public QObject
 {
@@ -42,27 +35,32 @@ public:
 
     static QrzServerRpc *getQrzServerRpc();
 
-    void sendQraToClusterServer(QString dxQra, QString spotterQra, QString state);
+    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
+    void sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state);
+
+
 signals:
-    //void QrzServerList(QVector<ClusterServer>);
-    void qrzRequest(QVector<ClusterMessage>);
+
+    //void qrzRequestQueue(QVector<QrzServerMessage>);
+    void clusterQrzMsg(QrzServerMessage);
+    void loggerQrzMsg(QrzServerMessage);
 
 private:
 
     static QrzServerRpc *qrzServerRpc;
-    QTimer SyncTimer;
+    //QTimer SyncTimer;
 
      QVector<QrzServer> serverList;
 
-    void addQrzRequestsQueue(const ClusterMessage spot);
+
 private slots:
-    void SyncTimerTimer( );
+
+    //void SyncTimerTimer( );
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );
-signals:
-    void QrzServerRpcServerList(QVector<QrzServer>);
-    void qrzRequests(QVector<ClusterMessage>);
+
+
 
 };
 

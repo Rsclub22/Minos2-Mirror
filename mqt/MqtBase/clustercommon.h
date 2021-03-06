@@ -49,7 +49,7 @@ const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MOD
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
 
-enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, DISCARD_SPOT_NOT_CONTEST_BAND, GET_PREFIX_FAILED, ASKQRZ_FAILED_QRA};
+enum clusterErrorCode {SPOT_OK, NO_SPOT_TIME, SPOT_DATETIME_INVALID, SPOT_TOO_MANY_SECTIONS, DISCARD_HF_SPOT, DISCARD_SPOT_NOT_CONTEST_BAND, GET_PREFIX_FAILED};
 const QStringList clusterErrorMsg = QStringList() << "Spot OK" << "SpotTime not found" << "Spot DateTime Invalid" << "Spot too many sections"
                                                   << "Discard HF Spot" << "getPrefix failed to find QRA" << "AskQrz Failed to Find QRA";
 
@@ -181,6 +181,7 @@ enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
 const QString RESEND_ALL_SPOTS = "resendAll";
 const QString IGNORE_BANDMASK = "ignore_bandmask";
 
+const QString ASKQRZ_FAILEDQRA = "xxxxxx";
 
 QDateTime getSpotDateTime(const QString spotDate, const QString spotTime);
 
@@ -199,6 +200,7 @@ class ClusterServer
 public:
     QString routerName;
     QString app;
+    QString publisherProgram;
     PublishState state;
 };
 
@@ -218,9 +220,12 @@ public:
 
 private:
     QString message;
+    QString dxCall;         // used in qrzServer
+    QString spotterCall;    // used in qrzServer
     QString loggerUuid;
     resendFrameId frameId;
 };
+
 
 
 class BandFilterSettings

@@ -19,8 +19,9 @@
 #include "ConfigFile.h"
 #include "qrzserverrpc.h"
 
+
 static bool syncstat = false;
-static QVector<ClusterMessage> qrzRequestsQueue;
+static QVector<QrzServerMessage> qrzRequestsQueue;
 const char * QrzServerRpc::stateIndicator[] =
 {
     QT_TR_NOOP("Available"),
@@ -44,25 +45,86 @@ QrzServerRpc *QrzServerRpc::qrzServerRpc = nullptr;
 
 QrzServerRpc::QrzServerRpc()
 {
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
-    SyncTimer.start(100);
+    //connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    //SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
 
     QStringList sv{
-        rpcConstants::clusterCategory
+        rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
     };
     rpc->initialiseRouters(sv);
 
     connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
+    QString a = rpc->getAppName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
+    //RPCPubSub::publish(rpcConstants::qrzServerApp,  a + "@" + station, "", psPublished);
+    RPCPubSub::publish(rpcConstants::qrzServerApp,  a + "@" + station, "", psPublished);
+
 }
 
 QrzServerRpc::~QrzServerRpc()
 {
 }
+
+
+void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallState, QString spotterCall, QString spotterQra, QString spotterCallState)
+{
+    for (auto const &s: qAsConst(serverList))
+    {
+
+        trace(QString("Send Qrz Response to Cluster Server = %1").arg(s.app));
+        RPCGeneralClient rpc(rpcConstants::qrzMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember(rpcConstants::qrzClusterResponse, rpcConstants::paramName);
+        st->addMember( dxCall, rpcConstants::qrzDxCallsign );
+        st->addMember(dxQra, rpcConstants::qrzDxGrid);
+        st->addDtgMember(dxCallState, rpcConstants::qrzDxReplyState);
+        st->addMember(spotterCall, rpcConstants::qrzSpotterCallsign);
+        st->addMember(spotterQra, rpcConstants::qrzSpotterGrid);
+        st->addDtgMember(spotterCallState, rpcConstants::qrzSpotterReplyState);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( s.app );
+
+    }
+
+}
+
+
+void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state)
+{
+    for (auto const &s: qAsConst(serverList))
+    {
+        trace(QString("Send Qrz Response to Logger Server = %1").arg(s.app));
+        RPCGeneralClient rpc(rpcConstants::qrzMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::paramName);
+        st->addMember( qrzCallsignData.getCallsign(), rpcConstants::qrzDxCallsign );
+        st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
+        st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
+        st->addMember(qrzCallsignData.getCounty(), rpcConstants::qrzCounty );
+        st->addMember(qrzCallsignData.getCountry(), rpcConstants::qrzCountry);
+        st->addMember(qrzCallsignData.getLat(), rpcConstants::qrzLat);
+        st->addMember(qrzCallsignData.getLon(), rpcConstants::qrzLon);
+        st->addMember(qrzCallsignData.getQra(), rpcConstants::qrzDxGrid);
+        st->addMember(qrzCallsignData.getCqZone(), rpcConstants::qrzCqZone);
+        st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
+        st->addMember(state, rpcConstants::qrzDxReplyState);
+
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( s.app );
+
+    }
+
+
+
+
+}
+
+
 
 
 void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
@@ -72,28 +134,51 @@ void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
     {
         RPCArgs *args = mro->getCallArgs();
 
+
         if (args)
         {
-            QSharedPointer<RPCParam> psMess;
-            QSharedPointer<RPCParam> loggerUuid;
-            QSharedPointer<RPCParam> frameId;
-            QString pmess;
-            QString uuid;
-            int frame_id;
-            if (args->getStructArgMember(0, rpcConstants::sendClusterSpot, psMess)
-                    && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
-                    && args->getStructArgMember(0, rpcConstants::clusterFrameId, frameId))
+            QSharedPointer<RPCParam> qrzCluster;
+            QSharedPointer<RPCParam> qrzLogger;
+            QSharedPointer<RPCParam> msgDxCall;
+            QSharedPointer<RPCParam> msgSpotterCall;
+            QSharedPointer<RPCParam> msgLogFrameId;
+            QString dxCall;
+            QString spotterCall;
+            QString loggerId;
+
+
+            // look for message from cluster server
+            if (args->getStructArgMember(0, rpcConstants::qrzCluster, qrzCluster)
+                    && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
+                    && args->getStructArgMember(0, rpcConstants::qrzSpotterCallsign, msgSpotterCall))
             {
 
-                psMess->getString(pmess);
-                loggerUuid->getString(uuid);
-                frameId->getInt(frame_id);
-                trace(QString("QrzServerRpc: on_routerCall - receive cluster spot = %1, uuid = %2").arg(pmess, uuid));
-                ClusterMessage msg;
-                msg.setMessage(pmess);
-                msg.setFrameId(frame_id);
-                msg.setLoggerUuid(uuid);
-                addQrzRequestsQueue( msg );
+
+                msgDxCall->getString(dxCall);
+                msgSpotterCall->getString(spotterCall);
+                trace(QString("QrzServerRpc: on_serverCall - receive qrz request from cluster server dxCall = %1, spotterCall = %2").arg(dxCall, spotterCall));
+                QrzServerMessage msg;
+                msg.setDxCall(dxCall);
+                msg.setSpotterCall(spotterCall);
+                msg.setLoggerFlag(false);
+                trace(QString("on_serverCall: callsign %1, received from Cluster Server").arg(dxCall));
+                emit clusterQrzMsg(msg);
+                //qrzRequestsQueue.push_back(msg);
+
+            }
+                    // look for message from qrz Display server
+            else if (args->getStructArgMember(0, rpcConstants::qrzLogger, qrzLogger)
+                     && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
+                     && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
+            {
+                msgDxCall->getString(dxCall);
+                msgLogFrameId->getString(loggerId);
+                QrzServerMessage msg;
+                msg.setDxCall(dxCall);
+                msg.setLoggerUuid(loggerId);
+                msg.setLoggerFlag(true);
+                trace(QString("on_serverCall: callsign %1, received from Logger uuid %2").arg(dxCall, loggerId));
+                emit loggerQrzMsg(msg);
 
             }
 
@@ -104,16 +189,16 @@ void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 
 void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
-/*
 
-    trace("on_notify");
+
+    trace("qrzServer: on_notify");
     if ( an.getOK() )
     {
 
-        if ( an.getCategory() == rpcConstants::clusterCategory )
+        if ( an.getCategory() == rpcConstants::clusterApp || an.getCategory() == rpcConstants::qrzDisplayApp )
         {
             trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
-            bool chatFound = false;
+            bool stationFound = false;
             for ( auto &stat: serverList )
             {
                 if (stat.app == an.getKey())
@@ -125,59 +210,42 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                         //addChat( mess );
                         syncstat = true;
                     }
-                    chatFound = true;
+                    stationFound = true;
                     break;
                 }
             }
-            if ( !chatFound )
+            if ( !stationFound )
             {
                 // We have received notification from a previously unknown station - so report on it
                 QrzServer s;
-                s.routerName = an.getPublisherServer();
+                s.routerName = an.getPublisherRouter();
                 s.state = an.getState();
+                s.publisherProgram = an.getPublisherProgram();
                 s.app = an.getKey();
-                foreach (auto &s, serverList)
-                {
-                    trace(QString("routerName = %1, app = %2").arg(s.routerName, s.app));
-                }
                 serverList.push_back( s );
-                QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
-                //addChat( mess );
+                trace(QString("qrzServerRpc: on_notify - server found %1, publisher program %2, key %3").arg(s.routerName, s.publisherProgram, s.app));
+                //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
+
                 syncstat = true;
             }
         }
 
     }
-*/
+
 }
 
-
+/*
 void QrzServerRpc::SyncTimerTimer(  )
 {
     if (qrzRequestsQueue.count())
     {
-        emit qrzRequest(qrzRequestsQueue);
-        qrzRequestsQueue.clear();
+        //emit qrzRequestQueue(qrzRequestsQueue);
+        //qrzRequestsQueue.clear();
     }
 }
 
-
-void QrzServerRpc::addQrzRequestsQueue(const ClusterMessage spot)
-{
-    //QDateTime dt = QDateTime::currentDateTime();
-    //QString sdt = dt.toString( "HH:mm:ss " ) + spot;
-    qrzRequestsQueue.push_back(spot);
-}
+*/
 
 
-void QrzServerRpc::sendQraToClusterServer(QString dxQra, QString spotterQra, QString state)
-{
-    RPCGeneralClient rpc(rpcConstants::qrzMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-    st->addMember( dxQra, rpcConstants::qrzdXGrid);
-    st->addMember(spotterQra, rpcConstants::qrzSpotterGrid);
-    st->addMember(state, rpcConstants::qrzReplyState);
-    rpc.getCallArgs() ->addParam( st );
-    //rpc.queueCall( clusterApp  );
 
-}
+

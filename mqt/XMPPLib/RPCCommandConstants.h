@@ -61,14 +61,16 @@ static const QString clusterHfFlag ("ClusterHfFlag");
 
 // QRZ Server
 static const QString qrzServerApp  ("qrzServerApp");
+static const QString qrzDisplayApp ("qrzDisplayApp");
 static const QString qrzCategory  ("MinosQRZ");
 static const QString qrzMethod     ("Minos:QrzServer");
 static const QString qrzCluster    ("qrzCluster");
+static const QString qrzLogger     ("qrzLogger");
 static const QString qrzLogFrameId ("qrzLogFrameId");
 static const QString qrzClusterResponse ("qrzClusterResponse");
 static const QString qrzLoggerResponse ("qrzLoggerResponse");
-static const QString qrzCallsign   ("qrzDxCallsign");
-//static const QString qrzSpotterCallsign ("qrzSpotterCallsign");
+static const QString qrzDxCallsign   ("qrzDxCallsign");
+static const QString qrzSpotterCallsign ("qrzSpotterCallsign");
 static const QString qrzFirstName       ("qrzFirstName");
 static const QString qrzName            ("qrzName");
 static const QString qrzQth            ("qrzName");
@@ -76,12 +78,16 @@ static const QString qrzCounty         ("qrzCounty");
 static const QString qrzCountry         ("qrzCountry");
 static const QString qrzLat             ("qrzLat");
 static const QString qrzLon             ("qrzLon");
-static const QString qrzdXGrid            ("qrzDxGrid");
+static const QString qrzDxGrid            ("qrzDxGrid");
 static const QString qrzSpotterGrid     ("qrzSpotterGrid");
 static const QString qrzCqZone          ("qrzCqZone");
 static const QString qrzItuZone         ("qrzItuZone");
-static const QString qrzReplyState      ("qrzReplyState");
+static const QString qrzDxReplyState      ("qrzDxReplyState");
+static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
 
+static const QString qrzServerLoggedOut ("qrzServerLoggedOut");
+static const QString qrzServerLoggerIn  ("qrzServerLoggedIn");
+static const QString qrzServerCallOK    ("qrzServerCallOK");
 
 // Chat
 static const QString chatApp            ("mqtChat");

@@ -14,6 +14,7 @@ class Clusterrpc : public QObject
 
     QVector<ClusterServer> serverList;
 
+
 public:
     explicit Clusterrpc();
     ~Clusterrpc();
@@ -24,12 +25,14 @@ public:
 
     void publishTXEnable(const QString txOnOff);
 
-    void publishQrzDataRequest(QString dxCallsign, QString spotterCallsign);
+    void askQrzServerForQra(QString dxCall, QString spotterCall);
+
 signals:
 
     void sendSpotToDXCluster(Frequency, QString, QString);
     void resendSpotToClients(int, QString, QString, QString);
     void reconnectCmdFromLog(bool);
+    void clusterQrzResponse(QString, QString, QString, QString, QString, QString);
 
 
 private slots:

@@ -138,6 +138,9 @@ void TSingleLogFrame::buildFrame()
             this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString, QString)));
     //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
 
+    // to Qrz Display Panel
+    connect(GJVQSOLogFrame, SIGNAL(qrzCallsignRequest(QString)), this, SLOT(onQrzCallsignRequest(QString)));
+
     connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
     connect(FKHRigControlFrame, SIGNAL(radioHasError(QString)), this, SLOT(sendBandmapRadioHasError(QString)));
     connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
@@ -259,6 +262,11 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setRigControl(FKHRigControlFrame);
     txVmButtonsFrame->setVisible(false);
+
+    qrzDisplayFrame = new QrzDisplayFrame(this);
+    qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
+    qrzDisplayFrame->setVisible(false);
+    setQrzDisplayFrameLoaded(false);
 
     FKHRotControlFrame = new RotControlFrame(this);
 
@@ -412,7 +420,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     clusterControlFrame->setContest(nullptr);
     setClusterClientLoaded(false);
     bandmapControlFrame->setContest(nullptr);
+
     setBandmapLoaded(false);
+    setQrzDisplayFrameLoaded(false);
 
     // we need to setContest(nullptr) on all aux frames
     MinosLoggerEvents::SendClearContestInFrame(ct);
@@ -467,6 +477,12 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         wsjtxFrame->setParent(this);
         wsjtxFrame->hide();
+
+        txVmButtonsFrame->setParent(this);
+        txVmButtonsFrame->hide();
+
+        qrzDisplayFrame->setParent(this);
+        qrzDisplayFrame->hide();
 
         if (clearAllTabs)
         {
@@ -605,6 +621,12 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(FKHRotControlFrame);
                     // don't set contest here
+                    break;
+                }
+                case sctQrzDisplay:
+                {
+                    elementScrollArea->setWidget(qrzDisplayFrame);
+                    setQrzDisplayFrameLoaded(true);
                     break;
                 }
                 case sctRotPresets:
@@ -2190,6 +2212,27 @@ void TSingleLogFrame::presetTurn(QString b)
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
         FKHRotControlFrame->presetTurn(b);
 }
+
+
+//--------------- QRZ Display ---------------------------------------
+
+void TSingleLogFrame::onQrzCallsignRequest(QString callsign)
+{
+    qrzDisplayFrame->getQrzDetailsForLogger(callsign);
+}
+
+
+void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
+{
+   qrzCallFrameLoaded = loaded;
+   GJVQSOLogFrame->setqrzDisplayFrameLoaded(loaded);
+}
+
+bool TSingleLogFrame::isQrzCallFrameLoaded()
+{
+    return  qrzCallFrameLoaded;
+}
+
 
 //---------------------------------------------------------------------------
 

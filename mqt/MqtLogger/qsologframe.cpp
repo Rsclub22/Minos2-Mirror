@@ -34,6 +34,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , radioLoaded(false)
     , bandMapLoaded(false)
     , logDataFromBandmapOrMemory(false)
+    , qrzDisplayFrameLoaded(false)
     , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
@@ -339,6 +340,8 @@ void QSOLogFrame::on_TimeDisplayTimer()
     checkQsoFrameColour();
 
     checkBandMapAndClusterLoaded();
+
+    checkQrzDisplayFrameLoaded();
 }
 
 void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
@@ -519,6 +522,7 @@ void QSOLogFrame::initialise()
 
     connect(this, SIGNAL(freqChanged(Frequency)), this, SLOT(on_FreqChanged(Frequency)));
 
+    connect(ui->qrzToolButton, &QToolButton::clicked, this, [=](){onQrzButtonClicked();});
 
 
 }
@@ -3025,8 +3029,47 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 }
 
+void QSOLogFrame::onQrzButtonClicked()
+{
+    memoryData::memData logData;
+    int callRes = -1;
+    getLogDetails(logData, callRes);
+    if (callRes == CS_OK)
+    {
+        trace(QString("qrzButtonClicked: callsign %1").arg(logData.callsign));
+        emit qrzCallsignRequest(logData.callsign);
+    }
+
+}
+
+void QSOLogFrame::setQrzButtonVisible(bool state)
+{
+    ui->qrzToolButton->setVisible(state);
+}
 
 
+void QSOLogFrame::setqrzDisplayFrameLoaded(bool loaded)
+{
+    qrzDisplayFrameLoaded = loaded;
+}
+
+bool QSOLogFrame::isQrzDisplayFrameLoaded()
+{
+    return qrzDisplayFrameLoaded;
+}
+
+
+void QSOLogFrame::checkQrzDisplayFrameLoaded()
+{
+    if (contest && !contest->isReadOnly() && isQrzDisplayFrameLoaded())
+    {
+        setQrzButtonVisible(true);
+    }
+    else
+    {
+        setQrzButtonVisible(false);
+    }
+}
 
 void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
 {

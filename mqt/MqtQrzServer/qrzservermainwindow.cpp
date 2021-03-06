@@ -33,6 +33,13 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     connect(&stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
     stdinReader.start();
 
+    QSettings settings;
+    QByteArray geometry = settings.value("geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
+
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
@@ -45,12 +52,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     }
 
-
-
-    QSettings settings;
-    QByteArray geometry = settings.value("geometry").toByteArray();
-    if (geometry.size() > 0)
-        restoreGeometry(geometry);
+    logonCallsign = settings.value("logonCallsign", "").toString();
+    password = settings.value("password", "").toString();
 
     createCloseEvent();
 
@@ -61,28 +64,29 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
 
-    //connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(qrzRequestMsg(QVector<ClusterMessage>)), this, SLOT(onQrzRequests(QVector<ClusterMessage>)));
+    QStringList sv{
+            rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
+        };
+    QString pubName = rpcConstants::qrzServerApp;
 
 
-    connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=]{onConfigure();});
 
-    logonCallsign = settings.value("logonCallsign", "").toString().trimmed();
-    password = settings.value("password", "").toString().trimmed();
-
-    QString qrzURL = "https://xmldata.qrz.com/xml/current/?";
-
-    QString agent = "Minos";
+    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onClusterQrzMessage(QrzServerMessage)));
+    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(loggerQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMsg(QrzServerMessage)));
 
 
-    if (logonCallsign.isEmpty() || password.isEmpty())
-    {
-        onConfigure();
-    }
+    connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
 
-    QString logonQrz = qrzURL + "username=" + logonCallsign + ";password=" + password + ";agent=" + agent;
+    queryTimer = new QTimer(this);
+    connect(queryTimer, &QTimer::timeout, this, [=](){onQueryTimeout();});
 
-    sendUrl(logonQrz);
+    checkQrzRequestsTimer = new QTimer(this);
+    connect(checkQrzRequestsTimer, &QTimer::timeout, this, [=](){handleQrzRequests();});
+    checkQrzRequestsTimer->start(500);
+
+    ui->messageTextWindow->isReadOnly();
+
+    logon();
 
 
 }
@@ -116,6 +120,11 @@ void QrzServerMainWindow::LogTimerTimer()
     }
 }
 
+void QrzServerMainWindow::onQueryTimeout()
+{
+
+}
+
 void QrzServerMainWindow::onStdInRead(QString cmd)
 {
 
@@ -138,9 +147,43 @@ void QrzServerMainWindow::quit()
 }
 
 
+void QrzServerMainWindow::logon()
+{
+    if (askCallsignFlag || askLogonFlag)
+    {
+        return;
+    }
+
+    qrzSessionData.clear();
+
+    askLogonFlag = true;
+    qrzLoggedOn = false;
+
+    queryTimer->stop();
+    queryTimer->setInterval(QUERYTIMEOUT);
+
+
+    if (logonCallsign.isEmpty() || password.isEmpty())
+    {
+        onConfigure();
+    }
+
+    QString logonQrz = QRZURL + "username=" + logonCallsign.trimmed() + ";password=" + password.trimmed() + ";agent=" + AGENT;
+    addTextToLogWindow(QString("Logging on to QRZ.com with callsign: %1").arg(logonCallsign));
+    sendUrl(logonQrz);
+}
+
+void QrzServerMainWindow::askCallsignData(QString callsign)
+{
+    QString callsignUrl = QRZURL + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
+    sendUrl(callsignUrl);
+}
+
+
 
 void QrzServerMainWindow::sendUrl(QString url)
 {
+    trace(QString("sendUrl - %1").arg(stripPasswordFromUrl(url)));
 
     QNetworkAccessManager m_NetworkMngr;
 
@@ -188,11 +231,13 @@ void QrzServerMainWindow::sendUrl(QString url)
                         if (xmlData.name().contains("Session"))
                         {
                             parseSessionData(xmlData);
+                            sessionDataReceived();
                         }
                         else if (xmlData.name().contains("Callsign"))
                         {
 
                             parseCallsignData(xmlData);
+                            callsignDataReceived();
 
                         }
                         else if (xmlData.name().contains("DXCC"))
@@ -206,39 +251,139 @@ void QrzServerMainWindow::sendUrl(QString url)
     }
     else
     {
+        QString url_ = stripPasswordFromUrl(url);
+
         // error
-        //trace ( QString( "HTPP Get of " ) + calendarURL + " failed: " + reply->errorString() );
+        trace ( QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString() );
 
     }
 
+}
 
 
+QString QrzServerMainWindow::stripPasswordFromUrl(QString url)
+{
+    if (url.contains(";password="))
+    {
+        QStringList ul = url.split(";password=");
+        if (ul.count() == 2)
+        {
+            return ul[0];
+        }
+
+    }
+
+    return url;
+
+}
 
 
+void QrzServerMainWindow::sessionDataReceived()
+{
+    if (askLogonFlag || askCallsignFlag)
+    {
+        queryTimer->stop();
+    }
+
+    if (!qrzSessionData.getError().isEmpty())
+    {
+        trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
+        addToErrorTextLabel(qrzSessionData.getError());
+        addTextToLogWindow(qrzSessionData.getError());
+
+    }
+
+    if (!qrzSessionData.getMessage().isEmpty())
+    {
+        trace(QString("Qrz Message: %1").arg(qrzSessionData.getMessage()));
+        addToErrorTextLabel(qrzSessionData.getMessage());
+        addTextToLogWindow(qrzSessionData.getMessage());
+    }
+
+    if (askLogonFlag && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
+    {
+        // logon succesfull
+        qrzLoggedOn = true;
+        askLogonFlag = false;
+        QString msg = QString("Qrz Logged on Ok with call %1").arg(logonCallsign);
+        trace(msg);
+        addTextToLogWindow(msg);
+        addToErrorTextLabel("");
+        addToMessageTextLabel("");
+        setQrzStatusConnected(true);
+    }
+    else
+    {
+        askLogonFlag = false;
+    }
+
+}
 
 
+void QrzServerMainWindow::callsignDataReceived()
+{
+    if (askCallsignFlag)
+    {
+        if (!requestedStation.getLoggerFlag())
+        {
+            // a request from cluster Server
 
+            QString msg = QString("Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server").arg(requestedStation.getDxCall(), qrzCallsignData.getQra());
+            trace(msg);
+            addTextToLogWindow(msg);
+
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), qrzCallsignData.getQra(), rpcConstants::qrzServerCallOK, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerCallOK);
+
+        }
+        else
+        {
+            // a request from qrz display
+            QString msg = QString(QString("Cluster Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
+            trace(msg);
+            addTextToLogWindow(msg);
+            QString stateMsg = "";
+            if (!qrzSessionData.getError().isEmpty())
+            {
+                stateMsg = qrzSessionData.getError();
+            }
+            else if (!qrzSessionData.getMessage().isEmpty())
+            {
+                stateMsg = qrzSessionData.getMessage();
+            }
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg);
+
+        }
+
+        askCallsignFlag = false;
+
+    }
 }
 
 
 void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
 {
+    QString("Parse Session Data");
     while(xmlData.readNextStartElement())
     {
         if (xmlData.name() == "Error")
         {
            qrzSessionData.setError(xmlData.readElementText());
-           qDebug() << "Error = " << qrzSessionData.getError();
+           trace(QString("Session Data: Error = %1").arg(qrzSessionData.getError()));
         }
         else if(xmlData.name() == "Key")
         {
             qrzSessionData.setKey( xmlData.readElementText() );
-            qDebug() << "Key = " << qrzSessionData.getKey();
+            trace(QString("Session Data: Key = %1").arg(qrzSessionData.getKey()));
         }
         else if (xmlData.name() == "SubExp")
         {
             qrzSessionData.setSubExp(xmlData.readElementText());
-            qDebug() << "SubExp = " <<  qrzSessionData.getSubExp();
+            trace(QString("Session Data: SubExp = %1").arg(qrzSessionData.getSubExp()));
+        }
+        else if (xmlData.name() == "Message")
+        {
+            qrzSessionData.setMessage(xmlData.readElementText());
+            trace(QString("Session Data: Message = %1").arg(qrzSessionData.getMessage()));
         }
         else
         {
@@ -251,62 +396,63 @@ void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
 
 void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
 {
+    trace(QString("Parse Callsign Data"));
     while(xmlData.readNextStartElement())
     {
         if(xmlData.name() == "call")
         {
             qrzCallsignData.setCallsign(xmlData.readElementText());
-            qDebug() << "callsign = " << qrzCallsignData.getCallsign();
+            trace(QString("Callsign Data: callsign = %1").arg(qrzCallsignData.getCallsign()));
         }
         else if (xmlData.name() == "fname")
         {
             qrzCallsignData.setFirstName(xmlData.readElementText());
-            qDebug() << "first name = " <<  qrzCallsignData.getFirstName();
+            trace(QString("Callsign Data: first name = %1").arg(qrzCallsignData.getFirstName()));
         }
         else if (xmlData.name() == "name")
         {
             qrzCallsignData.setName(xmlData.readElementText());
-            qDebug() << "name = " << qrzCallsignData.getName();
+            trace(QString("Callsign Data: name = %1").arg(qrzCallsignData.getName()));
         }
         else if (xmlData.name() == "addr2")
         {
             qrzCallsignData.setQth(xmlData.readElementText());
-            qDebug() << "qth = " << qrzCallsignData.getQth();
+            trace(QString("Callsign Data: qth = %1").arg(qrzCallsignData.getQth()));
         }
         else if (xmlData.name() == "county")
         {
             qrzCallsignData.setCounty(xmlData.readElementText());
-            qDebug() << "county = " << qrzCallsignData.getCounty();
+            trace(QString("Callsign Data: county = %1").arg(qrzCallsignData.getCounty()));
         }
         else if (xmlData.name() == "country")
         {
             qrzCallsignData.setCountry(xmlData.readElementText());
-            qDebug() << "county = " << qrzCallsignData.getCountry();
+            trace(QString("Callsign Data: country = %1").arg(qrzCallsignData.getCountry()));
         }
         else if (xmlData.name() == "lat")
         {
             qrzCallsignData.setLat(xmlData.readElementText());
-            qDebug() << "lat = " << qrzCallsignData.getLat();
+            trace(QString("Callsign Data: lat = %1").arg(qrzCallsignData.getLat()));
         }
         else if (xmlData.name() == "lon")
         {
             qrzCallsignData.setLon(xmlData.readElementText());
-            qDebug() << "lon = " << qrzCallsignData.getLon();
+            trace(QString("Callsign Data: lon = %1").arg(qrzCallsignData.getLon()));
         }
         else if (xmlData.name() == "grid")
         {
             qrzCallsignData.setQra(xmlData.readElementText());
-            qDebug() << "grid = " << qrzCallsignData.getQra();
+            trace(QString("Callsign Data: grid = %1").arg(qrzCallsignData.getQra()));
         }
         else if (xmlData.name() == "cqzone")
         {
             qrzCallsignData.setCqZone(xmlData.readElementText());
-            qDebug() << "cqZone = " << qrzCallsignData.getCqZone();
+            trace(QString("Callsign Data: cqZone = %1").arg(qrzCallsignData.getCqZone()));
         }
         else if (xmlData.name() == "ituzone")
         {
             qrzCallsignData.setItuZone(xmlData.readElementText());
-            qDebug() << "ituZone = " <<  qrzCallsignData.getItuZone();
+            trace(QString("Callsign Data: ituZone = %1").arg(qrzCallsignData.getItuZone()));
         }
         else
         {
@@ -322,105 +468,6 @@ void QrzServerMainWindow::parseDXCCData(QXmlStreamReader &xmlData)
 }
 
 
-int QrzServerMainWindow::parseTest()
-{
-    QFile file("C:/Qt_Projects/build-qrzServer-Desktop_Qt_5_12_10_MinGW_32_bit-Debug/debug/qrzTest.xml");
-        if(!file.open(QFile::ReadOnly | QFile::Text)){
-            qDebug() << "Cannot read file" << file.errorString();
-            exit(0);
-        }
-
-        QXmlStreamReader reader(&file);
-
-        if (reader.readNextStartElement())
-        {
-            if (reader.name().contains("QRZDatabase"))
-            {
-                if (reader.readNextStartElement())
-                {
-                    if (reader.name().contains("Callsign"))
-                    {
-                        while(reader.readNextStartElement())
-                        {
-                            if(reader.name() == "call")
-                            {
-                                QString callsign = reader.readElementText();
-                                qDebug() << "callsign = " << qPrintable(callsign);
-                            }
-                            else if (reader.name() == "fname")
-                            {
-                                QString firstName = reader.readElementText();
-                                qDebug() << "first name = " << qPrintable(firstName);
-                            }
-                            else if (reader.name() == "name")
-                            {
-                                QString name = reader.readElementText();
-                                qDebug() << "name = " << qPrintable(name);
-                            }
-                            else if (reader.name() == "addr2")
-                            {
-                                QString qth = reader.readElementText();
-                                qDebug() << "qth = " << qPrintable(qth);
-                            }
-                            else if (reader.name() == "county")
-                            {
-                                QString county = reader.readElementText();
-                                qDebug() << "county = " << qPrintable(county);
-                            }
-                            else if (reader.name() == "country")
-                            {
-                                QString country = reader.readElementText();
-                                qDebug() << "county = " << qPrintable(country);
-                            }
-                            else if (reader.name() == "lat")
-                            {
-                                QString lat = reader.readElementText();
-                                qDebug() << "lat = " << qPrintable(lat);
-                            }
-                            else if (reader.name() == "lon")
-                            {
-                                QString lon = reader.readElementText();
-                                qDebug() << "lon = " << qPrintable(lon);
-                            }
-                            else if (reader.name() == "grid")
-                            {
-                                QString qra = reader.readElementText();
-                                qDebug() << "grid = " << qPrintable(qra);
-                            }
-                            else if (reader.name() == "cqzone")
-                            {
-                                QString cqZone = reader.readElementText();
-                                qDebug() << "cqZone = " << qPrintable(cqZone);
-                            }
-                            else if (reader.name() == "ituzone")
-                            {
-                                QString ituZone = reader.readElementText();
-                                qDebug() << "ituZone = " <<  qPrintable(ituZone);
-                            }
-                            else
-                            {
-                               reader.skipCurrentElement();
-                            }
-                        }
-
-
-                    }
-                }
-
-
-
-            }
-            else
-            {
-                reader.raiseError(QObject::tr("Incorrect file"));
-            }
-        }
-
-
-
-
-        return 0;
-}
 
 
 void QrzServerMainWindow::onConfigure()
@@ -460,42 +507,82 @@ void QrzServerMainWindow::clusterClientServerList(QVector<ClusterServer> serverL
 
 
 
-void QrzServerMainWindow::qrzRequestMsg(QVector<ClusterMessage> qrzRequestMsg)
+void QrzServerMainWindow::onClusterQrzMessage(QrzServerMessage qrzRequest)
 {
-/*
-    // if contest is protected ignore
-    if (!isProtected && ct)
-    {
-        //get spot Message from queue
-        for (int i = 0; i < spotMsg.count(); i++)
-        {
-            ClusterMessage msg = spotMsg[i];
-            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3, this frameId = %4").arg(msg.getMessage()).arg(msg.getLoggerUuid()).arg(ct->uuid).arg(msg.getFrameId()));
 
-            // if loggerUuid is empty, message is for all frames
-            if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::CLUSTER_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
+    trace(QString("onClusterQrzMessage: add message to queue, callsign %1").arg(qrzRequest.getDxCall()));
+    qrzRequestQueue += qrzRequest;
+}
+
+void QrzServerMainWindow::onLoggerQrzMsg(QrzServerMessage qrzRequest)
+{
+    trace(QString("onLoggerQrzMessage: add message to queue, callsign %1").arg(qrzRequest.getDxCall()));
+    qrzRequestQueue += qrzRequest;
+}
+
+
+void QrzServerMainWindow::handleQrzRequests()
+{
+    if (!qrzRequestQueue.isEmpty())
+    {
+        if (qrzLoggedOn)
+        {
+            if (!askCallsignFlag)
             {
-                if (msg.getMessage().contains(DXSPOT) || msg.getMessage().contains(RESENTSPOT))
-                {
-                    traceMsg(QString("Spot for this loggeruuid = %1, add to queue").arg(ct->uuid));
-                    spotQueue += msg.getMessage();
-                }
+                requestedStation.clear();
+
+                requestedStation = qrzRequestQueue[0];
+                qrzRequestQueue.remove(0);
+
+                // ask for qra locator
+                askCallsignFlag = true;
+                trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(requestedStation.getDxCall()));
+                askCallsignData(requestedStation.getDxCall());
+
             }
 
         }
+        else
+        {
+
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), "", rpcConstants::qrzServerLoggedOut, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerLoggedOut);
+
+        }
+
+    }
+}
+
+
+
+void QrzServerMainWindow::addTextToLogWindow(QString message)
+{
+    ui->messageTextWindow-> appendPlainText(QTime::currentTime().toString("hh:mm:ss.z") + " " + message);
+}
+
+void QrzServerMainWindow::addToErrorTextLabel(QString message)
+{
+    ui->errorText->clear();
+    ui->errorText->setText(message);
+}
+
+void QrzServerMainWindow::addToMessageTextLabel(QString message)
+{
+    ui->messageTextLabel->clear();
+    ui->messageTextLabel->setText(message);
+}
+
+void QrzServerMainWindow::setQrzStatusConnected(bool state)
+{
+    if (state)
+    {
+        ui->statusText->clear();
+        ui->statusText->setText("Connected");
+        ui->connectPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
     }
     else
     {
-        // protected
-        spotQueue.clear();
-        return;
+        ui->statusText->clear();
+        ui->statusText->setText("Disconnected");
+        ui->connectPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
     }
-
-
-
-    if (!purgeSpotFlag && !holdUpdateFlag)     // do nothing while purging spots
-    {
-        handleDxSpots(spotQueue);
-    }
-*/
 }

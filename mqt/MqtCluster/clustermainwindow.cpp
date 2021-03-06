@@ -149,6 +149,8 @@ void ClusterMainWindow::doStartup()
     connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
     connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
     connect(clusterRpc, &Clusterrpc::reconnectCmdFromLog, this, [=](bool state){onReconnectCommandFromLog(state);});
+    connect(clusterRpc, &Clusterrpc::clusterQrzResponse,
+            this, [=](QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState){onclusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);});
 
     handleSpotsInQueues = new QTimer();
     connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
@@ -1016,6 +1018,34 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
     {
         trace(QString("ProcessNewSpot: Spot within timeToLive"));
 
+        if (newSpot->getDxLocator().isEmpty())
+        {
+            trace(QString("processNewSpot: dxLocator empty for DXcall %1").arg(newSpot->getDxCall().getFullCall()));
+            if (getUseQrzForQraFlag())
+            {
+                trace(QString("processNewSpot: ask Qrz for qra locator"));
+                askQrzForQraLocator(newSpot);
+                return;
+            }
+            else
+            {
+                // get locator based upon prefix
+                newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+                trace(QString("Process DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
+                newSpot->setDxLocatorIsFromNode(true);
+            }
+        }
+        else if (newSpot->getDxLocator() == ASKQRZ_FAILEDQRA)
+        {
+            // failed to get QRA from QRZ, use prefix
+            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
+            trace(QString("Process DX Spot: failed to get qra from qrz, get from prefix = %1").arg(newSpot->getDxLocator()));
+            newSpot->setDxLocatorIsFromNode(true);
+        }
+
+
+
+
         if (currentUserCallsign != newSpot->getSpotterCallStr())
         {
             // send spot to clients if spotter isn't this station
@@ -1048,6 +1078,19 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
     {
         trace(QString("ProcessNewSpot: Spot %1, older than time to live time = %2 mins").arg(newSpot->getDxCallStr()).arg(timeToLive/60));
     }
+
+
+}
+
+
+void ClusterMainWindow::askQrzForQraLocator(QSharedPointer<ClusterSpotData> newSpot)
+{
+    QString dxCall = newSpot->getDxCall().getFullCall();
+    QString spotterCall = newSpot->getSpotterCall().getFullCall();
+
+    clusterRpc->askQrzServerForQra(dxCall, spotterCall);
+
+    askQrzQueue.insert((dxCall + ":" + spotterCall), newSpot);
 
 
 }
@@ -1165,7 +1208,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
-
+/*
         if (newSpot->getDxLocator().isEmpty())
         {
             // get locator based upon prefix
@@ -1173,7 +1216,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
             trace(QString("Unpack Show DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
             newSpot->setDxLocatorIsFromNode(true);
         }
-
+*/
 
         newSpot->setDxPropMode(getPropMode(spotComment));
 
@@ -1341,6 +1384,35 @@ QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<C
 }
 
 
+void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState)
+{
+    Q_UNUSED(spotterGrid)
+    Q_UNUSED(spotterState)
+
+    QString callsignKey = dxCall + ":" + spotterCall;
+
+    if (askQrzQueue.contains(callsignKey))
+    {
+        QSharedPointer<ClusterSpotData> newSpot = askQrzQueue.value(callsignKey);
+        askQrzQueue.remove(callsignKey);
+
+        if (!dxGrid.isEmpty() && dxCallState == rpcConstants::qrzServerCallOK)
+        {
+            trace(QString("Qrz Server Response for callsign = %1, qra = %2").arg(dxCall, dxGrid));
+            newSpot->setDxLocator(dxGrid);
+            processNewSpot(newSpot);
+        }
+        else
+        {
+            // flag no Qra found for callsign from Qrz
+            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);
+            processNewSpot(newSpot);
+        }
+    }
+
+
+}
+
 void ClusterMainWindow::cancelPingTimeOut(QString msg)
 {
     if (msg.contains("ping_cluster"))
@@ -1432,8 +1504,6 @@ void ClusterMainWindow::getSpotsFromSendToClientQueue()
                 sendSpotsToClientQueue.removeFirst();
             }
         }
-
-
 }
 
 
@@ -1590,7 +1660,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
-
+/*
         if (newSpot->getDxLocator().isEmpty())
         {
             // get locator based up prefix
@@ -1598,7 +1668,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
             trace(QString("Unpack DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
             newSpot->setDxLocatorIsFromNode(true);
         }
-
+*/
         newSpot->setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode
@@ -2813,7 +2883,17 @@ void ClusterMainWindow::handleStatusTimer()
 }
 
 
+bool ClusterMainWindow::getUseQrzForQraFlag()
+{
+    bool useQrzFlag;
+    QString fileName = CLUSTER_SETTINGS_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("UseQRZServer");
+    useQrzFlag =  config.value("enableGetQraFromQrz", false).toBool();
+    config.endGroup();
 
+    return useQrzFlag;
+}
 
 void ClusterMainWindow::about()
 {

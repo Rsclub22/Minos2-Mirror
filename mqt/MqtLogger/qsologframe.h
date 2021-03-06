@@ -97,6 +97,8 @@ public:
 
 
     void transferFromWSJTX(QString call);
+    void setQrzButtonVisible(bool state);
+    void setqrzDisplayFrameLoaded(bool loaded);
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -196,6 +198,9 @@ private:
     bool logDataFromBandmapOrMemory;
     int addToBandmapTuneTolerance;
 
+    bool qrzDisplayFrameLoaded;
+    bool isQrzDisplayFrameLoaded();
+
     bool keyerLoaded;
     bool isKeyerLoaded();
 
@@ -279,6 +284,7 @@ private:
     void checkQsoFrameColour();
     
     bool frameHasFocus();
+    void checkQrzDisplayFrameLoaded();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
@@ -288,6 +294,7 @@ signals:
     void sendFreqControl(Frequency);
     void freqChanged(Frequency);
     void sendSpotToClusterServer(Frequency, QString, QString);
+    void qrzCallsignRequest(QString);
 
 private slots:
     void focusChange(QObject *, bool, QFocusEvent *event);
@@ -330,6 +337,7 @@ private slots:
     void on_FreqChanged(Frequency f);
 
     void tuningAddMapChkBoxStateChange(int state);
+    void onQrzButtonClicked();
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

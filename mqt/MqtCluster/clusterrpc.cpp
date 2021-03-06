@@ -11,11 +11,17 @@ Clusterrpc::Clusterrpc()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    QStringList sv = {rpcConstants::clusterClientServer};
+    QStringList sv = {rpcConstants::clusterClientServer, rpcConstants::qrzServerApp};
     rpc->initialiseRouters(sv);
 
     connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+
+    QString a = rpc->getAppName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
+    RPCPubSub::publish(rpcConstants::clusterApp,  a + "@" + station, "", psPublished);
+
+
 }
 
 Clusterrpc::~Clusterrpc()
@@ -51,6 +57,23 @@ void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
     }
 }
 
+void Clusterrpc::askQrzServerForQra(QString dxCall, QString spotterCall)
+{
+    for (auto const &s: qAsConst(serverList))
+    {
+        if (s.publisherProgram == "QrzServer")
+        {
+            trace(QString("Send askQrzServerForQra to station = %1").arg(s.app));
+            RPCGeneralClient rpc(rpcConstants::qrzMethod);
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember("clusterAsk", rpcConstants::qrzCluster);
+            st->addMember( dxCall, rpcConstants::qrzDxCallsign );
+            st->addMember(spotterCall, rpcConstants::qrzSpotterCallsign);
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( s.app );
+        }
+    }
+}
 
 
 void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
@@ -68,6 +91,13 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
       QSharedPointer<RPCParam> resendSpotCmd;
       QSharedPointer<RPCParam> bandmask;
       QSharedPointer<RPCParam> reconnectState;
+      QSharedPointer<RPCParam> psDxCall;
+      QSharedPointer<RPCParam> psDxGrid;
+      QSharedPointer<RPCParam> psDxCallState;
+      QSharedPointer<RPCParam> psSpotterCall;
+      QSharedPointer<RPCParam> psSpotterGrid;
+      QSharedPointer<RPCParam> psSpotterCallState;
+
       RPCArgs *args = mro->getCallArgs();
 
       QString paraName;
@@ -130,6 +160,37 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
               emit reconnectCmdFromLog(state);
           }
       }
+      else if (paraName == rpcConstants::qrzClusterResponse)
+      {
+          QString dxCall;
+          QString dxGrid;
+          QString dxCallState;
+          QString spotterCall;
+          QString spotterGrid;
+          QString spotterState;
+
+          if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, psDxCall)
+              && args->getStructArgMember(0, rpcConstants::qrzDxGrid, psDxGrid)
+              && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, psDxCallState)
+              && args->getStructArgMember(0, rpcConstants::qrzSpotterCallsign, psSpotterCall)
+              && args->getStructArgMember(0, rpcConstants::qrzSpotterGrid, psSpotterGrid)
+              && args->getStructArgMember(0, rpcConstants::qrzSpotterReplyState, psSpotterCallState))
+          {
+               psDxCall->getString(dxCall);
+               psDxGrid->getString(dxGrid);
+               psDxCallState->getString(dxCallState);
+               psSpotterCall->getString(spotterCall);
+               psSpotterGrid->getString(spotterGrid);
+               psSpotterCallState->getString(spotterState);
+
+               emit clusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);
+
+          }
+
+
+
+      }
+
 
       mro->clearCallArgs();
       QSharedPointer<RPCParam>st(new RPCParamStruct);
@@ -144,7 +205,7 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     if ( an.getOK() )
     {
-        if ( an.getCategory() == rpcConstants::clusterClientServer )
+        if ( an.getCategory() == rpcConstants::clusterClientServer || an.getCategory() == rpcConstants::qrzServerApp )
         {
             trace( QString("***") + clusterStateList[an.getState()] + " " + an.getCategory() + " " + an.getKey());
             bool clusterFound = false;
@@ -169,6 +230,7 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 s.routerName = an.getPublisherRouter();
                 s.state = an.getState();
                 s.app = an.getKey();
+                s.publisherProgram = an.getPublisherProgram();
                 serverList.push_back( s );
                 QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
                 trace(mess);
@@ -180,13 +242,9 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 //---------------------------------------------------------------------------
 void Clusterrpc::publishState( const QString &raw, const QString &state )
 {
-  //static QString old;
 
-  //if ( state != old )
-  //{
-  //   old = state;
   RPCPubSub::publish( rpcConstants::clusterCategory, rpcConstants::clusterReport, raw + "<>" + state, psPublished );
-  //}
+
 }
 
 void Clusterrpc::publishTXEnable(const QString txOnOff)
@@ -201,7 +259,3 @@ void Clusterrpc::publishTXEnable(const QString txOnOff)
     }
 }
 
-void Clusterrpc::publishQrzDataRequest(QString dxCallsign, QString spotterCallsign)
-{
-    RPCPubSub::publish(rpcConstants::clusterCategory, rpcConstants::qrzCallsign, dxCallsign + ":" + spotterCallsign, psPublished);
-}

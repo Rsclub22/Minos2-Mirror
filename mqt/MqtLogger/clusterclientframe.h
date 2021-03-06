@@ -32,9 +32,6 @@ namespace Ui {
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
 
-//const int MOUSE_IN_FRAME_TIMEOUT = 10000;
-//const int CHECKSPOTS_DURATION = 1000;
-//const int CHECK_NEWFILTERS_DURATION = 1000;
 
 class ClusterClientFrame;
 
