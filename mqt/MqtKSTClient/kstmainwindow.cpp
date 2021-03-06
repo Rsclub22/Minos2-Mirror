@@ -28,7 +28,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     mainWindow = this;
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &KSTMainWindow::onStdInRead);
     stdinReader.start();
 
     QSettings settings;
@@ -239,7 +239,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     connect(kstclient, SIGNAL(connected()), this, SLOT(connected()));
     connect(kstclient, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(kstclient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(kstclient, &QTcpSocket::errorOccurred, this, &KSTMainWindow::connectionError);
+#else
+    connect(kstclient, &QTcpSocket::error, this, &KSTMainWindow::connectionError);
+#endif
     connect(kstclient, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
     ui->CSFilter->installEventFilter(this);

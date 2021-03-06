@@ -237,7 +237,7 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->setupUi(this);
     monitorMain = this;
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &MonitorMain::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -261,15 +261,15 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     monitorTimer = new QTimer();
 
-    connect(monitorTimer, SIGNAL(timeout()), this, SLOT(on_monitorTimeout()));
+    connect(monitorTimer, &QTimer::timeout, this, &MonitorMain::on_monitorTimeout);
 
     monitorTimer->start(100);
 
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &MonitorMain::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &MonitorMain::on_notify);
 
     QStringList sv = {rpcConstants::LoggerCategory};
     rpc->initialiseRouters(sv);
@@ -301,8 +301,8 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
 
-    closeMonitoredLog = newAction(tr("Close tab"), &TabPopup, SLOT(on_closeMonitoredLog()));
-    newAction( "Cancel", &TabPopup, SLOT( CancelClick() ) );
+    closeMonitoredLog = newAction(tr("Close tab"), &TabPopup, &MonitorMain::on_closeMonitoredLog);
+    newAction( "Cancel", &TabPopup, &MonitorMain::CancelClick );
 
     ui->callsignEdit->setValidator(&ucValidator);
     ui->locEdit->setValidator(&ucValidator);
@@ -462,11 +462,11 @@ void MonitorMain::on_contestPageControl_customContextMenuRequested(const QPoint 
 
     TabPopup.popup( globalPos );
 }
-QAction *MonitorMain::newAction( const QString &text, QMenu *m, const char *atype )
+QAction *MonitorMain::newAction(const QString &text, QMenu *m, void (MonitorMain::*slotparam)() )
 {
     QAction * newAct = new QAction( text, this );
     m->addAction( newAct );
-    connect( newAct, SIGNAL( triggered() ), this, atype );
+    connect( newAct, &QAction::triggered , this, slotparam );
     return newAct;
 }
 void MonitorMain::on_closeMonitoredLog()

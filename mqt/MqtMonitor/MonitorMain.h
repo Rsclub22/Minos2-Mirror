@@ -208,7 +208,7 @@ private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;
 
-    QAction *newAction( const QString &text, QMenu *m, const char *atype );
+    QAction *newAction(const QString &text, QMenu *m, void (MonitorMain::*slotparam)() );
     QMenu TabPopup;
     QAction *closeMonitoredLog;
 

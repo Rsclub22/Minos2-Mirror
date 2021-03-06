@@ -16,7 +16,7 @@ ScreenConfigScreen::ScreenConfigScreen(ScreenConfig *parentc) :
     ui->setupUi(this);
 
     vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
-    vbl->setMargin(1);
+    vbl->setContentsMargins(1, 1, 1, 1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     baseElement = new ScreenConfigElement(nullptr, this);

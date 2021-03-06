@@ -85,7 +85,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &KeyerMain::onStdInRead);
     stdinReader.start();
 
     QSettings settings;
@@ -345,8 +345,11 @@ void KeyerMain::runAlsaScript(const QString &alsaFileName, const QString &comman
         runner = new QProcess(parent());
         connect (runner, SIGNAL(started()), this, SLOT(on_started()));
         connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
-        connect (runner, SIGNAL(error(QProcess::ProcessError)), this, SLOT(on_error(QProcess::ProcessError)));
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        connect (runner, &QProcess::errorOccurred, this, &KeyerMain::on_error);
+#else
+        connect (runner, &QProcess::error, this, &KeyerMain::on_error);
+#endif
         connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
         connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
 

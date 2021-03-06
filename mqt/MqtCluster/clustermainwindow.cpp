@@ -70,7 +70,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 void ClusterMainWindow::doStartup()
 {
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
     stdinReader.start();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

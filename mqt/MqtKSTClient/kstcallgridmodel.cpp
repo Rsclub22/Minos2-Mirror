@@ -316,7 +316,7 @@ QVariant KstCallGridModel::data( const QModelIndex &index, int role ) const
             return QString("000002");
         }
     }
-    if (role == Qt::BackgroundColorRole)
+    if (role == Qt::BackgroundRole)
     {
         if (isFiltered())
         {

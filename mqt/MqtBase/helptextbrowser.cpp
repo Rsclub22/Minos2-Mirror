@@ -6,7 +6,7 @@ HelpTextBrowser::HelpTextBrowser(QWidget* parent):
                         QTextBrowser(parent)
     //  A subclass of QTextBrowser that handles Qt help collection files.
 {
-    QObject::connect(this, SIGNAL(anchorClicked(QUrl)), this, SLOT(on_anchorClicked(QUrl)));
+    QObject::connect(this, &HelpTextBrowser::anchorClicked, this, &HelpTextBrowser::on_anchorClicked);
 }
 
 

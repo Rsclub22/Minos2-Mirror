@@ -34,7 +34,7 @@ ControlMain::ControlMain(QWidget *parent) :
         restoreGeometry(geometry);
 
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &ControlMain::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);

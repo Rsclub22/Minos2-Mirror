@@ -22,7 +22,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     ui->autoStartCheckBox->setVisible(showAutoStart);
 
     QVBoxLayout *vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
-    vbl->setMargin(1);
+    vbl->setContentsMargins(1, 1, 1, 1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     elementFrames.clear();
@@ -51,12 +51,12 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
         mShowMessage(reqErrs, this);
     }
     formShowTimer.setSingleShot(true);
-    connect(&formShowTimer, SIGNAL(timeout()), this, SLOT(on_formShown()));
+    connect(&formShowTimer, &QTimer::timeout, this, &StartConfig::on_formShown);
     formShowTimer.start(100);
 
     checkEnabled();
 
-    connect(&runTimer, SIGNAL(timeout()), this, SLOT(checkEnabled()));
+    connect(&runTimer, &QTimer::timeout, this, &StartConfig::checkEnabled);
     runTimer.start(1000);
 }
 void StartConfig::on_formShown()

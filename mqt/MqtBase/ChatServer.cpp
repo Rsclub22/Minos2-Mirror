@@ -1,6 +1,6 @@
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
-
+#include "contest.h"
 #include "ChatServer.h"
 
 static bool syncstat = false;
@@ -26,7 +26,7 @@ ChatServer *ChatServer::getChatServer()
 }
 ChatServer::ChatServer()
 {
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    connect(&SyncTimer, &QTimer::timeout, this, &ChatServer::SyncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
@@ -38,9 +38,9 @@ ChatServer::ChatServer()
 
     rpc->initialiseRouters(chatCats);
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify,QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
+    connect(rpc, &MinosRPC::routerCall, this, &ChatServer::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &ChatServer::on_notify);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RigFreqChanged, this, &ChatServer::onRigFreqChanged);
 
     QString a = MinosRPC::getMinosRPC()->getAppName();
     QString s = MinosConfig::getMinosConfig()->getThisRouterName();

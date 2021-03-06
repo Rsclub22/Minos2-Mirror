@@ -36,12 +36,12 @@ ClusterClientServer *ClusterClientServer::getClusterClientServer()
 
 ClusterClientServer::ClusterClientServer()
 {
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    connect(&SyncTimer, &QTimer::timeout, this, &ClusterClientServer::SyncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &ClusterClientServer::on_routerCall);
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();

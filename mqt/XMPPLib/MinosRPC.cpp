@@ -32,7 +32,7 @@ MinosRPC::MinosRPC(const QString &defaultName, bool useEnvVar):
     }
     setAppName(rpcName);
 
-    connect(&connectTimer, SIGNAL(timeout()), this, SLOT(on_connectedTimeout()));
+    connect(&connectTimer, &QTimer::timeout, this, &MinosRPC::on_connectedTimeout);
     connectTimer.start(100);
 }
 void MinosRPC::on_connectedTimeout()

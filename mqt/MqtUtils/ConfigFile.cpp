@@ -171,12 +171,16 @@ void RunConfigElement::createProcess()
             runner->setProcessEnvironment(env);
         }
 
-        connect (runner, SIGNAL(started()), this, SLOT(on_started()));
-        connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
-        connect (runner, SIGNAL(error(QProcess::ProcessError)), this, SLOT(on_error(QProcess::ProcessError)));
+        connect (runner, &QProcess::started, this, &RunConfigElement::on_started);
+        connect (runner, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RunConfigElement::on_finished);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        connect (runner, &QProcess::errorOccurred, this, &RunConfigElement::on_error);
+#else
+        connect (runner, &QProcess::error, this, &RunConfigElement::on_error);
+#endif
 
-        connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
-        connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
+        connect (runner, &QProcess::readyReadStandardError, this, &RunConfigElement::on_readyReadStandardError);
+        connect (runner, &QProcess::readyReadStandardOutput, this, &RunConfigElement::on_readyReadStandardOutput);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         QStringList progArgs = runner->splitCommand(program);

@@ -57,7 +57,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     }
 
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
     stdinReader.start();
 
     // get the antenna name from host process

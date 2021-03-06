@@ -35,18 +35,17 @@ void MatchTreeFrame::initialise()
     setUniformRowHeights(true);
 
 
-    connect( header(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+    connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
 
-    connect(this, SIGNAL(matchTreeClicked()), this, SLOT(afterMatchTreeClicked()), Qt::QueuedConnection);
+    connect(this, &MatchTreeFrame::matchTreeClicked, this, &MatchTreeFrame::afterMatchTreeClicked, Qt::QueuedConnection);
 
-    connect(selectionModel(), SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)),
-            this, SLOT(on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &)), Qt::UniqueConnection);
+    connect(selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MatchTreeFrame::on_MatchTreeSelectionChanged, Qt::UniqueConnection);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
-            this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected,
+            this, &MatchTreeFrame::MatchTreeSelected);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &MatchTreeFrame::on_doColumnChanges);
 }
 MatchTreeFrame::~MatchTreeFrame()
 {

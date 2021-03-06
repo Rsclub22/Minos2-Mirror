@@ -30,7 +30,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     ui->setupUi(this);
 
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
     stdinReader.start();
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();

@@ -38,13 +38,13 @@ PresetButton::PresetButton(QToolButton *b, int num, QShortcut* key, QShortcut* s
     presetMenu->addAction(clearAction);
     presetButton->setMenu(presetMenu);
 
-    connect(shortKey, SIGNAL(activated()), this, SLOT(memoryRecallShortCutSelected()));
-    connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShiftShortCutSelected()));
-    connect(presetButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()));
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()));
-    connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()));
+    connect(shortKey, &QShortcut::activated, this, &PresetButton::memoryRecallShortCutSelected);
+    connect(shiftShortKey, &QShortcut::activated, this, &PresetButton::memoryShiftShortCutSelected);
+    connect(presetButton, &QToolButton::clicked, this, &PresetButton::readActionSelected);
+    connect( readAction, &QAction::triggered, this, &PresetButton::readActionSelected);
+    connect( writeAction, &QAction::triggered, this, &PresetButton::writeActionSelected);
+    connect( editAction, &QAction::triggered, this, &PresetButton::editActionSelected);
+    connect( clearAction, &QAction::triggered, this, &PresetButton::clearActionSelected);
 
 
 }

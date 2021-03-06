@@ -15,7 +15,7 @@ ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :
 {
     ui->setupUi(this);
     hbl = new QHBoxLayout(ui->scrollAreaWidgetContents);
-    hbl->setMargin(1);
+    hbl->setContentsMargins(1, 1, 1, 1);
     ui->scrollAreaWidgetContents->setLayout(hbl);
 
     setStyleSheet("background-color: light grey;");

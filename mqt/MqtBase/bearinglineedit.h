@@ -33,11 +33,6 @@ public:
 
 signals:
 
-    void textChanged(QLineEdit*, const QString&);
-
-
-
-
 private slots:
     void onTextChanged(const QString &);
 

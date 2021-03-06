@@ -49,7 +49,7 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
     void start();
-    QAction *newAction(const char *text, QMenu *m, const char *atype);
+    QAction *newAction(const char *text, QMenu *m, void (MainWindow::*slotparam)());
     QMenu *newMenu(QMenu *m, const char *text);
 };
 

@@ -189,21 +189,19 @@ void QSOLogFrame::on_FontChanged()
 
 void QSOLogFrame::on_QSOMargins()
 {
-    int lm;
     int ls;
     int cml;
     int cmt;
     int cmr;
     int cmb;
 
-    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
 
-    adjustMargins(layout(), lm, ls, cml, cmt, cmr, cmb);
+    adjustMargins(layout(), ls, cml, cmt, cmr, cmb);
 }
 
 bool QSOLogFrame::eventFilter(QObject *obj, QEvent *event)

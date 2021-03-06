@@ -89,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader,&StdInReader::stdinLine, this, &MainWindow::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -134,21 +134,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //    ui->Rig1Label->setText(omni_rig->Rig1()->RigType());
 
-    connect(&timer2, SIGNAL(timeout()), this, SLOT(timer2Timeout()));
+    connect(&timer2, &QTimer::timeout, this, &MainWindow::timer2Timeout);
     timer2.start(1000);
 
-    connect(&ClientSocket1, SIGNAL(connected()), this, SLOT(onSocketConnect()));
-    connect(&ClientSocket1, SIGNAL(disconnected()), this, SLOT(onSocketDisconnect()));
-    connect(&ClientSocket1, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-    connect(&ClientSocket1, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
+    connect(&ClientSocket1, &QTcpSocket::connected, this, &MainWindow::onSocketConnect);
+    connect(&ClientSocket1, &QTcpSocket::disconnected, this, &MainWindow::onSocketDisconnect);
+    connect(&ClientSocket1, &QTcpSocket::readyRead, this, &MainWindow::onReadyRead);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(&ClientSocket1, &QTcpSocket::errorOccurred, this, &MainWindow::onError);
+#else
+    connect(&ClientSocket1, &QTcpSocket::error, this, &MainWindow::onError);
+#endif
 
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    connect(&SyncTimer, &QTimer::timeout, this, &MainWindow::SyncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &MainWindow::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
 
     getRouterAppCatMap();
 

@@ -114,7 +114,7 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
     QSharedPointer<QNetworkReply> reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr ));
 
     QEventLoop loop;
-    QObject::connect( reply.data(), SIGNAL( finished() ), &loop, SLOT( quit() ) );
+    QObject::connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
     loop.exec();
 
     if ( reply->error() == QNetworkReply::NoError )
@@ -129,7 +129,7 @@ bool CalendarYear::downloadFile ( bool showError, QWidget *parent )
 
             reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr1 ));
             QEventLoop loop;
-            QObject::connect( reply.data(), SIGNAL( finished() ), &loop, SLOT( quit() ) );
+            QObject::connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
             loop.exec();
             raw = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         }

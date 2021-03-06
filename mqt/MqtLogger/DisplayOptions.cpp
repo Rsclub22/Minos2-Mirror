@@ -61,8 +61,6 @@ void DisplayOptions::initialise()
     ui->LanguageComboBox->addItems(sl);
     ui->LanguageComboBox->setCurrentIndex(currLang);
 
-    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
-    ui->lm->setValue(lm);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
     ui->ls->setValue(ls);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
@@ -140,12 +138,6 @@ void DisplayOptions::finalise()
     }
 
     bool sendMargins = false;
-    int nlm = ui->lm->value();
-    if (nlm != lm)
-    {
-        TContestApp::getContestApp() ->setIntDisplayProfile(edplm, nlm);
-        sendMargins = true;
-    }
     int nls = ui->ls->value();
     if (nls != ls)
     {
