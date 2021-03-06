@@ -77,6 +77,7 @@ SOURCES += \
     main.cpp \
     n1mmbroadcast.cpp \
     n1mmbroadcastconfig.cpp \
+    qrzdisplayframe.cpp \
     qsologframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
@@ -168,6 +169,7 @@ HEADERS  += \
     n1mmbroadcast.h \
     n1mmbroadcastconfig.h \
     printfile.h \
+    qrzdisplayframe.h \
     qsologframe.h \
     radiosettingdialog.h \
     reg1test.h \
@@ -230,6 +232,7 @@ FORMS    += \
     locframe.ui \
     locTreeFrame.ui \
     n1mmbroadcastconfig.ui \
+    qrzdisplayframe.ui \
     qsologframe.ui \
     radiosettingdialog.ui \
     rigcontrolframe.ui \

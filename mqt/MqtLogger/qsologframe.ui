@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>846</width>
-    <height>317</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -501,6 +501,13 @@ to</string>
     <layout class="QHBoxLayout" name="horizontalLayout_16">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
+       <item>
+        <widget class="QToolButton" name="qrzToolButton">
+         <property name="text">
+          <string>QRZ</string>
+         </property>
+        </widget>
+       </item>
        <item>
         <widget class="QPushButton" name="bandmapMarkFreqPb">
          <property name="focusPolicy">

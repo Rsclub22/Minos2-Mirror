@@ -161,6 +161,7 @@ HEADERS += \
     profiles.h \
     qlogtabwidget.h \
     RigCache.h \
+    qrzServerCommon.h \
     rigRotSetupCommon.h \
     rigcommon.h \
     rigcontrolcommonconstants.h \

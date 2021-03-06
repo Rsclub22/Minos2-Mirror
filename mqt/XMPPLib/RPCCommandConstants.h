@@ -61,6 +61,7 @@ static const QString clusterHfFlag ("ClusterHfFlag");
 
 // QRZ Server
 static const QString qrzServerApp  ("qrzServerApp");
+static const QString qrzDisplayApp ("qrzDisplayApp");
 static const QString qrzCategory  ("MinosQRZ");
 static const QString qrzMethod     ("Minos:QrzServer");
 static const QString qrzCluster    ("qrzCluster");

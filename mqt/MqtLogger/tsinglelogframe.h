@@ -20,6 +20,7 @@
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
 #include "txvmbuttonsframe.h"
+#include "qrzdisplayframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -46,6 +47,7 @@ public:
     RunButtonsFrame *runButtonsFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
+    QrzDisplayFrame *qrzDisplayFrame = nullptr;
 
     RotPresets *rotPresets = nullptr;
 
@@ -113,6 +115,9 @@ public:
 
     bool radioLoaded;
     bool isRadioLoaded();
+
+    bool qrzCallFrameLoaded;
+    bool isQrzCallFrameLoaded();
 
 
     void setRotatorState( QString f );
@@ -198,6 +203,7 @@ private:
     void updateFreq(Frequency f);
     void buildScreen(SCScreen &s, int t, int &auxInstance);
 
+    void setQrzDisplayFrameLoaded(bool loaded);
 private slots:
     void onQSOTable_doubleClicked(const QModelIndex &index);
 
@@ -291,6 +297,7 @@ private slots:
     void sendBandToRig(QString band);
     void on_sendReconnectFlagToClusterServer(bool state);
 
+    void onQrzCallsignRequest(QString callsign);
 public:
     bool doKeyPressEvent(QKeyEvent *event);
     void transferFromWSJTX(QString call);

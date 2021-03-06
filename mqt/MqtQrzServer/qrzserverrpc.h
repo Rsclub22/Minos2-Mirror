@@ -21,16 +21,8 @@
 #include "base_pch.h"
 #include "ConfigFile.h"
 #include "clustercommon.h"
+#include "qrzServerCommon.h"
 
-class QrzServer
-{
-public:
-    QString serverName;
-    QString app;
-    QString publisherProgram;
-    PublishState state;
-    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
-};
 
 class QrzServerRpc : public QObject
 {
@@ -45,10 +37,14 @@ public:
     static QrzServerRpc *getQrzServerRpc();
 
     void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
+    void sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state);
+
+
 signals:
 
     //void qrzRequestQueue(QVector<QrzServerMessage>);
     void clusterQrzMsg(QrzServerMessage);
+    void loggerQrzMsg(QrzServerMessage);
 
 private:
 

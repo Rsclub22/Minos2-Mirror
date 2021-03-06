@@ -64,8 +64,15 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
 
+    QStringList sv{
+            rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
+        };
+    QString pubName = rpcConstants::qrzServerApp;
+
+
 
     connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onClusterQrzMessage(QrzServerMessage)));
+    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(loggerQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMsg(QrzServerMessage)));
 
 
     connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
@@ -81,7 +88,6 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     logon();
 
-    //askCallsignData("M0SAT");
 
 }
 
@@ -320,9 +326,9 @@ void QrzServerMainWindow::callsignDataReceived()
     {
         if (!requestedStation.getLoggerFlag())
         {
-            // not a logger request
+            // a request from cluster Server
 
-            QString msg = QString("Logger Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server").arg(requestedStation.getDxCall(), qrzCallsignData.getQra());
+            QString msg = QString("Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server").arg(requestedStation.getDxCall(), qrzCallsignData.getQra());
             trace(msg);
             addTextToLogWindow(msg);
 
@@ -331,6 +337,20 @@ void QrzServerMainWindow::callsignDataReceived()
         }
         else
         {
+            // a request from qrz display
+            QString msg = QString(QString("Cluster Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
+            trace(msg);
+            addTextToLogWindow(msg);
+            QString stateMsg = "";
+            if (!qrzSessionData.getError().isEmpty())
+            {
+                stateMsg = qrzSessionData.getError();
+            }
+            else if (!qrzSessionData.getMessage().isEmpty())
+            {
+                stateMsg = qrzSessionData.getMessage();
+            }
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg);
 
         }
 
@@ -490,6 +510,13 @@ void QrzServerMainWindow::clusterClientServerList(QVector<ClusterServer> serverL
 void QrzServerMainWindow::onClusterQrzMessage(QrzServerMessage qrzRequest)
 {
 
+    trace(QString("onClusterQrzMessage: add message to queue, callsign %1").arg(qrzRequest.getDxCall()));
+    qrzRequestQueue += qrzRequest;
+}
+
+void QrzServerMainWindow::onLoggerQrzMsg(QrzServerMessage qrzRequest)
+{
+    trace(QString("onLoggerQrzMessage: add message to queue, callsign %1").arg(qrzRequest.getDxCall()));
     qrzRequestQueue += qrzRequest;
 }
 
@@ -509,6 +536,7 @@ void QrzServerMainWindow::handleQrzRequests()
 
                 // ask for qra locator
                 askCallsignFlag = true;
+                trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(requestedStation.getDxCall()));
                 askCallsignData(requestedStation.getDxCall());
 
             }

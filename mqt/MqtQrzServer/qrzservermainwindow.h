@@ -25,6 +25,7 @@
 
 #include "mqtUtils_pch.h"
 #include "qrzserverrpc.h"
+#include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class QrzServerMainWindow; }
@@ -43,84 +44,6 @@ const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; bord
 
 const QString NONSUBCRIBER = "non-subscriber";
 
-class QrzCallsignData
-{
-
-public:
-    QrzCallsignData()
-    {
-        clear();
-    }
-    ~QrzCallsignData()
-    {
-
-    }
-
-    void setCallsign(QString callsign_){callsign = callsign_;}
-    QString getCallsign(){return callsign;}
-
-    void setFirstName(QString firstName_){firstName = firstName_;}
-    QString getFirstName(){return firstName;}
-
-    void setName(QString name_){name = name_;}
-    QString getName(){return name;}
-
-    void setQth(QString qth_){qth = qth_;}
-    QString getQth(){return qth;}
-
-    void setCounty(QString county_){county = county_;}
-    QString getCounty(){return county;}
-
-    void setCountry(QString country_){country = country_;}
-    QString getCountry(){return country;}
-
-    void setLat(QString lat_){lat = lat_;}
-    QString getLat(){return lat;}
-
-    void setLon(QString lon_){lon = lon_;}
-    QString getLon(){return lon;}
-
-    void setQra(QString qra_){qra = qra_;}
-    QString getQra(){return qra;}
-
-    void setCqZone(QString cqZone_){cqZone = cqZone_;}
-    QString getCqZone(){return cqZone;}
-
-    void setItuZone(QString ituZone_){ituZone = ituZone_;}
-    QString getItuZone(){return ituZone;}
-
-    void clear()
-    {
-        callsign.clear();
-        firstName.clear();
-        name.clear();
-        qth.clear();
-        county.clear();
-        country.clear();
-        lat.clear();
-        lon.clear();
-        qra.clear();
-        cqZone.clear();
-        ituZone.clear();
-    }
-
-
-
-private:
-
-    QString callsign;
-    QString firstName;
-    QString name;
-    QString qth;
-    QString county;
-    QString country;
-    QString lat;
-    QString lon;
-    QString qra;
-    QString cqZone;
-    QString ituZone;
-
-};
 
 
 class QrzSessionData
@@ -181,8 +104,11 @@ private slots:
     void onClusterQrzMessage(QrzServerMessage qrzRequest);
     void handleQrzRequests();
     void onQueryTimeout();
+    void onLoggerQrzMsg(QrzServerMessage qrzRequest);
+
 private:
     Ui::QrzServerMainWindow *ui;
+
 
     StdInReader stdinReader;
     QString appName = "";
