@@ -345,7 +345,7 @@ void KeyerMain::runAlsaScript(const QString &alsaFileName, const QString &comman
         runner = new QProcess(parent());
         connect (runner, SIGNAL(started()), this, SLOT(on_started()));
         connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
-#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
         connect (runner, &QProcess::errorOccurred, this, &KeyerMain::on_error);
 #else
         connect (runner, &QProcess::error, this, &KeyerMain::on_error);

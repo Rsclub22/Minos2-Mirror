@@ -242,7 +242,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(kstclient, &QTcpSocket::errorOccurred, this, &KSTMainWindow::connectionError);
 #else
-    connect(kstclient, &QTcpSocket::error, this, &KSTMainWindow::connectionError);
+    connect(kstclient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
 #endif
     connect(kstclient, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 
