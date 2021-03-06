@@ -2,6 +2,7 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     KeyerBase \
+    MqtRigSync \
     MqtUtils \
     TinyXML \
     XMPPLib \
