@@ -242,6 +242,9 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     }
     else if (Key == Qt::Key_Tab)
     {
+        if (ctrl || shift)
+            return false;
+
          // Do we want "call" tab order or "S and P" tab order?
          bool tabSandP;
          TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
