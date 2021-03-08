@@ -7,7 +7,7 @@
 class QrzServer
 {
 public:
-    QString serverName;
+    QString routerName;
     QString app;
     QString publisherProgram;
     PublishState state;

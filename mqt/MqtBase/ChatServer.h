@@ -5,7 +5,7 @@
 class ChatServerApp
 {
 public:
-    QString serverName;
+    QString routerName;
     QString app;
     Frequency freq;
     PublishState state;
@@ -38,7 +38,7 @@ private slots:
     void SyncTimerTimer( );
 
     void onRigFreqChanged(Frequency /*f*/, BaseContestLog *c);
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
     void on_notify(AnalysePubSubNotify an, const QString from );
 signals:
     void ChatServerList(QVector<ChatServerApp>);

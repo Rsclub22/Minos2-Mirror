@@ -58,7 +58,7 @@ void RigCache::addRigList(const QString &s)
 
         for(auto const &psn: qAsConst(rigList))
         {
-            if (lpsn.server() != psn.server() || lpsn.appName() != psn.appName())
+            if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
                 newRigList.push_back(psn);
         }
         rigList = newRigList;
@@ -209,7 +209,7 @@ QString RigCache::getSelectedContest(PubSubName psn, QString loggerUuid)
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
         if (i.value().getSelectedLoggers().count() > 0
-                && i.key().server() == psn.server()
+                && i.key().router() == psn.router()
                 && i.key().appName() == psn.appName())
         {
             return i.value().getSelectedContest(loggerUuid).getValue(); // antenna selected on this app
@@ -228,7 +228,7 @@ PubSubName RigCache::getSelectedRadio(PubSubName psn)
     for(QMap<PubSubName, RigState>::iterator i = rigStates.begin(); i != rigStates.end(); i++ )
     {
         if (i.value().getSelectedLoggers().count() > 0
-                && i.key().server() == psn.server()
+                && i.key().router() == psn.router()
                 && i.key().appName() == psn.appName())
         {
             return i.key(); // antenna selected on this app

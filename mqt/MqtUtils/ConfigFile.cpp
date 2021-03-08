@@ -17,7 +17,7 @@ static bool terminated = false;
 
 QString RunLocal("RunLocal");
 
-QString ConnectServer("ConnectServer");
+QString ConnectRouter("ConnectServer");
 const char * MinosConfig::appNone = QT_TR_NOOP("None");
 const char * MinosConfig::appOther = QT_TR_NOOP("Other");
 
@@ -39,17 +39,17 @@ QString MinosConfig::getConfigIniName()
     return "./Configuration/MinosConfig.ini";
 }
 
-QString MinosConfig::getThisServerName()
+QString MinosConfig::getThisRouterName()
 {
-    QString serverName;
-    config.getPrivateProfileString( "Settings", "ServerName", QHostInfo::localHostName(), serverName );
+    QString routerName;
+    config.getPrivateProfileString( "Settings", "ServerName", QHostInfo::localHostName(), routerName );
 
-    if ( serverName.size() == 0 )
+    if ( routerName.size() == 0 )
     {
         QString h = QHostInfo::localHostName();
-        serverName = h;
+        routerName = h;
     }
-    return serverName;
+    return routerName;
 }
 
 
@@ -69,7 +69,7 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
     name = sect;
 
     config.getPrivateProfileString(sect, "Program", "", commandLine);
-    config.getPrivateProfileString( sect, "Server", "localhost", server );
+    config.getPrivateProfileString( sect, "Server", "localhost", router );
     config.getPrivateProfileString( sect, "Params", "", params );
     config.getPrivateProfileString( sect, "Directory", "", rundir );
     config.getPrivateProfileString( sect, "RemoteApp", "", remoteApp);
@@ -104,7 +104,7 @@ void RunConfigElement::save(INIFile &config)
         config.writePrivateProfileString(name, "Program", commandLine);
         config.writePrivateProfileString(name, "Params", params);
         config.writePrivateProfileString(name, "Directory", rundir);
-        config.writePrivateProfileString(name, "Server", server);
+        config.writePrivateProfileString(name, "Server", router);
         config.writePrivateProfileString(name, "RemoteApp", remoteApp);
         config.writePrivateProfileString(name, "RunType", runType);
         config.writePrivateProfileString(name, "AppType", appType);
@@ -124,14 +124,14 @@ QSharedPointer<Connectable> RunConfigElement::connectable()
     res->appName = name;
     res->appType = appType;
     res->runType = runType;
-    if (runType == ConnectServer)
+    if (runType == ConnectRouter)
     {
-        res->serverName = server;
+        res->routerName = router;
         res->remoteAppName = remoteApp;
     }
     else
     {
-        res->serverName = MinosConfig::getMinosConfig()->getThisServerName();
+        res->routerName = MinosConfig::getMinosConfig()->getThisRouterName();
         res->remoteAppName = name;
     }
     return res;
@@ -171,12 +171,16 @@ void RunConfigElement::createProcess()
             runner->setProcessEnvironment(env);
         }
 
-        connect (runner, SIGNAL(started()), this, SLOT(on_started()));
-        connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
-        connect (runner, SIGNAL(error(QProcess::ProcessError)), this, SLOT(on_error(QProcess::ProcessError)));
+        connect (runner, &QProcess::started, this, &RunConfigElement::on_started);
+        connect (runner, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &RunConfigElement::on_finished);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+        connect (runner, &QProcess::errorOccurred, this, &RunConfigElement::on_error);
+#else
+        connect (runner, &QProcess::error, this, &RunConfigElement::on_error);
+#endif
 
-        connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
-        connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
+        connect (runner, &QProcess::readyReadStandardError, this, &RunConfigElement::on_readyReadStandardError);
+        connect (runner, &QProcess::readyReadStandardOutput, this, &RunConfigElement::on_readyReadStandardOutput);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         QStringList progArgs = runner->splitCommand(program);
@@ -332,12 +336,12 @@ void MinosConfig::initialise()
         QString sect = s.trimmed();
         if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
         {
-            config.getPrivateProfileString( "Settings", "ServerName", "", thisServerName );
+            config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
 
-            if ( thisServerName.size() == 0 )
+            if ( thisRouterName.size() == 0 )
             {
                 QString h = QHostInfo::localHostName();
-                thisServerName = h;
+                thisRouterName = h;
             }
             autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
         }
@@ -368,7 +372,7 @@ void MinosConfig::saveAll()
     {
         i->save(config);
     }
-    config.writePrivateProfileString("Settings", "ServerName", thisServerName);
+    config.writePrivateProfileString("Settings", "ServerName", thisRouterName);
     config.writePrivateProfileBool( "Settings", "AutoStart", autoStart );
 
     config.writePrivateProfileString( "", "", "" );    // flush
@@ -421,9 +425,9 @@ void MinosConfig::bounce()
        }
     }
 }
-void MinosConfig::setThisServerName( const QString &circle )
+void MinosConfig::setThisRouterName( const QString &circle )
 {
-   thisServerName = circle;
+   thisRouterName = circle;
 }
 
 bool MinosConfig::getAutoStart()
@@ -506,7 +510,7 @@ Server=false
                 ac.appPath += ".exe";
             }
 #endif
-            ac.server = appConfig.getPrivateProfileBool(a, "Server", false);
+            ac.router = appConfig.getPrivateProfileBool(a, "Server", false);
             ac.defaultHide = appConfig.getPrivateProfileBool(a, "HideApp", false);
 
             QString whereString;
@@ -529,7 +533,7 @@ Server=false
             }
             if (otherApp)
             {
-                ac.server = true;
+                ac.router = true;
                 ac.defaultHide = false;
                 ac.localOK = true;
                 ac.remoteOK = true;
@@ -557,7 +561,7 @@ QString MinosConfig::checkConfig()
 {
     QString reqErrs;
 
-    bool serverPresent = false;
+    bool routerPresent = false;
     int eleListSize = 0;
     for ( auto const &ele: qAsConst(elelist ))
     {
@@ -568,18 +572,18 @@ QString MinosConfig::checkConfig()
             eleListSize++;
             if (ele->appType == "Server" && ele->runType == RunLocal )
             {
-                if (serverPresent)
+                if (routerPresent)
                 {
-                    reqErrs += tr("More than one server is defined and enabled");
+                    reqErrs += tr("More than one router is defined and enabled");
                 }
-                serverPresent = true;
+                routerPresent = true;
             }
         }
     }
 
-    if (eleListSize && !serverPresent)
+    if (eleListSize && !routerPresent)
     {
-        reqErrs += tr("A local server is required.\r\n\r\n") ;
+        reqErrs += tr("A local router is required.\r\n\r\n") ;
     }
 
     //Check that the name is not blank, and only has allowed characters

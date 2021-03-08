@@ -22,25 +22,25 @@ class RPCGeneralClient: public MinosRPCClient
          return QSharedPointer<MinosRPCObj>(new RPCGeneralClient( callback ));
       }
 };
-class RPCGeneralServer: public MinosRPCServer
+class RPCGeneralRouter: public MinosRPCRouter
 {
    public:
-    RPCGeneralServer( ) : MinosRPCServer( "", nullptr, true )
+    RPCGeneralRouter( ) : MinosRPCRouter( "", nullptr, true )
     {}
-      RPCGeneralServer( TRPCFunctor *cb ) : MinosRPCServer( "", cb, true )
+      RPCGeneralRouter( TRPCFunctor *cb ) : MinosRPCRouter( "", cb, true )
       {}
-      ~RPCGeneralServer();
+      ~RPCGeneralRouter();
 
       virtual QSharedPointer<MinosRPCObj>makeObj()
       {
-         return QSharedPointer<MinosRPCObj>(new RPCGeneralServer( callback ));
+         return QSharedPointer<MinosRPCObj>(new RPCGeneralRouter( callback ));
       }
 
 };
-class RPCServer
+class RPCRouter
 {
 public:
-    QString serverName;
+    QString routerName;
     QString app;
     PublishState state;
 };
@@ -61,19 +61,19 @@ class MinosRPC: public QObject
     QSet <QString> subscriptions;
     QSet <QPair <QString, QString> > remoteSubscriptions;
 
-    QVector<RPCServer> serverList;
-    QStringList serverSubs;
-    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
-    QVector<QString> servers;
+    QVector<RPCRouter> routerList;
+    QStringList routerSubs;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
+    QVector<QString> routers;
 
-    bool serversInitialised = false;
+    bool routersInitialised = false;
 
 
     void setAppName(const QString &);
     void notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
-    void serverCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
+    void routerCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
 
-    void serverNotify(AnalysePubSubNotify &an);
+    void routerNotify(AnalysePubSubNotify &an);
 public:
 
     static MinosRPC *getMinosRPC(QString defaultName = QString(), bool useEnvVar = true)
@@ -96,20 +96,20 @@ public:
     QString getAppName();
 
     void subscribe(const QString &);
-    void subscribeRemote(const QString &, const QString &);
+    void subscribeRemote(const QString &router, const QString &);
 
     void publish( const QString &category, const QString &key, const QString &value, PublishState pState );
 
-    void setServerAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
-    void initialiseServers(QStringList subs);
-    QVector<RPCServer> getServerList()
+    void setRouterAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
+    void initialiseRouters(QStringList subs);
+    QVector<RPCRouter> getRouterList()
     {
-        return serverList;
+        return routerList;
     }
 signals:
 
     void notify( AnalysePubSubNotify an, const QString from);
-    void serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
+    void routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
 
 private slots:
 

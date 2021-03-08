@@ -9,7 +9,7 @@
 class SingleApplication : public QApplication {
         Q_OBJECT
     public:
-        SingleApplication(QString serverName, int &argc, char **argv);
+        SingleApplication(QString routerName, int &argc, char **argv);
 
         bool isRunning();                // Are there instances running
         void sendArgs();
@@ -21,12 +21,12 @@ class SingleApplication : public QApplication {
     private:
         // Initialize the local connection
         void _initLocalConnection();
-        // Create the server
+        // Create the router
         void _newLocalServer();
 
         bool _isRunning;                // Are there instances running
         QLocalServer *_localServer;     // The local socket Server
-        QString _serverName;            // Service name
+        QString _routerName;            // Service name
 
     signals:
         void argsReceived(QString);

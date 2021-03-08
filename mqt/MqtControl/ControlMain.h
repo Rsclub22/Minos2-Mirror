@@ -21,7 +21,7 @@ public:
     ~ControlMain() override;
 
     void subscribeApps();
-    void getServerAppCatMap();
+    void getRouterAppCatMap();
 
     void setPTTIn(bool s);
     void setPTTOut(bool s);
@@ -56,7 +56,7 @@ private slots:
     void onStdInRead(QString);
 
     void on_formShown();
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
     void on_notify( AnalysePubSubNotify an, const QString from );
     void LogTimerTimer( );
     void linesChangedEvent();

@@ -72,10 +72,10 @@ MinosAppConnection::MinosAppConnection( const QString &myid ) : myId(myid)
   , user_data( this )
   , sock( new QTcpSocket )
 {
-    connect(&waitConnectTimer, SIGNAL(timeout()), this, SLOT(on_waitConnectTimeout()));
-    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()));
-    connect(sock.data(), SIGNAL(connected()), this, SLOT(on_connected()));
-    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()));
+    connect(&waitConnectTimer, &QTimer::timeout, this, &MinosAppConnection::on_waitConnectTimeout);
+    connect(sock.data(), &QTcpSocket::readyRead, this, &MinosAppConnection::on_readyRead);
+    connect(sock.data(), &QTcpSocket::connected, this, &MinosAppConnection::on_connected);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosAppConnection::on_disconnected);
 }
 MinosAppConnection::~MinosAppConnection()
 {
@@ -86,7 +86,7 @@ void MinosAppConnection::startConnection()
 }
 void MinosAppConnection::on_waitConnectTimeout()
 {
-    if (!checkServerReady())
+    if (!checkRouterReady())
     {
         return;
     }
@@ -97,7 +97,7 @@ void MinosAppConnection::on_connected()
 {
     connected = true;
 
-    RPCRequest *rpa = new RPCRequest( "", myId, "ClientSetFromId" );   // for our local server, this one MUST have a from
+    RPCRequest *rpa = new RPCRequest( "", myId, "ClientSetFromId" );   // for our local router, this one MUST have a from
     rpa->addParam( myId );
     trace("TX " + rpa->analyse());
     sendAction( rpa );

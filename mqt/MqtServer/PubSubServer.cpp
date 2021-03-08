@@ -10,14 +10,14 @@
 #include "minos_pch.h"
 #include "PubSubServer.h"
 
-QVector<RPCServerSubscriber *> serverSubscribeList;
+QVector<RPCRouterSubscriber *> routerSubscribeList;
 
-RPCServerPubSub::RPCServerPubSub( const QString &call, TRPCFunctor *cb ) : RPCPubSub( call, cb )
+RPCRouterPubSub::RPCRouterPubSub( const QString &call, TRPCFunctor *cb ) : RPCPubSub( call, cb )
 {}
-RPCServerPubSub::~RPCServerPubSub()
+RPCRouterPubSub::~RPCRouterPubSub()
 {}
 /*static*/
-void RPCServerPubSub::initialisePubSub( TRPCFunctor *notifycb )
+void RPCRouterPubSub::initialisePubSub( TRPCFunctor *notifycb )
 {
    static bool objAdded = false;
    if ( !objAdded )
@@ -26,100 +26,100 @@ void RPCServerPubSub::initialisePubSub( TRPCFunctor *notifycb )
       objAdded = true;
    }
 }
-void RPCServerPubSub::serverSubscribeRemote( const QString &server, const QString &category )
+void RPCRouterPubSub::routerSubscribeRemote( const QString &router, const QString &category )
 {
-   RPCServerSubscriber::testAndSubscribe( server, category );
+   RPCRouterSubscriber::testAndSubscribe( router, category );
 }
-void RPCServerPubSub::serverReconnectRemotePubSub( const QString &server )
+void RPCRouterPubSub::routerReconnectRemotePubSub( const QString &router )
 {
-   for ( auto const &s: qAsConst(serverSubscribeList ))
+   for ( auto const &s: qAsConst(routerSubscribeList ))
    {
-      if ( s && s->getServer() == server )
+      if ( s && s->getRouter() == router )
       {
-         s->serverReSubscribe();
+         s->routerReSubscribe();
       }
    }
    connected = true;
 }
-void RPCServerPubSub::close( )
+void RPCRouterPubSub::close( )
 {
    RPCPubSub::close( );
-   for ( auto &s: serverSubscribeList )
+   for ( auto &s: routerSubscribeList )
    {
       delete s;
       s = nullptr;
    }
-   serverSubscribeList.clear();
+   routerSubscribeList.clear();
 }
 
 //==================================================================================
-bool RPCServerSubscriber::isRemoteEqual( const QString &pServer, const QString &cat )
+bool RPCRouterSubscriber::isRemoteEqual( const QString &pRouter, const QString &cat )
 {
-   return server == pServer && isEqual( cat );
+   return router == pRouter && isEqual( cat );
 }
-RPCServerSubscriber::RPCServerSubscriber(const QString &server, const QString &cat)
-    : RPCSubscriber( cat ), server( server )
+RPCRouterSubscriber::RPCRouterSubscriber(const QString &router, const QString &cat)
+    : RPCSubscriber( cat ), router( router )
 {}
 
-void RPCServerSubscriber::testAndSubscribe( const QString &server, const QString &cat )
+void RPCRouterSubscriber::testAndSubscribe( const QString &router, const QString &cat )
 {
-    RPCServerSubscriber * sub = nullptr;
-    for ( auto const &s: qAsConst(serverSubscribeList ))
+    RPCRouterSubscriber * sub = nullptr;
+    for ( auto const &s: qAsConst(routerSubscribeList ))
    {
-      if ( s ->isRemoteEqual( server, cat ) )
+      if ( s ->isRemoteEqual( router, cat ) )
       {
          sub = s;
       }
    }
    if ( !sub )
    {
-      sub = new RPCServerSubscriber( server, cat );
-      serverSubscribeList.push_back( sub );
+      sub = new RPCRouterSubscriber( router, cat );
+      routerSubscribeList.push_back( sub );
    }
    //if ( RPCPubSub::isConnected() )
    {
-      sub->serverReSubscribe();
+      sub->routerReSubscribe();
    }
 }
-// causes the server to resubscribe to the remote server
-void RPCServerSubscriber::serverReSubscribe()
+// causes the router to resubscribe to the remote router
+void RPCRouterSubscriber::routerReSubscribe()
 {
-   RPCServerSubscribeClient rsc( nullptr );
+   RPCRouterSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( server ));
+   QSharedPointer<RPCParam>sRouter(new RPCStringParam( router ));
    QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sServer, "Server" );
+   st->addMember( sRouter, "Server" );
    st->addMember( sCat, "Category" );
    rsc.getCallArgs() ->addParam( st );
-   rsc.queueCall( server );       // localhost just causes the server to loop
+   rsc.queueCall( router );       // localhost just causes the router to loop
 }
 
-QString RPCServerSubscriber::getServer()
+QString RPCRouterSubscriber::getRouter()
 {
-    return server;
+    return router;
 }
 
 
-RPCServerNotifyServer::RPCServerNotifyServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::serverNotify, cb )
+RPCRouterNotifyRouter::RPCRouterNotifyRouter(TRPCFunctor *cb) : MinosRPCRouter( rpcConstants::routerNotify, cb )
 {}
 
-RPCServerNotifyServer::~RPCServerNotifyServer()
+RPCRouterNotifyRouter::~RPCRouterNotifyRouter()
 {}
 
-QSharedPointer<MinosRPCObj> RPCServerNotifyServer::makeObj()
+QSharedPointer<MinosRPCObj> RPCRouterNotifyRouter::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCServerNotifyServer( callback ));
+    return QSharedPointer<MinosRPCObj>(new RPCRouterNotifyRouter( callback ));
 }
 
-RPCServerNotifyClient::RPCServerNotifyClient(TRPCFunctor *cb) : MinosRPCClient( rpcConstants::serverNotify, cb )
+RPCRouterNotifyClient::RPCRouterNotifyClient(TRPCFunctor *cb) : MinosRPCClient( rpcConstants::routerNotify, cb )
 {}
 
-RPCServerNotifyClient::~RPCServerNotifyClient()
+RPCRouterNotifyClient::~RPCRouterNotifyClient()
 {}
 
-QSharedPointer<MinosRPCObj> RPCServerNotifyClient::makeObj()
+QSharedPointer<MinosRPCObj> RPCRouterNotifyClient::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCServerNotifyClient( callback ));
+    return QSharedPointer<MinosRPCObj>(new RPCRouterNotifyClient( callback ));
 }
 
 RPCClientNotifyClient::RPCClientNotifyClient(TRPCFunctor *cb) : MinosRPCClient( rpcConstants::clientNotify, cb )
@@ -133,57 +133,57 @@ QSharedPointer<MinosRPCObj> RPCClientNotifyClient::makeObj()
     return QSharedPointer<MinosRPCObj>(new RPCClientNotifyClient( callback ));
 }
 
-RPCRemoteSubscribeServer::RPCRemoteSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::remoteSubscribe, cb )
+RPCRemoteSubscribeRouter::RPCRemoteSubscribeRouter(TRPCFunctor *cb) : MinosRPCRouter( rpcConstants::remoteSubscribe, cb )
 {}
 
-RPCRemoteSubscribeServer::~RPCRemoteSubscribeServer()
+RPCRemoteSubscribeRouter::~RPCRemoteSubscribeRouter()
 {}
 
-QSharedPointer<MinosRPCObj> RPCRemoteSubscribeServer::makeObj()
+QSharedPointer<MinosRPCObj> RPCRemoteSubscribeRouter::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeServer( callback ) );
+    return QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeRouter( callback ) );
 }
 
-RPCSubscribeServer::RPCSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::subscribe, cb )
+RPCSubscribeRouter::RPCSubscribeRouter(TRPCFunctor *cb) : MinosRPCRouter( rpcConstants::subscribe, cb )
 {}
 
-RPCSubscribeServer::~RPCSubscribeServer()
+RPCSubscribeRouter::~RPCSubscribeRouter()
 {}
 
-QSharedPointer<MinosRPCObj> RPCSubscribeServer::makeObj()
+QSharedPointer<MinosRPCObj> RPCSubscribeRouter::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCSubscribeServer( callback ) );
+    return QSharedPointer<MinosRPCObj>(new RPCSubscribeRouter( callback ) );
 }
 
-RPCPublishServer::RPCPublishServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::publish, cb )
+RPCPublishRouter::RPCPublishRouter(TRPCFunctor *cb) : MinosRPCRouter( rpcConstants::publish, cb )
 {}
 
-RPCPublishServer::~RPCPublishServer()
+RPCPublishRouter::~RPCPublishRouter()
 {}
 
-QSharedPointer<MinosRPCObj> RPCPublishServer::makeObj()
+QSharedPointer<MinosRPCObj> RPCPublishRouter::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCPublishServer( callback ));
+    return QSharedPointer<MinosRPCObj>(new RPCPublishRouter( callback ));
 }
 
-RPCRServerSubscribeServer::RPCRServerSubscribeServer(TRPCFunctor *cb) : MinosRPCServer( rpcConstants::serverSubscribe, cb )
+RPCRouterSubscribeRouter::RPCRouterSubscribeRouter(TRPCFunctor *cb) : MinosRPCRouter( rpcConstants::routerSubscribe, cb )
 {}
 
-RPCRServerSubscribeServer::~RPCRServerSubscribeServer()
+RPCRouterSubscribeRouter::~RPCRouterSubscribeRouter()
 {}
 
-QSharedPointer<MinosRPCObj> RPCRServerSubscribeServer::makeObj()
+QSharedPointer<MinosRPCObj> RPCRouterSubscribeRouter::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCRServerSubscribeServer( callback ) );
+    return QSharedPointer<MinosRPCObj>(new RPCRouterSubscribeRouter( callback ) );
 }
 
-RPCServerSubscribeClient::RPCServerSubscribeClient(TRPCFunctor *cb) : RPCPubSub( rpcConstants::serverSubscribe, cb )
+RPCRouterSubscribeClient::RPCRouterSubscribeClient(TRPCFunctor *cb) : RPCPubSub( rpcConstants::routerSubscribe, cb )
 {}
 
-RPCServerSubscribeClient::~RPCServerSubscribeClient()
+RPCRouterSubscribeClient::~RPCRouterSubscribeClient()
 {}
 
-QSharedPointer<MinosRPCObj> RPCServerSubscribeClient::makeObj()
+QSharedPointer<MinosRPCObj> RPCRouterSubscribeClient::makeObj()
 {
-    return QSharedPointer<MinosRPCObj>(new RPCServerSubscribeClient( callback ) );
+    return QSharedPointer<MinosRPCObj>(new RPCRouterSubscribeClient( callback ) );
 }

@@ -23,7 +23,6 @@
 #include "clustercommon.h"
 #include "qrzServerCommon.h"
 
-
 class QrzServerRpc : public QObject
 {
     Q_OBJECT
@@ -57,7 +56,7 @@ private:
 private slots:
 
     //void SyncTimerTimer( );
-    void on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
 
     void on_notify(AnalysePubSubNotify an, const QString );
 

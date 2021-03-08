@@ -1,6 +1,6 @@
 #include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
-
+#include "contest.h"
 #include "MatchThisFrame.h"
 
 MatchThisFrame::MatchThisFrame(QWidget *parent) :
@@ -14,7 +14,7 @@ MatchThisFrame::~MatchThisFrame()
 void MatchThisFrame::initialise()
 {
     MatchTreeFrame::initialise();
-    connect(&MinosLoggerEvents::mle, SIGNAL(ReplaceThisLogList(SharedMatchCollection,BaseContestLog*,QString)), this, SLOT(on_ReplaceThisLogList(SharedMatchCollection,BaseContestLog*,QString)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ReplaceThisLogList, this, &MatchThisFrame::on_ReplaceThisLogList, Qt::QueuedConnection);
 }
 
 void MatchThisFrame::showThisMatchQSOs( SharedMatchCollection matchCollection )

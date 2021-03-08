@@ -15,13 +15,13 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
 
     ui->setupUi(this);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &TMinosChatForm::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
-    connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
+    connect(&CloseTimer, &QTimer::timeout, this, &TMinosChatForm::CloseTimerTimer);
     CloseTimer.start(100);
 
     QSettings settings;

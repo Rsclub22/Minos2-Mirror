@@ -133,7 +133,7 @@ QVariant KstMessageGridModel::data( const QModelIndex &index, int role ) const
         QSharedPointer<KstMessageLine> crec = messageVector->at(row);
         return crec->message;
     }
-    else if (role == Qt::BackgroundColorRole)
+    else if (role == Qt::BackgroundRole)
     {
         if (isFiltered())
         {
@@ -287,7 +287,7 @@ void KstMeepGridSortFilterModel::setFilterString(QString f)
 
 QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::BackgroundColorRole)
+    if (role == Qt::BackgroundRole)
     {
         return QColor(Qt::green).lighter(135);
     }

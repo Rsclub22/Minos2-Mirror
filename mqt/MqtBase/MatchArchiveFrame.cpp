@@ -14,7 +14,7 @@ MatchArchiveFrame::~MatchArchiveFrame()
 void MatchArchiveFrame::initialise()
 {
     MatchTreeFrame::initialise();
-    connect(&MinosLoggerEvents::mle, SIGNAL(ReplaceListList(SharedMatchCollection,BaseContestLog*,QString)), this, SLOT(on_ReplaceListList(SharedMatchCollection,BaseContestLog*,QString)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ReplaceListList, this, &MatchArchiveFrame::on_ReplaceListList, Qt::QueuedConnection);
 }
 
 void MatchArchiveFrame::showMatchList( SharedMatchCollection matchCollection )

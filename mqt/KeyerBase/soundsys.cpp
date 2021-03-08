@@ -6,33 +6,16 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include "mqtUtils_pch.h"
 
 #include <QtEndian>
 #include <QtMath>
 #include <numeric>
 #include <QtCore>
 
-#include "keyctrl.h"
-#include "keyconf.h"
-#include "VKMixer.h"
-#include "sbdriver.h"
 #include "soundsys.h"
-#include "keyers.h"
 #include "keyerlog.h"
 #include "riff.h"
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-result"
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif
-// as we don't want to change rtaudio.h...
-#include "RtAudio.h"
-#if !defined (_MSC_VER)
-#pragma GCC diagnostic pop
-#endif
-
-#include "SimpleComp.h"
 
 #define FRAMES 16
 #define FRAMESAMPLES 256
@@ -276,10 +259,10 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
 }
 
 
-int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
+int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 unsigned int nFrames,
                                 double /*streamTime*/,
-                                RtAudioStreamStatus status )
+                                unsigned int status )
 {
 #if defined (_MSC_VER)
     int16_t *inStageBuffer = new int16_t[nFrames * 2];
@@ -376,9 +359,9 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
         if (inputEnabled || passThroughEnabled)
         {
             qreal rmsval = sqrt(sqaccum/nFrames);
-            SoundSystemDriver::getSbDriver() ->WinVUCallback( static_cast<unsigned int>(maxvol),
-                                                              static_cast<unsigned int>(rmsval),
-                                                              nFrames );
+            emit setVU( static_cast<unsigned int>(maxvol),
+                          static_cast<unsigned int>(rmsval),
+                          nFrames );
         }
 
         if (inputEnabled)
@@ -403,9 +386,9 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
         qreal rmsval = 0.0;
         readFromFile(outputBuffer, nFrames, maxvol, rmsval);
 
-        SoundSystemDriver::getSbDriver() ->WinVUCallback( static_cast<unsigned int>(maxvol),
-                                                          static_cast<unsigned int>(rmsval),
-                                                          nFrames );
+        emit setVU( static_cast<unsigned int>(maxvol),
+                      static_cast<unsigned int>(rmsval),
+                      nFrames );
     }
 
     /*
@@ -426,12 +409,8 @@ void RtAudioSoundSystem::startOutput()
 void RtAudioSoundSystem::stopOutput()
 {
     outputEnabled = false;
-    KeyerAction * sba = KeyerAction::getCurrentAction();
-     if ( sba )
-     {
-        sba->actionTime = 1;    // force to stop
-     }
-     SoundSystemDriver::getSbDriver() ->WinVUCallback( 0, 0, 0 );
+    emit setActionTime1();
+    emit setVU(0, 0, 0);
 }
 void RtAudioSoundSystem::startInput()
 {
@@ -441,11 +420,7 @@ void RtAudioSoundSystem::startInput()
 void RtAudioSoundSystem::stopInput()
 {
     inputEnabled = false;
-    KeyerAction * sba = KeyerAction::getCurrentAction();
-     if ( sba )
-     {
-        sba->queueFinished();
-     }
+    emit actionQueueFinished();
      mutex.lock();
      if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
          bufferNotFull.wait(&mutex);
@@ -516,9 +491,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
         {
             return;
         }
-        KeyerAction * sba = KeyerAction::getCurrentAction();
-        if ( sba )
-           sba->interruptOK();	// so as we do not time it out immediately
+        emit interruptOK();
     }
 }
 void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, int16_t &maxvol, qreal &rmsval)
@@ -543,7 +516,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
             {
                 qint64 ps = pipDelayBytes;
                 total = qMin(ps, len);
-                q += total/2;
+//                q += total/2;
                 pipDelayBytes -= total;
             }
             else
@@ -552,7 +525,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 {
                     total = qMin((p_buffer.size() - p_pos), len);
                     memcpy(q, p_buffer.constData() + p_pos, static_cast<size_t>(total));
-                    q += total/2;
+//                    q += total/2;
                     p_pos += total;
                 }
                 else
@@ -592,9 +565,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 trace("m_buffer empty");
             }
         }
-        KeyerAction * sba = KeyerAction::getCurrentAction();
-        if ( sba )
-           sba->interruptOK();	// so as we do not time it out immediately
+        emit interruptOK();
 
         // should already have any gain multiplication done
          q = reinterpret_cast< int16_t * > ( outputBuffer );
@@ -615,7 +586,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
 }
 
 //==============================================================================
-bool RtAudioSoundSystem::startDMA( bool play, const QString &fname )
+bool RtAudioSoundSystem::startDMA(bool play, const QString &fname, int pipSamples, int16_t *pipptr , int pipStartDelaySamples)
 {
    // start input / output
 
@@ -633,12 +604,11 @@ bool RtAudioSoundSystem::startDMA( bool play, const QString &fname )
         tone = fname.isEmpty();
 
         setData(dataptr, samples);
-        KeyerAction * sba = KeyerAction::getCurrentAction();
-        if (sba && sba->tailWithPip)
+
+        if (pipSamples > 0)
         {
-            unsigned long psamples = SoundSystemDriver::getSbDriver() ->pipSamples * 2;
-            int16_t *pdataptr = SoundSystemDriver::getSbDriver() ->pipptr;
-            setPipData(pdataptr, psamples, sba->pipStartDelaySamples);
+            unsigned long psamples = pipSamples;
+            setPipData(pipptr, psamples, pipStartDelaySamples);
         }
         startOutput();
    }
@@ -679,7 +649,7 @@ void RtAudioSoundSystem::stopDMA()
     playingFile = false;
     recordingFile = false;
     passThrough = true;
-    SoundSystemDriver::getSbDriver() ->WinVUCallback( 0, 0, 0 );
+    emit setVU( 0, 0, 0 );
 }
 bool RtAudioSoundSystem::startMicPassThrough()
 {
@@ -693,6 +663,6 @@ bool RtAudioSoundSystem::stopMicPassThrough()
     trace("stopMicPassThrough");
 
     passThroughEnabled = false;
-    SoundSystemDriver::getSbDriver() ->WinVUCallback( 0, 0, 0 );
+    emit setVU( 0, 0, 0 );
     return true;
 }

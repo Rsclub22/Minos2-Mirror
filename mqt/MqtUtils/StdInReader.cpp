@@ -26,12 +26,12 @@ void StdInReader::run()
         emit stdinLine(line);
     }
 }
-static bool showServers = true;
-bool getShowServers()
+static bool showApp = true;
+bool getShowApp()
 {
-    return showServers;
+    return showApp;
 }
-void setShowServers(bool state)
+void setShowApp(bool state)
 {
-    showServers = state;
+    showApp = state;
 }

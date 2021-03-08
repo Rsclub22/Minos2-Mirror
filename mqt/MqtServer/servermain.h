@@ -45,7 +45,7 @@ private:
     Ui::MainWindow *ui;
     StdInReader stdinReader;
     QSharedPointer<MinosClientListener> clientListener;
-    QSharedPointer<MinosServerListener> serverListener;
+    QSharedPointer<MinosRouterListener> routerListener;
     QSharedPointer<TZConf> ZConf;
     QSharedPointer<TPubSubMain> PubSubMain;
 

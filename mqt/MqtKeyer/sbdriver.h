@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #ifndef sbdriverH
 #define sbdriverH
+#include <QObject>
 #include "keyctrl.h"
 
 enum sbControls {ePTT, eL1, eL2};
@@ -18,8 +19,9 @@ enum sbControls {ePTT, eL1, eL2};
 #define DOFILE_CW -4
 
 class RtAudioSoundSystem;
-class SoundSystemDriver
+class SoundSystemDriver:public QObject
 {
+   Q_OBJECT
    private:
       // another singleton to handle the sb card
       // it may need callbacks to interested parties!
@@ -44,6 +46,11 @@ class SoundSystemDriver
 
       void unload( );
 public:
+      SoundSystemDriver();
+      virtual ~SoundSystemDriver();
+
+      static SoundSystemDriver *getSbDriver();
+
       volatile int recording = false;
       bool ready = false;
       bool loadFailed = false;
@@ -96,9 +103,10 @@ public:
       void createCWBuffer( const char *message, int speed, int tone );
 
       bool sbdvp_init(QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
-      SoundSystemDriver();
-      ~SoundSystemDriver();
-
-      static SoundSystemDriver *getSbDriver();
+private slots:
+      void interruptOK();
+      void setActionTime1();
+      void actionQueueFinished();
+      void setVU(unsigned int a, unsigned int b, unsigned int c);
 };
 #endif

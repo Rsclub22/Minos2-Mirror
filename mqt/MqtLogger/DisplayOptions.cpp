@@ -61,8 +61,6 @@ void DisplayOptions::initialise()
     ui->LanguageComboBox->addItems(sl);
     ui->LanguageComboBox->setCurrentIndex(currLang);
 
-    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
-    ui->lm->setValue(lm);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
     ui->ls->setValue(ls);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
@@ -140,12 +138,6 @@ void DisplayOptions::finalise()
     }
 
     bool sendMargins = false;
-    int nlm = ui->lm->value();
-    if (nlm != lm)
-    {
-        TContestApp::getContestApp() ->setIntDisplayProfile(edplm, nlm);
-        sendMargins = true;
-    }
     int nls = ui->ls->value();
     if (nls != ls)
     {
@@ -219,7 +211,7 @@ void DisplayOptions::doFontChange()
 {
     if (nf != f)
     {
-        bool serverRunning = checkServerReady();
+        bool routerRunning = checkRouterReady();
         QApplication::setFont( nf );
 
         for ( auto &widget: QApplication::allWidgets() )
@@ -232,7 +224,7 @@ void DisplayOptions::doFontChange()
         settings.setValue( "font", font() );
 
         MinosLoggerEvents::SendFontChanged();
-        if (serverRunning)
+        if (routerRunning)
         {
             doBounceOnExit = true;
         }
@@ -245,7 +237,7 @@ void DisplayOptions::doLanguageChange()
     int lang = ui->LanguageComboBox->currentIndex();
     if (lang >= 0 && lang != currLang)
     {
-        bool serverRunning = checkServerReady();
+        bool routerRunning = checkRouterReady();
 
         QString selText = ui->LanguageComboBox->currentText();
 
@@ -259,7 +251,7 @@ void DisplayOptions::doLanguageChange()
                 break;
             }
         }
-        if (serverRunning)
+        if (routerRunning)
         {
             doBounceOnExit = true;
         }

@@ -13,7 +13,7 @@ MatchOtherFrame::~MatchOtherFrame()
 void MatchOtherFrame::initialise()
 {
     MatchTreeFrame::initialise();
-    connect(&MinosLoggerEvents::mle, SIGNAL(ReplaceOtherLogList(SharedMatchCollection,BaseContestLog*,QString)), this, SLOT(on_ReplaceOtherLogList(SharedMatchCollection,BaseContestLog*,QString)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ReplaceOtherLogList, this, &MatchOtherFrame::on_ReplaceOtherLogList, Qt::QueuedConnection);
 }
 
 void MatchOtherFrame::showOtherMatchQSOs(SharedMatchCollection matchCollection )

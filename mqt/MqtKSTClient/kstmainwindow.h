@@ -48,8 +48,8 @@ class KSTMainWindow : public QMainWindow
 
     QTcpSocket* kstclient;
 
-    QString serverName;
-    QString serverPort;
+    QString KSTserverName;
+    QString KSTserverPort;
     QString myCallsign;
     QString password;
     QString firstName;

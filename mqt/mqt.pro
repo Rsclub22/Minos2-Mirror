@@ -1,6 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    KeyerBase \
+    MqtRigSync \
     MqtUtils \
     TinyXML \
     XMPPLib \
@@ -23,16 +25,18 @@ SUBDIRS += \
 win32 {
 greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
    SUBDIRS += mqtKeyerTest
+   mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 }
 }
 
 
+KeyerBase.depends = MqtUtils TinyXML XMPPLib
 RPCTest.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtAppStarter.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtChat.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtCluster.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtControl.depends = MqtUtils TinyXML XMPPLib MqtBase
-MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtKSTClient.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtLogger.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtMonitor.depends = MqtUtils TinyXML XMPPLib MqtBase

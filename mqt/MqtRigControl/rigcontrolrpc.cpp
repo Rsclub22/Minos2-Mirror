@@ -26,7 +26,7 @@ RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), pa
         trace(QString("app name %1").arg(getAppStartupName()));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     // we aren't subscribing to anything!
@@ -61,7 +61,7 @@ void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
     }
 }
 //---------------------------------------------------------------------------
-void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
 {
     trace("Rig RPC: Rigcontrol callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -98,7 +98,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
 
         if ( args->getStructArgMember( 0, rpcConstants::rigLogVolLevel, psVolLevel ))
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -160,7 +160,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogMode, psMode ) )
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -176,7 +176,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
 
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogFreq, psFreq ))
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -191,7 +191,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogBand, psBand ))
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -206,7 +206,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigVoiceMessageNum, psVoiceMessageNum ))
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -222,7 +222,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
 
         else if ( args->getStructArgMember( 0, rpcConstants::rigControlLogRitFreq, psRitFreq ))
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {
@@ -237,7 +237,7 @@ void RigControlRpc::on_serverCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         }
         else if ( args->getStructArgMember( 0, rpcConstants::rigRitOnOffStatus, psRitStatus ) )
         {
-            PubSubName psn("test"); // just uses server/appname
+            PubSubName psn("test"); // just uses router/appname
             QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
             if (cursel == selContest)
             {

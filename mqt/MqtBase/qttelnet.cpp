@@ -462,12 +462,14 @@ void QtTelnetPrivate::setSocket(QTcpSocket *s)
     socket = s;
     connected = false;
     if (socket) {
-        connect(socket, SIGNAL(connected()), this, SLOT(socketConnected()));
-        connect(socket, SIGNAL(disconnected()),
-                this, SLOT(socketConnectionClosed()));
-        connect(socket, SIGNAL(readyRead()), this, SLOT(socketReadyRead()));
-        connect(socket, SIGNAL(error(QAbstractSocket::SocketError)),
-                this, SLOT(socketError(QAbstractSocket::SocketError)));
+        connect(socket, &QTcpSocket::connected, this, &QtTelnetPrivate::socketConnected);
+        connect(socket, &QTcpSocket::disconnected, this, &QtTelnetPrivate::socketConnectionClosed);
+        connect(socket, &QTcpSocket::readyRead, this, &QtTelnetPrivate::socketReadyRead);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+        connect(socket , &QTcpSocket::errorOccurred, this, &QtTelnetPrivate::socketError);
+#else
+        connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(socketError(QAbstractSocket::SocketError)));
+#endif
     }
 }
 
@@ -835,8 +837,8 @@ void QtTelnetPrivate::socketConnected()
     delete notifier;
     notifier = new QSocketNotifier(socket->socketDescriptor(),
                                    QSocketNotifier::Exception, this);
-    connect(notifier, SIGNAL(activated(int)),
-            this, SLOT(socketException(int)));
+    connect(notifier, &QSocketNotifier::activated,
+            this, &QtTelnetPrivate::socketException);
     //sendOptions();
     emit sockConnected();
 }
@@ -913,7 +915,7 @@ void QtTelnetPrivate::socketError(QAbstractSocket::SocketError error)
 QtTelnet::QtTelnet(QObject *parent)
     : QObject(parent), d(new QtTelnetPrivate(this))
 {
-    connect(d, SIGNAL(sockConnected()), this, SLOT(sConnected()));
+    connect(d, &QtTelnetPrivate::sockConnected, this, &QtTelnet::sConnected);
 }
 
 /*!

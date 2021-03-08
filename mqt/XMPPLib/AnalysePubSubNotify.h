@@ -9,8 +9,8 @@ class MinosRPCObj;
 class AnalysePubSubNotify
 {
       QString publisherProgram;
-      QString publisherServer;
-      QString server;
+      QString publisherRouter;
+      QString router;
       QString category;
       QString key;
       QString value;
@@ -24,13 +24,13 @@ class AnalysePubSubNotify
       {
          return publisherProgram;
       }
-      QString getPublisherServer() const
+      QString getPublisherRouter() const
       {
-         return publisherServer;
+         return publisherRouter;
       }
-      QString getServer() const
+      QString getRouter() const
       {
-         return server;
+         return router;
       }
       QString getCategory() const
       {

@@ -10,6 +10,5 @@
 #define _KEYERLOG_H_
 
 extern bool sblog;
-extern bool sbintrlog;
 
 #endif

@@ -190,21 +190,19 @@ void QSOLogFrame::on_FontChanged()
 
 void QSOLogFrame::on_QSOMargins()
 {
-    int lm;
     int ls;
     int cml;
     int cmt;
     int cmr;
     int cmb;
 
-    TContestApp::getContestApp() ->getIntDisplayProfile(edplm, lm);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
 
-    adjustMargins(layout(), lm, ls, cml, cmt, cmr, cmb);
+    adjustMargins(layout(), ls, cml, cmt, cmr, cmb);
 }
 
 bool QSOLogFrame::eventFilter(QObject *obj, QEvent *event)
@@ -244,6 +242,9 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     }
     else if (Key == Qt::Key_Tab)
     {
+        if (ctrl || shift)
+            return false;
+
          // Do we want "call" tab order or "S and P" tab order?
          bool tabSandP;
          TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );

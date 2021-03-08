@@ -17,35 +17,35 @@
 #include "serverThread.h"
 #include "MServer.h"
 
-ThisMinosServer *ThisMinosServer::singleton = nullptr;
+ThisMinosRouter *ThisMinosRouter::singleton = nullptr;
 /*static*/
-ThisMinosServer *ThisMinosServer::getThisMinosServer()
+ThisMinosRouter *ThisMinosRouter::getThisMinosRouter()
 {
    if ( !singleton )
    {
-      singleton = new ThisMinosServer();
+      singleton = new ThisMinosRouter();
    }
    return singleton;
 }
 //---------------------------------------------------------------------------
 
-ThisMinosServer::ThisMinosServer()
+ThisMinosRouter::ThisMinosRouter()
 {
-    serverName = MinosConfig::getMinosConfig()->getThisServerName();
+    routerName = MinosConfig::getMinosConfig()->getThisRouterName();
 }
 
-ThisMinosServer::~ThisMinosServer()
+ThisMinosRouter::~ThisMinosRouter()
 {}
 //---------------------------------------------------------------------------
-bool ThisMinosServer::forwardStanza( MinosCommonConnection *il, TiXmlElement *tix )
+bool ThisMinosRouter::forwardStanza( MinosCommonConnection *il, TiXmlElement *tix )
 {
    // while we don't know our name, we can accept client connections, but NOT server connections
    bool res = false;
    QString sto = getAttribute( tix, "to" );
    MinosId to( sto );
 
-   if ( sto.size() && to.server.size() && ( to.server.compare( "localhost", Qt::CaseInsensitive ) != 0 ) &&
-        ( to.server.compare( getServerName(), Qt::CaseInsensitive) != 0 ) )
+   if ( sto.size() && to.router.size() && ( to.router.compare( "localhost", Qt::CaseInsensitive ) != 0 ) &&
+        ( to.router.compare( getRouterName(), Qt::CaseInsensitive) != 0 ) )
    {
       res = false;        // not our host name in to
    }
@@ -58,7 +58,7 @@ bool ThisMinosServer::forwardStanza( MinosCommonConnection *il, TiXmlElement *ti
    return res;
 }
 //---------------------------------------------------------------------------
-bool ThisMinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
+bool ThisMinosRouter::analyseNode( MinosCommonConnection *il, TiXmlElement *tix )
 {
    // response factory - look at the node, and build the correct response stanza object
 
@@ -96,7 +96,7 @@ bool ThisMinosServer::analyseNode( MinosCommonConnection *il, TiXmlElement *tix 
    return true;      // which may not be right?
 }
 //---------------------------------------------------------------------------
-void ThisMinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req )
+void ThisMinosRouter::dispatchStanza( MinosCommonConnection *il, RPCRequest *req )
 {
    // really need to go to an RPC Object factory here
    trace( "RPCRequest received - " + req->methodName );
@@ -109,8 +109,8 @@ void ThisMinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req
          // check that from is what connected to us...
          MinosId id( from );
 
-         QString clientServerName = ( id.server.compare("localhost", Qt::CaseInsensitive ) == 0 ) ? serverName : id.server ;
-         QString fid = QString( id.user ) + "@" + clientServerName;
+         QString clientrouterName = ( id.router.compare("localhost", Qt::CaseInsensitive ) == 0 ) ? routerName : id.router ;
+         QString fid = QString( id.user ) + "@" + clientrouterName;
 
          MinosId id2( fid );
 
@@ -126,9 +126,9 @@ void ThisMinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req
          // check that from is what connected to us...
          MinosId id( from );
 
-         QString clientServerName = ( id.server.compare("localhost", Qt::CaseInsensitive ) == 0 ) ? serverName : id.server;
+         QString clientrouterName = ( id.router.compare("localhost", Qt::CaseInsensitive ) == 0 ) ? routerName : id.router;
 
-         QString fid = QString( id.user ) + "@" + clientServerName;
+         QString fid = QString( id.user ) + "@" + clientrouterName;
 
          MinosId id2( fid );
 
@@ -137,10 +137,10 @@ void ThisMinosServer::dispatchStanza( MinosCommonConnection *il, RPCRequest *req
       }
    }
    else if ( req->methodName == rpcConstants::publish
-        || req->methodName == rpcConstants::serverSubscribe
+        || req->methodName == rpcConstants::routerSubscribe
         || req->methodName == rpcConstants::remoteSubscribe
         || req->methodName == rpcConstants::subscribe
-        || req->methodName == rpcConstants::serverNotify
+        || req->methodName == rpcConstants::routerNotify
         || req->methodName == rpcConstants::clientNotify )
    {
       makeXMPPEvent( req );

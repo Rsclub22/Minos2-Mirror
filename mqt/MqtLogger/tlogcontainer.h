@@ -80,7 +80,6 @@ public:
     void applyScreenLayouts();
     void selectLayout(QString layout);
 
-    QAction *newAction(int n, QMenu *m, const char *atype);
     void doListOpenActionExecute(QWidget *p);
     void setMenuLog(int current);
     void selectContest(BaseContestLog *pc);
@@ -123,11 +122,12 @@ private:
     QAction *lastLayoutSelected = nullptr;
     QAction *lastLanguageSelected = nullptr;
 
-    QAction *newAction(const char *text, QMenu *m, const char *atype );
+    QAction *newAction(int n, QMenu *m, void (TLogContainer::*slotparam)());
+    QAction *newAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() );
     QMenu *newMenu(QMenu *m, const char *text);
-    SetMemoryAction *newMemoryAction(const char *text, QMenu *m, const char *atype );
-    QAction *newCheckableAction(const char *text, QMenu *m, const char *atype );
-    QAction *newCheckableAction(const QString text, QMenu *m, const char *atype );
+    SetMemoryAction *newMemoryAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)() );
+    QAction *newCheckableAction(const char *text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
+    QAction *newCheckableAction(const QString text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
     void setupMenus();
 
     QAction *HelpAction;
@@ -229,7 +229,7 @@ private slots:
     void KeyerRecordActionExecute();
     void KeyerPlaybackActionExecute();
 
-    void menuLogsActionExecute();
+    void menuLogsActionExecute(bool);
 
     void StartConfigActionExecute();
 

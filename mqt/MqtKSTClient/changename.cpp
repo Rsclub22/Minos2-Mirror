@@ -69,8 +69,8 @@ void ChangeName::doChangeName()
     connect(tnclient, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
 
     QSettings settings;
-    serverName = settings.value("tnhostname", "www.on4kst.info").toString();
-    serverPort = settings.value("tnport", "23000").toString();
+    KSTserverName = settings.value("tnhostname", "www.on4kst.info").toString();
+    KSTserverPort = settings.value("tnport", "23000").toString();
 
     connectToHost();
 
@@ -84,7 +84,7 @@ void ChangeName::sendData(QString msg)
 void ChangeName::connectToHost()
 {
     //tnclient->login(QString("%1\r\n").arg(myCallsign), QString(password) + "\r\n");
-    tnclient->connectToHost(serverName , serverPort.toInt());
+    tnclient->connectToHost(KSTserverName , KSTserverPort.toInt());
 
 }
 

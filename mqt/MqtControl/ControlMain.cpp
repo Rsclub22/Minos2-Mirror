@@ -34,13 +34,13 @@ ControlMain::ControlMain(QWidget *parent) :
         restoreGeometry(geometry);
 
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &ControlMain::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     formShowTimer.setSingleShot(true);
@@ -55,14 +55,14 @@ ControlMain::~ControlMain()
     controlMain = nullptr;
     delete ui;
 }
-void ControlMain::getServerAppCatMap()
+void ControlMain::getRouterAppCatMap()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     MinosConfig *config = MinosConfig::getMinosConfig();
     QVector<QSharedPointer<Connectable> > connectables;
     connectables = config->getConnectables();
 
-    QMap<QString,QVector< QSharedPointer<Connectable> > > serverAppCatMap;
+    QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
 
     for ( auto const &c: qAsConst(connectables) )
     {
@@ -104,9 +104,9 @@ void ControlMain::getServerAppCatMap()
         }
         else if (c->appType == "RigControl")
         {
-            serverAppCatMap[rpcConstants::rigControlCategory].push_back(c);
-            serverAppCatMap[rpcConstants::rigDetailsCategory].push_back(c);
-            serverAppCatMap[rpcConstants::rigStateCategory].push_back(c);
+            routerAppCatMap[rpcConstants::rigControlCategory].push_back(c);
+            routerAppCatMap[rpcConstants::rigDetailsCategory].push_back(c);
+            routerAppCatMap[rpcConstants::rigStateCategory].push_back(c);
         }
         else if (c->appType == "Rotator")
         {
@@ -114,8 +114,8 @@ void ControlMain::getServerAppCatMap()
         }
         else if (c->appType == "Server")
         {
-//            serverAppCatMap[rpcConstants::LocalStationCategory].push_back(c);
-//            serverAppCatMap[rpcConstants::StationCategory].push_back(c);
+//            routerAppCatMap[rpcConstants::LocalStationCategory].push_back(c);
+//            routerAppCatMap[rpcConstants::StationCategory].push_back(c);
         }
         else if (c->appType == "KSTClient")
         {
@@ -124,7 +124,7 @@ void ControlMain::getServerAppCatMap()
 
     }
 
-    rpc->setServerAppCatMap(serverAppCatMap);
+    rpc->setRouterAppCatMap(routerAppCatMap);
 }
 void ControlMain::subscribeApps()
 {
@@ -133,7 +133,7 @@ void ControlMain::subscribeApps()
     trace("subscribeApps");
     rigCache.invalidate();
 
-    getServerAppCatMap();
+    getRouterAppCatMap();
 
 }
 
@@ -187,7 +187,7 @@ void ControlMain::changeEvent( QEvent* e )
 }
 void ControlMain::LogTimerTimer( )
 {
-    bool show = getShowServers();
+    bool show = getShowApp();
     if ( !isVisible() && show )
     {
        setVisible(true);
@@ -230,7 +230,7 @@ void ControlMain::linesChangedEvent( )
     }
 }
 //---------------------------------------------------------------------------
-void ControlMain::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void ControlMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
    trace( "control callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
@@ -386,7 +386,7 @@ void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, bool L3, bool L4, bool 
 void ControlMain::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherServer());
+    trace( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {

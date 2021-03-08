@@ -182,13 +182,13 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
         rpcConstants::qrzServerApp
     };
 
-    rpc->initialiseServers(sv);
+    rpc->initialiseRouters(sv);
 
     connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     QString a = rpc->getAppName();
-    QString station = MinosConfig::getMinosConfig()->getThisServerName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::qrzDisplayApp,  a + "@" + station, "", psPublished);
 
 
@@ -355,12 +355,12 @@ void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from
             {
                 // We have received notification from a previously unknown station - so report on it
                 QrzServer s;
-                s.serverName = an.getPublisherServer();
+                s.routerName = an.getPublisherRouter();
                 s.state = an.getState();
                 s.publisherProgram = an.getPublisherProgram();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                trace(QString("qrzDisplayServerRpc: on_notify - server found %1, publisher program %2, key %3").arg(s.serverName, s.publisherProgram, s.app));
+                trace(QString("qrzDisplayServerRpc: on_notify - server found %1, publisher program %2, key %3").arg(s.routerName, s.publisherProgram, s.app));
                 //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
 
                 syncstat = true;

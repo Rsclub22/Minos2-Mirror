@@ -57,7 +57,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     }
 
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
     stdinReader.start();
 
     // get the antenna name from host process
@@ -269,7 +269,7 @@ void RotatorMainWindow::resizeEvent(QResizeEvent * event)
 
 void RotatorMainWindow::LogTimerTimer(  )
 {
-    bool show = getShowServers();
+    bool show = getShowApp();
     if ( !isVisible() && show )
     {
         setVisible(true);

@@ -72,7 +72,7 @@ class TRPCCallback : public TRPCFunctor
 
 
 class MinosRPCClient;
-class MinosRPCServer;
+class MinosRPCRouter;
 class MinosRPCObj
 {
       // Base object for Minos RPC calls. It encapsulates both ends of
@@ -114,9 +114,9 @@ class MinosRPCObj
 
       virtual QSharedPointer<MinosRPCObj>makeObj() = 0;
 
-      static QSharedPointer<MinosRPCObj> makeServerObj( QString call );
+      static QSharedPointer<MinosRPCObj> makeRouterObj( QString call );
 
-      static void addServerObj( QSharedPointer<MinosRPCObj> mro );
+      static void addRouterObj( QSharedPointer<MinosRPCObj> mro );
 
       virtual void queueCall( QString /* to*/ )
       {}
@@ -149,14 +149,14 @@ class MinosRPCClient: public MinosRPCObj
       void queueCall(const PubSubName &psn);
 
 };
-class MinosRPCServer: public MinosRPCObj
+class MinosRPCRouter: public MinosRPCObj
 {
    private:
-      MinosRPCServer();            // don't allow default constructor
+      MinosRPCRouter();            // don't allow default constructor
    public:
-      MinosRPCServer( const QString &mName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( mName, cb, gen )
+      MinosRPCRouter( const QString &mName, TRPCFunctor *cb, bool gen = false ) : MinosRPCObj( mName, cb, gen )
       {}
-      virtual ~MinosRPCServer() override;
+      virtual ~MinosRPCRouter() override;
 
       virtual QSharedPointer<MinosRPCObj>makeObj() override = 0;
 };

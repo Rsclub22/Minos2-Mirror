@@ -9,7 +9,7 @@
 
 RPCGeneralClient::~RPCGeneralClient()
 {}
-RPCGeneralServer::~RPCGeneralServer()
+RPCGeneralRouter::~RPCGeneralRouter()
 {}
 static void xmppsendAction( XStanza *a )
 {
@@ -32,14 +32,14 @@ MinosRPC::MinosRPC(const QString &defaultName, bool useEnvVar):
     }
     setAppName(rpcName);
 
-    connect(&connectTimer, SIGNAL(timeout()), this, SLOT(on_connectedTimeout()));
+    connect(&connectTimer, &QTimer::timeout, this, &MinosRPC::on_connectedTimeout);
     connectTimer.start(100);
 }
 void MinosRPC::on_connectedTimeout()
 {
-    if ( !connected && checkServerReady() )
+    if ( !connected && checkRouterReady() )
     {
-        MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCGeneralServer( new TRPCCallback <MinosRPC> ( this, &MinosRPC::serverCallback ) ) ) );
+        MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCGeneralRouter( new TRPCCallback <MinosRPC> ( this, &MinosRPC::routerCallback ) ) ) );
         XMPPInitialise( appName );
         connected = true;
     }
@@ -79,12 +79,12 @@ void MinosRPC::subscribe(const QString &c)
         RPCPubSub::subscribe( c );
     }
 }
-void MinosRPC::subscribeRemote(const QString &server, const QString &cat)
+void MinosRPC::subscribeRemote(const QString &router, const QString &cat)
 {
-    remoteSubscriptions.insert(QPair<QString, QString>(server, cat));
+    remoteSubscriptions.insert(QPair<QString, QString>(router, cat));
     if (subscribed)
     {
-        RPCPubSub::subscribeRemote( server, cat );
+        RPCPubSub::subscribeRemote(router , cat );
     }
 }
 void MinosRPC::publish( const QString &category, const QString &key, const QString &value, PublishState pState )
@@ -92,74 +92,74 @@ void MinosRPC::publish( const QString &category, const QString &key, const QStri
     RPCPubSub::publish( category, key, value, pState );
 }
 
-void MinosRPC::setServerAppCatMap(QMap<QString, QVector<QSharedPointer<Connectable> > > &sacm)
+void MinosRPC::setRouterAppCatMap(QMap<QString, QVector<QSharedPointer<Connectable> > > &sacm)
 {
-    serverAppCatMap = sacm;
+    routerAppCatMap = sacm;
 
-    servers.clear();    // so StationCategory can re-populate it
+    routers.clear();    // so StationCategory can re-populate it
 
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);   // this might not be needed?
+//    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);   // this might not be needed?
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
 
-    // Named servers get connected here; "any" servers get connected as and when they connect
-    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = serverAppCatMap.begin(); i != serverAppCatMap.end(); i++)
+    // Named s get connected here; "any" s get connected as and when they connect
+    for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = routerAppCatMap.begin(); i != routerAppCatMap.end(); i++)
     {
         for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
         {
             if ((*j)->runType == RunLocal)
             {
                 MinosConfig *config = MinosConfig::getMinosConfig();
-                rpc->subscribeRemote(config->getThisServerName(), i.key());
+                rpc->subscribeRemote(config->getThisRouterName(), i.key());
             }
-            else if ((*j)->runType == ConnectServer && !(*j)->serverName.isEmpty())
+            else if ((*j)->runType == ConnectRouter && !(*j)->routerName.isEmpty())
             {
-                rpc->subscribeRemote((*j)->serverName, i.key());
+                rpc->subscribeRemote((*j)->routerName, i.key());
             }
         }
     }
 
 }
 
-void MinosRPC::initialiseServers(QStringList subs)
+void MinosRPC::initialiseRouters(QStringList subs)
 {
     // we need to add (and subscribe to) any new subs
-    serversInitialised = true;
-    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
+    routersInitialised = true;
+    //RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
-    serverSubs = subs;
+    routerSubs = subs;
 
 }
-void MinosRPC::serverNotify( AnalysePubSubNotify &an)
+void MinosRPC::routerNotify( AnalysePubSubNotify &an)
 {
     if ( an.getOK() )
     {
-        if ( an.getCategory() == rpcConstants::LocalStationCategory)
-        {
-            QString server = an.getKey();
-            bool pubNeeded = true;
-            QString a = MinosRPC::getMinosRPC()->getAppName();
-            for ( auto const &stat: qAsConst(serverList) )
-            {
-                if (stat.app == a + "@" + server)
-                {
-                    pubNeeded = false;
-                    break;
-                }
-            }
-            if (pubNeeded)
-            {
-                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + server, "", psPublished);
-            }
-        }
+//        if ( an.getCategory() == rpcConstants::LocalStationCategory)
+//        {
+//            QString router = an.getKey();
+//            bool pubNeeded = true;
+//            QString a = MinosRPC::getMinosRPC()->getAppName();
+//            for ( auto const &stat: qAsConst(routerList) )
+//            {
+//                if (stat.app == a + "@" + router)
+//                {
+//                    pubNeeded = false;
+//                    break;
+//                }
+//            }
+//            if (pubNeeded)
+//            {
+//                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + router, "", psPublished);
+//            }
+//        }
         if (an.getCategory() == rpcConstants::StationCategory)
         {
-            QString server = an.getKey();
+            QString router = an.getKey();
             bool subNeeded = true;
-            for ( auto const &stat: qAsConst(serverList) )
+            for ( auto const &stat: qAsConst(routerList) )
             {
-                if (stat.serverName == server)
+                if (stat.routerName == router)
                 {
                     subNeeded = false;
                     break;
@@ -167,24 +167,24 @@ void MinosRPC::serverNotify( AnalysePubSubNotify &an)
             }
             if (subNeeded)
             {
-                for(auto &cat:serverSubs)
+                for(auto &cat:routerSubs)
                 {
-                    RPCPubSub::subscribeRemote(server, cat);
+                    RPCPubSub::subscribeRemote(router, cat);
                 }
             }
-            // This connects up those connectables that are "any" server
-            // we can't do this until we know the server name
+            // This connects up those connectables that are "any"
+            // we can't do this until we know the  name
 
-            if (!servers.contains(server))
+            if (!routers.contains(router))
             {
-                servers.append(server);
-                for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = serverAppCatMap.begin(); i != serverAppCatMap.end(); i++)
+                routers.append(router);
+                for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = routerAppCatMap.begin(); i != routerAppCatMap.end(); i++)
                 {
                     for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
                     {
-                        if ((*j)->runType == ConnectServer && (*j)->serverName.isEmpty())
+                        if ((*j)->runType == ConnectRouter && (*j)->routerName.isEmpty())
                         {
-                            RPCPubSub::subscribeRemote(server, i.key());
+                            RPCPubSub::subscribeRemote(router, i.key());
                         }
                     }
                 }
@@ -199,21 +199,21 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
    trace( "MinosRPC Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    AnalysePubSubNotify an( err, mro );
-   if (serversInitialised)
+   if (routersInitialised)
    {
-       serverNotify(an );
+       routerNotify(an );
    }
    QString category = an.getCategory();
-   if (serverAppCatMap.count() && category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
+   if (routerAppCatMap.count() && category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
    {
        bool notificationOK = false;
-       for ( auto &j: serverAppCatMap[category] )
+       for ( auto &j: routerAppCatMap[category] )
        {
            if (j->runType == RunLocal)
            {
-               if (an.getPublisherServer() != j->serverName)
+               if (an.getPublisherRouter() != j->routerName)
                {
-                   //trace("RunLocal server " + an.getPublisherServer() + " " + (*j).serverName);
+                   //trace("RunLocal  " + an.getPublisherRouter() + " " + (*j).routerName);
                    continue;
                }
                if (an.getPublisherProgram() != j->appName)
@@ -225,16 +225,16 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
                notificationOK = true;
                break;
            }
-           else if (j->runType == ConnectServer)
+           else if (j->runType == ConnectRouter)
            {
-               if (j->serverName.isEmpty())
+               if (j->routerName.isEmpty())
                {
                    notificationOK = true;
                    break;
                }
-               else if (an.getPublisherServer() != j->serverName)
+               else if (an.getPublisherRouter() != j->routerName)
                {
-                   //trace("ConnectServer server " + an.getPublisherServer() + " " + (*j).serverName);
+                   //trace("ConnectRouter  " + an.getPublisherRouter() + " " + (*j).routerName);
                    continue;
                }
                if (j->remoteAppName.isEmpty())
@@ -244,7 +244,7 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
                }
                else if (an.getPublisherProgram() != j->remoteAppName)
                {
-                   //trace("ConnectServer appName " + an.getPublisherProgram() + " " + (*j).appName);
+                   //trace("ConnectRouter appName " + an.getPublisherProgram() + " " + (*j).appName);
                    continue;
                }
 
@@ -254,7 +254,7 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
        }
 
        trace(QString("notificationOK is %1").arg(notificationOK));
-       for (const auto &s:qAsConst(serverSubs))
+       for (const auto &s:qAsConst(routerSubs))
        {
            //trace(QString("Category %1 s %2").arg(category).arg(s));
            if (category == s)
@@ -272,9 +272,9 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
 }
 
 //---------------------------------------------------------------------------
-void MinosRPC::serverCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
+void MinosRPC::routerCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
-   trace( "rpc server callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   trace( "rpc  callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
-   emit serverCall(err, mro, from);
+   emit routerCall(err, mro, from);
 }

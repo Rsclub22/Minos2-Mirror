@@ -89,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader,&StdInReader::stdinLine, this, &MainWindow::onStdInRead);
     stdinReader.start();
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -134,41 +134,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //    ui->Rig1Label->setText(omni_rig->Rig1()->RigType());
 
-    connect(&timer2, SIGNAL(timeout()), this, SLOT(timer2Timeout()));
+    connect(&timer2, &QTimer::timeout, this, &MainWindow::timer2Timeout);
     timer2.start(1000);
 
-    connect(&ClientSocket1, SIGNAL(connected()), this, SLOT(onSocketConnect()));
-    connect(&ClientSocket1, SIGNAL(disconnected()), this, SLOT(onSocketDisconnect()));
-    connect(&ClientSocket1, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(&ClientSocket1, &QTcpSocket::connected, this, &MainWindow::onSocketConnect);
+    connect(&ClientSocket1, &QTcpSocket::disconnected, this, &MainWindow::onSocketDisconnect);
+    connect(&ClientSocket1, &QTcpSocket::readyRead, this, &MainWindow::onReadyRead);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(&ClientSocket1, &QTcpSocket::errorOccurred, this, &MainWindow::onError);
+#else
     connect(&ClientSocket1, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onError(QAbstractSocket::SocketError)));
+#endif
 
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    connect(&SyncTimer, &QTimer::timeout, this, &MainWindow::SyncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &MainWindow::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
 
-    MinosConfig *config = MinosConfig::getMinosConfig();
-
-    QVector<QSharedPointer<Connectable> >connectables = config->getConnectables();
-
-    QStringList servers;
-    for ( auto const &res: qAsConst(connectables) )
-    {
-        servers.append(res->serverName);
-    }
-    servers.sort();
-    servers.removeDuplicates();
-
-    for (int i = 0; i < servers.size(); i++)
-    {
-        // this only works for local servers - so OK for me, but...
-        rpc->subscribeRemote( servers[i], rpcConstants::rigControlCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigDetailsCategory );
-        rpc->subscribeRemote( servers[i], rpcConstants::rigStateCategory );
-    }
+    getRouterAppCatMap();
 
     n1mmLink.initialise();
 }
@@ -177,6 +163,27 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+void MainWindow::getRouterAppCatMap()
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
+    MinosConfig *config = MinosConfig::getMinosConfig();
+
+    QVector<QSharedPointer<Connectable> > connectables;
+    connectables = config->getConnectables();
+
+    QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
+    for ( const auto &i: qAsConst(connectables))
+    {
+        if (i->appType == "RigControl")
+        {
+            routerAppCatMap[rpcConstants::rigControlCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigDetailsCategory].push_back(i);
+            routerAppCatMap[rpcConstants::rigStateCategory].push_back(i);
+        }
+    }
+    rpc->setRouterAppCatMap(routerAppCatMap);
+}
+
 void MainWindow::onStdInRead(QString cmd)
 {
     trace(QString("MainWindow::onStdInRead %1").arg(cmd));
@@ -395,7 +402,7 @@ void MainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     // PubSub notifications
     trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
 
-    if ( an.getOK() )    // won't be true now
+    if ( an.getOK() )
     {
         if ( an.getState() == psPublished)
         {
@@ -456,9 +463,9 @@ void MainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     }
 }
 //---------------------------------------------------------------------------
-void MainWindow::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void MainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace( "server callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    trace( "router callback from " + from + ( err ? ":Error" : ":Normal" ) );
     trace("method is " + mro->getMethodName());
 }
 //---------------------------------------------------------------------------
@@ -588,6 +595,17 @@ void MainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 {
     QSettings settings;
     settings.setValue("trackBand", ui->trackBandcb->isChecked());
+
+    mainRigMode.clear();
+    lastMainRigMode.clear();
+
+    mainRigFreq.clear();
+    lastMainRigFreq.clear();
+    lastTransverterOffset.clear();
+
+    lastBand.clear();
+    lastBandMode.clear();
+
 }
 
 void MainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)

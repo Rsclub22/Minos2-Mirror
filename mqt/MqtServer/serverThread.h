@@ -15,13 +15,13 @@
 #include <QTimer>
 #include "MinosLink.h"
 
-class Server;
+class Router;
 
-class MinosServerConnection: public MinosCommonConnection
+class MinosRouterConnection: public MinosCommonConnection
 {
     Q_OBJECT
    private:
-      Server *srv = nullptr;
+      Router *srv = nullptr;
       bool resubscribed = false;
       bool fromDatagram = false;
 
@@ -30,15 +30,15 @@ class MinosServerConnection: public MinosCommonConnection
       virtual bool checkLastRx() override;
       qint64 lastKeepAlive = 0;
    public:
-      MinosServerConnection(bool fromDatagram);
+      MinosRouterConnection(bool fromDatagram);
       virtual void initialise() override;
-      ~MinosServerConnection() override;
+      ~MinosRouterConnection() override;
       virtual bool checkFrom( TiXmlElement *pak ) override;
-      virtual bool isServer() override
+      virtual bool isRouter() override
       {
          return true;
       }
-      const Server *server() const
+      const Router *router() const
       {
           return srv;
       }
@@ -46,10 +46,10 @@ class MinosServerConnection: public MinosCommonConnection
       {
           return fromDatagram;
       }
-      void setServer(Server *s);
+      void setRouter(Router *s);
       virtual void setFromId( MinosId &from, RPCRequest *req ) override;
 
-      virtual void mConnect( Server *srv );
+      virtual void mConnect( Router *srv );
       virtual void sendAction( XStanza *a );
       void closeDown() override;
 private slots:

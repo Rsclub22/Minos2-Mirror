@@ -20,7 +20,7 @@ BearingLineEdit::BearingLineEdit(QWidget * parent): QLineEdit (parent),
 {
 
     setValidator(&ucValidator);
-    connect(this, SIGNAL(textChanged(const QString& )), this, SLOT(onTextChanged(const QString&)));
+    connect(this, &QLineEdit::textChanged, this, &BearingLineEdit::onTextChanged);
 
 
 }

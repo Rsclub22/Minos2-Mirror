@@ -48,11 +48,11 @@ MinosCompass::MinosCompass(QWidget *parent)
 
 QSize MinosCompass::minimumSizeHint() const
 {
-    return QDial::minimumSizeHint().expandedTo(QApplication::globalStrut());
+    return QDial::minimumSizeHint();
 }
 QSize MinosCompass::sizeHint() const
 {
-    return QSize(100, 100).expandedTo(QApplication::globalStrut());
+    return QSize(100, 100);
 }
 /*
 // for test

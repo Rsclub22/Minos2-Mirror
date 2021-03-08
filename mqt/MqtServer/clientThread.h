@@ -26,7 +26,7 @@ class MinosClientConnection: public MinosCommonConnection
       ~MinosClientConnection() override;
       virtual bool checkFrom( TiXmlElement *pak ) override;
       virtual void setFromId( MinosId &from, RPCRequest *req ) override;
-      virtual bool isServer() override
+      virtual bool isRouter() override
       {
          return false;
       }

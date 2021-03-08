@@ -29,7 +29,7 @@
 #define UPNP_PORT 9999
 
 //---------------------------------------------------------------------------
-class Server
+class Router
 {
    public:
       QString uuid;
@@ -38,13 +38,13 @@ class Server
       quint16 port;
       bool local;
 
-      Server( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p );
-      Server( const QString &s );
-      virtual ~Server();
+      Router( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p );
+      Router( const QString &s );
+      virtual ~Router();
 };
-extern QVector<Server *> serverList;
-extern QVector<Server *>::iterator findStation( const QString s );
-extern QVector<Server *>::iterator findIp( const QString s );
+extern QVector<Router *> routerList;
+extern QVector<Router *>::iterator findStation( const QString s );
+extern QVector<Router *>::iterator findIp( const QString s );
 
 class UDPSocket: public QObject
 {
@@ -65,7 +65,7 @@ class TZConf: public QObject
     Q_OBJECT
    private:  	// User declarations
 
-      static Server *zcPublishServer(const QString &uuid, const QString &name,
+      static Router *zcPublishRouter(const QString &uuid, const QString &name,
                         const QHostAddress &host, quint16 PortAsNumber );
       QString localName;
 
@@ -75,7 +75,7 @@ class TZConf: public QObject
       QTimer beaconTimer;
 
       bool sendMessage();
-      void readServerListFile();
+      void readRouterListFile();
 
       static TZConf *ZConf;
 
@@ -103,8 +103,8 @@ public:  		// User declarations
       }
 
       QString getZConfString(bool beaconreq, const QString &h);
-      Server *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
-      void publishDisconnect(Server *);
+      Router *processZConfString(const QString &message, QHostAddress &host, QDateTime &beaconResponse);
+      void publishDisconnect(Router *);
       void closeDown();
 private slots:
       void onReadyRead();

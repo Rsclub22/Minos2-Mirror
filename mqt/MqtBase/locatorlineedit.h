@@ -28,8 +28,8 @@ public:
 
 signals:
 
-    void textChanged(QLineEdit*, const QString&);
-    void editingFinished(QLineEdit*);
+//    void textChanged(QLineEdit*, const QString&);
+//    void editingFinished(QLineEdit*);
 
     void locatorFinished(const QString&);
 

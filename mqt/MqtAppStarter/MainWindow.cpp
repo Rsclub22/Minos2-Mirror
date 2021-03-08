@@ -20,14 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     if (MinosConfig::getMinosConfig() ->getAutoStart())
     {
-        connect(&startTimer, SIGNAL(timeout()), this, SLOT(startTimer_Timeout()));
+        connect(&startTimer, &QTimer::timeout, this, &MainWindow::startTimer_Timeout);
         startTimer.start(100);
     }
 
-    connect(MinosConfig::getMinosConfig(), SIGNAL(stdOutLine(QString)), this, SLOT(on_stdOutLine(QString)));
+    connect(MinosConfig::getMinosConfig(), &MinosConfig::stdOutLine, this, &MainWindow::on_stdOutLine);
 
-    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Application Starter"), ui->menuFile, SLOT(ExitActionExecute()));
-    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, SLOT(FontEditAcceptActionExecute()));
+    ExitAction = newAction(QT_TR_NOOP("E&xit Minos Application Starter"), ui->menuFile, &MainWindow::ExitActionExecute);
+    FontEditAcceptAction = newAction(QT_TR_NOOP("Select &Font..."), ui->menuTools, &MainWindow::FontEditAcceptActionExecute);
     languagesMenu = newMenu(ui->menuTools, QT_TR_NOOP("Select &Language"));
 
     QString currentLang = getCurrentLanguage();
@@ -38,8 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
         QAction *act =  new QAction(this);
         act->setText(l.dispName);
 
-        connect(act, SIGNAL(triggered()),
-                this, SLOT(LanguageAcceptActionExecute()));
+        connect(act, &QAction::triggered,
+                this, &MainWindow::LanguageAcceptActionExecute);
         act->setCheckable(true);
 
         languagesMenu->addAction(act);
@@ -109,12 +109,12 @@ QMenu *MainWindow::newMenu(QMenu *m, const char *text)
     menuList[menu] = text;
     return menu;
 }
-QAction *MainWindow::newAction( const char *text, QMenu *m, const char *atype )
+QAction *MainWindow::newAction( const char *text, QMenu *m, void (MainWindow::*slotparam)() )
 {
     QAction * newAct = new QAction( tr(text), this );
     m->addAction( newAct );
     actionList[newAct] = text;
-    connect( newAct, SIGNAL( triggered() ), this, atype );
+    connect( newAct, &QAction::triggered, this, slotparam );
     return newAct;
 }
 void MainWindow::ExitActionExecute()
@@ -151,8 +151,8 @@ void MainWindow::FontEditAcceptActionExecute()
 
             QString fs = f.toString();
 
-            bool serverRunning = checkServerReady();
-            if (serverRunning)
+            bool routerRunning = checkRouterReady();
+            if (routerRunning)
             {
                 MinosConfig::getMinosConfig() ->bounce();
             }
@@ -166,7 +166,7 @@ void MainWindow::LanguageAcceptActionExecute()
 
     if (action)
     {
-        bool serverRunning = checkServerReady();
+        bool routerRunning = checkRouterReady();
 
         if (lastLanguageSelected)
             lastLanguageSelected->setChecked(false);
@@ -183,7 +183,7 @@ void MainWindow::LanguageAcceptActionExecute()
                 break;
             }
         }
-        if (serverRunning)
+        if (routerRunning)
         {
             MinosConfig::getMinosConfig() ->bounce();
         }

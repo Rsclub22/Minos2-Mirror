@@ -32,9 +32,8 @@ RotPresetDialog::RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetDat
     ui->bearingEdit->setText(curData->bearing);
     ui->nameEdit->setFocus();
 
-    //connect(ui->bearingEdit, SIGNAL(editingFinished()), this, SLOT(bearingEditFinished()));
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(editAccepted()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(editRejected()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RotPresetDialog::editAccepted);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RotPresetDialog::editRejected);
 }
 
 RotPresetDialog::~RotPresetDialog()

@@ -83,7 +83,6 @@ private:
     QTimer CaptionTimer;
 
     StdInReader stdinReader;
-    VKMixer *mixer;
 
     bool PTT;
     bool PTTRef;

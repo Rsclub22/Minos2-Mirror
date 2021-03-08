@@ -13,13 +13,11 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosKeyer.ico
 
-unix:!macos{DEFINES += __LINUX_ALSA__}
-win32{DEFINES += __WINDOWS_DS__}
 INCLUDEPATH += $$PWD/../rtaudio
 INCLUDEPATH += $$PWD/../Chunkware
 
-unix:!macos{ LIBS += -lasound}
-win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32}
+unix:!macos{DEFINES += __LINUX_ALSA__}
+win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += main.cpp\
         KeyerMain.cpp \
@@ -28,44 +26,37 @@ SOURCES += main.cpp\
     KeyerRPCServer.cpp \
     keyers.cpp \
     portcon.cpp \
-    riff.cpp \
     sbdriver.cpp \
-    soundsys.cpp \
-    VKMixer.cpp \
-    levelmeter.cpp \
-    windowMonitor.cpp \
-    ../rtaudio/RtAudio.cpp \
-    ../Chunkware/SimpleComp.cpp \
-    ../Chunkware/SimpleCompProcess.inl \
-    ../Chunkware/SimpleEnvelope.cpp
+    windowMonitor.cpp
 
 HEADERS  += KeyerMain.h \
     keyerAbout.h \
-    ddc.h \
     keyconf.h \
     keyctrl.h \
-    keyerlog.h \
     KeyerRPCServer.h \
     keyers.h \
     portcon.h \
-    riff.h \
     sbdriver.h \
-    soundsys.h \
-    VKMixer.h \
-    levelmeter.h \
-    windowMonitor.h \
-    ../rtaudio/RtAudio.h \
-    ../rtaudio/include/dsound.h \
-    ../rtaudio/include/ginclude.h \
-    ../rtaudio/include/iasiodrv.h \
-    ../rtaudio/include/soundcard.h \
-    ../Chunkware/SimpleComp.h \
-    ../Chunkware/SimpleEnvelope.h \
-    ../Chunkware/SimpleGain.h \
-    ../Chunkware/SimpleHeader.h
+    windowMonitor.h
 
 FORMS    += KeyerMain.ui \
     keyerAbout.ui \
     windowMonitor.ui
 
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/release/ -lKeyerBase
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/debug/ -lKeyerBase
+else:unix: LIBS += -L$$OUT_PWD/../KeyerBase/ -lKeyerBase
 
+INCLUDEPATH += $$PWD/../KeyerBase
+DEPENDPATH += $$PWD/../KeyerBase
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/release/libKeyerBase.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/debug/libKeyerBase.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/release/KeyerBase.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/debug/KeyerBase.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/libKeyerBase.a
+
+# include system libs last, so they get included for KeyerBase
+
+unix:!macos{ LIBS += -lasound}
+win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32}

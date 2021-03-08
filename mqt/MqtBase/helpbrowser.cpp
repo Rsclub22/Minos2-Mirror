@@ -33,7 +33,7 @@ HelpBrowser::HelpBrowser(QString collectionFile, QUrl startUrl, QWidget *parent)
     ui->textBrowser->setHelpEngine(helpEngine);
     ui->textBrowser->setSource(startUrl);
 
-    // Connect the helpEngine Signals
+    // Connect the helpEngine Signals - functor versions will be complicated
     QObject::connect(helpEngine->contentWidget(), SIGNAL(linkActivated(QUrl)), ui->textBrowser, SLOT(setSource(QUrl)));
     QObject::connect(helpEngine->indexWidget(), SIGNAL(linkActivated(QUrl, QString)), ui->textBrowser, SLOT(setSource(QUrl)));
     QObject::connect(helpEngine->indexWidget(), SIGNAL(linksActivated(const QMap<QString, QUrl>, QString)),

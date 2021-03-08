@@ -21,7 +21,7 @@ ServerMain::ServerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
     stdinReader.start();
 
     createCloseEvent();
@@ -32,13 +32,13 @@ ServerMain::ServerMain(QWidget *parent) :
 
     connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
 
-    QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
+    QString sname = ThisMinosRouter::getThisMinosRouter()->getRouterName();
 
     clientListener = QSharedPointer<MinosClientListener>(new MinosClientListener);
     clientListener ->initialise( "Client", MinosClientPort );
 
-    serverListener = QSharedPointer<MinosServerListener>(new MinosServerListener);
-    serverListener ->initialise( "Server", MinosServerPort );
+    routerListener = QSharedPointer<MinosRouterListener>(new MinosRouterListener);
+    routerListener ->initialise( "Server", MinosRouterPort );
 
     ZConf = QSharedPointer<TZConf>(new TZConf);
 
@@ -48,7 +48,7 @@ ServerMain::ServerMain(QWidget *parent) :
     LogTimer.start(100);
     ScanTimer.start(20000);
 
-    makeServerEvent( true );
+    makeRouterEvent( true );
 }
 
 ServerMain::~ServerMain()
@@ -72,7 +72,7 @@ void ServerMain::LogTimerTimer( )
    static int lastSubCount = 0;
    static int lastPubCount = 0;
 
-   MinosServerListener *msl = MinosServerListener::getListener();
+   MinosRouterListener *msl = MinosRouterListener::getListener();
    MinosClientListener *mcl = MinosClientListener::getListener();
    int serverCount = msl ? msl->getConnectionCount() : 0;
    int clientCount = mcl ? mcl->getConnectionCount() : 0;
@@ -101,7 +101,7 @@ void ServerMain::LogTimerTimer( )
       ui->PubLabel->setText(QString::number(pubCount));
    }
 
-   bool show = getShowServers();
+   bool show = getShowApp();
    if ( !isVisible() && show )
    {
       setVisible(true);
@@ -143,7 +143,7 @@ void ServerMain::closeEvent(QCloseEvent *event)
         ZConf->closeDown();
 
         clientListener ->closeDown();
-        serverListener ->closeDown();
+        routerListener ->closeDown();
 
         LogTimerTimer( );
 

@@ -61,7 +61,7 @@ bool MinosClientConnection::checkFrom( TiXmlElement *tix )
    else
    {
       MinosId from( sfrom );
-      if ( !checkServer( from ) )
+      if ( !checkRouter( from ) )
          return false;
 
       if ( !checkUser( from ) )
@@ -73,7 +73,7 @@ bool MinosClientConnection::checkFrom( TiXmlElement *tix )
 void MinosClientConnection::setFromId( MinosId &from, RPCRequest * /*req*/ )
 {
    // this should always be a local client
-   clientServer = from.server;
+   clientRouter = from.router;
    clientUser = from.user;
    fromIdSet = true;
 }

@@ -11,5 +11,5 @@
 #define PortIdsH
 //---------------------------------------------------------------------------
 #define MinosClientPort 7777
-#define MinosServerPort 7778
+#define MinosRouterPort 7778
 #endif

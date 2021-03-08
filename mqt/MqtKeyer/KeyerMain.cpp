@@ -76,7 +76,6 @@ void KeyerMain::syncSetLines()
 KeyerMain::KeyerMain(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::KeyerMain),
-    mixer(nullptr),
     PTT(false), PTTRef(false), L1Ref(false), L2Ref(false),
     recordWait(false),
     recording(false),
@@ -86,7 +85,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, SIGNAL(stdinLine(QString)), this, SLOT(onStdInRead(QString)));
+    connect(&stdinReader, &StdInReader::stdinLine, this, &KeyerMain::onStdInRead);
     stdinReader.start();
 
     QSettings settings;
@@ -114,9 +113,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->setupScriptEdit->setText(alsaFileName);
 
     runAlsaScript(alsaFileName, alsaRestore);
-
-
-    mixer = VKMixer::OpenMixer();
 
     keyerMain = this;
     setLineCallBack( lcallback );
@@ -196,7 +192,7 @@ void KeyerMain::LineTimerTimer( )
     }
     else
     {
-        bool show = getShowServers();
+        bool show = getShowApp();
         if ( !isVisible() && show )
         {
            setVisible(true);
@@ -223,7 +219,7 @@ void KeyerMain::LineTimerTimer( )
          recording = false;
       }
    KeyerServer::publishCommand( ui->recind->text() );
-   eMixerSets m = mixer->GetCurrentMixerSet();
+   eMixerSets m = VKMixer::GetVKMixer()->GetCurrentMixerSet();
 
    ui->levelLabel->setText(tr(levelLabels[m]));
 
@@ -349,8 +345,11 @@ void KeyerMain::runAlsaScript(const QString &alsaFileName, const QString &comman
         runner = new QProcess(parent());
         connect (runner, SIGNAL(started()), this, SLOT(on_started()));
         connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
-        connect (runner, SIGNAL(error(QProcess::ProcessError)), this, SLOT(on_error(QProcess::ProcessError)));
-
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+        connect (runner, &QProcess::errorOccurred, this, &KeyerMain::on_error);
+#else
+        connect (runner, &QProcess::error, this, &KeyerMain::on_error);
+#endif
         connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
         connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
 

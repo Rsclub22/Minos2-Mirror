@@ -99,7 +99,7 @@ bool LineSet::initialise()
    if ( ret )
    {
        writeSet();
-      connect(&checkTimer, SIGNAL(timeout()), this, SLOT(checkTimerTimeout()));
+      connect(&checkTimer, &QTimer::timeout, this, &LineSet::checkTimerTimeout);
       checkTimer.start(5);
       return readSet();
    }

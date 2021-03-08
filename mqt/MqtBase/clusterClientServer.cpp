@@ -36,15 +36,15 @@ ClusterClientServer *ClusterClientServer::getClusterClientServer()
 
 ClusterClientServer::ClusterClientServer()
 {
-    connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
+    connect(&SyncTimer, &QTimer::timeout, this, &ClusterClientServer::SyncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &ClusterClientServer::on_routerCall);
 
     QString a = rpc->getAppName();
-    QString station = MinosConfig::getMinosConfig()->getThisServerName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::clusterClientServer,  a + "@" + station, "", psPublished);
 }
 
@@ -53,9 +53,9 @@ ClusterClientServer::~ClusterClientServer()
 }
 
 //---------------------------------------------------------------------------
-void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void ClusterClientServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    trace(QString("ClusterClientServer: on_serverCall - Message from %1").arg(from));
+    trace(QString("ClusterClientServer: on_routerCallCall - Message from %1").arg(from));
     if ( !err )
     {
         RPCArgs *args = mro->getCallArgs();
@@ -76,7 +76,7 @@ void ClusterClientServer::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
                 psMess->getString(pmess);
                 loggerUuid->getString(uuid);
                 frameId->getInt(frame_id);
-                trace(QString("ClusterClientServer: on_serverCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
+                trace(QString("ClusterClientServer: on_routerCall - receive cluster spot = %1, uuid = %2").arg(pmess).arg(uuid));
                 ClusterMessage msg;
                 msg.setMessage(pmess);
                 msg.setFrameId(frame_id);

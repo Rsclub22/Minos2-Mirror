@@ -10,24 +10,24 @@
 #include "XMPP_pch.h"
 
 #ifdef Q_OS_WIN
-    static QSharedMemory ServerEvent;
+    static QSharedMemory RouterEvent;
 #else
     #include <signal.h>
     #include <dirent.h>
     #include <fstream>
 #endif
-void makeServerEvent( bool create )
+void makeRouterEvent( bool create )
 {
 #ifdef Q_OS_WIN
-    ServerEvent.setKey( "MinosQtServer" );
+    RouterEvent.setKey( "MinosQtServer" );
     if (create)
     {
-        ServerEvent.create( 1 );
+        RouterEvent.create( 1 );
 
     }
     else
     {
-        ServerEvent.detach();
+        RouterEvent.detach();
     }
 #else
     Q_UNUSED(create)
@@ -85,7 +85,7 @@ static int getProcIdByName(QString procName)
 }
 #endif
 
-bool checkServerReady()
+bool checkRouterReady()
 {
 #ifdef Q_OS_WIN
     QSharedMemory mem( "MinosQtServer" );

@@ -24,7 +24,7 @@
 
 
 TZConf *TZConf::ZConf = nullptr;
-QVector<Server *> serverList;
+QVector<Router *> routerList;
 //---------------------------------------------------------------------------
 static quint16 toQUint16 ( const QString &s, int def )
 {
@@ -43,7 +43,7 @@ static QString makeUuid()
     QUuid uuid = QUuid::createUuid();
     return uuid.toString();
 }
-static QString getServerId()
+static QString getRouterId()
 {
    const QString key = "ServerUUID";
 
@@ -71,11 +71,11 @@ TZConf::TZConf( )
 }
 TZConf::~TZConf( )
 {
-    for ( auto const &s: qAsConst(serverList ))
+    for ( auto const &s: qAsConst(routerList ))
    {
       delete s;
    }
-   serverList.clear();
+   routerList.clear();
 }
 void TZConf::closeDown()
 {
@@ -173,7 +173,7 @@ void TZConf::onTimeout()
 
     if (lastTick.msecsTo(QDateTime::currentDateTime()) > beaconInterval)
     {
-        readServerListFile();
+        readRouterListFile();
     }
     if (readSocket.hasPendingDatagrams())
     {
@@ -233,21 +233,21 @@ void TZConf::onReadyRead()
 //---------------------------------------------------------------------------
 
 
-QVector<Server *>::iterator findStation( const QString s )
+QVector<Router *>::iterator findStation( const QString s )
 {
-   for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+   for ( QVector<Router *>::iterator i = routerList.begin(); i != routerList.end(); i++ )
    {
       if ( ( *i ) ->station.compare( s, Qt::CaseInsensitive ) == 0 )
       {
          return i;
       }
    }
-   return serverList.end();
+   return routerList.end();
 }
-QVector<Server *>::iterator findIp( const QHostAddress &h )
+QVector<Router *>::iterator findIp( const QHostAddress &h )
 {
     quint32 ha = h.toIPv4Address();
-   for ( QVector<Server *>::iterator i = serverList.begin(); i != serverList.end(); i++ )
+   for ( QVector<Router *>::iterator i = routerList.begin(); i != routerList.end(); i++ )
    {
        quint32 a = (*i)->host.toIPv4Address();
        trace(QString("findIP comparing %1 with %2").arg(ha).arg(a));
@@ -256,29 +256,29 @@ QVector<Server *>::iterator findIp( const QHostAddress &h )
          return i;
       }
    }
-   return serverList.end();
+   return routerList.end();
 }
 
-void TZConf::readServerListFile()
+void TZConf::readRouterListFile()
 {
    trace("Reading Server List File");
 
    // Read the server override file
 
-   QSettings servers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
-   QStringList sl = servers.childGroups();
+   QSettings routers(GetCurrentDir() + "/Configuration/Servers.ini", QSettings::IniFormat);
+   QStringList sl = routers.childGroups();
 
 //   trace(QString::number(sl.size()) + " child groups");
    for ( auto const &i: qAsConst(sl ))
    {
-      servers.beginGroup(i);
+      routers.beginGroup(i);
 
-      QString uuid = servers.value( "Uuid" ).toString();
-      QString host = servers.value( "Host" ).toString();
-      QString station = servers.value( "Station" ).toString();
-      QString port = servers.value( "Port" ).toString();
+      QString uuid = routers.value( "Uuid" ).toString();
+      QString host = routers.value( "Host" ).toString();
+      QString station = routers.value( "Station" ).toString();
+      QString port = routers.value( "Port" ).toString();
 
-    servers.endGroup();
+    routers.endGroup();
 
 //    trace(QString::number(i) + " " + sl[i] + " " + uuid + " " + host + " " + station + " " + port);
 
@@ -298,12 +298,12 @@ void TZConf::readServerListFile()
 
       if ( port.size() == 0 )
       {
-         port = QString::number(MinosServerPort);
+         port = QString::number(MinosRouterPort);
       }
 
       QHostAddress ha;
       ha.setAddress(host);
-      zcPublishServer( uuid, station, ha, toQUint16(port, MinosServerPort ) );
+      zcPublishRouter( uuid, station, ha, toQUint16(port, MinosRouterPort ) );
 
    }
    //trace("Finished reading Server List File");
@@ -319,31 +319,31 @@ void TZConf::readServerListFile()
 // ONLY trouble is... clients will now address their servers by UUID!
 // when they have subscribed to stations.
 
-Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
+Router *TZConf::zcPublishRouter( const QString &uuid, const QString &name,
                               const QHostAddress &host, quint16 PortAsNumber )
 {
-    trace( "zcPublishServer Host " + host.toString() + " Station " + name +
+    trace( "zcPublishRouter Host " + host.toString() + " Station " + name +
            " Port " + QString::number( PortAsNumber ) + " uuid " + uuid  );
-    MinosServerListener *msl = MinosServerListener::getListener();
-    QVector<Server *>::iterator s = findStation( name );
-    if ( s != serverList.end() )
+    MinosRouterListener *msl = MinosRouterListener::getListener();
+    QVector<Router *>::iterator s = findStation( name );
+    if ( s != routerList.end() )
     {
         trace("Station " + name + " found by name");
     }
-    if (s == serverList.end())
+    if (s == routerList.end())
     {
         s = findIp(host);
-        if (s != serverList.end())
+        if (s != routerList.end())
         {
             trace("Station " + host.toString() + " found by ip");
-            MinosServerConnection *m = msl->findConnection(host);
-            m->setServer(*s);
+            MinosRouterConnection *m = msl->findConnection(host);
+            m->setRouter(*s);
         }
     }
-    if (s == serverList.end())
+    if (s == routerList.end())
     {
         trace("Station " + name + " not found");
-        Server *sss = new Server( uuid, host, name, PortAsNumber );
+        Router *sss = new Router( uuid, host, name, PortAsNumber );
         if ( name == getZConf()->getName() )
         {
             sss->local = true;
@@ -352,11 +352,11 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
         {
             // we must have a server connection already
             trace("Creating MinosServerConnection zcPublishServer for " + name);
-            MinosServerConnection *msc = new MinosServerConnection(true);
+            MinosRouterConnection *msc = new MinosRouterConnection(true);
             msc->mConnect(sss);
             msl->addListenerSlot(msc);
         }
-        serverList.push_back( sss );
+        routerList.push_back( sss );
         s = findStation(name);
     }
     if ( (*s)->local )
@@ -367,35 +367,35 @@ Server *TZConf::zcPublishServer( const QString &uuid, const QString &name,
     trace("zcPublishServer finished");
     return *s;
 }
-void TZConf::publishDisconnect(Server *srv)
+void TZConf::publishDisconnect(Router *srv)
 {
    trace("publishDisconnect");
-   QVector<Server *>::iterator s = findStation( srv->station );
-   if ( s != serverList.end() )
+   QVector<Router *>::iterator s = findStation( srv->station );
+   if ( s != routerList.end() )
    {
       PubSubMain->publish( "", rpcConstants::StationCategory, srv->station, (*s)->host.toString(), psNotConnected );
-      serverList.erase(s);
+      routerList.erase(s);
    }
 }
 //==============================================================================
 QString TZConf::getZConfString(bool beaconreq, const QString &h)
 {
    static int sequence = 0;
-   QString Uuid = getServerId();
+   QString Uuid = getRouterId();
    return  QString("<minosServer ")
                + "seq='" + QString::number(sequence++)
                + "' UUID='" + Uuid
                + "' name='" + getName()
                + "' ip='" + h
-               + "' port='" + QString::number(MinosServerPort) + "'"
+               + "' port='" + QString::number(MinosRouterPort) + "'"
                + (beaconreq?" request='true'":"")
                + " />";
 }
 //==============================================================================
-Server *TZConf::processZConfString(const QString &message, QHostAddress &host, QDateTime &sendBeaconResponse)
+Router *TZConf::processZConfString(const QString &message, QHostAddress &host, QDateTime &sendBeaconResponse)
 {
     sendBeaconResponse = QDateTime();
-    Server *srv = nullptr;
+    Router *srv = nullptr;
     TiXmlDocument xdoc;
     TIXML_STRING smessage = message.toStdString();// allowed conversion through TIXML_STRING
     xdoc.Parse( smessage.c_str(), nullptr );
@@ -420,9 +420,9 @@ Server *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
 
         // publish what came in
 
-        quint16 iPort = toQUint16(port, MinosServerPort);
-        srv = zcPublishServer( UUID, station, host, iPort );
-        if ( request.size() && UUID != getServerId())
+        quint16 iPort = toQUint16(port, MinosRouterPort);
+        srv = zcPublishRouter( UUID, station, host, iPort );
+        if ( request.size() && UUID != getRouterId())
         {
             sendBeaconResponse = QDateTime::currentDateTime();   // delay the response, give the other end a chance...
         }
@@ -431,7 +431,7 @@ Server *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
 }
 //==============================================================================
 
-Server::Server( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p )
+Router::Router( const QString &uuid, const QHostAddress &h, const QString &s, quint16 p )
     :
       uuid(uuid),
       host( h ),
@@ -439,13 +439,13 @@ Server::Server( const QString &uuid, const QHostAddress &h, const QString &s, qu
       port( p ),
       local( false )
 {}
-Server::Server( const QString &s )
+Router::Router( const QString &s )
     :
       station( s ),
       port( static_cast<quint16>(-1) ),
       local( false )
 {}
-Server::~Server()
+Router::~Router()
 {}
 //==============================================================================
 

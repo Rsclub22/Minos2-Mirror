@@ -10,9 +10,9 @@ ChatFrame::ChatFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect (ChatServer::getChatServer(), SIGNAL(ChatServerList(QVector<ChatServerApp>)), this, SLOT(ChatServerList(QVector<ChatServerApp>)));
-    connect (ChatServer::getChatServer(), SIGNAL(ChatMessages(QVector<QString>)), this, SLOT(ChatMessages(QVector<QString>)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect (ChatServer::getChatServer(), &ChatServer::ChatServerList, this, &ChatFrame::ChatServerList);
+    connect (ChatServer::getChatServer(), &ChatServer::ChatMessages, this, &ChatFrame::ChatMessages);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &ChatFrame::on_FontChanged, Qt::QueuedConnection);
 
     on_FontChanged();
 }

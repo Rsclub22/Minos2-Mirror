@@ -13,8 +13,6 @@
 
 #include "MatchContact.h"
 #include "MatchThread.h"
-//#include "tsinglelogframe.h"
-//#include "tlogcontainer.h"
 #include "ScreenContact.h"
 #include "contest.h"
 #include "ListContact.h"
@@ -89,11 +87,10 @@ TMatchThread::TMatchThread()
    thisLogMatch = new ThisLogMatcher();
    otherLogMatch = new OtherLogMatcher();
    listMatch = new ListMatcher();
-   connect(&MinosLoggerEvents::mle, SIGNAL(ScreenContactChanged(ScreenContact*,BaseContestLog*,QString)), this, SLOT(on_ScreenContactChanged(ScreenContact*,BaseContestLog*,QString)));
-
-   connect(&MinosLoggerEvents::mle, SIGNAL(CountrySelect(QString,BaseContestLog*)), this, SLOT(on_CountrySelect(QString,BaseContestLog*)));
-   connect(&MinosLoggerEvents::mle, SIGNAL(DistrictSelect(QString,BaseContestLog*)), this, SLOT(on_DistrictSelect(QString,BaseContestLog*)));
-   connect(&MinosLoggerEvents::mle, SIGNAL(LocSelect(QString,BaseContestLog*)), this, SLOT(on_LocatorSelect(QString,BaseContestLog*)));
+   connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScreenContactChanged, this, &TMatchThread::on_ScreenContactChanged);
+   connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::CountrySelect, this, &TMatchThread::on_CountrySelect);
+   connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DistrictSelect, this, &TMatchThread::on_DistrictSelect);
+   connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::LocSelect, this, &TMatchThread::on_LocatorSelect);
 }
 
 QString TMatchThread::getBaseName() const

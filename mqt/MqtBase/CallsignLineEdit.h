@@ -32,14 +32,7 @@ public:
     void setCallsign(const QString call);
 signals:
 
-    void textChanged(QLineEdit*, const QString&);
-    void editingFinished(QLineEdit*);
-
     void callsignFinished(const QString&);
-
-
-
-
 
 private slots:
     void onTextChanged(const QString &);

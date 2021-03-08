@@ -12,71 +12,71 @@
 #ifndef PubSubServerH
 #define PubSubServerH
 //---------------------------------------------------------------------------
-class RPCServerPubSub : public RPCPubSub
+class RPCRouterPubSub : public RPCPubSub
 {
    protected:
-      RPCServerPubSub( const QString &call, TRPCFunctor *cb );
-      virtual ~RPCServerPubSub();
+      RPCRouterPubSub( const QString &call, TRPCFunctor *cb );
+      virtual ~RPCRouterPubSub();
       virtual QSharedPointer<MinosRPCObj> makeObj() = 0;
    public:
       static void initialisePubSub( TRPCFunctor *notifycb );
 
-      static void serverSubscribeRemote( const QString &server, const QString &category );
-      static void serverReconnectRemotePubSub( const QString &server );
+      static void routerSubscribeRemote( const QString &router, const QString &category );
+      static void routerReconnectRemotePubSub( const QString &router );
       static void close( );
 };
 //---------------------------------------------------------------------------
-// this is the server/server subscription
-class RPCServerSubscriber : public RPCSubscriber
+// this is the router/router subscription
+class RPCRouterSubscriber : public RPCSubscriber
 {
    private:
-      QString server;
-      RPCServerSubscriber( const QString &server, const QString &category );
+      QString router;
+      RPCRouterSubscriber( const QString &router, const QString &category );
    public:
-      static void testAndSubscribe( const QString &server, const QString &category );
-      virtual bool isRemoteEqual( const QString &server, const QString &category );
-      virtual void serverReSubscribe();
-      QString getServer();
+      static void testAndSubscribe( const QString &router, const QString &category );
+      virtual bool isRemoteEqual( const QString &router, const QString &category );
+      virtual void routerReSubscribe();
+      QString getRouter();
 };
-extern QVector<RPCServerSubscriber *> serverSubscribeList;
+extern QVector<RPCRouterSubscriber *> routerSubscribeList;
 //---------------------------------------------------------------------------
-class RPCServerSubscribeClient: public RPCPubSub
+class RPCRouterSubscribeClient: public RPCPubSub
 {
    public:
-      RPCServerSubscribeClient( TRPCFunctor *cb );
-      ~RPCServerSubscribeClient();
+      RPCRouterSubscribeClient( TRPCFunctor *cb );
+      ~RPCRouterSubscribeClient();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 };
-class RPCRServerSubscribeServer: public MinosRPCServer
+class RPCRouterSubscribeRouter: public MinosRPCRouter
 {
    public:
-      RPCRServerSubscribeServer( TRPCFunctor *cb );
-      ~RPCRServerSubscribeServer();
+      RPCRouterSubscribeRouter( TRPCFunctor *cb );
+      ~RPCRouterSubscribeRouter();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 
 };
 //---------------------------------------------------------------------------
-class RPCPublishServer: public MinosRPCServer
+class RPCPublishRouter: public MinosRPCRouter
 {
    public:
-      RPCPublishServer( TRPCFunctor *cb );
-      ~RPCPublishServer();
+      RPCPublishRouter( TRPCFunctor *cb );
+      ~RPCPublishRouter();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 };
-class RPCSubscribeServer: public MinosRPCServer
+class RPCSubscribeRouter: public MinosRPCRouter
 {
    public:
-      RPCSubscribeServer( TRPCFunctor *cb );
-      ~RPCSubscribeServer();
+      RPCSubscribeRouter( TRPCFunctor *cb );
+      ~RPCSubscribeRouter();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 
 };
 //---------------------------------------------------------------------------
-class RPCRemoteSubscribeServer: public MinosRPCServer
+class RPCRemoteSubscribeRouter: public MinosRPCRouter
 {
    public:
-      RPCRemoteSubscribeServer( TRPCFunctor *cb );
-      ~RPCRemoteSubscribeServer();
+      RPCRemoteSubscribeRouter( TRPCFunctor *cb );
+      ~RPCRemoteSubscribeRouter();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 
 };
@@ -94,18 +94,18 @@ class RPCClientNotifyClient: public MinosRPCClient
 
 //---------------------------------------------------------------------------
 
-class RPCServerNotifyClient: public MinosRPCClient
+class RPCRouterNotifyClient: public MinosRPCClient
 {
    public:
-      RPCServerNotifyClient( TRPCFunctor *cb ); // base class "callback" gets set to cb
-      ~RPCServerNotifyClient();
+      RPCRouterNotifyClient( TRPCFunctor *cb ); // base class "callback" gets set to cb
+      ~RPCRouterNotifyClient();
       virtual QSharedPointer<MinosRPCObj>makeObj();
 };
-class RPCServerNotifyServer: public MinosRPCServer
+class RPCRouterNotifyRouter: public MinosRPCRouter
 {
    public:
-      RPCServerNotifyServer( TRPCFunctor *cb ); // base class "callback" gets set to cb
-      ~RPCServerNotifyServer();
+      RPCRouterNotifyRouter( TRPCFunctor *cb ); // base class "callback" gets set to cb
+      ~RPCRouterNotifyRouter();
       virtual QSharedPointer<MinosRPCObj> makeObj();
 };
 //---------------------------------------------------------------------------

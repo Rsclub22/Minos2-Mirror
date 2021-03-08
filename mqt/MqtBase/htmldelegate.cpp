@@ -27,8 +27,8 @@
 
 HtmlDelegate::HtmlDelegate(qreal wmult, qreal hmult):wmult(wmult), hmult(hmult)
 {
-    connect(&MinosLoggerEvents::mle, SIGNAL(listCompressionChanged(qreal)),
-            this, SLOT(onListCompressionChanged(qreal)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::listCompressionChanged,
+            this, &HtmlDelegate::onListCompressionChanged);
 
 }
 HtmlDelegate:: ~HtmlDelegate()

@@ -198,7 +198,7 @@ bool extractDxLocFromNodeFlag(QString locFlagMsg);
 class ClusterServer
 {
 public:
-    QString serverName;
+    QString routerName;
     QString app;
     QString publisherProgram;
     PublishState state;

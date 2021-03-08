@@ -28,13 +28,13 @@ static const char *stateList[] =
 };//---------------------------------------------------------------------------
 static void makeRPCObjects()
 {
-   MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCPublishServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::publishCallback ) ) ) );
-   MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCSubscribeServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::subscribeCallback ) ) ) );
-   MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::remoteSubscribeCallback ) ) ) );
-   MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCRServerSubscribeServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::serverSubscribeCallback ) ) ) );
-   MinosRPCObj::addServerObj( QSharedPointer<MinosRPCObj>(new RPCServerNotifyServer( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::serverNotifyCallback ) ) ) );
+   MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCPublishRouter( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::publishCallback ) ) ) );
+   MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCSubscribeRouter( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::subscribeCallback ) ) ) );
+   MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCRemoteSubscribeRouter( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::remoteSubscribeCallback ) ) ) );
+   MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCRouterSubscribeRouter( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::routerSubscribeCallback ) ) ) );
+   MinosRPCObj::addRouterObj( QSharedPointer<MinosRPCObj>(new RPCRouterNotifyRouter( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::routerNotifyCallback ) ) ) );
 
-   RPCServerPubSub::initialisePubSub( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::notifyCallback ) );
+   RPCRouterPubSub::initialisePubSub( new TRPCCallback <TPubSubMain> ( PubSubMain, &TPubSubMain::notifyCallback ) );
 }
 //---------------------------------------------------------------------------
 class Subscriber;
@@ -45,9 +45,9 @@ class RemoteSubscriber;
 typedef QVector <RemoteSubscriber *> RemoteSubscriberList;
 typedef QVector <RemoteSubscriber *>::iterator RemoteSubscriberListIterator;
 //---------------------------------------------------------------------------
-class ServerSubscriber;
-typedef QVector <ServerSubscriber *> ServerSubscriberList;
-typedef QVector <ServerSubscriber *>::iterator ServerSubscriberListIterator;
+class RouterSubscriber;
+typedef QVector <RouterSubscriber *> RouterSubscriberList;
+typedef QVector <RouterSubscriber *>::iterator RouterSubscriberListIterator;
 //---------------------------------------------------------------------------
 class PublishedCategory;
 typedef QVector <PublishedCategory *> PublishedCategoryList;
@@ -57,7 +57,7 @@ class PublishedKey;
 typedef QVector <PublishedKey *> PublishedKeyList;
 typedef QVector <PublishedKey *>::iterator PublishedKeyListIterator;
 //---------------------------------------------------------------------------
-// normal subscriber; client prog of this server
+// normal subscriber; client prog of this router
 class Subscriber
 {
       QString sjid;
@@ -77,15 +77,15 @@ class Subscriber
       void SendTo( const PublishedKey &pk );
 };
 //---------------------------------------------------------------------------
-// normal subscriber; client prog of this server, subscribed to remote server value
+// normal subscriber; client prog of this router, subscribed to remote router value
 class RemoteSubscriber
 {
       QString sjid;
-      QString server;
+      QString router;
    public:
 
-      RemoteSubscriber( const QString &sjid, const QString &server )
-            : sjid( sjid ), server( server )
+      RemoteSubscriber( const QString &sjid, const QString &router )
+            : sjid( sjid ), router( router )
       {}
       RemoteSubscriber()
       {}
@@ -96,35 +96,35 @@ class RemoteSubscriber
          return sjid;
       }
 
-      QString getServer() const
+      QString getRouter() const
       {
-         return server;
+         return router;
       }
       void SendTo( const PublishedKey &pk );
 };
 //---------------------------------------------------------------------------
-// remote server subscribed to this server (on bahalf of its client)
-class ServerSubscriber
+// remote router subscribed to this router (on bahalf of its client)
+class RouterSubscriber
 {
       QString sjid;
-      QString server;
+      QString router;
    public:
 
-      ServerSubscriber( const QString &sjid, const QString &server )
-            : sjid( sjid ), server( server )
+      RouterSubscriber( const QString &sjid, const QString &router )
+            : sjid( sjid ), router( router )
       {}
-      ServerSubscriber()
+      RouterSubscriber()
       {}
-      ~ServerSubscriber()
+      ~RouterSubscriber()
       {}
       QString getSjid() const
       {
          return sjid;
       }
 
-      QString getServer() const
+      QString getRouter() const
       {
-         return server;
+         return router;
       }
       void SendTo( const PublishedKey &pk );
 };
@@ -156,7 +156,7 @@ class Published
       static void buildPublishedTree(QTreeWidget *tree);
       static void buildSubscribedTree(QTreeWidget *tree);
 
-      QString getPublisherServer();
+      QString getPublisherRouter();
 
 };
 class PublishedCategory: public Published
@@ -167,19 +167,19 @@ class PublishedCategory: public Published
    public:
       SubscriberList subscribedLocal;
       RemoteSubscriberList subscribedRemote;
-      ServerSubscriberList subscribedServer;
+      RouterSubscriberList subscribedrouter;
       PublishedKeyList pubkeylist;              // per cat list of key/value pairs
       int GetSubscribedCount();
 
       static bool publish( const QString &pubId, const QString &category, const QString &key, const QString &value, PublishState state );
       void publish( const QString &pubId, const QString &key, const QString &value , PublishState state );
 
-      static bool serverPublish( const QString &pubId, const QString &svr, const QString &category, const QString &key, const QString &value, PublishState state );
-      void serverPublish( const QString &pubId, const QString &svr, const QString &key, const QString &value, PublishState state );
+      static bool routerPublish( const QString &pubId, const QString &svr, const QString &category, const QString &key, const QString &value, PublishState state );
+      void routerPublish( const QString &pubId, const QString &svr, const QString &key, const QString &value, PublishState state );
 
       static void clientSubscribe( const QString &subId, const QString &category );
-      static void remoteSubscribe( const QString &subId, const QString &server, const QString &category );
-      static void serverSubscribe( const QString &subId, const QString &server, const QString &category );
+      static void remoteSubscribe( const QString &subId, const QString &router, const QString &category );
+      static void routerSubscribe( const QString &subId, const QString &router, const QString &category );
 
       // find a published item
       static PublishedCategoryListIterator findPubCategory( const QString &category );
@@ -197,7 +197,7 @@ class PublishedCategory: public Published
 
       Subscriber * getClientSubscribed( const QString &subId );
       RemoteSubscriber * getRemoteSubscribed( const QString &subId );
-      ServerSubscriber * getServerSubscribed( const QString &subId );
+      RouterSubscriber * getRouterSubscribed( const QString &subId );
 
 };
 class PublishedKey: public Published
@@ -205,7 +205,7 @@ class PublishedKey: public Published
    private:
       PublishedKey();
 
-      QString server;  // published from server
+      QString router;  // published from router
       QString key;
       QString value;
       PublishState state;
@@ -236,9 +236,9 @@ class PublishedKey: public Published
       {
          return cat;
       }
-      QString getServer() const
+      QString getRouter() const
       {
-         return server;
+         return router;
       }
       QString getPubKey() const
       {
@@ -260,15 +260,15 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-   // local - no server
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( "" ));
+   // local - no router
+   QSharedPointer<RPCParam>srouter(new RPCStringParam( "" ));
    QSharedPointer<RPCParam>sPubId(new RPCStringParam( pk.getPubId() ));
    QSharedPointer<RPCParam>sCategory(new RPCStringParam( pk.getPubCat() ->getCategory() ));
    QSharedPointer<RPCParam>sKey(new RPCStringParam( pk.getPubKey() ));
    QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
    QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
 
-   st->addMember( sServer, "Server" );
+   st->addMember( srouter, "Server" );
    st->addMember( sPubId, "Publisher" );
    st->addMember( sCategory, "Category" );
    st->addMember( sKey, "Key" );
@@ -285,15 +285,15 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    RPCClientNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-   // server is remote server name (as published)
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( pk.getServer() ));
+   // router is remote router name (as published)
+   QSharedPointer<RPCParam>srouter(new RPCStringParam( pk.getRouter() ));
    QSharedPointer<RPCParam>sPubId(new RPCStringParam( pk.getPubId() ));
    QSharedPointer<RPCParam>sCategory(new RPCStringParam( pk.getPubCat() ->getCategory() ));
    QSharedPointer<RPCParam>sKey(new RPCStringParam( pk.getPubKey() ));
    QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
    QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
 
-   st->addMember( sServer, "Server" );
+   st->addMember( srouter, "Server" );
    st->addMember( sPubId, "Publisher" );
    st->addMember( sCategory, "Category" );
    st->addMember( sKey, "Key" );
@@ -304,14 +304,14 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    rnc.queueCall( getSjid() );
 }
 //---------------------------------------------------------------------------
-void ServerSubscriber::SendTo ( const PublishedKey &pk )
+void RouterSubscriber::SendTo ( const PublishedKey &pk )
 {
    // Build the stanza, and send it to the subid
-   RPCServerNotifyClient rnc( nullptr );
+   RPCRouterNotifyClient rnc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-   //server is OUR server name
-   QSharedPointer<RPCParam>sServer(new RPCStringParam( ThisMinosServer::getThisMinosServer() ->getServerName() ));
+   //router is OUR router name
+   QSharedPointer<RPCParam>srouter(new RPCStringParam( ThisMinosRouter::getThisMinosRouter() ->getRouterName() ));
    QSharedPointer<RPCParam>sCategory;
    PublishedCategory *pc = nullptr;
    QString cat;
@@ -330,7 +330,7 @@ void ServerSubscriber::SendTo ( const PublishedKey &pk )
    QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
    QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
 
-   st->addMember( sServer, "Server" );
+   st->addMember( srouter, "Server" );
    st->addMember( sPubId, "Publisher" );
    st->addMember( sCategory, "Category" );
    st->addMember( sKey, "Key" );
@@ -346,9 +346,9 @@ PublishedCategoryList Published::publist;
 //---------------------------------------------------------------------------
 Published::Published( const QString &pubId, bool loc ) : pubId( pubId ), localOnly( loc )
 {}
-QString Published::getPublisherServer()
+QString Published::getPublisherRouter()
 {
-    QString publisherServer;
+    QString publisherrouter;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QStringList p = pubId.split(QChar('@'), Qt::KeepEmptyParts);
 #else
@@ -356,18 +356,18 @@ QString Published::getPublisherServer()
 #endif
     if (p.size() > 1)
     {
-        publisherServer = p[1];
+        publisherrouter = p[1];
     }
     else
     {
-        publisherServer = pubId;
+        publisherrouter = pubId;
     }
-    if (publisherServer == "localhost")
+    if (publisherrouter == "localhost")
     {
-        QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
-        publisherServer = sname;
+        QString sname = ThisMinosRouter::getThisMinosRouter()->getRouterName();
+        publisherrouter = sname;
     }
-    return publisherServer;
+    return publisherrouter;
 }
 //---------------------------------------------------------------------------
 void Published::clearPublist()
@@ -443,7 +443,7 @@ void Published::buildSubscribedTree(QTreeWidget *tree)
         }
         stype = new QTreeWidgetItem(catItem);
         stype->setText(0, "Server");
-        for ( auto const &i:qAsConst( p->subscribedServer ))
+        for ( auto const &i:qAsConst( p->subscribedrouter ))
         {
             QString sub = i->getSjid();
             QTreeWidgetItem *subItem = new QTreeWidgetItem(stype);
@@ -476,7 +476,7 @@ int PublishedCategory::GetSubscribedCount()
 {
    int scount = subscribedLocal.size();
    scount += subscribedRemote.size();
-   scount += subscribedServer.size();
+   scount += subscribedrouter.size();
 
    return scount;
 }
@@ -504,7 +504,7 @@ int PublishedCategory::GetSubscribedCount()
       for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
          // Here we are sending all the already published values
-         if ( pk->getServer().size() == 0 || pk->getServer() == "localhost" || pk ->getServer() == ThisMinosServer::getThisMinosServer() ->getServerName() )
+         if ( pk->getRouter().size() == 0 || pk->getRouter() == "localhost" || pk ->getRouter() == ThisMinosRouter::getThisMinosRouter() ->getRouterName() )
          {
             s->SendTo( *pk );
          }
@@ -512,7 +512,7 @@ int PublishedCategory::GetSubscribedCount()
    }
 }
 //---------------------------------------------------------------------------
-/*static*/ void PublishedCategory::remoteSubscribe(  const QString &subId,  const QString &server,  const QString &category  )
+/*static*/ void PublishedCategory::remoteSubscribe(  const QString &subId,  const QString &router,  const QString &category  )
 {
    PublishedCategoryListIterator f = PublishedCategory::findPubCategory( category );
    if ( f == publist.end() )
@@ -528,27 +528,27 @@ int PublishedCategory::GetSubscribedCount()
       if ( !s )
       {
          // not yet published
-         s = new RemoteSubscriber( subId, server );
+         s = new RemoteSubscriber( subId, router );
          ( *f ) ->subscribedRemote.push_back( s );
 
-         //**** and we need to subscribe to the remote server
+         //**** and we need to subscribe to the remote router
       }
 
       // and we now need to send them all...
       for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
          // Here we are sending all the already published values
-         if ( pk->getServer() == server )
+         if ( pk->getRouter() == router )
          {
             s->SendTo( *pk );
          }
       }
-      RPCServerPubSub::serverSubscribeRemote( server, category );
+      RPCRouterPubSub::routerSubscribeRemote( router, category );
    }
 }
 
 //---------------------------------------------------------------------------
-/*static*/ void PublishedCategory::serverSubscribe(  const QString &subId,  const QString &server,  const QString &category  )
+/*static*/ void PublishedCategory::routerSubscribe(  const QString &subId,  const QString &router,  const QString &category  )
 {
    PublishedCategoryListIterator f = PublishedCategory::findPubCategory( category );
    if ( f == publist.end() )
@@ -560,21 +560,21 @@ int PublishedCategory::GetSubscribedCount()
    if ( f != publist.end() )
    {
       // we subscribe to ALL keys under the category
-      ServerSubscriber * s = ( *f ) ->getServerSubscribed( subId );
+      RouterSubscriber * s = ( *f ) ->getRouterSubscribed( subId );
       if ( !s )
       {
-         s = new ServerSubscriber( subId, server );
-         ( *f ) ->subscribedServer.push_back( s );
+         s = new RouterSubscriber( subId, router );
+         ( *f ) ->subscribedrouter.push_back( s );
       }
 
       // and we now need to send them all...
       for ( auto const &pk: qAsConst(( *f ) ->pubkeylist ))
       {
-         // make sure that the key is one published by THIS server; we don't
+         // make sure that the key is one published by THIS router; we don't
          // want to re-publish
          // BUT it can publish as blank
-         QString pserver = pk->getServer();
-         if ( pserver.size() == 0 || pserver == "localhost" || pserver == ThisMinosServer::getThisMinosServer() ->getServerName() )
+         QString prouter = pk->getRouter();
+         if ( prouter.size() == 0 || prouter == "localhost" || prouter == ThisMinosRouter::getThisMinosRouter() ->getRouterName() )
          {
             // Here we are sending all the already published values
 
@@ -605,7 +605,7 @@ PublishedKeyListIterator PublishedCategory::findPubKey(const QString &svr, const
    for ( PublishedKeyListIterator i = pubkeylist.begin(); i != pubkeylist.end(); i++ )
    {
       PublishedKey *pk = (*i);
-      if (pk && key == pk ->getPubKey() && pk->getPubId() == pid && pk ->getServer() == svr )
+      if (pk && key == pk ->getPubKey() && pk->getPubId() == pid && pk ->getRouter() == svr )
          return i;
    }
    return pubkeylist.end();
@@ -652,7 +652,7 @@ void PublishedCategory::publish( const QString &pubId, const QString &k, const Q
          // send to all who have subscribed to the category
          ( *i ) ->SendTo( *( *kl ) );
       }
-      for ( ServerSubscriberListIterator i = subscribedServer.begin(); i != subscribedServer.end(); i++ )
+      for ( RouterSubscriberListIterator i = subscribedrouter.begin(); i != subscribedrouter.end(); i++ )
       {
          // send to all who have subscribed to the category
          ( *i ) ->SendTo( *( *kl ) );
@@ -660,7 +660,7 @@ void PublishedCategory::publish( const QString &pubId, const QString &k, const Q
    }
 }
 //---------------------------------------------------------------------------
-/*static*/ bool PublishedCategory::serverPublish(  const QString &pubId,   const QString &svr, const QString &category, const QString &key , const QString &value, PublishState pState )
+/*static*/ bool PublishedCategory::routerPublish(  const QString &pubId,   const QString &svr, const QString &category, const QString &key , const QString &value, PublishState pState )
 {
    PublishedCategoryListIterator f = PublishedCategory::findPubCategory( category );
    if ( f == publist.end() )
@@ -670,14 +670,14 @@ void PublishedCategory::publish( const QString &pubId, const QString &k, const Q
       publist.push_back( p );
       f = PublishedCategory::findPubCategory( category );
    }
-   ( *f ) ->serverPublish( pubId, svr, key, value, pState );
+   ( *f ) ->routerPublish( pubId, svr, key, value, pState );
    return true;
 }
 //---------------------------------------------------------------------------
-void PublishedCategory::serverPublish( const QString &pubId, const QString &svr, const QString &k, const QString &v, PublishState pState )
+void PublishedCategory::routerPublish( const QString &pubId, const QString &svr, const QString &k, const QString &v, PublishState pState )
 {
 
-//#warning What happens here? Why do remote contestlogs get reported with no server to the local monitor?
+//#warning What happens here? Why do remote contestlogs get reported with no router to the local monitor?
    PublishedKeyListIterator kl = findPubKey( svr, pubId, k );
    bool doPub = false;
    if ( kl == pubkeylist.end() )
@@ -716,12 +716,12 @@ PublishedCategory::~PublishedCategory()
       i = nullptr;
    }
    subscribedRemote.clear();
-   for ( auto &i: subscribedServer)
+   for ( auto &i: subscribedrouter)
    {
       delete i;
       i = nullptr;
    }
-   subscribedServer.clear();
+   subscribedrouter.clear();
 
    for ( auto &i: pubkeylist )
    {
@@ -751,9 +751,9 @@ RemoteSubscriber * PublishedCategory::getRemoteSubscribed( const QString &subId 
    return nullptr;
 }
 //---------------------------------------------------------------------------
-ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId )
+RouterSubscriber * PublishedCategory::getRouterSubscribed( const QString &subId )
 {
-   for ( auto const &i: qAsConst(subscribedServer ))
+   for ( auto const &i: qAsConst(subscribedrouter ))
    {
       if ( i->getSjid() == subId )
          return i;
@@ -763,7 +763,7 @@ ServerSubscriber * PublishedCategory::getServerSubscribed( const QString &subId 
 //---------------------------------------------------------------------------
 PublishedKey::PublishedKey( bool local, const QString &publId, const QString &svr, PublishedCategory *pcat, const QString &key, PublishState pState ) :
       Published( publId, local )
-    , server( svr )
+    , router( svr )
     , key( key )
     , state ( pState )
     , cat( pcat )
@@ -791,14 +791,14 @@ bool TPubSubMain::publish( const QString &pubId, const QString &category, const 
    trace("Publishing from <" + pubId + "> cat " + category + " key " + key + " state " + stateList[pState]);
    return PublishedCategory::publish( pubId, category, key, value, pState );
 }
-bool TPubSubMain::serverPublish( const QString &pubId, const QString &svr, const QString &category, const QString &key, const QString &value, PublishState pState )
+bool TPubSubMain::routerPublish( const QString &pubId, const QString &svr, const QString &category, const QString &key, const QString &value, PublishState pState )
 {
    if (closeApp)
    {
       return false;
    }
-   trace("Server Publishing from svr <" + svr + "> pubid <" + pubId + "> cat " + category + " key " + key+ " state " + stateList[pState]);
-   return PublishedCategory::serverPublish( pubId, svr, category, key, value, pState );
+   trace("router Publishing from svr <" + svr + "> pubid <" + pubId + "> cat " + category + " key " + key+ " state " + stateList[pState]);
+   return PublishedCategory::routerPublish( pubId, svr, category, key, value, pState );
 }
 int GetSubscribedCount()
 {
@@ -820,7 +820,7 @@ void buildSubscribedTree(QTreeWidget *tree)
 
 //---------------------------------------------------------------------------
 
-// callback to publish local server - this may get proxied when we have a remote server subscriber
+// callback to publish local router - this may get proxied when we have a remote router subscriber
 
 void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
@@ -856,7 +856,7 @@ void TPubSubMain::publishCallback( bool err, QSharedPointer<MinosRPCObj>mro, con
 }
 //---------------------------------------------------------------------------
 
-// callback to subscribe client - local server (there should not be a server member)
+// callback to subscribe client - local router (there should not be a router member)
 
 void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
@@ -879,7 +879,7 @@ void TPubSubMain::subscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, c
 }
 //---------------------------------------------------------------------------
 
-// callback to subscribe client  - remote server
+// callback to subscribe client  - remote router
 
 void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from )
 {
@@ -887,52 +887,52 @@ void TPubSubMain::remoteSubscribeCallback( bool err, QSharedPointer<MinosRPCObj>
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
-      QSharedPointer<RPCParam> psServer;
+      QSharedPointer<RPCParam> psrouter;
       QSharedPointer<RPCParam> psCategory;
       RPCArgs *args = mro->getCallArgs();
-      if ( args->getStructArgMember( 0, "Server", psServer ) &&
+      if ( args->getStructArgMember( 0, "Server", psrouter ) &&
            args->getStructArgMember( 0, "Category", psCategory ) )
       {
-         QString Server;
-         bool ress = psServer->getString( Server );
+         QString router;
+         bool ress = psrouter->getString( router );
          QString Category;
          bool resc = psCategory->getString( Category );
          if ( ress && resc )
          {
-            if ( !Server.size() || Server == "localhost" || Server == ThisMinosServer::getThisMinosServer() ->getServerName() )
+            if ( !router.size() || router == "localhost" || router == ThisMinosRouter::getThisMinosRouter() ->getRouterName() )
             {
-               subscribeCallback( err, mro, from );     // actually, for local server
+               subscribeCallback( err, mro, from );     // actually, for local router
                return ;
             }
 
-            PublishedCategory::remoteSubscribe( from, Server, Category );
+            PublishedCategory::remoteSubscribe( from, router, Category );
          }
       }
    }
 }
 //---------------------------------------------------------------------------
 
-// callback to subscribe server  - remote server
+// callback to subscribe router  - remote router
 
-void TPubSubMain::serverSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TPubSubMain::routerSubscribeCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-   trace( "Server Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
+   trace( "router Subscribe callback from " + from + ( err ? ":Error" : ":Normal" ) );
    if ( !err )
    {
       QSharedPointer<RPCParam>st(new RPCParamStruct);
-      QSharedPointer<RPCParam> psServer;
+      QSharedPointer<RPCParam> psrouter;
       QSharedPointer<RPCParam> psCategory;
       RPCArgs *args = mro->getCallArgs();
-      if ( args->getStructArgMember( 0, "Server", psServer ) &&
+      if ( args->getStructArgMember( 0, "Server", psrouter ) &&
            args->getStructArgMember( 0, "Category", psCategory ) )
       {
-         QString Server;
-         bool ress = psServer->getString( Server );
+         QString router;
+         bool ress = psrouter->getString( router );
          QString Category;
          bool resc = psCategory->getString( Category );
          if ( ress && resc )
          {
-            PublishedCategory::serverSubscribe( from, Server, Category );
+            PublishedCategory::routerSubscribe( from, router, Category );
          }
       }
    }
@@ -948,26 +948,26 @@ void TPubSubMain::notifyCallback( bool err, QSharedPointer<MinosRPCObj> /*mro*/,
 }
 //---------------------------------------------------------------------------
 
-// this we get when we get a subscribe notification from a remote server
+// this we get when we get a subscribe notification from a remote router
 
-void TPubSubMain::serverNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
+void TPubSubMain::routerNotifyCallback(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
    // we need to pass it on to any of our subscribers who are interested
-   // in this event from this server
+   // in this event from this router
    // But why aren't we sending a result?
    trace( "PubSub Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
    AnalysePubSubNotify an( err, mro );
 
    if ( an.getOK() )
    {
-      QString server = an.getServer();
+      QString router = an.getRouter();
       QString category = an.getCategory();
       QString key = an.getKey();
       QString value = an.getValue();
       QString publisherProgram = an.getPublisherProgram();
-      QString publisherServer = an.getPublisherServer();
+      QString publisherRouter = an.getPublisherRouter();
       PublishState state = an.getState();
-      serverPublish( /*from*/publisherProgram + "@" + publisherServer, server, category, key, value, state );       // but we mustn't publish this back to any remote servers
+      routerPublish( /*from*/publisherProgram + "@" + publisherRouter, router, category, key, value, state );       // but we mustn't publish this back to any remote routers
       // even if they ARE subscribed
    }
 }
@@ -1000,13 +1000,13 @@ void TPubSubMain::revokeClient(const QString &pubId)
       // and now clear up the published key list for the category
    }
 }
-void TPubSubMain::disconnectServer(const QString &pubId)
+void TPubSubMain::disconnectRouter(const QString &pubId)
 {
    if (closeApp)
    {
       return;
    }
-   QString publisherServer;
+   QString publisherRouter;
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     QStringList p = pubId.split(QChar('@'), Qt::KeepEmptyParts);
 #else
@@ -1014,26 +1014,26 @@ void TPubSubMain::disconnectServer(const QString &pubId)
 #endif
    if (p.size() > 1)
    {
-       publisherServer = p[1];
+       publisherRouter = p[1];
    }
    else
    {
-       publisherServer = pubId;
+       publisherRouter = pubId;
    }
-   if (publisherServer == "localhost")
+   if (publisherRouter == "localhost")
    {
-        QString sname = ThisMinosServer::getThisMinosServer()->getServerName();
-        publisherServer = sname;
+        QString sname = ThisMinosRouter::getThisMinosRouter()->getRouterName();
+        publisherRouter = sname;
    }
 
    for ( auto &f: Published::publist )
    {
       for ( auto &pk: f->pubkeylist )
       {
-         if (pk->getPublisherServer() == publisherServer)
+         if (pk->getPublisherRouter() == publisherRouter)
          {
             // publish revoke
-            TPubSubMain::serverPublish( pk->getPubId(), publisherServer, f->getCategory(), pk->getPubKey(), "", psRevoked );
+            TPubSubMain::routerPublish( pk->getPubId(), publisherRouter, f->getCategory(), pk->getPubKey(), "", psRevoked );
             delete pk;
             pk = nullptr;
          }
@@ -1047,5 +1047,5 @@ void TPubSubMain::closeDown()
     // need to clear all the lists
     Published::clearPublist();
     MinosRPCObj::clearRPCObjects();
-    RPCServerPubSub::close( );
+    RPCRouterPubSub::close( );
 }

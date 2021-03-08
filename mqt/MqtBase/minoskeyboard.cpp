@@ -18,22 +18,22 @@ MinosKeyboard::MinosKeyboard(QWidget *parent) :
         if (t == ui->tabButton)
         {
             ui->tabButton->setObjectName("tab");
-            connect(ui->tabButton, SIGNAL(clicked(bool)), this, SLOT(onTabButton()));
+            connect(ui->tabButton, &QPushButton::clicked, this, &MinosKeyboard::onTabButton);
         }
         else if (t == ui->returnButton)
         {
             ui->spaceButton->setObjectName(" ");
-            connect(ui->spaceButton, SIGNAL(clicked(bool)), this, SLOT(onKeyButton()));
+            connect(ui->spaceButton, &QPushButton::clicked, this, &MinosKeyboard::onKeyButton);
         }
         else if (t == ui->escButton)
         {
             ui->escButton->setObjectName("esc");
-            connect(ui->escButton, SIGNAL(clicked(bool)), this, SLOT(onEscButton()));
+            connect(ui->escButton, &QPushButton::clicked, this, &MinosKeyboard::onEscButton);
         }
         else
         {
             t->setObjectName(t->text());
-            connect(t, SIGNAL(clicked(bool)), this, SLOT(onKeyButton()));
+            connect(t, &QPushButton::clicked, this, &MinosKeyboard::onKeyButton);
         }
     }
 }
