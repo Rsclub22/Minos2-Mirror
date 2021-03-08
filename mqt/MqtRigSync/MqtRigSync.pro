@@ -1,24 +1,26 @@
+include($$PWD/../mqt.pri)
+include($$PWD/../mqtapplibs.pri)
+
 QT       += core gui
+QT       += network
+QT       += widgets
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+TARGET = MqtRigSync
+TEMPLATE = app
 
-CONFIG += c++11
-
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+win32:RC_ICONS += ../minos.ico
 
 SOURCES += \
     main.cpp \
-    RSMainWindow.cpp
+    RSMainWindow.cpp \
+    n1mmlink.cpp \
+    wsjtxlink.cpp
 
 HEADERS += \
-    RSMainWindow.h
+    RSMainWindow.h \
+    n1mmlink.h \
+    qs_defines.h \
+    wsjtxlink.h
 
 FORMS += \
     RSMainWindow.ui
-
-# Default rules for deployment.
-qnx: target.path = /tmp/$${TARGET}/bin
-else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
