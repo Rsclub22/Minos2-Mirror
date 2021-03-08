@@ -184,7 +184,7 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
 
     rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     QString a = rpc->getAppName();
@@ -220,7 +220,7 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
 }
 
 
-void QrzDisplayServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
     trace(QString("QrzServer: on_serverCall - Message from %1").arg(from));
     if ( !err )

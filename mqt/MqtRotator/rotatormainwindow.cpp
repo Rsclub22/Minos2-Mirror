@@ -1799,7 +1799,7 @@ void RotatorMainWindow::rotateCCW(bool /*toggle*/)
                 {
 
                     logMessage(QString("Send rotate to minAzimuth, instead of CCW rotator command, minAzimuth = %1").arg(QString::number(setupAntenna->currentAntenna.min_azimuth)));
-                    retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.min_azimuth );
+                    retCode = rotator->rotate_to_bearing(setupAntenna->currentAntenna.min_azimuth + 1); // +1 for Spid Rotator
                 }
 
                 if (retCode < 0)
