@@ -303,7 +303,7 @@ void ClusterMainWindow::doStartup()
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(ui->nodeCb, &QComboBox::textActivated, this, &ClusterMainWindow::connectToNode);
 #else
-    connect(ui->nodeCb, QOverload<QString>::of(&QComboBox::activated), this, &ClusterMainWindow::connectToNode);
+    connect(ui->nodeCb, QOverload<const QString &>::of(&QComboBox::activated), this, &ClusterMainWindow::connectToNode);
 #endif
 
     connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
