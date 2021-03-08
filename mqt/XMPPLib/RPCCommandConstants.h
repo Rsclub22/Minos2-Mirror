@@ -73,7 +73,7 @@ static const QString qrzDxCallsign   ("qrzDxCallsign");
 static const QString qrzSpotterCallsign ("qrzSpotterCallsign");
 static const QString qrzFirstName       ("qrzFirstName");
 static const QString qrzName            ("qrzName");
-static const QString qrzQth            ("qrzName");
+static const QString qrzQth            ("qrzQth");
 static const QString qrzCounty         ("qrzCounty");
 static const QString qrzCountry         ("qrzCountry");
 static const QString qrzLat             ("qrzLat");
