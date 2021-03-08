@@ -83,9 +83,9 @@ void ClusterMainWindow::doStartup()
     createCloseEvent();
 
     disconnectTimer = new QTimer();
-    connect(disconnectTimer, SIGNAL(timeout()), this, SLOT(disconnectTimeout()));
+    connect(disconnectTimer, &QTimer::timeout, this, &ClusterMainWindow::disconnectTimeout);
 
-    connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
+    connect(&LogTimer, &QTimer::timeout, this, &ClusterMainWindow::LogTimerTimer);
     LogTimer.start(100);
 
 
@@ -95,8 +95,8 @@ void ClusterMainWindow::doStartup()
     status = new QLabel;
     ui->statusBar->addWidget(status);
 
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-    connect(ui->actionUser_Command_Shortcuts, SIGNAL(triggered()), this, SLOT(clusterNodeCommandsShortcutHelp()));
+    connect(ui->actionAbout, &QAction::triggered, this, &ClusterMainWindow::about);
+    connect(ui->actionUser_Command_Shortcuts, &QAction::triggered, this, &ClusterMainWindow::clusterNodeCommandsShortcutHelp);
 
     //BandList::getBandList().loadVhfAndUpBands(bands);
     BandList::getBandList().loadAllBands(bands);
@@ -122,9 +122,9 @@ void ClusterMainWindow::doStartup()
     if (FileExists(CLUSTER_PATH + CLUSTER_SPOT_TEST_FILE))
     {
         ui->testSpotsPb->setVisible(true);
-        connect(ui->testSpotsPb, SIGNAL(clicked()), this, SLOT(testSpotPbClicked()));
+        connect(ui->testSpotsPb, &QPushButton::clicked, this, &ClusterMainWindow::testSpotPbClicked);
         spotTestTimer = new QTimer();
-        connect(spotTestTimer, SIGNAL(timeout()), this, SLOT(onSpotTestTimerTimeOut()));
+        connect(spotTestTimer, &QTimer::timeout, this, &ClusterMainWindow::onSpotTestTimerTimeOut);
     }
     else
     {
@@ -143,17 +143,17 @@ void ClusterMainWindow::doStartup()
 
     setupCluster = new SetupDialog();
 
-    connect(setupCluster, SIGNAL(personalDataUpdated(QString, QString, QString, QString)), SLOT(personalDataChanged(QString, QString, QString, QString)));
+    connect(setupCluster, &SetupDialog::personalDataUpdated, this, &ClusterMainWindow::personalDataChanged);
 
     clusterRpc = new Clusterrpc();
-    connect(clusterRpc, SIGNAL(sendSpotToDXCluster(Frequency, QString, QString)), this, SLOT(sendSpotToDXCluster(Frequency, QString, QString)));
-    connect(clusterRpc, SIGNAL(resendSpotToClients(int, QString, QString, QString)), this, SLOT(onResendSpotToClients(int, QString, QString, QString)));
+    connect(clusterRpc, &Clusterrpc::sendSpotToDXCluster, this, &ClusterMainWindow::sendSpotToDXCluster);
+    connect(clusterRpc, &Clusterrpc::resendSpotToClients, this, &ClusterMainWindow::onResendSpotToClients);
     connect(clusterRpc, &Clusterrpc::reconnectCmdFromLog, this, [=](bool state){onReconnectCommandFromLog(state);});
     connect(clusterRpc, &Clusterrpc::clusterQrzResponse,
             this, [=](QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState){onclusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);});
 
     handleSpotsInQueues = new QTimer();
-    connect(handleSpotsInQueues, SIGNAL(timeout()), this, SLOT(onHandleSpotsInQueues()));
+    connect(handleSpotsInQueues, &QTimer::timeout, this, &ClusterMainWindow::onHandleSpotsInQueues);
     handleSpotsInQueues->start(SEND_SPOTS_DUR);
 
 
@@ -177,7 +177,7 @@ void ClusterMainWindow::doStartup()
     setupCluster->readPersonal();
     setupCluster->loadPersonalToSetupTab();
 
-    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
+    connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
 
     // read enable hf spots flag
     QString fileName = CLUSTER_SETTINGS_FILE;
@@ -221,8 +221,8 @@ void ClusterMainWindow::doStartup()
 
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( dxSpotView_sectionResized(int, int , int)));
+    connect( dxSpotView->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &ClusterMainWindow::dxSpotView_sectionResized);
 
     // set these columns visible
     dxSpotView->setColumnHidden(TIME_COL_NUM, false);
@@ -277,8 +277,8 @@ void ClusterMainWindow::doStartup()
 
     restoreSentSpotViewColumns();
     sentSpotView->horizontalHeader()->setStretchLastSection(true);
-    connect( sentSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( sentSpotView_sectionResized(int, int , int)));
+    connect( sentSpotView->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &ClusterMainWindow::sentSpotView_sectionResized);
 
     sentSpotView->setColumnHidden(SENT_SPOT_RXTIME_COL_NUM, true);
 
@@ -295,42 +295,49 @@ void ClusterMainWindow::doStartup()
 
     setAllTabsColor(CLUSTER_TAB_NOT_SELECT_COLOR);
     ui->clusterViewsTab->setTabColor(ui->clusterViewsTab->currentIndex(), CLUSTER_TAB_SELECT_COLOR);
-    connect(ui->clusterViewsTab, SIGNAL(currentChanged(int)), this, SLOT(onSpotTabChanged(int)));
+    connect(ui->clusterViewsTab, &QLogTabWidget::currentChanged, this, &ClusterMainWindow::onSpotTabChanged);
 
-    connect(ui->actionSetup, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
-    connect(ui->actionClear_All_Spots, SIGNAL(triggered()), this, SLOT(onClearAllSpots()));
+    connect(ui->actionSetup, &QAction::triggered, this, &ClusterMainWindow::onLaunchSetup);
+    connect(ui->actionClear_All_Spots, &QAction::triggered, this, &ClusterMainWindow::onClearAllSpots);
 
-    connect(ui->nodeCb, SIGNAL(activated(QString)), this, SLOT(connectToNode(QString)));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(ui->nodeCb, &QComboBox::textActivated, this, &ClusterMainWindow::connectToNode);
+#else
+    connect(ui->nodeCb, QOverload<QString>::of(&QComboBox::activated), this, &ClusterMainWindow::connectToNode);
+#endif
 
-    connect(setupCluster, SIGNAL(clusterListChanged()), this, SLOT(clusterListChanged()));
+    connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
 
-    connect(client, SIGNAL(socketConnected()), this, SLOT(connectionEstab()));
-    //connect(client, SIGNAL(connected(bool)), this, SLOT(connected(bool)));
-    connect(client, SIGNAL(loginRequired()), this, SLOT(logIn()));
+    connect(client, &QtTelnet::socketConnected, this, &ClusterMainWindow::connectionEstab);
+    connect(client, &QtTelnet::loginRequired, this, &ClusterMainWindow::logIn);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(client, &QtTelnet::connectionError, this, &ClusterMainWindow::connectionError);
+#else
     connect(client, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
-    connect(client, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
-    connect(client, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(parseDX(QString)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(checkedLoggedIn(QString)));
-    connect(client, SIGNAL(message(QString)), this, SLOT(cancelPingTimeOut(QString)));
-    //connect(client, SIGNAL(message(QString)), this, SLOT(checkStationDetails(QString)));
-    //connect(ui->sendLine, SIGNAL(returnPressed()), this, SLOT(sendText()));
+#endif
+
+    connect(client, &QtTelnet::loggedOut, this, &ClusterMainWindow::loggedOut);
+    connect(client, &QtTelnet::message, this, &ClusterMainWindow::messageRx);
+    connect(client, &QtTelnet::message, this, &ClusterMainWindow::parseDX);
+    connect(client, &QtTelnet::message, this, &ClusterMainWindow::checkedLoggedIn);
+    connect(client, &QtTelnet::message, this, &ClusterMainWindow::cancelPingTimeOut);
 
     readBandFilterSettings();
     loadBandFilterSettingsToTab();
 
 
     statusTimer = new QTimer(this);
-    connect(statusTimer, SIGNAL(timeout()), this, SLOT(handleStatusTimer()));
+    connect(statusTimer, &QTimer::timeout, this, &ClusterMainWindow::handleStatusTimer);
     statusTimer->start(STATUS_TIMER_DUR);
 
 
     pingClusterNodeTimer = new QTimer(this);
-    connect(pingClusterNodeTimer, SIGNAL(timeout()), this, SLOT(handlePingClusterNodeTimeout()));
+    connect(pingClusterNodeTimer, &QTimer::timeout, this, &ClusterMainWindow::handlePingClusterNodeTimeout);
     pingOk = false;
 
     purgeTimer = new QTimer(this);
-    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+    connect (purgeTimer, &QTimer::timeout, this, &ClusterMainWindow::purgeSpots);
     purgeTimer->start(PURGE_TIME);
 
 
@@ -350,11 +357,11 @@ void ClusterMainWindow::doStartup()
 
     connectToHost(currentNodeName);
 
-    connect(setupCluster, SIGNAL(sendSpotToTxEnabled(bool)), this, SLOT(sendSpotToTxEnabled(bool)));
+    connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
 
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
-    connect(ui->pushButton, SIGNAL(pressed()), this, SLOT(onpbpressed()));
+    connect(ui->pushButton, &QPushButton::pressed, this, &ClusterMainWindow::onpbpressed);
 
 
 
@@ -584,7 +591,7 @@ void ClusterMainWindow::connectToNode(const QString &nodeName)
             reconnectFlag = true;
             startDisconnectTimer(15000);
             QEventLoop loop;
-            QObject::connect( this, SIGNAL( disconnectTimerfinished() ), &loop, SLOT( quit() ) );
+            connect( this, &ClusterMainWindow::disconnectTimerfinished, &loop, &QEventLoop::quit);
             loop.exec();
 
             // error if got here
