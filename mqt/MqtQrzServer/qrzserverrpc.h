@@ -36,7 +36,7 @@ public:
     static QrzServerRpc *getQrzServerRpc();
 
     void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
-    void sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state);
+    void sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state, QString uuid);
 
 
 signals:

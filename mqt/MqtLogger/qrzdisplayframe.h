@@ -11,6 +11,41 @@ namespace Ui {
 class QrzDisplayFrame;
 }
 
+class QrzDisplayServerRpc;
+
+
+class QrzDisplayFrame : public QFrame
+{
+    Q_OBJECT
+
+public:
+    explicit QrzDisplayFrame(QWidget *parent = nullptr);
+    ~QrzDisplayFrame();
+
+    void getQrzDetailsForLogger(QString callign);
+    void setContest(BaseContestLog *c);
+
+private slots:
+    void onLoggerQrzMessage(QrzServerMessage qrzRequest);
+    void onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid);
+
+private:
+    Ui::QrzDisplayFrame *ui;
+    BaseContestLog *ct = nullptr;
+
+    QrzDisplayServerRpc *qrzDisplayServerRpc;
+
+    QVector<QrzServerMessage> qrzRequestQueue;
+    QrzServerMessage requestedStation;
+
+    double distance = 0.0;
+    int bearing = 0;
+
+    void clear();
+
+    void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
+};
+
 
 class QrzDisplayServerRpc : public QObject
 {
@@ -29,14 +64,14 @@ public:
 
 signals:
 
-
+    void loggerQrzReply(QrzCallsignData, QString, QString);
 
 private:
 
     static QrzDisplayServerRpc *qrzDisplayServerRpc;
     //QTimer SyncTimer;
 
-     QVector<QrzServer> serverList;
+    QVector<QrzServer> serverList;
 
 
 private slots:
@@ -48,35 +83,8 @@ private slots:
 
 
 
+
 };
 
-
-
-
-
-
-class QrzDisplayFrame : public QFrame
-{
-    Q_OBJECT
-
-public:
-    explicit QrzDisplayFrame(QWidget *parent = nullptr);
-    ~QrzDisplayFrame();
-
-    void getQrzDetailsForLogger(QString callign);
-
-
-private slots:
-    void onLoggerQrzMessage(QrzServerMessage qrzRequest);
-private:
-    Ui::QrzDisplayFrame *ui;
-
-    QrzDisplayServerRpc *qrzDisplayServerRpc;
-
-    QVector<QrzServerMessage> qrzRequestQueue;
-    QrzServerMessage requestedStation;
-
-    void clear();
-};
 
 #endif // QRZDISPLAYFRAME_H

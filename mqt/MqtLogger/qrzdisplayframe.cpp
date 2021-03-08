@@ -20,6 +20,8 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
 
 
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMessage(QrzServerMessage)));
+    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(loggerQrzReply(QrzCallsignData, QString, QString)), this, SLOT(onLoggerQrzReply(QrzCallsignData, QString, QString)));
+
 
 }
 
@@ -36,7 +38,72 @@ void QrzDisplayFrame::onLoggerQrzMessage(QrzServerMessage qrzRequest)
 
 }
 
+void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid)
+{
+    clear();
+    if (qrzReplyState.isEmpty())
+    {
+        ui->callsignText->setText(cd.getCallsign());
+        ui->nameText->setText(cd.getFirstName());
+        ui->townText->setText(cd.getQth());
+        ui->qraText->setText(cd.getQra());
+        if (!cd.getQra().isEmpty())
+        {
+            distance = 0;
+            bearing = 0;
+            calcSpotDistanceBearing(cd.getQra(), &distance, &bearing);
 
+            ui->distanceText->setText(QString::number(distance));
+            if (bearing >= 0 && bearing <= 360)
+            {
+                ui->bearingText->setText(QString::number(bearing));
+            }
+
+        }
+        ui->countryText->setText(cd.getCountry());
+        ui->cqZoneText->setText(cd.getCqZone());
+        ui->ituZoneText->setText(cd.getItuZone());
+    }
+    else
+    {
+        ui->callsignText->setText(cd.getCallsign());
+        ui->qrzMessageText->setText(qrzReplyState);
+    }
+
+
+}
+
+
+
+void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* distance, int* bearing)
+{
+    bool locValid = true;
+    QString locator = _locator;
+    double latitude;
+    double longitude;
+    double dist;
+    int brg = 0;
+
+    if (ct && !locator.isEmpty())
+    {
+        if (locator.count() == 4)
+        {
+            locator.append("MM");
+        }
+
+        int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+        if ( ( locValres ) != LOC_OK )
+        {
+            locValid = false;
+        }
+        if (locValid)
+        {
+            ct->disbeara(longitude, latitude, dist, brg);
+            *distance = dist;
+            *bearing = brg;
+        }
+    }
+}
 
 
 void QrzDisplayFrame::clear()
@@ -62,6 +129,16 @@ void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
     QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
 
 
+}
+
+
+void QrzDisplayFrame::setContest(BaseContestLog( *c))
+{
+    ct = c;
+    if (ct == nullptr)
+    {
+        return;
+    }
 }
 
 
@@ -153,17 +230,94 @@ void QrzDisplayServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
 
         if (args)
         {
-            QSharedPointer<RPCParam> qrzCluster;
-            QSharedPointer<RPCParam> qrzLogger;
+            QSharedPointer<RPCParam> msgQrzLoggerResponse;
             QSharedPointer<RPCParam> msgDxCall;
-            QSharedPointer<RPCParam> msgSpotterCall;
+            QSharedPointer<RPCParam> msgQrzFirstName;
+            QSharedPointer<RPCParam> msgQrzName;
+            QSharedPointer<RPCParam> msgQrzCounty;
+            QSharedPointer<RPCParam> msgQrzQth;
+            QSharedPointer<RPCParam> msgQrzCountry;
+            QSharedPointer<RPCParam> msgQrzLat;
+            QSharedPointer<RPCParam> msgQrzLon;
+            QSharedPointer<RPCParam> msgQrzDxGrid;
+            QSharedPointer<RPCParam> msgQrzCQZone;
+            QSharedPointer<RPCParam> msgQrzITUZone;
+            QSharedPointer<RPCParam> msgQrzDxReplyState;
+
             QSharedPointer<RPCParam> msgLogFrameId;
-            QString dxCall;
-            QString spotterCall;
-            QString loggerId;
+
+            QrzCallsignData cd;
 
 
+            if (args->getStructArgMember(0, rpcConstants::qrzLoggerResponse, msgQrzLoggerResponse)
+                    && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
+                    && args->getStructArgMember(0, rpcConstants::qrzFirstName, msgQrzFirstName)
+                    && args->getStructArgMember(0, rpcConstants::qrzName, msgQrzName)
+                    && args->getStructArgMember(0, rpcConstants::qrzCounty, msgQrzCounty)
+                    && args->getStructArgMember(0, rpcConstants::qrzQth, msgQrzQth)
+                    && args->getStructArgMember(0, rpcConstants::qrzCountry, msgQrzCountry)
+                    && args->getStructArgMember(0, rpcConstants::qrzLat, msgQrzLat)
+                    && args->getStructArgMember(0, rpcConstants::qrzLon, msgQrzLon)
+                    && args->getStructArgMember(0, rpcConstants::qrzDxGrid, msgQrzDxGrid)
+                    && args->getStructArgMember(0, rpcConstants::qrzCqZone, msgQrzCQZone)
+                    && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
+                    && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, msgQrzDxReplyState)
+                    && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
+            {
+                QString callsign;
+                msgDxCall->getString(callsign);
+                cd.setCallsign(callsign);
 
+                QString firstName;
+                msgQrzFirstName->getString(firstName);
+                cd.setFirstName(firstName);
+
+                QString name;
+                msgQrzName->getString(name);
+                cd.setName(name);
+
+                QString county;
+                msgQrzCounty->getString(county);
+                cd.setCounty(county);
+
+                QString qth;
+                msgQrzQth->getString(qth);
+                cd.setQth(qth);
+
+                QString country;
+                msgQrzCountry->getString(country);
+                cd.setCountry(country);
+
+                QString lat;
+                msgQrzLat->getString(lat);
+                cd.setLat(lat);
+
+                QString lon;
+                msgQrzLon->getString(lon);
+                cd.setLon(lon);
+
+                QString dxGrid;
+                msgQrzDxGrid->getString(dxGrid);
+                cd.setQra(dxGrid);
+
+                QString cqZone;
+                msgQrzCQZone->getString(cqZone);
+                cd.setCqZone(cqZone);
+
+                QString ituZone;
+                msgQrzITUZone->getString(ituZone);
+                cd.setItuZone(ituZone);
+
+                QString dxReplyState;
+                msgQrzDxReplyState->getString(dxReplyState);
+
+                QString uuid;
+                msgLogFrameId->getString(uuid);
+
+
+                emit loggerQrzReply(cd, dxReplyState, uuid);
+
+            }
 
         }
     }

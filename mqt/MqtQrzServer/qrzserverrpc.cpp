@@ -94,18 +94,19 @@ void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra,
 }
 
 
-void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state)
+void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state, QString uuid)
 {
     for (auto const &s: qAsConst(serverList))
     {
         trace(QString("Send Qrz Response to Logger Server = %1").arg(s.app));
         RPCGeneralClient rpc(rpcConstants::qrzMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::paramName);
+        st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::qrzLoggerResponse);
         st->addMember( qrzCallsignData.getCallsign(), rpcConstants::qrzDxCallsign );
         st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
         st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
         st->addMember(qrzCallsignData.getCounty(), rpcConstants::qrzCounty );
+        st->addMember(qrzCallsignData.getQth(), rpcConstants::qrzQth );
         st->addMember(qrzCallsignData.getCountry(), rpcConstants::qrzCountry);
         st->addMember(qrzCallsignData.getLat(), rpcConstants::qrzLat);
         st->addMember(qrzCallsignData.getLon(), rpcConstants::qrzLon);
@@ -113,6 +114,7 @@ void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignDat
         st->addMember(qrzCallsignData.getCqZone(), rpcConstants::qrzCqZone);
         st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
         st->addMember(state, rpcConstants::qrzDxReplyState);
+        st->addMember(uuid, rpcConstants::qrzLogFrameId);
 
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( s.app );

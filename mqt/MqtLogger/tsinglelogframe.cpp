@@ -266,6 +266,7 @@ void TSingleLogFrame::createScreenComponents()
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
     qrzDisplayFrame->setVisible(false);
+    qrzDisplayFrame->setContest(contest);
     setQrzDisplayFrameLoaded(false);
 
     FKHRotControlFrame = new RotControlFrame(this);

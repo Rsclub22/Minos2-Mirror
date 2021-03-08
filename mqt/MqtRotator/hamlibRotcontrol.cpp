@@ -310,6 +310,12 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         {
             max_az = capsList[i]->max_az;
         }
+
+        if (key == "SPID Rot1Prog" || key == "SPID Rot2Prog") // to allow spoof CW/CCW commands
+        {
+            max_az = 539;
+            min_az = -179;
+        }
 /*
         trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
               .arg(capsList[i]->mfg_name)

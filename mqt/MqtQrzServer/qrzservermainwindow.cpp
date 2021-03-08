@@ -175,6 +175,8 @@ void QrzServerMainWindow::logon()
 
 void QrzServerMainWindow::askCallsignData(QString callsign)
 {
+    //Callsign cs;
+    //cs.setFullCall(callsign);
     QString callsignUrl = QRZURL + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
     sendUrl(callsignUrl);
 }
@@ -317,6 +319,25 @@ void QrzServerMainWindow::sessionDataReceived()
         askLogonFlag = false;
     }
 
+    if (askCallsignFlag && !qrzSessionData.getError().isEmpty() && requestedStation.getLoggerFlag())
+    {
+        QString stateMsg;
+        if (!qrzSessionData.getError().isEmpty())
+        {
+            stateMsg = qrzSessionData.getError();
+        }
+        else if (!qrzSessionData.getMessage().isEmpty())
+        {
+            stateMsg = qrzSessionData.getMessage();
+        }
+
+        qrzCallsignData.clear();
+        qrzCallsignData.setCallsign(requestedStation.getDxCall());
+        QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getLoggerUuid());
+
+        askCallsignFlag = false;
+    }
+
 }
 
 
@@ -337,20 +358,12 @@ void QrzServerMainWindow::callsignDataReceived()
         }
         else
         {
-            // a request from qrz display
+            // a request from logger
             QString msg = QString(QString("Cluster Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
             trace(msg);
             addTextToLogWindow(msg);
             QString stateMsg = "";
-            if (!qrzSessionData.getError().isEmpty())
-            {
-                stateMsg = qrzSessionData.getError();
-            }
-            else if (!qrzSessionData.getMessage().isEmpty())
-            {
-                stateMsg = qrzSessionData.getMessage();
-            }
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg);
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getLoggerUuid());
 
         }
 
@@ -397,6 +410,9 @@ void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
 void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
 {
     trace(QString("Parse Callsign Data"));
+
+    qrzCallsignData.clear();
+
     while(xmlData.readNextStartElement())
     {
         if(xmlData.name() == "call")
@@ -441,7 +457,12 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
         }
         else if (xmlData.name() == "grid")
         {
-            qrzCallsignData.setQra(xmlData.readElementText());
+            QString grid = xmlData.readElementText();
+            if (grid.count() == 6)
+            {
+                grid = grid.replace(4, 2, grid.right(2).toUpper());
+            }
+            qrzCallsignData.setQra(grid);
             trace(QString("Callsign Data: grid = %1").arg(qrzCallsignData.getQra()));
         }
         else if (xmlData.name() == "cqzone")
