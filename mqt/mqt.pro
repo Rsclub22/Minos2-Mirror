@@ -2,11 +2,10 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     KeyerBase \
-    MqtRigSync \
+    MqtBase \
     MqtUtils \
     TinyXML \
     XMPPLib \
-    MqtBase \
     RPCTest \
     MqtAppStarter \
     MqtControl \
@@ -15,11 +14,12 @@ SUBDIRS += \
     MqtKeyer \
     MqtKSTClient \
     MqtLogger \
-    MqtServer \
-    MqtRotator \
     MqtMonitor \
-    MqtRigControl \
     MqtQrzServer \
+    MqtRigControl \
+    MqtRigSync \
+    MqtRotator \
+    MqtServer \
     Qs1rSync
 
 win32 {
@@ -40,10 +40,11 @@ MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtKSTClient.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtLogger.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtMonitor.depends = MqtUtils TinyXML XMPPLib MqtBase
-MqtServer.depends = MqtUtils TinyXML XMPPLib MqtBase
-MqtRigControl.depends = MqtUtils TinyXML XMPPLib MqtBase
-MqtRotator.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtQrzServer.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtRigControl.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtRigSync.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtRotator.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtServer.depends = MqtUtils TinyXML XMPPLib MqtBase
 Qs1rSync.depends = MqtUtils TinyXML XMPPLib MqtBase
 
 
