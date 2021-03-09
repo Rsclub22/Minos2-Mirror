@@ -26,7 +26,6 @@
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
 #include "bandmapcallsignmarker.h"
-//#include "bandmap.h"
 #include "bandmapview.h"
 #include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
@@ -44,91 +43,7 @@ namespace Ui {
 
 class BMP_MouseInObject;
 
-/*
-class LoggerSpots
-{
-public:
 
-    LoggerSpots(Callsign _cs, QString _loc,  QString _brg,
-                QString _modeStr, QString _modeMask,
-                Frequency _freq, QString _bandStr, QString _bandMask,
-                bool _worked, QDateTime _time, bool _runModeOn, bool _offRunFreq, bandmapSpotType::SPOT_TYPE _spotType )
-    {
-        cs = _cs;
-        loc = _loc;
-        brg = _brg;
-        freq = _freq;
-        bandStr = _bandStr;
-        bandMask = _bandMask;
-        modeStr = _modeStr;
-        modeMask = _modeMask;
-        worked = _worked;
-        time = _time;
-        runModeOn = _runModeOn;
-        offRunFreq = _offRunFreq;
-        spotType = _spotType;
-
-    }
-
-    Callsign getCallsign(){ return cs;}
-    void setCallsign(Callsign _cs){cs = _cs;}
-
-    QString getLocator(){return loc;}
-    void setLocator(QString _loc){loc = _loc;}
-
-    QString getBearing(){return brg;}
-    void setBearing(QString _brg){brg = _brg;}
-
-    Frequency getFreq(){return freq;}
-    void setFreq(Frequency _freq){freq = _freq;}
-
-    QString getbandStr(){return bandStr;}
-    void setBandStr(QString _bandStr){bandStr = _bandStr;}
-
-    QString getBandMask(){return bandMask;}
-    void setBandMask(QString _bandMask){bandMask = _bandMask;}
-
-
-    QString getModeStr(){return modeStr;}
-    void setModeStr(QString _modeStr){modeStr = _modeStr;}
-
-    QString getModeMask(){return modeMask;}
-    void setModeMask(QString _modeMask){modeMask = _modeMask;}
-
-    bool getWorked(){return worked;}
-    void setWorked(bool _worked){worked = _worked;}
-
-    QDateTime getTime(){return time;}
-    void setTime(QDateTime _time){time = _time;}
-
-    bool getRunModeOn(){return runModeOn;}
-    void setRunModeOn(bool _runModeOn){runModeOn = _runModeOn;}
-
-
-    bool getOffRunFreq(){return offRunFreq;}
-    void setOffRunFreq(bool _offRunFreq){offRunFreq = _offRunFreq;}
-
-
-    bandmapSpotType::SPOT_TYPE getSpotType(){return spotType;}
-    void setSpotType(bandmapSpotType::SPOT_TYPE _spotType){spotType = _spotType;}
-
-private:
-
-    Callsign cs;
-    QString loc;
-    QString brg;
-    QString modeStr;
-    QString modeMask;
-    Frequency freq;
-    QString bandStr;
-    QString bandMask;
-    bool worked;
-    QDateTime time;
-    bool runModeOn;
-    bool offRunFreq;
-    bandmapSpotType::SPOT_TYPE spotType;
-};
-*/
 const QString MODE_BANDPLAN_FILE = "./Configuration/mode_bandplan.json";
 const QString OPERATING_FREQ_FILE = "./Configuration/operating_frequencies.json";
 const QString BANDPLAN_FREQ_LIMITS_FILE = "./Configuration/bandmap_limits.ini";
@@ -186,7 +101,7 @@ private:
     BaseContestLog *ct = nullptr;
     QString contestUuid;
     QString contestBandStr;
-    int contestBand = -1;
+    //int contestBand = -1;
     Frequency contestBandFlow;
     Frequency contestBandFHigh;
     QString contestModeStr;

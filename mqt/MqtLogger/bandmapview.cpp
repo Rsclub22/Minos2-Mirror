@@ -1231,9 +1231,9 @@ void BandmapView::drawBandMapSpots()
 
 
                                     spot->setSpotText(spotMsg);
-                                    //spotMsg.detach();
+
                                     spot->setToolTipText(spotTooltipText);
-                                    //spotTooltipText.detach();
+
                                     listOfMarkers[markNum]->setSpotMarkerPtr(spot);
 
                                     QPoint startMarkerLine = QPoint(dialWidth + SPOTMARKER_XOFFSET, listOfMarkers[markNum]->getSpotMarkerCoord().y() + fontHeight);

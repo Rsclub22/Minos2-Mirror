@@ -566,7 +566,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
     contestUuid = ct->uuid;
     traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
     contestBandStr = ct->currentBand.getValue();
-    contestBand = getStringlistOffSet(clusterBands, contestBandStr);
+    //contestBand = getStringlistOffSet(clusterBands, contestBandStr);
     contestModeStr = ct->currentMode.getValue();
     contestMode = getModeOffSet(contestModeStr);
 
@@ -1895,26 +1895,26 @@ bool BandmapClientFrame::readTuneAddBandMapSetting()
 
 void BandmapClientFrame::saveBandmapZoomLevel(int &level)
 {
-    if (contestBand == -1)
+    if (contestBandStr.isEmpty())
     {
-        trace(QString("BandmapFreqDial - Error, set Bandmap zoom contestband = %1").arg(contestBand));
+        trace(QString("BandmapFreqDial - Error, set Bandmap zoom contestband = %1").arg(contestBandStr));
         return;
     }
 
     BandmapZoomLevelIdAndNames bandmapId;
-    TContestApp::getContestApp()->loggerBundle.setIntProfile(bandmapId.getStartZoomLevelId(contestBand), level);
+    TContestApp::getContestApp()->loggerBundle.setIntProfile(bandmapId.getStartZoomLevelId(contestBandStr), level);
 }
 
 int BandmapClientFrame::readBandmapZoomLevel()
 {
-    if (contestBand == -1)
+    if (contestBandStr.isEmpty())
     {
         return dialData::MAX_ZOOM_LEVEL;
     }
 
     BandmapZoomLevelIdAndNames bandmapId;
     int zoomLevel;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandmapId.getStartZoomLevelId(contestBand), zoomLevel );
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandmapId.getStartZoomLevelId(contestBandStr), zoomLevel );
     return zoomLevel;
 }
 
