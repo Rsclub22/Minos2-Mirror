@@ -11,16 +11,19 @@ TEMPLATE = app
 win32:RC_ICONS += ../minos.ico
 
 SOURCES += \
+    RSConfigure.cpp \
     main.cpp \
     RSMainWindow.cpp \
     n1mmlink.cpp \
     wsjtxlink.cpp
 
 HEADERS += \
+    RSConfigure.h \
     RSMainWindow.h \
     n1mmlink.h \
     qs_defines.h \
     wsjtxlink.h
 
 FORMS += \
+    RSConfigure.ui \
     RSMainWindow.ui

@@ -180,6 +180,22 @@
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>628</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuConfigure">
+    <property name="title">
+     <string>Configure</string>
+    </property>
+   </widget>
+   <addaction name="menuConfigure"/>
+  </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -41,6 +41,7 @@ private slots:
 
     void on_Rig2Combo_activated(const QString &arg1);
 
+    void configure();
 private:
     Ui::RSMainWindow *ui;
     RigCache mainRigCache;
@@ -57,6 +58,8 @@ private:
 
     QTimer SyncTimer;
 
+    QAction *configAction;
+
     bool rig2Connected = false;
 
     QString mainRigMode;
@@ -71,6 +74,8 @@ private:
     int lastModePart = -1;
 
     PubSubName mainRigSelected;
+
+    QString subServer;
     PubSubName subRigSelected;
 
     bool mainTransvertState = false;

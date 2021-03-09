@@ -6,6 +6,7 @@
 #include "rigutils.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "RSConfigure.h"
 #include "RSMainWindow.h"
 #include "ui_RSMainWindow.h"
 
@@ -48,8 +49,26 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     rpc->initialiseRouters(sv);
 
     n1mmLink.initialise();
+
+    configAction = new QAction( tr("Configure..."), this );
+    ui->menuConfigure->addAction( configAction );
+    connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
 }
 
+void RSMainWindow::configure()
+{
+    QStringList sv;
+    QString current;
+    RSConfigure rsc(this);
+    rsc.setServerList(sv, current);
+
+    if (rsc.exec() == QDialog::Accepted)
+    {
+        current = rsc.getSubServer();
+        subServer = current;
+        // and filter the sub combo for this server
+    }
+}
 RSMainWindow::~RSMainWindow()
 {
     delete ui;

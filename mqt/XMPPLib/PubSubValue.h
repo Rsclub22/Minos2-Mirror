@@ -47,6 +47,8 @@ public:
     void setAppName(const QString &appName);
     QString key() const;
     void setKey(const QString &key);
+
+    QString getRouterApp();
 };
 
 #endif // PUBSUBVALUE_H
