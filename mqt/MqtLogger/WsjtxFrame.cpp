@@ -101,15 +101,15 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     // this to change - get the item, and use the message decode data
     connect (ui->decodes_table_view_, &QTableView::doubleClicked, this, &WsjtxFrame::do_reply);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &WsjtxFrame::on_doColumnChanges);
 
-    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
-             this, SLOT( on_sectionMoved(int, int , int)));
-    connect( ui->decodes_table_view_->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+    connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::sectionMoved,
+             this, &WsjtxFrame::on_sectionMoved);
+    connect( ui->decodes_table_view_->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &WsjtxFrame::on_sectionResized);
 
     restoreSplitters();
-    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
 
     getAllTxtEnd();
     getCQStrings();

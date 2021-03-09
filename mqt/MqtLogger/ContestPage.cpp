@@ -27,12 +27,12 @@ ContestPage::ContestPage(QWidget *parent, BaseContestLog *ct) :
     singleLogFrameSplitter->setOrientation(Qt::Vertical);
     singleLogFrameSplitter->setChildrenCollapsible(false);
 
-    connect(singleLogFrameSplitter, SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+    connect(singleLogFrameSplitter, &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(SplittersChanged()), this, SLOT(onSplittersChanged()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SplittersChanged, this, &ContestPage::onSplittersChanged);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &ContestPage::on_doSplitterChanges);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(ContestShownChanged()), this, SLOT(on_ContestShownChanged()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestShownChanged, this, &ContestPage::on_ContestShownChanged);
 }
 
 ContestPage::~ContestPage()
@@ -78,7 +78,7 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
         {
             rowSplitters[i]->setStretchFactor(j, 0);
         }
-        connect(rowSplitters[i], SIGNAL(splitterMoved(int, int)), this, SLOT(onSplitterMoved(int, int)));
+        connect(rowSplitters[i], &MinosSplitter::splitterMoved, this, &ContestPage::onSplitterMoved);
     }
 
     onSplitterMoved(-1, -1);

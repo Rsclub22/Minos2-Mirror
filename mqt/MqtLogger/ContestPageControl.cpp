@@ -18,10 +18,10 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle(tr("Minos Contest Logger"));
     setContextMenuPolicy( Qt::CustomContextMenu );
-    connect(&MinosLoggerEvents::mle, SIGNAL(ContestShownChanged()), this, SLOT(onContestShownChanged()));
-    connect(this, SIGNAL(tabBarClicked(int)), this, SLOT(onTabBarClicked(int)));
-    connect(this, SIGNAL(customContextMenuRequested(const QPoint)), this, SLOT(onCustomContextMenuRequested(const QPoint)));
-    connect(this, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(onTabBarDoubleClicked(int)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestShownChanged, this, &ContestPageControl::onContestShownChanged);
+    connect(this, &ContestPageControl::tabBarClicked, this, &ContestPageControl::onTabBarClicked);
+    connect(this, &ContestPageControl::customContextMenuRequested, this, &ContestPageControl::onCustomContextMenuRequested);
+    connect(this, &ContestPageControl::tabBarDoubleClicked, this, &ContestPageControl::onTabBarDoubleClicked);
 }
 
 ContestPageControl::~ContestPageControl()

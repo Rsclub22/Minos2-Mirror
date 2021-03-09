@@ -21,7 +21,7 @@ ControlMain::ControlMain(QWidget *parent) :
 {
     LineSet *ls = LineSet::GetLineSet();
     ls->lsLog = LineLog;
-    connect(ls, SIGNAL(linesChanged()), this, SLOT(linesChangedEvent()));
+    connect(ls, &LineSet::linesChanged, this, &ControlMain::linesChangedEvent);
 
     controlMain = this;
     ui->setupUi(this);
@@ -40,11 +40,11 @@ ControlMain::ControlMain(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &ControlMain::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &ControlMain::on_notify);
 
     formShowTimer.setSingleShot(true);
-    connect(&formShowTimer, SIGNAL(timeout()), this, SLOT(on_formShown()));
+    connect(&formShowTimer, &QTimer::timeout, this, &ControlMain::on_formShown);
     formShowTimer.start(100);
 
 
@@ -151,7 +151,7 @@ void ControlMain::on_formShown( )
 
         monitor.initialise();
 
-        connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
+        connect(&LogTimer, &QTimer::timeout, this, &ControlMain::LogTimerTimer);
         LogTimer.start(100);
 
         subscribeApps();

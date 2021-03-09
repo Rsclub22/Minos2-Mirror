@@ -16,7 +16,7 @@ AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotatorFactory *r
         ui->rotatorModel->addItem(rotText);
     }
     rotatorModel = ui->rotatorModel->currentText();
-    connect (ui->rotatorModel, SIGNAL(currentIndexChanged(int)), this, SLOT(rotatorModelSelect(int)));
+    connect (ui->rotatorModel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AddAntennaDialog::rotatorModelSelect);
 
 }
 

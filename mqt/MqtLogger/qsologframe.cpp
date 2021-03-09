@@ -158,7 +158,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         trace(QString("addToBandmapTuneTolerance read in = %1 khz").arg(addToBandmapTuneTolerance));
     }
     on_tabSandP();  // show (or not) the Call/S&P choice
-
+    on_ShowOperators();
     on_QSOMargins();
 }
 
@@ -246,15 +246,15 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
             return false;
 
          // Do we want "call" tab order or "S and P" tab order?
-         bool tabSandP;
-         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+         bool tabSandPstate;
+         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
-         if (tabSandP)
+         if (tabSandPstate)
          {
-             tabSandP = ui->SandPrb->isChecked();
+             tabSandPstate = ui->SandPrb->isChecked();
          }
 
-         if (tabSandP && edit == false && catchup == false)
+         if (tabSandPstate && edit == false && catchup == false)
          {
              if (current == ui->CallsignFrame->getTextEditEdit() && !rrIl->valid( cmValidStatus, screenContact ))
              {
@@ -690,12 +690,12 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 //       return;
     }
     // Do we want "call" tab order or "S and P" tab order?
-    bool tabSandP;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+    bool tabSandPstate;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
-    if (tabSandP)
+    if (tabSandPstate)
     {
-        tabSandP = ui->SandPrb->isChecked();
+        tabSandPstate = ui->SandPrb->isChecked();
     }
 
     // validate the entry; if still invalid, spin round the invalid
@@ -745,7 +745,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
        QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
 
-       if (tabSandP && edit == false && catchup == false)
+       if (tabSandPstate && edit == false && catchup == false)
        {
            if (current == ui->CallsignFrame->getTextEditEdit())
            {
@@ -2132,16 +2132,16 @@ void QSOLogFrame::on_ShowOperators ( )
 }
 void QSOLogFrame::on_tabSandP()
 {
-    bool tabSandP;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandP );
+    bool tabSandPstate;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
     if (edit || catchup)
     {
-        tabSandP = false;
+        tabSandPstate = false;
     }
-    ui->tabSandPframe->setVisible(tabSandP);
+    ui->tabSandPframe->setVisible(tabSandPstate);
 
-    if (!tabSandP || (runButtonOnFlag && !radioOffRunFreq))
+    if (!tabSandPstate || (runButtonOnFlag && !radioOffRunFreq))
     {
         ui->callRb->setChecked(true);
     }

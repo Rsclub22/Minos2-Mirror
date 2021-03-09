@@ -551,10 +551,10 @@ SoundSystemDriver *SoundSystemDriver::getSbDriver()
 SoundSystemDriver::SoundSystemDriver()
 {
    soundSystem = RtAudioSoundSystem::createSoundSystem();
-   connect(soundSystem, SIGNAL(interruptOK()), this, SLOT(interruptOK()));
-   connect(soundSystem, SIGNAL(setActionTime1()), this, SLOT(setActionTime1()));
-   connect(soundSystem, SIGNAL(actionQueueFinished()), this, SLOT(actionQueueFinished()));
-   connect(soundSystem, SIGNAL(setVU(unsigned int, unsigned int, unsigned int)), this, SLOT(setVU(unsigned int, unsigned int, unsigned int)));
+   connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
+   connect(soundSystem, &RtAudioSoundSystem::setActionTime1, this, &SoundSystemDriver::setActionTime1);
+   connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
+   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::setVU);
 }
 SoundSystemDriver::~SoundSystemDriver()
 {

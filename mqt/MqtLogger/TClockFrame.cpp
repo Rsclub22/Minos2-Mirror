@@ -12,7 +12,7 @@ TClockFrame::TClockFrame(QWidget *parent) :
    , contest(nullptr)
 {
     ui->setupUi(this);
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(RecheckTimerTimer()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TClockFrame::RecheckTimerTimer);
 }
 
 TClockFrame::~TClockFrame()

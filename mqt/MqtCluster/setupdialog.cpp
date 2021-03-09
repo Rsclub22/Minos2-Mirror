@@ -61,10 +61,10 @@ SetupDialog::SetupDialog(QWidget *parent) :
     ui->callsignEdit->setValidator(&ucValidator);
     ui->locatorEdit->setValidator(&ucValidator);
 
-    connect(ui->callsignEdit, SIGNAL(callsignFinished(const QString&)), this, SLOT(callsignFinished(const QString&)));
-    connect(ui->nameEdit, SIGNAL(editingFinished()), this, SLOT(nameEditFinshed()));
-    connect(ui->locatorEdit, SIGNAL(locatorFinished(const QString&)), this, SLOT(locatorFinished(const QString&)));
-    connect(ui->qthEdit, SIGNAL(editingFinished()), this, SLOT(qthEditFinished()));
+    connect(ui->callsignEdit, &CallsignLineEdit::callsignFinished, this, &SetupDialog::callsignFinished);
+    connect(ui->nameEdit, &QLineEdit::editingFinished, this, &SetupDialog::nameEditFinshed);
+    connect(ui->locatorEdit, &LocatorLineEdit::locatorFinished, this, &SetupDialog::locatorFinished);
+    connect(ui->qthEdit, &QLineEdit::editingFinished, this, &SetupDialog::qthEditFinished);
 
 
     //readPersonal();
@@ -74,13 +74,13 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     // Cluster Node List Tab
     loadClusterListToModel();       // this also creates the model
-    connect(ui->clustersListAddPbutton, SIGNAL(clicked()), this, SLOT(addClusterNode()));
-    connect(ui->clustersListDelPbutton, SIGNAL(clicked()), this, SLOT(deleteClusterNode()));
+    connect(ui->clustersListAddPbutton, &QPushButton::clicked, this, &SetupDialog::addClusterNode);
+    connect(ui->clustersListDelPbutton, &QPushButton::clicked, this, &SetupDialog::deleteClusterNode);
 
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &SetupDialog::saveButtonPushed);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &SetupDialog::cancelButtonPushed);
 
-    connect(clusterListModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(clusterListDataChanged(QStandardItem*)));
+    connect(clusterListModel, &QStandardItemModel::itemChanged, this, &SetupDialog::clusterListDataChanged);
 
     ui->displayModeCheckBox->setVisible(false);
     ui->displayPropCheckBox->setVisible(false);

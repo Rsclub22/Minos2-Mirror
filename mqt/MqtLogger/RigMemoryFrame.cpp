@@ -52,26 +52,26 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     model.delegate = delegate;
     ui->rigMemTable->setItemDelegate( delegate.data());
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(checkTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RigFreqChanged(Frequency,BaseContestLog*)), this, SLOT(onRigFreqChanged(Frequency,BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(RotBearingChanged(int,BaseContestLog*)), this, SLOT(onRotBearingChanged(int,BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &RigMemoryFrame::checkTimerTimer);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RigFreqChanged, this, &RigMemoryFrame::onRigFreqChanged);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RotBearingChanged, this, &RigMemoryFrame::onRotBearingChanged);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &RigMemoryFrame::on_AfterLogContact, Qt::QueuedConnection);
 
     reloadColumns();
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &RigMemoryFrame::on_doColumnChanges);
 
     ui->rigMemTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    connect( ui->rigMemTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
-             this, SLOT( on_sectionMoved(int, int , int)));
-    connect( ui->rigMemTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
-    connect( ui->rigMemTable->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-             this, SLOT( on_sortIndicatorChanged(int, Qt::SortOrder)));
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionMoved,
+             this, &RigMemoryFrame::on_sectionMoved);
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &RigMemoryFrame::on_sectionResized);
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+             this, &RigMemoryFrame::on_sortIndicatorChanged);
 
-    connect( ui->rigMemTable->verticalHeader(), SIGNAL( sectionClicked(int)),
-             this, SLOT( vsectionClicked( int ) ) );
+    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::sectionClicked,
+             this, &RigMemoryFrame::vsectionClicked);
 
     memoryMenu = new QMenu(ui->flushMemoriesButton);
 
@@ -97,24 +97,24 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     memoryMenu->addAction(clearWorkedAction);
 
     ui->flushMemoriesButton->setMenu(memoryMenu);
-    connect(memoryMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
+    connect(memoryMenu, &QMenu::aboutToShow, this, &RigMemoryFrame::onMenuShow);
 
-    connect( newAction, SIGNAL( triggered() ), this, SLOT(on_newMemoryButton_clicked()) );
-    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(bearingActionSelected()) );
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
-    connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()) );
-    connect( clearAllAction, SIGNAL( triggered() ), this, SLOT(clearAllActionSelected()) );
-    connect( clearWorkedAction, SIGNAL( triggered() ), this, SLOT(clearWorkedActionSelected()) );
+    connect( newAction, &QAction::triggered, this, &RigMemoryFrame::on_newMemoryButton_clicked);
+    connect( bearingAction, &QAction::triggered, this, &RigMemoryFrame::bearingActionSelected );
+    connect( readAction, &QAction::triggered, this, &RigMemoryFrame::readActionSelected );
+    connect( writeAction, &QAction::triggered, this, &RigMemoryFrame::writeActionSelected );
+    connect( editAction, &QAction::triggered, this, &RigMemoryFrame::editActionSelected );
+    connect( clearAction, &QAction::triggered, this, &RigMemoryFrame::clearActionSelected );
+    connect( clearAllAction, &QAction::triggered, this, &RigMemoryFrame::clearAllActionSelected );
+    connect( clearWorkedAction, &QAction::triggered, this, &RigMemoryFrame::clearWorkedActionSelected );
 
     ui->rigMemTable->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( ui->rigMemTable, SIGNAL( customContextMenuRequested( const QPoint& ) ),
-             this, SLOT( on_rigMemTable_customContextMenuRequested( const QPoint& ) ) );
+    connect( ui->rigMemTable, &MinosTableWidget::customContextMenuRequested,
+             this, &RigMemoryFrame::on_rigMemTable_customContextMenuRequested);
 
     ui->rigMemTable->verticalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( ui->rigMemTable->verticalHeader(), SIGNAL( customContextMenuRequested( const QPoint& ) ),
-             this, SLOT( rigMemTable_Hdr_customContextMenuRequested( const QPoint& ) ) );
+    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::customContextMenuRequested,
+             this, &RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested);
 }
 
 RigMemoryFrame::~RigMemoryFrame()

@@ -102,7 +102,7 @@ void MinosRPC::setRouterAppCatMap(QMap<QString, QVector<QSharedPointer<Connectab
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
 
-    // Named s get connected here; "any" s get connected as and when they connect
+    // Named routers get connected here; "any" routers get connected as and when they connect
     for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = routerAppCatMap.begin(); i != routerAppCatMap.end(); i++)
     {
         for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
@@ -128,7 +128,10 @@ void MinosRPC::initialiseRouters(QStringList subs)
     //RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
     RPCPubSub::subscribe(rpcConstants::StationCategory);
 
-    routerSubs = subs;
+    routerSubs += subs;
+    routerSubs.removeDuplicates();
+
+    routers.clear();    // so StationCategory can re-populate it
 
 }
 void MinosRPC::routerNotify( AnalysePubSubNotify &an)
@@ -156,28 +159,24 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString router = an.getKey();
-            bool subNeeded = true;
-            for ( auto const &stat: qAsConst(routerList) )
-            {
-                if (stat.routerName == router)
-                {
-                    subNeeded = false;
-                    break;
-                }
-            }
-            if (subNeeded)
-            {
-                for(auto &cat:routerSubs)
-                {
-                    RPCPubSub::subscribeRemote(router, cat);
-                }
-            }
-            // This connects up those connectables that are "any"
-            // we can't do this until we know the  name
 
             if (!routers.contains(router))
             {
                 routers.append(router);
+
+                if (routersInitialised)
+                {
+                    // connect all "initialiseServers" subscriptions
+
+                    for(auto &cat:routerSubs)
+                    {
+                        RPCPubSub::subscribeRemote(router, cat);
+                    }
+                }
+
+                // This connects up those connectables that are "any" server
+                // we can't do this until we know the  name
+
                 for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = routerAppCatMap.begin(); i != routerAppCatMap.end(); i++)
                 {
                     for ( QVector <QSharedPointer<Connectable> >::iterator j = (*i).begin(); j != (*i).end(); j++ )
@@ -199,10 +198,8 @@ void MinosRPC::notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const Q
    trace( "MinosRPC Notify callback from " + from + ( err ? ":Error" : ":Normal" ) );
 
    AnalysePubSubNotify an( err, mro );
-   if (routersInitialised)
-   {
-       routerNotify(an );
-   }
+   routerNotify(an );
+
    QString category = an.getCategory();
    if (routerAppCatMap.count() && category != rpcConstants::LocalStationCategory && category != rpcConstants::StationCategory)
    {

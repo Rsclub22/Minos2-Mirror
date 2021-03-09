@@ -19,8 +19,8 @@ KeyerServer::KeyerServer()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(routerCalll(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &KeyerServer::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &KeyerServer::on_notify);
 
     RPCPubSub::subscribe( rpcConstants::lineControlCategory );
 }

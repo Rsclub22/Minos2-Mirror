@@ -120,6 +120,11 @@ void PubSubName::setKey(const QString &key)
     _key = key;
 }
 
+QString PubSubName::getRouterApp()
+{
+    return router() + "/" + appName();
+}
+
 QString PubSubName::router() const
 {
     return _router;

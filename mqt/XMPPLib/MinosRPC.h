@@ -37,13 +37,13 @@ class RPCGeneralRouter: public MinosRPCRouter
       }
 
 };
-class RPCRouter
-{
-public:
-    QString routerName;
-    QString app;
-    PublishState state;
-};
+//class RPCRouter
+//{
+//public:
+//    QString routerName;
+//    QString app;
+//    PublishState state;
+//};
 class MinosRPC: public QObject
 {
     Q_OBJECT
@@ -61,7 +61,7 @@ class MinosRPC: public QObject
     QSet <QString> subscriptions;
     QSet <QPair <QString, QString> > remoteSubscriptions;
 
-    QVector<RPCRouter> routerList;
+    //QVector<RPCRouter> routerList;
     QStringList routerSubs;
     QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
     QVector<QString> routers;
@@ -102,10 +102,10 @@ public:
 
     void setRouterAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
     void initialiseRouters(QStringList subs);
-    QVector<RPCRouter> getRouterList()
-    {
-        return routerList;
-    }
+//    QVector<RPCRouter> getRouterList()
+//    {
+//        return routerList;
+//    }
 signals:
 
     void notify( AnalysePubSubNotify an, const QString from);
