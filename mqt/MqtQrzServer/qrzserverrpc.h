@@ -27,7 +27,7 @@ class QrzServerRpc : public QObject
 {
     Q_OBJECT
 public:
-    static const char * stateIndicator[];
+    static const char * qrzServerStateIndicator[];
     static const char * stateList[];
 
     explicit QrzServerRpc();
