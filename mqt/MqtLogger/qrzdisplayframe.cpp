@@ -135,10 +135,7 @@ void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 void QrzDisplayFrame::setContest(BaseContestLog( *c))
 {
     ct = c;
-    if (ct == nullptr)
-    {
-        return;
-    }
+
 }
 
 

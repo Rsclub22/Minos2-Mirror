@@ -1903,6 +1903,7 @@ void BandmapClientFrame::saveBandmapZoomLevel(int &level)
 
     BandmapZoomLevelIdAndNames bandmapId;
     TContestApp::getContestApp()->loggerBundle.setIntProfile(bandmapId.getStartZoomLevelId(contestBandStr), level);
+
 }
 
 int BandmapClientFrame::readBandmapZoomLevel()
