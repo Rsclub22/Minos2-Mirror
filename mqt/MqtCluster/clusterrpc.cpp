@@ -203,6 +203,8 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
 void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
+    trace(QString("clusterServer: on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
+
     if ( an.getOK() )
     {
         if ( an.getCategory() == rpcConstants::clusterClientServer || an.getCategory() == rpcConstants::qrzServerApp )
@@ -232,6 +234,7 @@ void Clusterrpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 s.app = an.getKey();
                 s.publisherProgram = an.getPublisherProgram();
                 serverList.push_back( s );
+                trace(QString("clusterServerRpc: routerName = %1, app = %2, publisher programe = %3").arg(s.routerName, s.app, s.publisherProgram));
                 QString mess = an.getKey() + " changed state to " + clusterStateList[an.getState()] + " and added";
                 trace(mess);
 

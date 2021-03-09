@@ -19,7 +19,7 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     clear();
 
 
-    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMessage(QrzServerMessage)));
+    //connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMessage(QrzServerMessage)));
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(loggerQrzReply(QrzCallsignData, QString, QString)), this, SLOT(onLoggerQrzReply(QrzCallsignData, QString, QString)));
 
 
@@ -125,7 +125,7 @@ void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     QString frame_uuid = tslf->getContest()->uuid;
-    trace(QString("qrzDisplayFrame: sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
+    trace(QString("[qrzDisplayFrame] sending callsign %1, from frame uuid %2 to QrzServer").arg(callsign, frame_uuid));
     QrzDisplayServerRpc::getQrzDisplayServerRpc()->sendCallsignFromLoggerToQrzServer(callsign, frame_uuid);
 
 
@@ -178,13 +178,11 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
 
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    QStringList sv{
-        rpcConstants::qrzServerApp
-    };
+    QStringList sv{ rpcConstants::qrzServerApp };
 
     rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(serverCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_serverCall(bool,QSharedPointer<MinosRPCObj>,QString)));
+    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
     connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
 
     QString a = rpc->getAppName();
@@ -206,7 +204,7 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
 {
     for (auto const &s: qAsConst(serverList))
     {
-        trace(QString("Send Qrz Response to Cluster Server = %1").arg(s.app));
+        trace(QString("[QrzDisplayServer]  Send Qrz Response to Cluster Server = %1").arg(s.app));
         RPCGeneralClient rpc(rpcConstants::qrzLogger );
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember(rpcConstants::qrzLogger, rpcConstants::qrzLogger);
@@ -220,9 +218,9 @@ void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QS
 }
 
 
-void QrzDisplayServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
-    trace(QString("QrzServer: on_serverCall - Message from %1").arg(from));
+    trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
         RPCArgs *args = mro->getCallArgs();
@@ -327,14 +325,14 @@ void QrzDisplayServerRpc::on_serverCall(bool err, QSharedPointer<MinosRPCObj> mr
 void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
 
+    trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
 
-    trace("qrzDisplayServer: on_notify");
     if ( an.getOK() )
     {
 
-        if ( an.getCategory() == rpcConstants::ChatServer )
+        if ( an.getCategory() == rpcConstants::qrzServerApp || an.getCategory() == rpcConstants::clusterApp)
         {
-            trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            trace( QString("*** [QrzDisplayServer] on_notify") + QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             bool stationFound = false;
             for ( auto &stat: serverList )
             {
@@ -343,7 +341,7 @@ void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from
                     if (stat.state != an.getState())
                     {
                         stat.state = an.getState();
-                        QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
+                        //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
                         //addChat( mess );
                         syncstat = true;
                     }
@@ -360,7 +358,7 @@ void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from
                 s.publisherProgram = an.getPublisherProgram();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                trace(QString("qrzDisplayServerRpc: on_notify - server found %1, publisher program %2, key %3").arg(s.routerName, s.publisherProgram, s.app));
+                trace(QString("[QrzDisplayServer]  routerName = %1, app = %2, publisher programe = %3").arg(s.routerName, s.app, s.publisherProgram));
                 //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
 
                 syncstat = true;

@@ -175,8 +175,8 @@ void QrzServerMainWindow::logon()
 
 void QrzServerMainWindow::askCallsignData(QString callsign)
 {
-    //Callsign cs;
-    //cs.setFullCall(callsign);
+    Callsign cs;
+    cs.setFullCall(callsign);
     QString callsignUrl = QRZURL + "s=" + qrzSessionData.getKey() + ";callsign=" + callsign;
     sendUrl(callsignUrl);
 }

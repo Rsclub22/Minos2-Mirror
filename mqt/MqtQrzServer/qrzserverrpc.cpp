@@ -22,7 +22,7 @@
 
 static bool syncstat = false;
 static QVector<QrzServerMessage> qrzRequestsQueue;
-const char * QrzServerRpc::stateIndicator[] =
+const char * QrzServerRpc::qrzServerStateIndicator[] =
 {
     QT_TR_NOOP("Available"),
     QT_TR_NOOP("Not Available"),
@@ -57,7 +57,7 @@ QrzServerRpc::QrzServerRpc()
     rpc->initialiseRouters(sv);
 
     connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, SIGNAL(notify(AnalysePubSubNotify, QString)), this, SLOT(on_notify(AnalysePubSubNotify, QString)));
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
@@ -193,13 +193,13 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
 
 
-    trace("qrzServer: on_notify");
+    trace(QString("qrzServer: on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
     if ( an.getOK() )
     {
 
         if ( an.getCategory() == rpcConstants::clusterApp || an.getCategory() == rpcConstants::qrzDisplayApp )
         {
-            trace( QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
+            trace( QString("*** QrzDisplayServer::on_notify") + QString(qrzServerStateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
             bool stationFound = false;
             for ( auto &stat: serverList )
             {
@@ -208,7 +208,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                     if (stat.state != an.getState())
                     {
                         stat.state = an.getState();
-                        QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
+                        QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(qrzServerStateIndicator[an.getState()]));
                         //addChat( mess );
                         syncstat = true;
                     }
@@ -225,7 +225,7 @@ void QrzServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
                 s.publisherProgram = an.getPublisherProgram();
                 s.app = an.getKey();
                 serverList.push_back( s );
-                trace(QString("qrzServerRpc: on_notify - server found %1, publisher program %2, key %3").arg(s.routerName, s.publisherProgram, s.app));
+                trace(QString("qrzServerRpc: routerName = %1, app = %2, publisher programe = %3").arg(s.routerName, s.app, s.publisherProgram));
                 //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
 
                 syncstat = true;

@@ -21,11 +21,13 @@ SOURCES += \
     main.cpp \
     qrzconfiguredialog.cpp \
     qrzservermainwindow.cpp \
+    qrzserverminosparameters.cpp \
     qrzserverrpc.cpp
 
 HEADERS += \
     qrzconfiguredialog.h \
     qrzservermainwindow.h \
+    qrzserverminosparameters.h \
     qrzserverrpc.h
 
 FORMS += \
