@@ -55,10 +55,10 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, QString tabS
     ui->name->setText(curData->name);
     ui->commandString->setText(curData->cmdString);
 
-    connect(ui->name, SIGNAL(editingFinished()), this, SLOT(nameEditFinished()));
-    connect(ui->commandString, SIGNAL(editingFinished()), this, SLOT(cmdStringEditFinished()));
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(editAccepted()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(editRejected()));
+    connect(ui->name, &QLineEdit::editingFinished, this, &userClusterCommandDialog::nameEditFinished);
+    connect(ui->commandString, &QLineEdit::editingFinished, this, &userClusterCommandDialog::cmdStringEditFinished);
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &userClusterCommandDialog::editAccepted);
+    connect(ui->buttonBox,&QDialogButtonBox::rejected, this, &userClusterCommandDialog::editRejected);
 
 
 }

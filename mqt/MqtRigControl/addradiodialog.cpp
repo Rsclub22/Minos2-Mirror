@@ -14,7 +14,7 @@ AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigFactory* rigFactory,
 
     rigFactory->populateComboRigList(ui->radioModel);
     radioModel = ui->radioModel->currentText();
-    connect (ui->radioModel, SIGNAL(currentIndexChanged(int)), this, SLOT(radioModelSelect(int)));
+    connect (ui->radioModel, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &AddRadioDialog::radioModelSelect);
 
 
 }

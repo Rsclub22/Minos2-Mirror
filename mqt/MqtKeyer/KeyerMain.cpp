@@ -122,11 +122,11 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     setVolumeMults();
 
-    connect(&LineTimer, SIGNAL(timeout()), this, SLOT(LineTimerTimer()));
+    connect(&LineTimer, &QTimer::timeout, this, &KeyerMain::LineTimerTimer);
     LineTimer.start(100);
 
     // NB CaptionTimer only runs after something changes - the line timer triggers it
-    connect(&CaptionTimer, SIGNAL(timeout()), this, SLOT(CaptionTimerTimer()));
+    connect(&CaptionTimer, &QTimer::timeout, this, &KeyerMain::CaptionTimerTimer);
 
     ui->PipCheckBox->setChecked(getPipEnabled());
 
@@ -343,15 +343,15 @@ void KeyerMain::runAlsaScript(const QString &alsaFileName, const QString &comman
     if ( !runner)
     {
         runner = new QProcess(parent());
-        connect (runner, SIGNAL(started()), this, SLOT(on_started()));
-        connect (runner, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(on_finished(int, QProcess::ExitStatus)));
+        connect (runner, &QProcess::started, this, &KeyerMain::on_started);
+        connect (runner, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, &KeyerMain::on_finished);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
         connect (runner, &QProcess::errorOccurred, this, &KeyerMain::on_error);
 #else
         connect (runner, &QProcess::error, this, &KeyerMain::on_error);
 #endif
-        connect (runner, SIGNAL(readyReadStandardError()), this, SLOT(on_readyReadStandardError()));
-        connect (runner, SIGNAL(readyReadStandardOutput()), this, SLOT(on_readyReadStandardOutput()));
+        connect (runner, &QProcess::readyReadStandardError, this, &KeyerMain::on_readyReadStandardError);
+        connect (runner, &QProcess::readyReadStandardOutput, this, &KeyerMain::on_readyReadStandardOutput);
 
         QString wdir = GetCurrentDir();
         runner->setWorkingDirectory(wdir);

@@ -18,7 +18,7 @@ windowMonitor::windowMonitor(QWidget *parent) :
     else
     {
         setPosTimer.setSingleShot(true);
-        connect(&setPosTimer, SIGNAL(timeout()), this, SLOT(setPosition()));
+        connect(&setPosTimer, &QTimer::timeout, this, &windowMonitor::setPosition);
         setPosTimer.start(100);
     }
 }

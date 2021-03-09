@@ -33,7 +33,7 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditEdit = new QLineEdit(this);
     //TextEditEdit->setClearButtonEnabled(true);
     TextEditEdit->setObjectName(name + "Edit");
-    connect(TextEditEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onTextEdit_textChanged(const QString &)));
+    connect(TextEditEdit, &QLineEdit::textChanged, this, &QSOTextEditFrame::onTextEdit_textChanged);
 
     if (horizontal)
     {
@@ -50,7 +50,7 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     clearButton->setEnabled(false);
 
     clearButton->setToolTip(tr("Click to clear edit content"));
-    connect(clearButton, SIGNAL(clicked()), this, SLOT(onClearButtonClicked()));
+    connect(clearButton, &QToolButton::clicked, this, &QSOTextEditFrame::onClearButtonClicked);
 
     hb->addWidget(clearButton);
 

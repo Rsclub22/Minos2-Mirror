@@ -81,7 +81,7 @@ void TxVmButtonsFrame::initTxVmButton()
 
 
 
-    connect(ui->voiceKeyerSelect, SIGNAL(currentIndexChanged(int)), this, SLOT(onVoiceKeyerSelect(int)));
+    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
     connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
 
     connect(ui->vmStopPb, SIGNAL(clicked()), this, SLOT(onVmStopClicked()));

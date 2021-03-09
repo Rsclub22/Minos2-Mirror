@@ -63,10 +63,16 @@ void ChangeName::doChangeName()
     // run up telnet to hange the first name.
     tnclient = new QtTelnet(this);
 
-    connect(tnclient, SIGNAL(socketConnected()), this, SLOT(connectionEstablished()));
+    connect(tnclient, &QtTelnet::socketConnected, this, &ChangeName::connectionEstablished);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    connect(tnclient, &QtTelnet::connectionError, this, &ChangeName::connectionError);
+#else
     connect(tnclient, SIGNAL(connectionError(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
-    connect(tnclient, SIGNAL(loggedOut()), this, SLOT(loggedOut()));
-    connect(tnclient, SIGNAL(message(QString)), this, SLOT(messageRx(QString)));
+#endif
+
+    connect(tnclient, &QtTelnet::loggedOut, this, &ChangeName::loggedOut);
+    connect(tnclient, &QtTelnet::message, this, &ChangeName::messageRx);
 
     QSettings settings;
     KSTserverName = settings.value("tnhostname", "www.on4kst.info").toString();

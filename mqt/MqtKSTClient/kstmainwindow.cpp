@@ -87,20 +87,20 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->login3cb->setText(services[2]);
     ui->login4cb->setText(services[3]);
 
-    connect(ui->login1cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
-    connect(ui->login2cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
-    connect(ui->login3cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
-    connect(ui->login4cb, SIGNAL(stateChanged(int)), this, SLOT(logincb_stateChanged(int)));
+    connect(ui->login1cb, &QCheckBox::stateChanged, this, &KSTMainWindow::logincb_stateChanged);
+    connect(ui->login2cb, &QCheckBox::stateChanged, this, &KSTMainWindow::logincb_stateChanged);
+    connect(ui->login3cb, &QCheckBox::stateChanged, this, &KSTMainWindow::logincb_stateChanged);
+    connect(ui->login4cb, &QCheckBox::stateChanged, this, &KSTMainWindow::logincb_stateChanged);
 
     ui->active1rb->setText(services[0]);
     ui->active2rb->setText(services[1]);
     ui->active3rb->setText(services[2]);
     ui->active4rb->setText(services[3]);
 
-    connect(ui->active1rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
-    connect(ui->active2rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
-    connect(ui->active3rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
-    connect(ui->active4rb, SIGNAL(clicked()), this, SLOT(activerb_clicked()));
+    connect(ui->active1rb, &QRadioButton::clicked, this, &KSTMainWindow::activerb_clicked);
+    connect(ui->active2rb, &QRadioButton::clicked, this, &KSTMainWindow::activerb_clicked);
+    connect(ui->active3rb, &QRadioButton::clicked, this, &KSTMainWindow::activerb_clicked);
+    connect(ui->active4rb, &QRadioButton::clicked, this, &KSTMainWindow::activerb_clicked);
 
     checkActive();
 
@@ -133,10 +133,10 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
-    connect(&CloseTimer, SIGNAL(timeout()), this, SLOT(CloseTimerTimer()));
+    connect(&CloseTimer, &QTimer::timeout, this, &KSTMainWindow::CloseTimerTimer);
     CloseTimer.start(100);
 
-    connect(&userCallTimer, SIGNAL(timeout()), this, SLOT(userCallTimerTimer()));
+    connect(&userCallTimer, &QTimer::timeout, this, &KSTMainWindow::userCallTimerTimer);
     userCallTimer.start(5000);
 
     kstMessageModel.setChatVector(messageVector);
@@ -218,33 +218,33 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
     ui->CSTable->horizontalHeader()->setSectionsMovable( true );
 
-    connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
-    connect( ui->messageTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
-    connect( ui->meepTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
-    connect( ui->planesView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+    connect( ui->CSTable->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &KSTMainWindow:: on_sectionResized, Qt::UniqueConnection);
+    connect( ui->messageTable->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &KSTMainWindow::on_sectionResized, Qt::UniqueConnection);
+    connect( ui->meepTable->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &KSTMainWindow::on_sectionResized, Qt::UniqueConnection);
+    connect( ui->planesView->horizontalHeader(), &QHeaderView::sectionResized,
+             this, &KSTMainWindow::on_sectionResized, Qt::UniqueConnection);
 
-    connect( ui->CSTable->horizontalHeader(), SIGNAL(sectionMoved(int, int , int)),
-             this, SLOT( on_sectionMoved(int, int , int)));
+    connect( ui->CSTable->horizontalHeader(), &QHeaderView::sectionMoved,
+             this, &KSTMainWindow::on_sectionMoved);
 
 
-    connect( ui->CSTable->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)),
-             this, SLOT( on_sortIndicatorChanged(int, Qt::SortOrder)));
+    connect( ui->CSTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
+             this, &KSTMainWindow::on_sortIndicatorChanged);
 
 
     kstclient = new QTcpSocket(this);
 
-    connect(kstclient, SIGNAL(connected()), this, SLOT(connected()));
-    connect(kstclient, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(kstclient, &QTcpSocket::connected, this, &KSTMainWindow::connected);
+    connect(kstclient, &QTcpSocket::disconnected, this, &KSTMainWindow::disconnected);
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
     connect(kstclient, &QTcpSocket::errorOccurred, this, &KSTMainWindow::connectionError);
 #else
     connect(kstclient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(connectionError(QAbstractSocket::SocketError)));
 #endif
-    connect(kstclient, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(kstclient, &QTcpSocket::readyRead, this, &KSTMainWindow::onReadyRead);
 
     ui->CSFilter->installEventFilter(this);
     ui->messageFilter->installEventFilter(this);
@@ -265,7 +265,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
         ui->CSTable->hideColumn(ecscAirscout);
     }
     asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-    connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+    connect(asl.data(), &AirScoutLink::acChanged, this, &KSTMainWindow::acChanged);
 
     for(auto const &s: qAsConst(AirScoutLink::ASBandStrings))
     {
@@ -1196,7 +1196,7 @@ bool KSTMainWindow::doConfiguration()
             asl.reset();
 
             asl = QSharedPointer<AirScoutLink>(new AirScoutLink());
-            connect(asl.data(), SIGNAL(acChanged(QSharedPointer<KstUser>)), this, SLOT(acChanged(QSharedPointer<KstUser>)));
+            connect(asl.data(), &AirScoutLink::acChanged, this, &KSTMainWindow::acChanged);
         }
         if  (kstconnected)
         {

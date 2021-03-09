@@ -92,7 +92,6 @@ void ClusterBandmapConfigure::initialise()
         addBandmapTuningTolerance =  ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE;
      }
 
-     //connect(ui->addBandmapTuningTolSpinBox, SIGNAL(valueChanged(int)), this, SLOT(onFreqToleranceValueChanged(int)));
      ui->addBandmapTuningTolSpinBox->setRange(ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE, ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE);
 
      ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);

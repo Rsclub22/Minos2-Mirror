@@ -37,9 +37,9 @@ AirScoutLink::AirScoutLink():
 {
     qus->bind(QHostAddress::Any, static_cast<quint16>(mainWindow->getASPort()), (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
 
-    connect(qus.data(), SIGNAL(readyRead( )), this, SLOT(onReadyRead()));
+    connect(qus.data(), &QUdpSocket::readyRead, this, &AirScoutLink::onReadyRead);
 
-    connect(&ASTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    connect(&ASTimer, &QTimer::timeout, this, &AirScoutLink::onTimeout);
     ASTimer.start(1000);
 }
 AirScoutLink::~AirScoutLink()

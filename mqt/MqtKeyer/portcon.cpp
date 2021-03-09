@@ -153,7 +153,7 @@ WindowsMonitorPort::~WindowsMonitorPort()
 bool WindowsMonitorPort::initialisePort()
 {
    winMonForm = new windowMonitor( nullptr );
-   connect(&LineCheck, SIGNAL(timeout()), this, SLOT(checkWinLines()));
+   connect(&LineCheck, &QTimer::timeout, this, &WindowsMonitorPort::checkWinLines);
    LineCheck.start(10);
    winMonForm->show();
    return true;
@@ -343,7 +343,7 @@ bool LineEventsPort::initialisePort()
    LineSet * ls = LineSet::GetLineSet();
    ls->lsLog = LineLog;
 
-   connect(ls, SIGNAL(linesChanged()), this, SLOT(linesChangedEvent()));
+   connect(ls, &LineSet::linesChanged, this, &LineEventsPort::linesChangedEvent);
    return true;
 }
 

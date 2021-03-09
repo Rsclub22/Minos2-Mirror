@@ -25,7 +25,7 @@ OptionsDialog::OptionsDialog(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(MainRaised()), this, SLOT(onMainRaised()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MainRaised, this, &OptionsDialog::onMainRaised);
 }
 
 OptionsDialog::~OptionsDialog()

@@ -76,7 +76,7 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
     connect(freqEditShortKey, SIGNAL(activated()), this, SLOT(freqEditSelected()));
 
-    connect(ui->freqStepCombo, SIGNAL(currentIndexChanged(const QString)), this, SLOT(freqStepComboChanged(const QString)));
+    connect(ui->freqStepCombo, QOverload<const QString &>::of(&QComboBox::currentIndexChanged), this, &RigControlFrame::freqStepComboChanged);
 
     freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U), parent);
     connect(freqPlusShortCut, SIGNAL(activated()), this, SLOT(freqPlus_ShortCut()));

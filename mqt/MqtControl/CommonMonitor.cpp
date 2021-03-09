@@ -22,7 +22,7 @@
 //==============================================================================
 timerTicker::timerTicker()
 {
-    connect(&b, SIGNAL(timeout()), this, SLOT(tick()));
+    connect(&b, &QTimer::timeout, this, &timerTicker::tick);
     b.start(TIMER_INTERVAL);
 }
 timerTicker::~timerTicker()

@@ -24,8 +24,8 @@ TSendDM::TSendDM(QWidget* Owner )
     traceMsg("logger uuid is " + loggerUuid);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &TSendDM::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &TSendDM::on_notify);
 
 }
 TSendDM::~TSendDM()
