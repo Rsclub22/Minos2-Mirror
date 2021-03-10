@@ -57,6 +57,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    writeWindowTitle(appName);
+
     createCloseEvent();
 
     connect(&LogTimer, &QTimer::timeout, this, [=](){LogTimerTimer();});
@@ -856,7 +858,7 @@ void RigControlMainWindow::upDateRadio()
 
 
                 sendRitEnableStatusLogger();
-                writeWindowTitle(appName);
+                //writeWindowTitle(appName);
                 sendStatusToLogConnected();
 
 
@@ -937,7 +939,7 @@ void RigControlMainWindow::upDateRadio()
         ui->radioNameDisp->setText("");
         ui->usingLibText->setText("");
         closeRadio();
-        writeWindowTitle(appName);
+        //writeWindowTitle(appName);
     }
 
 
@@ -1000,7 +1002,7 @@ void RigControlMainWindow::refreshRadio()
                 loggerSetFreq(loggerRequests->selRadioFreq);
             }
 
-            writeWindowTitle(appName);
+            //writeWindowTitle(appName);
             sendStatusToLogConnected();
             dumpRadioToTraceLog();
             msg->rigCache.publish();
@@ -1567,7 +1569,7 @@ void RigControlMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rig Control - %1 - Logger").arg(appName));
+        this->setWindowTitle(tr("Minos Rig Control - Logger - %1").arg(appName));
     }
     else
     {

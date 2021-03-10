@@ -64,6 +64,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    writeWindowTitle(appName);
+
+
     QDir dir(".");
     trace(QString("Directory %1").arg(dir.absolutePath()));
 
@@ -986,7 +989,7 @@ void RotatorMainWindow::upDateAntenna()
 
 
 
-            writeWindowTitle(appName);
+            //writeWindowTitle(appName);
             ui->antNameDisp->setText(setupAntenna->currentAntenna.antennaName);
             ui->usingLibText->setText(rotator->getLibraryName());
 
@@ -1080,14 +1083,11 @@ void RotatorMainWindow::upDateAntenna()
         closeRotator();
         if (appName.length() > 0)
         {
-            writeWindowTitle(appName);
+            //writeWindowTitle(appName);
             sendStatusToLogDisConnected();
             sendStatusToLogStop();
         }
-        else
-        {
-            writeWindowTitle(appName);
-        }
+
     }
 
     if (appName.length() > 0)
@@ -1137,7 +1137,7 @@ void RotatorMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rotator Control - %1 - Logger").arg(appName));
+        this->setWindowTitle(tr("Minos Rotator Control - Logger - %1").arg(appName));
     }
     else
     {
