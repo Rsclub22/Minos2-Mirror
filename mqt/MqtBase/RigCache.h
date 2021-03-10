@@ -80,7 +80,7 @@ public:
     void setPttType(const PubSubName &name, int type);
     void setPttState(const PubSubName &name, bool state);
 
-    QVector<PubSubName> getRigList()
+    QVector<PubSubName> &getRigList()
     {
         return rigList;
     }

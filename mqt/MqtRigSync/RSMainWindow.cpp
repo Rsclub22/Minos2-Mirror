@@ -58,15 +58,26 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
 void RSMainWindow::configure()
 {
     QStringList sv;
-    QString current;
     RSConfigure rsc(this);
-    rsc.setServerList(sv, current);
+
+    for (const auto &r: qAsConst(rigCache.getRigList()))
+    {
+        QString s = r.getRouterApp();
+        sv.append(s);
+    }
+    sv.removeDuplicates();
+
+    rsc.setServerList(sv, subRigSelected.getRouterApp());
 
     if (rsc.exec() == QDialog::Accepted)
     {
-        current = rsc.getSubServer();
-        subServer = current;
-        // and filter the sub combo for this server
+        subRigSelected = PubSubName(rsc.getSubServer() + "/x");    // expects r/a/k - this is just r/a
+        subServer = subRigSelected.getRouterApp();
+
+        QStringList cb = populateRig2();
+        ui->Rig2Combo->clear();
+        ui->Rig2Combo->addItems(cb);
+        ui->Rig2Combo->setCurrentText(subRigSelected.toString());
     }
 }
 RSMainWindow::~RSMainWindow()
@@ -171,7 +182,7 @@ void RSMainWindow::on_transfer21Button_clicked()
         RPCGeneralClient rpc(rpcConstants::rigControlMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-        QStringList qsl = mainRigCache.getSelectedLoggers(mainRigSelected);
+        QStringList qsl = rigCache.getSelectedLoggers(mainRigSelected);
         if (qsl.count())
         {
             QString loggerUuid = qsl[0];
@@ -179,7 +190,7 @@ void RSMainWindow::on_transfer21Button_clicked()
             QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
             st->addMember( logger, rpcConstants::loggerUuid );
 
-            QString selc = mainRigCache.getSelectedContest(mainRigSelected, loggerUuid);
+            QString selc = rigCache.getSelectedContest(mainRigSelected, loggerUuid);
 
             QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
             st->addMember( select, rpcConstants::selected );
@@ -191,10 +202,10 @@ void RSMainWindow::on_transfer21Button_clicked()
         }
     }
 }
-QStringList RSMainWindow::mainRigs()
+QStringList RSMainWindow::rigs()
 {
     QStringList sl;
-    QVector<PubSubName> riglist = mainRigCache.getRigList();
+    QVector<PubSubName> riglist = rigCache.getRigList();
     for (const auto &psn: qAsConst(riglist))
     {
         QString rigname = psn.toString();
@@ -203,17 +214,23 @@ QStringList RSMainWindow::mainRigs()
     sl.sort();
     return  sl;
 }
-QStringList RSMainWindow::subRigs()
+
+
+QStringList RSMainWindow::populateRig2()
 {
-    QStringList sl;
-    QVector<PubSubName> riglist = subRigCache.getRigList();
-    for (const auto &psn: qAsConst(riglist))
+    QStringList cb;
+    cb.append("");
+    for (const auto &r: qAsConst(rigCache.getRigList()))
     {
-        QString rigname = psn.toString();
-        sl.append(rigname);
+        if (r.getRouterApp() == subRigSelected.getRouterApp() )
+        {
+            if (!r.isEmpty())
+            cb.append( r.toString());
+        }
     }
-    sl.sort();
-    return  sl;
+    cb.removeDuplicates();
+    cb.sort();
+    return cb;
 }
 
 void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
@@ -227,39 +244,39 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
         {
             if ( an.getCategory() == rpcConstants::rigStateCategory)
             {
-                mainRigCache.setStateString(an);
-                subRigCache.setStateString(an);
+                rigCache.setStateString(an);
             }
             else if ( an.getCategory() == rpcConstants::rigDetailsCategory)
             {
-                mainRigCache.setDetailsString(an);
-                subRigCache.setDetailsString(an);
+                rigCache.setDetailsString(an);
             }
             else if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlRadioList )
             {
-                mainRigCache.addRigList(an.getValue());
-                subRigCache.addRigList(an.getValue());
+                rigCache.addRigList(an.getValue());
 
                 ui->Rig1Combo->clear();
                 ui->Rig1Combo->addItem("");
-                ui->Rig1Combo->addItems( mainRigs());
+                ui->Rig1Combo->addItems( rigs());
 
+                PubSubName psn(an.getKey());
+
+                QStringList cb = populateRig2();
                 ui->Rig2Combo->clear();
-                ui->Rig2Combo->addItem("");
-                ui->Rig2Combo->addItems( subRigs());
+                ui->Rig2Combo->addItems(cb);
                 ui->Rig2Combo->setCurrentText(subRigSelected.toString());
+
 
             }
             else
                 return;
         }
-        mainRigSelected = mainRigCache.getSelected("");
+        mainRigSelected = rigCache.getSelected("");
         ui->Rig1Combo->setCurrentText(mainRigSelected.toString());
 
         if (!mainRigSelected.isEmpty())
         {
-            RigState &selState = mainRigCache.getState(mainRigSelected);
-            RigDetails &selDetail = mainRigCache.getDetails(mainRigSelected);
+            RigState &selState = rigCache.getState(mainRigSelected);
+            RigDetails &selDetail = rigCache.getDetails(mainRigSelected);
             ui->Rig1Combo->setCurrentText(mainRigSelected.toString());
 
             if (selDetail.isDirty())

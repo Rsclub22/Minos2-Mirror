@@ -2,6 +2,7 @@
 #define RSMAINWINDOW_H
 
 #include "base_pch.h"
+#include <QComboBox>
 #include "RigCache.h"
 #include "n1mmlink.h"
 #include "wsjtxlink.h"
@@ -44,8 +45,7 @@ private slots:
     void configure();
 private:
     Ui::RSMainWindow *ui;
-    RigCache mainRigCache;
-    RigCache subRigCache;
+    RigCache rigCache;
     N1MMLink n1mmLink;
     WsjtxLink wsjtxLink;
 
@@ -87,8 +87,8 @@ private:
     void trackBand();
     void rig2Centre(const Frequency &fLow, const Frequency &fHigh);
     void getRouterAppCatMap();
-    QStringList mainRigs();
-    QStringList subRigs();
+    QStringList rigs();
+    QStringList populateRig2();
 };
 
 #endif // RSMAINWINDOW_H
