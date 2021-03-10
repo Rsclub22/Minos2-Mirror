@@ -28,8 +28,8 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
 
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
+    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &BandmapClientFrame::clusterClientServerList);
+    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
 
     bandmapDataModel = new BandmapDataModel();
 
@@ -48,18 +48,17 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
 
     checkNewSpotsTimer = new QTimer(this);
-    connect (checkNewSpotsTimer, SIGNAL(timeout()), this, SLOT(timerCheckNewBandMapSpots()));
+    connect (checkNewSpotsTimer, &QTimer::timeout, this, &BandmapClientFrame::timerCheckNewBandMapSpots);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToBandmap(BaseContestLog *, QSharedPointer<BaseContact>)),
-            this, SLOT(on_AfterLogContact(BaseContestLog *, QSharedPointer<BaseContact>)));
-    connect(bandmapView, SIGNAL( contextMenuSelected( const QPoint&, const QPoint& ) ), this, SLOT( on_contextMenuSelected( const QPoint&, const QPoint& ) ) );
-    connect(bandmapView, SIGNAL(newZoomlevel(int)), this, SLOT(on_newZoomlevel(int)));
-    connect (ui->filtersPushBut, SIGNAL(clicked()), this, SLOT(filterButtonSelected()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &BandmapClientFrame::on_FontChanged, Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &BandmapClientFrame::on_AfterLogContact);
+    connect(bandmapView, &BandmapView::contextMenuSelected, this, &BandmapClientFrame::on_contextMenuSelected);
+    connect(bandmapView, &BandmapView::newZoomlevel, this, &BandmapClientFrame::on_newZoomlevel);
+    connect (ui->filtersPushBut, &QPushButton::clicked, this, &BandmapClientFrame::filterButtonSelected);
 
     purgeTimer = new QTimer(this);
-    connect (purgeTimer, SIGNAL(timeout()), this, SLOT(purgeSpots()));
+    connect (purgeTimer, &QTimer::timeout, this, &BandmapClientFrame::purgeSpots);
 
     spotsMenu = new QMenu(ui->actionsButton);
 
@@ -92,25 +91,25 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->addAction(clearAllSpotsAction);
 
     ui->actionsButton->setMenu(spotsMenu);
-    connect(spotsMenu, SIGNAL(aboutToShow()), this, SLOT(onMenuShow()));
+    connect(spotsMenu, &QMenu::aboutToShow, this, &BandmapClientFrame::onMenuShow);
 
     zoomIn = new QShortcut(QKeySequence("Ctrl+<"), parent);   // Ctrl <
-    connect(zoomIn, SIGNAL(activated()), this, SLOT(on_zoomIn()));
+    connect(zoomIn, &QShortcut::activated, this, &BandmapClientFrame::on_zoomIn);
 
     zoomOut = new QShortcut(QKeySequence("Ctrl+>"), parent);   // Ctrl >
-    connect(zoomOut, SIGNAL(activated()), this, SLOT(on_zoomOut()));
+    connect(zoomOut, &QShortcut::activated, this, &BandmapClientFrame::on_zoomOut);
 
-    connect( markSpotAction, SIGNAL( triggered() ), this, SLOT(on_markSpotActionSelected()) );
-    connect( unMarkSpotAction, SIGNAL( triggered() ), this, SLOT(on_unMarkSpotActionSelected()) );
-    connect( freqAction, SIGNAL( triggered() ), this, SLOT(on_freqActionSelected()) );
-    connect( bearingAction, SIGNAL( triggered() ), this, SLOT(on_bearingActionSelected()) );
-    connect( logAction, SIGNAL( triggered() ), this, SLOT(on_logActionSelected()) );
-    connect( memoryAction, SIGNAL( triggered() ), this, SLOT(on_memoryActionSelected()) );
-    connect( saveZoomLevel, SIGNAL( triggered() ), this, SLOT(on_saveZoomLevelActionSelected()) );
-    connect( readSavedZoomLevel, SIGNAL( triggered() ), this, SLOT(on_readZoomLevelActionSelected()) );
-    connect(resendSpotsAction, SIGNAL(triggered()), this, SLOT(on_resendClusterSpotSelected()));
-    connect( clearSpotAction, SIGNAL( triggered() ), this, SLOT(on_clearSpotActionSelected()) );
-    connect( clearAllSpotsAction, SIGNAL( triggered() ), this, SLOT(on_clearAllSpotsActionSelected()) );
+    connect( markSpotAction, &QAction::triggered, this, &BandmapClientFrame::on_markSpotActionSelected );
+    connect( unMarkSpotAction, &QAction::triggered, this, &BandmapClientFrame::on_unMarkSpotActionSelected );
+    connect( freqAction, &QAction::triggered, this, &BandmapClientFrame::on_freqActionSelected );
+    connect( bearingAction, &QAction::triggered, this, &BandmapClientFrame::on_bearingActionSelected );
+    connect( logAction, &QAction::triggered, this, &BandmapClientFrame::on_logActionSelected );
+    connect( memoryAction, &QAction::triggered, this, &BandmapClientFrame::on_memoryActionSelected );
+    connect( saveZoomLevel, &QAction::triggered, this, &BandmapClientFrame::on_saveZoomLevelActionSelected );
+    connect( readSavedZoomLevel, &QAction::triggered, this, &BandmapClientFrame::on_readZoomLevelActionSelected );
+    connect(resendSpotsAction, &QAction::triggered, this, &BandmapClientFrame::on_resendClusterSpotSelected);
+    connect( clearSpotAction, &QAction::triggered, this, &BandmapClientFrame::on_clearSpotActionSelected );
+    connect( clearAllSpotsAction, &QAction::triggered, this, &BandmapClientFrame::on_clearAllSpotsActionSelected );
 
     contextSpotsMenu = new QMenu(this);
     contextSpotsMenu_markSpotAction = new QAction(tr("M&ark Spot"), this);
@@ -131,20 +130,20 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     contextSpotsMenu->addAction(contextSpotsMenu_memoryAction);
     contextSpotsMenu->addAction(contextSpotsMenu_clearSpotAction);
 
-    connect( contextSpotsMenu_markSpotAction, SIGNAL( triggered() ), this, SLOT(context_markSpotActionSelected()) );
-    connect( contextSpotsMenu_unMarkSpotAction, SIGNAL( triggered() ), this, SLOT(context_unMarkSpotActionSelected()) );
-    connect( contextMoveFreqAction, SIGNAL( triggered() ), this, SLOT(context_moveFreqActionSelected()) );
-    connect( contextSpotsMenu_freqAction, SIGNAL( triggered() ), this, SLOT(context_freqActionSelected()) );
-    connect( contextSpotsMenu_bearingAction, SIGNAL( triggered() ), this, SLOT(context_bearingActionSelected()) );
-    connect( contextSpotsMenu_logAction, SIGNAL( triggered() ), this, SLOT(context_logActionSelected()) );
-    connect( contextSpotsMenu_memoryAction, SIGNAL( triggered() ), this, SLOT(context_memoryActionSelected()) );
-    connect( contextSpotsMenu_clearSpotAction, SIGNAL( triggered() ), this, SLOT(context_clearSpotActionSelected()) );
+    connect( contextSpotsMenu_markSpotAction, &QAction::triggered, this, &BandmapClientFrame::context_markSpotActionSelected );
+    connect( contextSpotsMenu_unMarkSpotAction, &QAction::triggered, this, &BandmapClientFrame::context_unMarkSpotActionSelected );
+    connect( contextMoveFreqAction, &QAction::triggered, this, &BandmapClientFrame::context_moveFreqActionSelected );
+    connect( contextSpotsMenu_freqAction, &QAction::triggered, this, &BandmapClientFrame::context_freqActionSelected );
+    connect( contextSpotsMenu_bearingAction, &QAction::triggered, this, &BandmapClientFrame::context_bearingActionSelected );
+    connect( contextSpotsMenu_logAction, &QAction::triggered, this, &BandmapClientFrame::context_logActionSelected );
+    connect( contextSpotsMenu_memoryAction, &QAction::triggered, this, &BandmapClientFrame::context_memoryActionSelected );
+    connect( contextSpotsMenu_clearSpotAction, &QAction::triggered, this, &BandmapClientFrame::context_clearSpotActionSelected );
 
-    connect(this, SIGNAL(freqDisplayClicked()), this, SLOT(on_FreqDisplayClicked()));
+    connect(this, &BandmapClientFrame::freqDisplayClicked, this, &BandmapClientFrame::on_FreqDisplayClicked);
 
     this->setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
-    connect (mouseInFrameTimer, SIGNAL(timeout()), this, SLOT(mouseTimerCheckNewSpots()));
+    connect (mouseInFrameTimer, &QTimer::timeout, this, &BandmapClientFrame::mouseTimerCheckNewSpots);
 
     BandList::getBandList().loadAllBands(bands);
 

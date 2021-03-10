@@ -100,15 +100,15 @@ void BandmapClientFilterDialog::initCheckFilterTab()
 
 
 
-    connect(ui->modeSelectBut, SIGNAL(clicked()), this, SLOT(modeButtonSelected()));
+    connect(ui->modeSelectBut, &QPushButton::clicked, this, &BandmapClientFilterDialog::modeButtonSelected);
 
-    connect(ui->spotDistanceEdit, SIGNAL(editingFinished()), this, SLOT(onDistanceEditFinished()));
-    connect(ui->distFilterIgnoreCheckBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreDistanceChkBoxStateChanged(int)));
-    connect(ui->ignoreEmptyDistanceValuesChkBox, SIGNAL(stateChanged(int)), this, SLOT(onIgnoreEmptyDistanceValuesChkBoxStateChanged(int)));
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(filtersAccepted()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(filtersRejected()));
+    connect(ui->spotDistanceEdit, &QLineEdit::editingFinished, this, &BandmapClientFilterDialog::onDistanceEditFinished);
+    connect(ui->distFilterIgnoreCheckBox, &QCheckBox::stateChanged, this, &BandmapClientFilterDialog::onIgnoreDistanceChkBoxStateChanged);
+    connect(ui->ignoreEmptyDistanceValuesChkBox, &QCheckBox::stateChanged, this, &BandmapClientFilterDialog::onIgnoreEmptyDistanceValuesChkBoxStateChanged);
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &BandmapClientFilterDialog::filtersAccepted);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &BandmapClientFilterDialog::filtersRejected);
 
-    connect(ui->bandmapFilterTab, SIGNAL(currentChanged(int)), this, SLOT(onFilterTabIndexChanged(int)));
+    connect(ui->bandmapFilterTab, &QTabWidget::currentChanged, this, &BandmapClientFilterDialog::onFilterTabIndexChanged);
 
     setFilterTabCurrentIndex(mainTabIndex);
     loadSettingsToDialogBox();
