@@ -121,7 +121,7 @@ void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const 
 //---------------------------------------------------------------------------
 void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
 {
-   trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
+   trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
    // called whenever line changes
    if ( an.getOK() )

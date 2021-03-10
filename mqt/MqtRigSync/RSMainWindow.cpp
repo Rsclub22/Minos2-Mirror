@@ -53,6 +53,12 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     configAction = new QAction( tr("Configure..."), this );
     ui->menuConfigure->addAction( configAction );
     connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    subServer = config.value("SyncRigControlApp", subServer).toString();
+    subRigSelected = config.value("SyncRigControlRig", subRigSelected.toString()).toString();
 }
 
 void RSMainWindow::configure()
@@ -78,6 +84,12 @@ void RSMainWindow::configure()
         ui->Rig2Combo->clear();
         ui->Rig2Combo->addItems(cb);
         ui->Rig2Combo->setCurrentText(subRigSelected.toString());
+
+        QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+        QSettings config(fileName, QSettings::IniFormat);
+
+        config.setValue("SyncRigControlApp", subServer);
+
     }
 }
 RSMainWindow::~RSMainWindow()
@@ -236,7 +248,7 @@ QStringList RSMainWindow::populateRig2()
 void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {
@@ -448,4 +460,10 @@ void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
 void RSMainWindow::on_Rig2Combo_activated(const QString &psn)
 {
     subRigSelected = psn;
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.setValue("SyncRigControlRig", subRigSelected.toString());
+
 }

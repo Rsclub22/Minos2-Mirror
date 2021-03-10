@@ -839,7 +839,7 @@ void TSendDM::notifyRotChanges()
 void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    traceMsg( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
+    traceMsg( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {

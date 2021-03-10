@@ -47,7 +47,7 @@ void RigControlRpc::publishRadioNames(QStringList radios)
 
 void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
-    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     // called whenever soemthing we subscribe to changes
     if ( an.getOK() )

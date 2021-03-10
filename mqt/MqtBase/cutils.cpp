@@ -605,7 +605,6 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
         }
         if (w)
         {
-            trace(li->widget()->objectName());
             if (w->layout())
             {
                 adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);

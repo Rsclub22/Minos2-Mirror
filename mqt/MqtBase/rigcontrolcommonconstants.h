@@ -113,6 +113,7 @@ const QString RIG_CONFIGURATION_FILEPATH_LOGGER = "./Configuration/";
 const QString RIG_CONFIGURATION_FILEPATH_LOCAL = "./Configuration/";
 
 const QString MINOS_RADIO_CONFIG_FILE = "MinosRigControlConfig.ini";
+const QString MINOS_RIGSYNC_CONFIG_FILE = "MinosRigSyncConfig.ini";
 
 
 const QString RADIO_PATH_LOGGER = "./Configuration/Radio/";

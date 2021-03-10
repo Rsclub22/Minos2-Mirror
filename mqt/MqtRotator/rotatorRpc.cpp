@@ -47,7 +47,7 @@ void RotatorRpc::publishPresetList(QString presets)
 
 void RotatorRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
-   trace( "Rot Rpc: Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
+   trace( "Rot Rpc: Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
    // called whenever soemthing we subscribe to changes
    if ( an.getOK() )

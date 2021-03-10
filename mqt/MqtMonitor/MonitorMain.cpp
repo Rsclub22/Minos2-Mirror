@@ -481,7 +481,7 @@ void MonitorMain::CancelClick()
 void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
 {
     // pubsub notify
-    trace( "Notify callback from " + from + ( an.getOK() ? ":Error" : ":Normal" ) );
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
 
     if ( an.getOK() )
     {

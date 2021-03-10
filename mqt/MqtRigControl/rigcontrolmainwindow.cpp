@@ -366,6 +366,9 @@ void RigControlMainWindow::onStdInRead(QString cmd)
     executeStdIn(cmd);
     if (doClose)
         close();
+
+    // we definitely know now how we are connected, so update the window title
+    writeWindowTitle(appName);
 }
 
 void RigControlMainWindow::initActionsConnections()

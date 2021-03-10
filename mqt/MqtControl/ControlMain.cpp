@@ -386,7 +386,7 @@ void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, bool L3, bool L4, bool 
 void ControlMain::on_notify( AnalysePubSubNotify an, const QString from )
 {
     // PubSub notifications
-    trace( "Notify callback from " + from + ( an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error " : ":Normal " ) +  an.getPublisherProgram() + "@" + an.getPublisherRouter());
 
     if ( an.getOK())
     {
