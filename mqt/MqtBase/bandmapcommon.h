@@ -14,37 +14,13 @@
 #ifndef BANDMAPCOMMON_H
 #define BANDMAPCOMMON_H
 
-// Cluster Data and View Columns
+#include <QString>
+#include <QMap>
+#include <QStringList>
+#include "ProfileEnums.h"
+#include "BandList.h"
 
 
-
-//const int BMP_TIME_COL_NUM = 0;
-//const int BMP_FREQ_COL_NUM = 1;
-//const int BMP_DXSPOT_CALL_COL_NUM = 2;
-//const int BMP_DXSPOT_CALL_WORKED_COL_NUM = 3;
-//const int BMP_DXLOC_COL_NUM = 4;
-//const int BMP_DXDIST_COL_NUM = 5;
-//const int BMP_DXBRG_COL_NUM = 6;
-//const int BMP_DXLOC_WORKED_COL_NUM = 7;
-//const int BMP_SPOT_CALL_COL_NUM = 8;
-//const int BMP_SPOTLOC_COL_NUM = 9;
-//const int BMP_COMMENT_COL_NUM = 10;
-//const int BMP_DXBANDMASK_COL_NUM = 11;
-//const int BMP_MODEMASK_COL_NUM = 12;
-//const int BMP_DXSPOT_TO_MEMORY_FLAG_COL_NUM = 13;
-//const int BMP_RXTIME_COL_NUM = 14;
-
-//const int BMP_TIME_COL_WIDTH = 40;
-//const int BMP_FREQ_COL_WIDTH = 60;
-//const int BMP_DXSPOT_CALL_COL_WIDTH = 60;
-//const int BMP_DXSPOT_CALL_WKD_COL_WIDTH = 30;
-//const int BMP_DXLOC_COL_WIDTH = 50;
-//const int BMP_DXDIST_COL_WIDTH = 40;
-//const int BMP_DXBRG_COL_WIDTH = 30;
-//const int BMP_DXLOC_WKD_COL_WIDTH = 30;
-//const int BMP_SPOT_CALL_COL_WIDTH = 60;
-//const int BMP_SPOTLOC_COL_WIDTH = 50;
-//const int BMP_COMMENT_COL_WIDTH = 170;
 
 const bool BMP_BOOL_YES = true;
 const bool BMP_BOOL_NO = false;
@@ -61,6 +37,7 @@ namespace dialData {
 
 const int khzStep[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 50, 50, 50};
 const int khzPixelStep[] = {200, 150, 110, 85, 65, 50, 35, 25, 20, 15, 11, 8, 6, 4, 3, 2, 1};
+//const int khzPixelStep[] = {225, 196, 169, 144, 121, 100, 81, 64, 49, 36, 25, 16, 9, 4, 1, 1, 1};
 const int hzPixelStep[] = {5, 6, 9, 12, 15, 20, 28, 40, 50, 66, 90, 125, 166, 250, 333, 500, 1000};
 const int minorMarker[] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 0, 0, 0};
 const int endScrollMult[] = {1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5};
@@ -92,14 +69,52 @@ const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
 class BandmapZoomLevelIdAndNames
 {
 public:
-    LOGGERPROFILE getStartZoomLevelId(int i){return startZoomLevelId[i];}
-    QString getStartZoomLevelName(int i){return startZoomLevelName[i];}
-    int getStartZoomLevelNameCount(){return startZoomLevelName.count();}
+
+    BandmapZoomLevelIdAndNames()
+    {
+        QVector <QSharedPointer<BandInfo> > bands;
+        BandList::getBandList().loadAllBands(bands);
+
+        for (int i = 0; i < bands.count() && i < startZoomLevelId.count(); i++)
+        {
+
+            startZoomLevelIdByBand.insert(bands[i].data()->uk, startZoomLevelId[i]);
+        }
+    }
+
+
+    LOGGERPROFILE getStartZoomLevelId(QString band)
+    {
+        if (startZoomLevelIdByBand.contains(band))
+        {
+                return startZoomLevelIdByBand.value(band);
+        }
+
+        return elpBandmapStartZoomLevel_1_8MHz;
+    }
+
+    QString getStartZoomLevelName(QString band)
+    {
+        QString name = "bandmapStartZoomLevel_" + band.remove('\x20').replace('.', '_');
+        return name;
+    }
+
 
 
 private:
 
-    const LOGGERPROFILE startZoomLevelId [9] {elpBandmapStartZoomLevel_50MHz,
+    QMap <QString, LOGGERPROFILE> startZoomLevelIdByBand;
+
+
+
+    const QList<LOGGERPROFILE> startZoomLevelId  {
+                                            elpBandmapStartZoomLevel_1_8MHz,
+                                            elpBandmapStartZoomLevel_3_5MHz,
+                                            elpBandmapStartZoomLevel_7MHz,
+                                            elpBandmapStartZoomLevel_14MHz,
+                                            elpBandmapStartZoomLevel_21MHz,
+                                            elpBandmapStartZoomLevel_28MHz,
+                                            elpBandmapStartZoomLevel_50MHz,
                                             elpBandmapStartZoomLevel_70MHz,
                                             elpBandmapStartZoomLevel_144MHz,
                                             elpBandmapStartZoomLevel_432MHz,
@@ -109,15 +124,7 @@ private:
                                             elpBandmapStartZoomLevel_5_6GHz,
                                             elpBandmapStartZoomLevel_10GHz};
 
-    const QStringList startZoomLevelName  {"bandmapStartZoomLevel_50MHz",
-                                "bandmapStartZoomLevel_70MHz",
-                                "bandmapStartZoomLevel_144MHz",
-                                "bandmapStartZoomLevel_432MHz",
-                                "bandmapStartZoomLevel_1296MHz",
-                                "bandmapStartZoomLevel_2300MHz",
-                                "bandmapStartZoomLevel_3_4GHz",
-                                "bandmapStartZoomLevel_5_6GHz",
-                                "bandmapStartZoomLevel_10GHz"};
+
 
 
 };

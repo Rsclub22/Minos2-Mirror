@@ -86,7 +86,6 @@ enum LOGGERPROFILE {
    elpBandmapStartZoomLevel_21MHz,
    elpBandmapStartZoomLevel_28MHz,
 
-
    elpBandmapStartZoomLevel_50MHz,
    elpBandmapStartZoomLevel_70MHz,
    elpBandmapStartZoomLevel_144MHz,
