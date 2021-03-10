@@ -1661,16 +1661,16 @@ void RigControlFrame::setContestBandLimits(QString band)
 
 void RigControlFrame::setRadioListFromTslf()
 {
-    if (!rigFrameStartFlag || ui->radioNameSel->count() == 0)
-    {
-        traceMsg(QString("setRadioListFromTslf: framestart flag off - setRadioList"));
+    //if (!rigFrameStartFlag || ui->radioNameSel->count() == 0)
+    //{
+     //   traceMsg(QString("setRadioListFromTslf: framestart flag off - setRadioList"));
         setRadioList();
-    }
-    else
-    {
-        traceMsg(QString("setRadioListFromTslf: framestart flag on - ignore this radiolist update"));
+   // }
+   // else
+   // {
+   //     traceMsg(QString("setRadioListFromTslf: framestart flag on - ignore this radiolist update"));
 
-    }
+   // }
 }
 
 void RigControlFrame::setRadioList()
@@ -1691,9 +1691,23 @@ void RigControlFrame::setRadioList()
 
             traceMsg(QString("setRadioList: add %1 radios to radioNameSel").arg(listOfRadios.count()));
 
-            ui->radioNameSel->clear();
-            ui->radioNameSel->addItem("");
-            ui->radioNameSel->addItems(listOfRadios);
+            if (ui->radioNameSel->count() == 0)
+            {
+               ui->radioNameSel->addItem("");
+            }
+            else
+            {
+                foreach (const auto &rn, listOfRadios)
+                {
+                    if (ui->radioNameSel->findText(rn) == -1)
+                    {
+                        ui->radioNameSel->addItem(rn);
+                    }
+
+                }
+            }
+
+
 
             int index = ui->radioNameSel->findText(radioName, Qt::MatchExactly);
             if (index > 0)
