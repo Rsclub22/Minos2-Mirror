@@ -106,7 +106,8 @@ void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignDat
         st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
         st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
         st->addMember(qrzCallsignData.getCounty(), rpcConstants::qrzCounty );
-        st->addMember(qrzCallsignData.getQth(), rpcConstants::qrzQth );
+        st->addMember(qrzCallsignData.getAddr1(), rpcConstants::qrzAddr1 );
+        st->addMember(qrzCallsignData.getAddr2(), rpcConstants::qrzAddr2 );
         st->addMember(qrzCallsignData.getCountry(), rpcConstants::qrzCountry);
         st->addMember(qrzCallsignData.getLat(), rpcConstants::qrzLat);
         st->addMember(qrzCallsignData.getLon(), rpcConstants::qrzLon);

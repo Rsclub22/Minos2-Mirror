@@ -39,8 +39,11 @@ public:
     void setName(QString name_){name = name_;}
     QString getName(){return name;}
 
-    void setQth(QString qth_){qth = qth_;}
-    QString getQth(){return qth;}
+    void setAddr1(QString addr1_){addr1 = addr1_;}
+    QString getAddr1(){return addr1;}
+
+    void setAddr2(QString addr2_){addr2 = addr2_;}
+    QString getAddr2(){return addr2;}
 
     void setCounty(QString county_){county = county_;}
     QString getCounty(){return county;}
@@ -68,7 +71,8 @@ public:
         callsign.clear();
         firstName.clear();
         name.clear();
-        qth.clear();
+        addr1.clear();
+        addr2.clear();
         county.clear();
         country.clear();
         lat.clear();
@@ -85,7 +89,8 @@ private:
     QString callsign;
     QString firstName;
     QString name;
-    QString qth;
+    QString addr1;
+    QString addr2;
     QString county;
     QString country;
     QString lat;

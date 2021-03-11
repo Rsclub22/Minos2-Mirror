@@ -40,35 +40,40 @@ void QrzDisplayFrame::onLoggerQrzMessage(QrzServerMessage qrzRequest)
 
 void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid)
 {
-    clear();
-    if (qrzReplyState.isEmpty())
+    if (!ct->isAgeProtected())
     {
-        ui->callsignText->setText(cd.getCallsign());
-        ui->nameText->setText(cd.getFirstName());
-        ui->townText->setText(cd.getQth());
-        ui->qraText->setText(cd.getQra());
-        if (!cd.getQra().isEmpty())
+        clear();
+        if (qrzReplyState.isEmpty())
         {
-            distance = 0;
-            bearing = 0;
-            calcSpotDistanceBearing(cd.getQra(), &distance, &bearing);
-
-            ui->distanceText->setText(QString::number(distance));
-            if (bearing >= 0 && bearing <= 360)
+            ui->callsignText->setText(cd.getCallsign());
+            ui->nameText->setText(cd.getFirstName());
+            ui->addr1Text->setText(cd.getAddr1());
+            ui->addr2Text->setText(cd.getAddr2());
+            ui->qraText->setText(cd.getQra());
+            if (!cd.getQra().isEmpty())
             {
-                ui->bearingText->setText(QString::number(bearing));
-            }
+                distance = 0;
+                bearing = 0;
+                calcSpotDistanceBearing(cd.getQra(), &distance, &bearing);
 
+                ui->distanceText->setText(QString::number(distance));
+                if (bearing >= 0 && bearing <= 360)
+                {
+                    ui->bearingText->setText(QString::number(bearing));
+                }
+
+            }
+            ui->countryText->setText(cd.getCountry());
+            ui->cqZoneText->setText(cd.getCqZone());
+            ui->ituZoneText->setText(cd.getItuZone());
         }
-        ui->countryText->setText(cd.getCountry());
-        ui->cqZoneText->setText(cd.getCqZone());
-        ui->ituZoneText->setText(cd.getItuZone());
+        else
+        {
+            ui->callsignText->setText(cd.getCallsign());
+            ui->qrzMessageText->setText(qrzReplyState);
+        }
     }
-    else
-    {
-        ui->callsignText->setText(cd.getCallsign());
-        ui->qrzMessageText->setText(qrzReplyState);
-    }
+
 
 
 }
@@ -110,8 +115,8 @@ void QrzDisplayFrame::clear()
 {
     ui->callsignText->clear();
     ui->nameText->clear();
-    ui->townText->clear();
-    ui->qraText->clear();
+    ui->addr1Text->clear();
+    ui->addr2Text->clear();
     ui->distanceText->clear();
     ui->bearingText->clear();
     ui->cqZoneText->clear();
@@ -230,7 +235,8 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
             QSharedPointer<RPCParam> msgQrzFirstName;
             QSharedPointer<RPCParam> msgQrzName;
             QSharedPointer<RPCParam> msgQrzCounty;
-            QSharedPointer<RPCParam> msgQrzQth;
+            QSharedPointer<RPCParam> msgQrzAddr1;
+            QSharedPointer<RPCParam> msgQrzAddr2;
             QSharedPointer<RPCParam> msgQrzCountry;
             QSharedPointer<RPCParam> msgQrzLat;
             QSharedPointer<RPCParam> msgQrzLon;
@@ -249,7 +255,8 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                     && args->getStructArgMember(0, rpcConstants::qrzFirstName, msgQrzFirstName)
                     && args->getStructArgMember(0, rpcConstants::qrzName, msgQrzName)
                     && args->getStructArgMember(0, rpcConstants::qrzCounty, msgQrzCounty)
-                    && args->getStructArgMember(0, rpcConstants::qrzQth, msgQrzQth)
+                    && args->getStructArgMember(0, rpcConstants::qrzAddr1, msgQrzAddr1)
+                    && args->getStructArgMember(0, rpcConstants::qrzAddr2, msgQrzAddr2)
                     && args->getStructArgMember(0, rpcConstants::qrzCountry, msgQrzCountry)
                     && args->getStructArgMember(0, rpcConstants::qrzLat, msgQrzLat)
                     && args->getStructArgMember(0, rpcConstants::qrzLon, msgQrzLon)
@@ -275,9 +282,13 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                 msgQrzCounty->getString(county);
                 cd.setCounty(county);
 
-                QString qth;
-                msgQrzQth->getString(qth);
-                cd.setQth(qth);
+                QString addr1;
+                msgQrzAddr1->getString(addr1);
+                cd.setAddr1(addr1);
+
+                QString addr2;
+                msgQrzAddr1->getString(addr2);
+                cd.setAddr2(addr2);
 
                 QString country;
                 msgQrzCountry->getString(country);

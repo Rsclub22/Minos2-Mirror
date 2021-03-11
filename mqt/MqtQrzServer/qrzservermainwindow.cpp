@@ -430,10 +430,15 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
             qrzCallsignData.setName(xmlData.readElementText());
             trace(QString("Callsign Data: name = %1").arg(qrzCallsignData.getName()));
         }
+        else if (xmlData.name() == "addr1")
+        {
+            qrzCallsignData.setAddr1(xmlData.readElementText());
+            trace(QString("Callsign Data: addr1 = %1").arg(qrzCallsignData.getAddr1()));
+        }
         else if (xmlData.name() == "addr2")
         {
-            qrzCallsignData.setQth(xmlData.readElementText());
-            trace(QString("Callsign Data: qth = %1").arg(qrzCallsignData.getQth()));
+            qrzCallsignData.setAddr2(xmlData.readElementText());
+            trace(QString("Callsign Data: addr2 = %1").arg(qrzCallsignData.getAddr2()));
         }
         else if (xmlData.name() == "county")
         {
