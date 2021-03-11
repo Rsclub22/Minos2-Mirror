@@ -165,16 +165,16 @@ void RigControlFrame::checkRigDetailsAvail()
         return;
     }
 
-    if (ct && !ct->isReadOnly() )
-    {
-        if (ui->radioNameSel->count() == 0)
-        {
-            if(LogContainer->sendDM->rigs().count())
-            {
-                setRadioList();
-            }
-        }
-    }
+    //if (ct && !ct->isReadOnly() )
+   // {
+    //    if (ui->radioNameSel->count() == 0)
+    //    {
+   //         if(LogContainer->sendDM->rigs().count())
+    //        {
+    //            setRadioList();
+   //         }
+    //    }
+   // }
 
 
     if (ct &&  ct->isReadOnly())
@@ -195,7 +195,8 @@ void RigControlFrame::checkRigDetailsAvail()
             traceMsg(QString("checkRigDetailsAvail: contest radio name is %1").arg(ct->radioName.getValue().toString()));
             traceMsg(QString("checkRigDetailsAvail: number of radios in allradioDetails = %1").arg(allRadioDetails.count()));
 
-            if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
+            //if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
+            if (ui->radioNameSel->findText(ct->radioName.getValue().toString()) != -1)
             {
                traceMsg(QString("checkRigDetailsAvail: radioName in allRadioDetails = %1").arg(ct->radioName.getValue().toString()));
                if (allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
@@ -216,7 +217,7 @@ void RigControlFrame::checkRigDetailsAvail()
             }
             else
             {
-                traceMsg(QString("checkRigDetailsAvail: contest radio missing from allradioDetails = %1").arg(ct->radioName.getValue().toString()));
+                traceMsg(QString("checkRigDetailsAvail: contest radio missing from radioName Select = %1").arg(ct->radioName.getValue().toString()));
             }
 
         }
@@ -1663,14 +1664,14 @@ void RigControlFrame::setRadioListFromTslf()
 {
     //if (!rigFrameStartFlag || ui->radioNameSel->count() == 0)
     //{
-     //   traceMsg(QString("setRadioListFromTslf: framestart flag off - setRadioList"));
+    //    traceMsg(QString("setRadioListFromTslf: framestart flag off - setRadioList"));
         setRadioList();
-   // }
-   // else
-   // {
-   //     traceMsg(QString("setRadioListFromTslf: framestart flag on - ignore this radiolist update"));
+    //}
+    //else
+    //{
+    //    traceMsg(QString("setRadioListFromTslf: framestart flag on - ignore this radiolist update"));
 
-   // }
+    //}
 }
 
 void RigControlFrame::setRadioList()
