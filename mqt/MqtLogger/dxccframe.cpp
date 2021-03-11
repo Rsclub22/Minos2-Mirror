@@ -47,8 +47,8 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         reInitialiseCountries();
         ui->DXCCTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-        connect( ui->DXCCTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-                 this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+        connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::sectionResized,
+                 this, &DXCCFrame::on_sectionResized, Qt::UniqueConnection);
     }
 }
 void DXCCFrame::reInitialiseCountries()

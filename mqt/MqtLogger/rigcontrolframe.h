@@ -155,7 +155,7 @@ private slots:
     void clusterUpdateRigFreq(Frequency freq);
 
 
-    void freqStepComboChanged(const QString step);
+    void freqStepComboChanged(int step);
 
 
     void onCheckContestBandMatch();

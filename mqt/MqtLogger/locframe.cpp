@@ -197,7 +197,7 @@ LocFrame::LocFrame(QWidget *parent) :
     model->delegate = delegate;
     ui->LocView->setModel(model);
 
-    connect(ui->LocView, SIGNAL(minosViewScrolled()), this, SLOT(on_minosViewScrolled()));
+    connect(ui->LocView, &MinosTableView::minosViewScrolled, this, &LocFrame::on_minosViewScrolled);
 }
 
 LocFrame::~LocFrame()

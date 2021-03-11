@@ -11,12 +11,9 @@
 
 N1MMBroadcast::N1MMBroadcast()
 {
-    connect(&MinosLoggerEvents::mle, SIGNAL(afterQSOSaved(BaseContestLog *, QSharedPointer<BaseContact>)),
-            this, SLOT(afterQSOSaved(BaseContestLog *, QSharedPointer<BaseContact> )));
-    connect(&MinosLoggerEvents::mle, SIGNAL(wsjtxDatagram(QByteArray *)),
-            this, SLOT(wsjtxDatagram(QByteArray *)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(callsignLookup(BaseContestLog *, QString)),
-            this, SLOT(callsignLookup(BaseContestLog *, QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::afterQSOSaved, this, &N1MMBroadcast::afterQSOSaved);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::wsjtxDatagram, this, &N1MMBroadcast::wsjtxDatagram);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::callsignLookup, this, &N1MMBroadcast::callsignLookup);
 
 }
 bool N1MMBroadcast::setAddress(QString addr, QHostAddress &host)

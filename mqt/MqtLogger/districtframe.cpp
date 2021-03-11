@@ -41,8 +41,8 @@ void DistrictFrame::setContest(BaseContestLog *contest)
     if (contest)
     {
         reInitialiseDistricts();
-        connect( ui->DistrictTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-                 this, SLOT( on_sectionResized(int, int , int)), Qt::UniqueConnection);
+        connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized,
+                 this, &DistrictFrame::on_sectionResized, Qt::UniqueConnection);
     }
     ui->DistrictTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }

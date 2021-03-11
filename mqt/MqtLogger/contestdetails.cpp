@@ -82,15 +82,15 @@ ContestDetails::ContestDetails(QWidget *parent) :
     MainOpComboBoxFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->installEventFilter(this);
 
-    connect(ContestNameEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(BandComboBoxFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(CallsignEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(LocatorEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(PowerEditFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(MainOpComboBoxFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
+    connect(ContestNameEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(BandComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(CallsignEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(LocatorEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(PowerEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(MainOpComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
 
-    connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
-    connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
+    connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
+    connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_RotatorList);
 
     ui->NonGCtryMult->setVisible(false);
     ui->GLocMult->setVisible(false);

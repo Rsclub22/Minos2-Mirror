@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include "bandmapgraphicspanel.h"
 #include "bandmapview.h"
 #include "rigutils.h"
 #include "MinosLoggerEvents.h"
@@ -62,7 +62,7 @@ BandmapView::~BandmapView()
 }
 
 
-void BandmapView::initBandmapView(QGraphicsView* view )
+void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
 {
     bandmapGraphicsView = view;
     bandmapGraphicsView->setScene(bandmapScene);
@@ -83,20 +83,21 @@ void BandmapView::initBandmapView(QGraphicsView* view )
     trace("BandmapView::bandmapUpdate() initBandMapView");
     bandmapUpdate();
 
-    connect(dial, SIGNAL(zoomUpdated(bool)), this, SLOT(zoomUpdated(bool)));
+    connect(dial, &BandmapFreqDial::zoomUpdated, this, &BandmapView::zoomUpdated);
 
-    connect(bandmapGraphicsView, SIGNAL(bandmapResize(int, int)), this, SLOT(bandmapResize(int, int)));
-    connect(bandmapGraphicsView, SIGNAL(leftMouseButtonPressed(QPoint)), this, SLOT(leftMouseButtonPressed(QPoint)));
-    connect(bandmapGraphicsView, SIGNAL(mouseDoubleClicked(QPoint)), this, SLOT(mouseDoubleClicked(QPoint)));
-    connect(bandmapGraphicsView, SIGNAL(nextSpot(bool, bool)), this, SLOT(on_nextSpot(bool, bool)));
-    connect(bandmapGraphicsView, SIGNAL(scrollMap(bool)),this, SLOT(on_scrollMap(bool)));
+    connect(bandmapGraphicsView, &BandmapGraphicsPanel::bandmapResize, this, &BandmapView::bandmapResize);
+    connect(bandmapGraphicsView, &BandmapGraphicsPanel::leftMouseButtonPressed, this, &BandmapView::leftMouseButtonPressed);
+    connect(bandmapGraphicsView, &BandmapGraphicsPanel::mouseDoubleClicked, this, &BandmapView::mouseDoubleClicked);
+    connect(bandmapGraphicsView, &BandmapGraphicsPanel::nextSpot, this, &BandmapView::on_nextSpot);
+    connect(bandmapGraphicsView, &BandmapGraphicsPanel::scrollMap, this, &BandmapView::on_scrollMap);
 
+    // functor connects don't work for these two... Or if they do, I haven't found the recipe
     connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
     connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
 
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( bandmapGraphicsView, SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( on_bandmap_customContextMenuRequested( const QPoint& ) ) );
+    connect( bandmapGraphicsView, &BandmapGraphicsPanel::customContextMenuRequested, this, &BandmapView::on_bandmap_customContextMenuRequested);
 
 
 }

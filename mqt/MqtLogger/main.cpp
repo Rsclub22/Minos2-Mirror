@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         //a.setStyle("fusion");
 
         TLogContainer *w = new TLogContainer();
-        w->connect(&a, SIGNAL(argsReceived(QString)), w, SLOT(onArgsReceived(QString)));
+        w->connect(&a, &SingleApplication::argsReceived, w, &TLogContainer::onArgsReceived);
 
         setAppFont();
 

@@ -17,6 +17,7 @@
 #include "bandmapclientfilterdialog.h"
 #include "bandmapcommon.h"
 #include "spotdatabase.h"
+#include "bandmapgraphicspanel.h"
 
 const QChar DEG_SYMBOL = 0260; // octal value
 const int NO_SELECTED_ROWNUM = -1;
@@ -49,7 +50,7 @@ public:
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
     void onFontChanged(QFont cf);
-    void initBandmapView(QGraphicsView *view);
+    void initBandmapView(BandmapGraphicsPanel *view);
 
 
     void bandmapUpdate();
@@ -143,7 +144,7 @@ private slots:
 private:
 
     QGraphicsScene *bandmapScene;
-    QGraphicsView* bandmapGraphicsView;
+    BandmapGraphicsPanel* bandmapGraphicsView;
 
     BandmapFreqDial *dial;
     Frequency curFreq;

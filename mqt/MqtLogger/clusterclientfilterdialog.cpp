@@ -243,10 +243,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     callsignListWidget = ui->callsignListWidget;
     callsignListWidget->addItems(filterSettings.unpackFilterList(filterSettings.callsignFilterList));
 
-
-    //connect(ui->callsignListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(callsignCurrentRowChanged(int)));
-
-
     connect(ui->callsignAddButton, &QPushButton::clicked, this, [=](){callsignAddClicked();});
     connect(ui->callsignEditButton, &QPushButton::clicked, this, [=](){callsignEditClicked();});
     connect(ui->callsignDelButton, &QPushButton::clicked, this, [=](){callsignDelClicked();});
@@ -256,8 +252,6 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     locatorListWidget = ui->locatorListWidget;
     locatorListWidget->addItems(filterSettings.unpackFilterList(filterSettings.locatorFilterList));
-
-    //connect(ui->locatorListWidget, SIGNAL(currentRowChanged(int)), this, SLOT(locatorCurrentRowChanged(int)));
 
     connect(ui->locatorAddButton, &QPushButton::clicked, this, [=](){locatorAddClicked();});
     connect(ui->locatorEditButton, &QPushButton::clicked, this, [=](){locatorEditClicked();});

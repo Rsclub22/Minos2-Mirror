@@ -96,7 +96,7 @@ public:
 
     void setRadioMode(QString mode);
 signals:
-    //void dialupdated();
+
     void zoomUpdated(bool);
 
 protected:

@@ -89,13 +89,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters = new QTimer(this);
     connect (checkNewFilters, &QTimer::timeout, this, [=](){checkSavedFilters();});
 
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(ClusterServerList(QVector<ClusterServer>)), this, SLOT(clusterClientServerList(QVector<ClusterServer>)));
-    connect (ClusterClientServer::getClusterClientServer(), SIGNAL(dxSpot(QVector<ClusterMessage>)), this, SLOT(dxSpots(QVector<ClusterMessage>)));
+    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &ClusterClientFrame::clusterClientServerList);
+    connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &ClusterClientFrame::dxSpots);
 
     connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
 
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &ClusterClientFrame::on_FontChanged, Qt::QueuedConnection);
 
     connect (ui->filtersBut, &QPushButton::clicked, this, [=](){filterButtonSelected();});
 
@@ -134,10 +134,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     connect(resendSpotsAction, &QAction::triggered, this, [=](){on_resendClusterSpots();});
     connect( clearSpotAction, &QAction::triggered, this, [=](){clearSpotActionSelected();});
     connect( clearAllSpotsAction, &QAction::triggered, this, [=](){clearAllSpotsActionSelected();});
-    //connect( memoryActionOveride, SIGNAL( triggered() ), this, SLOT(memoryActionOverideSelected()) );
 
-    //connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, Locator)), this, SLOT(delayed_afterLogContact(BaseContestLog *, Callsign, Locator)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContactToCluster(BaseContestLog *, Callsign, QString)), this, SLOT(on_AfterLogContact(BaseContestLog *, Callsign, QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToCluster, this, &ClusterClientFrame::on_AfterLogContact);
 
     ui->searchLineEdit->setValidator(&ucValidator);
     connect(ui->searchLineEdit, &QLineEdit::editingFinished, this, [=](){onSearchEditingFinished();});
@@ -176,11 +174,8 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     // all initial restores have been done
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(doSplitterChanges(BaseContestLog*)), this, SLOT(on_doSplitterChanges(BaseContestLog*)));
-
-
-    //connect(filterSetup, SIGNAL(filtersChanged(bool, bool, bool, bool)), this, SLOT(filtersChanged(bool, bool, bool, bool)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &ClusterClientFrame::on_doColumnChanges);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &ClusterClientFrame::on_doSplitterChanges);
 
     connect(ui->unworkedCallsignsChkBox, &QCheckBox::stateChanged, this, [=](int state){on_unworkedCallsignsCheckBox(state);});
     connect(ui->unworkedLocChkBox, &QCheckBox::stateChanged, this, [=](int state){on_unworkedLocCheckBox(state);});
@@ -192,12 +187,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     newLocatorSpotIndToggle(false);
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
-
-    //setClusterServerState(LogContainer->getClusterServerState()); // need tslf?
-
-    //QShortcut *shortcut = new QShortcut(QKeySequence("Ctrl+a"), parent);
-    //QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(onMenuShow()));
-
 
     checkHfFlagTimer = new QTimer(this);
     connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
@@ -316,14 +305,14 @@ void ClusterClientFrame::setupDXSpotView()
 
     QHeaderView *spotVerticalHeader = dxSpotView->verticalHeader();
 
-    connect(dxSpotView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onDxSpotViewClicked(const QModelIndex &)));
-    connect(spotVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onDXSpotVertHeaderClicked(int)));
+    connect(dxSpotView, &QTableView::clicked, this, &ClusterClientFrame::onDxSpotViewClicked);
+    connect(spotVerticalHeader, &QHeaderView::sectionClicked, this, &ClusterClientFrame::onDXSpotVertHeaderClicked);
 
 
     restoreDxSpotViewColumns();
     dxSpotView->horizontalHeader()->setStretchLastSection(true);
 
-    connect( dxSpotView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_dxSpotViewSectionResized(int, int , int)));
+    connect( dxSpotView->horizontalHeader(), &QHeaderView::sectionResized, this, &ClusterClientFrame::on_dxSpotViewSectionResized);
 
     spotVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
@@ -374,12 +363,12 @@ void ClusterClientFrame::setupSearchSpotView()
     searchView->verticalHeader()->setMinimumSectionSize(10);
 
     QHeaderView *searchVerticalHeader = searchView->verticalHeader();
-    connect(searchView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onSearchSpotViewClicked(const QModelIndex &)));
-    connect(searchVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onSearchSpotVertHeaderClicked(int)));
+    connect(searchView, &QTableView::clicked, this, &ClusterClientFrame::onSearchSpotViewClicked);
+    connect(searchVerticalHeader, &QHeaderView::sectionClicked, this, &ClusterClientFrame::onSearchSpotVertHeaderClicked);
 
     restoreSearchViewColumns();
     searchView->horizontalHeader()->setStretchLastSection(true);
-    connect( searchView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_searchViewSectionResized(int, int , int)));
+    connect( searchView->horizontalHeader(), &QHeaderView::sectionResized, this, &ClusterClientFrame::on_searchViewSectionResized);
     searchVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     // show these columns
@@ -435,13 +424,13 @@ void ClusterClientFrame::setupCallsignSpotView()
 
 
     QHeaderView *callSignVerticalHeader = callSignView->verticalHeader();
-    connect(callSignView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onCallsignSpotViewClicked(const QModelIndex &)));
-    connect(callSignVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onCallsignSpotVertHeaderClicked(int)));
+    connect(callSignView, &QTableView::clicked, this, &ClusterClientFrame::onCallsignSpotViewClicked);
+    connect(callSignVerticalHeader, &QHeaderView::sectionClicked, this, &ClusterClientFrame::onCallsignSpotVertHeaderClicked);
 
 
     restoreCallsignViewColumns();
     callSignView->horizontalHeader()->setStretchLastSection(true);
-    connect( callSignView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_callsignViewSectionResized(int, int , int)));
+    connect( callSignView->horizontalHeader(), &QHeaderView::sectionResized, this, &ClusterClientFrame::on_callsignViewSectionResized);
 
     callSignVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
@@ -498,12 +487,12 @@ void ClusterClientFrame::setupLocatorSpotView()
     locatorView->verticalHeader()->setMinimumSectionSize(10);
 
 
-    connect(locatorView, SIGNAL(clicked(const QModelIndex &)), this, SLOT(onLocatorSpotViewClicked(const QModelIndex &)));
-    connect(locatorViewVerticalHeader, SIGNAL(sectionClicked(int)), this, SLOT(onLocatorSpotVertHeaderClicked(int)));
+    connect(locatorView, &QTableView::clicked, this, &ClusterClientFrame::onLocatorSpotViewClicked);
+    connect(locatorViewVerticalHeader, &QHeaderView::sectionClicked, this, &ClusterClientFrame::onLocatorSpotVertHeaderClicked);
 
     restoreLocatorViewColumns();
     locatorView->horizontalHeader()->setStretchLastSection(true);
-    connect( locatorView->horizontalHeader(), SIGNAL(sectionResized(int, int , int)), this, SLOT( on_locatorViewSectionResized(int, int , int)));
+    connect( locatorView->horizontalHeader(), &QHeaderView::sectionResized, this, &ClusterClientFrame::on_locatorViewSectionResized);
     locatorViewVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
 
