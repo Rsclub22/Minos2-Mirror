@@ -25,16 +25,12 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     bandSelGridLayout = _bandSelGrid;
     setupButtons();
 
-    QStringList listOfBands;
-    for (auto &b:bands)
-    {
-        listOfBands.append(b->uk);
-    }
-    presetFreqs.readSettings(listOfBands);
 
-    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, listOfBands);
-    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, listOfBands);
-    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, listOfBands);
+    readPresetFreqsFromIni(bands);
+
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
+    presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
 
 
 }
@@ -107,6 +103,11 @@ void BandSelButtons::setupButtons()
     buildBandButtonLabels();
 
 
+}
+
+void BandSelButtons::readPresetFreqsFromIni(const QVector <QSharedPointer <BandInfo> > bands)
+{
+    presetFreqs.readSettings(bands);
 }
 
 

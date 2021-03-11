@@ -1,4 +1,5 @@
 #include "rigcontrolcommonconstants.h"
+#include "BandList.h"
 
 const char * RIG_STATUS_CONNECTED = "Connected";
 const char * RIG_STATUS_DISCONNECTED = "Disconnected";
@@ -170,12 +171,12 @@ void PresetFreq::setLastFreq(const QString mode, const QString band, const Frequ
 
 }
 
-void PresetFreq::copyAllPrevFreqToLastFreqByMode(const QString mode, const QStringList &listOfBands)
+void PresetFreq::copyAllPrevFreqToLastFreqByMode(const QString mode, const QVector<QSharedPointer<BandInfo> > &bands)
 {
-    for (auto &b:listOfBands)
+    for (auto &b:bands)
     {
-        Frequency f = getPresetFreq(mode, b);
-        setLastFreq(mode, b, f);
+        Frequency f = getPresetFreq(mode, b.data()->uk);
+        setLastFreq(mode, b.data()->uk, f);
     }
 }
 
@@ -203,7 +204,7 @@ bool PresetFreq::contains(QString mode, QString band)
     return false;
 }
 
-void PresetFreq::readSettings(const QStringList &listOfBands)
+void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 {
 
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
@@ -215,9 +216,9 @@ void PresetFreq::readSettings(const QStringList &listOfBands)
 
     config.beginGroup(freqPresetData::PRESET_MODE_CW);
 
-    for (int i = 0; i < listOfBands.count(); i++)
+    for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_CW, listOfBands[i], Frequency(config.value(listOfBands[i], freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 
@@ -225,9 +226,9 @@ void PresetFreq::readSettings(const QStringList &listOfBands)
 
     config.beginGroup(freqPresetData::PRESET_MODE_PHONE);
 
-    for (int i = 0; i < listOfBands.count(); i++)
+    for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, listOfBands[i], Frequency(config.value(listOfBands[i], freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 
@@ -235,9 +236,9 @@ void PresetFreq::readSettings(const QStringList &listOfBands)
 
     config.beginGroup(freqPresetData::PRESET_MODE_MGM);
 
-    for (int i = 0; i < listOfBands.count(); i++)
+    for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_MGM, listOfBands[i], Frequency(config.value(listOfBands[i], freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
 
     }
 

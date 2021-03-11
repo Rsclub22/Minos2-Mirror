@@ -76,6 +76,7 @@ public:
     void setPresetFreqToolTip(QString mode);
     void setPrevFreqToolTip(QString mode);
 
+    void readPresetFreqsFromIni(const QVector<QSharedPointer<BandInfo> > bands);
 signals:
     void sendPresetFreq(Frequency freq);
     void sendBandChange(QString band);

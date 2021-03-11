@@ -73,6 +73,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     setRitEnableState(false);
     setRadioVolumeState(false);
 
+    BandList::getBandList().loadAllBands(bands);
+
     freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
     connect(freqEditShortKey, SIGNAL(activated()), this, SLOT(freqEditSelected()));
 
@@ -722,7 +724,8 @@ void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialog
         setStateOfBandOnlyRadButtons();
     }
 
-
+    // update preset freqs
+    bandSelButtons->readPresetFreqsFromIni(bands);
 
 }
 

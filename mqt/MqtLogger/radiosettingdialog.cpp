@@ -427,12 +427,8 @@ void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, con
 void RadioSettingDialog::freqPresetReadSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)
 {
 
-    QStringList listOfBands;
-    for(auto &b:bands)
-    {
-        listOfBands.append(b->uk);
-    }
-    presetFreq.readSettings(listOfBands);
+
+    presetFreq.readSettings(bands);
 
 
 }
