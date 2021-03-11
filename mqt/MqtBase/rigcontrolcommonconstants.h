@@ -5,6 +5,7 @@
 #include <QString>
 #include <QMap>
 #include <QMultiMap>
+
 #include <QStringList>
 #include <QSettings>
 #include "frequency.h"
@@ -20,7 +21,7 @@ extern const char * RIG_SWITCH_COMPLETED;
 //#define TXVERT_ON "TXVERTON"
 //#define TXVERT_OFF "TXVERTOFF"
 
-
+class BandInfo;
 
 
 namespace radioData {
@@ -233,12 +234,8 @@ public:
     void setLastFreq(const QString mode, const QString band, const Frequency freq);
     bool contains(QString mode, QString band);
 
-    void readSettings(const QStringList &listOfBands);
-    void copyAllPrevFreqToLastFreqByMode(const QString mode, const QStringList &listOfBands);
-
-
-
-
+    void copyAllPrevFreqToLastFreqByMode(const QString mode, const QVector<QSharedPointer<BandInfo> > &bands);
+    void readSettings(const QVector<QSharedPointer<BandInfo> > &bands);
 
 private:
 

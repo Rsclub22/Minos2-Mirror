@@ -73,6 +73,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     setRitEnableState(false);
     setRadioVolumeState(false);
 
+    BandList::getBandList().loadAllBands(bands);
+
     freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
     connect(freqEditShortKey, SIGNAL(activated()), this, SLOT(freqEditSelected()));
 
@@ -165,16 +167,16 @@ void RigControlFrame::checkRigDetailsAvail()
         return;
     }
 
-    if (ct && !ct->isReadOnly() )
-    {
-        if (ui->radioNameSel->count() == 0)
-        {
-            if(LogContainer->sendDM->rigs().count())
-            {
-                setRadioList();
-            }
-        }
-    }
+    //if (ct && !ct->isReadOnly() )
+   // {
+    //    if (ui->radioNameSel->count() == 0)
+    //    {
+   //         if(LogContainer->sendDM->rigs().count())
+    //        {
+    //            setRadioList();
+   //         }
+    //    }
+   // }
 
 
     if (ct &&  ct->isReadOnly())
@@ -195,7 +197,8 @@ void RigControlFrame::checkRigDetailsAvail()
             traceMsg(QString("checkRigDetailsAvail: contest radio name is %1").arg(ct->radioName.getValue().toString()));
             traceMsg(QString("checkRigDetailsAvail: number of radios in allradioDetails = %1").arg(allRadioDetails.count()));
 
-            if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
+            //if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
+            if (ui->radioNameSel->findText(ct->radioName.getValue().toString()) != -1)
             {
                traceMsg(QString("checkRigDetailsAvail: radioName in allRadioDetails = %1").arg(ct->radioName.getValue().toString()));
                if (allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
@@ -216,7 +219,7 @@ void RigControlFrame::checkRigDetailsAvail()
             }
             else
             {
-                traceMsg(QString("checkRigDetailsAvail: contest radio missing from allradioDetails = %1").arg(ct->radioName.getValue().toString()));
+                traceMsg(QString("checkRigDetailsAvail: contest radio missing from radioName Select = %1").arg(ct->radioName.getValue().toString()));
             }
 
         }
@@ -721,7 +724,8 @@ void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialog
         setStateOfBandOnlyRadButtons();
     }
 
-
+    // update preset freqs
+    bandSelButtons->readPresetFreqsFromIni(bands);
 
 }
 
@@ -1661,16 +1665,8 @@ void RigControlFrame::setContestBandLimits(QString band)
 
 void RigControlFrame::setRadioListFromTslf()
 {
-    //if (!rigFrameStartFlag || ui->radioNameSel->count() == 0)
-    //{
-     //   traceMsg(QString("setRadioListFromTslf: framestart flag off - setRadioList"));
-        setRadioList();
-   // }
-   // else
-   // {
-   //     traceMsg(QString("setRadioListFromTslf: framestart flag on - ignore this radiolist update"));
+    setRadioList();
 
-   // }
 }
 
 void RigControlFrame::setRadioList()
@@ -1695,19 +1691,15 @@ void RigControlFrame::setRadioList()
             {
                ui->radioNameSel->addItem("");
             }
-            else
-            {
-                foreach (const auto &rn, listOfRadios)
-                {
-                    if (ui->radioNameSel->findText(rn) == -1)
-                    {
-                        ui->radioNameSel->addItem(rn);
-                    }
 
-                }
-            }
+           foreach (const auto &rn, listOfRadios)
+           {
+               if (ui->radioNameSel->findText(rn) == -1)
+               {
+                   ui->radioNameSel->addItem(rn);
+               }
 
-
+           }
 
             int index = ui->radioNameSel->findText(radioName, Qt::MatchExactly);
             if (index > 0)
@@ -1722,7 +1714,7 @@ void RigControlFrame::setRadioList()
 
             }
 
-            launchRadioSelectCount = 10;     // wait five seconds
+            launchRadioSelectCount = 5;     // wait five seconds
             launchRadioSelectTimer->start(1000);
 
         }

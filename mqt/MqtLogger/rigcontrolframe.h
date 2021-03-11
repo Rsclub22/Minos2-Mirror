@@ -25,6 +25,7 @@
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
 #include "bandselbuttons.h"
+#include "BandList.h"
 
 namespace Ui {
     class RigControlFrame;
@@ -176,6 +177,8 @@ private:
     QStringList listOfBands;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
+
+    QVector <QSharedPointer<BandInfo> > bands;     // list of data for contest bands
 
     QShortcut* freqEditShortKey;
 
