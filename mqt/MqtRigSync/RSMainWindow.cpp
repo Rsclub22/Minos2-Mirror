@@ -255,7 +255,16 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             else
                 return;
         }
-        mainRigSelected = rigCache.getSelected("");
+
+        for (const auto &r: qAsConst(rigCache.getRigList()))
+        {
+            QStringList selLogs = rigCache.getSelectedLoggers(r);
+            if (r.appName() != rigSyncUuid && selLogs.count() && !selLogs.contains(rigSyncUuid))
+            {
+                mainRigSelected = r;
+                break;
+            }
+        }
         ui->Rig1Combo->setCurrentText(mainRigSelected.toString());
 
         if (!mainRigSelected.isEmpty())
@@ -467,25 +476,31 @@ void RSMainWindow::on_Rig2Combo_activated(const QString &psn)
 }
 void RSMainWindow::mainRigControlFreq(const Frequency &lFreq, QString mode)
 {
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
     QStringList qsl = rigCache.getSelectedLoggers(mainRigSelected);
     if (qsl.count())
     {
+        rigCache.setLogFreq(mainRigSelected, lFreq);
+        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
         QString loggerUuid = qsl[0];
-
-        st->addMember( loggerUuid, rpcConstants::loggerUuid );
-
         QString selc = rigCache.getSelectedContest(mainRigSelected, loggerUuid);
 
-        st->addMember( selc, rpcConstants::selected );
-        st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
-        st->addMember( mode, rpcConstants::rigControlLogMode );
-
-        rpc.getCallArgs() ->addParam( st );
-
-        rpc.queueCall( mainRigSelected);
+        {
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( loggerUuid, rpcConstants::loggerUuid );
+            st->addMember( selc, rpcConstants::selected );
+            st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( mainRigSelected);
+        }
+        {
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( loggerUuid, rpcConstants::loggerUuid );
+            st->addMember( selc, rpcConstants::selected );
+            st->addMember( mode, rpcConstants::rigControlLogMode );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( mainRigSelected);
+        }
     }
 }
 
@@ -521,25 +536,30 @@ void RSMainWindow::subRigSelection(const PubSubName &sd, bool state)
 
 void RSMainWindow::subRigControlFreq(const Frequency &lFreq, QString mode)
 {
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
     QStringList qsl = rigCache.getSelectedLoggers(subRigSelected);
     if (qsl.count())
     {
+        rigCache.setLogFreq(subRigSelected, lFreq);
         QString loggerUuid = qsl[0];
-
-        st->addMember( loggerUuid, rpcConstants::loggerUuid );
-
         QString selc = rigCache.getSelectedContest(subRigSelected, loggerUuid);
-
-        st->addMember(selc, rpcConstants::selected);
-        st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
-        st->addMember( mode, rpcConstants::rigControlLogMode );
-
-        rpc.getCallArgs() ->addParam( st );
-
-        rpc.queueCall( subRigSelected);
+        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+        {
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( loggerUuid, rpcConstants::loggerUuid );
+            st->addMember(selc, rpcConstants::selected);
+            st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( subRigSelected);
+        }
+        {
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember( loggerUuid, rpcConstants::loggerUuid );
+            st->addMember(selc, rpcConstants::selected);
+            st->addMember( mode, rpcConstants::rigControlLogMode );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( subRigSelected);
+        }
     }
 }
 
