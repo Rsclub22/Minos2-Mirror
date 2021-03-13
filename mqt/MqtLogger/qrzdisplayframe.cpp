@@ -5,7 +5,7 @@
 #include "ui_qrzdisplayframe.h"
 
 
-
+const int PINGTIMER_DURATION = 10000;
 
 
 
@@ -13,16 +13,20 @@
 
 QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     QFrame(parent),
-    ui(new Ui::QrzDisplayFrame)
+    ui(new Ui::QrzDisplayFrame),
+    receivedServerPing(false )
 {
     ui->setupUi(this);
     clear();
 
 
-    //connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMessage(QrzServerMessage)));
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(loggerQrzReply(QrzCallsignData, QString, QString)), this, SLOT(onLoggerQrzReply(QrzCallsignData, QString, QString)));
+    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(qrzServerLoggedState(bool, QString)), this, SLOT(onQrzServerLoggedState(bool, QString)));
+    onQrzServerLoggedState(false, "");
 
-
+    serverPingTimer = new QTimer(this);
+    connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
+    serverPingTimer->start(PINGTIMER_DURATION);
 }
 
 QrzDisplayFrame::~QrzDisplayFrame()
@@ -31,11 +35,43 @@ QrzDisplayFrame::~QrzDisplayFrame()
 }
 
 
-void QrzDisplayFrame::onLoggerQrzMessage(QrzServerMessage qrzRequest)
+void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
 {
+    receivedServerPing = true;
 
-    qrzRequestQueue += qrzRequest;
+    if (state)
+    {
+        ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
 
+    }
+    else
+    {
+        ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
+    }
+
+
+
+    if (!stateMessage.isEmpty())
+    {
+        ui->qrzMessageText->clear();
+        ui->qrzMessageText->setText(stateMessage);
+    }
+
+}
+
+void QrzDisplayFrame::onServerPingTimerTimeout()
+{
+    ui->off_onLineText->clear();
+
+    if (receivedServerPing)
+    {
+        ui->off_onLineText->setText("OnLine");
+        receivedServerPing = false;
+    }
+    else
+    {
+        ui->off_onLineText->setText("Offline");
+    }
 }
 
 void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid)
@@ -189,6 +225,7 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
+    trace(QString("[QrzDisplayServer]Publish %1 %2@%3").arg(rpcConstants::qrzDisplayApp, a, station));
     RPCPubSub::publish(rpcConstants::qrzDisplayApp,  a + "@" + station, "", psPublished);
 
 
@@ -225,103 +262,148 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
     trace(QString("[QrzDisplayServer]  on_serverCall - Message from %1").arg(from));
     if ( !err )
     {
-        RPCArgs *args = mro->getCallArgs();
+
+        QString mName = mro->getMethodName();
 
 
-        if (args)
+        if (mName == rpcConstants::qrzMethod)
         {
-            QSharedPointer<RPCParam> msgQrzLoggerResponse;
-            QSharedPointer<RPCParam> msgDxCall;
-            QSharedPointer<RPCParam> msgQrzFirstName;
-            QSharedPointer<RPCParam> msgQrzName;
-            QSharedPointer<RPCParam> msgQrzCounty;
-            QSharedPointer<RPCParam> msgQrzAddr1;
-            QSharedPointer<RPCParam> msgQrzAddr2;
-            QSharedPointer<RPCParam> msgQrzCountry;
-            QSharedPointer<RPCParam> msgQrzLat;
-            QSharedPointer<RPCParam> msgQrzLon;
-            QSharedPointer<RPCParam> msgQrzDxGrid;
-            QSharedPointer<RPCParam> msgQrzCQZone;
-            QSharedPointer<RPCParam> msgQrzITUZone;
-            QSharedPointer<RPCParam> msgQrzDxReplyState;
+            RPCArgs *args = mro->getCallArgs();
+            QSharedPointer<RPCParam> psName;
 
-            QSharedPointer<RPCParam> msgLogFrameId;
-
-            QrzCallsignData cd;
-
-
-            if (args->getStructArgMember(0, rpcConstants::qrzLoggerResponse, msgQrzLoggerResponse)
-                    && args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
-                    && args->getStructArgMember(0, rpcConstants::qrzFirstName, msgQrzFirstName)
-                    && args->getStructArgMember(0, rpcConstants::qrzName, msgQrzName)
-                    && args->getStructArgMember(0, rpcConstants::qrzCounty, msgQrzCounty)
-                    && args->getStructArgMember(0, rpcConstants::qrzAddr1, msgQrzAddr1)
-                    && args->getStructArgMember(0, rpcConstants::qrzAddr2, msgQrzAddr2)
-                    && args->getStructArgMember(0, rpcConstants::qrzCountry, msgQrzCountry)
-                    && args->getStructArgMember(0, rpcConstants::qrzLat, msgQrzLat)
-                    && args->getStructArgMember(0, rpcConstants::qrzLon, msgQrzLon)
-                    && args->getStructArgMember(0, rpcConstants::qrzDxGrid, msgQrzDxGrid)
-                    && args->getStructArgMember(0, rpcConstants::qrzCqZone, msgQrzCQZone)
-                    && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
-                    && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, msgQrzDxReplyState)
-                    && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
+            if (args->getStructArgMember(0, rpcConstants::paramName, psName))
             {
-                QString callsign;
-                msgDxCall->getString(callsign);
-                cd.setCallsign(callsign);
+                QString paraName;
+                psName->getString(paraName);
 
-                QString firstName;
-                msgQrzFirstName->getString(firstName);
-                cd.setFirstName(firstName);
+                if (paraName == rpcConstants::qrzLoggerResponse)
+                {
+                    trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
-                QString name;
-                msgQrzName->getString(name);
-                cd.setName(name);
+                    QSharedPointer<RPCParam> msgQrzLoggerResponse;
+                    QSharedPointer<RPCParam> msgDxCall;
+                    QSharedPointer<RPCParam> msgQrzFirstName;
+                    QSharedPointer<RPCParam> msgQrzName;
+                    QSharedPointer<RPCParam> msgQrzCounty;
+                    QSharedPointer<RPCParam> msgQrzAddr1;
+                    QSharedPointer<RPCParam> msgQrzAddr2;
+                    QSharedPointer<RPCParam> msgQrzCountry;
+                    QSharedPointer<RPCParam> msgQrzLat;
+                    QSharedPointer<RPCParam> msgQrzLon;
+                    QSharedPointer<RPCParam> msgQrzDxGrid;
+                    QSharedPointer<RPCParam> msgQrzCQZone;
+                    QSharedPointer<RPCParam> msgQrzITUZone;
+                    QSharedPointer<RPCParam> msgQrzDxReplyState;
+                    QSharedPointer<RPCParam> msgLogFrameId;
 
-                QString county;
-                msgQrzCounty->getString(county);
-                cd.setCounty(county);
+                    if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, msgDxCall)
+                            && args->getStructArgMember(0, rpcConstants::qrzFirstName, msgQrzFirstName)
+                            && args->getStructArgMember(0, rpcConstants::qrzName, msgQrzName)
+                            && args->getStructArgMember(0, rpcConstants::qrzCounty, msgQrzCounty)
+                            && args->getStructArgMember(0, rpcConstants::qrzAddr1, msgQrzAddr1)
+                            && args->getStructArgMember(0, rpcConstants::qrzAddr2, msgQrzAddr2)
+                            && args->getStructArgMember(0, rpcConstants::qrzCountry, msgQrzCountry)
+                            && args->getStructArgMember(0, rpcConstants::qrzLat, msgQrzLat)
+                            && args->getStructArgMember(0, rpcConstants::qrzLon, msgQrzLon)
+                            && args->getStructArgMember(0, rpcConstants::qrzDxGrid, msgQrzDxGrid)
+                            && args->getStructArgMember(0, rpcConstants::qrzCqZone, msgQrzCQZone)
+                            && args->getStructArgMember(0, rpcConstants::qrzItuZone, msgQrzITUZone)
+                            && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, msgQrzDxReplyState)
+                            && args->getStructArgMember(0, rpcConstants::qrzLogFrameId, msgLogFrameId))
+                    {
 
-                QString addr1;
-                msgQrzAddr1->getString(addr1);
-                cd.setAddr1(addr1);
+                        QrzCallsignData cd;
 
-                QString addr2;
-                msgQrzAddr1->getString(addr2);
-                cd.setAddr2(addr2);
+                        QString callsign;
+                        msgDxCall->getString(callsign);
+                        cd.setCallsign(callsign);
 
-                QString country;
-                msgQrzCountry->getString(country);
-                cd.setCountry(country);
+                        QString firstName;
+                        msgQrzFirstName->getString(firstName);
+                        cd.setFirstName(firstName);
 
-                QString lat;
-                msgQrzLat->getString(lat);
-                cd.setLat(lat);
+                        QString name;
+                        msgQrzName->getString(name);
+                        cd.setName(name);
 
-                QString lon;
-                msgQrzLon->getString(lon);
-                cd.setLon(lon);
+                        QString county;
+                        msgQrzCounty->getString(county);
+                        cd.setCounty(county);
 
-                QString dxGrid;
-                msgQrzDxGrid->getString(dxGrid);
-                cd.setQra(dxGrid);
+                        QString addr1;
+                        msgQrzAddr1->getString(addr1);
+                        cd.setAddr1(addr1);
 
-                QString cqZone;
-                msgQrzCQZone->getString(cqZone);
-                cd.setCqZone(cqZone);
+                        QString addr2;
+                        msgQrzAddr2->getString(addr2);
+                        cd.setAddr2(addr2);
 
-                QString ituZone;
-                msgQrzITUZone->getString(ituZone);
-                cd.setItuZone(ituZone);
+                        QString country;
+                        msgQrzCountry->getString(country);
+                        cd.setCountry(country);
 
-                QString dxReplyState;
-                msgQrzDxReplyState->getString(dxReplyState);
+                        QString lat;
+                        msgQrzLat->getString(lat);
+                        cd.setLat(lat);
 
-                QString uuid;
-                msgLogFrameId->getString(uuid);
+                        QString lon;
+                        msgQrzLon->getString(lon);
+                        cd.setLon(lon);
+
+                        QString dxGrid;
+                        msgQrzDxGrid->getString(dxGrid);
+                        cd.setQra(dxGrid);
+
+                        QString cqZone;
+                        msgQrzCQZone->getString(cqZone);
+                        cd.setCqZone(cqZone);
+
+                        QString ituZone;
+                        msgQrzITUZone->getString(ituZone);
+                        cd.setItuZone(ituZone);
+
+                        QString dxReplyState;
+                        msgQrzDxReplyState->getString(dxReplyState);
+
+                        QString uuid;
+                        msgLogFrameId->getString(uuid);
 
 
-                emit loggerQrzReply(cd, dxReplyState, uuid);
+                        emit loggerQrzReply(cd, dxReplyState, uuid);
+
+                    }
+                }
+                if (paraName == rpcConstants::qrzServerState)
+                {
+                    trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
+
+                    QSharedPointer<RPCParam> msgQrzLogonState;
+                    QSharedPointer<RPCParam> msgQrzServerMessage;
+                    bool loggedState = false;
+
+
+                    if (args->getStructArgMember(0, rpcConstants::qrzServerLogonState, msgQrzLogonState)
+                        && args->getStructArgMember(0, rpcConstants::qrzServerStateMessage, msgQrzServerMessage))
+
+                    {
+                        QString logStateStr;
+                        QString stateMessage;
+
+                        msgQrzLogonState->getString(logStateStr);
+                        if (logStateStr == rpcConstants::qrzServerLoggedIn)
+                        {
+                            loggedState = true;
+                        }
+
+                        msgQrzServerMessage->getString(stateMessage);
+
+                        emit qrzServerLoggedState(loggedState, stateMessage);
+                    }
+
+
+
+                }
+
 
             }
 

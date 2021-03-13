@@ -26,14 +26,18 @@ public:
     void setContest(BaseContestLog *c);
 
 private slots:
-    void onLoggerQrzMessage(QrzServerMessage qrzRequest);
+    void onQrzServerLoggedState(bool, QString);
     void onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid);
 
+    void onServerPingTimerTimeout();
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;
 
     QrzDisplayServerRpc *qrzDisplayServerRpc;
+
+    QTimer *serverPingTimer;
+    bool receivedServerPing;
 
     QVector<QrzServerMessage> qrzRequestQueue;
     QrzServerMessage requestedStation;
@@ -65,6 +69,7 @@ public:
 signals:
 
     void loggerQrzReply(QrzCallsignData, QString, QString);
+    void qrzServerLoggedState(bool, QString);
 
 private:
 

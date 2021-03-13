@@ -4,6 +4,10 @@
 #include "base_pch.h"
 
 
+const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
 class QrzServer
 {
 public:
@@ -11,7 +15,7 @@ public:
     QString app;
     QString publisherProgram;
     PublishState state;
-    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
+
 };
 
 
@@ -117,6 +121,9 @@ public:
     void setLoggerFlag(bool state){loggerFlag = state;}
     bool getLoggerFlag(){return loggerFlag;}
 
+    void setFromStationName(QString fromStationName_){fromStationName = fromStationName_;}
+    QString getFromStationName(){return fromStationName;}
+
     void setLoggerUuid(QString loggerUuid_){loggerUuid = loggerUuid_;}
     QString getLoggerUuid(){return loggerUuid;}
 
@@ -132,6 +139,7 @@ private:
 
     QString dxCall;
     QString spotterCall;
+    QString fromStationName;
     QString loggerUuid;
     bool loggerFlag;           // true from logger, false from cluster
 

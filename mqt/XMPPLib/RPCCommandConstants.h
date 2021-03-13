@@ -83,11 +83,15 @@ static const QString qrzDxGrid            ("qrzDxGrid");
 static const QString qrzSpotterGrid     ("qrzSpotterGrid");
 static const QString qrzCqZone          ("qrzCqZone");
 static const QString qrzItuZone         ("qrzItuZone");
+static const QString qrzServerLogonState ("qrzServerLogonState");
+static const QString qrzServerStateMessage     ("qrzServerStateMessage");
+static const QString qrzServerState     ("qrzServerState");
 static const QString qrzDxReplyState      ("qrzDxReplyState");
 static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
 
 static const QString qrzServerLoggedOut ("qrzServerLoggedOut");
-static const QString qrzServerLoggerIn  ("qrzServerLoggedIn");
+static const QString qrzServerLoggedIn ("qrzServerLoggedIn");
+static const QString qrzServerLoggedState  ("qrzServerLoggedState");
 static const QString qrzServerCallOK    ("qrzServerCallOK");
 
 // Chat

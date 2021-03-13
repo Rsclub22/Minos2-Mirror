@@ -1412,7 +1412,7 @@ void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QSt
         else
         {
             // flag no Qra found for callsign from Qrz
-            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);
+            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);  // flag failure
             processNewSpot(newSpot);
         }
     }

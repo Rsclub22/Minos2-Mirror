@@ -289,7 +289,7 @@ bool RadioSettingDialog::checkInBand(Frequency freq, int band)
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(tr("Freq. is out of band for %1").arg(bands[band]->name()));
+        msgBox.setText(tr("Frequency %1 is out of band for %2").arg(freq.convertFreqStrDispSingle(), bands[band]->name()));
         msgBox.exec();
         return false;
     }

@@ -33,6 +33,7 @@ signals:
     void resendSpotToClients(int, QString, QString, QString);
     void reconnectCmdFromLog(bool);
     void clusterQrzResponse(QString, QString, QString, QString, QString, QString);
+    void qrzServerLoggedState(bool, QString);
 
 
 private slots:

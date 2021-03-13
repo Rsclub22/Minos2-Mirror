@@ -67,22 +67,21 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     QStringList sv{
             rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
         };
-    QString pubName = rpcConstants::qrzServerApp;
-
-
 
     connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onClusterQrzMessage(QrzServerMessage)));
     connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(loggerQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMsg(QrzServerMessage)));
 
 
-    connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
 
-    queryTimer = new QTimer(this);
-    connect(queryTimer, &QTimer::timeout, this, [=](){onQueryTimeout();});
+    connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
 
     checkQrzRequestsTimer = new QTimer(this);
     connect(checkQrzRequestsTimer, &QTimer::timeout, this, [=](){handleQrzRequests();});
     checkQrzRequestsTimer->start(500);
+
+    pingStateTimer = new QTimer(this);
+    connect(pingStateTimer, &QTimer::timeout, this, [=](){onPingStateTimerTimeout();});
+    pingStateTimer->start(3000);
 
     ui->messageTextWindow->isReadOnly();
 
@@ -120,8 +119,11 @@ void QrzServerMainWindow::LogTimerTimer()
     }
 }
 
-void QrzServerMainWindow::onQueryTimeout()
+
+
+void QrzServerMainWindow::onPingStateTimerTimeout()
 {
+        QrzServerRpc::getQrzServerRpc()->sendQrzLoggedState(qrzServerStateFlags.getQrzLoggedOnFlag(), stateErrorMessage);
 
 }
 
@@ -149,19 +151,15 @@ void QrzServerMainWindow::quit()
 
 void QrzServerMainWindow::logon()
 {
-    if (askCallsignFlag || askLogonFlag)
+    if (qrzServerStateFlags.getAskCallsignFlag() || qrzServerStateFlags.getAskLogonFlag())
     {
         return;
     }
 
     qrzSessionData.clear();
 
-    askLogonFlag = true;
-    qrzLoggedOn = false;
-
-    queryTimer->stop();
-    queryTimer->setInterval(QUERYTIMEOUT);
-
+    qrzServerStateFlags.setAskLogonFlag(true);
+    qrzServerStateFlags.setQrzLoggedOnFlag(false);
 
     if (logonCallsign.isEmpty() || password.isEmpty())
     {
@@ -204,6 +202,8 @@ void QrzServerMainWindow::sendUrl(QString url)
 
     if ( reply->error() == QNetworkReply::NoError )
     {
+        stateErrorMessage.clear();
+
         int raw = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         if (raw == 301)
         {
@@ -256,7 +256,13 @@ void QrzServerMainWindow::sendUrl(QString url)
         QString url_ = stripPasswordFromUrl(url);
 
         // error
+        QString msg = QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString();
         trace ( QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString() );
+        stateErrorMessage = reply->errorString();
+        addToErrorTextLabel(msg);
+        addTextToLogWindow(msg);
+        qrzServerStateFlags.clear();
+        QrzServerRpc::getQrzServerRpc()->sendQrzLoggedState(qrzServerStateFlags.getQrzLoggedOnFlag(), reply->errorString());
 
     }
 
@@ -282,10 +288,6 @@ QString QrzServerMainWindow::stripPasswordFromUrl(QString url)
 
 void QrzServerMainWindow::sessionDataReceived()
 {
-    if (askLogonFlag || askCallsignFlag)
-    {
-        queryTimer->stop();
-    }
 
     if (!qrzSessionData.getError().isEmpty())
     {
@@ -302,24 +304,25 @@ void QrzServerMainWindow::sessionDataReceived()
         addTextToLogWindow(qrzSessionData.getMessage());
     }
 
-    if (askLogonFlag && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
+    if (qrzServerStateFlags.getAskLogonFlag() && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
     {
         // logon succesfull
-        qrzLoggedOn = true;
-        askLogonFlag = false;
+        qrzServerStateFlags.setQrzLoggedOnFlag(true);
+        qrzServerStateFlags.setAskLogonFlag(false);
         QString msg = QString("Qrz Logged on Ok with call %1").arg(logonCallsign);
         trace(msg);
         addTextToLogWindow(msg);
         addToErrorTextLabel("");
         addToMessageTextLabel("");
         setQrzStatusConnected(true);
+
     }
     else
     {
-        askLogonFlag = false;
+        qrzServerStateFlags.setAskLogonFlag(false);
     }
 
-    if (askCallsignFlag && !qrzSessionData.getError().isEmpty() && requestedStation.getLoggerFlag())
+    if (qrzServerStateFlags.getAskCallsignFlag() && !qrzSessionData.getError().isEmpty() && requestedStation.getLoggerFlag())
     {
         QString stateMsg;
         if (!qrzSessionData.getError().isEmpty())
@@ -333,9 +336,19 @@ void QrzServerMainWindow::sessionDataReceived()
 
         qrzCallsignData.clear();
         qrzCallsignData.setCallsign(requestedStation.getDxCall());
-        QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getLoggerUuid());
+        if (requestedStation.getLoggerFlag())
+        {
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
 
-        askCallsignFlag = false;
+        }
+        else
+        {
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
+        }
+
+        QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
+
+        qrzServerStateFlags.setAskCallsignFlag(false);
     }
 
 }
@@ -343,7 +356,7 @@ void QrzServerMainWindow::sessionDataReceived()
 
 void QrzServerMainWindow::callsignDataReceived()
 {
-    if (askCallsignFlag)
+    if (qrzServerStateFlags.getAskCallsignFlag())
     {
         if (!requestedStation.getLoggerFlag())
         {
@@ -359,15 +372,15 @@ void QrzServerMainWindow::callsignDataReceived()
         else
         {
             // a request from logger
-            QString msg = QString(QString("Cluster Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
+            QString msg = QString(QString("Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
             trace(msg);
             addTextToLogWindow(msg);
             QString stateMsg = "";
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getLoggerUuid());
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(), requestedStation.getLoggerUuid());
 
         }
 
-        askCallsignFlag = false;
+        qrzServerStateFlags.setAskCallsignFlag(false);
 
     }
 }
@@ -551,9 +564,9 @@ void QrzServerMainWindow::handleQrzRequests()
 {
     if (!qrzRequestQueue.isEmpty())
     {
-        if (qrzLoggedOn)
+        if (qrzServerStateFlags.getQrzLoggedOnFlag())
         {
-            if (!askCallsignFlag)
+            if (!qrzServerStateFlags.getAskCallsignFlag())
             {
                 requestedStation.clear();
 
@@ -561,7 +574,7 @@ void QrzServerMainWindow::handleQrzRequests()
                 qrzRequestQueue.remove(0);
 
                 // ask for qra locator
-                askCallsignFlag = true;
+                qrzServerStateFlags.setAskCallsignFlag(true);
                 trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(requestedStation.getDxCall()));
                 askCallsignData(requestedStation.getDxCall());
 

@@ -36,8 +36,6 @@ const QString AGENT = "Minos";
 
 const int QUERYTIMEOUT = 2000;
 
-const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
-const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 
 // SubExp response
@@ -80,6 +78,45 @@ private:
 
 };
 
+class QrzServerStateFlags
+{
+
+public:
+
+    QrzServerStateFlags()
+    {
+        clear();
+    }
+
+    void clear()
+    {
+        askLogonFlag = false;
+        askCallsignFlag = false;
+        qrzLoggedOnFlag = false;
+    }
+
+    bool getAskLogonFlag(){return askLogonFlag;}
+    void setAskLogonFlag(bool state){askLogonFlag = state;}
+
+    bool getAskCallsignFlag(){return askCallsignFlag;}
+    void setAskCallsignFlag(bool state){askCallsignFlag = state;}
+
+    bool getQrzLoggedOnFlag(){return qrzLoggedOnFlag;}
+    void setQrzLoggedOnFlag(bool state){qrzLoggedOnFlag = state;}
+
+
+
+private:
+
+    bool askLogonFlag = false;
+    bool askCallsignFlag = false;
+    bool qrzLoggedOnFlag = false;
+
+
+
+
+};
+
 
 
 
@@ -103,9 +140,10 @@ private slots:
 
     void onClusterQrzMessage(QrzServerMessage qrzRequest);
     void handleQrzRequests();
-    void onQueryTimeout();
+
     void onLoggerQrzMsg(QrzServerMessage qrzRequest);
 
+    void onPingStateTimerTimeout();
 private:
     Ui::QrzServerMainWindow *ui;
 
@@ -116,6 +154,7 @@ private:
 
 
     QTimer LogTimer;
+    QTimer *pingStateTimer;
 
     QString logonCallsign;
     QString password;
@@ -128,14 +167,11 @@ private:
     QrzCallsignData qrzCallsignData;
     QrzSessionData qrzSessionData;
 
-
-    QTimer *queryTimer;
     QTimer *checkQrzRequestsTimer;
 
-    bool askLogonFlag = false;
-    bool askCallsignFlag = false;
+    QrzServerStateFlags qrzServerStateFlags;
 
-    bool qrzLoggedOn = false;
+    QString stateErrorMessage;
 
 
     QString key;
