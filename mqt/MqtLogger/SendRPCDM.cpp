@@ -148,14 +148,10 @@ void TSendDM::sendKeyerPlay( TSingleLogFrame *tslf, int fno )
     {
         RPCGeneralClient rpc(rpcConstants::keyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::keyerPlayFile ));
-        QSharedPointer<RPCParam>iValue(new RPCIntParam( fno ));
-        QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
-        st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( iValue, rpcConstants::paramValue );
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( rpcConstants::keyerPlayFile, rpcConstants::paramName );
+        st->addMember( fno, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
     }
@@ -166,14 +162,10 @@ void TSendDM::sendKeyerRecord( TSingleLogFrame *tslf, int fno )
     {
         RPCGeneralClient rpc(rpcConstants::keyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( "RecordFile" ));
-        QSharedPointer<RPCParam>iValue(new RPCIntParam( fno ));
-        QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
-        st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( iValue, rpcConstants::paramValue );
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( QString("RecordFile"), rpcConstants::paramName );
+        st->addMember( fno, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
     }
@@ -185,14 +177,10 @@ void TSendDM::sendKeyerTone(TSingleLogFrame *tslf)
     {
         RPCGeneralClient rpc(rpcConstants::keyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( "Tone" ));
-        QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
-        QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
-        st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( iValue, rpcConstants::paramValue );
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( QString("Tone"), rpcConstants::paramName );
+        st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
     }
@@ -203,14 +191,10 @@ void TSendDM::sendKeyerTwoTone(TSingleLogFrame *tslf)
     {
         RPCGeneralClient rpc(rpcConstants::keyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( "TwoTone" ));
-        QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
-        QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
-        st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( iValue, rpcConstants::paramValue );
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( QString("TwoTone"), rpcConstants::paramName );
+        st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
     }
@@ -221,69 +205,48 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
     {
         RPCGeneralClient rpc(rpcConstants::keyerMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( "Stop" ));
-        QSharedPointer<RPCParam>iValue(new RPCIntParam( 0 ));
-        QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-        QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-        st->addMember( logger, rpcConstants::loggerUuid );
-        st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( iValue, rpcConstants::paramValue );
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+        st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+        st->addMember( QString("Stop"), rpcConstants::paramName );
+        st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
     }
 }
 //---------------------------------------------------------------------------
 
-
-
-
 void TSendDM::sendSpotToClusterServer(const Frequency &freq, const QString &call, const QString &loc )
 {
-
     if (!clusterApp.isEmpty())
     {
         traceMsg(QString("Send Spot To Cluster Server - call = %1").arg(call));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::txSpotToCluster ));
-        QSharedPointer<RPCParam>freqStr(new RPCStringParam(freq.str()));
-        QSharedPointer<RPCParam>callStr(new RPCStringParam(call));
-        QSharedPointer<RPCParam>locStr(new RPCStringParam(loc));
-        //QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
 
-        //st->addMember( logger, rpcConstants::loggerUuid );
-        //st->addMember( select, rpcConstants::selected );
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( freqStr, rpcConstants::txSpotParamFreq );
-        st->addMember( callStr, rpcConstants::txSpotParamCallsign );
-        st->addMember( locStr, rpcConstants::txSpotParamLocator );
+        st->addMember( rpcConstants::txSpotToCluster, rpcConstants::paramName );
+        st->addMember( freq.str(), rpcConstants::txSpotParamFreq );
+        st->addMember( call, rpcConstants::txSpotParamCallsign );
+        st->addMember( loc, rpcConstants::txSpotParamLocator );
+
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
     }
-
-
 }
 
 void TSendDM::sendHfFlagToClusterServer(const bool state)
 {
-
     if (!clusterApp.isEmpty())
     {
         traceMsg(QString("Send HfFlag To Cluster Server - state = %1").arg(state ? "True": "False"));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::hfFlagToCluster));
-        QSharedPointer<RPCParam>hfFlag(new RPCBooleanParam(state));
 
+        st->addMember( rpcConstants::hfFlagToCluster, rpcConstants::paramName );
+        st->addMember( state, rpcConstants::clusterHfFlag );
 
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( hfFlag, rpcConstants::clusterHfFlag );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
     }
-
-
 }
 
 void TSendDM::sendReconnectFlagToClusterServer(const bool state)
@@ -294,12 +257,10 @@ void TSendDM::sendReconnectFlagToClusterServer(const bool state)
         traceMsg(QString("Send Reconnect Flag To Cluster Server - state = %1").arg(state ? "True": "False"));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterReconnect));
-        QSharedPointer<RPCParam>hfFlag(new RPCBooleanParam(state));
 
+        st->addMember( rpcConstants::clusterReconnect, rpcConstants::paramName );
+        st->addMember( state, rpcConstants::clusterReconnect );
 
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( hfFlag, rpcConstants::clusterReconnect );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
     }
@@ -316,17 +277,12 @@ void TSendDM::sendRequestSpotsResentFromClusterServer( resendFrameId id, const Q
         traceMsg(QString("Send Request Spot Resend Command = %1, loggerUuid %2").arg(cmd, uuid));
         RPCGeneralClient rpc(rpcConstants::clusterMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
-        QSharedPointer<RPCParam>sName(new RPCStringParam( rpcConstants::clusterResendSpots));
-        QSharedPointer<RPCParam>logUuid(new RPCStringParam(uuid ));
-        QSharedPointer<RPCParam>resendCmd(new RPCStringParam(cmd));
-        QSharedPointer<RPCParam>bandmask(new RPCStringParam(bandMask));
-        QSharedPointer<RPCParam>frameId(new RPCIntParam(id));
 
-        st->addMember( sName, rpcConstants::paramName );
-        st->addMember( resendCmd, rpcConstants::clusterResendSpotsCmd );
-        st->addMember( frameId, rpcConstants::clusterFrameId ); // cluster or bandmap frame
-        st->addMember(bandmask, rpcConstants::clusterBandmask);
-        st->addMember(logUuid, rpcConstants::loggerUuid);
+        st->addMember( rpcConstants::clusterResendSpots, rpcConstants::paramName );
+        st->addMember( cmd, rpcConstants::clusterResendSpotsCmd );
+        st->addMember( static_cast<int>(id), rpcConstants::clusterFrameId ); // cluster or bandmap frame
+        st->addMember(bandMask, rpcConstants::clusterBandmask);
+        st->addMember(uuid, rpcConstants::loggerUuid);
 
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( clusterApp  );
@@ -341,10 +297,8 @@ void TSendDM::sendRotator(TSingleLogFrame *tslf, rpcConstants::RotateDirection d
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( static_cast<int> (direction), rpcConstants::rotatorParamDirection );
     st->addMember( angle, rpcConstants::rotatorParamAngle );
     rpc.getCallArgs() ->addParam( st );
@@ -374,13 +328,8 @@ void TSendDM::sendRotatorSelection(const PubSubName &s, const QString &uuid)
 
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-
-    QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
-    st->addMember( select, rpcConstants::selected );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( uuid, rpcConstants::selected );
     st->addMember( s.toString(), rpcConstants::rotatorSelectAntennaName );
     rpc.getCallArgs() ->addParam( st );
 
@@ -410,11 +359,8 @@ void TSendDM::sendRigSelection(const PubSubName &s, const QString &band, const F
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(uuid ));
-    st->addMember( select, rpcConstants::selected );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( uuid, rpcConstants::selected );
     st->addMember( s.toString(), rpcConstants::rigControlSelectRadioName );
     st->addMember(band, rpcConstants::rigControlLogBand);
     st->addMember(freq.str(), rpcConstants::rigControlLogFreq);
@@ -435,12 +381,8 @@ void TSendDM::sendRigControlFreq(TSingleLogFrame *tslf, const Frequency &freq)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( freq.str(), rpcConstants::rigControlLogFreq );
     rpc.getCallArgs() ->addParam( st );
 
@@ -455,12 +397,8 @@ void TSendDM::sendRigControlBand(TSingleLogFrame *tslf, const QString &band)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( band, rpcConstants::rigControlLogBand );
     rpc.getCallArgs() ->addParam( st );
 
@@ -477,12 +415,8 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( msgNum, rpcConstants::rigVoiceMessageNum );
     rpc.getCallArgs() ->addParam( st );
 
@@ -500,10 +434,8 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( mode, rpcConstants::rigControlLogMode );
     rpc.getCallArgs() ->addParam( st );
 
@@ -519,10 +451,8 @@ void TSendDM::sendRigControlRitFreq(TSingleLogFrame *tslf, ShortFreq freq)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( freq.str(), rpcConstants::rigControlLogRitFreq );
     rpc.getCallArgs() ->addParam( st );
 
@@ -537,10 +467,8 @@ void TSendDM::sendRigControlRitStatus(TSingleLogFrame *tslf, const bool &status)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( status, rpcConstants::rigRitOnOffStatus);
     rpc.getCallArgs() ->addParam( st );
 
@@ -555,10 +483,8 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( level, rpcConstants::rigLogVolLevel);
     rpc.getCallArgs() ->addParam( st );
 
@@ -573,10 +499,8 @@ void TSendDM::sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status)
     RPCGeneralClient rpc(rpcConstants::rigControlMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
-    st->addMember( select, rpcConstants::selected );
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( status, rpcConstants::rigHfFlag);
     rpc.getCallArgs() ->addParam( st );
 
@@ -590,9 +514,7 @@ void TSendDM::sendRotatorPreset(QString s)
     RPCGeneralClient rpc(rpcConstants::rotatorMethod);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
 
-    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-    st->addMember( logger, rpcConstants::loggerUuid );
-
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
     st->addMember( s, rpcConstants::rotPreset );
     rpc.getCallArgs() ->addParam( st );
 

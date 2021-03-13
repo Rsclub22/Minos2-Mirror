@@ -56,10 +56,8 @@ void MonitoredLog::getLogStanza( int stanza )
     // and here we want to start getting the log from the remote logger
     RPCGeneralClient rpc(rpcConstants::loggerStanzaRequest);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
-    QSharedPointer<RPCParam>sName(new RPCStringParam( publishedName ));
-    QSharedPointer<RPCParam>iStanza(new RPCIntParam( stanza ));
-    st->addMember( sName, "LogName" );
-    st->addMember( iStanza, "Stanza" );
+    st->addMember( publishedName, "LogName" );
+    st->addMember( stanza, "Stanza" );
     rpc.getCallArgs() ->addParam( st );
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }

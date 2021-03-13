@@ -86,10 +86,8 @@ void RPCRouterSubscriber::routerReSubscribe()
 {
    RPCRouterSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sRouter(new RPCStringParam( router ));
-   QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sRouter, "Server" );
-   st->addMember( sCat, "Category" );
+   st->addMember( router, "Server" );
+   st->addMember( category, "Category" );
    rsc.getCallArgs() ->addParam( st );
    rsc.queueCall( router );       // localhost just causes the router to loop
 }

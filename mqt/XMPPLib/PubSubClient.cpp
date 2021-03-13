@@ -100,10 +100,8 @@ void RPCSubscriber::reSubscribe()
 {
    RPCSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sRouter(new RPCStringParam( "localhost" ));
-   QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sRouter, "Server" );
-   st->addMember( sCat, "Category" );
+   st->addMember( QString("localhost"), "Server" );
+   st->addMember( category, "Category" );
    rsc.getCallArgs() ->addParam( st );
    rsc.queueCall( "localhost" );
 }
@@ -112,10 +110,8 @@ void RPCRemoteSubscriber::reSubscribe()
 {
    RPCRemoteSubscribeClient rsc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sRouter(new RPCStringParam( router ));
-   QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   st->addMember( sRouter, "Server" );
-   st->addMember( sCat, "Category" );
+   st->addMember( router, "Server" );
+   st->addMember( category, "Category" );
    rsc.getCallArgs() ->addParam( st );
    rsc.queueCall( "localhost" );       // localhost just causes the router to loop
 }
@@ -149,14 +145,10 @@ void RPCPublisher::rePublish()
 {
    RPCPublishClient rpc( nullptr );
    QSharedPointer<RPCParam>st(new RPCParamStruct);
-   QSharedPointer<RPCParam>sCat(new RPCStringParam( category ));
-   QSharedPointer<RPCParam>sKey(new RPCStringParam( key ));
-   QSharedPointer<RPCParam>sValue(new RPCStringParam( value ));
-   QSharedPointer<RPCParam>sState(new RPCIntParam( state ));
-   st->addMember( sCat, "Category" );
-   st->addMember( sKey, "Key" );
-   st->addMember( sValue, "Value" );
-   st->addMember( sState, "State" );
+   st->addMember( category, "Category" );
+   st->addMember( key, "Key" );
+   st->addMember( value, "Value" );
+   st->addMember( state, "State" );
    rpc.getCallArgs() ->addParam( st );
    rpc.queueCall( "localhost" );
 }

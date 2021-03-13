@@ -261,19 +261,12 @@ void Subscriber::SendTo ( const PublishedKey &pk )
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    // local - no router
-   QSharedPointer<RPCParam>srouter(new RPCStringParam( "" ));
-   QSharedPointer<RPCParam>sPubId(new RPCStringParam( pk.getPubId() ));
-   QSharedPointer<RPCParam>sCategory(new RPCStringParam( pk.getPubCat() ->getCategory() ));
-   QSharedPointer<RPCParam>sKey(new RPCStringParam( pk.getPubKey() ));
-   QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
-   QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
-
-   st->addMember( srouter, "Server" );
-   st->addMember( sPubId, "Publisher" );
-   st->addMember( sCategory, "Category" );
-   st->addMember( sKey, "Key" );
-   st->addMember( sValue, "Value" );
-   st->addMember( sState, "State" );
+   st->addMember( QString(""), "Server" );
+   st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( pk.getPubCat() ->getCategory(), "Category" );
+   st->addMember( pk.getPubKey(), "Key" );
+   st->addMember( pk.getPubValue(), "Value" );
+   st->addMember( pk.getPubState(), "State" );
 
    rnc.getCallArgs() ->addParam( st );
    rnc.queueCall( getSjid() );
@@ -286,19 +279,12 @@ void RemoteSubscriber::SendTo ( const PublishedKey &pk )
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    // router is remote router name (as published)
-   QSharedPointer<RPCParam>srouter(new RPCStringParam( pk.getRouter() ));
-   QSharedPointer<RPCParam>sPubId(new RPCStringParam( pk.getPubId() ));
-   QSharedPointer<RPCParam>sCategory(new RPCStringParam( pk.getPubCat() ->getCategory() ));
-   QSharedPointer<RPCParam>sKey(new RPCStringParam( pk.getPubKey() ));
-   QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
-   QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
-
-   st->addMember( srouter, "Server" );
-   st->addMember( sPubId, "Publisher" );
-   st->addMember( sCategory, "Category" );
-   st->addMember( sKey, "Key" );
-   st->addMember( sValue, "Value" );
-   st->addMember( sState, "State" );
+   st->addMember( router, "Server" );
+   st->addMember( pk.getPubId(), "Publisher" );
+   st->addMember( pk.getPubCat() ->getCategory(), "Category" );
+   st->addMember( pk.getPubKey(), "Key" );
+   st->addMember( pk.getPubValue(), "Value" );
+   st->addMember( pk.getPubState(), "State" );
 
    rnc.getCallArgs() ->addParam( st );
    rnc.queueCall( getSjid() );
@@ -311,31 +297,24 @@ void RouterSubscriber::SendTo ( const PublishedKey &pk )
    QSharedPointer<RPCParam>st(new RPCParamStruct);
 
    //router is OUR router name
-   QSharedPointer<RPCParam>srouter(new RPCStringParam( ThisMinosRouter::getThisMinosRouter() ->getRouterName() ));
-   QSharedPointer<RPCParam>sCategory;
-   PublishedCategory *pc = nullptr;
-   QString cat;
+   QString srouter = ThisMinosRouter::getThisMinosRouter() ->getRouterName();
+   QString sCategory;
    try
    {
-      pc = pk.getPubCat();
-      cat = pc ->getCategory();
-      sCategory = QSharedPointer<RPCParam>(new RPCStringParam( cat ));
+      PublishedCategory *pc = pk.getPubCat();
+      sCategory = pc ->getCategory();
    }
    catch(...)
    {
       // sCategory = 0;
    }
-   QSharedPointer<RPCParam>sPubId(new RPCStringParam( pk.getPubId() ));
-   QSharedPointer<RPCParam>sKey(new RPCStringParam( pk.getPubKey() ));
-   QSharedPointer<RPCParam>sValue(new RPCStringParam( pk.getPubValue() ));
-   QSharedPointer<RPCParam>sState(new RPCIntParam( pk.getPubState() ));
 
-   st->addMember( srouter, "Server" );
-   st->addMember( sPubId, "Publisher" );
+   st->addMember( router, "Server" );
+   st->addMember( pk.getPubId(), "Publisher" );
    st->addMember( sCategory, "Category" );
-   st->addMember( sKey, "Key" );
-   st->addMember( sValue, "Value" );
-   st->addMember( sState, "State" );
+   st->addMember( pk.getPubKey(), "Key" );
+   st->addMember( pk.getPubValue() , "Value" );
+   st->addMember( pk.getPubState(), "State" );
 
    rnc.getCallArgs() ->addParam( st );
    rnc.queueCall( getSjid() );
