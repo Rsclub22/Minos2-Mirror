@@ -13,7 +13,7 @@ public:
 
     void initialise();
 
-    void sendFrequencyRequest(Frequency f);
+    void sendFrequencyRequest(Frequency f, QString mode);
 
     Frequency getFrequency();
     QString getMode();

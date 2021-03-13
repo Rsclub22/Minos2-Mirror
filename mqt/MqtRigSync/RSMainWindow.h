@@ -20,6 +20,8 @@ public:
     explicit RSMainWindow(QWidget *parent = nullptr);
     ~RSMainWindow() override;
 
+    void selectRadio(PubSubName name);
+
 public slots:
 
 private slots:
@@ -58,16 +60,15 @@ private:
 
     QTimer SyncTimer;
 
-    QAction *configAction;
+    const QString rigSyncUuid = "RigSync";
 
-    bool rig2Connected = false;
+    QAction *configAction;
 
     QString mainRigMode;
     QString lastMainRigMode;
 
     Frequency mainRigFreq;
     Frequency lastMainRigFreq;
-    Frequency lastTransverterOffset;
 
     QSharedPointer<BandInfo>  lastBand;
     QSharedPointer<ModeInfo>  lastBandMode;
@@ -78,17 +79,17 @@ private:
     QString subServer;
     PubSubName subRigSelected;
 
-    bool mainTransvertState = false;
-    Frequency mainTransvertOffset;
-
-    bool subTransvertState = false;
-    Frequency subTransvertOffset;
+    QString subRigMode;
+    Frequency subRigFreq;
 
     void trackBand();
     void rig2Centre(const Frequency &fLow, const Frequency &fHigh);
     void getRouterAppCatMap();
     QStringList rigs();
     QStringList populateRig2();
+    void subRigSelection(const PubSubName &s, bool state);
+    void subRigControlFreq(const Frequency &freq, QString mode);
+    void mainRigControlFreq(const Frequency &lFreq, QString mode);
 };
 
 #endif // RSMAINWINDOW_H

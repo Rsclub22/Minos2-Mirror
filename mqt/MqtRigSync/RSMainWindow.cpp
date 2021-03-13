@@ -10,7 +10,6 @@
 #include "RSMainWindow.h"
 #include "ui_RSMainWindow.h"
 
-
 RSMainWindow::RSMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::RSMainWindow),
@@ -141,15 +140,6 @@ void RSMainWindow::SyncTimerTimer(  )
             close();
         }
     }
-    if (rig2Connected)
-    {
-        // should be frequency
-        ui->QF2Label->setText("connected");
-    }
-    else
-    {
-        ui->QF2Label->setText("Not connected");
-    }
 
     if (n1mmLink.isConnected())
     {
@@ -177,41 +167,21 @@ void RSMainWindow::on_closeButton_clicked()
 void RSMainWindow::on_transfer12Button_clicked()
 {
     // set sub rig to main rig
+    subRigControlFreq(mainRigFreq, mainRigMode);
 }
+
 
 void RSMainWindow::on_transfer21Button_clicked()
 {
-    long lFreq = 0;
-
     // set main rig to sub rig
 
     if (n1mmLink.isConnected())
     {
-        n1mmLink.sendFrequencyRequest(lFreq);
+        n1mmLink.sendFrequencyRequest(subRigFreq, subRigMode);
     }
     else
     {
-        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-        QStringList qsl = rigCache.getSelectedLoggers(mainRigSelected);
-        if (qsl.count())
-        {
-            QString loggerUuid = qsl[0];
-
-            QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
-            st->addMember( logger, rpcConstants::loggerUuid );
-
-            QString selc = rigCache.getSelectedContest(mainRigSelected, loggerUuid);
-
-            QSharedPointer<RPCParam>select(new RPCStringParam(selc ));
-            st->addMember( select, rpcConstants::selected );
-
-            st->addMember( QString::number(lFreq + qint64(mainTransvertOffset)), rpcConstants::rigControlLogFreq );
-            rpc.getCallArgs() ->addParam( st );
-
-            rpc.queueCall( mainRigSelected);
-        }
+        mainRigControlFreq(subRigFreq, subRigMode);
     }
 }
 QStringList RSMainWindow::rigs()
@@ -270,14 +240,17 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 ui->Rig1Combo->addItem("");
                 ui->Rig1Combo->addItems( rigs());
 
-                PubSubName psn(an.getKey());
+                QString pub = an.getPublisherRouter() + "/" + an.getPublisherProgram();
 
-                QStringList cb = populateRig2();
-                ui->Rig2Combo->clear();
-                ui->Rig2Combo->addItems(cb);
-                ui->Rig2Combo->setCurrentText(subRigSelected.toString());
+                if (pub == subRigSelected.getRouterApp())
+                {
+                    QStringList cb = populateRig2();
+                    ui->Rig2Combo->clear();
+                    ui->Rig2Combo->addItems(cb);
+                    ui->Rig2Combo->setCurrentText(subRigSelected.toString());
 
-
+                    selectRadio(subRigSelected);
+                }
             }
             else
                 return;
@@ -293,11 +266,6 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 
             if (selDetail.isDirty())
             {
-                //bandlist = selDetail.bandList();  // bandlist is the bands supported
-                mainTransvertState = selDetail.transverterStatus().getValue();
-                mainTransvertOffset = selDetail.transverterOffset().getValue();
-                if (!mainTransvertState)
-                    mainTransvertOffset = 0.0;
                 selDetail.clearDirty();
 
             }
@@ -324,7 +292,41 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             ui->QF1Label->setText("");
         }
     }
+    if (!subRigSelected.isEmpty())
+    {
+        RigState &selState = rigCache.getState(subRigSelected);
+        RigDetails &selDetail = rigCache.getDetails(subRigSelected);
+//        ui->Rig2Combo->setCurrentText(subRigSelected.toString());
+
+        if (selDetail.isDirty())
+        {
+            selDetail.clearDirty();
+
+        }
+        if (selState.isDirty())
+        {
+            subRigMode = selState.radioMode().getValue().remove(":");
+            subRigFreq = selState.radioFreq().getValue();
+
+            selState.clearDirty();
+            ui->QF2Label->setText(subRigFreq.convertFreqStrDisp());
+
+            if (ui->trackSub->isChecked())
+            {
+                on_transfer21Button_clicked();
+            }
+            delayedAction(this, [=]{
+                trackBand();
+            }, 50);
+        }
+    }
+    else
+    {
+        ui->Rig2Combo->setCurrentText("");
+        ui->QF2Label->setText("");
+    }
 }
+
 //---------------------------------------------------------------------------
 void RSMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
 {
@@ -334,37 +336,32 @@ void RSMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 //---------------------------------------------------------------------------
 void RSMainWindow::rig2Centre(const Frequency &fLow, const Frequency &fHigh)
 {
-    if (rig2Connected)
-    {
-        trace(QString("%1 %2").arg(fLow.traceStr(), fHigh.traceStr()));
-        qint64 bandWidth = qint64(fHigh) - qint64(fLow);
-        qint64 centre = qint64(fLow) + bandWidth/2;
-        centre += 12500;
-        centre /= 25000;
-        centre *= 25000;
+    trace(QString("%1 %2").arg(fLow.traceStr(), fHigh.traceStr()));
+    qint64 bandWidth = qint64(fHigh) - qint64(fLow);
+    qint64 centre = qint64(fLow) + bandWidth/2;
+    centre += 12500;
+    centre /= 25000;
+    centre *= 25000;
 
 
-        qint64 lFreq = qint64(mainRigFreq) - qint64(mainTransvertOffset);
-        qint64 fCentre = centre - qint64(mainTransvertOffset);
-        // tune rig2 to "fcentre"
+    //qint64 lFreq = qint64(mainRigFreq);
+    qint64 fCentre = centre;
 
-    }
+    // tune rig2 to "fcentre"
+
+    subRigControlFreq(fCentre, mainRigMode);
+
 }
 void RSMainWindow::trackBand()
 {
-    if (mainRigFreq == lastMainRigFreq && mainTransvertOffset == lastTransverterOffset && mainRigMode == lastMainRigMode)
+    if (mainRigFreq == lastMainRigFreq && mainRigMode == lastMainRigMode)
     {
         return; // nothing to do
     }
     lastMainRigFreq = mainRigFreq;
-    lastTransverterOffset = mainTransvertOffset;
     lastMainRigMode = mainRigMode;
 
-    trace(QString("rig %1 tv %2 mode %3").arg(lastMainRigFreq.traceStr()).arg(lastTransverterOffset.traceStr()).arg(lastMainRigMode));
-
-    // mainRigFreq is absolute, i.e. on air frequency
-    // so we use it to find the band
-    // then we offset the band by the transverter offset before telling Rig2
+    trace(QString("RSMainWindow::trackBand(): rig %1 mode %2").arg(lastMainRigFreq.traceStr(), lastMainRigMode));
 
     BandList &blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
@@ -438,7 +435,6 @@ void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 
     mainRigFreq.clear();
     lastMainRigFreq.clear();
-    lastTransverterOffset.clear();
 
     lastBand.clear();
     lastBandMode.clear();
@@ -466,4 +462,85 @@ void RSMainWindow::on_Rig2Combo_activated(const QString &psn)
 
     config.setValue("SyncRigControlRig", subRigSelected.toString());
 
+    selectRadio(subRigSelected);
+
 }
+void RSMainWindow::mainRigControlFreq(const Frequency &lFreq, QString mode)
+{
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QStringList qsl = rigCache.getSelectedLoggers(mainRigSelected);
+    if (qsl.count())
+    {
+        QString loggerUuid = qsl[0];
+
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+        QString selc = rigCache.getSelectedContest(mainRigSelected, loggerUuid);
+
+        st->addMember( selc, rpcConstants::selected );
+        st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
+        st->addMember( mode, rpcConstants::rigControlLogMode );
+
+        rpc.getCallArgs() ->addParam( st );
+
+        rpc.queueCall( mainRigSelected);
+    }
+}
+
+void RSMainWindow::selectRadio(PubSubName name)
+{
+    PubSubName selected = rigCache.getSelected(rigSyncUuid);
+
+    if (!selected.isEmpty() && selected != name)
+    {
+        subRigSelection(selected, false);
+    }
+
+    subRigSelection(subRigSelected, true);
+}
+void RSMainWindow::subRigSelection(const PubSubName &sd, bool state)
+{
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QString id = (state?rigSyncUuid:QString());
+
+    rigCache.setSelected(sd, rigSyncUuid, id);
+
+    st->addMember( rigSyncUuid, rpcConstants::loggerUuid );
+    st->addMember( id, rpcConstants::selected );
+
+    st->addMember( sd.toString(), rpcConstants::rigControlSelectRadioName );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( sd );
+
+}
+
+void RSMainWindow::subRigControlFreq(const Frequency &lFreq, QString mode)
+{
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QStringList qsl = rigCache.getSelectedLoggers(subRigSelected);
+    if (qsl.count())
+    {
+        QString loggerUuid = qsl[0];
+
+        st->addMember( loggerUuid, rpcConstants::loggerUuid );
+
+        QString selc = rigCache.getSelectedContest(subRigSelected, loggerUuid);
+
+        st->addMember(selc, rpcConstants::selected);
+        st->addMember( lFreq.str(), rpcConstants::rigControlLogFreq );
+        st->addMember( mode, rpcConstants::rigControlLogMode );
+
+        rpc.getCallArgs() ->addParam( st );
+
+        rpc.queueCall( subRigSelected);
+    }
+}
+
+

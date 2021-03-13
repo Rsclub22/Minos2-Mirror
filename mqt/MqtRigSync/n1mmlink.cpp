@@ -190,7 +190,7 @@ QString N1MMLink::genFreqStanza(const Frequency &f)
 //    return false;
 //}
 
-void N1MMLink::sendFrequencyRequest(Frequency f)
+void N1MMLink::sendFrequencyRequest(Frequency f, QString mode)
 {
     // send f to N1MM
 //    QHostAddress addr;
