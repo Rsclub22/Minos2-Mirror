@@ -81,7 +81,7 @@ void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra,
         st->addMember(rpcConstants::qrzClusterResponse, rpcConstants::paramName);
         st->addMember( dxCall, rpcConstants::qrzDxCallsign );
         st->addMember(dxQra, rpcConstants::qrzDxGrid);
-        st->addDtgMember(dxCallState, rpcConstants::qrzDxReplyState);
+        st->addMember(dxCallState, rpcConstants::qrzDxReplyState);
         st->addMember(spotterCall, rpcConstants::qrzSpotterCallsign);
         st->addMember(spotterQra, rpcConstants::qrzSpotterGrid);
         st->addDtgMember(spotterCallState, rpcConstants::qrzSpotterReplyState);

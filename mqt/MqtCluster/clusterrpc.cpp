@@ -198,10 +198,11 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
                     QString dxCall;
                     QString dxGrid;
-                    QString dxCallState;
+                    QString callState;
                     QString spotterCall;
                     QString spotterGrid;
                     QString spotterState;
+
 
                     if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, psDxCall)
                         && args->getStructArgMember(0, rpcConstants::qrzDxGrid, psDxGrid)
@@ -212,12 +213,12 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
                     {
                          psDxCall->getString(dxCall);
                          psDxGrid->getString(dxGrid);
-                         psDxCallState->getString(dxCallState);
+                         psDxCallState->getString(callState);
                          psSpotterCall->getString(spotterCall);
                          psSpotterGrid->getString(spotterGrid);
                          psSpotterCallState->getString(spotterState);
 
-                         emit clusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);
+                         emit clusterQrzResponse(dxCall, dxGrid, callState, spotterCall, spotterGrid, spotterState);
 
                     }
 

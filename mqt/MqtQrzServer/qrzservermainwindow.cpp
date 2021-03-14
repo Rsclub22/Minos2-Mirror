@@ -366,7 +366,7 @@ void QrzServerMainWindow::callsignDataReceived()
             trace(msg);
             addTextToLogWindow(msg);
 
-            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), qrzCallsignData.getQra(), rpcConstants::qrzServerCallOK, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerCallOK);
+            QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), qrzCallsignData.getQra(), QRA_LOOKUP_OK, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerCallOK);
 
         }
         else
