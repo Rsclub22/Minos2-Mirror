@@ -40,6 +40,8 @@ class RPCGeneralRouter: public MinosRPCRouter
 class Provider
 {
 public:
+    Provider(){}
+
     QString routerName;
     QString app;
     PublishState state = psNotConnected;
