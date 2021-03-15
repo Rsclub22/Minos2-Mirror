@@ -10,6 +10,8 @@ ChatFrame::ChatFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // ChatServer::getChatServer() will initialise it
+
     connect (ChatServer::getChatServer(), &ChatServer::ChatServerList, this, &ChatFrame::ChatServerList);
     connect (ChatServer::getChatServer(), &ChatServer::ChatMessages, this, &ChatFrame::ChatMessages);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &ChatFrame::on_FontChanged, Qt::QueuedConnection);

@@ -3,8 +3,6 @@
 #include "contest.h"
 #include "ChatServer.h"
 
-static bool syncstat = false;
-static QVector<QString> chatQueue;
 const char * ChatServer::stateIndicator[] =
 {
     QT_TR_NOOP("Available"),
@@ -32,14 +30,14 @@ ChatServer::ChatServer()
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     QStringList chatCats = {
-        rpcConstants::ChatCategory,
-        rpcConstants::ChatServer
+        rpcConstants::ChatCategory
     };
 
-    rpc->initialiseRouters(chatCats);
+    rpc->findProviders(rpcConstants::ChatServer, chatCats);
 
     connect(rpc, &MinosRPC::routerCall, this, &ChatServer::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &ChatServer::on_notify);
+    connect(rpc, &MinosRPC::provider, this, &ChatServer::on_provider);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RigFreqChanged, this, &ChatServer::onRigFreqChanged);
 
     QString a = MinosRPC::getMinosRPC()->getAppName();
@@ -56,38 +54,6 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
     if ( an.getOK() )
     {
-        if ( an.getCategory() == rpcConstants::ChatServer )
-        {
-            //trace( QString("ChatServer::on_notify") + QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
-            bool chatFound = false;
-            for ( auto &stat: chatServerList )
-            {
-                if (stat.app == an.getKey())
-                {
-                    if (stat.state != an.getState())
-                    {
-                        stat.state = an.getState();
-                        QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
-                        addChat( mess );
-                        syncstat = true;
-                    }
-                    chatFound = true;
-                    break;
-                }
-            }
-            if ( !chatFound )
-            {
-                // We have received notification from a previously unknown station - so report on it
-                ChatServerApp s;
-                s.routerName = an.getPublisherRouter();
-                s.state = an.getState();
-                s.app = an.getKey();
-                chatServerList.push_back( s );
-                QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
-                addChat( mess );
-                syncstat = true;
-            }
-        }
         if ( an.getCategory() == rpcConstants::ChatCategory )
         {
             //trace( QString("ChatServer::on_notify ") + QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
@@ -110,6 +76,27 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             }
         }
     }
+}
+//---------------------------------------------------------------------------
+void ChatServer::on_provider(Provider provider)
+{
+    ChatServerApp s;
+    s.routerName = provider.routerName;
+    s.state = provider.state;
+    s.app = provider.app;
+
+    int csa = chatServerList.indexOf(s);
+    if (csa >= 0)
+    {
+        chatServerList[csa] = s;
+    }
+    else
+    {
+        chatServerList.push_back( s );
+    }
+    QString mess = tr("%1/%2 changed state to %3").arg(provider.routerName, provider.app, tr(stateIndicator[provider.state]));
+    addChat( mess );
+    syncstat = true;
 }
 //---------------------------------------------------------------------------
 void ChatServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
@@ -179,7 +166,7 @@ void ChatServer::sendMessage(QString mess)
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( mess, rpcConstants::SendChatMessage );
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( i.app );
+        rpc.queueCall( i.psn() );
     }
 }
 void ChatServer::onRigFreqChanged(Frequency f, BaseContestLog * /*c*/)

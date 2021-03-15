@@ -46,6 +46,7 @@ void MinosRPC::on_connectedTimeout()
     if ( connected && !subscribed )
     {
         RPCPubSub::initialisePubSub( new TRPCCallback <MinosRPC> ( this, &MinosRPC::notifyCallback ) );
+        RPCPubSub::subscribe(rpcConstants::StationCategory);
 
         for (auto const &p: qAsConst(remoteSubscriptions))
         {
@@ -98,10 +99,6 @@ void MinosRPC::setRouterAppCatMap(QMap<QString, QVector<QSharedPointer<Connectab
 
     routers.clear();    // so StationCategory can re-populate it
 
-//    RPCPubSub::subscribe(rpcConstants::LocalStationCategory);   // this might not be needed?
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
-
-
     // Named routers get connected here; "any" routers get connected as and when they connect
     for ( QMap<QString,QVector< QSharedPointer<Connectable> > >::iterator i = routerAppCatMap.begin(); i != routerAppCatMap.end(); i++)
     {
@@ -123,39 +120,23 @@ void MinosRPC::setRouterAppCatMap(QMap<QString, QVector<QSharedPointer<Connectab
 
 void MinosRPC::initialiseRouters(QStringList subs)
 {
-    // we need to add (and subscribe to) any new subs
-    routersInitialised = true;
-    //RPCPubSub::subscribe(rpcConstants::LocalStationCategory);
-    RPCPubSub::subscribe(rpcConstants::StationCategory);
-
     routerSubs += subs;
     routerSubs.removeDuplicates();
 
     routers.clear();    // so StationCategory can re-populate it
 
 }
+void MinosRPC::findProviders(QString sub, QStringList psubs)
+{
+    providers[sub]; // create the element if it isn't there already
+    postSubs[sub] += psubs;
+    postSubs[sub].removeDuplicates();
+
+}
 void MinosRPC::routerNotify( AnalysePubSubNotify &an)
 {
     if ( an.getOK() )
     {
-//        if ( an.getCategory() == rpcConstants::LocalStationCategory)
-//        {
-//            QString router = an.getKey();
-//            bool pubNeeded = true;
-//            QString a = MinosRPC::getMinosRPC()->getAppName();
-//            for ( auto const &stat: qAsConst(routerList) )
-//            {
-//                if (stat.app == a + "@" + router)
-//                {
-//                    pubNeeded = false;
-//                    break;
-//                }
-//            }
-//            if (pubNeeded)
-//            {
-//                RPCPubSub::publish(rpcConstants::ChatServer,  a + "@" + router, "", psPublished);
-//            }
-//        }
         if (an.getCategory() == rpcConstants::StationCategory)
         {
             QString router = an.getKey();
@@ -164,14 +145,16 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
             {
                 routers.append(router);
 
-                if (routersInitialised)
-                {
-                    // connect all "initialiseServers" subscriptions
+                // connect all "initialiseServers" subscriptions and any findProviders
 
-                    for(auto &cat:routerSubs)
-                    {
-                        RPCPubSub::subscribeRemote(router, cat);
-                    }
+                for(auto &cat:routerSubs)
+                {
+                    RPCPubSub::subscribeRemote(router, cat);
+                }
+                for(QMap<QString, QVector<Provider> >::iterator i = providers.begin(); i != providers.end(); i++)
+                {
+                    QString cat = i.key();
+                    RPCPubSub::subscribeRemote(router, cat);
                 }
 
                 // This connects up those connectables that are "any" server
@@ -190,6 +173,29 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
             }
 
         }
+        for(QMap<QString, QVector<Provider> >::iterator i = providers.begin(); i != providers.end(); i++)
+        {
+            QString sub = i.key();
+            if (sub == an.getCategory())
+            {
+                Provider prov(an);
+                int p = providers[sub].indexOf(prov);
+                if (p >= 0)
+                {
+                    providers[sub][p] = prov;
+                }
+                else
+                {
+                    providers[sub].push_back(prov);
+                }
+                for(const auto &s: qAsConst(postSubs[sub]))
+                {
+                    RPCPubSub::subscribeRemote(prov.routerName, s);
+                }
+                emit provider(prov);
+            }
+        }
+
     }
 
 }

@@ -37,13 +37,35 @@ class RPCGeneralRouter: public MinosRPCRouter
       }
 
 };
-//class RPCRouter
-//{
-//public:
-//    QString routerName;
-//    QString app;
-//    PublishState state;
-//};
+class Provider
+{
+public:
+    QString routerName;
+    QString app;
+    PublishState state = psNotConnected;
+
+
+    PubSubName psn() const
+    {
+        PubSubName p;
+        p.setRouter(routerName);
+        p.setAppName(app);
+        return p;
+    }
+
+    Provider(const AnalysePubSubNotify &an)
+    {
+        routerName = an.getPublisherRouter();
+        app = an.getPublisherProgram();
+        state = an.getState();
+    }
+    bool operator==(const Provider& rhs) const
+    {
+        return routerName == rhs.routerName
+                && app == rhs.app
+                ;
+    }
+};
 class MinosRPC: public QObject
 {
     Q_OBJECT
@@ -66,8 +88,8 @@ class MinosRPC: public QObject
     QMap<QString,QVector< QSharedPointer<Connectable> > > routerAppCatMap;
     QVector<QString> routers;
 
-    bool routersInitialised = false;
-
+    QMap<QString, QVector<Provider> > providers;
+    QMap<QString, QStringList > postSubs;
 
     void setAppName(const QString &);
     void notifyCallback( bool err, QSharedPointer<MinosRPCObj>mro, const QString &from );
@@ -102,14 +124,14 @@ public:
 
     void setRouterAppCatMap(QMap<QString,QVector< QSharedPointer<Connectable> > > &sacm);
     void initialiseRouters(QStringList subs);
-//    QVector<RPCRouter> getRouterList()
-//    {
-//        return routerList;
-//    }
+
+    void findProviders(QString sub, QStringList postsubs);
 signals:
 
     void notify( AnalysePubSubNotify an, const QString from);
     void routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
+
+    void provider(Provider);
 
 private slots:
 
