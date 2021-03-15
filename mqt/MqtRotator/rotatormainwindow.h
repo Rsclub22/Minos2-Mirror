@@ -254,7 +254,7 @@ private slots:
 
     void aboutRotatorConfig();
 
-    void onSelectAntennaBox();
+    void onSelectAntennaBox(int);
     void onLaunchSetup();
     void presetRead(int num);
     void presetWrite(int num);

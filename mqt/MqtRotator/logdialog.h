@@ -36,7 +36,6 @@ private slots:
 
     void on_logDirBrowsePb_clicked();
     void on_logFilenameEdit_textChanged(const QString &arg1);
-    void loadLogConfig();
 
     void on_logDialogOkPb_accepted();
 
@@ -45,7 +44,8 @@ private slots:
     void on_bearingDifferenceSBox_valueChanged(int arg1);
 
     void on_logcheckBox_toggled(bool checked);
-
+public slots:
+    void loadLogConfig();
 private:
     Ui::LogDialog *ui;
     QString directory;

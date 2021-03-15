@@ -43,7 +43,7 @@ RunButtonsFrame::RunButtonsFrame(QWidget *parent) :
     initRunMemoryButton();
 
     chkRunFreqTimer = new QTimer(this);
-    connect(chkRunFreqTimer, SIGNAL(timeout()), this, SLOT(on_radioFreqCheckTimer()));
+    connect(chkRunFreqTimer, &QTimer::timeout, this, &RunButtonsFrame::on_radioFreqCheckTimer);
 }
 
 RunButtonsFrame::~RunButtonsFrame()
@@ -70,8 +70,8 @@ void RunButtonsFrame::setRigControl(RigControlFrame *rc)
 {
     rigControl = rc;
     // This shouldn't need to be a unique connection
-    connect(rc, SIGNAL(setFreqDisplay(Frequency, bool)), this, SLOT(setFreqDisplay(Frequency, bool)), Qt::UniqueConnection);
-    connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(radioIsConnected(bool)));
+    connect(rc, &RigControlFrame::setFreqDisplay, this, &RunButtonsFrame::setFreqDisplay, Qt::UniqueConnection);
+    connect(rc, &RigControlFrame::radioIsConnected, this, &RunButtonsFrame::radioIsConnected);
 
 }
 void RunButtonsFrame::radioIsConnected(bool on)
@@ -110,12 +110,12 @@ void RunButtonsFrame::initRunMemoryButton()
 {
     memoryData::memData m;
     runButtonMap[0] = new RunMemoryButton(ui->RunButton1, this, 0);
-    connect( runButtonMap[0], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
-    connect( runButtonMap[0], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
+    connect( runButtonMap[0], &RunMemoryButton::clearActionActivated , this, &RunButtonsFrame::runButClearActSel, Qt::QueuedConnection );
+    connect( runButtonMap[0], &RunMemoryButton::buttonActivated, this, &RunButtonsFrame::runButActivated, Qt::QueuedConnection );
 
     runButtonMap[1] = new RunMemoryButton(ui->RunButton2, this, 1);
-    connect( runButtonMap[1], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
-    connect( runButtonMap[1], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
+    connect( runButtonMap[1], &RunMemoryButton::clearActionActivated, this, &RunButtonsFrame::runButClearActSel, Qt::QueuedConnection );
+    connect( runButtonMap[1], &RunMemoryButton::buttonActivated, this, &RunButtonsFrame::runButActivated, Qt::QueuedConnection );
 
 }
 int RunButtonsFrame::otherButton(int buttonNumber)
@@ -558,17 +558,14 @@ RunMemoryButton::RunMemoryButton(QToolButton *b, RunButtonsFrame *rcf, int no)
     memoryMenu->addAction(clearAction);
     memButton->setMenu(memoryMenu);
 
-    //connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
-    //connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()) );
-    //connect(memButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(buttonSelected()) );
-    connect(memButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));
-    connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
-    connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
-    connect( writeAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()) );
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()) );
-    connect( clearAction, SIGNAL( triggered() ), this, SLOT(clearActionSelected()) );
-    connect( runOffAction, SIGNAL( triggered() ), this, SLOT(runOffActionSelected()) );
+    connect( readAction, &QAction::triggered, this, &RunMemoryButton::buttonSelected);
+    connect(memButton, &QToolButton::clicked, this, &RunMemoryButton::buttonSelected);
+    connect(shortKey, &QShortcut::activated, this, &RunMemoryButton::buttonSelected);
+    connect(shiftShortKey, &QShortcut::activated, this, &RunMemoryButton::memoryShortCutSelected);
+    connect( writeAction, &QAction::triggered, this, &RunMemoryButton::writeActionSelected);
+    connect( editAction, &QAction::triggered, this, &RunMemoryButton::editActionSelected);
+    connect( clearAction, &QAction::triggered, this, &RunMemoryButton::clearActionSelected);
+    connect( runOffAction, &QAction::triggered, this, &RunMemoryButton::runOffActionSelected);
 
 }
 RunMemoryButton::~RunMemoryButton()
@@ -596,7 +593,7 @@ void RunMemoryButton::writeActionSelected()
 }
 void RunMemoryButton::clearActionSelected()
 {
-    emit clearActionSelected(memNo);
+    emit clearActionActivated(memNo);
 }
 
 void RunMemoryButton::runOffActionSelected()

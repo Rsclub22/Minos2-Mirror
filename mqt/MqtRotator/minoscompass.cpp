@@ -36,14 +36,12 @@ MinosCompass::MinosCompass(QWidget *parent)
    setSizePolicy(QSizePolicy:: Preferred, QSizePolicy:: Preferred);
 
    setMouseTracking(true);
-/*
    // for test...
-   QTimer *timer = new QTimer(this);
-   connect(this, SIGNAL(bearing_updated(QString)), this, SLOT(compassDialUpdate(const QString &)));
-   connect(timer, SIGNAL(timeout()), this, SLOT(upDateDial()));
-    timer->start();
+//   QTimer *timer = new QTimer(this);
+//   connect(this, SIGNAL(bearing_updated(QString)), this, SLOT(compassDialUpdate(const QString &)));
+//   connect(timer, SIGNAL(timeout()), this, SLOT(upDateDial()));
+//    timer->start();
    // for test
-*/
 }
 
 QSize MinosCompass::minimumSizeHint() const

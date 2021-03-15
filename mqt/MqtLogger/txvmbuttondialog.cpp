@@ -12,10 +12,10 @@ TxVmButtonDialog::TxVmButtonDialog(QWidget *parent) :
 
 
 
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(on_okButton_clicked()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(on_cancelbutton_clicked()));
-    connect(ui->txVmRepeatPauseDur , SIGNAL(editingFinished()), this, SLOT(onVmRepeatPauseDurEditingFinished()));
-    connect(ui->txVmMessageDur , SIGNAL(editingFinished()), this, SLOT(onVmMessageDurEditingFinished()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmButtonDialog::on_okButton_clicked);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmButtonDialog::on_cancelbutton_clicked);
+    connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmButtonDialog::onVmRepeatPauseDurEditingFinished);
+    connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmButtonDialog::onVmMessageDurEditingFinished);
 }
 
 TxVmButtonDialog::~TxVmButtonDialog()

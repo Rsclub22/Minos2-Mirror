@@ -190,7 +190,7 @@ for (each row in table ... ) {
    QComboBox* combo = new QComboBox();
    table->setCellWidget(row,col,combo);
    combo->setCurrentIndex(node.type());
-   connect(combo, SIGNAL(currentIndexChanged(int)),this, SLOT(changed(int)));
+   connect(combo, &QComboBox::currentIndexChanged,this, &TSettingsEditDlg::changed));
    ....
 }
 

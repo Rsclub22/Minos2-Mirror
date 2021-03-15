@@ -70,9 +70,10 @@ void SingleApplication::_initLocalConnection() {
 // Explain:
 // Create LocalServer
 ////////////////////////////////////////////////////////////////////////////////
-void SingleApplication::_newLocalServer() {
+void SingleApplication::_newLocalServer()
+{
     _localServer = new QLocalServer(this);
-    connect(_localServer, SIGNAL(newConnection()), this, SLOT(_newLocalConnection()));
+    connect(_localServer, &QLocalServer::newConnection, this, &SingleApplication::_newLocalConnection);
     if(!_localServer->listen(_routerName)) {
         // The monitor failure, may beWhen a program crashes, residual process service led, removal
         if(_localServer->serverError() == QAbstractSocket::AddressInUseError) {

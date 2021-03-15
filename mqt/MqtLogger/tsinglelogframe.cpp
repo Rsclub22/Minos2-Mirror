@@ -48,116 +48,111 @@ void TSingleLogFrame::buildFrame()
     buildScreenLayout();
 
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
-    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
+    connect(OtherMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onOtherMatchTreeFocused);
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
-    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
+    connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
     restoreColumns();
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(ContestPageChanged()), this, SLOT(on_ContestPageChanged()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestPageChanged, this, &TSingleLogFrame::on_ContestPageChanged);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(NextContactDetailsTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(PublishTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(HideTimerTimer()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(MakeEntry(BaseContestLog*)), this, SLOT(on_MakeEntry(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterLogContact(BaseContestLog *)), this, SLOT(on_AfterLogContact(BaseContestLog *)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(setMemory(BaseContestLog *, QString, QString)), this, SLOT(on_SetMemory(BaseContestLog *, QString, QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::NextContactDetailsTimerTimer);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::PublishTimerTimer);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::HideTimerTimer);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MakeEntry, this, &TSingleLogFrame::on_MakeEntry);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterSelectContact, this, &TSingleLogFrame::on_AfterSelectContact, Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemory, this, &TSingleLogFrame::on_SetMemory);
     // from cluster frame or bandmap frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToMemory(BaseContestLog *, memoryData::memData)), this, SLOT(on_dxSpotToMemory(BaseContestLog *, memoryData::memData)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToMemory, this, &TSingleLogFrame::on_dxSpotToMemory);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchStarting, this, &TSingleLogFrame::on_MatchStarting);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(ColumnsChanged()), this, SLOT(onColumnsChanged()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(NextUnfilled(BaseContestLog*)), this, SLOT(on_NextUnfilled(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(GoToSerial(BaseContestLog*)), this, SLOT(on_GoToSerial(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ColumnsChanged, this, &TSingleLogFrame::onColumnsChanged);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::NextUnfilled, this, &TSingleLogFrame::on_NextUnfilled);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::GoToSerial, this, &TSingleLogFrame::on_GoToSerial);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(XferPressed(BaseContestLog *, QString)), this, SLOT(on_XferPressed(BaseContestLog *, QString)));
-    connect(thisMatchFrame, SIGNAL(editContact(QSharedPointer<BaseContact>)), this, SLOT(EditContact(QSharedPointer<BaseContact>)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::XferPressed, this, &TSingleLogFrame::on_XferPressed);
+    connect(thisMatchFrame, &MatchThisFrame::editContact, this, &TSingleLogFrame::EditContact);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), GJVQSOLogFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
-            this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::XferEnabled, GJVQSOLogFrame, &QSOLogFrame::setXferEnabled);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected, this, &TSingleLogFrame::MatchTreeSelected);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(doColumnChanges(BaseContestLog*)), this, SLOT(on_doColumnChanges(BaseContestLog*)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &TSingleLogFrame::on_doColumnChanges);
 
 
     // RigControl Updates
     // From rig controller
-    connect(LogContainer->sendDM, SIGNAL(setRadioLoaded()), this, SLOT(on_RadioLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(setRadioList()), this, SLOT(on_SetRadioList()));
+    connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &TSingleLogFrame::on_RadioLoaded);
+    connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &TSingleLogFrame::on_SetRadioList);
 
     // To rig controller
 
-    connect(FKHRigControlFrame, SIGNAL(radioDisconnected()), this, SLOT(invalidateCacheOnDisconnect()));
-    connect(FKHRigControlFrame, SIGNAL(selectRadio(QString, QString, Frequency, QString)), this, SLOT(sendSelectRadio(QString, QString, Frequency, QString)));
+    connect(FKHRigControlFrame, &RigControlFrame::radioDisconnected, this, &TSingleLogFrame::invalidateCacheOnDisconnect);
+    connect(FKHRigControlFrame, &RigControlFrame::selectRadio, this, &TSingleLogFrame::sendSelectRadio);
 
-    connect(FKHRigControlFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
-    connect(FKHRigControlFrame, SIGNAL(sendBandToRigControl(QString)), this, SLOT(sendBandToRig(QString)));
-    connect(GJVQSOLogFrame, SIGNAL(sendFreqControl(Frequency)), this, SLOT(sendRadioFreq(Frequency)));
-    connect(FKHRigControlFrame, SIGNAL(sendRitFreq(ShortFreq)), this, SLOT(sendRadioRitFreq(ShortFreq)));
-    connect(FKHRigControlFrame, SIGNAL(sendVolumeToRadio(int)), this, SLOT(sendRadioVolume(int)));
-    connect(FKHRigControlFrame, SIGNAL(ritStatus(bool)), this, SLOT(sendRadioRitStatus(bool)));
-    connect(FKHRigControlFrame, SIGNAL(sendModeToControl(QString)), this, SLOT(sendRadioMode(QString)));
-    connect(GJVQSOLogFrame, SIGNAL(sendModeControl(QString)), this , SLOT(sendRadioMode(QString)));
+    connect(FKHRigControlFrame, &RigControlFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
+    connect(FKHRigControlFrame, &RigControlFrame::sendBandToRigControl, this, &TSingleLogFrame::sendBandToRig);
+    connect(GJVQSOLogFrame, &QSOLogFrame::sendFreqControl, this, &TSingleLogFrame::sendRadioFreq);
+    connect(FKHRigControlFrame, &RigControlFrame::sendRitFreq, this, &TSingleLogFrame::sendRadioRitFreq);
+    connect(FKHRigControlFrame, &RigControlFrame::sendVolumeToRadio, this, &TSingleLogFrame::sendRadioVolume);
+    connect(FKHRigControlFrame, &RigControlFrame::ritStatus, this, &TSingleLogFrame::sendRadioRitStatus);
+    connect(FKHRigControlFrame, &RigControlFrame::sendModeToControl, this, &TSingleLogFrame::sendRadioMode);
+    connect(GJVQSOLogFrame, &QSOLogFrame::sendModeControl, this , &TSingleLogFrame::sendRadioMode);
 
-    connect(runButtonsFrame, SIGNAL(sendRunOnFlag(Frequency, QString, bool)), this, SLOT(sendRunOnFlag(Frequency, QString, bool)));
-    connect(runButtonsFrame, SIGNAL(sendRunOffFreqFlag(Frequency, bool)), this, SLOT(sendRunOffFreqFlag(Frequency, bool)));
+    connect(runButtonsFrame, &RunButtonsFrame::sendRunOnFlag, this, &TSingleLogFrame::sendRunOnFlag);
+    connect(runButtonsFrame, &RunButtonsFrame::sendRunOffFreqFlag, this, &TSingleLogFrame::sendRunOffFreqFlag);
 
 
     // Rotator updates
     // From rotator controller
-    connect(LogContainer->sendDM, SIGNAL(RotatorLoaded()), this, SLOT(on_RotatorLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(RotatorList()), this, SLOT(on_RotatorList()));
+    connect(LogContainer->sendDM, &TSendDM::RotatorLoaded, this, &TSingleLogFrame::on_RotatorLoaded);
+    connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &TSingleLogFrame::on_RotatorList);
 
     // To rotator controller
-    connect(FKHRotControlFrame, SIGNAL(sendRotator(rpcConstants::RotateDirection , int  )), this, SLOT(sendRotator(rpcConstants::RotateDirection , int  )));
-    connect(rotPresets, SIGNAL(sendRotatorPreset(QString)), this, SLOT(sendRotatorPreset(QString)));
-    connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), this, SLOT(sendSelectRotator(QString)));
-    connect(FKHRotControlFrame, SIGNAL(selectRotator(QString)), rotPresets, SLOT(selectRotator(QString)));
-    connect(rotPresets, SIGNAL(presetTurn(QString)), this, SLOT(presetTurn(QString)));
-    connect(FKHRotControlFrame, SIGNAL(rotatorConnected(bool)), this, SLOT(on_rotatorConnected(bool)));
+    connect(FKHRotControlFrame, &RotControlFrame::sendRotator, this, &TSingleLogFrame::sendRotator);
+    connect(rotPresets, &RotPresets::sendRotatorPreset, this, &TSingleLogFrame::sendRotatorPreset);
+    connect(FKHRotControlFrame, &RotControlFrame::selectRotator, this, &TSingleLogFrame::sendSelectRotator);
+    connect(FKHRotControlFrame, &RotControlFrame::selectRotator, rotPresets, &RotPresets::selectRotator);
+    connect(rotPresets, &RotPresets::presetTurn, this, &TSingleLogFrame::presetTurn);
+    connect(FKHRotControlFrame, &RotControlFrame::rotatorConnected, this, &TSingleLogFrame::on_rotatorConnected);
 
     // from cluster frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(DxSpotToLog(memoryData::memData)), this, SLOT(dxSpotToLog(memoryData::memData)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString)), this, SLOT(on_ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(SendReconnectFlagToServer(bool)), this, SLOT(on_sendReconnectFlagToClusterServer(bool)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToLog, this, &TSingleLogFrame::dxSpotToLog);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ResendSpotsFromClusterCommand, this, &TSingleLogFrame::on_ResendSpotsFromClusterCommand);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SendReconnectFlagToServer, this, &TSingleLogFrame::on_sendReconnectFlagToClusterServer);
 
     // to cluster server
-    connect(GJVQSOLogFrame, SIGNAL(sendSpotToClusterServer(Frequency, QString, QString)), this, SLOT(on_SendSpotToClusterServer(Frequency, QString, QString)));
+    connect(GJVQSOLogFrame, &QSOLogFrame::sendSpotToClusterServer, this, &TSingleLogFrame::on_SendSpotToClusterServer);
 
     // from cluster server
-    connect(LogContainer->sendDM, SIGNAL(setClusterServerLoaded()),this, SLOT(on_clusterServerLoaded()));
-    connect(LogContainer->sendDM, SIGNAL(setClusterState(QString)), this, SLOT(on_clusterServerState(QString)));
-    connect(LogContainer->sendDM, SIGNAL(setClusterTXSpotEnableState(QString)), this, SLOT(on_setClusterTXSpotEnableState(QString)));
+    connect(LogContainer->sendDM, &TSendDM::setClusterServerLoaded,this, &TSingleLogFrame::on_clusterServerLoaded);
+    connect(LogContainer->sendDM, &TSendDM::setClusterState, this, &TSingleLogFrame::on_clusterServerState);
+    connect(LogContainer->sendDM, &TSendDM::setClusterTXSpotEnableState, this, &TSingleLogFrame::on_setClusterTXSpotEnableState);
 
 
     // to bandmap
-    connect(GJVQSOLogFrame, SIGNAL(bandmapMarkFreq(QString, Frequency, QString, QString, QString)),
-            this, SLOT(on_BandmapMarkFreq(QString, Frequency, QString, QString, QString)));
-    connect(GJVQSOLogFrame, SIGNAL(bandmapSaveFreq(QString, Frequency, QString, QString, QString)),
-            this, SLOT(on_BandmapSaveFreq(QString, Frequency, QString, QString, QString)));
-    //connect(FKHRigControlFrame, SIGNAL(sendCQFreq(QString, bool)), this, SLOT(on_SendCQFreq(QString, bool)));
+    connect(GJVQSOLogFrame, &QSOLogFrame::bandmapMarkFreq, this, &TSingleLogFrame::on_BandmapMarkFreq);
+    connect(GJVQSOLogFrame, &QSOLogFrame::bandmapSaveFreq, this, &TSingleLogFrame::on_BandmapSaveFreq);
 
     // to Qrz Display Panel
-    connect(GJVQSOLogFrame, SIGNAL(qrzCallsignRequest(QString)), this, SLOT(onQrzCallsignRequest(QString)));
+    connect(GJVQSOLogFrame, &QSOLogFrame::qrzCallsignRequest, this, &TSingleLogFrame::onQrzCallsignRequest);
 
-    connect(FKHRigControlFrame, SIGNAL(radioIsConnected(bool)), this, SLOT(sendBandmapRadioIsConnected(bool)));
-    connect(FKHRigControlFrame, SIGNAL(radioHasError(QString)), this, SLOT(sendBandmapRadioHasError(QString)));
-    connect(LogContainer->sendDM, SIGNAL(setKeyerLoaded()), this, SLOT(on_KeyerLoaded()));
+    connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
+    connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
+    connect(LogContainer->sendDM, &TSendDM::setKeyerLoaded, this, &TSingleLogFrame::on_KeyerLoaded);
 
 
-    connect( QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
-    connect(QSOTable, SIGNAL(doubleClicked(const QModelIndex &)), this, SLOT(onQSOTable_doubleClicked(const QModelIndex &)));
+    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &TSingleLogFrame::on_sectionResized);
+    connect(QSOTable, &QTableView::doubleClicked, this, &TSingleLogFrame::onQSOTable_doubleClicked);
 
-    connect(LogContainer, SIGNAL(sendKeyerPlay( int )), this, SLOT(sendKeyerPlay(int)));
-    connect(LogContainer, SIGNAL(sendKeyerRecord( int)), this, SLOT(sendKeyerRecord(int)));
-    connect(LogContainer, SIGNAL(sendKeyerTone()), this, SLOT(sendKeyerTone()));
-    connect(LogContainer, SIGNAL(sendKeyerTwoTone()), this, SLOT(sendKeyerTwoTone()));
-    connect(LogContainer, SIGNAL(sendKeyerStop()), this, SLOT(sendKeyerStop()));
-    connect(LogContainer, SIGNAL(logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)), this, SLOT(onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag>)));
+    connect(LogContainer, &TLogContainer::sendKeyerPlay, this, &TSingleLogFrame::sendKeyerPlay);
+    connect(LogContainer, &TLogContainer::sendKeyerRecord, this, &TSingleLogFrame::sendKeyerRecord);
+    connect(LogContainer, &TLogContainer::sendKeyerTone, this, &TSingleLogFrame::sendKeyerTone);
+    connect(LogContainer, &TLogContainer::sendKeyerTwoTone, this, &TSingleLogFrame::sendKeyerTwoTone);
+    connect(LogContainer, &TLogContainer::sendKeyerStop, this, &TSingleLogFrame::sendKeyerStop);
+    connect(LogContainer, &TLogContainer::logRadioSettingsChanged, this, &TSingleLogFrame::onLogRadioSettingsChanged);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &TSingleLogFrame::on_FontChanged, Qt::QueuedConnection);
 }
 
 TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :

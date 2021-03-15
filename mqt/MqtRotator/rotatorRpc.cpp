@@ -24,8 +24,8 @@ RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(pare
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &RotatorRpc::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &RotatorRpc::on_notify);
 
     // we aren't subscribing to anything!
 

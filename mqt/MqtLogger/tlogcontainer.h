@@ -193,8 +193,8 @@ private slots:
     void HelpActionExecute();
     void HelpAboutActionExecute();
 
-    void selectLayout();
-    void selectSession();
+    void selectLayoutAction();
+    void selectSessionAction();
     void openRecentFile();
     void FileOpenActionExecute();
     void FileImportActionExecute();

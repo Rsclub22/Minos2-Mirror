@@ -31,7 +31,7 @@ class SingleApplication : public QApplication {
     signals:
         void argsReceived(QString);
 
-private slots:
+    public slots:
         void clearRegistry();
 };
 

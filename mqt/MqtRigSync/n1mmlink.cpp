@@ -127,9 +127,9 @@ void N1MMLink::initialise()
     qus->bind(QHostAddress::Any, 12060, (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
 
 
-    connect (qus.data(), SIGNAL(readyRead()), this, SLOT(onReceiveUDP()));
+    connect (qus.data(), &QUdpSocket::readyRead, this, &N1MMLink::onReceiveUDP);
 
-    connect( &connectTimer, SIGNAL(timeout()), this, SLOT(connectTimeout()));
+    connect( &connectTimer, &QTimer::timeout, this, &N1MMLink::connectTimeout);
     connectTimer.start(N1MMTimerInterval);  // longer than the N1MM 10 sec repeat frequency
 
 }
@@ -190,7 +190,7 @@ QString N1MMLink::genFreqStanza(const Frequency &f)
 //    return false;
 //}
 
-void N1MMLink::sendFrequencyRequest(Frequency f, QString mode)
+void N1MMLink::sendFrequencyRequest(Frequency f, QString /*mode*/)
 {
     // send f to N1MM
 //    QHostAddress addr;

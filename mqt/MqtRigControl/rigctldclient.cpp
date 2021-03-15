@@ -17,12 +17,12 @@ RigCtldClient::RigCtldClient(QObject *parent) :
 {
     trace(QString("RigCtldClient - Creating Client"));
     socket = new QTcpSocket(this);
-    connect(socket, SIGNAL(connected()),this, SLOT(connected()));
-    connect(socket, SIGNAL(disconnected()),this, SLOT(disconnected()));
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    connect(socket, &QTcpSocket::connected,this, &RigCtldClient::connected);
+    connect(socket, &QTcpSocket::disconnected,this, &RigCtldClient::disconnected);
+    connect(socket, &QTcpSocket::readyRead, this, &RigCtldClient::readyRead);
 
     recvTimer = new QTimer();
-    connect(recvTimer, SIGNAL(timeout()), this, SLOT(recvTimeout()));
+    connect(recvTimer, &QTimer::timeout, this, &RigCtldClient::recvTimeout);
 
 
 }

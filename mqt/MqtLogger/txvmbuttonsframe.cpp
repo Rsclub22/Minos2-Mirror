@@ -43,11 +43,11 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
 
     msgDurTimer = new QTimer(this);
-    connect(msgDurTimer, SIGNAL(timeout()), this, SLOT(onMsgDurTimerTimeout()));
+    connect(msgDurTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onMsgDurTimerTimeout);
 
 
     repeatPauseTimer = new QTimer(this);
-    connect(repeatPauseTimer, SIGNAL(timeout()), this, SLOT(onRepeatPauseTimerTimeout()));
+    connect(repeatPauseTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onRepeatPauseTimerTimeout);
 
     initTxVmButton();
 
@@ -74,17 +74,15 @@ void TxVmButtonsFrame::initTxVmButton()
     for (int i = 0; i < voiceMemButtonList.count(); i++)
     {
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
-        //connect( txVmButtonMap[i], SIGNAL( clearActionSelected(int)) , this, SLOT(runButClearActSel(int)), Qt::QueuedConnection );
-        connect( txVmButtonMap[i], SIGNAL( buttonActivated(int)) , this, SLOT(runButActivated(int)), Qt::QueuedConnection );
-
+        connect( txVmButtonMap[i], &TxVoiceMemButton::buttonActivated, this, &TxVmButtonsFrame::runButActivated, Qt::QueuedConnection );
     }
 
 
 
     connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
-    connect(ui->vmSetupPb, SIGNAL(clicked()), this, SLOT(onVmSetupClicked()));
+    connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
 
-    connect(ui->vmStopPb, SIGNAL(clicked()), this, SLOT(onVmStopClicked()));
+    connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
 
 
     clearButtonLabels();
@@ -384,7 +382,7 @@ void TxVmButtonsFrame::setRigControl(RigControlFrame *rc)
 
     if (rigControl)
     {
-        connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(onRadioIsConnected(bool)));
+        connect(rc, &RigControlFrame::radioIsConnected, this, &TxVmButtonsFrame::onRadioIsConnected);
 
     }
 
@@ -499,14 +497,12 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
 
     vmButton->setMenu(vmMenu);
 
-    connect(shortKey, SIGNAL(activated()), this, SLOT(readActionSelected()));
-    connect( readAction, SIGNAL( triggered() ), this, SLOT(readActionSelected()));
-    connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(readActionSelected()));
-    connect(vmButton, SIGNAL(clicked(bool)), this, SLOT(buttonSelected()));
-    //connect(shortKey, SIGNAL(activated()), this, SLOT(buttonSelected()));
-    //connect(shiftShortKey, SIGNAL(activated()), this, SLOT(memoryShortCutSelected()));
-    connect( newAction, SIGNAL( triggered() ), this, SLOT(writeActionSelected()));
-    connect( editAction, SIGNAL( triggered() ), this, SLOT(editActionSelected()));
+    connect(shortKey, &QShortcut::activated, this, &TxVoiceMemButton::readActionSelected);
+    connect(readAction, &QAction::triggered, this, &TxVoiceMemButton::readActionSelected);
+    connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::readActionSelected);
+    connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::buttonSelected);
+    connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::writeActionSelected);
+    connect( editAction, &QAction::triggered, this, &TxVoiceMemButton::editActionSelected);
 
 
 }

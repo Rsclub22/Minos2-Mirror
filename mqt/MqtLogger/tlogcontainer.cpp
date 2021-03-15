@@ -73,8 +73,8 @@ TLogContainer::TLogContainer(QWidget *parent) :
 
     // These are specific to THIS ContestPageControl
     ui->contestPageControl->setTabsClosable(true);
-    connect(ui->contestPageControl->tabBar(), SIGNAL(tabCloseRequested(int)), this, SLOT(onTabClosebutton(int)));
-    connect(ui->contestPageControl->tabBar(), SIGNAL(tabMoved(int,int)), this, SLOT(onTabMoved(int,int)));
+    connect(ui->contestPageControl->tabBar(), &QTabBar::tabCloseRequested, this, &TLogContainer::onTabClosebutton);
+    connect(ui->contestPageControl->tabBar(), &QTabBar::tabMoved, this, &TLogContainer::onTabMoved);
 
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
@@ -93,7 +93,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
-    connect(&MinosConfigEvents::mce, SIGNAL(appStarted()), this, SLOT(appStarted()));
+    connect(&MinosConfigEvents::mce, &MinosConfigEvents::appStarted, this, &TLogContainer::appStarted);
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
@@ -151,13 +151,11 @@ bool TLogContainer::show(int argc, char *argv[])
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     TimerUpdateQSOTimer.start(1000);
-    connect(&TimerUpdateQSOTimer, SIGNAL(timeout()), this, SLOT(on_TimeDisplayTimer()));
+    connect(&TimerUpdateQSOTimer, &QTimer::timeout, this, &TLogContainer::on_TimeDisplayTimer);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(ReportOverstrike(bool , BaseContestLog * )),
-            this, SLOT(on_ReportOverstrike(bool , BaseContestLog * )), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ReportOverstrike, this, &TLogContainer::on_ReportOverstrike, Qt::QueuedConnection);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(setMemoryAction(BaseContestLog *, QString, QString)),
-            this, SLOT(mleSetMemoryAction(BaseContestLog *, QString, QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemoryAction, this, &TLogContainer::mleSetMemoryAction);
 
     QMainWindow::show();
     if ( TAboutBox::ShowAboutBox( this, true ) == false )
@@ -406,8 +404,7 @@ void TLogContainer::setupMenus()
     {
         recentFileActs.push_back( new QAction(this));
         recentFileActs[i]->setVisible(false);
-        connect(recentFileActs[i], SIGNAL(triggered()),
-                this, SLOT(openRecentFile()));
+        connect(recentFileActs[i], &QAction::triggered, this, &TLogContainer::openRecentFile);
         recentFilesMenu->addAction(recentFileActs[i]);
     }
     updateRecentFileActions();
@@ -1042,7 +1039,7 @@ void TLogContainer::ExitClearActionExecute()
     MinosConfig::getMinosConfig() ->forceStop();
     SingleApplication *sa = dynamic_cast<SingleApplication *>(QApplication::instance());
 
-    QObject::connect(sa, SIGNAL(aboutToQuit()), sa, SLOT(clearRegistry()));
+    connect(sa, &SingleApplication::aboutToQuit, sa, &SingleApplication::clearRegistry);
 
     close();
 #else
@@ -1551,8 +1548,7 @@ void TLogContainer::updateLayoutsMenu()
             {
                 act->setText(c.name);
             }
-            connect(act, SIGNAL(triggered()),
-                    this, SLOT(selectLayout()));
+            connect(act, &QAction::triggered, this, &TLogContainer::selectLayoutAction);
             act->setCheckable(true);
 
             screenLayoutMenu->addAction(act);
@@ -1568,7 +1564,7 @@ void TLogContainer::updateLayoutsMenu()
     }
 }
 
-void TLogContainer::selectLayout()
+void TLogContainer::selectLayoutAction()
 {
     TWaitCursor wc(this);
     QAction *action = qobject_cast<QAction *>(sender());
@@ -1639,8 +1635,7 @@ void TLogContainer::updateSessionActions()
         }
         QAction *act =  new QAction(this);
         act->setText(s);
-        connect(act, SIGNAL(triggered()),
-                this, SLOT(selectSession()));
+        connect(act, &QAction::triggered, this, &TLogContainer::selectSessionAction);
         act->setCheckable(true);
         if (s == app->currSession)
         {
@@ -1672,7 +1667,7 @@ void TLogContainer::sessionManageExecute()
         selectSession(TContestApp::getContestApp()->currSession);
     }
 }
-void TLogContainer::selectSession()
+void TLogContainer::selectSessionAction()
 {
     TWaitCursor wc(this);
     QAction *action = qobject_cast<QAction *>(sender());

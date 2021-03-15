@@ -21,8 +21,8 @@ VolumeSlider::VolumeSlider(QWidget *parent):
 
 
 
-    connect(this, SIGNAL(sliderReleased()), this, SLOT(setRadioVol()));
-    connect(this, SIGNAL(valueChanged(int)), this, SLOT(setRadioVol(int)));
+    connect(this, &VolumeSlider::sliderReleased, this,QOverload<>::of( &VolumeSlider::setRadioVol));
+    connect(this, &VolumeSlider::valueChanged, this, QOverload<>::of(&VolumeSlider::setRadioVol));
 
 
 

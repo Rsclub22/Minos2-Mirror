@@ -30,7 +30,7 @@ ServerMain::ServerMain(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
+    connect(&LogTimer, &QTimer::timeout, this, &ServerMain::LogTimerTimer);
 
     QString sname = ThisMinosRouter::getThisMinosRouter()->getRouterName();
 

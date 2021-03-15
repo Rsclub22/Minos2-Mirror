@@ -14,7 +14,7 @@ TStatsDispFrame::TStatsDispFrame(QWidget *parent) :
 
 {
     ui->setupUi(this);
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(RecheckTimerTimer()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TStatsDispFrame::RecheckTimerTimer);
 }
 
 TStatsDispFrame::~TStatsDispFrame()

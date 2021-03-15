@@ -35,12 +35,10 @@ TransVertSetupForm::TransVertSetupForm(TransVertParams* _transvertData, QWidget 
 
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    //connect(ui->targetFreq, SIGNAL(editingFinished()), this, SLOT(targetEditFinished()));
-    //connect(ui->radioFreq, SIGNAL(editingFinished()), this, SLOT(radioEditFinished()));
-    connect(radioFreqEdit, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(radioFreqEditfocusChange(QObject *, bool, QFocusEvent *)));
-    connect(targetFreqEdit, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(targetFreqEditfocusChange(QObject *, bool, QFocusEvent *)));
+    connect(radioFreqEdit, &FocusWatcher::focusChanged, this, &TransVertSetupForm::radioFreqEditfocusChange);
+    connect(targetFreqEdit, &FocusWatcher::focusChanged, this, &TransVertSetupForm::targetFreqEditfocusChange);
 
-    connect(ui->transVertSwNum, SIGNAL(editingFinished()), this, SLOT(transVertSwNumSel()));
+    connect(ui->transVertSwNum, &QLineEdit::editingFinished, this, &TransVertSetupForm::transVertSwNumSel);
 
 
 }

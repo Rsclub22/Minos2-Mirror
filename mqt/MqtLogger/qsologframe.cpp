@@ -56,44 +56,44 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     CallsignLabelString = tr("Callsign (F1)");
     CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
     ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
-    connect(ui->CallsignFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onCallsignEdit_textChanged(const QString &)));
+    connect(ui->CallsignFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onCallsignEdit_textChanged);
 
     ui->RSTTxFrame->setup("RstTx", this);
     RSTTXLabelString = tr("RS(T)Tx(F2)");
     RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
     ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
-    connect(ui->RSTTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTTXEdit_textChanged(const QString &)));
+    connect(ui->RSTTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTTXEdit_textChanged);
 
     ui->SerTxFrame->setup("serTx", this);
     SerTXLabelString = tr("Serial Tx");
     SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
     ui->SerTxFrame->getTextEditlabel()->setText("<b>" + SerTXLabelString);
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::ClickFocus);
-    connect(ui->SerTxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerTXEdit_textChanged(const QString &)));
+    connect(ui->SerTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerTXEdit_textChanged);
 
     ui->RSTRxFrame->setup("RstRx", this);
     RSTRXLabelString = tr("RS(T)Rx(F3)");
     RSTRXFW = new FocusWatcher(ui->RSTRxFrame->getTextEditEdit());
     ui->RSTRxFrame->getTextEditlabel()->setText("<b>" + RSTRXLabelString);
-    connect(ui->RSTRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onRSTRXEdit_textChanged(const QString &)));
+    connect(ui->RSTRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTRXEdit_textChanged);
 
     ui->SerRxFrame->setup("SerRx", this);
     SerRXLabelString = tr("Serial Rx (F4)");
     SerRXFW = new FocusWatcher(ui->SerRxFrame->getTextEditEdit());
     ui->SerRxFrame->getTextEditlabel()->setText("<b>" + SerRXLabelString);
-    connect(ui->SerRxFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onSerRXEdit_textChanged(const QString &)));
+    connect(ui->SerRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerRXEdit_textChanged);
 
     ui->LocFrame->setup("Loc", this);
     LocLabelString = tr("Loc (F5)");
     LocFW = new FocusWatcher(ui->LocFrame->getTextEditEdit());
     ui->LocFrame->getTextEditlabel()->setText("<b>" + LocLabelString);
-    connect(ui->LocFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onLocEdit_textChanged(const QString &)));
+    connect(ui->LocFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onLocEdit_textChanged);
 
     ui->QTHFrame->setup("QTH", this);
     QTHLabelString = tr("Exchange (F6)");
     QTHFW = new FocusWatcher(ui->QTHFrame->getTextEditEdit());
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
-    connect(ui->QTHFrame->getTextEditEdit(), SIGNAL(textChanged(const QString &)), this, SLOT(onQTHEdit_textChanged(const QString &)));
+    connect(ui->QTHFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onQTHEdit_textChanged);
 
     ui->commentsFrame->setup("Comments", this);
     CommentsLabelString = tr("Comments");
@@ -112,17 +112,17 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 
     freqFW = new FocusWatcher(ui->frequencyEdit);
 
-    connect(CallsignFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(RSTTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(SerTXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(RSTRXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(SerRXFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(LocFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(QTHFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(CommentsFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(MainOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(SecondOpFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
-    connect(freqFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(focusChange(QObject *, bool, QFocusEvent *)));
+    connect(CallsignFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(RSTTXFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(SerTXFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(RSTRXFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(SerRXFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(LocFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(QTHFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(CommentsFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(MainOpFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(SecondOpFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
+    connect(freqFW, &FocusWatcher::focusChanged, this, &QSOLogFrame::focusChange);
 
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
@@ -137,14 +137,14 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->ModeButton->setText(hamlibData::CW);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterTabFocusIn(QLineEdit*)), this, SLOT(on_AfterTabFocusIn(QLineEdit*)), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(ValidateError(int)), this, SLOT(on_ValidateError(int)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(ShowOperators()), this, SLOT(on_ShowOperators()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(tabSandP()), this, SLOT(on_tabSandP()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, SIGNAL(QSOMargins()), this, SLOT(on_QSOMargins()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterTabFocusIn, this, &QSOLogFrame::on_AfterTabFocusIn, Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ValidateError, this, &QSOLogFrame::on_ValidateError);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ShowOperators, this, &QSOLogFrame::on_ShowOperators);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::tabSandP, this, &QSOLogFrame::on_tabSandP);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &QSOLogFrame::on_FontChanged, Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &QSOLogFrame::on_QSOMargins);
 
-    connect(ui->tuningAddMapChkBox, SIGNAL(stateChanged(int)), this, SLOT(tuningAddMapChkBoxStateChange(int)));
+    connect(ui->tuningAddMapChkBox, &QCheckBox::stateChanged, this, &QSOLogFrame::tuningAddMapChkBoxStateChange);
 
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
 
@@ -513,17 +513,17 @@ void QSOLogFrame::initialise()
 
     current = nullptr;
     oldTimeOK = true;
-    connect(&MinosLoggerEvents::mle, SIGNAL(TimerDistribution()), this, SLOT(on_TimeDisplayTimer()));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &QSOLogFrame::on_TimeDisplayTimer);
 
 
-    connect(ui->bandmapMarkFreqPb, SIGNAL(clicked()), this, SLOT(on_BandmapMarkFreqPbClicked()));
-    connect(ui->bandmapSaveFreqPb, SIGNAL(clicked()), this, SLOT(on_bandmapSaveFreqPbClicked()));
+    connect(ui->bandmapMarkFreqPb, &QPushButton::clicked, this, &QSOLogFrame::on_BandmapMarkFreqPbClicked);
+    connect(ui->bandmapSaveFreqPb, &QPushButton::clicked, this, &QSOLogFrame::on_bandmapSaveFreqPbClicked);
 
-    connect(ui->spotPb, SIGNAL(clicked()), this, SLOT(on_SpotPbClicked()));
-    connect(ui->spotLastLoggedPb, SIGNAL(clicked()), this, SLOT(on_SpotLastLoggedPbClicked()));
+    connect(ui->spotPb, &QPushButton::clicked, this, &QSOLogFrame::on_SpotPbClicked);
+    connect(ui->spotLastLoggedPb, &QPushButton::clicked, this, &QSOLogFrame::on_SpotLastLoggedPbClicked);
     setClusterSendSpotControlsVisible(false);           // visibility controlled by txenable in clusterserver
 
-    connect(this, SIGNAL(freqChanged(Frequency)), this, SLOT(on_FreqChanged(Frequency)));
+    connect(this, &QSOLogFrame::freqChanged, this, &QSOLogFrame::on_FreqChanged);
 
     connect(ui->qrzToolButton, &QToolButton::clicked, this, [=](){onQrzButtonClicked();});
 

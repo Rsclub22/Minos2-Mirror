@@ -45,8 +45,8 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
 
     ui->callSignLineEdit->setFocus();
     // validate the input
-    connect(ui->freqLineEdit, SIGNAL(editingFinished()), this, SLOT(onFreqEditFinish()));
-    connect(ui->locatorLineEdit, SIGNAL(editingFinished()), this, SLOT(onLocEditFinish()));
+    connect(ui->freqLineEdit, &QLineEdit::editingFinished, this, &RigMemDialog::onFreqEditFinish);
+    connect(ui->locatorLineEdit, &LocatorLineEdit::editingFinished, this, &RigMemDialog::onLocEditFinish);
 }
 
 RigMemDialog::~RigMemDialog()

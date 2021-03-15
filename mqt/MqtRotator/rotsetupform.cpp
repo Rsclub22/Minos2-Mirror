@@ -59,25 +59,24 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
 
     networkDataEntryVisible(false);
 
-    //connect(ui, SIGNAL(editingFinished()), this, SLOT(antennaNameFinished()));
-    connect(ui->rotatorModelBox, SIGNAL(activated(int)), this, SLOT(rotatorModelSelected()));
-    connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
-    connect(ui->comSpeedBox, SIGNAL(activated(int)), this, SLOT(comDataSpeedSelected()));
-    connect(ui->comDataBitsBox, SIGNAL(activated(int)), this, SLOT(comDataBitsSelected()));
-    connect(ui->comStopBitsBox, SIGNAL(activated(int)), this, SLOT(comStopBitsSelected()));
-    connect(ui->comParityBox, SIGNAL(activated(int)), this, SLOT(comParityBitsSelected()));
-    connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandshakeSelected()));
-    connect(ui->advancedCommsChkBox, SIGNAL(clicked(bool)),this, SLOT(onAdvancedCommsSelected(bool)));
-    connect(ui->netAddressBox, SIGNAL(editingFinished()), this, SLOT(comNetAddressSelected()));
-    connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(comNetPortNumSelected()));
-    connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
-    connect(ui->sStopOffBut, SIGNAL(clicked(bool)), this, SLOT(sStopOffButSelected()));
-    connect(ui->rotInvertBut, SIGNAL(clicked(bool)), this, SLOT(rotInvertButSelected()));
-    connect(ui->compassBut, SIGNAL(clicked(bool)), this, SLOT(compassButSelected()));
-    connect(ui->chkOverrun, SIGNAL(stateChanged(int)), this, SLOT(overlapSelected()));
-    connect(ui->antOffset, SIGNAL(editingFinished()), this, SLOT(antennaOffSetSelected()));
-    connect(ui->simCW_CCWcmd, SIGNAL(clicked(bool)), this, SLOT(simCWCCWCmdSelected()));
-    connect(ui->showCompDialChkBox, SIGNAL(clicked(bool)), this, SLOT(onCompasDialVisibleChecked(bool)));
+    connect(ui->rotatorModelBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::rotatorModelSelected);
+    connect(ui->comPortBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comportSelected);
+    connect(ui->comSpeedBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comDataSpeedSelected);
+    connect(ui->comDataBitsBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comDataBitsSelected);
+    connect(ui->comStopBitsBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comStopBitsSelected);
+    connect(ui->comParityBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comParityBitsSelected);
+    connect(ui->comHandShakeBox, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::comHandshakeSelected);
+    connect(ui->advancedCommsChkBox, &QCheckBox::clicked,this, &rotSetupForm::onAdvancedCommsSelected);
+    connect(ui->netAddressBox, &QLineEdit::editingFinished, this, &rotSetupForm::comNetAddressSelected);
+    connect(ui->netPortBox, &QLineEdit::editingFinished, this, &rotSetupForm::comNetPortNumSelected);
+    connect(ui->pollInterval, QOverload<int>::of(&QComboBox::activated), this, &rotSetupForm::pollIntervalSelected);
+    connect(ui->sStopOffBut, &QRadioButton::clicked, this, &rotSetupForm::sStopOffButSelected);
+    connect(ui->rotInvertBut, &QRadioButton::clicked, this, &rotSetupForm::rotInvertButSelected);
+    connect(ui->compassBut, &QRadioButton::clicked, this, &rotSetupForm::compassButSelected);
+    connect(ui->chkOverrun, &QCheckBox::stateChanged, this, &rotSetupForm::overlapSelected);
+    connect(ui->antOffset, &QLineEdit::editingFinished, this, &rotSetupForm::antennaOffSetSelected);
+    connect(ui->simCW_CCWcmd, &QCheckBox::clicked, this, &rotSetupForm::simCWCCWCmdSelected);
+    connect(ui->showCompDialChkBox, &QCheckBox::clicked, this, &rotSetupForm::onCompasDialVisibleChecked);
 }
 
 rotSetupForm::~rotSetupForm()

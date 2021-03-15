@@ -35,40 +35,40 @@ RotControlFrame::RotControlFrame(QWidget *parent):
     ui->BrgSt->clear();
 
     nudgeRight1 = new QShortcut(QKeySequence("Ctrl++"), parent);   // Ctrl +
-    connect(nudgeRight1, SIGNAL(activated()), ui->nudgeRight, SLOT(click()));
+    connect(nudgeRight1, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
 
     nudgeRight2 = new QShortcut(QKeySequence("Ctrl+="), parent);   // Ctrl +
-    connect(nudgeRight2, SIGNAL(activated()), ui->nudgeRight, SLOT(click()));
+    connect(nudgeRight2, &QShortcut::activated, ui->nudgeRight, &QToolButton::click);
 
     nudgeLeft = new QShortcut(QKeySequence::ZoomOut, parent);   // Ctrl -
-    connect(nudgeLeft, SIGNAL(activated()), ui->nudgeLeft, SLOT(click()));
+    connect(nudgeLeft, &QShortcut::activated, ui->nudgeLeft, &QToolButton::click);
 
     rotateLeft = new QShortcut(QKeySequence(ROTATE_CCW_KEY), parent);
-    connect(rotateLeft, SIGNAL(activated()), this, SLOT(on_RotateLeft_clicked()));
+    connect(rotateLeft, &QShortcut::activated, this, &RotControlFrame::on_RotateLeft_clicked);
 
 
     rotateRight = new QShortcut(QKeySequence(ROTATE_CW_KEY), parent);
-    connect(rotateRight, SIGNAL(activated()), this, SLOT(on_RotateRight_clicked()));
+    connect(rotateRight, &QShortcut::activated, this, &RotControlFrame::on_RotateRight_clicked);
 
     turnToBearing = new QShortcut(QKeySequence(ROTATE_TURN_KEY), parent);
-    connect(turnToBearing, SIGNAL(activated()), this, SLOT(on_Rotate_clicked()));
+    connect(turnToBearing, &QShortcut::activated, this, &RotControlFrame::on_Rotate_clicked);
 
     rotateStop = new QShortcut(QKeySequence(ROTATE_STOP_KEY), parent);
-    connect(rotateStop, SIGNAL(activated()), this, SLOT(on_StopRotate_clicked()));
+    connect(rotateStop, &QShortcut::activated, this, &RotControlFrame::on_StopRotate_clicked);
 
 
-    connect(this, SIGNAL(bearingEditReturn()), this, SLOT(on_Rotate_clicked()));
+    connect(this, &RotControlFrame::bearingEditReturn, this, &RotControlFrame::on_Rotate_clicked);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(BrgStrToRot(QString)), this, SLOT(setBrgFromQSOLog(QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::BrgStrToRot, this, &RotControlFrame::setBrgFromQSOLog);
 
     // from match frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchBrgStrToRot(QString)), this, SLOT(setBrgFromMatchFrame(QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchBrgStrToRot, this, &RotControlFrame::setBrgFromMatchFrame);
 
     // from cluster frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(SpotBrgStrToRot(QString)), this, SLOT(setBrgFromSpot(QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::SpotBrgStrToRot, this, &RotControlFrame::setBrgFromSpot);
 
     // from memory frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(MemBrgStrToRot(QString)), this, SLOT(setBrgFromFrmMemory(QString)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MemBrgStrToRot, this, &RotControlFrame::setBrgFromFrmMemory);
 
     rot_left_button_off();
     rot_right_button_off();

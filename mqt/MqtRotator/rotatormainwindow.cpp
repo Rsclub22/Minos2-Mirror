@@ -71,7 +71,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     trace(QString("Directory %1").arg(dir.absolutePath()));
 
     createCloseEvent();
-    connect(&LogTimer, SIGNAL(timeout()), this, SLOT(LogTimerTimer()));
+    connect(&LogTimer, &QTimer::timeout, this, &RotatorMainWindow::LogTimerTimer);
     LogTimer.start(100);
     msg = new RotatorRpc(this);
 
@@ -293,7 +293,7 @@ void RotatorMainWindow::LogTimerTimer(  )
 }
 
 
-void RotatorMainWindow::onSelectAntennaBox()
+void RotatorMainWindow::onSelectAntennaBox(int)
 {
     setupAntenna->currentAntennaName = ui->selectAntennaBox->currentText();
     setupAntenna->saveCurrentAntenna();
@@ -470,14 +470,14 @@ int RotatorMainWindow::openRotator()
         logMessage(QString("Failed to create rotator from factory"));
         return OPEN_FAILED;
     }
-    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
-    connect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
-    connect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
-    connect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
+    connect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::displayBearing);
+    connect(rotator, &RotatorBase::traceCommsMsg, this, &RotatorMainWindow::logMessage);
+    connect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::checkMoving);
+    connect(rotator, &RotatorBase::bearing_updated, rotlog, &RotatorLog::saveBearingLog);
 
     if (rotator->getLibraryName() == PSTROTATOR_API)
     {
-        connect(rotator, SIGNAL(sentCommandError(int, QString)), this, SLOT(onSentCommandError(int, QString) ), Qt::QueuedConnection);
+        connect(rotator, &RotatorBase::sentCommandError, this, &RotatorMainWindow::onSentCommandError, Qt::QueuedConnection);
     }
 
     rotator->setTraceComms(traceCommsFlag);
@@ -544,14 +544,14 @@ void RotatorMainWindow::closeRotator()
 
     if (rotator)
     {
-        disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(displayBearing(int)));
-        disconnect(rotator, SIGNAL(traceCommsMsg(QString)), this, SLOT(logMessage(QString)));
-        disconnect(rotator, SIGNAL(bearing_updated(int)), this, SLOT(checkMoving(int)));
-        disconnect(rotator, SIGNAL(bearing_updated(int)), rotlog, SLOT(saveBearingLog(int)));
+        disconnect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::displayBearing);
+        disconnect(rotator, &RotatorBase::traceCommsMsg, this, &RotatorMainWindow::logMessage);
+        disconnect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::checkMoving);
+        disconnect(rotator, &RotatorBase::bearing_updated, rotlog, &RotatorLog::saveBearingLog);
 
         if (rotator->getLibraryName() == PSTROTATOR_API)
         {
-            disconnect(rotator, SIGNAL(sentCommandError(int, QString)), this, SLOT(onSentCommandError(int, QString)));
+            disconnect(rotator, &RotatorBase::sentCommandError, this, &RotatorMainWindow::onSentCommandError);
 
         }
 
@@ -626,74 +626,65 @@ void RotatorMainWindow::sendPresetListLogger()
     msg->rotatorCache.setRotatorPresets(psname, presets.join(':'));
     msg->rotatorCache.publish();
 }
-
 void RotatorMainWindow::initActionsConnections()
 {
 
-    connect(ui->selectAntennaBox, SIGNAL(activated(int)), this, SLOT(onSelectAntennaBox()));
-    connect(setupAntenna, SIGNAL(antennaNameChange()), this, SLOT(updateSelectAntennaBox()));
-    connect(ui->turnButton, SIGNAL(clicked(bool)), this, SLOT(rotateToController()));
-    connect(ui->bearingEdit, SIGNAL(returnPressed()), this, SLOT(rotateToController()));
-    connect(this, SIGNAL(presetRotateTo()), this, SLOT(rotateToController()));
-    connect(this, SIGNAL(presetRotateTo()), ui->bearingEdit, SLOT(selectAll()));
-    connect(this, SIGNAL(presetRotateTo()), ui->bearingEdit, SLOT(setFocus()));
-    connect(ui->turnButton, SIGNAL(clicked(bool)), ui->bearingEdit, SLOT(selectAll()));
-    connect(ui->turnButton, SIGNAL(clicked(bool)), ui->bearingEdit, SLOT(setFocus()));
-    connect(ui->stopButton, SIGNAL(clicked(bool)), ui->bearingEdit, SLOT(selectAll()));
-    connect(ui->stopButton, SIGNAL(clicked(bool)), ui->bearingEdit, SLOT(setFocus()));
-    connect(ui->bearingEdit, SIGNAL(returnPressed()), ui->bearingEdit, SLOT(setFocus()));
-    connect(ui->bearingEdit, SIGNAL(returnPressed()), ui->bearingEdit, SLOT(selectAll()));
-    connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(stopButton()));
-    connect(ui->rot_right_button, SIGNAL(clicked(bool)), this, SLOT(rotateCW(bool)));
-    connect(ui->rot_left_button, SIGNAL(clicked(bool)), this, SLOT(rotateCCW(bool)));
-    connect(this, SIGNAL(escapePressed()), this, SLOT(stop_rotation()));
+    connect(ui->selectAntennaBox,QOverload<int>::of(&QComboBox::activated), this, &RotatorMainWindow::onSelectAntennaBox);
+    connect(setupAntenna, &RotSetupDialog::antennaNameChange, this, &RotatorMainWindow::updateSelectAntennaBox);
+    connect(ui->turnButton, &QPushButton::clicked, this, &RotatorMainWindow::rotateToController);
+    connect(ui->bearingEdit, &BearingLineEdit::returnPressed, this, &RotatorMainWindow::rotateToController);
+    connect(this, &RotatorMainWindow::presetRotateTo, this, &RotatorMainWindow::rotateToController);
+    connect(this, &RotatorMainWindow::presetRotateTo, ui->bearingEdit, &BearingLineEdit::selectAll);
+    connect(this, &RotatorMainWindow::presetRotateTo, ui->bearingEdit, QOverload<>::of(&BearingLineEdit::setFocus));
+    connect(ui->turnButton, &QPushButton::clicked, ui->bearingEdit, &BearingLineEdit::selectAll);
+    connect(ui->turnButton, &QPushButton::clicked, ui->bearingEdit, QOverload<>::of(&BearingLineEdit::setFocus));
+    connect(ui->stopButton, &QPushButton::clicked, ui->bearingEdit, &BearingLineEdit::selectAll);
+    connect(ui->stopButton, &QPushButton::clicked, ui->bearingEdit, QOverload<>::of(&BearingLineEdit::setFocus));
+    connect(ui->bearingEdit, &BearingLineEdit::returnPressed, ui->bearingEdit, QOverload<>::of(&BearingLineEdit::setFocus));
+    connect(ui->bearingEdit, &BearingLineEdit::returnPressed, ui->bearingEdit, &BearingLineEdit::selectAll);
+    connect(ui->stopButton, &QPushButton::clicked, this, &RotatorMainWindow::stopButton);
+    connect(ui->rot_right_button, &QPushButton::clicked, this, &RotatorMainWindow::rotateCW);
+    connect(ui->rot_left_button, &QPushButton::clicked, this, &RotatorMainWindow::rotateCCW);
+    connect(this, &RotatorMainWindow::escapePressed, this, &RotatorMainWindow::stop_rotation);
 
     // click on compass rose
 
-    connect(ui->compassDial, SIGNAL(sendClickBearing(int)), this, SLOT(compassClicked(int)));
+    connect(ui->compassDial, &MinosCompass::sendClickBearing, this, &RotatorMainWindow::compassClicked);
 
     // display bearing
-    connect(pollTimer, SIGNAL(timeout()), this, SLOT(request_bearing()));
-    connect(this, SIGNAL(sendCompassDial(int)), ui->compassDial, SLOT(compassDialUpdate(int)));
-    connect(this, SIGNAL(sendBearing(QString)), ui->bearingDisplay, SLOT(setText(const QString &)));
-    connect(this, SIGNAL(sendBackBearing(QString)), ui->backBearingDisplay, SLOT(setText(const QString &)));
-    connect(this, SIGNAL(displayActualBearing(QString)), actualRotatorDisplay, SLOT( setText(const QString &)));
-    connect(this, SIGNAL(displayOverlap(overlapStat)), this ,SLOT(overLapDisplayBox(overlapStat)));
+    connect(pollTimer, &QTimer::timeout, this, &RotatorMainWindow::request_bearing);
+    connect(this, &RotatorMainWindow::sendCompassDial, ui->compassDial, &MinosCompass::compassDialUpdate);
+    connect(this, &RotatorMainWindow::sendBearing, ui->bearingDisplay, &QLabel::setText);
+    connect(this, &RotatorMainWindow::sendBackBearing, ui->backBearingDisplay, &QLabel::setText);
+    connect(this, &RotatorMainWindow::displayActualBearing, actualRotatorDisplay, &QLabel::setText);
+    connect(this, &RotatorMainWindow::displayOverlap, this ,&RotatorMainWindow::overLapDisplayBox);
     // check endstop and turn to rotation stop
-    connect(&RotateTimer, SIGNAL(timeout()), this, SLOT(rotatingTimer()));
-    connect(this, SIGNAL(checkingEndStop()), this, SLOT(checkEndStop()));
-    //connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(closeSerialPort()));
+    connect(&RotateTimer, &QTimer::timeout, this, &RotatorMainWindow::rotatingTimer);
+    connect(this, &RotatorMainWindow::checkingEndStop, this, &RotatorMainWindow::checkEndStop);
 
     // Test Bearing Box
-    connect(ui->testBearing, SIGNAL(returnPressed()), this, SLOT(onTestBearingEnter()));
+    connect(ui->testBearing, &QLineEdit::returnPressed, this, &RotatorMainWindow::onTestBearingEnter);
 
     // setup antennas
-    connect(ui->actionSetup_Antennas, SIGNAL(triggered()), this, SLOT(onLaunchSetup()));
-    connect(setupAntenna, SIGNAL(currentAntennaSettingChanged(QString)), this, SLOT(currentAntennaSettingChanged(QString)));
-    connect(setupAntenna, SIGNAL(antennaNameChange()), this, SLOT(updateSelectAntennaBox()));
-    connect(setupAntenna, SIGNAL(antennaTabChanged()), this, SLOT(updateSelectAntennaBox()));
+    connect(ui->actionSetup_Antennas, &QAction::triggered, this, &RotatorMainWindow::onLaunchSetup);
+    connect(setupAntenna, &RotSetupDialog::currentAntennaSettingChanged, this, &RotatorMainWindow::currentAntennaSettingChanged);
+    connect(setupAntenna, &RotSetupDialog::antennaNameChange, this, &RotatorMainWindow::updateSelectAntennaBox);
+    connect(setupAntenna, &RotSetupDialog::antennaTabChanged, this, &RotatorMainWindow::updateSelectAntennaBox);
 
-    // setup presets
-    //connect(editPresets, SIGNAL(showEditPresetDialog()), editPresets, SLOT(show()));
-    //connect(editPresets, SIGNAL(updatePresetButtonLabels()), this, SLOT(updatePresetLabels()));
-    //connect(ui->actionEdit_Presets, SIGNAL(triggered()), editPresets, SLOT(loadPresetEditFieldsShow()));
     // Bearing Log
-    connect(ui->actionLog_Heading, SIGNAL(triggered()), setupLog, SLOT(loadLogConfig()));
-    connect(setupLog, SIGNAL(showLogDialog()), setupLog, SLOT(show()));
-    connect(setupLog, SIGNAL(bearingLogConfigChanged()), rotlog, SLOT(getBearingLogConfig()));
+    connect(ui->actionLog_Heading, &QAction::triggered, setupLog, &LogDialog::loadLogConfig);
+    connect(setupLog, &LogDialog::showLogDialog, setupLog, &RotatorMainWindow::show);
+    connect(setupLog, &LogDialog::bearingLogConfigChanged, rotlog, &RotatorLog::getBearingLogConfig);
 
     // Message from Logger
-    connect(msg, SIGNAL(setRotation(int,int)), this, SLOT(onLoggerSetRotation(int,int)));
-    connect(msg, SIGNAL(selectAntennaFromLog(PubSubName)), this, SLOT(onLoggerSelectAntenna(PubSubName)));
-    connect(msg, SIGNAL(setRotPreset(QString)), this, SLOT(onLoggerSetPreset(QString)));
+    connect(msg, &RotatorRpc::setRotation, this, &RotatorMainWindow::onLoggerSetRotation);
+    connect(msg, &RotatorRpc::selectAntennaFromLog, this, &RotatorMainWindow::onLoggerSelectAntenna);
+    connect(msg, &RotatorRpc::setRotPreset, this, &RotatorMainWindow::onLoggerSetPreset);
 
 
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
-    connect(ui->actionAbout_Rotator_Config, SIGNAL(triggered()), this, SLOT(aboutRotatorConfig()));
-    connect(ui->actionTraceComms, SIGNAL(toggled(bool)), this, SLOT(saveTraceLogFlag(bool)));    // set/clear comms tracing
-    //connect(ui->actionExit , SIGNAL(triggered()), this, SLOT(close()));
-
-
+    connect(ui->actionAbout, &QAction::triggered, this, &RotatorMainWindow::about);
+    connect(ui->actionAbout_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::aboutRotatorConfig);
+    connect(ui->actionTraceComms, &QAction::toggled, this, &RotatorMainWindow::saveTraceLogFlag);    // set/clear comms tracing
 
 }
 

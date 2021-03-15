@@ -51,7 +51,7 @@ private slots:
     void buttonSelected();
     void runOffActionSelected();
 signals:
-    void clearActionSelected(int);
+    void clearActionActivated(int);
     void buttonActivated(int);
 
 

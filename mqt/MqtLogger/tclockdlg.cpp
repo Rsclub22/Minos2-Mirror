@@ -18,7 +18,7 @@ TClockDlg::TClockDlg(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    connect(&clockTick, SIGNAL(timeout()), this, SLOT(on_clockTicked()));
+    connect(&clockTick, &QTimer::timeout, this, &TClockDlg::on_clockTicked);
     clockTick.start(500);
 
     setEdits();

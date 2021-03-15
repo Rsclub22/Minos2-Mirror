@@ -66,47 +66,47 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
     ui->useRigCtldChkBox->setCheckState(Qt::CheckState::Unchecked);
     rigCtldItemsVisible(false);
 
-    connect(ui->radioModelBox, SIGNAL(activated(int)), this, SLOT(radioModelSelected()));
-    connect(ui->comPortBox, SIGNAL(activated(int)), this, SLOT(comportSelected()));
-    connect(ui->comSpeedBox, SIGNAL(activated(int)), this, SLOT(comSpeedSelected()));
-    connect(ui->comDataBitsBox, SIGNAL(activated(int)), this, SLOT(comDataBitsSelected()));
-    connect(ui->comStopBitsBox, SIGNAL(activated(int)), this, SLOT(comStopBitsSelected()));
-    connect(ui->comParityBox, SIGNAL(activated(int)), this, SLOT(comParitySelected()));
-    connect(ui->comHandShakeBox, SIGNAL(activated(int)), this, SLOT(comHandShakeSelected()));
-    connect(ui->forceDtrBox, SIGNAL(activated(int)), this, SLOT(on_forceDTRSelected()));
-    connect(ui->forceRtsBox, SIGNAL(activated(int)), this, SLOT(on_forceRTSSelected()));
-    connect(ui->advancedCommsChkBox, SIGNAL(clicked(bool)),this, SLOT(onAdvancedCommsSelected(bool)));
-    connect(ui->networkAddBox, SIGNAL(editingFinished()), this, SLOT(networkAddressSelected()));
-    connect(ui->netPortBox, SIGNAL(editingFinished()), this, SLOT(networkPortSelected()));
-    connect(ui->pollInterval, SIGNAL(activated(int)), this, SLOT(pollIntervalSelected()));
-    connect(ui->enableTransVert, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSelected(bool)));
-    connect(ui->mgmBox, SIGNAL(activated(int)), this, SLOT(mgmModeSelected()));
-    connect(ui->CIVlineEdit, SIGNAL(editingFinished()), this, SLOT(civAddressFinished()));
+    connect(ui->radioModelBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::radioModelSelected);
+    connect(ui->comPortBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comportSelected);
+    connect(ui->comSpeedBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comSpeedSelected);
+    connect(ui->comDataBitsBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comDataBitsSelected);
+    connect(ui->comStopBitsBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comStopBitsSelected);
+    connect(ui->comParityBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comParitySelected);
+    connect(ui->comHandShakeBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::comHandShakeSelected);
+    connect(ui->forceDtrBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::on_forceDTRSelected);
+    connect(ui->forceRtsBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::on_forceRTSSelected);
+    connect(ui->advancedCommsChkBox, &QCheckBox::clicked,this, &RigSetupForm::onAdvancedCommsSelected);
+    connect(ui->networkAddBox, &QLineEdit::editingFinished, this, &RigSetupForm::networkAddressSelected);
+    connect(ui->netPortBox, &QLineEdit::editingFinished, this, &RigSetupForm::networkPortSelected);
+    connect(ui->pollInterval, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::pollIntervalSelected);
+    connect(ui->enableTransVert, &QCheckBox::clicked, this, &RigSetupForm::enableTransVertSelected);
+    connect(ui->mgmBox, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::mgmModeSelected);
+    connect(ui->CIVlineEdit, &QLineEdit::editingFinished, this, &RigSetupForm::civAddressFinished);
 
 
-    connect(ui->pttEnable, SIGNAL(clicked(bool)), this, SLOT(onPttEnableSelected(bool)));
-    connect(ui->pttCatEnable, SIGNAL(clicked(bool)), this, SLOT(onPttCatEnableClicked(bool)));
-    connect(ui->pttDTREnable, SIGNAL(clicked(bool)), this, SLOT(onPttDtrEnableClicked(bool)));
-    connect(ui->pttRTSEnable, SIGNAL(clicked(bool)), this, SLOT(onPttRtsEnableClicked(bool)));
-    connect(ui->pttComportSel, SIGNAL(activated(int)), this, SLOT(onPttComportSelActivated(int)));
+    connect(ui->pttEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttEnableSelected);
+    connect(ui->pttCatEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttCatEnableClicked);
+    connect(ui->pttDTREnable, &QCheckBox::clicked, this, &RigSetupForm::onPttDtrEnableClicked);
+    connect(ui->pttRTSEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
+    connect(ui->pttComportSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::onPttComportSelActivated);
 
-    connect(ui->useRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(useRigCtldSelected(bool)));
-    connect(ui->startMinosRigCtldChkBox, SIGNAL(clicked(bool)), this, SLOT(onStartMinosRigCtldChkBox(bool)));
-    connect(ui->rigCtldNetworkAddBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkAddressSelected()));
-    connect(ui->rigCtldNetPortBox, SIGNAL(editingFinished()), this, SLOT(rigCtldNetworkPortSelected()));
+    connect(ui->useRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::useRigCtldSelected);
+    connect(ui->startMinosRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::onStartMinosRigCtldChkBox);
+    connect(ui->rigCtldNetworkAddBox, &QLineEdit::editingFinished, this, &RigSetupForm::rigCtldNetworkAddressSelected);
+    connect(ui->rigCtldNetPortBox, &QLineEdit::editingFinished, this, &RigSetupForm::rigCtldNetworkPortSelected);
 
     initSupBandsChkBoxs();
 
 
     // transvert
-    connect(ui->enableTransVertSw, SIGNAL(clicked(bool)), this, SLOT(enableTransVertSwSel(bool)));
-    connect(ui->locTvConChk, SIGNAL(clicked(bool)), this, SLOT(localTransVertSwSel(bool)));
-    connect(ui->locTVComPortSel, SIGNAL(activated(int)), this, SLOT(locTVComPortSel(int)));
+    connect(ui->enableTransVertSw, &QCheckBox::clicked, this, &RigSetupForm::enableTransVertSwSel);
+    connect(ui->locTvConChk, &QCheckBox::clicked, this, &RigSetupForm::localTransVertSwSel);
+    connect(ui->locTVComPortSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::locTVComPortSel);
 
 
-    connect(ui->addTransvert, SIGNAL(clicked(bool)), this, SLOT(addTransVerter()));
-    connect(ui->removeTransvert, SIGNAL(clicked(bool)), this, SLOT(removeTransVerter()));
-    connect(ui->changeBand, SIGNAL(clicked(bool)), this, SLOT(changeBand()));
+    connect(ui->addTransvert, &QPushButton::clicked, this, &RigSetupForm::addTransVerter);
+    connect(ui->removeTransvert, &QPushButton::clicked, this, &RigSetupForm::removeTransVerter);
+    connect(ui->changeBand, &QPushButton::clicked, this, &RigSetupForm::changeBand);
 
 }
 
@@ -503,7 +503,7 @@ void RigSetupForm::setStopBits(QString stop)
 /***************************** Parity Bits *************************/
 
 
-void RigSetupForm::comParitySelected()
+void RigSetupForm::comParitySelected(int)
 {
     if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
     {

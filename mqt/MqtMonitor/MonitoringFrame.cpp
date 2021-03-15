@@ -12,8 +12,7 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
     ui->setupUi(this);
 
     ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-    connect( ui->QSOTable->horizontalHeader(), SIGNAL(sectionResized(int, int , int)),
-             this, SLOT( on_sectionResized(int, int , int)));
+    connect( ui->QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &MonitoringFrame::on_sectionResized);
 
 }
 

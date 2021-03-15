@@ -76,27 +76,27 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     BandList::getBandList().loadAllBands(bands);
 
     freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
-    connect(freqEditShortKey, SIGNAL(activated()), this, SLOT(freqEditSelected()));
+    connect(freqEditShortKey, &QShortcut::activated, this, &RigControlFrame::freqEditSelected);
 
     connect(ui->freqStepCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RigControlFrame::freqStepComboChanged);
 
     freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U), parent);
-    connect(freqPlusShortCut, SIGNAL(activated()), this, SLOT(freqPlus_ShortCut()));
-    connect(ui->freqUp, SIGNAL(clicked(bool)), this, SLOT(freqPlusShortCut_clicked(bool)));
+    connect(freqPlusShortCut, &QShortcut::activated, this, &RigControlFrame::freqPlus_ShortCut);
+    connect(ui->freqUp, &QToolButton::clicked, this, &RigControlFrame::freqPlusShortCut_clicked);
 
     freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D), parent);
-    connect(freqNegShortCut, SIGNAL(activated()), this, SLOT(freqNeg_ShortCut()));
-    connect(ui->freqDown, SIGNAL(clicked(bool)), this, SLOT(freqNegShortCut_clicked(bool)));
+    connect(freqNegShortCut, &QShortcut::activated, this, &RigControlFrame::freqNeg_ShortCut);
+    connect(ui->freqDown, &QToolButton::clicked, this, &RigControlFrame::freqNegShortCut_clicked);
 
     // rit key shortcuts
     ritOnOffShortCut = new QShortcut(QKeySequence("Ctrl+o"), parent);
-    connect(ritOnOffShortCut, SIGNAL(activated()), this, SLOT(ritButtonSelected()));
+    connect(ritOnOffShortCut, &QShortcut::activated, this, &RigControlFrame::ritButtonSelected);
     ritClearShortCut = new QShortcut(QKeySequence("Ctrl+k"), parent);
-    connect(ritClearShortCut, SIGNAL(activated()), this, SLOT(ritClearShortCutSelected()));
+    connect(ritClearShortCut, &QShortcut::activated, this, &RigControlFrame::ritClearShortCutSelected);
     ritFreqEditShortCut = new QShortcut(QKeySequence("Ctrl+i"), parent);
-    connect(ritFreqEditShortCut, SIGNAL(activated()), this, SLOT(ritFreqEditShortCutInFocus()));
+    connect(ritFreqEditShortCut, &QShortcut::activated, this, &RigControlFrame::ritFreqEditShortCutInFocus);
 
-    connect(&MinosLoggerEvents::mle, SIGNAL(FontChanged()), this, SLOT(on_FontChanged()), Qt::QueuedConnection);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &RigControlFrame::on_FontChanged, Qt::QueuedConnection);
     on_FontChanged();
 
     operatingFreq = new CheckOperatingFreq();
@@ -268,30 +268,29 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     ui->modelbl->setText(" ");
 
     // main freq tuning
-    //connect(ui->freqInput, SIGNAL(lostFocus()), this, SLOT(exitFreqEdit()));
-    connect(ui->freqInput, SIGNAL(freqEditReturn()), this, SLOT(returnChangeRadioFreq()));
-    connect(ui->freqInput, SIGNAL(newFreq()), this, SLOT(changeMainRadioFreq()));
+    connect(ui->freqInput, &FreqLineEdit::freqEditReturn, this, &RigControlFrame::returnChangeRadioFreq);
+    connect(ui->freqInput, &FreqLineEdit::newFreq, this, &RigControlFrame::changeMainRadioFreq);
 
     // rit freq tuning
-    connect(ui->RitButton, SIGNAL(clicked(bool)), this, SLOT(ritButtonSelected()));
-    connect(ui->RitEdit, SIGNAL(newFreq(ShortFreq)), this, SLOT(changeRitRadioFreq(ShortFreq)));
-    connect(ui->RitClear, SIGNAL(clicked(bool)), this, SLOT(ritClearButtonSelected(bool)));
+    connect(ui->RitButton, &QToolButton::clicked, this, &RigControlFrame::ritButtonSelected);
+    connect(ui->RitEdit, &RitLineEdit::newFreq, this, &RigControlFrame::changeRitRadioFreq);
+    connect(ui->RitClear, &QToolButton::clicked, this, &RigControlFrame::ritClearButtonSelected);
 
     // from cluster frame
-    connect(&MinosLoggerEvents::mle, SIGNAL(FreqToRig(Frequency)), this, SLOT(clusterUpdateRigFreq(Frequency)));
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FreqToRig, this, &RigControlFrame::clusterUpdateRigFreq);
 
     // volume control updates to radio
-    connect(ui->volumeSlider, SIGNAL(sendVolumeRadio(int)), this, SLOT(sendVolumeRadio(int)));
+    connect(ui->volumeSlider, &VolumeSlider::sendVolumeRadio, this, &RigControlFrame::sendVolumeRadio);
 
     // when no radio is connected
-    connect(this, SIGNAL(noRadioSendFreq(Frequency)), this, SLOT(noRadioSetFreq(Frequency)));
-    connect(this, SIGNAL(noRadioSendMode(QString)), this, SLOT(noRadioSetMode(QString)));
+    connect(this, &RigControlFrame::noRadioSendFreq, this, &RigControlFrame::noRadioSetFreq);
+    connect(this,&RigControlFrame::noRadioSendMode, this, &RigControlFrame::noRadioSetMode);
 
 
-    connect(bandSelButtons , SIGNAL(sendPresetFreq(Frequency)), this, SLOT(radioBandFreq(Frequency)));
-    connect(bandSelButtons, SIGNAL(sendBandChange(QString)), this, SLOT(onRadioBandChange(QString)));
+    connect(bandSelButtons , &BandSelButtons::sendPresetFreq, this, &RigControlFrame::radioBandFreq);
+    connect(bandSelButtons, &BandSelButtons::sendBandChange, this, &RigControlFrame::onRadioBandChange);
 
-    connect(this, SIGNAL(radioSwitchCompleted()), this, SLOT(setRadioSwitchCompleted()));
+    connect(this, &RigControlFrame::radioSwitchCompleted, this, &RigControlFrame::setRadioSwitchCompleted);
 
     setVolControlVisible(false);
 

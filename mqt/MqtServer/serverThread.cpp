@@ -26,10 +26,10 @@ void MinosRouterConnection::initialise()
 {
     QHostAddress h = sock->peerAddress();
     connectHost = h;
-    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()), Qt::UniqueConnection);
-    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()), Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::on_disconnected, Qt::UniqueConnection);
 
-    connect(&resubscribeTimer, SIGNAL(timeout()), this, SLOT(sendKeepAlive()), Qt::UniqueConnection);
+    connect(&resubscribeTimer, &QTimer::timeout, this, &MinosRouterConnection::sendKeepAlive, Qt::UniqueConnection);
     resubscribeTimer.start(1000);
 }
 
@@ -80,9 +80,9 @@ void MinosRouterConnection::mConnect( Router *psrv )
    // We need to connect out to the end point - looks much like a client connection!
     sock = QSharedPointer<QTcpSocket>(new QTcpSocket);
 
-    connect(sock.data(), SIGNAL(connected()), this, SLOT(on_connected()), Qt::UniqueConnection);
-    connect(sock.data(), SIGNAL(disconnected()), this, SLOT(on_disconnected()), Qt::UniqueConnection);
-    connect(sock.data(), SIGNAL(readyRead()), this, SLOT(on_readyRead()), Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::connected, this, &MinosRouterConnection::on_connected, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::disconnected, this, &MinosRouterConnection::on_disconnected, Qt::UniqueConnection);
+    connect(sock.data(), &QTcpSocket::readyRead, this, &MinosRouterConnection::on_readyRead, Qt::UniqueConnection);
     sock->connectToHost(srv->host, srv->port);
 }
 void MinosRouterConnection::on_connected()

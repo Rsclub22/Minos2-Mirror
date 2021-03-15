@@ -98,7 +98,7 @@ void TZConf::startZConf(const QString &name)
 
     // set up the receiver
     readSocket.bind(UPNP_PORT);
-    connect(&readSocket, SIGNAL(readyRead( )), this, SLOT(onReadyRead()), Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
+    connect(&readSocket, &QUdpSocket::readyRead, this, &TZConf::onReadyRead, Qt::ConnectionType(Qt::QueuedConnection | Qt::UniqueConnection));
 
     // Get network interfaces list
 
@@ -157,7 +157,7 @@ void TZConf::startZConf(const QString &name)
       We also need to time out stations which we haven't heard from.
    */
 
-   connect (&beaconTimer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+   connect (&beaconTimer, &QTimer::timeout, this, &TZConf::onTimeout);
 
    beaconTimer.setInterval(100);
    beaconTimer.start();

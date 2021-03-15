@@ -38,7 +38,7 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
 
     ui->freqLineEdit->setFocus();
     // validate the input
-    connect(ui->freqLineEdit, SIGNAL(editingFinished()), this, SLOT(onFreqEditFinish()));
+    connect(ui->freqLineEdit, &QLineEdit::editingFinished, this, &RunButtonDialog::onFreqEditFinish);
 
 }
 

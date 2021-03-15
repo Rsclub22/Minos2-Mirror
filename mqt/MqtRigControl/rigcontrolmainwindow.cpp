@@ -131,8 +131,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         // rit test
 
         ui->setRitSpinner->setSingleStep(100);
-        connect(ui->setRitSpinner, SIGNAL(valueChanged(int)), this, SLOT(testIncRit(int)));
-        connect(ui->testRitButton, SIGNAL(clicked()), this, SLOT(ritbuttontoggle()));
+        connect(ui->setRitSpinner, QOverload<int>::of(&QSpinBox::valueChanged), this, &RigControlMainWindow::testIncRit);
+        connect(ui->testRitButton, &QPushButton::clicked, this, &RigControlMainWindow::ritbuttontoggle);
 
     }
     else
@@ -223,8 +223,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->selectRadioBox->clearFocus();
 
-    connect(ui->cwKeyerPb, SIGNAL(clicked()), this, SLOT(onCwKeyerPbClicked()));
-    connect(ui->cwKeyerStopPb, SIGNAL(clicked()), this, SLOT(onCwKeyerStopPbClicked()));
+    connect(ui->cwKeyerPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerPbClicked);
+    connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
 
 
     if (appName.length() == 0)
@@ -376,7 +376,7 @@ void RigControlMainWindow::onStdInRead(QString cmd)
 void RigControlMainWindow::initActionsConnections()
 {
 
-    connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio(int)));
+    connect(ui->selectRadioBox, QOverload<int>::of(&QComboBox::activated), this, &RigControlMainWindow::selectRadio);
 
     //connect(ui->selectRadioBox, &QComboBox::activated, [=](int index){selectRadio(index);});
     connect(ui->actionSetup_Radios, &QAction::triggered, [=](){onLaunchSetup();});
@@ -405,7 +405,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setMode, [=](QString mode){loggerSetMode(mode);});
     connect(msg, &RigControlRpc::selectLoggerRadio, [=](PubSubName s, QString band, Frequency freq, QString mode){onSelectRadio(s, band, freq, mode);});
     connect(msg, &RigControlRpc::setVolume, [=](int vol){loggerSetVolume(vol);});
-    connect(msg, SIGNAL(setVoiceMessageNum(QString)), this, SLOT(onSetVoiceMessageNum(QString)));
+    connect(msg, &RigControlRpc::setVoiceMessageNum, this, &RigControlMainWindow::onSetVoiceMessageNum);
 
 
 
@@ -892,15 +892,15 @@ void RigControlMainWindow::upDateRadio()
                     //getAndSendFrequency(curVfo);
                     //getAndSendMode(curVfo);
                     // connect signals for future value updates and errors
-                    connect(radio, SIGNAL(newRxFreq(Frequency)), this, SLOT(onNewRxFreq(Frequency)), Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
-                    connect(radio, SIGNAL(newVfo(QString)), this, SLOT(onNewVfo(QString)), Qt::QueuedConnection);
-                    connect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()), Qt::QueuedConnection);
-                    connect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)), Qt::QueuedConnection);
+                    connect(radio, &RigBase::newRxFreq, this, &RigControlMainWindow::onNewRxFreq, Qt::QueuedConnection); // QueuedConnection, ensure return to rigcontroller caller when not polling - eg Omnirig
+                    connect(radio, &RigBase::newVfo, this, &RigControlMainWindow::onNewVfo, Qt::QueuedConnection);
+                    connect(radio, &RigBase::newMode, this, &RigControlMainWindow::onNewMode, Qt::QueuedConnection);
+                    connect(radio, &RigBase::rigStatus, this, &RigControlMainWindow::onRigStatus, Qt::QueuedConnection);
 
-                    connect(radio, SIGNAL(ritOn()), this, SLOT(onRitOn()), Qt::QueuedConnection);
-                    connect(radio, SIGNAL(ritOff()), this, SLOT(onRitOff()), Qt::QueuedConnection);
-                    connect(radio, SIGNAL(ritOffset()), this, SLOT(onRitOffset()), Qt::QueuedConnection);
-                    connect(radio, SIGNAL(rit0()), this, SLOT(onRit0()), Qt::QueuedConnection);
+                    connect(radio, &RigBase::ritOn, this, &RigControlMainWindow::onRitOn, Qt::QueuedConnection);
+                    connect(radio, &RigBase::ritOff, this, &RigControlMainWindow::onRitOff, Qt::QueuedConnection);
+                    connect(radio, &RigBase::ritOffset, this, &RigControlMainWindow::onRitOffset, Qt::QueuedConnection);
+                    connect(radio, &RigBase::rit0, this, &RigControlMainWindow::onRit0, Qt::QueuedConnection);
                 }
 
             }
@@ -1303,7 +1303,7 @@ int RigControlMainWindow::openRadio()
     // set state of trace hamlib comms
 
     // Message from rigcontrol
-    //connect(radio, SIGNAL(debug_protocol(QString)), this, SLOT(logMessage(QString)));
+    //connect(radio, &RigBase:(debug_protocol, this, &RigControlMainWindow::logMessage);
 
     logMessage(QString("Radio Connected? %1").arg(radio->getRigConnected() ? "yes" : "no"));
 
@@ -1454,10 +1454,10 @@ void RigControlMainWindow::closeRadio()
     {
         if (radio != nullptr)
         {
-            disconnect(radio, SIGNAL(newRxFreq(Frequency)), this, SLOT(onNewRxFreq(Frequency)));
-            disconnect(radio, SIGNAL(newVfo(QString)), this, SLOT(onNewVfo(QString)));
-            disconnect(radio, SIGNAL(newMode()), this, SLOT(onNewMode()));
-            disconnect(radio, SIGNAL(rigStatus(int, QString)), this, SLOT(onRigStatus(int, QString)));
+            disconnect(radio, &RigBase::newRxFreq, this, &RigControlMainWindow::onNewRxFreq);
+            disconnect(radio, &RigBase::newVfo, this, &RigControlMainWindow::onNewVfo);
+            disconnect(radio, &RigBase::newMode, this, &RigControlMainWindow::onNewMode);
+            disconnect(radio, &RigBase::rigStatus, this, &RigControlMainWindow::onRigStatus);
         }
 
     }
@@ -2313,7 +2313,7 @@ void RigControlMainWindow::getRigctldNames(QString address, quint16 port)
                         logMessage(QString("getRigctldNames - Data sent ok"));
                         client->startRecvTimer(3000);
                         QEventLoop loop;
-                        QObject::connect( client, SIGNAL( finished() ), &loop, SLOT( quit() ) );
+                        QObject::connect( client, &RigCtldClient::finished, &loop, &QEventLoop::quit );
                         loop.exec();
                     }
 

@@ -44,11 +44,11 @@ RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
-    connect(ui->addAntenna, SIGNAL(clicked()), this, SLOT(addAntenna()));
-    connect(ui->removeAntenna, SIGNAL(clicked()), this, SLOT(removeAntenna()));
-    connect(ui->editAntName, SIGNAL(clicked()), this, SLOT(editAntennaName()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RotSetupDialog::saveButtonPushed);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RotSetupDialog::cancelButtonPushed);
+    connect(ui->addAntenna, &QPushButton::clicked, this, &RotSetupDialog::addAntenna);
+    connect(ui->removeAntenna, &QPushButton::clicked, this, &RotSetupDialog::removeAntenna);
+    connect(ui->editAntName, &QPushButton::clicked, this, &RotSetupDialog::editAntennaName);
 
     initSetup();
 

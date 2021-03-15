@@ -31,7 +31,7 @@ PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
 {
     pstCommandSocket = new QUdpSocket(this);
     pstReportSocket = new QUdpSocket(this);
-    connect(pstReportSocket, SIGNAL(readyRead()), this, SLOT(processPendingReportDatagrams()));
+    connect(pstReportSocket, &QUdpSocket::readyRead, this, &PstRotControl::processPendingReportDatagrams);
     cmdSent = pstCmdSent::NO_CMDSENT;
 
 }
@@ -75,7 +75,7 @@ int PstRotControl::rotInit(srotParams &selectedAntenna)
     setRotConnected(false);
 
     commsTimeoutTimer = new QTimer(this);
-    connect(commsTimeoutTimer, SIGNAL(timeout()), this, SLOT(onCommsTimeout()));
+    connect(commsTimeoutTimer, &QTimer::timeout, this, &PstRotControl::onCommsTimeout);
 
 
     pstNetAddress = selectedAntenna.networkAdd.trimmed();

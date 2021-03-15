@@ -42,9 +42,9 @@ TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool unfilled )
     ui->archiveMatchFrame->initialise();
 
     OtherMatchTreeFW = new FocusWatcher(ui->otherMatchFrame->getTreeView());
-    connect(OtherMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onOtherMatchTreeFocused(QObject *, bool, QFocusEvent *)));
+    connect(OtherMatchTreeFW, &FocusWatcher::focusChanged, this, &TQSOEditDlg::onOtherMatchTreeFocused);
     ArchiveMatchTreeFW = new FocusWatcher(ui->archiveMatchFrame->getTreeView());
-    connect(ArchiveMatchTreeFW, SIGNAL(focusChanged(QObject *, bool, QFocusEvent * )), this, SLOT(onArchiveTreeFocused(QObject *, bool, QFocusEvent *)));
+    connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TQSOEditDlg::onArchiveTreeFocused);
 
     ui->thisMatchFrame->setBaseName("Edit");
     ui->otherMatchFrame->setBaseName("Edit");
@@ -53,13 +53,12 @@ TQSOEditDlg::TQSOEditDlg(QWidget *parent, bool unfilled )
     ui->GJVQSOEditFrame->setAsEdit(true, "Edit");
     getSplitters();
 
-    connect(ui->GJVQSOEditFrame, SIGNAL(QSOFrameCancelled()), this, SLOT(on_EditFrameCancelled()));
-    connect(&MinosLoggerEvents::mle, SIGNAL(AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)), this, SLOT(on_AfterSelectContact(QSharedPointer<BaseContact>, BaseContestLog *)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchStarting(BaseContestLog*)), this, SLOT(on_MatchStarting(BaseContestLog*)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(XferPressed(BaseContestLog *, QString)), this, SLOT(onXferPressed(BaseContestLog *, QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(XferEnabled(bool, BaseContestLog *, QString)), ui->GJVQSOEditFrame, SLOT(setXferEnabled(bool, BaseContestLog *, QString)));
-    connect(&MinosLoggerEvents::mle, SIGNAL(MatchTreeSelected(MatchType , BaseContestLog *, QString, QItemSelection)),
-            this, SLOT(MatchTreeSelected(MatchType, BaseContestLog *, QString, QItemSelection)));
+    connect(ui->GJVQSOEditFrame, &QSOLogFrame::QSOFrameCancelled, this, &TQSOEditDlg::on_EditFrameCancelled);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterSelectContact, this, &TQSOEditDlg::on_AfterSelectContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchStarting, this, &TQSOEditDlg::on_MatchStarting);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::XferPressed, this, &TQSOEditDlg::onXferPressed);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::XferEnabled, ui->GJVQSOEditFrame, &QSOLogFrame::setXferEnabled);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected, this, &TQSOEditDlg::MatchTreeSelected);
 
     ui->GJVQSOEditFrame->setXferEnabled(false, contest, "Edit");
 }

@@ -116,7 +116,7 @@ class MinosCommonConnection: public QObject
       }
 
 
-private slots:
+public slots:
       void on_readyRead();
       void on_disconnected();
 };

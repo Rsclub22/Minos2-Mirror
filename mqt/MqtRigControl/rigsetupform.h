@@ -187,7 +187,7 @@ public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
     void comStopBitsSelected();
-    void comParitySelected();
+    void comParitySelected(int);
     void on_forceRTSSelected();
 
 signals:

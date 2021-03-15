@@ -48,11 +48,11 @@ RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPoi
         restoreGeometry(geometry);
 
 
-    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(saveButtonPushed()));
-    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(cancelButtonPushed()));
-    connect(ui->addRadio, SIGNAL(clicked()), this, SLOT(addRadio()));
-    connect(ui->removeRadio, SIGNAL(clicked()), this, SLOT(removeRadio()));
-    connect(ui->editRadioName, SIGNAL(clicked()), this, SLOT(editRadioName()));
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RigSetupDialog::saveButtonPushed);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RigSetupDialog::cancelButtonPushed);
+    connect(ui->addRadio, &QPushButton::clicked, this, &RigSetupDialog::addRadio);
+    connect(ui->removeRadio, &QPushButton::clicked, this, &RigSetupDialog::removeRadio);
+    connect(ui->editRadioName, &QPushButton::clicked, this, &RigSetupDialog::editRadioName);
 
 
     initSetup();
@@ -409,7 +409,7 @@ void RigSetupDialog::addRadio()
     radioTab[tabNum]->comStopBitsSelected();
 
     radioTab[tabNum]->setParityBits(0);
-    radioTab[tabNum]->comParitySelected();
+    radioTab[tabNum]->comParitySelected(true);
 
 
     radioTab[tabNum]->setForceRTS(1);

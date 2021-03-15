@@ -26,8 +26,8 @@ RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), pa
         trace(QString("app name %1").arg(getAppStartupName()));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &RigControlRpc::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &RigControlRpc::on_notify);
 
     // we aren't subscribing to anything!
 }

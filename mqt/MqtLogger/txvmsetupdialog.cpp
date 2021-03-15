@@ -33,7 +33,7 @@ void TxVmSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
-    connect(ui->numButtons, SIGNAL(valueChanged(int)), this, SLOT(onNumButtonsValueChanged(int)));
+    connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmSetupDialog::onNumButtonsValueChanged);
 
 
 
