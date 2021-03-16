@@ -557,6 +557,16 @@ private:
     int setTxState(VFO vfo, bool txState);
 
 
+    void checkSupportVolume(int ridx);
+    void checkSupportSMeter();
+    void checkSupportRit();
+    void checkSupportVoiceMemory();
+    void checkSupportCwKeyerMemory();
+    void checkSupportPtt();
+
+
+    void checkSupportPollRadio();
+    void setupTransVerter();
 private slots:
 
     void onStdInRead(QString);
