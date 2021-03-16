@@ -542,6 +542,9 @@ private:
     void setIndicatorVisible(const QString bandType, const bool visible);
     void sendRadioSwitchCompleteToLogger();
     bool selectTransverter(QString &band, Frequency &f);
+    int setTxState(VFO vfo, bool txState);
+
+
 private slots:
 
     void onStdInRead(QString);
@@ -607,6 +610,7 @@ private slots:
     void onCwKeyerStopPbClicked();
 
     void loggerSetBand(QString band);
+    void onTxPttTestPbClicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

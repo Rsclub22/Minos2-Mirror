@@ -1118,6 +1118,13 @@ Active</string>
        </layout>
       </item>
       <item>
+       <widget class="QPushButton" name="txPttTestPb">
+        <property name="text">
+         <string>TX PTT Test</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="cwKeyerPb">
         <property name="text">
          <string>CW Keyer</string>

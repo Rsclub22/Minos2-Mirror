@@ -277,7 +277,9 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
                 if (!currentRadio.pttSerialPort.isEmpty())
                 {
 #if defined (WIN32)
+
                 setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio.pttSerialPort).toLatin1 ().data ());
+
 #else
                 setConfigurationParameter("ptt_pathname", currentRadio.pttSerialPort.toLatin1().data());
 #endif
@@ -294,6 +296,8 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
                     setConfigurationParameter("ptt_type", "RTS");
                 }
+
+                setConfigurationParameter("ptt_share", "1");
 
 
             }

@@ -223,9 +223,10 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     ui->selectRadioBox->clearFocus();
 
+    // these are for test
     connect(ui->cwKeyerPb, SIGNAL(clicked()), this, SLOT(onCwKeyerPbClicked()));
     connect(ui->cwKeyerStopPb, SIGNAL(clicked()), this, SLOT(onCwKeyerStopPbClicked()));
-
+    connect(ui->txPttTestPb, SIGNAL(clicked()), this, SLOT(onTxPttTestPbClicked()));
 
     if (appName.length() == 0)
     {
@@ -257,6 +258,24 @@ void RigControlMainWindow::onCwKeyerStopPbClicked()
     if(radio)
     {
         radio->stopMorse(rigStateDetails->curVfo);
+    }
+}
+
+void RigControlMainWindow::onTxPttTestPbClicked()
+{
+    static bool pttState = false;
+    if (radio)
+    {
+        if (pttState)
+        {
+            setTxState(rigStateDetails->curVfo, false);
+            pttState = false;
+        }
+        else
+        {
+            setTxState(rigStateDetails->curVfo, true);
+            pttState = true;
+        }
     }
 }
 
@@ -375,41 +394,41 @@ void RigControlMainWindow::initActionsConnections()
 
     connect(ui->selectRadioBox, SIGNAL(activated(int)), this, SLOT(selectRadio(int)));
 
-    //connect(ui->selectRadioBox, &QComboBox::activated, [=](int index){selectRadio(index);});
-    connect(ui->actionSetup_Radios, &QAction::triggered, [=](){onLaunchSetup();});
-    //connect(ui->actionEdit_Preset_Freq, &QAction::triggered, [=](){setupBandFreq();});
-    connect(ui->actionTraceComms, &QAction::toggled, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
-    connect(ui->actionAbout, &QAction::triggered, [=](){about();});
-    connect(ui->actionAbout_Radio_Config, &QAction::triggered, [=](){aboutRigConfig();});
-    connect(pollTimer, &QTimer::timeout, [=](){pollRadioInfo();});
-    connect(ui->ritEnableChk, &QCheckBox::stateChanged, [=](int chkState){ritEnableChecked(chkState);});
+    //connect(ui->selectRadioBox, &QComboBox::activated, this, [=](int index){selectRadio(index);});
+    connect(ui->actionSetup_Radios, &QAction::triggered, this,  [=](){onLaunchSetup();});
+    //connect(ui->actionEdit_Preset_Freq, &QAction::triggered,  this, [=](){setupBandFreq();});
+    connect(ui->actionTraceComms, &QAction::toggled,  this, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
+    connect(ui->actionAbout, &QAction::triggered,  this, [=](){about();});
+    connect(ui->actionAbout_Radio_Config, &QAction::triggered,  this, [=](){aboutRigConfig();});
+    connect(pollTimer, &QTimer::timeout,  this, [=](){pollRadioInfo();});
+    connect(ui->ritEnableChk, &QCheckBox::stateChanged,  this, [=](int chkState){ritEnableChecked(chkState);});
 
 
     // configure radio dialog
-    connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged, [=](QString radioName){currentRadioSettingChanged(radioName);});
-    connect(setupRadio, &RigSetupDialog::radioNameChange, [=](){updateSelectRadioBox();});
-    connect(setupRadio, &RigSetupDialog::radioTabChanged, [=](){updateSelectRadioBox();});
-    connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache, [=](){updateRigDetailsCache();});
+    connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged,  this, [=](QString radioName){currentRadioSettingChanged(radioName);});
+    connect(setupRadio, &RigSetupDialog::radioNameChange,  this, [=](){updateSelectRadioBox();});
+    connect(setupRadio, &RigSetupDialog::radioTabChanged,  this, [=](){updateSelectRadioBox();});
+    connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache,  this, [=](){updateRigDetailsCache();});
 
 
 
     // Message from Logger
 
-    connect(msg, &RigControlRpc::setFreq, [=](Frequency freq){loggerSetFreq(freq);});
-    connect(msg, &RigControlRpc::setBand, [=](QString band){loggerSetBand(band);});
-    connect(msg, &RigControlRpc::setRitFreq, [=](ShortFreq freq){setRitFreq(freq);});
-    connect(msg, &RigControlRpc::setRitStatus, [=](bool status){setRitLogStatus(status);});
-    connect(msg, &RigControlRpc::setMode, [=](QString mode){loggerSetMode(mode);});
-    connect(msg, &RigControlRpc::selectLoggerRadio, [=](PubSubName s, QString band, Frequency freq, QString mode){onSelectRadio(s, band, freq, mode);});
-    connect(msg, &RigControlRpc::setVolume, [=](int vol){loggerSetVolume(vol);});
+    connect(msg, &RigControlRpc::setFreq,  this, [=](Frequency freq){loggerSetFreq(freq);});
+    connect(msg, &RigControlRpc::setBand,  this, [=](QString band){loggerSetBand(band);});
+    connect(msg, &RigControlRpc::setRitFreq,  this, [=](ShortFreq freq){setRitFreq(freq);});
+    connect(msg, &RigControlRpc::setRitStatus,  this, [=](bool status){setRitLogStatus(status);});
+    connect(msg, &RigControlRpc::setMode,  this, [=](QString mode){loggerSetMode(mode);});
+    connect(msg, &RigControlRpc::selectLoggerRadio,  this, [=](PubSubName s, QString band, Frequency freq, QString mode){onSelectRadio(s, band, freq, mode);});
+    connect(msg, &RigControlRpc::setVolume,  this, [=](int vol){loggerSetVolume(vol);});
     connect(msg, SIGNAL(setVoiceMessageNum(QString)), this, SLOT(onSetVoiceMessageNum(QString)));
 
 
 
 
     // standalone test
-    connect(ui->selFreq, &QPushButton::clicked, [=](){selFreqClicked();});
-    connect(ui->freqInputBox, &QLineEdit::editingFinished, [=](){selFreqClicked();});
+    connect(ui->selFreq, &QPushButton::clicked,  this, [=](){selFreqClicked();});
+    connect(ui->freqInputBox, &QLineEdit::editingFinished,  this, [=](){selFreqClicked();});
 
 
 
@@ -3624,6 +3643,15 @@ int RigControlMainWindow::getTXStatus(VFO vfo)
 
    return retCode;
 
+}
+
+
+int RigControlMainWindow::setTxState(VFO vfo, bool txState)
+{
+
+    trace(QString("setTxState = %1").arg(txState ? "On" : "Off"));
+    int retCode = radio->setPtt(vfo, txState);
+    return retCode;
 }
 
 
