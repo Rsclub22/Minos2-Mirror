@@ -246,6 +246,7 @@ private:
     const int CW_DEFAULT_STEP = 4;
     const int FM_DEFAULT_STEP = 2;
 
+    QString oldRigState;
 
     void sendRigFreq(Frequency f);
     Frequency getCurFreq() const;

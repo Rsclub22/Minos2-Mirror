@@ -126,6 +126,7 @@ void TSendDM::invalidateCache()
 }
 void TSendDM::invalidateRigCache(const PubSubName &name)
 {
+    trace(QString("invalidateRigCache %1").arg(name.toString()));
     rigCache.invalidate(name);
 }
 void TSendDM::invalidateRotatorCache(const PubSubName &name)
@@ -624,8 +625,6 @@ void TSendDM::notifyRigChanges()
     {
         RigState &selState = rigCache.getState(rigSelected);
         QString selStateUuid = selState.getSelectedContest(loggerUuid).getValue();
-        RigDetails &selDetail = rigCache.getDetails(rigSelected);
-        QString selDetailsUuid = selDetail.getSelectedContest(loggerUuid).getValue();
         if (!selStateUuid.isEmpty())
         {
             QVector<TSingleLogFrame *> frames = LogContainer->getLogFrames();
