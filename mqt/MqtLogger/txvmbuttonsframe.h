@@ -92,10 +92,14 @@ public:
 
 
     void setRadioLoaded();
-    void onSetPttEnabled(bool state, PubSubName psn);
-    void onSetPttType(int type, PubSubName psn);
-    void onSetPttState(bool state);
+
     void setRigControl(RigControlFrame *rc);
+    void setPttEnabled(bool state, PubSubName psn);
+
+    void setPttType(int type, PubSubName psn);
+    void setVoiceMemAvail(bool avail, PubSubName psn);
+    void setCwMemAvail(bool avail, PubSubName psn);
+    void setPttState(bool state);
 private:
     Ui::TxVmButtonsFrame *ui;
 

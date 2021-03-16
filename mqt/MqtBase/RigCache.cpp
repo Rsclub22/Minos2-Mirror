@@ -346,6 +346,10 @@ void RigCache::setPttState(const PubSubName &name, bool state)
     rigStates[name].setPttState(state);
 
 }
+void RigCache::setPttOnOff(const PubSubName &name, bool onOff)
+{
+    rigStates[name].setPttOnOff(onOff);
+}
 void RigCache::publishState()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();

@@ -1920,19 +1920,35 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 
 void TSingleLogFrame::onSetPttEnabled(bool state, PubSubName psn)
 {
-    txVmButtonsFrame->onSetPttEnabled(state, psn);
+    txVmButtonsFrame->setPttEnabled(state, psn);
 }
 
 void TSingleLogFrame::onSetPttType(int type, PubSubName psn)
 {
-    txVmButtonsFrame->onSetPttType(type, psn);
+    txVmButtonsFrame->setPttType(type, psn);
 }
 
 void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->onSetPttState(state);
+        txVmButtonsFrame->setPttState(state);
+    }
+}
+
+void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setVoiceMemAvail(avail, psn);
+    }
+}
+
+void TSingleLogFrame::onSetCwMemAvail(bool avail, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setCwMemAvail(avail, psn);
     }
 }
 

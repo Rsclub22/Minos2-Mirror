@@ -78,6 +78,7 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psRitStatus;
         QSharedPointer<RPCParam> psVolLevel;
         QSharedPointer<RPCParam> psReq;
+        QSharedPointer<RPCParam> psPttOnOff;
 
 
         RPCArgs *args = mro->getCallArgs();
@@ -108,6 +109,22 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: Vol Level From Logger = %1").arg(volLevel));
                     emit setVolume(volLevel);
+                }
+            }
+        }
+
+        if (args->getStructArgMember(0, rpcConstants::rigPttOnOff, psPttOnOff))
+        {
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
+            {
+                bool pttOnOff;
+                if ( psPttOnOff->getBoolean(pttOnOff))
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Ptt On/Off From Logger = %1").arg(pttOnOff ? "On" : "Off"));
+                    emit setPttOnOff(pttOnOff);
                 }
             }
         }

@@ -33,6 +33,10 @@ public:
     int getRitMaxKHzFreq();
 
 
+    void setVoiceMemAvail(bool avail);
+    bool getVoiceMemAvail();
+    void setCwMemAvail(bool avail);
+    bool getCwMemAvail();
 private:
 
 double transVerterOffset;
@@ -44,6 +48,8 @@ bool ritEnableStatus;
 int maxRitFreq;
 bool pttEnabled;
 int pttType;
+bool voiceMemAvail;
+bool cwMemAvail;
 QString bandList;
 
 };

@@ -85,6 +85,7 @@ public:  		// User declarations
       void sendRigControlRitFreq(TSingleLogFrame *tslf, ShortFreq freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
       void sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status);
+      void sendRigControlPttOnOff(TSingleLogFrame *tslf, const bool &onOff);
 
       QStringList rotators();
       QStringList rigs();
@@ -102,8 +103,6 @@ public:  		// User declarations
       {
           return &rigCache;
       }
-
-
 
 
 

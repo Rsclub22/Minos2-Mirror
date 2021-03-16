@@ -117,56 +117,26 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
             {}
         }
 
-        //bool supportGetRit = capsList[i]->get_rit ? true:false;
-
-        //bool supportSetRit = capsList[i]->set_rit ? true:false;
-
-        //bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
-        //bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
-
-        //bool supportSMeter = HamlibRigControl::supportSignalStrength(capsList[i]->rig_model);
-
-        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
-
-        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
-
-        bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
-
-        bool supportCwMem = capsList[i]->send_morse ? true:false;
-
-        //bool supportVolume = false;
-
-
-        // support Antenna Switch
-        //bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
-
-        /*
-        QString s = QString("RigModel = %1, GetPTT = %2, SetPTT = %3, Voice Keyer = %4, Cw Keyer = %5")
-            .arg(key).arg(supportGetPtt ? "Yes" : "No").arg(supportSetPtt ? "Yes" : "No")
-            .arg(supportVoiceMem ? "Yes" : "No").arg(supportCwMem ? "Yes" : "No");
-
-        qDebug() << s;
-        */
 
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
                                            capsList[i]->model_name,
                                            key,
                                            capsList[i]->rig_model,
-                                           true,                // supports lookup supported bands
-                                           true,       // support get rit
-                                           true,       // support set rit
-                                           true,        // support get rit state
-                                           true,        // support set rit state
-                                           true,       // support get rit max Khz
-                                           true,       // support s-meter
-                                           supportGetPtt,       // support get Ptt
-                                           supportSetPtt,       // support set Ptt
-                                           true,       // support volume
-                                           true,        // support antenna switch
-                                           true,            // support RigCtld
-                                           supportVoiceMem,        // support Voice Memory
-                                           supportCwMem,     // support Cw Memory
+                                           true,                // library supports lookup supported bands
+                                           true,       // library supports get rit
+                                           true,       // library supports set rit
+                                           true,        // library supports get rit state
+                                           true,        // library supports set rit state
+                                           true,       // library supports get rit max Khz
+                                           true,       // library supports s-meter
+                                           true,       // library supports get Ptt
+                                           true,       // library supports set Ptt
+                                           true,       // library supports volume
+                                           true,        // library supports antenna switch
+                                           true,            // library supports RigCtld
+                                           true,        // library supports Voice Memory
+                                           true,     // library supports Cw Memory
                                            true);    // support poll data
     }
 
@@ -835,7 +805,19 @@ int HamlibRigControl::setPtt(VFO vfo, bool state)
 
 }
 
+bool HamlibRigControl::supportGetPtt(int rigNumber)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    return myRig->caps->get_ptt ? true:false;
+}
 
+bool HamlibRigControl::supportSetPtt(int rigNumber)
+{
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    return myRig->caps->set_ptt ? true:false;
+}
 
 
 
@@ -1002,14 +984,17 @@ int HamlibRigControl::sendVoiceMessage(VFO vfo, int vmNum)
 
 }
 
-bool HamlibRigControl::supportVoiceMemory()
+bool HamlibRigControl::supportVoiceMemory(int rigNumber)
 {
-    if (my_rig->caps->send_voice_mem)
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
     {
-        return true;
+        return my_rig->caps->send_voice_mem ? true:false;
     }
 
     return false;
+
 }
 
 
@@ -1034,15 +1019,49 @@ int HamlibRigControl::waitMorse(VFO vfo)
     return rig_wait_morse(my_rig, hamlibVfoNames[vfo]);
 }
 
-bool HamlibRigControl::supportCwMemory()
+bool HamlibRigControl::supportSendMorse(int rigNumber)
 {
 
-    if (my_rig->caps->send_morse)
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
     {
-        return true;
+        return my_rig->caps->send_morse ? true:false;
+
     }
 
     return false;
+
+}
+
+bool HamlibRigControl::supportStopMorse(int rigNumber)
+{
+
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return my_rig->caps->stop_morse ? true:false;
+
+    }
+
+    return false;
+
+}
+
+bool HamlibRigControl::supportWaitMorse(int rigNumber)
+{
+
+    RIG *myRig;
+    myRig = rig_init(rigNumber);
+    if (myRig)
+    {
+        return my_rig->caps->wait_morse ? true:false;
+
+    }
+
+    return false;
+
 }
 
 

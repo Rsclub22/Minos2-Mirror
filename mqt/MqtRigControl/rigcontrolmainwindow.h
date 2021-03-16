@@ -115,6 +115,7 @@ class RigSupCapabilities
 public:
     RigSupCapabilities(){clear();}
 
+
     void clear()
     {
         supVolume = false;
@@ -125,6 +126,13 @@ public:
         radioSupSetRitState = false;
         supportGetVfo = false;
         supportSetVfo = false;
+        supportGetPtt = false;
+        supportSetPtt = false;
+        supportVoiceMemory = false;
+        suportSendMorse = false;
+        supportStopMorse = false;
+        supportWaitMorse = false;
+
     }
 
     bool supVolume;     // radio supports volume
@@ -135,6 +143,12 @@ public:
     bool radioSupSetRitState;
     bool supportGetVfo;
     bool supportSetVfo;
+    bool supportGetPtt;
+    bool supportSetPtt;
+    bool supportVoiceMemory;
+    bool suportSendMorse;
+    bool supportStopMorse;
+    bool supportWaitMorse;
 
 };
 
@@ -283,8 +297,6 @@ private:
     //bool supVolume;     // radio supports volume
     //bool supSignalStrength;
 
-
-    bool supPtt;
 
     const int PASSBAND_NOCHANGE = -1;
 
@@ -611,6 +623,7 @@ private slots:
 
     void loggerSetBand(QString band);
     void onTxPttTestPbClicked();
+    void onSetPttOnOff(bool pttOnOff);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

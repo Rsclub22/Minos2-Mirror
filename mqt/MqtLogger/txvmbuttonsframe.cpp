@@ -402,7 +402,7 @@ void TxVmButtonsFrame::setRadioLoaded()
 }
 
 
-void TxVmButtonsFrame::onSetPttEnabled(bool state, PubSubName psn)
+void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
@@ -418,7 +418,7 @@ void TxVmButtonsFrame::onSetPttEnabled(bool state, PubSubName psn)
     }
 }
 
-void TxVmButtonsFrame::onSetPttType(int type, PubSubName psn)
+void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
@@ -434,8 +434,40 @@ void TxVmButtonsFrame::onSetPttType(int type, PubSubName psn)
     }
 }
 
+void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setVoiceMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setVoiceMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+}
 
-void TxVmButtonsFrame::onSetPttState(bool state)
+void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setCwMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setCwMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+}
+
+
+void TxVmButtonsFrame::setPttState(bool state)
 {
 
     pttState = state;

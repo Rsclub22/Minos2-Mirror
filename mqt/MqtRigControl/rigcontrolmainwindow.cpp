@@ -268,14 +268,25 @@ void RigControlMainWindow::onTxPttTestPbClicked()
     {
         if (pttState)
         {
-            setTxState(rigStateDetails->curVfo, false);
+            onSetPttOnOff(false);
             pttState = false;
         }
         else
         {
-            setTxState(rigStateDetails->curVfo, true);
+            onSetPttOnOff(true);
             pttState = true;
         }
+    }
+}
+
+void RigControlMainWindow::onSetPttOnOff(bool pttOnOff)
+{
+    trace(QString("Ptt On/Off message from Logger - %1").arg(pttOnOff ? "On" : "Off"));
+
+    if (radio)
+    {
+        setTxState(rigStateDetails->curVfo, pttOnOff);
+
     }
 }
 
@@ -421,7 +432,8 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setMode,  this, [=](QString mode){loggerSetMode(mode);});
     connect(msg, &RigControlRpc::selectLoggerRadio,  this, [=](PubSubName s, QString band, Frequency freq, QString mode){onSelectRadio(s, band, freq, mode);});
     connect(msg, &RigControlRpc::setVolume,  this, [=](int vol){loggerSetVolume(vol);});
-    connect(msg, SIGNAL(setVoiceMessageNum(QString)), this, SLOT(onSetVoiceMessageNum(QString)));
+    connect(msg, &RigControlRpc::setVoiceMessageNum, this, [=](QString msgNum){onSetVoiceMessageNum(msgNum);});
+    connect(msg, &RigControlRpc::setPttOnOff, this, [=](bool pttOnOff){onSetPttOnOff(pttOnOff);});
 
 
 
@@ -793,63 +805,99 @@ void RigControlMainWindow::upDateRadio()
                     setMemoryGroupVisible(false);
                 }
 
-                // does radio support voice memories
+                // does the library support voice keyer memory
+
                 if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportVoiceMemory)
                 {
-                    setVoiceMemIndVisible(true);
-                    setVoiceMemIndOnOff(true);
+
+                    if (radio)
+                    {
+                        // does radio support voice memories
+                        selectedRigSupCap->supportVoiceMemory = radio->supportVoiceMemory(setupRadio->currentRadio.rigModelNumber);
+                        if (selectedRigSupCap->supportVoiceMemory)
+                        {
+                            setVoiceMemIndVisible(true);
+                            setVoiceMemIndOnOff(true);
+
+                        }
+                        else
+                        {
+                            setVoiceMemIndVisible(false);
+                            setVoiceMemIndOnOff(false);
+
+                        }
+                    }
 
                 }
-                else
-                {
-                    setVoiceMemIndVisible(false);
-                    setVoiceMemIndOnOff(false);
-
-                }
 
 
-
-                // does radio support CW memories
+                // does the library support cw keyer memories
                 if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportCwMemory)
                 {
-                    setCwMemIndVisible(true);
-                    setCwMemIndOnOff(true);
-
-                }
-                else
-                {
-                    setCwMemIndVisible(false);
-                    setCwMemIndOnOff(false);
-
-                }
-
-
-                // does radio support PTT
-                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportGetPtt
-                        && rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportSetPtt)
-                {
-                    setPttGroupItemsVisible(true);
-                    supPtt = true;
-                    if (setupRadio->currentRadio.enablePTT)
+                    // does radio support CW memories
+                    if (radio)
                     {
-                      setPttIndOnOff(true);
-                    }
-                    else
-                    {
-                        setPttIndOnOff(false);
-                    }
+                        selectedRigSupCap->suportSendMorse = radio->supportSendMorse(setupRadio->currentRadio.rigModelNumber);
+                        selectedRigSupCap->supportStopMorse = radio->supportStopMorse(setupRadio->currentRadio.rigModelNumber);
+                        selectedRigSupCap->supportWaitMorse = radio->supportWaitMorse(setupRadio->currentRadio.rigModelNumber);
+                        if (selectedRigSupCap->suportSendMorse
+                            && selectedRigSupCap->supportStopMorse)
+                        {
+                            setCwMemIndVisible(true);
+                            setCwMemIndOnOff(true);
 
-                    setTxRxIndOnOff(false);
+                        }
+                        else
+                        {
+                            setCwMemIndVisible(false);
+                            setCwMemIndOnOff(false);
+
+                        }
+                     }
 
 
                 }
-                else
+
+                // does library support PTT Control
+                if (rigFactory->supported_rigs()->value(setupRadio->currentRadio.rigModel).supportGetPtt)
                 {
-                    supPtt = false;
-                    setPttGroupItemsVisible(false);
-                    setPttIndOnOff(false);
+                    // does radio support PTT
+                    if (radio)
+                    {
+                          selectedRigSupCap->supportGetPtt = radio->supportGetPtt(setupRadio->currentRadio.rigModelNumber);
+                          selectedRigSupCap->supportSetPtt = radio->supportSetPtt(setupRadio->currentRadio.rigModelNumber);
 
-                }
+                          if (selectedRigSupCap->supportGetPtt
+                                  && selectedRigSupCap->supportSetPtt)
+                          {
+                              setPttGroupItemsVisible(true);
+
+                              if (setupRadio->currentRadio.enablePTT)
+                              {
+                                setPttIndOnOff(true);
+                              }
+                              else
+                              {
+                                  setPttIndOnOff(false);
+                              }
+
+                              setTxRxIndOnOff(false);
+
+
+                          }
+                          else
+                          {
+
+                              setPttGroupItemsVisible(false);
+                              setPttIndOnOff(false);
+
+                           }
+                     }
+
+                  }
+
+
+
 
                 if (appName.count() > 0)
                 {
@@ -1768,7 +1816,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && supPtt)
+    if (radioCommsOK && selectedRigSupCap->supportGetPtt)
     {
 
         retCode = getTXStatus(rigStateDetails->curVfo);

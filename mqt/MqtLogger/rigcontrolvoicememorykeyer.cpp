@@ -1,20 +1,20 @@
-#include "rigcontrolvoicekeyer.h"
+#include "rigcontrolvoicememorykeyer.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 
-RigControlVoiceKeyer::RigControlVoiceKeyer(QObject *parent) : VoiceKeyerBase(parent)
+RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 
 }
 
 
-RigControlVoiceKeyer::~RigControlVoiceKeyer()
+RigControlVoiceMemoryKeyer::~RigControlVoiceMemoryKeyer()
 {
 
 }
 
 
-void RigControlVoiceKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
 {
     QString keyerName = "rigControl";
 
@@ -33,32 +33,33 @@ void RigControlVoiceKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKey
 }
 
 
-void RigControlVoiceKeyer::voiceKeyerInit(int numButtons)
+void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
+{
+    Q_UNUSED(onOff)
+}
+
+
+void RigControlVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
 {
     Q_UNUSED(numButtons)
 }
-void RigControlVoiceKeyer::sendMsgNum(int buttonNum)
+void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
 }
-void RigControlVoiceKeyer::stopMsg()
+void RigControlVoiceMemoryKeyer::stopMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     tslf->sendRigTxVoiceMessage(STOPCODE);
 }
 
-int RigControlVoiceKeyer::getKeyerState(int &state)
-{
-    Q_UNUSED(state)
-
-    return 0;
-}
 
 
-bool RigControlVoiceKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+
+bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
@@ -75,7 +76,7 @@ bool RigControlVoiceKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &v
     return true;
 }
 
-void RigControlVoiceKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
+void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
     VoiceKeyerParams vmParams = vmParams_;
 
@@ -92,3 +93,6 @@ void RigControlVoiceKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ 
     config.endGroup();
 
 }
+
+
+
