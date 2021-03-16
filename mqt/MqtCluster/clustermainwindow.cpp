@@ -20,6 +20,7 @@
 
 #include "clustermainwindow.h"
 #include "clustercommon.h"
+#include "qrzServerCommon.h"
 #include "rigutils.h"
 #include "cutils.h"
 #include "BandList.h"
@@ -1403,16 +1404,18 @@ void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QSt
         QSharedPointer<ClusterSpotData> newSpot = askQrzQueue.value(callsignKey);
         askQrzQueue.remove(callsignKey);
 
-        if (!dxGrid.isEmpty() && dxCallState == rpcConstants::qrzServerCallOK)
+        if (!dxGrid.isEmpty() && dxCallState == QRA_LOOKUP_OK)
         {
             trace(QString("Qrz Server Response for callsign = %1, qra = %2").arg(dxCall, dxGrid));
             newSpot->setDxLocator(dxGrid);
+            newSpot->setDxLocatorIsFromNode(true);
             processNewSpot(newSpot);
         }
         else
         {
             // flag no Qra found for callsign from Qrz
-            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);
+            newSpot->setDxLocator(ASKQRZ_FAILEDQRA);  // flag failure
+            trace(QString("Qrz Server Response for callsign = %1, error = %2").arg(dxCallState));
             processNewSpot(newSpot);
         }
     }

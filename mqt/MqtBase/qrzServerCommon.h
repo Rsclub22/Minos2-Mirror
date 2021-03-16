@@ -4,6 +4,11 @@
 #include "base_pch.h"
 
 
+const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+const QString QRA_LOOKUP_OK = "qraLookUpOK";
+
 class QrzServer
 {
 public:
@@ -11,7 +16,7 @@ public:
     QString app;
     QString publisherProgram;
     PublishState state;
-    void sendQrzResponseToClusterServer(QString dxCall, QString dxQra, QString dxCallStatus, QString spotterCall, QString spotterQra, QString spotterCallStatus);
+
 };
 
 
@@ -39,8 +44,11 @@ public:
     void setName(QString name_){name = name_;}
     QString getName(){return name;}
 
-    void setQth(QString qth_){qth = qth_;}
-    QString getQth(){return qth;}
+    void setAddr1(QString addr1_){addr1 = addr1_;}
+    QString getAddr1(){return addr1;}
+
+    void setAddr2(QString addr2_){addr2 = addr2_;}
+    QString getAddr2(){return addr2;}
 
     void setCounty(QString county_){county = county_;}
     QString getCounty(){return county;}
@@ -68,7 +76,8 @@ public:
         callsign.clear();
         firstName.clear();
         name.clear();
-        qth.clear();
+        addr1.clear();
+        addr2.clear();
         county.clear();
         country.clear();
         lat.clear();
@@ -85,7 +94,8 @@ private:
     QString callsign;
     QString firstName;
     QString name;
-    QString qth;
+    QString addr1;
+    QString addr2;
     QString county;
     QString country;
     QString lat;
@@ -112,6 +122,9 @@ public:
     void setLoggerFlag(bool state){loggerFlag = state;}
     bool getLoggerFlag(){return loggerFlag;}
 
+    void setFromStationName(QString fromStationName_){fromStationName = fromStationName_;}
+    QString getFromStationName(){return fromStationName;}
+
     void setLoggerUuid(QString loggerUuid_){loggerUuid = loggerUuid_;}
     QString getLoggerUuid(){return loggerUuid;}
 
@@ -127,6 +140,7 @@ private:
 
     QString dxCall;
     QString spotterCall;
+    QString fromStationName;
     QString loggerUuid;
     bool loggerFlag;           // true from logger, false from cluster
 

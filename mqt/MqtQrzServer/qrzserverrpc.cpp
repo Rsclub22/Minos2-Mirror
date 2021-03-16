@@ -61,7 +61,6 @@ QrzServerRpc::QrzServerRpc()
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
-    //RPCPubSub::publish(rpcConstants::qrzServerApp,  a + "@" + station, "", psPublished);
     RPCPubSub::publish(rpcConstants::qrzServerApp,  a + "@" + station, "", psPublished);
 
 }
@@ -82,7 +81,7 @@ void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra,
         st->addMember(rpcConstants::qrzClusterResponse, rpcConstants::paramName);
         st->addMember( dxCall, rpcConstants::qrzDxCallsign );
         st->addMember(dxQra, rpcConstants::qrzDxGrid);
-        st->addDtgMember(dxCallState, rpcConstants::qrzDxReplyState);
+        st->addMember(dxCallState, rpcConstants::qrzDxReplyState);
         st->addMember(spotterCall, rpcConstants::qrzSpotterCallsign);
         st->addMember(spotterQra, rpcConstants::qrzSpotterGrid);
         st->addDtgMember(spotterCallState, rpcConstants::qrzSpotterReplyState);
@@ -94,36 +93,65 @@ void QrzServerRpc::sendQrzResponseToClusterServer(QString dxCall, QString dxQra,
 }
 
 
-void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state, QString uuid)
+void QrzServerRpc::sendQrzResponseToLoggerDisplay(QrzCallsignData qrzCallsignData, QString state, QString fromStationName, QString uuid)
 {
     for (auto const &s: qAsConst(serverList))
     {
-        trace(QString("Send Qrz Response to Logger Server = %1").arg(s.app));
-        RPCGeneralClient rpc(rpcConstants::qrzMethod);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::qrzLoggerResponse);
-        st->addMember( qrzCallsignData.getCallsign(), rpcConstants::qrzDxCallsign );
-        st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
-        st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
-        st->addMember(qrzCallsignData.getCounty(), rpcConstants::qrzCounty );
-        st->addMember(qrzCallsignData.getQth(), rpcConstants::qrzQth );
-        st->addMember(qrzCallsignData.getCountry(), rpcConstants::qrzCountry);
-        st->addMember(qrzCallsignData.getLat(), rpcConstants::qrzLat);
-        st->addMember(qrzCallsignData.getLon(), rpcConstants::qrzLon);
-        st->addMember(qrzCallsignData.getQra(), rpcConstants::qrzDxGrid);
-        st->addMember(qrzCallsignData.getCqZone(), rpcConstants::qrzCqZone);
-        st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
-        st->addMember(state, rpcConstants::qrzDxReplyState);
-        st->addMember(uuid, rpcConstants::qrzLogFrameId);
+        if (s.app == fromStationName)
+        {
+            trace(QString("Send Qrz Response to Logger Server = %1").arg(s.app));
+            RPCGeneralClient rpc(rpcConstants::qrzMethod);
+            QSharedPointer<RPCParam>st(new RPCParamStruct);
+            st->addMember(rpcConstants::qrzLoggerResponse, rpcConstants::paramName);
+            st->addMember( qrzCallsignData.getCallsign(), rpcConstants::qrzDxCallsign );
+            st->addMember(qrzCallsignData.getFirstName(), rpcConstants::qrzFirstName );
+            st->addMember(qrzCallsignData.getName(), rpcConstants::qrzName );
+            st->addMember(qrzCallsignData.getCounty(), rpcConstants::qrzCounty );
+            st->addMember(qrzCallsignData.getAddr1(), rpcConstants::qrzAddr1 );
+            st->addMember(qrzCallsignData.getAddr2(), rpcConstants::qrzAddr2 );
+            st->addMember(qrzCallsignData.getCountry(), rpcConstants::qrzCountry);
+            st->addMember(qrzCallsignData.getLat(), rpcConstants::qrzLat);
+            st->addMember(qrzCallsignData.getLon(), rpcConstants::qrzLon);
+            st->addMember(qrzCallsignData.getQra(), rpcConstants::qrzDxGrid);
+            st->addMember(qrzCallsignData.getCqZone(), rpcConstants::qrzCqZone);
+            st->addMember(qrzCallsignData.getItuZone(), rpcConstants::qrzItuZone);
+            st->addMember(state, rpcConstants::qrzDxReplyState);
+            st->addMember(uuid, rpcConstants::qrzLogFrameId);
 
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( s.app );
+            rpc.getCallArgs() ->addParam( st );
+            rpc.queueCall( s.app );
+        }
+
 
     }
+}
 
 
+void QrzServerRpc::sendQrzLoggedState(bool state, QString stateMessage)
+{
+    QString logState;
+    trace(QString("sendQrzLoggedState: state = %1, stateMessage = %2").arg(state ? "logged on" : "logged off", stateMessage));
+    for (auto const &s: qAsConst(serverList))
+    {
+        trace(QString("Send Qrz Logged State %1 to Server = %2").arg(state ? "logged on" : "logged off", s.app));
+        RPCGeneralClient rpc(rpcConstants::qrzMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
 
+        st->addMember(rpcConstants::qrzServerState,  rpcConstants::paramName);
 
+        if (state)
+        {
+            logState = rpcConstants::qrzServerLoggedIn;
+        }
+        else
+        {
+            logState = rpcConstants::qrzServerLoggedOut;
+        }
+        st->addMember(logState,  rpcConstants::qrzServerLogonState);
+        st->addMember(stateMessage, rpcConstants::qrzServerStateMessage);
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( s.app );
+    }
 }
 
 
@@ -163,6 +191,7 @@ void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                 msg.setDxCall(dxCall);
                 msg.setSpotterCall(spotterCall);
                 msg.setLoggerFlag(false);
+                msg.setFromStationName(from);
                 trace(QString("on_serverCall: callsign %1, received from Cluster Server").arg(dxCall));
                 emit clusterQrzMsg(msg);
                 //qrzRequestsQueue.push_back(msg);
@@ -177,6 +206,7 @@ void QrzServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
                 msgLogFrameId->getString(loggerId);
                 QrzServerMessage msg;
                 msg.setDxCall(dxCall);
+                msg.setFromStationName(from);
                 msg.setLoggerUuid(loggerId);
                 msg.setLoggerFlag(true);
                 trace(QString("on_serverCall: callsign %1, received from Logger uuid %2").arg(dxCall, loggerId));

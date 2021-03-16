@@ -73,7 +73,8 @@ static const QString qrzDxCallsign   ("qrzDxCallsign");
 static const QString qrzSpotterCallsign ("qrzSpotterCallsign");
 static const QString qrzFirstName       ("qrzFirstName");
 static const QString qrzName            ("qrzName");
-static const QString qrzQth            ("qrzQth");
+static const QString qrzAddr1            ("qrzAddr1");
+static const QString qrzAddr2            ("qrzAddr2");
 static const QString qrzCounty         ("qrzCounty");
 static const QString qrzCountry         ("qrzCountry");
 static const QString qrzLat             ("qrzLat");
@@ -82,11 +83,15 @@ static const QString qrzDxGrid            ("qrzDxGrid");
 static const QString qrzSpotterGrid     ("qrzSpotterGrid");
 static const QString qrzCqZone          ("qrzCqZone");
 static const QString qrzItuZone         ("qrzItuZone");
+static const QString qrzServerLogonState ("qrzServerLogonState");
+static const QString qrzServerStateMessage     ("qrzServerStateMessage");
+static const QString qrzServerState     ("qrzServerState");
 static const QString qrzDxReplyState      ("qrzDxReplyState");
 static const QString qrzSpotterReplyState      ("qrzSpotterReplyState");
 
 static const QString qrzServerLoggedOut ("qrzServerLoggedOut");
-static const QString qrzServerLoggerIn  ("qrzServerLoggedIn");
+static const QString qrzServerLoggedIn ("qrzServerLoggedIn");
+static const QString qrzServerLoggedState  ("qrzServerLoggedState");
 static const QString qrzServerCallOK    ("qrzServerCallOK");
 
 // Chat

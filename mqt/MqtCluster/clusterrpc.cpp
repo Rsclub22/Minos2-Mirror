@@ -82,112 +82,179 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
 
    if ( !err )
    {
-      QSharedPointer<RPCParam> psName;
-      QSharedPointer<RPCParam> psFreq;
-      QSharedPointer<RPCParam> psCall;
-      QSharedPointer<RPCParam> psLoc;
-      QSharedPointer<RPCParam> loggerUuid;
-      QSharedPointer<RPCParam> clusterFrameId;
-      QSharedPointer<RPCParam> resendSpotCmd;
-      QSharedPointer<RPCParam> bandmask;
-      QSharedPointer<RPCParam> reconnectState;
-      QSharedPointer<RPCParam> psDxCall;
-      QSharedPointer<RPCParam> psDxGrid;
-      QSharedPointer<RPCParam> psDxCallState;
-      QSharedPointer<RPCParam> psSpotterCall;
-      QSharedPointer<RPCParam> psSpotterGrid;
-      QSharedPointer<RPCParam> psSpotterCallState;
+      QString mName = mro->getMethodName();
 
-      RPCArgs *args = mro->getCallArgs();
-
-      QString paraName;
-      args->getStructArgMember(0, rpcConstants::paramName, psName);
-      psName->getString(paraName);
-      if (paraName == rpcConstants::txSpotToCluster)
+      if (mName == rpcConstants::clusterMethod)
       {
-          QString freq;
-          QString call;
-          QString loc;
 
-          if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq)
-                  && args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall)
-                  && args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
+          RPCArgs *args = mro->getCallArgs();
+          QSharedPointer<RPCParam> psName;
+
+          if (args->getStructArgMember(0, rpcConstants::paramName, psName))
           {
-              psFreq->getString(freq);
-              psCall->getString(call);
-              psLoc->getString(loc);
+              QString paraName;
+              psName->getString(paraName);
 
-              trace(QString("Cluster RPC: send spot to cluster node, call = %1, loc = %2, freq = %3").arg(call, loc, freq));
+              if (paraName == rpcConstants::txSpotToCluster)
+              {
+                  trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
-              emit sendSpotToDXCluster(Frequency(freq), call, loc);
+                  QSharedPointer<RPCParam> psFreq;
+                  QSharedPointer<RPCParam> psCall;
+                  QSharedPointer<RPCParam> psLoc;
 
+                  QString freq;
+                  QString call;
+                  QString loc;
+
+                  if (args->getStructArgMember(0, rpcConstants::txSpotParamFreq, psFreq)
+                          && args->getStructArgMember(0, rpcConstants::txSpotParamCallsign, psCall)
+                          && args->getStructArgMember(0, rpcConstants::txSpotParamLocator, psLoc))
+                  {
+                      psFreq->getString(freq);
+                      psCall->getString(call);
+                      psLoc->getString(loc);
+
+                      trace(QString("Cluster RPC: send spot to cluster node, call = %1, loc = %2, freq = %3").arg(call, loc, freq));
+
+                      emit sendSpotToDXCluster(Frequency(freq), call, loc);
+
+
+                  }
+
+
+              }
+              else if (paraName == rpcConstants::clusterResendSpots)
+              {
+                  trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
+
+
+                  QSharedPointer<RPCParam> resendSpotCmd;
+                  QSharedPointer<RPCParam> clusterFrameId;
+                  QSharedPointer<RPCParam> bandmask;
+                  QSharedPointer<RPCParam> loggerUuid;
+                  QString cmd;
+                  QString logUuid;
+                  QString bandMask;
+                  int frameId;
+                  if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd)
+                          && args->getStructArgMember(0, rpcConstants::clusterFrameId, clusterFrameId)
+                          && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
+                           && args->getStructArgMember(0, rpcConstants::clusterBandmask, bandmask))
+                  {
+                      resendSpotCmd->getString(cmd);
+                      loggerUuid->getString(logUuid);
+                      bandmask->getString(bandMask);
+                      clusterFrameId->getInt(frameId);
+
+
+                      trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd).arg(bandMask).arg(logUuid).arg(frameId));
+                      emit resendSpotToClients(frameId, logUuid, cmd, bandMask);
+
+                  }
+
+
+              }
+              else if (paraName == rpcConstants::clusterReconnect)
+              {
+                  trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
+
+
+                  QSharedPointer<RPCParam> reconnectState;
+                  bool state;
+
+                  if (args->getStructArgMember(0, rpcConstants::clusterReconnect, reconnectState))
+                  {
+                      reconnectState->getBoolean(state);
+                      trace(QString("Cluster RPC: reconnect command to cluster = %1").arg(state));
+                      emit reconnectCmdFromLog(state);
+                  }
+              }
 
           }
-
 
       }
-      else if (paraName == rpcConstants::clusterResendSpots)
+      else if (mName == rpcConstants::qrzMethod)
       {
-          QString cmd;
-          QString logUuid;
-          QString bandMask;
-          int frameId;
-          if (args->getStructArgMember(0, rpcConstants::clusterResendSpotsCmd, resendSpotCmd)
-                  && args->getStructArgMember(0, rpcConstants::clusterFrameId, clusterFrameId)
-                  && args->getStructArgMember(0, rpcConstants::loggerUuid, loggerUuid)
-                   && args->getStructArgMember(0, rpcConstants::clusterBandmask, bandmask))
+          RPCArgs *args = mro->getCallArgs();
+          QSharedPointer<RPCParam> psName;
+
+          if (args->getStructArgMember(0, rpcConstants::paramName, psName))
           {
-              resendSpotCmd->getString(cmd);
-              loggerUuid->getString(logUuid);
-              bandmask->getString(bandMask);
-              clusterFrameId->getInt(frameId);
+
+                QString paraName;
+                psName->getString(paraName);
+
+                if (paraName == rpcConstants::qrzClusterResponse)
+                {
+                    trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
+
+                    QSharedPointer<RPCParam> psDxCall;
+                    QSharedPointer<RPCParam> psDxGrid;
+                    QSharedPointer<RPCParam> psDxCallState;
+                    QSharedPointer<RPCParam> psSpotterCall;
+                    QSharedPointer<RPCParam> psSpotterGrid;
+                    QSharedPointer<RPCParam> psSpotterCallState;
+
+                    QString dxCall;
+                    QString dxGrid;
+                    QString callState;
+                    QString spotterCall;
+                    QString spotterGrid;
+                    QString spotterState;
 
 
-              trace(QString("Cluster RPC: resendspots command to cluster = %1, bandmask = %2, from loggerUuid = %3, frameId %4").arg(cmd).arg(bandMask).arg(logUuid).arg(frameId));
-              emit resendSpotToClients(frameId, logUuid, cmd, bandMask);
+                    if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, psDxCall)
+                        && args->getStructArgMember(0, rpcConstants::qrzDxGrid, psDxGrid)
+                        && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, psDxCallState)
+                        && args->getStructArgMember(0, rpcConstants::qrzSpotterCallsign, psSpotterCall)
+                        && args->getStructArgMember(0, rpcConstants::qrzSpotterGrid, psSpotterGrid)
+                        && args->getStructArgMember(0, rpcConstants::qrzSpotterReplyState, psSpotterCallState))
+                    {
+                         psDxCall->getString(dxCall);
+                         psDxGrid->getString(dxGrid);
+                         psDxCallState->getString(callState);
+                         psSpotterCall->getString(spotterCall);
+                         psSpotterGrid->getString(spotterGrid);
+                         psSpotterCallState->getString(spotterState);
 
-          }
+                         emit clusterQrzResponse(dxCall, dxGrid, callState, spotterCall, spotterGrid, spotterState);
 
+                    }
 
-      }
-      else if (paraName == rpcConstants::clusterReconnect)
-      {
-          bool state;
-          if (args->getStructArgMember(0, rpcConstants::clusterReconnect, reconnectState))
-          {
-              reconnectState->getBoolean(state);
-              trace(QString("Cluster RPC: reconnect command to cluster = %1").arg(state));
-              emit reconnectCmdFromLog(state);
-          }
-      }
-      else if (paraName == rpcConstants::qrzClusterResponse)
-      {
-          QString dxCall;
-          QString dxGrid;
-          QString dxCallState;
-          QString spotterCall;
-          QString spotterGrid;
-          QString spotterState;
-
-          if (args->getStructArgMember(0, rpcConstants::qrzDxCallsign, psDxCall)
-              && args->getStructArgMember(0, rpcConstants::qrzDxGrid, psDxGrid)
-              && args->getStructArgMember(0, rpcConstants::qrzDxReplyState, psDxCallState)
-              && args->getStructArgMember(0, rpcConstants::qrzSpotterCallsign, psSpotterCall)
-              && args->getStructArgMember(0, rpcConstants::qrzSpotterGrid, psSpotterGrid)
-              && args->getStructArgMember(0, rpcConstants::qrzSpotterReplyState, psSpotterCallState))
-          {
-               psDxCall->getString(dxCall);
-               psDxGrid->getString(dxGrid);
-               psDxCallState->getString(dxCallState);
-               psSpotterCall->getString(spotterCall);
-               psSpotterGrid->getString(spotterGrid);
-               psSpotterCallState->getString(spotterState);
-
-               emit clusterQrzResponse(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState);
-
-          }
+                }
+                else if (paraName == rpcConstants::qrzServerState)
+                {
+                    trace(QString("Cluster RPC: callback from %1 paraName = %2").arg(mName, paraName));
 
 
+                    QSharedPointer<RPCParam> msgQrzLogonState;
+                    QSharedPointer<RPCParam> msgQrzServerMessage;
+                    bool loggedState = false;
+
+
+                    if (args->getStructArgMember(0, rpcConstants::qrzServerLogonState, msgQrzLogonState)
+                        && args->getStructArgMember(0, rpcConstants::qrzServerStateMessage, msgQrzServerMessage))
+
+                    {
+                        QString logStateStr;
+                        QString stateMessage;
+
+                        msgQrzLogonState->getString(logStateStr);
+                        if (logStateStr == rpcConstants::qrzServerLoggedIn)
+                        {
+                            loggedState = true;
+                        }
+
+                        msgQrzServerMessage->getString(stateMessage);
+
+                        emit qrzServerLoggedState(loggedState, stateMessage);
+                    }
+
+
+                }
+
+            }
 
       }
 
