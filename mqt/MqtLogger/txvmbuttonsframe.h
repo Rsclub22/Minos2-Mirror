@@ -13,6 +13,7 @@
 #include "radiodetails.h"
 #include "rigcontrolframe.h"
 
+
 namespace Ui {
 class TxVmButtonsFrame;
 }
@@ -58,6 +59,7 @@ signals:
     void buttonActivated(int);
 
 
+
 private:
     int memNo;
 
@@ -93,13 +95,20 @@ public:
 
     void setRadioLoaded();
 
-    void setRigControl(RigControlFrame *rc);
+
     void setPttEnabled(bool state, PubSubName psn);
 
     void setPttType(int type, PubSubName psn);
     void setVoiceMemAvail(bool avail, PubSubName psn);
     void setCwMemAvail(bool avail, PubSubName psn);
     void setPttState(bool state);
+
+    void setSelectedRadio(PubSubName selectedRadio);
+    void setRadioIsConnected(bool connected);
+signals:
+
+    void pttStatus(bool);
+
 private:
     Ui::TxVmButtonsFrame *ui;
 
@@ -123,10 +132,11 @@ private:
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
+    PubSubName selectedRadio;
     bool radioConnected;
     bool radioLoaded;
     bool pttState;
-    RigControlFrame *rigControl;
+
 
     void initTxVmButton();
 
@@ -137,7 +147,7 @@ private:
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
 private slots:
-    void onRadioIsConnected(bool on);
+
     void onVoiceKeyerSelect(int idx);
     void onVmSetupClicked();
     void onRepeatPauseTimerTimeout();

@@ -486,7 +486,7 @@ private:
 
     void initCacheData();
 
-    void addVolStatusToRigCache(const int radIdx, bool status);
+    void addVolStatusToRigCache(bool status);
     void sendTransVertEnabled(bool status);
 
 
@@ -557,7 +557,7 @@ private:
     int setTxState(VFO vfo, bool txState);
 
 
-    void checkSupportVolume(int ridx);
+    void checkSupportVolume();
     void checkSupportSMeter();
     void checkSupportRit();
     void checkSupportVoiceMemory();
@@ -567,6 +567,9 @@ private:
 
     void checkSupportPollRadio();
     void setupTransVerter();
+    void addVoiceMemStatusToRigCache(bool status);
+    void addCwKeyerMemoryStatusToRigCache(bool status);
+    void addPTTEnabledStatusToRigCache(bool status);
 private slots:
 
     void onStdInRead(QString);

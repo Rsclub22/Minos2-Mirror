@@ -25,8 +25,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     buttonNumSent(NO_VM_BUTTON_ON),
     radioConnected(false),
     radioLoaded(false),
-    pttState(false),
-    rigControl(nullptr)
+    pttState(false)
 
 {
     ui->setupUi(this);
@@ -378,20 +377,9 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 
 }
 
-void TxVmButtonsFrame::setRigControl(RigControlFrame *rc)
-{
-    rigControl = rc;
-
-    if (rigControl)
-    {
-        connect(rc, SIGNAL(radioIsConnected(bool)), this, SLOT(onRadioIsConnected(bool)));
-
-    }
 
 
-}
-
-void TxVmButtonsFrame::onRadioIsConnected(bool connected)
+void TxVmButtonsFrame::setRadioIsConnected(bool connected)
 {
     radioConnected = connected;
 }
@@ -401,6 +389,10 @@ void TxVmButtonsFrame::setRadioLoaded()
     radioLoaded = true;
 }
 
+void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
+{
+    selectedRadio = selectedRadio_;
+}
 
 void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 {
@@ -469,8 +461,12 @@ void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
 
 void TxVmButtonsFrame::setPttState(bool state)
 {
+    if (pttState != state)
+    {
+        pttState = state;
+        emit pttStatus(pttState);
+    }
 
-    pttState = state;
 }
 
 void TxVmButtonsFrame::saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams)

@@ -682,7 +682,7 @@ void RigControlMainWindow::upDateRadio()
 
                 buildSupBandList(ridx, modelNumber, setupRadio->currentRadio.radioTransSupBands);
 
-                checkSupportVolume(ridx);
+                checkSupportVolume();
 
                 checkSupportSMeter();
 
@@ -832,7 +832,7 @@ void RigControlMainWindow::setupTransVerter()
 }
 
 
-void RigControlMainWindow::checkSupportVolume(int ridx)
+void RigControlMainWindow::checkSupportVolume()
 {
     // does the library support control of volume control
 
@@ -850,7 +850,7 @@ void RigControlMainWindow::checkSupportVolume(int ridx)
     }
 
     logMessage(QString("Update Radio: Radio Supports Volume Control %1").arg(selectedRigSupCap->supVolume ? "True" : "False"));
-    addVolStatusToRigCache(ridx, selectedRigSupCap->supVolume);
+    addVolStatusToRigCache(selectedRigSupCap->supVolume);
 }
 
 
@@ -923,17 +923,25 @@ void RigControlMainWindow::checkSupportVoiceMemory()
             {
                 setVoiceMemIndVisible(true);
                 setVoiceMemIndOnOff(true);
+                addVoiceMemStatusToRigCache(true);
 
             }
             else
             {
                 setVoiceMemIndVisible(false);
                 setVoiceMemIndOnOff(false);
+                addVoiceMemStatusToRigCache(false);
 
             }
         }
-
     }
+    else
+    {
+        addVoiceMemStatusToRigCache(false);
+    }
+
+
+
 }
 
 void RigControlMainWindow::checkSupportCwKeyerMemory()
@@ -952,18 +960,26 @@ void RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 setCwMemIndVisible(true);
                 setCwMemIndOnOff(true);
+                addCwKeyerMemoryStatusToRigCache(true);
 
             }
             else
             {
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
+                addCwKeyerMemoryStatusToRigCache(false);
+                addCwKeyerMemoryStatusToRigCache(false);
 
             }
          }
-
-
     }
+    else
+    {
+        addCwKeyerMemoryStatusToRigCache(false);
+    }
+
+
+
 }
 
 void RigControlMainWindow::checkSupportPtt()
@@ -985,10 +1001,12 @@ void RigControlMainWindow::checkSupportPtt()
                   if (setupRadio->currentRadio.enablePTT)
                   {
                     setPttIndOnOff(true);
+                    addPTTEnabledStatusToRigCache(true);
                   }
                   else
                   {
                       setPttIndOnOff(false);
+                      addPTTEnabledStatusToRigCache(false);
                   }
 
                   setTxRxIndOnOff(false);
@@ -1004,7 +1022,12 @@ void RigControlMainWindow::checkSupportPtt()
                }
          }
 
-      }
+    }
+    else
+    {
+        addPTTEnabledStatusToRigCache(false);
+    }
+
 
 }
 
@@ -3911,7 +3934,7 @@ void RigControlMainWindow::sendRadioSwitchCompleteToLogger()
 void RigControlMainWindow::sendFreqToLog(const Frequency &freq)
 {
 
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         PubSubName psname(setupRadio->currentRadio.radioName);
 
@@ -3926,7 +3949,7 @@ void RigControlMainWindow::sendFreqToLog(const Frequency &freq)
 
 void RigControlMainWindow::sendModeToLog(QString mode)
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send mode to logger = %1").arg(mode));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -3937,7 +3960,7 @@ void RigControlMainWindow::sendModeToLog(QString mode)
 
 void RigControlMainWindow::sendVolToLog(int level)
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send volume to logger = %1").arg(QString::number(level)));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -3947,12 +3970,12 @@ void RigControlMainWindow::sendVolToLog(int level)
 }
 
 
-void RigControlMainWindow::addVolStatusToRigCache(const int radIdx, bool status)
+void RigControlMainWindow::addVolStatusToRigCache(bool status)
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Add Volume Status to rigcache = %1").arg(status  ? "True" : "False"));
-        PubSubName psname(setupRadio->availRadioData[radIdx]->radioName);
+        PubSubName psname(setupRadio->currentRadio.radioName);
         msg->rigCache.setVolumeStatus(psname, status);
         //msg->rigCache.publish();
 
@@ -3960,11 +3983,40 @@ void RigControlMainWindow::addVolStatusToRigCache(const int radIdx, bool status)
 }
 
 
+void RigControlMainWindow::addVoiceMemStatusToRigCache(bool status)
+{
+    if (!appName.isEmpty())
+    {
+        logMessage(QString("Add Voice Memory Status to rigcache = %1").arg(status  ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setVoiceMemAvail(psname, status);
+    }
+}
+
+void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(bool status)
+{
+    if (!appName.isEmpty())
+    {
+        logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(status  ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setCwMemAvail(psname, status);
+    }
+}
+
+void RigControlMainWindow::addPTTEnabledStatusToRigCache(bool status)
+{
+    if (!appName.isEmpty())
+    {
+        logMessage(QString("Add PTT Enabled Status to rigcache = %1").arg(status  ? "True" : "False"));
+        PubSubName psname(setupRadio->currentRadio.radioName);
+        msg->rigCache.setPttEnabled(psname, status);
+    }
+}
 
 void RigControlMainWindow::sendTransVertEnabled(bool status)
 {
 
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Transvert Enabled to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -3979,7 +4031,7 @@ void RigControlMainWindow::sendTransVertEnabled(bool status)
 void RigControlMainWindow::sendTransVertStatusToLog(bool status)
 {
     //QString flag;
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Transvert Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -4063,7 +4115,7 @@ void RigControlMainWindow::sendRitEnableStatusLogger()
 void RigControlMainWindow::sendRitEnableStatus(bool status)
 {
 
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Rit Enable Status to logger = %1").arg(status  ? "True" : "False"));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -4076,7 +4128,7 @@ void RigControlMainWindow::sendRitEnableStatus(bool status)
 
 void RigControlMainWindow::sendMaxRitFreqLogger()
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send RitMaxFreq = %1 to logger").arg(rigStateDetails->ritMaxKHzFreq));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -4088,7 +4140,7 @@ void RigControlMainWindow::sendMaxRitFreqLogger()
 
 void RigControlMainWindow::sendPttTypeLogger()
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Ptt Type = %1 to logger").arg(serialCommonData::pttMethodStr[setupRadio->currentRadio.pttType]));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -4098,7 +4150,7 @@ void RigControlMainWindow::sendPttTypeLogger()
 
 void RigControlMainWindow::sendPttEnabledLogger()
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Ptt Enabled = %1 to logger").arg(setupRadio->currentRadio.enablePTT ? "Yes" : "No"));
         PubSubName psname(setupRadio->currentRadio.radioName);
@@ -4108,7 +4160,7 @@ void RigControlMainWindow::sendPttEnabledLogger()
 }
 void RigControlMainWindow::sendPttStateLogger()
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send Ptt State = %1 to logger").arg(curPttStatus ? "TX" : "RX"));
         PubSubName psname(setupRadio->currentRadio.radioName);

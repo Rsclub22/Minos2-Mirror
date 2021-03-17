@@ -350,6 +350,14 @@ void RigCache::setPttOnOff(const PubSubName &name, bool onOff)
 {
     rigStates[name].setPttOnOff(onOff);
 }
+void RigCache::setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail)
+{
+    rigDetails[name].setVoiceMemAvail(voiceMemAvail);
+}
+void RigCache::setCwMemAvail(const PubSubName &name, bool cwMemAvail)
+{
+    rigDetails[name].setCwMemAvail(cwMemAvail);
+}
 void RigCache::publishState()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
