@@ -36,17 +36,20 @@ void RotatorCache::addRotList(const QString &s)
     // clumsy code - there must be a better way!
     if (s.isEmpty())
         return;
+    PubSubName lpsn;
     QStringList list = s.split(":");
     if (list.length())
     {
         // remove all rots from this app from the rot list
-        PubSubName lpsn = PubSubName(list[0]);
+        lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRotList;
 
         for(auto const &psn: qAsConst(rotList))
         {
             if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
+            {
                 newRotList.push_back(psn);
+            }
         }
         rotList = newRotList;
 
@@ -66,7 +69,7 @@ void RotatorCache::addRotList(const QString &s)
         QMap<PubSubName, AntennaDetail>::const_iterator i = rotDetails.constBegin();
         while (i != rotDetails.constEnd())
         {
-            if (rotList.contains(i.key()))
+            if (i.key() != lpsn  || rotList.contains(i.key()))
             {
                 newdets[i.key()] = i.value();
             }
@@ -80,7 +83,7 @@ void RotatorCache::addRotList(const QString &s)
         QMap<PubSubName, AntennaState>::const_iterator j = rotStates.constBegin();
         while (j != rotStates.constEnd())
         {
-            if (rotList.contains(j.key()))
+            if (j.key() != lpsn  || rotList.contains(j.key()))
             {
                 newstates[j.key()] = j.value();
             }

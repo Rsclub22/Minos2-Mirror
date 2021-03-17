@@ -47,19 +47,26 @@ void RigCache::setDetailsString(const AnalysePubSubNotify & an)
 void RigCache::addRigList(const QString &s)
 {
     // clumsy code - there must be a better way!
+    // This thinks it knows everything... but there may be multiple rig control programs
+    // each sending it's own list
+
+
     if (s.isEmpty())
         return;
+    PubSubName lpsn;
     QStringList list = s.split(":");
     if (list.length())
     {
         // remove all rigs from this app from the rig list
-        PubSubName lpsn = PubSubName(list[0]);
+        lpsn = PubSubName(list[0]);
         QVector<PubSubName> newRigList;
 
         for(auto const &psn: qAsConst(rigList))
         {
             if (lpsn.router() != psn.router() || lpsn.appName() != psn.appName())
+            {
                 newRigList.push_back(psn);
+            }
         }
         rigList = newRigList;
 
@@ -79,7 +86,7 @@ void RigCache::addRigList(const QString &s)
         QMap<PubSubName, RigDetails>::const_iterator i = rigDetails.constBegin();
         while (i != rigDetails.constEnd())
         {
-            if (rigList.contains(i.key()))
+            if (i.key() != lpsn  || rigList.contains(i.key()))
             {
                 newdets[i.key()] = i.value();
             }
@@ -93,7 +100,7 @@ void RigCache::addRigList(const QString &s)
         QMap<PubSubName, RigState>::const_iterator j = rigStates.constBegin();
         while (j != rigStates.constEnd())
         {
-            if (rigList.contains(j.key()))
+            if (j.key() != lpsn  || rigList.contains(j.key()))
             {
                 newstates[j.key()] = j.value();
             }
