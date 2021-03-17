@@ -15,32 +15,13 @@ class MonitoredLog;
 
 class MonitoredStation
 {
-   private:
-
-      // Plus we want the control (keyer) state, frequency, ?bandmap etc
-
    public:
-      QString stationName;
-      QString publisher;
-      PublishState state;
-      QVector< MonitoredLog *> slotList;
+      QVector< QSharedPointer<MonitoredLog> > slotList;
 
       MonitoredStation()
       {}
       ~MonitoredStation()
-      {}   // need to delete slots...
-};
-struct MonitoredStationCmp
-{
-   QString cmpstr;
-   QString pub;
-   MonitoredStationCmp( const QString &s, QString p ) : cmpstr( s ), pub(p)
-   {}
-
-   bool operator() ( MonitoredStation * &s1 ) const
-   {
-      return s1->stationName.compare( cmpstr, Qt::CaseInsensitive ) == 0 && s1->publisher.compare(pub) == 0;
-   }
+      {}
 };
 struct MonitoredLogCmp
 {
@@ -48,7 +29,7 @@ struct MonitoredLogCmp
    MonitoredLogCmp( const QString &s ) : cmpstr( s )
    {}
 
-   bool operator() ( MonitoredLog * &s1 ) const
+   bool operator() ( QSharedPointer<MonitoredLog> s1 ) const
    {
       return s1->getPublishedName().compare(cmpstr, Qt::CaseInsensitive ) == 0;
    }
@@ -63,13 +44,13 @@ protected:
     QString hintString;
     int childNo;
     TreeNode *parentItem;
-    MonitoredLog *mlog;
+    QSharedPointer< MonitoredLog> mlog;
 
 public:
     MonitorMain *monmain;
 
     TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm);
-    TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm);
+    TreeNode(NodeType sn, TreeNode *parent, QSharedPointer< MonitoredLog> log, MonitorMain *mm);
     virtual ~TreeNode();
 
     virtual NodeType GetNodeType() const
@@ -96,15 +77,14 @@ public:
     TreeNode *parent();
     TreeNode *child( int number );
     int childCount() const;
-    MonitoredLog *getLog()
+    QSharedPointer< MonitoredLog> getLog()
     {
         return mlog;
     }
-    void setLog(MonitoredLog *l)
+    void setLog(QSharedPointer< MonitoredLog>l)
     {
         mlog = l;
     }
-
 };
 class RootTreeNode:public TreeNode
 {
@@ -127,7 +107,7 @@ class LogTreeNode:public TreeNode
 {
     Q_OBJECT
 public:
-    LogTreeNode(TreeNode *parent, MonitoredLog *log):TreeNode(entLog, parent, log, parent->monmain)
+    LogTreeNode(TreeNode *parent,QSharedPointer< MonitoredLog> log):TreeNode(entLog, parent, log, parent->monmain)
     {
     }
     virtual QString data( int column );
@@ -167,7 +147,7 @@ public:
     explicit MonitorMain(QWidget *parent = nullptr);
     ~MonitorMain() override;
 
-    QVector<MonitoredStation *> stationList;
+    QMap<Provider, MonitoredStation *> stationList;
     ScreenContact screenContact;
 
     void closeTab(MonitoringFrame *tab);
@@ -179,6 +159,7 @@ public:
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );
     void on_routerCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
+    void on_provider(Provider provider);
 
     void onStdInRead(QString cmd);
 
@@ -230,7 +211,7 @@ private:
 
     bool syncstat = false;
     void syncStations();
-    void addSlot( MonitoredLog *ct );
+    void addSlot(QSharedPointer<MonitoredLog> ct );
     MonitoringFrame *findCurrentLogFrame();
     MonitoringFrame *findContestPage( BaseContestLog *ct );
     void searchChanged();

@@ -24,7 +24,7 @@ private:
 private slots:
     void on_SendButton_clicked();
 
-    void ChatServerList(QVector<ChatServerApp>);
+    void ChatServerList(QMap<Provider, ChatServerApp>);
     void ChatMessages(QVector<QString>);
     void on_FontChanged();
 };

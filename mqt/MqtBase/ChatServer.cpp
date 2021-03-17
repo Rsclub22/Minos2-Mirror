@@ -59,19 +59,13 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
             //trace( QString("ChatServer::on_notify ") + QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() + " " + an.getValue() );
             if (an.getKey() == rpcConstants::ChatServerFrequency)
             {
-                for ( auto &stat: chatServerList )
+                Provider p(an);
+                Frequency f = Frequency(an.getValue());
+                if (chatServerList[p].freq != f)
                 {
-                    if (stat.routerName == an.getPublisherRouter())
-                    {
-                        Frequency f = Frequency(an.getValue());
-                        if (stat.freq != f)
-                        {
-                            //trace("stat freq set");
-                            stat.freq = f;
-                            syncstat = true;
-                        }
-                        break;
-                    }
+                    //trace("stat freq set");
+                    chatServerList[p].freq = f;
+                    syncstat = true;
                 }
             }
         }
@@ -81,19 +75,7 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 void ChatServer::on_provider(Provider provider)
 {
     ChatServerApp s;
-    s.routerName = provider.routerName;
-    s.state = provider.state;
-    s.app = provider.app;
-
-    int csa = chatServerList.indexOf(s);
-    if (csa >= 0)
-    {
-        chatServerList[csa] = s;
-    }
-    else
-    {
-        chatServerList.push_back( s );
-    }
+    chatServerList[provider] = s;
     QString mess = tr("%1/%2 changed state to %3").arg(provider.routerName, provider.app, tr(stateIndicator[provider.state]));
     addChat( mess );
     syncstat = true;
@@ -160,13 +142,13 @@ void ChatServer::syncChat()
 void ChatServer::sendMessage(QString mess)
 {
     // We need to send the message to all connected stations
-    for ( auto const &i: qAsConst(chatServerList) )
+    for(QMap<Provider, ChatServerApp>::iterator i = chatServerList.begin(); i != chatServerList.end(); i++)
     {
         RPCGeneralClient rpc(rpcConstants::chatMethod);
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( mess, rpcConstants::SendChatMessage );
         rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( i.psn() );
+        rpc.queueCall( i.key().psn() );
     }
 }
 void ChatServer::onRigFreqChanged(Frequency f, BaseContestLog * /*c*/)

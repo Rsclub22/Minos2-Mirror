@@ -18,7 +18,7 @@ TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm)
     if (parent)
         parent->nodes.push_back(this);
 }
-TreeNode::TreeNode(NodeType sn, TreeNode *parent, MonitoredLog *log, MonitorMain *mm):
+TreeNode::TreeNode(NodeType sn, TreeNode *parent, QSharedPointer<MonitoredLog> log, MonitorMain *mm):
     ntype(sn), NodeName(log->getDisplayName()), hintString(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
 {
     if (parent)
@@ -268,11 +268,16 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
 
+    MinosConfig *config = MinosConfig::getMinosConfig();
+    localRouterName = config->getThisRouterName();
+
+
     connect(rpc, &MinosRPC::routerCall, this, &MonitorMain::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &MonitorMain::on_notify);
+    connect(rpc, &MinosRPC::provider, this, &MonitorMain::on_provider);
 
-    QStringList sv = {rpcConstants::LoggerCategory};
-    rpc->initialiseRouters(sv);
+    QStringList sv = {rpcConstants::monitorLogCategory};
+    rpc->findProviders(rpcConstants::LoggerCategory, sv);
 
     QByteArray state;
 
@@ -326,15 +331,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    for ( auto const &s: qAsConst(stationList) )
-    {
-       for ( auto const &l: qAsConst(s->slotList) )
-       {
-          delete l;
-       }
-       s->slotList.clear();
-       delete s;
-    }
     stationList.clear();
     delete MultLists::getMultLists();
 }
@@ -477,6 +473,12 @@ void MonitorMain::CancelClick()
 {
     // do nothing...
 }
+//---------------------------------------------------------------------------
+void MonitorMain::on_provider(Provider provider)
+{
+    stationList[provider] = new MonitoredStation;
+    syncstat = true;
+}
 
 void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
 {
@@ -485,78 +487,50 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
 
     if ( an.getOK() )
     {
-       PublishState state = an.getState();
-       QString key = an.getKey();
-       QString value = an.getValue();
+        PublishState state = an.getState();
+        QString key = an.getKey();
+        QString value = an.getValue();
 
-       if ( an.getCategory() == rpcConstants::LoggerCategory )
-       {
+        if ( an.getCategory() == rpcConstants::monitorLogCategory )
+        {
+            QString router = an.getRouter();
+            if ( router.size() == 0 )
+            {
+                // it is for us...
+                router = localRouterName;
+            }
 
-           trace( "Station " + key + " " + value );
-          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( key, an.getPublisherProgram() ) );
+            QString logval = router + " : " + key ;
+            trace( "ContestLog " + logval + " " + value );
 
-          if (state != psRevoked)
-          {
-             if ( stat == stationList.end() )
-             {
-                MonitoredStation * ms = new MonitoredStation();
-                ms->stationName = key;
-                ms->state = state;
-                ms->publisher = an.getPublisherProgram();
-                stationList.push_back( ms );
-                RPCPubSub::subscribeRemote( key, rpcConstants::monitorLogCategory);
-             }
-             else
-             {
-                (*stat)->state = state;
-             }
-          }
-          else
-          {
-             (*stat)->state = state;
-          }
-       }
-       if ( an.getCategory() == rpcConstants::monitorLogCategory )
-       {
-          QString router = an.getRouter();
-          if ( router.size() == 0 )
-          {
-             // it is for us...
-             router = localRouterName;
-          }
+            MonitoredStation *stat = stationList[Provider(an)];
 
-          QString logval = router + " : " + key ;
-          trace( "ContestLog " + logval + " " + value );
-
-          QVector<MonitoredStation *>::iterator stat = std::find_if( stationList.begin(), stationList.end(), MonitoredStationCmp( router, an.getPublisherProgram() ) );
-          if ( stat != stationList.end() )
-          {
-             QVector< MonitoredLog *>::iterator log = std::find_if( ( *stat ) ->slotList.begin(), ( *stat ) ->slotList.end(), MonitoredLogCmp( key ) );
-             if (state == psPublished)
-             {
-                 QStringList args = value.split(";");
-                if ( log == ( *stat ) ->slotList.end() )
+            QVector< QSharedPointer<MonitoredLog> >::iterator log = std::find_if( stat->slotList.begin(), stat->slotList.end(), MonitoredLogCmp( key ) );
+            if (state == psPublished)
+            {
+                QStringList args = value.split(";");
+                if ( log == stat->slotList.end() )
                 {
-                   MonitoredLog * ml = new MonitoredLog();
-                   ml->initialise( router, key );
+                    QSharedPointer<MonitoredLog> ml(new MonitoredLog());
+                    ml->initialise( router, key );
 
 
-                   if (args.count() >= 1)
-                   {
-                       trace(QString("args 0 %1 ").arg(args[0]));
+                    if (args.count() >= 1)
+                    {
+                        trace(QString("args 0 %1 ").arg(args[0]));
                         ml->setExpectedStanzaCount( args[0].toInt() );
-                   }
-                   if (args.count() >= 2)
-                   {
-                       trace(QString("args 1 %2").arg(args[1]));
-                       ml->setDisplayName(args[1]);
-                   }
-                   else
-                       ml->setDisplayName(key);
+                    }
+                    if (args.count() >= 2)
+                    {
+                        trace(QString("args 1 %2").arg(args[1]));
+                        ml->setDisplayName(args[1]);
+                    }
+                    else
+                        ml->setDisplayName(key);
 
-                   ml->setState(state);
-                   ( *stat ) ->slotList.push_back( ml );
-                   syncstat = true;
+                    ml->setState(state);
+                    stat->slotList.push_back( ml );
+                    syncstat = true;
 
                 }
                 else
@@ -564,20 +538,19 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
                     if (args.count() >= 1)
                     {
                         trace(QString("args 0 %1 ").arg(args[0]));
-                         (*log)->setExpectedStanzaCount( args[0].toInt() );
+                        (*log)->setExpectedStanzaCount( args[0].toInt() );
                     }
-                   (*log)->setState(state);
+                    (*log)->setState(state);
                 }
-             }
-             else
-             {
-                if ( log != ( *stat ) ->slotList.end() )
+            }
+            else
+            {
+                if ( log != stat->slotList.end() )
                 {
-                   (*log)->setState(state);
+                    (*log)->setState(state);
                 }
-             }
-          }
-       }
+            }
+        }
     }
 }
 //---------------------------------------------------------------------------
@@ -613,24 +586,26 @@ void MonitorMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                 {
                     trace( "Name " + logName + " stanza " + QString::number( stanza ) );
                     // Find the matching MonitoredLog and send the stanza their for processing
-                    for ( auto const &s: qAsConst(stationList) )
+
+                    QStringList sl = from.split('@');
+                    if (sl.count() != 2)
                     {
-                        // "from" is something like Logger@dev-station
-                        // BUT it isn't necessarily Logger!
-                        if ( s->publisher + "@" + s->stationName == from )
+                        return;
+                    }
+                    QString ss = sl[1] + "/" + sl[0] + "/xxx";
+                    Provider p(ss);
+
+                    MonitoredStation *s = stationList[p];
+
+                    for ( auto const &l: qAsConst(s->slotList) )
+                    {
+                        if (l && l->getPublishedName() == logName )
                         {
-                            for ( auto const &l: qAsConst(s->slotList) )
-                            {
-                                if (l && l->getPublishedName() == logName )
-                                {
-                                    trace( "||" + stanzaData + "||" );
-                                    l ->processLogStanza( stanza, stanzaData );
-                                    return ;
-                                }
-                            }
+                            trace( "||" + stanzaData + "||" );
+                            l ->processLogStanza( stanza, stanzaData );
+                            return ;
                         }
                     }
-
                 }
             }
         }
@@ -656,10 +631,10 @@ void MonitorMain::syncStations()
       syncstat = false;
 
       TreeNode *root = new RootTreeNode(this);
-      for ( auto const &s: qAsConst(stationList) )
+      for ( auto s = stationList.begin(); s != stationList.end(); s++ )
       {
-          TreeNode *snode = new RouterTreeNode(root, s->stationName);
-          for ( auto const &l: qAsConst(s->slotList) )
+          TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
+          for ( auto const &l: qAsConst(s.value()->slotList) )
           {
               /*TreeNode *lnode =*/ new LogTreeNode(snode, l);
           }
@@ -673,7 +648,7 @@ void MonitorMain::syncStations()
       ui->monitorTree->expandAll();
    }
 }
-void MonitorMain::addSlot( MonitoredLog *ct )
+void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
 {
    static int namegen = 0;
    QString baseFName = ExtractFileName( ct->getPublishedName() );
@@ -749,8 +724,6 @@ void MonitorMain::on_monitorTimeout()
              closeTab(cttab);
              // take it out of the slot list and close it
              // and we need to redo the list
-             delete l;
-             l = nullptr;
              s->slotList.erase(&l);
              syncstat = true;
              break;             // as we have changed the list - don't continue
@@ -790,9 +763,31 @@ void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
     }
     else
     {
-       MonitoredStation *ms = stationList[ sel->parent()->childNumber() ];
+        RouterTreeNode *tn = static_cast< RouterTreeNode *>(index.parent().internalPointer());
+        QString pn = tn->data(0);
+
+        QStringList sl = pn.split('@');
+        if (sl.count() != 2)
+        {
+            return;
+        }
+        QString s = sl[1] + "/" + sl[0] + "/xxx";
+        Provider p(s);
+       MonitoredStation *ms = stationList[ p ];
+       if (!ms)
+       {
+           return;
+       }
        // log
-      MonitoredLog * ml = ms ->slotList[ sel->childNumber()];
+       if (sel->childNumber() >= ms->slotList.count())
+       {
+           return;
+       }
+      QSharedPointer< MonitoredLog> ml = ms ->slotList[ sel->childNumber()];
+      if (!ml)
+      {
+          return;
+      }
       if ( !ml->enabled() )
       {
          ml->startMonitor();

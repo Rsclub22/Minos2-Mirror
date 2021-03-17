@@ -31,13 +31,13 @@ void ChatFrame::on_FontChanged()
 }
 
 //---------------------------------------------------------------------------
-void ChatFrame::ChatServerList(QVector<ChatServerApp> serverList)
+void ChatFrame::ChatServerList(QMap<Provider, ChatServerApp> serverList)
 {
     ui->StationList->clear();
-    for ( auto const &i: serverList )
+    for(QMap<Provider, ChatServerApp>::iterator i = serverList.begin(); i != serverList.end(); i++)
     {
-        Frequency f = i.freq;
-        QString state = ChatServer::tr(ChatServer::stateIndicator[i.state]) + " " + i.app + "\r\n" + f.str();
+        Frequency f = i.value().freq;
+        QString state = ChatServer::tr(ChatServer::stateIndicator[i.key().state]) + " " + i.key().app + "\r\n" + f.str();
         ui->StationList->addItem( state );
     }
 }

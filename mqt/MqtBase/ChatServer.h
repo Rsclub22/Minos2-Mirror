@@ -2,29 +2,19 @@
 #define CHATSERVER_H
 #include "base_pch.h"
 
+//class Provider
+//{
+//public:
+//    Provider(){}
+
+//    QString routerName;
+//    QString app;
+//    PublishState state = psNotConnected;
+//}
 class ChatServerApp
 {
 public:
-    QString routerName;
-    QString app;
     Frequency freq;
-    PublishState state;
-
-    PubSubName psn() const
-    {
-        PubSubName p;
-        p.setRouter(routerName);
-        p.setAppName(app);
-        return p;
-    }
-
-
-    bool operator==(const ChatServerApp& rhs) const
-    {
-        return routerName == rhs.routerName
-                && app == rhs.app
-                ;
-    }
 };
 
 class ChatServer : public QObject
@@ -43,7 +33,7 @@ public:
     void sendMessage(QString mess);
 private:
     static ChatServer *chatServer;
-    QVector<ChatServerApp> chatServerList;
+    QMap<Provider, ChatServerApp> chatServerList;
     QTimer SyncTimer;
 
     bool syncstat = false;
@@ -62,7 +52,7 @@ private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );
     void on_provider(Provider provider);
 signals:
-    void ChatServerList(QVector<ChatServerApp>);
+    void ChatServerList(QMap<Provider, ChatServerApp>);
     void ChatMessages(QVector<QString>);
 };
 

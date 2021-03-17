@@ -61,12 +61,23 @@ public:
         app = an.getPublisherProgram();
         state = an.getState();
     }
+    Provider(QString s)
+    {
+        PubSubName p(s);
+        routerName = p.router();
+        app = p.appName();
+    }
     bool operator==(const Provider& rhs) const
     {
         return routerName == rhs.routerName
                 && app == rhs.app
                 ;
     }
+    bool operator< ( const Provider& rhs ) const
+    {
+        return (psn() < rhs.psn());
+    }
+
 };
 class MinosRPC: public QObject
 {
@@ -128,6 +139,10 @@ public:
     void initialiseRouters(QStringList subs);
 
     void findProviders(QString sub, QStringList postsubs);
+    const QMap<QString, QVector<Provider> > &getProviders() const
+    {
+        return providers;
+    }
 signals:
 
     void notify( AnalysePubSubNotify an, const QString from);
