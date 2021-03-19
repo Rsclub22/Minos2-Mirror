@@ -46,18 +46,22 @@ void Clusterrpc::sendDXSpot(QString spot, QString uuid, int frameId)
 {
     // We need to send the message to all connected cluster clients, except the spot server
     MinosRPC *rpc = MinosRPC::getMinosRPC();
-    for ( auto const &p: rpc->getProviders() )
+    for ( auto p = rpc->getProviders().begin(); p != rpc->getProviders().end(); p++ )
     {
-        for (auto const &s: p)
+        QString cat = p.key();
+        if (cat == rpcConstants::qrzServerApp || cat == rpcConstants::clusterClientServer)
         {
-            trace(QString("SendDxSpot to station = %1").arg(s.app));
-            RPCGeneralClient rpc(rpcConstants::clusterMethod);
-            QSharedPointer<RPCParam>st(new RPCParamStruct);
-            st->addMember( spot, rpcConstants::sendClusterSpot );
-            st->addMember(uuid, rpcConstants::loggerUuid);
-            st->addMember(frameId, rpcConstants::clusterFrameId);
-            rpc.getCallArgs() ->addParam( st );
-            rpc.queueCall( s.psn() );
+            for (auto const &s: (*p))
+            {
+                trace(QString("SendDxSpot to station = %1").arg(s.app));
+                RPCGeneralClient rpc(rpcConstants::clusterMethod);
+                QSharedPointer<RPCParam>st(new RPCParamStruct);
+                st->addMember( spot, rpcConstants::sendClusterSpot );
+                st->addMember(uuid, rpcConstants::loggerUuid);
+                st->addMember(frameId, rpcConstants::clusterFrameId);
+                rpc.getCallArgs() ->addParam( st );
+                rpc.queueCall( s.psn() );
+            }
         }
     }
 }

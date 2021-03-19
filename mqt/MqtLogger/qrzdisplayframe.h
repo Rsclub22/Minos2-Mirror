@@ -86,6 +86,8 @@ private slots:
 
     void on_notify(AnalysePubSubNotify an, const QString );
 
+    void on_provider(Provider);
+
 
 
 

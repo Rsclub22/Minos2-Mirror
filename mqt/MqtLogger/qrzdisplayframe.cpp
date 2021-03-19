@@ -185,7 +185,7 @@ void QrzDisplayFrame::setContest(BaseContestLog( *c))
 
 
 
-static bool syncstat = false;
+//static bool syncstat = false;
 static QVector<QrzServerMessage> qrzRequestsQueue;
 
 QrzDisplayServerRpc *QrzDisplayServerRpc::qrzDisplayServerRpc = nullptr;
@@ -213,12 +213,14 @@ QrzDisplayServerRpc::QrzDisplayServerRpc()
 {
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
-    QStringList sv{ rpcConstants::qrzServerApp };
+    QStringList sv{  };
 
-    rpc->initialiseRouters(sv);
+    rpc->findProviders(rpcConstants::qrzServerApp, sv);
+    rpc->findProviders(rpcConstants::clusterApp, sv);
 
     connect(rpc, &MinosRPC::routerCall, this, &QrzDisplayServerRpc::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &QrzDisplayServerRpc::on_notify);
+    connect(rpc, &MinosRPC::provider, this, &QrzDisplayServerRpc::on_provider);
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
@@ -238,18 +240,26 @@ QrzDisplayServerRpc::~QrzDisplayServerRpc()
 
 void QrzDisplayServerRpc::sendCallsignFromLoggerToQrzServer(QString callsign, QString frameid)
 {
-    for (auto const &s: qAsConst(serverList))
+    // We need to send the message to all connected cluster clients, except the spot server
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+    for ( auto p = rpc->getProviders().begin(); p != rpc->getProviders().end(); p++ )
     {
-        trace(QString("[QrzDisplayServer]  Send Qrz Response to Cluster Server = %1").arg(s.app));
-        RPCGeneralClient rpc(rpcConstants::qrzLogger );
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-        st->addMember(rpcConstants::qrzLogger, rpcConstants::qrzLogger);
-        st->addMember( callsign, rpcConstants::qrzDxCallsign );
-        st->addMember(frameid, rpcConstants::qrzLogFrameId);
+        QString cat = p.key();
+        if (cat == rpcConstants::qrzServerApp || cat == rpcConstants::clusterApp)
+        {
+            for (auto const &s: (*p))
+            {
+                trace(QString("[QrzDisplayServer]  Send Qrz Response to Cluster Server = %1").arg(s.app));
+                RPCGeneralClient rpc(rpcConstants::qrzLogger );
+                QSharedPointer<RPCParam>st(new RPCParamStruct);
+                st->addMember(rpcConstants::qrzLogger, rpcConstants::qrzLogger);
+                st->addMember( callsign, rpcConstants::qrzDxCallsign );
+                st->addMember(frameid, rpcConstants::qrzLogFrameId);
 
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( s.app );
-
+                rpc.getCallArgs() ->addParam( st );
+                rpc.queueCall( s.psn() );
+            }
+        }
     }
 }
 
@@ -411,49 +421,12 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
 
 void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
 {
-
     trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
+}
 
-    if ( an.getOK() )
-    {
-
-        if ( an.getCategory() == rpcConstants::qrzServerApp || an.getCategory() == rpcConstants::clusterApp)
-        {
-            trace( QString("*** [QrzDisplayServer] on_notify") + QString(stateIndicator[an.getState()]) + " " + an.getCategory() + " " + an.getKey() );
-            bool stationFound = false;
-            for ( auto &stat: serverList )
-            {
-                if (stat.app == an.getKey())
-                {
-                    if (stat.state != an.getState())
-                    {
-                        stat.state = an.getState();
-                        //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
-                        //addChat( mess );
-                        syncstat = true;
-                    }
-                    stationFound = true;
-                    break;
-                }
-            }
-            if ( !stationFound )
-            {
-                // We have received notification from a previously unknown station - so report on it
-                QrzServer s;
-                s.routerName = an.getPublisherRouter();
-                s.state = an.getState();
-                s.publisherProgram = an.getPublisherProgram();
-                s.app = an.getKey();
-                serverList.push_back( s );
-                trace(QString("[QrzDisplayServer]  routerName = %1, app = %2, publisher programe = %3").arg(s.routerName, s.app, s.publisherProgram));
-                //QString mess = tr("%1 changed state to %2").arg(an.getKey()).arg(tr(stateIndicator[an.getState()]));
-
-                syncstat = true;
-            }
-        }
-
-    }
-
+void QrzDisplayServerRpc::on_provider(Provider)
+{
+//    syncstat = true;
 }
 
 /*
