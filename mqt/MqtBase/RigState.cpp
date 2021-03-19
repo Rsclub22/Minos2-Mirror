@@ -11,6 +11,7 @@ RigState::RigState()
     _radioVolLevel.setInitialValue(0);
     _logVolLevel.setInitialValue(0);
     _pttState.setInitialValue(false);
+    _setPttOnOff.setInitialValue(false);
 }
 
 RigState::RigState(QString s)
@@ -35,7 +36,8 @@ bool RigState::isDirty() const
             _logRitFreq.isDirty() ||
             _ritOnOffStatus.isDirty() ||
             _ritRadioStatus.isDirty() ||
-            _pttState.isDirty();
+            _pttState.isDirty() ||
+            _setPttOnOff.isDirty();
 }
 void RigState::clearDirty()
 {
@@ -54,6 +56,7 @@ void RigState::clearDirty()
     _ritOnOffStatus.clearDirty();
     _ritRadioStatus.clearDirty();
     _pttState.clearDirty();
+    _setPttOnOff.clearDirty();
 }
 void RigState::setDirty()
 {
@@ -72,6 +75,7 @@ void RigState::setDirty()
     _ritOnOffStatus.setDirty();
     _ritRadioStatus.setDirty();
     _pttState.setDirty();
+    _setPttOnOff.setDirty();
 }
 void RigState::setSelected(const QString &loggeruuid, const QString &selected)
 {
@@ -140,6 +144,10 @@ void RigState::setPttState(const bool state)
 {
     _pttState.setValue(state);
 }
+void RigState::setPttOnOff(const bool on)
+{
+    _setPttOnOff.setValue(on);
+}
 
 
 QString RigState::pack() const
@@ -161,6 +169,7 @@ QString RigState::pack() const
     jv.insert(rpcConstants::rigRitOnOffStatus, ritOnOffStatus().getValue());
     jv.insert(rpcConstants::rigRitRadioStatus, ritRadioStatus().getValue());
     jv.insert(rpcConstants::rigPttState, pttState().getValue());
+    jv.insert(rpcConstants::rigPttOnOff, setPttOnOff().getValue());
 
     QJsonDocument json(jv);
 
@@ -190,6 +199,7 @@ void RigState::unpack(QString s)
         _ritOnOffStatus.setValue(json.object().value(rpcConstants::rigRitOnOffStatus).toBool());
         _ritRadioStatus.setValue(json.object().value(rpcConstants::rigRitRadioStatus).toBool());
         _pttState.setValue(json.object().value(rpcConstants::rigPttState).toBool());
+        _setPttOnOff.setValue(json.object().value(rpcConstants::rigPttOnOff).toBool());
     }
     else
     {
@@ -273,4 +283,8 @@ QStringList RigState::getSelectedLoggers()
 MinosItem<bool> RigState::pttState() const
 {
     return _pttState;
+}
+MinosItem<bool> RigState::setPttOnOff() const
+{
+    return _setPttOnOff;
 }

@@ -89,16 +89,21 @@ public:
     int getConfigurationParameter(QString cfgparam, QString *value) override;
 
     int sendVoiceMessage(VFO vfo, int vmNum) override;
-    bool supportVoiceMemory() override;
+    bool supportVoiceMemory(int rigNumber) override;
 
     int sendMorse(VFO vfo, QString msg) override;
     int stopMorse(VFO vfo) override;
     //int waitMorsePtt(VFO vfo) override;
     int waitMorse(VFO vfo) override;
-    bool supportCwMemory() override;
+    bool supportSendMorse(int rigNumber) override;
+    bool supportStopMorse(int rigNumber) override;
+    bool supportWaitMorse(int rigNumber) override;
+
 
     int getPttStatus(VFO vfo, bool &state) override;
     int setPtt(VFO vfo, bool state) override;
+    bool supportGetPtt(int rigNumber) override;
+    bool supportSetPtt(int rigNumber) override;
 
 
 

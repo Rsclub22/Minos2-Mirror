@@ -81,16 +81,24 @@ public:
 
 
     virtual int sendVoiceMessage(VFO vfo, int vmNum) = 0;
-    virtual bool supportVoiceMemory() = 0;
+    virtual bool supportVoiceMemory(int rigNumber) = 0;
 
     virtual int sendMorse(VFO vfo, QString msg) = 0;
     virtual int stopMorse(VFO vfo) = 0;
     //virtual int waitMorsePtt(VFO vfo) = 0;
     virtual int waitMorse(VFO vfo) = 0;
-    virtual bool supportCwMemory() = 0;
+    virtual bool supportSendMorse(int rigNumber) = 0;
+    virtual bool supportStopMorse(int rigNumber) = 0;
+    virtual bool supportWaitMorse(int rigNumber) = 0;
+
+
 
     virtual int getPttStatus(VFO vfo, bool& state) = 0;
     virtual int setPtt(VFO vfo, bool state) = 0;
+
+    virtual bool supportGetPtt(int rigNumber) = 0;
+    virtual bool supportSetPtt(int rigNumber) = 0;
+
 
 
 

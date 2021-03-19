@@ -1102,6 +1102,8 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
     {
             radioName = radNam;
 
+            selRadioName = PubSubName(radioName);
+            sendVmButtonFrameSelectedRadio(selRadioName);
 
             traceMsg(QString("setRadioName:: set radiocombosel to radioName  %1").arg(radioName));
             traceMsg(QString("setRadioName:: Looking for radio in combo sel"));
@@ -1135,108 +1137,101 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                 selRadioDetails = RadioDetails();
                 createSupportedBandList(selRadioDetails.getBandList());
             }
-            else
+            else if (allRadioDetails.contains(selRadioName))
             {
+                selRadioDetails = allRadioDetails[selRadioName];
+                traceMsg(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
+                createSupportedBandList(selRadioDetails.getBandList());
 
-                selRadioName = PubSubName(radioName);
+                // get freq to send
+                setRadioFreq(sendFreq,  fromStartRigControl);
 
 
-                if (allRadioDetails.contains(selRadioName))
+                // set Band Sel Combo to band of contest band
+
+                //if (setBandSelComboIndex(contestBand) == -1)
+                /*
+                if (bandSelButtons->selectButtonGroupAndActiveBand(contestBand)  == -1)
                 {
-                    selRadioDetails = allRadioDetails[selRadioName];
-                    traceMsg(QString("setRadioName:: Select Radio - radio details for %1 in allRadioDetails").arg(radioName));
-                    createSupportedBandList(selRadioDetails.getBandList());
+                    traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
+                }
+                else
+                {
+                */
+                    //traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
+                    traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
+                    setContestBandLimits(contestBand);
+                //}
 
-                    // get freq to send
-                    setRadioFreq(sendFreq,  fromStartRigControl);
 
+                QString contestMode = ct->currentMode.getValue();
+                bool restoreModeFlag = false;
+                TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, restoreModeFlag );
 
-                    // set Band Sel Combo to band of contest band
+                if (fromStartRigControl)
+                {
+                    rigFrameStartFlag = false;
+                    onContestPageChangedFlag = false;
+                    traceMsg(QString("setRadioName: start contest frame radioName = %1, freq = %2, mode = %3, contest = %4")
+                             .arg(radioName).arg(sendFreq.traceStr()
+                                                                                                                                                ).arg(contestMode).arg(ct->uuid));
+                    emit selectRadio(radioName, contestBand, sendFreq, contestMode.remove(':'));
+                }
+                else if (onContestPageChangedFlag && !rigFrameStartFlag)
+                {
+                    onContestPageChangedFlag = false;
 
-                    //if (setBandSelComboIndex(contestBand) == -1)
-                    /*
-                    if (bandSelButtons->selectButtonGroupAndActiveBand(contestBand)  == -1)
+                    traceMsg(QString("setRadioName: onContestPageChanged flag set and rigFrameStartFlag clear"));
+
+                    if (!restoreModeFlag)
                     {
-                        traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
+                        traceMsg(QString("setRadioName: restoreModeFlag clear"));
+                        traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
+
+                        QString m = curMode;
+
+                        traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
+                        if (m.contains(':') && m.contains("MGM"))
+                        {
+                            QStringList ml = m.split(':');
+                            if (ml.count() == 2)
+                            {
+                                m = ml[0].remove(':').trimmed();
+                            }
+
+                        }
+
+                        if (m.isEmpty())
+                        {
+                            m = contestMode;
+                            traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
+
+                        }
+
+                        traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
+                        emit selectRadio(radioName, contestBand, sendFreq, m.remove(':'));  // send radio and previous mode.
                     }
                     else
                     {
-                    */
-                        //traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
-                        traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
-                        setContestBandLimits(contestBand);
-                    //}
-
-
-                    QString contestMode = ct->currentMode.getValue();
-                    bool restoreModeFlag = false;
-                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeRestoreContestMode, restoreModeFlag );
-
-                    if (fromStartRigControl)
-                    {
-                        rigFrameStartFlag = false;
-                        onContestPageChangedFlag = false;
-                        traceMsg(QString("setRadioName: start contest frame radioName = %1, freq = %2, mode = %3, contest = %4")
-                                 .arg(radioName).arg(sendFreq.traceStr()
-                                                                                                                                                    ).arg(contestMode).arg(ct->uuid));
-                        emit selectRadio(radioName, contestBand, sendFreq, contestMode.remove(':'));
+                        traceMsg(QString("setRadioName: restoreModeFlag set"));
+                        traceMsg(QString("setRadioName: onContestPageChange = %1, radioName = %2, mode = %3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(contestMode));
+                        emit selectRadio(radioName, contestBand, sendFreq, contestMode);
                     }
-                    else if (onContestPageChangedFlag && !rigFrameStartFlag)
-                    {
-                        onContestPageChangedFlag = false;
-
-                        traceMsg(QString("setRadioName: onContestPageChanged flag set and rigFrameStartFlag clear"));
-
-                        if (!restoreModeFlag)
-                        {
-                            traceMsg(QString("setRadioName: restoreModeFlag clear"));
-                            traceMsg(QString("setRadioName: onContestPageChangedFlag = %1, restoreModeFlag = %2").arg(onContestPageChangedFlag ? "true" : "false").arg(restoreModeFlag ? "true" : "false"));
-
-                            QString m = curMode;
-
-                            traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
-                            if (m.contains(':') && m.contains("MGM"))
-                            {
-                                QStringList ml = m.split(':');
-                                if (ml.count() == 2)
-                                {
-                                    m = ml[0].remove(':').trimmed();
-                                }
-
-                            }
-
-                            if (m.isEmpty())
-                            {
-                                m = contestMode;
-                                traceMsg(QString("setRadioName: saved mode is empty - revert to contest mode = %1").arg(m));
-
-                            }
-
-                            traceMsg(QString("setRadioName: sending radioName = %1, mode = %2").arg(radioName).arg(m));
-                            emit selectRadio(radioName, contestBand, sendFreq, m.remove(':'));  // send radio and previous mode.
-                        }
-                        else
-                        {
-                            traceMsg(QString("setRadioName: restoreModeFlag set"));
-                            traceMsg(QString("setRadioName: onContestPageChange = %1, radioName = %2, mode = %3").arg(onContestPageChangedFlag ? "true" : "false").arg(radioName).arg(contestMode));
-                            emit selectRadio(radioName, contestBand, sendFreq, contestMode);
-                        }
-                    }
-
                 }
-                else if (!radioName.isEmpty() && isRadioLoaded())
-                {
-
-                        trace(QString("setRadioName:: Select Radio for %1 , Radio wasn't found = %1").arg(radioName));
-                        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Selected radio details were not found, please add radio or restart rigcontrol!"));
-                        // clear selection in rigcontrol
-                        emit selectRadio(radioName, contestBand, Frequency(), curMode);  // send radio and mode.
-                        selRadioDetails = RadioDetails();
-                        createSupportedBandList(selRadioDetails.getBandList());
-                }
-
 
             }
+            else if (!radioName.isEmpty() && isRadioLoaded())
+            {
+
+                    trace(QString("setRadioName:: Select Radio for %1 , Radio wasn't found = %1").arg(radioName));
+                    setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Selected radio details were not found, please add radio or restart rigcontrol!"));
+                    // clear selection in rigcontrol
+                    emit selectRadio(radioName, contestBand, Frequency(), curMode);  // send radio and mode.
+                    selRadioDetails = RadioDetails();
+                    createSupportedBandList(selRadioDetails.getBandList());
+            }
+
+
 
             //LogContainer->sendDM->notifyRigChanges();
     }
@@ -1491,30 +1486,6 @@ int RigControlFrame::setBandSelButtonFromFreq(const Frequency &freq)
 
 
 
-
-/*
-int RigControlFrame::setBandSelComboIndex(QString band)
-{
-
-
-    if (ui->bandSelCombo->count() > 0)
-    {
-        for (int i = 0; i < ui->bandSelCombo->count(); i++)
-        {
-            if (ui->bandSelCombo->itemText(i) == band)
-            {
-                ui->bandSelCombo->setCurrentIndex(i);
-                return 0;
-            }
-        }
-    }
-
-
-    return -1; //error
-
-
-}
-*/
 void RigControlFrame::onCheckContestBandMatch()
 {
     checkContestBandMatch(curFreq);
@@ -1722,6 +1693,7 @@ void RigControlFrame::setRadioState(QString s)
 
                 //restoreRadioFreq();
                 emit radioIsConnected(true);
+                sendVmButtonFrameRadioConnected(true);
             }
             else
             {
@@ -1752,6 +1724,7 @@ void RigControlFrame::setRadioState(QString s)
            }
            emit radioIsConnected(false);
            emit radioDisconnected();
+           sendVmButtonFrameRadioConnected(false);
         }
         else if (s == RIG_SWITCH_COMPLETED)
         {
@@ -2211,9 +2184,42 @@ bool RigControlFrame::readIgnorePreviousFreqFlag()
     return state;
 }
 
+void RigControlFrame::setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame_)
+{
+    if (txVmButtonsFrame)
+    {
+        txVmButtonsFrame = txVmButtonsFrame_;
+    }
+}
 
+bool RigControlFrame::isVmButtonsFrameVisible()
+{
+    if (txVmButtonsFrame)
+    {
+       return txVmButtonsFrame->isVisible();
+    }
 
+    return false;
+}
 
+void RigControlFrame::sendVmButtonFrameSelectedRadio(PubSubName selectedRadio)
+{
+
+    if (txVmButtonsFrame)
+    {
+      txVmButtonsFrame->setSelectedRadio(selectedRadio);
+    }
+
+}
+
+void RigControlFrame::sendVmButtonFrameRadioConnected(bool connected)
+{
+    if (txVmButtonsFrame)
+    {
+       txVmButtonsFrame->setRadioIsConnected(connected);
+    }
+
+}
 
 //-----------------------------------------------------------------------------------
 

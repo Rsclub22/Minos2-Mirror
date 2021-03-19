@@ -27,11 +27,14 @@
 #include "bandselbuttons.h"
 #include "BandList.h"
 
+
 namespace Ui {
     class RigControlFrame;
 }
 
 const int BANDLIST_TIMEOUT_DUR = 3000;
+
+class TxVmButtonsFrame;
 
 class quickBandSelData
 {
@@ -105,6 +108,7 @@ public:
 
     Frequency getSendFreq();
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
+    void setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame);
 signals:
     void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);
@@ -235,6 +239,8 @@ private:
     QPalette *freqDisplayPalette;
     bool legalFreq = true;
 
+    TxVmButtonsFrame *txVmButtonsFrame;
+
     const QString RIT_BUTTON_ON_STYLE = QString("background-color: Sandybrown ;\n");
     const QString RIT_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ;\n");
     const QStringList USB_TUNING_STEPS = {"5 KHz", "10 KHz", "15 KHz", "20 Khz"};
@@ -312,6 +318,9 @@ private:
     void initBandSelButtons();
 
     void setStateOfBandOnlyRadButtons();
+    bool isVmButtonsFrameVisible();
+    void sendVmButtonFrameSelectedRadio(PubSubName selectedRadio);
+    void sendVmButtonFrameRadioConnected(bool connected);
 };
 
 

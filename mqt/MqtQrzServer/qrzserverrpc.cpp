@@ -45,9 +45,6 @@ QrzServerRpc *QrzServerRpc::qrzServerRpc = nullptr;
 
 QrzServerRpc::QrzServerRpc()
 {
-    //connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
-    //SyncTimer.start(100);
-
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
 
@@ -56,8 +53,8 @@ QrzServerRpc::QrzServerRpc()
     };
     rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify, QString)), this, SLOT(on_notify(AnalysePubSubNotify, QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &QrzServerRpc::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &QrzServerRpc::on_notify);
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();

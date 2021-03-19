@@ -25,8 +25,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     buttonNumSent(NO_VM_BUTTON_ON),
     radioConnected(false),
     radioLoaded(false),
-    pttState(false),
-    rigControl(nullptr)
+    pttState(false)
 
 {
     ui->setupUi(this);
@@ -376,20 +375,9 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 
 }
 
-void TxVmButtonsFrame::setRigControl(RigControlFrame *rc)
-{
-    rigControl = rc;
-
-    if (rigControl)
-    {
-        connect(rc, &RigControlFrame::radioIsConnected, this, &TxVmButtonsFrame::onRadioIsConnected);
-
-    }
 
 
-}
-
-void TxVmButtonsFrame::onRadioIsConnected(bool connected)
+void TxVmButtonsFrame::setRadioIsConnected(bool connected)
 {
     radioConnected = connected;
 }
@@ -399,8 +387,12 @@ void TxVmButtonsFrame::setRadioLoaded()
     radioLoaded = true;
 }
 
+void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
+{
+    selectedRadio = selectedRadio_;
+}
 
-void TxVmButtonsFrame::onSetPttEnabled(bool state, PubSubName psn)
+void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
@@ -416,7 +408,7 @@ void TxVmButtonsFrame::onSetPttEnabled(bool state, PubSubName psn)
     }
 }
 
-void TxVmButtonsFrame::onSetPttType(int type, PubSubName psn)
+void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
 {
     RadioDetails rd;
     if (allRadioDetails.contains(psn))
@@ -432,11 +424,47 @@ void TxVmButtonsFrame::onSetPttType(int type, PubSubName psn)
     }
 }
 
-
-void TxVmButtonsFrame::onSetPttState(bool state)
+void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
 {
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setVoiceMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setVoiceMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+}
 
-    pttState = state;
+void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        rd.setCwMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+    else
+    {
+        rd.setCwMemAvail(avail);
+        allRadioDetails[psn] = rd;
+    }
+}
+
+
+void TxVmButtonsFrame::setPttState(bool state)
+{
+    if (pttState != state)
+    {
+        pttState = state;
+        emit pttStatus(pttState);
+    }
+
 }
 
 void TxVmButtonsFrame::saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams)

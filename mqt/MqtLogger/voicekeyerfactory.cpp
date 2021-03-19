@@ -13,11 +13,11 @@
 
 #include <QComboBox>
 #include "voicekeyerfactory.h"
-#include "rigcontrolvoicekeyer.h"
+#include "rigcontrolvoicememorykeyer.h"
 
 VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
-    RigControlVoiceKeyer::registerVoiceKeyer(&vmKeyersList);
+    RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
 }
 
 
@@ -36,7 +36,7 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
 {
     if (vmKeyerId == VoiceKeyerId::RigControl)
     {
-        return new RigControlVoiceKeyer(this);
+        return new RigControlVoiceMemoryKeyer(this);
     }
 
     return nullptr;

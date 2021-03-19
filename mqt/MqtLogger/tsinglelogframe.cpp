@@ -239,10 +239,15 @@ void TSingleLogFrame::createScreenComponents()
     GJVQSOLogFrame->setAsEdit(false, "Log");
     GJVQSOLogFrame->initialise( );
 
+    txVmButtonsFrame = new TxVmButtonsFrame(this);
+    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
+    txVmButtonsFrame->setVisible(false);
+
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
     FKHRigControlFrame->setFrameShadow(QFrame::Raised);
+    FKHRigControlFrame->setVmButtonsFrame(txVmButtonsFrame);
 
     FKHRigControlFrame->setVisible(false);
     FKHRigControlFrame->setContest(contest);
@@ -253,10 +258,6 @@ void TSingleLogFrame::createScreenComponents()
     runButtonsFrame->setRigControl(FKHRigControlFrame);
     runButtonsFrame->setContest(contest);
 
-    txVmButtonsFrame = new TxVmButtonsFrame(this);
-    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
-    txVmButtonsFrame->setRigControl(FKHRigControlFrame);
-    txVmButtonsFrame->setVisible(false);
 
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));
@@ -1915,19 +1916,35 @@ void TSingleLogFrame::on_SetBandList(QString s,PubSubName psn)
 
 void TSingleLogFrame::onSetPttEnabled(bool state, PubSubName psn)
 {
-    txVmButtonsFrame->onSetPttEnabled(state, psn);
+    txVmButtonsFrame->setPttEnabled(state, psn);
 }
 
 void TSingleLogFrame::onSetPttType(int type, PubSubName psn)
 {
-    txVmButtonsFrame->onSetPttType(type, psn);
+    txVmButtonsFrame->setPttType(type, psn);
 }
 
 void TSingleLogFrame::on_SetPttState(bool state)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->onSetPttState(state);
+        txVmButtonsFrame->setPttState(state);
+    }
+}
+
+void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setVoiceMemAvail(avail, psn);
+    }
+}
+
+void TSingleLogFrame::onSetCwMemAvail(bool avail, PubSubName psn)
+{
+    if ( this == LogContainer->getCurrentLogFrame() )
+    {
+        txVmButtonsFrame->setCwMemAvail(avail, psn);
     }
 }
 

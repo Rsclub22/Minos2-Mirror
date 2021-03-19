@@ -509,6 +509,25 @@ void TSendDM::sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status)
 }
 
 
+void TSendDM::sendRigControlPttOnOff(TSingleLogFrame *tslf, const bool &onOff)
+{
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setPttOnOff(rigSelected, onOff);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    QSharedPointer<RPCParam>logger(new RPCStringParam(loggerUuid ));
+    st->addMember( logger, rpcConstants::loggerUuid );
+    QSharedPointer<RPCParam>select(new RPCStringParam(tslf->getContest()->uuid ));
+    st->addMember( select, rpcConstants::selected );
+    st->addMember( onOff, rpcConstants::rigPttOnOff);
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+
+}
+
+
 
 void TSendDM::sendRotatorPreset(QString s)
 {
@@ -607,6 +626,22 @@ void TSendDM::notifyRigDetailChanges()
                 {
                     TSingleLogFrame *tslf = frames[i];
                     tslf->onSetPttType(selDetail.pttType().getValue(), psn);
+                }
+            }
+            if (selDetail.voiceMemAvail().isDirty())
+            {
+                for (int i = 0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetVoiceMemAvail(selDetail.voiceMemAvail().getValue(),psn);
+                }
+            }
+            if (selDetail.cwMemAvail().isDirty())
+            {
+                for (int i =0; i < frames.size(); i++)
+                {
+                    TSingleLogFrame *tslf = frames[i];
+                    tslf->onSetCwMemAvail(selDetail.cwMemAvail().getValue(), psn);
                 }
             }
 
@@ -766,7 +801,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
     {
         if ( an.getState() == psPublished)
         {
-            traceMsg(QString("Category %1 key %2").arg(an.getCategory()).arg(an.getKey()));
+            traceMsg(QString("Category %1 key %2").arg(an.getCategory(), an.getKey()));
             if ( an.getCategory() == rpcConstants::rigStateCategory)
             {
                 rigCache.setStateString(an);

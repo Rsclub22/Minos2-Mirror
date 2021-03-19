@@ -115,6 +115,7 @@ class RigSupCapabilities
 public:
     RigSupCapabilities(){clear();}
 
+
     void clear()
     {
         supVolume = false;
@@ -125,6 +126,13 @@ public:
         radioSupSetRitState = false;
         supportGetVfo = false;
         supportSetVfo = false;
+        supportGetPtt = false;
+        supportSetPtt = false;
+        supportVoiceMemory = false;
+        suportSendMorse = false;
+        supportStopMorse = false;
+        supportWaitMorse = false;
+
     }
 
     bool supVolume;     // radio supports volume
@@ -135,6 +143,12 @@ public:
     bool radioSupSetRitState;
     bool supportGetVfo;
     bool supportSetVfo;
+    bool supportGetPtt;
+    bool supportSetPtt;
+    bool supportVoiceMemory;
+    bool suportSendMorse;
+    bool supportStopMorse;
+    bool supportWaitMorse;
 
 };
 
@@ -283,8 +297,6 @@ private:
     //bool supVolume;     // radio supports volume
     //bool supSignalStrength;
 
-
-    bool supPtt;
 
     const int PASSBAND_NOCHANGE = -1;
 
@@ -474,7 +486,7 @@ private:
 
     void initCacheData();
 
-    void addVolStatusToRigCache(const int radIdx, bool status);
+    void addVolStatusToRigCache(bool status);
     void sendTransVertEnabled(bool status);
 
 
@@ -542,6 +554,22 @@ private:
     void setIndicatorVisible(const QString bandType, const bool visible);
     void sendRadioSwitchCompleteToLogger();
     bool selectTransverter(QString &band, Frequency &f);
+    int setTxState(VFO vfo, bool txState);
+
+
+    void checkSupportVolume();
+    void checkSupportSMeter();
+    void checkSupportRit();
+    void checkSupportVoiceMemory();
+    void checkSupportCwKeyerMemory();
+    void checkSupportPtt();
+
+
+    void checkSupportPollRadio();
+    void setupTransVerter();
+    void addVoiceMemStatusToRigCache(bool status);
+    void addCwKeyerMemoryStatusToRigCache(bool status);
+    void addPTTEnabledStatusToRigCache(bool status);
 private slots:
 
     void onStdInRead(QString);
@@ -607,6 +635,8 @@ private slots:
     void onCwKeyerStopPbClicked();
 
     void loggerSetBand(QString band);
+    void onTxPttTestPbClicked();
+    void onSetPttOnOff(bool pttOnOff);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

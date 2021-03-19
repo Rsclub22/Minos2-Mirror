@@ -82,7 +82,7 @@ SOURCES += \
     radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolframe.cpp \
-    rigcontrolvoicekeyer.cpp \
+    rigcontrolvoicememorykeyer.cpp \
     rigmemdialog.cpp \
     ritlineedit.cpp \
     rotcontrolframe.cpp \
@@ -174,7 +174,7 @@ HEADERS  += \
     radiosettingdialog.h \
     reg1test.h \
     rigcontrolframe.h \
-    rigcontrolvoicekeyer.h \
+    rigcontrolvoicememorykeyer.h \
     rigmemdialog.h \
     ritlineedit.h \
     rotcontrolframe.h \

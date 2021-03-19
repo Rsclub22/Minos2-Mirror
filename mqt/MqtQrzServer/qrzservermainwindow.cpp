@@ -68,8 +68,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
             rpcConstants::clusterApp, rpcConstants::qrzDisplayApp
         };
 
-    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(clusterQrzMsg(QrzServerMessage)), this, SLOT(onClusterQrzMessage(QrzServerMessage)));
-    connect (QrzServerRpc::getQrzServerRpc(), SIGNAL(loggerQrzMsg(QrzServerMessage)), this, SLOT(onLoggerQrzMsg(QrzServerMessage)));
+    connect (QrzServerRpc::getQrzServerRpc(), &QrzServerRpc::clusterQrzMsg, this, &QrzServerMainWindow::onClusterQrzMessage);
+    connect (QrzServerRpc::getQrzServerRpc(), &QrzServerRpc::loggerQrzMsg, this, &QrzServerMainWindow::onLoggerQrzMsg);
 
 
 
@@ -196,7 +196,7 @@ void QrzServerMainWindow::sendUrl(QString url)
 
     QEventLoop eventLoop;
         // "quit()" the event-loop, when the network request "finished()"
-    QObject::connect(&m_NetworkMngr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
+    QObject::connect(&m_NetworkMngr, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit);
     eventLoop.exec(); // blocks stack until "finished()" has been called
 
 
@@ -214,7 +214,7 @@ void QrzServerMainWindow::sendUrl(QString url)
 
             reply = QSharedPointer<QNetworkReply>(m_NetworkMngr.get( qnr1 ));
             QEventLoop loop;
-            QObject::connect( reply.data(), SIGNAL( finished() ), &loop, SLOT( quit() ) );
+            QObject::connect( reply.data(), &QNetworkReply::finished, &loop, &QEventLoop::quit);
             loop.exec();
             raw = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         }

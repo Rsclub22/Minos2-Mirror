@@ -106,10 +106,12 @@ public:
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg() = 0;
 
-    virtual int getKeyerState(int &state) = 0;
+    //virtual int getKeyerState(int &state) = 0;
 
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) = 0;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams ) = 0;
+
+    virtual void setPttOnOff(bool onOff) = 0;
 
 
     int getMaxNumButtons(){return MAXNUM_BUTTONS;}

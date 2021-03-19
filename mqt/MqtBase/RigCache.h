@@ -90,6 +90,9 @@ public:
     void setLogBand(const PubSubName &name, QString band);
     void setHfFlag(const PubSubName &name, bool state);
 
+    void setPttOnOff(const PubSubName &name, bool onOff);
+    void setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail);
+    void setCwMemAvail(const PubSubName &name, bool cwMemAvail);
 };
 
 #endif // RIGCACHE_H

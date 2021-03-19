@@ -1161,8 +1161,9 @@ int OmnirigControl::sendVoiceMessage(VFO vfo, int vmNum)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-bool OmnirigControl::supportVoiceMemory()
+bool OmnirigControl::supportVoiceMemory(int rigModelNumber)
 {
+    Q_UNUSED(rigModelNumber);
     return false;
 }
 
@@ -1188,10 +1189,24 @@ int OmnirigControl::waitMorse(VFO vfo)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-bool OmnirigControl::supportCwMemory()
+
+
+bool OmnirigControl::supportSendMorse(int rigModelNumber)
 {
+    Q_UNUSED(rigModelNumber);
     return false;
 }
+bool OmnirigControl::supportStopMorse(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
+bool OmnirigControl::supportWaitMorse(int rigModelNumber)
+{
+   Q_UNUSED(rigModelNumber);
+    return false;
+}
+
 
 
 int OmnirigControl::getPttStatus(VFO vfo, bool &state)
@@ -1208,8 +1223,16 @@ int OmnirigControl::setPtt(VFO vfo, bool state)
     return omnirigError(OMNIRIG_NOT_SUPPORTED);
 }
 
-
-
+bool OmnirigControl::supportGetPtt(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
+bool OmnirigControl::supportSetPtt(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
 void OmnirigControl::setTraceCommsFlag(bool value)
 {
     omnirigTraceComms = value;

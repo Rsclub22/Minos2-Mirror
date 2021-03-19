@@ -104,5 +104,22 @@ bool RadioDetails::getPttEnabled()
 {
     return pttEnabled;
 }
+void RadioDetails::setVoiceMemAvail(bool avail)
+{
+    voiceMemAvail = avail;
+}
+bool RadioDetails::getVoiceMemAvail()
+{
+    return voiceMemAvail;
+}
+void RadioDetails::setCwMemAvail(bool avail)
+{
+    cwMemAvail = avail;
+}
+bool RadioDetails::getCwMemAvail()
+{
+    return cwMemAvail;
+}
+
 
 

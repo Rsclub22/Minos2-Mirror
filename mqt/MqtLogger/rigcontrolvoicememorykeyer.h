@@ -2,7 +2,7 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rig Control
+//                      Rig Voice Memory Keyer
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 //
@@ -12,8 +12,8 @@
 
 
 
-#ifndef RIGCONTROLVOICEKEYER_H
-#define RIGCONTROLVOICEKEYER_H
+#ifndef RIGCONTROLVOICEMEMORYKEYER_H
+#define RIGCONTROLVOICEMEMORYKEYER_H
 
 #include <QObject>
 #include "voicekeyerbase.h"
@@ -23,12 +23,12 @@
 const QString STOPCODE = "0";
 
 
-class RigControlVoiceKeyer : public VoiceKeyerBase
+class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
 public:
-    explicit RigControlVoiceKeyer(QObject *parent = nullptr);
-    virtual ~RigControlVoiceKeyer();
+    explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
+    virtual ~RigControlVoiceMemoryKeyer();
 
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
@@ -36,7 +36,8 @@ public:
     void sendMsgNum(int buttonNum) override;
     void stopMsg() override;
 
-    int getKeyerState(int &state) override;
+    //int getKeyerState(int &state) override;
+    void setPttOnOff(bool onOff) override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -52,4 +53,4 @@ private:
 
 };
 
-#endif // RIGCONTROLVOICEKEYER_H
+#endif // RIGCONTROLVOICEMEMORYKEYER_H

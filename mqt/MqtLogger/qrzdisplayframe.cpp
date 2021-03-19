@@ -20,8 +20,8 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     clear();
 
 
-    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(loggerQrzReply(QrzCallsignData, QString, QString)), this, SLOT(onLoggerQrzReply(QrzCallsignData, QString, QString)));
-    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), SIGNAL(qrzServerLoggedState(bool, QString)), this, SLOT(onQrzServerLoggedState(bool, QString)));
+    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::loggerQrzReply, this, &QrzDisplayFrame::onLoggerQrzReply);
+    connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
     onQrzServerLoggedState(false, "");
 
     serverPingTimer = new QTimer(this);
@@ -74,7 +74,7 @@ void QrzDisplayFrame::onServerPingTimerTimeout()
     }
 }
 
-void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid)
+void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString /*uuid*/)
 {
     if (!ct->isAgeProtected())
     {
@@ -211,17 +211,14 @@ QrzDisplayServerRpc *QrzDisplayServerRpc::getQrzDisplayServerRpc()
 
 QrzDisplayServerRpc::QrzDisplayServerRpc()
 {
-    //connect(&SyncTimer, SIGNAL(timeout()), this, SLOT(SyncTimerTimer()));
-    //SyncTimer.start(100);
-
     MinosRPC *rpc = MinosRPC::getMinosRPC();
 
     QStringList sv{ rpcConstants::qrzServerApp };
 
     rpc->initialiseRouters(sv);
 
-    connect(rpc, SIGNAL(routerCall(bool,QSharedPointer<MinosRPCObj>,QString)), this, SLOT(on_routerCall(bool,QSharedPointer<MinosRPCObj>,QString)));
-    connect(rpc, SIGNAL(notify(AnalysePubSubNotify ,QString)), this, SLOT(on_notify(AnalysePubSubNotify ,QString)));
+    connect(rpc, &MinosRPC::routerCall, this, &QrzDisplayServerRpc::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &QrzDisplayServerRpc::on_notify);
 
     QString a = rpc->getAppName();
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
