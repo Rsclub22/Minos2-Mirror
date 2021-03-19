@@ -244,6 +244,10 @@ void TSingleLogFrame::createScreenComponents()
     GJVQSOLogFrame->setAsEdit(false, "Log");
     GJVQSOLogFrame->initialise( );
 
+    txVmButtonsFrame = new TxVmButtonsFrame(this);
+    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
+    txVmButtonsFrame->setVisible(false);
+
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
@@ -259,9 +263,6 @@ void TSingleLogFrame::createScreenComponents()
     runButtonsFrame->setRigControl(FKHRigControlFrame);
     runButtonsFrame->setContest(contest);
 
-    txVmButtonsFrame = new TxVmButtonsFrame(this);
-    txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
-    txVmButtonsFrame->setVisible(false);
 
     qrzDisplayFrame = new QrzDisplayFrame(this);
     qrzDisplayFrame->setObjectName(QStringLiteral("qrzDisplayFrame"));

@@ -2277,22 +2277,39 @@ bool RigControlFrame::readIgnorePreviousFreqFlag()
 
 void RigControlFrame::setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame_)
 {
-    txVmButtonsFrame = txVmButtonsFrame_;
+    if (txVmButtonsFrame)
+    {
+        txVmButtonsFrame = txVmButtonsFrame_;
+    }
 }
 
 bool RigControlFrame::isVmButtonsFrameVisible()
 {
-    return txVmButtonsFrame->isVisible();
+    if (txVmButtonsFrame)
+    {
+       return txVmButtonsFrame->isVisible();
+    }
+
+    return false;
 }
 
 void RigControlFrame::sendVmButtonFrameSelectedRadio(PubSubName selectedRadio)
 {
-    txVmButtonsFrame->setSelectedRadio(selectedRadio);
+
+    if (txVmButtonsFrame)
+    {
+      txVmButtonsFrame->setSelectedRadio(selectedRadio);
+    }
+
 }
 
 void RigControlFrame::sendVmButtonFrameRadioConnected(bool connected)
 {
-    txVmButtonsFrame->setRadioIsConnected(connected);
+    if (txVmButtonsFrame)
+    {
+       txVmButtonsFrame->setRadioIsConnected(connected);
+    }
+
 }
 
 //-----------------------------------------------------------------------------------
