@@ -19,8 +19,7 @@ SUBDIRS += \
     MqtRigControl \
     MqtRigSync \
     MqtRotator \
-    MqtServer \
-    Qs1rSync
+    MqtServer
 
 win32 {
 greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
@@ -45,6 +44,5 @@ MqtRigControl.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRigSync.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtRotator.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtServer.depends = MqtUtils TinyXML XMPPLib MqtBase
-Qs1rSync.depends = MqtUtils TinyXML XMPPLib MqtBase
 
 
