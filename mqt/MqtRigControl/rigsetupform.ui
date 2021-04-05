@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>978</width>
-    <height>365</height>
+    <width>1191</width>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_7">
+  <layout class="QVBoxLayout" name="verticalLayout_8">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
@@ -316,32 +316,111 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_51">
+      <layout class="QVBoxLayout" name="verticalLayout_7">
        <item>
-        <spacer name="horizontalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
+        <layout class="QHBoxLayout" name="horizontalLayout_51">
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="advancedCommsChkBox">
+           <property name="text">
+            <string>CAT Advanced Comms Settings</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="enableCatFeatures">
+           <property name="text">
+            <string>Enable/Disable CAT Features</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="pttEnable">
+           <property name="text">
+            <string>PTT Enable</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="advancedCommsChkBox">
-         <property name="text">
-          <string>CAT Advanced Comms Settings</string>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Enable\Disable  CAT  Features</string>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="pttEnable">
-         <property name="text">
-          <string>PTT Enable</string>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QCheckBox" name="enableRitChkBox">
+              <property name="text">
+               <string>RIT</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="enableSMeterChkBox">
+              <property name="text">
+               <string>Signal Meter</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="enableVolChkBox">
+              <property name="text">
+               <string>Volume</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="enableCatPtt">
+              <property name="text">
+               <string>CAT Ptt</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="enableVoiceTxMem">
+              <property name="text">
+               <string>Voice TX Mem</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="enableCwTxMem">
+              <property name="text">
+               <string>CW TX Mem</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
