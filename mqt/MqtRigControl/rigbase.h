@@ -32,7 +32,7 @@ public:
     virtual void setTraceComms(bool value) = 0;
     virtual bool getTraceComms() = 0;
 
-    virtual int rigInit(scatParams &currentRadio, bool useRigCtld) = 0;
+    virtual int rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld) = 0;
     virtual int closeRig() = 0;
 
     virtual int getFrequency(VFO vfo, Frequency&) = 0;

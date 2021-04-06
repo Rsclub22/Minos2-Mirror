@@ -562,7 +562,7 @@ int OmnirigControl::omnirigError(omnirigErrorCode errNum)
 
 
 
-int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
+int OmnirigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld)
 {
     Q_UNUSED(useRigCtld)
 
@@ -631,7 +631,7 @@ int OmnirigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     rig_type = rig->RigType ();
     traceMsg(QString("Opening Rig %1").arg(rig_type));
-    currentRadio.rigModelName = rig_type;
+    currentRadio->rigModelName = rig_type;
     readable_params = rig->ReadableParams ();
     writable_params = rig->WriteableParams ();
 

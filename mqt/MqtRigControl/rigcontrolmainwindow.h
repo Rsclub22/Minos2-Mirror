@@ -282,7 +282,8 @@ private:
 
     QVector<QSharedPointer<BandInfo>  > bands;
 
-    scatParams currentRadio;
+    QSharedPointer<scatParams> currentRadio;
+    QString currentRadioName;
     QStringList availRadios;
 
 
@@ -532,6 +533,10 @@ private:
     void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
 
     void getAvailRadiosList(QStringList &availRadios);
+    void readCurrentRadio(QString &currentRadioName);
+
+    void saveCurrentRadio(const QString currentRadioName);
+    int findCurrentRadio(const QString &currentRadioName);
 private slots:
 
     void onStdInRead(QString);
