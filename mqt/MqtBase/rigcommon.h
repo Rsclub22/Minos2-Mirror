@@ -182,7 +182,6 @@ public:
       dest.advancedCommsFlag = srce->advancedCommsFlag;
       dest.networkAdd = srce->networkAdd;
       dest.networkPort = srce->networkPort;
-      dest.enableCAT = srce->enableCAT;
       dest.enablePTT = srce->enablePTT;
       dest.pttSerialPort = srce->pttSerialPort;
       dest.rigCtldEnable = srce->rigCtldEnable;
@@ -220,6 +219,15 @@ public:
           }
       }
 
+      dest.enableShowCatFeatures = srce->enableShowCatFeatures;
+      dest.ritEnable = srce->ritEnable;
+      dest.sMeterEnable = srce->sMeterEnable;
+      dest.volumeEnable = srce->volumeEnable;
+      dest.voiceMemEnable = srce->voiceMemEnable;
+      dest.cWMemEnable = srce->cWMemEnable;
+      dest.catEnable = srce->catEnable;
+
+
   }
 
 
@@ -243,7 +251,6 @@ public:
   bool advancedCommsFlag;
   QString networkAdd;
   QString networkPort;
-  bool enableCAT = false;
   bool enablePTT  = false;
   QString pttSerialPort;
   int pttType;
@@ -254,7 +261,7 @@ public:
   QString mgmMode = "USB";
   bool antSwitchAvail = false;
   bool ritSupported = false;
-  bool ritEnable = false;
+
   bool transVertEnable  = false;
   bool volAvail = false;
   SupportBands supportBands;        // for non hamlib radios
@@ -266,6 +273,15 @@ public:
   QStringList radioSupBands;  // bands supported by radio
   QStringList radioTransSupBands; // band supported by radio and transverters
   QVector<TransVertParams*> transVertSettings;
+
+  // enable\Disable Cat features
+  bool enableShowCatFeatures = false;
+  bool ritEnable = false;
+  bool sMeterEnable = true;
+  bool volumeEnable = true;
+  bool voiceMemEnable = true;
+  bool cWMemEnable = true;
+  bool catEnable = true;
 
 
 };

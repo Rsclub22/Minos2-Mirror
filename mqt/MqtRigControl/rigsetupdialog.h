@@ -50,7 +50,7 @@ public:
 
 
 
-    scatParams currentRadio;
+    //scatParams currentRadio;
 
     QVector<scatParams*> availRadioData;
     QStringList availRadios;
@@ -58,6 +58,7 @@ public:
 
     QVector<QSharedPointer<BandInfo> > bands;
 
+    void initSetup();
     int getRadioId(QString rotator);
 
     void readCurrentRadio();
@@ -79,8 +80,7 @@ public:
 
 
 
-    QString getRigCtldExePath();
-    void getRigCtldExePathFromFile();
+
 
 signals:
 
@@ -121,7 +121,7 @@ private:
 
     QString currentRadioName;
 
-    QString rigCtldExePath;
+
 
     void saveSettings();
 
@@ -153,7 +153,7 @@ private:
     void getRadioSetting(int radNum, QSettings &config);
     void saveRadioData(int radNum, QSettings &config);
 
-    void initSetup();
+
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
     void loadAvailComportsToTab(int tabNum);

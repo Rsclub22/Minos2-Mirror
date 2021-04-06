@@ -269,73 +269,27 @@ private:
     int radioIndex;
     QTimer *pollTimer;
     class QTimer LogTimer;
-    //int pollTime;
-    //bool rigErrorFlag;
+
     bool cmdLockFlag;
-    //bool traceCommsFlag;
-    // data from rigctld
 
-    //QString rigctld_radioNumber;
-    //int irigctld_radioNumber = 0;
-    //QString rigctld_radioName;
-    //QString rigctld_radioMfg;
-    //QTimer *RigCtldStatusTimer;
-    //int rigCtldConnectDelay;
-
-    // data from logger
-    //Frequency logger_freq;
-    //QString slogMode;
-    //QString selRadioMode;   // onSelectRadio mode from logger at startup
-    //Frequency selRadioFreq;
-   // QString selBand;
-    //rmode_t logMode;
-    //QString selTvBand;      // selected transverter band radio
     int selTransverterNum;
     QString transVertSwNum;
     SerialTVSwitch *serialTVSw = nullptr;
-    //bool logRitOn;
-    //bool supVolume;     // radio supports volume
-    //bool supSignalStrength;
+
 
 
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<QSharedPointer<BandInfo>  > bands;
 
+    scatParams currentRadio;
+    QStringList availRadios;
 
 
-    // data from radio
-    //Frequency rfrequency;       // read frequency
-    //MODE rmode;          // read radio mode
-    //pbwidth_t rwidth;        // read radio rx bw
 
-    //VFO curVfo;
-    //bool supportGetVfo = false;
-    //bool supportSetVfo = false;
-    //Frequency curVfoFrq;
-    //Frequency curTransVertFrq;
-    //MODE curMode;
-    //QString sCurMode;
-    //bool mgmModeFlag;
-    //QStringList  mgmModes;
-    //ShortFreq rRitFreq;
-    //int ritMaxKHzFreq;
-    //bool ritKHzFlag;
-    //int curVol;
-    //int curSignalStrength = 0;
 
     bool curPttStatus;
 
-
-    // rit functions supported by current radio
-
-    //bool radioSupGetRit;
-   // bool radioSupSetRit;
-    //bool radioSupGetRitState;
-    //bool radioSupSetRitState;
-    //bool radioRitOn;
-
-    //bool ritEnable;         // flag to enable rit
 
 
 
@@ -570,6 +524,14 @@ private:
     void addVoiceMemStatusToRigCache(bool status);
     void addCwKeyerMemoryStatusToRigCache(bool status);
     void addPTTEnabledStatusToRigCache(bool status);
+    QString getRigCtldExePath();
+
+    void readTranVerterSetting(QSharedPointer<scatParams> radio, int transVertNum, QSettings &config);
+    void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
+    void checkIniFileVersion();
+    void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
+
+    void getAvailRadiosList(QStringList &availRadios);
 private slots:
 
     void onStdInRead(QString);

@@ -140,33 +140,7 @@ void RigSetupDialog::initSetup()
 }
 
 
-void RigSetupDialog::getRigCtldExePathFromFile()
-{
-    QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    QSettings  settings(fileName, QSettings::IniFormat);
-    settings.beginGroup(RIGCTLD_GROUP_NAME);
 
-#if defined Q_OS_WIN32
-    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_WIN32_RIGCTLD_PATH).toString();
-#elif defined Q_OS_LINUX
-    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_LINUX_RIGCTLD_PATH).toString();
-    rigCtldExePath.replace("//", "/");
-#elif defined Q_OS_MAC
-    rigCtldExePath = settings.value(RIGCTLD_PATH_SETTING_NAME, DEFAULT_MAC_RIGCTLD_PATH).toString();
-    rigCtldExePath.replace("//", "/");
-#endif
-
-    settings.endGroup();
-
-
-
-}
-
-QString RigSetupDialog::getRigCtldExePath()
-{
-    return rigCtldExePath;
-}
 
 void RigSetupDialog::addTab(int tabNum, QString tabName)
 {
@@ -950,6 +924,14 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
+    config.setValue("enableShowCatFeatures", radioTab[radNum]->getRadioData()->enableShowCatFeatures);
+    config.setValue("ritEnable", radioTab[radNum]->getRadioData()->ritEnable);
+    config.setValue("sMeterEnable", radioTab[radNum]->getRadioData()->sMeterEnable);
+    config.setValue("volumeEnable", radioTab[radNum]->getRadioData()->volumeEnable);
+    config.setValue("voiceMemEnable", radioTab[radNum]->getRadioData()->voiceMemEnable);
+    config.setValue("cWMemEnable", radioTab[radNum]->getRadioData()->cWMemEnable);
+    config.setValue("catEnable", radioTab[radNum]->getRadioData()->catEnable);
+
     foreach (auto &b, bands)
     {
         if (hfFlag)
@@ -1009,6 +991,15 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
     radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
     radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
     radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
+    radioTab[radNum]->getRadioData()->enableShowCatFeatures = config.value("enableShowCatFeatures", false).toBool();
+    radioTab[radNum]->getRadioData()->ritEnable = config.value("ritEnable", false).toBool();
+    radioTab[radNum]->getRadioData()->sMeterEnable = config.value("sMeterEnable", true).toBool();
+    radioTab[radNum]->getRadioData()->volumeEnable = config.value("volumeEnable", true).toBool();
+    radioTab[radNum]->getRadioData()->voiceMemEnable = config.value("voiceMemEnable", true).toBool();
+    radioTab[radNum]->getRadioData()->cWMemEnable = config.value("cWMemEnable", true).toBool();
+    radioTab[radNum]->getRadioData()->catEnable = config.value("catEnable", true).toBool();
+
+
     foreach (auto &b, bands)
     {
         if (hfFlag)
