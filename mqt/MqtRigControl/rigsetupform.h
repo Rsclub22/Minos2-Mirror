@@ -181,6 +181,7 @@ public:
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
+    void loadEnableShowCatFeaturesBox();
 
 
 public slots:
@@ -239,6 +240,14 @@ private slots:
     void onPttComportSelActivated(int idx);
 
 
+
+    void onEnableRitClicked();
+    void onEnableSMeterClicked();
+    void onEnableVolClicked();
+    void onEnableCatPttClicked();
+    void onEnableVoiceTxMemClicked();
+    void onEnableCwTxMemClicked();
+    void onEnableCatFeaturesClicked();
 private:
 
 
@@ -299,6 +308,8 @@ private:
 
 
 
+
+    void setEnableDisableFeaturesGroupVisible(bool visible);
 };
 
 #endif // RIGSETUPFORM_H

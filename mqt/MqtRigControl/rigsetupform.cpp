@@ -90,6 +90,16 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
     connect(ui->pttRTSEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
     connect(ui->pttComportSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::onPttComportSelActivated);
 
+    connect(ui->enableRitChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableRitClicked);
+    connect(ui->enableSMeterChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableSMeterClicked);
+    connect(ui->enableVolChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVolClicked);
+    connect(ui->enableCatPttChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatPttClicked);
+    connect(ui->enableVoiceTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVoiceTxMemClicked);
+    connect(ui->enableCwTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCwTxMemClicked);
+    connect(ui->enableCatFeaturesChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatFeaturesClicked);
+
+
+
     connect(ui->useRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::useRigCtldSelected);
     connect(ui->startMinosRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::onStartMinosRigCtldChkBox);
     connect(ui->rigCtldNetworkAddBox, &QLineEdit::editingFinished, this, &RigSetupForm::rigCtldNetworkAddressSelected);
@@ -1183,6 +1193,106 @@ void RigSetupForm::fillMgmModes()
 
      ui->mgmBox->clear();
      ui->mgmBox->addItems(mgmModes);
+}
+
+
+/********************** Enable\Disable Features Checkboxes **************/
+
+
+void RigSetupForm::onEnableRitClicked()
+{
+    bool checked = ui->enableRitChkBox->isChecked();
+    if (radioData->ritEnable != checked)
+    {
+        radioData->ritEnable = checked;
+    }
+
+}
+
+
+void RigSetupForm::onEnableSMeterClicked()
+{
+    bool checked = ui->enableSMeterChkBox->isChecked();
+    if (radioData->sMeterEnable != checked)
+    {
+        radioData->sMeterEnable = checked;
+    }
+}
+
+void RigSetupForm::onEnableVolClicked()
+{
+    bool checked = ui->enableVolChkBox->isChecked();
+    if (radioData->volumeEnable != checked)
+    {
+        radioData->volumeEnable = checked;
+    }
+}
+void RigSetupForm::onEnableCatPttClicked()
+{
+    bool checked = ui->enableCatPttChkBox->isChecked();
+    if (radioData->catEnable != checked)
+    {
+        radioData->catEnable = checked;
+    }
+}
+void RigSetupForm::onEnableVoiceTxMemClicked()
+{
+    bool checked = ui->enableVoiceTxMemChkBox->isChecked();
+    if (radioData->voiceMemEnable != checked)
+    {
+        radioData->voiceMemEnable = checked;
+    }
+
+}
+void RigSetupForm::onEnableCwTxMemClicked()
+{
+    bool checked = ui->enableCwTxMemChkBox->isChecked();
+    if (radioData->cWMemEnable != checked)
+    {
+        radioData->cWMemEnable = checked;
+    }
+}
+void RigSetupForm::onEnableCatFeaturesClicked()
+{
+    if(ui->enableCatFeaturesChkBox->isChecked())
+    {
+        radioData->enableShowCatFeatures = true;
+        setEnableDisableFeaturesGroupVisible(true);
+    }
+    else
+    {
+        radioData->enableShowCatFeatures = false;
+        setEnableDisableFeaturesGroupVisible(false);
+    }
+}
+
+
+
+void RigSetupForm::loadEnableShowCatFeaturesBox()
+{
+    if (ui->enableCatFeaturesChkBox->isChecked())
+    {
+        setEnableDisableFeaturesGroupVisible(true);
+    }
+    else
+    {
+       setEnableDisableFeaturesGroupVisible(false);
+    }
+
+    ui->enableRitChkBox->setChecked(radioData->ritEnable);
+    ui->enableSMeterChkBox->setChecked(radioData->sMeterEnable);
+    ui->enableVolChkBox->setChecked(radioData->volumeEnable);
+    ui->enableCatPttChkBox->setChecked(radioData->catEnable);
+    ui->enableVoiceTxMemChkBox->setChecked(radioData->voiceMemEnable);
+    ui->enableCwTxMemChkBox->setChecked(radioData->cWMemEnable);
+
+}
+
+
+
+void RigSetupForm::setEnableDisableFeaturesGroupVisible(bool visible)
+{
+     ui->enable_disableFeaturesGroup->setVisible(visible);
 }
 
 

@@ -325,6 +325,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->setLocTVSWComportVisible(false);
     }
 
+    radioTab[tabNum]->loadEnableShowCatFeaturesBox();
+
     //radioTab[tabNum]->buildSupBandList();
 
 }

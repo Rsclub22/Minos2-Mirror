@@ -340,9 +340,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="enableCatFeatures">
+          <widget class="QCheckBox" name="enableCatFeaturesChkBox">
            <property name="text">
-            <string>Enable/Disable CAT Features</string>
+            <string>EnableDisable CAT Features</string>
            </property>
           </widget>
          </item>
@@ -356,7 +356,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="enable_disableFeaturesGroup">
          <property name="title">
           <string>Enable\Disable  CAT  Features</string>
          </property>
@@ -385,21 +385,21 @@
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableCatPtt">
+             <widget class="QCheckBox" name="enableCatPttChkBox">
               <property name="text">
                <string>CAT Ptt</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableVoiceTxMem">
+             <widget class="QCheckBox" name="enableVoiceTxMemChkBox">
               <property name="text">
                <string>Voice TX Mem</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="enableCwTxMem">
+             <widget class="QCheckBox" name="enableCwTxMemChkBox">
               <property name="text">
                <string>CW TX Mem</string>
               </property>
