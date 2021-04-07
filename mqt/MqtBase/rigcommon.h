@@ -107,6 +107,22 @@ public:
         return *this;
     }
 
+    bool operator==(const SupportBands &sbd)
+    {
+        bool state = true;
+
+        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
+        {
+            if (supportBands.value(i.key()) == i.value())
+            {
+                state = false;
+                break;
+            }
+        }
+
+        return state;
+    }
+
 
     void clear()
     {
@@ -159,74 +175,143 @@ class scatParams
 
 public:
 
-  static void copyRig(scatParams* srce, scatParams &dest)
+  scatParams(){}
+
+  bool operator==(const QSharedPointer<scatParams> radParams)
   {
+      if (radioName == radParams->radioName &&
+              radioNumber == radParams->radioNumber &&
+              comport == radParams->comport &&
+              rigMfg_Name == radParams->rigMfg_Name &&
+              rigModelName == radParams->rigModelName &&
+              rigModel == radParams->rigModel &&
+              rigModelNumber == radParams->rigModelNumber &&
+              pollInterval == radParams->pollInterval &&
+              civAddress == radParams->civAddress &&
+              baudrate == radParams->baudrate &&
+              parity == radParams->parity &&
+              stopbits == radParams->stopbits &&
+              databits == radParams->databits &&
+              handshake == radParams->handshake &&
+              forceDtr == radParams->forceDtr &&
+              forceRts == radParams->forceRts &&
+              portType == radParams->portType &&
+              advancedCommsFlag == radParams->advancedCommsFlag &&
+              networkAdd == radParams->networkAdd &&
+              networkPort == radParams->networkPort &&
+              enablePTT == radParams->enablePTT &&
+              pttSerialPort == radParams->pttSerialPort &&
+              pttType == radParams->pttType &&
+              rigCtldEnable == radParams->rigCtldEnable &&
+              startMinosRigCtld == radParams->startMinosRigCtld &&
+              rigCtldNetworkAdd == radParams->rigCtldNetworkAdd &&
+              rigCtldNetworkPort == radParams->rigCtldNetworkPort &&
+              mgmMode == radParams->mgmMode &&
+              antSwitchAvail == radParams->antSwitchAvail &&
+              ritSupported == radParams->ritSupported &&
 
-      dest.radioName = srce->radioName;
-      dest.radioNumber = srce->radioNumber;
-      dest.comport = srce->comport;
-      dest.rigMfg_Name = srce->rigMfg_Name;
-      dest.rigModel = srce->rigModel;
-      dest.rigModelName = srce->rigModelName;
-      dest.rigModelNumber = srce->rigModelNumber;
-      dest.pollInterval = srce->pollInterval;
-      dest.civAddress = srce->civAddress;
-      dest.baudrate = srce->baudrate;
-      dest.parity = srce->parity;
-      dest.stopbits = srce->stopbits;
-      dest.databits = srce->databits;
-      dest.handshake = srce->handshake;
-      dest.forceDtr = srce->forceDtr;
-      dest.forceRts = srce->forceRts;
-      dest.portType = srce->portType;
-      dest.advancedCommsFlag = srce->advancedCommsFlag;
-      dest.networkAdd = srce->networkAdd;
-      dest.networkPort = srce->networkPort;
-      dest.enablePTT = srce->enablePTT;
-      dest.pttSerialPort = srce->pttSerialPort;
-      dest.rigCtldEnable = srce->rigCtldEnable;
-      dest.startMinosRigCtld = srce->startMinosRigCtld;
-      dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
-      dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
-      dest.supportBands = srce->supportBands;
-      dest.mgmMode = srce->mgmMode;
-      dest.pttType = srce->pttType;
-      dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritSupported = srce->ritSupported;
-      dest.ritEnable = srce->ritEnable;
-      dest.radioSupBands = srce->radioSupBands;
-      dest.radioTransSupBands = srce->radioTransSupBands;
-      dest.transVertEnable = srce->transVertEnable;
-      dest.enableTransSwitch = srce->enableTransSwitch;
-      dest.enableLocTVSwMsg = srce->enableLocTVSwMsg;
-      dest.locTVSwComport = srce->locTVSwComport;
-
-      dest.transVertNames.clear();
-      if (srce->transVertNames.count() > 0)
+              transVertEnable == radParams->transVertEnable &&
+              volAvail == radParams->volAvail &&
+              supportBands == radParams->supportBands &&     // for non hamlib radios
+              compareStringList(transVertNames, radParams->transVertNames) &&
+              numTransverters == radParams->numTransverters &&
+              enableTransSwitch == radParams->enableTransSwitch &&
+              enableLocTVSwMsg == radParams->enableLocTVSwMsg &&
+              locTVSwComport == radParams->locTVSwComport &&
+              compareStringList(radioSupBands, radParams->radioSupBands) &&
+              compareStringList(radioTransSupBands, radParams->radioTransSupBands) &&
+              transVertSettings == radParams->transVertSettings &&
+              enableShowCatFeatures == radParams->enableShowCatFeatures &&
+              ritEnable == radParams->ritEnable &&
+              sMeterEnable == radParams->sMeterEnable &&
+              volumeEnable == radParams->volumeEnable &&
+              voiceMemEnable == radParams->voiceMemEnable &&
+              cWMemEnable == radParams->cWMemEnable &&
+              catEnable == radParams->catEnable)
       {
-          for (int i = 0; i < srce->transVertNames.count(); i++)
-          {
-              dest.transVertNames.append(srce->transVertNames[i]);
-          }
-      }
-      dest.numTransverters = srce->numTransverters;
-      dest.transVertSettings.clear();
-      if (srce->numTransverters > 0)
-      {
-          for (int i = 0; i <srce->numTransverters; i++)
-          {
-              dest.transVertSettings.append(srce->transVertSettings[i]);
-          }
+         return true;
       }
 
-      dest.enableShowCatFeatures = srce->enableShowCatFeatures;
-      dest.ritEnable = srce->ritEnable;
-      dest.sMeterEnable = srce->sMeterEnable;
-      dest.volumeEnable = srce->volumeEnable;
-      dest.voiceMemEnable = srce->voiceMemEnable;
-      dest.cWMemEnable = srce->cWMemEnable;
-      dest.catEnable = srce->catEnable;
+      return false;
 
+  }
+
+
+  bool compareStringList(QStringList &sl1, QStringList &sl2)
+  {
+      if (sl1.count() != sl2.count())
+      {
+          return false;
+      }
+      else
+      {
+          for (int i = 0; i <sl1.count(); i++)
+          {
+              if (sl1[i] != sl2[i])
+              {
+                  return false;
+              }
+          }
+      }
+      return true;
+  }
+
+  QSharedPointer<scatParams> operator=(const QSharedPointer<scatParams> srce)
+  {
+      radioName = srce->radioName;
+      radioNumber = srce->radioNumber;
+      comport = srce->comport;
+      rigMfg_Name = srce->rigMfg_Name;
+      rigModelName = srce->rigModelName;
+      rigModel = srce->rigModel;       // used as key to select radio
+      rigModelNumber = srce->rigModelNumber;
+      pollInterval = srce->pollInterval;
+      civAddress = srce->civAddress;
+      baudrate = srce->baudrate;
+      parity = srce->parity;
+      stopbits = srce->stopbits;
+      databits = srce->databits;
+      handshake = srce->handshake;
+      forceDtr = srce->forceDtr;
+      forceRts = srce->forceRts;
+      portType = srce->portType;
+      advancedCommsFlag = srce->advancedCommsFlag;
+      networkAdd = srce->networkAdd;
+      networkPort = srce->networkPort;
+      enablePTT  = srce->enablePTT;
+      pttSerialPort = srce->enablePTT;
+      pttType = srce->pttType;
+      rigCtldEnable = srce->rigCtldEnable;
+      startMinosRigCtld = srce->startMinosRigCtld;
+      rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
+      rigCtldNetworkPort = srce->rigCtldNetworkPort;
+      mgmMode = srce->mgmMode;
+      antSwitchAvail = srce->antSwitchAvail;
+      ritSupported = srce->ritSupported;
+
+      transVertEnable  = srce->transVertEnable;
+      volAvail = srce->volAvail;
+      supportBands = srce->supportBands;        // for non hamlib radios
+      transVertNames = srce->transVertNames;
+      numTransverters = srce->numTransverters;
+      enableTransSwitch = srce->enableTransSwitch;
+      enableLocTVSwMsg = srce->enableLocTVSwMsg;
+      locTVSwComport = srce->locTVSwComport;
+      radioSupBands = srce->radioSupBands;  // bands supported by radio
+      radioTransSupBands = srce->radioTransSupBands; // band supported by radio and transverters
+      transVertSettings = srce->transVertSettings;
+
+
+      // enable\Disable Cat features
+      enableShowCatFeatures = srce->enableShowCatFeatures;
+      ritEnable = srce->ritEnable;
+      sMeterEnable = srce->sMeterEnable;
+      volumeEnable = srce->volumeEnable;
+      voiceMemEnable = srce->voiceMemEnable;
+      cWMemEnable = srce->cWMemEnable;
+      catEnable = srce->catEnable;
+
+      return QSharedPointer<scatParams>(this);
 
   }
 
@@ -237,7 +322,7 @@ public:
   QString rigMfg_Name;
   QString rigModelName;
   QString rigModel;       // used as key to select radio
-  int rigModelNumber = 0;
+  int rigModelNumber = 1;
   QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
@@ -248,7 +333,7 @@ public:
   int forceDtr = 0;
   int forceRts = 0;
   int portType = 0;
-  bool advancedCommsFlag;
+  bool advancedCommsFlag = false;
   QString networkAdd;
   QString networkPort;
   bool enablePTT  = false;
@@ -297,6 +382,7 @@ public:
 
 
 void fillPortsInfo(QComboBox* comportSel);
-
+void getListOfComports(QStringList &listOfAvailComports);
+bool isComportAvail(const QString comport);
 
 #endif // RIGCOMMON_H

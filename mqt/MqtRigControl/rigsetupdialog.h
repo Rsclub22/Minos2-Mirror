@@ -52,9 +52,7 @@ public:
 
     //scatParams currentRadio;
 
-    QVector<scatParams*> availRadioData;
-    QStringList availRadios;
-    int numAvailRadios;
+
 
     QVector<QSharedPointer<BandInfo> > bands;
 
@@ -69,7 +67,7 @@ public:
 
     void setAppName(QString name);
     int comportAvial(int radioNum, QString comport);
-    int findCurrentRadio(QString currentRadioName);
+
     void setCurrentRadioName(QString name);
     QString getCurrentRadioName();
     void setTabToCurrentRadio();
@@ -108,11 +106,18 @@ private:
 
     QVector<RigSetupForm*> radioTab;
 
+
+    QStringList storedAvailRadios;
+    QVector<QSharedPointer<scatParams> > storedRadioData; // data stored in ini files
+
+    QStringList availRadios;
+    int numAvailRadios;
+    QVector<QSharedPointer<scatParams> > availRadioData;   // data loaded to tabs
     QSettings availRadioIni;
     //QSettings transVerterIni;
 
 
-    bool chkloadflg = false;
+    //bool chkloadflg = false;
     QString appName = "";
 
     bool radioRemoved;
@@ -148,9 +153,9 @@ private:
     //void saveRadio(int i);
     bool checkRadioNameMatch(QString radioName);
     void saveTranVerterSetting(int radioNum, int transVertNum, QSettings  &config);
-    void readTranVerterSetting(int radioNum, int transVertNum, QSettings &config);
+    //void readTranVerterSetting(int radioNum, int transVertNum, QSettings &config);
     void loadBands();
-    void getRadioSetting(int radNum, QSettings &config);
+    //void getRadioSetting(int radNum, QSettings &config);
     void saveRadioData(int radNum, QSettings &config);
 
 
@@ -160,6 +165,8 @@ private:
     void updateAvailRadiosToVersion2(QSettings &settings);
     void isAnySupportedBandsAvail(QString &supRadNames);
     void loadAvailPttComportsToTab(int tabNum);
+    void readTranVerterSetting(QSharedPointer<scatParams> radioData, int transVertNum, QSettings &config);
+    void getRadioSetting(QSharedPointer<scatParams> radioData, QString radioName, QSettings &config);
 };
 
 #endif // SETUPDIALOG_H

@@ -59,12 +59,12 @@ void fillPortsInfo(QComboBox* comportSel)
     QString description;
     QString manufacturer;
     QString serialNumber;
-
+    QStringList list;
     comportSel->addItem("");
 
     foreach (auto const &info, QSerialPortInfo::availablePorts())
     {
-        QStringList list;
+
         description = info.description();
         manufacturer = info.manufacturer();
 #if QT_VERSION > QT_VERSION_CHECK(5, 3, 0)
@@ -82,6 +82,39 @@ void fillPortsInfo(QComboBox* comportSel)
         comportSel->addItem(list.first(), list);
 
     }
+
+
+}
+
+
+
+void getListOfComports(QStringList &listOfAvailComports)
+{
+    foreach (auto const &info, QSerialPortInfo::availablePorts())
+    {
+
+        listOfAvailComports << info.portName();
+
+    }
+}
+
+bool isComportAvail(const QString comport)
+{
+    QStringList availComports;
+
+    foreach (auto const &info, QSerialPortInfo::availablePorts())
+    {
+
+        availComports << info.portName();
+
+    }
+
+    if (availComports.contains(comport))
+    {
+        return true;
+    }
+
+    return false;
 
 
 }

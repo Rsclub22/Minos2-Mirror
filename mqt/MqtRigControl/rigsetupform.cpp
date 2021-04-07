@@ -29,7 +29,7 @@
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
-RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
+RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
                            const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _ui_RadioTab,
                            bool hfFlag_, QWidget *parent):
     QWidget(parent),
@@ -120,7 +120,7 @@ RigSetupForm::~RigSetupForm()
 
 
 
-scatParams* RigSetupForm::getRadioData()
+QSharedPointer<scatParams> RigSetupForm::getRadioData()
 {
     return radioData;
 }

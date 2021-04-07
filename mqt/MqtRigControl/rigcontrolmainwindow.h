@@ -251,7 +251,7 @@ private:
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 
-    RigSetupDialog *setupRadio;
+
     RigBase  *radio;
     RigFactory* rigFactory;
 
@@ -433,13 +433,13 @@ private:
     void clearTransVertSupport();
 
     bool readTestStandAloneFlag();
-    void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
+    //void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
     void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
-    bool findSupTransBand(const QString band, const int radioIdx);
+    //bool findSupTransBand(const QString band, const int radioIdx);
     //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
-    void initCacheData();
+    //void initCacheData();
 
     void addVolStatusToRigCache(bool status);
     void sendTransVertEnabled(bool status);
@@ -471,7 +471,7 @@ private:
 
     void setSmeterVisible(bool visible);
 
-    void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
+    //void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
 
 
 
@@ -537,6 +537,11 @@ private:
 
     void saveCurrentRadio(const QString currentRadioName);
     int findCurrentRadio(const QString &currentRadioName);
+    void buildSupportedRadioBands(QSharedPointer<scatParams> radioData, QStringList &supBandList);
+    bool findSupTransBand(const QString band, const QSharedPointer<scatParams> radioData);
+    void buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList);
+    void initCacheData(QStringList &availRadios);
+    void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
 private slots:
 
     void onStdInRead(QString);

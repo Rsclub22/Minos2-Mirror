@@ -76,65 +76,56 @@ void RigSetupDialog::initSetup()
     fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
 
-    availRadios = settings.childGroups();
+    // get current settings
+    storedAvailRadios = settings.childGroups();
+    for (int i = 0; i < storedAvailRadios.count(); i++)
+    {
+        if (storedAvailRadios[i].contains("Version"))
+        {
+            storedAvailRadios.removeAt(i);
+            break;
+        }
+    }
+
+
+    for (int i = 0; i < storedAvailRadios.count(); i++)
+    {
+        QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams);
+        getRadioSetting(radioData, storedAvailRadios[i], settings);
+        storedRadioData.append(radioData);
+    }
+
+    availRadios = storedAvailRadios;
+
     numAvailRadios = availRadios.count();
 
-    if (numAvailRadios > 0)
+    for (int i = 0; i < numAvailRadios; i++)
     {
-        QString version = settings.value("Version/version", QString()).toString();
-        if (version == "1")
+        addTab(i, availRadios[i]);
+
+        // find transverters
+
+        QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
+        QSettings  configTransvert(fileName, QSettings::IniFormat);
+
+        radioTab[i]->getRadioData()->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
+        radioTab[i]->getRadioData()->numTransverters =  radioTab[i]->getRadioData()->transVertNames.count();
+
+        if (radioTab[i]->getRadioData()->numTransverters > 0)
         {
-            updateAvailRadiosToVersion2(settings);
-        }
-
-        // check version again
-        version = settings.value("Version/version", QString()).toString();
-
-        if (version != "2")
-        {
-            mShowMessage(tr("The Radio configuration files in %1 are from an old incompatible version of Minos.\r\n\r\n"
-                         "Please delete them and set up the radios again").arg(RADIO_PATH_LOGGER), parentWidget());
-            exit(10);
-        }
-
-        int v = availRadios.indexOf("Version"); // the section name
-        availRadios.removeAt(v);
-        numAvailRadios--;
-
-        chkloadflg = true;      // stop loading check values tiggering mapper signals
-        for (int i = 0; i < numAvailRadios; i++)
-        {
-            addTab(i, availRadios[i]);
-
-            // find transverters
-
-            QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
-            QSettings  configTransvert(fileName, QSettings::IniFormat);
-
-            radioTab[i]->getRadioData()->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
-            radioTab[i]->getRadioData()->numTransverters =  radioTab[i]->getRadioData()->transVertNames.count();
-
-            if (radioTab[i]->getRadioData()->numTransverters > 0)
+            for (int t = 0; t < availRadioData[i]->numTransverters; t++)
             {
-                for (int t = 0; t < availRadioData[i]->numTransverters; t++)
-                {
-                   radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
-                }
+               radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
             }
-
-            getRadioSetting(i, settings);
-
-            radioTab[i]->getRadioData()->rigMfg_Name = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigManufacturer;
-            radioTab[i]->getRadioData()->rigModelName = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelName;
-            radioTab[i]->getRadioData()->rigModelNumber = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelNumber;
-
-            loadSettingsToTab(i);
         }
-        chkloadflg = false;
-    }
-    else
-    {
-        settings.setValue("Version/version", "2");
+
+        getRadioSetting(radioTab[i]->getRadioData(), availRadios[i], settings);
+
+        radioTab[i]->getRadioData()->rigMfg_Name = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigManufacturer;
+        radioTab[i]->getRadioData()->rigModelName = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelName;
+        radioTab[i]->getRadioData()->rigModelNumber = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelNumber;
+
+        loadSettingsToTab(i);
     }
 
 }
@@ -144,7 +135,7 @@ void RigSetupDialog::initSetup()
 
 void RigSetupDialog::addTab(int tabNum, QString tabName)
 {
-    availRadioData.append(new scatParams);
+    availRadioData.append(QSharedPointer<scatParams>(new scatParams));
     availRadioData[tabNum]->radioName = tabName;
     if (!availRadios.contains(tabName))
     {
@@ -962,42 +953,42 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
 
 
 
-void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
+void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QString radioName, QSettings& config)
 {
-    config.beginGroup(availRadios[radNum]);
-    radioTab[radNum]->getRadioData()->radioName = config.value("radioName", "").toString();
-    radioTab[radNum]->getRadioData()->rigModel = config.value("radioModel", "").toString();
-    radioTab[radNum]->getRadioData()->civAddress = config.value("civAddress", "").toString();
-    radioTab[radNum]->getRadioData()->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
-    radioTab[radNum]->getRadioData()->advancedCommsFlag = config.value("advancedComms", false).toBool();
-    radioTab[radNum]->getRadioData()->comport = config.value("comport", "").toString();
-    radioTab[radNum]->getRadioData()->baudrate = config.value("baudrate", 9600).toInt();
-    radioTab[radNum]->getRadioData()->databits = config.value("databits", 8).toInt();
-    radioTab[radNum]->getRadioData()->parity = config.value("parity", 0).toInt();
-    radioTab[radNum]->getRadioData()->stopbits = config.value("stopbits", 1).toInt();
-    radioTab[radNum]->getRadioData()->handshake = config.value("handshake", 0).toInt();
-    radioTab[radNum]->getRadioData()->forceDtr = config.value("forceDTR", 0).toInt();
-    radioTab[radNum]->getRadioData()->forceRts= config.value("forceRTS", 0).toInt();
-    radioTab[radNum]->getRadioData()->enablePTT = config.value("enablePtt", false).toBool();
-    radioTab[radNum]->getRadioData()->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)).toInt();
-    radioTab[radNum]->getRadioData()->pttSerialPort = config.value("pttSerialPort", "").toString();
-    radioTab[radNum]->getRadioData()->pollInterval = config.value("radioPollInterval", "1").toString();
-    radioTab[radNum]->getRadioData()->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
-    radioTab[radNum]->getRadioData()->startMinosRigCtld = config.value("startMinosRigCtld", true).toBool();
-    radioTab[radNum]->getRadioData()->rigCtldNetworkAdd = config.value("rigCtldNetworkAddress", "").toString();
-    radioTab[radNum]->getRadioData()->rigCtldNetworkPort = config.value("rigCtldPortNumber", "").toString();
-    radioTab[radNum]->getRadioData()->transVertEnable = config.value("transVertEnable", false).toBool();
-    radioTab[radNum]->getRadioData()->antSwitchAvail = config.value("antSwitchAvail", false).toBool();
-    radioTab[radNum]->getRadioData()->networkAdd = config.value("netAddress", "").toString();
-    radioTab[radNum]->getRadioData()->networkPort = config.value("netPort", "").toString();
-    radioTab[radNum]->getRadioData()->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radioTab[radNum]->getRadioData()->enableShowCatFeatures = config.value("enableShowCatFeatures", false).toBool();
-    radioTab[radNum]->getRadioData()->ritEnable = config.value("ritEnable", false).toBool();
-    radioTab[radNum]->getRadioData()->sMeterEnable = config.value("sMeterEnable", true).toBool();
-    radioTab[radNum]->getRadioData()->volumeEnable = config.value("volumeEnable", true).toBool();
-    radioTab[radNum]->getRadioData()->voiceMemEnable = config.value("voiceMemEnable", true).toBool();
-    radioTab[radNum]->getRadioData()->cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radioTab[radNum]->getRadioData()->catEnable = config.value("catEnable", true).toBool();
+    config.beginGroup(radioName);
+    radioData->radioName = config.value("radioName", "").toString();
+    radioData->rigModel = config.value("radioModel", "").toString();
+    radioData->civAddress = config.value("civAddress", "").toString();
+    radioData->portType = config.value("portType", RigCapConstants::PortType::serial).toInt();
+    radioData->advancedCommsFlag = config.value("advancedComms", false).toBool();
+    radioData->comport = config.value("comport", "").toString();
+    radioData->baudrate = config.value("baudrate", 9600).toInt();
+    radioData->databits = config.value("databits", 8).toInt();
+    radioData->parity = config.value("parity", 0).toInt();
+    radioData->stopbits = config.value("stopbits", 1).toInt();
+    radioData->handshake = config.value("handshake", 0).toInt();
+    radioData->forceDtr = config.value("forceDTR", 0).toInt();
+    radioData->forceRts= config.value("forceRTS", 0).toInt();
+    radioData->enablePTT = config.value("enablePtt", false).toBool();
+    radioData->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)).toInt();
+    radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
+    radioData->pollInterval = config.value("radioPollInterval", "1").toString();
+    radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
+    radioData->startMinosRigCtld = config.value("startMinosRigCtld", true).toBool();
+    radioData->rigCtldNetworkAdd = config.value("rigCtldNetworkAddress", "").toString();
+    radioData->rigCtldNetworkPort = config.value("rigCtldPortNumber", "").toString();
+    radioData->transVertEnable = config.value("transVertEnable", false).toBool();
+    radioData->antSwitchAvail = config.value("antSwitchAvail", false).toBool();
+    radioData->networkAdd = config.value("netAddress", "").toString();
+    radioData->networkPort = config.value("netPort", "").toString();
+    radioData->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
+    radioData->enableShowCatFeatures = config.value("enableShowCatFeatures", false).toBool();
+    radioData->ritEnable = config.value("ritEnable", false).toBool();
+    radioData->sMeterEnable = config.value("sMeterEnable", true).toBool();
+    radioData->volumeEnable = config.value("volumeEnable", true).toBool();
+    radioData->voiceMemEnable = config.value("voiceMemEnable", true).toBool();
+    radioData->cWMemEnable = config.value("cWMemEnable", true).toBool();
+    radioData->catEnable = config.value("catEnable", true).toBool();
 
 
     foreach (auto &b, bands)
@@ -1006,7 +997,7 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
         {
             QString name = b.data()->uk;
             name.remove('\x20').replace('H', 'h').replace('.', '_');
-            radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+            radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
         }
         else
         {
@@ -1014,25 +1005,25 @@ void RigSetupDialog::getRadioSetting(int radNum, QSettings& config)
             {
                 QString name = b.data()->uk;
                 name.remove('\x20').replace('H', 'h').replace('.', '_');
-                radioTab[radNum]->getRadioData()->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+                radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
             }
         }
 
 
     }
-    radioTab[radNum]->getRadioData()->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
-    radioTab[radNum]->getRadioData()->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
-    radioTab[radNum]->getRadioData()->locTVSwComport = config.value("locTransVertSwComport", "").toString();
+    radioData->enableTransSwitch = config.value("enableTransVertSw", false).toBool();
+    radioData->enableLocTVSwMsg = config.value("locTransSwEnable", false).toBool();
+    radioData->locTVSwComport = config.value("locTransVertSwComport", "").toString();
     config.endGroup();
 
     // now read transverter settings
     QString fileNameTransVert;
-    fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[radNum]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
+    fileNameTransVert = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
-    for (int t = 0; t < radioTab[radNum]->getRadioData()->numTransverters; t++)
+    for (int t = 0; t < radioData->numTransverters; t++)
     {
-        readTranVerterSetting(radNum, t, configTransVert);
+        readTranVerterSetting(radioData, t, configTransVert);
     }
 }
 
@@ -1052,16 +1043,16 @@ void RigSetupDialog::saveTranVerterSetting(int radioNum, int transVertNum, QSett
 }
 
 
-void RigSetupDialog::readTranVerterSetting(int radNum, int transVertNum, QSettings  &config)
+void RigSetupDialog::readTranVerterSetting(QSharedPointer<scatParams> radioData, int transVertNum, QSettings  &config)
 {
-    config.beginGroup(radioTab[radNum]->getRadioData()->transVertNames[transVertNum]);
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->transVertName = config.value("name", "").toString();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->band = config.value("band", "").toString();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->radioFreq = config.value("radioFreq", 0.0).toDouble();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->targetFreq = config.value("targetFreq", 0.0).toDouble();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->antSwitchNum = config.value("antSwNumber", "0").toString();
-    radioTab[radNum]->getRadioData()->transVertSettings[transVertNum]->transSwitchNum = config.value("transVertSw", "0").toString();
+    config.beginGroup(radioData->transVertNames[transVertNum]);
+    radioData->transVertSettings[transVertNum]->transVertName = config.value("name", "").toString();
+    radioData->transVertSettings[transVertNum]->band = config.value("band", "").toString();
+    radioData->transVertSettings[transVertNum]->radioFreq = config.value("radioFreq", 0.0).toDouble();
+    radioData->transVertSettings[transVertNum]->targetFreq = config.value("targetFreq", 0.0).toDouble();
+    radioData->transVertSettings[transVertNum]->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
+    radioData->transVertSettings[transVertNum]->antSwitchNum = config.value("antSwNumber", "0").toString();
+    radioData->transVertSettings[transVertNum]->transSwitchNum = config.value("transVertSw", "0").toString();
     config.endGroup();
 }
 
@@ -1202,20 +1193,7 @@ void RigSetupDialog::readCurrentRadio()
 
 
 
-int RigSetupDialog::findCurrentRadio(QString currentRadioName)
-{
-    int err = -1;
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-        {
 
-            return i;
-        }
-    }
-
-    return err;
-}
 
 
 

@@ -121,10 +121,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     currentRadio = QSharedPointer<scatParams>(new scatParams);
 
-    setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
-    setupRadio->setAppName(appName);
-
-
 
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
@@ -153,7 +149,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         sendRadioListLogger();
 
-        initCacheData();
+        initCacheData(availRadios);
         msg->rigCache.publish();
 
    // }
@@ -425,10 +421,10 @@ void RigControlMainWindow::initActionsConnections()
 
 
     // configure radio dialog
-    connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged,  this, [=](QString radioName){currentRadioSettingChanged(radioName);});
-    connect(setupRadio, &RigSetupDialog::radioNameChange,  this, [=](){updateSelectRadioBox();});
-    connect(setupRadio, &RigSetupDialog::radioTabChanged,  this, [=](){updateSelectRadioBox();});
-    connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache,  this, [=](){updateRigDetailsCache();});
+    //connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged,  this, [=](QString radioName){currentRadioSettingChanged(radioName);});
+    //connect(setupRadio, &RigSetupDialog::radioNameChange,  this, [=](){updateSelectRadioBox();});
+    //connect(setupRadio, &RigSetupDialog::radioTabChanged,  this, [=](){updateSelectRadioBox();});
+    //connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache,  this, [=](){updateRigDetailsCache();});
 
 
 
@@ -541,7 +537,7 @@ void RigControlMainWindow::initSelectRadioBox()
 void RigControlMainWindow::selectRadio(int index)
 {
     Q_UNUSED(index)
-    setupRadio->setCurrentRadioName(ui->selectRadioBox->currentText());
+    currentRadioName = ui->selectRadioBox->currentText();
     upDateRadio();
 }
 
@@ -564,7 +560,7 @@ void RigControlMainWindow::upDateRadio()
 {
     int radioOpenStat = OPEN_FAILED;
 
-    logMessage(QString("UpdateRadio: Radio requested = %1").arg(setupRadio->getCurrentRadioName()));
+    logMessage(QString("UpdateRadio: Radio requested = %1").arg(currentRadioName));
 
     if (appName.length() == 0)
     {
@@ -581,9 +577,9 @@ void RigControlMainWindow::upDateRadio()
     int ridx = 0;
     if (currentRadioName != "")
     {
-        rigStateDetails->radioIndex = setupRadio->findCurrentRadio(currentRadioName); // make sure radio exits in available radios
+        rigStateDetails->radioIndex = findCurrentRadio(currentRadioName); // make sure radio exits in available radios
         ridx = rigStateDetails->radioIndex;
-        if (ridx > -1 && ridx < setupRadio->numAvailRadios)
+        if (ridx > -1 && ridx < availRadios.count())
         {
             if (radioCommsOK)
             {
@@ -689,7 +685,7 @@ void RigControlMainWindow::upDateRadio()
                     modelNumber = rigCtldDetails->irigctld_radioNumber;
                 }
 
-                buildSupBandList(ridx, modelNumber, currentRadio->radioTransSupBands);
+                buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
 
                 checkSupportVolume();
 
@@ -767,7 +763,7 @@ void RigControlMainWindow::upDateRadio()
         }
         else
         {
-            trace(QString("Saved Current Radio %1 does not match saved available radios.").arg(setupRadio->getCurrentRadioName()));
+            trace(QString("Saved Current Radio %1 does not match saved available radios.").arg(currentRadioName));
         }
     }
     else
@@ -1387,7 +1383,7 @@ int RigControlMainWindow::openRadio()
 
     if (currentRadio->portType == RigCapConstants::PortType::serial)
     {
-        if(setupRadio->comportAvial(currentRadio->radioNumber.toInt(), currentRadio->comport) == -1)
+        if(isComportAvail(currentRadio->comport))
         {
             logMessage(QString("Open Radio: Check comport - defined port %1 not available on computer").arg(currentRadio->comport));
             showStatusMessage(tr("Comport %1 no longer configured on computer?").arg(currentRadio->comport));
@@ -1942,9 +1938,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString band, Frequency f
 
 
 
-    QString oldRadio = setupRadio->getCurrentRadioName();
-
-    setupRadio->setCurrentRadioName(s.key());
+    QString oldRadio = currentRadioName;
 
     if (!s.isEmpty() && (s.key() == oldRadio))
     {
@@ -2392,11 +2386,11 @@ void RigControlMainWindow::onNewRxFreq(Frequency f)
 
 QString RigControlMainWindow::getBand(const Frequency &freq)
 {
-    for (int i = 0; i < setupRadio->bands.count(); i++)
+    for (int i = 0; i < bands.count(); i++)
     {
-        if (freq >= setupRadio->bands[i]->fLow && freq <= setupRadio->bands[i]->fHigh)
+        if (freq >= bands[i]->fLow && freq <= bands[i]->fHigh)
         {
-            return setupRadio->bands[i]->name();
+            return bands[i]->name();
         }
     }
     return "";
@@ -2716,9 +2710,35 @@ void RigControlMainWindow::getRigCtldConnectDelay()
 /*****************  cache data ***************/
 
 
-void RigControlMainWindow::initCacheData()
+void RigControlMainWindow::initCacheData(QStringList &availRadios)
 {
 
+    if (!availRadios.isEmpty())
+    {
+        QVector<QSharedPointer<scatParams> >radioDataList;
+        scatParams radioData;
+        for(auto &radioName: availRadios)
+        {
+            QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams);
+            getRadioConfigData(radioData, radioName);
+            radioDataList.append(radioData);
+        }
+
+        for (int i = 0; i < radioDataList.count(); i++)
+        {
+            QStringList supBandList;
+            //int radioModelNumber = radioDataList[i]->rigModelNumber;
+            buildSupBandList(radioDataList[i], supBandList);
+
+            addBandListToRigCache(radioDataList[i]->radioName, supBandList);
+
+        }
+
+        msg->rigCache.invalidate();
+
+    }
+
+ /*
     if (setupRadio->availRadioData.count() > 0)
     {
 
@@ -2731,8 +2751,7 @@ void RigControlMainWindow::initCacheData()
             addBandListToRigCache(i, supBandList);
 
 
-            //bool f = radio->supportVolControl(radioModelNumber); //*********************
-            //addVolStatusToRigCache(i, f); //*********************************
+            //bool f = radio->supportVolControl(radioModelNumber);
 
 
             //msg->rigCache.publish();
@@ -2743,7 +2762,7 @@ void RigControlMainWindow::initCacheData()
         msg->rigCache.invalidate();
     }
 
-
+*/
 }
 
 // this is a bit brutal...updates all rigdetails even if data hasn't changed...
@@ -2753,7 +2772,7 @@ void RigControlMainWindow::updateRigDetailsCache()
     // update riglist first
     sendRadioListLogger();
     // now rigdetails available before radio is opened
-    initCacheData();
+    initCacheData(availRadios);
     msg->rigCache.publish();
 
 }
@@ -2763,23 +2782,23 @@ void RigControlMainWindow::updateRigDetailsCache()
 
 
 
-void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList)
+void RigControlMainWindow::buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList)
 {
     bandList.clear();
     //int radioModelNumber = setupRadio->availRadioData[radioIdx]->radioModelNumber;
 
     // find the bands the radio supports
     QStringList supBandsList;
-    buildSupportedRadioBands(radioIdx, radioModelNumber, supBandsList);
+    buildSupportedRadioBands(radioData, supBandsList);
 
 
     // merge radio bands and transverter bands
-    if(setupRadio->availRadioData[radioIdx]->transVertEnable)
+    if(radioData->transVertEnable)
     {
 
         foreach (auto const &b, bands)
         {
-            if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioIdx))
+            if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioData))
             {
                 bandList.append(b->name());
             }
@@ -2798,15 +2817,15 @@ void RigControlMainWindow::buildSupBandList(int radioIdx, int radioModelNumber, 
 
 
 // probe radio for supported bands
-void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList)
+void RigControlMainWindow::buildSupportedRadioBands(QSharedPointer<scatParams> radioData, QStringList& supBandList)
 {
 
-    if (radioModelNumber <= RigId::NonHamlibBaseId)
+    if (radioData->rigModelNumber <= RigId::NonHamlibBaseId)
     {
         foreach (auto const &b, bands)
         {
 
-            if (rigFactory->checkForBands(radioModelNumber, b->fLow))
+            if (rigFactory->checkForBands(radioData->rigModelNumber, b->fLow))
             {
                 supBandList.append(b->name());
 
@@ -2818,7 +2837,7 @@ void RigControlMainWindow::buildSupportedRadioBands(int radioIdx, int radioModel
         // non hamlib radios
         foreach (auto &b, bands)
         {
-            if (setupRadio->availRadioData[radioIdx]->supportBands.getSupportBandFlag(b.data()->name()))
+            if (radioData->supportBands.getSupportBandFlag(b.data()->name()))
             {
                supBandList.append(b.data()->name());
             }
@@ -2851,14 +2870,14 @@ bool RigControlMainWindow::findSupRadioBand(const QString band, const QStringLis
 }
 
 // is this band in the transverter list for this radio
-bool RigControlMainWindow::findSupTransBand(const QString band, const int radioIdx)
+bool RigControlMainWindow::findSupTransBand(const QString band, const QSharedPointer<scatParams> radioData)
 {
-    if (setupRadio->availRadioData[radioIdx]->transVertNames.count() > 0)
+    if (radioData->transVertNames.count() > 0)
     {
-        for (int i = 0; i < setupRadio->availRadioData[radioIdx]->transVertNames.count();i++)
+        for (int i = 0; i < radioData->transVertNames.count();i++)
         {
 
-            if (band == setupRadio->availRadioData[radioIdx]->transVertNames[i])
+            if (band == radioData->transVertNames[i])
             {
                 return true;
             }
@@ -3863,37 +3882,41 @@ void RigControlMainWindow::about()
 
 void RigControlMainWindow::sendRadioListLogger()
 {
-    QStringList radioList;
-    for (int i= 0; i < setupRadio->numAvailRadios; i++)
+    if (!appName.isEmpty())
     {
-        if (!setupRadio->availRadios[i].isEmpty())
+        QStringList radioList;
+        for (int i= 0; i < availRadios.count(); i++)
         {
-            PubSubName r(setupRadio->availRadios[i]);
-            radioList.append(r.toString());
+            if (!availRadios[i].isEmpty())
+            {
+                PubSubName r(availRadios[i]);
+                radioList.append(r.toString());
+            }
         }
+        logMessage(QString("Sending radiolist to logger"));
+        for (int i = 0; i < radioList.count(); i++)
+        {
+            logMessage(QString("Send radio %1, name %2").arg(QString::number(i)).arg(radioList[i]));
+        }
+        logMessage(QString("radiolist complete"));
+        msg->publishRadioNames(radioList);
     }
-    logMessage(QString("Sending radiolist to logger"));
-    for (int i = 0; i < radioList.count(); i++)
-    {
-        logMessage(QString("Send radio %1, name %2").arg(QString::number(i)).arg(radioList[i]));
-    }
-    logMessage(QString("radiolist complete"));
-    msg->publishRadioNames(radioList);
+
 }
 
-void RigControlMainWindow::addBandListToRigCache(const int radioIdx, const QStringList& supBandList)
+void RigControlMainWindow::addBandListToRigCache(const QString radioName, const QStringList& supBandList)
 {
 
     //PresetFreq presetFreq;
     //FreqPresetDialog::checkPreviousVersionIniFile(presetFreq, bands);
     //FreqPresetDialog::readSettings(presetFreq, bands);
 
-    if (!supBandList.isEmpty())
+    if (!supBandList.isEmpty() && !appName.isEmpty())
     {
 
-        PubSubName psname(setupRadio->availRadioData[radioIdx]->radioName);
+        PubSubName psname(radioName);
         QString bandList = supBandList.join(":");
-        logMessage(QString("Add bandlist to rigcache for radio %1 = %2").arg(setupRadio->availRadioData[radioIdx]->radioName).arg(bandList));
+        logMessage(QString("Add bandlist to rigcache for radio %1 = %2").arg(radioName).arg(bandList));
         msg->rigCache.setBandList(psname, bandList);
 
     }
@@ -3910,7 +3933,7 @@ void RigControlMainWindow::addBandListToRigCache(const int radioIdx, const QStri
 
 void RigControlMainWindow::sendStatusLogger(const QString &message )
 {
-    if (appName.length() > 0)
+    if (!appName.isEmpty())
     {
         logMessage(QString("Send status to logger = %1").arg(message));
         PubSubName psname(currentRadio->radioName);
@@ -4060,35 +4083,44 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
 
 void RigControlMainWindow::sendTransVertOffsetToLogger(int tvNum)
 {
-    Frequency f = currentRadio->transVertSettings[tvNum]->transVertOffset;
-    logMessage(QString("Send Transvert Offset to logger = %1%2")
-               .arg(currentRadio->transVertEnable ? "-" : "+")
-               .arg(f.traceStr()));
-    PubSubName psname(currentRadio->radioName);
-    msg->rigCache.setTransverterOffset(psname, currentRadio->transVertSettings[tvNum]->transVertOffset);
-    //msg->rigCache.publish();
+    if (!appName.isEmpty())
+    {
+        Frequency f = currentRadio->transVertSettings[tvNum]->transVertOffset;
+        logMessage(QString("Send Transvert Offset to logger = %1%2")
+                   .arg(currentRadio->transVertEnable ? "-" : "+")
+                   .arg(f.traceStr()));
+        PubSubName psname(currentRadio->radioName);
+        msg->rigCache.setTransverterOffset(psname, currentRadio->transVertSettings[tvNum]->transVertOffset);
+        //msg->rigCache.publish();
+    }
+
 
 
 }
 
 void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
 {
-    if (swNum == "")
+    if (!appName.isEmpty())
     {
-        logMessage(QString("Send Transvert Switch Number to Logger - Switch Number Empty - Nothing Sent"));
-        return;
+        if (swNum == "")
+        {
+            logMessage(QString("Send Transvert Switch Number to Logger - Switch Number Empty - Nothing Sent"));
+            return;
+        }
+
+        logMessage(QString("Send Transvert Switch Number to logger = %1").arg(swNum));
+        PubSubName psname(currentRadioName);
+        msg->rigCache.setTransverterSwitch(psname, swNum.toInt());
+        //msg->rigCache.publish();
     }
 
-    logMessage(QString("Send Transvert Switch Number to logger = %1").arg(swNum));
-    PubSubName psname(currentRadioName);
-    msg->rigCache.setTransverterSwitch(psname, swNum.toInt());
-    //msg->rigCache.publish();
 
 }
 
 
 void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
 {
+
     if (swNum == "")
     {
         logMessage(QString("Send Transvert Switch Number to Comport - Switch Number Empty - Nothing Sent"));
@@ -4108,6 +4140,8 @@ void RigControlMainWindow::sendTransVertSwitchToComPort(const QString &swNum)
         logMessage(QString("Send Transvert Switch Number to Comport = %1, message = %2").arg(currentRadio->locTVSwComport).arg(QString::fromLocal8Bit(msg)));
         serialTVSw->sendTVSwMessage(msg);
     }
+
+
 }
 
 
@@ -4187,6 +4221,8 @@ void RigControlMainWindow::sendPttStateLogger()
 void RigControlMainWindow::onLaunchSetup()
 {
 
+    RigSetupDialog *setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
+    setupRadio->setAppName(appName);
     setupRadio->setTabToCurrentRadio();
     setupRadio->loadAvailComports();
     setupRadio->exec();
@@ -4365,6 +4401,15 @@ void RigControlMainWindow::getAvailRadiosList(QStringList &availRadios)
     QString fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings  settings(fileName, QSettings::IniFormat);
     availRadios = settings.childGroups();
+    for (int i = 0; i < availRadios.count(); i++)
+    {
+        if (availRadios[i].contains("Version"))
+        {
+            availRadios.removeAt(i);
+            return;
+        }
+    }
+
 }
 
 void RigControlMainWindow::checkIniFileVersion()
