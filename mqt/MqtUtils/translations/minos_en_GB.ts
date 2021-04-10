@@ -14,43 +14,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="573"/>
-        <source>More than one server is defined and enabled</source>
+        <location filename="../ConfigFile.cpp" line="577"/>
+        <source>More than one router is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="582"/>
-        <source>A local server is required.<byte value="xd"/>
+        <location filename="../ConfigFile.cpp" line="586"/>
+        <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="597"/>
+        <location filename="../ConfigFile.cpp" line="601"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="612"/>
+        <location filename="../ConfigFile.cpp" line="616"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="651"/>
+        <location filename="../ConfigFile.cpp" line="655"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="661"/>
+        <location filename="../ConfigFile.cpp" line="665"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="665"/>
+        <location filename="../ConfigFile.cpp" line="669"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>

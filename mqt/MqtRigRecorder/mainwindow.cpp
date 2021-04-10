@@ -190,11 +190,10 @@ void MainWindow::on_baseFileBrowse_clicked()
 {
     QString InitialDir = GetCurrentDir();
 
-    QString Filter = "Record Files (*.wav);;"
-                     "All Files (*.*)" ;
+    QString Filter = tr("Record Files (*.wav);;All Files (*.*)") ;
 
     QString fileName = QFileDialog::getSaveFileName( this,
-                       "Recorded Files",
+                       tr("Recorded Files"),
                        InitialDir,                   // opendir
                        Filter );
 

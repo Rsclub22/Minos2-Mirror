@@ -358,7 +358,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="581"/>
-        <location filename="../kstmainwindow.cpp" line="391"/>
+        <location filename="../kstmainwindow.cpp" line="395"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -368,23 +368,23 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="383"/>
+        <location filename="../kstmainwindow.cpp" line="387"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="380"/>
+        <location filename="../kstmainwindow.cpp" line="384"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="538"/>
+        <location filename="../kstmainwindow.cpp" line="542"/>
         <source>Set Back</source>
         <translatorcomment>ou Retour?</translatorcomment>
         <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="542"/>
+        <location filename="../kstmainwindow.cpp" line="546"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>

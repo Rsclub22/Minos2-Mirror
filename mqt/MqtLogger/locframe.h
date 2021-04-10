@@ -11,6 +11,7 @@ class LocCount;
 
 class LocGridModel: public QAbstractItemModel
 {
+    Q_OBJECT
         QString tlLoc;
     public:
         LocGridModel();

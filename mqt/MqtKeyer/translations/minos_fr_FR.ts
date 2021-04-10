@@ -158,22 +158,22 @@ Through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="265"/>
+        <location filename="../KeyerMain.cpp" line="261"/>
         <source>Push PTT to Commence Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="405"/>
+        <location filename="../KeyerMain.cpp" line="404"/>
         <source>Alsa Control Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="406"/>
+        <location filename="../KeyerMain.cpp" line="405"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="409"/>
+        <location filename="../KeyerMain.cpp" line="408"/>
         <source>File for mixer setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -331,7 +331,7 @@ Through</source>
 <context>
     <name>commonKeyer</name>
     <message>
-        <location filename="../keyers.cpp" line="437"/>
+        <location filename="../keyers.cpp" line="436"/>
         <source>No current actions</source>
         <translation type="unfinished"></translation>
     </message>
