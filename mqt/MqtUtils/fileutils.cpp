@@ -28,12 +28,8 @@ QString GetCurrentDir()
 QString ExtractFileDir(const QString &fname )
 {
     QFileInfo finf( fname );
-    QString p = finf.dir().canonicalPath();
+    QString p = finf.dir().absolutePath();
     return p;
-}
-QString ExtractFilePath( const QString &fname )
-{
-    return ExtractFileDir( fname );
 }
 QString ExtractFileName(const QString &fname )
 {

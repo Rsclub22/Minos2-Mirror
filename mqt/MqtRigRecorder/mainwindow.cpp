@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(&stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
     stdinReader.start();
 
-    QSettings settings;
-    QByteArray geometry = settings.value("RigRecorderMain/geometry").toByteArray();
+    QSettings gsettings;
+    QByteArray geometry = gsettings.value("RigRecorderMain/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
@@ -48,6 +48,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->inChannelCB->addItems(rass.inputDevices);
     ui->outChannelCB->addItems(rass.outputDevices);
+
+    QString filename = "./Configuration/RigRecorder.ini";
+    QSettings settings(filename, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey, "").toString();
     QString outdev = settings.value(outdevKey, "").toString();
@@ -61,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     int cycleTime = settings.value(cycleRateKey, 10).toInt();
     ui->rotInterval->setValue(cycleTime);
 
-    connect(ui->inChannelCB, SIGNAL(currentTextChanged(const QString &)), this, SLOT(inChannelCB_currentTextChanged(const QString &)));
-    connect(ui->outChannelCB, SIGNAL(currentTextChanged(const QString &)), this, SLOT(outChannelCB_currentTextChanged(const QString &)));
+    connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_currentTextChanged);
+    connect(ui->outChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::outChannelCB_currentTextChanged);
 
     trace("About to initialise audio");
     rass.setRate(11025);
@@ -200,7 +203,8 @@ void MainWindow::on_baseFileBrowse_clicked()
     if (!fileName.isEmpty())
     {
         ui->baseFilename->setText(fileName);
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(baseFileKey, fileName);
     }
 }
@@ -209,7 +213,8 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(indevKey, arg1);
 
         trace("About to re-initialise audio");
@@ -223,7 +228,8 @@ void MainWindow::outChannelCB_currentTextChanged(const QString &arg1)
 {
     if (!closing)
     {
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(outdevKey, arg1);
         trace("About to re-initialise audio");
         rass.closedown();
@@ -235,7 +241,8 @@ void MainWindow::on_baseFilename_editingFinished()
 {
     if (!closing)
     {
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(baseFileKey, ui->baseFilename->text());
     }
 }
@@ -244,7 +251,8 @@ void MainWindow::on_rotInterval_editingFinished()
 {
     if (!closing)
     {
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue(cycleRateKey, ui->rotInterval->value());
     }
 }
@@ -272,7 +280,8 @@ void MainWindow::on_recordSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QSettings settings;
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
         settings.setValue("RecordLevel", position);
     }
     setVolumeMults();
@@ -282,13 +291,15 @@ void MainWindow::on_recordMono_stateChanged(int /*arg1*/)
 {
     bool mono = ui->recordMono->isChecked();
     rass.setMono(mono);
-    QSettings settings;
+    QString filename = "./Configuration/RigRecorder.ini";
+    QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("Mono", mono);
 }
 
 void MainWindow::on_autostartCb_stateChanged(int /*arg1*/)
 {
     bool autostart = ui->autostartCb->isChecked();
-    QSettings settings;
+    QString filename = "./Configuration/RigRecorder.ini";
+    QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("AutoStart", autostart);
 }

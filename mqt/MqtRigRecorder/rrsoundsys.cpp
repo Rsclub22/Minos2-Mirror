@@ -412,11 +412,22 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
     {
         return false;
     }
+    QString curdir = GetCurrentDir();
     QString baseName = ExtractFileName(fname);
-    QString path = ExtractFilePath(fname);
+    QString path = ExtractFileDir(fname);
     QString suffix = ExtractFileExt(fname);
-    int suff = baseName.indexOf(suffix);
-    fname = fname.left(suff);
+    if (suffix.isEmpty() || suffix == ".")
+    {
+        suffix = ".wav";
+    }
+    else
+    {
+        int suff = baseName.indexOf(suffix);
+        if (suff > 0)
+        {
+            fname = fname.left(suff);
+        }
+    }
 
     int dash = baseName.indexOf("_");
     if (dash >= 0)

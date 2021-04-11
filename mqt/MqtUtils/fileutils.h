@@ -9,7 +9,6 @@ QString GetCurrentDir();
 void SetCurrentDir( const QString &dir );
 
 QString ExtractFileDir( const QString &fname );
-QString ExtractFilePath(const QString &fname );
 QString ExtractFileName(const QString &fname );
 QString ExtractFileExt(const QString &fname );
 
