@@ -171,8 +171,10 @@ private:
     VFO convert_Vfo_t_To_VFO(vfo_t vfo);
     vfo_t convert_VFO_to_vfo_t(VFO vfo);
 
+    static bool supportSMeter(int modelNumber);
 
 
+    static bool supportVolume(int rigNumber);
 };
 
 #endif // HAMLIBRIGCONTROL_H

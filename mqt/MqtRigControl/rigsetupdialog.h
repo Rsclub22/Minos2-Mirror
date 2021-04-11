@@ -59,7 +59,7 @@ public:
     void initSetup();
     int getRadioId(QString rotator);
 
-    void readCurrentRadio();
+
     QString getRadioComPort(QString);
     void saveCurrentRadio();
 

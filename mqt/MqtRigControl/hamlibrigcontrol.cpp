@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Hamlib Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
@@ -118,26 +118,48 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         }
 
 
+        bool supportGetRit = capsList[i]->get_rit ? true:false;
+        bool supportSetRit = capsList[i]->set_rit ? true:false;
+        bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+
+        bool supportSMeter = HamlibRigControl::supportSMeter(capsList[i]->rig_model);
+
+        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+
+        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+
+        bool supportVolume = HamlibRigControl::supportVolume(capsList[i]->rig_model);
+
+        // support Antenna Switch
+        bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+
+        bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
+
+        bool supportCwMem = capsList[i]->send_morse ? true:false;
+
+
+
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
                                            capsList[i]->model_name,
                                            key,
                                            capsList[i]->rig_model,
-                                           true,                // library supports lookup supported bands
-                                           true,       // library supports get rit
-                                           true,       // library supports set rit
-                                           true,        // library supports get rit state
-                                           true,        // library supports set rit state
-                                           true,       // library supports get rit max Khz
-                                           true,       // library supports s-meter
-                                           true,       // library supports get Ptt
-                                           true,       // library supports set Ptt
-                                           true,       // library supports volume
-                                           true,        // library supports antenna switch
-                                           true,            // library supports RigCtld
-                                           true,        // library supports Voice Memory
-                                           true,     // library supports Cw Memory
-                                           true);    // support poll data
+                                           true,                // radio supports lookup supported bands
+                                           supportGetRit,       // radio supports get rit
+                                           supportSetRit,       // radio supports set rit
+                                           supportGetRitState,  // radio supports get rit state
+                                           supportSetRitState,  // radio supports set rit state
+                                           true,                // radio supports get rit max Khz
+                                           supportSMeter,       // radio supports s-meter
+                                           supportGetPtt,       // radio supports get Ptt
+                                           supportSetPtt,       // radio supports set Ptt
+                                           supportVolume,       // radio supports volume
+                                           supportAntSw,        // radio supports antenna switch
+                                           true,            // radio supports RigCtld
+                                           supportVoiceMem,        // radio supports Voice Memory
+                                           supportCwMem,     // radio supports Cw Memory
+                                           true);    // radio poll data
     }
 
 
@@ -930,6 +952,25 @@ bool HamlibRigControl::supportVolControl(int rigNumber)
     }
 }
 
+
+bool HamlibRigControl::supportVolume(int rigNumber)
+{
+    //if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    //{
+    //    return false;
+    //}
+
+    if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
+}
+
 int HamlibRigControl::setVolume(VFO vfo, float val)
 {
     value_t value;
@@ -959,7 +1000,10 @@ bool HamlibRigControl::supportSignalStrength(int modelNumber)
     return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
 
-
+bool HamlibRigControl::supportSMeter(int modelNumber)
+{
+    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
+}
 
 int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 {

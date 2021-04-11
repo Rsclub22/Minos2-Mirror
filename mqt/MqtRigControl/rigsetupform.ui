@@ -320,6 +320,13 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_51">
          <item>
+          <widget class="QLabel" name="comportErrorTxt">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer_5">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -716,6 +723,13 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">

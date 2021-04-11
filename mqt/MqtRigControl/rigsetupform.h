@@ -2,6 +2,7 @@
 #define RIGSETUPFORM_H
 
 #include <QWidget>
+#include "base_pch.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
 #include "minosNetUtils.h"
@@ -28,6 +29,32 @@ public:
     QString bandType;
 };
 
+class RigSetupFlags
+{
+public:
+
+    bool getRadioNameChanged(){return radioNameChanged;}
+    void setRadioNameChanged(bool state){radioNameChanged = state;}
+
+    bool getTransverterAdded(){return transverterAdded;}
+    void setTransverterAdded(bool state){transverterAdded = state;}
+
+    bool getTransverterRemoved(){return transverterRemoved;}
+    void setTransverterRemoved(bool state){transverterRemoved = state;}
+
+    bool getTransverterBandChanged(){return transverterBandChanged;}
+    void setTransverterBandChanged(bool state){transverterBandChanged = state;}
+
+private:
+
+
+
+    bool radioNameChanged = false;
+    bool transverterAdded = false;
+    bool transverterRemoved = false;
+    bool transverterBandChanged = false;
+};
+
 
 class RigSetupForm : public QWidget
 {
@@ -41,23 +68,19 @@ public:
 
     bool radioValueChanged = false;
     bool radioNameChanged = false;
-
+    //bool transverterRemoved;
 
     QSharedPointer<scatParams> getRadioData();
 
     QVector<QSharedPointer<BandInfo> > bands;
 
-
+    RigSetupFlags rigSetupFlags;
 
 
 
     QVector<TransVertSetupForm*> transVertTab;
 
-    //QStringList addedTransVertTabs;     // tracked edited data
-    //QStringList removedTransVertTabs;
-    //QStringList renamedTransVertTabs;   // old radio names
-    //QStringList availTransVerters;
-    //int numAvailTransVerters;
+
     void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
 
     QString getRadioModel();
@@ -119,13 +142,6 @@ public:
 
     void setAppName(QString name);
 
-    //void buildSupportedRadioBands(int radioModelNumber);
-    //void buildSupBandList();
-
-    //bool findSupRadioBand(const QString band);
-    //bool findSupTransBand(const QString band);
-
-
 
     void setEnableRigDataEntry(bool enable);
 
@@ -181,7 +197,7 @@ public:
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
-    void loadEnableShowCatFeaturesBox();
+    void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
 
 public slots:
@@ -266,7 +282,7 @@ private:
 
     bool hfFlag = false;
 
-    bool transverterRemoved;
+
     QString currentRadioName;
 
     QList<QCheckBox*> allSupBandsChkBoxList;
@@ -310,6 +326,7 @@ private:
 
 
     void setEnableDisableFeaturesGroupVisible(bool visible);
+
 };
 
 #endif // RIGSETUPFORM_H

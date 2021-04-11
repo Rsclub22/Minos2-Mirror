@@ -1,3 +1,12 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rig Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
+//
+//
+/////////////////////////////////////////////////////////////////////////////
 #include "addradiodialog.h"
 #include "ui_addradiodialog.h"
 

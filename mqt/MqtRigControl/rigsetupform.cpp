@@ -34,9 +34,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
                            bool hfFlag_, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
-    hfFlag(hfFlag_),
-    transverterRemoved(false)
-
+    hfFlag(hfFlag_)
 {
 
     ui->setupUi(this);
@@ -434,6 +432,20 @@ QString RigSetupForm::getComport()
 
 void RigSetupForm::setComport(QString p)
 {
+
+    if (ui->comPortBox->findText(p) ==  -1)
+    {
+        ui->comportErrorTxt->setText(/*HtmlFontColour(Qt::red) + */tr("%1 Not Available").arg(p));
+        ui->comportErrorTxt->setVisible(true);
+
+    }
+    else
+    {
+        ui->comportErrorTxt->setText("");
+        ui->comportErrorTxt->setVisible(false);
+
+    }
+
     ui->comPortBox->setCurrentIndex(ui->comPortBox->findText(p));
 }
 
@@ -1202,9 +1214,9 @@ void RigSetupForm::fillMgmModes()
 void RigSetupForm::onEnableRitClicked()
 {
     bool checked = ui->enableRitChkBox->isChecked();
-    if (radioData->ritEnable != checked)
+    if (radioData->enableDisableCatFeature.ritEnable != checked)
     {
-        radioData->ritEnable = checked;
+        radioData->enableDisableCatFeature.ritEnable = checked;
     }
 
 }
@@ -1213,62 +1225,62 @@ void RigSetupForm::onEnableRitClicked()
 void RigSetupForm::onEnableSMeterClicked()
 {
     bool checked = ui->enableSMeterChkBox->isChecked();
-    if (radioData->sMeterEnable != checked)
+    if (radioData->enableDisableCatFeature.sMeterEnable != checked)
     {
-        radioData->sMeterEnable = checked;
+        radioData->enableDisableCatFeature.sMeterEnable = checked;
     }
 }
 
 void RigSetupForm::onEnableVolClicked()
 {
     bool checked = ui->enableVolChkBox->isChecked();
-    if (radioData->volumeEnable != checked)
+    if (radioData->enableDisableCatFeature.volumeEnable != checked)
     {
-        radioData->volumeEnable = checked;
+        radioData->enableDisableCatFeature.volumeEnable = checked;
     }
 }
 void RigSetupForm::onEnableCatPttClicked()
 {
     bool checked = ui->enableCatPttChkBox->isChecked();
-    if (radioData->catEnable != checked)
+    if (radioData->enableDisableCatFeature.catEnable != checked)
     {
-        radioData->catEnable = checked;
+        radioData->enableDisableCatFeature.catEnable = checked;
     }
 }
 void RigSetupForm::onEnableVoiceTxMemClicked()
 {
     bool checked = ui->enableVoiceTxMemChkBox->isChecked();
-    if (radioData->voiceMemEnable != checked)
+    if (radioData->enableDisableCatFeature.voiceMemEnable != checked)
     {
-        radioData->voiceMemEnable = checked;
+        radioData->enableDisableCatFeature.voiceMemEnable = checked;
     }
 
 }
 void RigSetupForm::onEnableCwTxMemClicked()
 {
     bool checked = ui->enableCwTxMemChkBox->isChecked();
-    if (radioData->cWMemEnable != checked)
+    if (radioData->enableDisableCatFeature.cWMemEnable != checked)
     {
-        radioData->cWMemEnable = checked;
+        radioData->enableDisableCatFeature.cWMemEnable = checked;
     }
 }
 void RigSetupForm::onEnableCatFeaturesClicked()
 {
     if(ui->enableCatFeaturesChkBox->isChecked())
     {
-        radioData->enableShowCatFeatures = true;
+        radioData->enableDisableCatFeature.enableDisplay = true;
         setEnableDisableFeaturesGroupVisible(true);
     }
     else
     {
-        radioData->enableShowCatFeatures = false;
+        radioData->enableDisableCatFeature.enableDisplay = false;
         setEnableDisableFeaturesGroupVisible(false);
     }
 }
 
 
 
-void RigSetupForm::loadEnableShowCatFeaturesBox()
+void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
 {
     if (ui->enableCatFeaturesChkBox->isChecked())
     {
@@ -1279,12 +1291,68 @@ void RigSetupForm::loadEnableShowCatFeaturesBox()
        setEnableDisableFeaturesGroupVisible(false);
     }
 
-    ui->enableRitChkBox->setChecked(radioData->ritEnable);
-    ui->enableSMeterChkBox->setChecked(radioData->sMeterEnable);
-    ui->enableVolChkBox->setChecked(radioData->volumeEnable);
-    ui->enableCatPttChkBox->setChecked(radioData->catEnable);
-    ui->enableVoiceTxMemChkBox->setChecked(radioData->voiceMemEnable);
-    ui->enableCwTxMemChkBox->setChecked(radioData->cWMemEnable);
+    ui->enableRitChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
+    if (rigCap.supportGetRit || rigCap.supportSetRit)
+    {
+        ui->enableRitChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableRitChkBox->setVisible(false);
+    }
+
+
+    ui->enableSMeterChkBox->setChecked(radioData->enableDisableCatFeature.sMeterEnable);
+    if(rigCap.supportSMeter)
+    {
+        ui->enableSMeterChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableSMeterChkBox->setVisible(false);
+    }
+
+    ui->enableVolChkBox->setChecked(radioData->enableDisableCatFeature.volumeEnable);
+    if (rigCap.supportVolume)
+    {
+        ui->enableVolChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableVolChkBox->setVisible(false);
+    }
+
+    ui->enableCatPttChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
+    if (rigCap.supportGetPtt && rigCap.supportSetPtt)
+    {
+        ui->enableCatPttChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableCatPttChkBox->setVisible(false);
+    }
+
+    ui->enableVoiceTxMemChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
+    if (rigCap.supportVoiceMemory)
+    {
+        ui->enableVoiceTxMemChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableVoiceTxMemChkBox->setVisible(false);
+    }
+
+    ui->enableCwTxMemChkBox->setChecked(radioData->enableDisableCatFeature.cWMemEnable);
+    if (rigCap.supportCwMemory)
+    {
+        ui->enableCwTxMemChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableCwTxMemChkBox->setVisible(false);
+    }
+
+
 
 }
 
@@ -1592,7 +1660,7 @@ void RigSetupForm::removeTransVerter()
     radioData->transVertSettings.removeAt(currentIndex);
 
     radioData->numTransverters--;
-    transverterRemoved = true;
+    rigSetupFlags.setTransverterRemoved(true);
 
 
 }
@@ -1600,12 +1668,12 @@ void RigSetupForm::removeTransVerter()
 
 bool RigSetupForm::getTransVertRemovedFlag()
 {
-    return transverterRemoved;
+    return rigSetupFlags.getTransverterRemoved();
 }
 
 void RigSetupForm::setTransVertRemovedFlag(bool value)
 {
-    transverterRemoved = value;
+    rigSetupFlags.setTransverterRemoved(value);
 }
 
 void RigSetupForm::changeBand()

@@ -64,7 +64,6 @@ public:
     bool supportGetRitMax;
     bool supportSMeter;
     bool supportGetPtt;
-    bool supportPtt;
     bool supportSetPtt;
     bool supportVolume;
     bool supportAntSw;

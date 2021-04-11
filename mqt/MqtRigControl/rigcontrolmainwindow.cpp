@@ -417,7 +417,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(ui->actionAbout, &QAction::triggered,  this, [=](){about();});
     connect(ui->actionAbout_Radio_Config, &QAction::triggered,  this, [=](){aboutRigConfig();});
     connect(pollTimer, &QTimer::timeout,  this, [=](){pollRadioInfo();});
-    connect(ui->ritEnableChk, &QCheckBox::stateChanged,  this, [=](int chkState){ritEnableChecked(chkState);});
+    //connect(ui->ritEnableChk, &QCheckBox::stateChanged,  this, [=](int chkState){ritEnableChecked(chkState);});
 
 
     // configure radio dialog
@@ -687,29 +687,10 @@ void RigControlMainWindow::upDateRadio()
 
                 buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
 
-                checkSupportVolume();
+                checkSupportCatFeatures();
 
-                checkSupportSMeter();
 
                 updateSupportedRadioIndicators();
-
-                checkSupportRit();
-
-                if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory
-                        || rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory)
-                {
-                    setMemoryGroupVisible(true);
-                }
-                else
-                {
-                    setMemoryGroupVisible(false);
-                }
-
-                checkSupportVoiceMemory();
-
-                checkSupportCwKeyerMemory();
-
-                checkSupportPtt();
 
                 if (appName.count() > 0)
                 {
@@ -790,6 +771,36 @@ void RigControlMainWindow::upDateRadio()
 }
 
 
+void RigControlMainWindow::checkSupportCatFeatures()
+{
+
+    checkSupportVolume();
+
+    checkSupportSMeter();
+
+    checkSupportRit();
+
+    if ((rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory
+            || rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory)
+            && (currentRadio->enableDisableCatFeature.voiceMemEnable
+            || currentRadio->enableDisableCatFeature.cWMemEnable))
+    {
+        setMemoryGroupVisible(true);
+    }
+    else
+    {
+        setMemoryGroupVisible(false);
+    }
+
+    checkSupportVoiceMemory();
+
+    checkSupportCwKeyerMemory();
+
+    checkSupportPtt();
+
+}
+
+
 void RigControlMainWindow::setupTransVerter()
 {
     // setup local serial transvert switch
@@ -841,7 +852,7 @@ void RigControlMainWindow::checkSupportVolume()
 {
     // does the library support control of volume control
 
-    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVolume)
+    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVolume && currentRadio->enableDisableCatFeature.volumeEnable)
     {
         // does the radio support volume control
         if (radio != nullptr)
@@ -863,7 +874,7 @@ void RigControlMainWindow::checkSupportSMeter()
 {
     // does the library support signal strength meter
 
-    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportSMeter)
+    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportSMeter && currentRadio->enableDisableCatFeature.sMeterEnable)
     {
        // does the radio support signal strength meter
        if (radio !=nullptr)
@@ -917,7 +928,7 @@ void RigControlMainWindow::checkSupportVoiceMemory()
 {
     // does the library support voice keyer memory
 
-    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory)
+    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory && currentRadio->enableDisableCatFeature.voiceMemEnable)
     {
 
         if (radio)
@@ -952,7 +963,7 @@ void RigControlMainWindow::checkSupportVoiceMemory()
 void RigControlMainWindow::checkSupportCwKeyerMemory()
 {
     // does the library support cw keyer memories
-    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory)
+    if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory && currentRadio->enableDisableCatFeature.cWMemEnable)
     {
         // does radio support CW memories
         if (radio)
@@ -998,8 +1009,9 @@ void RigControlMainWindow::checkSupportPtt()
               selectedRigSupCap->supportGetPtt = radio->supportGetPtt(currentRadio->rigModelNumber);
               selectedRigSupCap->supportSetPtt = radio->supportSetPtt(currentRadio->rigModelNumber);
 
-              if (selectedRigSupCap->supportGetPtt
-                      && selectedRigSupCap->supportSetPtt)
+              if ((selectedRigSupCap->supportGetPtt && selectedRigSupCap->supportSetPtt)
+                   && (currentRadio->pttType != serialCommonData::PTT_METHOD_CAT
+                   || (currentRadio->pttType == serialCommonData::PTT_METHOD_CAT && currentRadio->enableDisableCatFeature.catEnable)))
               {
                   setPttGroupItemsVisible(true);
 
@@ -1855,7 +1867,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     }
 
-    if (radioCommsOK && selectedRigSupCap->supVolume)
+    if (radioCommsOK && selectedRigSupCap->supVolume && currentRadio->enableDisableCatFeature.voiceMemEnable)
     {
 
         retCode = getVolume(rigStateDetails->curVfo);
@@ -1869,7 +1881,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     }
 
 
-    if (radioCommsOK && selectedRigSupCap->supSignalStrength)
+    if (radioCommsOK && selectedRigSupCap->supSignalStrength && currentRadio->enableDisableCatFeature.sMeterEnable)
     {
 
 
@@ -1886,14 +1898,17 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && selectedRigSupCap->supportGetPtt)
     {
-
-        retCode = getTXStatus(rigStateDetails->curVfo);
-        if (retCode < 0)
+        if (currentRadio->pttType != serialCommonData::PTT_METHOD_CAT || (currentRadio->pttType == serialCommonData::PTT_METHOD_CAT && currentRadio->enableDisableCatFeature.catEnable))
         {
-            // error
-            logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
-            radioError(retCode, "Request TX Status");
+            retCode = getTXStatus(rigStateDetails->curVfo);
+            if (retCode < 0)
+            {
+                // error
+                logMessage(QString("Get radioInfo: Get TXStatus error").arg(QString::number(retCode)));
+                radioError(retCode, "Request TX Status");
+            }
         }
+
 
     }
 
@@ -3158,16 +3173,8 @@ void RigControlMainWindow::getRitSupportStatus()
 
             if (selectedRigSupCap->radioSupSetRit)
             {
-                rigStateDetails->ritEnable = readRitEnableChk();
+                rigStateDetails->ritEnable = currentRadio->enableDisableCatFeature.ritEnable;
                 logMessage(QString("Get Rit Support - Rit Enabled = %1").arg(rigStateDetails->ritEnable ? "True" : "False"));
-                if (rigStateDetails->ritEnable)
-                {
-                    ui->ritEnableChk->setCheckState(Qt::Checked);
-                }
-                else
-                {
-                    ui->ritEnableChk->setCheckState(Qt::Unchecked);
-                }
 
             }
 
@@ -3306,7 +3313,7 @@ void RigControlMainWindow::setRitGetSetFreqIndicatorVisible(bool state)
     ui->SetRitFreqLbl->setVisible(state);
     ui->SetRitFreqInd->setVisible(state);
     ui->GetRitFreqInd->setVisible(state);
-    ui->ritEnableChk->setVisible(state);
+    //ui->ritEnableChk->setVisible(state);
     ui->ritGroupBox->setVisible(state);
 }
 
@@ -3339,7 +3346,7 @@ void RigControlMainWindow::ritGetFreqIndicatorToggle(bool state)
     }
 }
 
-
+/*
 void RigControlMainWindow::saveRitEnableChk(bool state)
 {
     QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
@@ -3380,7 +3387,7 @@ void RigControlMainWindow::ritEnableChecked(int chkState)
 
     sendRitEnableStatusLogger();
 }
-
+*/
 
 int RigControlMainWindow::getRitFreq(VFO vfo)
 {
@@ -4310,13 +4317,13 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radio, Q
     radio->networkAdd = config.value("netAddress", "").toString();
     radio->networkPort = config.value("netPort", "").toString();
     radio->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radio->enableShowCatFeatures = config.value("enableShowCatFeatures", false).toBool();
-    radio->ritEnable = config.value("ritEnable", false).toBool();
-    radio->sMeterEnable = config.value("sMeterEnable", true).toBool();
-    radio->volumeEnable = config.value("volumeEnable", true).toBool();
-    radio->voiceMemEnable = config.value("voiceMemEnable", true).toBool();
-    radio->cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radio->catEnable = config.value("catEnable", true).toBool();
+    radio->enableDisableCatFeature.enableDisplay = config.value("enableShowCatFeatures", false).toBool();
+    radio->enableDisableCatFeature.ritEnable = config.value("ritEnable", false).toBool();
+    radio->enableDisableCatFeature.sMeterEnable = config.value("sMeterEnable", true).toBool();
+    radio->enableDisableCatFeature.volumeEnable = config.value("volumeEnable", true).toBool();
+    radio->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
+    radio->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
+    radio->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
 
 
     foreach (auto &b, bands)

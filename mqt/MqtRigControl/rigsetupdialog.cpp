@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2020
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -77,25 +77,15 @@ void RigSetupDialog::initSetup()
     QSettings  settings(fileName, QSettings::IniFormat);
 
     // get current settings
-    storedAvailRadios = settings.childGroups();
-    for (int i = 0; i < storedAvailRadios.count(); i++)
+    availRadios = settings.childGroups();
+    for (int i = 0; i < availRadios.count(); i++)
     {
-        if (storedAvailRadios[i].contains("Version"))
+        if (availRadios[i].contains("Version"))
         {
-            storedAvailRadios.removeAt(i);
+            availRadios.removeAt(i);
             break;
         }
     }
-
-
-    for (int i = 0; i < storedAvailRadios.count(); i++)
-    {
-        QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams);
-        getRadioSetting(radioData, storedAvailRadios[i], settings);
-        storedRadioData.append(radioData);
-    }
-
-    availRadios = storedAvailRadios;
 
     numAvailRadios = availRadios.count();
 
@@ -127,6 +117,19 @@ void RigSetupDialog::initSetup()
 
         loadSettingsToTab(i);
     }
+
+    // make a copy of the current settings
+    for (int i = 0; i < availRadios.count(); i++)
+    {
+        QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams);
+        storedRadioData.append(radioData);
+    }
+
+     storedAvailRadios = availRadios;
+     for (int i = 0; i < storedAvailRadios.count(); i++)
+     {
+         storedRadioData[i]->scatParamsCopy(radioTab[i]->getRadioData());
+     }
 
 }
 
@@ -325,7 +328,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
         radioTab[tabNum]->setLocTVSWComportVisible(false);
     }
 
-    radioTab[tabNum]->loadEnableShowCatFeaturesBox();
+    radioTab[tabNum]->loadEnableShowCatFeaturesBox(rigCap);
 
     //radioTab[tabNum]->buildSupBandList();
 
@@ -476,7 +479,7 @@ void RigSetupDialog::editRadioName()
             {
                 availRadioData[i]->radioName = text;  // update with new name
                 availRadios[i] = text;
-                radioTab[i]->radioNameChanged = true;
+                radioTab[i]->rigSetupFlags.setRadioNameChanged(true);
                 radioTab[i]->radioValueChanged = true;
 
             }
@@ -658,6 +661,40 @@ void RigSetupDialog::saveRadio(int i)
 void RigSetupDialog::saveSettings()
 {
 
+    for (int i = 0; i < numAvailRadios; i++)
+    {
+        if (storedRadioData[i]->compareNotEqual( availRadioData[i]))
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << " Not equal";
+        }
+
+        if (storedRadioData[0]->compareEqual(availRadioData[0]))
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << "Equal";
+        }
+
+        if (storedRadioData[0]->transVertSettings == availRadioData[0]->transVertSettings)
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings equal";
+        }
+
+        if (storedRadioData[0]->transVertSettings != availRadioData[0]->transVertSettings)
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings not equal";
+        }
+
+        if (storedRadioData[0]->supportBands == availRadioData[0]->supportBands)
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings equal";
+        }
+
+        if (storedRadioData[0]->supportBands != availRadioData[0]->supportBands)
+        {
+            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings not equal";
+        }
+    }
+
+
 
     QString fileNameTransVert;
 
@@ -711,10 +748,10 @@ void RigSetupDialog::saveSettings()
 
         if (radioTab[i]->radioValueChanged)
         {
-            if (radioTab[i]->radioNameChanged)
+            if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
             {
                 emit radioNameChange();
-                radioTab[i]->radioNameChanged = false;
+                radioTab[i]->rigSetupFlags.setRadioNameChanged(false);
             }
 
             if (currentRadioName == radioTab[i]->getRadioData()->radioName)
@@ -917,13 +954,13 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
     config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
     config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
     config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    config.setValue("enableShowCatFeatures", radioTab[radNum]->getRadioData()->enableShowCatFeatures);
-    config.setValue("ritEnable", radioTab[radNum]->getRadioData()->ritEnable);
-    config.setValue("sMeterEnable", radioTab[radNum]->getRadioData()->sMeterEnable);
-    config.setValue("volumeEnable", radioTab[radNum]->getRadioData()->volumeEnable);
-    config.setValue("voiceMemEnable", radioTab[radNum]->getRadioData()->voiceMemEnable);
-    config.setValue("cWMemEnable", radioTab[radNum]->getRadioData()->cWMemEnable);
-    config.setValue("catEnable", radioTab[radNum]->getRadioData()->catEnable);
+    config.setValue("enableShowCatFeatures", radioTab[radNum]->getRadioData()->enableDisableCatFeature.enableDisplay);
+    config.setValue("ritEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.ritEnable);
+    config.setValue("sMeterEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.sMeterEnable);
+    config.setValue("volumeEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.volumeEnable);
+    config.setValue("voiceMemEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.voiceMemEnable);
+    config.setValue("cWMemEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.cWMemEnable);
+    config.setValue("catEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.catEnable);
 
     foreach (auto &b, bands)
     {
@@ -972,7 +1009,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->forceDtr = config.value("forceDTR", 0).toInt();
     radioData->forceRts= config.value("forceRTS", 0).toInt();
     radioData->enablePTT = config.value("enablePtt", false).toBool();
-    radioData->pttType = config.value("pttType", static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)).toInt();
+    radioData->pttType = config.value("pttType", serialCommonData::PTTMethodCodes::PTT_METHOD_CAT).toInt();
     radioData->pttSerialPort = config.value("pttSerialPort", "").toString();
     radioData->pollInterval = config.value("radioPollInterval", "1").toString();
     radioData->rigCtldEnable = config.value("rigCtldEnable", false).toBool();
@@ -984,13 +1021,13 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->networkAdd = config.value("netAddress", "").toString();
     radioData->networkPort = config.value("netPort", "").toString();
     radioData->mgmMode = config.value("mgmMode", hamlibData::USB).toString();
-    radioData->enableShowCatFeatures = config.value("enableShowCatFeatures", false).toBool();
-    radioData->ritEnable = config.value("ritEnable", false).toBool();
-    radioData->sMeterEnable = config.value("sMeterEnable", true).toBool();
-    radioData->volumeEnable = config.value("volumeEnable", true).toBool();
-    radioData->voiceMemEnable = config.value("voiceMemEnable", true).toBool();
-    radioData->cWMemEnable = config.value("cWMemEnable", true).toBool();
-    radioData->catEnable = config.value("catEnable", true).toBool();
+    radioData->enableDisableCatFeature.enableDisplay = config.value("enableShowCatFeatures", false).toBool();
+    radioData->enableDisableCatFeature.ritEnable = config.value("ritEnable", false).toBool();
+    radioData->enableDisableCatFeature.sMeterEnable = config.value("sMeterEnable", true).toBool();
+    radioData->enableDisableCatFeature.volumeEnable = config.value("volumeEnable", true).toBool();
+    radioData->enableDisableCatFeature.voiceMemEnable = config.value("voiceMemEnable", true).toBool();
+    radioData->enableDisableCatFeature.cWMemEnable = config.value("cWMemEnable", true).toBool();
+    radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
 
 
     foreach (auto &b, bands)
@@ -1175,7 +1212,7 @@ QString RigSetupDialog::getCurrentRadioName()
     return currentRadioName;
 }
 
-
+/*
 void RigSetupDialog::readCurrentRadio()
 {
 
@@ -1192,7 +1229,7 @@ void RigSetupDialog::readCurrentRadio()
 
 }
 
-
+*/
 
 
 

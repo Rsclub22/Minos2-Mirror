@@ -113,7 +113,7 @@ public:
 
         for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
         {
-            if (supportBands.value(i.key()) == i.value())
+            if (supportBands.value(i.key()) != i.value())
             {
                 state = false;
                 break;
@@ -122,6 +122,23 @@ public:
 
         return state;
     }
+
+    bool operator!=(const SupportBands &sbd)
+    {
+        bool state = false;
+
+        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
+        {
+            if (supportBands.value(i.key()) != i.value())
+            {
+                state = true;
+                break;
+            }
+        }
+
+        return state;
+    }
+
 
 
     void clear()
@@ -162,7 +179,24 @@ public:
 
 };
 
+class EnableDisableCatFeature
+{
+public:
+    EnableDisableCatFeature(){};
 
+    bool operator ==(const EnableDisableCatFeature &edcf);
+    bool operator !=(const EnableDisableCatFeature &edcf);
+    EnableDisableCatFeature& operator =(const EnableDisableCatFeature &edcf);
+
+    bool enableDisplay = false;
+    bool ritEnable = false;
+    bool sMeterEnable = true;
+    bool volumeEnable = true;
+    bool voiceMemEnable = true;
+    bool cWMemEnable = true;
+    bool catEnable = true;
+
+};
 
 
 
@@ -177,148 +211,21 @@ public:
 
   scatParams(){}
 
-  bool operator==(const QSharedPointer<scatParams> radParams)
-  {
-      if (radioName == radParams->radioName &&
-              radioNumber == radParams->radioNumber &&
-              comport == radParams->comport &&
-              rigMfg_Name == radParams->rigMfg_Name &&
-              rigModelName == radParams->rigModelName &&
-              rigModel == radParams->rigModel &&
-              rigModelNumber == radParams->rigModelNumber &&
-              pollInterval == radParams->pollInterval &&
-              civAddress == radParams->civAddress &&
-              baudrate == radParams->baudrate &&
-              parity == radParams->parity &&
-              stopbits == radParams->stopbits &&
-              databits == radParams->databits &&
-              handshake == radParams->handshake &&
-              forceDtr == radParams->forceDtr &&
-              forceRts == radParams->forceRts &&
-              portType == radParams->portType &&
-              advancedCommsFlag == radParams->advancedCommsFlag &&
-              networkAdd == radParams->networkAdd &&
-              networkPort == radParams->networkPort &&
-              enablePTT == radParams->enablePTT &&
-              pttSerialPort == radParams->pttSerialPort &&
-              pttType == radParams->pttType &&
-              rigCtldEnable == radParams->rigCtldEnable &&
-              startMinosRigCtld == radParams->startMinosRigCtld &&
-              rigCtldNetworkAdd == radParams->rigCtldNetworkAdd &&
-              rigCtldNetworkPort == radParams->rigCtldNetworkPort &&
-              mgmMode == radParams->mgmMode &&
-              antSwitchAvail == radParams->antSwitchAvail &&
-              ritSupported == radParams->ritSupported &&
+  bool operator ==(const scatParams radParams);
+  bool compareEqual(QSharedPointer<scatParams> radParams);
+  bool compareNotEqual(QSharedPointer<scatParams> radParams);
+  void scatParamsCopy(const QSharedPointer<scatParams> srce);
 
-              transVertEnable == radParams->transVertEnable &&
-              volAvail == radParams->volAvail &&
-              supportBands == radParams->supportBands &&     // for non hamlib radios
-              compareStringList(transVertNames, radParams->transVertNames) &&
-              numTransverters == radParams->numTransverters &&
-              enableTransSwitch == radParams->enableTransSwitch &&
-              enableLocTVSwMsg == radParams->enableLocTVSwMsg &&
-              locTVSwComport == radParams->locTVSwComport &&
-              compareStringList(radioSupBands, radParams->radioSupBands) &&
-              compareStringList(radioTransSupBands, radParams->radioTransSupBands) &&
-              transVertSettings == radParams->transVertSettings &&
-              enableShowCatFeatures == radParams->enableShowCatFeatures &&
-              ritEnable == radParams->ritEnable &&
-              sMeterEnable == radParams->sMeterEnable &&
-              volumeEnable == radParams->volumeEnable &&
-              voiceMemEnable == radParams->voiceMemEnable &&
-              cWMemEnable == radParams->cWMemEnable &&
-              catEnable == radParams->catEnable)
-      {
-         return true;
-      }
-
-      return false;
-
-  }
+  bool compareStringList(QStringList &sl1, QStringList &sl2);
 
 
-  bool compareStringList(QStringList &sl1, QStringList &sl2)
-  {
-      if (sl1.count() != sl2.count())
-      {
-          return false;
-      }
-      else
-      {
-          for (int i = 0; i <sl1.count(); i++)
-          {
-              if (sl1[i] != sl2[i])
-              {
-                  return false;
-              }
-          }
-      }
-      return true;
-  }
-
-  QSharedPointer<scatParams> operator=(const QSharedPointer<scatParams> srce)
-  {
-      radioName = srce->radioName;
-      radioNumber = srce->radioNumber;
-      comport = srce->comport;
-      rigMfg_Name = srce->rigMfg_Name;
-      rigModelName = srce->rigModelName;
-      rigModel = srce->rigModel;       // used as key to select radio
-      rigModelNumber = srce->rigModelNumber;
-      pollInterval = srce->pollInterval;
-      civAddress = srce->civAddress;
-      baudrate = srce->baudrate;
-      parity = srce->parity;
-      stopbits = srce->stopbits;
-      databits = srce->databits;
-      handshake = srce->handshake;
-      forceDtr = srce->forceDtr;
-      forceRts = srce->forceRts;
-      portType = srce->portType;
-      advancedCommsFlag = srce->advancedCommsFlag;
-      networkAdd = srce->networkAdd;
-      networkPort = srce->networkPort;
-      enablePTT  = srce->enablePTT;
-      pttSerialPort = srce->enablePTT;
-      pttType = srce->pttType;
-      rigCtldEnable = srce->rigCtldEnable;
-      startMinosRigCtld = srce->startMinosRigCtld;
-      rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
-      rigCtldNetworkPort = srce->rigCtldNetworkPort;
-      mgmMode = srce->mgmMode;
-      antSwitchAvail = srce->antSwitchAvail;
-      ritSupported = srce->ritSupported;
-
-      transVertEnable  = srce->transVertEnable;
-      volAvail = srce->volAvail;
-      supportBands = srce->supportBands;        // for non hamlib radios
-      transVertNames = srce->transVertNames;
-      numTransverters = srce->numTransverters;
-      enableTransSwitch = srce->enableTransSwitch;
-      enableLocTVSwMsg = srce->enableLocTVSwMsg;
-      locTVSwComport = srce->locTVSwComport;
-      radioSupBands = srce->radioSupBands;  // bands supported by radio
-      radioTransSupBands = srce->radioTransSupBands; // band supported by radio and transverters
-      transVertSettings = srce->transVertSettings;
 
 
-      // enable\Disable Cat features
-      enableShowCatFeatures = srce->enableShowCatFeatures;
-      ritEnable = srce->ritEnable;
-      sMeterEnable = srce->sMeterEnable;
-      volumeEnable = srce->volumeEnable;
-      voiceMemEnable = srce->voiceMemEnable;
-      cWMemEnable = srce->cWMemEnable;
-      catEnable = srce->catEnable;
-
-      return QSharedPointer<scatParams>(this);
-
-  }
 
 
   QString radioName;    //Minos Radio Name
   QString radioNumber;  // Minos Radio Number
-  QString comport; /**<  serial port device*/
+  QString comport;
   QString rigMfg_Name;
   QString rigModelName;
   QString rigModel;       // used as key to select radio
@@ -338,7 +245,7 @@ public:
   QString networkPort;
   bool enablePTT  = false;
   QString pttSerialPort;
-  int pttType;
+  int pttType = 0;
   bool rigCtldEnable = false;
   bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;
@@ -348,7 +255,6 @@ public:
   bool ritSupported = false;
 
   bool transVertEnable  = false;
-  bool volAvail = false;
   SupportBands supportBands;        // for non hamlib radios
   QStringList transVertNames;
   int numTransverters = 0;
@@ -359,14 +265,10 @@ public:
   QStringList radioTransSupBands; // band supported by radio and transverters
   QVector<TransVertParams*> transVertSettings;
 
-  // enable\Disable Cat features
-  bool enableShowCatFeatures = false;
-  bool ritEnable = false;
-  bool sMeterEnable = true;
-  bool volumeEnable = true;
-  bool voiceMemEnable = true;
-  bool cWMemEnable = true;
-  bool catEnable = true;
+  EnableDisableCatFeature enableDisableCatFeature;
+
+
+
 
 
 };

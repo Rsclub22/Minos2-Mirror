@@ -170,8 +170,8 @@ public:
      selTransverterNum = NO_TRANSVERTER_NUM;
      mgmModeFlag = false;
      radioRitOn = false;
-     ritMaxKHzFreq = MAX_RITFREQ;
      ritEnable = false;
+     ritMaxKHzFreq = MAX_RITFREQ;
      ritKHzFlag = false;
      radioCommsOK = false;
      rigErrorFlag = false;
@@ -201,8 +201,8 @@ public:
   bool mgmModeFlag;
   QStringList mgmModes;
   bool radioRitOn;
-  bool ritEnable;
   ShortFreq rRitFreq;
+  bool ritEnable;
   int ritMaxKHzFreq;
   bool ritKHzFlag;
   bool radioCommsOK;
@@ -419,8 +419,8 @@ private:
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
-    void saveRitEnableChk(bool state);
-    bool readRitEnableChk();
+    //void saveRitEnableChk(bool state);
+    //bool readRitEnableChk();
 
     void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
@@ -542,6 +542,7 @@ private:
     void buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList);
     void initCacheData(QStringList &availRadios);
     void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
+    void checkSupportCatFeatures();
 private slots:
 
     void onStdInRead(QString);
@@ -571,7 +572,7 @@ private slots:
 
     void sendRadioListLogger();
 
-    void ritEnableChecked(int state);
+    //void ritEnableChecked(int state);
     void updateRigDetailsCache();
 
 
