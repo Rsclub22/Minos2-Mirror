@@ -212,6 +212,8 @@ private slots:
     void onStdInRead(QString cmd);
     void on_maxDistanceEdit_editingFinished();
 
+    void on_showReadcb_stateChanged(int arg1);
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader stdinReader;

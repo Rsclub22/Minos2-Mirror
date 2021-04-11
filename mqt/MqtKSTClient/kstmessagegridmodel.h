@@ -13,15 +13,16 @@ enum ChatColumns {eccChat = 0, eccDTG, eccCall, eccName, eccOther, eccText, eccM
 class KstMessageLine
 {
 public:
-    int sequence;
-    int chat;
+    bool markedRead = false;
+    int sequence = -1;
+    int chat = -1;
     QDateTime dtg;
     QString fullLine;
     QString call;
-    int distance;
+    int distance = -1;
     QString name;
     QString otherCall;
-    int otherDistance;
+    int otherDistance = -1;
     QString message;
 
     KstMessageLine(){}
@@ -68,6 +69,8 @@ class KstMessageGridModel: public QAbstractItemModel
         void reset();
         void setFilterString(QString f);
         void setChatFilter(int value);
+        virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
+        virtual bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 };
 
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
@@ -87,10 +90,12 @@ public:
 class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 {
     QString filterString;
+    bool showRead = false;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
     QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
+    void setShowRead(bool);
 };
 
 
