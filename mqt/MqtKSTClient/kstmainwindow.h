@@ -11,6 +11,7 @@
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
 #include "kstplanesmodel.h"
+#include "cutils.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class KSTMainWindow; }
@@ -87,6 +88,8 @@ class KSTMainWindow : public QMainWindow
 
     QSharedPointer<AirScoutLink> asl;
     QSharedPointer<KstUser> planeActive;
+
+    UpperCaseValidator ucValidator;
 
     void closeEvent(QCloseEvent *event) override;
 

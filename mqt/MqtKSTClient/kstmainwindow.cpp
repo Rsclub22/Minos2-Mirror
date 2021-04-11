@@ -254,6 +254,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
+    ui->callEdit->setValidator(&ucValidator);
+
     ui->ASActivecb->setChecked(ASActive);
     ui->planesFrame->setVisible(ASActive);
     if(ASActive)
@@ -328,6 +330,11 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
     userCallTimer.stop();
 
     // and tidy up all loose ends
+
+    if (kstconnected)
+    {
+        on_connectButton_clicked();
+    }
 
     QSettings settings;
     settings.setValue("geometry/Main", saveGeometry());
