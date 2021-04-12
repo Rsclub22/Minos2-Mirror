@@ -133,6 +133,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
         ui->ModeComboBoxGJV->addItem(sm);
     }
 
+    // THis is STUPID - set it one way and then check the other!
     ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
     ui->ModeButton->setText(hamlibData::CW);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
@@ -2042,8 +2043,18 @@ void QSOLogFrame::updateQSODisplay()
 
    bool mgm = contest->MGMContestRules.getValue();
 
-   ui->ModeComboBoxGJV->setEnabled(!mgm);
-   ui->ModeButton->setEnabled(!mgm);
+   if (mgm)
+   {
+       ui->ModeComboBoxGJV->setCurrentText(hamlibData::MGM);
+       ui->MGMSubModeEdit->setText(contest->currentMode.getValue());
+   }
+   if (notProtected)
+   {
+       ui->ModeComboBoxGJV->setEnabled(!mgm);
+       ui->ModeButton->setEnabled(!mgm);
+
+       ui->MGMSubModeFrame->setVisible(mgm);
+   }
 
    checkQsoFrameColour();
 
