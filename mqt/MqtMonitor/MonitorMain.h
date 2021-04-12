@@ -159,7 +159,7 @@ public:
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );
     void on_routerCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
-    void on_provider(Provider provider);
+    void on_provider(Provider provider, QString cat);
 
     void onStdInRead(QString cmd);
 

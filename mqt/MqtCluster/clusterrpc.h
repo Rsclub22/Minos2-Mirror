@@ -39,7 +39,7 @@ signals:
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString);
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
-    void on_provider(Provider provider);
+    void on_provider(Provider provider, QString cat);
 };
 
 #endif // CLUSTERRPC_H

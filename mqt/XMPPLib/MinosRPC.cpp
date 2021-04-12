@@ -192,7 +192,7 @@ void MinosRPC::routerNotify( AnalysePubSubNotify &an)
                 {
                     RPCPubSub::subscribeRemote(prov.routerName, s);
                 }
-                emit provider(prov);
+                emit provider(prov, sub);
             }
         }
 

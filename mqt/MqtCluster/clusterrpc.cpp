@@ -280,7 +280,7 @@ void Clusterrpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const 
    }
 }
 
-void Clusterrpc::on_provider(Provider p  )
+void Clusterrpc::on_provider(Provider p, QString /*cat*/  )
 {
     trace(QString("clusterServer: on_provider - routerName = %1, app = %2").arg(p.routerName, p.app));
 }
