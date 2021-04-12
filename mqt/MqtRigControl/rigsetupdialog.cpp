@@ -630,103 +630,42 @@ void RigSetupDialog::cancelButtonPushed()
 }
 
 
-// remove ??? *********************************
-/*
-void RigSetupDialog::saveRadio(int i)
-{
 
-    QString fileName;
-    fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    saveRadioData(i, config);
-
-    if (availRadioData[i]->transVertEnable)
-    {
-        fileName = RADIO_PATH_LOGGER + availRadioData[i]->radioModelName + FILENAME_TRANSVERT_RADIOS;
-        QSettings  config(fileName, QSettings::IniFormat);
-
-        for (int trv = 0; trv < availRadioData[i]->numTransverters; trv++)
-        {
-            saveTranVerterSetting(i, trv, config);
-        }
-
-    }
-
-}
-
-*/
 
 void RigSetupDialog::saveSettings()
 {
-
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        if (storedRadioData[i]->compareNotEqual( availRadioData[i]))
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << " Not equal";
-        }
-
-        if (storedRadioData[0]->compareEqual(availRadioData[0]))
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << "Equal";
-        }
-
-        if (storedRadioData[0]->transVertSettings == availRadioData[0]->transVertSettings)
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings equal";
-        }
-
-        if (storedRadioData[0]->transVertSettings != availRadioData[0]->transVertSettings)
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings not equal";
-        }
-
-        if (storedRadioData[0]->supportBands == availRadioData[0]->supportBands)
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings equal";
-        }
-
-        if (storedRadioData[0]->supportBands != availRadioData[0]->supportBands)
-        {
-            qDebug() << "radio - " << storedRadioData[i]->radioName << "transvert settings not equal";
-        }
-    }
-
-
 
     QString fileNameTransVert;
 
     QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
 
-    // get current list of saved radios, remove those that no longer exist
-    QStringList savedRadioNames = configRadio.childGroups();
-    int v = savedRadioNames.indexOf("Version");   // the section name
-    savedRadioNames.removeAt(v);
-
-    bool radioNameChanged = false;
     for (int i = 0; i < radioTab.count(); i ++)
     {
-        if (radioTab[i]->radioValueChanged)
+        if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
         {
-            radioNameChanged = true;
+            setupChangeFlags.setRadioNameChanged(true);
+            // gather data to send to other rigcontrols
+            QSharedPointer<RadioNameChange> radioNames = QSharedPointer<RadioNameChange>(new RadioNameChange);
+            radioNames->oldName = storedAvailRadios[i];
+            radioNames->newName = availRadios[i];
+            listOfRadioNameChanges.append(radioNames);
+
         }
     }
 
-    if (savedRadioNames.count() > 0 && (radioRemoved || radioNameChanged))
+    if (storedAvailRadios.count() > 0 && (radioRemoved || setupChangeFlags.getRadioNameChanged()))
     {
-        radioRemoved = false;
-        for (int i = 0; i < savedRadioNames.count(); i++)
+        //radioRemoved = false;
+        for (int i = 0; i < storedAvailRadios.count(); i++)
         {
-            if (!availRadios.contains(savedRadioNames[i]))
+            if (!availRadios.contains(storedAvailRadios[i]))
             {
-                   configRadio.beginGroup(savedRadioNames[i]);        // entry no longer exists
+                   configRadio.beginGroup(storedAvailRadios[i]);        // entry no longer exists
                     configRadio.remove("");      // remove all keys for this group
                     configRadio.endGroup();
                     // remove transverters for this radio
-                    fileNameTransVert = TRANSVERT_PATH_LOGGER + savedRadioNames[i] + FILENAME_TRANSVERT_RADIOS;
+                    fileNameTransVert = TRANSVERT_PATH_LOGGER + storedAvailRadios[i] + FILENAME_TRANSVERT_RADIOS;
                     if (QFile::exists(fileNameTransVert))
                     {
                         QFile::remove(fileNameTransVert);
@@ -737,12 +676,6 @@ void RigSetupDialog::saveSettings()
 
 
 
-    bool currRadioChanged = false;
-    bool radioSettingChanged = false;
-    bool transVertSettingChanged = false;
-    bool transVertNameChanged = false;
-
-
     for (int i = 0; i < numAvailRadios; i++)
     {
 
@@ -750,30 +683,34 @@ void RigSetupDialog::saveSettings()
         {
             if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
             {
-                emit radioNameChange();
+                //emit radioNameChange();
+                setupChangeFlags.setRadioNameChanged(true);
                 radioTab[i]->rigSetupFlags.setRadioNameChanged(false);
             }
 
             if (currentRadioName == radioTab[i]->getRadioData()->radioName)
             {
                 // settings changed in current radio
-                currRadioChanged = true;
+                setupChangeFlags.setCurrRadioChanged(true);
             }
+
+            // gather list of radioNames to send to other rigcontrols
+            listOfRadiosDataChanged.append(radioTab[i]->getRadioData()->radioName);
 
             saveRadioData(i, configRadio);
 
         }
 
         radioTab[i]->radioValueChanged = false;
-        radioSettingChanged = true;
+        setupChangeFlags.setRadioSettingChanged(true);
 
     }
 
-
+    // now save transvert settings
     for (int i = 0; i < numAvailRadios; i++)
     {
 
-        // now save transvert settings
+
         if (radioTab[i]->getRadioData()->transVertEnable)
         {
             radioTab[i]->setTransVertRemovedFlag(false);
@@ -798,7 +735,7 @@ void RigSetupDialog::saveSettings()
                             if (currentRadioName == radioTab[i]->getRadioData()->radioName)
                             {
                                 // settings changed in current radio
-                                currRadioChanged = true;
+                                setupChangeFlags.setCurrRadioChanged(true);
                             }
                         }
                     }
@@ -814,14 +751,14 @@ void RigSetupDialog::saveSettings()
                         if (radioTab[i]->transVertTab[t]->transVertNameChanged)
                         {
                             radioTab[i]->transVertTab[t]->transVertNameChanged = false;
-                            transVertNameChanged = true;
+                            setupChangeFlags.setTransVertNameChanged(true);
 
                         }
 
                         if (currentRadioName == radioTab[i]->getRadioData()->radioName)
                         {
                             // settings changed in current radio
-                            currRadioChanged = true;
+                            setupChangeFlags.setCurrRadioChanged(true);
                         }
                     }
 
@@ -835,29 +772,7 @@ void RigSetupDialog::saveSettings()
             {
 
 
-                /*
-                // look for transverters marked for deletion
-                int t = radioTab[i]->getRadioData()->numTransverters - 1;
-                while (t > 0)
-                {
-                    if (radioTab[i]->transVertTab[t]->transVertValueChanged  == Tvert_Config_Status::DELETE)
-                    {
-                        // remove this transverter
-                        radioTab[i]->transVertTabRemove(t);
-                        radioTab[i]->getRadioData()->transVertNames.removeAt(t);
-                        radioTab[i]->getRadioData()->transVertSettings.removeAt(t);
-                        radioTab[i]->getRadioData()->numTransverters--;
-                        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                        {
-                            // settings changed in current radio
-                            currRadioChanged = true;
-                        }
-
-                    }
-                    t--;
-                }
-    */
-                // look for transverters that have changed
+                 // look for transverters that have changed
 
                 for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
                 {
@@ -868,21 +783,21 @@ void RigSetupDialog::saveSettings()
                         if (radioTab[i]->transVertTab[t]->transVertNameChanged)
                         {
                             radioTab[i]->transVertTab[t]->transVertNameChanged = false;
-                            transVertNameChanged = true;
+                            setupChangeFlags.setTransVertNameChanged(true);
 
                         }
 
                         if (currentRadioName == radioTab[i]->getRadioData()->radioName)
                         {
                             // settings changed in current radio
-                            currRadioChanged = true;
+                            setupChangeFlags.setCurrRadioChanged(true);
                         }
 
                         saveTranVerterSetting(i, t, configTransVert);
 
 
                         radioTab[i]->transVertTab[t]->transVertValueChanged = false;
-                        transVertSettingChanged = true;
+                        setupChangeFlags.setTransVertSettingChanged(true);
                     }
                 }
                 //radioTab[i]->buildSupBandList();
@@ -892,7 +807,7 @@ void RigSetupDialog::saveSettings()
 
 
     }
-
+/*
     if (radioSettingChanged || transVertSettingChanged || transVertNameChanged)
     {
         emit upDateRadioDetailsCache();
@@ -919,7 +834,7 @@ void RigSetupDialog::saveSettings()
     {
         emit currentRadioSettingChanged(currentRadioName);
     }
-
+*/
 
 
 }
@@ -1180,22 +1095,7 @@ QString RigSetupDialog::getRadioComPort(QString radioName)
 
 
 
-void RigSetupDialog::saveCurrentRadio()
-{
 
-    QString fileName;
-    fileName = RADIO_PATH_LOGGER + appName + FILENAME_CURRENT_RADIO;
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    config.beginGroup("CurrentRadio");
-    config.setValue("radioName", currentRadioName);
-    config.endGroup();
-
-
-
-
-}
 
 void RigSetupDialog::setCurrentRadioName(QString name)
 {
@@ -1206,31 +1106,6 @@ void RigSetupDialog::setCurrentRadioName(QString name)
         radioTab[i]->setCurrentRadioName(name);
     }
 }
-
-QString RigSetupDialog::getCurrentRadioName()
-{
-    return currentRadioName;
-}
-
-/*
-void RigSetupDialog::readCurrentRadio()
-{
-
-    QString fileName;
-    fileName = RADIO_PATH_LOGGER + appName + FILENAME_CURRENT_RADIO;
-    QSettings config(fileName, QSettings::IniFormat);
-
-
-    {
-        config.beginGroup("CurrentRadio");
-        currentRadioName = config.value("radioName", "").toString();
-        config.endGroup();
-    }
-
-}
-
-*/
-
 
 
 

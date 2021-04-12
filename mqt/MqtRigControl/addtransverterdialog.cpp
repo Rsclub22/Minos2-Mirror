@@ -37,7 +37,7 @@ void AddTransVerterDialog::loadBandSel()
     {
         if (!checkBandUsed(bands[i]->name(), transVerterNames))
         {
-            if (bands[i]->name() != "28 MHz")
+            if (bands[i]->getType() != HF_BANDTYPE)
             {
                 ui->bandSel->addItem(bands[i]->name());
             }

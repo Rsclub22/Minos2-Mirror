@@ -536,7 +536,6 @@ private:
     void readCurrentRadio(QString &currentRadioName);
 
     void saveCurrentRadio(const QString currentRadioName);
-    int findCurrentRadio(const QString &currentRadioName);
     void buildSupportedRadioBands(QSharedPointer<scatParams> radioData, QStringList &supBandList);
     bool findSupTransBand(const QString band, const QSharedPointer<scatParams> radioData);
     void buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList);

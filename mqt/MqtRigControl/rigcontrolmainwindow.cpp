@@ -577,7 +577,7 @@ void RigControlMainWindow::upDateRadio()
     int ridx = 0;
     if (currentRadioName != "")
     {
-        rigStateDetails->radioIndex = findCurrentRadio(currentRadioName); // make sure radio exits in available radios
+        rigStateDetails->radioIndex = availRadios.indexOf(currentRadioName); // make sure radio exits in available radios
         ridx = rigStateDetails->radioIndex;
         if (ridx > -1 && ridx < availRadios.count())
         {
@@ -1395,12 +1395,6 @@ int RigControlMainWindow::openRadio()
 
     if (currentRadio->portType == RigCapConstants::PortType::serial)
     {
-        if(isComportAvail(currentRadio->comport))
-        {
-            logMessage(QString("Open Radio: Check comport - defined port %1 not available on computer").arg(currentRadio->comport));
-            showStatusMessage(tr("Comport %1 no longer configured on computer?").arg(currentRadio->comport));
-            return OPEN_FAILED;
-        }
 
         if (currentRadio->comport == "")
         {
@@ -1408,6 +1402,14 @@ int RigControlMainWindow::openRadio()
             showStatusMessage(tr("Please select a Comport"));
             return OPEN_FAILED;
         }
+        else if(!isComportAvail(currentRadio->comport))
+        {
+            logMessage(QString("Open Radio: Check comport - defined port %1 not available on computer").arg(currentRadio->comport));
+            showStatusMessage(tr("Comport %1 no longer configured on computer?").arg(currentRadio->comport));
+            return OPEN_FAILED;
+        }
+
+
 
     }
 
@@ -1939,21 +1941,14 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString band, Frequency f
     logMessage(QString("**** Received SelectRadio from Logger = %1, band = %2, freq = %3, mode = %4 ****").arg(s.toString()).arg(band).arg(freq.traceStr()).arg(mode));
 
 
-    //if (mode.isEmpty() || freq.isEmpty() || s.isEmpty())
-   // {
-   //     QString("RadioName or Mode or Freq is empty - ignore");
-   // }
-
     loggerRequests->selRadioMode = mode;
-
 
     loggerRequests->selRadioFreq = freq;
 
     loggerRequests->selBand = band;
 
-
-
     QString oldRadio = currentRadioName;
+    currentRadioName = s.key();
 
     if (!s.isEmpty() && (s.key() == oldRadio))
     {
@@ -1962,7 +1957,7 @@ void RigControlMainWindow::onSelectRadio(PubSubName s, QString band, Frequency f
     }
     else
     {
-        trace(QString("Selected Radio - %1 is different to previuos radio - %2, update radio").arg(s.key()).arg(oldRadio));
+        trace(QString("Selected Radio - %1 is different to previous radio - %2, update radio").arg(s.key()).arg(oldRadio));
         upDateRadio();
         msg->rigCache.invalidate();
     }
@@ -4230,9 +4225,47 @@ void RigControlMainWindow::onLaunchSetup()
 
     RigSetupDialog *setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
     setupRadio->setAppName(appName);
+    setupRadio->setCurrentRadioName(currentRadioName);
     setupRadio->setTabToCurrentRadio();
     setupRadio->loadAvailComports();
-    setupRadio->exec();
+    if (setupRadio->exec() == QDialog::Accepted)
+    {
+        if (setupRadio->setupChangeFlags.getRadioSettingChanged() ||
+            setupRadio->setupChangeFlags.getTransVertSettingChanged() ||
+                setupRadio->setupChangeFlags.getTransVertNameChanged())
+        {
+            updateRigDetailsCache();
+        }
+
+        if (setupRadio->setupChangeFlags.getRadioNameChanged())
+        {
+            updateSelectRadioBox();
+        }
+
+//        if (setupRadio->setupChangeFlags.getRadioSettingChanged())
+//        {
+//            radioSettingsSaved()
+//        }
+
+//        if (setupRadio->setupChangeFlags.getTransVertSettingChanged)
+//        {
+//            emit transVertSettingHasChanged();
+//        }
+
+//        if (setupRadio->setupChangeFlags.getTransVertNameChanged)
+//        {
+//            emit transVertNameHasChanged();
+//        }
+
+        if (setupRadio->setupChangeFlags.getCurrRadioChanged())
+        {
+            currentRadioSettingChanged(currentRadioName);
+        }
+    }
+
+
+
+
 }
 
 void RigControlMainWindow::readCurrentRadio(QString &currentRadioName)
@@ -4266,20 +4299,7 @@ void RigControlMainWindow::saveCurrentRadio(const QString currentRadioName)
 
 }
 
-int RigControlMainWindow::findCurrentRadio(const QString &currentRadioName)
-{
-    int err = -1;
-    for (int i = 0; i < availRadios.count(); i++)
-    {
-        if (currentRadioName == availRadios[i])
-        {
 
-            return i;
-        }
-    }
-
-    return err;
-}
 
 
 

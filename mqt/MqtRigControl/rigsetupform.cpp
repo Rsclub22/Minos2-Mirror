@@ -1217,6 +1217,7 @@ void RigSetupForm::onEnableRitClicked()
     if (radioData->enableDisableCatFeature.ritEnable != checked)
     {
         radioData->enableDisableCatFeature.ritEnable = checked;
+        radioValueChanged = true;
     }
 
 }
@@ -1228,6 +1229,7 @@ void RigSetupForm::onEnableSMeterClicked()
     if (radioData->enableDisableCatFeature.sMeterEnable != checked)
     {
         radioData->enableDisableCatFeature.sMeterEnable = checked;
+        radioValueChanged = true;
     }
 }
 
@@ -1237,6 +1239,7 @@ void RigSetupForm::onEnableVolClicked()
     if (radioData->enableDisableCatFeature.volumeEnable != checked)
     {
         radioData->enableDisableCatFeature.volumeEnable = checked;
+        radioValueChanged = true;
     }
 }
 void RigSetupForm::onEnableCatPttClicked()
@@ -1245,6 +1248,7 @@ void RigSetupForm::onEnableCatPttClicked()
     if (radioData->enableDisableCatFeature.catEnable != checked)
     {
         radioData->enableDisableCatFeature.catEnable = checked;
+        radioValueChanged = true;
     }
 }
 void RigSetupForm::onEnableVoiceTxMemClicked()
@@ -1253,6 +1257,7 @@ void RigSetupForm::onEnableVoiceTxMemClicked()
     if (radioData->enableDisableCatFeature.voiceMemEnable != checked)
     {
         radioData->enableDisableCatFeature.voiceMemEnable = checked;
+        radioValueChanged = true;
     }
 
 }
@@ -1262,6 +1267,7 @@ void RigSetupForm::onEnableCwTxMemClicked()
     if (radioData->enableDisableCatFeature.cWMemEnable != checked)
     {
         radioData->enableDisableCatFeature.cWMemEnable = checked;
+        radioValueChanged = true;
     }
 }
 void RigSetupForm::onEnableCatFeaturesClicked()
@@ -1270,11 +1276,13 @@ void RigSetupForm::onEnableCatFeaturesClicked()
     {
         radioData->enableDisableCatFeature.enableDisplay = true;
         setEnableDisableFeaturesGroupVisible(true);
+        radioValueChanged = true;
     }
     else
     {
         radioData->enableDisableCatFeature.enableDisplay = false;
         setEnableDisableFeaturesGroupVisible(false);
+        radioValueChanged = true;
     }
 }
 

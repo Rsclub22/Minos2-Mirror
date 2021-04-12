@@ -38,6 +38,52 @@ class RigSetupDialog;
 }
 
 
+class SetupChangeFlags
+{
+public:
+
+    SetupChangeFlags(){};
+
+    bool getRadioNameChanged(){return radioNameChanged;}
+    void setRadioNameChanged(bool state){radioNameChanged = state;}
+
+    bool getCurrRadioChanged(){return currRadioChanged;}
+    void setCurrRadioChanged(bool state){currRadioChanged = state;}
+
+    bool getRadioSettingChanged(){return radioSettingChanged;}
+    void setRadioSettingChanged(bool state){radioSettingChanged = state;}
+
+    bool getTransVertSettingChanged(){return transVertSettingChanged;}
+    void setTransVertSettingChanged(bool state){transVertSettingChanged = state;}
+
+    bool getTransVertNameChanged(){return transVertNameChanged;}
+    void setTransVertNameChanged(bool state){transVertNameChanged = state;}
+
+private:
+
+
+     bool radioNameChanged = false;
+     bool currRadioChanged = false;
+     bool radioSettingChanged = false;
+     bool transVertSettingChanged = false;
+     bool transVertNameChanged = false;
+
+
+
+
+};
+
+class RadioNameChange
+{
+public:
+    RadioNameChange(){};
+
+
+
+    QString newName;
+    QString oldName;
+    QString radioNameSettingsChanged;
+};
 
 
 class RigSetupDialog : public QDialog
@@ -61,7 +107,7 @@ public:
 
 
     QString getRadioComPort(QString);
-    void saveCurrentRadio();
+
 
     void copyRadioToCurrent(int radioNumber);
 
@@ -69,13 +115,13 @@ public:
     int comportAvial(int radioNum, QString comport);
 
     void setCurrentRadioName(QString name);
-    QString getCurrentRadioName();
+
     void setTabToCurrentRadio();
 
     void fillPortsInfo();
     void loadAvailComports();
 
-
+    SetupChangeFlags setupChangeFlags;
 
 
 
@@ -125,6 +171,9 @@ private:
     bool hfFlag;
 
     QString currentRadioName;
+
+    QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges;
+    QVector<QString> listOfRadiosDataChanged;
 
 
 
