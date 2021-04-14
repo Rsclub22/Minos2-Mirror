@@ -667,7 +667,7 @@ void PublishedCategory::routerPublish( const QString &pubId, const QString &svr,
       pubkeylist.push_back( p );
       kl = findPubKey( svr, pubId, k );
       PublishedKeyListIterator ikl = pubkeylist.end();
-      if (kl++ != ikl)
+      if (++kl != ikl)
       {
           trace(QString("Bad PublishedKey creation: %1 %2 %3 %4").arg(category, svr, pubId, v));
       }
