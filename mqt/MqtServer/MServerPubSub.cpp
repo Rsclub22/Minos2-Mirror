@@ -379,8 +379,8 @@ int Published::GetPublishedCount()
 void Published::buildPublishedTree(QTreeWidget *tree)
 {
     tree->clear();
-    tree->setColumnCount(3);
-    QStringList h = {tr("key"), tr("state"), tr("value")};
+    tree->setColumnCount(4);
+    QStringList h = {tr("key"), tr("router"), tr("state"), tr("value")};
     tree->setHeaderLabels(h);
     for ( auto const &p: qAsConst(Published::publist) )
     {
@@ -392,11 +392,13 @@ void Published::buildPublishedTree(QTreeWidget *tree)
            QString key = j->getPubKey();
            QString value = j->getPubValue();
            PublishState state = j->getPubState();
+           QString router = j->getRouter();
 
            QTreeWidgetItem *keyItem = new QTreeWidgetItem(catItem);
            keyItem->setText(0, key);
-           keyItem->setText(1, stateList[state]);
-           keyItem->setText(2, value);
+           keyItem->setText(1, router);
+           keyItem->setText(2, stateList[state]);
+           keyItem->setText(3, value);
         }
 
     }
@@ -661,9 +663,14 @@ void PublishedCategory::routerPublish( const QString &pubId, const QString &svr,
    bool doPub = false;
    if ( kl == pubkeylist.end() )
    {
+       PublishedKeyListIterator ikl = pubkeylist.end();
       PublishedKey * p = new PublishedKey( true, pubId, svr, this, k, pState );
       pubkeylist.push_back( p );
       kl = findPubKey( svr, pubId, k );
+      if (kl != ikl)
+      {
+          trace(QString("Bad PublishedKey creation: %1 %2 %3 %4").arg(category, svr, pubId, v));
+      }
       doPub = true;
    }
 
