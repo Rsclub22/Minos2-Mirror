@@ -33,7 +33,6 @@
 RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, const bool hfFlag_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RigSetupDialog),
-    radioRemoved(false),
     hfFlag(hfFlag_)
 
 {
@@ -441,7 +440,7 @@ void RigSetupDialog::removeRadio()
     availRadios.removeAt(currentIndex);
     radioTab.removeAt(currentIndex);
     numAvailRadios--;
-    radioRemoved = true;
+    setupChangeFlags.setRadioRemoved(true);
 
     //emit radioTabChanged();
 
@@ -480,7 +479,7 @@ void RigSetupDialog::editRadioName()
                 availRadioData[i]->radioName = text;  // update with new name
                 availRadios[i] = text;
                 radioTab[i]->rigSetupFlags.setRadioNameChanged(true);
-                radioTab[i]->radioValueChanged = true;
+                radioTab[i]->rigSetupFlags.setRadioValueChanged(true);
 
             }
         }
@@ -606,9 +605,9 @@ void RigSetupDialog::cancelButtonPushed()
     bool change = false;
     for (int i = 0; i < radioTab.count(); i++)
     {
-        if (radioTab[i]->radioValueChanged || radioRemoved || radioTab[i]->getTransVertRemovedFlag())
+        if (radioTab[i]->rigSetupFlags.getRadioValueChanged() || setupChangeFlags.getRadioRemoved() || radioTab[i]->getTransVertRemovedFlag())
         {
-            radioRemoved = false;
+            setupChangeFlags.setRadioRemoved(false);
             change = true;
             break;
         }
@@ -654,9 +653,9 @@ void RigSetupDialog::saveSettings()
         }
     }
 
-    if (storedAvailRadios.count() > 0 && (radioRemoved || setupChangeFlags.getRadioNameChanged()))
+    if (storedAvailRadios.count() > 0 && (setupChangeFlags.getRadioRemoved() || setupChangeFlags.getRadioNameChanged()))
     {
-        //radioRemoved = false;
+
         for (int i = 0; i < storedAvailRadios.count(); i++)
         {
             if (!availRadios.contains(storedAvailRadios[i]))
@@ -670,7 +669,30 @@ void RigSetupDialog::saveSettings()
                     {
                         QFile::remove(fileNameTransVert);
                     }
+
+                    storedAvailRadios.removeAt(i);  // remove item from our copy of stored data
+                    storedRadioData.remove(i);
             }
+        }
+    }
+
+    for (int i = 0; i < numAvailRadios; i++)
+    {
+        if (radioTab[i]->rigSetupFlags.getTransverterRemoved())
+        {
+            for (int t = 0; t < storedRadioData[i]->transVertNames.count(); t++)
+            {
+                if (!radioTab[i]->getRadioData()->transVertNames.contains(storedRadioData[i]->transVertNames[t]))
+                {
+                    fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
+                    QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
+                    configTransVert.remove(storedRadioData[i]->transVertNames[t]);
+                    storedRadioData[i]->transVertNames.removeAt(t);
+                    storedRadioData[i]->transVertSettings.remove(t);
+
+                }
+            }
+
         }
     }
 
@@ -679,7 +701,8 @@ void RigSetupDialog::saveSettings()
     for (int i = 0; i < numAvailRadios; i++)
     {
 
-        if (radioTab[i]->radioValueChanged)
+        //if (radioTab[i]->rigSetupFlags.getRadioValueChanged())
+        if (radioTab[i]->getRadioData()->compareNotEqual(storedRadioData[i]))
         {
             if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
             {
@@ -696,13 +719,12 @@ void RigSetupDialog::saveSettings()
 
             // gather list of radioNames to send to other rigcontrols
             listOfRadiosDataChanged.append(radioTab[i]->getRadioData()->radioName);
-
+            setupChangeFlags.setRadioSettingChanged(true);
             saveRadioData(i, configRadio);
 
         }
 
-        radioTab[i]->radioValueChanged = false;
-        setupChangeFlags.setRadioSettingChanged(true);
+
 
     }
 
@@ -713,7 +735,7 @@ void RigSetupDialog::saveSettings()
 
         if (radioTab[i]->getRadioData()->transVertEnable)
         {
-            radioTab[i]->setTransVertRemovedFlag(false);
+            //radioTab[i]->setTransVertRemovedFlag(false);
 
             fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
             QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
@@ -768,39 +790,23 @@ void RigSetupDialog::saveSettings()
             }
 
 
-            if (radioTab[i]->getRadioData()->numTransverters > 0)
+            if (radioTab[i]->getRadioData()->transVertSettings.count() > 0)
             {
 
 
                  // look for transverters that have changed
 
-                for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
+                for (int t = 0; t < radioTab[i]->getRadioData()->transVertSettings.count(); t++)
                 {
 
 
-                    if (radioTab[i]->transVertTab[t]->transVertValueChanged)
+                    if (radioTab[i]->getRadioData()->transVertSettings != storedRadioData[i]->transVertSettings)
                     {
-                        if (radioTab[i]->transVertTab[t]->transVertNameChanged)
-                        {
-                            radioTab[i]->transVertTab[t]->transVertNameChanged = false;
-                            setupChangeFlags.setTransVertNameChanged(true);
-
-                        }
-
-                        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                        {
-                            // settings changed in current radio
-                            setupChangeFlags.setCurrRadioChanged(true);
-                        }
-
                         saveTranVerterSetting(i, t, configTransVert);
-
-
-                        radioTab[i]->transVertTab[t]->transVertValueChanged = false;
                         setupChangeFlags.setTransVertSettingChanged(true);
                     }
                 }
-                //radioTab[i]->buildSupBandList();
+
             }
         }
 

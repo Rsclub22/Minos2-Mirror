@@ -292,7 +292,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          }
 
         //buildSupBandList();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 
@@ -362,7 +362,7 @@ void RigSetupForm::civAddressFinished()
             {
                 radioData->civAddress = civNum;
 
-                radioValueChanged = true;
+                rigSetupFlags.setRadioValueChanged(true);
 
             }
         }
@@ -421,7 +421,7 @@ void RigSetupForm::comportSelected()
     if (ui->comPortBox->currentText() != radioData->comport)
     {
         radioData->comport = ui->comPortBox->currentText();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -463,7 +463,7 @@ void RigSetupForm::comSpeedSelected()
     if (ui->comSpeedBox->currentText().toInt() != radioData->baudrate)
     {
         radioData->baudrate = ui->comSpeedBox->currentText().toInt();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -485,7 +485,7 @@ void RigSetupForm::comDataBitsSelected()
     if (ui->comDataBitsBox->currentText().toInt() != radioData->databits)
     {
         radioData->databits = ui->comDataBitsBox->currentText().toInt();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -508,7 +508,7 @@ void RigSetupForm::comStopBitsSelected()
     if (ui->comStopBitsBox->currentText().toInt() != radioData->stopbits)
     {
         radioData->stopbits = ui->comStopBitsBox->currentText().toInt();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -530,7 +530,7 @@ void RigSetupForm::comParitySelected(int)
     if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
     {
         radioData->parity = serialCommonData::parityCodesList[ui->comParityBox->currentIndex()];
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -556,7 +556,7 @@ void RigSetupForm::comHandShakeSelected()
            setForceRTSDisabled(false);
 
         }
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -585,7 +585,7 @@ void RigSetupForm::on_forceDTRSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != radioData->forceDtr)
     {
         radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -600,7 +600,7 @@ void RigSetupForm::on_forceRTSSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()] != radioData->forceRts)
     {
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -632,7 +632,7 @@ void RigSetupForm::networkAddressSelected()
         if (addressOk)
         {
             radioData->networkAdd = ui->networkAddBox->text().trimmed();
-            radioValueChanged = true;
+            rigSetupFlags.setRadioValueChanged(true);
         }
         else
         {
@@ -685,7 +685,7 @@ void RigSetupForm::mgmModeSelected()
     if (ui->mgmBox->currentText() != radioData->mgmMode)
     {
         radioData->mgmMode = ui->mgmBox->currentText();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -706,7 +706,7 @@ void RigSetupForm::pollIntervalSelected()
     if (radioData->pollInterval != ui->pollInterval->currentText())
     {
         radioData->pollInterval = ui->pollInterval->currentText();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
 
     }
 }
@@ -751,7 +751,7 @@ void RigSetupForm::enableTransVertSelected(bool /*flag*/)
             setEnableLocalTransVertSw(checked);
             setLocTVSWComportVisible(checked);
         }
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 
@@ -791,7 +791,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
 
         }
         //setLocTVSWComportVisible(false);
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 }
@@ -830,7 +830,7 @@ void RigSetupForm::localTransVertSwSel(bool /*flag*/)
     {
         radioData->enableLocTVSwMsg = checked;
         setLocTVSWComportVisible(checked);
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 }
@@ -867,7 +867,7 @@ void RigSetupForm::locTVComPortSel(int /*index*/)
     if (ui->locTVComPortSel->currentText() != radioData->locTVSwComport)
     {
         radioData->locTVSwComport = ui->locTVComPortSel->currentText();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -925,7 +925,7 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
         rigCtldItemsVisible(checked);
     }
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 }
 
 
@@ -955,7 +955,7 @@ void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
         //rigCtldItemsVisible(checked);
     }
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 }
 
 
@@ -985,7 +985,7 @@ void RigSetupForm::rigCtldNetworkAddressSelected()
         if (addressOk)
         {
             radioData->rigCtldNetworkAdd = ui->networkAddBox->text().trimmed();
-            radioValueChanged = true;
+            rigSetupFlags.setRadioValueChanged(true);
         }
         else
         {
@@ -1079,7 +1079,7 @@ void RigSetupForm::onAdvancedCommsSelected(bool selected)
     {
         radioData->advancedCommsFlag = checked;
         advancedSerialDataEntryVisible(checked);
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
 
     }
 }
@@ -1217,7 +1217,7 @@ void RigSetupForm::onEnableRitClicked()
     if (radioData->enableDisableCatFeature.ritEnable != checked)
     {
         radioData->enableDisableCatFeature.ritEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 }
@@ -1229,7 +1229,7 @@ void RigSetupForm::onEnableSMeterClicked()
     if (radioData->enableDisableCatFeature.sMeterEnable != checked)
     {
         radioData->enableDisableCatFeature.sMeterEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -1239,7 +1239,7 @@ void RigSetupForm::onEnableVolClicked()
     if (radioData->enableDisableCatFeature.volumeEnable != checked)
     {
         radioData->enableDisableCatFeature.volumeEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 void RigSetupForm::onEnableCatPttClicked()
@@ -1248,7 +1248,7 @@ void RigSetupForm::onEnableCatPttClicked()
     if (radioData->enableDisableCatFeature.catEnable != checked)
     {
         radioData->enableDisableCatFeature.catEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 void RigSetupForm::onEnableVoiceTxMemClicked()
@@ -1257,7 +1257,7 @@ void RigSetupForm::onEnableVoiceTxMemClicked()
     if (radioData->enableDisableCatFeature.voiceMemEnable != checked)
     {
         radioData->enableDisableCatFeature.voiceMemEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 
 }
@@ -1267,7 +1267,7 @@ void RigSetupForm::onEnableCwTxMemClicked()
     if (radioData->enableDisableCatFeature.cWMemEnable != checked)
     {
         radioData->enableDisableCatFeature.cWMemEnable = checked;
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 void RigSetupForm::onEnableCatFeaturesClicked()
@@ -1276,13 +1276,13 @@ void RigSetupForm::onEnableCatFeaturesClicked()
     {
         radioData->enableDisableCatFeature.enableDisplay = true;
         setEnableDisableFeaturesGroupVisible(true);
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
     else
     {
         radioData->enableDisableCatFeature.enableDisplay = false;
         setEnableDisableFeaturesGroupVisible(false);
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 
@@ -1413,7 +1413,7 @@ void RigSetupForm::onSupbandCheckBoxStateChanged(int i, int state)
             radioData->supportBands.setSupportBandFlag(selBand, false);
         }
 
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
 
     }
 }
@@ -1594,7 +1594,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
        //transVertTab[tabNum]->antSwNumVisible(false);
        radioData->antSwitchAvail = false;
     }
-    //buildSupBandList();
+
     transVertTab[tabNum]->transVertValueChanged = tabChanged;
 
 }
@@ -1756,8 +1756,6 @@ void RigSetupForm::changeBand()
     //config.endGroup();
 
 
-
-
     transVertTab[tabNum]->transVertValueChanged = true;
 
 }
@@ -1829,13 +1827,13 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
          if (netAddBox->text().isEmpty())
          {
              portNumber = netPortBox->text();
-             radioValueChanged = true;
+             rigSetupFlags.setRadioValueChanged(true);
          }
 
          else if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
          {
              portNumber = netPortBox->text();
-             radioValueChanged = true;
+             rigSetupFlags.setRadioValueChanged(true);
          }
          else
          {
@@ -1911,7 +1909,7 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
     }
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 }
 
 void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
@@ -1927,7 +1925,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
     }
 
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 
 }
 
@@ -1943,7 +1941,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
         ui->pttComportSel->setDisabled(false);
     }
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 }
 
 
@@ -1959,7 +1957,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
         ui->pttComportSel->setDisabled(false);
     }
 
-    radioValueChanged = true;
+    rigSetupFlags.setRadioValueChanged(true);
 }
 
 void RigSetupForm::onPttComportSelActivated(int /*idx*/)
@@ -1967,7 +1965,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
     if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
     {
         radioData->pttSerialPort = ui->pttComportSel->currentText();
-        radioValueChanged = true;
+        rigSetupFlags.setRadioValueChanged(true);
     }
 }
 

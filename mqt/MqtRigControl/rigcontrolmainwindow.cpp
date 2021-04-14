@@ -4242,6 +4242,15 @@ void RigControlMainWindow::onLaunchSetup()
             updateSelectRadioBox();
         }
 
+        if (setupRadio->setupChangeFlags.getRadioNameChanged() || setupRadio->setupChangeFlags.getRadioSettingChanged())
+        {
+            if (!appName.isEmpty())
+            {
+                msg->publishListChangedRadioNames(setupRadio->listOfRadioNameChanges, setupRadio->listOfRadiosDataChanged);
+            }
+
+        }
+
 //        if (setupRadio->setupChangeFlags.getRadioSettingChanged())
 //        {
 //            radioSettingsSaved()

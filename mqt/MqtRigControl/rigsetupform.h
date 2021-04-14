@@ -29,31 +29,6 @@ public:
     QString bandType;
 };
 
-class RigSetupFlags
-{
-public:
-
-    bool getRadioNameChanged(){return radioNameChanged;}
-    void setRadioNameChanged(bool state){radioNameChanged = state;}
-
-    bool getTransverterAdded(){return transverterAdded;}
-    void setTransverterAdded(bool state){transverterAdded = state;}
-
-    bool getTransverterRemoved(){return transverterRemoved;}
-    void setTransverterRemoved(bool state){transverterRemoved = state;}
-
-    bool getTransverterBandChanged(){return transverterBandChanged;}
-    void setTransverterBandChanged(bool state){transverterBandChanged = state;}
-
-private:
-
-
-
-    bool radioNameChanged = false;
-    bool transverterAdded = false;
-    bool transverterRemoved = false;
-    bool transverterBandChanged = false;
-};
 
 
 class RigSetupForm : public QWidget
@@ -66,9 +41,8 @@ public:
     ~RigSetupForm();
 
 
-    bool radioValueChanged = false;
-    bool radioNameChanged = false;
-    //bool transverterRemoved;
+
+
 
     QSharedPointer<scatParams> getRadioData();
 

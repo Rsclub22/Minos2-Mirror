@@ -47,6 +47,10 @@ public:
     bool getRadioNameChanged(){return radioNameChanged;}
     void setRadioNameChanged(bool state){radioNameChanged = state;}
 
+    bool getRadioRemoved(){return radioRemoved;}
+    void setRadioRemoved(bool state){radioRemoved = state;}
+
+
     bool getCurrRadioChanged(){return currRadioChanged;}
     void setCurrRadioChanged(bool state){currRadioChanged = state;}
 
@@ -63,6 +67,7 @@ private:
 
 
      bool radioNameChanged = false;
+     bool radioRemoved = false;
      bool currRadioChanged = false;
      bool radioSettingChanged = false;
      bool transVertSettingChanged = false;
@@ -73,17 +78,6 @@ private:
 
 };
 
-class RadioNameChange
-{
-public:
-    RadioNameChange(){};
-
-
-
-    QString newName;
-    QString oldName;
-    QString radioNameSettingsChanged;
-};
 
 
 class RigSetupDialog : public QDialog
@@ -122,6 +116,9 @@ public:
     void loadAvailComports();
 
     SetupChangeFlags setupChangeFlags;
+
+    QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges;
+    QVector<QString> listOfRadiosDataChanged;
 
 
 
@@ -166,16 +163,11 @@ private:
     //bool chkloadflg = false;
     QString appName = "";
 
-    bool radioRemoved;
+    //bool radioRemoved;
 
     bool hfFlag;
 
     QString currentRadioName;
-
-    QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges;
-    QVector<QString> listOfRadiosDataChanged;
-
-
 
     void saveSettings();
 

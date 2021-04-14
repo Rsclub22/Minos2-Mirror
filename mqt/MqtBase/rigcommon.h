@@ -199,6 +199,49 @@ public:
 };
 
 
+class RigSetupFlags
+{
+public:
+
+    bool getRadioNameChanged(){return radioNameChanged;}
+    void setRadioNameChanged(bool state){radioNameChanged = state;}
+
+    bool getRadioValueChanged(){return radioValueChanged;}
+    void setRadioValueChanged(bool state){radioValueChanged = state;}
+
+    bool getTransverterAdded(){return transverterAdded;}
+    void setTransverterAdded(bool state){transverterAdded = state;}
+
+    bool getTransverterRemoved(){return transverterRemoved;}
+    void setTransverterRemoved(bool state){transverterRemoved = state;}
+
+
+    bool getTransverterBandChanged(){return transverterBandChanged;}
+    void setTransverterBandChanged(bool state){transverterBandChanged = state;}
+
+private:
+
+
+    bool radioValueChanged = false;
+    bool radioNameChanged = false;
+    bool transverterAdded = false;
+    bool transverterRemoved = false;
+
+    bool transverterBandChanged = false;
+};
+
+class RadioNameChange
+{
+public:
+    RadioNameChange(){};
+
+
+
+    QString newName;
+    QString oldName;
+
+};
+
 
 
 // This was the hamlib catParams structure, other fields have been added
