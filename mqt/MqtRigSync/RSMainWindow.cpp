@@ -286,9 +286,12 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 selState.clearDirty();
                 ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
 
-                if (ui->trackRig->isChecked())
+                if (ui->trackRig->isChecked() || firstTime)
                 {
+                    // first time - transfer rig to SDR, which will set up transverter
+                    // settings as required
                     on_transfer12Button_clicked();
+                    firstTime = false;
                 }
                 delayedAction(this, [=]{
                     trackBand();

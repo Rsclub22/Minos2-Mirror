@@ -50,6 +50,7 @@ private:
     RigCache rigCache;
     N1MMLink n1mmLink;
     WsjtxLink wsjtxLink;
+    bool firstTime = true;
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
