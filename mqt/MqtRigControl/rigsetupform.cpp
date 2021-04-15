@@ -276,9 +276,11 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          {
              setTransVertSwVisible(true);
              setEnableLocalTransVertSwVisible(true);
-             for (int i = 0; i < radioData->numTransverters; i++)
+             QStringList tvList = radioData->transVertSettings.keys();
+             //for (int i = 0; i < radioData->numTransverters; i++)
+             foreach(const auto &tv, tvList)
              {
-                 transVertTab[i]->setEnableTransVertSwBoxVisible(true);
+                 transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
              }
          }
 
@@ -778,9 +780,11 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
     if (radioData->enableTransSwitch != checked)
     {
         radioData->enableTransSwitch = checked;
-        for (int i = 0; i < radioData->numTransverters; i++)
+        QStringList tvList = radioData->transVertSettings.keys();
+        //for (int i = 0; i < radioData->numTransverters; i++)
+        foreach(const auto &tv, tvList)
         {
-            transVertTab[i]->setEnableTransVertSwBoxVisible(checked);
+            transVertTab.value(tv)->setEnableTransVertSwBoxVisible(checked);
         }
         setEnableLocalTransVertSwVisible(checked);
         if (!checked)
@@ -805,9 +809,12 @@ bool RigSetupForm::getEnableTransVertSw()
 void RigSetupForm::setEnableTransVertSw(bool b)
 {
     ui->enableTransVertSw->setChecked(b);
-    for (int i = 0; i < radioData->numTransverters; i++)
+
+    QStringList tvList = radioData->transVertSettings.keys();
+    //for (int i = 0; i < radioData->numTransverters; i++)
+    foreach(const auto &tv, tvList)
     {
-        transVertTab[i]->setEnableTransVertSwBoxVisible(b);
+        transVertTab.value(tv)->setEnableTransVertSwBoxVisible(b);
     }
 
 }
@@ -1514,7 +1521,7 @@ bool RigSetupForm::isAnySupportBandChecked()
 
 void RigSetupForm::setTransVertTabText(int tabNum, QString tabName)
 {
-    ui->transVertTab->setTabText(tabNum, tabName);
+    //ui->transVertTab->setTabText(tabNum, tabName);
 }
 
 
@@ -1551,63 +1558,63 @@ void RigSetupForm::addTransVerter()
 
 
     // add the new transverter
-    int tabNum = radioData->numTransverters;
+    int tabNum = radioData->transVertSettings.count();
     radioData->transVertNames.append(transVerterName);
     addTransVertTab(tabNum, transVerterName, true);
     radioData->numTransverters = tabNum + 1;
-    loadTransVertTab(tabNum);
+    loadTransVertTab(transVerterName);
 
 }
 
 
 void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 {
-    radioData->transVertSettings.append(new TransVertParams());
-    radioData->transVertSettings[tabNum]->transVertName = tabName;
-    radioData->transVertSettings[tabNum]->band = tabName;
+    radioData->transVertSettings.insert(tabName, new TransVertParams());
+    radioData->transVertSettings.value(tabName)->transVertName = tabName;
+    radioData->transVertSettings.value(tabName)->band = tabName;
     for (int i = 0; i < bands.count(); i++)
     {
          if (bands[i]->name() == tabName)
          {
-             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
+             radioData->transVertSettings.value(tabName)->fLow = bands[i]->fLow;
+             radioData->transVertSettings.value(tabName)->fHigh = bands[i]->fHigh;
              break;
          }
     }
-    transVertTab.append(new TransVertSetupForm(radioData->transVertSettings[tabNum]));
+    transVertTab.insert(tabName, new TransVertSetupForm(radioData->transVertSettings.value(tabName)));
     //addedTransVertTabs.append(tabName);
 
-    ui->transVertTab->insertTab(tabNum, transVertTab[tabNum], tabName);
+    ui->transVertTab->insertTab(tabNum, transVertTab.value(tabName), tabName);
     ui->transVertTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
     ui->transVertTab->setCurrentIndex(tabNum);
-    transVertTab[tabNum]->setEnableTransVertSwBoxVisible(false);
-
+    transVertTab.value(tabName)->setEnableTransVertSwBoxVisible(false);
+/*
     // does this radio support antenna sw?
 
     if (rigFactory->supported_rigs()->value(radioData->rigModel).supportAntSw)
     {
-       //transVertTab[tabNum]->antSwNumVisible(true);
+
        radioData->antSwitchAvail = true;
     }
     else
     {
-       //transVertTab[tabNum]->antSwNumVisible(false);
+
        radioData->antSwitchAvail = false;
     }
-
-    transVertTab[tabNum]->transVertValueChanged = tabChanged;
+*/
+    transVertTab.value(tabName)->transVertValueChanged = tabChanged;
 
 }
 
 
 
-void RigSetupForm::loadTransVertTab(int tabNum)
+void RigSetupForm::loadTransVertTab(QString tabName)
 {
-    transVertTab[tabNum]->setRadioFreqBox(radioData->transVertSettings[tabNum]->radioFreq);
-    transVertTab[tabNum]->setTargetFreqBox(radioData->transVertSettings[tabNum]->targetFreq);
-    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffset);
-    transVertTab[tabNum]->setTransVerSwNum(radioData->transVertSettings[tabNum]->transSwitchNum);
-    transVertTab[tabNum]->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
+    transVertTab.value(tabName)->setRadioFreqBox(radioData->transVertSettings.value(tabName)->radioFreq);
+    transVertTab.value(tabName)->setTargetFreqBox(radioData->transVertSettings.value(tabName)->targetFreq);
+    transVertTab.value(tabName)->setOffsetFreqLabel(radioData->transVertSettings.value(tabName)->transVertOffset);
+    transVertTab.value(tabName)->setTransVerSwNum(radioData->transVertSettings.value(tabName)->transSwitchNum);
+    transVertTab.value(tabName)->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
 }
 
 bool RigSetupForm::checkTransVerterNameMatch(QString transVertName)
@@ -1661,12 +1668,13 @@ void RigSetupForm::removeTransVerter()
 
 
     // remove this transverter
+    QString transvertName = ui->transVertTab->tabText(currentIndex);
+
     ui->transVertTab->removeTab(currentIndex);
-    transVertTab.removeAt(currentIndex);
+    transVertTab.remove(transvertName);
+    radioData->transVertSettings.remove(transvertName);
 
     radioData->transVertNames.removeAt(currentIndex);
-    radioData->transVertSettings.removeAt(currentIndex);
-
     radioData->numTransverters--;
     rigSetupFlags.setTransverterRemoved(true);
 
@@ -1707,8 +1715,8 @@ void RigSetupForm::changeBand()
 
 
 
-
-    AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
+    QStringList tvList = radioData->transVertSettings.keys();
+    AddTransVerterDialog addTransDialog(bands, tvList, this);
     if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
@@ -1731,32 +1739,29 @@ void RigSetupForm::changeBand()
         return;
     }
 
-    QString oldName = radioData->transVertNames[tabNum];
+    TransVertParams *currentParams = new TransVertParams();
+    currentParams = radioData->transVertSettings.value(currentTransVertName);
+    radioData->transVertSettings.remove(currentTransVertName);
+    radioData->transVertSettings.insert(transVertName, currentParams);
     ui->transVertTab->setTabText(tabNum, transVertName);
-    radioData->transVertNames[tabNum] = transVertName;
-    radioData->transVertSettings[tabNum]->band = transVertName;
-    radioData->transVertSettings[tabNum]->transVertName = transVertName;
+
+    //radioData->transVertNames[tabNum] = transVertName;
+    radioData->transVertSettings.value(transVertName)->band = transVertName;
+    radioData->transVertSettings.value(transVertName)->transVertName = transVertName;
 
 
     foreach (auto &b, bands)
     {
          if (b->name() == transVertName)
          {
-             radioData->transVertSettings[tabNum]->fLow = b->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = b->fHigh;
+           radioData->transVertSettings.value(transVertName)->fLow = b->fLow;
+           radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
          }
     }
-    //renamedTransVertTabs.append(oldName);
-    // remove old entry
-    //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
-
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup(oldName);
-    //config.remove("");      // remove all keys for this group
-    //config.endGroup();
 
 
-    transVertTab[tabNum]->transVertValueChanged = true;
+
+    //transVertTab[tabNum]->transVertValueChanged = true;
 
 }
 
@@ -1775,7 +1780,7 @@ void RigSetupForm::transVertTabEnable(bool enable)
 void RigSetupForm::transVertTabRemove(int tabNum)
 {
     ui->transVertTab->removeTab(tabNum);
-    transVertTab.removeAt(tabNum);
+    //transVertTab.remove(tabNum);
 }
 
 

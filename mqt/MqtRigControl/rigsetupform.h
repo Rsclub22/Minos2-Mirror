@@ -52,7 +52,7 @@ public:
 
 
 
-    QVector<TransVertSetupForm*> transVertTab;
+    QMap<QString, TransVertSetupForm*> transVertTab;
 
 
     void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
@@ -121,7 +121,7 @@ public:
 
     void setupRadioModel(QString radioModel);
 
-    void loadTransVertTab(int tabNum);
+    void loadTransVertTab(QString transvertName);
     bool getEnableTransVertSw();
     void setEnableTransVertSw( bool b);
     void setEnableTransVertSwBoxVisible( bool visible);

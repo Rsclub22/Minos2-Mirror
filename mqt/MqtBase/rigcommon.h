@@ -71,6 +71,27 @@ public:
     Frequency transVertOffset;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
+    bool markForDeletion = false;
+
+TransVertParams& operator=(const TransVertParams &tvp)
+{
+
+    transVertName = tvp.transVertName;
+    band = tvp.band;
+    radioFreq = tvp.radioFreq;
+    targetFreq = tvp.targetFreq;
+    fLow = tvp.fLow;
+    fHigh = tvp.fHigh;
+    transVertOffset = tvp.transVertOffset;
+    antSwitchNum = tvp.antSwitchNum;
+    transSwitchNum = tvp.transSwitchNum;
+    markForDeletion = tvp.markForDeletion;
+
+
+
+    return *this;
+}
+
 
 
 };
@@ -267,6 +288,8 @@ public:
 
 
   QString radioName;    //Minos Radio Name
+  QString previousRadioName;
+  bool markForDeletion = false;
   QString radioNumber;  // Minos Radio Number
   QString comport;
   QString rigMfg_Name;
@@ -301,12 +324,13 @@ public:
   SupportBands supportBands;        // for non hamlib radios
   QStringList transVertNames;
   int numTransverters = 0;
+  QMap<QString, TransVertParams*> transVertSettings;
   bool enableTransSwitch = false;
   bool enableLocTVSwMsg = false;
   QString locTVSwComport = "";
   QStringList radioSupBands;  // bands supported by radio
   QStringList radioTransSupBands; // band supported by radio and transverters
-  QVector<TransVertParams*> transVertSettings;
+
 
   EnableDisableCatFeature enableDisableCatFeature;
 

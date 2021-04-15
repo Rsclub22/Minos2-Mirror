@@ -106,7 +106,7 @@ public:
     void copyRadioToCurrent(int radioNumber);
 
     void setAppName(QString name);
-    int comportAvial(int radioNum, QString comport);
+    int comportAvial(QString radioName, QString comport);
 
     void setCurrentRadioName(QString name);
 
@@ -147,15 +147,17 @@ private:
 
     RigFactory *rigFactory;
 
-    QVector<RigSetupForm*> radioTab;
-
+    //QVector<RigSetupForm*> radioTab;
+    QMap<QString, RigSetupForm*> radioTab;
 
     QStringList storedAvailRadios;
     QVector<QSharedPointer<scatParams> > storedRadioData; // data stored in ini files
 
     QStringList availRadios;
     int numAvailRadios;
-    QVector<QSharedPointer<scatParams> > availRadioData;   // data loaded to tabs
+    //QVector<QSharedPointer<scatParams> > availRadioData;   // data loaded to tabs
+    QMap<QString, QSharedPointer<scatParams> > availRadioData;
+
     QSettings availRadioIni;
     //QSettings transVerterIni;
 
@@ -190,24 +192,25 @@ private:
     void loadMgmModes();
     void saveMgmList();
     void addTab(int tabNum, QString tabName);
-    void loadSettingsToTab(int tabNum);
+    void loadSettingsToTab(int tabNum, QString tabName);
     //void saveRadio(int i);
     bool checkRadioNameMatch(QString radioName);
-    void saveTranVerterSetting(int radioNum, int transVertNum, QSettings  &config);
+    void saveTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings  &config);
     //void readTranVerterSetting(int radioNum, int transVertNum, QSettings &config);
     void loadBands();
     //void getRadioSetting(int radNum, QSettings &config);
-    void saveRadioData(int radNum, QSettings &config);
+    void saveRadioData(QSharedPointer<scatParams> radioData, QSettings &config);
 
 
     void closeEvent(QCloseEvent *event);
     void doCloseEvent();
-    void loadAvailComportsToTab(int tabNum);
+    void loadAvailComportsToTab(QString radioName);
     void updateAvailRadiosToVersion2(QSettings &settings);
     void isAnySupportedBandsAvail(QString &supRadNames);
-    void loadAvailPttComportsToTab(int tabNum);
-    void readTranVerterSetting(QSharedPointer<scatParams> radioData, int transVertNum, QSettings &config);
+    void loadAvailPttComportsToTab(QString radioName);
+    void readTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings &config);
     void getRadioSetting(QSharedPointer<scatParams> radioData, QString radioName, QSettings &config);
+    void getAvailRadiosList(QStringList &availRadios);
 };
 
 #endif // SETUPDIALOG_H

@@ -126,6 +126,8 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
 {
     if (radioName == radParams->radioName &&
         radioNumber == radParams->radioNumber &&
+        previousRadioName == radParams->previousRadioName &&
+        markForDeletion == radParams->markForDeletion &&
         comport == radParams->comport &&
         rigMfg_Name == radParams->rigMfg_Name &&
         rigModelName == radParams->rigModelName &&
@@ -180,204 +182,12 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
 bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
 {
 
-    if (radioName != radParams->radioName)
-    {
-        qDebug() << "radioName !=";
-    }
-    if (radioNumber != radParams->radioNumber)
-    {
-        qDebug() << "radioNumber !=";
-    }
-    if (comport != radParams->comport)
-    {
-       qDebug() << "comport !=";
-    }
-    if (rigMfg_Name != radParams->rigMfg_Name)
-    {
-        qDebug() << "rigMfg_Name !=";
-    }
-    if (rigModelName != radParams->rigModelName)
-    {
-        qDebug() << "rigModelName !=";
-    }
-    if (rigModel != radParams->rigModel)
-    {
-       qDebug() << "rigModel !=";
-    }
-     if (rigModelNumber != radParams->rigModelNumber)
-     {
-         qDebug() << "rigModelNumber !=";
-     }
-     if (pollInterval != radParams->pollInterval)
-     {
-        qDebug() << "pollInterval  !=";
-     }
-     if (civAddress != radParams->civAddress)
-     {
-        qDebug() << "civAddress  !=";
-     }
-      if (  baudrate != radParams->baudrate)
-      {
-         qDebug() << "baudrate  !=";
-      }
-       if (parity != radParams->parity)
-       {
-           qDebug() << "parity  !=";
-       }
-       if ( stopbits != radParams->stopbits)
-       {
-           qDebug() << "stopbits !=";
-       }
-       if (databits != radParams->databits)
-       {
-           qDebug() << "databits !=";
-       }
-       if (handshake != radParams->handshake)
-       {
-          qDebug() << "handshake !=";
-       }
-       if (forceDtr != radParams->forceDtr)
-       {
-          qDebug() << "forceDtr !=";
-       }
-       if (forceRts != radParams->forceRts)
-       {
-           qDebug() << "forceRts !=";
-       }
-        if (portType != radParams->portType)
-        {
-           qDebug() << "portType !=";
-        }
-        if (advancedCommsFlag != radParams->advancedCommsFlag)
-        {
-            qDebug() << "advancedCommsFlag !=";
-
-        }
-        if (networkAdd != radParams->networkAdd)
-        {
-            qDebug() << "networkAdd !=";
-        }
-         if (networkPort != radParams->networkPort)
-         {
-             qDebug() << "networkPort !=";
-         }
-        if (enablePTT != radParams->enablePTT)
-        {
-            qDebug() << "enablePTT !=";
-        }
-        if (pttSerialPort != radParams->pttSerialPort)
-        {
-           qDebug() << "pttSerialPort !=";
-        }
-        if (pttType != radParams->pttType)
-        {
-           qDebug() << "pttType !=";
-        }
-        if (rigCtldEnable != radParams->rigCtldEnable)
-        {
-            qDebug() << "rigCtldEnable !=";
-        }
-         if (startMinosRigCtld != radParams->startMinosRigCtld)
-         {
-             qDebug() << "startMinosRigCtld !=";
-         }
-         if (rigCtldNetworkAdd != radParams->rigCtldNetworkAdd)
-         {
-             qDebug() << "rigCtldNetworkAdd !=";
-         }
-        if (rigCtldNetworkPort != radParams->rigCtldNetworkPort)
-        {
-            qDebug() << "rigCtldNetworkPort !=";
-        }
-        if (mgmMode != radParams->mgmMode)
-        {
-            qDebug() << "mgmMode !=";
-        }
-        if ( antSwitchAvail != radParams->antSwitchAvail)
-        {
-            qDebug() << "antSwitchAvail !=";
-        }
-         if ( ritSupported != radParams->ritSupported)
-         {
-             qDebug() << "ritSupported !=";
-         }
-
-         if (transVertEnable != radParams->transVertEnable)
-         {
-             qDebug() << "transVertEnable !=";
-         }
-         if (   supportBands != radParams->supportBands)
-         {
-             qDebug() << "supportBands !=";
-         }
-         if (!compareStringList(transVertNames, radParams->transVertNames))
-         {
-             qDebug() << "transVertNames !=";
-         }
-         if (   numTransverters != radParams->numTransverters)
-         {
-             qDebug() << "numTransverters !=";
-         }
-         if (   enableTransSwitch != radParams->enableTransSwitch)
-         {
-             qDebug() << "enableTransSwitch !=";
-         }
-         if (   enableLocTVSwMsg != radParams->enableLocTVSwMsg)
-         {
-             qDebug() << "enableLocTVSwMsg !=";
-         }
-         if (   locTVSwComport != radParams->locTVSwComport)
-         {
-            qDebug() << "locTVSwComport !=";
-         }
-         if (  ! compareStringList(radioSupBands, radParams->radioSupBands))
-         {
-             qDebug() << "radioSupBands !=";
-         }
-         if ( !  compareStringList(radioTransSupBands, radParams->radioTransSupBands))
-         {
-             qDebug() << "radioTransSupBands !=";
-         }
-         if (   transVertSettings != radParams->transVertSettings)
-         {
-             qDebug() << "transVertSettings !=";
-         }
-         if (   enableDisableCatFeature != radParams->enableDisableCatFeature )
-         {
-             qDebug() << "enableShowCatFeatures !=";
-         }
-        if (   enableDisableCatFeature.ritEnable != radParams->enableDisableCatFeature.ritEnable)
-         {
-             qDebug() << "ritEnable !=";
-         }
-         if (   enableDisableCatFeature.sMeterEnable != radParams->enableDisableCatFeature.sMeterEnable)
-         {
-             qDebug() << "sMeterEnable !=";
-         }
-         if (   enableDisableCatFeature.volumeEnable != radParams->enableDisableCatFeature.volumeEnable)
-         {
-             qDebug() << "volumeEnable !=";
-         }
-         if (   enableDisableCatFeature.voiceMemEnable != radParams->enableDisableCatFeature.voiceMemEnable)
-         {
-             qDebug() << "voiceMemEnable !=";
-         }
-         if (   enableDisableCatFeature.cWMemEnable != radParams->enableDisableCatFeature.cWMemEnable)
-         {
-             qDebug() << "cWMemEnable !=";
-         }
-         if (   enableDisableCatFeature.catEnable != radParams->enableDisableCatFeature.catEnable)
-         {
-             qDebug() << "catEnable !=";
-         }
-
-
-
-
 
 
     if (radioName != radParams->radioName ||
             radioNumber != radParams->radioNumber ||
+            previousRadioName != radParams->previousRadioName ||
+            markForDeletion != radParams->markForDeletion ||
             comport != radParams->comport ||
             rigMfg_Name != radParams->rigMfg_Name ||
             rigModelName != radParams->rigModelName ||
@@ -450,6 +260,8 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
 {
     radioName = srce->radioName;
     radioNumber = srce->radioNumber;
+    previousRadioName = srce->previousRadioName;
+    markForDeletion = srce->markForDeletion;
     comport = srce->comport;
     rigMfg_Name = srce->rigMfg_Name;
     rigModelName = srce->rigModelName;

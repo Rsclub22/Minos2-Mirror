@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -86,9 +86,9 @@ void RigSetupDialog::initSetup()
         }
     }
 
-    numAvailRadios = availRadios.count();
+    //numAvailRadios = availRadios.count();
 
-    for (int i = 0; i < numAvailRadios; i++)
+    for (int i = 0; i < availRadios.count(); i++)
     {
         addTab(i, availRadios[i]);
 
@@ -97,24 +97,24 @@ void RigSetupDialog::initSetup()
         QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
         QSettings  configTransvert(fileName, QSettings::IniFormat);
 
-        radioTab[i]->getRadioData()->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
-        radioTab[i]->getRadioData()->numTransverters =  radioTab[i]->getRadioData()->transVertNames.count();
+        availRadioData.value(availRadios[i])->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
+        availRadioData.value(availRadios[i])->numTransverters =  availRadioData.value(availRadios[i])->transVertNames.count();
 
-        if (radioTab[i]->getRadioData()->numTransverters > 0)
+        if (availRadioData.value(availRadios[i])->numTransverters > 0)
         {
-            for (int t = 0; t < availRadioData[i]->numTransverters; t++)
+            for (int t = 0; t < availRadioData.value(availRadios[i])->numTransverters; t++)
             {
-               radioTab[i]->addTransVertTab(t, radioTab[i]->getRadioData()->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
+               radioTab.value(availRadios[i])->addTransVertTab(t, availRadioData.value(availRadios[i])->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
             }
         }
 
-        getRadioSetting(radioTab[i]->getRadioData(), availRadios[i], settings);
+        getRadioSetting(availRadioData.value(availRadios[i]), availRadios[i], settings);
 
-        radioTab[i]->getRadioData()->rigMfg_Name = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigManufacturer;
-        radioTab[i]->getRadioData()->rigModelName = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelName;
-        radioTab[i]->getRadioData()->rigModelNumber = rigFactory->supported_rigs()->value(radioTab[i]->getRadioData()->rigModel).rigModelNumber;
+        availRadioData.value(availRadios[i])->rigMfg_Name = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigManufacturer;
+        availRadioData.value(availRadios[i])->rigModelName = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigModelName;
+        availRadioData.value(availRadios[i])->rigModelNumber = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigModelNumber;
 
-        loadSettingsToTab(i);
+        loadSettingsToTab(i, availRadios[i]);
     }
 
     // make a copy of the current settings
@@ -124,11 +124,7 @@ void RigSetupDialog::initSetup()
         storedRadioData.append(radioData);
     }
 
-     storedAvailRadios = availRadios;
-     for (int i = 0; i < storedAvailRadios.count(); i++)
-     {
-         storedRadioData[i]->scatParamsCopy(radioTab[i]->getRadioData());
-     }
+
 
 }
 
@@ -137,199 +133,204 @@ void RigSetupDialog::initSetup()
 
 void RigSetupDialog::addTab(int tabNum, QString tabName)
 {
-    availRadioData.append(QSharedPointer<scatParams>(new scatParams));
-    availRadioData[tabNum]->radioName = tabName;
+    availRadioData.insert(tabName, QSharedPointer<scatParams>(new scatParams));
+    availRadioData.value(tabName)->radioName = tabName;
     if (!availRadios.contains(tabName))
     {
        availRadios.append(tabName);
     }
 
-    radioTab.append(new RigSetupForm(rigFactory, availRadioData[tabNum], bands, ui->radioTab, hfFlag));
-    ui->radioTab->insertTab(tabNum, radioTab[tabNum], tabName);
+    radioTab.insert(tabName, new RigSetupForm(rigFactory, availRadioData.value(tabName), bands, ui->radioTab, hfFlag));
+    ui->radioTab->insertTab(tabNum, radioTab.value(tabName), tabName);
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
 
 }
 
 
-void RigSetupDialog::loadSettingsToTab(int tabNum)
+void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 {
 
-    ui->radioTab->setTabText(tabNum, radioTab[tabNum]->getRadioData()->radioName);
+    ui->radioTab->setTabText(tabNum, availRadioData.value(tabName)->radioName);
 
-    radioTab[tabNum]->setRadioModel(radioTab[tabNum]->getRadioData()->rigModel);
+    radioTab.value(tabName)->setRadioModel(availRadioData.value(tabName)->rigModel);
 
-    radioTab[tabNum]->setCIVAddress(radioTab[tabNum]->getRadioData()->civAddress);
-    loadAvailComportsToTab(tabNum);                                                 // finds comports first
+    radioTab.value(tabName)->setCIVAddress(availRadioData.value(tabName)->civAddress);
+    loadAvailComportsToTab(tabName);                                                 // finds comports first
     //radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
-    radioTab[tabNum]->setDataSpeed(QString::number(radioTab[tabNum]->getRadioData()->baudrate));
-    radioTab[tabNum]->setDataBits(QString::number(radioTab[tabNum]->getRadioData()->databits));
-    radioTab[tabNum]->setStopBits(QString::number(radioTab[tabNum]->getRadioData()->stopbits));
-    radioTab[tabNum]->setParityBits(radioTab[tabNum]->getRadioData()->parity);
-    radioTab[tabNum]->setHandshake(radioTab[tabNum]->getRadioData()->handshake);
-    radioTab[tabNum]->setForceDTR(radioTab[tabNum]->getRadioData()->forceDtr);
-    radioTab[tabNum]->setForceRTS(radioTab[tabNum]->getRadioData()->forceRts);
-    radioTab[tabNum]->setNetAddress(radioTab[tabNum]->getRadioData()->networkAdd);
-    radioTab[tabNum]->setNetPortNum(radioTab[tabNum]->getRadioData()->networkPort);
+    radioTab.value(tabName)->setDataSpeed(QString::number(availRadioData.value(tabName)->baudrate));
+    radioTab.value(tabName)->setDataBits(QString::number(availRadioData.value(tabName)->databits));
+    radioTab.value(tabName)->setStopBits(QString::number(availRadioData.value(tabName)->stopbits));
+    radioTab.value(tabName)->setParityBits(availRadioData.value(tabName)->parity);
+    radioTab.value(tabName)->setHandshake(availRadioData.value(tabName)->handshake);
+    radioTab.value(tabName)->setForceDTR(availRadioData.value(tabName)->forceDtr);
+    radioTab.value(tabName)->setForceRTS(availRadioData.value(tabName)->forceRts);
+    radioTab.value(tabName)->setNetAddress(availRadioData.value(tabName)->networkAdd);
+    radioTab.value(tabName)->setNetPortNum(availRadioData.value(tabName)->networkPort);
 
-    RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
+    RigCapabilities rigCap = rigFactory->supported_rigs()->value(availRadioData.value(tabName)->rigModel);
 
 
-    radioTab[tabNum]->setPollInterval(radioTab[tabNum]->getRadioData()->pollInterval);
+    radioTab.value(tabName)->setPollInterval(availRadioData.value(tabName)->pollInterval);
     if (rigCap.pollData)
     {
-        radioTab[tabNum]->pollIntervalVisible(true);
+        radioTab.value(tabName)->pollIntervalVisible(true);
     }
     else
     {
-        radioTab[tabNum]->pollIntervalVisible(false);
+        radioTab.value(tabName)->pollIntervalVisible(false);
     }
 
-    radioTab[tabNum]->setTransVertSelected(radioTab[tabNum]->getRadioData()->transVertEnable);
-    radioTab[tabNum]->setEnableTransVertSw(radioTab[tabNum]->getRadioData()->enableTransSwitch);
-    radioTab[tabNum]->setEnableLocalTransVertSw(radioTab[tabNum]->getRadioData()->enableLocTVSwMsg);
+    radioTab.value(tabName)->setTransVertSelected(availRadioData.value(tabName)->transVertEnable);
+    radioTab.value(tabName)->setEnableTransVertSw(availRadioData.value(tabName)->enableTransSwitch);
+    radioTab.value(tabName)->setEnableLocalTransVertSw(availRadioData.value(tabName)->enableLocTVSwMsg);
 
 
 
     if (rigCap.portType == RigCapConstants::PortType::network)
     {
-        radioTab[tabNum]->serialDataEntryVisible(false);
-        radioTab[tabNum]->advancedSerialDataEntryVisible(false);
-        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
-        radioTab[tabNum]->networkDataEntryVisible(true);
-        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
-        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
+        radioTab.value(tabName)->serialDataEntryVisible(false);
+        radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
+        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
+        radioTab.value(tabName)->networkDataEntryVisible(true);
+        radioTab.value(tabName)->setRigctldCheckBoxVisible(false);
+        radioTab.value(tabName)->getRadioData()->rigCtldEnable = false;
     }
     else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
-        radioTab[tabNum]->serialDataEntryVisible(true);
-        radioTab[tabNum]->advancedSerialDataEntryVisible(radioTab[tabNum]->getRadioData()->advancedCommsFlag);
-        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(true);
-        radioTab[tabNum]->networkDataEntryVisible(false);
-        if (radioTab[tabNum]->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
+        radioTab.value(tabName)->serialDataEntryVisible(true);
+        radioTab.value(tabName)->advancedSerialDataEntryVisible(availRadioData.value(tabName)->advancedCommsFlag);
+        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
+        radioTab.value(tabName)->networkDataEntryVisible(false);
+        if (radioTab.value(tabName)->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
-            radioTab[tabNum]->setForceRTSDisabled(true);
+            radioTab.value(tabName)->setForceRTSDisabled(true);
         }
         else
         {
-            radioTab[tabNum]->setForceRTSDisabled(false);
+            radioTab.value(tabName)->setForceRTSDisabled(false);
         }
 
     }
     else if (rigCap.portType == RigCapConstants::PortType::none)
     {
-        radioTab[tabNum]->serialDataEntryVisible(false);
-        radioTab[tabNum]->advancedSerialDataEntryVisible(false);
-        radioTab[tabNum]->setAdvancedCommsChkBoxVisible(false);
-        radioTab[tabNum]->networkDataEntryVisible(false);
-        radioTab[tabNum]->setRigctldCheckBoxVisible(false);
-        radioTab[tabNum]->getRadioData()->rigCtldEnable = false;
+        radioTab.value(tabName)->serialDataEntryVisible(false);
+        radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
+        radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
+        radioTab.value(tabName)->networkDataEntryVisible(false);
+        radioTab.value(tabName)->setRigctldCheckBoxVisible(false);
+        radioTab.value(tabName)->getRadioData()->rigCtldEnable = false;
     }
 
     // serial ptt comport loaded with other comports
-    radioTab[tabNum]->setPttTypeRadioButtons(radioTab[tabNum]->getRadioData()->pttType);
+    radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
 
 
     if (rigCap.supportGetPtt && rigCap.supportSetPtt)
     {
-        radioTab[tabNum]->setPTTCheckBoxDisabled(false);
-        if (radioTab[tabNum]->getRadioData()->enablePTT)
+        radioTab.value(tabName)->setPTTCheckBoxDisabled(false);
+        if (radioTab.value(tabName)->getRadioData()->enablePTT)
         {
-            radioTab[tabNum]->setPttControlsVisible(true);
-            radioTab[tabNum]->setPTTCheckBoxChecked(true);
+            radioTab.value(tabName)->setPttControlsVisible(true);
+            radioTab.value(tabName)->setPTTCheckBoxChecked(true);
 
         }
         else
         {
-           radioTab[tabNum]->setPttControlsVisible(false);
-           radioTab[tabNum]->setPTTCheckBoxChecked(false);
+           radioTab.value(tabName)->setPttControlsVisible(false);
+           radioTab.value(tabName)->setPTTCheckBoxChecked(false);
 
         }
     }
     else
     {
-        radioTab[tabNum]->setPttControlsVisible(false);
-        radioTab[tabNum]->setPTTCheckBoxChecked(false);
-        radioTab[tabNum]->setPTTCheckBoxDisabled(true);
+        radioTab.value(tabName)->setPttControlsVisible(false);
+        radioTab.value(tabName)->setPTTCheckBoxChecked(false);
+        radioTab.value(tabName)->setPTTCheckBoxDisabled(true);
     }
 
 
 
 
-    radioTab[tabNum]->setMgmMode(radioTab[tabNum]->getRadioData()->mgmMode);
+    radioTab.value(tabName)->setMgmMode(availRadioData.value(tabName)->mgmMode);
 
     //for (int i =0; i < radioTab[tabNum]->getRadioData()->supportBands.count(); i++)
     foreach(auto &b, bands)
     {
-       radioTab[tabNum]->setSupportBandChkBox(b.data()->name(), radioTab[tabNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
+       radioTab.value(tabName)->setSupportBandChkBox(b.data()->name(), availRadioData.value(tabName)->supportBands.getSupportBandFlag(b.data()->name()));
     }
 
 
     if (rigCap.supportGetSupBands)
     {
-        radioTab[tabNum]->setSupportBandCheckBoxVisible(false);
+        radioTab.value(tabName)->setSupportBandCheckBoxVisible(false);
     }
     else
     {
-        radioTab[tabNum]->setSupportBandCheckBoxVisible(true);
+        radioTab.value(tabName)->setSupportBandCheckBoxVisible(true);
     }
 
-    radioTab[tabNum]->setUseRigctldCheckbox(radioTab[tabNum]->getRadioData()->rigCtldEnable);
-    radioTab[tabNum]->setStartMinosRigctldCheckbox(radioTab[tabNum]->getRadioData()->startMinosRigCtld);
-    radioTab[tabNum]->rigCtldItemsVisible(radioTab[tabNum]->getRadioData()->rigCtldEnable);
-    radioTab[tabNum]->setRigctldNetworkAddress(radioTab[tabNum]->getRadioData()->rigCtldNetworkAdd);
-    radioTab[tabNum]->setRigctldPortNumber(radioTab[tabNum]->getRadioData()->rigCtldNetworkPort);
+    radioTab.value(tabName)->setUseRigctldCheckbox(availRadioData.value(tabName)->rigCtldEnable);
+    radioTab.value(tabName)->setStartMinosRigctldCheckbox(availRadioData.value(tabName)->startMinosRigCtld);
+    radioTab.value(tabName)->rigCtldItemsVisible(availRadioData.value(tabName)->rigCtldEnable);
+    radioTab.value(tabName)->setRigctldNetworkAddress(availRadioData.value(tabName)->rigCtldNetworkAdd);
+    radioTab.value(tabName)->setRigctldPortNumber(availRadioData.value(tabName)->rigCtldNetworkPort);
 
     // now load transverter settings
-    if (radioTab[tabNum]->getRadioData()->numTransverters > 0 )
+
+    if (availRadioData.value(tabName)->numTransverters > 0 )
     {
-        for (int t = 0; t < radioTab[tabNum]->getRadioData()->numTransverters; t++)
+        //for (int t = 0; t < availRadioData.value(tabName)->numTransverters; t++)
+        QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
+        foreach(const auto &tv, tvList)
         {
-            radioTab[tabNum]->setTransVertTabText(t, radioTab[tabNum]->getRadioData()->transVertNames[t]);
-            radioTab[tabNum]->loadTransVertTab(t);
+            //radioTab.value(tabName)->setTransVertTabText(tv, tvList);
+            radioTab.value(tabName)->loadTransVertTab(tv);
         }
 
     }
 
    // display the correct transverter settings
 
-    radioTab[tabNum]->setLocTVSwComport(radioTab[tabNum]->getRadioData()->locTVSwComport);
+    radioTab.value(tabName)->setLocTVSwComport(availRadioData.value(tabName)->locTVSwComport);
 
-    radioTab[tabNum]->setTransVertSelected(radioTab[tabNum]->getRadioData()->transVertEnable);
-    if (radioTab[tabNum]->getRadioData()->transVertEnable)
+    radioTab.value(tabName)->setTransVertSelected(availRadioData.value(tabName)->transVertEnable);
+    if (availRadioData.value(tabName)->transVertEnable)
     {
-        radioTab[tabNum]->setTransVertSwVisible(true);
-        radioTab[tabNum]->setEnableLocalTransVertSwVisible(false);
+        radioTab.value(tabName)->setTransVertSwVisible(true);
+        radioTab.value(tabName)->setEnableLocalTransVertSwVisible(false);
     }
     else
     {
-        radioTab[tabNum]->setTransVertSwVisible(false);
-        radioTab[tabNum]->setEnableLocalTransVertSwVisible(false);
-        radioTab[tabNum]->setLocTVSWComportVisible(false);
+        radioTab.value(tabName)->setTransVertSwVisible(false);
+        radioTab.value(tabName)->setEnableLocalTransVertSwVisible(false);
+        radioTab.value(tabName)->setLocTVSWComportVisible(false);
     }
 
-    if (radioTab[tabNum]->getRadioData()->transVertEnable && radioTab[tabNum]->getRadioData()->enableTransSwitch)
+    if (availRadioData.value(tabName)->transVertEnable && availRadioData.value(tabName)->enableTransSwitch)
     {
-        radioTab[tabNum]->setTransVertSwVisible(true);
-        radioTab[tabNum]->setEnableLocalTransVertSwVisible(true);
-        for (int i = 0; i < radioTab[tabNum]->getRadioData()->numTransverters; i++)
+        radioTab.value(tabName)->setTransVertSwVisible(true);
+        radioTab.value(tabName)->setEnableLocalTransVertSwVisible(true);
+        //for (int i = 0; i < availRadioData.value(tabName)->numTransverters; i++)
+        QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
+        foreach(const auto &tv, tvList)
         {
-            radioTab[tabNum]->transVertTab[i]->setEnableTransVertSwBoxVisible(true);
+            radioTab.value(tabName)->transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
         }
     }
 
-    if (radioTab[tabNum]->getRadioData()->transVertEnable && radioTab[tabNum]->getRadioData()->enableTransSwitch && radioTab[tabNum]->getRadioData()->enableLocTVSwMsg)
+    if (availRadioData.value(tabName)->transVertEnable && availRadioData.value(tabName)->enableTransSwitch && availRadioData.value(tabName)->enableLocTVSwMsg)
     {
-        radioTab[tabNum]->setLocTVSWComportVisible(true);
+        radioTab.value(tabName)->setLocTVSWComportVisible(true);
     }
     else
     {
-        radioTab[tabNum]->setLocTVSWComportVisible(false);
+        radioTab.value(tabName)->setLocTVSWComportVisible(false);
     }
 
-    radioTab[tabNum]->loadEnableShowCatFeaturesBox(rigCap);
+    radioTab.value(tabName)->loadEnableShowCatFeaturesBox(rigCap);
 
-    //radioTab[tabNum]->buildSupBandList();
+
 
 }
 
@@ -338,7 +339,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum)
 
 void RigSetupDialog::addRadio()
 {
-
+    QStringList availRadios;
+    getAvailRadiosList(availRadios);
     AddRadioDialog getRadioName_Rig(availRadios, rigFactory);
     getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
     if (getRadioName_Rig.exec() != QDialog::Accepted)
@@ -358,38 +360,50 @@ void RigSetupDialog::addRadio()
 
 
     // add the new radio
-    int tabNum = numAvailRadios;
+    int tabNum = availRadios.count();
     addTab(tabNum, radioName);
     numAvailRadios++;
-    radioTab[tabNum]->setAdvancedCommsFlag(false);
-    radioTab[tabNum]->setupRadioModel(radioModel);
-    radioTab[tabNum]->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
+    radioTab.value(radioName)->setAdvancedCommsFlag(false);
+    radioTab.value(radioName)->setupRadioModel(radioModel);
+    radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
-    loadAvailComportsToTab(tabNum);
+    loadAvailComportsToTab(radioName);
 
     // initial settings
-    radioTab[tabNum]->setDataSpeed("9600");
-    radioTab[tabNum]->comSpeedSelected();
+    radioTab.value(radioName)->setDataSpeed("9600");
+    radioTab.value(radioName)->comSpeedSelected();
 
-    radioTab[tabNum]->setDataBits("8");
-    radioTab[tabNum]->comDataBitsSelected();
+    radioTab.value(radioName)->setDataBits("8");
+    radioTab.value(radioName)->comDataBitsSelected();
 
-    radioTab[tabNum]->setStopBits("1");
-    radioTab[tabNum]->comStopBitsSelected();
+    radioTab.value(radioName)->setStopBits("1");
+    radioTab.value(radioName)->comStopBitsSelected();
 
-    radioTab[tabNum]->setParityBits(0);
-    radioTab[tabNum]->comParitySelected(true);
+    radioTab.value(radioName)->setParityBits(0);
+    radioTab.value(radioName)->comParitySelected(true);
 
 
-    radioTab[tabNum]->setForceRTS(1);
-    radioTab[tabNum]->on_forceRTSSelected();
+    radioTab.value(radioName)->setForceRTS(1);
+    radioTab.value(radioName)->on_forceRTSSelected();
 
 
 
     ui->radioTab->setCurrentIndex(tabNum);
 
-    //emit radioTabChanged();
 
+
+}
+
+
+void RigSetupDialog::getAvailRadiosList(QStringList &availRadios)
+{
+    foreach (const auto &rd, availRadioData)
+    {
+        if (!rd->markForDeletion)
+        {
+            availRadios.append(rd->radioName);
+        }
+    }
 }
 
 
@@ -436,11 +450,11 @@ void RigSetupDialog::removeRadio()
 
     // remove this radio
     ui->radioTab->removeTab(currentIndex);
-    availRadioData.remove(currentIndex);
-    availRadios.removeAt(currentIndex);
-    radioTab.removeAt(currentIndex);
-    numAvailRadios--;
-    setupChangeFlags.setRadioRemoved(true);
+    availRadioData.value(currentName)->markForDeletion = true;
+    //availRadios.removeAt(currentIndex);
+    radioTab.remove(currentName);
+    //numAvailRadios--;
+    //setupChangeFlags.setRadioRemoved(true);
 
     //emit radioTabChanged();
 
@@ -473,7 +487,7 @@ void RigSetupDialog::editRadioName()
     {
         ui->radioTab->setTabText(tabNum, text);
         for (int i = 0; i < numAvailRadios; i++)
-        {
+        {/*
             if (radioName == availRadioData[i]->radioName)
             {
                 availRadioData[i]->radioName = text;  // update with new name
@@ -481,7 +495,7 @@ void RigSetupDialog::editRadioName()
                 radioTab[i]->rigSetupFlags.setRadioNameChanged(true);
                 radioTab[i]->rigSetupFlags.setRadioValueChanged(true);
 
-            }
+            }*/
         }
     }
     else
@@ -495,9 +509,9 @@ void RigSetupDialog::editRadioName()
 void RigSetupDialog::setTabToCurrentRadio()
 {
 
-    for (int i = 0; i < numAvailRadios; i++)
+    for (int i = 0; i < ui->radioTab->count(); i++)
     {
-        if (currentRadioName == availRadioData[i]->radioName)
+        if (currentRadioName == availRadioData.value(ui->radioTab->tabText(i))->radioName)
         {
             ui->radioTab->setTabColor(i, Qt::red);
             ui->radioTab->setCurrentIndex(i);
@@ -511,11 +525,11 @@ void RigSetupDialog::setTabToCurrentRadio()
     }
 }
 
-int RigSetupDialog::comportAvial(int radioNum, QString comport)
+int RigSetupDialog::comportAvial(QString radioName, QString comport)
 {
     if (radioTab.count() > 0)
     {
-        return radioTab[radioNum]->comportAvial(comport);
+        return radioTab.value(radioName)->comportAvial(comport);
     }
 
     return -1;
@@ -524,26 +538,27 @@ int RigSetupDialog::comportAvial(int radioNum, QString comport)
 
 void RigSetupDialog::loadAvailComports()
 {
-    for (int i = 0; i <radioTab.count(); i++)
+    QStringList lk = radioTab.keys();
+    foreach (auto &k, lk)
     {
-        loadAvailComportsToTab(i);
-        loadAvailPttComportsToTab(i);
+        loadAvailComportsToTab(k);
+        loadAvailPttComportsToTab(k);
     }
 
 
 }
 
 
-void RigSetupDialog::loadAvailComportsToTab(int tabNum)
+void RigSetupDialog::loadAvailComportsToTab(QString radioName)
 {
-    radioTab[tabNum]->loadRadioComports();
-    radioTab[tabNum]->setComport(availRadioData[tabNum]->comport);
+    radioTab.value(radioName)->loadRadioComports();
+    radioTab.value(radioName)->setComport(availRadioData.value(radioName)->comport);
 }
 
-void RigSetupDialog::loadAvailPttComportsToTab(int tabNum)
+void RigSetupDialog::loadAvailPttComportsToTab(QString radioName)
 {
-    radioTab[tabNum]->loadAvailPttComports();
-    radioTab[tabNum]->setPttComport(availRadioData[tabNum]->pttSerialPort);
+    radioTab.value(radioName)->loadAvailPttComports();
+    radioTab.value(radioName)->setPttComport(availRadioData.value(radioName)->pttSerialPort);
 }
 
 void RigSetupDialog::doCloseEvent()
@@ -585,15 +600,15 @@ void RigSetupDialog::saveButtonPushed()
 
 void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
 {
-
-    for (int tabNum = 0; tabNum < numAvailRadios; tabNum++)
+    QStringList lk = radioTab.keys();
+    foreach (auto &k, lk)
     {
-        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab[tabNum]->getRadioData()->rigModel);
+        RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab.value(k)->getRadioData()->rigModel);
         if (!rigCap.supportGetSupBands)
         {
-            if (!radioTab[tabNum]->isAnySupportBandChecked() && radioTab[tabNum]->getRadioData()->numTransverters == 0)
+            if (!radioTab.value(k)->isAnySupportBandChecked() && radioTab.value(k)->getRadioData()->numTransverters == 0)
             {
-                supRadNames.append(radioTab[tabNum]->getRadioData()->radioName + '\n');
+                supRadNames.append(radioTab.value(k)->getRadioData()->radioName + '\n');
             }
         }
     }
@@ -602,6 +617,7 @@ void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
 
 void RigSetupDialog::cancelButtonPushed()
 {
+    /*
     bool change = false;
     for (int i = 0; i < radioTab.count(); i++)
     {
@@ -624,7 +640,7 @@ void RigSetupDialog::cancelButtonPushed()
         ui->radioTab->clear();
         initSetup();                // load data from file
     }
-
+*/
     doCloseEvent();
 }
 
@@ -639,6 +655,76 @@ void RigSetupDialog::saveSettings()
     QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
 
+    QStringList lk = availRadioData.keys();
+    // look for deleted radios or radio name change
+    foreach (auto &k, lk)
+    {
+        if (availRadioData.value(k)->markForDeletion )
+        {
+            configRadio.beginGroup(k);
+            configRadio.remove("");      // remove all keys for this group
+            configRadio.endGroup();
+            // remove transverters for this radio
+            fileNameTransVert = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+            if (QFile::exists(fileNameTransVert))
+            {
+                QFile::remove(fileNameTransVert);
+            }
+
+            availRadioData.remove(k);
+        }
+    }
+
+    // look for radios with changed name
+    foreach (auto &k, lk)
+    {
+        if (!availRadioData.value(k)->previousRadioName.isEmpty())
+        {
+            configRadio.beginGroup(k);
+            configRadio.remove("");      // remove all keys for this group
+            configRadio.endGroup();
+            // remove transverters for this radio
+            fileNameTransVert = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+            if (QFile::exists(fileNameTransVert))
+            {
+                QFile::remove(fileNameTransVert);
+            }
+            // gather data to send to other rigcontrols
+            QSharedPointer<RadioNameChange> radioNames = QSharedPointer<RadioNameChange>(new RadioNameChange);
+            radioNames->oldName = availRadioData.value(k)->previousRadioName;
+            radioNames->newName = availRadioData.value(k)->radioName;
+            listOfRadioNameChanges.append(radioNames);
+
+        }
+    }
+
+
+    // look for radios with changed data
+    foreach (auto &k, lk)
+    {
+        QString fileName;
+        fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
+        QSettings  settings(fileName, QSettings::IniFormat);
+
+        QSharedPointer<scatParams> savedRadioData;
+
+        getRadioSetting(savedRadioData, k, settings);
+
+        if (availRadioData.value(k)->compareNotEqual(savedRadioData))
+        {
+            saveRadioData(availRadioData.value(k), settings);
+
+            if (availRadioData.value(k)->transVertEnable)
+            {
+                if (availRadioData.value(k)->transVertSettings != savedRadioData->transVertSettings)
+                {
+
+                }
+            }
+        }
+
+    }
+/*
     for (int i = 0; i < radioTab.count(); i ++)
     {
         if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
@@ -813,6 +899,7 @@ void RigSetupDialog::saveSettings()
 
 
     }
+    */
 /*
     if (radioSettingChanged || transVertSettingChanged || transVertNameChanged)
     {
@@ -846,42 +933,42 @@ void RigSetupDialog::saveSettings()
 }
 
 
-void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
+void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettings& config)
 {
 
-    config.beginGroup(radioTab[radNum]->getRadioData()->radioName);
-    config.setValue("radioName", radioTab[radNum]->getRadioData()->radioName);
-    config.setValue("radioModel", radioTab[radNum]->getRadioData()->rigModel);
-    config.setValue("civAddress", radioTab[radNum]->getRadioData()->civAddress);
-    config.setValue("portType", radioTab[radNum]->getRadioData()->portType);
-    config.setValue("advancedComms", radioTab[radNum]->getRadioData()->advancedCommsFlag);
-    config.setValue("comport", radioTab[radNum]->getRadioData()->comport);
-    config.setValue("baudrate", radioTab[radNum]->getRadioData()->baudrate);
-    config.setValue("databits", radioTab[radNum]->getRadioData()->databits);
-    config.setValue("parity", radioTab[radNum]->getRadioData()->parity);
-    config.setValue("stopbits", radioTab[radNum]->getRadioData()->stopbits);
-    config.setValue("handshake", radioTab[radNum]->getRadioData()->handshake);
-    config.setValue("forceDTR", radioTab[radNum]->getRadioData()->forceDtr);
-    config.setValue("forceRTS", radioTab[radNum]->getRadioData()->forceRts);
-    config.setValue("enablePtt", radioTab[radNum]->getRadioData()->enablePTT);
-    config.setValue("pttType", radioTab[radNum]->getRadioData()->pttType);
-    config.setValue("pttSerialPort", radioTab[radNum]->getRadioData()->pttSerialPort);
-    config.setValue("radioPollInterval", radioTab[radNum]->getRadioData()->pollInterval);
-    config.setValue("rigCtldEnable", radioTab[radNum]->getRadioData()->rigCtldEnable);
-    config.setValue("startMinosRigCtld", radioTab[radNum]->getRadioData()->startMinosRigCtld);
-    config.setValue("rigCtldNetworkAddress", radioTab[radNum]->getRadioData()->rigCtldNetworkAdd);
-    config.setValue("rigCtldPortNumber", radioTab[radNum]->getRadioData()->rigCtldNetworkPort);
-    config.setValue("transVertEnable", radioTab[radNum]->getRadioData()->transVertEnable);
-    config.setValue("netAddress", radioTab[radNum]->getRadioData()->networkAdd);
-    config.setValue("netPort", radioTab[radNum]->getRadioData()->networkPort);
-    config.setValue("mgmMode", radioTab[radNum]->getRadioData()->mgmMode);
-    config.setValue("enableShowCatFeatures", radioTab[radNum]->getRadioData()->enableDisableCatFeature.enableDisplay);
-    config.setValue("ritEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.ritEnable);
-    config.setValue("sMeterEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.sMeterEnable);
-    config.setValue("volumeEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.volumeEnable);
-    config.setValue("voiceMemEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.voiceMemEnable);
-    config.setValue("cWMemEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.cWMemEnable);
-    config.setValue("catEnable", radioTab[radNum]->getRadioData()->enableDisableCatFeature.catEnable);
+    config.beginGroup(radioData->radioName);
+    config.setValue("radioName", radioData->radioName);
+    config.setValue("radioModel", radioData->rigModel);
+    config.setValue("civAddress", radioData->civAddress);
+    config.setValue("portType", radioData->portType);
+    config.setValue("advancedComms", radioData->advancedCommsFlag);
+    config.setValue("comport", radioData->comport);
+    config.setValue("baudrate", radioData->baudrate);
+    config.setValue("databits", radioData->databits);
+    config.setValue("parity", radioData->parity);
+    config.setValue("stopbits", radioData->stopbits);
+    config.setValue("handshake", radioData->handshake);
+    config.setValue("forceDTR", radioData->forceDtr);
+    config.setValue("forceRTS", radioData->forceRts);
+    config.setValue("enablePtt", radioData->enablePTT);
+    config.setValue("pttType", radioData->pttType);
+    config.setValue("pttSerialPort", radioData->pttSerialPort);
+    config.setValue("radioPollInterval", radioData->pollInterval);
+    config.setValue("rigCtldEnable", radioData->rigCtldEnable);
+    config.setValue("startMinosRigCtld", radioData->startMinosRigCtld);
+    config.setValue("rigCtldNetworkAddress", radioData->rigCtldNetworkAdd);
+    config.setValue("rigCtldPortNumber", radioData->rigCtldNetworkPort);
+    config.setValue("transVertEnable", radioData->transVertEnable);
+    config.setValue("netAddress", radioData->networkAdd);
+    config.setValue("netPort", radioData->networkPort);
+    config.setValue("mgmMode", radioData->mgmMode);
+    config.setValue("enableShowCatFeatures", radioData->enableDisableCatFeature.enableDisplay);
+    config.setValue("ritEnable", radioData->enableDisableCatFeature.ritEnable);
+    config.setValue("sMeterEnable", radioData->enableDisableCatFeature.sMeterEnable);
+    config.setValue("volumeEnable", radioData->enableDisableCatFeature.volumeEnable);
+    config.setValue("voiceMemEnable", radioData->enableDisableCatFeature.voiceMemEnable);
+    config.setValue("cWMemEnable", radioData->enableDisableCatFeature.cWMemEnable);
+    config.setValue("catEnable", radioData->enableDisableCatFeature.catEnable);
 
     foreach (auto &b, bands)
     {
@@ -889,7 +976,7 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
         {
             QString name = b.data()->name();
             name.remove('\x20').replace('H', 'h').replace('.', '_');
-            config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
+            config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b.data()->name()));
         }
         else
         {
@@ -897,14 +984,14 @@ void RigSetupDialog::saveRadioData(int radNum, QSettings& config)
             {
                 QString name = b.data()->name();
                 name.remove('\x20').replace('H', 'h').replace('.', '_');
-                config.setValue("support" + name, radioTab[radNum]->getRadioData()->supportBands.getSupportBandFlag(b.data()->name()));
+                config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b.data()->name()));
             }
         }
 
     }
-    config.setValue("enableTransVertSw", radioTab[radNum]->getRadioData()->enableTransSwitch);
-    config.setValue("locTransSwEnable", radioTab[radNum]->getRadioData()->enableLocTVSwMsg);
-    config.setValue("locTransVertSwComport", radioTab[radNum]->getRadioData()->locTVSwComport);
+    config.setValue("enableTransVertSw", radioData->enableTransSwitch);
+    config.setValue("locTransSwEnable", radioData->enableLocTVSwMsg);
+    config.setValue("locTransVertSwComport", radioData->locTVSwComport);
     config.endGroup();
 
 
@@ -981,7 +1068,8 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     fileNameTransVert = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
-    for (int t = 0; t < radioData->numTransverters; t++)
+    QStringList tvList = configTransVert.childGroups();
+    foreach (const auto &t, tvList)
     {
         readTranVerterSetting(radioData, t, configTransVert);
     }
@@ -989,30 +1077,30 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
 
 
 
-void RigSetupDialog::saveTranVerterSetting(int radioNum, int transVertNum, QSettings  &config)
+void RigSetupDialog::saveTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings  &config)
 {
-    config.beginGroup(radioTab[radioNum]->getRadioData()->transVertNames[transVertNum]);
-    config.setValue("name", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->transVertName);
-    config.setValue("band", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->band);
-    config.setValue("radioFreq", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->radioFreq.str());
-    config.setValue("targetFreq", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->targetFreq.str());
-    config.setValue("offsetDouble", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->transVertOffset.str());
-    config.setValue("antSwNumber", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->antSwitchNum);
-    config.setValue("transVertSw", radioTab[radioNum]->getRadioData()->transVertSettings[transVertNum]->transSwitchNum);
+    config.beginGroup(transvertName);
+    config.setValue("name", radioData->transVertSettings.value(transvertName)->transVertName);
+    config.setValue("band", radioData->transVertSettings.value(transvertName)->band);
+    config.setValue("radioFreq", radioData->transVertSettings.value(transvertName)->radioFreq.str());
+    config.setValue("targetFreq", radioData->transVertSettings.value(transvertName)->targetFreq.str());
+    config.setValue("offsetDouble", radioData->transVertSettings.value(transvertName)->transVertOffset.str());
+    config.setValue("antSwNumber", radioData->transVertSettings.value(transvertName)->antSwitchNum);
+    config.setValue("transVertSw", radioData->transVertSettings.value(transvertName)->transSwitchNum);
     config.endGroup();
 }
 
 
-void RigSetupDialog::readTranVerterSetting(QSharedPointer<scatParams> radioData, int transVertNum, QSettings  &config)
+void RigSetupDialog::readTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings  &config)
 {
-    config.beginGroup(radioData->transVertNames[transVertNum]);
-    radioData->transVertSettings[transVertNum]->transVertName = config.value("name", "").toString();
-    radioData->transVertSettings[transVertNum]->band = config.value("band", "").toString();
-    radioData->transVertSettings[transVertNum]->radioFreq = config.value("radioFreq", 0.0).toDouble();
-    radioData->transVertSettings[transVertNum]->targetFreq = config.value("targetFreq", 0.0).toDouble();
-    radioData->transVertSettings[transVertNum]->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
-    radioData->transVertSettings[transVertNum]->antSwitchNum = config.value("antSwNumber", "0").toString();
-    radioData->transVertSettings[transVertNum]->transSwitchNum = config.value("transVertSw", "0").toString();
+    config.beginGroup(transvertName);
+    radioData->transVertSettings.value(transvertName)->transVertName = config.value("name", "").toString();
+    radioData->transVertSettings.value(transvertName)->band = config.value("band", "").toString();
+    radioData->transVertSettings.value(transvertName)->radioFreq = config.value("radioFreq", 0.0).toDouble();
+    radioData->transVertSettings.value(transvertName)->targetFreq = config.value("targetFreq", 0.0).toDouble();
+    radioData->transVertSettings.value(transvertName)->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
+    radioData->transVertSettings.value(transvertName)->antSwitchNum = config.value("antSwNumber", "0").toString();
+    radioData->transVertSettings.value(transvertName)->transSwitchNum = config.value("transVertSw", "0").toString();
     config.endGroup();
 }
 
@@ -1086,12 +1174,12 @@ void RigSetupDialog::copyRadioToCurrent(int radioNumber)
 
 QString RigSetupDialog::getRadioComPort(QString radioName)
 {
-
-    for (int i = 0; i < numAvailRadios; i++)
+    QStringList lk = availRadioData.keys();
+    foreach (const auto &k, lk)
     {
-        if (availRadioData[i]->radioName == radioName)
+        if (availRadioData.value(k)->radioName == radioName)
         {
-            return availRadioData[i]->comport;
+            return availRadioData.value(k)->comport;
         }
     }
 
@@ -1107,9 +1195,10 @@ void RigSetupDialog::setCurrentRadioName(QString name)
 {
     currentRadioName = name;
     // set currentRadioName in radio tab to test remove transverter
-    for (int i = 0; i < radioTab.count(); i++)
+    QStringList lk = radioTab.keys();
+    foreach (const auto &k, lk)
     {
-        radioTab[i]->setCurrentRadioName(name);
+        radioTab.value(k)->setCurrentRadioName(name);
     }
 }
 

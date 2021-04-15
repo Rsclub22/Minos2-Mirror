@@ -347,7 +347,7 @@ private:
     void sendStatusToLogDisConnected();
     void sendStatusToLogConnected();
     void sendStatusToLogError(QString);
-    void sendTransVertOffsetToLogger(int tvNum);
+    //void sendTransVertOffsetToLogger(QString transvertName);
     void sendTransVertSwitchToLogger(const QString &swNum);
     void sendFreqToLog(const Frequency &freq);
     void sendModeToLog(QString mode);
@@ -486,8 +486,8 @@ private:
 
 
 
-    void getAndSendTransVertSwNum(int transVerterNum);
-    bool findTransverter(int &transVerterNum, QString &transVerterBand, QString band);
+    void getAndSendTransVertSwNum(QString transvertName);
+    bool findTransverter(QString &transVerterBand, QString band);
 
     void setPttIndOnOff(bool state);
     void setpttIndVisible(bool visible);
@@ -527,7 +527,7 @@ private:
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
 
-    void readTranVerterSetting(QSharedPointer<scatParams> radio, int transVertNum, QSettings &config);
+    void readTranVerterSetting(QSharedPointer<scatParams> radio, QString transvertName, QSettings &config);
     void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
     void checkIniFileVersion();
     void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
