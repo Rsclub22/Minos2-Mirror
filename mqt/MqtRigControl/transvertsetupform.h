@@ -21,7 +21,7 @@ class TransVertSetupForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent = nullptr);
+    explicit TransVertSetupForm(QSharedPointer<TransVertParams> _transvertData, QWidget *parent = nullptr);
 
 
     bool transVertValueChanged = false;
@@ -47,10 +47,12 @@ public:
     void setLocTVSwComport(QString p);
     void setEnableTransVertSwBoxVisible(bool visible);
 
+    QSharedPointer<TransVertParams> getTransVertData(){return transVertData;}
+    void setTransVertData(QSharedPointer<TransVertParams> tvp){transVertData = tvp;}
 private:
 
     Ui::transVertSetupForm *ui;
-    TransVertParams *transVertData;
+    QSharedPointer<TransVertParams> transVertData;
 
     FocusWatcher *radioFreqEdit;
     FocusWatcher *targetFreqEdit;

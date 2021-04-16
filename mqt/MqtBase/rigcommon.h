@@ -324,7 +324,7 @@ public:
   SupportBands supportBands;        // for non hamlib radios
   QStringList transVertNames;
   int numTransverters = 0;
-  QMap<QString, TransVertParams*> transVertSettings;
+  QMap<QString, QSharedPointer<TransVertParams> > transVertSettings;
   bool enableTransSwitch = false;
   bool enableLocTVSwMsg = false;
   QString locTVSwComport = "";

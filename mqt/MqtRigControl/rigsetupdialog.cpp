@@ -339,10 +339,11 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 void RigSetupDialog::addRadio()
 {
-    QStringList availRadios;
-    getAvailRadiosList(availRadios);
-    AddRadioDialog getRadioName_Rig(availRadios, rigFactory);
-    getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
+    //QStringList availRadios;
+    //getAvailRadiosList(availRadios);
+    QString windowTitle = tr("Add Radio and Radio Model");
+    AddRadioDialog getRadioName_Rig(&availRadioData, rigFactory, windowTitle);
+    //getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
     if (getRadioName_Rig.exec() != QDialog::Accepted)
     {
         return;
@@ -469,7 +470,7 @@ void RigSetupDialog::editRadioName()
 {
     int tabNum = ui->radioTab->currentIndex();
     QString radioName = ui->radioTab->tabText(tabNum);
-    QString oldName = radioName;
+
     if (currentRadioName == radioName)
     {
         // can't change current antennaName
@@ -479,29 +480,77 @@ void RigSetupDialog::editRadioName()
         return;
     }
 
-    bool ok;
-    QString text = QInputDialog::getText(this, tr("Edit Radio Name - %1").arg(radioName),
-                                         tr("Edit Radio Name:"), QLineEdit::Normal,
-                                         radioName, &ok);
-    if (ok && !text.isEmpty())
-    {
-        ui->radioTab->setTabText(tabNum, text);
-        for (int i = 0; i < numAvailRadios; i++)
-        {/*
-            if (radioName == availRadioData[i]->radioName)
-            {
-                availRadioData[i]->radioName = text;  // update with new name
-                availRadios[i] = text;
-                radioTab[i]->rigSetupFlags.setRadioNameChanged(true);
-                radioTab[i]->rigSetupFlags.setRadioValueChanged(true);
+    //bool ok;
 
-            }*/
-        }
-    }
-    else
+    AddRadioDialog editRadioName(&availRadioData, rigFactory, tr("Edit Radio Name - %1").arg(radioName));
+    //editRadioName.setWindowTitle(tr("Edit Radio Name - %1").arg(radioName));
+    editRadioName.hideRadioSelection(false);
+    if (editRadioName.exec() != QDialog::Accepted)
     {
         return;
     }
+    //QString newName = QInputDialog::getText(this, tr("Edit Radio Name - %1").arg(radioName),
+    //                                     tr("Edit Radio Name:"), QLineEdit::Normal,
+    //                                     radioName, &ok).trimmed();
+
+    QString newName = editRadioName.getRadioName();
+
+    if (!newName.isEmpty())
+    {
+
+        if (newName != radioName)
+        {
+            //for (int i = 0; i < numAvailRadios; i++)
+            QStringList avrList = availRadioData.keys();
+
+            // does the name already exist
+            foreach (const auto &r, avrList)
+            {
+                if (newName == availRadioData.value(r)->radioName)
+                {
+                    if (availRadioData.value(r)->markForDeletion)
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText(tr("%1 has been marked for deletion, please try another name").arg(newName));
+                        msgBox.exec();
+                    }
+                    else
+                    {
+                        QMessageBox msgBox;
+                        msgBox.setText(tr("%1 already exists, please try another name").arg(newName));
+                        msgBox.exec();
+                    }
+
+                    return;
+                }
+            }
+
+
+            foreach (const auto &r, avrList)
+            {
+                if (radioName == availRadioData.value(r)->radioName)
+                {
+                    QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams());
+                    radioData = availRadioData.value(radioName);
+                    radioData->radioName = newName;
+                    radioData->previousRadioName =radioName;
+                    ui->radioTab->setTabText(tabNum, newName);
+
+                    //update data tables
+                    availRadioData.remove(radioName);
+                    availRadioData.insert(newName, radioData);
+
+                    RigSetupForm *rsf = radioTab.value(radioName);
+                    radioTab.remove(radioName);
+                    radioTab.insert(newName, rsf);
+               }
+            }
+        }
+
+
+
+    }
+
 
 }
 

@@ -12,14 +12,16 @@
 
 #include <QMessageBox>
 
-AddRadioDialog::AddRadioDialog(QStringList _availRadios, RigFactory* rigFactory, QWidget *parent) :
+AddRadioDialog::AddRadioDialog(QMap<QString, QSharedPointer<scatParams> > *availRadioData_, RigFactory* rigFactory, QString windowTitle, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddRadioDialog)
 {
     ui->setupUi(this);
-    availRadios = _availRadios;
+    availRadioData = availRadioData_;
 
+    setWindowTitle(windowTitle);
 
+    errorDialogTitle = "Error - " + windowTitle;
 
     rigFactory->populateComboRigList(ui->radioModel);
     radioModel = ui->radioModel->currentText();
@@ -56,6 +58,7 @@ void AddRadioDialog::done(int r)
         if (ui->radioName->text() == "")
         {
             QMessageBox msgBox;
+            msgBox.setWindowTitle(errorDialogTitle);
             msgBox.setText(tr("Radio Name Empty\nPlease enter a name for the radio"));
             msgBox.exec();
             ui->radioName->setFocus();
@@ -64,17 +67,15 @@ void AddRadioDialog::done(int r)
         else if (containsChars(ui->radioName->text(), illegalChars))
         {
             QMessageBox msgBox;
+            msgBox.setWindowTitle(errorDialogTitle);
             msgBox.setModal( true );
             msgBox.setText(tr("Radio name contains invalid characters,\n please remove non-alpha or non-numeric characters"));
             msgBox.exec();
             return;
         }
-        else if (availRadios.contains(ui->radioName->text()))
+        else if (checkNameAlreadyExists(ui->radioName->text()))
         {
-            QMessageBox msgBox;
-            msgBox.setModal( true );
-            msgBox.setText(tr("Radio name already exists,\n please use another name"));
-            msgBox.exec();
+
             return;
         }
         else
@@ -93,13 +94,44 @@ void AddRadioDialog::done(int r)
 }
 
 
+void AddRadioDialog::hideRadioSelection(bool state)
+{
+    ui->radioModel->setVisible(state);
+    ui->radioModelLbl->setVisible(state);
+}
+
+bool AddRadioDialog::checkNameAlreadyExists(QString radioName)
+{
+    QStringList rList = availRadioData->keys();
+    foreach (const auto &r, rList)
+    {
+        if (availRadioData->value(r)->radioName == radioName && availRadioData->value(r)->markForDeletion)
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText(tr("Radio name marked for deletion,\n please use another name"));
+            msgBox.exec();
+            return true;
+        }
+        else if (availRadioData->value(r)->radioName == radioName && !availRadioData->value(r)->markForDeletion)
+        {
+            QMessageBox msgBox;
+            msgBox.setModal( true );
+            msgBox.setText(tr("Radio name already exists,\n please use another name"));
+            msgBox.exec();
+            return true;
+        }
+    }
+
+    return false;
+}
 
 
 
 
 QString AddRadioDialog::getRadioName()
 {
-    return radioName;
+    return radioName.trimmed();
 }
 
 QString AddRadioDialog::getRadioModel()

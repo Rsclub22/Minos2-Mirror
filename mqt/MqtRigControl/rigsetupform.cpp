@@ -1569,7 +1569,7 @@ void RigSetupForm::addTransVerter()
 
 void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 {
-    radioData->transVertSettings.insert(tabName, new TransVertParams());
+    radioData->transVertSettings.insert(tabName, QSharedPointer<TransVertParams>(new TransVertParams()));
     radioData->transVertSettings.value(tabName)->transVertName = tabName;
     radioData->transVertSettings.value(tabName)->band = tabName;
     for (int i = 0; i < bands.count(); i++)
@@ -1739,13 +1739,13 @@ void RigSetupForm::changeBand()
         return;
     }
 
-    TransVertParams *currentParams = new TransVertParams();
+    // as you can't hide tabs until Qt5.15...have to remove
+    QSharedPointer<TransVertParams> currentParams = QSharedPointer<TransVertParams>(new TransVertParams());
     currentParams = radioData->transVertSettings.value(currentTransVertName);
-    radioData->transVertSettings.remove(currentTransVertName);
-    radioData->transVertSettings.insert(transVertName, currentParams);
-    ui->transVertTab->setTabText(tabNum, transVertName);
 
-    //radioData->transVertNames[tabNum] = transVertName;
+    radioData->transVertSettings.remove(currentTransVertName);
+
+    radioData->transVertSettings.insert(transVertName, currentParams);
     radioData->transVertSettings.value(transVertName)->band = transVertName;
     radioData->transVertSettings.value(transVertName)->transVertName = transVertName;
 
@@ -1758,6 +1758,16 @@ void RigSetupForm::changeBand()
            radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
          }
     }
+
+
+
+
+    transVertTab.remove(currentTransVertName);
+    transVertTab.insert(transVertName, new TransVertSetupForm(radioData->transVertSettings.value(transVertName)));
+
+    ui->transVertTab->setTabText(tabNum, transVertName);
+
+    //radioData->transVertNames[tabNum] = transVertName;
 
 
 

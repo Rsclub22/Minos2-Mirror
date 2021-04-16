@@ -22,7 +22,7 @@
 #include <QCheckBox>
 
 
-TransVertSetupForm::TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent) :
+TransVertSetupForm::TransVertSetupForm(QSharedPointer<TransVertParams> _transvertData, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::transVertSetupForm)
 {
