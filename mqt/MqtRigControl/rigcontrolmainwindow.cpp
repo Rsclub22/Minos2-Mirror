@@ -1130,7 +1130,7 @@ void RigControlMainWindow::refreshRadio()
 
             if (loggerRequests->selRadioFreq.isClear())
             {
-                if (loggerRequests->selBand != rigStateDetails->selTvBand && currentRadio->transVertEnable && currentRadio->numTransverters != 0)
+                if (loggerRequests->selBand != rigStateDetails->selTvBand && currentRadio->transVertEnable && currentRadio->transVertSettings.count() != 0)
                 {
                     rigStateDetails->selTransverterNum = NO_TRANSVERTER_NUM;
                     if (findTransverter(rigStateDetails->selTvBand, loggerRequests->selBand))
@@ -1840,6 +1840,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
             bool ritStatus = false;
             if (selectedRigSupCap->radioSupGetRitState)
             {
+                logMessage(QString("Get Rit"));
                 retCode = getRitRadioStatus(rigStateDetails->curVfo, &ritStatus);
                 if (retCode < 0)
                 {
@@ -1871,7 +1872,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
 
     if (radioCommsOK && selectedRigSupCap->supVolume && currentRadio->enableDisableCatFeature.voiceMemEnable)
     {
-
+        logMessage(QString("Get Radio Volume"));
         retCode = getVolume(rigStateDetails->curVfo);
         if (retCode < 0)
         {
@@ -1886,7 +1887,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     if (radioCommsOK && selectedRigSupCap->supSignalStrength && currentRadio->enableDisableCatFeature.sMeterEnable)
     {
 
-
+        logMessage(QString("Get Signal Strength"));
         retCode = getSignalStrength(rigStateDetails->curVfo);
         if (retCode < 0)
         {
@@ -1902,6 +1903,7 @@ void RigControlMainWindow::getRadioInfo(bool pubNow)
     {
         if (currentRadio->pttType != serialCommonData::PTT_METHOD_CAT || (currentRadio->pttType == serialCommonData::PTT_METHOD_CAT && currentRadio->enableDisableCatFeature.catEnable))
         {
+            logMessage(QString("Get PTT Status"));
             retCode = getTXStatus(rigStateDetails->curVfo);
             if (retCode < 0)
             {
@@ -1999,7 +2001,7 @@ void RigControlMainWindow::loggerSetBand(QString band)
 
     Frequency f(0); // not used
 
-    if (band != rigStateDetails->selTvBand && currentRadio->transVertEnable && currentRadio->numTransverters != 0)
+    if (band != rigStateDetails->selTvBand && currentRadio->transVertEnable && currentRadio->transVertSettings.count() != 0)
     {
 
         logMessage(QString("loggerSetBand: Look for transverter for band %1").arg(band));
@@ -2049,7 +2051,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
     Frequency f(freq);
 
 
-    if ((cb != rigStateDetails->selTvBand) && currentRadio->transVertEnable && (currentRadio->numTransverters != 0))
+    if ((cb != rigStateDetails->selTvBand) && currentRadio->transVertEnable && (currentRadio->transVertSettings.count() != 0))
     {
 
         logMessage(QString("SetFreq: Look for transverter for band %1").arg(cb));
@@ -2069,7 +2071,7 @@ void RigControlMainWindow::setFreq(Frequency freq, VFO vfo)
         */
 
     }
-    else if ((cb == rigStateDetails->selTvBand) && currentRadio->transVertEnable && (currentRadio->numTransverters != 0))
+    else if ((cb == rigStateDetails->selTvBand) && currentRadio->transVertEnable && (currentRadio->transVertSettings.count() != 0))
     {
         logMessage(QString("SetFeq: Transverter Selected for %1 band, calculate frequency").arg(rigStateDetails->selTvBand));
         // now calculate the freq
@@ -2331,7 +2333,7 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
 
     rigStateDetails->curVfoFreq = rigStateDetails->rfrequency;
     logMessage(QString("Get Freq: Read Freq from Radio = %1").arg(rigStateDetails->curVfoFreq.traceStr()));
-    if (currentRadio->transVertEnable && currentRadio->numTransverters > 0)
+    if (currentRadio->transVertEnable && currentRadio->transVertSettings.count() > 0)
     {
         if (rigStateDetails->selTvBand != "")
         {
@@ -4600,7 +4602,7 @@ void RigControlMainWindow::aboutRigConfig()
 
             msg.append(QString("\n"));
             msg.append(tr("TransVert Enable = %1\n").arg(currentRadio->transVertEnable ? tr("True") : tr("False")));
-            msg.append(tr("Number of TransVerters = %1\n").arg(currentRadio->numTransverters));
+            msg.append(tr("Number of TransVerters = %1\n").arg(currentRadio->transVertSettings.count()));
 
             QStringList tvList = currentRadio->transVertSettings.keys();
             //for (int i = 0; i < currentRadio->numTransverters; i++)
@@ -4719,7 +4721,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         }
         trace(QString("MGM mode = %1").arg(currentRadio->mgmMode));
         trace(QString("TransVert Enable = %1").arg(currentRadio->transVertEnable ? "True" : "False"));
-        trace(QString("Number of TransVerters = %1").arg(currentRadio->numTransverters));
+        trace(QString("Number of TransVerters = %1").arg(currentRadio->transVertSettings.count()));
 
         QStringList tvList = currentRadio->transVertSettings.keys();
         //for (int i = 0; i < currentRadio->numTransverters; i++)

@@ -47,8 +47,8 @@ RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPoi
         restoreGeometry(geometry);
 
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RigSetupDialog::saveButtonPushed);
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RigSetupDialog::cancelButtonPushed);
+    //connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RigSetupDialog::saveButtonPushed);
+    //connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RigSetupDialog::cancelButtonPushed);
     connect(ui->addRadio, &QPushButton::clicked, this, &RigSetupDialog::addRadio);
     connect(ui->removeRadio, &QPushButton::clicked, this, &RigSetupDialog::removeRadio);
     connect(ui->editRadioName, &QPushButton::clicked, this, &RigSetupDialog::editRadioName);
@@ -97,14 +97,14 @@ void RigSetupDialog::initSetup()
         QString fileName = TRANSVERT_PATH_LOGGER + availRadios[i] + FILENAME_TRANSVERT_RADIOS;
         QSettings  configTransvert(fileName, QSettings::IniFormat);
 
-        availRadioData.value(availRadios[i])->transVertNames = configTransvert.childGroups();  // get transvert names for this radio
-        availRadioData.value(availRadios[i])->numTransverters =  availRadioData.value(availRadios[i])->transVertNames.count();
+        QStringList listOfTransverters = configTransvert.childGroups();  // get transvert names for this radio
+        //availRadioData.value(availRadios[i])->transVertSettings.count() =  availRadioData.value(availRadios[i])->transVertNames.count();
 
-        if (availRadioData.value(availRadios[i])->numTransverters > 0)
+        if (listOfTransverters.count() > 0)
         {
-            for (int t = 0; t < availRadioData.value(availRadios[i])->numTransverters; t++)
+            for (int t = 0; t < listOfTransverters.count(); t++)
             {
-               radioTab.value(availRadios[i])->addTransVertTab(t, availRadioData.value(availRadios[i])->transVertNames[t], false);   // adding and existing tab, set change flag = N0CHANGE
+               radioTab.value(availRadios[i])->addTransVertTab(t, listOfTransverters[t], false);   // adding and existing tab, set change flag = N0CHANGE
             }
         }
 
@@ -278,7 +278,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     // now load transverter settings
 
-    if (availRadioData.value(tabName)->numTransverters > 0 )
+    if (availRadioData.value(tabName)->transVertSettings.count() > 0 )
     {
         //for (int t = 0; t < availRadioData.value(tabName)->numTransverters; t++)
         QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
@@ -620,11 +620,141 @@ void RigSetupDialog::doCloseEvent()
 
 void RigSetupDialog::closeEvent (QCloseEvent *event)
 {
-    cancelButtonPushed();
+    //cancelButtonPushed();
     doCloseEvent();
     QWidget::closeEvent(event);
 }
 
+
+void RigSetupDialog::done(int r)
+{
+    bool supportedBandsOK = false;
+    bool transvertFreqInBand = false;
+
+    if(QDialog::Accepted == r)  // ok was pressed
+    {
+        supportedBandsOK = checkOmniRigSupportedBands();
+        transvertFreqInBand = checkTransvertFreqInBand();
+
+        if (supportedBandsOK && transvertFreqInBand)
+        {
+            saveSettings();
+        }
+        else
+        {
+            return;
+        }
+
+    }
+    else    // cancel, close or exc was pressed
+    {
+        QDialog::done(r);
+        return;
+    }
+
+
+}
+
+bool RigSetupDialog::checkTransvertFreqInBand()
+{
+    QStringList radList = availRadioData.keys();
+    QStringList outOfBandTransverts;
+
+    foreach(const auto &r, radList)
+    {
+        if (availRadioData.value(r)->transVertEnable)
+        {
+            QStringList transvertList = availRadioData.value(r)->transVertSettings.keys();
+            foreach(const auto &tv, transvertList)
+            {
+                QString transVertBand;
+                if (!transVerterInBand(availRadioData.value(r)->transVertSettings.value(tv), transVertBand ))
+                {
+                    outOfBandTransverts.append(r + ':' + transVertBand);
+                }
+
+            }
+        }
+    }
+
+    if (outOfBandTransverts.isEmpty())
+    {
+        // transvert settings ok
+        return true;
+    }
+    else
+    {
+        QString outofBandTransvertMsg;
+        foreach(const auto &obt, outOfBandTransverts)
+        {
+            QStringList radioTransVert = obt.split(':');
+            if (radioTransVert.count() == 2)
+            {
+                outofBandTransvertMsg.append(QString("Radio = %1, Band = %2\n").arg(radioTransVert[0], radioTransVert[1]));
+            }
+
+        }
+
+        QMessageBox::critical(this, tr("Transvert Settings Out of Band"),
+                                       tr("The Transvert settings are out of band for the\n"
+                                          "following:\n"
+                                          "%1").arg(outofBandTransvertMsg),
+                                       QMessageBox::Ok);
+
+        return false;
+    }
+}
+
+bool RigSetupDialog::transVerterInBand(const QSharedPointer<TransVertParams>tvp, QString &transVertBand)
+{
+
+    Frequency targetFreq = tvp->radioFreq + tvp->transVertOffset;
+
+    foreach (const auto &b, bands)
+    {
+        if (b.data()->uk == tvp->band)
+        {
+            transVertBand = tvp->band;
+
+            if (targetFreq >= b->fLow && targetFreq <= b->fHigh)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+    }
+
+    return false;
+
+    return false;
+}
+
+
+bool RigSetupDialog::checkOmniRigSupportedBands()
+{
+    QString supRadNames;
+    isAnySupportedBandsAvailForOmnirig(supRadNames);
+    if (supRadNames.isEmpty())  // no radios with missing supportbands found
+    {
+        return true;
+    }
+
+    QMessageBox::critical(this, tr("Radio Supported Bands Missing"),
+                                   tr("For Minos to work best with Radios,\n"
+                                      "Please add bands or transverters to\n"
+                                      "these radio definitions:\n"
+                                      "%1").arg(supRadNames),
+                                   QMessageBox::Ok);
+
+    return false;
+
+}
+
+/*
 void RigSetupDialog::saveButtonPushed()
 {
     QString supRadNames;
@@ -646,8 +776,11 @@ void RigSetupDialog::saveButtonPushed()
     doCloseEvent();
 
 }
+*/
 
-void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
+// finds Omnirig radios with no supported bands checked
+
+void RigSetupDialog::isAnySupportedBandsAvailForOmnirig(QString &supRadNames)
 {
     QStringList lk = radioTab.keys();
     foreach (auto &k, lk)
@@ -655,7 +788,7 @@ void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab.value(k)->getRadioData()->rigModel);
         if (!rigCap.supportGetSupBands)
         {
-            if (!radioTab.value(k)->isAnySupportBandChecked() && radioTab.value(k)->getRadioData()->numTransverters == 0)
+            if (!radioTab.value(k)->isAnySupportBandChecked() && radioTab.value(k)->getRadioData()->transVertSettings.count() == 0)
             {
                 supRadNames.append(radioTab.value(k)->getRadioData()->radioName + '\n');
             }
@@ -663,10 +796,10 @@ void RigSetupDialog::isAnySupportedBandsAvail(QString &supRadNames)
     }
 
 }
-
+/*
 void RigSetupDialog::cancelButtonPushed()
 {
-    /*
+
     bool change = false;
     for (int i = 0; i < radioTab.count(); i++)
     {
@@ -689,9 +822,10 @@ void RigSetupDialog::cancelButtonPushed()
         ui->radioTab->clear();
         initSetup();                // load data from file
     }
-*/
+
     doCloseEvent();
 }
+*/
 
 
 
@@ -755,7 +889,7 @@ void RigSetupDialog::saveSettings()
         fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
         QSettings  settings(fileName, QSettings::IniFormat);
 
-        QSharedPointer<scatParams> savedRadioData;
+        QSharedPointer<scatParams> savedRadioData = QSharedPointer<scatParams>(new scatParams());
 
         getRadioSetting(savedRadioData, k, settings);
 
@@ -1143,13 +1277,15 @@ void RigSetupDialog::saveTranVerterSetting(QSharedPointer<scatParams> radioData,
 void RigSetupDialog::readTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings  &config)
 {
     config.beginGroup(transvertName);
-    radioData->transVertSettings.value(transvertName)->transVertName = config.value("name", "").toString();
-    radioData->transVertSettings.value(transvertName)->band = config.value("band", "").toString();
-    radioData->transVertSettings.value(transvertName)->radioFreq = config.value("radioFreq", 0.0).toDouble();
-    radioData->transVertSettings.value(transvertName)->targetFreq = config.value("targetFreq", 0.0).toDouble();
-    radioData->transVertSettings.value(transvertName)->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
-    radioData->transVertSettings.value(transvertName)->antSwitchNum = config.value("antSwNumber", "0").toString();
-    radioData->transVertSettings.value(transvertName)->transSwitchNum = config.value("transVertSw", "0").toString();
+    QSharedPointer<TransVertParams> tvp = QSharedPointer<TransVertParams>(new TransVertParams());
+    tvp->transVertName = config.value("name", "").toString();
+    tvp->band = config.value("band", "").toString();
+    tvp->radioFreq = config.value("radioFreq", 0.0).toDouble();
+    tvp->targetFreq = config.value("targetFreq", 0.0).toDouble();
+    tvp->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
+    tvp->antSwitchNum = config.value("antSwNumber", "0").toString();
+    tvp->transSwitchNum = config.value("transVertSw", "0").toString();
+    radioData->transVertSettings.insert(transvertName, tvp);
     config.endGroup();
 }
 

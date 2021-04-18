@@ -160,7 +160,7 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
         transVertEnable == radParams->transVertEnable &&
         supportBands == radParams->supportBands &&     // for non hamlib radios
         compareStringList(transVertNames, radParams->transVertNames) &&
-        numTransverters == radParams->numTransverters &&
+        //numTransverters == radParams->numTransverters &&
         enableTransSwitch == radParams->enableTransSwitch &&
         enableLocTVSwMsg == radParams->enableLocTVSwMsg &&
         locTVSwComport == radParams->locTVSwComport &&
@@ -220,7 +220,7 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
             transVertEnable != radParams->transVertEnable ||
             supportBands != radParams->supportBands ||     // for non hamlib radios
             !compareStringList(transVertNames, radParams->transVertNames) ||
-            numTransverters != radParams->numTransverters ||
+            //numTransverters != radParams->numTransverters ||
             enableTransSwitch != radParams->enableTransSwitch ||
             enableLocTVSwMsg != radParams->enableLocTVSwMsg ||
             locTVSwComport != radParams->locTVSwComport ||
@@ -294,7 +294,7 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
     transVertEnable  = srce->transVertEnable;
     supportBands = srce->supportBands;        // for non hamlib radios
     transVertNames = srce->transVertNames;
-    numTransverters = srce->numTransverters;
+    //numTransverters = srce->numTransverters;
     enableTransSwitch = srce->enableTransSwitch;
     enableLocTVSwMsg = srce->enableLocTVSwMsg;
     locTVSwComport = srce->locTVSwComport;

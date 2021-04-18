@@ -136,8 +136,8 @@ signals:
 
 private slots:
 
-    void saveButtonPushed();
-    void cancelButtonPushed();
+    //void saveButtonPushed();
+    //void cancelButtonPushed();
 
     void addRadio();
     void removeRadio();
@@ -146,6 +146,8 @@ private:
     Ui::RigSetupDialog *ui;
 
     RigFactory *rigFactory;
+
+    void done(int r) override;   // override done function to validate data entry
 
     //QVector<RigSetupForm*> radioTab;
     QMap<QString, RigSetupForm*> radioTab;
@@ -202,15 +204,18 @@ private:
     void saveRadioData(QSharedPointer<scatParams> radioData, QSettings &config);
 
 
-    void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event)override;
     void doCloseEvent();
     void loadAvailComportsToTab(QString radioName);
     void updateAvailRadiosToVersion2(QSettings &settings);
-    void isAnySupportedBandsAvail(QString &supRadNames);
     void loadAvailPttComportsToTab(QString radioName);
     void readTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings &config);
     void getRadioSetting(QSharedPointer<scatParams> radioData, QString radioName, QSettings &config);
     void getAvailRadiosList(QStringList &availRadios);
+    void isAnySupportedBandsAvailForOmnirig(QString &supRadNames);
+    bool checkOmniRigSupportedBands();
+    bool transVerterInBand(const QSharedPointer<TransVertParams> tvp, QString &transVertBand);
+    bool checkTransvertFreqInBand();
 };
 
 #endif // SETUPDIALOG_H

@@ -48,10 +48,6 @@ public:
 
     QVector<QSharedPointer<BandInfo> > bands;
 
-    RigSetupFlags rigSetupFlags;
-
-
-
     QMap<QString, TransVertSetupForm*> transVertTab;
 
 
@@ -108,9 +104,9 @@ public:
     void CIVEditVisible(bool visible);
     void transVertTabEnable(bool visible);
 
-    bool getTransVertRemovedFlag();
+
     void transVertTabRemove(int tabNum);
-    void setTransVertRemovedFlag(bool value);
+
 
     void setTransVertTabText(int tabNum, QString tabName);
 
