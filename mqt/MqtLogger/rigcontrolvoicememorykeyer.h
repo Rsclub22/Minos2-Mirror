@@ -28,13 +28,16 @@ class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
     Q_OBJECT
 public:
     explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
-    virtual ~RigControlVoiceMemoryKeyer();
+    virtual ~RigControlVoiceMemoryKeyer() override;
 
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
     void voiceKeyerInit(int numButtons) override;
     void sendMsgNum(int buttonNum) override;
     void stopMsg() override;
+
+    virtual bool hasRecord() override {return false;}
+
 
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;

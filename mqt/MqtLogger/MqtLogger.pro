@@ -41,6 +41,7 @@ SOURCES += \
     ContestPageControl.cpp \
     DisplayOptions.cpp \
     FilterFrame.cpp \
+    InternalVoiceMemoryKeyer.cpp \
     LocCalcFrame.cpp \
     LoggerContacts.cpp \
     LoggerContest.cpp \
@@ -134,6 +135,7 @@ HEADERS  += \
     ContestPageControl.h \
     DisplayOptions.h \
     FilterFrame.h \
+    InternalVoiceMemoryKeyer.h \
     LocCalcFrame.h \
     LoggerContacts.h \
     LoggerContest.h \

@@ -73,12 +73,11 @@ void VoiceKeyerParams::clear()
     vmButtonNum = -1;   // None
 }
 
-
 void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
 {
     type = vkp.type;
     vmName = vkp.vmName;
-
+    
     vmRepeatFlag = vkp.vmRepeatFlag;
     vmDuration = vkp.vmDuration;
     vmRepeatPauseDur = vkp.vmRepeatPauseDur;
@@ -87,6 +86,11 @@ void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
 
 
 VoiceKeyerBase::VoiceKeyerBase(QObject *parent) : QObject(parent)
+{
+
+}
+
+VoiceKeyerBase::~VoiceKeyerBase()
 {
 
 }

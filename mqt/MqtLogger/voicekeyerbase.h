@@ -16,7 +16,7 @@
 
 #include <QObject>
 
-
+class VoiceKeyerBase;
 
 class VoiceKeyerCommonParams
 {
@@ -83,11 +83,15 @@ public:
     int getvmButtonNum(){return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
 
+    VoiceKeyerBase *getVkBase() const{return vkBase;}
+    void setVkBase(VoiceKeyerBase *value){vkBase = value;}
+
     void clear();
 
 private:
 
     QString type;
+    VoiceKeyerBase *vkBase = nullptr;
     QString vmName;
     int vmDuration;
     bool vmRepeatFlag;
@@ -101,10 +105,13 @@ class VoiceKeyerBase  : public QObject
 
 public:
     explicit VoiceKeyerBase(QObject *parent = nullptr);
+    virtual ~VoiceKeyerBase();
 
     virtual void voiceKeyerInit(int numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg() = 0;
+    virtual bool hasRecord() = 0;
+    virtual void doRecording(VoiceKeyerParams *){}
 
     //virtual int getKeyerState(int &state) = 0;
 

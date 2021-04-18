@@ -33,6 +33,8 @@ void TxVmButtonDialog::setVmData(VoiceKeyerParams* vmData_)
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
 
+    ui->recordingFrame->setVisible(vmData->getVkBase()->hasRecord());
+
 }
 
 void TxVmButtonDialog::onVmRepeatPauseDurEditingFinished()
@@ -94,3 +96,21 @@ void TxVmButtonDialog::on_cancelbutton_clicked()
     reject();
 }
 
+
+void TxVmButtonDialog::on_replayButton_clicked()
+{
+    // This is a test replay - we shouldn't be PTTing if we can avoid it
+    vmData->getVkBase()->sendMsgNum(vmData->getvmButtonNum());
+}
+
+void TxVmButtonDialog::on_recordButton_clicked()
+{
+    // make a recording for this button
+    vmData->getVkBase()->doRecording(vmData);
+}
+
+void TxVmButtonDialog::on_stopButton_clicked()
+{
+    // stop record/replay
+    vmData->getVkBase()->stopMsg();
+}

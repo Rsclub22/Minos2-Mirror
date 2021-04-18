@@ -27,6 +27,12 @@ private slots:
 
     void onVmRepeatPauseDurEditingFinished();
     void onVmMessageDurEditingFinished();
+    void on_replayButton_clicked();
+
+    void on_recordButton_clicked();
+
+    void on_stopButton_clicked();
+
 private:
     Ui::TxVmButtonDialog *ui;
     VoiceKeyerParams* vmData;
