@@ -1580,7 +1580,8 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
              break;
          }
     }
-    transVertTab.insert(tabName, new TransVertSetupForm(radioData->transVertSettings.value(tabName)));
+
+    transVertTab.insert(tabName, new TransVertSetupForm(radioData->transVertSettings.value(tabName), this));
     //addedTransVertTabs.append(tabName);
 
     ui->transVertTab->insertTab(tabNum, transVertTab.value(tabName), tabName);

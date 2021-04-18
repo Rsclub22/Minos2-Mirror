@@ -27,6 +27,7 @@ TransVertSetupForm::TransVertSetupForm(QSharedPointer<TransVertParams> _transver
     ui(new Ui::transVertSetupForm)
 {
 
+
     ui->setupUi(this);
     transVertData = _transvertData;
 
