@@ -110,20 +110,9 @@ void RigSetupDialog::initSetup()
 
         getRadioSetting(availRadioData.value(availRadios[i]), availRadios[i], settings);
 
-        availRadioData.value(availRadios[i])->rigMfg_Name = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigManufacturer;
-        availRadioData.value(availRadios[i])->rigModelName = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigModelName;
-        availRadioData.value(availRadios[i])->rigModelNumber = rigFactory->supported_rigs()->value(availRadioData.value(availRadios[i])->rigModel).rigModelNumber;
 
         loadSettingsToTab(i, availRadios[i]);
     }
-
-    // make a copy of the current settings
-    for (int i = 0; i < availRadios.count(); i++)
-    {
-        QSharedPointer<scatParams> radioData = QSharedPointer<scatParams>(new scatParams);
-        storedRadioData.append(radioData);
-    }
-
 
 
 }
@@ -558,20 +547,30 @@ void RigSetupDialog::editRadioName()
 void RigSetupDialog::setTabToCurrentRadio()
 {
 
-    for (int i = 0; i < ui->radioTab->count(); i++)
-    {
-        if (currentRadioName == availRadioData.value(ui->radioTab->tabText(i))->radioName)
-        {
-            ui->radioTab->setTabColor(i, Qt::red);
-            ui->radioTab->setCurrentIndex(i);
-        }
-        else
-        {
-            ui->radioTab->setTabColor(i,Qt::darkBlue);
-        }
+   for (int i = 0; i < ui->radioTab->count(); i++)
+   {
+
+       if (availRadioData.contains(ui->radioTab->tabText(i)))
+       {
+           if (currentRadioName == availRadioData.value(ui->radioTab->tabText(i))->radioName)
+            {
+                ui->radioTab->setTabColor(i, Qt::red);
+                ui->radioTab->setCurrentIndex(i);
+            }
+            else
+            {
+                ui->radioTab->setTabColor(i,Qt::darkBlue);
+            }
+       }
+       else
+       {
+           trace(QString("SetTabToCurrentRadio - radio %1 is not in availRadioData").arg(ui->radioTab->tabText(i)));
+       }
 
 
-    }
+
+   }
+
 }
 
 int RigSetupDialog::comportAvial(QString radioName, QString comport)
@@ -899,8 +898,16 @@ void RigSetupDialog::saveSettings()
 
             if (availRadioData.value(k)->transVertEnable)
             {
-                if (availRadioData.value(k)->transVertSettings != savedRadioData->transVertSettings)
+                QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
+                QString fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+                QSettings  configTransvert(fileName, QSettings::IniFormat);
+
+                if (availRadioData.value(k)->transVertSettingsNotEqual(savedRadioData->transVertSettings))
                 {
+                    foreach(const auto &tv ,tvKeys)
+                    {
+                        saveTranVerterSetting(availRadioData.value(k), tv, configTransvert);
+                    }
 
                 }
             }
@@ -1256,6 +1263,11 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     {
         readTranVerterSetting(radioData, t, configTransVert);
     }
+
+    radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
+    radioData->rigModelName = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelName;
+    radioData->rigModelNumber = rigFactory->supported_rigs()->value(radioData->rigModel).rigModelNumber;
+
 }
 
 

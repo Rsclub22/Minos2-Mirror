@@ -152,8 +152,6 @@ private:
     //QVector<RigSetupForm*> radioTab;
     QMap<QString, RigSetupForm*> radioTab;
 
-    QStringList storedAvailRadios;
-    QVector<QSharedPointer<scatParams> > storedRadioData; // data stored in ini files
 
     QStringList availRadios;
     int numAvailRadios;

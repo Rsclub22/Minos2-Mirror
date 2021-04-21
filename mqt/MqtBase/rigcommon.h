@@ -66,8 +66,6 @@ public:
     QString band;
     Frequency radioFreq;
     Frequency targetFreq;
-    Frequency fLow;
-    Frequency fHigh;
     Frequency transVertOffset;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
@@ -80,8 +78,6 @@ TransVertParams& operator=(const TransVertParams &tvp)
     band = tvp.band;
     radioFreq = tvp.radioFreq;
     targetFreq = tvp.targetFreq;
-    fLow = tvp.fLow;
-    fHigh = tvp.fHigh;
     transVertOffset = tvp.transVertOffset;
     antSwitchNum = tvp.antSwitchNum;
     transSwitchNum = tvp.transSwitchNum;
@@ -92,7 +88,22 @@ TransVertParams& operator=(const TransVertParams &tvp)
     return *this;
 }
 
+bool notEqual(const QSharedPointer<TransVertParams> tvp)
+{
+    if (transVertName != tvp->transVertName ||
+        band != tvp->band ||
+        radioFreq != tvp->radioFreq ||
+        targetFreq != tvp->targetFreq ||
+        transVertOffset != tvp->transVertOffset ||
+        antSwitchNum != tvp->antSwitchNum ||
+        transSwitchNum != tvp->transSwitchNum ||
+        markForDeletion != tvp->markForDeletion)
+    {
+        return true;
+    }
 
+    return false;
+}
 
 };
 
@@ -252,8 +263,7 @@ public:
   void scatParamsCopy(const QSharedPointer<scatParams> srce);
 
   bool compareStringList(QStringList &sl1, QStringList &sl2);
-
-
+  bool transVertSettingsNotEqual(const QMap<QString, QSharedPointer<TransVertParams> > tvs2);
 
 
 
@@ -304,7 +314,6 @@ public:
 
 
   EnableDisableCatFeature enableDisableCatFeature;
-
 
 
 

@@ -30,7 +30,7 @@
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
-                           const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _ui_RadioTab,
+                           const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab,
                            bool hfFlag_, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
@@ -1571,17 +1571,17 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
     radioData->transVertSettings.insert(tabName, QSharedPointer<TransVertParams>(new TransVertParams()));
     radioData->transVertSettings.value(tabName)->transVertName = tabName;
     radioData->transVertSettings.value(tabName)->band = tabName;
-    for (int i = 0; i < bands.count(); i++)
-    {
-         if (bands[i]->name() == tabName)
-         {
-             radioData->transVertSettings.value(tabName)->fLow = bands[i]->fLow;
-             radioData->transVertSettings.value(tabName)->fHigh = bands[i]->fHigh;
-             break;
-         }
-    }
+    //for (int i = 0; i < bands.count(); i++)
+    //{
+    //     if (bands[i]->name() == tabName)
+    //     {
+    //         radioData->transVertSettings.value(tabName)->fLow = bands[i]->fLow;
+     //        radioData->transVertSettings.value(tabName)->fHigh = bands[i]->fHigh;
+     //        break;
+     //    }
+   // }
 
-    transVertTab.insert(tabName, new TransVertSetupForm(radioData->transVertSettings.value(tabName), this));
+    transVertTab.insert(tabName, new TransVertSetupForm(radioData, tabName, bands));
     //addedTransVertTabs.append(tabName);
 
     ui->transVertTab->insertTab(tabNum, transVertTab.value(tabName), tabName);
@@ -1738,20 +1738,20 @@ void RigSetupForm::changeBand()
     radioData->transVertSettings.value(transVertName)->transVertName = transVertName;
 
 
-    foreach (auto &b, bands)
-    {
-         if (b->name() == transVertName)
-         {
-           radioData->transVertSettings.value(transVertName)->fLow = b->fLow;
-           radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
-         }
-    }
+    //foreach (auto &b, bands)
+    //{
+    //     if (b->name() == transVertName)
+    //     {
+    //       radioData->transVertSettings.value(transVertName)->fLow = b->fLow;
+    //       radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
+    //     }
+   // }
 
 
 
 
     transVertTab.remove(currentTransVertName);
-    transVertTab.insert(transVertName, new TransVertSetupForm(radioData->transVertSettings.value(transVertName)));
+    transVertTab.insert(transVertName, new TransVertSetupForm(radioData, transVertName, bands));
 
     ui->transVertTab->setTabText(tabNum, transVertName);
 
