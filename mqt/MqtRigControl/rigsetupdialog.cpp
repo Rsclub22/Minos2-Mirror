@@ -644,12 +644,12 @@ void RigSetupDialog::done(int r)
             return;
         }
 
-    }
-    else    // cancel, close or exc was pressed
-    {
+   }
+   // else    // cancel, close or exc was pressed
+  //  {
         QDialog::done(r);
-        return;
-    }
+
+  //  }
 
 
 }
@@ -727,7 +727,7 @@ bool RigSetupDialog::transVerterInBand(const QSharedPointer<TransVertParams>tvp,
 
     }
 
-    return false;
+
 
     return false;
 }
@@ -832,6 +832,7 @@ void RigSetupDialog::cancelButtonPushed()
 void RigSetupDialog::saveSettings()
 {
 
+
     QString fileNameTransVert;
 
     QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
@@ -858,6 +859,7 @@ void RigSetupDialog::saveSettings()
     }
 
     // look for radios with changed name
+    lk = availRadioData.keys();
     foreach (auto &k, lk)
     {
         if (!availRadioData.value(k)->previousRadioName.isEmpty())
@@ -914,210 +916,6 @@ void RigSetupDialog::saveSettings()
         }
 
     }
-/*
-    for (int i = 0; i < radioTab.count(); i ++)
-    {
-        if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
-        {
-            setupChangeFlags.setRadioNameChanged(true);
-            // gather data to send to other rigcontrols
-            QSharedPointer<RadioNameChange> radioNames = QSharedPointer<RadioNameChange>(new RadioNameChange);
-            radioNames->oldName = storedAvailRadios[i];
-            radioNames->newName = availRadios[i];
-            listOfRadioNameChanges.append(radioNames);
-
-        }
-    }
-
-    if (storedAvailRadios.count() > 0 && (setupChangeFlags.getRadioRemoved() || setupChangeFlags.getRadioNameChanged()))
-    {
-
-        for (int i = 0; i < storedAvailRadios.count(); i++)
-        {
-            if (!availRadios.contains(storedAvailRadios[i]))
-            {
-                   configRadio.beginGroup(storedAvailRadios[i]);        // entry no longer exists
-                    configRadio.remove("");      // remove all keys for this group
-                    configRadio.endGroup();
-                    // remove transverters for this radio
-                    fileNameTransVert = TRANSVERT_PATH_LOGGER + storedAvailRadios[i] + FILENAME_TRANSVERT_RADIOS;
-                    if (QFile::exists(fileNameTransVert))
-                    {
-                        QFile::remove(fileNameTransVert);
-                    }
-
-                    storedAvailRadios.removeAt(i);  // remove item from our copy of stored data
-                    storedRadioData.remove(i);
-            }
-        }
-    }
-
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        if (radioTab[i]->rigSetupFlags.getTransverterRemoved())
-        {
-            for (int t = 0; t < storedRadioData[i]->transVertNames.count(); t++)
-            {
-                if (!radioTab[i]->getRadioData()->transVertNames.contains(storedRadioData[i]->transVertNames[t]))
-                {
-                    fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
-                    QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
-                    configTransVert.remove(storedRadioData[i]->transVertNames[t]);
-                    storedRadioData[i]->transVertNames.removeAt(t);
-                    storedRadioData[i]->transVertSettings.remove(t);
-
-                }
-            }
-
-        }
-    }
-
-
-
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-
-        //if (radioTab[i]->rigSetupFlags.getRadioValueChanged())
-        if (radioTab[i]->getRadioData()->compareNotEqual(storedRadioData[i]))
-        {
-            if (radioTab[i]->rigSetupFlags.getRadioNameChanged())
-            {
-                //emit radioNameChange();
-                setupChangeFlags.setRadioNameChanged(true);
-                radioTab[i]->rigSetupFlags.setRadioNameChanged(false);
-            }
-
-            if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-            {
-                // settings changed in current radio
-                setupChangeFlags.setCurrRadioChanged(true);
-            }
-
-            // gather list of radioNames to send to other rigcontrols
-            listOfRadiosDataChanged.append(radioTab[i]->getRadioData()->radioName);
-            setupChangeFlags.setRadioSettingChanged(true);
-            saveRadioData(i, configRadio);
-
-        }
-
-
-
-    }
-
-    // now save transvert settings
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-
-
-        if (radioTab[i]->getRadioData()->transVertEnable)
-        {
-            //radioTab[i]->setTransVertRemovedFlag(false);
-
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + radioTab[i]->getRadioData()->radioName + FILENAME_TRANSVERT_RADIOS;
-            QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
-
-            // does a transvert file exist for this radio
-            if (QFile::exists(fileNameTransVert))
-            {
-                QStringList savedTransVertNames = configTransVert.childGroups();
-
-                if(savedTransVertNames.count() > 0)
-                {
-                    for (int t = 0; t < savedTransVertNames.count(); t++)
-                    {
-                        if (!radioTab[i]->getRadioData()->transVertNames.contains(savedTransVertNames[t]))
-                        {
-                            configTransVert.beginGroup(savedTransVertNames[t]);        // entry no longer exists
-                            configTransVert.remove("");      // remove all keys for this group
-                            configTransVert.endGroup();
-                            if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                            {
-                                // settings changed in current radio
-                                setupChangeFlags.setCurrRadioChanged(true);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // radio renamed... need to recreate the file
-                for (int t = 0; t < radioTab[i]->getRadioData()->numTransverters; t++)
-                {
-                    if (radioTab[i]->transVertTab[t]->transVertValueChanged)
-                    {
-                        if (radioTab[i]->transVertTab[t]->transVertNameChanged)
-                        {
-                            radioTab[i]->transVertTab[t]->transVertNameChanged = false;
-                            setupChangeFlags.setTransVertNameChanged(true);
-
-                        }
-
-                        if (currentRadioName == radioTab[i]->getRadioData()->radioName)
-                        {
-                            // settings changed in current radio
-                            setupChangeFlags.setCurrRadioChanged(true);
-                        }
-                    }
-
-                    saveTranVerterSetting(i, t, configTransVert);
-                }
-
-            }
-
-
-            if (radioTab[i]->getRadioData()->transVertSettings.count() > 0)
-            {
-
-
-                 // look for transverters that have changed
-
-                for (int t = 0; t < radioTab[i]->getRadioData()->transVertSettings.count(); t++)
-                {
-
-
-                    if (radioTab[i]->getRadioData()->transVertSettings != storedRadioData[i]->transVertSettings)
-                    {
-                        saveTranVerterSetting(i, t, configTransVert);
-                        setupChangeFlags.setTransVertSettingChanged(true);
-                    }
-                }
-
-            }
-        }
-
-
-
-    }
-    */
-/*
-    if (radioSettingChanged || transVertSettingChanged || transVertNameChanged)
-    {
-        emit upDateRadioDetailsCache();
-    }
-
-
-
-    if (radioSettingChanged)
-    {
-       emit radioSettingsSaved();
-    }
-
-    if (transVertSettingChanged)
-    {
-        emit transVertSettingHasChanged();
-    }
-
-    if (transVertNameChanged)
-    {
-        emit transVertNameHasChanged();
-    }
-
-    if (currRadioChanged)
-    {
-        emit currentRadioSettingChanged(currentRadioName);
-    }
-*/
 
 
 }

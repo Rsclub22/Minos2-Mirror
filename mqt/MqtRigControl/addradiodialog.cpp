@@ -103,21 +103,22 @@ void AddRadioDialog::hideRadioSelection(bool state)
 bool AddRadioDialog::checkNameAlreadyExists(QString radioName)
 {
     QStringList rList = availRadioData->keys();
+    QMessageBox msgBox;
+    msgBox.setModal( true );
+    msgBox.setWindowTitle(tr("Error Radio Name"));
+
     foreach (const auto &r, rList)
     {
         if (availRadioData->value(r)->radioName == radioName && availRadioData->value(r)->markForDeletion)
         {
-            QMessageBox msgBox;
-            msgBox.setModal( true );
-            msgBox.setText(tr("Radio name marked for deletion,\n please use another name"));
+
+            msgBox.setText(tr("Radio %1 is marked for deletion,\n please use another name").arg(radioName));
             msgBox.exec();
             return true;
         }
         else if (availRadioData->value(r)->radioName == radioName && !availRadioData->value(r)->markForDeletion)
         {
-            QMessageBox msgBox;
-            msgBox.setModal( true );
-            msgBox.setText(tr("Radio name already exists,\n please use another name"));
+            msgBox.setText(tr("Radio %1 already exists,\n please use another name").arg(radioName));
             msgBox.exec();
             return true;
         }
