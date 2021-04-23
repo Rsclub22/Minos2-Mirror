@@ -515,8 +515,8 @@ private:
     void checkSupportVolume();
     void checkSupportSMeter();
     void checkSupportRit();
-    void checkSupportVoiceMemory();
-    void checkSupportCwKeyerMemory();
+    bool checkSupportVoiceMemory();
+    bool checkSupportCwKeyerMemory();
     void checkSupportPtt();
 
 

@@ -788,10 +788,7 @@ void RigControlMainWindow::checkSupportCatFeatures()
 
     checkSupportRit();
 
-    if ((rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory
-            || rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory)
-            && (currentRadio->enableDisableCatFeature.voiceMemEnable
-            || currentRadio->enableDisableCatFeature.cWMemEnable))
+    if (checkSupportVoiceMemory() || checkSupportCwKeyerMemory())
     {
         setMemoryGroupVisible(true);
     }
@@ -800,9 +797,7 @@ void RigControlMainWindow::checkSupportCatFeatures()
         setMemoryGroupVisible(false);
     }
 
-    checkSupportVoiceMemory();
 
-    checkSupportCwKeyerMemory();
 
     checkSupportPtt();
 
@@ -932,7 +927,7 @@ void RigControlMainWindow::checkSupportRit()
     }
 }
 
-void RigControlMainWindow::checkSupportVoiceMemory()
+bool RigControlMainWindow::checkSupportVoiceMemory()
 {
     // does the library support voice keyer memory
 
@@ -948,6 +943,7 @@ void RigControlMainWindow::checkSupportVoiceMemory()
                 setVoiceMemIndVisible(true);
                 setVoiceMemIndOnOff(true);
                 addVoiceMemStatusToRigCache(true);
+                return true;
 
             }
             else
@@ -955,6 +951,7 @@ void RigControlMainWindow::checkSupportVoiceMemory()
                 setVoiceMemIndVisible(false);
                 setVoiceMemIndOnOff(false);
                 addVoiceMemStatusToRigCache(false);
+                return false;
 
             }
         }
@@ -962,13 +959,14 @@ void RigControlMainWindow::checkSupportVoiceMemory()
     else
     {
         addVoiceMemStatusToRigCache(false);
+
     }
 
-
+    return false;
 
 }
 
-void RigControlMainWindow::checkSupportCwKeyerMemory()
+bool RigControlMainWindow::checkSupportCwKeyerMemory()
 {
     // does the library support cw keyer memories
     if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory && currentRadio->enableDisableCatFeature.cWMemEnable)
@@ -985,6 +983,7 @@ void RigControlMainWindow::checkSupportCwKeyerMemory()
                 setCwMemIndVisible(true);
                 setCwMemIndOnOff(true);
                 addCwKeyerMemoryStatusToRigCache(true);
+                return true;
 
             }
             else
@@ -993,6 +992,7 @@ void RigControlMainWindow::checkSupportCwKeyerMemory()
                 setCwMemIndOnOff(false);
                 addCwKeyerMemoryStatusToRigCache(false);
                 addCwKeyerMemoryStatusToRigCache(false);
+                return false;
 
             }
          }
@@ -1000,9 +1000,10 @@ void RigControlMainWindow::checkSupportCwKeyerMemory()
     else
     {
         addCwKeyerMemoryStatusToRigCache(false);
+
     }
 
-
+    return false;
 
 }
 

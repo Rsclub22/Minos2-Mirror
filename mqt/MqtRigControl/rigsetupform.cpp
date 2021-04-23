@@ -1297,6 +1297,7 @@ void RigSetupForm::onEnableCatFeaturesClicked()
 
 void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
 {
+    ui->enableCatFeaturesChkBox->setChecked(radioData->enableDisableCatFeature.enableDisplay);
     if (ui->enableCatFeaturesChkBox->isChecked())
     {
         setEnableDisableFeaturesGroupVisible(true);

@@ -98,7 +98,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
         auto port_type = RigCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
@@ -201,7 +201,7 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
 
     if (!my_rig)
     {
-        return retcode = -14;
+        return  -14;
     }
 
 
@@ -304,7 +304,7 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
     {
         if(!currentRadio->civAddress.isEmpty())
         {
-            retcode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio->civAddress.toLatin1());
+            rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio->civAddress.toLatin1());
         }
     }
 
@@ -331,10 +331,10 @@ int HamlibRigControl::closeRig()
     int retcode;
     if (!my_rig)
     {
-        return retcode = -14;
+        return  -14;
     }
 
-    retcode = rig_close(my_rig);
+    rig_close(my_rig);
 
     retcode = rig_cleanup(my_rig);
     setRigConnected(false);

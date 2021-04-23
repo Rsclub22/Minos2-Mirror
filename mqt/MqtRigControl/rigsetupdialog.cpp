@@ -190,6 +190,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->serialDataEntryVisible(true);
         radioTab.value(tabName)->advancedSerialDataEntryVisible(availRadioData.value(tabName)->advancedCommsFlag);
         radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
+        radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
         radioTab.value(tabName)->networkDataEntryVisible(false);
         if (radioTab.value(tabName)->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
