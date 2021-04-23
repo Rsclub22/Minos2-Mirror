@@ -1532,8 +1532,8 @@ void RigSetupForm::setTransVertTabText(int tabNum, QString tabName)
 
 void RigSetupForm::addTransVerter()
 {
-
-    AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
+    QStringList tvList = radioData->transVertSettings.keys();
+    AddTransVerterDialog addTransDialog(bands, tvList, this);
     if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
@@ -1559,7 +1559,7 @@ void RigSetupForm::addTransVerter()
 
     // add the new transverter
     int tabNum = radioData->transVertSettings.count();
-    radioData->transVertNames.append(transVerterName);
+    //radioData->transVertNames.append(transVerterName);
     addTransVertTab(tabNum, transVerterName, true);
     loadTransVertTab(transVerterName);
 
@@ -1674,7 +1674,7 @@ void RigSetupForm::removeTransVerter()
     transVertTab.remove(transvertName);
     radioData->transVertSettings.remove(transvertName);
 
-    radioData->transVertNames.removeAt(currentIndex);
+    //radioData->transVertNames.removeAt(currentIndex);
 }
 
 

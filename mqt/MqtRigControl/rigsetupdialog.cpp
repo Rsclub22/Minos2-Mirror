@@ -894,26 +894,35 @@ void RigSetupDialog::saveSettings()
 
         getRadioSetting(savedRadioData, k, settings);
 
+        bool dataChanged = false;
         if (availRadioData.value(k)->compareNotEqual(savedRadioData))
         {
+            dataChanged = true;
             saveRadioData(availRadioData.value(k), settings);
+        }
 
-            if (availRadioData.value(k)->transVertEnable)
+        if (availRadioData.value(k)->transVertEnable)
+        {
+            QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
+            QString fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+            QSettings  configTransvert(fileName, QSettings::IniFormat);
+
+            if (availRadioData.value(k)->transVertSettingsNotEqual(savedRadioData->transVertSettings))
             {
-                QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
-                QString fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
-                QSettings  configTransvert(fileName, QSettings::IniFormat);
-
-                if (availRadioData.value(k)->transVertSettingsNotEqual(savedRadioData->transVertSettings))
+                dataChanged = false;
+                foreach(const auto &tv ,tvKeys)
                 {
-                    foreach(const auto &tv ,tvKeys)
-                    {
-                        saveTranVerterSetting(availRadioData.value(k), tv, configTransvert);
-                    }
-
+                    saveTranVerterSetting(availRadioData.value(k), tv, configTransvert);
                 }
+
             }
         }
+
+        if (dataChanged)
+        {
+            listOfRadiosDataChanged.append(k);
+        }
+
 
     }
 
@@ -1090,9 +1099,9 @@ void RigSetupDialog::readTranVerterSetting(QSharedPointer<scatParams> radioData,
     QSharedPointer<TransVertParams> tvp = QSharedPointer<TransVertParams>(new TransVertParams());
     tvp->transVertName = config.value("name", "").toString();
     tvp->band = config.value("band", "").toString();
-    tvp->radioFreq = config.value("radioFreq", 0.0).toDouble();
-    tvp->targetFreq = config.value("targetFreq", 0.0).toDouble();
-    tvp->transVertOffset = config.value("offsetDouble", 0.0).toDouble();
+    tvp->radioFreq = Frequency(config.value("radioFreq", 0).toString());
+    tvp->targetFreq = Frequency(config.value("targetFreq", 0).toString());
+    tvp->transVertOffset = Frequency(config.value("offsetDouble", 0).toString());
     tvp->antSwitchNum = config.value("antSwNumber", "0").toString();
     tvp->transSwitchNum = config.value("transVertSw", "0").toString();
     radioData->transVertSettings.insert(transvertName, tvp);

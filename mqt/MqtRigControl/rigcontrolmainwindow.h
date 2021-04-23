@@ -284,7 +284,7 @@ private:
 
     QSharedPointer<scatParams> currentRadio;
     QString currentRadioName;
-    QStringList availRadios;
+    //QStringList availRadios;
 
 
 
@@ -380,7 +380,7 @@ private:
 
     void testBoxesVisible(bool visible);
 
-    void upDateRadio();
+    void upDateRadio(QString radioName);
     //void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
@@ -463,7 +463,7 @@ private:
 
 
     MODE mapQStrMode(QString mode);
-    void updateCurrentRadioFromAvailRadios(int ridx);
+    void updateCurrentRadioFromAvailRadios(QString radioName);
     MODE convertQStringToMode(QString modeStr);
     QString convertModeToQString(MODE m);
 
@@ -542,6 +542,7 @@ private:
     void initCacheData(QStringList &availRadios);
     void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
     void checkSupportCatFeatures();
+    bool availRadiosContains(const QString radioName);
 private slots:
 
     void onStdInRead(QString);
@@ -569,7 +570,7 @@ private slots:
     void setRitFreq(ShortFreq ritFreq);
     void setRitLogStatus(bool status);
 
-    void sendRadioListLogger();
+    void sendRadioListLogger(const QStringList &availRadios);
 
     //void ritEnableChecked(int state);
     void updateRigDetailsCache();

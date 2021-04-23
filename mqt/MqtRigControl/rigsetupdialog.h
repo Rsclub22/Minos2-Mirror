@@ -37,7 +37,7 @@ namespace Ui {
 class RigSetupDialog;
 }
 
-
+/*
 class SetupChangeFlags
 {
 public:
@@ -77,7 +77,7 @@ private:
 
 
 };
-
+*/
 
 
 class RigSetupDialog : public QDialog
@@ -115,7 +115,7 @@ public:
     void fillPortsInfo();
     void loadAvailComports();
 
-    SetupChangeFlags setupChangeFlags;
+    //SetupChangeFlags setupChangeFlags;
 
     QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges;
     QVector<QString> listOfRadiosDataChanged;

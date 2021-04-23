@@ -159,14 +159,14 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
 
         transVertEnable == radParams->transVertEnable &&
         supportBands == radParams->supportBands &&     // for non hamlib radios
-        compareStringList(transVertNames, radParams->transVertNames) &&
+        //compareStringList(transVertNames, radParams->transVertNames) &&
         //numTransverters == radParams->numTransverters &&
         enableTransSwitch == radParams->enableTransSwitch &&
         enableLocTVSwMsg == radParams->enableLocTVSwMsg &&
         locTVSwComport == radParams->locTVSwComport &&
         compareStringList(radioSupBands, radParams->radioSupBands) &&
         compareStringList(radioTransSupBands, radParams->radioTransSupBands) &&
-        transVertSettings == radParams->transVertSettings &&
+        //transVertSettings == radParams->transVertSettings &&
         enableDisableCatFeature == radParams->enableDisableCatFeature)
     {
        return true;
@@ -217,14 +217,14 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
 
                 transVertEnable != radParams->transVertEnable ? qDebug() << "transVertEnable = true" : qDebug() << "transVertEnable = false";
                 supportBands != radParams->supportBands ? qDebug() << "supportBands = true" : qDebug() << "supportBands = false";
-                !compareStringList(transVertNames, radParams->transVertNames) ? qDebug() << "transVertNames = true" : qDebug() << "transVertNames = false";
+                //!compareStringList(transVertNames, radParams->transVertNames) ? qDebug() << "transVertNames = true" : qDebug() << "transVertNames = false";
                 //numTransverters != radParams->numTransverters ? qDebug() << "radioName = true" : qDebug() << "radioName = false";
                 enableTransSwitch != radParams->enableTransSwitch ? qDebug() << "enableTransSwitch = true" : qDebug() << "enableTransSwitch = false";
                 enableLocTVSwMsg != radParams->enableLocTVSwMsg ? qDebug() << "enableLocTVSwMsg = true" : qDebug() << "enableLocTVSwMsg = false";
                 locTVSwComport != radParams->locTVSwComport ? qDebug() << "locTVSwComport = true" : qDebug() << "locTVSwComport = false";
                 !compareStringList(radioSupBands, radParams->radioSupBands) ? qDebug() << "radioSupBands = true" : qDebug() << "radioSupBands = false";
                 !compareStringList(radioTransSupBands, radParams->radioTransSupBands) ? qDebug() << "radioTransSupBands = true" : qDebug() << "radioTransSupBands = false";
-                transVertSettings != radParams->transVertSettings ? qDebug() << "transVertSettings = true" : qDebug() << "transVertSettings = false";
+                //transVertSettings != radParams->transVertSettings ? qDebug() << "transVertSettings = true" : qDebug() << "transVertSettings = false";
                 enableDisableCatFeature != radParams->enableDisableCatFeature ? qDebug() << "enableDisableCatFeature = true" : qDebug() << "enableDisableCatFeature = false";
 
 
@@ -263,7 +263,7 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
 
             transVertEnable != radParams->transVertEnable ||
             supportBands != radParams->supportBands ||     // for non hamlib radios
-            !compareStringList(transVertNames, radParams->transVertNames) ||
+            //!compareStringList(transVertNames, radParams->transVertNames) ||
             //numTransverters != radParams->numTransverters ||
             enableTransSwitch != radParams->enableTransSwitch ||
             enableLocTVSwMsg != radParams->enableLocTVSwMsg ||
@@ -356,7 +356,7 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
 
     transVertEnable  = srce->transVertEnable;
     supportBands = srce->supportBands;        // for non hamlib radios
-    transVertNames = srce->transVertNames;
+    //transVertNames = srce->transVertNames;
     //numTransverters = srce->numTransverters;
     enableTransSwitch = srce->enableTransSwitch;
     enableLocTVSwMsg = srce->enableLocTVSwMsg;

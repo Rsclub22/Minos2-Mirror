@@ -303,7 +303,7 @@ public:
 
   bool transVertEnable  = false;
   SupportBands supportBands;        // for non hamlib radios
-  QStringList transVertNames;
+  //QStringList transVertNames;
   //int numTransverters = 0;
   QMap<QString, QSharedPointer<TransVertParams> > transVertSettings;
   bool enableTransSwitch = false;
