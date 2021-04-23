@@ -37,26 +37,6 @@ static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "OS - Restart(1)/Close(2)")
 };
-//==============================================================================
-
-QMap <int, QString> MORSECODE;    // . is 0x40, - is 0x80
-QMap <int, MORSEMSG> MORSEMSGS;
-
-//==============================================================================
-
-// some of these might not belong here, but they were in sbdvp or tlkeyer
-// and I still need them somewhere
-bool sblog = false;
-unsigned long MORSEINTCOUNT = 0;
-
-int tuneTime = 10;
-double tuneLevel = 80.0;
-
-int CWTone = 1000;
-int CWSpeed = 12;
-
-qint64 currTick;
-my_deque < KeyerAction *> KeyerAction::currentAction;
 //=============================================================================
 
 commonKeyer *currentKeyer = nullptr;
@@ -406,7 +386,9 @@ timerTicker::~timerTicker()
 
 commonKeyer::commonKeyer( const KeyerConfig &keyer, const PortConfig &port )
       : lineMonitor( keyer, port )
-{}
+{
+
+}
 commonKeyer::~commonKeyer()
 {
    if ( sblog )
@@ -518,6 +500,7 @@ bool commonKeyer::transverterSwitchChanged(int s)
 }
 void commonKeyer::queueFinished()
 {}
+
 //==============================================================================
 
 voiceKeyer::voiceKeyer( const KeyerConfig &keyer, const PortConfig &port )
@@ -1539,7 +1522,7 @@ void PlayAction::timeOut()
                 tailWithPip = currentKeyer->kconf.enablePip;
             }
 
-            if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode ))
+            if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode, currentKeyer->kconf.clipRecord ))
             {
                actionTime = 1;
                deleteAtTick = true;

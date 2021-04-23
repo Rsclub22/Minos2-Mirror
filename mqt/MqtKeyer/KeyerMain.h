@@ -77,6 +77,8 @@ private slots:
 
     void on_passThroughValue_valueChanged(double arg1);
 
+    void onPTT(bool);
+
 private:
     void syncSetLines();
     QTimer LineTimer;

@@ -9,6 +9,11 @@ Target = KeyerBase
 INCLUDEPATH += $$PWD/../rtaudio
 INCLUDEPATH += $$PWD/../Chunkware
 INCLUDEPATH += ../MqtUtils
+INCLUDEPATH += ../MqtBase
+INCLUDEPATH += ../XMPPLib
+INCLUDEPATH += ../TinyXML
+
+
 
 unix:!macos{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_DS__}
@@ -19,8 +24,10 @@ SOURCES += \
     ../Chunkware/SimpleCompProcess.inl \
     ../Chunkware/SimpleEnvelope.cpp \
     VKMixer.cpp \
+    keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
+    sbdriver.cpp \
     soundsys.cpp
 
 HEADERS += \
@@ -35,9 +42,12 @@ HEADERS += \
     ../Chunkware/SimpleHeader.h \
     VKMixer.h \
     ddc.h \
+    keyctrl.h \
+    keyerBase.h \
     keyerlog.h \
     levelmeter.h \
     riff.h \
+    sbdriver.h \
     soundsys.h
 
 # Default rules for deployment.

@@ -7,6 +7,7 @@
 #include "KeyerRPCServer.h"
 #include "VKMixer.h"
 #include "sbdriver.h"
+#include "keyers.h"
 
 KeyerMain *keyerMain = nullptr;
 
@@ -138,6 +139,9 @@ KeyerMain::KeyerMain(QWidget *parent) :
         ui->keyCombo->addItem(QString::number(i));
     }
     ui->keyCombo->setCurrentIndex(0);
+
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KeyerMain::onPTT);
+
 }
 
 KeyerMain::~KeyerMain()
@@ -177,7 +181,11 @@ void KeyerMain::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
-
+void KeyerMain::onPTT(bool s)
+{
+    if (currentKeyer)
+        currentKeyer->ptt(s);
+}
 void KeyerMain::LineTimerTimer( )
 {
     static bool closed = false;

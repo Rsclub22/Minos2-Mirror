@@ -3,6 +3,7 @@
 
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "keyerBase.h"
 
 class InternalVoiceMemoryKeyer : public VoiceKeyerBase
 {

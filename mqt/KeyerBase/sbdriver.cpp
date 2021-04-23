@@ -6,11 +6,13 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include "mqtUtils_pch.h"
 
 #include "riff.h"
 #include "cutils.h"
-#include "keyers.h" 
+#include "keyerlog.h"
+#include "keyerBase.h"
+#include "keyctrl.h"
 #include "sbdriver.h"
 #include "soundsys.h"
 
@@ -104,7 +106,7 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
    ptr = nullptr;
    if ( sblog )
    {
-      trace( "dofile(" + QString::number( i ) + ")" + "play = " + QString::number( play ) );
+      trace( "dofile(" + QString::number( i ) + ")" + "play = " + makeStr( play ) );
    }
    ihand = i;
 
@@ -185,8 +187,8 @@ void SoundSystemDriver::stoprec()
 
    if ( recording )
    {
-      if ( currentKeyer )
-         currentKeyer->ptt( 0 );
+      emit ptt(false);
+
       stopDMA();  // stop - eventually
       CW_ACTIVE = false;
       ihand = isave;
@@ -206,8 +208,7 @@ void SoundSystemDriver::record_file( const QString &filename )
    stoprec();
    stopDMA();  // stop - eventually
    CW_ACTIVE = false;
-   if ( currentKeyer )
-      currentKeyer->ptt( 0 );
+   emit ptt(false);
    int i;
    for ( i = 0;i < recfil.size();i++ )
    {
@@ -237,7 +238,7 @@ void SoundSystemDriver::record_file( const QString &filename )
    recording = true;
    dofile( i, 0 );
 }
-bool SoundSystemDriver::play_file( const QString &filename, bool xmit )
+bool SoundSystemDriver::play_file( const QString &filename, bool xmit, int clipRecord )
 {
    if ( sblog )
    {
@@ -246,16 +247,16 @@ bool SoundSystemDriver::play_file( const QString &filename, bool xmit )
    stoprec();
    stopDMA();  // stop - eventually
    CW_ACTIVE = false;
-   if ( !xmit && currentKeyer )
-      currentKeyer->ptt( 0 );
+   if ( !xmit )
+       emit ptt(false);
 
    if ( filename.compare("AudioCWFile", Qt::CaseInsensitive ) == 0 )
    {
       if ( cwptr && cwSamples )
       {
-         if ( xmit && currentKeyer )
+         if ( xmit )
          {
-            currentKeyer->ptt( 1 );
+             emit ptt(true);
          }
          play = true;
          recording = false;
@@ -273,14 +274,16 @@ bool SoundSystemDriver::play_file( const QString &filename, bool xmit )
       }
       if ( i < recfil.size() )
       {
-         if ( recfil[ i ] ->loaded && xmit && currentKeyer )
+         if ( recfil[ i ] ->loaded && xmit )
          {
-            currentKeyer->ptt( 1 );
+             emit ptt(true);
          }
          play = true;
          recording = false;
-         if (currentKeyer && dofile( i, currentKeyer->kconf.clipRecord ) )
-            return recfil[ i ] ->fsample;
+         if (dofile( i, clipRecord ) )
+         {
+            return recfil[ i ] ->fsample > 0;
+         }
       }
       return false;
    }
@@ -292,8 +295,8 @@ void SoundSystemDriver::stopall()
    stoprec();
    stopDMA();  // stop - eventually
    CW_ACTIVE = false;
-   if ( currentKeyer )
-      currentKeyer->ptt( 0 );
+
+   emit ptt(false);
 
    delete [] t1ptr;
    delete [] t2ptr;
@@ -342,8 +345,7 @@ bool SoundSystemDriver::sbdvp_init( QString &errmess, unsigned int srate, int pi
       if ( !soundSystem->initialise( errmess ) )
          return false;
 
-      if ( currentKeyer )
-         currentKeyer->ptt( 0 );
+      emit ptt(false);
 
       play = true;
       recording = false;
@@ -545,7 +547,6 @@ SoundSystemDriver *SoundSystemDriver::getSbDriver()
       return singleton_sb;
 
    singleton_sb = new SoundSystemDriver();
-   singleton_sb->ready = true;      // not until we are out of the constructor
    return singleton_sb;
 }
 SoundSystemDriver::SoundSystemDriver()
@@ -571,6 +572,7 @@ void SoundSystemDriver::interruptOK()
        sba->interruptOK();	// so as we do not time it out immediately
 
 }
+
 void SoundSystemDriver::setActionTime1()
 {
     KeyerAction * sba = KeyerAction::getCurrentAction();

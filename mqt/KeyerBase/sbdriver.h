@@ -51,8 +51,7 @@ public:
 
       static SoundSystemDriver *getSbDriver();
 
-      volatile int recording = false;
-      bool ready = false;
+      int recording = false;
       bool loadFailed = false;
 
       bool CW_ACTIVE = false;
@@ -73,7 +72,7 @@ public:
 
       int16_t *ptr = nullptr;       /* data for current file */
       uint32_t samples = 0;   /* fsample for current file  */
-      char play;  /* Play or record */
+      bool play;  /* Play or record */
 
       unsigned int rate = 0;   /* rate in Hertz -- this gets reset to nearest available value */
 
@@ -84,7 +83,7 @@ public:
       bool dofile( int i, int clipRecord = 0 );
       void stoprec();
       void record_file( const QString &filename );
-      bool play_file( const QString &filename, bool xmit );
+      bool play_file(const QString &filename, bool xmit , int clipRecord);
       void stopall();
       void stopDMA();
       bool startMicPassThrough();
@@ -108,5 +107,8 @@ private slots:
       void setActionTime1();
       void actionQueueFinished();
       void setVU(unsigned int a, unsigned int b, unsigned int c);
+
+signals:
+      void ptt(bool);
 };
 #endif
