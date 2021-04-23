@@ -252,6 +252,8 @@ void RigControlFrame::setContest(BaseContestLog *c)
     {
         contestBand = ct->contestBands.getValue();
 
+        setRadioList();
+
     }
 
     if (bandSelButtons)

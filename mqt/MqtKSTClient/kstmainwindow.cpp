@@ -254,6 +254,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
+    ui->callEdit->setValidator(&ucValidator);
+
     ui->ASActivecb->setChecked(ASActive);
     ui->planesFrame->setVisible(ASActive);
     if(ASActive)
@@ -328,6 +330,11 @@ void KSTMainWindow::closeEvent(QCloseEvent *event)
     userCallTimer.stop();
 
     // and tidy up all loose ends
+
+    if (kstconnected)
+    {
+        on_connectButton_clicked();
+    }
 
     QSettings settings;
     settings.setValue("geometry/Main", saveGeometry());
@@ -1428,18 +1435,20 @@ void KSTMainWindow::checkActive()
 }
 void KSTMainWindow::on_meepTable_clicked(const QModelIndex &index)
 {
-    QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
-    QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
-    QString call = line->call;
-    if (call.compare(myCallsign, Qt::CaseInsensitive) == 0)
+    if (index.isValid())
     {
-        call = line->otherCall;
+        QModelIndex sourceIndex = kstMeepFilterModel.mapToSource(index);
+        QSharedPointer<KstMessageLine> line = messageVector->at(sourceIndex.row());
+        QString call = line->call;
+        if (call.compare(myCallsign, Qt::CaseInsensitive) == 0)
+        {
+            call = line->otherCall;
+        }
+        setNameFromCall(call);
+        ui->callEdit->setText(call);
+        ui->msgEdit->setFocus();
+        setActive(line->chat);
     }
-    setNameFromCall(call);
-    ui->callEdit->setText(call);
-    ui->msgEdit->setFocus();
-    setActive(line->chat);
-
 }
 
 void KSTMainWindow::on_clearButton_clicked()
@@ -1748,4 +1757,9 @@ void KSTMainWindow::on_maxDistanceEdit_editingFinished()
 
     kstCallFilterModel.invalidate();
     kstMessageFilterModel.invalidate();
+}
+
+void KSTMainWindow::on_showReadcb_stateChanged(int /*arg1*/)
+{
+    kstMeepFilterModel.setShowRead(ui->showReadcb->isChecked());
 }

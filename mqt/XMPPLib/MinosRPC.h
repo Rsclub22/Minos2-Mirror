@@ -148,7 +148,7 @@ signals:
     void notify( AnalysePubSubNotify an, const QString from);
     void routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from);
 
-    void provider(Provider);
+    void provider(Provider, QString cat);
 
 private slots:
 

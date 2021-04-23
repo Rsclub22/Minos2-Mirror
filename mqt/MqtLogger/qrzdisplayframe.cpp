@@ -424,7 +424,7 @@ void QrzDisplayServerRpc::on_notify(AnalysePubSubNotify an, const QString /*from
     trace(QString("[QrzDisplayServer]   on_notify - routerName = %1, publisherProgram = %2, app = %3").arg(an.getPublisherRouter(), an.getPublisherProgram(), an.getKey()));
 }
 
-void QrzDisplayServerRpc::on_provider(Provider)
+void QrzDisplayServerRpc::on_provider(Provider, QString /*cat*/)
 {
 //    syncstat = true;
 }

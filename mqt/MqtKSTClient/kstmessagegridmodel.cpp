@@ -193,6 +193,30 @@ void KstMessageGridModel::setChatFilter(int value)
 {
     chatFilter = value;
 }
+
+Qt::ItemFlags KstMessageGridModel::flags(const QModelIndex& index) const
+{
+  Qt::ItemFlags returnFlags = QAbstractItemModel::flags(index);
+
+  if (index.column() == 0)
+  {
+    returnFlags |= Qt::ItemIsUserCheckable;
+  }
+
+  return returnFlags;
+}
+bool KstMessageGridModel::setData(const QModelIndex & index, const QVariant & value, int role)
+{
+    if (index.column() == 0 && role == Qt::CheckStateRole)
+    {
+        QSharedPointer<KstMessageLine> kstmsg = messageVector->at(index.row());
+        kstmsg->markedRead = static_cast<Qt::CheckState>(value.toUInt());
+    }
+
+    emit dataChanged(index, index);
+    return true;
+}
+
 //==========================================================================================
 void KstMessageGridSortFilterModel::setChatFilter(int value)
 {
@@ -254,7 +278,6 @@ void KstMessageGridSortFilterModel::setFilterString(QString f)
 
 bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
-
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
@@ -265,6 +288,9 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
     if (filterString.isEmpty())
+        return false;
+
+    if (!showRead && kstmsg->markedRead)
         return false;
 
     if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
@@ -284,6 +310,11 @@ void KstMeepGridSortFilterModel::setFilterString(QString f)
     filterString = f;
     invalidateFilter();
 }
+void KstMeepGridSortFilterModel::setShowRead(bool s)
+{
+    showRead = s;
+    invalidate();
+}
 
 QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) const
 {
@@ -292,7 +323,24 @@ QVariant KstMeepGridSortFilterModel::data(const QModelIndex &index, int role) co
         return QColor(Qt::green).lighter(135);
     }
 
+    KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+    if (index.row() >= cgm->rawCount())
+    {
+        return QVariant();
+    }
     QModelIndex sourceIndex = mapToSource(index);
-     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
-     return cgm->data(sourceIndex, role);
+    int sourceRow = sourceIndex.row();
+    if (cgm && ( sourceRow < cgm->rawCount() ) )
+    {
+        if (role == Qt::CheckStateRole && sourceIndex.column() == 0)
+        {
+            QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
+            int status = kstmsg->markedRead;
+            if (status)
+                return Qt::Checked;
+            else
+                return Qt::Unchecked;
+        }
+    }
+    return cgm->data(sourceIndex, role);
 }

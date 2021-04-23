@@ -50,7 +50,7 @@ private slots:
     void onRigFreqChanged(Frequency /*f*/, BaseContestLog *c);
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
     void on_notify(AnalysePubSubNotify an, const QString from );
-    void on_provider(Provider provider);
+    void on_provider(Provider provider, QString cat);
 signals:
     void ChatServerList(QMap<Provider, ChatServerApp>);
     void ChatMessages(QVector<QString>);

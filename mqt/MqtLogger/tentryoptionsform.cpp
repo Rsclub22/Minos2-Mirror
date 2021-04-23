@@ -286,7 +286,7 @@ QString TEntryOptionsForm::doFileSave( )
 
     for(auto const &expformat: exptypes)
     {
-        QString InitialDir = ExtractFilePath( ct->cfileName );
+        QString InitialDir = ExtractFileDir( ct->cfileName );
 
         QString fname = ExtractFileName( ct->cfileName );
         QString ext = ExtractFileExt( ct->cfileName );

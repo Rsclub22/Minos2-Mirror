@@ -72,13 +72,16 @@ void ChatServer::on_notify(AnalysePubSubNotify an, const QString /*from*/ )
     }
 }
 //---------------------------------------------------------------------------
-void ChatServer::on_provider(Provider provider)
+void ChatServer::on_provider(Provider provider, QString cat)
 {
-    ChatServerApp s;
-    chatServerList[provider] = s;
-    QString mess = tr("%1/%2 changed state to %3").arg(provider.routerName, provider.app, tr(stateIndicator[provider.state]));
-    addChat( mess );
-    syncstat = true;
+    if (cat == rpcConstants::ChatServer)
+    {
+        ChatServerApp s;
+        chatServerList[provider] = s;
+        QString mess = tr("%1/%2 changed state to %3").arg(provider.routerName, provider.app, tr(stateIndicator[provider.state]));
+        addChat( mess );
+        syncstat = true;
+    }
 }
 //---------------------------------------------------------------------------
 void ChatServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )

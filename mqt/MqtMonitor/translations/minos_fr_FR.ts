@@ -37,7 +37,7 @@
         <translation>Échange</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="304"/>
+        <location filename="../MonitorMain.cpp" line="309"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>

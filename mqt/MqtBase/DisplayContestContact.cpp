@@ -22,11 +22,19 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
    BaseContestLog * clp = ct;
 
    int ms = clp->maxSerial + 1;
-   QString curmode = clp->currentMode.getValue();
+   QString bclMode = clp->currentMode.getValue();
+
+   QString curMode = bclMode;
+
+   if (bclMode == "FT8" || bclMode == "FT4")
+   {
+       curMode = hamlibData::MGM;
+       mgmSubmode.setValue(bclMode);
+   }
 
    serialr.setInitialValue( QString( SERIALLENGTH, ' ' ) );
 
-   if (curmode != hamlibData::MGM)
+   if (curMode != hamlibData::MGM)
    {
        QString cb = clp->currentBand.getValue().trimmed();
        BandList &blist = BandList::getBandList();
@@ -46,7 +54,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        }
        if (hf)
        {
-            if (curmode == hamlibData::CW)
+            if (curMode == hamlibData::CW)
             {
                 repr.setInitialValue( "599" );
                 reps.setInitialValue( "599" );
@@ -73,7 +81,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
    QString temp = QString("%1").arg(ms, 3);
    serials.setValue( temp );
 
-   mode.setValue( curmode );
+   mode.setValue( curMode );
 
 
 }

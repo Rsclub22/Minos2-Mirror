@@ -809,7 +809,7 @@ void TLogContainer::FileNewActionExecute()
            {
                MinosParameters::getMinosParameters() ->mshowMessage( tr("%1 \nalready exists.\n\nPlease choose a new name.").arg(fileName) );
 
-               InitialDir = ExtractFilePath(fileName);
+               InitialDir = ExtractFileDir(fileName);
                QString sfname = InitialDir + nameBase + "_" + QString::number(fnum) + ".minos";
                while (FileExists(sfname))
                {

@@ -331,14 +331,25 @@ when user selected</string>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget3">
+       <widget class="QWidget" name="">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
-          <widget class="QLabel" name="includeLabel">
-           <property name="text">
-            <string>Including me</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLabel" name="includeLabel">
+             <property name="text">
+              <string>Including me</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="showReadcb">
+             <property name="text">
+              <string>Show read (ticked) messages</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QTableView" name="meepTable">

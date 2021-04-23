@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>628</width>
-    <height>86</height>
+    <height>95</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -141,16 +141,9 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QPushButton" name="transfer12Button">
+         <widget class="QPushButton" name="closeButton">
           <property name="text">
-           <string>Transfer Main -&gt; Sub</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="transfer21Button">
-          <property name="text">
-           <string>Transfer Sub -&gt; Main</string>
+           <string>Close</string>
           </property>
          </widget>
         </item>
@@ -168,9 +161,16 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="closeButton">
+         <widget class="QPushButton" name="transfer12Button">
           <property name="text">
-           <string>Close</string>
+           <string>Transfer Main -&gt; Sub</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="transfer21Button">
+          <property name="text">
+           <string>Transfer Sub -&gt; Main</string>
           </property>
          </widget>
         </item>

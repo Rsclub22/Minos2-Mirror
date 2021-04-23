@@ -474,7 +474,7 @@ void MonitorMain::CancelClick()
     // do nothing...
 }
 //---------------------------------------------------------------------------
-void MonitorMain::on_provider(Provider provider)
+void MonitorMain::on_provider(Provider provider, QString /*cat*/)
 {
     stationList[provider] = new MonitoredStation;
     syncstat = true;
