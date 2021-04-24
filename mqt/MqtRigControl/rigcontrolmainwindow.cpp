@@ -569,192 +569,209 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     clearSupportRitFlags();
     rigStateDetails->curTransVertFreq.clear();
 
-
-    if (!radioName.isEmpty())
+    if (radioCommsOK)
     {
-        if (availRadiosContains(radioName))
+        closeRadio();
+    }
+
+    if (radioName.isEmpty())
+    {
+        // no radio selected
+           trace("No radio selected");
+           saveCurrentRadio(currentRadioName);
+           ui->radioNameDisp->setText("");
+           ui->usingLibText->setText("");
+           return;
+    }
+
+    // Does radio still exist on disc, it might of been deleted by another
+    // rigcontrol app on same machine
+    if (!availRadiosContains(radioName))
+    {
+        logMessage("Update Radio - Radio No longer exists!");
+
+        if (appName.isEmpty())
         {
-            if (radioCommsOK)
-            {
-                closeRadio();
-            }
-
-
-
-            // found radio, update currentRadio from selected radiodata
-
-            currentRadioName = radioName;
-            updateCurrentRadioFromAvailRadios(currentRadioName);
-
-            dumpRadioToTraceLog();
-
-            if (currentRadio->rigCtldEnable)
-            {
-                radioOpenStat = openRigCtldRadio(currentRadio->startMinosRigCtld);
-                setRigCltdIndicatorVisible(true);
-                setRigCtldIndicator(RIGCTLD_IND_OFF);
-
-                RigCtldStatusTimer->start(RIGCTLD_STATUS_TIMER_DUR);
-            }
-            else
-            {
-                radioOpenStat = openRadio();
-            }
-
-
-            if (radioOpenStat == OPEN_OK && radio)
-            {
-                //initCacheData();
-                int retCode;
-
-                selectedRigSupCap->supportGetVfo = radio->supportReadVfo(currentRadio->rigModelNumber);
-                trace(QString("Supports reading Vfo = %1").arg(selectedRigSupCap->supportGetVfo ? "true" : "false"));
-
-                if (selectedRigSupCap->supportGetVfo)
-                {
-                    // get current VFO
-                    retCode = radio->getVfo(&rigStateDetails->curVfo);
-                    if (retCode != RIG_OK)
-                    {
-                        trace(QString("GetVfo Error: %1").arg(retCode));
-                    }
-                    else
-                    {
-                        trace(QString("Get initial vfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
-
-                    }
-
-
-
-                    // this is a test for hamlib, check radio supports targetted VFO's in hamlib
-                    // FT857 and FT897 don't in hamlib
-                    trace(QString("Check radio can setMode with supported VFO, curVfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
-                    retCode = radio->setMode(rigStateDetails->curVfo, MODE::USB);
-                    if (retCode != RIG_OK)
-                    {
-                        // no doesn't support targetted Vfo, default to Current Vfo
-                        trace(QString("Does not support targetted Vfo, use Current_VFO"));
-                        selectedRigSupCap->supportGetVfo = false;
-                        rigStateDetails->curVfo = CURRENT_VFO;
-                        selectedRigSupCap->supportGetVfo = false;      // don't bother with Vfo selection
-                        selectedRigSupCap->supportSetVfo = false;
-                    }
-                }
-                else
-                {
-                    rigStateDetails->curVfo = CURRENT_VFO;
-                }
-
-                selectedRigSupCap->supportSetVfo = radio->supportWriteVfo(currentRadio->rigModelNumber);
-                trace(QString("Supports writing Vfo = %1").arg(selectedRigSupCap->supportSetVfo ? "true" : "false"));
-
-
-
-                trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
-
-                ui->usingLibText->setText(radio->getLibraryName());
-
-                if (currentRadio->rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
-                {
-                    getRigctldNames(currentRadio->networkAdd, currentRadio->networkPort.toUShort());
-                    bool ok = false;
-                    int rigNum = rigCtldDetails->rigctld_radioNumber.toInt(&ok, 10);
-                    if (ok)
-                    {
-                        rigCtldDetails->irigctld_radioNumber = rigNum;
-                    }
-                    else
-                    {
-                        rigCtldDetails->irigctld_radioNumber = 0;
-                    }
-                }
-
-                setupTransVerter();
-
-                saveCurrentRadio(currentRadioName);
-
-                ui->radioNameDisp->setText(currentRadio->radioName);
-
-
-                // if it is a rigctld model, then use the radio model number connected to rigctld
-
-                int modelNumber = currentRadio->rigModelNumber;
-                if (modelNumber == hamlibData::RIGCTL)
-                {
-                    modelNumber = rigCtldDetails->irigctld_radioNumber;
-                }
-
-                buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
-
-                checkSupportCatFeatures();
-
-
-                updateSupportedRadioIndicators();
-
-                if (appName.count() > 0)
-                {
-                    logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr()).arg(loggerRequests->selRadioMode));
-                    loggerSetFreq(loggerRequests->selRadioFreq);
-                    loggerSetMode(loggerRequests->selRadioMode);
-                }
-                else
-                {
-
-                    logMessage(QString("Update Radio: Set Mode USB Standalone"));
-                    // initialise rig state
-
-                    loggerRequests->slogMode = USB_STR;
-                    // set mode
-                    setMode(USB_STR, rigStateDetails->curVfo);
-                }
-
-                getRadioInfo(DONT_PUBLISH_NOW);
-
-                sendRitEnableStatusLogger();
-                //writeWindowTitle(appName);
-                sendStatusToLogConnected();
-
-                checkSupportPollRadio();
-
-
-            }
-            else
-            {
-                int msgOffSet = radioOpenStat;
-                if (msgOffSet <= 0)
-                {
-                    if (msgOffSet < 0)
-                    {
-                        msgOffSet = msgOffSet * -1;
-                        if (msgOffSet > radioOpenMessages.count())
-                        {
-                            trace(QString("UpdateRadio: Radio Failed to Connect - Error Message Number out of range = %1").arg(msgOffSet));
-                        }
-                    }
-                }
-
-
-                trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
-                sendStatusToLogDisConnected();
-
-            }
-
-
+            // No longer available.
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(tr("RigControl Select Radio"));
+            msgBox.setText(tr("Radio No Longer Exists, please add"));
+            msgBox.exec();
         }
         else
         {
-            trace(QString("Saved Current Radio %1 does not match saved available radios.").arg(currentRadioName));
+            sendStatusToLogError(tr("Radio No Longer Exists, please add"));
         }
+
+
+
+    }
+
+
+
+
+
+    // found radio, update currentRadio from selected radiodata
+
+    currentRadioName = radioName;
+    updateCurrentRadioFromAvailRadios(currentRadioName);
+
+    dumpRadioToTraceLog();
+
+    if (currentRadio->rigCtldEnable)
+    {
+        radioOpenStat = openRigCtldRadio(currentRadio->startMinosRigCtld);
+        setRigCltdIndicatorVisible(true);
+        setRigCtldIndicator(RIGCTLD_IND_OFF);
+
+        RigCtldStatusTimer->start(RIGCTLD_STATUS_TIMER_DUR);
     }
     else
-    {   // no radio selected
-        trace("No radio selected");
-        saveCurrentRadio(currentRadioName);
-        ui->radioNameDisp->setText("");
-        ui->usingLibText->setText("");
-        closeRadio();
-        //writeWindowTitle(appName);
+    {
+        radioOpenStat = openRadio();
     }
+
+
+    if (radioOpenStat == OPEN_OK && radio)
+    {
+        //initCacheData();
+        int retCode;
+
+        selectedRigSupCap->supportGetVfo = radio->supportReadVfo(currentRadio->rigModelNumber);
+        trace(QString("Supports reading Vfo = %1").arg(selectedRigSupCap->supportGetVfo ? "true" : "false"));
+
+        if (selectedRigSupCap->supportGetVfo)
+        {
+            // get current VFO
+            retCode = radio->getVfo(&rigStateDetails->curVfo);
+            if (retCode != RIG_OK)
+            {
+                trace(QString("GetVfo Error: %1").arg(retCode));
+            }
+            else
+            {
+                trace(QString("Get initial vfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+
+            }
+
+
+
+            // this is a test for hamlib, check radio supports targetted VFO's in hamlib
+            // FT857 and FT897 don't in hamlib
+            trace(QString("Check radio can setMode with supported VFO, curVfo = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+            retCode = radio->setMode(rigStateDetails->curVfo, MODE::USB);
+            if (retCode != RIG_OK)
+            {
+                // no doesn't support targetted Vfo, default to Current Vfo
+                trace(QString("Does not support targetted Vfo, use Current_VFO"));
+                selectedRigSupCap->supportGetVfo = false;
+                rigStateDetails->curVfo = CURRENT_VFO;
+                selectedRigSupCap->supportGetVfo = false;      // don't bother with Vfo selection
+                selectedRigSupCap->supportSetVfo = false;
+            }
+        }
+        else
+        {
+            rigStateDetails->curVfo = CURRENT_VFO;
+        }
+
+        selectedRigSupCap->supportSetVfo = radio->supportWriteVfo(currentRadio->rigModelNumber);
+        trace(QString("Supports writing Vfo = %1").arg(selectedRigSupCap->supportSetVfo ? "true" : "false"));
+
+
+
+        trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
+
+        ui->usingLibText->setText(radio->getLibraryName());
+
+        if (currentRadio->rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
+        {
+            getRigctldNames(currentRadio->networkAdd, currentRadio->networkPort.toUShort());
+            bool ok = false;
+            int rigNum = rigCtldDetails->rigctld_radioNumber.toInt(&ok, 10);
+            if (ok)
+            {
+                rigCtldDetails->irigctld_radioNumber = rigNum;
+            }
+            else
+            {
+                rigCtldDetails->irigctld_radioNumber = 0;
+            }
+        }
+
+        setupTransVerter();
+
+        saveCurrentRadio(currentRadioName);
+
+        ui->radioNameDisp->setText(currentRadio->radioName);
+
+
+        // if it is a rigctld model, then use the radio model number connected to rigctld
+
+        int modelNumber = currentRadio->rigModelNumber;
+        if (modelNumber == hamlibData::RIGCTL)
+        {
+            modelNumber = rigCtldDetails->irigctld_radioNumber;
+        }
+
+        buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
+
+        checkSupportCatFeatures();
+
+
+        updateSupportedRadioIndicators();
+
+        if (appName.count() > 0)
+        {
+            logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr()).arg(loggerRequests->selRadioMode));
+            loggerSetFreq(loggerRequests->selRadioFreq);
+            loggerSetMode(loggerRequests->selRadioMode);
+        }
+        else
+        {
+
+            logMessage(QString("Update Radio: Set Mode USB Standalone"));
+            // initialise rig state
+
+            loggerRequests->slogMode = USB_STR;
+            // set mode
+            setMode(USB_STR, rigStateDetails->curVfo);
+        }
+
+        getRadioInfo(DONT_PUBLISH_NOW);
+
+        sendRitEnableStatusLogger();
+        //writeWindowTitle(appName);
+        sendStatusToLogConnected();
+
+        checkSupportPollRadio();
+
+
+    }
+    else
+    {
+        int msgOffSet = radioOpenStat;
+        if (msgOffSet <= 0)
+        {
+            if (msgOffSet < 0)
+            {
+                msgOffSet = msgOffSet * -1;
+                if (msgOffSet > radioOpenMessages.count())
+                {
+                    trace(QString("UpdateRadio: Radio Failed to Connect - Error Message Number out of range = %1").arg(msgOffSet));
+                }
+            }
+        }
+
+
+        trace(QString("#### Radio Failed to connect Error Code = %1, %2  ####").arg(radioOpenStat).arg(radioOpenMessages[radioOpenStat * -1]));
+        sendStatusToLogDisConnected();
+
+    }
+
+
+
+
 
 
 
@@ -3855,6 +3872,12 @@ void RigControlMainWindow::readTraceLogFlag()
     rigStateDetails->traceCommsFlag = config.value("TraceLog", false).toBool();
     config.endGroup();
 
+    if (radio)
+    {
+        radio->setTraceComms(rigStateDetails->traceCommsFlag);
+    }
+
+
     ui->actionTraceComms->setChecked(rigStateDetails->traceCommsFlag);
 }
 
@@ -3863,7 +3886,12 @@ void RigControlMainWindow::saveTraceLogFlag(bool state)
 
     // set state of hamlib commms tracing
 
-    //radio->setTraceComms(state);
+    rigStateDetails->traceCommsFlag = state;
+    if (radio)
+    {
+        radio->setTraceComms(state);
+    }
+
 
     // save to ini for restart
 
@@ -3923,10 +3951,6 @@ void RigControlMainWindow::sendRadioListLogger(const QStringList &availRadios)
 
 void RigControlMainWindow::addBandListToRigCache(const QString radioName, const QStringList& supBandList)
 {
-
-    //PresetFreq presetFreq;
-    //FreqPresetDialog::checkPreviousVersionIniFile(presetFreq, bands);
-    //FreqPresetDialog::readSettings(presetFreq, bands);
 
     if (!supBandList.isEmpty() && !appName.isEmpty())
     {
@@ -4097,24 +4121,7 @@ void RigControlMainWindow::sendTransVertStatusToLog(bool status)
 }
 
 
-/*
-void RigControlMainWindow::sendTransVertOffsetToLogger(QString transvertName)
-{
-    if (!appName.isEmpty())
-    {
-        Frequency f = currentRadio->transVertSettings.value(transvertName)->transVertOffset;
-        logMessage(QString("Send Transvert Offset to logger = %1%2")
-                   .arg(currentRadio->transVertEnable ? "-" : "+")
-                   .arg(f.traceStr()));
-        PubSubName psname(currentRadio->radioName);
-        msg->rigCache.setTransverterOffset(psname, currentRadio->transVertSettings.value(transvertName)->transVertOffset);
-        //msg->rigCache.publish();
-    }
 
-
-
-}
-*/
 void RigControlMainWindow::sendTransVertSwitchToLogger(const QString &swNum)
 {
     if (!appName.isEmpty())
@@ -4246,7 +4253,7 @@ void RigControlMainWindow::onLaunchSetup()
     if (setupRadio->exec() == QDialog::Accepted)
     {
         if (!setupRadio->listOfRadioNameChanges.isEmpty() ||
-            !setupRadio->listOfRadioNameChanges.isEmpty())
+            !setupRadio->listOfRadiosDataChanged.isEmpty())
         {
             updateRigDetailsCache();
             if (!appName.isEmpty())
