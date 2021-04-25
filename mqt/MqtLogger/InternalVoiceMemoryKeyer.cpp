@@ -1,4 +1,6 @@
 #include "base_pch.h"
+#include "sbdriver.h"
+#include "keyerlog.h"
 #include "InternalVoiceMemoryKeyer.h"
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
@@ -8,7 +10,7 @@ InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyer
 
 InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
 {
-
+    SoundSystemDriver::sbdvp_unload();
 }
 void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
 {
@@ -29,23 +31,72 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
 }
 void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
 {
+    Q_UNUSED(numButtons)
+    sblog = true;
 
+    QString errmess;
+    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( errmess, 48000, 0, 0, 0 ,0 ) )
+    {
+       trace( "sbdvp_init failed! " + errmess );
+    }
+    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0);  // for now, set everything to 0db
+
+    //connect( SoundSystemDriver::getSbDriver(), &SoundSystemDriver::recpbFinished, this, )
+
+    for (int i = 0; i < numButtons; i++)
+    {
+        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(i);
+
+        QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::Internal] + ".ini";
+        QSettings config(inifileName, QSettings::IniFormat);
+        config.beginGroup("button" + QString::number(i));
+
+        config.setValue("messageDuration", msgLen);
+
+        config.endGroup();
+    }
 }
 
 void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
 {
     // play message - we need a PTT/NoPtt switch
+    QString fileName;
+    fileName = QString("CQF%1.WAV").arg(msgNum);
+
+    if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
+    {
+
+    }
+
 }
 
 void InternalVoiceMemoryKeyer::stopMsg()
 {
-    // stop playing message
+    // stop recording/playing message
+    SoundSystemDriver::getSbDriver() ->stopDMA();
+
 }
+
 
 void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
 {
     // execute recording from params dialog
     // button number and filename are in vkParam
+
+    // Can we work it to use space bar as PTT for recording?
+    QString fileName = QString("CQF%1.WAV").arg(vkParam->getvmButtonNum());
+    SoundSystemDriver::getSbDriver() ->record_file( fileName );
+
+    int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getvmButtonNum());
+    vkParam->setVmDuration(msgLen);
+
+    QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
+    QSettings config(inifileName, QSettings::IniFormat);
+    config.beginGroup("button" + QString::number(vkParam->getvmButtonNum()));
+
+    config.setValue("messageDuration", vkParam->getVmDuration());
+
+    config.endGroup();
 }
 
 bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
@@ -84,5 +135,5 @@ void InternalVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
 void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
 {
-
+    Q_UNUSED(onOff)
 }

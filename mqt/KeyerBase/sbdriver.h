@@ -80,6 +80,7 @@ public:
 
       void setVolumeMults(int record, int replay, int passThrough);
 
+      int getMessageLen(int buttonNumber);
       bool dofile( int i, int clipRecord = 0 );
       void stoprec();
       void record_file( const QString &filename );
@@ -104,11 +105,12 @@ public:
       bool sbdvp_init(QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
 private slots:
       void interruptOK();
-      void setActionTime1();
+      void outputFinished();
       void actionQueueFinished();
       void setVU(unsigned int a, unsigned int b, unsigned int c);
 
 signals:
       void ptt(bool);
+      void recpbFinished();
 };
 #endif

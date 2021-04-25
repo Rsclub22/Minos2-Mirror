@@ -67,7 +67,7 @@ private slots:
 
 signals:
     void interruptOK();
-    void setActionTime1();
+    void ssOutputFinished();
     void actionQueueFinished();
     void setVU(unsigned int a, unsigned int b, unsigned int c);
 

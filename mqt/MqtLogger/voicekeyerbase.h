@@ -15,6 +15,7 @@
 #define VOICEKEYERBASE_H
 
 #include <QObject>
+#include <QSharedPointer>
 
 class VoiceKeyerBase;
 
@@ -83,15 +84,15 @@ public:
     int getvmButtonNum(){return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
 
-    VoiceKeyerBase *getVkBase() const{return vkBase;}
-    void setVkBase(VoiceKeyerBase *value){vkBase = value;}
+    QSharedPointer<VoiceKeyerBase> getVkBase() const{return vkBase;}
+    void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
 
     void clear();
 
 private:
 
     QString type;
-    VoiceKeyerBase *vkBase = nullptr;
+    QSharedPointer<VoiceKeyerBase> vkBase;
     QString vmName;
     int vmDuration;
     bool vmRepeatFlag;

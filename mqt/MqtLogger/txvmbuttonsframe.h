@@ -113,7 +113,7 @@ private:
     Ui::TxVmButtonsFrame *ui;
 
 
-    VoiceKeyerBase* txVoiceKeyer;
+    QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
     QList<QShortcut *> shortCutKeyList;

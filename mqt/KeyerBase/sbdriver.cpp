@@ -106,7 +106,7 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
    ptr = nullptr;
    if ( sblog )
    {
-      trace( "dofile(" + QString::number( i ) + ")" + "play = " + makeStr( play ) );
+      trace( "dofile(" + QString::number( i ) + ")" + " play = " + makeStr( play ) );
    }
    ihand = i;
 
@@ -318,6 +318,16 @@ bool SoundSystemDriver::stopMicPassThrough()
 void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough)
 {
     soundSystem->setVolumeMults(record, replay, passThrough);
+}
+
+int SoundSystemDriver::getMessageLen(int buttonNumber)
+{
+    if (buttonNumber < recfil.size())
+    {
+        dvkFile *d = recfil[buttonNumber];
+        return (d->fsample + d->sampleRate)/d->sampleRate;
+    }
+    return 0;
 }
 
 bool SoundSystemDriver::sbdvp_init( QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength, int filterCorner )
@@ -553,7 +563,7 @@ SoundSystemDriver::SoundSystemDriver()
 {
    soundSystem = RtAudioSoundSystem::createSoundSystem();
    connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
-   connect(soundSystem, &RtAudioSoundSystem::setActionTime1, this, &SoundSystemDriver::setActionTime1);
+   connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
    connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
    connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::setVU);
 }
@@ -573,12 +583,16 @@ void SoundSystemDriver::interruptOK()
 
 }
 
-void SoundSystemDriver::setActionTime1()
+void SoundSystemDriver::outputFinished()
 {
     KeyerAction * sba = KeyerAction::getCurrentAction();
      if ( sba )
      {
         sba->actionTime = 1;    // force to stop
+     }
+     else
+     {
+         emit recpbFinished();
      }
 }
 void SoundSystemDriver::actionQueueFinished()
@@ -591,7 +605,8 @@ void SoundSystemDriver::actionQueueFinished()
 }
 void SoundSystemDriver::setVU(unsigned int a, unsigned int b, unsigned int c)
 {
-    WinVUCallback( a, b, c );
+    if (WinVUCallback)
+        WinVUCallback( a, b, c );
 
 }
 //==============================================================================

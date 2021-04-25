@@ -277,11 +277,11 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     if ( status == RTAUDIO_INPUT_OVERFLOW)
     {
-        trace("Stream input underflow detected.");
+        trace("Stream input overflow detected.");
     }
     if (status == RTAUDIO_OUTPUT_UNDERFLOW)
     {
-        trace("Stream output overflow detected.");
+        trace("Stream output underflow detected.");
     }
 
 
@@ -408,8 +408,9 @@ void RtAudioSoundSystem::startOutput()
 
 void RtAudioSoundSystem::stopOutput()
 {
+    trace("stopOutput");
     outputEnabled = false;
-    emit setActionTime1();
+    emit ssOutputFinished();
     emit setVU(0, 0, 0);
 }
 void RtAudioSoundSystem::startInput()

@@ -977,17 +977,6 @@ KeyerAction::~KeyerAction()
    actionTime = -1;
 }
 
-/*static*/ KeyerAction *KeyerAction::getCurrentAction()
-{
-   if ( currentAction.begin() == currentAction.end() )
-      return nullptr;
-   return *currentAction.begin();
-}
-
-KeyerAction *KeyerAction::getNextAction()
-{
-   return KeyerAction::currentAction.next_element( this );
-}
 
 void KeyerAction::checkTimer()
 {

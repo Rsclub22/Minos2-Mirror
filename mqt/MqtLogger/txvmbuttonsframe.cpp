@@ -3,11 +3,6 @@
 
 
 const int NO_VM_BUTTON_ON = -1;
-const int VM_BUTTON_1_ON = 0;
-const int VM_BUTTON_2_ON = 1;
-
-
-
 
 const QStringList vmButtonShortCutKeys = {
                                     "Shift+F1", "Shift+F2",
@@ -179,7 +174,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
     {
         trace(QString("[Voice Keyer] Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
-        txVoiceKeyer = voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum());
+        txVoiceKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
         if (txVoiceKeyer)
         {
 
@@ -195,6 +190,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
                vmKeyParamList.append(vmData);
                setRunButtonText(i, vmData.getVmName());
            }
+           txVoiceKeyer->voiceKeyerInit(voiceMemButtonList.count());
         }
 
     }
@@ -327,12 +323,12 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
 }
 
-void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
+void TxVmButtonsFrame::clearActionSelected(int /*buttonNumber*/)
 {
 
 }
 
-void TxVmButtonsFrame::runButActivated(int buttonNumber)
+void TxVmButtonsFrame::runButActivated(int /*buttonNumber*/)
 {
 
 }
