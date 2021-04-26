@@ -34,7 +34,7 @@ SentSpotData::SentSpotData(qint64 _rxTime, QString _spotTime,
 
 }
 
-void SentSpotData::operator = (const SentSpotData& sspd)
+SentSpotData& SentSpotData::operator = (const SentSpotData& sspd)
 {
     rxTime = sspd.rxTime;
     spotTime = sspd.spotTime;
@@ -44,6 +44,7 @@ void SentSpotData::operator = (const SentSpotData& sspd)
     spotComment = sspd.spotComment;
     sentOk  = sspd.sentOk;
     reason = sspd.reason;
+    return *this;
 }
 
 

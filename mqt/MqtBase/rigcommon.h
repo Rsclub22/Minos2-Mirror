@@ -66,12 +66,44 @@ public:
     QString band;
     Frequency radioFreq;
     Frequency targetFreq;
-    Frequency fLow;
-    Frequency fHigh;
     Frequency transVertOffset;
     QString antSwitchNum = "0";
     QString transSwitchNum = "";
+    bool markForDeletion = false;
 
+TransVertParams& operator=(const TransVertParams &tvp)
+{
+
+    transVertName = tvp.transVertName;
+    band = tvp.band;
+    radioFreq = tvp.radioFreq;
+    targetFreq = tvp.targetFreq;
+    transVertOffset = tvp.transVertOffset;
+    antSwitchNum = tvp.antSwitchNum;
+    transSwitchNum = tvp.transSwitchNum;
+    markForDeletion = tvp.markForDeletion;
+
+
+
+    return *this;
+}
+
+bool notEqual(const QSharedPointer<TransVertParams> tvp)
+{
+    if (transVertName != tvp->transVertName ||
+        band != tvp->band ||
+        radioFreq != tvp->radioFreq ||
+        targetFreq != tvp->targetFreq ||
+        transVertOffset != tvp->transVertOffset ||
+        antSwitchNum != tvp->antSwitchNum ||
+        transSwitchNum != tvp->transSwitchNum ||
+        markForDeletion != tvp->markForDeletion)
+    {
+        return true;
+    }
+
+    return false;
+}
 
 };
 
@@ -106,6 +138,39 @@ public:
 
         return *this;
     }
+
+    bool operator==(const SupportBands &sbd)
+    {
+        bool state = true;
+
+        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
+        {
+            if (supportBands.value(i.key()) != i.value())
+            {
+                state = false;
+                break;
+            }
+        }
+
+        return state;
+    }
+
+    bool operator!=(const SupportBands &sbd)
+    {
+        bool state = false;
+
+        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
+        {
+            if (supportBands.value(i.key()) != i.value())
+            {
+                state = true;
+                break;
+            }
+        }
+
+        return state;
+    }
+
 
 
     void clear()
@@ -146,8 +211,39 @@ public:
 
 };
 
+class EnableDisableCatFeature
+{
+public:
+    EnableDisableCatFeature(){};
+
+    bool operator ==(const EnableDisableCatFeature &edcf);
+    bool operator !=(const EnableDisableCatFeature &edcf);
+    EnableDisableCatFeature& operator =(const EnableDisableCatFeature &edcf);
+
+    bool enableDisplay = false;
+    bool ritEnable = false;
+    bool sMeterEnable = true;
+    bool volumeEnable = true;
+    bool voiceMemEnable = true;
+    bool cWMemEnable = true;
+    bool catEnable = true;
+
+};
 
 
+
+
+class RadioNameChange
+{
+public:
+    RadioNameChange(){};
+
+
+
+    QString newName;
+    QString oldName;
+
+};
 
 
 
@@ -159,77 +255,28 @@ class scatParams
 
 public:
 
-  static void copyRig(scatParams* srce, scatParams &dest)
-  {
+  scatParams(){}
 
-      dest.radioName = srce->radioName;
-      dest.radioNumber = srce->radioNumber;
-      dest.comport = srce->comport;
-      dest.rigMfg_Name = srce->rigMfg_Name;
-      dest.rigModel = srce->rigModel;
-      dest.rigModelName = srce->rigModelName;
-      dest.rigModelNumber = srce->rigModelNumber;
-      dest.pollInterval = srce->pollInterval;
-      dest.civAddress = srce->civAddress;
-      dest.baudrate = srce->baudrate;
-      dest.parity = srce->parity;
-      dest.stopbits = srce->stopbits;
-      dest.databits = srce->databits;
-      dest.handshake = srce->handshake;
-      dest.forceDtr = srce->forceDtr;
-      dest.forceRts = srce->forceRts;
-      dest.portType = srce->portType;
-      dest.advancedCommsFlag = srce->advancedCommsFlag;
-      dest.networkAdd = srce->networkAdd;
-      dest.networkPort = srce->networkPort;
-      dest.enableCAT = srce->enableCAT;
-      dest.enablePTT = srce->enablePTT;
-      dest.pttSerialPort = srce->pttSerialPort;
-      dest.rigCtldEnable = srce->rigCtldEnable;
-      dest.startMinosRigCtld = srce->startMinosRigCtld;
-      dest.rigCtldNetworkAdd = srce->rigCtldNetworkAdd;
-      dest.rigCtldNetworkPort = srce->rigCtldNetworkPort;
-      dest.supportBands = srce->supportBands;
-      dest.mgmMode = srce->mgmMode;
-      dest.pttType = srce->pttType;
-      dest.antSwitchAvail = srce->antSwitchAvail;
-      dest.ritSupported = srce->ritSupported;
-      dest.ritEnable = srce->ritEnable;
-      dest.radioSupBands = srce->radioSupBands;
-      dest.radioTransSupBands = srce->radioTransSupBands;
-      dest.transVertEnable = srce->transVertEnable;
-      dest.enableTransSwitch = srce->enableTransSwitch;
-      dest.enableLocTVSwMsg = srce->enableLocTVSwMsg;
-      dest.locTVSwComport = srce->locTVSwComport;
+  bool operator ==(const scatParams radParams);
+  bool compareEqual(QSharedPointer<scatParams> radParams);
+  bool compareNotEqual(QSharedPointer<scatParams> radParams);
+  void scatParamsCopy(const QSharedPointer<scatParams> srce);
 
-      dest.transVertNames.clear();
-      if (srce->transVertNames.count() > 0)
-      {
-          for (int i = 0; i < srce->transVertNames.count(); i++)
-          {
-              dest.transVertNames.append(srce->transVertNames[i]);
-          }
-      }
-      dest.numTransverters = srce->numTransverters;
-      dest.transVertSettings.clear();
-      if (srce->numTransverters > 0)
-      {
-          for (int i = 0; i <srce->numTransverters; i++)
-          {
-              dest.transVertSettings.append(srce->transVertSettings[i]);
-          }
-      }
+  bool compareStringList(QStringList &sl1, QStringList &sl2);
+  bool transVertSettingsNotEqual(const QMap<QString, QSharedPointer<TransVertParams> > tvs2);
 
-  }
+
 
 
   QString radioName;    //Minos Radio Name
+  QString previousRadioName;
+  bool markForDeletion = false;
   QString radioNumber;  // Minos Radio Number
-  QString comport; /**<  serial port device*/
+  QString comport;
   QString rigMfg_Name;
   QString rigModelName;
   QString rigModel;       // used as key to select radio
-  int rigModelNumber = 0;
+  int rigModelNumber = 1;
   QString pollInterval = RIG_DEFAULT_POLLINTERVAL;
   QString civAddress;
   int baudrate = 0; /**<  serial port baudrate*/
@@ -240,13 +287,12 @@ public:
   int forceDtr = 0;
   int forceRts = 0;
   int portType = 0;
-  bool advancedCommsFlag;
+  bool advancedCommsFlag = false;
   QString networkAdd;
   QString networkPort;
-  bool enableCAT = false;
   bool enablePTT  = false;
   QString pttSerialPort;
-  int pttType;
+  int pttType = 0;
   bool rigCtldEnable = false;
   bool startMinosRigCtld = true;
   QString rigCtldNetworkAdd;
@@ -254,18 +300,22 @@ public:
   QString mgmMode = "USB";
   bool antSwitchAvail = false;
   bool ritSupported = false;
-  bool ritEnable = false;
+
   bool transVertEnable  = false;
-  bool volAvail = false;
   SupportBands supportBands;        // for non hamlib radios
-  QStringList transVertNames;
-  int numTransverters = 0;
+  //QStringList transVertNames;
+  //int numTransverters = 0;
+  QMap<QString, QSharedPointer<TransVertParams> > transVertSettings;
   bool enableTransSwitch = false;
   bool enableLocTVSwMsg = false;
   QString locTVSwComport = "";
   QStringList radioSupBands;  // bands supported by radio
   QStringList radioTransSupBands; // band supported by radio and transverters
-  QVector<TransVertParams*> transVertSettings;
+
+
+  EnableDisableCatFeature enableDisableCatFeature;
+
+
 
 
 };
@@ -281,6 +331,7 @@ public:
 
 
 void fillPortsInfo(QComboBox* comportSel);
-
+void getListOfComports(QStringList &listOfAvailComports);
+bool isComportAvail(const QString comport);
 
 #endif // RIGCOMMON_H

@@ -170,8 +170,8 @@ public:
      selTransverterNum = NO_TRANSVERTER_NUM;
      mgmModeFlag = false;
      radioRitOn = false;
-     ritMaxKHzFreq = MAX_RITFREQ;
      ritEnable = false;
+     ritMaxKHzFreq = MAX_RITFREQ;
      ritKHzFlag = false;
      radioCommsOK = false;
      rigErrorFlag = false;
@@ -201,8 +201,8 @@ public:
   bool mgmModeFlag;
   QStringList mgmModes;
   bool radioRitOn;
-  bool ritEnable;
   ShortFreq rRitFreq;
+  bool ritEnable;
   int ritMaxKHzFreq;
   bool ritKHzFlag;
   bool radioCommsOK;
@@ -251,7 +251,7 @@ private:
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 
-    RigSetupDialog *setupRadio;
+
     RigBase  *radio;
     RigFactory* rigFactory;
 
@@ -269,73 +269,28 @@ private:
     int radioIndex;
     QTimer *pollTimer;
     class QTimer LogTimer;
-    //int pollTime;
-    //bool rigErrorFlag;
+
     bool cmdLockFlag;
-    //bool traceCommsFlag;
-    // data from rigctld
 
-    //QString rigctld_radioNumber;
-    //int irigctld_radioNumber = 0;
-    //QString rigctld_radioName;
-    //QString rigctld_radioMfg;
-    //QTimer *RigCtldStatusTimer;
-    //int rigCtldConnectDelay;
-
-    // data from logger
-    //Frequency logger_freq;
-    //QString slogMode;
-    //QString selRadioMode;   // onSelectRadio mode from logger at startup
-    //Frequency selRadioFreq;
-   // QString selBand;
-    //rmode_t logMode;
-    //QString selTvBand;      // selected transverter band radio
     int selTransverterNum;
     QString transVertSwNum;
     SerialTVSwitch *serialTVSw = nullptr;
-    //bool logRitOn;
-    //bool supVolume;     // radio supports volume
-    //bool supSignalStrength;
+
 
 
     const int PASSBAND_NOCHANGE = -1;
 
     QVector<QSharedPointer<BandInfo>  > bands;
 
+    QSharedPointer<scatParams> currentRadio;
+    QString currentRadioName;
+    //QStringList availRadios;
 
 
-    // data from radio
-    //Frequency rfrequency;       // read frequency
-    //MODE rmode;          // read radio mode
-    //pbwidth_t rwidth;        // read radio rx bw
 
-    //VFO curVfo;
-    //bool supportGetVfo = false;
-    //bool supportSetVfo = false;
-    //Frequency curVfoFrq;
-    //Frequency curTransVertFrq;
-    //MODE curMode;
-    //QString sCurMode;
-    //bool mgmModeFlag;
-    //QStringList  mgmModes;
-    //ShortFreq rRitFreq;
-    //int ritMaxKHzFreq;
-    //bool ritKHzFlag;
-    //int curVol;
-    //int curSignalStrength = 0;
 
     bool curPttStatus;
 
-
-    // rit functions supported by current radio
-
-    //bool radioSupGetRit;
-   // bool radioSupSetRit;
-    //bool radioSupGetRitState;
-    //bool radioSupSetRitState;
-    //bool radioRitOn;
-
-    //bool ritEnable;         // flag to enable rit
 
 
 
@@ -392,7 +347,7 @@ private:
     void sendStatusToLogDisConnected();
     void sendStatusToLogConnected();
     void sendStatusToLogError(QString);
-    void sendTransVertOffsetToLogger(int tvNum);
+    //void sendTransVertOffsetToLogger(QString transvertName);
     void sendTransVertSwitchToLogger(const QString &swNum);
     void sendFreqToLog(const Frequency &freq);
     void sendModeToLog(QString mode);
@@ -425,7 +380,7 @@ private:
 
     void testBoxesVisible(bool visible);
 
-    void upDateRadio();
+    void upDateRadio(QString radioName);
     //void loadBands();
 
     void sendTransVertSwitchToComPort(const QString &swNum);
@@ -464,8 +419,8 @@ private:
     void setRitGetSetFreqIndicatorVisible(bool state);
     void ritSetFreqIndicatorToggle(bool state);
     void ritGetFreqIndicatorToggle(bool state);
-    void saveRitEnableChk(bool state);
-    bool readRitEnableChk();
+    //void saveRitEnableChk(bool state);
+    //bool readRitEnableChk();
 
     void getRigctldNames(QString address, quint16 port);
     void clrRigctldNames();
@@ -478,13 +433,13 @@ private:
     void clearTransVertSupport();
 
     bool readTestStandAloneFlag();
-    void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
+    //void buildSupBandList(int radioIdx, int radioModelNumber, QStringList &bandList);
     void buildSupportedRadioBands(int radioIdx, int radioModelNumber, QStringList& supBandList);
     bool findSupRadioBand(const QString band, const QStringList& supBandsList);
-    bool findSupTransBand(const QString band, const int radioIdx);
+    //bool findSupTransBand(const QString band, const int radioIdx);
     //void sendBandListLogger(const int radioIdx, const QStringList &supBandList);
 
-    void initCacheData();
+    //void initCacheData();
 
     void addVolStatusToRigCache(bool status);
     void sendTransVertEnabled(bool status);
@@ -508,7 +463,7 @@ private:
 
 
     MODE mapQStrMode(QString mode);
-    void updateCurrentRadioFromAvailRadios(int ridx);
+    void updateCurrentRadioFromAvailRadios(QString radioName);
     MODE convertQStringToMode(QString modeStr);
     QString convertModeToQString(MODE m);
 
@@ -516,7 +471,7 @@ private:
 
     void setSmeterVisible(bool visible);
 
-    void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
+    //void addBandListToRigCache(const int radioIdx, const QStringList &supBandList);
 
 
 
@@ -531,8 +486,8 @@ private:
 
 
 
-    void getAndSendTransVertSwNum(int transVerterNum);
-    bool findTransverter(int &transVerterNum, QString &transVerterBand, QString band);
+    void getAndSendTransVertSwNum(QString transvertName);
+    bool findTransverter(QString &transVerterBand, QString band);
 
     void setPttIndOnOff(bool state);
     void setpttIndVisible(bool visible);
@@ -560,8 +515,8 @@ private:
     void checkSupportVolume();
     void checkSupportSMeter();
     void checkSupportRit();
-    void checkSupportVoiceMemory();
-    void checkSupportCwKeyerMemory();
+    bool checkSupportVoiceMemory();
+    bool checkSupportCwKeyerMemory();
     void checkSupportPtt();
 
 
@@ -570,6 +525,24 @@ private:
     void addVoiceMemStatusToRigCache(bool status);
     void addCwKeyerMemoryStatusToRigCache(bool status);
     void addPTTEnabledStatusToRigCache(bool status);
+    QString getRigCtldExePath();
+
+    void readTranVerterSetting(QSharedPointer<scatParams> radio, QString transvertName, QSettings &config);
+    void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
+    void checkIniFileVersion();
+    void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
+
+    void getAvailRadiosList(QStringList &availRadios);
+    void readCurrentRadio(QString &currentRadioName);
+
+    void saveCurrentRadio(const QString currentRadioName);
+    void buildSupportedRadioBands(QSharedPointer<scatParams> radioData, QStringList &supBandList);
+    bool findSupTransBand(const QString band, const QSharedPointer<scatParams> radioData);
+    void buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList);
+    void initCacheData(QStringList &availRadios);
+    void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
+    void checkSupportCatFeatures();
+    bool availRadiosContains(const QString radioName);
 private slots:
 
     void onStdInRead(QString);
@@ -597,9 +570,9 @@ private slots:
     void setRitFreq(ShortFreq ritFreq);
     void setRitLogStatus(bool status);
 
-    void sendRadioListLogger();
+    void sendRadioListLogger(const QStringList &availRadios);
 
-    void ritEnableChecked(int state);
+    //void ritEnableChecked(int state);
     void updateRigDetailsCache();
 
 

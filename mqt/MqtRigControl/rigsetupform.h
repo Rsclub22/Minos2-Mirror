@@ -2,6 +2,7 @@
 #define RIGSETUPFORM_H
 
 #include <QWidget>
+#include "base_pch.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
 #include "minosNetUtils.h"
@@ -29,35 +30,27 @@ public:
 };
 
 
+
 class RigSetupForm : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
-                          const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _radioTab, bool hfFlag_, QWidget *parent = nullptr);
+    explicit RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
+                          const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _radioTab, bool hfFlag_, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
-    bool radioValueChanged = false;
-    bool radioNameChanged = false;
 
 
-    scatParams* getRadioData();
+
+    QSharedPointer<scatParams> getRadioData();
 
     QVector<QSharedPointer<BandInfo> > bands;
 
+    QMap<QString, TransVertSetupForm*> transVertTab;
 
 
-
-
-    QVector<TransVertSetupForm*> transVertTab;
-
-    //QStringList addedTransVertTabs;     // tracked edited data
-    //QStringList removedTransVertTabs;
-    //QStringList renamedTransVertTabs;   // old radio names
-    //QStringList availTransVerters;
-    //int numAvailTransVerters;
     void addTransVertTab(int tabNum, QString tabName, bool tabChanged);
 
     QString getRadioModel();
@@ -111,27 +104,20 @@ public:
     void CIVEditVisible(bool visible);
     void transVertTabEnable(bool visible);
 
-    bool getTransVertRemovedFlag();
+
     void transVertTabRemove(int tabNum);
-    void setTransVertRemovedFlag(bool value);
+
 
     void setTransVertTabText(int tabNum, QString tabName);
 
     void setAppName(QString name);
-
-    //void buildSupportedRadioBands(int radioModelNumber);
-    //void buildSupBandList();
-
-    //bool findSupRadioBand(const QString band);
-    //bool findSupTransBand(const QString band);
-
 
 
     void setEnableRigDataEntry(bool enable);
 
     void setupRadioModel(QString radioModel);
 
-    void loadTransVertTab(int tabNum);
+    void loadTransVertTab(QString transvertName);
     bool getEnableTransVertSw();
     void setEnableTransVertSw( bool b);
     void setEnableTransVertSwBoxVisible( bool visible);
@@ -181,6 +167,7 @@ public:
     void setPttComport(QString p);
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
+    void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
 
 
 public slots:
@@ -239,6 +226,14 @@ private slots:
     void onPttComportSelActivated(int idx);
 
 
+
+    void onEnableRitClicked();
+    void onEnableSMeterClicked();
+    void onEnableVolClicked();
+    void onEnableCatPttClicked();
+    void onEnableVoiceTxMemClicked();
+    void onEnableCwTxMemClicked();
+    void onEnableCatFeaturesClicked();
 private:
 
 
@@ -248,7 +243,7 @@ private:
     RigFactory *rigFactory;
 
 
-    scatParams *radioData;
+    QSharedPointer<scatParams> radioData;
 
     QLogTabWidget* ui_RadioTab;
 
@@ -257,7 +252,7 @@ private:
 
     bool hfFlag = false;
 
-    bool transverterRemoved;
+
     QString currentRadioName;
 
     QList<QCheckBox*> allSupBandsChkBoxList;
@@ -298,6 +293,9 @@ private:
     void setSupportBandFlag(int i, bool checked);
 
 
+
+
+    void setEnableDisableFeaturesGroupVisible(bool visible);
 
 };
 

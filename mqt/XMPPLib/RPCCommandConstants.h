@@ -166,6 +166,7 @@ static const QString rigControlCategory    ("RigControl");
 static const QString rigStateCategory      ("RigState");
 static const QString rigDetailsCategory    ("RigDetails");
 static const QString rigControlRadioList   ("RadioList");
+static const QString rigControlChangeList  ("RigChangeList");
 static const QString rigControlBandList    ("BandList");
 static const QString rigControlStatus      ("RigStatus");
 static const QString rigControlErrorMsg    ("ErrorMsg");

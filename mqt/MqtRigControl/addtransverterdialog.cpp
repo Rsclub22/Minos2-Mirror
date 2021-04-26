@@ -1,3 +1,12 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      Rig Control
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2018 - 2021
+//
+//
+/////////////////////////////////////////////////////////////////////////////
 #include "addtransverterdialog.h"
 #include "ui_addtransverterdialog.h"
 #include "BandList.h"
@@ -28,7 +37,7 @@ void AddTransVerterDialog::loadBandSel()
     {
         if (!checkBandUsed(bands[i]->name(), transVerterNames))
         {
-            if (bands[i]->name() != "28 MHz")
+            if (bands[i]->getType() != HF_BANDTYPE)
             {
                 ui->bandSel->addItem(bands[i]->name());
             }

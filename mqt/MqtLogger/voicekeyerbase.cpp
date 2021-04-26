@@ -24,10 +24,11 @@ VoiceKeyerCommonParams::~VoiceKeyerCommonParams()
 
 }
 
-void VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
+VoiceKeyerCommonParams& VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
 {
     numButtons = vkcp.numButtons;
     comport = vkcp.comport;
+    return *this;
 }
 
 bool VoiceKeyerCommonParams::operator == (const VoiceKeyerCommonParams& vkcp)
@@ -73,7 +74,7 @@ void VoiceKeyerParams::clear()
     vmButtonNum = -1;   // None
 }
 
-void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
+VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
 {
     type = vkp.type;
     vmName = vkp.vmName;
@@ -82,6 +83,7 @@ void VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     vmDuration = vkp.vmDuration;
     vmRepeatPauseDur = vkp.vmRepeatPauseDur;
     vmButtonNum = vkp.vmButtonNum;
+    return *this;
 }
 
 

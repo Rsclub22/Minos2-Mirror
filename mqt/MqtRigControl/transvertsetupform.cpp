@@ -22,13 +22,17 @@
 #include <QCheckBox>
 
 
-TransVertSetupForm::TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent) :
+TransVertSetupForm::TransVertSetupForm(QSharedPointer<scatParams> _radioData, QString _bandName, const QVector<QSharedPointer<BandInfo> > _bands, QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::transVertSetupForm)
+    ui(new Ui::transVertSetupForm),
+    radioData(_radioData),
+    bandName(_bandName),
+    bands(_bands)
 {
 
+
     ui->setupUi(this);
-    transVertData = _transvertData;
+
 
     radioFreqEdit = new FocusWatcher(ui->radioFreq);
     targetFreqEdit = new FocusWatcher(ui->targetFreq);
@@ -46,23 +50,27 @@ TransVertSetupForm::TransVertSetupForm(TransVertParams* _transvertData, QWidget 
 
 
 
-void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, QFocusEvent * /*event*/)
+void TransVertSetupForm::radioFreqEditfocusChange(QObject *obj, bool fIn, QFocusEvent *event)
 {
-    if (fIn)
+    Q_UNUSED(obj)
+    Q_UNUSED(fIn)
+    Q_UNUSED(event)
+
+    if (QApplication::focusWidget() == ui->radioFreq || QApplication::focusWidget() == ui->targetFreq)
     {
-        //ui->radioFreq->selectAll();
+        return;
     }
     else
     {
         // may need to compare real freq here!
-        if (Frequency(ui->radioFreq->text().remove('.')) != transVertData->radioFreq)
+        if (Frequency(ui->radioFreq->text().remove('.')) != radioData->transVertSettings.value(bandName)->radioFreq)
         {
 
             if (ui->radioFreq->text().isEmpty() || ui->radioFreq->text() == "0.0")
             {
-                transVertData->transVertOffset.clear();
+                radioData->transVertSettings.value(bandName)->transVertOffset.clear();
                 // display
-                setOffsetFreqLabel(transVertData->transVertOffset);
+                setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
                 return;
             }
             QString txf = ui->radioFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -86,22 +94,26 @@ void TransVertSetupForm::radioFreqEditfocusChange(QObject * /*obj*/, bool fIn, Q
     }
 }
 
-void TransVertSetupForm::targetFreqEditfocusChange(QObject * /*obj*/, bool fIn, QFocusEvent * /*event*/)
+void TransVertSetupForm::targetFreqEditfocusChange(QObject *obj , bool fIn, QFocusEvent *event)
 {
-    if (fIn)
+    Q_UNUSED(obj)
+    Q_UNUSED(fIn)
+    Q_UNUSED(event)
+
+    if (QApplication::focusWidget() == ui->radioFreq || QApplication::focusWidget() == ui->targetFreq)
     {
-        //ui->targetFreq->setSelection(0, ui->targetFreq->text().count());
+        return;
     }
     else
     {
         // may need to compare real freq here!
-        if (Frequency(ui->targetFreq->text().remove('.')) != transVertData->targetFreq) // changed?
+        if (Frequency(ui->targetFreq->text().remove('.')) != radioData->transVertSettings.value(bandName)->targetFreq) // changed?
         {
             if (ui->targetFreq->text().isEmpty() || ui->targetFreq->text() == "0.0")
             {
-                transVertData->transVertOffset.clear();
+                radioData->transVertSettings.value(bandName)->transVertOffset.clear();
                 // display
-                setOffsetFreqLabel(transVertData->transVertOffset);
+                setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
                 return;
             }
             QString targetf = ui->targetFreq->text().trimmed().remove(QRegularExpression("^[0]*"));
@@ -149,18 +161,18 @@ void TransVertSetupForm::calcOffset()
 
     // convert radio freq
     txf = convertFreqToFullDigit(txf);
-    transVertData->radioFreq = Frequency(txf);
+    radioData->transVertSettings.value(bandName)->radioFreq = Frequency(txf);
     // convert target freq
     targetf = convertFreqToFullDigit(targetf);
-    transVertData->targetFreq = Frequency(targetf);
+    radioData->transVertSettings.value(bandName)->targetFreq = Frequency(targetf);
 
     // check target freq in band
-    if (transVertData->targetFreq >= transVertData->fLow && transVertData->targetFreq <= transVertData->fHigh)
+    if (freqInBand(radioData->transVertSettings.value(bandName)->targetFreq, bandName))
     {
-        transVertData->transVertOffset = transVertData->targetFreq - transVertData->radioFreq;
+        radioData->transVertSettings.value(bandName)->transVertOffset = radioData->transVertSettings.value(bandName)->targetFreq - radioData->transVertSettings.value(bandName)->radioFreq;
 
         // display
-        setOffsetFreqLabel(transVertData->transVertOffset);
+        setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
 
         transVertOffsetOk = true;
         transVertValueChanged = true;
@@ -168,12 +180,28 @@ void TransVertSetupForm::calcOffset()
     else
     {
         QMessageBox msgBox;
-        msgBox.setText(tr("Target Freq. is out of band for %1").arg(transVertData->band));
+        msgBox.setText(tr("Target Freq. is out of band for %1").arg(radioData->transVertSettings.value(bandName)->band));
         msgBox.exec();
         ui->targetFreq->setFocus();
         return;
     }
 
+}
+
+bool TransVertSetupForm::freqInBand(Frequency f, QString band)
+{
+    for (int i = 0; i < bands.count(); i++)
+    {
+        if (bands[i].data()->uk == band)
+        {
+            if (f >= bands[i].data()->fLow && f <= bands[i].data()->fHigh)
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
@@ -202,13 +230,13 @@ void TransVertSetupForm::setOffsetFreqLabel(Frequency f)
 void TransVertSetupForm::transVertSwNumSel()
 {
     QString numSel = ui->transVertSwNum->text().trimmed();
-    if (numSel != transVertData->transSwitchNum)
+    if (numSel != radioData->transVertSettings.value(bandName)->transSwitchNum)
     {
         QRegularExpression re = QRegularExpression(anchoredPattern("\\d*"));    // a digit (\d), zero or more times (*)
         QRegularExpressionMatch rem = re.match(numSel);
         if (rem.hasMatch())
         {
-            transVertData->transSwitchNum = numSel;
+            radioData->transVertSettings.value(bandName)->transSwitchNum = numSel;
             transVertValueChanged = true;
         }
         else

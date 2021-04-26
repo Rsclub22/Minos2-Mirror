@@ -16,15 +16,17 @@ class transVertSetupForm;
 
 
 
+
 class TransVertSetupForm : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TransVertSetupForm(TransVertParams* _transvertData, QWidget *parent = nullptr);
+    explicit TransVertSetupForm(QSharedPointer<scatParams> _radioData, const QString _bandName, const QVector<QSharedPointer<BandInfo> > _bands, QWidget *parent = nullptr);
 
 
     bool transVertValueChanged = false;
     bool transVertNameChanged = false;
+
 
     bool transVertOffsetOk = false;
 
@@ -44,10 +46,14 @@ public:
     void setLocTVSwComport(QString p);
     void setEnableTransVertSwBoxVisible(bool visible);
 
+    //QSharedPointer<TransVertParams> getTransVertData(){return transVertData;}
+    //void setTransVertData(QSharedPointer<TransVertParams> tvp){transVertData = tvp;}
 private:
 
     Ui::transVertSetupForm *ui;
-    TransVertParams *transVertData;
+    QSharedPointer<scatParams> radioData;
+    QString bandName;
+    const QVector<QSharedPointer<BandInfo> > bands;
 
     FocusWatcher *radioFreqEdit;
     FocusWatcher *targetFreqEdit;
@@ -56,6 +62,7 @@ private:
     bool targetFreqOK = false;
 
     void loadBandSel();
+    bool freqInBand(Frequency f, QString band);
 private slots:
     //void bandSelected();
     void calcOffset();

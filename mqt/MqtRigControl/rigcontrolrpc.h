@@ -18,6 +18,7 @@
 #include "RigCache.h"
 
 #include "base_pch.h"
+#include "rigcommon.h"
 
 class RigControlMainWindow;
 
@@ -34,6 +35,7 @@ public:
 
     void publishRadioNames(QStringList radios);
 
+    void publishListChangedRadioNames(QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges, QVector<QString> listOfRadiosDataChanged);
 signals:
     void setFreq(Frequency);
     void setBand(QString);

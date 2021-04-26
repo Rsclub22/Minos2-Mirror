@@ -28,7 +28,7 @@ public:
     explicit VoiceKeyerCommonParams();
     ~VoiceKeyerCommonParams();
 
-    void operator = (const VoiceKeyerCommonParams& vkcp);
+    VoiceKeyerCommonParams& operator = (const VoiceKeyerCommonParams& vkcp);
     bool operator == (const VoiceKeyerCommonParams& vkcp);
     bool operator != (const VoiceKeyerCommonParams& vkcp);
 
@@ -62,7 +62,7 @@ public:
 
     ~VoiceKeyerParams(){}
 
-    void operator = (const VoiceKeyerParams& vkp);
+    VoiceKeyerParams& operator = (const VoiceKeyerParams& vkp);
 
 
     QString getType(){return type;}

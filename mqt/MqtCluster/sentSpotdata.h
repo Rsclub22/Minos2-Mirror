@@ -26,7 +26,7 @@ public:
              Frequency _dxFreq, QString _dxCall,
              QString _dxLocator, QString comment, bool _sentOk, QString _reason);
 
-    void operator = (const SentSpotData& spd);
+    SentSpotData& operator = (const SentSpotData& spd);
 
     qint64 rxTime;
     QString spotTime;

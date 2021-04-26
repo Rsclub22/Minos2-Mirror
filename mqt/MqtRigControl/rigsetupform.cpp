@@ -29,14 +29,12 @@
 
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
-RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
-                           const QVector<QSharedPointer<BandInfo> > &_bands, QLogTabWidget* _ui_RadioTab,
+RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
+                           const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab,
                            bool hfFlag_, QWidget *parent):
     QWidget(parent),
     ui(new Ui::rigSetupForm),
-    hfFlag(hfFlag_),
-    transverterRemoved(false)
-
+    hfFlag(hfFlag_)
 {
 
     ui->setupUi(this);
@@ -90,6 +88,16 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, scatParams* _radioData,
     connect(ui->pttRTSEnable, &QCheckBox::clicked, this, &RigSetupForm::onPttRtsEnableClicked);
     connect(ui->pttComportSel, QOverload<int>::of(&QComboBox::activated), this, &RigSetupForm::onPttComportSelActivated);
 
+    connect(ui->enableRitChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableRitClicked);
+    connect(ui->enableSMeterChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableSMeterClicked);
+    connect(ui->enableVolChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVolClicked);
+    connect(ui->enableCatPttChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatPttClicked);
+    connect(ui->enableVoiceTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableVoiceTxMemClicked);
+    connect(ui->enableCwTxMemChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCwTxMemClicked);
+    connect(ui->enableCatFeaturesChkBox, &QCheckBox::clicked, this, &RigSetupForm::onEnableCatFeaturesClicked);
+
+
+
     connect(ui->useRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::useRigCtldSelected);
     connect(ui->startMinosRigCtldChkBox, &QCheckBox::clicked, this, &RigSetupForm::onStartMinosRigCtldChkBox);
     connect(ui->rigCtldNetworkAddBox, &QLineEdit::editingFinished, this, &RigSetupForm::rigCtldNetworkAddressSelected);
@@ -120,7 +128,7 @@ RigSetupForm::~RigSetupForm()
 
 
 
-scatParams* RigSetupForm::getRadioData()
+QSharedPointer<scatParams> RigSetupForm::getRadioData()
 {
     return radioData;
 }
@@ -230,7 +238,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
 
         // does this radio support antenna sw?
 
-        for (int i = 0; i < radioData->numTransverters; i++)
+        for (int i = 0; i < radioData->transVertSettings.count(); i++)
         {
             if (rigCap.supportAntSw)
             {
@@ -268,9 +276,11 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          {
              setTransVertSwVisible(true);
              setEnableLocalTransVertSwVisible(true);
-             for (int i = 0; i < radioData->numTransverters; i++)
+             QStringList tvList = radioData->transVertSettings.keys();
+             //for (int i = 0; i < radioData->numTransverters; i++)
+             foreach(const auto &tv, tvList)
              {
-                 transVertTab[i]->setEnableTransVertSwBoxVisible(true);
+                 transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
              }
          }
 
@@ -284,7 +294,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
          }
 
         //buildSupBandList();
-        radioValueChanged = true;
+
     }
 
 
@@ -354,7 +364,7 @@ void RigSetupForm::civAddressFinished()
             {
                 radioData->civAddress = civNum;
 
-                radioValueChanged = true;
+
 
             }
         }
@@ -413,7 +423,7 @@ void RigSetupForm::comportSelected()
     if (ui->comPortBox->currentText() != radioData->comport)
     {
         radioData->comport = ui->comPortBox->currentText();
-        radioValueChanged = true;
+
     }
 }
 
@@ -424,6 +434,20 @@ QString RigSetupForm::getComport()
 
 void RigSetupForm::setComport(QString p)
 {
+
+    if (ui->comPortBox->findText(p) ==  -1)
+    {
+        ui->comportErrorTxt->setText(/*HtmlFontColour(Qt::red) + */tr("%1 Not Available").arg(p));
+        ui->comportErrorTxt->setVisible(true);
+
+    }
+    else
+    {
+        ui->comportErrorTxt->setText("");
+        ui->comportErrorTxt->setVisible(false);
+
+    }
+
     ui->comPortBox->setCurrentIndex(ui->comPortBox->findText(p));
 }
 
@@ -441,7 +465,7 @@ void RigSetupForm::comSpeedSelected()
     if (ui->comSpeedBox->currentText().toInt() != radioData->baudrate)
     {
         radioData->baudrate = ui->comSpeedBox->currentText().toInt();
-        radioValueChanged = true;
+
     }
 }
 
@@ -463,7 +487,7 @@ void RigSetupForm::comDataBitsSelected()
     if (ui->comDataBitsBox->currentText().toInt() != radioData->databits)
     {
         radioData->databits = ui->comDataBitsBox->currentText().toInt();
-        radioValueChanged = true;
+
     }
 }
 
@@ -486,7 +510,7 @@ void RigSetupForm::comStopBitsSelected()
     if (ui->comStopBitsBox->currentText().toInt() != radioData->stopbits)
     {
         radioData->stopbits = ui->comStopBitsBox->currentText().toInt();
-        radioValueChanged = true;
+
     }
 }
 
@@ -508,7 +532,7 @@ void RigSetupForm::comParitySelected(int)
     if (serialCommonData::parityCodesList[ui->comParityBox->currentIndex()] != radioData->parity)
     {
         radioData->parity = serialCommonData::parityCodesList[ui->comParityBox->currentIndex()];
-        radioValueChanged = true;
+
     }
 }
 
@@ -534,7 +558,7 @@ void RigSetupForm::comHandShakeSelected()
            setForceRTSDisabled(false);
 
         }
-        radioValueChanged = true;
+
     }
 }
 
@@ -563,7 +587,7 @@ void RigSetupForm::on_forceDTRSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != radioData->forceDtr)
     {
         radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
-        radioValueChanged = true;
+
     }
 }
 
@@ -578,7 +602,7 @@ void RigSetupForm::on_forceRTSSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()] != radioData->forceRts)
     {
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
-        radioValueChanged = true;
+
     }
 }
 
@@ -610,7 +634,7 @@ void RigSetupForm::networkAddressSelected()
         if (addressOk)
         {
             radioData->networkAdd = ui->networkAddBox->text().trimmed();
-            radioValueChanged = true;
+
         }
         else
         {
@@ -663,7 +687,7 @@ void RigSetupForm::mgmModeSelected()
     if (ui->mgmBox->currentText() != radioData->mgmMode)
     {
         radioData->mgmMode = ui->mgmBox->currentText();
-        radioValueChanged = true;
+
     }
 }
 
@@ -684,7 +708,7 @@ void RigSetupForm::pollIntervalSelected()
     if (radioData->pollInterval != ui->pollInterval->currentText())
     {
         radioData->pollInterval = ui->pollInterval->currentText();
-        radioValueChanged = true;
+
 
     }
 }
@@ -729,7 +753,7 @@ void RigSetupForm::enableTransVertSelected(bool /*flag*/)
             setEnableLocalTransVertSw(checked);
             setLocTVSWComportVisible(checked);
         }
-        radioValueChanged = true;
+
     }
 
 
@@ -756,9 +780,11 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
     if (radioData->enableTransSwitch != checked)
     {
         radioData->enableTransSwitch = checked;
-        for (int i = 0; i < radioData->numTransverters; i++)
+        QStringList tvList = radioData->transVertSettings.keys();
+        //for (int i = 0; i < radioData->numTransverters; i++)
+        foreach(const auto &tv, tvList)
         {
-            transVertTab[i]->setEnableTransVertSwBoxVisible(checked);
+            transVertTab.value(tv)->setEnableTransVertSwBoxVisible(checked);
         }
         setEnableLocalTransVertSwVisible(checked);
         if (!checked)
@@ -769,7 +795,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
 
         }
         //setLocTVSWComportVisible(false);
-        radioValueChanged = true;
+
     }
 
 }
@@ -783,9 +809,12 @@ bool RigSetupForm::getEnableTransVertSw()
 void RigSetupForm::setEnableTransVertSw(bool b)
 {
     ui->enableTransVertSw->setChecked(b);
-    for (int i = 0; i < radioData->numTransverters; i++)
+
+    QStringList tvList = radioData->transVertSettings.keys();
+    //for (int i = 0; i < radioData->numTransverters; i++)
+    foreach(const auto &tv, tvList)
     {
-        transVertTab[i]->setEnableTransVertSwBoxVisible(b);
+        transVertTab.value(tv)->setEnableTransVertSwBoxVisible(b);
     }
 
 }
@@ -808,7 +837,7 @@ void RigSetupForm::localTransVertSwSel(bool /*flag*/)
     {
         radioData->enableLocTVSwMsg = checked;
         setLocTVSWComportVisible(checked);
-        radioValueChanged = true;
+
     }
 
 }
@@ -845,7 +874,7 @@ void RigSetupForm::locTVComPortSel(int /*index*/)
     if (ui->locTVComPortSel->currentText() != radioData->locTVSwComport)
     {
         radioData->locTVSwComport = ui->locTVComPortSel->currentText();
-        radioValueChanged = true;
+
     }
 }
 
@@ -903,7 +932,7 @@ void RigSetupForm::useRigCtldSelected(bool /*selected*/)
         rigCtldItemsVisible(checked);
     }
 
-    radioValueChanged = true;
+
 }
 
 
@@ -933,7 +962,7 @@ void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
         //rigCtldItemsVisible(checked);
     }
 
-    radioValueChanged = true;
+
 }
 
 
@@ -963,7 +992,7 @@ void RigSetupForm::rigCtldNetworkAddressSelected()
         if (addressOk)
         {
             radioData->rigCtldNetworkAdd = ui->networkAddBox->text().trimmed();
-            radioValueChanged = true;
+
         }
         else
         {
@@ -1057,7 +1086,7 @@ void RigSetupForm::onAdvancedCommsSelected(bool selected)
     {
         radioData->advancedCommsFlag = checked;
         advancedSerialDataEntryVisible(checked);
-        radioValueChanged = true;
+
 
     }
 }
@@ -1186,6 +1215,171 @@ void RigSetupForm::fillMgmModes()
 }
 
 
+/********************** Enable\Disable Features Checkboxes **************/
+
+
+void RigSetupForm::onEnableRitClicked()
+{
+    bool checked = ui->enableRitChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.ritEnable != checked)
+    {
+        radioData->enableDisableCatFeature.ritEnable = checked;
+
+    }
+
+}
+
+
+void RigSetupForm::onEnableSMeterClicked()
+{
+    bool checked = ui->enableSMeterChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.sMeterEnable != checked)
+    {
+        radioData->enableDisableCatFeature.sMeterEnable = checked;
+
+    }
+}
+
+void RigSetupForm::onEnableVolClicked()
+{
+    bool checked = ui->enableVolChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.volumeEnable != checked)
+    {
+        radioData->enableDisableCatFeature.volumeEnable = checked;
+
+    }
+}
+void RigSetupForm::onEnableCatPttClicked()
+{
+    bool checked = ui->enableCatPttChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.catEnable != checked)
+    {
+        radioData->enableDisableCatFeature.catEnable = checked;
+
+    }
+}
+void RigSetupForm::onEnableVoiceTxMemClicked()
+{
+    bool checked = ui->enableVoiceTxMemChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.voiceMemEnable != checked)
+    {
+        radioData->enableDisableCatFeature.voiceMemEnable = checked;
+
+    }
+
+}
+void RigSetupForm::onEnableCwTxMemClicked()
+{
+    bool checked = ui->enableCwTxMemChkBox->isChecked();
+    if (radioData->enableDisableCatFeature.cWMemEnable != checked)
+    {
+        radioData->enableDisableCatFeature.cWMemEnable = checked;
+
+    }
+}
+void RigSetupForm::onEnableCatFeaturesClicked()
+{
+    if(ui->enableCatFeaturesChkBox->isChecked())
+    {
+        radioData->enableDisableCatFeature.enableDisplay = true;
+        setEnableDisableFeaturesGroupVisible(true);
+
+    }
+    else
+    {
+        radioData->enableDisableCatFeature.enableDisplay = false;
+        setEnableDisableFeaturesGroupVisible(false);
+
+    }
+}
+
+
+
+void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
+{
+    ui->enableCatFeaturesChkBox->setChecked(radioData->enableDisableCatFeature.enableDisplay);
+    if (ui->enableCatFeaturesChkBox->isChecked())
+    {
+        setEnableDisableFeaturesGroupVisible(true);
+    }
+    else
+    {
+       setEnableDisableFeaturesGroupVisible(false);
+    }
+
+    ui->enableRitChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
+    if (rigCap.supportGetRit || rigCap.supportSetRit)
+    {
+        ui->enableRitChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableRitChkBox->setVisible(false);
+    }
+
+
+    ui->enableSMeterChkBox->setChecked(radioData->enableDisableCatFeature.sMeterEnable);
+    if(rigCap.supportSMeter)
+    {
+        ui->enableSMeterChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableSMeterChkBox->setVisible(false);
+    }
+
+    ui->enableVolChkBox->setChecked(radioData->enableDisableCatFeature.volumeEnable);
+    if (rigCap.supportVolume)
+    {
+        ui->enableVolChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableVolChkBox->setVisible(false);
+    }
+
+    ui->enableCatPttChkBox->setChecked(radioData->enableDisableCatFeature.catEnable);
+    if (rigCap.supportGetPtt && rigCap.supportSetPtt)
+    {
+        ui->enableCatPttChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableCatPttChkBox->setVisible(false);
+    }
+
+    ui->enableVoiceTxMemChkBox->setChecked(radioData->enableDisableCatFeature.voiceMemEnable);
+    if (rigCap.supportVoiceMemory)
+    {
+        ui->enableVoiceTxMemChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableVoiceTxMemChkBox->setVisible(false);
+    }
+
+    ui->enableCwTxMemChkBox->setChecked(radioData->enableDisableCatFeature.cWMemEnable);
+    if (rigCap.supportCwMemory)
+    {
+        ui->enableCwTxMemChkBox->setVisible(true);
+    }
+    else
+    {
+        ui->enableCwTxMemChkBox->setVisible(false);
+    }
+
+
+
+}
+
+
+
+void RigSetupForm::setEnableDisableFeaturesGroupVisible(bool visible)
+{
+     ui->enable_disableFeaturesGroup->setVisible(visible);
+}
+
+
 
 /****************** Support Bands Checkbox ***************************/
 
@@ -1227,7 +1421,7 @@ void RigSetupForm::onSupbandCheckBoxStateChanged(int i, int state)
             radioData->supportBands.setSupportBandFlag(selBand, false);
         }
 
-        radioValueChanged = true;
+
 
     }
 }
@@ -1328,7 +1522,7 @@ bool RigSetupForm::isAnySupportBandChecked()
 
 void RigSetupForm::setTransVertTabText(int tabNum, QString tabName)
 {
-    ui->transVertTab->setTabText(tabNum, tabName);
+    //ui->transVertTab->setTabText(tabNum, tabName);
 }
 
 
@@ -1339,8 +1533,8 @@ void RigSetupForm::setTransVertTabText(int tabNum, QString tabName)
 
 void RigSetupForm::addTransVerter()
 {
-
-    AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
+    QStringList tvList = radioData->transVertSettings.keys();
+    AddTransVerterDialog addTransDialog(bands, tvList, this);
     if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
@@ -1365,68 +1559,68 @@ void RigSetupForm::addTransVerter()
 
 
     // add the new transverter
-    int tabNum = radioData->numTransverters;
-    radioData->transVertNames.append(transVerterName);
+    int tabNum = radioData->transVertSettings.count();
+    //radioData->transVertNames.append(transVerterName);
     addTransVertTab(tabNum, transVerterName, true);
-    radioData->numTransverters = tabNum + 1;
-    loadTransVertTab(tabNum);
+    loadTransVertTab(transVerterName);
 
 }
 
 
 void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
 {
-    radioData->transVertSettings.append(new TransVertParams());
-    radioData->transVertSettings[tabNum]->transVertName = tabName;
-    radioData->transVertSettings[tabNum]->band = tabName;
-    for (int i = 0; i < bands.count(); i++)
-    {
-         if (bands[i]->name() == tabName)
-         {
-             radioData->transVertSettings[tabNum]->fLow = bands[i]->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = bands[i]->fHigh;
-             break;
-         }
-    }
-    transVertTab.append(new TransVertSetupForm(radioData->transVertSettings[tabNum]));
+    radioData->transVertSettings.insert(tabName, QSharedPointer<TransVertParams>(new TransVertParams()));
+    radioData->transVertSettings.value(tabName)->transVertName = tabName;
+    radioData->transVertSettings.value(tabName)->band = tabName;
+    //for (int i = 0; i < bands.count(); i++)
+    //{
+    //     if (bands[i]->name() == tabName)
+    //     {
+    //         radioData->transVertSettings.value(tabName)->fLow = bands[i]->fLow;
+     //        radioData->transVertSettings.value(tabName)->fHigh = bands[i]->fHigh;
+     //        break;
+     //    }
+   // }
+
+    transVertTab.insert(tabName, new TransVertSetupForm(radioData, tabName, bands));
     //addedTransVertTabs.append(tabName);
 
-    ui->transVertTab->insertTab(tabNum, transVertTab[tabNum], tabName);
+    ui->transVertTab->insertTab(tabNum, transVertTab.value(tabName), tabName);
     ui->transVertTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
     ui->transVertTab->setCurrentIndex(tabNum);
-    transVertTab[tabNum]->setEnableTransVertSwBoxVisible(false);
-
+    transVertTab.value(tabName)->setEnableTransVertSwBoxVisible(false);
+/*
     // does this radio support antenna sw?
 
     if (rigFactory->supported_rigs()->value(radioData->rigModel).supportAntSw)
     {
-       //transVertTab[tabNum]->antSwNumVisible(true);
+
        radioData->antSwitchAvail = true;
     }
     else
     {
-       //transVertTab[tabNum]->antSwNumVisible(false);
+
        radioData->antSwitchAvail = false;
     }
-    //buildSupBandList();
-    transVertTab[tabNum]->transVertValueChanged = tabChanged;
+*/
+    transVertTab.value(tabName)->transVertValueChanged = tabChanged;
 
 }
 
 
 
-void RigSetupForm::loadTransVertTab(int tabNum)
+void RigSetupForm::loadTransVertTab(QString tabName)
 {
-    transVertTab[tabNum]->setRadioFreqBox(radioData->transVertSettings[tabNum]->radioFreq);
-    transVertTab[tabNum]->setTargetFreqBox(radioData->transVertSettings[tabNum]->targetFreq);
-    transVertTab[tabNum]->setOffsetFreqLabel(radioData->transVertSettings[tabNum]->transVertOffset);
-    transVertTab[tabNum]->setTransVerSwNum(radioData->transVertSettings[tabNum]->transSwitchNum);
-    transVertTab[tabNum]->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
+    transVertTab.value(tabName)->setRadioFreqBox(radioData->transVertSettings.value(tabName)->radioFreq);
+    transVertTab.value(tabName)->setTargetFreqBox(radioData->transVertSettings.value(tabName)->targetFreq);
+    transVertTab.value(tabName)->setOffsetFreqLabel(radioData->transVertSettings.value(tabName)->transVertOffset);
+    transVertTab.value(tabName)->setTransVerSwNum(radioData->transVertSettings.value(tabName)->transSwitchNum);
+    transVertTab.value(tabName)->setEnableTransVertSwBoxVisible(radioData->enableTransSwitch);
 }
 
 bool RigSetupForm::checkTransVerterNameMatch(QString transVertName)
 {
-    for (int i = 0; i < radioData->numTransverters; i++)
+    for (int i = 0; i < radioData->transVertSettings.count(); i++)
     {
         if (ui->transVertTab->tabText(i) == transVertName)
             return true;
@@ -1475,28 +1669,17 @@ void RigSetupForm::removeTransVerter()
 
 
     // remove this transverter
+    QString transvertName = ui->transVertTab->tabText(currentIndex);
+
     ui->transVertTab->removeTab(currentIndex);
-    transVertTab.removeAt(currentIndex);
+    transVertTab.remove(transvertName);
+    radioData->transVertSettings.remove(transvertName);
 
-    radioData->transVertNames.removeAt(currentIndex);
-    radioData->transVertSettings.removeAt(currentIndex);
-
-    radioData->numTransverters--;
-    transverterRemoved = true;
-
-
+    //radioData->transVertNames.removeAt(currentIndex);
 }
 
 
-bool RigSetupForm::getTransVertRemovedFlag()
-{
-    return transverterRemoved;
-}
 
-void RigSetupForm::setTransVertRemovedFlag(bool value)
-{
-    transverterRemoved = value;
-}
 
 void RigSetupForm::changeBand()
 {
@@ -1521,8 +1704,8 @@ void RigSetupForm::changeBand()
 
 
 
-
-    AddTransVerterDialog addTransDialog(bands, radioData->transVertNames, this);
+    QStringList tvList = radioData->transVertSettings.keys();
+    AddTransVerterDialog addTransDialog(bands, tvList, this);
     if (addTransDialog.exec() != QDialog::Accepted)
     {
         return;
@@ -1545,34 +1728,39 @@ void RigSetupForm::changeBand()
         return;
     }
 
-    QString oldName = radioData->transVertNames[tabNum];
+    // as you can't hide tabs until Qt5.15...have to remove
+    QSharedPointer<TransVertParams> currentParams = QSharedPointer<TransVertParams>(new TransVertParams());
+    currentParams = radioData->transVertSettings.value(currentTransVertName);
+
+    radioData->transVertSettings.remove(currentTransVertName);
+
+    radioData->transVertSettings.insert(transVertName, currentParams);
+    radioData->transVertSettings.value(transVertName)->band = transVertName;
+    radioData->transVertSettings.value(transVertName)->transVertName = transVertName;
+
+
+    //foreach (auto &b, bands)
+    //{
+    //     if (b->name() == transVertName)
+    //     {
+    //       radioData->transVertSettings.value(transVertName)->fLow = b->fLow;
+    //       radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
+    //     }
+   // }
+
+
+
+
+    transVertTab.remove(currentTransVertName);
+    transVertTab.insert(transVertName, new TransVertSetupForm(radioData, transVertName, bands));
+
     ui->transVertTab->setTabText(tabNum, transVertName);
-    radioData->transVertNames[tabNum] = transVertName;
-    radioData->transVertSettings[tabNum]->band = transVertName;
-    radioData->transVertSettings[tabNum]->transVertName = transVertName;
 
-
-    foreach (auto &b, bands)
-    {
-         if (b->name() == transVertName)
-         {
-             radioData->transVertSettings[tabNum]->fLow = b->fLow;
-             radioData->transVertSettings[tabNum]->fHigh = b->fHigh;
-         }
-    }
-    //renamedTransVertTabs.append(oldName);
-    // remove old entry
-    //QString fileName = TRANSVERT_PATH_LOGGER + radioData->radioName + FILENAME_TRANSVERT_RADIOS;
-
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup(oldName);
-    //config.remove("");      // remove all keys for this group
-    //config.endGroup();
+    //radioData->transVertNames[tabNum] = transVertName;
 
 
 
-
-    transVertTab[tabNum]->transVertValueChanged = true;
+    //transVertTab[tabNum]->transVertValueChanged = true;
 
 }
 
@@ -1591,7 +1779,7 @@ void RigSetupForm::transVertTabEnable(bool enable)
 void RigSetupForm::transVertTabRemove(int tabNum)
 {
     ui->transVertTab->removeTab(tabNum);
-    transVertTab.removeAt(tabNum);
+    //transVertTab.remove(tabNum);
 }
 
 
@@ -1643,13 +1831,13 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
          if (netAddBox->text().isEmpty())
          {
              portNumber = netPortBox->text();
-             radioValueChanged = true;
+
          }
 
          else if (netPortBox->text().toInt() >= 1 && netPortBox->text().toInt() <= 65535)
          {
              portNumber = netPortBox->text();
-             radioValueChanged = true;
+
          }
          else
          {
@@ -1725,7 +1913,7 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
 
     }
 
-    radioValueChanged = true;
+
 }
 
 void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
@@ -1741,7 +1929,7 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
     }
 
 
-    radioValueChanged = true;
+
 
 }
 
@@ -1757,7 +1945,7 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
         ui->pttComportSel->setDisabled(false);
     }
 
-    radioValueChanged = true;
+
 }
 
 
@@ -1773,7 +1961,7 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
         ui->pttComportSel->setDisabled(false);
     }
 
-    radioValueChanged = true;
+
 }
 
 void RigSetupForm::onPttComportSelActivated(int /*idx*/)
@@ -1781,7 +1969,7 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
     if (ui->pttComportSel->currentText() != radioData->pttSerialPort)
     {
         radioData->pttSerialPort = ui->pttComportSel->currentText();
-        radioValueChanged = true;
+
     }
 }
 

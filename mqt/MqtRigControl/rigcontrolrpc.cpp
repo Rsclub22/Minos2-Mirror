@@ -29,7 +29,9 @@ RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), pa
     connect(rpc, &MinosRPC::routerCall, this, &RigControlRpc::on_routerCall);
     connect(rpc, &MinosRPC::notify, this, &RigControlRpc::on_notify);
 
-    // we aren't subscribing to anything!
+    QStringList sv = {rpcConstants::rigControlCategory
+                      };
+    rpc->initialiseRouters(sv);
 }
 
 //--------------------------------------------------------------------------------------------------//
@@ -45,6 +47,60 @@ void RigControlRpc::publishRadioNames(QStringList radios)
     rpc->publish( rpcConstants::rigControlCategory, rpcConstants::rigControlRadioList, nameList, psPublished );
 }
 
+
+void RigControlRpc::publishListChangedRadioNames(QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges, QVector<QString> listOfRadiosDataChanged)
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+
+    QString rpcData;
+    QString listOfRadioNameChangesStr;
+    QString listOfRadiosDataChangedStr;
+
+    // package data
+    if (!listOfRadioNameChanges.isEmpty())
+    {
+
+        foreach (const auto &lrnc, listOfRadioNameChanges)
+        {
+
+            QString rn;
+            rn.append(lrnc->oldName + ',');
+            rn.append(lrnc->newName);
+            if (listOfRadioNameChangesStr.isEmpty())
+            {
+                listOfRadioNameChangesStr.append(rn);
+            }
+            else
+            {
+                listOfRadioNameChangesStr.append(rn.prepend(':'));
+            }
+        }
+
+    }
+
+    if (!listOfRadiosDataChanged.isEmpty())
+    {
+        foreach (const auto &n, listOfRadiosDataChanged)
+        {
+            if (listOfRadiosDataChangedStr.isEmpty())
+            {
+               listOfRadiosDataChangedStr.append(n);
+            }
+            else
+            {
+               listOfRadiosDataChangedStr.append(':' + n);
+            }
+
+        }
+    }
+
+    rpcData = listOfRadioNameChangesStr + '#' + listOfRadiosDataChangedStr;
+
+    rpc->publish( rpcConstants::rigControlCategory, rpcConstants::rigControlChangeList, rpcData, psPublished );
+}
+
+
+
 void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
 {
     trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
@@ -52,12 +108,15 @@ void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
     // called whenever soemthing we subscribe to changes
     if ( an.getOK() )
     {
-        // example from elsewhere
-        //      if ( an.getCategory() == rpcConstants::lineControlCategory )
-        //      {
-        //         lineStates[ an.getKey() ] = ( ( an.getValue() == rpcConstants::lineSet ) ? true : false );
-        //         trace( rpcConstants::lineControlCategory + " " + an.getKey() + ":" + an.getValue() );
-        //      }
+        if ( an.getState() == psPublished)
+        {
+            if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlChangeList )
+            {
+                QString publisherRouter = an.getPublisherRouter();
+                QString publisherProgram = an.getPublisherProgram();
+                QString changeList = an.getValue();
+            }
+        }
     }
 }
 //---------------------------------------------------------------------------

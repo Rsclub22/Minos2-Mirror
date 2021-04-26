@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Hamlib Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
@@ -98,7 +98,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
         auto port_type = RigCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
@@ -118,26 +118,48 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
         }
 
 
+        bool supportGetRit = capsList[i]->get_rit ? true:false;
+        bool supportSetRit = capsList[i]->set_rit ? true:false;
+        bool supportGetRitState = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+        bool supportSetRitState = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_RIT)  ? true:false;
+
+        bool supportSMeter = HamlibRigControl::supportSMeter(capsList[i]->rig_model);
+
+        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
+
+        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+
+        bool supportVolume = HamlibRigControl::supportVolume(capsList[i]->rig_model);
+
+        // support Antenna Switch
+        bool supportAntSw = (capsList[i]->get_ant && capsList[i]->set_ant) ? true:false;
+
+        bool supportVoiceMem = capsList[i]->send_voice_mem ? true:false;
+
+        bool supportCwMem = capsList[i]->send_morse ? true:false;
+
+
+
         (*rigsList)[key] = RigCapabilities(port_type,
                                            capsList[i]->mfg_name,
                                            capsList[i]->model_name,
                                            key,
                                            capsList[i]->rig_model,
-                                           true,                // library supports lookup supported bands
-                                           true,       // library supports get rit
-                                           true,       // library supports set rit
-                                           true,        // library supports get rit state
-                                           true,        // library supports set rit state
-                                           true,       // library supports get rit max Khz
-                                           true,       // library supports s-meter
-                                           true,       // library supports get Ptt
-                                           true,       // library supports set Ptt
-                                           true,       // library supports volume
-                                           true,        // library supports antenna switch
-                                           true,            // library supports RigCtld
-                                           true,        // library supports Voice Memory
-                                           true,     // library supports Cw Memory
-                                           true);    // support poll data
+                                           true,                // radio supports lookup supported bands
+                                           supportGetRit,       // radio supports get rit
+                                           supportSetRit,       // radio supports set rit
+                                           supportGetRitState,  // radio supports get rit state
+                                           supportSetRitState,  // radio supports set rit state
+                                           true,                // radio supports get rit max Khz
+                                           supportSMeter,       // radio supports s-meter
+                                           supportGetPtt,       // radio supports get Ptt
+                                           supportSetPtt,       // radio supports set Ptt
+                                           supportVolume,       // radio supports volume
+                                           supportAntSw,        // radio supports antenna switch
+                                           true,            // radio supports RigCtld
+                                           supportVoiceMem,        // radio supports Voice Memory
+                                           supportCwMem,     // radio supports Cw Memory
+                                           true);    // radio poll data
     }
 
 
@@ -146,7 +168,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 }
 
 
-int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
+int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld)
 {
     int retcode;
 
@@ -160,26 +182,26 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     if (useRigCtld)
     {
-        if (currentRadio.rigCtldNetworkAdd.isEmpty() || isHostLocal(currentRadio.rigCtldNetworkAdd))
+        if (currentRadio->rigCtldNetworkAdd.isEmpty() || isHostLocal(currentRadio->rigCtldNetworkAdd))
         {
-            currentRadio.rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+            currentRadio->rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
         }
-        if (currentRadio.rigCtldNetworkPort.isEmpty())
+        if (currentRadio->rigCtldNetworkPort.isEmpty())
         {
-            currentRadio.rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+            currentRadio->rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
         }
         my_rig = rig_init(RIGCTLD_MODEL_NUMBER);
 
     }
     else
     {
-        my_rig = rig_init(currentRadio.rigModelNumber);
+        my_rig = rig_init(currentRadio->rigModelNumber);
     }
 
 
     if (!my_rig)
     {
-        return retcode = -14;
+        return  -14;
     }
 
 
@@ -187,27 +209,27 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     // load cat params
     if (useRigCtld)
     {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.rigCtldNetworkAdd + ":" + currentRadio.rigCtldNetworkPort).toLatin1().data(), FILPATHLEN);
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), FILPATHLEN);
     }
     else
     {
 
-        if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
+        if (rig_port_e(currentRadio->portType) == RIG_PORT_SERIAL)
         {
-            comport.append(currentRadio.comport);
+            comport.append(currentRadio->comport);
             strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), FILPATHLEN);
-            my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
-            my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
-            my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
-            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
-            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
+            my_rig->state.rigport.parm.serial.rate = currentRadio->baudrate;
+            my_rig->state.rigport.parm.serial.data_bits = currentRadio->databits;
+            my_rig->state.rigport.parm.serial.stop_bits = currentRadio->stopbits;
+            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio->parity);
+            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio->handshake);
 
 
 
             if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
             {
 
-                if (currentRadio.forceRts)
+                if (currentRadio->forceRts)
                 {
                     my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
                 }
@@ -219,39 +241,39 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             }
 
         }
-        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
+        else if (rig_port_e(currentRadio->portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio->portType) == RIG_PORT_UDP_NETWORK)
         {
             QString netAdd;
-            if (currentRadio.networkAdd.isEmpty() || isHostLocal(currentRadio.networkAdd))
+            if (currentRadio->networkAdd.isEmpty() || isHostLocal(currentRadio->networkAdd))
             {
                 netAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
             }
             else
             {
-                netAdd = currentRadio.networkAdd;
+                netAdd = currentRadio->networkAdd;
             }
-            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio->networkPort).toLatin1().data(), FILPATHLEN);
         }
-        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
+        else if (rig_port_e(currentRadio->portType) == RIG_PORT_NONE)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
         }
 
-        if (currentRadio.enablePTT)
+        if (currentRadio->enablePTT)
         {
 
-            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
+            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio->pttType);
 
             if (pttType != serialCommonData::PTT_METHOD_CAT)
             {
-                if (!currentRadio.pttSerialPort.isEmpty())
+                if (!currentRadio->pttSerialPort.isEmpty())
                 {
 #if defined (WIN32)
 
-                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio.pttSerialPort).toLatin1 ().data ());
+                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio->pttSerialPort).toLatin1 ().data ());
 
 #else
-                setConfigurationParameter("ptt_pathname", currentRadio.pttSerialPort.toLatin1().data());
+                setConfigurationParameter("ptt_pathname", currentRadio->pttSerialPort.toLatin1().data());
 #endif
 
                 }
@@ -280,9 +302,9 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 
     if(QString(my_rig->caps->mfg_name) == "Icom")
     {
-        if(!currentRadio.civAddress.isEmpty())
+        if(!currentRadio->civAddress.isEmpty())
         {
-            retcode = rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio.civAddress.toLatin1());
+            rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio->civAddress.toLatin1());
         }
     }
 
@@ -309,10 +331,10 @@ int HamlibRigControl::closeRig()
     int retcode;
     if (!my_rig)
     {
-        return retcode = -14;
+        return  -14;
     }
 
-    retcode = rig_close(my_rig);
+    rig_close(my_rig);
 
     retcode = rig_cleanup(my_rig);
     setRigConnected(false);
@@ -930,6 +952,25 @@ bool HamlibRigControl::supportVolControl(int rigNumber)
     }
 }
 
+
+bool HamlibRigControl::supportVolume(int rigNumber)
+{
+    //if (rigNumber == 237)   // if rig is TS590SG ignore volume as it has a bug...
+    //{
+    //    return false;
+    //}
+
+    if ((rigHasGetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF) && (rigHasSetLevel(rigNumber, RIG_LEVEL_AF) == RIG_LEVEL_AF))
+    {
+        return true;
+    }
+    else
+    {
+
+        return false;
+    }
+}
+
 int HamlibRigControl::setVolume(VFO vfo, float val)
 {
     value_t value;
@@ -959,7 +1000,10 @@ bool HamlibRigControl::supportSignalStrength(int modelNumber)
     return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
 }
 
-
+bool HamlibRigControl::supportSMeter(int modelNumber)
+{
+    return rigHasGetLevel(modelNumber, RIG_LEVEL_STRENGTH);
+}
 
 int HamlibRigControl::getSignalStrength(VFO vfo, int *value)
 {

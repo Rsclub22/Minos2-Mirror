@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
@@ -79,7 +79,6 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportGetRitMax = rigcap.supportGetRitMax;
     supportSMeter = rigcap.supportSMeter;
     supportGetPtt = rigcap.supportGetPtt;
-    supportPtt = rigcap.supportPtt;
     supportSetPtt = rigcap.supportSetPtt;
     supportVolume = rigcap.supportVolume;
     supportAntSw = rigcap.supportAntSw;
