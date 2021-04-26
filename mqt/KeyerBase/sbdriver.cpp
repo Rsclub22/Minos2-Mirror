@@ -592,6 +592,7 @@ void SoundSystemDriver::outputFinished()
      }
      else
      {
+         emit ptt(false);
          emit recpbFinished();
      }
 }

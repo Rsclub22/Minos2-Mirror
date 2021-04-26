@@ -1,3 +1,4 @@
+#include <QSettings>
 #include "txvmsetupdialog.h"
 #include "ui_txvmsetupdialog.h"
 
@@ -9,6 +10,12 @@ TxVmSetupDialog::TxVmSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *pare
 {
     ui->setupUi(this);
 
+    QSettings settings;
+    QByteArray geometry = settings.value("TxVmSetupDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     initSetup();
 }
 
@@ -16,6 +23,22 @@ TxVmSetupDialog::~TxVmSetupDialog()
 {
     delete ui;
 }
+void TxVmSetupDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("TxVmSetupDialog/geometry", saveGeometry());
+}
+void TxVmSetupDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void TxVmSetupDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
+}
+
 
 void TxVmSetupDialog::initSetup()
 {

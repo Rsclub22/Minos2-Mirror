@@ -26,13 +26,16 @@ private slots:
 
     void onVmRepeatPauseDurEditingFinished();
     void onVmMessageDurEditingFinished();
-
+public Q_SLOTS:
+    virtual void accept() override;
+    virtual void reject() override;
 private:
+
     Ui::TxVmRigButtonDialog *ui;
     VoiceKeyerParams* vmData;
 
-
     bool validateDur(QString durName, QString dur, int &dur_);
+    void doCloseEvent();
 };
 
 #endif // TXVMRIGBUTTONDIALOG_H

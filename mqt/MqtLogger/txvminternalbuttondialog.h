@@ -19,6 +19,7 @@ public:
     explicit TxVmInternalButtonDialog(QWidget *parent = nullptr);
     ~TxVmInternalButtonDialog();
 
+    void volcallback(unsigned int rmsvol, unsigned int peakvol, unsigned int samples);
     void setVmData(VoiceKeyerParams* vmData);
 private slots:
     void on_okButtonCicked();
@@ -33,15 +34,19 @@ private slots:
 
     void on_stopButton_clicked();
 
-    void inChannelCB_currentTextChanged(const QString &arg1);
-    void outChannelCB_currentTextChanged(const QString &arg1);
     void on_recordLevel_valueChanged(double arg1);
     void on_recordSlider_valueChanged(int position);
-    void on_recordMono_stateChanged(int);
+
+public Q_SLOTS:
+    virtual void accept() override;
+    virtual void reject() override;
+
 private:
     Ui::TxVmInternalButtonDialog *ui;
     VoiceKeyerParams* vmData;
+    bool inVolChange = false;
 
+    void doCloseEvent();
     void setVolumeMults();
     bool validateDur(QString durName, QString dur, int &dur_);
 };

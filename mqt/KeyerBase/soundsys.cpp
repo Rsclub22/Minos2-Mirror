@@ -57,7 +57,7 @@ void RiffWriter::run()
             ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
         else
         {
-            ss->outWave.Close();
+            ss->outWave->Close();
 #ifdef Q_OS_UNIX
             sync();     // make sure it goes to disk
 #endif
@@ -248,6 +248,40 @@ bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
 
     return true;
 }
+void RtAudioSoundSystem::stop()
+{
+    stopDMA();
+
+    wThread->terminated = true;
+    bufferNotEmpty.wakeAll();
+    wThread->wait();
+    try
+    {
+        if (audio->isStreamRunning())
+        {
+           // Stop the stream.
+           audio->stopStream();
+        }
+    }
+    catch ( RtAudioError& error )
+    {
+        trace(error.getMessage().c_str());
+    }
+}
+void RtAudioSoundSystem::closedown()
+{
+    if (audio)
+    {
+        stop();
+
+        delete audio;
+        audio = nullptr;
+
+        delete outWave;
+        outWave = nullptr;
+    }
+}
+
 unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
 {
    sampleRate = rate;
@@ -425,6 +459,7 @@ void RtAudioSoundSystem::stopOutput()
 void RtAudioSoundSystem::startInput()
 {
     inputEnabled = true;
+
 }
 
 void RtAudioSoundSystem::stopInput()
@@ -452,8 +487,12 @@ bool RtAudioSoundSystem::startInput( QString fn )
     // Should we do this in the writer thread?
     recIndex = 0;
     writeIndex = 0;
+    if (!outWave)
+    {
+        outWave = new WaveFile;
+    }
 
-    if ( outWave.OpenForWrite( fn.toLatin1(), sampleRate, 16, 2 ) == DDC_SUCCESS )
+    if ( outWave->OpenForWrite( fn.toLatin1(), sampleRate, 16, 2 ) == DDC_SUCCESS )
        return true;
 
     return false;
@@ -496,7 +535,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
     if (inp && nFrames)
     {
         const int16_t *q = reinterpret_cast< const int16_t * > ( inp );
-        DDCRET ret = outWave.WriteData ( q, nFrames * 2 );   // size is numdata
+        DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
         if ( ret != DDC_SUCCESS )
         {
             return;

@@ -79,6 +79,8 @@ public:
     virtual ~RtAudioSoundSystem();
 
     bool initialise( QString &errmess );
+    void stop();
+    void closedown();
 
     QStringList inputDevices;
     QStringList outputDevices;
@@ -108,7 +110,7 @@ public:
     int16_t *dataptr = nullptr;
     unsigned long samples = 0;
 
-    WaveFile outWave;
+    WaveFile *outWave = nullptr;
     void writeDataToFile(void *inp, unsigned int nFrames);
     RiffWriter *wThread = nullptr;
 

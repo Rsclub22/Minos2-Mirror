@@ -1,6 +1,7 @@
+#include <QMessageBox>
+#include <QSettings>
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
-#include <QMessageBox>
 
 
 TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
@@ -9,6 +10,12 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    QSettings settings;
+    QByteArray geometry = settings.value("TxVmRigButtonDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
@@ -19,6 +26,22 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
 TxVmRigButtonDialog::~TxVmRigButtonDialog()
 {
     delete ui;
+}
+
+void TxVmRigButtonDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("TxVmRigButtonDialog/geometry", saveGeometry());
+}
+void TxVmRigButtonDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void TxVmRigButtonDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
 }
 
 

@@ -105,6 +105,7 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txVmInternalSetupDialog.cpp \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
@@ -199,6 +200,7 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txVmInternalSetupDialog.h \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
@@ -274,6 +276,7 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
+    txVmInternalSetupDialog.ui \
     txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \

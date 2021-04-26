@@ -99,34 +99,6 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>Input Channel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="inChannelCB"/>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_9">
-            <item>
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>Output Channel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="outChannelCB"/>
-            </item>
-           </layout>
-          </item>
-          <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
              <widget class="QPushButton" name="replayButton">
@@ -300,7 +272,7 @@
                <number>-100</number>
               </property>
               <property name="maximum">
-               <number>200</number>
+               <number>100</number>
               </property>
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -327,13 +299,6 @@
              </spacer>
             </item>
            </layout>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="recordMono">
-            <property name="text">
-             <string>Mono</string>
-            </property>
-           </widget>
           </item>
          </layout>
         </item>

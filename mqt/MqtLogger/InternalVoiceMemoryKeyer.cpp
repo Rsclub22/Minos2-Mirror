@@ -1,9 +1,9 @@
 #include "base_pch.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
-
+#include "SendRPCDM.h"
 #include "txvminternalbuttondialog.h"
-#include "txvmsetupdialog.h"
+#include "txVmInternalSetupDialog.h"
 
 #include "sbdriver.h"
 #include "keyerlog.h"
@@ -63,6 +63,7 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
 
         config.endGroup();
     }
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &InternalVoiceMemoryKeyer::onDoPTT);
 }
 
 void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
@@ -143,29 +144,35 @@ void InternalVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 
 void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
 {
-    Q_UNUSED(onOff)
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+    {
+        LogContainer->sendDM->sendRigControlPttOnOff(tslf, onOff);
+    }
 }
-
+void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
+{
+    setPttOnOff(onOff);
+}
 int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
 {
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
-    txVmSetupDialog.setWindowTitle(tr("Internal Voice Memory Setup"));
+    txVmInternalSetupDialog setup(voiceCap, tslf->txVmButtonsFrame);
+    setup.setWindowTitle(tr("Internal Voice Memory Setup"));
 
-    txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+    setup.setVmCommonParamsData(&vmCommonParams);
 
-    return txVmSetupDialog.exec();
+    return setup.exec();
 }
 
 int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmInternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
-    int buttonNumber = vmData->getvmButtonNum();
 
-    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+    vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
     int ret = vmButtonDialog.exec();
     return ret;

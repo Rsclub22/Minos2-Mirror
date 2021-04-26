@@ -28,6 +28,8 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+private slots:
+    void onDoPTT(bool onOff);
 };
 
 #endif // INTERNALVOICEMEMORYKEYER_H

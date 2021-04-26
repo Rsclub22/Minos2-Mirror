@@ -1,10 +1,23 @@
 #include <QMessageBox>
 #include <QSettings>
-
+#include "sbdriver.h"
 #include "txvminternalbuttondialog.h"
 #include "voicekeyerfactory.h"
 #include "ui_txvminternalbuttondialog.h"
 
+static bool inhibitCallbacks = false;
+
+TxVmInternalButtonDialog *txvmbd = nullptr;
+void volcallback( unsigned int rmsvol, unsigned int peakvol, unsigned int samples )
+{
+    if (!inhibitCallbacks && txvmbd)
+        txvmbd->volcallback(rmsvol, peakvol, samples);
+}
+void TxVmInternalButtonDialog::volcallback(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
+{
+    if (!inhibitCallbacks)
+        ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+}
 
 TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     QDialog(parent),
@@ -13,22 +26,51 @@ TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    QSettings settings;
+    QByteArray geometry = settings.value("TxVmInternalButtonDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmInternalButtonDialog::on_okButtonCicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmInternalButtonDialog::on_cancelbuttonClicked);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmInternalButtonDialog::onVmRepeatPauseDurEditingFinished);
     connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmInternalButtonDialog::onVmMessageDurEditingFinished);
-
-
 }
 
 TxVmInternalButtonDialog::~TxVmInternalButtonDialog()
 {
+    txvmbd = nullptr;
+    inhibitCallbacks = true;
+
+    SoundSystemDriver *sbDriver = SoundSystemDriver::getSbDriver();
+    sbDriver ->WinVUCallback = nullptr;
+
     delete ui;
+}
+
+void TxVmInternalButtonDialog::doCloseEvent()
+{
+    QSettings settings;
+    settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
+    inhibitCallbacks = true;
+    txvmbd = nullptr;
+}
+void TxVmInternalButtonDialog::reject()
+{
+    doCloseEvent();
+    QDialog::reject();
+}
+void TxVmInternalButtonDialog::accept()
+{
+    doCloseEvent();
+    QDialog::accept();
 }
 
 
 void TxVmInternalButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 {
+    txvmbd = this;
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
@@ -36,39 +78,19 @@ void TxVmInternalButtonDialog::setVmData(VoiceKeyerParams* vmData_)
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
 
-    ui->recordingFrame->setVisible(vmData->getVkBase()->hasRecord());
-    ui->levelsFrame->setVisible(vmData->getVkBase()->hasRecord());
+    SoundSystemDriver *sbDriver = SoundSystemDriver::getSbDriver();
+    sbDriver ->WinVUCallback = &::volcallback;
 
-//    if (vmData->getVkBase()->hasRecord())
-//    {
-//        ui->inChannelCB->addItems(rass.inputDevices);
-//        ui->outChannelCB->addItems(rass.outputDevices);
+    inVolChange = true;
 
-//        QSettings settings(filename, QSettings::IniFormat);
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QSettings settings(fileName, QSettings::IniFormat);
 
-//        QString indev = settings.value(indevKey, "").toString();
-//        QString outdev = settings.value(outdevKey, "").toString();
+    int recordLevel = settings.value("RecordLevel", 0).toInt();
 
-//        ui->inChannelCB->setCurrentText(indev);
-//        ui->outChannelCB->setCurrentText(outdev);
+    ui->recordSlider->setValue(recordLevel);
 
-//        connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &TxVmInternalButtonDialog::inChannelCB_currentTextChanged);
-//        connect(ui->outChannelCB, &QComboBox::currentTextChanged, this, &TxVmInternalButtonDialog::outChannelCB_currentTextChanged);
-
-//        rass.setVUCallBack( &::volcallback );
-
-//        inVolChange = true;
-
-//        int recordLevel = settings.value("RecordLevel", 0).toInt();
-
-//        ui->recordSlider->setValue(recordLevel);
-
-//        inVolChange = false;
-
-//        bool mono = settings.value("Mono", false).toBool();
-//        ui->recordMono->setChecked(mono);
-
-//    }
+    inVolChange = false;
 
 }
 
@@ -149,67 +171,35 @@ void TxVmInternalButtonDialog::on_stopButton_clicked()
     // stop record/replay
     vmData->getVkBase()->stopMsg();
 }
-void TxVmInternalButtonDialog::inChannelCB_currentTextChanged(const QString &arg1)
-{
-//    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
-//    QSettings config(fileName, QSettings::IniFormat);
-//    config.beginGroup("button" + QString::number(buttonNum));
-
-//    settings.setValue(indevKey, arg1);
-
-//    trace("About to re-initialise audio");
-//    rass.closedown();
-//    rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
-}
-
-void TxVmInternalButtonDialog::outChannelCB_currentTextChanged(const QString &arg1)
-{
-//    if (!closing)
-//    {
-//        QString filename = "./Configuration/RigRecorder.ini";
-//        QSettings settings(filename, QSettings::IniFormat);
-//        settings.setValue(outdevKey, arg1);
-//        trace("About to re-initialise audio");
-//        rass.closedown();
-//        rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
-//    }
-}
 void TxVmInternalButtonDialog::setVolumeMults()
 {
-//    int record = ui->recordSlider->value();
-//    rass.setRecordLevel(record);
+    int record = ui->recordSlider->value();
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0);  // for now, set everything to 0db
 
-//    inVolChange = true;
+    inVolChange = true;
 
-//    ui->recordLevel->setValue(record/10.0);
+    ui->recordLevel->setValue(record/10.0);
 
-//    inVolChange = false;
+    inVolChange = false;
 }
 
 void TxVmInternalButtonDialog::on_recordLevel_valueChanged(double arg1)
 {
-//    if (!inVolChange)
-//    {
-//        ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
-//    }
+    if (!inVolChange)
+    {
+        ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
+    }
 }
 
 void TxVmInternalButtonDialog::on_recordSlider_valueChanged(int position)
 {
-//    if (!inVolChange)
-//    {
-//        QString filename = "./Configuration/RigRecorder.ini";
-//        QSettings settings(filename, QSettings::IniFormat);
-//        settings.setValue("RecordLevel", position);
-//    }
-//    setVolumeMults();
+    if (!inVolChange)
+    {
+        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+        QSettings settings(fileName, QSettings::IniFormat);
+        settings.setValue("RecordLevel", position);
+    }
+    setVolumeMults();
 }
 
-void TxVmInternalButtonDialog::on_recordMono_stateChanged(int /*arg1*/)
-{
-//    bool mono = ui->recordMono->isChecked();
-//    rass.setMono(mono);
-//    QString filename = "./Configuration/RigRecorder.ini";
-//    QSettings settings(filename, QSettings::IniFormat);
-//    settings.setValue("Mono", mono);
-}
+

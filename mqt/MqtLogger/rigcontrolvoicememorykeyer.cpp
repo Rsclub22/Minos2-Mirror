@@ -115,7 +115,6 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
-    int buttonNumber = vmData->getvmButtonNum();
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
