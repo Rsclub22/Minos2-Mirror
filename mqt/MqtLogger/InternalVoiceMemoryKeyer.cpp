@@ -1,6 +1,14 @@
 #include "base_pch.h"
+#include "tlogcontainer.h"
+#include "tsinglelogframe.h"
+
+#include "txvminternalbuttondialog.h"
+#include "txvmsetupdialog.h"
+
 #include "sbdriver.h"
 #include "keyerlog.h"
+
+
 #include "InternalVoiceMemoryKeyer.h"
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
@@ -136,4 +144,30 @@ void InternalVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPara
 void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
+}
+
+int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+{
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    TxVmSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
+    txVmSetupDialog.setWindowTitle(tr("Internal Voice Memory Setup"));
+
+    txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+
+    return txVmSetupDialog.exec();
+}
+
+int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    TxVmInternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    int buttonNumber = vmData->getvmButtonNum();
+
+    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+    vmButtonDialog.setVmData(vmData);
+    int ret = vmButtonDialog.exec();
+    return ret;
+
 }

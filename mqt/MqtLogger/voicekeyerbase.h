@@ -18,6 +18,7 @@
 #include <QSharedPointer>
 
 class VoiceKeyerBase;
+class VoiceKeyerFactory;
 
 class VoiceKeyerCommonParams
 {
@@ -121,6 +122,8 @@ public:
 
     virtual void setPttOnOff(bool onOff) = 0;
 
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) = 0;
+    virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     int getMaxNumButtons(){return MAXNUM_BUTTONS;}
 

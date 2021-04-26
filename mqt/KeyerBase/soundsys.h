@@ -80,6 +80,9 @@ public:
 
     bool initialise( QString &errmess );
 
+    QStringList inputDevices;
+    QStringList outputDevices;
+
     unsigned int setRate(unsigned int rate);
     void setFilter(int cf);
 

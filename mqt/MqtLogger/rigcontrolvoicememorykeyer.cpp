@@ -1,6 +1,9 @@
-#include "rigcontrolvoicememorykeyer.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "voicekeyerfactory.h"
+#include "txvmsetupdialog.h"
+#include "txvmrigbuttondialog.h"
+#include "rigcontrolvoicememorykeyer.h"
 
 RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -91,6 +94,33 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
     config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
     config.setValue("buttonNum", vmParams.getvmButtonNum());
     config.endGroup();
+
+}
+
+int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+{
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    TxVmSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
+    txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
+
+    txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+
+    return txVmSetupDialog.exec();
+
+}
+
+int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+    int buttonNumber = vmData->getvmButtonNum();
+
+    vmButtonDialog.setWindowTitle(title);
+    vmButtonDialog.setVmData(vmData);
+    int ret = vmButtonDialog.exec();
+    return ret;
 
 }
 

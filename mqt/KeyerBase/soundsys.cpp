@@ -158,6 +158,15 @@ RtAudioSoundSystem::RtAudioSoundSystem()
          {
              outChannels = info.outputChannels;
          }
+         if (info.inputChannels)
+         {
+             inputDevices.append(info.name.c_str());
+         }
+         if (info.outputChannels)
+         {
+             outputDevices.append(info.name.c_str());
+         }
+
        }
        trace( "Default output channels = " + QString::number(outChannels) + " Default input channels = " + QString::number(inChannels));
     }

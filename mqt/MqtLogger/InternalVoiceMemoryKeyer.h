@@ -24,6 +24,10 @@ public:
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
+
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
+    virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
+
 };
 
 #endif // INTERNALVOICEMEMORYKEYER_H

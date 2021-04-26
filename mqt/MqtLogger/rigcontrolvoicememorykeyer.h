@@ -45,6 +45,10 @@ public:
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
+    virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
+
+
 signals:
 
 

@@ -8,8 +8,6 @@
 #include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "txvmbuttondialog.h"
-#include "txvmsetupdialog.h"
 #include "radiodetails.h"
 #include "rigcontrolframe.h"
 

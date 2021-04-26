@@ -105,8 +105,9 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
-    txvmbuttondialog.cpp \
     txvmbuttonsframe.cpp \
+    txvminternalbuttondialog.cpp \
+    txvmrigbuttondialog.cpp \
     txvmsetupdialog.cpp \
     voicekeyerbase.cpp \
     voicekeyerfactory.cpp \
@@ -198,8 +199,9 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
-    txvmbuttondialog.h \
     txvmbuttonsframe.h \
+    txvminternalbuttondialog.h \
+    txvmrigbuttondialog.h \
     txvmsetupdialog.h \
     voicekeyerbase.h \
     voicekeyerfactory.h \
@@ -272,8 +274,9 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
-    txvmbuttondialog.ui \
     txvmbuttonsframe.ui \
+    txvminternalbuttondialog.ui \
+    txvmrigbuttondialog.ui \
     txvmsetupdialog.ui
 
 

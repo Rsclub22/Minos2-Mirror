@@ -112,14 +112,9 @@ void TxVmButtonsFrame::onVmSetupClicked()
 {
     if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
     {
-        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(ui->voiceKeyerSelect->currentText());
-        TxVmSetupDialog txVmSetupDialog(voiceCap, this);
-        txVmSetupDialog.setWindowTitle(tr("Voice Memory Setup"));
-
         VoiceKeyerCommonParams vmCommonParams_ = vmCommonParams;
-        txVmSetupDialog.setVmCommonParamsData(&vmCommonParams_);
 
-        if (txVmSetupDialog.exec() == QDialog::Accepted)
+        if (txVoiceKeyer->setup(voiceKeyerFactory, vmCommonParams) == QDialog::Accepted)
         {
             if (vmCommonParams_ != vmCommonParams)
             {
@@ -130,8 +125,6 @@ void TxVmButtonsFrame::onVmSetupClicked()
 
                 vmCommonParams = vmCommonParams_;
                 saveVmCommonParams(vmCommonParams);
-
-
             }
         }
     }
@@ -225,13 +218,12 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         }
         vmData.setVkBase(txVoiceKeyer);
         trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
-        TxVmButtonDialog vmButtonDialog(this);
 
-        vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
-        vmButtonDialog.setVmData(&vmData);
-        if (vmButtonDialog.exec() == QDialog::Accepted)
+        QString title(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+        int ret = txVoiceKeyer->editButton(&vmData, title);
+        if (ret == QDialog::Accepted)
         {
-            if (txVoiceKeyer)
+            if ( txVoiceKeyer)
             {
                 txVoiceKeyer->saveVmButtonParams(vmData);
                 setRunButtonText(buttonNumber, vmData.getVmName());
@@ -239,6 +231,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
             }
 
         }
+
     }
 
 }
@@ -302,15 +295,16 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
     trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
 
-    TxVmButtonDialog vmButtonDialog(this);
 
-    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
+//    TxVmRigButtonDialog vmButtonDialog(this);
+
+    QString title(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
     vmData.setVkBase(txVoiceKeyer);
-    vmButtonDialog.setVmData(&vmData);
 
-    if (vmButtonDialog.exec() == QDialog::Accepted)
+    int ret = txVoiceKeyer->editButton(&vmData, title);
+    if (ret == QDialog::Accepted)
     {
         if (txVoiceKeyer)
         {

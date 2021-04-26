@@ -1,30 +1,28 @@
-#include "txvmbuttondialog.h"
-#include "ui_txvmbuttondialog.h"
+#include "txvmrigbuttondialog.h"
+#include "ui_txvmrigbuttondialog.h"
 #include <QMessageBox>
 
 
-TxVmButtonDialog::TxVmButtonDialog(QWidget *parent) :
+TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::TxVmButtonDialog)
+    ui(new Ui::TxVmRigButtonDialog)
 {
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-
-
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmButtonDialog::on_okButton_clicked);
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmButtonDialog::on_cancelbutton_clicked);
-    connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmButtonDialog::onVmRepeatPauseDurEditingFinished);
-    connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmButtonDialog::onVmMessageDurEditingFinished);
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
+    connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished);
+    connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmMessageDurEditingFinished);
 }
 
-TxVmButtonDialog::~TxVmButtonDialog()
+TxVmRigButtonDialog::~TxVmRigButtonDialog()
 {
     delete ui;
 }
 
 
-void TxVmButtonDialog::setVmData(VoiceKeyerParams* vmData_)
+void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 {
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
@@ -32,24 +30,21 @@ void TxVmButtonDialog::setVmData(VoiceKeyerParams* vmData_)
     ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
-
-    ui->recordingFrame->setVisible(vmData->getVkBase()->hasRecord());
-
 }
 
-void TxVmButtonDialog::onVmRepeatPauseDurEditingFinished()
+void TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished()
 {
     int dur_ = 0;
     validateDur(tr("Repeat Pause"), ui->txVmRepeatPauseDur->text(), dur_);
 }
 
-void TxVmButtonDialog::onVmMessageDurEditingFinished()
+void TxVmRigButtonDialog::onVmMessageDurEditingFinished()
 {
     int dur_ = 0;
     validateDur(tr("Message"), ui->txVmMessageDur->text(), dur_);
 }
 
-bool TxVmButtonDialog::validateDur(QString durName, QString dur, int& dur_)
+bool TxVmRigButtonDialog::validateDur(QString durName, QString dur, int& dur_)
 {
     bool ok;
     int d = dur.trimmed().toInt(&ok);
@@ -67,7 +62,7 @@ bool TxVmButtonDialog::validateDur(QString durName, QString dur, int& dur_)
 
 }
 
-void TxVmButtonDialog::on_okButton_clicked()
+void TxVmRigButtonDialog::on_okButtonClicked()
 {
     int repeatPauseDur_ = 0;
     if (!validateDur(tr("Repeat Pause"), ui->txVmRepeatPauseDur->text(), repeatPauseDur_))
@@ -91,26 +86,8 @@ void TxVmButtonDialog::on_okButton_clicked()
 }
 
 
-void TxVmButtonDialog::on_cancelbutton_clicked()
+void TxVmRigButtonDialog::on_cancelbuttonClicked()
 {
     reject();
 }
 
-
-void TxVmButtonDialog::on_replayButton_clicked()
-{
-    // This is a test replay - we shouldn't be PTTing if we can avoid it
-    vmData->getVkBase()->sendMsgNum(vmData->getvmButtonNum());
-}
-
-void TxVmButtonDialog::on_recordButton_clicked()
-{
-    // make a recording for this button
-    vmData->getVkBase()->doRecording(vmData);
-}
-
-void TxVmButtonDialog::on_stopButton_clicked()
-{
-    // stop record/replay
-    vmData->getVkBase()->stopMsg();
-}
