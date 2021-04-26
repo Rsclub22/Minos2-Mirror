@@ -543,6 +543,7 @@ private:
     void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
     void checkSupportCatFeatures();
     bool availRadiosContains(const QString radioName);
+    void setRigControlPttState(bool state);
 private slots:
 
     void onStdInRead(QString);
@@ -610,6 +611,7 @@ private slots:
     void loggerSetBand(QString band);
     void onTxPttTestPbClicked();
     void onSetPttOnOff(bool pttOnOff);
+    void onPttState(bool state);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

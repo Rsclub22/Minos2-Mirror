@@ -30,6 +30,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
                                  bool supportSMeter_,
                                  bool supportGetPtt_,
                                  bool supportSetPtt_,
+                                 bool supportGetVox_,
+                                 bool supportSetVox_,
                                  bool supportVolume_,
                                  bool supportAntSw_,
                                  bool supportRigCtld_,
@@ -50,6 +52,8 @@ RigCapabilities::RigCapabilities(RigCapConstants::PortType portType_,
       supportSMeter (supportSMeter_),
       supportGetPtt (supportGetPtt_),
       supportSetPtt (supportSetPtt_),
+      supportGetVox(supportGetVox_),
+      supportSetVox(supportSetVox_),
       supportVolume (supportVolume_),
       supportAntSw (supportAntSw_),
       supportRigCtld (supportRigCtld_),
@@ -80,6 +84,8 @@ RigCapabilities & RigCapabilities::operator= ( const RigCapabilities &rigcap)
     supportSMeter = rigcap.supportSMeter;
     supportGetPtt = rigcap.supportGetPtt;
     supportSetPtt = rigcap.supportSetPtt;
+    supportGetVox = rigcap.supportGetVox;
+    supportSetVox = rigcap.supportSetVox;
     supportVolume = rigcap.supportVolume;
     supportAntSw = rigcap.supportAntSw;
     supportRigCtld = rigcap.supportRigCtld;

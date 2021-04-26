@@ -152,8 +152,8 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     radioTab.value(tabName)->setStopBits(QString::number(availRadioData.value(tabName)->stopbits));
     radioTab.value(tabName)->setParityBits(availRadioData.value(tabName)->parity);
     radioTab.value(tabName)->setHandshake(availRadioData.value(tabName)->handshake);
-    radioTab.value(tabName)->setForceDTR(availRadioData.value(tabName)->forceDtr);
-    radioTab.value(tabName)->setForceRTS(availRadioData.value(tabName)->forceRts);
+    radioTab.value(tabName)->setForceDTRComboBox(availRadioData.value(tabName)->forceDtr);
+    radioTab.value(tabName)->setForceRTSComboBox(availRadioData.value(tabName)->forceRts);
     radioTab.value(tabName)->setNetAddress(availRadioData.value(tabName)->networkAdd);
     radioTab.value(tabName)->setNetPortNum(availRadioData.value(tabName)->networkPort);
 
@@ -223,6 +223,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         {
             radioTab.value(tabName)->setPttControlsVisible(true);
             radioTab.value(tabName)->setPTTCheckBoxChecked(true);
+            if (radioTab.value(tabName)->getRadioData()->pttType == serialCommonData::PTT_METHOD_CAT)
+            {
+
+            }
 
         }
         else
@@ -374,7 +378,7 @@ void RigSetupDialog::addRadio()
     radioTab.value(radioName)->comParitySelected(true);
 
 
-    radioTab.value(radioName)->setForceRTS(1);
+    radioTab.value(radioName)->setForceRTSComboBox(1);
     radioTab.value(radioName)->on_forceRTSSelected();
 
 

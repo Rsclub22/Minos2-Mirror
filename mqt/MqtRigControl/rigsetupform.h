@@ -144,10 +144,12 @@ public:
 
 
     void setRigctldCheckBoxVisible(bool visible);
-    void setForceDTR(int n);
-    void setForceRTS(int n);
+    void setForceDTRComboBox(int n);
+    void setForceRTSComboBox(int n);
 
     void setForceRTSDisabled(bool state);
+    void setForceDTRDisabled(bool state);
+
 
     void setSupportBandChkBox(int i, bool checked);
     void setSupportBandChkBox(QString band, bool checked);
@@ -168,6 +170,10 @@ public:
     void setPttTypeRadioButtons(int type);
     void setPTTCheckBoxDisabled(bool disabled);
     void loadEnableShowCatFeaturesBox(const RigCapabilities rigCap);
+
+
+    bool isPttComportEqualCatComport();
+    void pttComportSelDisabled(bool state);
 
 
 public slots:
@@ -297,6 +303,8 @@ private:
 
     void setEnableDisableFeaturesGroupVisible(bool visible);
 
+    void setPttRTSDisabled(bool state);
+    void setPttDTRDisabled(bool state);
 };
 
 #endif // RIGSETUPFORM_H

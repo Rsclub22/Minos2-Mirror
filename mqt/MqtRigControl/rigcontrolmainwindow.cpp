@@ -1110,7 +1110,7 @@ void RigControlMainWindow::checkSupportPollRadio()
         connect(radio, &RigBase::newVfo, this, &RigControlMainWindow::onNewVfo, Qt::QueuedConnection);
         connect(radio, &RigBase::newMode, this, &RigControlMainWindow::onNewMode, Qt::QueuedConnection);
         connect(radio, &RigBase::rigStatus, this, &RigControlMainWindow::onRigStatus, Qt::QueuedConnection);
-
+        //connect(radio, &RigBase::pttState, this, [=](bool state){onPttState(state)}, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOn, this, &RigControlMainWindow::onRitOn, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOff, this, &RigControlMainWindow::onRitOff, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOffset, this, &RigControlMainWindow::onRitOffset, Qt::QueuedConnection);
@@ -3797,6 +3797,17 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 /********************* PTT ****************************************/
 
 
+// Omnirig
+void RigControlMainWindow::onPttState(bool state)
+{
+    if (state != curPttStatus)
+    {
+       trace(QString("onPttState = %1").arg(curPttStatus ? "On" : "Off"));
+        setRigControlPttState(curPttStatus);
+    }
+}
+
+
 
 int RigControlMainWindow::getTXStatus(VFO vfo)
 {
@@ -3808,14 +3819,21 @@ int RigControlMainWindow::getTXStatus(VFO vfo)
    {
        if (pttStatus != curPttStatus)
        {
-           curPttStatus = pttStatus;
-           sendPttStateLogger();
-           setTxRxIndOnOff(curPttStatus);
+           trace(QString("getTXStatus = %1").arg(curPttStatus ? "On" : "Off"));
+           setRigControlPttState(curPttStatus);
        }
    }
 
    return retCode;
 
+}
+
+
+void RigControlMainWindow::setRigControlPttState(bool state)
+{
+    curPttStatus = state;
+    sendPttStateLogger();
+    setTxRxIndOnOff(state);
 }
 
 

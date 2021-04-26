@@ -551,12 +551,10 @@ void RigSetupForm::comHandShakeSelected()
         if (radioData->handshake == serialCommonData::HANDSHAKE_HARDWARE)  // RTS/CTS selected
         {
            setForceRTSDisabled(true);
-
         }
         else
         {
            setForceRTSDisabled(false);
-
         }
 
     }
@@ -589,9 +587,20 @@ void RigSetupForm::on_forceDTRSelected()
         radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
 
     }
+
+
 }
 
-void RigSetupForm::setForceDTR(int n)
+
+
+void RigSetupForm::setForceDTRDisabled(bool state)
+{
+    ui->forceDtrBox->setDisabled(state);
+    ui->forceDtrLbl->setDisabled(state);
+}
+
+
+void RigSetupForm::setForceDTRComboBox(int n)
 {
     ui->forceDtrBox->setCurrentIndex(n);
 }
@@ -612,7 +621,7 @@ void RigSetupForm::setForceRTSDisabled(bool state)
     ui->forceRtsLbl->setDisabled(state);
 }
 
-void RigSetupForm::setForceRTS(int n)
+void RigSetupForm::setForceRTSComboBox(int n)
 {
     ui->forceRtsBox->setCurrentIndex(n);
 }
@@ -1646,7 +1655,7 @@ void RigSetupForm::removeTransVerter()
     {
         // can't remove transverter on current RadioName
         QMessageBox msgBox;
-        msgBox.setText(tr("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName).arg(currentRadioName));
+        msgBox.setText(tr("You can not remove this transverter - %1, while it is the current radio - %2!").arg(currentTransVertName, currentRadioName));
         msgBox.exec();
         return;
     }
@@ -1884,6 +1893,8 @@ void RigSetupForm::setPttComport(QString p)
     ui->pttComportSel->setCurrentIndex(ui->pttComportSel->findText(p));
 }
 
+
+
 void RigSetupForm::setPttTypeRadioButtons(int type)
 {
     serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(type);
@@ -1891,14 +1902,26 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
     if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_CAT)
     {
         ui->pttCatEnable->setChecked(true);
+        pttComportSelDisabled(true);
+        setForceRTSDisabled(false);
+        setForceDTRDisabled(false);
     }
     else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
     {
         ui->pttRTSEnable->setChecked(true);
+        pttComportSelDisabled(false);
+        if (isPttComportEqualCatComport())
+        {
+            setForceRTSDisabled(true);
+        }
     }
     else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_DTR)
     {
         ui->pttDTREnable->setChecked(true);
+        if (isPttComportEqualCatComport())
+        {
+            setForceDTRDisabled(true);
+        }
     }
 }
 
@@ -1925,12 +1948,17 @@ void RigSetupForm::onPttCatEnableClicked(bool /*checked*/)
 
     if (ui->pttCatEnable->isChecked())
     {
-        ui->pttComportSel->setDisabled(true);
+        pttComportSelDisabled(true);
+        setForceRTSDisabled(false);
+        setForceDTRDisabled(false);
+
     }
+}
 
 
-
-
+void RigSetupForm::pttComportSelDisabled(bool state)
+{
+    ui->pttComportSel->setDisabled(state);
 }
 
 void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
@@ -1943,6 +1971,16 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
     if (ui->pttDTREnable->isChecked())
     {
         ui->pttComportSel->setDisabled(false);
+        if (isPttComportEqualCatComport())
+        {
+            setForceDTRDisabled(true);
+            setForceRTSDisabled(false);
+        }
+        else
+        {
+            setForceDTRDisabled(false);
+        }
+
     }
 
 
@@ -1959,6 +1997,16 @@ void RigSetupForm::onPttRtsEnableClicked(bool /*checked*/)
     if (ui->pttRTSEnable->isChecked())
     {
         ui->pttComportSel->setDisabled(false);
+        if (isPttComportEqualCatComport())
+        {
+            setForceRTSDisabled(true);
+            setForceDTRDisabled(false);
+
+        }
+        else
+        {
+            setForceDTRDisabled(false);
+        }
     }
 
 
@@ -1970,10 +2018,69 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
     {
         radioData->pttSerialPort = ui->pttComportSel->currentText();
 
+        if (isPttComportEqualCatComport())
+        {
+            if (!radioData->advancedCommsFlag)
+            {
+                radioData->advancedCommsFlag = true;
+                ui->advancedCommsChkBox->setChecked(true);
+                advancedSerialDataEntryVisible(true);
+            }
+
+            if (ui->pttRTSEnable->isChecked())
+            {
+                setForceRTSDisabled(true);
+                setForceDTRDisabled(false);
+                if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                {
+                    radioData->forceRts = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    setForceRTSComboBox(radioData->forceRts);
+                }
+            }
+            else if (ui->pttDTREnable->isChecked())
+            {
+                setForceDTRDisabled(true);
+                setForceRTSDisabled(false);
+                if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                {
+                    radioData->forceDtr = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    setForceDTRComboBox(radioData->forceDtr);
+                }
+            }
+        }
+        else
+        {
+            setForceDTRDisabled(false);
+            setForceRTSDisabled(false);
+        }
+
+
     }
 }
 
+bool RigSetupForm::isPttComportEqualCatComport()
+{
+    if (radioData->comport == radioData->pttSerialPort)
+    {
+        return true;
+    }
 
+    return false;
+
+}
+
+
+void RigSetupForm::setPttRTSDisabled(bool state)
+{
+    ui->pttRTSEnable->setDisabled(state);
+}
+
+void RigSetupForm::setPttDTRDisabled(bool state)
+{
+    ui->pttRTSEnable->setDisabled(state);
+}
 
 
 

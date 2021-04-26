@@ -66,6 +66,10 @@ public:
     virtual int setVfo(VFO vfo) = 0;
     virtual int getVfo(VFO *vfo) = 0;
 
+    virtual bool supportSetVox(int rigModelNumber) = 0;
+    virtual int setVoxState(VFO vfo, bool state) = 0;
+    virtual bool supportGetVoX(int rigNumber) = 0;
+    virtual int getVoxState(VFO vfo, bool &state) = 0;
 
     virtual bool supportSignalStrength(int rigModelNumber) = 0;
     virtual int getSignalStrength(VFO vfo, int *value) = 0;
@@ -117,6 +121,7 @@ signals:
     void ritOff();
     void ritOffset();
     void rit0();
+    void pttState(bool);
     //void comError(QString, QString, QString, QString);
     void rigStatus(int, QString);
 
