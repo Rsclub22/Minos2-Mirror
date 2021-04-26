@@ -1,4 +1,7 @@
 #include <QSettings>
+#include "sbdriver.h"
+#include "MTrace.h"
+
 #include "txVmInternalSetupDialog.h"
 #include "ui_txVmInternalSetupDialog.h"
 
@@ -61,8 +64,8 @@ void txVmInternalSetupDialog::initSetup()
 
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &txVmInternalSetupDialog::onNumButtonsValueChanged);
 
-//    ui->inChannelCB->addItems(rass.inputDevices);
-//    ui->outChannelCB->addItems(rass.outputDevices);
+    ui->inChannelCB->addItems(SoundSystemDriver::getSbDriver()->getInputDevices());
+    ui->outChannelCB->addItems(SoundSystemDriver::getSbDriver()->getOutputDevices());
 
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
@@ -72,6 +75,10 @@ void txVmInternalSetupDialog::initSetup()
 
     ui->inChannelCB->setCurrentText(indev);
     ui->outChannelCB->setCurrentText(outdev);
+
+    connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &txVmInternalSetupDialog::inChannelCB_currentTextChanged);
+    connect(ui->outChannelCB, &QComboBox::currentTextChanged, this, &txVmInternalSetupDialog::outChannelCB_currentTextChanged);
+
 
 }
 
@@ -95,9 +102,9 @@ void txVmInternalSetupDialog::inChannelCB_currentTextChanged(const QString &arg1
 
     settings.setValue(indevKey, arg1);
 
-//    trace("About to re-initialise audio");
-//    rass.closedown();
-//    rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
 }
 
 void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg1)
@@ -105,7 +112,7 @@ void txVmInternalSetupDialog::outChannelCB_currentTextChanged(const QString &arg
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
     QSettings settings(fileName, QSettings::IniFormat);
     settings.setValue(outdevKey, arg1);
-//    trace("About to re-initialise audio");
-//    rass.closedown();
-//    rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+    trace("About to re-initialise audio");
+    SoundSystemDriver::getSbDriver()->closedown();
+    SoundSystemDriver::getSbDriver()->initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
 }

@@ -8,8 +8,10 @@
 #include "sbdriver.h"
 #include "keyerlog.h"
 
-
 #include "InternalVoiceMemoryKeyer.h"
+
+const QString indevKey("InDevice");
+const QString outdevKey("OutDevice");
 
 InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -42,14 +44,18 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
     Q_UNUSED(numButtons)
     sblog = true;
 
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QSettings settings(fileName, QSettings::IniFormat);
+
+    QString indev = settings.value(indevKey, "").toString();
+    QString outdev = settings.value(outdevKey, "").toString();
+
     QString errmess;
-    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( errmess, 48000, 0, 0, 0 ,0 ) )
+    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ,0 ) )
     {
        trace( "sbdvp_init failed! " + errmess );
     }
     SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0);  // for now, set everything to 0db
-
-    //connect( SoundSystemDriver::getSbDriver(), &SoundSystemDriver::recpbFinished, this, )
 
     for (int i = 0; i < numButtons; i++)
     {

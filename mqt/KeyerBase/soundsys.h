@@ -78,7 +78,7 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
-    bool initialise( QString &errmess );
+    bool initialise(QString ind , QString outd);
     void stop();
     void closedown();
 
@@ -125,6 +125,8 @@ private:
 
     unsigned int inChannels = 0;
     unsigned int outChannels = 0;
+
+    QMap<QString, int> deviceIds;
 
     chunkware_simple::SimpleCompRms compressor;
     LPFilter lpFilter;

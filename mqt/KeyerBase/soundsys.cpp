@@ -166,7 +166,7 @@ RtAudioSoundSystem::RtAudioSoundSystem()
          {
              outputDevices.append(info.name.c_str());
          }
-
+         deviceIds[QString(info.name.c_str())] = i;
        }
        trace( "Default output channels = " + QString::number(outChannels) + " Default input channels = " + QString::number(inChannels));
     }
@@ -196,9 +196,12 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
    }
    delete audio;
 }
-bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
+bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 {
-
+    if (!audio)
+    {
+        audio = new RtAudio();
+    }
     compressor.setSampleRate(sampleRate);
     compressor.setWindow(10);       // milliseconds
     compressor.setThresh( -10 );
@@ -217,11 +220,25 @@ bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
 
         unsigned int bufferFrames = FRAMESAMPLES;
 
-        outParams.deviceId = audio->getDefaultOutputDevice();
+        if (outd.isEmpty())
+        {
+            outParams.deviceId = audio->getDefaultOutputDevice();
+        }
+        else
+        {
+            outParams.deviceId = deviceIds[outd];
+        }
         outParams.firstChannel = 0;
         outParams.nChannels = outChannels;
 
-        inParams.deviceId = audio->getDefaultInputDevice();
+        if (ind.isEmpty())
+        {
+            inParams.deviceId = audio->getDefaultInputDevice();
+        }
+        else
+        {
+            inParams.deviceId = deviceIds[ind];
+        }
         inParams.firstChannel = 0;
         inParams.nChannels = inChannels;
 

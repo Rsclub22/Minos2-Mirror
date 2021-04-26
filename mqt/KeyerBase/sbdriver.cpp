@@ -329,8 +329,17 @@ int SoundSystemDriver::getMessageLen(int buttonNumber)
     }
     return 0;
 }
+void SoundSystemDriver::closedown()
+{
+    soundSystem->closedown();
+}
+bool SoundSystemDriver::initialise(QString ind, QString outd)
+{
+    bool ret = soundSystem->initialise(ind, outd);
+    return ret;
+}
 
-bool SoundSystemDriver::sbdvp_init( QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength, int filterCorner )
+bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength, int filterCorner )
 {
    // should be done from config when the sb is defined as in use.
 
@@ -352,7 +361,7 @@ bool SoundSystemDriver::sbdvp_init( QString &errmess, unsigned int srate, int pi
       rate = soundSystem->setRate(srate);
       soundSystem->setFilter(filterCorner);
 
-      if ( !soundSystem->initialise( errmess ) )
+      if ( !soundSystem->initialise( ind, outd ) )
          return false;
 
       emit ptt(false);
@@ -388,6 +397,16 @@ bool SoundSystemDriver::sbdvp_init( QString &errmess, unsigned int srate, int pi
    createPipTone( errmess, pipTone, pipVolume, pipLength ); // outside conditional to allow for CW calls with -1
 
    return init_OK;
+}
+
+QStringList SoundSystemDriver::getInputDevices()
+{
+    return soundSystem->inputDevices;
+}
+
+QStringList SoundSystemDriver::getOutputDevices()
+{
+    return soundSystem->outputDevices;
 }
 
 
@@ -764,6 +783,7 @@ void SoundSystemDriver::createCWBuffer( const char *message, int speed, int tone
       trace( "ramptime = " + QString::number( ramptime ) );
    }
 }
+
 //==============================================================================
 void SoundSystemDriver::stopDMA()
 {

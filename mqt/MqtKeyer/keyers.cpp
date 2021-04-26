@@ -938,7 +938,7 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
 bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength, int filterCorner )
 {
    QString errmess;
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;

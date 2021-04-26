@@ -102,7 +102,11 @@ public:
       void startTone2();
       void createCWBuffer( const char *message, int speed, int tone );
 
-      bool sbdvp_init(QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
+      bool initialise(QString ind, QString outd);
+      bool sbdvp_init(QString ind, QString outd, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
+      QStringList getInputDevices();
+      QStringList getOutputDevices();
+      void closedown();
 private slots:
       void interruptOK();
       void outputFinished();
