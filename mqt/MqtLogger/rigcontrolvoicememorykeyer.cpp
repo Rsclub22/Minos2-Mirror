@@ -1,7 +1,7 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "voicekeyerfactory.h"
-#include "txvmsetupdialog.h"
+#include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolvoicememorykeyer.h"
 
@@ -102,7 +102,7 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, Voic
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
     txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
 
     txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);

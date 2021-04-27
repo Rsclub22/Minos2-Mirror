@@ -109,7 +109,7 @@ SOURCES += \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
     txvmrigbuttondialog.cpp \
-    txvmsetupdialog.cpp \
+    txvmrigsetupdialog.cpp \
     voicekeyerbase.cpp \
     voicekeyerfactory.cpp \
     volumeslider.cpp \
@@ -204,7 +204,7 @@ HEADERS  += \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
     txvmrigbuttondialog.h \
-    txvmsetupdialog.h \
+    txvmrigsetupdialog.h \
     voicekeyerbase.h \
     voicekeyerfactory.h \
     volumeslider.h \
@@ -280,7 +280,7 @@ FORMS    += \
     txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \
-    txvmsetupdialog.ui
+    txvmrigsetupdialog.ui
 
 
 DISTFILES += \

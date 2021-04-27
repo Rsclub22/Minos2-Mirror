@@ -1,10 +1,10 @@
 #include <QSettings>
-#include "txvmsetupdialog.h"
-#include "ui_txvmsetupdialog.h"
+#include "txvmrigsetupdialog.h"
+#include "ui_txvmrigsetupdialog.h"
 
-TxVmSetupDialog::TxVmSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent) :
+TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::TxVmSetupDialog),
+    ui(new Ui::TxVmRigSetupDialog),
     voiceCap(voiceCap_)
 
 {
@@ -19,28 +19,28 @@ TxVmSetupDialog::TxVmSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *pare
     initSetup();
 }
 
-TxVmSetupDialog::~TxVmSetupDialog()
+TxVmRigSetupDialog::~TxVmRigSetupDialog()
 {
     delete ui;
 }
-void TxVmSetupDialog::doCloseEvent()
+void TxVmRigSetupDialog::doCloseEvent()
 {
     QSettings settings;
     settings.setValue("TxVmSetupDialog/geometry", saveGeometry());
 }
-void TxVmSetupDialog::reject()
+void TxVmRigSetupDialog::reject()
 {
     doCloseEvent();
     QDialog::reject();
 }
-void TxVmSetupDialog::accept()
+void TxVmRigSetupDialog::accept()
 {
     doCloseEvent();
     QDialog::accept();
 }
 
 
-void TxVmSetupDialog::initSetup()
+void TxVmRigSetupDialog::initSetup()
 {
 
     ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
@@ -56,20 +56,20 @@ void TxVmSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
-    connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmSetupDialog::onNumButtonsValueChanged);
+    connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
 
 
 
 }
 
 
-void TxVmSetupDialog::onNumButtonsValueChanged(int num)
+void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 {
     vmCommonParams->setNumButtons(num);
 }
 
 
-void TxVmSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_)
+void TxVmRigSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_)
 {
 
     vmCommonParams = vmCommonParams_;

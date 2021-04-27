@@ -1,24 +1,24 @@
-#ifndef TXVMSETUPDIALOG_H
-#define TXVMSETUPDIALOG_H
+#ifndef TXVMRIGSETUPDIALOG_H
+#define TXVMRIGSETUPDIALOG_H
 
 #include <QDialog>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
 namespace Ui {
-class TxVmSetupDialog;
+class TxVmRigSetupDialog;
 }
 
 const int MAXNUM_BUTTONS = 8;
 const int MININUM_BUTTONS = 2;
 
-class TxVmSetupDialog : public QDialog
+class TxVmRigSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit TxVmSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent = nullptr);
-    ~TxVmSetupDialog();
+    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent = nullptr);
+    ~TxVmRigSetupDialog();
 
 
     void setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_);
@@ -33,7 +33,7 @@ public Q_SLOTS:
 
 private:
 
-    Ui::TxVmSetupDialog *ui;
+    Ui::TxVmRigSetupDialog *ui;
 
     VoiceKeyerCapabilities voiceCap;
     VoiceKeyerCommonParams *vmCommonParams;
@@ -42,4 +42,4 @@ private:
     void doCloseEvent();
 };
 
-#endif // TXVMSETUPDIALOG_H
+#endif // TXVMRIGSETUPDIALOG_H
