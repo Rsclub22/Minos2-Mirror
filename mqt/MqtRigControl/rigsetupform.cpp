@@ -585,7 +585,14 @@ void RigSetupForm::on_forceDTRSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != radioData->forceDtr)
     {
         radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
-
+        if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+        {
+            setPttDTRDisabled(false);
+        }
+        else
+        {
+            setPttDTRDisabled(true);
+        }
     }
 
 
@@ -611,6 +618,17 @@ void RigSetupForm::on_forceRTSSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()] != radioData->forceRts)
     {
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
+        if (isPttComportEqualCatComport())
+        {
+            if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            {
+                setPttRTSDisabled(false);
+            }
+            else
+            {
+                setPttRTSDisabled(true);
+            }
+        }
 
     }
 }
@@ -1903,8 +1921,32 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
     {
         ui->pttCatEnable->setChecked(true);
         pttComportSelDisabled(true);
-        setForceRTSDisabled(false);
-        setForceDTRDisabled(false);
+        if (isPttComportEqualCatComport())
+        {
+            if (radioData->handshake != serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE
+                    || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            {
+                setForceRTSDisabled(false);
+            }
+            else
+            {
+                setForceRTSDisabled(true);
+            }
+            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            {
+                setForceDTRDisabled(false);
+            }
+            else
+            {
+                setForceDTRDisabled(true);
+            }
+        }
+        else
+        {
+            setForceRTSDisabled(false);
+            setForceDTRDisabled(false);
+        }
+
     }
     else if (pttType == serialCommonData::PTTMethodCodes::PTT_METHOD_RTS)
     {
@@ -1984,6 +2026,12 @@ void RigSetupForm::onPttDtrEnableClicked(bool /*checked*/)
     }
 
 
+}
+
+
+void RigSetupForm::setPttComportToolTip(QString toolTip)
+{
+    ui->pttComportSel->setToolTip(toolTip);
 }
 
 

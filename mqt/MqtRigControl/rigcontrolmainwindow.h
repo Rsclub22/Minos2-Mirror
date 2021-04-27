@@ -178,6 +178,7 @@ public:
      traceCommsFlag = false;
      curVol = 0;
      curSignalStrength = 0;
+     curPttStatus = false;
 
   }
 
@@ -209,6 +210,7 @@ public:
   int curVol;
   int curSignalStrength;
   bool rigErrorFlag;
+  bool curPttStatus;
   bool traceCommsFlag;
 
 };
@@ -285,12 +287,6 @@ private:
     QSharedPointer<scatParams> currentRadio;
     QString currentRadioName;
     //QStringList availRadios;
-
-
-
-
-    bool curPttStatus;
-
 
 
 

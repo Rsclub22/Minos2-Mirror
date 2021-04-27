@@ -112,6 +112,8 @@ void RigSetupDialog::initSetup()
 
 
         loadSettingsToTab(i, availRadios[i]);
+
+        setToolTips(availRadios[i]);
     }
 
 
@@ -134,6 +136,19 @@ void RigSetupDialog::addTab(int tabNum, QString tabName)
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
 
+}
+
+
+void RigSetupDialog::setToolTips(QString tabName)
+{
+    QString pttComportToolTip = tr("Select the RS-232 serial port used for PTT control,\n"
+                                    "this option is available when DTR or RTS is selected above.\n\n"
+                                    "This port can be the same comport as used for CAT Control,\n"
+                                    "But be careful if you need to force DTR or RTS to power a USB convertor.\n"
+                                    "If that is the case, then use a different serial comport for PTT.\n"
+                                    "Selecting the same port as the CAT interface will enable CAT Advanced Comms settings to show\n"
+                                    "The handshake and forced settings.");
+    radioTab.value(tabName)->setPttComportToolTip(pttComportToolTip);
 }
 
 

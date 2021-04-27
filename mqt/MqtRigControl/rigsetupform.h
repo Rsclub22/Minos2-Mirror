@@ -176,6 +176,7 @@ public:
     void pttComportSelDisabled(bool state);
 
 
+    void setPttComportToolTip(QString toolTip);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
