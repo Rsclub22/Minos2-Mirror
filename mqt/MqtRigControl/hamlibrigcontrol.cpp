@@ -212,7 +212,7 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
     // load cat params
     if (useRigCtld)
     {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), FILPATHLEN);
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
     }
     else
     {
