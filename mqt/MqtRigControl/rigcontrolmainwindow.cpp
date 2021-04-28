@@ -57,6 +57,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    hfFlag = true;
+
     writeWindowTitle(appName);
 
     createCloseEvent();
@@ -578,7 +580,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     {
         // no radio selected
            trace("No radio selected");
-           saveCurrentRadio(currentRadioName);
+           saveCurrentRadio(radioName);
            ui->radioNameDisp->setText("");
            ui->usingLibText->setText("");
            return;
@@ -708,11 +710,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         // if it is a rigctld model, then use the radio model number connected to rigctld
 
-        int modelNumber = currentRadio->rigModelNumber;
-        if (modelNumber == hamlibData::RIGCTL)
-        {
-            modelNumber = rigCtldDetails->irigctld_radioNumber;
-        }
+        //int modelNumber = currentRadio->rigModelNumber;
+        //if (modelNumber == hamlibData::RIGCTL)
+        //{
+        //    modelNumber = rigCtldDetails->irigctld_radioNumber;
+       // }
 
         buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
 
@@ -4335,7 +4337,7 @@ void RigControlMainWindow::saveCurrentRadio(const QString currentRadioName)
 
 
 
-
+// we really only have one of these!
 
 void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioData, QString radioName)
 {
@@ -4382,7 +4384,7 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->uk;
             name.remove('\x20').replace('H', 'h').replace('.', '_');

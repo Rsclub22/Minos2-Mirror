@@ -989,7 +989,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->name();
             name.remove('\x20').replace('H', 'h').replace('.', '_');
@@ -1057,7 +1057,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->uk;
             name.remove('\x20').replace('H', 'h').replace('.', '_');

@@ -181,7 +181,7 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
 
 bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
 {
-
+/*
     radioName != radParams->radioName ? qDebug() << "radioName = true" : qDebug() << "radioName = false";
     radioNumber != radParams->radioNumber ? qDebug() << "radioNumber = true" : qDebug() << "radioNumber = false";
     previousRadioName != radParams->previousRadioName ? qDebug() << "previousRadioName = true" : qDebug() << "previousRadioName = false";
@@ -227,7 +227,7 @@ bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
                 //transVertSettings != radParams->transVertSettings ? qDebug() << "transVertSettings = true" : qDebug() << "transVertSettings = false";
                 enableDisableCatFeature != radParams->enableDisableCatFeature ? qDebug() << "enableDisableCatFeature = true" : qDebug() << "enableDisableCatFeature = false";
 
-
+*/
     if (radioName != radParams->radioName ||
             radioNumber != radParams->radioNumber ||
             previousRadioName != radParams->previousRadioName ||
@@ -298,6 +298,9 @@ bool scatParams::transVertSettingsNotEqual(const QMap<QString, QSharedPointer<Tr
 
     return false;
 }
+
+
+
 
 
 bool scatParams::compareStringList(QStringList &sl1, QStringList &sl2)
