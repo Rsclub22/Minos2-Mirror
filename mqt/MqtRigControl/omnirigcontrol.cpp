@@ -436,11 +436,13 @@ void OmnirigControl::onHandleParamsChange(int rigNumber, int params)
         if (params & OmniRig::PM_RX)
         {
             traceMsg(QString("OmniRig params change: OmniRig RX"));
+            emit pttState(false);
 
         }
         if (params & OmniRig::PM_TX)
         {
             traceMsg(QString("OmniRig params change: OmniRig TX"));
+            emit pttState(true);
 
         }
         if (params & OmniRig::PM_CW_U)
@@ -516,6 +518,8 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support s-meter
                 false,      // support get Ptt
                 false,      // support set Ptt
+                false,      // support get Vox State
+                false,      // support set Vox State
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
@@ -539,9 +543,12 @@ void OmnirigControl::register_rigs(RigFactory::Rigs* rigsList, int id1, int id2)
                 false,      // support set rit
                 false,      // support get rit state
                 false,      // support set rit state
+                false,      // get Rit Max Khz
                 false,      // support s-meter
                 false,      // support get Ptt
                 false,      // support set Ptt
+                false,      // support get Vox State
+                false,      // support set Vox State
                 false,      // support volume
                 false,      // support antenna switch
                 false,      // support rigctld
@@ -1233,6 +1240,34 @@ bool OmnirigControl::supportSetPtt(int rigModelNumber)
     Q_UNUSED(rigModelNumber);
     return false;
 }
+
+
+bool OmnirigControl::supportSetVox(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
+
+int OmnirigControl::setVoxState(VFO vfo, bool state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
+bool OmnirigControl::supportGetVoX(int rigModelNumber)
+{
+    Q_UNUSED(rigModelNumber);
+    return false;
+}
+
+int OmnirigControl::getVoxState(VFO vfo, bool &state)
+{
+    Q_UNUSED(vfo)
+    Q_UNUSED(state)
+    return omnirigError(OMNIRIG_NOT_SUPPORTED);
+}
+
 void OmnirigControl::setTraceCommsFlag(bool value)
 {
     omnirigTraceComms = value;

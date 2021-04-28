@@ -132,6 +132,9 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         bool supportSetPtt = capsList[i]->set_ptt ? true:false;
 
+        bool supportGetVox = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_VOX) ? true:false;
+        bool supportSetVox = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_VOX) ? true:false;
+
         bool supportVolume = HamlibRigControl::supportVolume(capsList[i]->rig_model);
 
         // support Antenna Switch
@@ -157,6 +160,8 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
                                            supportSMeter,       // radio supports s-meter
                                            supportGetPtt,       // radio supports get Ptt
                                            supportSetPtt,       // radio supports set Ptt
+                                           supportGetVox,       // radio supports get Vox State
+                                           supportSetVox,       // radio supports set Vox State
                                            supportVolume,       // radio supports volume
                                            supportAntSw,        // radio supports antenna switch
                                            true,            // radio supports RigCtld
@@ -844,7 +849,49 @@ bool HamlibRigControl::supportSetPtt(int rigNumber)
     return myRig->caps->set_ptt ? true:false;
 }
 
+/************* VOX *********************/
 
+
+
+bool HamlibRigControl::supportSetVox(int rigNumber)
+{
+    RIG *myRig;
+    myRig= rig_init(rigNumber);
+    setting_t state = rig_has_set_func(myRig, RIG_FUNC_VOX);
+    if (state & RIG_FUNC_VOX)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool HamlibRigControl::supportGetVoX(int rigNumber)
+{
+    RIG *myRig;
+    myRig= rig_init(rigNumber);
+    setting_t state = rig_has_get_func(myRig, RIG_FUNC_VOX);
+    if (state & RIG_FUNC_VOX)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+int HamlibRigControl::setVoxState(VFO vfo, bool state)
+{
+    return rig_set_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_VOX, state);
+}
+
+int HamlibRigControl::getVoxState(VFO vfo, bool &state)
+{
+    int status = 0;
+    int retCode = RIG_OK;
+    retCode = rig_get_func(my_rig, hamlibVfoNames[vfo], RIG_FUNC_VOX, &status);
+    state = status ? true : false;
+    return retCode;
+}
 
 /*************** Passband ********************************/
 

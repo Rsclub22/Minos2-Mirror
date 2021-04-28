@@ -178,6 +178,7 @@ public:
      traceCommsFlag = false;
      curVol = 0;
      curSignalStrength = 0;
+     curPttStatus = false;
 
   }
 
@@ -209,6 +210,7 @@ public:
   int curVol;
   int curSignalStrength;
   bool rigErrorFlag;
+  bool curPttStatus;
   bool traceCommsFlag;
 
 };
@@ -285,12 +287,6 @@ private:
     QSharedPointer<scatParams> currentRadio;
     QString currentRadioName;
     //QStringList availRadios;
-
-
-
-
-    bool curPttStatus;
-
 
 
 
@@ -543,6 +539,7 @@ private:
     void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
     void checkSupportCatFeatures();
     bool availRadiosContains(const QString radioName);
+    void setRigControlPttState(bool state);
 private slots:
 
     void onStdInRead(QString);
@@ -610,6 +607,7 @@ private slots:
     void loggerSetBand(QString band);
     void onTxPttTestPbClicked();
     void onSetPttOnOff(bool pttOnOff);
+    void onPttState(bool state);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

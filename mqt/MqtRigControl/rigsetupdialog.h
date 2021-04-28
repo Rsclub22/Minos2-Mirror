@@ -214,6 +214,7 @@ private:
     bool checkOmniRigSupportedBands();
     bool transVerterInBand(const QSharedPointer<TransVertParams> tvp, QString &transVertBand);
     bool checkTransvertFreqInBand();
+    void setToolTips(QString tabName);
 };
 
 #endif // SETUPDIALOG_H

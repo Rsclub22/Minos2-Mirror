@@ -126,7 +126,7 @@ bool RigFactory::checkOmniRigInstalled()
     trace(QString("looking for Omnirig here - %1").arg(fileNamex86));
 
     bool fileExistsx86 = QFileInfo::exists(fileNamex86) && QFileInfo(fileNamex86).isFile();
-    trace(QString("Omnirig found here %1 = %2").arg(fileNamex86).arg(fileExistsx86 ? "Yes" : "No"));
+    trace(QString("Omnirig found here %1 = %2").arg(fileNamex86, fileExistsx86 ? "Yes" : "No"));
 
     bool fileExists = false;
     if (!fileExistsx86)
@@ -134,7 +134,7 @@ bool RigFactory::checkOmniRigInstalled()
         fileName = omnirigFilePath + omnirigFileName;
         trace(QString("looking for Omnirig here - %1").arg(fileName));
         fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
-        trace(QString("Omnirig found here %1 = %2").arg(fileName).arg(fileExists ? "Yes" : "No"));
+        trace(QString("Omnirig found here %1 = %2").arg(fileName, fileExists ? "Yes" : "No"));
     }
 
     if (fileExists || fileExistsx86)
