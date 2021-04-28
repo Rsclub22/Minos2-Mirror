@@ -112,7 +112,7 @@ bool keyer_init( QString &errmess )
       return false;
    return true;
 }
-bool select_keyer( const QString &kn )
+commonPort * select_keyer( const QString &kn )
 {
    if ( sblog )
    {
@@ -135,16 +135,17 @@ bool select_keyer( const QString &kn )
                trace( "Keyer " + kn + " made current." );
             }
             currentKeyer->select( true );
-            return true;
+            return cp;
          }
          i++;
       }
    }
 
-   return false;
+   return nullptr;
 }
-void loadKeyers()
+commonPort* loadKeyers()
 {
+   commonPort *cp = nullptr;
    QString buff;
    bool KeyerLoaded = keyer_init( buff );	// params are argc, argv fo DVP control strings
    if ( KeyerLoaded )
@@ -152,11 +153,13 @@ void loadKeyers()
       QVector < QString > kl = get_keyer_list();
       if ( kl.size() )
       {
-         select_keyer( kl[ 0 ] );
+         cp = select_keyer( kl[ 0 ] );
       }
    }
    else
       mShowMessage( buff, nullptr );
+
+   return cp;
 }
 void unloadKeyers()
 {
@@ -244,16 +247,6 @@ void setLines( bool PTT, bool L1, bool L2 )
    WindowsMonitorPort::PTTInState = PTT;
    WindowsMonitorPort::L1State = L1;
    WindowsMonitorPort::L2State = L2;
-}
-void setLineCallBack( LineCallBack lcallback )
-{
-   WindowsMonitorPort::WinLineCallback = lcallback;
-   WinMonitor::WinLineCallback = lcallback;
-   LineEventsPort::WinLineCallback = lcallback;
-}
-void setVUCallBack( VUCallBack cb )
-{
-   SoundSystemDriver::getSbDriver() ->WinVUCallback = cb;
 }
 int getAutoRepeatDelay()
 {

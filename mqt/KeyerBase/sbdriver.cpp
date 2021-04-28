@@ -584,7 +584,7 @@ SoundSystemDriver::SoundSystemDriver()
    connect(soundSystem, &RtAudioSoundSystem::interruptOK, this, &SoundSystemDriver::interruptOK);
    connect(soundSystem, &RtAudioSoundSystem::ssOutputFinished, this, &SoundSystemDriver::outputFinished);
    connect(soundSystem, &RtAudioSoundSystem::actionQueueFinished, this, &SoundSystemDriver::actionQueueFinished);
-   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::setVU);
+   connect(soundSystem, &RtAudioSoundSystem::setVU, this, &SoundSystemDriver::doSetVU);
 }
 SoundSystemDriver::~SoundSystemDriver()
 {
@@ -623,11 +623,9 @@ void SoundSystemDriver::actionQueueFinished()
         sba->queueFinished();
      }
 }
-void SoundSystemDriver::setVU(unsigned int a, unsigned int b, unsigned int c)
+void SoundSystemDriver::doSetVU(unsigned int a, unsigned int b, unsigned int c)
 {
-    if (WinVUCallback)
-        WinVUCallback( a, b, c );
-
+    emit setVU(a, b, c);
 }
 //==============================================================================
 void SoundSystemDriver::initTone1( int t1 )

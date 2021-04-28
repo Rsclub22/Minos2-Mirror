@@ -8,6 +8,7 @@
 #include "VKMixer.h"
 #include "sbdriver.h"
 #include "keyers.h"
+#include "portcon.h"
 
 KeyerMain *keyerMain = nullptr;
 
@@ -28,28 +29,12 @@ static const char *levelLabels[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer"
                  QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output")
                 };
 
-void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )
+void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )
 {
     if (!inhibitCallbacks)
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
-
-//---------------------------------------------------------------------------
-// Actually, we only want ONE level meter -
-// input for recording
-// output for replay/passthrough
-
-// And we want gain control
-// on input level for recording
-// on output level from recording
-// on transfer level for pasthrough
-//---------------------------------------------------------------------------
-void volcallback( unsigned int rmsvol, unsigned int peakvol, unsigned int samples )
-{
-    if (!inhibitCallbacks)
-        keyerMain->volcallback(rmsvol, peakvol, samples);
-}
-void KeyerMain::volcallback(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
+void KeyerMain::doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
 {
     if (!inhibitCallbacks)
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
@@ -116,10 +101,11 @@ KeyerMain::KeyerMain(QWidget *parent) :
     runAlsaScript(alsaFileName, alsaRestore);
 
     keyerMain = this;
-    setLineCallBack( lcallback );
-    setVUCallBack( &::volcallback );
 
-    loadKeyers();
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
+
+    commonPort * cp = loadKeyers();
+    connect(cp, &commonPort::lcallback, this, &KeyerMain::lcallback);
 
     setVolumeMults();
 

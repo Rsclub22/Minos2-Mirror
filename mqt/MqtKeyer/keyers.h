@@ -61,9 +61,9 @@ private slots:
 };
 class lineMonitor: public timerTicker
 {
-   private:
-      commonPort *cp = nullptr;
+    Q_OBJECT
    public:
+      commonPort *cp = nullptr;
       PortConfig pconf;
       KeyerConfig kconf;
       QString pName;
