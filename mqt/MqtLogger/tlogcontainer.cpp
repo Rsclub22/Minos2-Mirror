@@ -2147,8 +2147,14 @@ void TLogContainer::appStarted()
 {
     delayedAction(this,  [=]()
     {
+        // Bring window(s) to top
+        for(auto cpc: qAsConst(LogContainer->contestPageControls))
+        {
+            // it would be nice to end with the primary pane...
+            Qt::WindowStates css = cpc->windowState();
+            cpc->setWindowState(css | Qt::WindowState::WindowActive);
+        }
         Qt::WindowStates ss = windowState();
-        trace(QString("WindowsState %1").arg(ss));
         setWindowState(ss | Qt::WindowState::WindowActive);
     });
 }
