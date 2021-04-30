@@ -29,7 +29,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
 
 //    int offset = 0;
-    for (auto const &c:  qAsConst(minosConfig->elelist))
+    for (auto const &c:  qAsConst(minosConfig->getCurrConfig().elelist))
     {
         if (c->deleted)
             continue;
@@ -62,7 +62,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
 void StartConfig::on_formShown()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-    if (minosConfig->elelist.size() == 0 )
+    if (minosConfig->getCurrConfig().elelist.size() == 0 )
     {
         // configure a new server
         on_newElementButton_clicked();
@@ -245,3 +245,5 @@ void StartConfig::on_newElementButton_clicked()
 
     cef->setNameFocus();
 }
+
+

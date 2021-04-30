@@ -103,6 +103,14 @@ private slots:
     void	on_readyReadStandardError();
     void	on_readyReadStandardOutput();
 };
+class NamedConfig
+{
+public:
+    QString configName;
+    bool autoStart = false;
+    QVector < QSharedPointer< RunConfigElement> > elelist;
+};
+
 class MinosConfig : public QObject
 {
     Q_OBJECT
@@ -112,9 +120,9 @@ private:  	// User declarations
 
     static MinosConfig *thisDM;
     static QString getConfigIniName();
+    static QString getConfigJsonName();
     MinosConfig();
 
-    INIFile config;
     void initialise();
 
     QVector<AppConfigElement> appConfigList;
@@ -122,9 +130,8 @@ private:  	// User declarations
     void buildAppConfigList();
 
     QString thisRouterName;
-    bool autoStart;
 
-public:  		// User declarations
+public:
     static MinosConfig *getMinosConfig( );
 
     virtual ~MinosConfig() override;
@@ -132,9 +139,13 @@ public:  		// User declarations
     static const char * appNone;
     static const char * appOther;
 
+    QString thisConfigName;
+    QString defConfigName;
     void reset();
 
-    QVector <QSharedPointer<RunConfigElement> > elelist;
+    QMap < QString,  NamedConfig >  configs;
+
+    NamedConfig &getCurrConfig();
 
     QString getThisRouterName();
 
@@ -146,6 +157,9 @@ public:  		// User declarations
 
 //    void cleanElementsOnCancel();
     void saveAll();
+    bool saveAsJson(QString jf);
+
+    bool loadJson(QString jf);
 
     void setThisRouterName( const QString &circle );
 
