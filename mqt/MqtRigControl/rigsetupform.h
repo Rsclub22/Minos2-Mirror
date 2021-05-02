@@ -177,6 +177,9 @@ public:
 
 
     void setPttComportToolTip(QString toolTip);
+
+    void setPttInitialState();
+    void setEnableDisableCatFeaturesGroupVisible(bool visible);
 public slots:
     void comSpeedSelected();
     void comDataBitsSelected();
@@ -254,7 +257,6 @@ private:
 
     QLogTabWidget* ui_RadioTab;
 
-    //TransVertSetupForm *transVerter;
     QString appName;
 
     bool hfFlag = false;
@@ -285,9 +287,6 @@ private:
 
 
     bool radioSupportRit(int radioModelNumber);
-
-
-    //void processNetAddress(QLineEdit *networkAddBox, QString& netAddress);
     void processPortNumber(QLineEdit *netAddBox, QLineEdit *netPortBox, QString &portNumber);
 
 
@@ -302,7 +301,6 @@ private:
 
 
 
-    void setEnableDisableFeaturesGroupVisible(bool visible);
 
     void setPttRTSDisabled(bool state);
     void setPttDTRDisabled(bool state);

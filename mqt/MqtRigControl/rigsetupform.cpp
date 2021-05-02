@@ -49,7 +49,7 @@ RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _
 
 
     fillRadioModelInfo();  // add radio models to drop down
-    //fillPortsInfo(ui->comPortBox);     // add comports to drop down
+
     fillPortsInfo(ui->locTVComPortSel);
     fillSpeedInfo();
     fillDataBitsInfo();
@@ -293,7 +293,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setLocTVSWComportVisible(false);
          }
 
-        //buildSupBandList();
+
 
     }
 
@@ -821,7 +821,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
             setLocTVSWComportVisible(checked);
 
         }
-        //setLocTVSWComportVisible(false);
+
 
     }
 
@@ -922,7 +922,7 @@ void RigSetupForm::setLocTVSWComportVisible(bool visible)
 {
      ui->locTVComPortSel->setVisible(visible);
      ui->locComportSwLbl->setVisible(visible);
-     //setEnableLocalTransVertSwVisible(visible);
+
 
 }
 
@@ -986,7 +986,7 @@ void RigSetupForm::onStartMinosRigCtldChkBox(bool /*selected*/)
         radioData->startMinosRigCtld = checked;
         setStartMinosRigctldCheckbox(checked);
         radioData->startMinosRigCtld = checked;
-        //rigCtldItemsVisible(checked);
+
     }
 
 
@@ -1309,13 +1309,13 @@ void RigSetupForm::onEnableCatFeaturesClicked()
     if(ui->enableCatFeaturesChkBox->isChecked())
     {
         radioData->enableDisableCatFeature.enableDisplay = true;
-        setEnableDisableFeaturesGroupVisible(true);
+        setEnableDisableCatFeaturesGroupVisible(true);
 
     }
     else
     {
         radioData->enableDisableCatFeature.enableDisplay = false;
-        setEnableDisableFeaturesGroupVisible(false);
+        setEnableDisableCatFeaturesGroupVisible(false);
 
     }
 }
@@ -1327,11 +1327,11 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
     ui->enableCatFeaturesChkBox->setChecked(radioData->enableDisableCatFeature.enableDisplay);
     if (ui->enableCatFeaturesChkBox->isChecked())
     {
-        setEnableDisableFeaturesGroupVisible(true);
+        setEnableDisableCatFeaturesGroupVisible(true);
     }
     else
     {
-       setEnableDisableFeaturesGroupVisible(false);
+       setEnableDisableCatFeaturesGroupVisible(false);
     }
 
     ui->enableRitChkBox->setChecked(radioData->enableDisableCatFeature.ritEnable);
@@ -1401,7 +1401,7 @@ void RigSetupForm::loadEnableShowCatFeaturesBox(const RigCapabilities rigCap)
 
 
 
-void RigSetupForm::setEnableDisableFeaturesGroupVisible(bool visible)
+void RigSetupForm::setEnableDisableCatFeaturesGroupVisible(bool visible)
 {
      ui->enable_disableFeaturesGroup->setVisible(visible);
 }
@@ -1616,20 +1616,7 @@ void RigSetupForm::addTransVertTab(int tabNum, QString tabName, bool tabChanged)
     ui->transVertTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
     ui->transVertTab->setCurrentIndex(tabNum);
     transVertTab.value(tabName)->setEnableTransVertSwBoxVisible(false);
-/*
-    // does this radio support antenna sw?
 
-    if (rigFactory->supported_rigs()->value(radioData->rigModel).supportAntSw)
-    {
-
-       radioData->antSwitchAvail = true;
-    }
-    else
-    {
-
-       radioData->antSwitchAvail = false;
-    }
-*/
     transVertTab.value(tabName)->transVertValueChanged = tabChanged;
 
 }
@@ -1702,7 +1689,7 @@ void RigSetupForm::removeTransVerter()
     transVertTab.remove(transvertName);
     radioData->transVertSettings.remove(transvertName);
 
-    //radioData->transVertNames.removeAt(currentIndex);
+
 }
 
 
@@ -1881,6 +1868,16 @@ void RigSetupForm::processPortNumber(QLineEdit* netAddBox, QLineEdit* netPortBox
 
 }
 
+void RigSetupForm::setPttInitialState()
+{
+    radioData->enablePTT = false;
+    radioData->portType = serialCommonData::PTTMethodCodes::PTT_METHOD_CAT;
+    setPttControlsVisible(false);
+    ui->pttCatEnable->setChecked(true);
+    setPTTCheckBoxChecked(false);
+    setPttComport("");
+    setPTTCheckBoxChecked(false);
+}
 
 void RigSetupForm::setPttControlsVisible(bool visible)
 {

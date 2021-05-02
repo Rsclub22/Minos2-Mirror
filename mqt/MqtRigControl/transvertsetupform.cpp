@@ -274,47 +274,14 @@ void TransVertSetupForm::setEnableTransVertSwBoxVisible(bool visible)
 
 
 
-/***************** Radio Antenna Switch Number  ********************************/
-
-/*
-void TransVertSetupForm::antennaNumSwSel()
-{
-    QString numSel = ui->radioAntSwNum->text().trimmed();
-    QRegularExpression re("\\d*");  // a digit (\d), zero or more times (*)
-    if (re.exactMatch(numSel))
-    {
-        transVertData->antSwitchNum = numSel;
-        transVertValueChanged = true;
-    }
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText(QString("Digits only!"));
-        msgBox.exec();
-        return;
-    }
-}
-
-
-void TransVertSetupForm::antSwNumVisible(bool visible)
-{
-
-    ui->radioAntSwNum->setVisible(visible);
-    ui->antSwNumLbl->setVisible(visible);
-}
-
-*/
-
 
 
 
 void TransVertSetupForm::setUiItemsVisible(bool visible)
 {
-    //ui->bandSel->setVisible(visible);
-    //ui->enableTransVertSw->setVisible(visible);
+
     ui->radioFreq->setVisible(visible);
     ui->transVertSwNum->setVisible(visible);
-    //ui->BandLabel->setVisible(visible);
     ui->OffsetLabel->setVisible(visible);
 }
 
