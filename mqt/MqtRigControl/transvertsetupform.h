@@ -33,7 +33,7 @@ public:
     void setBand(QString b);
     QString getBand();
 
-    //void antSwNumVisible(bool visible);
+
     QString getTransVerSwNum();
     void setTransVerSwNum(QString s);
 
@@ -46,8 +46,7 @@ public:
     void setLocTVSwComport(QString p);
     void setEnableTransVertSwBoxVisible(bool visible);
 
-    //QSharedPointer<TransVertParams> getTransVertData(){return transVertData;}
-    //void setTransVertData(QSharedPointer<TransVertParams> tvp){transVertData = tvp;}
+
 private:
 
     Ui::transVertSetupForm *ui;
@@ -64,7 +63,7 @@ private:
     void loadBandSel();
     bool freqInBand(Frequency f, QString band);
 private slots:
-    //void bandSelected();
+
     void calcOffset();
 
     void transVertSwNumSel();

@@ -207,18 +207,40 @@ bool TransVertSetupForm::freqInBand(Frequency f, QString band)
 
 void TransVertSetupForm::setRadioFreqBox(Frequency f)
 {
-    ui->radioFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->radioFreq->setText("0.0");
+    }
+    else
+    {
+       ui->radioFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
+
 }
 
 void TransVertSetupForm::setTargetFreqBox(Frequency f)
 {
-    ui->targetFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->targetFreq->setText("0.0");
+    }
+    else
+    {
+        ui->targetFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
 }
 
 
 void TransVertSetupForm::setOffsetFreqLabel(Frequency f)
 {
-    ui->offsetFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->offsetFreq->setText("0.0");
+    }
+    else
+    {
+        ui->offsetFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
 }
 
 
@@ -274,47 +296,14 @@ void TransVertSetupForm::setEnableTransVertSwBoxVisible(bool visible)
 
 
 
-/***************** Radio Antenna Switch Number  ********************************/
-
-/*
-void TransVertSetupForm::antennaNumSwSel()
-{
-    QString numSel = ui->radioAntSwNum->text().trimmed();
-    QRegularExpression re("\\d*");  // a digit (\d), zero or more times (*)
-    if (re.exactMatch(numSel))
-    {
-        transVertData->antSwitchNum = numSel;
-        transVertValueChanged = true;
-    }
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText(QString("Digits only!"));
-        msgBox.exec();
-        return;
-    }
-}
-
-
-void TransVertSetupForm::antSwNumVisible(bool visible)
-{
-
-    ui->radioAntSwNum->setVisible(visible);
-    ui->antSwNumLbl->setVisible(visible);
-}
-
-*/
-
 
 
 
 void TransVertSetupForm::setUiItemsVisible(bool visible)
 {
-    //ui->bandSel->setVisible(visible);
-    //ui->enableTransVertSw->setVisible(visible);
+
     ui->radioFreq->setVisible(visible);
     ui->transVertSwNum->setVisible(visible);
-    //ui->BandLabel->setVisible(visible);
     ui->OffsetLabel->setVisible(visible);
 }
 

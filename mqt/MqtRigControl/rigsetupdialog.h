@@ -37,48 +37,7 @@ namespace Ui {
 class RigSetupDialog;
 }
 
-/*
-class SetupChangeFlags
-{
-public:
-
-    SetupChangeFlags(){};
-
-    bool getRadioNameChanged(){return radioNameChanged;}
-    void setRadioNameChanged(bool state){radioNameChanged = state;}
-
-    bool getRadioRemoved(){return radioRemoved;}
-    void setRadioRemoved(bool state){radioRemoved = state;}
-
-
-    bool getCurrRadioChanged(){return currRadioChanged;}
-    void setCurrRadioChanged(bool state){currRadioChanged = state;}
-
-    bool getRadioSettingChanged(){return radioSettingChanged;}
-    void setRadioSettingChanged(bool state){radioSettingChanged = state;}
-
-    bool getTransVertSettingChanged(){return transVertSettingChanged;}
-    void setTransVertSettingChanged(bool state){transVertSettingChanged = state;}
-
-    bool getTransVertNameChanged(){return transVertNameChanged;}
-    void setTransVertNameChanged(bool state){transVertNameChanged = state;}
-
-private:
-
-
-     bool radioNameChanged = false;
-     bool radioRemoved = false;
-     bool currRadioChanged = false;
-     bool radioSettingChanged = false;
-     bool transVertSettingChanged = false;
-     bool transVertNameChanged = false;
-
-
-
-
-};
-*/
-
+const QString RADIO_DELETED = "radioDeleted";
 
 class RigSetupDialog : public QDialog
 {
@@ -87,12 +46,6 @@ class RigSetupDialog : public QDialog
 public:
     explicit RigSetupDialog(RigFactory* rigFactory, const QVector<QSharedPointer<BandInfo> > &_bands, bool hfFlag_, QWidget *parent = nullptr);
     ~RigSetupDialog();
-
-
-
-    //scatParams currentRadio;
-
-
 
     QVector<QSharedPointer<BandInfo> > bands;
 
@@ -115,7 +68,6 @@ public:
     void fillPortsInfo();
     void loadAvailComports();
 
-    //SetupChangeFlags setupChangeFlags;
 
     QVector<QSharedPointer<RadioNameChange> > listOfRadioNameChanges;
     QVector<QString> listOfRadiosDataChanged;
@@ -136,8 +88,6 @@ signals:
 
 private slots:
 
-    //void saveButtonPushed();
-    //void cancelButtonPushed();
 
     void addRadio();
     void removeRadio();
@@ -149,23 +99,16 @@ private:
 
     void done(int r) override;   // override done function to validate data entry
 
-    //QVector<RigSetupForm*> radioTab;
     QMap<QString, RigSetupForm*> radioTab;
 
 
     QStringList availRadios;
     int numAvailRadios;
-    //QVector<QSharedPointer<scatParams> > availRadioData;   // data loaded to tabs
     QMap<QString, QSharedPointer<scatParams> > availRadioData;
 
     QSettings availRadioIni;
-    //QSettings transVerterIni;
 
-
-    //bool chkloadflg = false;
     QString appName = "";
-
-    //bool radioRemoved;
 
     bool hfFlag;
 
@@ -193,12 +136,12 @@ private:
     void saveMgmList();
     void addTab(int tabNum, QString tabName);
     void loadSettingsToTab(int tabNum, QString tabName);
-    //void saveRadio(int i);
+
     bool checkRadioNameMatch(QString radioName);
     void saveTranVerterSetting(QSharedPointer<scatParams> radioData, QString transvertName, QSettings  &config);
-    //void readTranVerterSetting(int radioNum, int transVertNum, QSettings &config);
+
     void loadBands();
-    //void getRadioSetting(int radNum, QSettings &config);
+
     void saveRadioData(QSharedPointer<scatParams> radioData, QSettings &config);
 
 

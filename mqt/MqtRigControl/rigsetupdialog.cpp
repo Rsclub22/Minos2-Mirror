@@ -320,7 +320,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     {
         radioTab.value(tabName)->setTransVertSwVisible(true);
         radioTab.value(tabName)->setEnableLocalTransVertSwVisible(true);
-        //for (int i = 0; i < availRadioData.value(tabName)->numTransverters; i++)
+
         QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
         foreach(const auto &tv, tvList)
         {
@@ -348,11 +348,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
 void RigSetupDialog::addRadio()
 {
-    //QStringList availRadios;
-    //getAvailRadiosList(availRadios);
+
     QString windowTitle = tr("Add Radio and Radio Model");
     AddRadioDialog getRadioName_Rig(&availRadioData, rigFactory, windowTitle);
-    //getRadioName_Rig.setWindowTitle(tr("Add Radio and Radio Model"));
+
     if (getRadioName_Rig.exec() != QDialog::Accepted)
     {
         return;
@@ -374,6 +373,8 @@ void RigSetupDialog::addRadio()
     addTab(tabNum, radioName);
     numAvailRadios++;
     radioTab.value(radioName)->setAdvancedCommsFlag(false);
+    radioTab.value(radioName)->setPttInitialState();
+    radioTab.value(radioName)->setEnableDisableCatFeaturesGroupVisible(false);
     radioTab.value(radioName)->setupRadioModel(radioModel);
     radioTab.value(radioName)->setPollInterval(RIG_DEFAULT_POLLINTERVAL);
 
@@ -395,6 +396,8 @@ void RigSetupDialog::addRadio()
 
     radioTab.value(radioName)->setForceRTSComboBox(1);
     radioTab.value(radioName)->on_forceRTSSelected();
+
+
 
 
 
@@ -460,15 +463,34 @@ void RigSetupDialog::removeRadio()
 
     // remove this radio
     ui->radioTab->removeTab(currentIndex);
-    availRadioData.value(currentName)->markForDeletion = true;
-    //availRadios.removeAt(currentIndex);
+    QString newName = currentName + RADIO_DELETED;
+
+    // allow for adding back and deleting the same radio name
+    QList<QString> keys = availRadioData.keys();
+    int keyCount = 0;
+    foreach(const auto &k, keys)
+    {
+        if (k.contains(newName))
+        {
+            keyCount++;
+        }
+    }
+    if (keyCount > 0)
+    {
+        newName += QString::number(keyCount + 1);
+    }
+
+    QSharedPointer<scatParams> radioData;
+    radioData = availRadioData.value(currentName);
+    radioData->radioName = newName;
+    radioData->previousRadioName = currentName;
+    radioData->markForDeletion = true;
+
+    //update data tables
+    availRadioData.remove(currentName);
+    availRadioData.insert(newName, radioData);
+
     radioTab.remove(currentName);
-    //numAvailRadios--;
-    //setupChangeFlags.setRadioRemoved(true);
-
-    //emit radioTabChanged();
-
-
 
 }
 
@@ -489,7 +511,7 @@ void RigSetupDialog::editRadioName()
         return;
     }
 
-    //bool ok;
+
 
     AddRadioDialog editRadioName(&availRadioData, rigFactory, tr("Edit Radio Name - %1").arg(radioName));
     //editRadioName.setWindowTitle(tr("Edit Radio Name - %1").arg(radioName));
@@ -498,9 +520,7 @@ void RigSetupDialog::editRadioName()
     {
         return;
     }
-    //QString newName = QInputDialog::getText(this, tr("Edit Radio Name - %1").arg(radioName),
-    //                                     tr("Edit Radio Name:"), QLineEdit::Normal,
-    //                                     radioName, &ok).trimmed();
+
 
     QString newName = editRadioName.getRadioName();
 
@@ -509,7 +529,7 @@ void RigSetupDialog::editRadioName()
 
         if (newName != radioName)
         {
-            //for (int i = 0; i < numAvailRadios; i++)
+
             QStringList avrList = availRadioData.keys();
 
             // does the name already exist
@@ -864,16 +884,22 @@ void RigSetupDialog::saveSettings()
     {
         if (availRadioData.value(k)->markForDeletion )
         {
-            configRadio.beginGroup(k);
-            configRadio.remove("");      // remove all keys for this group
-            configRadio.endGroup();
-            // remove transverters for this radio
-            fileNameTransVert = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
-            if (QFile::exists(fileNameTransVert))
+            // if previousRadioName contains RADIO_DELETED, duplicate deletion
+            // nothing to delete on disc
+            if (!availRadioData.value(k)->previousRadioName.contains(RADIO_DELETED))
             {
-                QFile::remove(fileNameTransVert);
-            }
+                configRadio.beginGroup(availRadioData.value(k)->previousRadioName);
+                configRadio.remove("");      // remove all keys for this group
+                configRadio.endGroup();
+                // remove transverters for this radio
+                fileNameTransVert = TRANSVERT_PATH_LOGGER + availRadioData.value(k)->previousRadioName + FILENAME_TRANSVERT_RADIOS;
+                if (QFile::exists(fileNameTransVert))
+                {
+                    QFile::remove(fileNameTransVert);
+                }
 
+
+            }
             availRadioData.remove(k);
         }
     }
@@ -989,7 +1015,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->name();
             name.remove('\x20').replace('H', 'h').replace('.', '_');
@@ -1057,7 +1083,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->uk;
             name.remove('\x20').replace('H', 'h').replace('.', '_');
