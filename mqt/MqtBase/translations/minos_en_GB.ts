@@ -942,7 +942,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="79"/>
+        <location filename="../ChatServer.cpp" line="81"/>
         <source>%1/%2 changed state to %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1127,42 +1127,42 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>LOCAL COMMENT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="587"/>
+        <location filename="../DisplayContestContact.cpp" line="595"/>
         <source>MAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="657"/>
+        <location filename="../DisplayContestContact.cpp" line="665"/>
         <source>DEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="660"/>
+        <location filename="../DisplayContestContact.cpp" line="668"/>
         <source>N/S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="667"/>
+        <location filename="../DisplayContestContact.cpp" line="675"/>
         <source>DUP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="748"/>
+        <location filename="../DisplayContestContact.cpp" line="756"/>
         <source>UNFILLED CONTACT </source>
         <translation type="unfinished"></translation>
     </message>

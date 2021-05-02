@@ -1801,6 +1801,14 @@ Continents only apply to DXCC</source>
     </message>
 </context>
 <context>
+    <name>InternalVoiceMemoryKeyer</name>
+    <message>
+        <location filename="../InternalVoiceMemoryKeyer.cpp" line="169"/>
+        <source>Internal Voice Memory Setup</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LocCalcFrame</name>
     <message>
         <location filename="../LocCalcFrame.ui" line="28"/>
@@ -2193,7 +2201,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="605"/>
+        <location filename="../qsologframe.cpp" line="606"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2408,17 +2416,17 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="441"/>
+        <location filename="../qsologframe.cpp" line="442"/>
         <source>Return to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="614"/>
+        <location filename="../qsologframe.cpp" line="615"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1820"/>
+        <location filename="../qsologframe.cpp" line="1821"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2426,57 +2434,57 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1964"/>
+        <location filename="../qsologframe.cpp" line="1965"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1968"/>
+        <location filename="../qsologframe.cpp" line="1969"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1972"/>
+        <location filename="../qsologframe.cpp" line="1973"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1980"/>
+        <location filename="../qsologframe.cpp" line="1981"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2285"/>
+        <location filename="../qsologframe.cpp" line="2296"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2292"/>
+        <location filename="../qsologframe.cpp" line="2303"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2321"/>
+        <location filename="../qsologframe.cpp" line="2332"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2384"/>
+        <location filename="../qsologframe.cpp" line="2395"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2386"/>
+        <location filename="../qsologframe.cpp" line="2397"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2720"/>
+        <location filename="../qsologframe.cpp" line="2731"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2755"/>
+        <location filename="../qsologframe.cpp" line="2766"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2832,7 +2840,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="194"/>
-        <location filename="../rigcontrolframe.cpp" line="614"/>
+        <location filename="../rigcontrolframe.cpp" line="616"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2868,48 +2876,56 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="621"/>
+        <location filename="../rigcontrolframe.cpp" line="623"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1227"/>
+        <location filename="../rigcontrolframe.cpp" line="1229"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1263"/>
+        <location filename="../rigcontrolframe.cpp" line="1265"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1272"/>
+        <location filename="../rigcontrolframe.cpp" line="1274"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1356"/>
+        <location filename="../rigcontrolframe.cpp" line="1358"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1508"/>
+        <location filename="../rigcontrolframe.cpp" line="1510"/>
         <source>Freq out of contest band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1681"/>
+        <location filename="../rigcontrolframe.cpp" line="1683"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1688"/>
+        <location filename="../rigcontrolframe.cpp" line="1690"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1709"/>
+        <location filename="../rigcontrolframe.cpp" line="1711"/>
         <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RigControlVoiceMemoryKeyer</name>
+    <message>
+        <location filename="../rigcontrolvoicememorykeyer.cpp" line="106"/>
+        <source>Rig Control Voice Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3106,7 +3122,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="176"/>
-        <location filename="../rotcontrolframe.cpp" line="594"/>
+        <location filename="../rotcontrolframe.cpp" line="595"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3117,8 +3133,8 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="166"/>
-        <location filename="../rotcontrolframe.cpp" line="472"/>
-        <location filename="../rotcontrolframe.cpp" line="479"/>
+        <location filename="../rotcontrolframe.cpp" line="473"/>
+        <location filename="../rotcontrolframe.cpp" line="480"/>
         <source>Turn</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3143,62 +3159,62 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="225"/>
+        <location filename="../rotcontrolframe.cpp" line="226"/>
         <source>Bearing empty or invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="235"/>
+        <location filename="../rotcontrolframe.cpp" line="236"/>
         <source>Bearing too large - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="243"/>
+        <location filename="../rotcontrolframe.cpp" line="244"/>
         <source>Bearing too small - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="489"/>
-        <location filename="../rotcontrolframe.cpp" line="496"/>
+        <location filename="../rotcontrolframe.cpp" line="490"/>
+        <location filename="../rotcontrolframe.cpp" line="497"/>
         <source>(CCW) Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="503"/>
-        <location filename="../rotcontrolframe.cpp" line="510"/>
+        <location filename="../rotcontrolframe.cpp" line="504"/>
+        <location filename="../rotcontrolframe.cpp" line="511"/>
         <source>(CW) Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="571"/>
-        <location filename="../rotcontrolframe.cpp" line="634"/>
+        <location filename="../rotcontrolframe.cpp" line="572"/>
+        <location filename="../rotcontrolframe.cpp" line="635"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="580"/>
-        <location filename="../rotcontrolframe.cpp" line="640"/>
-        <location filename="../rotcontrolframe.cpp" line="658"/>
+        <location filename="../rotcontrolframe.cpp" line="581"/>
+        <location filename="../rotcontrolframe.cpp" line="641"/>
+        <location filename="../rotcontrolframe.cpp" line="659"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="603"/>
+        <location filename="../rotcontrolframe.cpp" line="604"/>
         <source>Rotating CCW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="613"/>
+        <location filename="../rotcontrolframe.cpp" line="614"/>
         <source>Rotating CW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="624"/>
+        <location filename="../rotcontrolframe.cpp" line="625"/>
         <source>Turning to bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="646"/>
+        <location filename="../rotcontrolframe.cpp" line="647"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5281,66 +5297,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
 </context>
 <context>
-    <name>TxVmButtonDialog</name>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="37"/>
-        <source>Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="71"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="98"/>
-        <source>Message Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="120"/>
-        <source>Repeat Message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.ui" line="132"/>
-        <source>Repeat Pause Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.cpp" line="41"/>
-        <location filename="../txvmbuttondialog.cpp" line="71"/>
-        <source>Repeat Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.cpp" line="47"/>
-        <location filename="../txvmbuttondialog.cpp" line="77"/>
-        <source>Message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.cpp" line="61"/>
-        <source>%1 Duration </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.cpp" line="61"/>
-        <source> - out of range</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttondialog.cpp" line="62"/>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>TxVmButtonsFrame</name>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="14"/>
@@ -5358,57 +5314,187 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="56"/>
-        <location filename="../txvmbuttonsframe.ui" line="63"/>
-        <location filename="../txvmbuttonsframe.ui" line="70"/>
-        <location filename="../txvmbuttonsframe.ui" line="77"/>
-        <location filename="../txvmbuttonsframe.ui" line="88"/>
-        <location filename="../txvmbuttonsframe.ui" line="95"/>
-        <location filename="../txvmbuttonsframe.ui" line="102"/>
-        <location filename="../txvmbuttonsframe.ui" line="109"/>
+        <location filename="../txvmbuttonsframe.ui" line="52"/>
+        <location filename="../txvmbuttonsframe.ui" line="59"/>
+        <location filename="../txvmbuttonsframe.ui" line="66"/>
+        <location filename="../txvmbuttonsframe.ui" line="73"/>
+        <location filename="../txvmbuttonsframe.ui" line="84"/>
+        <location filename="../txvmbuttonsframe.ui" line="91"/>
+        <location filename="../txvmbuttonsframe.ui" line="98"/>
+        <location filename="../txvmbuttonsframe.ui" line="105"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="120"/>
+        <location filename="../txvmbuttonsframe.ui" line="114"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="117"/>
-        <source>Voice Memory Setup</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmbuttonsframe.cpp" line="219"/>
+        <location filename="../txvmbuttonsframe.cpp" line="222"/>
         <source>Voice Memory %1 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="296"/>
+        <location filename="../txvmbuttonsframe.cpp" line="301"/>
         <source>Voice Memory %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>TxVmSetupDialog</name>
+    <name>TxVmInternalButtonDialog</name>
     <message>
-        <location filename="../txvmsetupdialog.ui" line="14"/>
+        <location filename="../txvminternalbuttondialog.ui" line="14"/>
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmsetupdialog.ui" line="27"/>
+        <location filename="../txvminternalbuttondialog.ui" line="39"/>
+        <source>Type: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="73"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="106"/>
+        <source>Test Replay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="126"/>
+        <source>Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="146"/>
+        <source>Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="163"/>
+        <source>Message Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="185"/>
+        <source>Repeat Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.ui" line="197"/>
+        <source>Repeat Pause Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.cpp" line="91"/>
+        <location filename="../txvminternalbuttondialog.cpp" line="121"/>
+        <source>Repeat Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.cpp" line="97"/>
+        <location filename="../txvminternalbuttondialog.cpp" line="127"/>
+        <source>Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.cpp" line="111"/>
+        <source>%1 Duration </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.cpp" line="111"/>
+        <source> - out of range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvminternalbuttondialog.cpp" line="112"/>
+        <source>Please set value between 0 and 180 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TxVmRigButtonDialog</name>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="35"/>
+        <source>Type: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="69"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="96"/>
+        <source>Message Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="118"/>
+        <source>Repeat Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="130"/>
+        <source>Repeat Pause Duration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.cpp" line="61"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="91"/>
+        <source>Repeat Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.cpp" line="67"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="97"/>
+        <source>Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.cpp" line="81"/>
+        <source>%1 Duration </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.cpp" line="81"/>
+        <source> - out of range</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.cpp" line="82"/>
+        <source>Please set value between 0 and 180 seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TxVmRigSetupDialog</name>
+    <message>
+        <location filename="../txvmrigsetupdialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigsetupdialog.ui" line="27"/>
         <source>Number Buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmsetupdialog.ui" line="41"/>
+        <location filename="../txvmrigsetupdialog.ui" line="41"/>
         <source>Comport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmsetupdialog.ui" line="50"/>
+        <location filename="../txvmrigsetupdialog.ui" line="50"/>
         <source>Use PTT For EOM</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5416,22 +5502,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="516"/>
+        <location filename="../txvmbuttonsframe.cpp" line="522"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="517"/>
+        <location filename="../txvmbuttonsframe.cpp" line="523"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="518"/>
+        <location filename="../txvmbuttonsframe.cpp" line="524"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="519"/>
+        <location filename="../txvmbuttonsframe.cpp" line="525"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5649,6 +5735,39 @@ Include the CQ as well as the type</source>
         <location filename="../enqdlg.cpp" line="32"/>
         <location filename="../enqdlg.cpp" line="44"/>
         <source>Please supply value</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>txVmInternalSetupDialog</name>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="25"/>
+        <source>Number Buttons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="39"/>
+        <source>Comport</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="48"/>
+        <source>Use PTT For EOM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="57"/>
+        <source>Input Channel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmInternalSetupDialog.ui" line="71"/>
+        <source>Output Channel</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
