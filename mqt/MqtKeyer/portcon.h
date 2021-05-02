@@ -71,13 +71,15 @@ class commonPort : public QObject
       bool lastPTTState = false;
       bool lastL1State = false;
       bool lastL2State = false;
-      int lastLinesMode = 0;
-      int lastTransverterSwitch = 0;
+      int lastLinesMode = -1;
+      int lastTransverterSwitch = -1;
 
       virtual void checkControls( ) = 0;
 
       void registerMonitor( lineMonitor * );
 
+signals:
+      void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 };
 
 commonPort *createPort( const PortConfig &port );
@@ -100,8 +102,6 @@ class WindowsMonitorPort: public commonPort
       static bool L2State;
       static int linesMode;
 
-      static LineCallBack WinLineCallback;
-
       WindowsMonitorPort( const PortConfig &port );
       virtual ~WindowsMonitorPort();
 
@@ -122,17 +122,15 @@ class WinMonitor: public lineMonitor
    private:
       bool PTTState;
 
-      bool lastPttState;
-      bool lastL1State;
-      bool lastL2State;
-      int lastLinesMode;
+      bool lastPttState = false;
+      bool lastL1State = false;
+      bool lastL2State = false;
+      int lastLinesMode = -1;
    public:
       static bool PTTInState;
       static bool L1State;
       static bool L2State;
       static int linesMode;
-
-      static LineCallBack WinLineCallback;
 
       WinMonitor();
       ~WinMonitor() override;
@@ -166,8 +164,6 @@ class LineEventsPort: public commonPort
       int transverterSwitch = 0;
       bool closing = false;
    public:
-
-      static LineCallBack WinLineCallback;
 
       LineEventsPort( const PortConfig &port );
       virtual ~LineEventsPort();

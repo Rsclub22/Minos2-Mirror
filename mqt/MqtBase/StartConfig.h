@@ -49,6 +49,7 @@ private slots:
 
     void checkEnabled();
     void on_formShown();
+
 public slots:
     void on_CancelButton_clicked();
 
@@ -56,6 +57,8 @@ private:
     QVector<ConfigElementFrame *> elementFrames;
 
     void copyFromScreen();
+
+    bool saveAsJson(QString f);
 
     void saveAll();
 

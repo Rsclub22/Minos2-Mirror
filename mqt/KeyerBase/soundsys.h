@@ -67,7 +67,7 @@ private slots:
 
 signals:
     void interruptOK();
-    void setActionTime1();
+    void ssOutputFinished();
     void actionQueueFinished();
     void setVU(unsigned int a, unsigned int b, unsigned int c);
 
@@ -78,7 +78,12 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
-    bool initialise( QString &errmess );
+    bool initialise(QString ind , QString outd);
+    void stop();
+    void closedown();
+
+    QStringList inputDevices;
+    QStringList outputDevices;
 
     unsigned int setRate(unsigned int rate);
     void setFilter(int cf);
@@ -105,7 +110,7 @@ public:
     int16_t *dataptr = nullptr;
     unsigned long samples = 0;
 
-    WaveFile outWave;
+    WaveFile *outWave = nullptr;
     void writeDataToFile(void *inp, unsigned int nFrames);
     RiffWriter *wThread = nullptr;
 
@@ -120,6 +125,8 @@ private:
 
     unsigned int inChannels = 0;
     unsigned int outChannels = 0;
+
+    QMap<QString, int> deviceIds;
 
     chunkware_simple::SimpleCompRms compressor;
     LPFilter lpFilter;

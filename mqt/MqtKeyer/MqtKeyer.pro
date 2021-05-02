@@ -26,17 +26,14 @@ SOURCES += main.cpp\
     KeyerRPCServer.cpp \
     keyers.cpp \
     portcon.cpp \
-    sbdriver.cpp \
     windowMonitor.cpp
 
 HEADERS  += KeyerMain.h \
     keyerAbout.h \
     keyconf.h \
-    keyctrl.h \
     KeyerRPCServer.h \
     keyers.h \
     portcon.h \
-    sbdriver.h \
     windowMonitor.h
 
 FORMS    += KeyerMain.ui \

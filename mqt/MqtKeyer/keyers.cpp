@@ -37,26 +37,6 @@ static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "OS - Restart(1)/Close(2)")
 };
-//==============================================================================
-
-QMap <int, QString> MORSECODE;    // . is 0x40, - is 0x80
-QMap <int, MORSEMSG> MORSEMSGS;
-
-//==============================================================================
-
-// some of these might not belong here, but they were in sbdvp or tlkeyer
-// and I still need them somewhere
-bool sblog = false;
-unsigned long MORSEINTCOUNT = 0;
-
-int tuneTime = 10;
-double tuneLevel = 80.0;
-
-int CWTone = 1000;
-int CWSpeed = 12;
-
-qint64 currTick;
-my_deque < KeyerAction *> KeyerAction::currentAction;
 //=============================================================================
 
 commonKeyer *currentKeyer = nullptr;
@@ -132,7 +112,7 @@ bool keyer_init( QString &errmess )
       return false;
    return true;
 }
-bool select_keyer( const QString &kn )
+commonPort * select_keyer( const QString &kn )
 {
    if ( sblog )
    {
@@ -155,16 +135,17 @@ bool select_keyer( const QString &kn )
                trace( "Keyer " + kn + " made current." );
             }
             currentKeyer->select( true );
-            return true;
+            return cp;
          }
          i++;
       }
    }
 
-   return false;
+   return nullptr;
 }
-void loadKeyers()
+commonPort* loadKeyers()
 {
+   commonPort *cp = nullptr;
    QString buff;
    bool KeyerLoaded = keyer_init( buff );	// params are argc, argv fo DVP control strings
    if ( KeyerLoaded )
@@ -172,11 +153,13 @@ void loadKeyers()
       QVector < QString > kl = get_keyer_list();
       if ( kl.size() )
       {
-         select_keyer( kl[ 0 ] );
+         cp = select_keyer( kl[ 0 ] );
       }
    }
    else
       mShowMessage( buff, nullptr );
+
+   return cp;
 }
 void unloadKeyers()
 {
@@ -264,16 +247,6 @@ void setLines( bool PTT, bool L1, bool L2 )
    WindowsMonitorPort::PTTInState = PTT;
    WindowsMonitorPort::L1State = L1;
    WindowsMonitorPort::L2State = L2;
-}
-void setLineCallBack( LineCallBack lcallback )
-{
-   WindowsMonitorPort::WinLineCallback = lcallback;
-   WinMonitor::WinLineCallback = lcallback;
-   LineEventsPort::WinLineCallback = lcallback;
-}
-void setVUCallBack( VUCallBack cb )
-{
-   SoundSystemDriver::getSbDriver() ->WinVUCallback = cb;
 }
 int getAutoRepeatDelay()
 {
@@ -406,7 +379,9 @@ timerTicker::~timerTicker()
 
 commonKeyer::commonKeyer( const KeyerConfig &keyer, const PortConfig &port )
       : lineMonitor( keyer, port )
-{}
+{
+
+}
 commonKeyer::~commonKeyer()
 {
    if ( sblog )
@@ -518,6 +493,7 @@ bool commonKeyer::transverterSwitchChanged(int s)
 }
 void commonKeyer::queueFinished()
 {}
+
 //==============================================================================
 
 voiceKeyer::voiceKeyer( const KeyerConfig &keyer, const PortConfig &port )
@@ -955,7 +931,7 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
 bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength, int filterCorner )
 {
    QString errmess;
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;
@@ -994,17 +970,6 @@ KeyerAction::~KeyerAction()
    actionTime = -1;
 }
 
-/*static*/ KeyerAction *KeyerAction::getCurrentAction()
-{
-   if ( currentAction.begin() == currentAction.end() )
-      return nullptr;
-   return *currentAction.begin();
-}
-
-KeyerAction *KeyerAction::getNextAction()
-{
-   return KeyerAction::currentAction.next_element( this );
-}
 
 void KeyerAction::checkTimer()
 {
@@ -1539,7 +1504,7 @@ void PlayAction::timeOut()
                 tailWithPip = currentKeyer->kconf.enablePip;
             }
 
-            if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode ))
+            if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode, currentKeyer->kconf.clipRecord ))
             {
                actionTime = 1;
                deleteAtTick = true;

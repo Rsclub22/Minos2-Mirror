@@ -17,6 +17,9 @@
 #include "serialCommonData.h"
 #include "MTrace.h"
 
+#ifndef HAMLIB_FILPATHLEN
+#define HAMLIB_FILPATHLEN FILPATHLEN
+#endif
 const char* HamlibRigControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
                                                 QT_TR_NOOP("Invalid parameter"),
                                                 QT_TR_NOOP("Invalid configuration"),
@@ -214,7 +217,7 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
     // load cat params
     if (useRigCtld)
     {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), FILPATHLEN);
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
     }
     else
     {
@@ -222,7 +225,7 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
         if (rig_port_e(currentRadio->portType) == RIG_PORT_SERIAL)
         {
             comport.append(currentRadio->comport);
-            strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), HAMLIB_FILPATHLEN);
             my_rig->state.rigport.parm.serial.rate = currentRadio->baudrate;
             my_rig->state.rigport.parm.serial.data_bits = currentRadio->databits;
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio->stopbits;
@@ -257,11 +260,11 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
             {
                 netAdd = currentRadio->networkAdd;
             }
-            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio->networkPort).toLatin1().data(), FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio->networkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
         }
         else if (rig_port_e(currentRadio->portType) == RIG_PORT_NONE)
         {
-            strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN);
         }
 
         if (currentRadio->enablePTT)
@@ -1226,7 +1229,7 @@ setting_t HamlibRigControl::rigHasGetFunc(int rigNumber, setting_t func)
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_get_level (myRig, func);
+        return rig_has_get_func( myRig, func);
     }
     else
     {
@@ -1236,7 +1239,7 @@ setting_t HamlibRigControl::rigHasGetFunc(int rigNumber, setting_t func)
 
 setting_t HamlibRigControl::rigHasSetFunc(setting_t func)
 {
-    return rig_has_set_level (my_rig, func);
+    return rig_has_set_func (my_rig, func);
 }
 
 setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
@@ -1245,7 +1248,7 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_set_level (myRig, func);
+        return rig_has_set_func (myRig, func);
     }
     else
     {

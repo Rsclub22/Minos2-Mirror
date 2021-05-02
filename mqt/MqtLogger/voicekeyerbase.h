@@ -15,8 +15,10 @@
 #define VOICEKEYERBASE_H
 
 #include <QObject>
+#include <QSharedPointer>
 
-
+class VoiceKeyerBase;
+class VoiceKeyerFactory;
 
 class VoiceKeyerCommonParams
 {
@@ -83,11 +85,15 @@ public:
     int getvmButtonNum(){return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
 
+    QSharedPointer<VoiceKeyerBase> getVkBase() const{return vkBase;}
+    void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
+
     void clear();
 
 private:
 
     QString type;
+    QSharedPointer<VoiceKeyerBase> vkBase;
     QString vmName;
     int vmDuration;
     bool vmRepeatFlag;
@@ -101,10 +107,13 @@ class VoiceKeyerBase  : public QObject
 
 public:
     explicit VoiceKeyerBase(QObject *parent = nullptr);
+    virtual ~VoiceKeyerBase();
 
     virtual void voiceKeyerInit(int numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg() = 0;
+    virtual bool hasRecord() = 0;
+    virtual void doRecording(VoiceKeyerParams *){}
 
     //virtual int getKeyerState(int &state) = 0;
 
@@ -113,6 +122,8 @@ public:
 
     virtual void setPttOnOff(bool onOff) = 0;
 
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) = 0;
+    virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
     int getMaxNumButtons(){return MAXNUM_BUTTONS;}
 

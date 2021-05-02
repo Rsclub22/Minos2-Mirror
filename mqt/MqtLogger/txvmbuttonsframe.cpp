@@ -3,11 +3,6 @@
 
 
 const int NO_VM_BUTTON_ON = -1;
-const int VM_BUTTON_1_ON = 0;
-const int VM_BUTTON_2_ON = 1;
-
-
-
 
 const QStringList vmButtonShortCutKeys = {
                                     "Shift+F1", "Shift+F2",
@@ -38,8 +33,6 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     vmCommonParams.clear();
 
     readVmCommonParams(vmCommonParams);
-
-    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
 
     msgDurTimer = new QTimer(this);
     connect(msgDurTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onMsgDurTimerTimeout);
@@ -76,17 +69,24 @@ void TxVmButtonsFrame::initTxVmButton()
         connect( txVmButtonMap[i], &TxVoiceMemButton::buttonActivated, this, &TxVmButtonsFrame::runButActivated, Qt::QueuedConnection );
     }
 
-
-
-    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
     connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
-
     connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
-
 
     clearButtonLabels();
 
     setVoiceNumMemButtonsVisible(vmCommonParams.getNumButtons());
+
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
+    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+
+    QString voiceKeyerName = config.value("KeyerName").toString();
+    ui->voiceKeyerSelect->setCurrentText(voiceKeyerName);
+
+    config.endGroup();
 
 }
 
@@ -112,14 +112,9 @@ void TxVmButtonsFrame::onVmSetupClicked()
 {
     if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
     {
-        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(ui->voiceKeyerSelect->currentText());
-        TxVmSetupDialog txVmSetupDialog(voiceCap, this);
-        txVmSetupDialog.setWindowTitle(tr("Voice Memory Setup"));
-
         VoiceKeyerCommonParams vmCommonParams_ = vmCommonParams;
-        txVmSetupDialog.setVmCommonParamsData(&vmCommonParams_);
 
-        if (txVmSetupDialog.exec() == QDialog::Accepted)
+        if (txVoiceKeyer->setup(voiceKeyerFactory, vmCommonParams) == QDialog::Accepted)
         {
             if (vmCommonParams_ != vmCommonParams)
             {
@@ -130,8 +125,6 @@ void TxVmButtonsFrame::onVmSetupClicked()
 
                 vmCommonParams = vmCommonParams_;
                 saveVmCommonParams(vmCommonParams);
-
-
             }
         }
     }
@@ -145,6 +138,15 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     Q_UNUSED(idx)
 
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+
+    QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
+
+    config.setValue("KeyerName", voiceKeyerName);
+
+    config.endGroup();
+
     if (voiceKeyerName.isEmpty())
     {
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
@@ -162,10 +164,10 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
     voiceKeyerType = voiceCap.getKeyerType();
 
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
     {
         trace(QString("[Voice Keyer] Voice Keyer type selected = %1").arg(voiceCap.getKeyerName()));
-        txVoiceKeyer = voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum());
+        txVoiceKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
         if (txVoiceKeyer)
         {
 
@@ -181,6 +183,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
                vmKeyParamList.append(vmData);
                setRunButtonText(i, vmData.getVmName());
            }
+           txVoiceKeyer->voiceKeyerInit(voiceMemButtonList.count());
         }
 
     }
@@ -213,14 +216,14 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         {
             vmData.setType(voiceKeyerType);
         }
+        vmData.setVkBase(txVoiceKeyer);
         trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
-        TxVmButtonDialog vmButtonDialog(this);
 
-        vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
-        vmButtonDialog.setVmData(&vmData);
-        if (vmButtonDialog.exec() == QDialog::Accepted)
+        QString title(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+        int ret = txVoiceKeyer->editButton(&vmData, title);
+        if (ret == QDialog::Accepted)
         {
-            if (txVoiceKeyer)
+            if ( txVoiceKeyer)
             {
                 txVoiceKeyer->saveVmButtonParams(vmData);
                 setRunButtonText(buttonNumber, vmData.getVmName());
@@ -228,6 +231,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
             }
 
         }
+
     }
 
 }
@@ -291,14 +295,16 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
     trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
 
-    TxVmButtonDialog vmButtonDialog(this);
 
-    vmButtonDialog.setWindowTitle(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
+//    TxVmRigButtonDialog vmButtonDialog(this);
+
+    QString title(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
-    vmButtonDialog.setVmData(&vmData);
+    vmData.setVkBase(txVoiceKeyer);
 
-    if (vmButtonDialog.exec() == QDialog::Accepted)
+    int ret = txVoiceKeyer->editButton(&vmData, title);
+    if (ret == QDialog::Accepted)
     {
         if (txVoiceKeyer)
         {
@@ -311,12 +317,12 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
 }
 
-void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
+void TxVmButtonsFrame::clearActionSelected(int /*buttonNumber*/)
 {
 
 }
 
-void TxVmButtonsFrame::runButActivated(int buttonNumber)
+void TxVmButtonsFrame::runButActivated(int /*buttonNumber*/)
 {
 
 }

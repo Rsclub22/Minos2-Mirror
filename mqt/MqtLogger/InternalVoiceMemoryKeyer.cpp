@@ -1,0 +1,186 @@
+#include "base_pch.h"
+#include "tlogcontainer.h"
+#include "tsinglelogframe.h"
+#include "SendRPCDM.h"
+#include "txvminternalbuttondialog.h"
+#include "txVmInternalSetupDialog.h"
+
+#include "sbdriver.h"
+#include "keyerlog.h"
+
+#include "InternalVoiceMemoryKeyer.h"
+
+const QString indevKey("InDevice");
+const QString outdevKey("OutDevice");
+
+InternalVoiceMemoryKeyer::InternalVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
+{
+
+}
+
+InternalVoiceMemoryKeyer::~InternalVoiceMemoryKeyer()
+{
+    SoundSystemDriver::sbdvp_unload();
+}
+void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+{
+    QString keyerName = "Internal";
+
+    VoiceKeyerCapabilities voiceMemCap;
+
+    voiceMemCap.setVmIdNum(VoiceKeyerId::Internal);
+    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::Internal]);
+    voiceMemCap.setKeyerName(keyerName);
+    voiceMemCap.setNumVoiceKeys(8);
+    voiceMemCap.setSupportRepeatMsg(true);
+    voiceMemCap.setSetupButton(false);
+
+
+    (*vmKeyersList)[keyerName] = voiceMemCap;
+
+}
+void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
+{
+    Q_UNUSED(numButtons)
+    sblog = true;
+
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
+    QSettings settings(fileName, QSettings::IniFormat);
+
+    QString indev = settings.value(indevKey, "").toString();
+    QString outdev = settings.value(outdevKey, "").toString();
+
+    QString errmess;
+    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ,0 ) )
+    {
+       trace( "sbdvp_init failed! " + errmess );
+    }
+    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0);  // for now, set everything to 0db
+
+    for (int i = 0; i < numButtons; i++)
+    {
+        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(i);
+
+        QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::Internal] + ".ini";
+        QSettings config(inifileName, QSettings::IniFormat);
+        config.beginGroup("button" + QString::number(i));
+
+        config.setValue("messageDuration", msgLen);
+
+        config.endGroup();
+    }
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &InternalVoiceMemoryKeyer::onDoPTT);
+}
+
+void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
+{
+    // play message - we need a PTT/NoPtt switch
+    QString fileName;
+    fileName = QString("CQF%1.WAV").arg(msgNum);
+
+    if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
+    {
+
+    }
+
+}
+
+void InternalVoiceMemoryKeyer::stopMsg()
+{
+    // stop recording/playing message
+    SoundSystemDriver::getSbDriver() ->stopDMA();
+
+}
+
+
+void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
+{
+    // execute recording from params dialog
+    // button number and filename are in vkParam
+
+    // Can we work it to use space bar as PTT for recording?
+    QString fileName = QString("CQF%1.WAV").arg(vkParam->getvmButtonNum());
+    SoundSystemDriver::getSbDriver() ->record_file( fileName );
+
+    int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getvmButtonNum());
+    vkParam->setVmDuration(msgLen);
+
+    QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
+    QSettings config(inifileName, QSettings::IniFormat);
+    config.beginGroup("button" + QString::number(vkParam->getvmButtonNum()));
+
+    config.setValue("messageDuration", vkParam->getVmDuration());
+
+    config.endGroup();
+}
+
+bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+{
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("button" + QString::number(buttonNum));
+
+    vmParams.setType(config.value("type", "").toString());
+    vmParams.setVmName(config.value("name", "").toString());
+    vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
+    vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
+    vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
+    vmParams.setvmButtonNum(config.value("buttonNum", buttonNum).toInt());
+    config.endGroup();
+
+    return true;
+}
+
+void InternalVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_)
+{
+    VoiceKeyerParams vmParams = vmParams_;
+
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+    config.beginGroup("button" + QString::number(vmParams.getvmButtonNum()));
+
+    config.setValue("type", vmParams.getType());
+    config.setValue("name", vmParams.getVmName());
+    config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
+    config.setValue("messageDuration", vmParams.getVmDuration());
+    config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
+    config.setValue("buttonNum", vmParams.getvmButtonNum());
+    config.endGroup();
+}
+
+void InternalVoiceMemoryKeyer::setPttOnOff(bool onOff)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf)
+    {
+        LogContainer->sendDM->sendRigControlPttOnOff(tslf, onOff);
+    }
+}
+void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
+{
+    setPttOnOff(onOff);
+}
+int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+{
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+
+    txVmInternalSetupDialog setup(voiceCap, tslf->txVmButtonsFrame);
+    setup.setWindowTitle(tr("Internal Voice Memory Setup"));
+
+    setup.setVmCommonParamsData(&vmCommonParams);
+
+    return setup.exec();
+}
+
+int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+{
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    TxVmInternalButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
+
+    vmButtonDialog.setWindowTitle(title);
+    vmButtonDialog.setVmData(vmData);
+    int ret = vmButtonDialog.exec();
+    return ret;
+
+}

@@ -22,7 +22,6 @@ public:
     virtual ~KeyerMain() override;
 
     void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode);
-    void volcallback(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
 
 private slots:
 
@@ -76,6 +75,11 @@ private slots:
     void on_replayValue_valueChanged(double arg1);
 
     void on_passThroughValue_valueChanged(double arg1);
+
+    void onPTT(bool);
+
+    void doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
+    void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
 private:
     void syncSetLines();

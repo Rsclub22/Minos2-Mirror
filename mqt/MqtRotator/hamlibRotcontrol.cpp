@@ -19,6 +19,9 @@
 #include "rotcapabilities.h"
 #include "minosNetUtils.h"
 #include "MTrace.h"
+#ifndef HAMLIB_FILPATHLEN
+#define HAMLIB_FILPATHLEN FILPATHLEN
+#endif
 
 const char* HamlibRotControl::hamlibErrorMsg[] =  {QT_TR_NOOP("No Error, operation completed sucessfully"),
                                                 QT_TR_NOOP("Invalid parameter"),
@@ -208,11 +211,11 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
         {
             netAdd = selectedAntenna.networkAdd;
         }
-        strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), FILPATHLEN - 1);
+        strncpy(my_rot->state.rotport.pathname, QString(netAdd + ":" + selectedAntenna.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN - 1);
     }
     else if (selectedAntenna.portType == RotCapConstants::PortType::none)
     {
-        strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), FILPATHLEN - 1);
+        strncpy(my_rot->state.rotport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN - 1);
     }
 
 

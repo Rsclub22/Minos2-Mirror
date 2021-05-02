@@ -57,7 +57,7 @@ void RiffWriter::run()
             ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
         else
         {
-            ss->outWave.Close();
+            ss->outWave->Close();
 #ifdef Q_OS_UNIX
             sync();     // make sure it goes to disk
 #endif
@@ -137,9 +137,6 @@ RtAudioSoundSystem::RtAudioSoundSystem()
     {
        audio = new RtAudio();
 
-       wThread = new RiffWriter(this);
-       wThread->start();
-
        unsigned int defInput = audio->getDefaultInputDevice();
        unsigned int defOutput = audio->getDefaultOutputDevice();
        unsigned int devices = audio->getDeviceCount();
@@ -158,6 +155,15 @@ RtAudioSoundSystem::RtAudioSoundSystem()
          {
              outChannels = info.outputChannels;
          }
+         if (info.inputChannels)
+         {
+             inputDevices.append(info.name.c_str());
+         }
+         if (info.outputChannels)
+         {
+             outputDevices.append(info.name.c_str());
+         }
+         deviceIds[QString(info.name.c_str())] = i;
        }
        trace( "Default output channels = " + QString::number(outChannels) + " Default input channels = " + QString::number(inChannels));
     }
@@ -186,10 +192,19 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
        trace(error.getMessage().c_str());
    }
    delete audio;
+   delete wThread;
 }
-bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
+bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 {
-
+    if (!audio)
+    {
+        audio = new RtAudio();
+    }
+    if (!wThread)
+    {
+        wThread = new RiffWriter(this);
+        wThread->start();
+    }
     compressor.setSampleRate(sampleRate);
     compressor.setWindow(10);       // milliseconds
     compressor.setThresh( -10 );
@@ -208,11 +223,25 @@ bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
 
         unsigned int bufferFrames = FRAMESAMPLES;
 
-        outParams.deviceId = audio->getDefaultOutputDevice();
+        if (outd.isEmpty())
+        {
+            outParams.deviceId = audio->getDefaultOutputDevice();
+        }
+        else
+        {
+            outParams.deviceId = deviceIds[outd];
+        }
         outParams.firstChannel = 0;
         outParams.nChannels = outChannels;
 
-        inParams.deviceId = audio->getDefaultInputDevice();
+        if (ind.isEmpty())
+        {
+            inParams.deviceId = audio->getDefaultInputDevice();
+        }
+        else
+        {
+            inParams.deviceId = deviceIds[ind];
+        }
         inParams.firstChannel = 0;
         inParams.nChannels = inChannels;
 
@@ -239,6 +268,40 @@ bool RtAudioSoundSystem::initialise( QString &/*errmess*/ )
 
     return true;
 }
+void RtAudioSoundSystem::stop()
+{
+    stopDMA();
+
+    wThread->terminated = true;
+    bufferNotEmpty.wakeAll();
+    wThread->wait();
+    try
+    {
+        if (audio->isStreamRunning())
+        {
+           // Stop the stream.
+           audio->stopStream();
+        }
+    }
+    catch ( RtAudioError& error )
+    {
+        trace(error.getMessage().c_str());
+    }
+}
+void RtAudioSoundSystem::closedown()
+{
+    if (audio)
+    {
+        stop();
+
+        delete audio;
+        audio = nullptr;
+
+        delete outWave;
+        outWave = nullptr;
+    }
+}
+
 unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
 {
    sampleRate = rate;
@@ -277,11 +340,11 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
     if ( status == RTAUDIO_INPUT_OVERFLOW)
     {
-        trace("Stream input underflow detected.");
+        trace("Stream input overflow detected.");
     }
     if (status == RTAUDIO_OUTPUT_UNDERFLOW)
     {
-        trace("Stream output overflow detected.");
+        trace("Stream output underflow detected.");
     }
 
 
@@ -408,13 +471,15 @@ void RtAudioSoundSystem::startOutput()
 
 void RtAudioSoundSystem::stopOutput()
 {
+    trace("stopOutput");
     outputEnabled = false;
-    emit setActionTime1();
+    emit ssOutputFinished();
     emit setVU(0, 0, 0);
 }
 void RtAudioSoundSystem::startInput()
 {
     inputEnabled = true;
+
 }
 
 void RtAudioSoundSystem::stopInput()
@@ -442,8 +507,12 @@ bool RtAudioSoundSystem::startInput( QString fn )
     // Should we do this in the writer thread?
     recIndex = 0;
     writeIndex = 0;
+    if (!outWave)
+    {
+        outWave = new WaveFile;
+    }
 
-    if ( outWave.OpenForWrite( fn.toLatin1(), sampleRate, 16, 2 ) == DDC_SUCCESS )
+    if ( outWave->OpenForWrite( fn.toLatin1(), sampleRate, 16, 2 ) == DDC_SUCCESS )
        return true;
 
     return false;
@@ -486,7 +555,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
     if (inp && nFrames)
     {
         const int16_t *q = reinterpret_cast< const int16_t * > ( inp );
-        DDCRET ret = outWave.WriteData ( q, nFrames * 2 );   // size is numdata
+        DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
         if ( ret != DDC_SUCCESS )
         {
             return;

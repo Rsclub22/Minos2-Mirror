@@ -197,50 +197,6 @@ void KeyerConfigure::SetMorseCode( TiXmlElement *e )
    }
 }
 //==============================================================================
-/*
--- Variable strings
- 
--- $MyCall, $HisCall, $CorrectedCall, $RST, $Serial, $MyLocator, $MyQTH,
--- $CurrentOperator
- 
--- are interpreted at transmission time
- 
--- Should the callbacks add a space before or after the characters? Ideally not
--- but will this confuse novices.
- 
-We need a some kind of separator to allow us to parse things at all!
- 
--- all messages will be converted to "UPPER CASE" before sending
- 
-CWMessages = {
-	["1"] = "CQ CQ CQ de $MyCall",
-	["2"] = "$MyCall",
-	["3"] = "$HisCall",
-	["4"] = "$CorrectedCall UR $RST $Serial at $MyLocator $MyQTH",
-	}
-SetMessages(CWMessages)
- 
-// WGV codings:
- 
-$1 mycall
-$2 "^"
-$3 "&"
-$4 serial sent
-$5 myloc
-$6 file contents
-$7 his call (autocorrect; only if not as originally sent)
- 
-// we will use???
- 
-*/
-MORSEMSG::MORSEMSG() : repeat( false )
-{}
-MORSEMSG::~MORSEMSG()
-{}
-void MORSEMSG::setMessage( const QString &pvalue )
-{
-   msg = pvalue;
-}
 void KeyerConfigure::SetCWMessages( TiXmlElement *e )
 {
    for ( TiXmlElement * c = e->FirstChildElement(); c; c = c->NextSiblingElement() )

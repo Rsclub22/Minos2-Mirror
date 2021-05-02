@@ -144,7 +144,7 @@ void ConfigElementFrame::saveElement()
 
         if (newElement)
         {
-            MinosConfig::getMinosConfig() ->elelist.append(configElement );
+            MinosConfig::getMinosConfig() ->getCurrConfig().elelist.append(configElement );
             newElement = false;
         }
     }

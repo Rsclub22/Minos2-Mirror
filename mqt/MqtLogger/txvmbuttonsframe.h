@@ -8,8 +8,6 @@
 #include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "txvmbuttondialog.h"
-#include "txvmsetupdialog.h"
 #include "radiodetails.h"
 #include "rigcontrolframe.h"
 
@@ -113,7 +111,7 @@ private:
     Ui::TxVmButtonsFrame *ui;
 
 
-    VoiceKeyerBase* txVoiceKeyer;
+    QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
     QList<QShortcut *> shortCutKeyList;
