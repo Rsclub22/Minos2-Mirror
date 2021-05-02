@@ -1182,7 +1182,7 @@ setting_t HamlibRigControl::rigHasGetFunc(int rigNumber, setting_t func)
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_get_level (myRig, func);
+        return rig_has_get_func( myRig, func);
     }
     else
     {
@@ -1192,7 +1192,7 @@ setting_t HamlibRigControl::rigHasGetFunc(int rigNumber, setting_t func)
 
 setting_t HamlibRigControl::rigHasSetFunc(setting_t func)
 {
-    return rig_has_set_level (my_rig, func);
+    return rig_has_set_func (my_rig, func);
 }
 
 setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
@@ -1201,7 +1201,7 @@ setting_t HamlibRigControl::rigHasSetFunc(int rigNumber, setting_t func)
     myRig = rig_init(rigNumber);
     if (myRig)
     {
-        return rig_has_set_level (myRig, func);
+        return rig_has_set_func (myRig, func);
     }
     else
     {
