@@ -725,13 +725,17 @@ Server=false
     }
     appConfig.endGroup();
 }
-QString MinosConfig::checkConfig()
+QString MinosConfig::checkConfig(QString name)
 {
     QString reqErrs;
 
+    if (name.isEmpty())
+    {
+        name = thisConfigName;
+    }
     bool routerPresent = false;
     int eleListSize = 0;
-    NamedConfig &nc = configs[thisConfigName];
+    NamedConfig &nc = configs[name];
     for ( auto const &ele: qAsConst(nc.elelist ))
     {
         if (ele->deleted)

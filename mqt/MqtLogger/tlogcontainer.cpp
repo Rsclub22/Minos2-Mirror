@@ -18,6 +18,7 @@
 #include "tclockdlg.h"
 #include "tloccalcform.h"
 #include "TSessionManager.h"
+#include "ManageAppConfigs.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "SendRPCDM.h"
@@ -438,7 +439,7 @@ void TLogContainer::setupMenus()
     NextUnfilledAction = newAction(QT_TR_NOOP("Goto First Unfilled Contact"), ui->menuSearch, &TLogContainer::NextUnfilledActionExecute);
 // end of search menu
 
-    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration..."), ui->menuTools, &TLogContainer::StartConfigActionExecute);
+    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration..."), ui->menuTools, &TLogContainer::ManageAppConfigsActionExecute);
 
     screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
@@ -1229,10 +1230,10 @@ void TLogContainer::doScreenConfigAction()
     sc.exec();
     updateLayoutsMenu();
 }
-void TLogContainer::StartConfigActionExecute()
+void TLogContainer::ManageAppConfigsActionExecute()
 {
-    StartConfig configBox( this, false);
-    configBox.exec();
+    ManageAppConfigs manageApps( this, false);
+    manageApps.exec();
     // in case we are now running more apps
     sendDM->subscribeApps();
 }

@@ -231,7 +231,7 @@ private slots:
 
     void menuLogsActionExecute(bool);
 
-    void StartConfigActionExecute();
+    void ManageAppConfigsActionExecute();
 
     void on_contestPageControl_currentChanged(int index);
     void onTabClosebutton(int);

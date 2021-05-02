@@ -5,6 +5,7 @@
 #include "TSessionManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
+#include "ManageAppConfigs.h"
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
@@ -222,8 +223,17 @@ void TAboutBox::on_LoggerOnlyButton_clicked()
 
 void TAboutBox::on_AppsButton_clicked()
 {
-    StartConfig configBox( this, false);
-    configBox.exec();
+    if (Qt::ShiftModifier == QApplication::keyboardModifiers())
+    {
+        ManageAppConfigs manageApps( this, false);
+        manageApps.exec();
+    }
+    else
+    {
+        MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+        StartConfig configBox( this, false, minosConfig->getCurrConfig().configName);
+        configBox.exec();
+    }
 }
 
 void TAboutBox::on_manageSets_clicked()

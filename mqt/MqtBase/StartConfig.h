@@ -14,13 +14,14 @@ class StartConfig : public QDialog
     Q_OBJECT
 
 public:
-    explicit StartConfig(QWidget *parent, bool showAutoStart);
+    explicit StartConfig(QWidget *parent, bool showAutoStart, QString curName);
     virtual ~StartConfig() override;
 
 private:
     Ui::StartConfig *ui;
     QTimer runTimer;
     QTimer formShowTimer;
+    QString curConfigName;
     virtual void resizeEvent(QResizeEvent *event) override;
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
