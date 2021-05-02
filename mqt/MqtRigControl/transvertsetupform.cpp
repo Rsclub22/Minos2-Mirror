@@ -207,18 +207,40 @@ bool TransVertSetupForm::freqInBand(Frequency f, QString band)
 
 void TransVertSetupForm::setRadioFreqBox(Frequency f)
 {
-    ui->radioFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->radioFreq->setText("0.0");
+    }
+    else
+    {
+       ui->radioFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
+
 }
 
 void TransVertSetupForm::setTargetFreqBox(Frequency f)
 {
-    ui->targetFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->targetFreq->setText("0.0");
+    }
+    else
+    {
+        ui->targetFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
 }
 
 
 void TransVertSetupForm::setOffsetFreqLabel(Frequency f)
 {
-    ui->offsetFreq->setText(f.convertFreqStrDispSingle());
+    if (f == Frequency(0))
+    {
+      ui->offsetFreq->setText("0.0");
+    }
+    else
+    {
+        ui->offsetFreq->setText(f.convertFreqStrDispSingleNoTrailZero());
+    }
 }
 
 
