@@ -707,15 +707,6 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         ui->radioNameDisp->setText(currentRadio->radioName);
 
-
-        // if it is a rigctld model, then use the radio model number connected to rigctld
-
-        //int modelNumber = currentRadio->rigModelNumber;
-        //if (modelNumber == hamlibData::RIGCTL)
-        //{
-        //    modelNumber = rigCtldDetails->irigctld_radioNumber;
-       // }
-
         buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
 
         checkSupportCatFeatures();
@@ -743,7 +734,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         getRadioInfo(DONT_PUBLISH_NOW);
 
         sendRitEnableStatusLogger();
-        //writeWindowTitle(appName);
+
         sendStatusToLogConnected();
 
         checkSupportPollRadio();
@@ -917,17 +908,16 @@ void RigControlMainWindow::checkSupportRit()
 {
     getRitSupportStatus();
 
-    if (selectedRigSupCap->radioSupSetRit)
+    rigStateDetails->ritEnable = currentRadio->enableDisableCatFeature.ritEnable;
+    if (rigStateDetails->ritEnable && (selectedRigSupCap->radioSupSetRit || selectedRigSupCap->radioSupGetRit))
     {
 
-        if (rigStateDetails->ritEnable)
-        {
-            setRitFreqDisplayVisible(true);
-            if (ritTestEnabled)
-            {
 
-                showRitTestControl(true);
-            }
+        setRitFreqDisplayVisible(true);
+        if (ritTestEnabled)
+        {
+
+            showRitTestControl(true);
         }
 
         setRitGetSetFreqIndicatorVisible(true);
@@ -939,6 +929,8 @@ void RigControlMainWindow::checkSupportRit()
     }
     else
     {
+
+        ui->ritGroupBox->setVisible(false);
         setRitFreqDisplayVisible(false);
         setRitGetSetFreqIndicatorVisible(false);
         clearSupportRitFlags();
