@@ -137,9 +137,6 @@ RtAudioSoundSystem::RtAudioSoundSystem()
     {
        audio = new RtAudio();
 
-       wThread = new RiffWriter(this);
-       wThread->start();
-
        unsigned int defInput = audio->getDefaultInputDevice();
        unsigned int defOutput = audio->getDefaultOutputDevice();
        unsigned int devices = audio->getDeviceCount();
@@ -195,12 +192,18 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
        trace(error.getMessage().c_str());
    }
    delete audio;
+   delete wThread;
 }
 bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 {
     if (!audio)
     {
         audio = new RtAudio();
+    }
+    if (!wThread)
+    {
+        wThread = new RiffWriter(this);
+        wThread->start();
     }
     compressor.setSampleRate(sampleRate);
     compressor.setWindow(10);       // milliseconds
