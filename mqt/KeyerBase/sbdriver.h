@@ -76,8 +76,6 @@ public:
 
       unsigned int rate = 0;   /* rate in Hertz -- this gets reset to nearest available value */
 
-      VUCallBack WinVUCallback = nullptr;
-
       void setVolumeMults(int record, int replay, int passThrough);
 
       int getMessageLen(int buttonNumber);
@@ -111,10 +109,11 @@ private slots:
       void interruptOK();
       void outputFinished();
       void actionQueueFinished();
-      void setVU(unsigned int a, unsigned int b, unsigned int c);
+      void doSetVU(unsigned int a, unsigned int b, unsigned int c);
 
 signals:
       void ptt(bool);
       void recpbFinished();
+      void setVU(unsigned int a, unsigned int b, unsigned int c);
 };
 #endif

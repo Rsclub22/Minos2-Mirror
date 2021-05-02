@@ -9,9 +9,8 @@
 #ifndef keyctrlH
 #define keyctrlH
 #include <QString>
-typedef void ( *LineCallBack ) ( bool PTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lineMode );
-typedef void ( *VUCallBack ) ( unsigned int rmsvol, unsigned int peakvol, unsigned int samples  );
 
+class commonPort;
 enum KEYER_COMMAND {eKEYER_STOPRECORD,    		// kill record
                     eKEYER_RECORD,
                     eKEYER_STOPALL,    			// kill record and playback
@@ -57,25 +56,23 @@ class KeyerInfo    // only passes info up
       int CWTone;
       int CWSpeed;
 };
-void loadKeyers( );
+commonPort *  loadKeyers( );
 void unloadKeyers( );
 
 bool getKeyerStatus( QString & );
 bool getKeyerInfo( KeyerInfo * );
-void setLineCallBack( LineCallBack lcallback );
 void setLines( bool PTT, bool L1, bool L2 );
 bool getPTT();
 
 void getActionState( QString & );    // returns current keyer action state string
 void getTransverterSwitch( QString & );
-void setVUCallBack(VUCallBack cb);
 
 void startRecordDVPFile( int fileno );
 void finishRecordDVPFile( );
 void playKeyerFile( int fileno, bool ptt );
 
 QVector < QString > get_keyer_list();
-bool select_keyer( const QString &kn );
+commonPort *select_keyer( const QString &kn );
 
 void stopKeyer();
 void setKeyerType( const QString &mode );

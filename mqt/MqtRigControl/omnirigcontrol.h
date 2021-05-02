@@ -1,4 +1,4 @@
-
+﻿
 /////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
@@ -105,7 +105,10 @@ public:
     bool supportGetPtt(int rigNumber) override;
     bool supportSetPtt(int rigNumber) override;
 
-
+    bool supportSetVox(int rigModelNumber) override;
+    int setVoxState(VFO vfo, bool state) override;
+    bool supportGetVoX(int rigNumber) override;
+    int getVoxState(VFO vfo, bool &state) override;
 
 
 #if defined (WIN32)
@@ -142,6 +145,10 @@ private:
 
     VFO curVfo;
     bool reversedVFO;
+
+    bool pttEnable = false;
+    QString pttSerialPort;
+    int pttType = 0;
 
     OmniRig::PortBits* serPort;
 

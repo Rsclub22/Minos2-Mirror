@@ -123,6 +123,11 @@ public:
     bool supportGetPtt(int rigModelNumber) override;
     bool supportSetPtt(int rigModelNumber) override;
 
+    bool supportSetVox(int rigModelNumber) override;
+    int setVoxState(VFO vfo, bool state) override;
+    bool supportGetVoX(int rigNumber) override;
+    int getVoxState(VFO vfo, bool &state) override;
+
 
 
 private:

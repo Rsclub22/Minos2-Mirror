@@ -78,6 +78,8 @@ class commonPort : public QObject
 
       void registerMonitor( lineMonitor * );
 
+signals:
+      void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 };
 
 commonPort *createPort( const PortConfig &port );
@@ -99,8 +101,6 @@ class WindowsMonitorPort: public commonPort
       static bool L1State;
       static bool L2State;
       static int linesMode;
-
-      static LineCallBack WinLineCallback;
 
       WindowsMonitorPort( const PortConfig &port );
       virtual ~WindowsMonitorPort();
@@ -131,8 +131,6 @@ class WinMonitor: public lineMonitor
       static bool L1State;
       static bool L2State;
       static int linesMode;
-
-      static LineCallBack WinLineCallback;
 
       WinMonitor();
       ~WinMonitor() override;
@@ -166,8 +164,6 @@ class LineEventsPort: public commonPort
       int transverterSwitch = 0;
       bool closing = false;
    public:
-
-      static LineCallBack WinLineCallback;
 
       LineEventsPort( const PortConfig &port );
       virtual ~LineEventsPort();

@@ -42,6 +42,8 @@ public:
                     bool supportSMeter_ = false,
                     bool supportGetPtt_ = false,
                     bool supportSetPtt_ = false,
+                    bool supportGetVox_ = false,
+                    bool supportSetVox_ = false,
                     bool supportVolume_ = false,
                     bool supportAntSw_ = false,
                     bool supportRigCtld_ = false,
@@ -65,6 +67,8 @@ public:
     bool supportSMeter;
     bool supportGetPtt;
     bool supportSetPtt;
+    bool supportGetVox;
+    bool supportSetVox;
     bool supportVolume;
     bool supportAntSw;
     bool supportRigCtld;

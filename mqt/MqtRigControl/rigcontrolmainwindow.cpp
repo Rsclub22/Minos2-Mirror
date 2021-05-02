@@ -946,14 +946,14 @@ void RigControlMainWindow::checkSupportRit()
 
 bool RigControlMainWindow::checkSupportVoiceMemory()
 {
-    // does the library support voice keyer memory
+
 
     if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportVoiceMemory && currentRadio->enableDisableCatFeature.voiceMemEnable)
     {
 
         if (radio)
         {
-            // does radio support voice memories
+
             selectedRigSupCap->supportVoiceMemory = radio->supportVoiceMemory(currentRadio->rigModelNumber);
             if (selectedRigSupCap->supportVoiceMemory)
             {
@@ -973,22 +973,21 @@ bool RigControlMainWindow::checkSupportVoiceMemory()
             }
         }
     }
-    else
-    {
-        addVoiceMemStatusToRigCache(false);
 
-    }
-
+    selectedRigSupCap->supportVoiceMemory = false;
+    setVoiceMemIndVisible(false);
+    setVoiceMemIndOnOff(false);
+    addVoiceMemStatusToRigCache(false);
     return false;
 
 }
 
 bool RigControlMainWindow::checkSupportCwKeyerMemory()
 {
-    // does the library support cw keyer memories
+
     if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportCwMemory && currentRadio->enableDisableCatFeature.cWMemEnable)
     {
-        // does radio support CW memories
+
         if (radio)
         {
             selectedRigSupCap->suportSendMorse = radio->supportSendMorse(currentRadio->rigModelNumber);
@@ -1008,28 +1007,28 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
                 addCwKeyerMemoryStatusToRigCache(false);
-                addCwKeyerMemoryStatusToRigCache(false);
                 return false;
 
             }
          }
     }
-    else
-    {
-        addCwKeyerMemoryStatusToRigCache(false);
 
-    }
-
+    addCwKeyerMemoryStatusToRigCache(false);
+    setCwMemIndVisible(false);
+    setCwMemIndOnOff(false);
+    selectedRigSupCap->supportWaitMorse = false;
+    selectedRigSupCap->supportStopMorse = false;
+    selectedRigSupCap->suportSendMorse = false;
     return false;
 
 }
 
 void RigControlMainWindow::checkSupportPtt()
 {
-    // does library support PTT Control
+
     if (rigFactory->supported_rigs()->value(currentRadio->rigModel).supportGetPtt)
     {
-        // does radio support PTT
+
         if (radio)
         {
               selectedRigSupCap->supportGetPtt = radio->supportGetPtt(currentRadio->rigModelNumber);
@@ -1068,6 +1067,9 @@ void RigControlMainWindow::checkSupportPtt()
     }
     else
     {
+        setPttGroupItemsVisible(false);
+        selectedRigSupCap->supportGetPtt = false;
+        selectedRigSupCap->supportSetPtt = false;
         addPTTEnabledStatusToRigCache(false);
     }
 
@@ -1110,7 +1112,7 @@ void RigControlMainWindow::checkSupportPollRadio()
         connect(radio, &RigBase::newVfo, this, &RigControlMainWindow::onNewVfo, Qt::QueuedConnection);
         connect(radio, &RigBase::newMode, this, &RigControlMainWindow::onNewMode, Qt::QueuedConnection);
         connect(radio, &RigBase::rigStatus, this, &RigControlMainWindow::onRigStatus, Qt::QueuedConnection);
-
+        //connect(radio, &RigBase::pttState, this, [=](bool state){onPttState(state)}, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOn, this, &RigControlMainWindow::onRitOn, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOff, this, &RigControlMainWindow::onRitOff, Qt::QueuedConnection);
         connect(radio, &RigBase::ritOffset, this, &RigControlMainWindow::onRitOffset, Qt::QueuedConnection);
@@ -3797,6 +3799,17 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
 /********************* PTT ****************************************/
 
 
+// Omnirig
+void RigControlMainWindow::onPttState(bool state)
+{
+    if (state != rigStateDetails->curPttStatus)
+    {
+       trace(QString("onPttState = %1").arg(rigStateDetails->curPttStatus ? "On" : "Off"));
+        setRigControlPttState(rigStateDetails->curPttStatus);
+    }
+}
+
+
 
 int RigControlMainWindow::getTXStatus(VFO vfo)
 {
@@ -3806,16 +3819,24 @@ int RigControlMainWindow::getTXStatus(VFO vfo)
 
    if (retCode >= 0)
    {
-       if (pttStatus != curPttStatus)
+       if (pttStatus != rigStateDetails->curPttStatus)
        {
-           curPttStatus = pttStatus;
-           sendPttStateLogger();
-           setTxRxIndOnOff(curPttStatus);
+           rigStateDetails->curPttStatus = pttStatus;
+           trace(QString("getTXStatus = %1").arg(rigStateDetails->curPttStatus ? "On" : "Off"));
+           setRigControlPttState(rigStateDetails->curPttStatus);
        }
    }
 
    return retCode;
 
+}
+
+
+void RigControlMainWindow::setRigControlPttState(bool state)
+{
+
+    sendPttStateLogger();
+    setTxRxIndOnOff(state);
 }
 
 
@@ -4235,9 +4256,9 @@ void RigControlMainWindow::sendPttStateLogger()
 {
     if (!appName.isEmpty())
     {
-        logMessage(QString("Send Ptt State = %1 to logger").arg(curPttStatus ? "TX" : "RX"));
+        logMessage(QString("Send Ptt State = %1 to logger").arg(rigStateDetails->curPttStatus ? "TX" : "RX"));
         PubSubName psname(currentRadio->radioName);
-        msg->rigCache.setPttState(psname, curPttStatus);
+        msg->rigCache.setPttState(psname, rigStateDetails->curPttStatus);
     }
 
 }

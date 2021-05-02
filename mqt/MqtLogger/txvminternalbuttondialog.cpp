@@ -8,12 +8,7 @@
 static bool inhibitCallbacks = false;
 
 TxVmInternalButtonDialog *txvmbd = nullptr;
-void volcallback( unsigned int rmsvol, unsigned int peakvol, unsigned int samples )
-{
-    if (!inhibitCallbacks && txvmbd)
-        txvmbd->volcallback(rmsvol, peakvol, samples);
-}
-void TxVmInternalButtonDialog::volcallback(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
+void TxVmInternalButtonDialog::doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
 {
     if (!inhibitCallbacks)
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
@@ -42,9 +37,6 @@ TxVmInternalButtonDialog::~TxVmInternalButtonDialog()
 {
     txvmbd = nullptr;
     inhibitCallbacks = true;
-
-    SoundSystemDriver *sbDriver = SoundSystemDriver::getSbDriver();
-    sbDriver ->WinVUCallback = nullptr;
 
     delete ui;
 }
@@ -78,8 +70,7 @@ void TxVmInternalButtonDialog::setVmData(VoiceKeyerParams* vmData_)
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
 
-    SoundSystemDriver *sbDriver = SoundSystemDriver::getSbDriver();
-    sbDriver ->WinVUCallback = &::volcallback;
+    connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &TxVmInternalButtonDialog::doSetVU);
 
     inVolChange = true;
 
