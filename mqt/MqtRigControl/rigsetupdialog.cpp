@@ -668,14 +668,14 @@ void RigSetupDialog::closeEvent (QCloseEvent *event)
 void RigSetupDialog::done(int r)
 {
     bool supportedBandsOK = false;
-    bool transvertFreqInBand = false;
+    //bool transvertFreqInBand = false;
 
     if(QDialog::Accepted == r)  // ok was pressed
     {
         supportedBandsOK = checkOmniRigSupportedBands();
-        transvertFreqInBand = checkTransvertFreqInBand();
+        //transvertFreqInBand = checkTransvertFreqInBand();
 
-        if (supportedBandsOK && transvertFreqInBand)
+        if (supportedBandsOK /*&& transvertFreqInBand*/)
         {
             saveSettings();
         }
@@ -793,29 +793,7 @@ bool RigSetupDialog::checkOmniRigSupportedBands()
 
 }
 
-/*
-void RigSetupDialog::saveButtonPushed()
-{
-    QString supRadNames;
-    isAnySupportedBandsAvail(supRadNames);
-    if (supRadNames.isEmpty())
-    {
-        saveSettings();
-    }
-    else
-    {
-        QMessageBox::critical(this, tr("Radio Supported Bands Missing"),
-                                       tr("For Minos to work best with Radios,\n"
-                                          "Please add bands or transverters to\n"
-                                          "these radio definitions:\n"
-                                          "%1").arg(supRadNames),
-                                       QMessageBox::Ok);
-    }
 
-    doCloseEvent();
-
-}
-*/
 
 // finds Omnirig radios with no supported bands checked
 
@@ -835,36 +813,7 @@ void RigSetupDialog::isAnySupportedBandsAvailForOmnirig(QString &supRadNames)
     }
 
 }
-/*
-void RigSetupDialog::cancelButtonPushed()
-{
 
-    bool change = false;
-    for (int i = 0; i < radioTab.count(); i++)
-    {
-        if (radioTab[i]->rigSetupFlags.getRadioValueChanged() || setupChangeFlags.getRadioRemoved() || radioTab[i]->getTransVertRemovedFlag())
-        {
-            setupChangeFlags.setRadioRemoved(false);
-            change = true;
-            break;
-        }
-    }
-
-
-
-    if (change)
-    {
-        availRadios.clear();
-        numAvailRadios = 0;
-        availRadioData.clear();
-        radioTab.clear();
-        ui->radioTab->clear();
-        initSetup();                // load data from file
-    }
-
-    doCloseEvent();
-}
-*/
 
 
 
@@ -947,22 +896,41 @@ void RigSetupDialog::saveSettings()
             saveRadioData(availRadioData.value(k), settings);
         }
 
-        if (availRadioData.value(k)->transVertEnable)
+
+        QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
+
+        fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
+        QSettings  configTransvert(fileName, QSettings::IniFormat);
+        QStringList iniTvKey = configTransvert.childGroups();
+
+        if (!tvKeys.isEmpty() || !iniTvKey.isEmpty())
         {
-            QStringList tvKeys = availRadioData.value(k)->transVertSettings.keys();
-            QString fileName = TRANSVERT_PATH_LOGGER + k + FILENAME_TRANSVERT_RADIOS;
-            QSettings  configTransvert(fileName, QSettings::IniFormat);
+
+            // look for deleted bands
+            foreach( const auto &k, iniTvKey)
+            {
+                if (!tvKeys.contains(k))
+                {
+                    // band deleted
+                    dataChanged = true;
+                    configTransvert.beginGroup(k);
+                    configTransvert.remove("");
+                    configTransvert.endGroup();
+                }
+            }
 
             if (availRadioData.value(k)->transVertSettingsNotEqual(savedRadioData->transVertSettings))
             {
-                dataChanged = false;
+                dataChanged = true;
                 foreach(const auto &tv ,tvKeys)
                 {
                     saveTranVerterSetting(availRadioData.value(k), tv, configTransvert);
                 }
 
             }
+
         }
+
 
         if (dataChanged)
         {
@@ -1193,33 +1161,6 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
 }
 
 
-/*
-void RigSetupDialog::clearAvailRadio()
-{
-    scatParams nulParam;
-
-    for (int i = 0; i < numAvailRadios; i++)
-    {
-        availRadios[i] = nulParam;
-    }
-
-
-}
-
-
-void RigSetupDialog::clearCurrentRadio()
-{
-    scatParams nulParam;
-    currentRadio = nulParam;
-}
-
-
-void RigSetupDialog::copyRadioToCurrent(int radioNumber)
-{
-    currentRadio = availRadios[radioNumber];
-}
-
-*/
 
 
 QString RigSetupDialog::getRadioComPort(QString radioName)
