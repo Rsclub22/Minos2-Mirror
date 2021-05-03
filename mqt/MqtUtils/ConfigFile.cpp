@@ -364,42 +364,41 @@ void MinosConfig::initialise()
     {
         // Load the minosConfig.ini file
 
-        INIFile config(getConfigIniName());
-
-        config.startGroup();
-
-        QStringList lsect = config.getSections();
-
-        NamedConfig defConfig;
-
-        for ( auto const &s: qAsConst(lsect ))
+        if (FileExists(getConfigIniName()))
         {
-            QString sect = s.trimmed();
-            if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
-            {
-                config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
+            INIFile config(getConfigIniName());
 
-                if ( thisRouterName.size() == 0 )
-                {
-                    QString h = QHostInfo::localHostName();
-                    thisRouterName = h;
-                }
-                defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
-                defConfig.configName = defConfigName;
-            }
-            else
+            config.startGroup();
+
+            QStringList lsect = config.getSections();
+
+            NamedConfig defConfig;
+            defConfig.configName = defConfigName;
+            defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
+            thisRouterName = config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
+            if ( thisRouterName.isEmpty() )
             {
-                QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
-                if ( tce->initialise( config, sect ) )
+                QString h = QHostInfo::localHostName();
+                thisRouterName = h;
+            }
+
+            for ( auto const &s: qAsConst(lsect ))
+            {
+                QString sect = s.trimmed();
+                if ( sect.compare("Settings", Qt::CaseInsensitive ) != 0)
                 {
-                    defConfig.elelist.push_back( tce );
+                    QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
+                    if ( tce->initialise( config, sect ) )
+                    {
+                        defConfig.elelist.push_back( tce );
+                    }
                 }
             }
+            config.endGroup();
+
+            configs[defConfigName] = defConfig;
+            saveAsJson(getConfigJsonName());
         }
-        config.endGroup();
-
-        configs[defConfigName] = defConfig;
-        saveAsJson(getConfigJsonName());
     }
     loadJson(getConfigJsonName());
 }
