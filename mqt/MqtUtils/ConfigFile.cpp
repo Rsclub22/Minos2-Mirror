@@ -375,7 +375,7 @@ void MinosConfig::initialise()
             NamedConfig defConfig;
             defConfig.configName = defConfigName;
             defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
-            thisRouterName = config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
+            config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
             if ( thisRouterName.isEmpty() )
             {
                 QString h = QHostInfo::localHostName();
