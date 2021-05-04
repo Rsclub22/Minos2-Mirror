@@ -2,7 +2,7 @@
 #include <QFontDialog>
 #include <QFont>
 #include "ConfigFile.h"
-#include "ManageAppConfigs.h"
+#include "StartConfigManager.h"
 #include "StartConfig.h"
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
@@ -193,7 +193,7 @@ void MainWindow::LanguageAcceptActionExecute()
 
 void MainWindow::on_appsButton_clicked()
 {
-    ManageAppConfigs manageApps(this, true);
+    StartConfigManager manageApps(this, true);
     manageApps.exec();
 }
 

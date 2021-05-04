@@ -30,7 +30,7 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
-    ManageAppConfigs.cpp \
+    StartConfigManager.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
     calcs.cpp \
@@ -113,7 +113,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
-    ManageAppConfigs.h \
+    StartConfigManager.h \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
@@ -207,8 +207,8 @@ HEADERS += \
 FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \
-    ManageAppConfigs.ui \
     MatchTreeFrame.ui \
+    StartConfigManager.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \

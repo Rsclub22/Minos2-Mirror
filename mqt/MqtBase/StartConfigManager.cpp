@@ -2,12 +2,12 @@
 #include "StartConfig.h"
 #include "enqdlg.h"
 
-#include "ManageAppConfigs.h"
-#include "ui_ManageAppConfigs.h"
+#include "StartConfigManager.h"
+#include "ui_StartConfigManager.h"
 
-ManageAppConfigs::ManageAppConfigs(QWidget *parent, bool showAutoStart) :
+StartConfigManager::StartConfigManager(QWidget *parent, bool showAutoStart) :
     QDialog(parent),
-    ui(new Ui::ManageAppConfigs)
+    ui(new Ui::StartConfigManager)
   , showAutoStart(showAutoStart)
 {
     ui->setupUi(this);
@@ -22,18 +22,18 @@ ManageAppConfigs::ManageAppConfigs(QWidget *parent, bool showAutoStart) :
 
 }
 
-ManageAppConfigs::~ManageAppConfigs()
+StartConfigManager::~StartConfigManager()
 {
     delete ui;
 }
 
-int ManageAppConfigs::exec()
+int StartConfigManager::exec()
 {
     showDetails();
 
     return QDialog::exec();
 }
-void ManageAppConfigs::showDetails()
+void StartConfigManager::showDetails()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
 
@@ -57,41 +57,41 @@ void ManageAppConfigs::showDetails()
     suppressItemSelect = false;
 }
 
-void ManageAppConfigs::on_cancelButton_clicked()
+void StartConfigManager::on_cancelButton_clicked()
 {
     reject();
 }
 
-void ManageAppConfigs::on_OKButton_clicked()
+void StartConfigManager::on_OKButton_clicked()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     minosConfig->saveAll();
     accept();
 }
-void ManageAppConfigs::reject()
+void StartConfigManager::reject()
 {
     bool running = MinosConfig::getMinosConfig() ->anyRunning();
     if (!running)
         MinosConfig::getMinosConfig() ->reset();
     QDialog::reject();
 }
-void ManageAppConfigs::accept()
+void StartConfigManager::accept()
 {
     QDialog::accept();
 }
-void ManageAppConfigs::moveEvent(QMoveEvent *event)
+void StartConfigManager::moveEvent(QMoveEvent *event)
 {
     QSettings settings;
     settings.setValue("ManageAppConfigs/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
-void ManageAppConfigs::resizeEvent(QResizeEvent * event)
+void StartConfigManager::resizeEvent(QResizeEvent * event)
 {
     QSettings settings;
     settings.setValue("ManageAppConfigs/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
-void ManageAppConfigs::changeEvent( QEvent* e )
+void StartConfigManager::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
@@ -99,7 +99,7 @@ void ManageAppConfigs::changeEvent( QEvent* e )
         settings.setValue("ManageAppConfigs/geometry", saveGeometry());
     }
 }
-bool ManageAppConfigs::getNewName(QString &Value)
+bool StartConfigManager::getNewName(QString &Value)
 {
     bool firsttime = true;
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
@@ -125,14 +125,14 @@ bool ManageAppConfigs::getNewName(QString &Value)
     }
     return false;
 }
-void ManageAppConfigs::on_editButton_clicked()
+void StartConfigManager::on_editButton_clicked()
 {
     StartConfig startConfig(this, showAutoStart, curConfigName);
     startConfig.exec();
 
 }
 
-void ManageAppConfigs::on_newButton_clicked()
+void StartConfigManager::on_newButton_clicked()
 {
     QString value =tr("new app config");
     if (getNewName(value))
@@ -148,7 +148,7 @@ void ManageAppConfigs::on_newButton_clicked()
     }
 }
 
-void ManageAppConfigs::on_cloneButton_clicked()
+void StartConfigManager::on_cloneButton_clicked()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     NamedConfig &sc = minosConfig->configs[curConfigName];
@@ -165,7 +165,7 @@ void ManageAppConfigs::on_cloneButton_clicked()
     }
 }
 
-void ManageAppConfigs::on_deleteButton_clicked()
+void StartConfigManager::on_deleteButton_clicked()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     minosConfig->configs.remove(curConfigName);
@@ -182,7 +182,7 @@ void ManageAppConfigs::on_deleteButton_clicked()
 
 }
 
-void ManageAppConfigs::on_renameButton_clicked()
+void StartConfigManager::on_renameButton_clicked()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     QString value = curConfigName;
@@ -199,7 +199,7 @@ void ManageAppConfigs::on_renameButton_clicked()
     }
 }
 
-void ManageAppConfigs::on_layoutList_itemSelectionChanged()
+void StartConfigManager::on_layoutList_itemSelectionChanged()
 {
     if (!suppressItemSelect)
     {
@@ -207,7 +207,7 @@ void ManageAppConfigs::on_layoutList_itemSelectionChanged()
     }
 }
 
-void ManageAppConfigs::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
+void StartConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
 {
     curConfigName = ui->layoutList->currentItem()->text();
 

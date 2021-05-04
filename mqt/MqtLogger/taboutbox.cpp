@@ -5,7 +5,7 @@
 #include "TSessionManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
-#include "ManageAppConfigs.h"
+#include "StartConfigManager.h"
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
@@ -225,7 +225,7 @@ void TAboutBox::on_AppsButton_clicked()
 {
     if (Qt::ShiftModifier == QApplication::keyboardModifiers())
     {
-        ManageAppConfigs manageApps( this, false);
+        StartConfigManager manageApps( this, true);   // when managing sets, include autostart
         manageApps.exec();
     }
     else

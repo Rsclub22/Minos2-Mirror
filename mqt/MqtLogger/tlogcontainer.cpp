@@ -18,7 +18,7 @@
 #include "tclockdlg.h"
 #include "tloccalcform.h"
 #include "TSessionManager.h"
-#include "ManageAppConfigs.h"
+#include "StartConfigManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "SendRPCDM.h"
@@ -1232,7 +1232,7 @@ void TLogContainer::doScreenConfigAction()
 }
 void TLogContainer::ManageAppConfigsActionExecute()
 {
-    ManageAppConfigs manageApps( this, false);
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
     manageApps.exec();
     // in case we are now running more apps
     sendDM->subscribeApps();

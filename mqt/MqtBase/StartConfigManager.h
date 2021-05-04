@@ -1,20 +1,20 @@
-#ifndef MANAGEAPPCONFIGS_H
-#define MANAGEAPPCONFIGS_H
+#ifndef STARTCONFIGMANAGER_H
+#define STARTCONFIGMANAGER_H
 
 #include <QDialog>
 
 namespace Ui {
-class ManageAppConfigs;
+class StartConfigManager;
 }
 class QListWidgetItem;
 
-class ManageAppConfigs : public QDialog
+class StartConfigManager : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ManageAppConfigs(QWidget *parent, bool showAutoStart);
-    virtual ~ManageAppConfigs() override;
+    explicit StartConfigManager(QWidget *parent, bool showAutoStart);
+    virtual ~StartConfigManager() override;
 
     int exec() override;
 
@@ -39,7 +39,7 @@ public Q_SLOTS:
    virtual void reject() override;
 
 private:
-    Ui::ManageAppConfigs *ui;
+    Ui::StartConfigManager *ui;
 
     bool showAutoStart = false;
     bool suppressItemSelect = false;
@@ -53,4 +53,4 @@ private:
     bool getNewName(QString &Value);
 };
 
-#endif // MANAGEAPPCONFIGS_H
+#endif // STARTCONFIGMANAGER_H
