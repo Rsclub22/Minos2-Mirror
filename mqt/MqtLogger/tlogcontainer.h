@@ -104,7 +104,7 @@ private:
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
-    bool loggerClosing = false;
+    static bool loggerClosing;
 
     void enableActions();
 
