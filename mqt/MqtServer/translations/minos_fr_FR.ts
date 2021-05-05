@@ -50,9 +50,8 @@
 <context>
     <name>Published</name>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
         <source>key</source>
-        <translation>Clé</translation>
+        <translation type="vanished">Clé</translation>
     </message>
     <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
@@ -63,6 +62,21 @@
         <location filename="../MServerPubSub.cpp" line="383"/>
         <source>value</source>
         <translation>Valeur</translation>
+    </message>
+    <message>
+        <location filename="../MServerPubSub.cpp" line="383"/>
+        <source>cat/key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MServerPubSub.cpp" line="383"/>
+        <source>router</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MServerPubSub.cpp" line="383"/>
+        <source>pubid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

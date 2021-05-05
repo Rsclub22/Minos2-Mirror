@@ -1977,7 +1977,86 @@ Please enter another bearing</source>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfig.ui" line="152"/>
         <source>Save and Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StartConfigManager</name>
+    <message>
+        <location filename="../StartConfigManager.ui" line="14"/>
+        <source>Manage Application Configurations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="24"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="31"/>
+        <source>Clone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="38"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="45"/>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="52"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="88"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="108"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="115"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="51"/>
+        <source>Stop all apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="55"/>
+        <source>Start all apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="137"/>
+        <source>Please give a new name for the layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="141"/>
+        <source>%1 already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="164"/>
+        <location filename="../StartConfigManager.cpp" line="182"/>
+        <source>new app config</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2147,6 +2226,15 @@ Please enter another bearing</source>
     <message>
         <location filename="../clustercommon.cpp" line="9"/>
         <source>No Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>enquireDialog</name>
+    <message>
+        <location filename="../enqdlg.cpp" line="32"/>
+        <location filename="../enqdlg.cpp" line="44"/>
+        <source>Please supply value</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

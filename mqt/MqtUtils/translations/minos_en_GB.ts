@@ -19,43 +19,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="746"/>
+        <location filename="../ConfigFile.cpp" line="749"/>
         <source>More than one router is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="755"/>
+        <location filename="../ConfigFile.cpp" line="758"/>
         <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="770"/>
+        <location filename="../ConfigFile.cpp" line="773"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="785"/>
+        <location filename="../ConfigFile.cpp" line="788"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="824"/>
+        <location filename="../ConfigFile.cpp" line="827"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="834"/>
+        <location filename="../ConfigFile.cpp" line="837"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="838"/>
+        <location filename="../ConfigFile.cpp" line="841"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>

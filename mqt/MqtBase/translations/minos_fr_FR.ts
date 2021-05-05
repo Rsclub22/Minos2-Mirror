@@ -948,7 +948,7 @@
         <translation>Pas de contact</translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="79"/>
+        <location filename="../ChatServer.cpp" line="81"/>
         <source>%1/%2 changed state to %3</source>
         <translation type="unfinished">%1 changé d&apos;état en %3 {1/%2 ?}</translation>
     </message>
@@ -1134,42 +1134,42 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>LOCAL COMMENT</source>
         <translation>COMMENTAIRE LOCAL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="536"/>
+        <location filename="../DisplayContestContact.cpp" line="544"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translation>COMMENTAIRE POUR L&apos;ARBITRE</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="587"/>
+        <location filename="../DisplayContestContact.cpp" line="595"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="657"/>
+        <location filename="../DisplayContestContact.cpp" line="665"/>
         <source>DEL</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="660"/>
+        <location filename="../DisplayContestContact.cpp" line="668"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="667"/>
+        <location filename="../DisplayContestContact.cpp" line="675"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="748"/>
+        <location filename="../DisplayContestContact.cpp" line="756"/>
         <source>UNFILLED CONTACT </source>
         <translation>CONTACT NON REMPLI </translation>
     </message>
@@ -2001,8 +2001,87 @@ Entrer une autre direction SVP</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfig.ui" line="152"/>
         <source>Save and Close</source>
         <translation>Enregistrer et fermer</translation>
+    </message>
+</context>
+<context>
+    <name>StartConfigManager</name>
+    <message>
+        <location filename="../StartConfigManager.ui" line="14"/>
+        <source>Manage Application Configurations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="24"/>
+        <source>New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="31"/>
+        <source>Clone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="38"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="45"/>
+        <source>Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="52"/>
+        <source>Edit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="88"/>
+        <source>Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="108"/>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.ui" line="115"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="51"/>
+        <source>Stop all apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="55"/>
+        <source>Start all apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="137"/>
+        <source>Please give a new name for the layout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="141"/>
+        <source>%1 already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StartConfigManager.cpp" line="164"/>
+        <location filename="../StartConfigManager.cpp" line="182"/>
+        <source>new app config</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2157,9 +2236,6 @@ Entrer une autre direction SVP</translation>
     </message>
 </context>
 <context>
-    <name>checkModeAgainstFreq</name>
-</context>
-<context>
     <name>clusterState</name>
     <message>
         <location filename="../clustercommon.cpp" line="7"/>
@@ -2176,6 +2252,15 @@ Entrer une autre direction SVP</translation>
         <source>No Contact</source>
         <translatorcomment>Dupe?</translatorcomment>
         <translation>Pas de contact</translation>
+    </message>
+</context>
+<context>
+    <name>enquireDialog</name>
+    <message>
+        <location filename="../enqdlg.cpp" line="32"/>
+        <location filename="../enqdlg.cpp" line="44"/>
+        <source>Please supply value</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
