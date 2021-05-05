@@ -6,17 +6,17 @@
     <message>
         <location filename="../qrzconfiguredialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue (hidden?)</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="45"/>
         <source>Logon Callsign</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif de connexion</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="67"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe</translation>
     </message>
 </context>
 <context>
@@ -24,37 +24,37 @@
     <message>
         <location filename="../qrzservermainwindow.ui" line="14"/>
         <source>QrzServerMainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre principale du serveur QRZ (Visible???</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="26"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecter</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="33"/>
         <source>Status:</source>
-        <translation type="unfinished"></translation>
+        <translation>Statut:</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="47"/>
         <source>Message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Message:</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="61"/>
         <source>Error:</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur:</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="100"/>
         <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="109"/>
         <source>Setup QRZ</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer QRZ</translation>
     </message>
 </context>
 <context>
@@ -62,22 +62,22 @@
     <message>
         <location filename="../qrzserverrpc.cpp" line="27"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponible</translation>
     </message>
     <message>
         <location filename="../qrzserverrpc.cpp" line="28"/>
         <source>Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Indisponible</translation>
     </message>
     <message>
         <location filename="../qrzserverrpc.cpp" line="29"/>
         <source>No Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun contact</translation>
     </message>
     <message>
         <location filename="../qrzserverrpc.cpp" line="238"/>
         <source>%1 changed state to %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 a changé d&apos;état en %2</translation>
     </message>
 </context>
 </TS>

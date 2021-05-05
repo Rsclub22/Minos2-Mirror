@@ -421,11 +421,6 @@
         <translation>Autoriser les bandes HF</translation>
     </message>
     <message>
-        <source>Load Progress Delay</source>
-        <translatorcomment>???CONTEXT??</translatorcomment>
-        <translation type="vanished">Délai de progression de la charge      </translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="107"/>
         <source>Change Tab order for S&amp;P</source>
         <translation type="unfinished"></translation>
@@ -953,13 +948,9 @@
         <translation>Pas de contact</translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="81"/>
+        <location filename="../ChatServer.cpp" line="79"/>
         <source>%1/%2 changed state to %3</source>
         <translation type="unfinished">%1 changé d&apos;état en %3 {1/%2 ?}</translation>
-    </message>
-    <message>
-        <source>%1 changed state to %2</source>
-        <translation type="vanished">%1 changé d&apos;état en %2</translation>
     </message>
 </context>
 <context>
@@ -1143,42 +1134,42 @@
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="544"/>
+        <location filename="../DisplayContestContact.cpp" line="536"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="544"/>
+        <location filename="../DisplayContestContact.cpp" line="536"/>
         <source>LOCAL COMMENT</source>
         <translation>COMMENTAIRE LOCAL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="544"/>
+        <location filename="../DisplayContestContact.cpp" line="536"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translation>COMMENTAIRE POUR L&apos;ARBITRE</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="595"/>
+        <location filename="../DisplayContestContact.cpp" line="587"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="665"/>
+        <location filename="../DisplayContestContact.cpp" line="657"/>
         <source>DEL</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="668"/>
+        <location filename="../DisplayContestContact.cpp" line="660"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="675"/>
+        <location filename="../DisplayContestContact.cpp" line="667"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="756"/>
+        <location filename="../DisplayContestContact.cpp" line="748"/>
         <source>UNFILLED CONTACT </source>
         <translation>CONTACT NON REMPLI </translation>
     </message>
@@ -1241,14 +1232,6 @@
         <location filename="../dxspotdatamodel.cpp" line="63"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
-    </message>
-    <message>
-        <source>Band Mask</source>
-        <translation type="vanished">Masque de bande</translation>
-    </message>
-    <message>
-        <source>mode Mask</source>
-        <translation type="vanished">Masque de mode</translation>
     </message>
     <message>
         <location filename="../dxspotdatamodel.cpp" line="65"/>
@@ -2175,10 +2158,6 @@ Entrer une autre direction SVP</translation>
 </context>
 <context>
     <name>checkModeAgainstFreq</name>
-    <message>
-        <source>None</source>
-        <translation type="vanished">Aucun</translation>
-    </message>
 </context>
 <context>
     <name>clusterState</name>

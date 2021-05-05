@@ -19,18 +19,15 @@
         <translation>Test Spots</translation>
     </message>
     <message>
-        <source>User Commands</source>
-        <translation type="vanished">Commandes utilisateur</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="63"/>
         <source>HF Test</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Only used for testing?</translatorcomment>
+        <translation>HF Test???</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="97"/>
         <source>HF User Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Commandes utilisateur HF</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="105"/>
@@ -59,107 +56,108 @@
     <message>
         <location filename="../clustermainwindow.ui" line="181"/>
         <source>VHF/ UHF User Commands</source>
-        <translation type="unfinished"></translation>
+        <translation>Commandes utilisateur VHF/ UHF</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="265"/>
         <source>Band Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre de bande</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="288"/>
         <source>HF</source>
-        <translation type="unfinished"></translation>
+        <translation>HF</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="297"/>
         <source>1.8 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>1,8 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="304"/>
         <source>3.5 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>3,5 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="315"/>
         <source>7 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>7 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="322"/>
         <source>14 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>14 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="333"/>
         <source> 21 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation> 21 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="340"/>
         <source>28 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>28 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="366"/>
         <source>VHF</source>
-        <translation type="unfinished"></translation>
+        <translation>VHF</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="377"/>
         <source>50 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>50 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="384"/>
         <source>70 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>70 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="395"/>
         <source>144 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>144 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="402"/>
         <source>432 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>432 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="430"/>
         <source>MW</source>
-        <translation type="unfinished"></translation>
+        <translation>MW</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="439"/>
         <source>1296 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>1296 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="446"/>
         <source>2300 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>2300 MHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="457"/>
         <source>3.4 GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>3,4 GHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="464"/>
         <source>5.6 GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>5,6 GHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="475"/>
         <source>10 GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>10 GHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="542"/>
         <source>Filter Server Display Only</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Is that what it means?</translatorcomment>
+        <translation>Filtrer uniquement l&apos;affichage du serveur </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="578"/>
@@ -194,7 +192,7 @@
     <message>
         <location filename="../clustermainwindow.ui" line="625"/>
         <source>User Command Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourcis des commandes utilisateur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="41"/>
@@ -307,24 +305,25 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="2290"/>
         <source>Cluster %1 User Command Clear</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Is this all commands?</translatorcomment>
+        <translation>Effacer commande(s?) utilisateur du cluster %1 </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2291"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer commande utilisateur: %2 du cluster %1 ?</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2910"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
-        <translation type="unfinished">Minos Cluster
+        <translation>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020 {8F?} {0D?} {2016 ?}</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2916"/>
         <source>Cluster Node User Command Shortcut Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Raccourci de commande utilisateur du nœud de cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2917"/>
@@ -343,13 +342,21 @@ N - New cmd
 E - Edit cmd
 C - Clear cmd
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Minos Cluster
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</source>
-        <translation type="vanished">Minos Cluster
-Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
+        <translation>Commandes utilisateur VHF / UHF
+
+Envoyer Cmd
+Ctrl + 1, Ctrl + 2, Ctrl + 3, Ctrl + 4, Ctrl + 5
+Ctrl + 6, Ctrl + 7, Ctrl + 8, Ctrl + 9, Ctrl + 0
+
+Rappel de menu
+Ctrl + Maj + 1, Ctrl + Maj + 2, Ctrl + Maj + 3, Ctrl + Maj + 4, Ctrl + Maj + 5
+Ctrl + Maj + 6, Ctrl + Maj + 7, Ctrl + Maj + 8, Ctrl + Maj + 9, Ctrl + Maj + 0
+Puis lettre:
+S - Envoyer cmd
+N - Nouveau cmd
+E - Modifier cmd
+C - Effacer cmd
+</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="698"/>
@@ -395,14 +402,6 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
         <location filename="../clustermainwindow.cpp" line="1850"/>
         <source>Sending command - Not logged in  - %1</source>
         <translation>L&apos;envoi de Command  - Non connecté - %1</translation>
-    </message>
-    <message>
-        <source>Cluster User Command Clear</source>
-        <translation type="vanished">Effacer la commande utilisateur du cluster</translation>
-    </message>
-    <message>
-        <source>Do you really want to clear cluster user command number:%1?</source>
-        <translation type="vanished">Voulez-vous vraiment effacer la commande utilisateur du cluster:%1?</translation>
     </message>
 </context>
 <context>
@@ -530,12 +529,13 @@ Copyright D Balharrie G8FKH/M0DGB 2016 - 2019</translation>
     <message>
         <location filename="../setupdialog.ui" line="103"/>
         <source>Save Band Filter Settings on Close</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>de filtre de bande</translatorcomment>
+        <translation>Enregistrer les paramètres à la fermeture </translation>
     </message>
     <message>
         <location filename="../setupdialog.ui" line="110"/>
         <source>Use QRZ to obtain QRA Locators</source>
-        <translation type="unfinished"></translation>
+        <translation>Obtenir QRA de QRZ.com</translation>
     </message>
     <message>
         <location filename="../setupdialog.ui" line="131"/>
@@ -626,13 +626,9 @@ La durée de vie doit être comprise entre %2 minutes et %3 minutes</translation
         <translation>Texte</translation>
     </message>
     <message>
-        <source>Cluster User Command %1 - %2</source>
-        <translation type="vanished">Commande d&apos;utilisateur du Cluster: Commande %1 - %2</translation>
-    </message>
-    <message>
         <location filename="../userclustercommanddialog.cpp" line="54"/>
         <source>Cluster %1 User Command %2 - %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Cluster %1 Commande utilisateur %2 - %3</translation>
     </message>
 </context>
 </TS>

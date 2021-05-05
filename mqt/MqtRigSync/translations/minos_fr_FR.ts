@@ -6,22 +6,23 @@
     <message>
         <location filename="../RSConfigure.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue </translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="22"/>
         <source>Sub Rig Control</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Contrôle du sous-rig</translatorcomment>
+        <translation>What does this mean??</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="49"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="56"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>
@@ -77,17 +78,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="166"/>
+        <location filename="../RSMainWindow.ui" line="146"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="173"/>
+        <location filename="../RSMainWindow.ui" line="153"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="146"/>
+        <location filename="../RSMainWindow.ui" line="173"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
