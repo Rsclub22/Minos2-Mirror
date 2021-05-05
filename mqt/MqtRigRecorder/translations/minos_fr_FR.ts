@@ -59,12 +59,12 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="193"/>
+        <location filename="../mainwindow.cpp" line="196"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *) </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="196"/>
+        <location filename="../mainwindow.cpp" line="199"/>
         <source>Recorded Files</source>
         <translation>Fichiers enregistrés</translation>
     </message>

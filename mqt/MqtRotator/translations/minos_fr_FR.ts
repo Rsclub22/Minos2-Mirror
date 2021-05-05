@@ -42,98 +42,98 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>HamlibRotControl</name>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="23"/>
+        <location filename="../hamlibRotcontrol.cpp" line="26"/>
         <source>No Error, operation completed sucessfully</source>
         <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="24"/>
+        <location filename="../hamlibRotcontrol.cpp" line="27"/>
         <source>Invalid parameter</source>
         <translation>Paramètre invalide</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="25"/>
+        <location filename="../hamlibRotcontrol.cpp" line="28"/>
         <source>Invalid configuration</source>
         <translation>Configuration invalide</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="26"/>
+        <location filename="../hamlibRotcontrol.cpp" line="29"/>
         <source>Memory shortage</source>
         <translation>Manque de mémoire</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="27"/>
+        <location filename="../hamlibRotcontrol.cpp" line="30"/>
         <source>Function not implemented</source>
         <translation>Fonction non implémentée</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="28"/>
+        <location filename="../hamlibRotcontrol.cpp" line="31"/>
         <source>Communication timed out</source>
         <translation>Timeout de communication</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="29"/>
+        <location filename="../hamlibRotcontrol.cpp" line="32"/>
         <source>IO error, including open failed</source>
         <translation>Erreur d&apos;E/S, y compris échec d&apos;ouverture&quot;</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="30"/>
+        <location filename="../hamlibRotcontrol.cpp" line="33"/>
         <source>Internal Hamlib error</source>
         <translation>Hamlib - Erreur interne</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="31"/>
+        <location filename="../hamlibRotcontrol.cpp" line="34"/>
         <source>Protocol error</source>
         <translation>Erreur de protocole</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="32"/>
+        <location filename="../hamlibRotcontrol.cpp" line="35"/>
         <source>Command rejected by the rig</source>
         <translation>Commande rejetée par l&apos;appareil</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="33"/>
+        <location filename="../hamlibRotcontrol.cpp" line="36"/>
         <source>Command performed, but arg truncated</source>
         <translation>Commande exécutée, mais argument tronqué</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="34"/>
+        <location filename="../hamlibRotcontrol.cpp" line="37"/>
         <source>Function not available</source>
         <translation>Fonction non disponible</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="35"/>
+        <location filename="../hamlibRotcontrol.cpp" line="38"/>
         <source>VFO not targetable</source>
         <translation>VFO???? not targetable</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="36"/>
+        <location filename="../hamlibRotcontrol.cpp" line="39"/>
         <source>Error talking on the bus</source>
         <translation>Erreur de communication sur le bus</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="37"/>
+        <location filename="../hamlibRotcontrol.cpp" line="40"/>
         <source>Collision on the bus</source>
         <translation>Collision de données sur le bus</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="38"/>
+        <location filename="../hamlibRotcontrol.cpp" line="41"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
         <translatorcomment>Prise en main de l&apos;appareil nulle ou un paramètre de pointeur invalide dans l&apos;argument retourné</translatorcomment>
         <translation>WHAT ???     (AND WHY?)   APJ19</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="39"/>
+        <location filename="../hamlibRotcontrol.cpp" line="42"/>
         <source>Invalid VFO</source>
         <translation>VFO?????? invalide   APJ20</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="40"/>
+        <location filename="../hamlibRotcontrol.cpp" line="43"/>
         <source>RIG_EDOM</source>
         <translation>RIG_EDOM WHAT????   APJ21</translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="574"/>
+        <location filename="../hamlibRotcontrol.cpp" line="577"/>
         <source>hamlib Errorcode too large!</source>
         <translation>Code d&apos;erreur de hamlib trop grand!</translation>
     </message>
