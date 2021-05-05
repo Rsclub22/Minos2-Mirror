@@ -49,6 +49,8 @@
 
 TLogContainer *LogContainer = nullptr;
 
+bool TLogContainer::loggerClosing = false;
+
 SetMemoryAction::SetMemoryAction(QString t, QObject *p):QAction(t, p)
 {}
 
@@ -262,6 +264,11 @@ void TLogContainer::on_ReportOverstrike(bool overstrike, BaseContestLog *econtes
 void TLogContainer::closeEvent(QCloseEvent *event)
 {
     trace("closeEvent:Start");
+    if (loggerClosing)
+    {
+        trace("Logger already closing");
+        return;
+    }
     loggerClosing = true;
 //    MinosConfig::getMinosConfig() ->askStop();
 
