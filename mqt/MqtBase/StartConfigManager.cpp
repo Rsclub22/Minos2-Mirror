@@ -41,9 +41,10 @@ void StartConfigManager::checkEnabled()
 
     bool enable = !running && minosConfig->configs.size() > 0;
 
+    ui->newButton->setEnabled(enable);
+    ui->cloneButton->setEnabled(enable);
     ui->deleteButton->setEnabled(enable);
     ui->renameButton->setEnabled(enable);
-    ui->cloneButton->setEnabled(enable);
     ui->editButton->setEnabled(enable);
 
     if (running)
@@ -53,10 +54,8 @@ void StartConfigManager::checkEnabled()
     else
     {
         ui->startStopButton->setText(tr("Start all apps"));
+        ui->startStopButton->setEnabled(enable);
     }
-
-    ui->startStopButton->setEnabled(enable);
-
 }
 
 void StartConfigManager::showDetails()
@@ -261,7 +260,8 @@ void StartConfigManager::on_startStopButton_clicked()
     }
     else
     {
+        minosConfig->saveAll();
         minosConfig->start();
-        close();
+        accept();
     }
 }
