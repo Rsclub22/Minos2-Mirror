@@ -6,67 +6,67 @@
     <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre principale</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="97"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="119"/>
         <source>Input Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="133"/>
         <source>Output Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal de sortie</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="147"/>
         <source>Base Output Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Base du nom de fichier de sortie </translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="157"/>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="168"/>
         <source>File Rotation Interval (minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Intervalle de rotation des fichiers (minutes) </translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="180"/>
         <source>Auto Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrage automatique</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="192"/>
         <source>Start Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer l&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="212"/>
         <source>Stop Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter l&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="232"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="193"/>
+        <source>Record Files (*.wav);;All Files (*.*)</source>
+        <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *) </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="196"/>
-        <source>Record Files (*.wav);;All Files (*.*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="199"/>
         <source>Recorded Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers enregistrés</translation>
     </message>
 </context>
 </TS>

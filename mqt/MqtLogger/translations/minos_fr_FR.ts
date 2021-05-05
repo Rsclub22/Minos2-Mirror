@@ -6,17 +6,17 @@
     <message>
         <location filename="../bandselbuttons.cpp" line="58"/>
         <source>Preset</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Prédéfini </translation>
     </message>
     <message>
         <location filename="../bandselbuttons.cpp" line="63"/>
         <source>Prev</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../bandselbuttons.cpp" line="68"/>
         <source>Band</source>
-        <translation type="unfinished">Bande</translation>
+        <translation>Bande</translation>
     </message>
 </context>
 <context>
@@ -114,16 +114,12 @@
         <location filename="../bandmapclientframe.cpp" line="1551"/>
         <source>Bandmap</source>
         <translatorcomment>Bandmap???</translatorcomment>
-        <translation>Carte des bandes     </translation>
+        <translation>Carte des bandes</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="45"/>
         <source>Call/Locator Filter</source>
         <translation>Filtre de Indicatif/Locator   </translation>
-    </message>
-    <message>
-        <source>Test Resend Spots</source>
-        <translation type="vanished">Tester envoyer à nouveau des Spots   </translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="66"/>
@@ -204,7 +200,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="77"/>
         <source>&amp;Resend Cluster Spots</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Renvoyer les spots de cluster</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="78"/>
@@ -220,7 +216,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="117"/>
         <source>Move spot to current frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer le spot sur la fréquence actuelle</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="395"/>
@@ -280,17 +276,18 @@
         <location filename="../bandmapview.cpp" line="1527"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
-        <translation type="unfinished"></translation>
+        <translation>La fréquence CQ = %1
+Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../bandmapview.cpp" line="1557"/>
         <source>The computed mode is</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode calculé</translation>
     </message>
     <message>
         <location filename="../bandmapview.cpp" line="1560"/>
         <source>The mode is</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode</translation>
     </message>
     <message>
         <location filename="../bandmapview.cpp" line="1567"/>
@@ -298,21 +295,10 @@ The mode is %2</source>
 %9 %10
 %11
 %12</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>CQ Frequency = %1
-The computed mode is %2</source>
-        <translation type="vanished">La fréquence CQ = %1
-Le mode calculé est %2</translation>
-    </message>
-    <message>
-        <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
-The computed mode is %9
-%10</source>
-        <translation type="vanished">%1 - %2, %3, %4, %5 [%6 %7 @ %8 min]
-Le mode calculé est%9
-%10</translation>
+        <translation>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
+%9 %10
+%11
+%12</translation>
     </message>
 </context>
 <context>
@@ -320,16 +306,12 @@ Le mode calculé est%9
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="76"/>
         <source>Operating Freq Colour Band Follow Radio Mode </source>
-        <translation type="unfinished"></translation>
+        <translation>Bande de couleurs de fréquence suivre mode de radio?</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Old Bandmap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cluster/Bandmap Default Distance</source>
-        <translation type="vanished">Distance par défaut de Cluster / Bandmap</translation>
+        <translation>Vieux Carte des bandes</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="130"/>
@@ -364,7 +346,7 @@ Le mode calculé est%9
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="109"/>
         <source>Cluster/Bandmap Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>???What???</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="186"/>
@@ -429,21 +411,17 @@ Le mode calculé est%9
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="422"/>
         <source>Spot Less Than Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Spot à moins de distance</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="429"/>
         <source>Spot Greater Than Distance</source>
-        <translation type="unfinished"></translation>
+        <translation>Spot plus grand que le distance</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="69"/>
         <source>Turn Off Operating Freq Colour Band</source>
         <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
-    </message>
-    <message>
-        <source>Follow Radio Mode Operating Freq Colour Band</source>
-        <translation type="vanished">Suivre le mode de radio pour la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="30"/>
@@ -483,42 +461,42 @@ Le mode calculé est%9
         <location filename="../clusterclientfilterdialog.ui" line="36"/>
         <location filename="../clusterclientfilterdialog.ui" line="501"/>
         <source>HF</source>
-        <translation type="unfinished">HF</translation>
+        <translation>HF</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="43"/>
         <location filename="../clusterclientfilterdialog.ui" line="511"/>
         <source>1.8 MHz</source>
-        <translation type="unfinished">1,8 MHz</translation>
+        <translation>1,8 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="50"/>
         <location filename="../clusterclientfilterdialog.ui" line="554"/>
         <source>3.5 MHz</source>
-        <translation type="unfinished">3,5 MHz</translation>
+        <translation>3,5 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="57"/>
         <location filename="../clusterclientfilterdialog.ui" line="597"/>
         <source>7 MHz</source>
-        <translation type="unfinished">7 MHz</translation>
+        <translation>7 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="64"/>
         <location filename="../clusterclientfilterdialog.ui" line="640"/>
         <source>14 MHz</source>
-        <translation type="unfinished">14 MHz</translation>
+        <translation>14 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="71"/>
         <source> 21 MHz</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="78"/>
         <location filename="../clusterclientfilterdialog.ui" line="726"/>
         <source>28 MHz</source>
-        <translation type="unfinished">28 MHz</translation>
+        <translation>28 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="102"/>
@@ -746,7 +724,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="683"/>
         <source>21 MHz</source>
-        <translation type="unfinished">21 MHz</translation>
+        <translation>21 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="760"/>
@@ -793,11 +771,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="1026"/>
         <source>MW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>UHF</source>
-        <translation type="vanished">UHF</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="85"/>
@@ -938,10 +912,6 @@ Le mode calculé est%9
 <context>
     <name>ClusterClientFrame</name>
     <message>
-        <source>Test Resend Spots</source>
-        <translation type="vanished">Tester envoyer à nouveau des Spots   </translation>
-    </message>
-    <message>
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="55"/>
         <location filename="../clusterclientframe.cpp" line="1511"/>
@@ -1019,7 +989,7 @@ Le mode calculé est%9
     <message>
         <location filename="../clusterclientframe.cpp" line="113"/>
         <source>&amp;Resend Cluster Spots</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Renvoyer les spots de cluster</translation>
     </message>
     <message>
         <location filename="../clusterclientframe.cpp" line="114"/>
@@ -1151,7 +1121,7 @@ Le mode calculé est%9
     <message>
         <location filename="../contestdetails.ui" line="380"/>
         <source>Locator as sent</source>
-        <translation type="unfinished">Locator envoyé</translation>
+        <translation>Locator envoyé</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="403"/>
@@ -1451,7 +1421,8 @@ Cela ouvre une boîte de dialogue dans laquelle vous pouvez définir un nouveau 
 
 Cliquez sur le nom du paramètre à gauche pour sélectionner un paramètre existant, puis ses composants sont affichés dans le volet de droite et peuvent être modifiés individuellement.
 
-Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.</translation>
+Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris ou des touches fléchées haut / bas.
+</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1467"/>
@@ -1469,7 +1440,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../ContestPage.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
 </context>
 <context>
@@ -1477,18 +1448,18 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../ContestPageControl.ui" line="14"/>
         <source>Minos</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos</translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="19"/>
         <location filename="../ContestPageControl.cpp" line="148"/>
         <source>Minos Contest Logger</source>
-        <translation type="unfinished">Minos Enregistreur deu Concours</translation>
+        <translation>Minos Enregistreur de Concours</translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="83"/>
         <source> (min)</source>
-        <translation type="unfinished"></translation>
+        <translation> (min)</translation>
     </message>
 </context>
 <context>
@@ -1678,14 +1649,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Répertoire des Listes</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuler</translation>
-    </message>
-    <message>
         <location filename="../defdirsdlg.cpp" line="74"/>
         <source>Set Default Logs Directory</source>
         <translation>Définir le répertoire par défaut des Logs</translation>
@@ -1701,102 +1664,102 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="26"/>
         <source>Font</source>
-        <translation type="unfinished"></translation>
+        <translation>Police</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="33"/>
         <source>Example of the current Minos font 0123456789</source>
-        <translation type="unfinished"></translation>
+        <translation>Exemple de la police Minos actuelle 0123456789</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="53"/>
         <source>Change...</source>
-        <translation type="unfinished"></translation>
+        <translation>Changer...</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="64"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Langue</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="110"/>
         <source>Signal Report AutoFill</source>
-        <translation type="unfinished">Remplissage automatique du report de signal</translation>
+        <translation>Remplissage automatique du report de signal</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="117"/>
         <source>Change Tab Order for S&amp;&amp;P</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier l&apos;ordre des onglets pour S &amp;&amp; P</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="124"/>
         <source>Show Operators</source>
-        <translation type="unfinished">Visualiser les opérateurs</translation>
+        <translation>Visualiser les opérateurs</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="150"/>
         <source>Contest Age Protection after</source>
-        <translation type="unfinished">Protéger le Concours après</translation>
+        <translation>Protéger le Concours après</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="167"/>
         <source>days</source>
-        <translation type="unfinished">jours</translation>
+        <translation>jours</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="191"/>
         <source>Set List Spacing Compression Value as percentage</source>
-        <translation type="unfinished">Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
+        <translation>Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="225"/>
         <source>QSO Field expansion as percentage</source>
-        <translation type="unfinished">Expansion du détails du QSO en pourcentage</translation>
+        <translation>Expansion du détails du QSO en pourcentage</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="259"/>
         <source>Layouts</source>
-        <translation type="unfinished"></translation>
+        <translation>Présentations</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="265"/>
         <source>Spacing</source>
-        <translation type="unfinished"></translation>
+        <translation>Espacement</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="298"/>
         <source>Content Margins</source>
-        <translation type="unfinished"></translation>
+        <translation>Marges de content</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="304"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="321"/>
         <source>T</source>
-        <translation type="unfinished"></translation>
+        <translation>T</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="338"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="355"/>
         <source>B</source>
-        <translation type="unfinished"></translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.cpp" line="194"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
-        <translation type="unfinished">Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
+        <translation>Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
     </message>
 </context>
 <context>
@@ -1875,14 +1838,6 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
         <location filename="../FilterFrame.ui" line="130"/>
         <source>Unworked</source>
         <translation>Non contacté</translation>
-    </message>
-</context>
-<context>
-    <name>InternalVoiceMemoryKeyer</name>
-    <message>
-        <location filename="../InternalVoiceMemoryKeyer.cpp" line="169"/>
-        <source>Internal Voice Memory Setup</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1979,7 +1934,8 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
         <location filename="../locframe.cpp" line="478"/>
         <source>Single click to transfer the square centre bearing ( %1 ) to rotator control;
 Double click on an edge square to extend the area of the map.</source>
-        <translation type="unfinished"></translation>
+        <translation>Un seul clic pour transférer le palier central carré ( %1 ) vers le contrôle du rotateur;
+Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</translation>
     </message>
 </context>
 <context>
@@ -2077,18 +2033,6 @@ Double click on an edge square to extend the area of the map.</source>
         <translation>Écriture de tous les contacts entre la séquence %1 et %2 inclus</translation>
     </message>
     <message>
-        <source>Please give first serial to be dumped</source>
-        <translation type="vanished">SVP préciser le premier numéro de série à écraser</translation>
-    </message>
-    <message>
-        <source>Please give last serial to be dumped</source>
-        <translation type="vanished">Dernier numéro de séquence à écrire</translation>
-    </message>
-    <message>
-        <source>Dumping all contacts between serials %1 and %2 inclusive</source>
-        <translation type="vanished">Écraser tous les contacts entre la séquence %1 et %2 incluse</translation>
-    </message>
-    <message>
         <location filename="../LoggerContest.cpp" line="1019"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation>Exporté par Minos Logger Version %1 %2</translation>
@@ -2102,57 +2046,6 @@ Double click on an edge square to extend the area of the map.</source>
         <location filename="../LoggerContest.cpp" line="1888"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation>Echec de l&apos;ouverture du fichier pour la surveillance de %1 : %2</translation>
-    </message>
-</context>
-<context>
-    <name>MessageServer::impl</name>
-    <message>
-        <source>Error creating UDP message</source>
-        <translation type="vanished">La création du message UDP a échoué</translation>
-    </message>
-    <message>
-        <source>MessageServer warning: invalid UDP message received</source>
-        <translation type="vanished">Avertissement MessageServer: message UDP non valide reçu</translation>
-    </message>
-    <message>
-        <source>MessageServer exception: %1</source>
-        <translation type="vanished">Exception MessageServer:%1</translation>
-    </message>
-    <message>
-        <source>Unexpected exception in MessageServer</source>
-        <translation type="vanished">Exception inattendue dans MessageServer</translation>
-    </message>
-    <message>
-        <source>Message serialization error: read corrupt data</source>
-        <translation type="vanished">Erreur de sérialisation du message: lecture de données corrompues</translation>
-    </message>
-    <message>
-        <source>Message serialization error: write error</source>
-        <translation type="vanished">Erreur de sérialisation du message: erreur d&apos;écriture</translation>
-    </message>
-</context>
-<context>
-    <name>MinosContestLoadDialog</name>
-    <message>
-        <source>Loading...</source>
-        <translation type="vanished">Chargement...</translation>
-    </message>
-    <message>
-        <source>Creating </source>
-        <translatorcomment>Patientez???</translatorcomment>
-        <translation type="vanished">Création </translation>
-    </message>
-    <message>
-        <source>Loading </source>
-        <translation type="vanished">Chargement </translation>
-    </message>
-    <message>
-        <source>List file </source>
-        <translation type="vanished">Fichier de liste </translation>
-    </message>
-    <message>
-        <source>Contest file </source>
-        <translation type="vanished">Fichier du Concours </translation>
     </message>
 </context>
 <context>
@@ -2250,61 +2143,54 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <source>Configure UDP Broadcasts</source>
         <translation>Configurer les diffusions UDP</translation>
     </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>OptionsDialog</name>
     <message>
         <location filename="../OptionsDialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.ui" line="25"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.ui" line="45"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="80"/>
         <source>Cluster/Bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Cluster/Bandmap</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="81"/>
         <source>Default Directories</source>
-        <translation type="unfinished"></translation>
+        <translation>Les répertoires par défaut</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="82"/>
         <source>DisplayOptions</source>
-        <translation type="unfinished"></translation>
+        <translation>???What???</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="83"/>
         <source>Log Radio Settings</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Paramètres de radio</translatorcomment>
+        <translation>???What???</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="84"/>
         <source>UDP Broadcast</source>
-        <translation type="unfinished"></translation>
+        <translation>Diffusions UDP</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="85"/>
         <source>WSJT-X</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJT-X</translation>
     </message>
 </context>
 <context>
@@ -2370,7 +2256,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="606"/>
+        <location filename="../qsologframe.cpp" line="605"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -2378,14 +2264,6 @@ to</source>
         <location filename="../qsologframe.ui" line="181"/>
         <source>First Unfilled QSO</source>
         <translation>Premier QSO non rempli</translation>
-    </message>
-    <message>
-        <source>Spot Last Logged: </source>
-        <translation type="vanished">Dernier Spot enregistré: </translation>
-    </message>
-    <message>
-        <source>Spot</source>
-        <translation type="vanished">Spot</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="568"/>
@@ -2415,7 +2293,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="507"/>
         <source>QRZ</source>
-        <translation type="unfinished"></translation>
+        <translation>QRZ</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="517"/>
@@ -2450,7 +2328,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="289"/>
         <source>prot</source>
-        <translation type="unfinished"></translation>
+        <translation>Protégé ???</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="371"/>
@@ -2470,12 +2348,12 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="347"/>
         <source>Call</source>
-        <translation type="unfinished">Indicatif d&apos;appel</translation>
+        <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="334"/>
         <source>S&amp;&amp;P</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;&amp;P</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="417"/>
@@ -2530,12 +2408,12 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="551"/>
         <source>Spot Last Logged ()</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un spot pour le dernière enregistrée</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="561"/>
         <source>Spot Current</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un spot pour le courant???</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="755"/>
@@ -2594,17 +2472,17 @@ to</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="442"/>
+        <location filename="../qsologframe.cpp" line="441"/>
         <source>Return to Log</source>
         <translation>Retourner au Log</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="615"/>
+        <location filename="../qsologframe.cpp" line="614"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1821"/>
+        <location filename="../qsologframe.cpp" line="1820"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2615,57 +2493,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1965"/>
+        <location filename="../qsologframe.cpp" line="1964"/>
         <source>Read Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1969"/>
+        <location filename="../qsologframe.cpp" line="1968"/>
         <source>Protected</source>
-        <translation type="unfinished">Protégé</translation>
+        <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1973"/>
+        <location filename="../qsologframe.cpp" line="1972"/>
         <source>Protected by age of contest</source>
-        <translation type="unfinished"></translation>
+        <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1981"/>
+        <location filename="../qsologframe.cpp" line="1980"/>
         <source>QSO Entry Frame not focussed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2296"/>
+        <location filename="../qsologframe.cpp" line="2285"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2303"/>
+        <location filename="../qsologframe.cpp" line="2292"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2332"/>
+        <location filename="../qsologframe.cpp" line="2321"/>
         <source>Spot Last Logged (%1) </source>
-        <translation type="unfinished"></translation>
+        <translation>Spot dernière enregistrée (%1)  </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2395"/>
+        <location filename="../qsologframe.cpp" line="2384"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2397"/>
+        <location filename="../qsologframe.cpp" line="2386"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2731"/>
+        <location filename="../qsologframe.cpp" line="2720"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2766"/>
+        <location filename="../qsologframe.cpp" line="2755"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -2675,7 +2553,8 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../QSOTextEditFrame.cpp" line="52"/>
         <source>Click to clear edit content</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Cliquer pour supprimer le contenu modifié</translatorcomment>
+        <translation>???What does this mean???</translation>
     </message>
 </context>
 <context>
@@ -2683,72 +2562,72 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="20"/>
         <source>QRZ.com</source>
-        <translation type="unfinished"></translation>
+        <translation>??QRZ.com </translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="51"/>
         <source>Callsign:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="92"/>
         <source>Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="129"/>
         <source>Address 1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse 1:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="166"/>
         <source>Address 2:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse 2:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="203"/>
         <source>Country:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="257"/>
         <source>QRA:</source>
-        <translation type="unfinished"></translation>
+        <translation>QRA:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="294"/>
         <source>Bearing:</source>
-        <translation type="unfinished"></translation>
+        <translation>Direction:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="331"/>
         <source>Distance:</source>
-        <translation type="unfinished"></translation>
+        <translation>Distance:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="368"/>
         <source>ITU Zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone ITU:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="405"/>
         <source>CQ Zone:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zone CQ:</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="455"/>
         <source>LogOn</source>
-        <translation type="unfinished"></translation>
+        <translation>Se connecter</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="462"/>
         <source>OffLine</source>
-        <translation type="unfinished"></translation>
+        <translation>Hors ligne</translation>
     </message>
 </context>
 <context>
@@ -2756,17 +2635,17 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="195"/>
         <source>Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponible</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="196"/>
         <source>Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Indisponible</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="197"/>
         <source>No Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun contact</translation>
     </message>
 </context>
 <context>
@@ -2774,52 +2653,53 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="30"/>
         <source>Radio General Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres généraux de radio</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="38"/>
         <source>Turn Off Operating Frequency Colour in Radio Freq Dial</source>
-        <translation type="unfinished"></translation>
+        <translation>???What does this mean??</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="45"/>
         <source>Contest Start - Ignore Preset Frequency</source>
-        <translation type="unfinished">Début du Concours - Ignorer la fréquence prédéfinie</translation>
+        <translation>Début du Concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="52"/>
         <source>Contest Change - Ignore Previous Frequency</source>
-        <translation type="unfinished">Modification du Concours - Ignorer la fréquence précédente</translation>
+        <translation>Modification du Concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="59"/>
         <source>Contest Change - Restore Contest Mode</source>
-        <translation type="unfinished">Modification du concours - Restaurer le mode concours</translation>
+        <translation>Modification du concours - Restaurer le mode concours</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="66"/>
         <source>Set RIT when calling CQ (radio permitting)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Activer?</translatorcomment>
+        <translation>Régler RIT lorsque en appelant CQ (si la radio le permet) </translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="92"/>
         <source>Radio Frequency Presets</source>
-        <translation type="unfinished"></translation>
+        <translation>Présélections de radiofréquence</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="98"/>
         <source>Enter a frequency to be recalled when selecting a band for each mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer une fréquence pour chaque mode ​lors de la sélection d&apos;une bande</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="115"/>
         <source>CW</source>
-        <translation type="unfinished">CW</translation>
+        <translation>CW</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="123"/>
@@ -2827,7 +2707,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="661"/>
         <location filename="../radiosettingdialog.ui" line="1014"/>
         <source>28 MHz</source>
-        <translation type="unfinished">28 MHz</translation>
+        <translation>28 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="133"/>
@@ -2835,7 +2715,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="671"/>
         <location filename="../radiosettingdialog.ui" line="1024"/>
         <source>3.5 MHZ</source>
-        <translation type="unfinished"></translation>
+        <translation>3,5 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="143"/>
@@ -2843,7 +2723,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="681"/>
         <location filename="../radiosettingdialog.ui" line="1034"/>
         <source>70MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>70 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="153"/>
@@ -2851,7 +2731,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="691"/>
         <location filename="../radiosettingdialog.ui" line="1044"/>
         <source>432MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>432 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="184"/>
@@ -2859,7 +2739,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="722"/>
         <location filename="../radiosettingdialog.ui" line="1075"/>
         <source>7 MHz</source>
-        <translation type="unfinished">7 MHz</translation>
+        <translation>7 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="194"/>
@@ -2867,7 +2747,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="732"/>
         <location filename="../radiosettingdialog.ui" line="1085"/>
         <source>1.8 MHz</source>
-        <translation type="unfinished">1,8 MHz</translation>
+        <translation>1,8 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="204"/>
@@ -2875,7 +2755,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="742"/>
         <location filename="../radiosettingdialog.ui" line="1095"/>
         <source>144MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>144 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="221"/>
@@ -2883,7 +2763,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="759"/>
         <location filename="../radiosettingdialog.ui" line="1112"/>
         <source>21 MHz</source>
-        <translation type="unfinished">21 MHz</translation>
+        <translation>21 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="245"/>
@@ -2891,7 +2771,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="783"/>
         <location filename="../radiosettingdialog.ui" line="1136"/>
         <source>50MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>50 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="262"/>
@@ -2899,7 +2779,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="800"/>
         <location filename="../radiosettingdialog.ui" line="1153"/>
         <source>14 MHz</source>
-        <translation type="unfinished">14 MHz</translation>
+        <translation>14 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="300"/>
@@ -2907,7 +2787,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="838"/>
         <location filename="../radiosettingdialog.ui" line="1191"/>
         <source>1296MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>1296 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="310"/>
@@ -2915,7 +2795,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="848"/>
         <location filename="../radiosettingdialog.ui" line="1201"/>
         <source>10GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>10 GHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="327"/>
@@ -2923,7 +2803,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="865"/>
         <location filename="../radiosettingdialog.ui" line="1218"/>
         <source>5.6GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>5,6 GHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="344"/>
@@ -2931,7 +2811,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="882"/>
         <location filename="../radiosettingdialog.ui" line="1235"/>
         <source>3.4GHz</source>
-        <translation type="unfinished"></translation>
+        <translation>3,4 GHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="368"/>
@@ -2939,47 +2819,47 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="906"/>
         <location filename="../radiosettingdialog.ui" line="1259"/>
         <source>2300MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>2300 MHz</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="384"/>
         <source>Phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Phonie</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="653"/>
         <source>MGM</source>
-        <translation type="unfinished"></translation>
+        <translation>MGM</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="926"/>
         <source>Band Switch</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="934"/>
         <source>Enable Band Switch</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer le commutateur de bande</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="941"/>
         <source>Enable Band Switch Serial Control</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer le contrôle série du commutateur de bande</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="948"/>
         <source>Comport</source>
-        <translation type="unfinished"></translation>
+        <translation>Port COM</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="990"/>
         <source>Bandswitch Messages</source>
-        <translation type="unfinished"></translation>
+        <translation>Messages du commutateur de bande</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="292"/>
         <source>Frequency %1 is out of band for %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence %1 est hors bande pour %2</translation>
     </message>
 </context>
 <context>
@@ -3021,7 +2901,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="194"/>
-        <location filename="../rigcontrolframe.cpp" line="616"/>
+        <location filename="../rigcontrolframe.cpp" line="614"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -3034,10 +2914,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.ui" line="248"/>
         <source>TxVert:</source>
         <translation>Transverter:</translation>
-    </message>
-    <message>
-        <source>Band Sel.</source>
-        <translation type="vanished">Sélection de bande.</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="304"/>
@@ -3061,58 +2937,50 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="623"/>
+        <location filename="../rigcontrolframe.cpp" line="621"/>
         <source>Off</source>
         <translation>Éteint</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1229"/>
+        <location filename="../rigcontrolframe.cpp" line="1227"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1265"/>
+        <location filename="../rigcontrolframe.cpp" line="1263"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1274"/>
+        <location filename="../rigcontrolframe.cpp" line="1272"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1358"/>
+        <location filename="../rigcontrolframe.cpp" line="1356"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1510"/>
+        <location filename="../rigcontrolframe.cpp" line="1508"/>
         <source>Freq out of contest band</source>
         <translation>Fréquence hors bande du Concours</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1683"/>
+        <location filename="../rigcontrolframe.cpp" line="1681"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1690"/>
+        <location filename="../rigcontrolframe.cpp" line="1688"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1711"/>
+        <location filename="../rigcontrolframe.cpp" line="1709"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
-    </message>
-</context>
-<context>
-    <name>RigControlVoiceMemoryKeyer</name>
-    <message>
-        <location filename="../rigcontrolvoicememorykeyer.cpp" line="106"/>
-        <source>Rig Control Voice Memory Setup</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3308,7 +3176,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="176"/>
-        <location filename="../rotcontrolframe.cpp" line="595"/>
+        <location filename="../rotcontrolframe.cpp" line="594"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
@@ -3319,8 +3187,8 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="166"/>
-        <location filename="../rotcontrolframe.cpp" line="473"/>
-        <location filename="../rotcontrolframe.cpp" line="480"/>
+        <location filename="../rotcontrolframe.cpp" line="472"/>
+        <location filename="../rotcontrolframe.cpp" line="479"/>
         <source>Turn</source>
         <translation>Tourner</translation>
     </message>
@@ -3345,62 +3213,62 @@ Non - Ignorer les modifications</translation>
         <translation>+3</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="226"/>
+        <location filename="../rotcontrolframe.cpp" line="225"/>
         <source>Bearing empty or invalid</source>
         <translation>Direction vide ou invalide</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="236"/>
+        <location filename="../rotcontrolframe.cpp" line="235"/>
         <source>Bearing too large - %1</source>
         <translation>Direction trop grande -%1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="244"/>
+        <location filename="../rotcontrolframe.cpp" line="243"/>
         <source>Bearing too small - %1</source>
         <translation>Direction trop petite - %1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="490"/>
-        <location filename="../rotcontrolframe.cpp" line="497"/>
+        <location filename="../rotcontrolframe.cpp" line="489"/>
+        <location filename="../rotcontrolframe.cpp" line="496"/>
         <source>(CCW) Left</source>
         <translation>Sens antihoraire (à gauche)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="504"/>
-        <location filename="../rotcontrolframe.cpp" line="511"/>
+        <location filename="../rotcontrolframe.cpp" line="503"/>
+        <location filename="../rotcontrolframe.cpp" line="510"/>
         <source>(CW) Right</source>
         <translation>Sens horaire (à droite)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="572"/>
-        <location filename="../rotcontrolframe.cpp" line="635"/>
+        <location filename="../rotcontrolframe.cpp" line="571"/>
+        <location filename="../rotcontrolframe.cpp" line="634"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="581"/>
-        <location filename="../rotcontrolframe.cpp" line="641"/>
-        <location filename="../rotcontrolframe.cpp" line="659"/>
+        <location filename="../rotcontrolframe.cpp" line="580"/>
+        <location filename="../rotcontrolframe.cpp" line="640"/>
+        <location filename="../rotcontrolframe.cpp" line="658"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="604"/>
+        <location filename="../rotcontrolframe.cpp" line="603"/>
         <source>Rotating CCW</source>
         <translation>Tournant sens antihoraire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="614"/>
+        <location filename="../rotcontrolframe.cpp" line="613"/>
         <source>Rotating CW</source>
         <translation>Tournant sens horaire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="625"/>
+        <location filename="../rotcontrolframe.cpp" line="624"/>
         <source>Turning to bearing</source>
         <translation>Passant à la direction choisie</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="647"/>
+        <location filename="../rotcontrolframe.cpp" line="646"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -3572,21 +3440,17 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfig.ui" line="75"/>
         <source>Add Screen Before</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un écran avant</translation>
     </message>
     <message>
         <location filename="../ScreenConfig.ui" line="82"/>
         <source>Add Screen After</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter un écran après</translation>
     </message>
     <message>
         <location filename="../ScreenConfig.ui" line="102"/>
         <source>Remove Screen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add Column Left</source>
-        <translation type="vanished">Ajouter une colonne à gauche</translation>
+        <translation>Supprimer l&apos;écran</translation>
     </message>
     <message>
         <location filename="../ScreenConfig.ui" line="55"/>
@@ -3594,29 +3458,9 @@ Non - Ignorer les modifications</translation>
         <translation>Appliquer</translation>
     </message>
     <message>
-        <source>Add Row</source>
-        <translation type="vanished">Ajouter une ligne</translation>
-    </message>
-    <message>
-        <source>Add Column Right</source>
-        <translation type="vanished">Ajouter une colonne à droite</translation>
-    </message>
-    <message>
         <location filename="../ScreenConfig.ui" line="122"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
-The row background will change colour when selected.</source>
-        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
-    </message>
-    <message>
-        <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
-The row background will change colour when selected.</source>
-        <translation type="vanished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
     </message>
 </context>
 <context>
@@ -3664,22 +3508,22 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="12"/>
         <source>mainscreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Écran principal</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="12"/>
         <source>Main Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Écran principal</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="13"/>
         <source>screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Écran</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="13"/>
         <source>Secondary Screen</source>
-        <translation type="unfinished"></translation>
+        <translation>Écran secondaire</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="14"/>
@@ -3802,12 +3646,12 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../ScreenConfigElement.cpp" line="30"/>
         <source>TX Voice Mem. Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de mémoire de voix TX</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="31"/>
         <source>QRZ Display</source>
-        <translation type="unfinished"></translation>
+        <translation>QRZ ???</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="32"/>
@@ -3869,7 +3713,8 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../ScreenConfigManager.ui" line="69"/>
         <source>Make Default
 Protected</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>rendre protégé par défaut</translatorcomment>
+        <translation>Protégé par défaut </translation>
     </message>
     <message>
         <location filename="../ScreenConfigManager.ui" line="106"/>
@@ -3894,7 +3739,7 @@ Protected</source>
     <message>
         <location filename="../ScreenConfigManager.cpp" line="13"/>
         <source>(protected)</source>
-        <translation type="unfinished"></translation>
+        <translation>(protégé)</translation>
     </message>
     <message>
         <location filename="../ScreenConfigManager.cpp" line="157"/>
@@ -3936,41 +3781,41 @@ Protected</source>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadre</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="39"/>
         <source>Screen Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom de l&apos;écran</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="62"/>
         <source>Add Column Left</source>
-        <translation type="unfinished">Ajouter une colonne à gauche</translation>
+        <translation>Ajouter une colonne à gauche</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="82"/>
         <source>Add Row</source>
-        <translation type="unfinished">Ajouter une ligne</translation>
+        <translation>Ajouter une ligne</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.ui" line="102"/>
         <source>Add Column Right</source>
-        <translation type="unfinished">Ajouter une colonne à droite</translation>
+        <translation>Ajouter une colonne à droite</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="345"/>
         <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
-        <translation type="unfinished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
+        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
+L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée. </translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="377"/>
         <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
-        <translation type="unfinished">Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
+        <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
+L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée. </translation>
     </message>
 </context>
 <context>
@@ -4931,31 +4776,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Dispositions de l&apos;écran</translation>
     </message>
     <message>
-        <source>Select &amp;Font...</source>
-        <translation type="vanished">Sélectionner &amp;Police...</translation>
-    </message>
-    <message>
-        <source>Cluster/Bandmap configuration...</source>
-        <translation type="vanished">Configuration de Cluster / Bandmap ...</translation>
-    </message>
-    <message>
-        <source>Radio</source>
-        <translation type="vanished">Radio</translation>
-    </message>
-    <message>
-        <source>Contest Start - Ignore Preset Frequency</source>
-        <translation type="vanished">Début du Concours - Ignorer la fréquence prédéfinie</translation>
-    </message>
-    <message>
-        <source>Contest Change - Ignore Previous Frequency</source>
-        <translation type="vanished">Modification du Concours - Ignorer la fréquence précédente</translation>
-    </message>
-    <message>
-        <source>Signal Report AutoFill</source>
-        <translatorcomment>Remplissage automatique du report reçu</translatorcomment>
-        <translation type="vanished">Remplissage automatique du report de signal</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="431"/>
         <source>E&amp;xit Minos Contest Logger and Clear registry...</source>
         <translation>Effacer le &amp;Registre et Fermer Minos Enregistreur de Concours...</translation>
@@ -4966,42 +4786,14 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Configurer les applications...</translation>
     </message>
     <message>
-        <source>Select &amp;Language</source>
-        <translation type="vanished">Sélectionner &amp;Langue</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="446"/>
         <source>Locator Calculator...</source>
         <translation>Calcul du Locator Maidenhead...</translation>
     </message>
     <message>
-        <source>UDP broadcast configuration...</source>
-        <translation type="vanished">Configuration de la diffusion UDP ...</translation>
-    </message>
-    <message>
-        <source>WSJT-X link configuration...</source>
-        <translation type="vanished">Configuration de la liaison WSJT-X...</translation>
-    </message>
-    <message>
-        <source>Contest Change - Restore Contest Mode</source>
-        <translation type="vanished">Modification du concours - Restaurer le mode concours</translation>
-    </message>
-    <message>
-        <source>Old Bandmap layout</source>
-        <translation type="vanished">Ancienne disposition de Bandmap     </translation>
-    </message>
-    <message>
-        <source>Configure Contest Age Protection</source>
-        <translation type="vanished">Configurer la protection d&apos;âge du concours</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="448"/>
         <source>Correct Date/Time...</source>
         <translation>Corriger date / heure...</translation>
-    </message>
-    <message>
-        <source>Configure Default Directories...</source>
-        <translation type="vanished">Configurer les répertoires par défaut ...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="452"/>
@@ -5014,14 +4806,9 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Ajouter comme nouvelle mémoire ...</translation>
     </message>
     <message>
-        <source>Show Operators</source>
-        <translatorcomment>Visualiser les opérateurs</translatorcomment>
-        <translation type="vanished">Visualiser les opérateurs</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="450"/>
         <source>Options...</source>
-        <translation type="unfinished"></translation>
+        <translation>Options...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="479"/>
@@ -5195,27 +4982,6 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Vous devrez peut-être fermer et redémarrer Minos pour appliquer ces paramètres</translation>
     </message>
     <message>
-        <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
-        <translation type="vanished">Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
-    </message>
-    <message>
-        <source>Set days after which to protect contests (-1 for never)</source>
-        <translation type="vanished">Définir le nombre des jours après lesquels protéger les concours (-1 pour jamais)      </translation>
-    </message>
-    <message>
-        <source>Qt style</source>
-        <translation type="vanished">Style Qt</translation>
-    </message>
-    <message>
-        <source>Set List Spacing Compression Value as percentage</source>
-        <translation type="vanished">Définir la valeur de compression d&apos;espacement de liste en pourcentage</translation>
-    </message>
-    <message>
-        <source>QSO Field expansion as percentage</source>
-        <translatorcomment>Definir</translatorcomment>
-        <translation type="vanished">Expansion du détails du QSO en pourcentage</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="1264"/>
         <location filename="../tlogcontainer.cpp" line="1787"/>
         <source>Contest Sets</source>
@@ -5224,35 +4990,23 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1349"/>
         <source>Creating </source>
-        <translation type="unfinished">Création </translation>
+        <translation>Création </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1349"/>
         <location filename="../tlogcontainer.cpp" line="1894"/>
         <source>Loading </source>
-        <translation type="unfinished">Chargement </translation>
+        <translation>Chargement </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1351"/>
         <source>Contest file </source>
-        <translation type="unfinished">Fichier du Concours </translation>
+        <translation>Fichier du Concours </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1519"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
-    </message>
-    <message>
-        <source>Set style...</source>
-        <translation type="vanished">Définir Style (QT?)...</translation>
-    </message>
-    <message>
-        <source>Set extra QSO field size...</source>
-        <translation type="vanished">Augmenter la taille des champs QSO...</translation>
-    </message>
-    <message>
-        <source>Set List Spacing Compression...</source>
-        <translation type="vanished">Définir la valeur de compression d&apos;espacement de liste...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1628"/>
@@ -5262,7 +5016,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="1896"/>
         <source>List file </source>
-        <translation type="unfinished">Fichier de liste </translation>
+        <translation>Fichier de liste </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1906"/>
@@ -5628,8 +5382,61 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TxVmButtonDialog</name>
     <message>
+        <location filename="../txvmbuttondialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Dialogue</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.ui" line="37"/>
+        <source>Type: </source>
+        <translation>Type: </translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.ui" line="71"/>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.ui" line="98"/>
+        <source>Message Duration</source>
+        <translation>Durée du message</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.ui" line="120"/>
+        <source>Repeat Message</source>
+        <translation>Répéter le message</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.ui" line="132"/>
+        <source>Repeat Pause Duration</source>
+        <translation>Durée du pause</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.cpp" line="41"/>
+        <location filename="../txvmbuttondialog.cpp" line="71"/>
+        <source>Repeat Pause</source>
+        <translation>Répéter la pause</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.cpp" line="47"/>
+        <location filename="../txvmbuttondialog.cpp" line="77"/>
         <source>Message</source>
-        <translation type="obsolete">Message</translation>
+        <translation>Message</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.cpp" line="61"/>
+        <source>%1 Duration </source>
+        <translation>%1 Durée </translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.cpp" line="61"/>
+        <source> - out of range</source>
+        <translation>??? hors de limite</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttondialog.cpp" line="62"/>
+        <source>Please set value between 0 and 180 seconds</source>
+        <translation>Entrer un value entre 0 et 180 secondes SVP</translation>
     </message>
 </context>
 <context>
@@ -5637,225 +5444,95 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="14"/>
         <source>GroupBox</source>
-        <translation type="unfinished"></translation>
+        <translation>Boîte de groupe???</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="17"/>
         <source>TX Keyer</source>
-        <translation type="unfinished"></translation>
+        <translation>TX Keyer</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="41"/>
         <source>Setup</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="52"/>
-        <location filename="../txvmbuttonsframe.ui" line="59"/>
-        <location filename="../txvmbuttonsframe.ui" line="66"/>
-        <location filename="../txvmbuttonsframe.ui" line="73"/>
-        <location filename="../txvmbuttonsframe.ui" line="84"/>
-        <location filename="../txvmbuttonsframe.ui" line="91"/>
-        <location filename="../txvmbuttonsframe.ui" line="98"/>
-        <location filename="../txvmbuttonsframe.ui" line="105"/>
+        <location filename="../txvmbuttonsframe.ui" line="56"/>
+        <location filename="../txvmbuttonsframe.ui" line="63"/>
+        <location filename="../txvmbuttonsframe.ui" line="70"/>
+        <location filename="../txvmbuttonsframe.ui" line="77"/>
+        <location filename="../txvmbuttonsframe.ui" line="88"/>
+        <location filename="../txvmbuttonsframe.ui" line="95"/>
+        <location filename="../txvmbuttonsframe.ui" line="102"/>
+        <location filename="../txvmbuttonsframe.ui" line="109"/>
         <source>...</source>
-        <translation type="unfinished">...</translation>
+        <translation>...</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="114"/>
+        <location filename="../txvmbuttonsframe.ui" line="120"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="222"/>
+        <location filename="../txvmbuttonsframe.cpp" line="117"/>
+        <source>Voice Memory Setup</source>
+        <translation>Configuration de la mémoire de voix </translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="219"/>
         <source>Voice Memory %1 - Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire de voix %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="301"/>
+        <location filename="../txvmbuttonsframe.cpp" line="296"/>
         <source>Voice Memory %1 - New</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire de voix %1 - Nouveau</translation>
     </message>
 </context>
 <context>
-    <name>TxVmInternalButtonDialog</name>
+    <name>TxVmSetupDialog</name>
     <message>
-        <location filename="../txvminternalbuttondialog.ui" line="14"/>
+        <location filename="../txvmsetupdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
-        <location filename="../txvminternalbuttondialog.ui" line="39"/>
-        <source>Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="73"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="106"/>
-        <source>Test Replay</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="126"/>
-        <source>Record</source>
-        <translation type="unfinished">Enregistrer</translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="146"/>
-        <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="163"/>
-        <source>Message Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="185"/>
-        <source>Repeat Message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.ui" line="197"/>
-        <source>Repeat Pause Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.cpp" line="91"/>
-        <location filename="../txvminternalbuttondialog.cpp" line="121"/>
-        <source>Repeat Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.cpp" line="97"/>
-        <location filename="../txvminternalbuttondialog.cpp" line="127"/>
-        <source>Message</source>
-        <translation type="unfinished">Message</translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.cpp" line="111"/>
-        <source>%1 Duration </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.cpp" line="111"/>
-        <source> - out of range</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvminternalbuttondialog.cpp" line="112"/>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TxVmRigButtonDialog</name>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="35"/>
-        <source>Type: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="69"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="96"/>
-        <source>Message Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="118"/>
-        <source>Repeat Message</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.ui" line="130"/>
-        <source>Repeat Pause Duration</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="61"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="91"/>
-        <source>Repeat Pause</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="67"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="97"/>
-        <source>Message</source>
-        <translation type="unfinished">Message</translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="81"/>
-        <source>%1 Duration </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="81"/>
-        <source> - out of range</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="82"/>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>TxVmRigSetupDialog</name>
-    <message>
-        <location filename="../txvmrigsetupdialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txvmrigsetupdialog.ui" line="27"/>
+        <location filename="../txvmsetupdialog.ui" line="27"/>
         <source>Number Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>???What is this???</translation>
     </message>
     <message>
-        <location filename="../txvmrigsetupdialog.ui" line="41"/>
+        <location filename="../txvmsetupdialog.ui" line="41"/>
         <source>Comport</source>
-        <translation type="unfinished"></translation>
+        <translation>Port COM</translation>
     </message>
     <message>
-        <location filename="../txvmrigsetupdialog.ui" line="50"/>
+        <location filename="../txvmsetupdialog.ui" line="50"/>
         <source>Use PTT For EOM</source>
-        <translation type="unfinished"></translation>
+        <translation>???What??</translation>
     </message>
 </context>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="522"/>
+        <location filename="../txvmbuttonsframe.cpp" line="516"/>
         <source>&amp;Read</source>
-        <translation type="unfinished">&amp;Lire</translation>
+        <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="523"/>
+        <location filename="../txvmbuttonsframe.cpp" line="517"/>
         <source>&amp;New</source>
-        <translation type="unfinished">&amp;Nouveau</translation>
+        <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="524"/>
+        <location filename="../txvmbuttonsframe.cpp" line="518"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">&amp;Modifier</translation>
+        <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="525"/>
+        <location filename="../txvmbuttonsframe.cpp" line="519"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished">&amp;Effacer</translation>
+        <translation>&amp;Effacer</translation>
     </message>
 </context>
 <context>
@@ -5919,14 +5596,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <location filename="../WsjtxConfigure.ui" line="250"/>
         <source>Address</source>
         <translation>Adresse IP</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="vanished">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="vanished">Annuler</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.cpp" line="160"/>
@@ -6082,39 +5751,6 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <source>Please supply value</source>
         <translatorcomment>SVP? (Autres)</translatorcomment>
         <translation>Donner une valeur</translation>
-    </message>
-</context>
-<context>
-    <name>txVmInternalSetupDialog</name>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="25"/>
-        <source>Number Buttons</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="39"/>
-        <source>Comport</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="48"/>
-        <source>Use PTT For EOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="57"/>
-        <source>Input Channel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../txVmInternalSetupDialog.ui" line="71"/>
-        <source>Output Channel</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
