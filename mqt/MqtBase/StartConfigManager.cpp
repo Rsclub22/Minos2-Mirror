@@ -1,6 +1,7 @@
 #include "base_pch.h"
 #include "StartConfig.h"
 #include "enqdlg.h"
+#include "delayedaction.h"
 
 #include "StartConfigManager.h"
 #include "ui_StartConfigManager.h"
@@ -33,6 +34,31 @@ int StartConfigManager::exec()
 
     return QDialog::exec();
 }
+void StartConfigManager::checkEnabled()
+{
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    bool running = minosConfig->anyRunning();
+
+    bool enable = !running && minosConfig->configs.size() > 0;
+
+    ui->deleteButton->setEnabled(enable);
+    ui->renameButton->setEnabled(enable);
+    ui->cloneButton->setEnabled(enable);
+    ui->editButton->setEnabled(enable);
+
+    if (running)
+    {
+        ui->startStopButton->setText(tr("Stop all apps"));
+    }
+    else
+    {
+        ui->startStopButton->setText(tr("Start all apps"));
+    }
+
+    ui->startStopButton->setEnabled(enable);
+
+}
+
 void StartConfigManager::showDetails()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
@@ -53,6 +79,7 @@ void StartConfigManager::showDetails()
         j++;
     }
     ui->layoutList->setCurrentRow(crow);
+    checkEnabled();
     update();
     suppressItemSelect = false;
 }
@@ -205,6 +232,7 @@ void StartConfigManager::on_layoutList_itemSelectionChanged()
     {
         curConfigName = ui->layoutList->currentItem()->text();
     }
+    checkEnabled();
 }
 
 void StartConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
@@ -212,4 +240,28 @@ void StartConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*ite
     curConfigName = ui->layoutList->currentItem()->text();
 
     on_editButton_clicked();
+    checkEnabled();
+}
+
+void StartConfigManager::on_startStopButton_clicked()
+{
+    // start (or stop) as appropriate
+    // if start, close this dialog
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+    bool running = minosConfig->anyRunning();
+
+    ui->startStopButton->setEnabled(false);
+    if (running)
+    {
+        MinosConfig::getMinosConfig() ->askStop();
+        MinosConfig::getMinosConfig() ->forceStop();
+        delayedAction(this, [=](){
+            checkEnabled();
+        });
+    }
+    else
+    {
+        minosConfig->start();
+        close();
+    }
 }

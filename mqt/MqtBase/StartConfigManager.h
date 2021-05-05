@@ -34,6 +34,8 @@ private slots:
 
     void on_layoutList_itemSelectionChanged();
     void on_layoutList_itemDoubleClicked(QListWidgetItem *);
+    void on_startStopButton_clicked();
+
 public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
@@ -51,6 +53,7 @@ private:
 
     void showDetails();
     bool getNewName(QString &Value);
+    void checkEnabled();
 };
 
 #endif // STARTCONFIGMANAGER_H
