@@ -288,10 +288,13 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 
                 if (ui->trackRig->isChecked() || firstTime)
                 {
-                    // first time - transfer rig to SDR, which will set up transverter
-                    // settings as required
-                    on_transfer12Button_clicked();
-                    firstTime = false;
+                    if (!mainRigFreq.isClear())
+                    {
+                        // first time - transfer rig to SDR, which will set up transverter
+                        // settings as required
+                        on_transfer12Button_clicked();
+                        firstTime = false;
+                    }
                 }
                 delayedAction(this, [=]{
                     trackBand();
