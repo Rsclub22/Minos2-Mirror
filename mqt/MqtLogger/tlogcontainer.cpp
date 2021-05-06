@@ -1409,7 +1409,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          int tno = ui->contestPageControl->addTab(f, baseFName);
 
          ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
-         ui->contestPageControl->setTabToolTip(tno, contest->cfileName);
 
          MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
          MinosLoggerEvents::SendSplittersChanged();

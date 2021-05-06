@@ -30,6 +30,7 @@ private:
     virtual void moveEvent(QMoveEvent *event) override;
     virtual void changeEvent( QEvent* e ) override;
 
+    bool eventFilter(QObject *obj, QEvent *event) override;
 private slots:
     void onContestShownChanged();
 

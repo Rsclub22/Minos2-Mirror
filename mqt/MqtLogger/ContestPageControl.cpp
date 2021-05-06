@@ -1,6 +1,7 @@
 #include "base_pch.h"
 
 #include <QSizeGrip>
+#include <QToolTip>
 
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -22,6 +23,43 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     connect(this, &ContestPageControl::tabBarClicked, this, &ContestPageControl::onTabBarClicked);
     connect(this, &ContestPageControl::customContextMenuRequested, this, &ContestPageControl::onCustomContextMenuRequested);
     connect(this, &ContestPageControl::tabBarDoubleClicked, this, &ContestPageControl::onTabBarDoubleClicked);
+
+    tabBar()->installEventFilter(this);
+
+}
+bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip)
+    {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        int curtab = tabBar()->tabAt(helpEvent->pos());
+        if (curtab >= 0)
+        {
+            ContestPage *ctab = dynamic_cast<ContestPage *>(widget(curtab));
+            BaseContestLog *pc = ctab->getContest();
+            QString statbuf;
+            if ( pc )
+            {
+                pc->setScore( statbuf );
+                QToolTip::showText(helpEvent->globalPos(), pc->cfileName + "\r\n" + statbuf);
+            }
+            else
+            {
+                QToolTip::hideText();
+                event->ignore();
+            }
+
+        }
+        else
+        {
+            QToolTip::hideText();
+            event->ignore();
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 ContestPageControl::~ContestPageControl()
