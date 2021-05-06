@@ -265,3 +265,9 @@ void MainWindow::on_stdOutLine(QString line)
     }
 }
 
+
+void MainWindow::on_startAppsButton_clicked()
+{
+    MinosConfig::getMinosConfig()->start();
+}
+

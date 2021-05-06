@@ -29,6 +29,8 @@ private slots:
     void ExitActionExecute();
     void FontEditAcceptActionExecute();
     void LanguageAcceptActionExecute();
+    void on_startAppsButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QTimer startTimer;
