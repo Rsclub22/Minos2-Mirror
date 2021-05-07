@@ -7,6 +7,7 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "MinosLoggerEvents.h"
+#include "LoggerContest.h"
 #include "qlogtabwidget.h"
 #include "ContestPageControl.h"
 #include "ContestPage.h"
@@ -41,7 +42,35 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
             if ( pc )
             {
                 pc->setScore( statbuf );
-                QToolTip::showText(helpEvent->globalPos(), pc->cfileName + "\r\n" + statbuf);
+                QString toolTip = pc->cfileName + "\r\n" + statbuf;
+                if (!pc->isReadOnly())
+                {
+                    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);
+
+                    memoryData::memData m;
+                    if (ct->runMemories.size() > 0)
+                    {
+                       m = ct->runMemories[0].getValue();
+                       Frequency cq = m.freq;
+                       if (!cq.isClear())
+                       {
+                            toolTip += "\r\n" + tr("Run Frequency 1") + " " + cq.convertFreqStrDisp();
+                       }
+
+                    }
+                    if (ct->runMemories.size() > 1)
+                    {
+                       m = ct->runMemories[1].getValue();
+                       Frequency cq = m.freq;
+                       if (!cq.isClear())
+                       {
+                            toolTip += "\r\n" + tr("Run Frequency 2") + " " + cq.convertFreqStrDisp();
+                       }
+
+                    }
+
+                }
+                QToolTip::showText(helpEvent->globalPos(), toolTip);
             }
             else
             {
