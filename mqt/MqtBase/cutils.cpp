@@ -185,7 +185,7 @@ void writer::lwrite( const char *b )
 }
 void writer::lwriteLine()
 {
-   QString l( 80, 0x5F );					// horizontal line
+   QString l( 80, QChar(0x5F) );					// horizontal line
    lwrite( l );
 }
 void writer::lwriteNl()
@@ -402,7 +402,7 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
             else if (textStream.atEnd())
             {
                 temp.append(character);
-                checkString(temp, 0, csv);
+                checkString(temp, QChar(0), csv);
             }
             else
             {
@@ -433,14 +433,14 @@ void CsvReader::parseCsvLine(const QString &line, QStringList &csv)
          }
          else if (character == nullptr)
          {
-             checkString(temp, 0, csv);
+             checkString(temp, QChar(0), csv);
          }
          else
          {
              temp.append(character);
          }
      }
-     checkString(temp, 0, csv);
+     checkString(temp, QChar(0), csv);
 }
 void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
 {

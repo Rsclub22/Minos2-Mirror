@@ -15,19 +15,22 @@
 //---------------------------------------------------------------------------
 #include "fileutils.h"
 
-class CsGuard:public QMutexLocker
+class CsGuard
 {
-      static QMutex m_mutex;
+      static QRecursiveMutex m_mutex;
    public:
-      CsGuard():QMutexLocker(&m_mutex)
+      CsGuard()
       {
+          m_mutex.lock();
       }
 
       ~CsGuard()
       {
+          m_mutex.unlock();
       }
       static void ClearDown()
       {
+          //m_mutex.unlock();
       }
 };
 

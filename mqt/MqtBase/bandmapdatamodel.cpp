@@ -130,31 +130,31 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = QString::number(bandmapSpot->getRxTime());
             break;
             case SPOT_TYPE_COL_NUM:
-                d = bandmapSpot->getSpotType();
+                d = QChar(bandmapSpot->getSpotType());
             break;
             case ROT_BEARING_COL_NUM:
                 d = bandmapSpot->getRotBrg() + QChar('R');
             break;
             case ROT_CONNECTED_COL_NUM:
-                d = bandmapSpot->getRotConnected();
+                d = QChar(bandmapSpot->getRotConnected());
             break;
             case RUN_MODE_ON_COL_NUM:
-                d = bandmapSpot->getRunModeOn();
+                d = QChar(bandmapSpot->getRunModeOn());
             break;
             case OFF_RUN_FREQ_COL_NUM:
-                d = bandmapSpot->getOffRunFreq();
+                d = QChar(bandmapSpot->getOffRunFreq());
             break;
             case CQ_RESPONSE_COL:
-                d = bandmapSpot->getCqResponse();
+                d = QChar(bandmapSpot->getCqResponse());
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = bandmapSpot->getDxLocatorIsFromNode();
+                d = QChar(bandmapSpot->getDxLocatorIsFromNode());
             break;
             case DX_DISTRICT_COL_NUM:
                 d = bandmapSpot->getDistrict();
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                d = bandmapSpot->getDistrictWorked();
+                d = QChar(bandmapSpot->getDistrictWorked());
             break;
             default:
                 d = "";

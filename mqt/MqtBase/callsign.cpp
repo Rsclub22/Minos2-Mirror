@@ -162,7 +162,7 @@ int Callsign::validate( )
         if (c == '/')
             continue;
 
-        if ( c>= 0x40 && c <= 0x5A) // Basic ASCII uppercase
+        if ( c>= QChar('A') && c <= QChar('Z')) // Basic ASCII uppercase
             continue;
         return valRes;
     }
