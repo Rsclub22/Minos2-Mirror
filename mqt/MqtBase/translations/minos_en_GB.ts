@@ -2034,28 +2034,28 @@ Please enter another bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="51"/>
+        <location filename="../StartConfigManager.cpp" line="52"/>
         <source>Stop all apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="55"/>
+        <location filename="../StartConfigManager.cpp" line="56"/>
         <source>Start all apps</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="137"/>
+        <location filename="../StartConfigManager.cpp" line="136"/>
         <source>Please give a new name for the layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="141"/>
+        <location filename="../StartConfigManager.cpp" line="140"/>
         <source>%1 already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="164"/>
-        <location filename="../StartConfigManager.cpp" line="182"/>
+        <location filename="../StartConfigManager.cpp" line="163"/>
+        <location filename="../StartConfigManager.cpp" line="181"/>
         <source>new app config</source>
         <translation type="unfinished"></translation>
     </message>

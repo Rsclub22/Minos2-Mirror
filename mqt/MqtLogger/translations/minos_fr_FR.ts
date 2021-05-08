@@ -1451,13 +1451,23 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Minos</translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="19"/>
-        <location filename="../ContestPageControl.cpp" line="148"/>
+        <location filename="../ContestPageControl.cpp" line="21"/>
+        <location filename="../ContestPageControl.cpp" line="215"/>
         <source>Minos Contest Logger</source>
         <translation>Minos Enregistreur de Concours</translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="83"/>
+        <location filename="../ContestPageControl.cpp" line="57"/>
+        <source>Run Frequency 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestPageControl.cpp" line="67"/>
+        <source>Run Frequency 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestPageControl.cpp" line="150"/>
         <source> (min)</source>
         <translation> (min)</translation>
     </message>
@@ -4999,7 +5009,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1272"/>
-        <location filename="../tlogcontainer.cpp" line="1795"/>
+        <location filename="../tlogcontainer.cpp" line="1794"/>
         <source>Contest Sets</source>
         <translation>Ensembles de Concours</translation>
     </message>
@@ -5010,7 +5020,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1357"/>
-        <location filename="../tlogcontainer.cpp" line="1902"/>
+        <location filename="../tlogcontainer.cpp" line="1901"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
@@ -5020,38 +5030,38 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Fichier du Concours </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1527"/>
+        <location filename="../tlogcontainer.cpp" line="1526"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1636"/>
+        <location filename="../tlogcontainer.cpp" line="1635"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1904"/>
+        <location filename="../tlogcontainer.cpp" line="1903"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1914"/>
+        <location filename="../tlogcontainer.cpp" line="1913"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1938"/>
+        <location filename="../tlogcontainer.cpp" line="1937"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1942"/>
+        <location filename="../tlogcontainer.cpp" line="1941"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="2114"/>
         <location filename="../tlogcontainer.cpp" line="2115"/>
-        <location filename="../tlogcontainer.cpp" line="2116"/>
         <source>Minos contest Logger Application</source>
         <translation>Application Minos Enregistreur de Concours</translation>
     </message>

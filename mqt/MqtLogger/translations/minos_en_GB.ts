@@ -1418,13 +1418,23 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="19"/>
-        <location filename="../ContestPageControl.cpp" line="148"/>
+        <location filename="../ContestPageControl.cpp" line="21"/>
+        <location filename="../ContestPageControl.cpp" line="215"/>
         <source>Minos Contest Logger</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="83"/>
+        <location filename="../ContestPageControl.cpp" line="57"/>
+        <source>Run Frequency 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestPageControl.cpp" line="67"/>
+        <source>Run Frequency 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContestPageControl.cpp" line="150"/>
         <source> (min)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4907,7 +4917,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1272"/>
-        <location filename="../tlogcontainer.cpp" line="1795"/>
+        <location filename="../tlogcontainer.cpp" line="1794"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4918,7 +4928,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1357"/>
-        <location filename="../tlogcontainer.cpp" line="1902"/>
+        <location filename="../tlogcontainer.cpp" line="1901"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4928,38 +4938,38 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1527"/>
+        <location filename="../tlogcontainer.cpp" line="1526"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1636"/>
+        <location filename="../tlogcontainer.cpp" line="1635"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1904"/>
+        <location filename="../tlogcontainer.cpp" line="1903"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1914"/>
+        <location filename="../tlogcontainer.cpp" line="1913"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1938"/>
+        <location filename="../tlogcontainer.cpp" line="1937"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1942"/>
+        <location filename="../tlogcontainer.cpp" line="1941"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="2114"/>
         <location filename="../tlogcontainer.cpp" line="2115"/>
-        <location filename="../tlogcontainer.cpp" line="2116"/>
         <source>Minos contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>

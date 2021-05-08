@@ -19,44 +19,44 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="749"/>
+        <location filename="../ConfigFile.cpp" line="759"/>
         <source>More than one router is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="758"/>
+        <location filename="../ConfigFile.cpp" line="768"/>
         <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="773"/>
+        <location filename="../ConfigFile.cpp" line="783"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="788"/>
+        <location filename="../ConfigFile.cpp" line="798"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="827"/>
+        <location filename="../ConfigFile.cpp" line="837"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="837"/>
+        <location filename="../ConfigFile.cpp" line="847"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="841"/>
-        <source> Working directory is not valid - no Configuration/MinosConfig.ini
+        <location filename="../ConfigFile.cpp" line="851"/>
+        <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
         <translation type="unfinished"></translation>
