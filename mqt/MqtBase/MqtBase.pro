@@ -30,6 +30,7 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
+    StartConfigManager.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
     calcs.cpp \
@@ -46,6 +47,7 @@ SOURCES += \
     cutils.cpp \
     DisplayContestContact.cpp \
     dtg.cpp \
+    enqdlg.cpp \
     freqmodebandplan.cpp \
     gjvparams.cpp \
     htmldelegate.cpp \
@@ -111,6 +113,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
+    StartConfigManager.h \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
@@ -129,6 +132,7 @@ HEADERS += \
     cutils.h \
     DisplayContestContact.h \
     dtg.h \
+    enqdlg.h \
     focuswatcher.h \
     freqmodebandplan.h \
     gjvparams.h \
@@ -204,6 +208,7 @@ FORMS += \
     ChatFrame.ui \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \
+    StartConfigManager.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \

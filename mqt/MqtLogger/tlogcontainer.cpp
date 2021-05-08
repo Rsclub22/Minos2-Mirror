@@ -18,6 +18,7 @@
 #include "tclockdlg.h"
 #include "tloccalcform.h"
 #include "TSessionManager.h"
+#include "StartConfigManager.h"
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "SendRPCDM.h"
@@ -445,7 +446,7 @@ void TLogContainer::setupMenus()
     NextUnfilledAction = newAction(QT_TR_NOOP("Goto First Unfilled Contact"), ui->menuSearch, &TLogContainer::NextUnfilledActionExecute);
 // end of search menu
 
-    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration..."), ui->menuTools, &TLogContainer::StartConfigActionExecute);
+    startConfigAction = newAction(QT_TR_NOOP("Startup Apps Configuration..."), ui->menuTools, &TLogContainer::ManageAppConfigsActionExecute);
 
     screenLayoutMenu = newMenu(ui->menuTools, QT_TR_NOOP("Screen Layouts"));
     updateLayoutsMenu();
@@ -1236,10 +1237,10 @@ void TLogContainer::doScreenConfigAction()
     sc.exec();
     updateLayoutsMenu();
 }
-void TLogContainer::StartConfigActionExecute()
+void TLogContainer::ManageAppConfigsActionExecute()
 {
-    StartConfig configBox( this, false);
-    configBox.exec();
+    StartConfigManager manageApps( this, true);   // when managing sets, include autostart
+    manageApps.exec();
     // in case we are now running more apps
     sendDM->subscribeApps();
 }
@@ -1408,7 +1409,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          int tno = ui->contestPageControl->addTab(f, baseFName);
 
          ui->contestPageControl->setCurrentWidget(ui->contestPageControl->widget(tno));
-         ui->contestPageControl->setTabToolTip(tno, contest->cfileName);
 
          MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
          MinosLoggerEvents::SendSplittersChanged();

@@ -8,11 +8,18 @@
 
 #include "ui_StartConfig.h"
 
-StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
-    QDialog(parent),
-    ui(new Ui::StartConfig)
+StartConfig::StartConfig(QWidget *parent, bool showAutoStart, QString curName) :
+    QDialog(parent)
+    , ui(new Ui::StartConfig)
+    , curConfigName(curName)
 {
     ui->setupUi(this);
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+
+    if (curConfigName.isEmpty())
+    {
+        curConfigName = minosConfig->defConfigName;
+    }
 
     QSettings settings;
     QByteArray geometry = settings.value("startConfig/geometry").toByteArray();
@@ -20,16 +27,16 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
         restoreGeometry(geometry);
 
     ui->autoStartCheckBox->setVisible(showAutoStart);
+    ui->configNameLabel->setText(curConfigName);
 
     QVBoxLayout *vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
     vbl->setContentsMargins(1, 1, 1, 1);
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     elementFrames.clear();
-    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
 
 //    int offset = 0;
-    for (auto const &c:  qAsConst(minosConfig->getCurrConfig().elelist))
+    for (auto const &c:  qAsConst(minosConfig->configs[curConfigName].elelist))
     {
         if (c->deleted)
             continue;
@@ -44,7 +51,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
     ui->StationIdEdit->setText(minosConfig->getThisRouterName());
     ui->autoStartCheckBox->setChecked(minosConfig->getAutoStart());
 
-    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
+    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig(curConfigName);
 
     if (!reqErrs.isEmpty())
     {
@@ -62,7 +69,7 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart) :
 void StartConfig::on_formShown()
 {
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
-    if (minosConfig->getCurrConfig().elelist.size() == 0 )
+    if (minosConfig->configs[curConfigName].elelist.size() == 0 )
     {
         // configure a new server
         on_newElementButton_clicked();
@@ -139,7 +146,7 @@ void StartConfig::setup(bool started)
 void StartConfig::on_StartButton_clicked()
 {
     copyFromScreen();
-    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
+    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig(curConfigName);
 
     if (reqErrs.isEmpty())
     {
@@ -189,7 +196,7 @@ void StartConfig::on_SaveCloseButton_clicked()
 {
     copyFromScreen();
 
-    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig();
+    QString reqErrs = MinosConfig::getMinosConfig() ->checkConfig(curConfigName);
 
     if (reqErrs.isEmpty())
     {

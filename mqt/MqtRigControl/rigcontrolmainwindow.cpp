@@ -57,6 +57,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
+    hfFlag = true;
+
     writeWindowTitle(appName);
 
     createCloseEvent();
@@ -578,7 +580,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     {
         // no radio selected
            trace("No radio selected");
-           saveCurrentRadio(currentRadioName);
+           saveCurrentRadio(radioName);
            ui->radioNameDisp->setText("");
            ui->usingLibText->setText("");
            return;
@@ -705,15 +707,6 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         ui->radioNameDisp->setText(currentRadio->radioName);
 
-
-        // if it is a rigctld model, then use the radio model number connected to rigctld
-
-        int modelNumber = currentRadio->rigModelNumber;
-        if (modelNumber == hamlibData::RIGCTL)
-        {
-            modelNumber = rigCtldDetails->irigctld_radioNumber;
-        }
-
         buildSupBandList(currentRadio, currentRadio->radioTransSupBands);
 
         checkSupportCatFeatures();
@@ -741,7 +734,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         getRadioInfo(DONT_PUBLISH_NOW);
 
         sendRitEnableStatusLogger();
-        //writeWindowTitle(appName);
+
         sendStatusToLogConnected();
 
         checkSupportPollRadio();
@@ -915,17 +908,16 @@ void RigControlMainWindow::checkSupportRit()
 {
     getRitSupportStatus();
 
-    if (selectedRigSupCap->radioSupSetRit)
+    rigStateDetails->ritEnable = currentRadio->enableDisableCatFeature.ritEnable;
+    if (rigStateDetails->ritEnable && (selectedRigSupCap->radioSupSetRit || selectedRigSupCap->radioSupGetRit))
     {
 
-        if (rigStateDetails->ritEnable)
-        {
-            setRitFreqDisplayVisible(true);
-            if (ritTestEnabled)
-            {
 
-                showRitTestControl(true);
-            }
+        setRitFreqDisplayVisible(true);
+        if (ritTestEnabled)
+        {
+
+            showRitTestControl(true);
         }
 
         setRitGetSetFreqIndicatorVisible(true);
@@ -937,6 +929,8 @@ void RigControlMainWindow::checkSupportRit()
     }
     else
     {
+
+        ui->ritGroupBox->setVisible(false);
         setRitFreqDisplayVisible(false);
         setRitGetSetFreqIndicatorVisible(false);
         clearSupportRitFlags();
@@ -4335,7 +4329,7 @@ void RigControlMainWindow::saveCurrentRadio(const QString currentRadioName)
 
 
 
-
+// we really only have one of these!
 
 void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioData, QString radioName)
 {
@@ -4382,7 +4376,7 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
 
     foreach (auto &b, bands)
     {
-        if (hfFlag)
+        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
         {
             QString name = b.data()->uk;
             name.remove('\x20').replace('H', 'h').replace('.', '_');

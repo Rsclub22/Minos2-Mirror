@@ -71,7 +71,6 @@ SOURCES += \
     defdirsdlg.cpp \
     districtframe.cpp \
     dxccframe.cpp \
-    enqdlg.cpp \
     freqlineedit.cpp \
     locTreeFrame.cpp \
     locframe.cpp \
@@ -166,7 +165,6 @@ HEADERS  += \
     defdirsdlg.h \
     districtframe.h \
     dxccframe.h \
-    enqdlg.h \
     freqlineedit.h \
     locTreeFrame.h \
     locframe.h \

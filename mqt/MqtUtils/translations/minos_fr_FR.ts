@@ -19,12 +19,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="746"/>
+        <location filename="../ConfigFile.cpp" line="759"/>
         <source>More than one router is defined and enabled</source>
         <translation>Plus d&apos;un routeur est défini et activé </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="755"/>
+        <location filename="../ConfigFile.cpp" line="768"/>
         <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
@@ -32,17 +32,17 @@
 What??</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="770"/>
+        <location filename="../ConfigFile.cpp" line="783"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="785"/>
+        <location filename="../ConfigFile.cpp" line="798"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="824"/>
+        <location filename="../ConfigFile.cpp" line="837"/>
         <source>%1 requires a local %2
 
 </source>
@@ -51,7 +51,7 @@ What??</translation>
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="834"/>
+        <location filename="../ConfigFile.cpp" line="847"/>
         <source> Executable path does not exist
 
 </source>
@@ -60,11 +60,17 @@ What??</translation>
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="838"/>
+        <location filename="../ConfigFile.cpp" line="851"/>
+        <source> Working directory is not valid - no Configuration/MinosConfig.json
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source> Working directory is not valid - no Configuration/MinosConfig.ini
 
 </source>
-        <translation> Le répertoire de travail n&apos;est pas valide - pas de configuration / MinosConfig.ini
+        <translation type="vanished"> Le répertoire de travail n&apos;est pas valide - pas de configuration / MinosConfig.ini
 
 </translation>
     </message>

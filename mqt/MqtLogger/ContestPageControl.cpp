@@ -1,11 +1,13 @@
 #include "base_pch.h"
 
 #include <QSizeGrip>
+#include <QToolTip>
 
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "MinosLoggerEvents.h"
+#include "LoggerContest.h"
 #include "qlogtabwidget.h"
 #include "ContestPageControl.h"
 #include "ContestPage.h"
@@ -22,6 +24,71 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     connect(this, &ContestPageControl::tabBarClicked, this, &ContestPageControl::onTabBarClicked);
     connect(this, &ContestPageControl::customContextMenuRequested, this, &ContestPageControl::onCustomContextMenuRequested);
     connect(this, &ContestPageControl::tabBarDoubleClicked, this, &ContestPageControl::onTabBarDoubleClicked);
+
+    tabBar()->installEventFilter(this);
+
+}
+bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip)
+    {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        int curtab = tabBar()->tabAt(helpEvent->pos());
+        if (curtab >= 0)
+        {
+            ContestPage *ctab = dynamic_cast<ContestPage *>(widget(curtab));
+            BaseContestLog *pc = ctab->getContest();
+            QString statbuf;
+            if ( pc )
+            {
+                pc->setScore( statbuf );
+                QString toolTip = pc->cfileName + "\r\n" + statbuf;
+                if (!pc->isReadOnly())
+                {
+                    LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);
+
+                    memoryData::memData m;
+                    if (ct->runMemories.size() > 0)
+                    {
+                       m = ct->runMemories[0].getValue();
+                       Frequency cq = m.freq;
+                       if (!cq.isClear())
+                       {
+                            toolTip += "\r\n" + tr("Run Frequency 1") + " " + cq.convertFreqStrDisp();
+                       }
+
+                    }
+                    if (ct->runMemories.size() > 1)
+                    {
+                       m = ct->runMemories[1].getValue();
+                       Frequency cq = m.freq;
+                       if (!cq.isClear())
+                       {
+                            toolTip += "\r\n" + tr("Run Frequency 2") + " " + cq.convertFreqStrDisp();
+                       }
+
+                    }
+
+                }
+                QToolTip::showText(helpEvent->globalPos(), toolTip);
+            }
+            else
+            {
+                QToolTip::hideText();
+                event->ignore();
+            }
+
+        }
+        else
+        {
+            QToolTip::hideText();
+            event->ignore();
+        }
+
+        return true;
+    }
+
+    return false;
 }
 
 ContestPageControl::~ContestPageControl()

@@ -353,6 +353,12 @@ void MinosConfig::reset()
 
 NamedConfig &MinosConfig::getCurrConfig()
 {
+    if (!configs.contains(thisConfigName))
+    {
+        NamedConfig nc;
+        nc.configName = thisConfigName;
+        configs[thisConfigName] = nc;
+    }
     return configs[thisConfigName];
 }
 void MinosConfig::initialise()
@@ -364,41 +370,40 @@ void MinosConfig::initialise()
     {
         // Load the minosConfig.ini file
 
-        INIFile config(getConfigIniName());
-
-        config.startGroup();
-
-        QStringList lsect = config.getSections();
-
-        NamedConfig defConfig;
-
-        for ( auto const &s: qAsConst(lsect ))
+        if (FileExists(getConfigIniName()))
         {
-            QString sect = s.trimmed();
-            if ( sect.compare("Settings", Qt::CaseInsensitive ) == 0)
-            {
-                config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
+            INIFile config(getConfigIniName());
 
-                if ( thisRouterName.size() == 0 )
-                {
-                    QString h = QHostInfo::localHostName();
-                    thisRouterName = h;
-                }
-                defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
-                defConfig.configName = defConfigName;
-            }
-            else
+            config.startGroup();
+
+            QStringList lsect = config.getSections();
+
+            NamedConfig defConfig;
+            defConfig.configName = defConfigName;
+            defConfig.autoStart = config.getPrivateProfileBool( "Settings", "AutoStart", false );
+            config.getPrivateProfileString( "Settings", "ServerName", "", thisRouterName );
+            if ( thisRouterName.isEmpty() )
             {
-                QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
-                if ( tce->initialise( config, sect ) )
+                QString h = QHostInfo::localHostName();
+                thisRouterName = h;
+            }
+
+            for ( auto const &s: qAsConst(lsect ))
+            {
+                QString sect = s.trimmed();
+                if ( sect.compare("Settings", Qt::CaseInsensitive ) != 0)
                 {
-                    defConfig.elelist.push_back( tce );
+                    QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
+                    if ( tce->initialise( config, sect ) )
+                    {
+                        defConfig.elelist.push_back( tce );
+                    }
                 }
             }
+            config.endGroup();
+
+            configs[defConfigName] = defConfig;
         }
-        config.endGroup();
-
-        configs[defConfigName] = defConfig;
         saveAsJson(getConfigJsonName());
     }
     loadJson(getConfigJsonName());
@@ -423,8 +428,13 @@ bool MinosConfig::saveAsJson(QString f)
      {
          const QVector < QSharedPointer< RunConfigElement> > &eles = i.value().elelist;
 
+         QString configName = i.value().configName;
+         if (configName.isEmpty())
+         {
+             configName = defConfigName;
+         }
          QJsonObject conf;
-         conf.insert("ConfigName", i.value().configName);
+         conf.insert("ConfigName", configName);
          conf.insert("AutoStart", i.value().autoStart);
 
          QJsonArray e;
@@ -450,13 +460,12 @@ bool MinosConfig::saveAsJson(QString f)
          }
          conf.insert("Elements", e);
 
-         sconf.insert("ServerName", thisRouterName);
-         sconf.insert("CurrentConfig", thisConfigName);
-
          confs.append(conf);
 
      }
      sconf.insert("AppConfigs", confs);
+     sconf.insert("ServerName", thisRouterName);
+     sconf.insert("CurrentConfig", thisConfigName);
      json.setObject(sconf);
 
      QByteArray s = json.toJson();
@@ -725,13 +734,17 @@ Server=false
     }
     appConfig.endGroup();
 }
-QString MinosConfig::checkConfig()
+QString MinosConfig::checkConfig(QString name)
 {
     QString reqErrs;
 
+    if (name.isEmpty())
+    {
+        name = thisConfigName;
+    }
     bool routerPresent = false;
     int eleListSize = 0;
-    NamedConfig &nc = configs[thisConfigName];
+    NamedConfig &nc = configs[name];
     for ( auto const &ele: qAsConst(nc.elelist ))
     {
         if (ele->deleted)
@@ -833,9 +846,9 @@ QString MinosConfig::checkConfig()
                 {
                     reqErrs += ele->appType + tr(" Executable path does not exist\n\n");
                 }
-                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.ini"))
+                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
                 {
-                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.ini\n\n");
+                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
                 }
             }
         }

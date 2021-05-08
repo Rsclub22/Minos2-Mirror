@@ -166,7 +166,7 @@ public:
     bool getAutoStart();
     void setAutoStart(bool);
 
-    QString checkConfig();
+    QString checkConfig(QString name = QString());
     bool anyRunning();
 
     void checkAllStopped();
