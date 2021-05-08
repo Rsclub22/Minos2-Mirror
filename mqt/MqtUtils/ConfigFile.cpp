@@ -353,6 +353,12 @@ void MinosConfig::reset()
 
 NamedConfig &MinosConfig::getCurrConfig()
 {
+    if (!configs.contains(thisConfigName))
+    {
+        NamedConfig nc;
+        nc.configName = thisConfigName;
+        configs[thisConfigName] = nc;
+    }
     return configs[thisConfigName];
 }
 void MinosConfig::initialise()
@@ -397,8 +403,8 @@ void MinosConfig::initialise()
             config.endGroup();
 
             configs[defConfigName] = defConfig;
-            saveAsJson(getConfigJsonName());
         }
+        saveAsJson(getConfigJsonName());
     }
     loadJson(getConfigJsonName());
 }
@@ -422,8 +428,13 @@ bool MinosConfig::saveAsJson(QString f)
      {
          const QVector < QSharedPointer< RunConfigElement> > &eles = i.value().elelist;
 
+         QString configName = i.value().configName;
+         if (configName.isEmpty())
+         {
+             configName = defConfigName;
+         }
          QJsonObject conf;
-         conf.insert("ConfigName", i.value().configName);
+         conf.insert("ConfigName", configName);
          conf.insert("AutoStart", i.value().autoStart);
 
          QJsonArray e;
@@ -449,13 +460,12 @@ bool MinosConfig::saveAsJson(QString f)
          }
          conf.insert("Elements", e);
 
-         sconf.insert("ServerName", thisRouterName);
-         sconf.insert("CurrentConfig", thisConfigName);
-
          confs.append(conf);
 
      }
      sconf.insert("AppConfigs", confs);
+     sconf.insert("ServerName", thisRouterName);
+     sconf.insert("CurrentConfig", thisConfigName);
      json.setObject(sconf);
 
      QByteArray s = json.toJson();
@@ -836,9 +846,9 @@ QString MinosConfig::checkConfig(QString name)
                 {
                     reqErrs += ele->appType + tr(" Executable path does not exist\n\n");
                 }
-                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.ini"))
+                if (ele->appType != tr(appNone) && !FileExists(ele->rundir + "/Configuration/MinosConfig.json"))
                 {
-                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.ini\n\n");
+                    reqErrs += ele->appType + tr(" Working directory is not valid - no Configuration/MinosConfig.json\n\n");
                 }
             }
         }

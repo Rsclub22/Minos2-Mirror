@@ -14,6 +14,12 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart, QString curName) :
     , curConfigName(curName)
 {
     ui->setupUi(this);
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
+
+    if (curConfigName.isEmpty())
+    {
+        curConfigName = minosConfig->defConfigName;
+    }
 
     QSettings settings;
     QByteArray geometry = settings.value("startConfig/geometry").toByteArray();
@@ -28,7 +34,6 @@ StartConfig::StartConfig(QWidget *parent, bool showAutoStart, QString curName) :
     ui->scrollAreaWidgetContents->setLayout(vbl);
 
     elementFrames.clear();
-    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
 
 //    int offset = 0;
     for (auto const &c:  qAsConst(minosConfig->configs[curConfigName].elelist))
