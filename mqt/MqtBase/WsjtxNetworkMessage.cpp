@@ -6,7 +6,6 @@
 #include <QString>
 #include <QByteArray>
 #include <QDebug>
-#include <QIODevice>
 
 #include "Wsjtx_pimpl_impl.hpp"
 

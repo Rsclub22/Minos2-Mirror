@@ -71,7 +71,7 @@ QVector<Translation> getLanguages()
     while ( files.hasNext() )
     {
         files.next();
-        QFileInfo finfo(files.fileName());
+        QFileInfo finfo = files.fileName();
 
         QString fileExt = finfo.suffix();
 

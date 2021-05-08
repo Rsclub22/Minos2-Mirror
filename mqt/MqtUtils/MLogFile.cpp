@@ -11,7 +11,7 @@
 #include "mqtUtils_pch.h"
 #include "fileutils.h"
 
-QRecursiveMutex CsGuard::m_mutex;
+QMutex CsGuard::m_mutex(QMutex::Recursive);
 //---------------------------------------------------------------------------
 static QTextStream &getLogFile( QString name )
 {

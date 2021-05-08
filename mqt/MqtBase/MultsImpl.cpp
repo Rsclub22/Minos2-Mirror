@@ -632,7 +632,7 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          QString part = b[i];
          while ( !skip && i < 99 && !part.isEmpty()  && part[ 0 ] != '=')
          {
-            QRegularExpression cc("[\\(\\{\\[\\<]");
+            QRegExp cc("[\\(\\{\\[\\<]");
             int bracket = b[ i ].indexOf( cc );
             if ( bracket >= 0 )
                b[ i ] = b[i].left(bracket);   // chop off the brackets

@@ -658,7 +658,7 @@ static int geoinput( Location *ingrid )
    //		getline();
 
    ingrid->datastring = ingrid->datastring.toUpper();
-   QRegularExpression cc("[NSEW]");
+   QRegExp cc("[NSEW]");
 
    i = static_cast<int>(ingrid->datastring.indexOf( cc ));
    if ( i < ingrid->datastring.length() )
