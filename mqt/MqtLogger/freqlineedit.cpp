@@ -141,7 +141,7 @@ void FreqLineEdit::changeFreq(bool direction)
 
         QString sfreq2 = Frequency(dfreq).convertFreqStrDisp();
 
-        trace(QString("Change Freq: Freq Tuning = %1 from %2").arg(sfreq2).arg(sfreq));
+        trace(QString("Change Freq: Freq Tuning = %1 from %2").arg(sfreq2, sfreq));
         if (bandOK)
         {
             setLineText(sfreq2);
