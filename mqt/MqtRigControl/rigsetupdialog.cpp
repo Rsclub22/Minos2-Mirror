@@ -818,6 +818,7 @@ void RigSetupDialog::isAnySupportedBandsAvailForOmnirig(QString &supRadNames)
 
 
 
+
 void RigSetupDialog::saveSettings()
 {
 
@@ -826,6 +827,12 @@ void RigSetupDialog::saveSettings()
 
     QString fileNameRadio = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
     QSettings configRadio(fileNameRadio, QSettings::IniFormat);
+
+    // ensure this is a version 2 ini file
+    configRadio.beginGroup("Version");
+    configRadio.setValue("version", "2");
+    configRadio.endGroup();
+
 
     QStringList lk = availRadioData.keys();
     // look for deleted radios or radio name change

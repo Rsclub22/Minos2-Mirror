@@ -796,7 +796,7 @@ void RigControlFrame::on_ContestPageChanged()
         sendFreq.clear();
 
 
-        traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam).arg(ct->uuid));
+        traceMsg(QString("on_ContestPageChanged: radio = %1, uuid = %2").arg(radNam, ct->uuid));
         setRadioName(radNam, false);
 
 
@@ -886,7 +886,7 @@ void RigControlFrame::freqEditSelected()
 void RigControlFrame::transferDetails(memoryData::memData &m)
 {
     traceMsg(QString("Memory Read: Memory Freq = %1, CurFreq = %2, Mode = %3, CurMode = %4")
-             .arg(m.freq.traceStr()).arg(curFreq.traceStr()).arg(m.mode).arg(curMode));
+             .arg(m.freq.traceStr(), curFreq.traceStr(), m.mode, curMode));
     if (isRadioLoaded())
     {
         if (radioConnected && !radioError)
