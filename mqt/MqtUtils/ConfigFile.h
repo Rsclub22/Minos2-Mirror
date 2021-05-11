@@ -130,6 +130,7 @@ private:  	// User declarations
     void buildAppConfigList();
 
     QString thisRouterName;
+    QString thisConfigName;
 
 public:
     static MinosConfig *getMinosConfig( );
@@ -138,12 +139,13 @@ public:
 
     static const char * appNone;
     static const char * appOther;
-
-    QString thisConfigName;
     QString defConfigName;
+
     void reset();
 
     QMap < QString,  NamedConfig >  configs;
+
+    void setCurConfig(QString);
 
     NamedConfig &getCurrConfig();
 

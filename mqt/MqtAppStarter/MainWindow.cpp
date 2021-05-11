@@ -1,6 +1,7 @@
 #include "base_pch.h"
 #include <QFontDialog>
 #include <QFont>
+#include <QStatusBar>
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
 #include "StartConfig.h"
@@ -19,11 +20,18 @@ MainWindow::MainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    if (MinosConfig::getMinosConfig() ->getAutoStart())
+    MinosConfig *mconfig = MinosConfig::getMinosConfig();
+
+    if (mconfig ->getAutoStart())
     {
         connect(&startTimer, &QTimer::timeout, this, &MainWindow::startTimer_Timeout);
         startTimer.start(100);
     }
+
+    sbLabel = new QLabel( "" );
+    statusBar() ->addWidget( sbLabel, 6 );
+
+    sbLabel->setText(mconfig->getCurrConfig().configName);
 
     connect(MinosConfig::getMinosConfig(), &MinosConfig::stdOutLine, this, &MainWindow::on_stdOutLine);
 
@@ -195,6 +203,9 @@ void MainWindow::on_appsButton_clicked()
 {
     StartConfigManager manageApps(this, true);
     manageApps.exec();
+
+    sbLabel->setText(MinosConfig::getMinosConfig() ->getCurrConfig().configName);
+
 }
 
 void MainWindow::on_closeButton_clicked()

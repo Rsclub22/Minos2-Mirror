@@ -168,6 +168,7 @@ void StartConfigManager::on_newButton_clicked()
         NamedConfig newsc;
         newsc.configName = value;
         minosConfig->configs[curConfigName] = newsc;
+        minosConfig->setCurConfig(curConfigName);
         // create empty layout
         showDetails();
         on_editButton_clicked();
@@ -186,6 +187,7 @@ void StartConfigManager::on_cloneButton_clicked()
         NamedConfig newsc = sc;
         newsc.configName = curConfigName;
         minosConfig->configs[curConfigName] = newsc;
+        minosConfig->setCurConfig(curConfigName);
         showDetails();
         on_editButton_clicked();
     }
@@ -204,6 +206,7 @@ void StartConfigManager::on_deleteButton_clicked()
     {
         curConfigName.clear();
     }
+    minosConfig->setCurConfig(curConfigName);
     showDetails();
 
 }
@@ -219,6 +222,7 @@ void StartConfigManager::on_renameButton_clicked()
         curConfigName = value;
         sc.configName = curConfigName;
         minosConfig->configs[curConfigName] = sc;
+        minosConfig->setCurConfig(curConfigName);
 
         // and we need to redo the map
         showDetails();
@@ -229,14 +233,18 @@ void StartConfigManager::on_layoutList_itemSelectionChanged()
 {
     if (!suppressItemSelect)
     {
+        MinosConfig *minosConfig = MinosConfig::getMinosConfig();
         curConfigName = ui->layoutList->currentItem()->text();
+        minosConfig->setCurConfig(curConfigName);
     }
     checkEnabled();
 }
 
 void StartConfigManager::on_layoutList_itemDoubleClicked(QListWidgetItem * /*item*/)
 {
+    MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     curConfigName = ui->layoutList->currentItem()->text();
+    minosConfig->setCurConfig(curConfigName);
 
     on_editButton_clicked();
     checkEnabled();

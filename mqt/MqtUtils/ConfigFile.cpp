@@ -351,6 +351,11 @@ void MinosConfig::reset()
     getMinosConfig();
 }
 
+void MinosConfig::setCurConfig(QString name)
+{
+    thisConfigName = name;
+}
+
 NamedConfig &MinosConfig::getCurrConfig()
 {
     if (!configs.contains(thisConfigName))

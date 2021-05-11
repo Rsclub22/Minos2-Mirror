@@ -33,6 +33,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QLabel *sbLabel;
     QTimer startTimer;
     QMetaObject::Connection m_connection;
 
