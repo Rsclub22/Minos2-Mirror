@@ -41,7 +41,7 @@ public:
     
 private slots:
     void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
-    void wsjtxDatagram(QByteArray *);
+    void wsjtxDatagram(int, QByteArray *);
     void callsignLookup(BaseContestLog *, QString);
 };
 

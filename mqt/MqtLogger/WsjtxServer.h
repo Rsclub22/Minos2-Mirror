@@ -22,7 +22,7 @@ public:
     void do_halt_tx (QString const& id, bool auto_only);
     void do_clear_decodes (QString const& id, quint8 window);
 
-    static QString getDataPath();
+    static QString getUdpRecPath();
 private:
     static WsjtxServer *wsjtxServer;
     MessageServer * server_1 = nullptr;
@@ -30,6 +30,11 @@ private:
     MessageServer * server_3 = nullptr;
     MessageServer * server_4 = nullptr;
     bool fast_mode_ = false;
+
+    QFile fos;
+    QDataStream os;
+
+
 public slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
 
@@ -55,6 +60,8 @@ public slots:
                               , float delta_time, quint32 delta_frequency, QString const& mode
                               , QString const& message, bool low_confidence, bool off_air);
     void decodes_cleared (QString const& client_id);
+private slots:
+    void wsjtxDatagram(int instance, QByteArray *datagram);
 
 signals:
     void do_add_client (QString const& id, QString const& version, QString const& revision);

@@ -111,8 +111,8 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     restoreSplitters();
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doSplitterChanges, this, &WsjtxFrame::on_doSplitterChanges);
 
-    getAllTxtEnd();
     getCQStrings();
+
 }
 WsjtxFrame::~WsjtxFrame()
 {
@@ -510,25 +510,6 @@ void WsjtxFrame::process_decodes()
 
     ui->decodes_table_view_->scrollToBottom ();
 }
-void WsjtxFrame::getAllTxtEnd()
-{
-    QString fname = WsjtxServer::getDataPath() + "/ALL.TXT";
-    alltxt.setFileName(fname);
-
-    if (!alltxt.open(QIODevice::ReadOnly|QIODevice::Text))
-    {
-        QString ebuff = tr( "Failed to open %1" ).arg(fname);
-        trace(ebuff);
-        return;
-    }
-    alltxt.seek(alltxt.size());
-    alltxtstr.setDevice(&alltxt);
-    while (!alltxtstr.atEnd())
-    {
-
-      alltxtstr.readLine(255);
-    }
-}
 decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
 {
     // 200425_110345    50.313 Tx FT8      0  0.0 1500 CQ G0GJV IO91
@@ -597,27 +578,6 @@ decodeMessage *WsjtxFrame::parse_tx_message(QString atline, bool fromScrape)
     return last;
 }
 
-decodeMessage *WsjtxFrame::scrapeAllTxt()
-{
-    decodeMessage *last = nullptr;
-    if (alltxt.isOpen())
-    {
-        while (!alltxtstr.atEnd())
-        {
-
-          QString atline = alltxtstr.readLine(255);
-
-          if (!bandOK)
-              continue;
-
-          // now we need to parse for transmissions
-            last = parse_tx_message(atline, true); // which normally happens in process_decodes
-
-            // process_decodes(); - not wanted, we've just started transmitting; previous process_decodes should have stopped us!
-        }
-    }
-    return last;
-}
 void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
                                 , QString const& report, QString const& tx_mode, bool tx_enabled
                                 , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
@@ -678,7 +638,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
 
     if (!bandOK)
     {
-        scrapeAllTxt(); // move to EOF withut doing anything
+        // don't continue
         return;
     }
 
@@ -690,28 +650,20 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     decodeMessage *lastTx = nullptr;
     if (transmitting && !currentlyTransmitting)
     {
-        // try scraping the transmissions from the all.txt file
-        if (tx_message.isEmpty())
-        {
-            lastTx = scrapeAllTxt();
-        }
-        else
-        {
-            //lastTx = parse_tx_message( tx_message, false);
 
-            decodeMessage dc = decoder.decode(id, eTX, QTime::currentTime(), 0, 0
-                                            , 0, mode
-                                            , tx_message, false, true);
+        decodeMessage dc = decoder.decode(id, eTX, QTime::currentTime(), 0, 0
+                                        , 0, mode
+                                        , tx_message, false, true);
 
-            trace(QString("WsjtxFrame::parse_tx_message - stage %1 %2")
-                  .arg(dc.getMStage(), tx_message));
+        trace(QString("WsjtxFrame::parse_tx_message - stage %1 %2")
+              .arg(dc.getMStage(), tx_message));
 
-            currTxStage = dc.mstage;
+        currTxStage = dc.mstage;
 
-            messages.push_back(dc);
+        messages.push_back(dc);
 
-            lastTx =  &messages.last();
-        }
+        lastTx =  &messages.last();
+
         decodes_model_->add_decode ();
         ui->decodes_table_view_->scrollToBottom ();
     }
@@ -1194,3 +1146,71 @@ void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
         }
     }
 }
+
+void WsjtxFrame::doReplayTimer()
+{
+    if (fos.isOpen())
+    {
+        qint64 res = -1;
+        if (!fos.atEnd())
+        {
+            qint16 instance;
+            QDateTime tnow;
+            QByteArray datagram;
+
+            os >> instance;
+            os >> tnow;
+            os >> datagram;
+
+            QUdpSocket bc;
+            quint16 wsjtxRbPort = 2237;
+            QHostAddress wsjtxRbHost(QHostAddress::LocalHost);
+            res = bc.writeDatagram(datagram, wsjtxRbHost, wsjtxRbPort);
+
+            if ( res < 0 )
+            {
+                return;
+            }
+        }
+        else
+        {
+            disconnect(replayTimer, &QTimer::timeout, this, &WsjtxFrame::doReplayTimer);
+            replayTimer->deleteLater();
+            replayTimer = nullptr;
+            fos.close();
+        }
+    }
+}
+void WsjtxFrame::on_pushButton_clicked()
+{
+    if (!fos.isOpen())
+    {
+        QString dpath = WsjtxServer::getUdpRecPath();
+
+        QString InitialDir = GetCurrentDir() + "/" + dpath;
+
+        QString Filter = tr("WSJT-X recording Files") + " (*.wsjtx);;" +
+                         tr("All Files") + " (*.*)" ;
+
+        QString baseFileName = QFileDialog::getOpenFileName( this,
+                           tr("WSJT-X recording Files"),
+                           InitialDir,                   // opendir
+                           Filter );
+
+        if ( !baseFileName.isEmpty() )
+        {
+            fos.setFileName(baseFileName);
+            if (!fos.open(QIODevice::ReadOnly))
+               return;
+
+            os.setDevice(&fos);
+            os.setVersion (QDataStream::Qt_5_4);
+
+            replayTimer = new QTimer(this);
+            connect(replayTimer, &QTimer::timeout, this, &WsjtxFrame::doReplayTimer);
+            replayTimer->start(100);
+        }
+    }
+
+}
+

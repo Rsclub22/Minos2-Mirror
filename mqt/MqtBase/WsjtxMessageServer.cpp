@@ -171,7 +171,7 @@ void MessageServer::impl::pending_datagrams ()
         {
           parse_message (sender_address, sender_port, datagram);
 
-          MinosLoggerEvents::sendWsjtxDatagram(&datagram);
+          MinosLoggerEvents::sendWsjtxDatagram(self_->serverInstance, &datagram);
         }
     }
 }
@@ -450,8 +450,9 @@ auto MessageServer::impl::check_status (QDataStream const& stream) const -> Stre
   return result;
 }
 
-MessageServer::MessageServer (QObject * parent, QString const& version, QString const& revision)
+MessageServer::MessageServer (int instance, QObject * parent, QString const& version, QString const& revision)
   : QObject {parent}
+  , serverInstance(instance)
   , m_ {this, version, revision}
 {
 }

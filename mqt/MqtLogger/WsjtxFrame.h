@@ -61,14 +61,16 @@ private:
 
     bool bandOK = false;
 
+    QFile fos;
+    QDataStream os;
+    QTimer *replayTimer = nullptr;
+
     void reply(decodeMessage &dc);
     void restoreSplitters();
     void process_decodes();
     
     void saveAllColumnWidthsAndPositions();
     void reloadColumns();
-    decodeMessage *scrapeAllTxt();
-    void getAllTxtEnd();
     void getCQStrings();
     decodeMessage *parse_tx_message(QString atline, bool fromScrape);
 
@@ -118,6 +120,8 @@ private slots:
     void on_sectionResized(int, int, int);
     void on_configCQButton_clicked();
     void on_decodes_table_view__clicked(const QModelIndex &index);
+    void on_pushButton_clicked();
+    void doReplayTimer();
 };
 
 #endif // WSJTXFRAME_H

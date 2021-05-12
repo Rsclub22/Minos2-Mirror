@@ -1,5 +1,6 @@
 #include "ConfigFile.h"
 #include "ContestApp.h"
+#include "MinosLoggerEvents.h"
 
 #include "WsjtxServer.h"
 
@@ -14,10 +15,10 @@ WsjtxServer *WsjtxServer::getWsjtxServer()
     return wsjtxServer;
 }
 WsjtxServer::WsjtxServer():
-  server_1 {new MessageServer {this}}
-, server_2 {new MessageServer {this}}
-, server_3 {new MessageServer {this}}
-, server_4 {new MessageServer {this}}
+  server_1 {new MessageServer {1, this}}
+, server_2 {new MessageServer {2, this}}
+, server_3 {new MessageServer {3, this}}
+, server_4 {new MessageServer {4, this}}
 {
     connect (server_1, &MessageServer::status_update, this, &WsjtxServer::update_status);
     //connect (server_, &MessageServer::qso_logged, this, &WsjtxServer::log_qso);
@@ -30,6 +31,9 @@ WsjtxServer::WsjtxServer():
     connect (server_2, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
     connect (server_3, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
     connect (server_4, &MessageServer::logged_ADIF, this, &WsjtxServer::log_ADIF);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::wsjtxDatagram, this, &WsjtxServer::wsjtxDatagram);
+
 }
 
 WsjtxServer::~WsjtxServer()
@@ -129,21 +133,15 @@ void WsjtxServer::start ( )
         }
     }
 }
-QString WsjtxServer::getDataPath()
+QString WsjtxServer::getUdpRecPath()
 {
-    QString dataPath;
-    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTX1DataPath, dataPath );
-    if (dataPath.isEmpty())
+    QString udpRecPath;
+    TContestApp::getContestApp() ->loggerBundle.getStringProfile( elpWSJTXUdpRecPath, udpRecPath );
+    if (udpRecPath.isEmpty())
     {
-        // This works on Windows - not sure what we do elsewhere
-        // %LOCALAPPDATA%/WSJT-X
-        dataPath = QString(qgetenv("LOCALAPPDATA")) + "/WSJT-X";
-        if (!DirectoryExists(dataPath))
-        {
-            return QString();
-        }
+        return QString();
     }
-    return dataPath;
+    return udpRecPath;
 }
 //void WsjtxServer::log_qso (QString const& id, QDateTime time_off, QString const& dx_call
 //                                           , QString const& dx_grid, Frequency dial_frequency, QString const& mode
@@ -219,4 +217,41 @@ void WsjtxServer::do_halt_tx (QString const& id, bool auto_only)
 void WsjtxServer::do_clear_decodes (QString const& id, quint8 window)
 {
     server_1->clear_decodes(id, window);
+}
+void WsjtxServer::wsjtxDatagram(int instance, QByteArray *datagram)
+{
+    // if recording, becord the datagram
+    // Can we just use Qt streaming both ways?
+
+    bool enabled = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXUdpRecEnabled, enabled );
+
+    if (enabled)
+    {
+        QDateTime tnow = QDateTime::currentDateTime();
+        if (!fos.isOpen())
+        {
+            QString dpath = WsjtxServer::getUdpRecPath();
+
+            QString baseName = "/WsjtxUDPStream";
+            QString now = tnow.toString("_yyyy-MM-dd hh-mm-ss");
+            baseName = baseName + now + ".wsjtx";
+
+            fos.setFileName(dpath + baseName);
+            if (!fos.open(QIODevice::WriteOnly|QIODevice::Append))
+               return;
+
+            os.setDevice(&fos);
+            os.setVersion (QDataStream::Qt_5_4);
+        }
+
+        os << static_cast<qint16>(instance);
+        os << tnow;
+        os << *datagram;
+
+//        QString dtg = tnow.toString("yyyy-MM-dd hh-mm-ss");
+//        int s = datagram->size();
+
+        fos.flush();
+    }
 }

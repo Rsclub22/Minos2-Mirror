@@ -167,7 +167,7 @@ void N1MMBroadcast::afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact>
     }
 }
 
-void N1MMBroadcast::wsjtxDatagram(QByteArray *datagram)
+void N1MMBroadcast::wsjtxDatagram(int, QByteArray *datagram)
 {
     // rebroadcast wsjt-x datagram
     if (wsjtxRbSelect && !wsjtxRbHost.isNull())

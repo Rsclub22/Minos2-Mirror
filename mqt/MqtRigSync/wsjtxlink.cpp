@@ -2,7 +2,7 @@
 
 WsjtxLink::WsjtxLink(QObject *parent):
     QObject(parent),
-    msgServer {new MessageServer {this}}
+    msgServer {new MessageServer {0, this}}
 
 {
     connect (msgServer, &MessageServer::status_update, this, &WsjtxLink::update_status);

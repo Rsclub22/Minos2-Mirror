@@ -36,6 +36,12 @@ void WsjtxConfigure::initialise()
 
     {
         bool enabled;
+        ui->udpRecPath->setText(WsjtxServer::getUdpRecPath());
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXUdpRecEnabled, enabled );
+        ui->udpRecCB->setChecked(enabled);
+    }
+    {
+        bool enabled;
         int port = 0;
         QString addr;
 
@@ -47,7 +53,6 @@ void WsjtxConfigure::initialise()
         ui->portSpinBox->setValue(port);
         ui->groupAddrEdit->setText(addr);
 
-        ui->wsjtxPath->setText(WsjtxServer::getDataPath());
     }
     {
         bool enabled;
@@ -101,6 +106,9 @@ void WsjtxConfigure::initialise()
 }
 void WsjtxConfigure::finalise()
 {
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpWSJTXUdpRecEnabled, ui->udpRecCB->isChecked() );
+    TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpWSJTXUdpRecPath, ui->udpRecPath->text() );
+
     {
         bool enabled = ui->enabledcb->isChecked();
         int port = ui->portSpinBox->value();
@@ -148,24 +156,24 @@ void WsjtxConfigure::finalise()
     WsjtxServer::getWsjtxServer()->start();
 }
 
-void WsjtxConfigure::on_alltxtBrowseButton_clicked()
+void WsjtxConfigure::on_udpRecBrowseButton_clicked()
 {
-    // search for WSJT-X data dir (which contains ALL.TXT)
-    //QDir cdir(GetCurrentDir());
+    QDir cdir(GetCurrentDir());
 
-    QString fpath =  ui->wsjtxPath->text();
+    QString fpath =  ui->udpRecPath->text();
 
-    QString destFile = QFileDialog::getOpenFileName(
-                  this,
-                  tr("ALL.TXT for WSJT-X"),
-                  fpath,
-                  "ALL.TXT"
-                   );
-    if (!destFile.isEmpty())
+    QString destDir = QFileDialog::getExistingDirectory(
+            nullptr,
+            "Directory in which to save WSJT-X recordings",
+            fpath,
+            QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+            );
+    if (!destDir.isEmpty())
     {
-        QFileInfo fi(destFile);
-        fpath = fi.absolutePath();
-        ui->wsjtxPath->setText(fpath);
+        QString rpath = cdir.relativeFilePath(destDir);
+        ui->udpRecPath->setText(rpath);
     }
 
 }
+
+

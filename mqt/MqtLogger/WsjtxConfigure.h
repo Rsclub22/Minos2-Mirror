@@ -19,7 +19,7 @@ public:
     void finalise();
 
 private slots:
-    void on_alltxtBrowseButton_clicked();
+    void on_udpRecBrowseButton_clicked();
 
 private:
     Ui::WsjtxConfigure *ui;

@@ -98,7 +98,7 @@ signals:
    void listCompressionChanged(qreal hmult);
 
    void afterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
-   void wsjtxDatagram(QByteArray *);
+   void wsjtxDatagram(int instance, QByteArray *);
    void callsignLookup(BaseContestLog *l, QString c);
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
 public:
@@ -168,7 +168,7 @@ public:
     static void sendListCompressionChanged(qreal hmult);
 
     static void sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
-    static void sendWsjtxDatagram(QByteArray *);
+    static void sendWsjtxDatagram(int instance, QByteArray *);
     static void sendCallsignLookup(BaseContestLog *, QString);
 
     static void sendReconnectFlagToClusterServer(bool state);

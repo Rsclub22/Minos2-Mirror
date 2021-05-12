@@ -28,8 +28,9 @@ class MessageServer
 
 public:
   using port_type = quint16;
+    int serverInstance = -1;
 
-  MessageServer (QObject * parent = nullptr,
+  MessageServer (int instance, QObject * parent = nullptr,
                  QString const& version = QString {}, QString const& revision = QString {});
 
   // start or restart the server, if the multicast_group_address

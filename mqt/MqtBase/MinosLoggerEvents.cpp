@@ -304,9 +304,9 @@ void MinosLoggerEvents::sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<Base
     emit mle.afterQSOSaved(c, tct);
 }
 
-void MinosLoggerEvents::sendWsjtxDatagram(QByteArray *datagram)
+void MinosLoggerEvents::sendWsjtxDatagram(int instance, QByteArray *datagram)
 {
-    emit mle.wsjtxDatagram(datagram);
+    emit mle.wsjtxDatagram(instance, datagram);
 }
 
 void MinosLoggerEvents::sendCallsignLookup(BaseContestLog *l, QString c)
