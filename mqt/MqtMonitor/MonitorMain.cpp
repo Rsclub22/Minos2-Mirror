@@ -488,8 +488,8 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
     if ( an.getOK() )
     {
         PublishState state = an.getState();
-        QString key = an.getKey();
-        QString value = an.getValue();
+        QString key = an.getKey();          // key is minos file name
+        QString value = an.getValue();      // value is stanzacount;[band] name;start time;end time
 
         if ( an.getCategory() == rpcConstants::monitorLogCategory )
         {

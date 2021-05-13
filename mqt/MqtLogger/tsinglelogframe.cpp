@@ -1057,7 +1057,11 @@ void TSingleLogFrame::PublishTimerTimer(  )
           QString name = contest->name.getValue();
           QString band = contest->contestBands.getValue();
 
-          QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name;
+          // cell is stanzacount;[band] name;start time;end time
+          name = name.replace(';', ':');
+          QString tstart = contest->DTGStart.getValue();
+          QString tend = contest->DTGEnd.getValue();
+          QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name + ";" + tstart + ";" + tend;
 
          RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, cell, psPublished );
          lastStanzaCount = stanzaCount;

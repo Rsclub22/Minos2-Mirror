@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QDateTime>
 #include "fileutils.h"
+#include "cutils.h"
 #include "MTrace.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -90,10 +91,16 @@ MainWindow::MainWindow(QWidget *parent)
     bool autostart = settings.value("AutoStart", false).toBool();
     ui->autostartCb->setChecked(autostart);
 
+
     if (autostart)
     {
         on_startRecButton_clicked();
     }
+    MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
+    connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
+
+    QStringList sv = {rpcConstants::monitorLogCategory};
+    rpc->findProviders(rpcConstants::LoggerCategory, sv);
 }
 
 MainWindow::~MainWindow()
@@ -129,26 +136,46 @@ void MainWindow::changeEvent( QEvent* e )
 void MainWindow::onCloseTimer()
 {
     static bool closed = false;
-    if ( !closed )
+    if ( closed )
     {
-       if ( checkCloseEvent() )
-       {
-          closed = true;
-          close();
-          return;
-       }
+        return;
     }
-    else
+    if ( checkCloseEvent() )
     {
-        bool show = getShowApp();
-        if ( !isVisible() && show )
+        closed = true;
+        close();
+        return;
+    }
+
+    bool show = getShowApp();
+    if ( !isVisible() && show )
+    {
+        setVisible(true);
+    }
+    if ( isVisible() && !show )
+    {
+        setVisible(false);
+    }
+    bool autostart = ui->autostartCb->isChecked();
+
+    if (!autostart && tstart.isValid() && tend.isValid())
+    {
+        QDateTime tnow = QDateTime::currentDateTimeUtc();
+        QString t1 = tstart.addSecs(-60).toString();
+        QString t2 = tend.addSecs(60).toString();
+        QString t3 = tnow.toString();
+
+        if (started && tnow > tend.addSecs(60))
         {
-           setVisible(true);
+            trace("Stop trace by time");
+            on_stopRecButton_clicked();
         }
-        if ( isVisible() && !show )
-        {
-           setVisible(false);
-        }
+        else
+            if (!started && tstart.addSecs(-60) < tnow)
+            {
+                trace("Start trace by time");
+                on_startRecButton_clicked();
+            }
     }
 }
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -173,6 +200,7 @@ void MainWindow::on_startRecButton_clicked()
     rass.startDMA(fname, ui->rotInterval->value() * 60);    // as we have it in minutes
 
     trace("Start stream complete");
+    started = true;
 
     ui->detailsFrame->setEnabled(false);
     ui->startRecButton->setEnabled(false);
@@ -184,6 +212,7 @@ void MainWindow::on_stopRecButton_clicked()
     trace("About to stop audio");
     rass.stopDMA();
     trace("audio stopped");
+    started = false;
     ui->detailsFrame->setEnabled(true);
     ui->startRecButton->setEnabled(true);
     ui->stopRecButton->setEnabled(false);
@@ -302,4 +331,40 @@ void MainWindow::on_autostartCb_stateChanged(int /*arg1*/)
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("AutoStart", autostart);
+}
+void MainWindow::on_notify(AnalysePubSubNotify an, const QString from )
+{
+    // pubsub notify
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+
+    if ( an.getOK() )
+    {
+        PublishState state = an.getState();
+        if (state != psPublished)
+        {
+            return;
+        }
+        //QString key = an.getKey();          // key is minos file name
+        QString value = an.getValue();      // value is stanzacount;[band] name;start time;end time
+
+        if ( an.getCategory() == rpcConstants::monitorLogCategory )
+        {
+            QStringList args = value.split(";");
+            if (args.size() < 4)
+            {
+                return;
+            }
+            QDateTime  contestStart = CanonicalToTDT(args[2]);
+            if (!tstart.isValid() || contestStart < tstart)
+            {
+                tstart = contestStart;
+            }
+
+            QDateTime  contestEnd = CanonicalToTDT(args[3]);
+            if (!tend.isValid() || contestEnd > tend)
+            {
+                tend = contestEnd;
+            }
+        }
+    }
 }

@@ -48,9 +48,15 @@ private slots:
     void on_autostartCb_stateChanged(int);
 
     void onCloseTimer();
+
+    void on_notify(AnalysePubSubNotify an, const QString from);
 private:
     Ui::MainWindow *ui;
     RtAudioSoundSystem rass;
+
+    QDateTime tstart;
+    QDateTime tend;
+    bool started = false;
 
     StdInReader stdinReader;
     QTimer closeTimer;
