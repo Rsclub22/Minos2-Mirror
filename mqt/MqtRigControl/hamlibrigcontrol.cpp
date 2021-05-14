@@ -391,22 +391,30 @@ bool RigControl::checkFreqValid(freq_t freq, rmode_t mode)
 
 bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
 {
-
     RIG *myRig = rig_init(rigNumber);
     if (myRig)
     {
         rmode_t mode = convertQStrRmode_t("USB");
 
         const freq_range_t* freq_range = nullptr;
+        qint64 f = freq;
 #if defined(RIG_MODEL_IC9700)
         if (myRig->caps->rig_model == RIG_MODEL_IC9700)
         {
-             freq_range = rig_get_range(myRig->caps->tx_range_list2, freq, mode);
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, f, mode);
         }
         else
 #endif
+#if defined(RIG_MODEL_TS2000)
+        if (myRig->caps->rig_model == RIG_MODEL_TS2000)
         {
-            freq_range = rig_get_range(myRig->caps->tx_range_list1, freq, mode);
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, f, mode);
+        }
+        else
+#endif
+
+        {
+            freq_range = rig_get_range(myRig->caps->tx_range_list1, f, mode);
         }
 
         return (freq_range != nullptr)? true:false;
