@@ -5,7 +5,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../MainWindow.ui" line="14"/>
-        <location filename="../MainWindow.cpp" line="103"/>
+        <location filename="../MainWindow.cpp" line="111"/>
         <source>Start Minos Apps</source>
         <translation>Démarrer les applications Minos</translation>
     </message>
@@ -35,22 +35,22 @@
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="30"/>
+        <location filename="../MainWindow.cpp" line="38"/>
         <source>E&amp;xit Minos Application Starter</source>
         <translation>&amp;Quitter Minos Application Starter</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="31"/>
+        <location filename="../MainWindow.cpp" line="39"/>
         <source>Select &amp;Font...</source>
         <translation>Choisir la &amp;Police ...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="32"/>
+        <location filename="../MainWindow.cpp" line="40"/>
         <source>Select &amp;Language</source>
         <translation>Choisir la &amp;Langue</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="131"/>
+        <location filename="../MainWindow.cpp" line="139"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation>Le paramètrage de la  police ne fonctionnera pas si la variable environnement QT_QPA_PLATFORMTHEME est définie sur QT5CT</translation>
     </message>

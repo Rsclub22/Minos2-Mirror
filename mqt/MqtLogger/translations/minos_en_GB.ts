@@ -2,24 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en_GB">
 <context>
-    <name>BandSelButtons</name>
-    <message>
-        <location filename="../bandselbuttons.cpp" line="58"/>
-        <source>Preset</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../bandselbuttons.cpp" line="63"/>
-        <source>Prev</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../bandselbuttons.cpp" line="68"/>
-        <source>Band</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>BandmapClientFilterDialog</name>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="24"/>
@@ -2850,7 +2832,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="194"/>
-        <location filename="../rigcontrolframe.cpp" line="616"/>
+        <location filename="../rigcontrolframe.cpp" line="582"/>
         <source>On</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2865,68 +2847,68 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="304"/>
+        <location filename="../rigcontrolframe.ui" line="289"/>
         <source>Mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="311"/>
-        <location filename="../rigcontrolframe.ui" line="325"/>
+        <location filename="../rigcontrolframe.ui" line="296"/>
+        <location filename="../rigcontrolframe.ui" line="310"/>
         <source>USB</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="318"/>
+        <location filename="../rigcontrolframe.ui" line="303"/>
         <source>:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.ui" line="349"/>
+        <location filename="../rigcontrolframe.ui" line="334"/>
         <source>Vol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="623"/>
+        <location filename="../rigcontrolframe.cpp" line="589"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1229"/>
+        <location filename="../rigcontrolframe.cpp" line="1170"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1265"/>
+        <location filename="../rigcontrolframe.cpp" line="1201"/>
         <source>Radio Bandlist is empty!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1274"/>
+        <location filename="../rigcontrolframe.cpp" line="1210"/>
         <source>Radio has no available bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1358"/>
+        <location filename="../rigcontrolframe.cpp" line="1294"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1510"/>
+        <location filename="../rigcontrolframe.cpp" line="1368"/>
         <source>Freq out of contest band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1683"/>
+        <location filename="../rigcontrolframe.cpp" line="1510"/>
         <source>Error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1690"/>
+        <location filename="../rigcontrolframe.cpp" line="1517"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1711"/>
+        <location filename="../rigcontrolframe.cpp" line="1538"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5246,17 +5228,17 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1404"/>
+        <location filename="../tsinglelogframe.cpp" line="1408"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1423"/>
+        <location filename="../tsinglelogframe.cpp" line="1427"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1445"/>
+        <location filename="../tsinglelogframe.cpp" line="1449"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5546,57 +5528,57 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="28"/>
-        <location filename="../WsjtxConfigure.ui" line="97"/>
-        <location filename="../WsjtxConfigure.ui" line="136"/>
-        <location filename="../WsjtxConfigure.ui" line="175"/>
+        <location filename="../WsjtxConfigure.ui" line="106"/>
+        <location filename="../WsjtxConfigure.ui" line="145"/>
+        <location filename="../WsjtxConfigure.ui" line="184"/>
         <source>Link Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="37"/>
-        <location filename="../WsjtxConfigure.ui" line="106"/>
-        <location filename="../WsjtxConfigure.ui" line="145"/>
-        <location filename="../WsjtxConfigure.ui" line="184"/>
-        <location filename="../WsjtxConfigure.ui" line="260"/>
+        <location filename="../WsjtxConfigure.ui" line="115"/>
+        <location filename="../WsjtxConfigure.ui" line="154"/>
+        <location filename="../WsjtxConfigure.ui" line="193"/>
+        <location filename="../WsjtxConfigure.ui" line="269"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="51"/>
-        <location filename="../WsjtxConfigure.ui" line="120"/>
-        <location filename="../WsjtxConfigure.ui" line="159"/>
-        <location filename="../WsjtxConfigure.ui" line="198"/>
+        <location filename="../WsjtxConfigure.ui" line="129"/>
+        <location filename="../WsjtxConfigure.ui" line="168"/>
+        <location filename="../WsjtxConfigure.ui" line="207"/>
         <source>Multicast Group Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxConfigure.ui" line="67"/>
-        <source>Path to WSJT-X data (containing ALL.TXT)</source>
+        <location filename="../WsjtxConfigure.ui" line="68"/>
+        <source>Record incoming UDP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxConfigure.ui" line="77"/>
+        <location filename="../WsjtxConfigure.ui" line="75"/>
+        <source>UDP Recording path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxConfigure.ui" line="85"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxConfigure.ui" line="89"/>
+        <location filename="../WsjtxConfigure.ui" line="98"/>
         <source>Secondary (ADIF only) links</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxConfigure.ui" line="230"/>
+        <location filename="../WsjtxConfigure.ui" line="239"/>
         <source>WSJT-X message re-broadcast</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxConfigure.ui" line="250"/>
+        <location filename="../WsjtxConfigure.ui" line="259"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../WsjtxConfigure.cpp" line="160"/>
-        <source>ALL.TXT for WSJT-X</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5686,38 +5668,49 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="320"/>
+        <location filename="../WsjtxFrame.ui" line="318"/>
         <source>Halt TX</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="330"/>
+        <location filename="../WsjtxFrame.ui" line="328"/>
         <source>Disable Tx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="344"/>
+        <location filename="../WsjtxFrame.ui" line="342"/>
         <source>Clear Local Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="354"/>
+        <location filename="../WsjtxFrame.ui" line="352"/>
         <source>Clear All Decodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.ui" line="379"/>
+        <location filename="../WsjtxFrame.ui" line="376"/>
+        <source>Replay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.ui" line="386"/>
         <source>test</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="520"/>
-        <source>Failed to open %1</source>
+        <location filename="../WsjtxFrame.cpp" line="624"/>
+        <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="663"/>
-        <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
+        <location filename="../WsjtxFrame.cpp" line="1193"/>
+        <location filename="../WsjtxFrame.cpp" line="1197"/>
+        <source>WSJT-X recording Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../WsjtxFrame.cpp" line="1194"/>
+        <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
