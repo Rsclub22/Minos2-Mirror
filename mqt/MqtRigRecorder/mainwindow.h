@@ -50,6 +50,8 @@ private slots:
     void onCloseTimer();
 
     void on_notify(AnalysePubSubNotify an, const QString from);
+    void on_contestLinkCB_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     RtAudioSoundSystem rass;
