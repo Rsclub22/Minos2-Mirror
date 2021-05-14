@@ -91,11 +91,14 @@ MainWindow::MainWindow(QWidget *parent)
     bool autostart = settings.value("AutoStart", false).toBool();
     ui->autostartCb->setChecked(autostart);
 
-
     if (autostart)
     {
         on_startRecButton_clicked();
     }
+
+    bool link = settings.value("ContestLink", false).toBool();
+    ui->contestLinkCB->setChecked(link);
+
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), true);
     connect(rpc, &MinosRPC::notify, this, &MainWindow::on_notify);
 
@@ -147,6 +150,11 @@ void MainWindow::onCloseTimer()
         return;
     }
 
+    if (closing)
+    {
+        trace("closing set in close timer");
+        return;
+    }
     bool show = getShowApp();
     if ( !isVisible() && show )
     {
@@ -157,8 +165,9 @@ void MainWindow::onCloseTimer()
         setVisible(false);
     }
     bool autostart = ui->autostartCb->isChecked();
+    bool link = ui->contestLinkCB->isChecked();
 
-    if (!autostart && tstart.isValid() && tend.isValid())
+    if (link && !autostart && tstart.isValid() && tend.isValid())
     {
         QDateTime tnow = QDateTime::currentDateTimeUtc();
         QString t1 = tstart.addSecs(-60).toString();
@@ -171,7 +180,7 @@ void MainWindow::onCloseTimer()
             on_stopRecButton_clicked();
         }
         else
-            if (!started && tstart.addSecs(-60) < tnow)
+            if (!started && tstart.addSecs(-60) < tnow && tnow < tend.addSecs(60))
             {
                 trace("Start trace by time");
                 on_startRecButton_clicked();
@@ -180,6 +189,8 @@ void MainWindow::onCloseTimer()
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    trace("MainWindow::closeEvent");
+
     closing = true;
 
     rass.closedown();
@@ -325,13 +336,30 @@ void MainWindow::on_recordMono_stateChanged(int /*arg1*/)
     settings.setValue("Mono", mono);
 }
 
+void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
+{
+    bool link = ui->contestLinkCB->isChecked();
+    QString filename = "./Configuration/RigRecorder.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    settings.setValue("ContestLink", link);
+    if (link)
+    {
+        ui->autostartCb->setChecked(false);
+    }
+}
 void MainWindow::on_autostartCb_stateChanged(int /*arg1*/)
 {
     bool autostart = ui->autostartCb->isChecked();
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("AutoStart", autostart);
+
+    if (autostart)
+    {
+        ui->contestLinkCB->setChecked(false);
+    }
 }
+
 void MainWindow::on_notify(AnalysePubSubNotify an, const QString from )
 {
     // pubsub notify
@@ -368,3 +396,4 @@ void MainWindow::on_notify(AnalysePubSubNotify an, const QString from )
         }
     }
 }
+

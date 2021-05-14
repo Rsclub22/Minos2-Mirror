@@ -120,7 +120,7 @@ private slots:
     void on_sectionResized(int, int, int);
     void on_configCQButton_clicked();
     void on_decodes_table_view__clicked(const QModelIndex &index);
-    void on_pushButton_clicked();
+    void on_replayButton_clicked();
     void doReplayTimer();
 };
 

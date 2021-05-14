@@ -30,6 +30,7 @@ WsjtxFrame::WsjtxFrame(QWidget *parent) :
     remove_client(QString());    // kill off the ratshit
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1TestEnabled, showTest );
     ui->testButton->setVisible(showTest);
+    ui->replayButton->setVisible(showTest);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1AutoEnabled, autoEnabled );
     ui->autoSelectReplyFrame->setVisible(autoEnabled);
@@ -1181,7 +1182,7 @@ void WsjtxFrame::doReplayTimer()
         }
     }
 }
-void WsjtxFrame::on_pushButton_clicked()
+void WsjtxFrame::on_replayButton_clicked()
 {
     if (!fos.isOpen())
     {
