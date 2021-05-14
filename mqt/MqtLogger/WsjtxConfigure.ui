@@ -60,32 +60,34 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_15">
-        <item>
-         <widget class="QCheckBox" name="udpRecCB">
-          <property name="text">
-           <string>Record incoming UDP</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>UDP Recording path</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="udpRecPath"/>
-        </item>
-        <item>
-         <widget class="QToolButton" name="udpRecBrowseButton">
-          <property name="text">
-           <string>...</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QFrame" name="recrepFrame">
+        <layout class="QHBoxLayout" name="horizontalLayout_15">
+         <item>
+          <widget class="QCheckBox" name="udpRecCB">
+           <property name="text">
+            <string>Record incoming UDP</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>UDP Recording path</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="udpRecPath"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="udpRecBrowseButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
      </layout>
     </widget>

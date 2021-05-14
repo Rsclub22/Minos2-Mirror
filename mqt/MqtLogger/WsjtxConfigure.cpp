@@ -35,6 +35,10 @@ void WsjtxConfigure::initialise()
     ui->portSpinBox_4->setMaximum (std::numeric_limits<port_type>::max ());
 
     {
+        bool showTest = false;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTX1TestEnabled, showTest );
+        ui->recrepFrame->setVisible(showTest);
+
         bool enabled;
         ui->udpRecPath->setText(WsjtxServer::getUdpRecPath());
         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpWSJTXUdpRecEnabled, enabled );

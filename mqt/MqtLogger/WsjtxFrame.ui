@@ -371,7 +371,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_5">
             <item>
-             <widget class="QPushButton" name="pushButton">
+             <widget class="QPushButton" name="replayButton">
               <property name="text">
                <string>Replay</string>
               </property>
