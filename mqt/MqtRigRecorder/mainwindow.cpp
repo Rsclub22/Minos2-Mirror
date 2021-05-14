@@ -150,6 +150,11 @@ void MainWindow::onCloseTimer()
         return;
     }
 
+    if (closing)
+    {
+        trace("closing set in close timer");
+        return;
+    }
     bool show = getShowApp();
     if ( !isVisible() && show )
     {
@@ -184,6 +189,8 @@ void MainWindow::onCloseTimer()
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    trace("MainWindow::closeEvent");
+
     closing = true;
 
     rass.closedown();
