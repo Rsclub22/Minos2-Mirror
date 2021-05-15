@@ -273,6 +273,21 @@
       </widget>
      </item>
      <item>
+      <widget class="QFrame" name="bandSelFrame">
+       <property name="frameShape">
+        <enum>QFrame::Box</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QGridLayout" name="bandSelGridLayout"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
       <widget class="QFrame" name="frame_2">
        <property name="frameShape">
         <enum>QFrame::Box</enum>

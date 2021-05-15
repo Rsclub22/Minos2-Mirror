@@ -24,6 +24,7 @@ public:
 
 private:
     Ui::ContestDetails *ui;
+    QString trAllHf;
     UpperCaseValidator ucValidator;
 
     QSharedPointer< ContestDetailsTransferObject > contestTransferObject;

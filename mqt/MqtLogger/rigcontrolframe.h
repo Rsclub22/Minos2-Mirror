@@ -24,6 +24,7 @@
 #include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
+#include "bandselbuttons.h"
 #include "BandList.h"
 
 
@@ -105,7 +106,7 @@ public:
 
     void closeContest();
 
-
+    Frequency getSendFreq();
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
     void setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame);
 signals:
@@ -174,7 +175,7 @@ private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     LoggerContestLog *ct = nullptr;
-    //BandSelButtons *bandSelButtons = nullptr;
+    BandSelButtons *bandSelButtons = nullptr;
 
     //QVector<quickBandSelData> listOfBands;
     QStringList listOfBands;
@@ -225,8 +226,6 @@ private:
     bool onContestPageChangedFlag;
     bool ignorePreviousFreqFlag;
     bool ignorePresetFreqFlag;
-
-    PresetFreq presetFreqs;
 
     QTimer *launchRadioSelectTimer = nullptr;
     int launchRadioSelectCount;
@@ -307,21 +306,21 @@ private:
     bool readIgnorePresetFreqFlag();
     bool readIgnorePreviousFreqFlag();
     void setRitMaxKHzFreq(int maxRitFreq);
+    //int setBandSelComboIndex(QString band);
+    void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(const Frequency &freq);
     void setRadioFreq(Frequency &sendFreq, bool &rigFrameStartFlag);
+    int setBandSelButtonFromFreq(const Frequency &freq);
+    //int setBandSelComboFromFreq(const Frequency &freq);
     bool checkFreqOK(const Frequency &freq);
     bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);
     void initBandSelButtons();
 
-
+    void setStateOfBandOnlyRadButtons();
     bool isVmButtonsFrameVisible();
     void sendVmButtonFrameSelectedRadio(PubSubName selectedRadio);
     void sendVmButtonFrameRadioConnected(bool connected);
-    Frequency getPresetFreq(const QString band, const QString mode);
-    QString convertModeForPresets(const QString mode);
-    void readPresetFreqsFromIni(const QVector<QSharedPointer<BandInfo> > bands);
-    Frequency readPresetFrequencyFromIni(const QString band, const QString mode);
 };
 
 

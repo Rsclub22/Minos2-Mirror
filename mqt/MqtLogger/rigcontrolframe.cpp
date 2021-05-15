@@ -61,6 +61,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
 
     rigFrameStartFlag = true;
 
+    initBandSelButtons();
+
     initRigFrame(parent);
 
     showRitButOff();
@@ -123,6 +125,8 @@ RigControlFrame::RigControlFrame(QWidget *parent):
     connect(checkFreqContestBandTimer, &QTimer::timeout, this, [=](){onCheckContestBandMatch();});
     checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
 
+    setStateOfBandOnlyRadButtons();
+
 
 
 
@@ -163,6 +167,16 @@ void RigControlFrame::checkRigDetailsAvail()
         return;
     }
 
+    //if (ct && !ct->isReadOnly() )
+   // {
+    //    if (ui->radioNameSel->count() == 0)
+    //    {
+   //         if(LogContainer->sendDM->rigs().count())
+    //        {
+    //            setRadioList();
+   //         }
+    //    }
+   // }
 
 
     if (ct &&  ct->isReadOnly())
@@ -242,6 +256,11 @@ void RigControlFrame::setContest(BaseContestLog *c)
 
     }
 
+    if (bandSelButtons)
+    {
+        bandSelButtons->setContest(contestBand);
+    }
+
 
 }
 
@@ -269,6 +288,10 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
     connect(this, &RigControlFrame::noRadioSendFreq, this, &RigControlFrame::noRadioSetFreq);
     connect(this,&RigControlFrame::noRadioSendMode, this, &RigControlFrame::noRadioSetMode);
 
+
+    connect(bandSelButtons , &BandSelButtons::sendPresetFreq, this, &RigControlFrame::radioBandFreq);
+    connect(bandSelButtons, &BandSelButtons::sendBandChange, this, &RigControlFrame::onRadioBandChange);
+
     connect(this, &RigControlFrame::radioSwitchCompleted, this, &RigControlFrame::setRadioSwitchCompleted);
 
     setVolControlVisible(false);
@@ -280,6 +303,15 @@ void RigControlFrame::initRigFrame(QWidget * /*parent*/)
 
 }
 
+
+void RigControlFrame::initBandSelButtons()
+{
+
+    QVector<QSharedPointer<BandInfo> > bands;
+    BandList::getBandList().loadAllBands(bands);
+    bandSelButtons = new BandSelButtons(bands, ui->bandSelGridLayout);
+
+}
 
 
 void RigControlFrame::clusterUpdateRigFreq(Frequency freq)
@@ -446,6 +478,8 @@ void RigControlFrame::setFreq(Frequency freq)
     }
     checkContestBandMatch(freq);        // to show error on panel
     displayFreqOnFreqEditDisplay(freq);
+    bandSelButtons->selectButtonGroupAndActiveBand(freq);
+    bandSelButtons->setPreviousFreq(curMode, freq);
     curFreq = freq;
     emit setFreqDisplay(freq, legalFreq);
 }
@@ -593,14 +627,27 @@ void RigControlFrame::logRadioSettingsChanged(QSharedPointer<RadioSettingsDialog
 {
     if (logRadioSettingsFlags->ignorePresetFreq || logRadioSettingsFlags->ignorePreviousFreq)
     {
-        //setStateOfBandOnlyRadButtons();
+        setStateOfBandOnlyRadButtons();
     }
 
     // update preset freqs
-    //bandSelButtons->readPresetFreqsFromIni(bands);
+    bandSelButtons->readPresetFreqsFromIni(bands);
 
 }
 
+void RigControlFrame::setStateOfBandOnlyRadButtons()
+{
+    if (!readIgnorePresetFreqFlag() && !readIgnorePreviousFreqFlag())
+    {
+        bandSelButtons->setbandOnlyButVisible(false);
+        bandSelButtons->setPresetFreqRadioButChecked(true);
+    }
+    else
+    {
+        bandSelButtons->setbandOnlyButVisible(true);
+        bandSelButtons->setBandOnlyRadioButChecked(true);
+    }
+}
 
 
 void RigControlFrame::changeMainRadioFreq()
@@ -1011,7 +1058,7 @@ void RigControlFrame::setMode(QString m)
                 {
                     ui->modelbl->setText(mode[0]);
                     curMode = mode[0];
-                    //bandSelButtons->setMode(curMode);
+                    bandSelButtons->setMode(curMode);
                     if (mode[0] == hamlibData::MGM)
                     {
                         mgmLabelVisible(true);
@@ -1102,9 +1149,21 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                 setRadioFreq(sendFreq,  fromStartRigControl);
 
 
-                traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
-                setContestBandLimits(contestBand);
+                // set Band Sel Combo to band of contest band
 
+                //if (setBandSelComboIndex(contestBand) == -1)
+                /*
+                if (bandSelButtons->selectButtonGroupAndActiveBand(contestBand)  == -1)
+                {
+                    traceMsg(QString("setRadioName: setBandSelCombo Band %1, not found").arg(contestBand));
+                }
+                else
+                {
+                */
+                    //traceMsg(QString("setRadioName: setBandSelCombo to contest band = %1").arg(contestBand));
+                    traceMsg(QString("setRadioName: set contest band limits for band = %1").arg(contestBand));
+                    setContestBandLimits(contestBand);
+                //}
 
 
                 QString contestMode = ct->currentMode.getValue();
@@ -1176,7 +1235,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 
 
-
+            //LogContainer->sendDM->notifyRigChanges();
     }
     else
     {
@@ -1188,7 +1247,12 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 }
 
+// used to test freq received from rigcontrol in tsinglelogframe
 
+Frequency RigControlFrame::getSendFreq()
+{
+    return sendFreq;
+}
 
 void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigControl)
 {
@@ -1266,7 +1330,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            if (bandOK)
            {
 
-               Frequency freq = readPresetFrequencyFromIni(cb, ct->currentMode.getValue());
+               Frequency freq = bandSelButtons->getPresetFreq(cb, ct->currentMode.getValue());
 
                traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
                if (checkValidFreq(freq))
@@ -1342,6 +1406,84 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
     }
 
 
+}
+
+// restore after rigcontrol restart
+
+void RigControlFrame::restoreRadioFreq()
+{
+    if (ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+
+        Frequency freq = disconnectFreq;
+        traceMsg(QString("restorRadioFreq: restore Freq for this contest"));
+/*
+        bool state;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestChangeIgnorePreviousFreq, state );
+        if (state)
+        {
+           traceMsg(QString("restoreRadioFreq: Ignore Previous Freq Set, skip restor freq"));
+           return;
+        }
+*/
+        if (!freq.isClear())
+        {
+            disconnectFreq.clear();
+            QString cb = ct->contestBands.getValue().trimmed();
+            //int err = setBandSelComboIndex(cb);
+            int err = bandSelButtons->selectButtonGroupAndActiveBand(cb);
+            if (err >= 0 )
+            {
+
+                if (checkValidFreq(freq))
+                {
+                  traceMsg(QString("restoreRadioFreq: restoring this freq = %1").arg(freq.traceStr()));
+                  sendRigFreq(freq);
+                }
+                else
+                {
+                   traceMsg(QString("restoreRadioFreq: freq %1 invalid").arg(curFreq.traceStr()));
+                }
+
+            }
+            else
+            {
+                traceMsg(QString("restoreRadioFreq: error finding band =  %1, in bandsel combo").arg(cb));
+            }
+
+        }
+
+    }
+
+
+
+}
+
+int RigControlFrame::setBandSelButtonFromFreq(const Frequency &freq)
+//int RigControlFrame::setBandSelComboFromFreq(const Frequency &freq)
+{
+    traceMsg(QString("setBandSelButtonFromFreq = %1").arg(freq.traceStr()));
+
+    int retCode = 0;
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+
+    if (blist.findBand(freq, bi))
+    {
+        if (bandSelButtons->getCurrentButtonOn_Band() != bi->uk)
+        {
+            //retCode = setBandSelComboIndex(bi->uk);
+            retCode = bandSelButtons->setButtonOnOff(bi->uk, true);
+            traceMsg(QString("setBandSelButtonFromFreq = %1, band = %2, retCode = %3").arg(freq.traceStr()).arg(bi->uk).arg(retCode));
+
+        }
+
+        return retCode;
+    }
+
+    retCode = -1;
+    traceMsg(QString("setBandSelButtonFromFreq retCode = %1").arg(retCode));
+    return retCode;
 }
 
 
@@ -1478,9 +1620,40 @@ void RigControlFrame::createSupportedBandList(QString b)
     {
         listOfBands.clear();
         listOfBands = b.split(":");
+
+
+        //ui->bandSelCombo->clear();
+        //ui->bandSelCombo->addItem("");
+        //ui->bandSelCombo->addItems(listOfBands);
+        bandSelButtons->selectSupportedBands(listOfBands);
+
+        // set combo to current contest band
+        if (ct && !ct->isReadOnly())
+        {
+            QString contestBand = ct->contestBands.getValue();
+            // is band in combo sel
+            int retCode = bandSelButtons->setButtonOnOff(contestBand, true);
+
+            //if (ui->bandSelCombo->findText(contestBand)>= 0)
+            if (retCode >= 0)
+            {
+                //ui->bandSelCombo->setCurrentText(contestBand);
+                traceMsg(QString("createActveBandList: restore currentBand = %1").arg(contestBand));
+
+            }
+            else
+            {
+                traceMsg(QString("createActveBandList: couldn't find contestBand = %1 in select combo").arg(contestBand));
+
+            }
+        }
+
     }
-
-
+    else
+    {
+        bandSelButtons->setAllButtonsVisible(false);
+        //ui->bandSelCombo->clear();
+    }
 }
 
 
@@ -1548,7 +1721,8 @@ void RigControlFrame::setRadioState(QString s)
                ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
                ui->freqInput->setLineText(sf);
                emit setFreqDisplay(curFreq, legalFreq);
-
+               //ui->bandSelCombo->clear();
+               bandSelButtons->setAllButtonsVisible(false);
            }
            emit radioIsConnected(false);
            emit radioDisconnected();
@@ -1767,6 +1941,9 @@ void RigControlFrame::freqLineEditFrameColour(bool status)
 
     }
 
+    //QString freq = ui->freqInput->text();
+    //setFreqTextLegalColour(freq, curMode);
+
 }
 
 
@@ -1968,7 +2145,12 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
 
 void RigControlFrame::closeContest()
 {
-
+//    // is this the last frame
+//    if (LogContainer->getLogFrameCount() == 1 && radioConnected)
+//    {
+//        trace(QString("Last contest frame closing, close radio connection"));
+//        setRadioName("", ct->currentMode.getValue());
+//    }
 }
 
 void RigControlFrame::traceMsg(QString msg)
@@ -2055,61 +2237,5 @@ void RigControlFrame::checkConnection()
         setRadioState(RIG_STATUS_DISCONNECTED);
     }
 }
-
-
-
-
-Frequency RigControlFrame::readPresetFrequencyFromIni(const QString band, const QString mode)
-{
-    int b = -1;
-    for (int i = 0; i < bands.count(); i++)
-    {
-        if (bands[i].data()->uk == band)
-        {
-            b = i;
-        }
-    }
-
-    if (b == -1)
-    {
-        traceMsg(QString("readPresetFreqsFromIni: band not found = %1, index = %2").arg(band, b));
-        return Frequency(0);
-    }
-
-    QString presetMode = convertModeForPresets(mode);
-    QString presetFreq;
-
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup(presetMode);
-
-    presetFreq = config.value(band, freqPresetData::bandFreq[b]).toString();
-    traceMsg(QString ("readPresetFreqsFromIni: presetFreq %1 for band %2").arg(presetFreq, band));
-    return Frequency(presetFreq);
-}
-
-/*
-Frequency RigControlFrame::getPresetFreq(const QString band, const QString mode)
-{
-    Frequency f;
-    if (presetFreqs.contains(convertModeForPresets(mode), band))
-    {
-         f = presetFreqs.getPresetFreq(convertModeForPresets(mode), band);
-    }
-
-    return f;
-}
-
-*/
-QString RigControlFrame::convertModeForPresets(const QString mode)
-{
-    if (mode == "USB" || mode == "LSB" || mode == "FM")
-    {
-        return "PHONE";
-    }
-
-    return mode;
-}
-
 
 

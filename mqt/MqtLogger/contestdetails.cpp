@@ -28,6 +28,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->setupUi(this);
 
+    trAllHf = tr("All HF");
+
     QSettings settings;
     QByteArray geometry = settings.value("ContestDetails/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -181,7 +183,7 @@ void ContestDetails::setDetails(  )
    BandList &blist = BandList::getBandList();
    if (allowHF)
    {
-       ui->BandComboBox->addItem( tr("All HF") );
+       ui->BandComboBox->addItem( trAllHf );
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
@@ -194,7 +196,7 @@ void ContestDetails::setDetails(  )
    QString cb = contestTransferObject->contestBands.getValue().trimmed();
    if (cb == allHF)
    {
-       cb = tr("All HF");
+       cb = trAllHf;
    }
    else
    {
@@ -902,7 +904,7 @@ QWidget * ContestDetails::getDetails( )
 
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
     QString cb = ui->BandComboBox->currentText();
-    if (cb == tr("All HF"))
+    if (cb == trAllHf)
     {
         cb = allHF;
     }
