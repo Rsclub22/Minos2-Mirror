@@ -4,6 +4,7 @@
 
 #include <QFontDialog>
 #include <QDesktopServices>
+#include <QToolTip>
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
@@ -88,6 +89,9 @@ TLogContainer::TLogContainer(QWidget *parent) :
     statusBar() ->addWidget( sblabel0, 6 );
     sblabel1 = new QLabel( "" );
     statusBar() ->addWidget( sblabel1, 1 );
+
+    sblabel1->installEventFilter(this);
+
     sblabel2 = new QLabel( "" );
     statusBar() ->addWidget( sblabel2, 2 );
 
@@ -146,6 +150,25 @@ TLogContainer::~TLogContainer()
     }
     MinosRPCObj::clearRPCObjects();
     ScreenConfigFile::getScreenConfigFile(this).configs.clear();
+}
+bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip && obj == sblabel1)
+    {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+
+        QString toolTip;
+        QWidget *f = QApplication::focusWidget ();
+        if(f)
+             toolTip = f->metaObject()->className() + QString("|") + f->objectName();
+        else
+            toolTip = "<unknown>";
+
+        QToolTip::showText(helpEvent->globalPos(), toolTip);
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -219,15 +242,7 @@ void TLogContainer::on_TimeDisplayTimer( )
 
        MinosLoggerEvents::SendTimerDistribution();
 
-#ifdef FINDFOCUS
-       QWidget *f = QApplication::focusWidget ();
-       if(f)
-            sblabel1->setText(f->metaObject()->className() + QString("|") + f->objectName());
-       else
-           sblabel1->setText("<unknown>");
-#endif
-
-       QString statbuf;
+      QString statbuf;
       if ( ct )
       {
          ct->setScore( statbuf );
