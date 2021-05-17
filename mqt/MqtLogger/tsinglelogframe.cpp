@@ -1018,27 +1018,39 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
         // ideally we want it configurable...
 
         CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);
+        QString qthBuff;
+        if (contest->location.getValue().size())
+        {
+            qthBuff = "<br>" + contest->location.getValue();
+        }
+
+        QString locBuff;
+        if (contest->locatorMandatoryField.getValue())
+        {
+            locBuff = "<br>" + contest->myloc.getLoc();
+        }
 
         if ( contest->isReadOnly() )
         {
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.getFullCall() + "<br>"
-                                                  + contest->myloc.getLoc() + "<br>"
-                                                  + contest->location.getValue());
+                                                  + contest->mycall.getFullCall()
+                                                  + locBuff
+                                                  + qthBuff
+                                              );
         }
         else
         {
-            QString snBuff = QString("%1").arg( contest->maxSerial + 1, 3, 10, QChar('0') );
-            QString locBuff;
-            if (contest->location.getValue().size())
+            QString snBuff;
+            if (contest->serialMandatoryField.getValue())
             {
-                locBuff = "<br>" + contest->location.getValue();
+                snBuff = "<br>" + QString("%1").arg( contest->maxSerial + 1, 3, 10, QChar('0') );
             }
             NextContactDetailsLabel->setText( "<b><center><nobr><p><big><h1>"
-                                                  + contest->mycall.getFullCall() + "<br>"
-                                                  + snBuff + "<br>"
-                                                  + contest->myloc.getLoc()
-                                                  + locBuff);
+                                                  + contest->mycall.getFullCall()
+                                                  + snBuff
+                                                  + locBuff
+                                                  + qthBuff
+                                              );
         }
     }
 }
