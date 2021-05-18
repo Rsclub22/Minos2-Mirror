@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>604</height>
+    <height>820</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,11 +30,11 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>607</width>
-        <height>557</height>
+        <width>621</width>
+        <height>770</height>
        </rect>
       </property>
-      <layout class="QVBoxLayout" name="verticalLayout_23">
+      <layout class="QVBoxLayout" name="verticalLayout_24">
        <item>
         <widget class="QFrame" name="frame">
          <property name="frameShape">
@@ -46,25 +46,7 @@
          <property name="lineWidth">
           <number>1</number>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout" stretch="1,1,1">
-          <property name="spacing">
-           <number>1</number>
-          </property>
-          <property name="sizeConstraint">
-           <enum>QLayout::SetDefaultConstraint</enum>
-          </property>
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
-           <number>0</number>
-          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_23">
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
@@ -81,30 +63,36 @@
               <property name="frameShadow">
                <enum>QFrame::Raised</enum>
               </property>
-              <layout class="QHBoxLayout" name="horizontalLayout_2">
-               <property name="leftMargin">
-                <number>9</number>
-               </property>
-               <property name="topMargin">
-                <number>2</number>
-               </property>
-               <property name="rightMargin">
-                <number>9</number>
-               </property>
-               <property name="bottomMargin">
-                <number>2</number>
-               </property>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QPushButton" name="HFCalendarButton">
+                   <property name="text">
+                    <string>HF Calendar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="VHFCalendarButton">
+                   <property name="text">
+                    <string>VHF Calendar</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="uwaveCalendarButton">
+                   <property name="text">
+                    <string>uwave Calendar</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
                <item>
                 <widget class="QLineEdit" name="ContestNameSelected">
                  <property name="clearButtonEnabled">
                   <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="VHFCalendarButton">
-                 <property name="text">
-                  <string>VHF Calendar</string>
                  </property>
                 </widget>
                </item>
@@ -232,7 +220,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -255,7 +243,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -287,7 +275,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -319,7 +307,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -346,7 +334,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -369,7 +357,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -392,7 +380,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -415,7 +403,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="">
+          <widget class="QFrame" name="frame">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -448,24 +436,20 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
-               <widget class="QLabel" name="label_8">
-                <property name="text">
-                 <string>Start Date</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_8">
+                  <property name="text">
+                   <string>Start Date</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QDateEdit" name="StartDateEdit">
                   <property name="calendarPopup">
                    <bool>true</bool>
                   </property>
                  </widget>
-                </item>
-               </layout>
               </item>
              </layout>
             </item>
@@ -503,24 +487,20 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_16">
-              <item>
-               <widget class="QLabel" name="label_10">
-                <property name="text">
-                 <string>End Date</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_10">
+                  <property name="text">
+                   <string>End Date</string>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <widget class="QDateEdit" name="EndDateEdit">
                   <property name="calendarPopup">
                    <bool>true</bool>
                   </property>
                  </widget>
-                </item>
-               </layout>
               </item>
              </layout>
             </item>

@@ -331,6 +331,10 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     {
         sfreq = "1,3 GHz";
     }
+    if ( sfreq == "3.6 MHz" )
+    {
+        sfreq = "3.5 MHz";
+    }
     qint64 ifreq = sfreq.toInt();
     Frequency dhffreq(ifreq * 1000);
     Frequency dvhffreq(ifreq * 1000000);

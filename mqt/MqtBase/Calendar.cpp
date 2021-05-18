@@ -382,6 +382,7 @@ bool Calendar::parseFile ( const QString &fname )
                             }
 
                             IndividualContest ic;
+                            ic.calType = calType;
 
                             QString desc = i.description.trimmed();
                             QString sdesc = i.shortDescription.trimmed();
@@ -477,6 +478,10 @@ bool Calendar::parseFile ( const QString &fname )
                             if ( ic.reg1band == "1,2 GHz" )
                             {
                                 ic.reg1band = "1,3 GHz";
+                            }
+                            if ( ic.reg1band == "3.6 MHz" )
+                            {
+                                ic.reg1band = "3.5 MHz";
                             }
 
                             BandList &blist = BandList::getBandList();
@@ -681,6 +686,10 @@ bool Calendar::parseBand ( TiXmlElement * tix )
                 if ( b.reg1band == "1,2 GHz" )
                 {
                     b.reg1band = "1,3 GHz";
+                }
+                if ( b.reg1band == "3.6 MHz" )
+                {
+                    b.reg1band = "3.5 MHz";
                 }
             }
             else

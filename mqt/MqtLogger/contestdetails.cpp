@@ -495,10 +495,6 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contestTransferObject->VHFContestName.setValue(ic.description);
 
-   contestTransferObject->RSTMandatoryField.setValue(true);
-   contestTransferObject->serialMandatoryField.setValue(true);
-   contestTransferObject->locatorMandatoryField.setValue(true);
-
    // need to get legal bands from ContestLog
    ui->BandComboBox->clear();
 
@@ -514,6 +510,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
         ui->BandComboBox->addItem( ic.reg1band );
     }
     ui->BandComboBox->setCurrentIndex(0);
+
+    contestTransferObject->RSTMandatoryField.setValue(true);
+    contestTransferObject->serialMandatoryField.setValue(true);
+    bool isHF = ic.calType == ectHF;
+    contestTransferObject->locatorMandatoryField.setValue(!isHF);
 
     ui->SectionComboBox->clear();
 
@@ -868,7 +869,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
 
         contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
-        if ( contestTransferObject->myloc.getValRes() != LOC_OK )
+        if ( contestTransferObject->locatorMandatoryField.getValue() && contestTransferObject->myloc.getValRes() != LOC_OK )
         {
             ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
@@ -950,7 +951,7 @@ QWidget * ContestDetails::getDetails( )
         }
     }
     contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
-    if ( contestTransferObject->myloc.getValRes() != LOC_OK )
+    if (contestTransferObject->locatorMandatoryField.getValue() &&  contestTransferObject->myloc.getValRes() != LOC_OK )
     {
         if (!nextD)
         {
@@ -1163,7 +1164,7 @@ QWidget * ContestDetails::getNextFocus()
    {
       return ui->CallsignEdit;
    }
-   if ( ui->LocatorEdit->text().trimmed().isEmpty() )
+   if (contestTransferObject->locatorMandatoryField.getValue() && ui->LocatorEdit->text().trimmed().isEmpty() )
    {
       return ui->LocatorEdit;
    }
@@ -1220,6 +1221,11 @@ void ContestDetails::enableControls()
    ui->BonusComboBox->setEnabled(!protectedChecked);
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
+
+   bool allowHF = false;
+   TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
+    ui->HFCalendarButton->setVisible(allowHF);
 
 //   if (!protectedChecked)
 //   {
@@ -1321,6 +1327,35 @@ void ContestDetails::on_BSHelpButton_clicked()
      HelpForm.setText(tr(BSHelpText));
      HelpForm.exec();}
 
+void ContestDetails::on_HFCalendarButton_clicked()
+{
+    TCalendarForm CalendarDlg(this, ectHF);
+
+    CalendarDlg.setWindowTitle( tr("HF Calendar"));
+    CalendarDlg.description = ui->ContestNameSelected->text();
+
+    QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
+    CalendarDlg.sdate = CanonicalToTDT(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
+    CalendarDlg.band = ui->BandComboBox->currentText();
+
+    if ( CalendarDlg.exec() == QDialog::Accepted )
+    {
+       // set up all the details that we can from the calendar
+       ui->ContestNameSelected->setText(CalendarDlg.ic.description);
+       setDetails( CalendarDlg.ic );
+    }
+    QWidget *next = getNextFocus();
+    if (next)
+    {
+       next->setFocus();
+    }
+    else
+    {
+       ui->OKButton->setFocus();
+    }
+    focusChange(nullptr, false, nullptr);
+}
+
 void ContestDetails::on_VHFCalendarButton_clicked()
 {
     TCalendarForm CalendarDlg(this, ectVHF);
@@ -1349,6 +1384,35 @@ void ContestDetails::on_VHFCalendarButton_clicked()
     }
     focusChange(nullptr, false, nullptr);
 }
+void ContestDetails::on_uwaveCalendarButton_clicked()
+{
+    TCalendarForm CalendarDlg(this, ectMwave);
+
+    CalendarDlg.setWindowTitle( tr("Microwave Calendar"));
+    CalendarDlg.description = ui->ContestNameSelected->text();
+
+    QString sdate = ui->StartDateEdit->date().toString("dd/MM/yyyy");
+    CalendarDlg.sdate = CanonicalToTDT(TDTToCanonical( sdate + " " + ui->StartTimeCombo->currentText())) ;
+    CalendarDlg.band = ui->BandComboBox->currentText();
+
+    if ( CalendarDlg.exec() == QDialog::Accepted )
+    {
+       // set up all the details that we can from the calendar
+       ui->ContestNameSelected->setText(CalendarDlg.ic.description);
+       setDetails( CalendarDlg.ic );
+    }
+    QWidget *next = getNextFocus();
+    if (next)
+    {
+       next->setFocus();
+    }
+    else
+    {
+       ui->OKButton->setFocus();
+    }
+    focusChange(nullptr, false, nullptr);
+}
+
 
 void ContestDetails::on_CallsignEdit_editingFinished()
 {
@@ -1545,3 +1609,25 @@ void ContestDetails::on_ageProtectedcb_stateChanged(int /*arg1*/)
 {
     enableControls();
 }
+
+void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
+{
+    QString band = ui->BandComboBox->currentText();
+    bool hfBand = false;
+    if (band == trAllHf)
+    {
+        hfBand = true;
+    }
+    else
+    {
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK = blist.findBand(band, bi);
+        if (bandOK)
+        {
+            hfBand = (bi->getType() == "HF");
+        }
+    }
+    ui->LocatorField->setChecked(!hfBand);
+}
+

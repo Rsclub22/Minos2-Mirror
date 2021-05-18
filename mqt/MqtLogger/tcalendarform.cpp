@@ -34,6 +34,7 @@ int TCalendarForm::exec()
     {
         ui->CalendarGrid->horizontalHeader()->restoreState(state);
     }
+    ui->CalendarGrid->horizontalHeader()->setStretchLastSection(true);
 
     QByteArray geometry = settings.value("Calendar/form_geometry_" + calendarNameString[calType]).toByteArray();
     if (geometry.size() > 0)
@@ -311,9 +312,9 @@ void TCalendarForm::downloadFiles()
     for ( int i = LOWURLYEAR; i <= HIGHYEAR; i++ )
     {
         yearList.push_back ( QSharedPointer<CalendarYear> ( new VHFCalendarYear ( i ) ) );
-//        yearList.push_back ( QSharedPointer<CalendarYear> ( new HFCalendarYear ( i ) ) );
+        yearList.push_back ( QSharedPointer<CalendarYear> ( new HFCalendarYear ( i ) ) );
 //        yearList.push_back ( QSharedPointer<CalendarYear> ( new HFBARTGCalendarYear ( i ) ) );
-//        yearList.push_back ( QSharedPointer<CalendarYear> ( new MicroCalendarYear ( i ) ) );
+        yearList.push_back ( QSharedPointer<CalendarYear> ( new MicroCalendarYear ( i ) ) );
     }
 
     for ( auto const &y: yearList )

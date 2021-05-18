@@ -103,7 +103,7 @@ class CalendarBandList
     public:
         QString name;
 
-        QVector<CalendarSectionList> sectionList;
+        QVector<CalendarSectionList> sectionList;  // sections within band
 };
 class SpecialRuleList
 {
@@ -140,6 +140,7 @@ class CalendarContest
 class IndividualContest
 {
     public:
+        CalType calType;
         QDateTime start;
         QDateTime finish;
         QString duration;

@@ -65,7 +65,9 @@ private slots:
    void on_EntDetailButton_clicked();
    void on_CancelButton_clicked();
    void on_BSHelpButton_clicked();
+   void on_HFCalendarButton_clicked();
    void on_VHFCalendarButton_clicked();
+   void on_uwaveCalendarButton_clicked();
    void on_CallsignEdit_editingFinished();
    void on_DXCCMult_clicked();
    void on_NonGCtryMult_clicked();
@@ -78,6 +80,7 @@ private slots:
    void on_RotatorList();
    void on_SetRadioList();
    void on_ageProtectedcb_stateChanged(int arg1);
+   void on_BandComboBox_activated(const QString &arg1);
 };
 
 #endif // CONTESTDETAILS_H
