@@ -127,6 +127,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     power = ct->power;
     currentMode = ct->currentMode;
+    modeList = ct->modeList;
 
     contestBands = ct->contestBands;
     currentBand = ct->currentBand;
@@ -237,6 +238,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
 
     ct->power = power;
     ct->currentMode = currentMode;
+    ct->modeList = modeList;
 
     ct->contestBands = contestBands;
     ct->currentBand = currentBand;

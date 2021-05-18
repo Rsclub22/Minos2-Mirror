@@ -16,6 +16,7 @@
 #include "MinosTestImport.h"
 #include "rigutils.h"
 #include "BandList.h"
+#include "rigcommon.h"
 
 #include "contest.h"
 
@@ -219,6 +220,7 @@ void BaseContestLog::clearDirty()
    locatorMandatoryField.clearDirty();
    power.clearDirty();
    currentMode.clearDirty();
+   modeList.clearDirty();
    contestBands.clearDirty();
    currentBand.clearDirty();
    otherExchange.clearDirty();
@@ -262,6 +264,7 @@ void BaseContestLog::setDirty()
    locatorMandatoryField.setDirty();
    power.setDirty();
    currentMode.setDirty();
+   modeList.setDirty();
    contestBands.setDirty();
    currentBand.setDirty();
    otherExchange.setDirty();
@@ -1174,6 +1177,12 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "AllowLoc4", allowLoc4 );
       mt->getStructArgMemberValue( "AllowLoc8", allowLoc8 );
       mt->getStructArgMemberValue( "currentMode", currentMode);
+
+      mt->getStructArgMemberValue( "modeList", modeList);
+      if (modeList.getValue().isEmpty())
+      {
+          modeList.setValue( supModeList.join('|'));
+      }
 
       mt->getStructArgMemberValue( "RSTField", RSTMandatoryField);
       mt->getStructArgMemberValue( "serialField", serialMandatoryField);

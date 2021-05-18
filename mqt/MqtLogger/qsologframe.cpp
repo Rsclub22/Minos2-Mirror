@@ -459,6 +459,50 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
     }
 
     updateQSODisplay();
+
+    QString cmode;
+    QStringList sl = contest->modeList.getValue().split('|');
+    if (sl.count() == 0)
+    {
+        sl = supModeList;
+    }
+    ui->ModeComboBoxGJV->clear();
+    ui->ModeButton->setText("");
+
+    for (auto &sm: sl)
+    {
+        ui->ModeComboBoxGJV->addItem(sm);
+        if (sm == contest->currentMode.getValue())
+        {
+            cmode = sm;
+        }
+    }
+
+    if (cmode.isEmpty())
+    {
+        cmode = contest->currentMode.getValue();
+    }
+    // THis is STUPID - set it one way and then check the other!
+    ui->ModeComboBoxGJV->setCurrentText(cmode);
+    for (auto &sm: sl)
+    {
+        if (sm != cmode)
+        {
+            ui->ModeButton->setText(sm);
+            break;
+        }
+    }
+    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
+
+    bool otherVisible = true;
+    QString otherMode = ui->ModeButton->text();
+    if (otherMode.isEmpty() || otherMode == cmode)
+    {
+        otherVisible = false;
+    }
+    ui->ModeButton->setVisible(otherVisible);
+    ui->switchToLabel->setVisible(otherVisible);
+
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
 }
@@ -1925,12 +1969,12 @@ void QSOLogFrame::setRotatorBearing(const QString &s)
     if (len < 2)
     {
         brg = QString("%1%2")
-        .arg("00").arg(sl[0]);
+        .arg("00", sl[0]);
     }
     else if (len < 3)
     {
         brg = QString("%1%2")
-        .arg("0").arg(sl[0]);
+        .arg("0", sl[0]);
     }
     else
     {

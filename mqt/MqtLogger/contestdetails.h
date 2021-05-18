@@ -44,6 +44,7 @@ private:
    QWidget * getNextFocus();
    void setDetails( const IndividualContest &ic );
    void setDetails( );
+   void setModes();
    void refreshOps();
    void enableControls();
    QWidget * getDetails( );

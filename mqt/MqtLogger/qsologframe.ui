@@ -137,7 +137,7 @@ Mode</string>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="switchToLabel">
              <property name="text">
               <string>Switch
 to</string>
@@ -153,7 +153,7 @@ to</string>
               <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
-              <string>A1A</string>
+              <string/>
              </property>
              <property name="autoRaise">
               <bool>false</bool>

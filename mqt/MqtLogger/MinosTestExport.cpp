@@ -115,6 +115,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
    ct->allowLoc4.addIfDirty( st, "AllowLoc4", dirty );
    ct->allowLoc8.addIfDirty( st, "AllowLoc8", dirty );
    ct->currentMode.addIfDirty(st, "currentMode", dirty);
+   ct->modeList.addIfDirty(st, "modeList", dirty);
 
    ct->RSTMandatoryField.addIfDirty(st, "RSTField", dirty);
    ct->serialMandatoryField.addIfDirty(st, "serialField", dirty);

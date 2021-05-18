@@ -78,6 +78,7 @@ private:
 
     MinosStringItem<QString> power;
     MinosStringItem<QString> currentMode;
+    MinosStringItem<QString> modeList;
 
     MinosStringItem<QString> contestBands;
     MinosStringItem<QString> currentBand;

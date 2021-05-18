@@ -46,10 +46,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
-    ui->ModeComboBox->addItem(hamlibData::CW);
-    ui->ModeComboBox->addItem(hamlibData::USB);
-    ui->ModeComboBox->addItem(hamlibData::FM);
-    ui->ModeComboBox->addItem(hamlibData::MGM);
+    setModes();
 
     for ( int i = 0; i < 24; i++ )
     {
@@ -218,6 +215,7 @@ void ContestDetails::setDetails(  )
       ui->BandComboBox->setCurrentText(contestTransferObject->contestBands.getValue());
    }
 
+   setModes();
    if (!contestTransferObject->currentMode.getValue().isEmpty())
    {
        int m = ui->ModeComboBox->findText( contestTransferObject->currentMode.getValue() );
@@ -454,7 +452,6 @@ void ContestDetails::setDetails(  )
    }
    ui->screenLayoutCombo->setCurrentIndex(crow);
 
-
    enableControls();
    focusChange(nullptr, false, nullptr);
 }
@@ -489,7 +486,6 @@ void ContestDetails::refreshOps()
 }
 void ContestDetails::setDetails( const IndividualContest &ic )
 {
-
    setWindowTitle(tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName) );
 
    ui->ContestNameEdit->setText(ic.description);                      // contest
@@ -791,8 +787,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
             ui->BonusComboBox->setCurrentIndex(2);
    }
 
+   contestTransferObject->modeList.setValue(ic.mode);
+   contestTransferObject->currentMode.setValue("");
+   setModes();
 
-   QString mode = ic.mode;
+   QString mode = ic.mode;  // which is a list
    if (mode.isEmpty())
    {
       if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
@@ -808,7 +807,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    }
    else
    {
-      ui->ModeComboBox->setCurrentText(mode);
+      ui->ModeComboBox->setCurrentIndex(0);
    }
    contestTransferObject->currentMode.setValue(mode);
 
@@ -829,6 +828,37 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        break;
    }
 //   setDetails();
+}
+void ContestDetails::setModes()
+{
+    QString modeString;
+    if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
+    {
+        modeString = hamlibData::CW
+                     + "|" + hamlibData::USB
+                    + "|" + hamlibData::LSB
+                    + "|" + hamlibData::FM
+                    + "|" + hamlibData::MGM
+                    ;
+
+    }
+    else
+    {
+        modeString = contestTransferObject->modeList.getValue();
+    }
+
+    modeString = modeString.remove('(');
+    modeString = modeString.remove(')');
+
+    QStringList modeList = modeString.split('|');
+
+    ui->ModeComboBox->clear();
+    ui->ModeComboBox->insertItems(0, modeList);
+
+    if (contestTransferObject)
+    {
+        contestTransferObject->modeList.setValue(modeString);
+    }
 }
 //---------------------------------------------------------------------------
 static QString ssLineEditFrRedBkRed = "QLineEdit { border-style: outset ; border-width: 2px ; border-color: red  }";

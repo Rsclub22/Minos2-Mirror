@@ -867,7 +867,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "currentBand", contest->currentBand );
          if (contest->currentBand.getValue().isEmpty())
          {
-             contest->currentMode = contest->contestBands;
+             contest->currentBand = contest->contestBands;
          }
          mt->getStructArgMemberValue( "claimedScore", contactScore );
          mt->getStructArgMemberValue( "forcedMult", forcedMult );
