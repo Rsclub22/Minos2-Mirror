@@ -43,7 +43,7 @@ bool Frequency::operator!=(const Frequency &rhs) const
 }
 Frequency::Frequency(QString frequency)
 {
-    frequency = frequency.remove('.');
+    frequency.remove('.');
 
     bool ok = false;
     if (frequency.isEmpty())
@@ -202,7 +202,7 @@ bool ShortFreq::operator!=(const ShortFreq &rhs) const
 }
 ShortFreq::ShortFreq(QString frequency)
 {
-    frequency = frequency.remove('.');
+    frequency.remove('.');
     bool ok = false;
     sf = frequency.toLong(&ok);
     if (!ok)

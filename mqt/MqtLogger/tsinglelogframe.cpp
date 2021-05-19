@@ -1070,7 +1070,7 @@ void TSingleLogFrame::PublishTimerTimer(  )
           QString band = contest->contestBands.getValue();
 
           // cell is stanzacount;[band] name;start time;end time
-          name = name.replace(';', ':');
+          name.replace(';', ':');
           QString tstart = contest->DTGStart.getValue();
           QString tend = contest->DTGEnd.getValue();
           QString cell = QString::number( stanzaCount ) + ";[" + band + "] " + name + ";" + tstart + ";" + tend;

@@ -174,7 +174,7 @@ QString convertRitFreqToStr(const ShortFreq &freq, bool ritKHzFlag)
     if (rfreq[0] == '-')
     {
         negNum = true;
-        rfreq = rfreq.remove('-');
+        rfreq.remove('-');
         f = f * -1;
     }
 

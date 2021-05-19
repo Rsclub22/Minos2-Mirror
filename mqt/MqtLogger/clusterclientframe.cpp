@@ -1257,7 +1257,9 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 for (auto &b:bands)
                 {
                     QString band = b.data()->uk;
-                    int dist = config.value(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, DEFAULT_FILTER_DISTANCE).toInt();
+                    DefaultDistanceIniName ddin = defaultDistIniNames.getDefaultDistIniName(band);
+                    QString key = ddin.defaultDistanceName;
+                    int dist = config.value(key, DEFAULT_FILTER_DISTANCE).toInt();
                     filterSettings.setDistanceFilter(band, dist);
                 }
 

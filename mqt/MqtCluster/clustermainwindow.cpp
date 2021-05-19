@@ -2575,7 +2575,7 @@ void ClusterMainWindow::saveBandFilterSettings()
     {
         QString band = b.data()->uk;
         QString iniBandName = band;
-        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        iniBandName.remove(' ').replace('.', '_');
         if (hfFlag)
         {
             config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
@@ -2603,7 +2603,7 @@ void ClusterMainWindow::readBandFilterSettings()
     {
         QString band = b.data()->uk;
         QString iniBandName = band;
-        iniBandName = iniBandName.remove(' ').replace('.', '_');
+        iniBandName.remove(' ').replace('.', '_');
         if (hfFlag)
         {
             filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());

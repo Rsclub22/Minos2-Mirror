@@ -360,7 +360,7 @@ void RadioSettingDialog::saveBandSwData()
     {
         QString bandIni;
         bandIni = b.data()->uk;
-        bandIni = bandIni.remove('\x20').replace('.', '_');
+        bandIni.remove('\x20').replace('.', '_');
         QString storedData = readBandSwitchDataFromIni(bandIni);
         if (bandSwDetails.value(b.data()->uk).bandSwLineEdit->text() != storedData)
         {
@@ -463,7 +463,7 @@ void RadioSettingDialog::loadSettingsToDialog()
     foreach(auto &b, bands)
     {
         QString iniBand = b.data()->uk;
-        iniBand = iniBand.remove('\x20').replace('.', '_');
+        iniBand.remove('\x20').replace('.', '_');
         QString bandData = readBandSwitchDataFromIni(iniBand);
         if (bandSwDetails.contains(b.data()->uk))
         {

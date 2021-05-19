@@ -228,7 +228,7 @@ void AirScoutLink::onReadyRead()
                 trace ("assetPathInProgress = false;");
                 if (args[3].startsWith("\""))
                 {
-                    args[3] = args[3].remove(0, 1);
+                    args[3].remove(0, 1);
                 }
                 if (args[3].endsWith("\""))
                 {

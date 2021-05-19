@@ -31,7 +31,7 @@ void BearingLineEdit::onTextChanged(const QString& brg)
 
     bearingValid = false;
     QString bearingStr = brg;
-    bearingStr = bearingStr.remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
+    bearingStr.remove(DEGREE_SYMBOL, Qt::CaseInsensitive).remove(BEARING_TRUE_CHAR).remove(SHORTLOC_DELIMITER_START).remove(SHORTLOC_DELIMITER_END);
 
     if (!bearingStr.isEmpty())
     {

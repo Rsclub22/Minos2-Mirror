@@ -847,8 +847,8 @@ void ContestDetails::setModes()
         modeString = contestTransferObject->modeList.getValue();
     }
 
-    modeString = modeString.remove('(');
-    modeString = modeString.remove(')');
+    modeString.remove('(');
+    modeString.remove(')');
 
     QStringList modeList = modeString.split('|');
 

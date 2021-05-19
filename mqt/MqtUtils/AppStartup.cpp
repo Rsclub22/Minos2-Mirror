@@ -157,7 +157,7 @@ void setAppLanguage(QString loc)
 {
     if (loc.startsWith("LANG "))
     {
-        loc = loc.remove(0, 5);
+        loc.remove(0, 5);
     }
     switchTranslation(loc);
 }
@@ -293,7 +293,7 @@ void setAppFont(QString fs)
 {
     if (fs.startsWith("Font "))
     {
-        fs = fs.remove(0, 5);
+        fs.remove(0, 5);
     }
     QFont f;
     if (f.fromString(fs))

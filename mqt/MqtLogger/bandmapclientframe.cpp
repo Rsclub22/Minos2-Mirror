@@ -1472,7 +1472,7 @@ void BandmapClientFrame::setMode(QString mode)
         }
         else
         {
-            radioMode = mode.remove(':').trimmed();
+            radioMode = mode.trimmed().remove(':');
         }
 
         bandmapView->setDialRadioMode(radioMode);

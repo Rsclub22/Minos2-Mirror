@@ -496,7 +496,8 @@ public:
         {
 
             QString band = b.data()->uk;
-            QString iniBand = band.remove("\x20").replace(".", "_");
+            QString iniBand = band;
+            iniBand.remove("\x20").replace(".", "_");   // remove/replace modify the QString
             ddin.defaultDistanceName = defTxt.append(iniBand);
             ddin.bandType = b.data()->getType();
             defaultDistanceIniNames.insert(band, ddin);
