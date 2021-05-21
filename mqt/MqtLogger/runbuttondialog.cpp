@@ -30,12 +30,6 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    for (auto const &sm: supModeList)
-    {
-        ui->modecb->addItem(sm);
-    }
-
-
     ui->freqLineEdit->setFocus();
     // validate the input
     connect(ui->freqLineEdit, &QLineEdit::editingFinished, this, &RunButtonDialog::onFreqEditFinish);
@@ -74,8 +68,12 @@ void RunButtonDialog::onFreqEditFinish()
     }
 }
 
-void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber)
+void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, LoggerContestLog *ct)
 {
+    ui->modecb->clear();
+    QStringList ml = ct->modeList.getValue().split('|');
+    ui->modecb->insertItems(0, ml);
+
 
     memoryNumber = buttonNumber;
     logdata = ldata;

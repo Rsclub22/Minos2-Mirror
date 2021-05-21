@@ -394,7 +394,7 @@ bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
     RIG *myRig = rig_init(rigNumber);
     if (myRig)
     {
-        rmode_t mode = convertQStrRmode_t("USB");
+        rmode_t mode = convertQStrRmode_t(hamlibData::USB);
 
         const freq_range_t* freq_range = nullptr;
         qint64 f = freq;
@@ -462,25 +462,6 @@ rmode_t HamlibRigControl::convertQStrRmode_t(QString mode)
 {
     return rig_parse_mode(mode.toLatin1());
 }
-
-/*
-
-// rigControl conversion
-
-int RigControl::rigConvertQStrMode(QString mode)
-{
-    for (int i = 0; i < hamlibData::supModeList.count(); i++)
-    {
-        if (mode == hamlibData::supModeList[i])
-        {
-            return i;
-        }
-    }
-    return -1; //not found
-}
-
-*/
-
 
 MODE HamlibRigControl::mapMode (rmode_t m) const
 {
@@ -555,17 +536,17 @@ rmode_t HamlibRigControl::mapMode (MODE mode) const
 
 rmode_t HamlibRigControl::mapMode(QString mode) const
 {
-    if (mode == "AM") return RIG_MODE_AM;
-    if (mode == "CW") return RIG_MODE_CW;
-    if (mode == "CW_R") return RIG_MODE_CWR;
-    if (mode == "USB") return RIG_MODE_USB;
-    if (mode == "LSB") return RIG_MODE_LSB;
-    if (mode == "FSK") return RIG_MODE_RTTY;
-    if (mode == "FSK_R") return RIG_MODE_RTTYR;
-    if (mode == "DIG_L") return RIG_MODE_PKTLSB;
-    if (mode == "DIG_U") return RIG_MODE_PKTUSB;
-    if (mode == "FM") return RIG_MODE_FM;
-    if (mode == "DIG_FM") return RIG_MODE_PKTFM;
+    if (mode == hamlibData::AM) return RIG_MODE_AM;
+    if (mode == hamlibData::CW) return RIG_MODE_CW;
+    if (mode == hamlibData::CWR) return RIG_MODE_CWR;
+    if (mode == hamlibData::USB) return RIG_MODE_USB;
+    if (mode == hamlibData::LSB) return RIG_MODE_LSB;
+    if (mode == hamlibData::RTTY) return RIG_MODE_RTTY;
+    if (mode == hamlibData::RTTYR) return RIG_MODE_RTTYR;
+    if (mode == hamlibData::PKTLSB) return RIG_MODE_PKTLSB;
+    if (mode == hamlibData::PKTUSB) return RIG_MODE_PKTUSB;
+    if (mode == hamlibData::FM) return RIG_MODE_FM;
+    if (mode == hamlibData::PKTFM) return RIG_MODE_PKTFM;
     else return RIG_MODE_USB;
 
 
@@ -921,73 +902,6 @@ pbwidth_t HamlibRigControl::passbandWide(rmode_t mode)
 {
     return rig_passband_wide(my_rig, mode);
 }
-
-/*
-void RigControl::buildPassBandTable(QString mgmMode)
-{
-
-    passBandWidth[0][0] = passbandNarrow(convertQStrMode("CW"));
-    passBandWidth[0][1] = passbandNormal(convertQStrMode("CW"));
-    passBandWidth[0][2] = passbandWide(convertQStrMode("CW"));
-
-    passBandWidth[1][0] = passbandNarrow(convertQStrMode("USB"));
-    passBandWidth[1][1] = passbandNormal(convertQStrMode("USB"));
-    passBandWidth[1][2] = passbandWide(convertQStrMode("USB"));
-
-    passBandWidth[2][0] = passbandNarrow(convertQStrMode("FM"));
-    passBandWidth[2][1] = passbandNormal(convertQStrMode("FM"));
-    passBandWidth[2][2] = passbandWide(convertQStrMode("FM"));
-
-    passBandWidth[3][0] = passbandNarrow(convertQStrMode(mgmMode));
-    passBandWidth[3][1] = passbandNormal(convertQStrMode(mgmMode));
-    passBandWidth[3][2] = passbandWide(convertQStrMode(mgmMode));
-
-
-}
-
-
-pbwidth_t RigControl::lookUpPassBand(QString mode, int modeState)
-{
-    int m = -1;
-
-    for (int i=0; i < hamlibData::supModeList.count(); i++)
-    {
-        if (mode == hamlibData::supModeList[i])
-        {
-            m = i;
-        }
-    }
-    if (m < 0)
-    {
-        return 0; //error
-    }
-    else
-    {
-
-        return passBandWidth[m][modeState];
-    }
-}
-
-
-void RigControl::setPassBand(QString mode, int modeState)
-{
-    int imode = rigConvertQStrMode(mode);
-    if (imode == -1)
-    {
-        return;
-    }
-    else
-    {
-        pbwidth = passBandWidth[imode][modeState];
-    }
-
-}
-
-pbwidth_t RigControl::getPassBand()
-{
-    return pbwidth;
-}
-*/
 
 /*************** Volume Level Control  ********************************/
 

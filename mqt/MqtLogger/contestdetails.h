@@ -24,6 +24,7 @@ public:
 
 private:
     Ui::ContestDetails *ui;
+    bool allowHF = false;
     QString trAllHf;
     UpperCaseValidator ucValidator;
 

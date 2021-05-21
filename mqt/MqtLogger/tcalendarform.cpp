@@ -110,7 +110,7 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
     {
         col = 0;
         ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.description ) );
-        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.reg1band ) );
+        ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.bands ) );
         ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.start.toString ( "dd/MM/yyyy HH:mm" ) ) );
         ui->CalendarGrid->setItem( row, col++, new QTableWidgetItem( c.finish.toString ( "dd/MM/yyyy HH:mm" ) ) );
 

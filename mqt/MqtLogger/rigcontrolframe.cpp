@@ -248,6 +248,26 @@ void RigControlFrame::setContest(BaseContestLog *c)
 {
     ct = dynamic_cast<LoggerContestLog *>( c);
 
+    /*
+      All        // 160, 80, 40, 20, 15, 10
+      80m-20m    // 80, 40, 20
+      80m-40m    // 80, 40
+
+      1.8 MHz
+      3.6MHz
+      7.0MHz
+      14.0 MHz
+      21.0 MHz
+      28.0 MHz
+    */
+    /*
+    QStringlist icbl;
+    if (ic.reg1band == "All")
+    {
+        icbl = {"1.8 MHz", "3.5 MHz", "7 MHz", "14 MHz", "21 MHz", "28 MHz", trAllHf}
+    }
+    */
+
     if (ct)
     {
         contestBand = ct->contestBands.getValue();
@@ -982,25 +1002,25 @@ void RigControlFrame::noRadioSetMode(QString m)
 
 void RigControlFrame::setFreqStepCombo(QString mode)
 {
-    if (mode == "USB")
+    if (mode == hamlibData::USB)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(USB_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(USB_DEFAULT_STEP);
     }
-    else if (mode == "FM")
+    else if (mode == hamlibData::FM)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(FM_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(FM_DEFAULT_STEP);
     }
-    else if (mode == "CW")
+    else if (mode == hamlibData::CW)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(CW_TUNING_STEPS);
         ui->freqStepCombo->setCurrentIndex(CW_DEFAULT_STEP);
     }
-    else if (mode == "MGM")
+    else if (mode == hamlibData::MGM)
     {
         ui->freqStepCombo->clear();
         ui->freqStepCombo->addItems(MGM_TUNING_STEPS);
@@ -1031,7 +1051,7 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
     }
     else
     {
-        if (curMode == "USB" || curMode == "FM")
+        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
         {
             stepF = sl[0].toDouble() * 1000;
         }
@@ -1052,25 +1072,22 @@ void RigControlFrame::setMode(QString m)
     QStringList mode = m.split(':');
     if (mode.length() == 2 )
     {
-        for (auto const &sm: supModeList)
+        if (ct->modeList.getValue().contains(mode[0]))
         {
-                if (mode[0] == sm)
-                {
-                    ui->modelbl->setText(mode[0]);
-                    curMode = mode[0];
-                    bandSelButtons->setMode(curMode);
-                    if (mode[0] == hamlibData::MGM)
-                    {
-                        mgmLabelVisible(true);
-                        ui->mgmLbl->setText(mode[1]);
-                    }
-                    else
-                    {
-                       mgmLabelVisible(false);
-                    }
-                    setFreqStepCombo(curMode);
-                    return;
-                }
+            ui->modelbl->setText(mode[0]);
+            curMode = mode[0];
+            bandSelButtons->setMode(curMode);
+            if (mode[0] == hamlibData::MGM)
+            {
+                mgmLabelVisible(true);
+                ui->mgmLbl->setText(mode[1]);
+            }
+            else
+            {
+               mgmLabelVisible(false);
+            }
+            setFreqStepCombo(curMode);
+            return;
         }
 
 
@@ -1193,7 +1210,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
                         QString m = curMode;
 
                         traceMsg(QString("setRadioName: SavedCurMode = %1").arg(curMode));
-                        if (m.contains(':') && m.contains("MGM"))
+                        if (m.contains(':') && m.contains(hamlibData::MGM))
                         {
                             QStringList ml = m.split(':');
                             if (ml.count() == 2)
@@ -1857,24 +1874,6 @@ bool RigControlFrame::checkRadioState()
 
     return false;
 }
-
-
-
-int RigControlFrame::calcMinosMode(QString mode)
-{
-    int iMode = -1;
-    for (int i = 0; i < supModeList.count(); i++ )
-    {
-        if (mode == supModeList[i])
-        {
-            iMode = i;
-            return iMode;
-        }
-    }
-    return iMode;
-}
-
-
 
 void RigControlFrame::freqLineEditInFocus()
 {

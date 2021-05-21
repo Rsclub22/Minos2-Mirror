@@ -609,7 +609,7 @@ void BandSelButtons::setContest(QString contestBand_)
 
 QString BandSelButtons::convertModeForPresets(const QString mode)
 {
-    if (mode == "USB" || mode == "LSB" || mode == "FM")
+    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM)
     {
         return "PHONE";
     }

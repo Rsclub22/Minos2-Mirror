@@ -98,7 +98,7 @@ namespace memDefData {
 const QString DEFAULT_CALLSIGN = "";
 //const QString DEFAULT_FREQ = "0000000000";
 const QString DEFAULT_FREQ = "";
-const QString DEFAULT_MODE = "USB";
+const QString DEFAULT_MODE = hamlibData::USB;
 const QString DEFAULT_LOCATOR = "";
 const int DEFAULT_BEARING = 0;
 const QString DEFAULT_TIME = "00:00";

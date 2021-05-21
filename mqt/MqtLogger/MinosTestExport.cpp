@@ -93,6 +93,7 @@ void MinosTestExport::exportContest( QSharedPointer<QFile> expfd )
 
    bool dirty = false;
 
+   ct->hfContest.addIfDirty(st, "hf", dirty);
    ct->appVersion.addIfDirty(st, "version", dirty);
    ct->name.addIfDirty( st, "name", dirty );
    ct->contestBands.addIfDirty( st, "band", dirty );
@@ -477,10 +478,10 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().getIgnoreEmptyDistanceFlag("10 GHz"), "ignoreEmptyDistanceFlag10Ghz");
 
         st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONE");
-        st->addMember(clusterFilter.getValue().getModeFilter("CW"), "modeFilterCW");
-        st->addMember(clusterFilter.getValue().getModeFilter("USB"), "modeFilterUSBMODE");
-        st->addMember(clusterFilter.getValue().getModeFilter("FM"), "modeFilterFMMODE");
-        st->addMember(clusterFilter.getValue().getModeFilter("RTTY"), "modeFilterRTTYMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
+        st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
+        st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
         st->addMember(clusterFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
         st->addMember(clusterFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
         st->addMember(clusterFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
@@ -501,10 +502,10 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         makeHeader( st, 1 );
 
         st->addMember(bandmapFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
-        st->addMember(bandmapFilter.getValue().getModeFilter("CW"), "modeFilterCW");
-        st->addMember(bandmapFilter.getValue().getModeFilter("USB"), "modeFilterUSBMODE");
-        st->addMember(bandmapFilter.getValue().getModeFilter("FM"), "modeFilterFMMODE");
-        st->addMember(bandmapFilter.getValue().getModeFilter("RTTY"), "modeFilterRTTYMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
+        st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");

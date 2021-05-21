@@ -19,7 +19,7 @@
 #ifndef RUNBUTTONDIALOG_H
 #define RUNBUTTONDIALOG_H
 #include "base_pch.h"
-
+#include "LoggerContest.h"
 
 #include "rigmemcommondata.h"
 
@@ -35,7 +35,7 @@ public:
     explicit RunButtonDialog(QWidget *parent = nullptr);
     ~RunButtonDialog();
 
-    void setLogData(memoryData::memData*, int buttonNumber);
+    void setLogData(memoryData::memData*, int buttonNumber, LoggerContestLog *ct);
 
 
 private slots:

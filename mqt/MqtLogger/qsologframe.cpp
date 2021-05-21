@@ -127,17 +127,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->timeEdit->installEventFilter(this);
     ui->dateEdit->installEventFilter(this);
 
-
-    for (auto const &sm: supModeList)
-    {
-        ui->ModeComboBoxGJV->addItem(sm);
-    }
-
-    // THis is STUPID - set it one way and then check the other!
-    ui->ModeComboBoxGJV->setCurrentText(hamlibData::USB);
-    ui->ModeButton->setText(hamlibData::CW);
-    ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
-
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterTabFocusIn, this, &QSOLogFrame::on_AfterTabFocusIn, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ValidateError, this, &QSOLogFrame::on_ValidateError);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ShowOperators, this, &QSOLogFrame::on_ShowOperators);
@@ -460,48 +449,9 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 
     updateQSODisplay();
 
-    QString cmode;
-    QStringList sl = contest->modeList.getValue().split('|');
-    if (sl.count() == 0)
-    {
-        sl = supModeList;
-    }
-    ui->ModeComboBoxGJV->clear();
-    ui->ModeButton->setText("");
 
-    for (auto &sm: sl)
-    {
-        ui->ModeComboBoxGJV->addItem(sm);
-        if (sm == contest->currentMode.getValue())
-        {
-            cmode = sm;
-        }
-    }
-
-    if (cmode.isEmpty())
-    {
-        cmode = contest->currentMode.getValue();
-    }
-    // THis is STUPID - set it one way and then check the other!
-    ui->ModeComboBoxGJV->setCurrentText(cmode);
-    for (auto &sm: sl)
-    {
-        if (sm != cmode)
-        {
-            ui->ModeButton->setText(sm);
-            break;
-        }
-    }
-    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
-
-    bool otherVisible = true;
-    QString otherMode = ui->ModeButton->text();
-    if (otherMode.isEmpty() || otherMode == cmode)
-    {
-        otherVisible = false;
-    }
-    ui->ModeButton->setVisible(otherVisible);
-    ui->switchToLabel->setVisible(otherVisible);
+    setModes();
+    setOtherMode();
 
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
@@ -1885,6 +1835,60 @@ bool QSOLogFrame::checkAndLogEntry()
    return retval;
 }
 //---------------------------------------------------------------------------
+void QSOLogFrame::setModes()
+{
+    QStringList sl = contest->modeList.getValue().split('|');
+
+    QString cmode;
+    ui->ModeComboBoxGJV->clear();
+
+    for (auto &sm: sl)
+    {
+        ui->ModeComboBoxGJV->addItem(sm);
+        if (sm == contest->currentMode.getValue())
+        {
+            cmode = sm;
+        }
+    }
+
+    if (cmode.isEmpty())
+    {
+        cmode = contest->currentMode.getValue();
+    }
+    ui->ModeComboBoxGJV->setCurrentText(cmode);
+
+    ui->MGMSubModeFrame->setVisible(cmode == hamlibData::MGM);
+
+
+}
+void QSOLogFrame::setOtherMode()
+{
+    QStringList sl = contest->modeList.getValue().split('|');
+//    if (sl.count() == 0)
+//    {
+//        sl = supModeList;
+//    }
+
+    QString cmode = ui->ModeComboBoxGJV->currentText();
+    bool otherVisible = true;
+    ui->ModeButton->setText("");
+    for (auto &sm: sl)
+    {
+        if (sm != cmode)
+        {
+            ui->ModeButton->setText(sm);
+            break;
+        }
+    }
+    QString otherMode = ui->ModeButton->text();
+    if (otherMode.isEmpty() || otherMode == cmode)
+    {
+        otherVisible = false;
+    }
+    ui->ModeButton->setVisible(otherVisible);
+    ui->switchToLabel->setVisible(otherVisible);
+
+}
 void QSOLogFrame::setMode(QString m)
 {
 
@@ -2275,20 +2279,14 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    for (auto const &sm: supModeList)
+    if (contest->modeList.getValue().contains(newMode))
     {
-        if (newMode == sm)
+        oldMode = ui->ModeComboBoxGJV->currentText();
+        if (newMode != oldMode)
         {
-            oldMode = ui->ModeComboBoxGJV->currentText();
-            if (newMode == ui->ModeComboBoxGJV->currentText())
-            {
-                return;
-            }
-            {
-                // set index to new mode
-                ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
-                mode = newMode;
-            }
+            // set index to new mode
+            ui->ModeComboBoxGJV->setCurrentIndex(ui->ModeComboBoxGJV->findText( newMode));
+            mode = newMode;
 
             // ensure flip mode is shown on mode button
             if (ui->ModeComboBoxGJV->currentText() == hamlibData::CW || ui->ModeComboBoxGJV->currentText() == hamlibData::MGM)
@@ -2300,8 +2298,6 @@ void QSOLogFrame::modeSentFromRig(QString m)
                ui->ModeButton->setText(hamlibData::CW);
             }
             ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
-            // finished..
-            return;
         }
     }
 }
@@ -2845,16 +2841,17 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     if (ui->ModeComboBoxGJV->currentText() == mode)
         return;
     oldMode = mode;
-    if (index < supModeList.count())
+    QStringList sml = contest->modeList.getValue().split('|');
+    if (index < sml.count())
     {
-        mode = supModeList[index];
+        mode = sml[index];
 
         // send mode change to radio
         if (isRadioLoaded() && radioConnected && !radioError)
         {
 
             qsoLogModeFlag = true;  // stop updates from radio here
-            emit sendModeControl(supModeList[index]);
+            emit sendModeControl(mode);
         }
     }
 

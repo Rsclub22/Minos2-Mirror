@@ -419,6 +419,9 @@ QAction *TLogContainer::newCheckableAction(const QString text, QMenu *m, void (T
 
 void TLogContainer::setupMenus()
 {
+    bool allowHF = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
     FileOpenAction = newAction(QT_TR_NOOP("&Open Contest..."), ui->menuFile, &TLogContainer::FileOpenActionExecute);
     FileImportAction = newAction(QT_TR_NOOP("&Import Contest..."), ui->menuFile, &TLogContainer::FileImportActionExecute);
     recentFilesMenu = newMenu(ui->menuFile, QT_TR_NOOP("Reopen Contest"));
@@ -432,7 +435,15 @@ void TLogContainer::setupMenus()
     }
     updateRecentFileActions();
 
-    FileNewAction = newAction(QT_TR_NOOP("&New Contest..."), ui->menuFile, &TLogContainer::FileNewActionExecute);
+    VHFFileNewAction = newAction(QT_TR_NOOP("&New VHF Contest..."), ui->menuFile, &TLogContainer::VHFFileNewActionExecute);
+    if (allowHF)
+    {
+        HFFileNewAction = newAction(QT_TR_NOOP("&New HF Contest..."), ui->menuFile, &TLogContainer::HFFileNewActionExecute);
+    }
+    else
+    {
+        HFFileNewAction = nullptr;
+    }
     FileCloseAction = newAction(QT_TR_NOOP("Close Contest"), ui->menuFile, &TLogContainer::FileCloseActionExecute);
     CloseAllAction = newAction(QT_TR_NOOP("Close all Contests"), ui->menuFile, &TLogContainer::CloseAllActionExecute);
     CloseAllButAction = newAction(QT_TR_NOOP("Close all but this Contest"), ui->menuFile, &TLogContainer::CloseAllButActionExecute);
@@ -482,7 +493,11 @@ void TLogContainer::setupMenus()
     TabPopup.addAction(FileOpenAction);
     TabPopup.addAction(FileImportAction);
     TabPopup.addMenu(recentFilesMenu);
-    TabPopup.addAction(FileNewAction);
+    TabPopup.addAction(VHFFileNewAction);
+    if (HFFileNewAction)
+    {
+        TabPopup.addAction(HFFileNewAction);
+    }
     TabPopup.addAction(FileCloseAction);
     TabPopup.addAction(CloseAllAction);
     TabPopup.addAction(CloseAllButAction);
@@ -530,7 +545,11 @@ void TLogContainer::enableActions()
    bool f = ( ui->contestPageControl->currentIndex() >= 0 );
 
    LocCalcAction->setEnabled(true);
-   FileNewAction->setEnabled(true);
+   VHFFileNewAction->setEnabled(true);
+   if (HFFileNewAction)
+   {
+        HFFileNewAction->setEnabled(true);
+   }
    HelpAction->setEnabled(true);
    HelpAboutAction->setEnabled(true);
 
@@ -581,7 +600,7 @@ void TLogContainer::openRecentFile()
         {
            setCurrentFile(FileName);
            ContestDetails pced( this );
-           BaseContestLog *ct = addSlot( &pced, FileName, false, -1 );
+           BaseContestLog *ct = addSlot( &pced, FileName, false, -1, false );
            if (ct)
            {
               selectContest(ct, QSharedPointer<BaseContact>());
@@ -740,8 +759,7 @@ void TLogContainer::onSetMemoryActionExecute()
 
     emit MinosLoggerEvents::sendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
-
-void TLogContainer::FileNewActionExecute()
+void TLogContainer::FileNewActionExecute(bool hf)
 {
     QString InitialDir = getDefaultDirectory( false );
 
@@ -772,7 +790,7 @@ void TLogContainer::FileNewActionExecute()
 
     QString initName = creationDir + "/" + nfileName + letter + ".minos";
     ContestDetails pced( this );
-    BaseContestLog * c = addSlot( &pced, initName, true, -1 );
+    BaseContestLog * c = addSlot( &pced, initName, true, -1, hf );
 
     if (!c)
     {
@@ -854,7 +872,7 @@ void TLogContainer::FileNewActionExecute()
           }
 
           // we want to (re)open it WITHOUT using the dialog!
-          addSlot( nullptr, suggestedfName, false, -1 );
+          addSlot( nullptr, suggestedfName, false, -1, false );
           repeatDialog = false;
        }
        else
@@ -868,6 +886,15 @@ void TLogContainer::FileNewActionExecute()
     }
     selectContest(c, QSharedPointer<BaseContact>());
 }
+void TLogContainer::VHFFileNewActionExecute()
+{
+    FileNewActionExecute(false);
+}
+void TLogContainer::HFFileNewActionExecute()
+{
+    FileNewActionExecute(true);
+}
+
 void TLogContainer::FileOpenActionExecute()
 {
     // first choose file
@@ -892,7 +919,7 @@ void TLogContainer::FileOpenActionExecute()
         if ( !fname.isEmpty() )
         {
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1 );   // not automatically read only
+            ct = addSlot( &pced, fname, false, -1, false );   // not automatically read only
             if (ct)
             {
                 selectContest(ct, QSharedPointer<BaseContact>());
@@ -929,7 +956,7 @@ void TLogContainer::FileImportActionExecute()
         if ( !fname.isEmpty() )
         {
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1 );   // not automatically read only
+            ct = addSlot( &pced, fname, false, -1, false );   // not automatically read only
             if (ct)
             {
                 selectContest(ct, QSharedPointer<BaseContact>());
@@ -1265,7 +1292,11 @@ void TLogContainer::setMenuLog(int current)
 
     ui->menuLogs->addAction(FileOpenAction);
     ui->menuLogs->addMenu(recentFilesMenu);
-    ui->menuLogs->addAction(FileNewAction);
+    ui->menuLogs->addAction(VHFFileNewAction);
+    if (HFFileNewAction)
+    {
+        ui->menuLogs->addAction(HFFileNewAction);
+    }
     ui->menuLogs->addAction(FileCloseAction);
     ui->menuLogs->addAction(CloseAllAction);
     ui->menuLogs->addAction(CloseAllButAction);
@@ -1365,7 +1396,7 @@ void TLogContainer::selectTab(int curTab)
     }
 
 }
-BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno )
+BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno, bool hf )
 {
     QString m;
 
@@ -1381,7 +1412,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
    // openFile ends up calling ContestLog::initialise which then
    // calls TContestApp::insertContest
 
-   LoggerContestLog * contest = TContestApp::getContestApp() ->openFile( fname, newfile, slotno );
+   LoggerContestLog * contest = TContestApp::getContestApp() ->openFile( fname, newfile, slotno, hf );
 
    if ( contest )
    {
@@ -1440,7 +1471,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
             if ( expName.size() )
             {
                closeSlot(tno, true );
-               addSlot( nullptr, expName, false, -1 );
+               addSlot( nullptr, expName, false, -1, false );
             }
          }
          else
@@ -1771,7 +1802,7 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
             int slotno = slot.toInt(&ok);
             if ( ok )
             {
-                addSlot( nullptr, pathlst[ i ], false, slotno );
+                addSlot( nullptr, pathlst[ i ], false, slotno, false );
                 // spin the event loop...
                 qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
@@ -1800,7 +1831,11 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
 
     ui->menuLogs->addAction(FileOpenAction);
     ui->menuLogs->addMenu(recentFilesMenu);
-    ui->menuLogs->addAction(FileNewAction);
+    ui->menuLogs->addAction(VHFFileNewAction);
+    if (HFFileNewAction)
+    {
+        ui->menuLogs->addAction(HFFileNewAction);
+    }
     ui->menuLogs->addAction(FileCloseAction);
     ui->menuLogs->addAction(CloseAllAction);
     ui->menuLogs->addAction(CloseAllButAction);
@@ -1866,7 +1901,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
         if (!TContestApp::getContestApp()->isContestOpen(conarg))
         {
             // open the "argument" one last - which will make it current
-            ct = addSlot( nullptr, conarg, false, -1 );
+            ct = addSlot( nullptr, conarg, false, -1, false );
             app ->writeContestList();	// or this one will not get included
         }
     }

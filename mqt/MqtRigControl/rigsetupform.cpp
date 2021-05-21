@@ -1233,6 +1233,7 @@ void RigSetupForm::fillMgmModes()
     config.beginGroup("MGM_Modes");
 
 
+    // this config is only ever preset at install time
     QStringList mgmModes = config.value("MgmModes", "").toStringList();
 
     config.endGroup();

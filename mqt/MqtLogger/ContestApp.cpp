@@ -13,7 +13,6 @@
 #include "MatchThread.h"
 
 //---------------------------------------------------------------------------
-
 #define INITIAL_CONTEST_SLOTS 2
 #define INITIAL_LIST_SLOTS 10
 
@@ -536,11 +535,11 @@ QVector<BaseContestLog *> TContestApp::getContestList()
    }
    return logList;
 }
-LoggerContestLog * TContestApp::openFile( const QString &fn, bool newFile, int slotno )
+LoggerContestLog * TContestApp::openFile( const QString &fn, bool newFile, int slotno, bool hf )
 {
-   LoggerContestLog * contest = new LoggerContestLog();
+   LoggerContestLog * contest = new LoggerContestLog(hf);
 
-   trace(QString("contest uuid for %1 is %2").arg(fn).arg(contest->uuid));
+   trace(QString("contest uuid for %1 is %2").arg(fn, contest->uuid));
 
 
    if ( !contest->initialise( fn, newFile, slotno ) )    // this adds it to the slot

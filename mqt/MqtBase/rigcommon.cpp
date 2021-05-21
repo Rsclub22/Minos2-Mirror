@@ -9,6 +9,44 @@ rigcommon::rigcommon()
 {
 
 }
+MODE rigcommon::convertQStringToMode(QString modeStr)
+{
+    if (modeStr == hamlibData::AM) return AM;
+    if (modeStr == hamlibData::CW) return CW;
+    if (modeStr == hamlibData::CWR) return CW_R;
+    if (modeStr == hamlibData::USB) return USB;
+    if (modeStr == hamlibData::LSB) return LSB;
+    if (modeStr == hamlibData::RTTY) return FSK;
+    if (modeStr == hamlibData::RTTYR) return FSK_R;
+    if (modeStr == hamlibData::PKTLSB) return DIG_L;
+    if (modeStr == hamlibData::PKTUSB) return DIG_U;
+    if (modeStr == hamlibData::FM) return FM;
+    if (modeStr == hamlibData::PKTFM) return DIG_FM;
+
+    return USB; // default
+
+
+}
+QString rigcommon::convertModeToQString(MODE mode)
+{
+    switch (mode)
+    {
+    case AM: return hamlibData::AM;
+    case CW: return hamlibData::CW;
+    case CW_R: return hamlibData::CWR;
+    case USB: return hamlibData::USB;
+    case LSB: return hamlibData::LSB;
+    case FSK: return hamlibData::RTTY;
+    case FSK_R: return hamlibData::RTTYR;
+    case DIG_L: return hamlibData::PKTLSB;
+    case DIG_U: return hamlibData::PKTUSB;
+    case FM: return hamlibData::FM;
+    case DIG_FM: return hamlibData::PKTFM;
+    default: break;
+    }
+    return hamlibData::USB;
+
+}
 
 
 QString vfoToStr(VFO curVfo)

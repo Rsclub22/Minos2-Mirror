@@ -94,6 +94,7 @@ class BaseContestLog: public BaseLogList
 
       //BaseContestLog(const BaseContestLog &);   // I hope a copy constructor
       BaseContestLog();
+      BaseContestLog(bool hf);
       virtual ~BaseContestLog();
 
       int getCtStanzaCount()
@@ -117,6 +118,7 @@ class BaseContestLog: public BaseLogList
           return protectedContest;
       }
       MinosStringItem<QString> appVersion;
+      MinosItem<bool> hfContest;
 
       MinosStringItem<QString> name;         // name of contest
       MinosStringItem<QString> location;
@@ -206,6 +208,15 @@ class BaseContestLog: public BaseLogList
       {
          return unwriteable;
       }
+      void setHF(bool s)
+      {
+          hfContest.setValue(s);
+      }
+      bool isHF()
+      {
+        return hfContest.getValue();
+      }
+
       unsigned long getNextBlock()
       {
           return nextBlock;

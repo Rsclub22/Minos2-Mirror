@@ -174,7 +174,7 @@ protected:
 
       // startup/closedown
 
-      LoggerContestLog( );
+      LoggerContestLog( bool hf);
       void initialiseINI();
       bool initialise( int slotno );
       bool initialise(const QString &, bool, int slotno );

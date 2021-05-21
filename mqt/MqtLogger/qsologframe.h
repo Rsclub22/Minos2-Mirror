@@ -235,6 +235,8 @@ private:
     QString curRadioName;
     QString curRotatorBearing;
 
+    void setModes();
+    void setOtherMode();
     void setMode(QString m);
 
     QString ssQsoFrameBlue = " #qsoFrame { border: 2px solid blue; }";

@@ -111,7 +111,7 @@ void KstCallGridModel::checkDistBear(QSharedPointer<KstUser> crec) const
         double longitude = 0.0;
         double latitude = 0.0;
 
-        BaseContestLog cnt;
+        BaseContestLog cnt(false);
         cnt.myloc.setLoc( locator );
         cnt.validateLoc();
 

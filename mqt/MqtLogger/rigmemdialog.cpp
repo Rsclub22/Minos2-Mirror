@@ -35,11 +35,6 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
 
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    for (auto const &sm: supModeList)
-    {
-        ui->modecb->addItem(sm);
-    }
-
     ui->callSignLineEdit->setValidator(&ucValidator);
     ui->locatorLineEdit->setValidator(&ucValidator);
 
@@ -83,6 +78,10 @@ void RigMemDialog::onFreqEditFinish()
 
 void RigMemDialog::setLogData(memoryData::memData* ldata, int buttonNumber, LoggerContestLog *ct)
 {
+    ui->modecb->clear();
+    QStringList ml = ct->modeList.getValue().split('|');
+    ui->modecb->insertItems(0, ml);
+
     memoryNumber = buttonNumber;
     logData = ldata;
     ui->modecb->setCurrentText(ldata->mode);

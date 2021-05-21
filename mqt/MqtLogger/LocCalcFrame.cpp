@@ -56,7 +56,7 @@ void LocCalcFrame::on_CalcButton_clicked()
     double longitude = 0.0;
     double latitude = 0.0;
 
-    BaseContestLog cnt;
+    BaseContestLog cnt(false);
     cnt.myloc.setLoc( ui->S1Loc->text());
     cnt.validateLoc();
 

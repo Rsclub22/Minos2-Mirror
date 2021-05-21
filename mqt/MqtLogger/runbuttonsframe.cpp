@@ -341,7 +341,7 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
 
     RunButtonDialog runDialog(this);
     runDialog.setWindowTitle(tr("Run %1 - New").arg(QString::number(buttonNumber + 1)));
-    runDialog.setLogData(&runData, buttonNumber);
+    runDialog.setLogData(&runData, buttonNumber, ct);
     if (runDialog.exec() == QDialog::Accepted)
     {
         setRunMemoryData(buttonNumber, runData);
@@ -359,7 +359,7 @@ void RunButtonsFrame::runButEditActSel(int buttonNumber)
     trace(QString("Run Button Edit Selected = %1").arg(QString::number(buttonNumber + 1)));
     RunButtonDialog runDialog(this);
     runDialog.setWindowTitle(tr("Run %1 - Edit").arg(QString::number(buttonNumber + 1)));
-    runDialog.setLogData(&runData, buttonNumber);
+    runDialog.setLogData(&runData, buttonNumber, ct);
 
     if (runDialog.exec() == QDialog::Accepted)
     {

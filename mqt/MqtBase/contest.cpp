@@ -30,13 +30,15 @@ void BaseContestLog::addDistrictWorked(QString band, const QString &cd)
     districtWorked[band][ cd ]++;
 }
 
-BaseContestLog::BaseContestLog( )
+BaseContestLog::BaseContestLog(bool hf)
 {
+    hfContest.setValue(hf);
+
     static int inst = 0;
     QString h = QHostInfo::localHostName();
    uuid = /*makeUuid()*/ h + "_" + QString::number(inst++);
    bearingOffset.setValue(0);
-   currentMode.setValue( "USB" );
+   currentMode.setValue( hamlibData::USB );
 
   protectedContest.setValue( false );
   allowLoc8.setValue( false );
@@ -223,6 +225,7 @@ void BaseContestLog::clearDirty()
    modeList.clearDirty();
    contestBands.clearDirty();
    currentBand.clearDirty();
+   hfContest.clearDirty();
    otherExchange.clearDirty();
    otherOptionalExchange.clearDirty();
    countryMult.clearDirty();
@@ -267,6 +270,7 @@ void BaseContestLog::setDirty()
    modeList.setDirty();
    contestBands.setDirty();
    currentBand.setDirty();
+   hfContest.setDirty();
    otherExchange.setDirty();
    otherOptionalExchange.setDirty();
    countryMult.setDirty();
@@ -1160,6 +1164,8 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       if (currentBand.getValue().isEmpty())
           currentBand = contestBands;
 
+      mt->getStructArgMemberValue( "hf", hfContest);
+
       bool btemp;
       if ( mt->getStructArgMemberValue( "scoreKms", btemp ) )
          scoreMode.setInitialValue( btemp ? PPKM : PPQSO );
@@ -1181,7 +1187,13 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "modeList", modeList);
       if (modeList.getValue().isEmpty())
       {
-          modeList.setValue( supModeList.join('|'));
+          QString modeString = hamlibData::CW
+                       + "|" + (isHF()?"PH":hamlibData::USB)
+                      + "|" + hamlibData::FM
+                      + "|" + hamlibData::MGM
+                      ;
+
+          modeList.setValue( modeString);
       }
 
       mt->getStructArgMemberValue( "RSTField", RSTMandatoryField);

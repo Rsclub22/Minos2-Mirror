@@ -24,7 +24,7 @@
 
 #include "LoggerContest.h"
 
-LoggerContestLog::LoggerContestLog( ) : BaseContestLog(),
+LoggerContestLog::LoggerContestLog(bool hf) : BaseContestLog(hf),
       minosFile( false ),
       GJVFile( false ),
       logFile( false ), adifFile( false ), ediFile( false ),
@@ -355,6 +355,14 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                      loadOK = importReg1Test( ediContestFile );
                      needExport = true;
                   }
+      bool allowHF = false;
+      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+      if (!allowHF && isHF())
+      {
+           MinosParameters::getMinosParameters() -> mshowMessage(tr("Contest %1 is an HF contest - HF not enabled").arg(cfileName))  ;
+           return false;
+      }
+
       scanContest();
       clearDirty();  // what we have just read CAN'T be dirty
       validateLoc();
@@ -1760,16 +1768,16 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
 
 
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
-                                       ccfs.setModeFilter("CW", filterFlag);
+                                       ccfs.setModeFilter(hamlibData::CW, filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterUSBMODE", filterFlag);
-                                       ccfs.setModeFilter("USB", filterFlag);
+                                       ccfs.setModeFilter(hamlibData::USB, filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterFMMODE", filterFlag);
-                                       ccfs.setModeFilter("FM", filterFlag);
+                                       ccfs.setModeFilter(hamlibData::FM, filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterRTTYMODE", filterFlag);
-                                       ccfs.setModeFilter("RTTY", filterFlag);
+                                       ccfs.setModeFilter(hamlibData::RTTY, filterFlag);
 
                                        mt->getStructArgMemberValue("modeFilterPSK31MODE", filterFlag);
                                        ccfs.setModeFilter("PSK31", filterFlag);

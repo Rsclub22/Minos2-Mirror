@@ -2,7 +2,7 @@
 #include "DisplayContestContact.h"
 //=============================================================================================
 
-MonitoredContestLog::MonitoredContestLog() : BaseContestLog()
+MonitoredContestLog::MonitoredContestLog() : BaseContestLog(false)
 {
 }
 MonitoredContestLog::~MonitoredContestLog()

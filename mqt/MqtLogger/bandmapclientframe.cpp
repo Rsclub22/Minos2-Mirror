@@ -625,7 +625,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
             readDefaultDistanceFilterSettings(&filterSettings);
 
             //set current mode
-            if (contestModeStr == "MGM")       //  have mode settings been saved before?
+            if (contestModeStr == hamlibData::MGM)       //  have mode settings been saved before?
             {
                 for (auto &m: mgmModes)
                 {
@@ -1462,7 +1462,7 @@ void BandmapClientFrame::setMode(QString mode)
 {
     if (!mode.isEmpty())
     {
-        if (mode.contains(':') && mode.contains("MGM"))
+        if (mode.contains(':') && mode.contains(hamlibData::MGM))
         {
             QStringList ml = mode.split(':');
             if (ml.count() == 2)
@@ -1854,7 +1854,7 @@ QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
             traceMsg(QString("bandmapLimit band = %1, mode = %2").arg(band, mode));
             if (mode.isEmpty())
             {
-                mode = "USB";
+                mode = hamlibData::USB;
             }
             settings.beginGroup(band);
             limitFreqs = settings.value(mode, "").toString();

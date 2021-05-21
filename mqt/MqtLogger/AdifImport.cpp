@@ -134,17 +134,21 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           strcpysp( temp, FieldContent, FieldLength );
 
           temp = temp.toUpper();
-          if (temp == "CW")
+          if (temp == hamlibData::CW)
           {
-              aqso->mode.setValue(hamlibData::CW);
+              aqso->mode.setValue(temp);
           }
-          else if (temp == "USB")
+          else if (temp == hamlibData::USB)
           {
-              aqso->mode.setValue(hamlibData::USB);
+              aqso->mode.setValue(temp);
           }
-          else if (temp == "FM")
+          else if (temp == hamlibData::LSB)
           {
-              aqso->mode.setValue(hamlibData::FM);
+              aqso->mode.setValue(temp);
+          }
+          else if (temp == hamlibData::FM)
+          {
+              aqso->mode.setValue(temp);
           }
           else
           {
@@ -204,7 +208,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
 
     bool qsoOK = true;
 
-    LoggerContestLog test;
+    LoggerContestLog test(c->isHF());
     test.contestBands = c->contestBands;
     test.currentBand = c->currentBand;
     test.DTGStart = c->DTGStart;

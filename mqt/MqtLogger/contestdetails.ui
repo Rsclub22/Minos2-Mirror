@@ -220,7 +220,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame1">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -243,7 +243,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame2">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -275,7 +275,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame3">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -307,7 +307,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame4">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -334,7 +334,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame5">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -357,7 +357,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame6">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -380,7 +380,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame7">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>
@@ -403,7 +403,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QFrame" name="frame">
+          <widget class="QFrame" name="frame8">
            <property name="frameShape">
             <enum>QFrame::Box</enum>
            </property>

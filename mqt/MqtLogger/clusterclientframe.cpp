@@ -1231,7 +1231,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 filterSettings.setBandFilter(contestBandStr, true);    // set cluster filter to current band - can be overidden
 
 
-                if (contestModeStr == "MGM")       //  have mode settings been saved before?
+                if (contestModeStr == hamlibData::MGM)       //  have mode settings been saved before?
                 {
 
                     for (auto &m:mgmModes)

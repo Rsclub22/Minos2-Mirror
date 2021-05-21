@@ -114,7 +114,7 @@ private:
     void updateRecentFileActions();
     QString strippedName(const QString &fullFileName);
 
-    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno );
+    BaseContestLog * addSlot(ContestDetails *ced, const QString &fname, bool newfile, int slotno , bool hf);
     void closeSlot(int t, bool addToMRU );
     TSingleLogFrame *findLogFrame(int t);
 
@@ -148,7 +148,8 @@ private:
     QAction *ExitClearAction;
     QAction *MakeEntryAction;
     QAction *AppendAdifAction;
-    QAction *FileNewAction;
+    QAction *VHFFileNewAction;
+    QAction *HFFileNewAction;
     QAction *ListOpenAction;
     QAction *ManageListsAction;
     QAction *ShiftTabLeftAction;
@@ -187,8 +188,6 @@ private:
 
     void updateLayoutsMenu();
 
-
-
 private slots:
     void CancelClick();
     void HelpActionExecute();
@@ -212,7 +211,9 @@ private slots:
     void MakeEntryActionExecute();
     void AppendAdifActionExecute();
     void onSetMemoryActionExecute();
-    void FileNewActionExecute();
+    void FileNewActionExecute(bool hf);
+    void VHFFileNewActionExecute();
+    void HFFileNewActionExecute();
     void ShiftTabLeftActionExecute();
     void ShiftTabRightActionExecute();
 

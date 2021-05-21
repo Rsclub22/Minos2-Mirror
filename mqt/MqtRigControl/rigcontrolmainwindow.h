@@ -363,8 +363,6 @@ private:
     void setRitFreq(VFO vfo, const ShortFreq &ritFreq);
     void cmdLockOn();
     void cmdLockOff();
-    int getMinosModeIndex(QString mode);
-
 
     void setTransVertDisplayVisible(bool visible);
     void writeWindowTitle(QString appName);
@@ -456,14 +454,7 @@ private:
 
     void getRigCtldConnectDelay();
 
-
-
-    MODE mapQStrMode(QString mode);
     void updateCurrentRadioFromAvailRadios(QString radioName);
-    MODE convertQStringToMode(QString modeStr);
-    QString convertModeToQString(MODE m);
-
-
 
     void setSmeterVisible(bool visible);
 

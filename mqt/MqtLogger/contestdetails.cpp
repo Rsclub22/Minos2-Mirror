@@ -28,6 +28,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->setupUi(this);
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
     trAllHf = tr("All HF");
 
     QSettings settings;
@@ -46,7 +48,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->BonusComboBox->addItem(tr("UKAC Bonuses (B4)"));
     ui->BonusComboBox->addItem(tr("NAC Bonuses"));
 
-    setModes();
+    //setModes();
 
     for ( int i = 0; i < 24; i++ )
     {
@@ -94,6 +96,7 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->NonGCtryMult->setVisible(false);
     ui->GLocMult->setVisible(false);
     ui->M7LocatorMults->setVisible(false);
+
 }
 void ContestDetails::doCloseEvent()
 {
@@ -174,17 +177,18 @@ void ContestDetails::setDetails(  )
    ui->BandComboBox->clear();
    // need to get legal bands from ContestLog
 
-   bool allowHF = false;
-   TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
    BandList &blist = BandList::getBandList();
-   if (allowHF)
+   if (allowHF && contestTransferObject->isHF())
    {
        ui->BandComboBox->addItem( trAllHf );
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if (allowHF || b->getType() != "HF")
+       if ( (allowHF && contestTransferObject->isHF()) && b->getType() == "HF")
+       {
+           ui->BandComboBox->addItem( b->uk );
+       }
+       if ( !contestTransferObject->isHF() && b->getType() != "HF")
        {
            ui->BandComboBox->addItem( b->uk );
        }
@@ -491,8 +495,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->ContestNameEdit->setText(ic.description);                      // contest
    contestTransferObject->VHFContestName.setValue(ic.description);
 
+
    // need to get legal bands from ContestLog
    ui->BandComboBox->clear();
+
 
    BandList &blist = BandList::getBandList();
    QSharedPointer<BandInfo>  bi;
@@ -501,9 +507,16 @@ void ContestDetails::setDetails( const IndividualContest &ic )
     {
         ui->BandComboBox->addItem( bi->uk );
     }
-   else
+    else
     {
-        ui->BandComboBox->addItem( ic.reg1band );
+        if (contestTransferObject->isHF())
+        {
+            ui->BandComboBox->addItem( trAllHf );
+        }
+        else
+        {
+            ui->BandComboBox->addItem( ic.reg1band );
+        }
     }
     ui->BandComboBox->setCurrentIndex(0);
 
@@ -725,7 +738,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       contestTransferObject->UKloc_multiplier = 0;
       contestTransferObject->NonUKloc_multiplier = 0;
    }
-   if (ic.specialRules.indexOf("MGM") >= 0)
+   if (ic.specialRules.indexOf("MGM") >= 0) // not a synonym for MGM mode!
    {
        //contest->locMult.setValue( true );
        contestTransferObject->MGMContestRules.setValue(true);
@@ -835,8 +848,7 @@ void ContestDetails::setModes()
     if (!contestTransferObject || contestTransferObject->modeList.getValue().isEmpty())
     {
         modeString = hamlibData::CW
-                     + "|" + hamlibData::USB
-                    + "|" + hamlibData::LSB
+                     + "|" + (contestTransferObject->isHF()?"PH":hamlibData::USB)
                     + "|" + hamlibData::FM
                     + "|" + hamlibData::MGM
                     ;
@@ -1233,7 +1245,9 @@ void ContestDetails::enableControls()
    ui->StartTimeCombo->setEnabled(!protectedChecked);
    ui->EndTimeCombo->setEnabled(!protectedChecked);
    ui->ExchangeComboBox->setEnabled(!protectedChecked);
+   ui->HFCalendarButton->setEnabled(!protectedChecked);
    ui->VHFCalendarButton->setEnabled(!protectedChecked);
+   ui->uwaveCalendarButton->setEnabled(!protectedChecked);
    ui->ContestNameSelected->setEnabled(!protectedChecked);
    ui->LocatorGroupBox->setEnabled(!protectedChecked);
    ui->AllowLoc8CB->setEnabled(!protectedChecked);
@@ -1252,21 +1266,9 @@ void ContestDetails::enableControls()
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
-   bool allowHF = false;
-   TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
-    ui->HFCalendarButton->setVisible(allowHF);
-
-//   if (!protectedChecked)
-//   {
-//       bool mgm = ui->MGMCheckBox->isChecked();
-//       ui->ScoreGroupBox->setEnabled(!mgm);
-//       ui->BonusComboBox->setEnabled(!mgm);
-//       ui->LocatorGroupBox->setEnabled(!mgm);
-//       ui->FieldsGroupBox->setEnabled(!mgm);
-//       ui->MultGroupBox->setEnabled(!mgm);
-//       ui->ModeComboBox->setEnabled(!mgm);
-//   }
+   ui->HFCalendarButton->setVisible(allowHF && contestTransferObject->isHF());
+   ui->VHFCalendarButton->setVisible(!contestTransferObject->isHF());
+   ui->uwaveCalendarButton->setVisible(!contestTransferObject->isHF());
 }
 //---------------------------------------------------------------------------
 

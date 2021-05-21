@@ -53,6 +53,14 @@ public:
     {
        suppressProtected = s;
     }
+    void setHF(bool s)
+    {
+        hfContest.setValue(s);
+    }
+    bool isHF()
+    {
+        return hfContest.getValue();
+    }
     void initialiseINI();
     void setINIDetails();
 private:
@@ -82,6 +90,7 @@ private:
 
     MinosStringItem<QString> contestBands;
     MinosStringItem<QString> currentBand;
+    MinosItem<bool> hfContest;
     MinosItem<bool> otherExchange;
     MinosItem<bool> otherOptionalExchange;
     MinosItem<bool> countryMult;

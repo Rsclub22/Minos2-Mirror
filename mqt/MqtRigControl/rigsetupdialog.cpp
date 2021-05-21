@@ -1215,24 +1215,3 @@ void RigSetupDialog::setAppName(QString name)
 
 
 
-void RigSetupDialog::saveMgmList()
-{
-    const QStringList  mList = {"USB", "LSB", "RTTY", "PKTLSB", "PKTUSB", "PKTFM" };
-
-    QString fileName;
-    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("MGM_Modes");
-
-    config.setValue("MgmModes", mList);
-
-    config.endGroup();
-
-
-}
-
-
-
-
-
-

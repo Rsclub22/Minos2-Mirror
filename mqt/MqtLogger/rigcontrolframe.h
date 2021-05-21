@@ -276,8 +276,6 @@ private:
 
     Frequency calcNewFreq(Frequency incFreq);
 
-    int calcMinosMode(QString mode);
-
     void freqPlusMinusButton(Frequency freq);
 
 

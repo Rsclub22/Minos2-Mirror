@@ -104,39 +104,19 @@ OmniRig::RigParamX OmnirigControl::map_mode (MODE mode)
   return OmniRig::PM_SSB_U;
 }
 
-QString OmnirigControl::convertModeToQString(MODE mode)
-{
-    switch (mode)
-      {
-      case AM: return "AM";
-      case CW: return "CW";
-      case CW_R: return "CW_R";
-      case USB: return "USB";
-      case LSB: return "LSB";
-      case FSK: return "FSK";
-      case FSK_R: return "FSK_R";
-      case DIG_L: return "DIG_L";
-      case DIG_U: return "DIG_U";
-      case FM: return "FM";
-      case DIG_FM: return "DIG_FM";
-      default: break;
-      }
-    return "USB";
-}
-
 OmniRig::RigParamX OmnirigControl::map_mode(QString mode)
 {
-    if (mode == "AM") return OmniRig::PM_AM;
-    if (mode == "CW") return OmniRig::PM_CW_L;
-    if (mode == "CW_R") return OmniRig::PM_CW_U;
-    if (mode == "USB") return OmniRig::PM_SSB_U;
-    if (mode == "LSB") return OmniRig::PM_SSB_L;
-    if (mode == "FSK") return OmniRig::PM_DIG_L;
-    if (mode == "FSK_R") return OmniRig::PM_DIG_U;
-    if (mode == "DIG_L") return OmniRig::PM_DIG_L;
-    if (mode == "DIG_U") return OmniRig::PM_DIG_U;
-    if (mode == "FM") return OmniRig::PM_FM;
-    if (mode == "DIG_FM") return OmniRig::PM_FM;
+    if (mode == hamlibData::AM) return OmniRig::PM_AM;
+    if (mode == hamlibData::CW) return OmniRig::PM_CW_L;
+    if (mode == hamlibData::CWR) return OmniRig::PM_CW_U;
+    if (mode == hamlibData::USB) return OmniRig::PM_SSB_U;
+    if (mode == hamlibData::LSB) return OmniRig::PM_SSB_L;
+    if (mode == hamlibData::RTTY) return OmniRig::PM_DIG_L;
+    if (mode == hamlibData::RTTYR) return OmniRig::PM_DIG_U;
+    if (mode == hamlibData::PKTLSB) return OmniRig::PM_DIG_L;
+    if (mode == hamlibData::PKTUSB) return OmniRig::PM_DIG_U;
+    if (mode == hamlibData::FM) return OmniRig::PM_FM;
+    if (mode == hamlibData::PKTFM) return OmniRig::PM_FM;
     else return OmniRig::PM_SSB_U;
 }
 
@@ -909,7 +889,7 @@ int OmnirigControl::getMode(VFO vfo, MODE &mode)
     }
 
     mode = map_mode(rig->Mode());
-    traceMsg(QString("GetMode = %1").arg(convertModeToQString(mode)));
+    traceMsg(QString("GetMode = %1").arg(rigcommon::convertModeToQString(mode)));
 
     return omnirigError(OMNIRIG_OK);
 
@@ -930,7 +910,7 @@ int OmnirigControl::setMode(VFO vfo, MODE mode)
         return omnirigError(OMNIRIG_OFFLINE);
 
     }
-        traceMsg(QString("SetMode = %1").arg(convertModeToQString(mode)));
+        traceMsg(QString("SetMode = %1").arg(rigcommon::convertModeToQString(mode)));
         OmniRig::RigParamX m = map_mode(mode);
         rig->SetMode(m);
 

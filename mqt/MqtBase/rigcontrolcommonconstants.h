@@ -59,20 +59,6 @@ namespace hamlibData
     const QString MGM = "MGM";           // MGM generically
 
 
-
-
-    const QStringList  modeList = {AM, CW, USB, LSB, RTTY, FM, WFM, CWR, RTTYR, AMS,
-                              PKTLSB, PKTUSB, PKTFM, ECSSUSB, ECSSLSB, FAX, SAM,
-                              SAL, SAH, DSB, FMN };
-
-
-    const QStringList supModeList = { CW, USB, FM, MGM};
-
-    //enum pBandState {NAR, NOR, WIDE};
-
-    //const QStringList pBandStateStr = {"NAR", "NOR", "WIDE"};
-
-
     const QStringList portTypeList = { "RIG_PORT_NONE", "RIG_PORT_SERIAL", "RIG_PORT_NETWORK", "RIG_PORT_DEVICE",
                                     "RIG_PORT_PACKET", "RIG_PORT_DTMF", "RIG_PORT_ULTRA", "RIG_PORT_RPC",
                                     "RIG_PORT_PARALLEL", "RIG_PORT_USB", "RIG_PORT_UDP_NETWORK", "RIG_PORT_CM108"};
