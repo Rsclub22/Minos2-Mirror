@@ -1759,6 +1759,13 @@ void TSingleLogFrame::checkConnections()
 
 void TSingleLogFrame::on_SetMode(QString m)
 {
+    if (contest->isHF())
+    {
+        if (m == hamlibData::USB + ":" || m == hamlibData::LSB + ":")
+        {
+            m = "PH:";
+        }
+    }
     if (sCurMode != m)
     {
         if ( this == LogContainer->getCurrentLogFrame() )

@@ -1837,7 +1837,8 @@ bool QSOLogFrame::checkAndLogEntry()
 //---------------------------------------------------------------------------
 void QSOLogFrame::setModes()
 {
-    QStringList sl = contest->modeList.getValue().split('|');
+    QString mlist = contest->modeList.getValue();
+    QStringList sl = mlist.split('|');
 
     QString cmode;
     ui->ModeComboBoxGJV->clear();
@@ -1863,11 +1864,8 @@ void QSOLogFrame::setModes()
 }
 void QSOLogFrame::setOtherMode()
 {
-    QStringList sl = contest->modeList.getValue().split('|');
-//    if (sl.count() == 0)
-//    {
-//        sl = supModeList;
-//    }
+    QString mlist = contest->modeList.getValue();
+    QStringList sl = mlist.split('|');
 
     QString cmode = ui->ModeComboBoxGJV->currentText();
     bool otherVisible = true;
@@ -2841,7 +2839,8 @@ void QSOLogFrame::on_ModeComboBoxGJV_activated(int index)
     if (ui->ModeComboBoxGJV->currentText() == mode)
         return;
     oldMode = mode;
-    QStringList sml = contest->modeList.getValue().split('|');
+    QString mlist = contest->modeList.getValue();
+    QStringList sml = mlist.split('|');
     if (index < sml.count())
     {
         mode = sml[index];

@@ -71,7 +71,8 @@ void RunButtonDialog::onFreqEditFinish()
 void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, LoggerContestLog *ct)
 {
     ui->modecb->clear();
-    QStringList ml = ct->modeList.getValue().split('|');
+    QString mlist = ct->modeList.getValue();
+    QStringList ml = mlist.split('|');
     ui->modecb->insertItems(0, ml);
 
 

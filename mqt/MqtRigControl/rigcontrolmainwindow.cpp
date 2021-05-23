@@ -14,16 +14,7 @@
 
 #include "base_pch.h"
 #include "mqtUtils_pch.h"
-#include "RPCCommandConstants.h"
-//#include "rigcontrolcommonconstants.h"
-#include "rigcommon.h"
-#include "rigcontrolmainwindow.h"
-#include "ui_rigcontrolmainwindow.h"
-#include "rigsetupdialog.h"
-#include "rigcontrolrpc.h"
-#include "rigutils.h"
-#include "rigctldclient.h"
-#include "serialdata.h"
+
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
@@ -32,8 +23,18 @@
 #include <QDebug>
 #include <QMetaType>
 
+#include "RPCCommandConstants.h"
+#include "rigcommon.h"
+#include "rigsetupdialog.h"
+#include "rigcontrolrpc.h"
+#include "rigutils.h"
+#include "rigctldclient.h"
+#include "serialdata.h"
+
 #include "cutils.h"
 
+#include "rigcontrolmainwindow.h"
+#include "ui_rigcontrolmainwindow.h"
 
 
 const bool PUBLISH_NOW = true;
@@ -1089,9 +1090,6 @@ void RigControlMainWindow::refreshRadio()
 {
     if (radioCommsOK)
         {
-            logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(loggerRequests->selRadioMode));
-            loggerSetMode(loggerRequests->selRadioMode);
-
             if (loggerRequests->selRadioFreq.isClear())
             {
                 if (loggerRequests->selBand != rigStateDetails->selTvBand && currentRadio->transVertEnable && currentRadio->transVertSettings.count() != 0)
@@ -1109,6 +1107,8 @@ void RigControlMainWindow::refreshRadio()
             {
                 loggerSetFreq(loggerRequests->selRadioFreq);
             }
+            logMessage(QString("Refresh Radio: Logger Set Mode to %1").arg(loggerRequests->selRadioMode));
+            loggerSetMode(loggerRequests->selRadioMode);
 
             //writeWindowTitle(appName);
             sendStatusToLogConnected();
@@ -2321,7 +2321,7 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
             if (b)
             {
                 logMessage(QString("Found transverter for band = %1").arg(b));
-                logMessage(QString("Transverter Key %1 offset %2 rfreq %3").arg(tvName)
+                logMessage(QString("Transverter Key %1 %2 offset %3 rfreq %4").arg(tvName)
                            .arg(currentRadio->transVertSettings.value(tvName)->transVertName)
                            .arg(currentRadio->transVertSettings.value(tvName)->transVertOffset.traceStr())
                            .arg(rigStateDetails->rfrequency.traceStr())
@@ -2905,26 +2905,33 @@ int RigControlMainWindow::getAndSendMode(VFO vfo)
 
         if (retCode == Rig_OK)
         {
-            logMessage(QString("Get Mode: From Rx mode = %1").arg(rigcommon::convertModeToQString(rigStateDetails->rmode)));
             rigStateDetails->curMode = rigStateDetails->rmode;
 
             rigStateDetails->curModeStr = rigcommon::convertModeToQString(rigStateDetails->rmode);
+
+            logMessage(QString("Get Mode: From Rx mode = %1; MGM Mode %2").arg(rigStateDetails->curModeStr, currentRadio->mgmMode));
 
             if (rigStateDetails->mgmModeFlag && rigStateDetails->curModeStr != currentRadio->mgmMode) // has mode been changed on the radio?
             {
                 // yes clear MGM mode
                 rigStateDetails->mgmModeFlag = false;
+                trace("mgmModeFlag cleared");
 
             }
 
 
             if (!rigStateDetails->mgmModeFlag)
             {
-                // check to see if radio has been put in MGM mode, excluding USB
-                if (rigStateDetails->mgmModes.contains(rigStateDetails->curModeStr) && rigStateDetails->curModeStr != hamlibData::USB)
+                // check to see if radio has been put in MGM mode, excluding USB/LSB
+                if (rigStateDetails->mgmModes.contains(rigStateDetails->curModeStr)
+                        && rigStateDetails->curModeStr != hamlibData::USB
+                         && rigStateDetails->curModeStr != hamlibData::LSB
+                        )
                 {
 
                         rigStateDetails->mgmModeFlag = true;
+                        trace("mgmModeFlag set");
+
                         currentRadio->mgmMode = rigStateDetails->curModeStr;
                         displayModeVfo(hamlibData::MGM);
                         //displayPassband(rwidth);
@@ -3024,6 +3031,26 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
         cmdLockOn();      // lock get radio info
         logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode).arg(vfoToStr(vfo)));
         mode = mode.left(mode.indexOf(":"));
+        if (mode == "PH")
+        {
+            Frequency modeTestFreq;
+            if (rigStateDetails->curTransVertFreq.isClear())
+            {
+                modeTestFreq = rigStateDetails->curTransVertFreq;
+            }
+            else
+            {
+                modeTestFreq = rigStateDetails->curVfoFreq;
+            }
+            if (modeTestFreq > Frequency(10000000))
+            {
+                mode = "USB";
+            }
+            else
+            {
+                mode = "LSB";
+            }
+        }
         MODE mCode = rigcommon::convertQStringToMode(mode);
 
         if (radioCommsOK)

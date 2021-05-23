@@ -1002,6 +1002,12 @@ void RigControlFrame::noRadioSetMode(QString m)
 
 void RigControlFrame::setFreqStepCombo(QString mode)
 {
+    if (mode == "PH")
+    {
+        ui->freqStepCombo->clear();
+        ui->freqStepCombo->addItems(PH_TUNING_STEPS);
+        ui->freqStepCombo->setCurrentIndex(PH_DEFAULT_STEP);
+    }
     if (mode == hamlibData::USB)
     {
         ui->freqStepCombo->clear();
@@ -1051,7 +1057,7 @@ double RigControlFrame::getStepFreqFromComboText(const QString step)
     }
     else
     {
-        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM)
+        if (curMode == hamlibData::USB || curMode == hamlibData::LSB || curMode == hamlibData::FM || curMode == "PH")
         {
             stepF = sl[0].toDouble() * 1000;
         }
@@ -1346,8 +1352,21 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            bool bandOK = blist.findBand(cb, bi);
            if (bandOK)
            {
+               QString mode = ct->currentMode.getValue();
+               if (mode == "PH")
+               {
+                   Frequency modeTestFreq = bi->fLow;
+                   if (modeTestFreq > Frequency(10000000))
+                   {
+                       mode = "USB";
+                   }
+                   else
+                   {
+                       mode = "LSB";
+                   }
+               }
 
-               Frequency freq = bandSelButtons->getPresetFreq(cb, ct->currentMode.getValue());
+               Frequency freq = bandSelButtons->getPresetFreq(cb, mode);
 
                traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
                if (checkValidFreq(freq))

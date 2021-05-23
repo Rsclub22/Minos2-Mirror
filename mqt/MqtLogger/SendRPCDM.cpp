@@ -674,17 +674,17 @@ void TSendDM::notifyRigChanges()
                 if (selStateUuid == frameUuid)
                 {
                     traceMsg(QString("Rig state distribution for %1").arg(selStateUuid));
-                    if (selState.radioMode().isDirty())
-                    {
-                        traceMsg(QString("Rig set mode = %1, uuid = %2").arg(selState.radioMode().getValue()).arg(selStateUuid));
-                        tslf->on_SetMode(selState.radioMode().getValue());
-                    }
                     if (selState.radioFreq().isDirty())
                     {
 
                         traceMsg(QString("Rig set freq = %1, uuid = %2").arg(selState.radioFreq().getValue().traceStr()).arg(selStateUuid));
                         tslf->on_SetFreq(selState.radioFreq().getValue());
 
+                    }
+                    if (selState.radioMode().isDirty())
+                    {
+                        traceMsg(QString("Rig set mode = %1, uuid = %2").arg(selState.radioMode().getValue()).arg(selStateUuid));
+                        tslf->on_SetMode(selState.radioMode().getValue());
                     }
                     if (selState.radioRitFreq().isDirty())
                     {
