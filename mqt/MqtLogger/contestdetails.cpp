@@ -551,192 +551,292 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->EndDateEdit->setDate(ic.finish.date()); // short date format, hours:minutes
    ui->EndTimeCombo->setCurrentText(ic.finish.toString( "HH:mm" ) + " UTC"); // short date format, hours:minutes
 
-   if ( ic.mults == "M1" )
+   if (isHF)
    {
-      // PC, DXCC
-       contestTransferObject->usesBonus.setValue(false);
-       contestTransferObject->bonusType.setValue("");
+       if ( ic.mults == "M1" )
+       {
+          // DXCCs worked on each band
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( true );
-      contestTransferObject->countryMult.setValue( true );
-      contestTransferObject->locMult.setValue( false );
-      contestTransferObject->GLocMult.setValue( false );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( true );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = false;
-      contestTransferObject->NonUKloc_mult = false;
-      contestTransferObject->UKloc_multiplier = 0;
-      contestTransferObject->NonUKloc_multiplier = 0;
-   }
-   else if ( ic.mults == "M2" )
-   {
-      // Loc
-       contestTransferObject->usesBonus.setValue(false);
-       contestTransferObject->bonusType.setValue("");
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M2" )
+       {
+          // UK Prefixes per band and mode
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( false );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( false );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = true;
-      contestTransferObject->UKloc_multiplier = 1;
-      contestTransferObject->NonUKloc_multiplier = 1;
-   }
-   else if ( ic.mults == "M3" )
-   {
-      // PC, DXCC, LOC
-       contestTransferObject->usesBonus.setValue(false);
-       contestTransferObject->bonusType.setValue("");
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M3" )
+       {
+          // DXCC & UK District BONUS
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( true );
-      contestTransferObject->countryMult.setValue( true );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( false );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = true;
-      contestTransferObject->UKloc_multiplier = 1;
-      contestTransferObject->NonUKloc_multiplier = 1;
-   }
-   else if ( ic.mults == "M4" )
-   {
-      // DXCC, LOC
-      contestTransferObject->usesBonus.setValue(false);
-      contestTransferObject->bonusType.setValue("");
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M4" )
+       {
+          // IOTA Points
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( true );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( false );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = true;
-      contestTransferObject->UKloc_multiplier = 1;
-      contestTransferObject->NonUKloc_multiplier = 1;
-   }
-   else if ( ic.mults == "M5" )
-   {
-      // G Locs only
-      contestTransferObject->usesBonus.setValue(false);
-      contestTransferObject->bonusType.setValue("");
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else
+       {
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( false );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( true );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = false;
-      contestTransferObject->UKloc_multiplier = 1;
-      contestTransferObject->NonUKloc_multiplier = 0;
-   }
-   else if ( ic.mults == "M6" )
-   {
-      // G Locs only  + DXCC
-      contestTransferObject->usesBonus.setValue(false);
-      contestTransferObject->bonusType.setValue("");
-
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( false );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( true );
-      contestTransferObject->nonGCountryMult.setValue( true );
-
-      contestTransferObject->M7Mults.setValue(false);
-
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = false;
-      contestTransferObject->UKloc_multiplier = 1;
-      contestTransferObject->NonUKloc_multiplier = 0;
-   }
-   else if ( ic.mults == "M7" )
-   {
-      // Modified M5; non UK 1 mult, UK 2 mults
-      contestTransferObject->usesBonus.setValue(false);
-      contestTransferObject->bonusType.setValue("");
-
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( false );
-      contestTransferObject->locMult.setValue( true );
-      contestTransferObject->GLocMult.setValue( true );
-      contestTransferObject->nonGCountryMult.setValue( false );
-
-      contestTransferObject->M7Mults.setValue(true);
-
-      contestTransferObject->UKloc_mult = true;
-      contestTransferObject->NonUKloc_mult = true;
-      contestTransferObject->UKloc_multiplier = 2;
-      contestTransferObject->NonUKloc_multiplier = 1;
-   }
-   else if ( ic.mults == "B2" )
-   {
-       contestTransferObject->usesBonus.setValue(true);
-       contestTransferObject->bonusType.setValue("B2");
-
-       contestTransferObject->districtMult.setValue( false );
-       contestTransferObject->countryMult.setValue( false );
-       contestTransferObject->locMult.setValue( false );
-       contestTransferObject->GLocMult.setValue( false );
-       contestTransferObject->nonGCountryMult.setValue( false );
-
-       contestTransferObject->M7Mults.setValue(false);
-
-       contestTransferObject->UKloc_mult = false;
-       contestTransferObject->NonUKloc_mult = false;
-       contestTransferObject->UKloc_multiplier = 0;
-       contestTransferObject->NonUKloc_multiplier = 0;
-   }
-   else if ( ic.mults == "B4" )
-   {
-       contestTransferObject->usesBonus.setValue(true);
-       contestTransferObject->bonusType.setValue("B4");
-
-       contestTransferObject->districtMult.setValue( false );
-       contestTransferObject->countryMult.setValue( false );
-       contestTransferObject->locMult.setValue( false );
-       contestTransferObject->GLocMult.setValue( false );
-       contestTransferObject->nonGCountryMult.setValue( false );
-
-       contestTransferObject->M7Mults.setValue(false);
-
-       contestTransferObject->UKloc_mult = false;
-       contestTransferObject->NonUKloc_mult = false;
-       contestTransferObject->UKloc_multiplier = 0;
-       contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
    }
    else
    {
-      contestTransferObject->usesBonus.setValue(false);
-      contestTransferObject->bonusType.setValue("");
+       if ( ic.mults == "M1" )
+       {
+          // PC, DXCC
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
 
-      contestTransferObject->districtMult.setValue( false );
-      contestTransferObject->countryMult.setValue( false );
-      contestTransferObject->locMult.setValue( false );
-      contestTransferObject->GLocMult.setValue( false );
-      contestTransferObject->nonGCountryMult.setValue( false );
+          contestTransferObject->districtMult.setValue( true );
+          contestTransferObject->countryMult.setValue( true );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
 
-      contestTransferObject->M7Mults.setValue(false);
+          contestTransferObject->M7Mults.setValue(false);
 
-      contestTransferObject->UKloc_mult = false;
-      contestTransferObject->NonUKloc_mult = false;
-      contestTransferObject->UKloc_multiplier = 0;
-      contestTransferObject->NonUKloc_multiplier = 0;
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M2" )
+       {
+          // Loc
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = true;
+          contestTransferObject->UKloc_multiplier = 1;
+          contestTransferObject->NonUKloc_multiplier = 1;
+       }
+       else if ( ic.mults == "M3" )
+       {
+          // PC, DXCC, LOC
+           contestTransferObject->usesBonus.setValue(false);
+           contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( true );
+          contestTransferObject->countryMult.setValue( true );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = true;
+          contestTransferObject->UKloc_multiplier = 1;
+          contestTransferObject->NonUKloc_multiplier = 1;
+       }
+       else if ( ic.mults == "M4" )
+       {
+          // DXCC, LOC
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( true );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = true;
+          contestTransferObject->UKloc_multiplier = 1;
+          contestTransferObject->NonUKloc_multiplier = 1;
+       }
+       else if ( ic.mults == "M5" )
+       {
+          // G Locs only
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( true );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 1;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M6" )
+       {
+          // G Locs only  + DXCC
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( true );
+          contestTransferObject->nonGCountryMult.setValue( true );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 1;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "M7" )
+       {
+          // Modified M5; non UK 1 mult, UK 2 mults
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( true );
+          contestTransferObject->GLocMult.setValue( true );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(true);
+
+          contestTransferObject->UKloc_mult = true;
+          contestTransferObject->NonUKloc_mult = true;
+          contestTransferObject->UKloc_multiplier = 2;
+          contestTransferObject->NonUKloc_multiplier = 1;
+       }
+       else if ( ic.mults == "B2" )
+       {
+           contestTransferObject->usesBonus.setValue(true);
+           contestTransferObject->bonusType.setValue("B2");
+
+           contestTransferObject->districtMult.setValue( false );
+           contestTransferObject->countryMult.setValue( false );
+           contestTransferObject->locMult.setValue( false );
+           contestTransferObject->GLocMult.setValue( false );
+           contestTransferObject->nonGCountryMult.setValue( false );
+
+           contestTransferObject->M7Mults.setValue(false);
+
+           contestTransferObject->UKloc_mult = false;
+           contestTransferObject->NonUKloc_mult = false;
+           contestTransferObject->UKloc_multiplier = 0;
+           contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else if ( ic.mults == "B4" )
+       {
+           contestTransferObject->usesBonus.setValue(true);
+           contestTransferObject->bonusType.setValue("B4");
+
+           contestTransferObject->districtMult.setValue( false );
+           contestTransferObject->countryMult.setValue( false );
+           contestTransferObject->locMult.setValue( false );
+           contestTransferObject->GLocMult.setValue( false );
+           contestTransferObject->nonGCountryMult.setValue( false );
+
+           contestTransferObject->M7Mults.setValue(false);
+
+           contestTransferObject->UKloc_mult = false;
+           contestTransferObject->NonUKloc_mult = false;
+           contestTransferObject->UKloc_multiplier = 0;
+           contestTransferObject->NonUKloc_multiplier = 0;
+       }
+       else
+       {
+          contestTransferObject->usesBonus.setValue(false);
+          contestTransferObject->bonusType.setValue("");
+
+          contestTransferObject->districtMult.setValue( false );
+          contestTransferObject->countryMult.setValue( false );
+          contestTransferObject->locMult.setValue( false );
+          contestTransferObject->GLocMult.setValue( false );
+          contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->M7Mults.setValue(false);
+
+          contestTransferObject->UKloc_mult = false;
+          contestTransferObject->NonUKloc_mult = false;
+          contestTransferObject->UKloc_multiplier = 0;
+          contestTransferObject->NonUKloc_multiplier = 0;
+       }
    }
    if (ic.specialRules.indexOf("MGM") >= 0) // not a synonym for MGM mode!
    {
