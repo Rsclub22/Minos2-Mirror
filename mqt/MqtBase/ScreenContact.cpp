@@ -333,7 +333,7 @@ bool ScreenContact::isNextContact( ) const
 
 void ScreenContact::score()
 {
-    // check shouldalready have run
+    // check should already have run
 
     QString gridref = loc.getLoc().trimmed();
     if (gridref.isEmpty())
@@ -377,38 +377,6 @@ void ScreenContact::score()
                 }
             }
         }
-
-/*
-        if ( districtMult )
-        {
-           if ( districtMult->country1 &&
-                ( ( contest->districtWorked.data()[ districtMult->listOffset ] ) +1 < districtMult->country1->districtLimit() ) )
-           {
-              if ( contest->districtMult.getValue() )
-              {
-                 multCount++;
-              }
-              newDistrict = true;
-           }
-        }
-
-        if ( ctryMult )
-        {
-           if ( ( contest->countryWorked.data()[ ctryMult->listOffset ] ) + 1 == 0 )
-           {
-              if (!contest->nonGCountryMult.getValue() || !cs.isUK())
-              {
-                 if ( contest->countryMult.getValue() )
-                 {
-                    {
-                       multCount++;
-                    }
-                 }
-                 newCtry = true;
-              }
-           }
-        }
-        */
 
         if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
         {

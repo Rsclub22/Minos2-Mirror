@@ -388,7 +388,11 @@ void DisplayContestContact::checkContact( bool inScan)
 
    if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
    {
-       if (contest->MGMContestRules.getValue())
+       if (!clp->locatorMandatoryField.getValue())
+       {
+            dist = 1;
+       }
+       else if (contest->MGMContestRules.getValue())
        {
            int brg;
             dist = clp->CalcCentres ( loc.getLoc(), brg );
