@@ -1166,6 +1166,10 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
 
       mt->getStructArgMemberValue( "hf", hfContest);
 
+      if (currentBand.getValue() == allHF)
+      {
+          currentBand.setValue("3.5 MHz");
+      }
       bool btemp;
       if ( mt->getStructArgMemberValue( "scoreKms", btemp ) )
          scoreMode.setInitialValue( btemp ? PPKM : PPQSO );

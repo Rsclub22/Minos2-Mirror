@@ -602,14 +602,14 @@ void BandSelButtons::setBandSelButtonsFromMode(QString curMode)
 }
 
 
-void BandSelButtons::setContest(QString contestBand_)
+void BandSelButtons::setContestBand(QString contestBand_)
 {
     contestBand = contestBand_;
 }
 
 QString BandSelButtons::convertModeForPresets(const QString mode)
 {
-    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM)
+    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode == hamlibData::FM  || mode == "PH")
     {
         return "PHONE";
     }

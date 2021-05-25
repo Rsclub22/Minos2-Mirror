@@ -441,6 +441,9 @@ void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
+
+    traceMsg(QString("SendRigControlMode = %1 uuid = %2").arg(mode, tslf->getContest()->uuid));
+
 }
 
 

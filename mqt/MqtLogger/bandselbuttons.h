@@ -62,7 +62,7 @@ public:
     Frequency getPresetFreq(const QString band, const QString mode);
     int selectButtonGroupAndActiveBand(const QString band);
     int selectButtonGroupAndActiveBand(const Frequency &freq);
-    void setContest(QString contestBand_);
+    void setContestBand(QString contestBand_);
     bool findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand);
 
     void setPreSetFreqRadioButVisible(bool visible);

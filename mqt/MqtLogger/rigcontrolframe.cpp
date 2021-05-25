@@ -270,7 +270,7 @@ void RigControlFrame::setContest(BaseContestLog *c)
 
     if (ct)
     {
-        contestBand = ct->contestBands.getValue();
+        contestBand = ct->currentBand.getValue();
 
         setRadioList();
 
@@ -278,7 +278,7 @@ void RigControlFrame::setContest(BaseContestLog *c)
 
     if (bandSelButtons)
     {
-        bandSelButtons->setContest(contestBand);
+        bandSelButtons->setContestBand(contestBand);
     }
 
 
@@ -1344,7 +1344,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            //We want to select the frequency based on the contest band
 
 
-           QString cb = ct->contestBands.getValue().trimmed();
+           QString cb = ct->currentBand.getValue().trimmed();
            traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
 
            BandList &blist = BandList::getBandList();       // not sure need this check now
@@ -1465,7 +1465,7 @@ void RigControlFrame::restoreRadioFreq()
         if (!freq.isClear())
         {
             disconnectFreq.clear();
-            QString cb = ct->contestBands.getValue().trimmed();
+            QString cb = ct->currentBand.getValue().trimmed();
             //int err = setBandSelComboIndex(cb);
             int err = bandSelButtons->selectButtonGroupAndActiveBand(cb);
             if (err >= 0 )
@@ -1575,7 +1575,16 @@ void RigControlFrame::setContestBandLimits(QString band)
 
 }
 
+void RigControlFrame::setContestBand(QString band)
+{
+    contestBand = band;
+    setContestBandLimits(contestBand);
+    if (bandSelButtons)
+    {
+        bandSelButtons->setContestBand(contestBand);
+    }
 
+}
 void RigControlFrame::setRadioListFromTslf()
 {
     setRadioList();
@@ -1666,7 +1675,7 @@ void RigControlFrame::createSupportedBandList(QString b)
         // set combo to current contest band
         if (ct && !ct->isReadOnly())
         {
-            QString contestBand = ct->contestBands.getValue();
+            QString contestBand = ct->currentBand.getValue();
             // is band in combo sel
             int retCode = bandSelButtons->setButtonOnOff(contestBand, true);
 

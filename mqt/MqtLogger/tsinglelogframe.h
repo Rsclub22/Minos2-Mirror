@@ -303,6 +303,7 @@ public:
     void transferFromWSJTX(QString call);
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
     void onSetCwMemAvail(bool avail, PubSubName psn);
+    bool checkBandChange(Frequency freq);
 };
 
 #endif // TSINGLELOGFRAME_H

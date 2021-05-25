@@ -1218,7 +1218,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     {
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: ContestUuid = %1").arg(contestUuid));
-        contestBandStr = ct->contestBands.getValue();
+        contestBandStr = ct->currentBand.getValue();
         //contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
 

@@ -457,7 +457,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         //But we have just shut the "other" contest... so we are pointing at nothing
                         //This is where we have an "other" match and we close the "other" contest
                         QString name = contest->name.getValue();
-                        QString band = contest->contestBands.getValue();
+                        QString band = contest->currentBand.getValue();
 
                         QDateTime  contestStart = CanonicalToTDT(contest->DTGStart.getValue());
                         QString dtg = contestStart.toString("yyyy/MM/dd");

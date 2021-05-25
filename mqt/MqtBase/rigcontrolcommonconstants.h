@@ -149,7 +149,7 @@ namespace freqPresetData {
 
 const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
-const QStringList bandFreq = {  "1800000",
+const QStringList bandFreq = {  "1810000",
                                 "3500000",
                                 "7000000",
                                "14000000",

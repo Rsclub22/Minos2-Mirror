@@ -3028,26 +3028,42 @@ void RigControlMainWindow::setMode(QString mode, VFO vfo)
 
     if (radio)
     {
+        getRadioInfo(false);
+
         cmdLockOn();      // lock get radio info
         logMessage(QString("SetMode: Mode Requested = %1, vfo = %2").arg(mode).arg(vfoToStr(vfo)));
         mode = mode.left(mode.indexOf(":"));
         if (mode == "PH")
         {
+//            if (currentRadio->transVertEnable && b)
+//            {
+//                sendFreqToLog(transVertF);
+//                msg->rigCache.publish();
+
+//            }
+//            else
+//            {
+//                sendFreqToLog(rigStateDetails->rfrequency);
+//                msg->rigCache.publish();
+//            }
+
             Frequency modeTestFreq;
             if (rigStateDetails->curTransVertFreq.isClear())
             {
-                modeTestFreq = rigStateDetails->curTransVertFreq;
+                modeTestFreq = rigStateDetails->curVfoFreq;
             }
             else
             {
-                modeTestFreq = rigStateDetails->curVfoFreq;
+                modeTestFreq = rigStateDetails->curTransVertFreq;
             }
             if (modeTestFreq > Frequency(10000000))
             {
+                trace(QString("Switching to USB as frequency is %1").arg(modeTestFreq.traceStr()));
                 mode = "USB";
             }
             else
             {
+                trace(QString("Switching to LSB as frequency is %1").arg(modeTestFreq.traceStr()));
                 mode = "LSB";
             }
         }

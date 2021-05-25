@@ -1347,7 +1347,7 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
     if (tslf)
     {
         static QString oldContestBand = "";
-        QString contestBand = tslf->getContest()->contestBands.getValue();
+        QString contestBand = tslf->getContest()->currentBand.getValue();
 
         if (oldContestBand != contestBand)
         {
