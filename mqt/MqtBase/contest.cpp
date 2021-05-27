@@ -956,6 +956,8 @@ DupContact::DupContact() : dct( nullptr ), sct( nullptr )
 {}
 DupContact::~DupContact()
 {}
+
+//If HF we need to include mode and band - VHF should be single band
 bool DupContact::operator<( const DupContact& rhs ) const
 {
    Callsign * c1 = nullptr;    // search item
@@ -986,6 +988,11 @@ bool DupContact::operator<( const DupContact& rhs ) const
          c2 = &rhs.sct->cs;
          rhs.sct->contest->getTxFreqBand(rhs.sct->frequency, b2);
       }
+
+   if (!c1 || !c2)
+   {
+       return false;
+   }
 
    if (*c1 == *c2)
        return b1 < b2;

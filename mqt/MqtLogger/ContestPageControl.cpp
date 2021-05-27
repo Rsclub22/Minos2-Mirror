@@ -143,11 +143,14 @@ void ContestPageControl::changeEvent( QEvent* e )
             QSettings settings;
             settings.setValue(QString("screen%1/geometry").arg(getInstance()), saveGeometry());
         }
+        ContestPage *ctab = dynamic_cast<ContestPage *>(currentWidget());
         if (isMinimized())
         {
-            ContestPage *ctab = dynamic_cast<ContestPage *>(currentWidget());
-
             setWindowTitle(ctab->pageName + tr(" (min)"));
+        }
+        else
+        {
+            setWindowTitle(ctab->pageName);
         }
     }
 
