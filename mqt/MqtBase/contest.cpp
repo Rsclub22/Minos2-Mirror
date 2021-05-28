@@ -1177,6 +1177,17 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       {
           currentBand.setValue("3.5 MHz");
       }
+
+      BandList &blist = BandList::getBandList();
+      QSharedPointer<BandInfo>  bi;
+      bool bandOK = false;
+      bandOK = blist.findBand(currentBand.getValue(), bi);
+      if (bandOK && currentBand.getValue() != bi->uk)
+      {
+          currentBand.setValue(bi->uk);
+      }
+
+
       bool btemp;
       if ( mt->getStructArgMemberValue( "scoreKms", btemp ) )
          scoreMode.setInitialValue( btemp ? PPKM : PPQSO );
