@@ -11,6 +11,7 @@ enum SCType
     sctLog,
     sctRigControl,
     sctRunButtons,
+    sctBandSwitch,
     sctRotControl,
     sctRotPresets,
     sctQSOEdit,

@@ -446,7 +446,7 @@ QVariant LocGridModel::data( const QModelIndex &index, int role ) const
     if (role == Qt::BackgroundRole)
     {
         QColor multhighlight = Qt::darkGray;
-            if (ct->usesBonus.getValue())
+        if (ct->usesBonus.getValue())
         {
             switch (ct->getSquareBonus(disp))
             {

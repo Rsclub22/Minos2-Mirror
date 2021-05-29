@@ -35,6 +35,7 @@ INCLUDEPATH += $$PWD/../MqtBandMap
 
 SOURCES += \
     AdifImport.cpp \
+    BandSwitchFrame.cpp \
     ContestApp.cpp \
     ContestDetailsTransferObject.cpp \
     ContestPage.cpp \
@@ -130,6 +131,7 @@ SOURCES += \
 
 HEADERS  += \
     AdifImport.h \
+    BandSwitchFrame.h \
     ContestApp.h \
     ContestDetailsTransferObject.h \
     ContestPage.h \
@@ -220,6 +222,7 @@ HEADERS  += \
     Clusterbandmapconfigure.h
 
 FORMS    += \
+    BandSwitchFrame.ui \
     ContestPage.ui \
     ContestPageControl.ui \
     DisplayOptions.ui \

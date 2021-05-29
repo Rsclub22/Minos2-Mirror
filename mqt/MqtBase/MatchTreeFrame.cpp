@@ -148,6 +148,7 @@ void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
 GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
 {
     GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
+    GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // band
     GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
     GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
     GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial

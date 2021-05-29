@@ -406,7 +406,7 @@ void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, con
         for (int i = 0; i < bands.count(); i++)
         {
 
-            presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
+            presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
 
         }
         config.endGroup();

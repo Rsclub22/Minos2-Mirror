@@ -40,37 +40,6 @@ Frequency PresetFreq::getLastFreq(const QString mode, const QString band)
 
 void PresetFreq::setPresetFreq(const QString mode, const QString band, const QString freq)
 {
-     QMap<QString, StoredPresetFreqs>* mspf = nullptr;
-
-     if (mode == freqPresetData::PRESET_MODE_CW)
-     {
-         mspf = &cwFreqPresets;
-     }
-     else if (mode == freqPresetData::PRESET_MODE_PHONE)
-     {
-         mspf = &phoneFreqPresets;
-     }
-     else if (mode == freqPresetData::PRESET_MODE_MGM)
-     {
-         mspf = &mgmFreqPresets;
-     }
-
-
-     if (mspf)
-     {
-         StoredPresetFreqs spf{};
-         spf = mspf->value(band);
-         spf.presetFreq = Frequency(freq);
-         mspf->insert(band, spf);
-         modePresetFreqList.insert(mode, mspf);
-     }
-
-
-
-}
-
-void PresetFreq::setPresetFreq(const QString mode, const QString band, const Frequency freq)
-{
     QMap<QString, StoredPresetFreqs>* mspf = nullptr;
 
     if (mode == freqPresetData::PRESET_MODE_CW)
@@ -218,7 +187,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 
     for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
 
     }
 
@@ -228,7 +197,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 
     for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
 
     }
 
@@ -238,7 +207,7 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 
     for (int i = 0; i < bands.count(); i++)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, Frequency(config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString()));
+        setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
 
     }
 

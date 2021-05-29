@@ -18,6 +18,7 @@ class ChatFrame;
 class ClusterClientFrame;
 class BandmapClientFrame;
 class RigControlFrame;
+class BandSwitchFrame;
 class RunButtonsFrame;
 class RotControlFrame;
 class RotPresets;

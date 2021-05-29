@@ -129,7 +129,7 @@ double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
     }
     return freq;
 }
-QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq )
+QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq ) const
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper Cabrillo name of the band

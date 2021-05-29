@@ -213,7 +213,6 @@ public:
 
     Frequency getPresetFreq(const QString mode, const QString band);
     void setPresetFreq(const QString mode, const QString band, const QString freq);
-    void setPresetFreq(const QString mode, const QString band, const Frequency freq);
 
     Frequency getLastFreq(const QString mode, const QString band);
     void setLastFreq(const QString mode, const QString band, const QString freq);

@@ -19,6 +19,7 @@
 #include "rotcontrolframe.h"
 #include "RotPresets.h"
 #include "runbuttonsframe.h"
+#include "BandSwitchFrame.h"
 #include "txvmbuttonsframe.h"
 #include "qrzdisplayframe.h"
 
@@ -45,6 +46,7 @@ public:
     QTableView *QSOTable;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RunButtonsFrame *runButtonsFrame = nullptr;
+    BandSwitchFrame *bandSwitchFrame = nullptr;
     RotControlFrame *FKHRotControlFrame = nullptr;
     TxVmButtonsFrame *txVmButtonsFrame = nullptr;
     QrzDisplayFrame *qrzDisplayFrame = nullptr;
@@ -303,7 +305,7 @@ public:
     void transferFromWSJTX(QString call);
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
     void onSetCwMemAvail(bool avail, PubSubName psn);
-    bool checkBandChange(Frequency freq);
+    QString checkBandChange(Frequency freq);
 };
 
 #endif // TSINGLELOGFRAME_H

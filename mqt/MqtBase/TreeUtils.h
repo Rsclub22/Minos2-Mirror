@@ -33,6 +33,7 @@ class GridColumn
 
 //---------------------------------------------------------------------------
 enum eLogGridCols {egTime,
+                   egBand,
                    egCall,
                    egRSTTx, egSNTx, egRSTRx, egSNRx,
                    egLoc, egBrg, egScore,
@@ -43,8 +44,8 @@ enum eLogGridCols {egTime,
 //---------------------------------------------------------------------------
 #define LOGTREECOLS egLogMaxCol
 #define THISMATCHTREECOLS egLogMaxCol
-#define OTHERMATCHTREECOLS egLogMaxCol - 4
-#define ARCHIVEMATCHTREECOLS egLogMaxCol - 8
+#define OTHERMATCHTREECOLS egLogMaxCol - 5
+#define ARCHIVEMATCHTREECOLS egLogMaxCol - 9
 
 class QSOGridModel: public QAbstractItemModel
 {

@@ -104,7 +104,7 @@ class BaseContestLog: public BaseLogList
       Frequency getTxFreqBand(Frequency txf, QString &cb);
       double getAdifFreqBand(Frequency txfreq, QString &cb);
 
-      QString getCabrilloFreqBand(Frequency txfreq);
+      QString getCabrilloFreqBand(Frequency txfreq) const;
 
       void setCurrentBand(QString);
 

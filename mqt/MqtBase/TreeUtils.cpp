@@ -17,6 +17,7 @@
 GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
    {
       GridColumn( egTime, "XXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
+      GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // time
       GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
       GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
       GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
@@ -64,22 +65,22 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
-        if (column == egTime)
-        {
-            BandList &blist = BandList::getBandList();
-            QSharedPointer<BandInfo>  bi;
-            bool bandOK = blist.findBand(ct->frequency.getValue(), bi);
-            bool hf = false;
-            if (bandOK)
-            {
-               hf = bi->getType() == "HF";
-               if (hf)
-               {
-                   QColor colour = QColor(bi->bandColour);
-                   return colour;
-               }
-            }
-        }
+//        if (column == egTime)
+//        {
+//            BandList &blist = BandList::getBandList();
+//            QSharedPointer<BandInfo>  bi;
+//            bool bandOK = blist.findBand(ct->frequency.getValue(), bi);
+//            bool hf = false;
+//            if (bandOK)
+//            {
+//               hf = bi->getType() == "HF";
+//               if (hf)
+//               {
+//                   QColor colour = QColor(bi->bandColour).lighter(300);
+//                   return colour;
+//               }
+//            }
+//        }
         if ( ct->contactFlags.getValue() & FORCE_LOG )
         {
            return static_cast< QColor> ( 0x00FF80C0 );        // Pink(ish)
@@ -112,6 +113,8 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
                     setHighlight = true;
                  }
                  break;
+              case egBand:
+                   break;
               case egCall:
                  if ( contest->countryMult.getValue() && ct->newCtry )
                      setHighlight = true;

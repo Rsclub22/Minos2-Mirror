@@ -243,6 +243,11 @@ void TSingleLogFrame::createScreenComponents()
     txVmButtonsFrame->setObjectName(QStringLiteral("txVmButtonsFrame"));
     txVmButtonsFrame->setVisible(false);
 
+    bandSwitchFrame = new BandSwitchFrame(this);
+    bandSwitchFrame->setObjectName(QStringLiteral("bandSwitchFrame"));
+    bandSwitchFrame->setVisible(false);
+    bandSwitchFrame->setContest(contest);
+
     FKHRigControlFrame = new RigControlFrame(this);
     FKHRigControlFrame->setObjectName(QStringLiteral("FKHRigControlFrame"));
     FKHRigControlFrame->setFrameShape(QFrame::StyledPanel);
@@ -251,6 +256,8 @@ void TSingleLogFrame::createScreenComponents()
 
     FKHRigControlFrame->setVisible(false);
     FKHRigControlFrame->setContest(contest);
+
+    bandSwitchFrame->setRigControl(FKHRigControlFrame);
 
     runButtonsFrame = new RunButtonsFrame(this);
     runButtonsFrame->setObjectName(QStringLiteral("runButtonsFrame"));
@@ -402,6 +409,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
     FKHRigControlFrame->setContest(nullptr);
     runButtonsFrame->setContest(nullptr);
+    bandSwitchFrame->setContest(nullptr);
     //txVmButtonsFrame
     FKHRotControlFrame->setContest(nullptr);
     rotPresets->setContest(nullptr);
@@ -444,6 +452,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         runButtonsFrame->setParent(this);
         runButtonsFrame->hide();
+
+        bandSwitchFrame->setParent(this);
+        bandSwitchFrame->hide();
 
         txVmButtonsFrame->setParent(this);
         txVmButtonsFrame->hide();
@@ -607,6 +618,12 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 {
                     elementScrollArea->setWidget(runButtonsFrame);
                     runButtonsFrame->setContest(ct);
+                    break;
+                }
+                case sctBandSwitch:
+                {
+                    elementScrollArea->setWidget(bandSwitchFrame);
+                    bandSwitchFrame->setContest(ct);
                     break;
                 }
                 case sctTxVmButtons:
@@ -2011,9 +2028,8 @@ void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
 }
 
 
-bool TSingleLogFrame::checkBandChange(Frequency freq)
+QString TSingleLogFrame::checkBandChange(Frequency freq)
 {
-    bool bandChanged = false;
     BandList &bl = BandList::getBandList();
     QSharedPointer<BandInfo>  b1;
     bool b1Ok = bl.findBand(freq, b1);
@@ -2023,11 +2039,9 @@ bool TSingleLogFrame::checkBandChange(Frequency freq)
     if (b1Ok && b2Ok && b1 != b2)
     {
         // A move of over 1MHz must mean a band change...
-        bandChanged = true;
-        contest->currentBand.setValue(b1->uk);
-        FKHRigControlFrame->setContestBand(b1->uk);
+        return b1->uk;
     }
-    return bandChanged;
+    return QString();
 }
 
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
@@ -2037,11 +2051,16 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
 
-        bool bandChanged = checkBandChange(freq);
+        QString bandChanged = checkBandChange(freq);
+        if (!bandChanged.isEmpty())
+        {
+            contest->currentBand.setValue(bandChanged);
+            FKHRigControlFrame->setContestBand(bandChanged);
+        }
 
         LogContainer->sendDM->sendRigControlFreq(this, freq);
 
-        if (bandChanged)
+        if (!bandChanged.isEmpty())
         {
             LogContainer->sendDM->sendRigControlMode(this, sCurMode);
         }

@@ -2400,7 +2400,9 @@ void QSOLogFrame::getScreenRigData()
     else
     {
         screenContact.rigName.clear();
-        screenContact.frequency.clear();
+
+        QString cb;
+        screenContact.frequency = contest->getTxFreqBand(Frequency(), cb);
     }
 }
 void QSOLogFrame::getscreenRotatorData()

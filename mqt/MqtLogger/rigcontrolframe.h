@@ -24,7 +24,6 @@
 #include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
-#include "bandselbuttons.h"
 #include "BandList.h"
 
 
@@ -35,6 +34,7 @@ namespace Ui {
 const int BANDLIST_TIMEOUT_DUR = 3000;
 
 class TxVmButtonsFrame;
+class TSingleLogFrame;
 
 class quickBandSelData
 {
@@ -54,8 +54,9 @@ class RigControlFrame : public QFrame
 {
     Q_OBJECT
     friend class RunButtonsFrame;
+    friend class BandSwitchFrame;
 public:
-    explicit RigControlFrame(QWidget *parent);
+    explicit RigControlFrame(TSingleLogFrame *parent);
     ~RigControlFrame() override;
 
     Ui::RigControlFrame *ui;
@@ -176,8 +177,8 @@ private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
     LoggerContestLog *ct = nullptr;
-    BandSelButtons *bandSelButtons = nullptr;
 
+    TSingleLogFrame *tslf = nullptr;
     //QVector<quickBandSelData> listOfBands;
     QStringList listOfBands;
 
@@ -311,14 +312,10 @@ private:
     void restoreRadioFreq();
     void displayFreqOnFreqEditDisplay(const Frequency &freq);
     void setRadioFreq(Frequency &sendFreq, bool &rigFrameStartFlag);
-    int setBandSelButtonFromFreq(const Frequency &freq);
-    //int setBandSelComboFromFreq(const Frequency &freq);
     bool checkFreqOK(const Frequency &freq);
     bool checkContestBandMatch(const Frequency &freq);
     void setContestBandLimits(QString band);
-    void initBandSelButtons();
 
-    void setStateOfBandOnlyRadButtons();
     bool isVmButtonsFrameVisible();
     void sendVmButtonFrameSelectedRadio(PubSubName selectedRadio);
     void sendVmButtonFrameRadioConnected(bool connected);

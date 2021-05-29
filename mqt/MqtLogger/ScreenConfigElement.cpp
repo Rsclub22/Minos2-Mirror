@@ -18,6 +18,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctNextQSODetails, QT_TR_NOOP("Next QSO Details"), QT_TR_NOOP("Next QSO details")},
     {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
     {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
+    {sctBandSwitch, QT_TR_NOOP("HF Band Switching"), QT_TR_NOOP("HF Band Switching")},
     {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Call Freq Buttons")},
     {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
     {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
