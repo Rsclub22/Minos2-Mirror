@@ -2028,18 +2028,20 @@ void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
 }
 
 
-QString TSingleLogFrame::checkBandChange(Frequency freq)
+QString TSingleLogFrame::checkBandChange(Frequency freq, Frequency refFreq)
 {
-    BandList &bl = BandList::getBandList();
-    QSharedPointer<BandInfo>  b1;
-    bool b1Ok = bl.findBand(freq, b1);
-    QSharedPointer<BandInfo>  b2;
-    bool b2Ok = bl.findBand(sCurFreq, b2);
-
-    if (b1Ok && b2Ok && b1 != b2)
+    if (contest->contestBands.getValue() == allHF)
     {
-        // A move of over 1MHz must mean a band change...
-        return b1->uk;
+        BandList &bl = BandList::getBandList();
+        QSharedPointer<BandInfo>  b1;
+        bool b1Ok = bl.findBand(freq, b1);
+        QSharedPointer<BandInfo>  b2;
+        bool b2Ok = bl.findBand(refFreq, b2);
+
+        if (b1Ok && b2Ok && b1 != b2)
+        {
+            return b1->uk;
+        }
     }
     return QString();
 }
@@ -2051,7 +2053,7 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
 
-        QString bandChanged = checkBandChange(freq);
+        QString bandChanged = checkBandChange(freq, sCurFreq);
         if (!bandChanged.isEmpty())
         {
             contest->currentBand.setValue(bandChanged);

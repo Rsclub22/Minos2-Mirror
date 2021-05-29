@@ -564,48 +564,12 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     contestUuid = ct->uuid;
     traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
-    contestBandStr = ct->currentBand.getValue();
-    //contestBand = getStringlistOffSet(clusterBands, contestBandStr);
-    contestModeStr = ct->currentMode.getValue();
-    contestMode = getModeOffSet(contestModeStr);
+
+    setContestBandMode(ct->currentBand.getValue(), ct->currentMode.getValue());
 
     int zoomLevel = readBandmapZoomLevel();     // set zoom to saved zoomlevel
     bandmapView->setBandmapZoom(zoomLevel);
     setZoomLevelLabelText(zoomLevel);
-
-    QString bandplanLimits = readBandmapFreqLimit(contestBandStr, contestModeStr);
-
-    if (bandplanLimits.isEmpty())
-    {
-        getBandLimitsFromBandListXML();
-    }
-    else
-    {
-        // use user bandplan limits ini file
-        QStringList bpl = bandplanLimits.split(',');
-        if (bpl.count() == 2)
-        {
-            bool okL;
-            bool okH;
-            double flow = bpl[0].trimmed().remove('.').toDouble(&okL);
-            double fhigh = bpl[1].trimmed().remove('.').toDouble(&okH);
-            if (okL && okH)
-            {
-                contestBandFlow = flow * 1000;
-                contestBandFHigh = fhigh * 1000;
-                bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
-                bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
-            }
-            else
-            {
-                getBandLimitsFromBandListXML();
-            }
-        }
-        else
-        {
-            getBandLimitsFromBandListXML();
-        }
-    }
 
     if (operatingFreqExclusionsPlanOk)
     {
@@ -845,6 +809,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
+            QString sdt = spotDateTime.toString();
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));
@@ -1403,10 +1368,21 @@ void BandmapClientFrame::setFreq(Frequency freq)
 {
     if (lastfreq != freq)
     {
+        QString bandChanged;
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (tslf)
+        {
+            bandChanged = tslf->checkBandChange(freq, lastfreq);
+            if (!bandChanged.isEmpty())
+            {
+                setContestBandMode(bandChanged, contestModeStr);
+            }
+        }
         lastfreq = freq;
         curFreq = freq;
 
         QString sf = freq.str();
+
 
         // check freq matches contest band
         checkContestBandMatch(curFreq);
@@ -1440,6 +1416,46 @@ void BandmapClientFrame::setFreq(Frequency freq)
     }
 }
 
+void BandmapClientFrame::setContestBandMode(QString band, QString mode)
+{
+    contestBandStr = band;
+    setMode(mode);
+
+    QString bandplanLimits = readBandmapFreqLimit(contestBandStr, contestModeStr);
+
+    if (bandplanLimits.isEmpty())
+    {
+        getBandLimitsFromBandListXML();
+    }
+    else
+    {
+        // use user bandplan limits ini file
+        QStringList bpl = bandplanLimits.split(',');
+        if (bpl.count() == 2)
+        {
+            bool okL;
+            bool okH;
+            double flow = bpl[0].trimmed().remove('.').toDouble(&okL);
+            double fhigh = bpl[1].trimmed().remove('.').toDouble(&okH);
+            if (okL && okH)
+            {
+                contestBandFlow = flow * 1000;
+                contestBandFHigh = fhigh * 1000;
+                bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
+                bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
+            }
+            else
+            {
+                getBandLimitsFromBandListXML();
+            }
+        }
+        else
+        {
+            getBandLimitsFromBandListXML();
+        }
+    }
+}
+
 bool BandmapClientFrame::checkContestBandMatch(Frequency curFreq)
 {
 
@@ -1460,6 +1476,9 @@ bool BandmapClientFrame::checkContestBandMatch(Frequency curFreq)
 
 void BandmapClientFrame::setMode(QString mode)
 {
+    contestModeStr = mode;
+    contestMode = getModeOffSet(contestModeStr);
+
     if (!mode.isEmpty())
     {
         if (mode.contains(':') && mode.contains(hamlibData::MGM))

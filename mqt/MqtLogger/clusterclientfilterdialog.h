@@ -56,7 +56,6 @@ public:
     //ClusterClientFilterSettings filterSettings;
 
     void setBandFilter(QString band, bool state);
-    bool getEnableHFSpotsFlag();
 
     void saveClusterFilterToContest();
     void setModeFilter(QString mode, bool state);

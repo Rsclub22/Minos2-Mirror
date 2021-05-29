@@ -1726,19 +1726,6 @@ void ClusterMainWindow::findLocInComment(QString &spotLoc, QString &dxLoc, const
     QRegularExpression full_loc_exp;
     QRegularExpression part_loc_exp;
 
-    /*if (!enableHFSpots || (enableHFSpots && bandmask > END_HF))
-    {
-        full_loc_exp = FULL_LOC_EXP;
-        part_loc_exp = PART_LOC_EXP;
-
-    }
-    else
-    {
-        full_loc_exp = FULL_LOC_EXP_HF;
-        part_loc_exp = PART_LOC_EXP_HF;
-    }
-*/
-
     full_loc_exp = FULL_LOC_EXP_HF;
     part_loc_exp = PART_LOC_EXP_HF;
 

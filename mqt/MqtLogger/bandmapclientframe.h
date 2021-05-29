@@ -60,6 +60,7 @@ public:
     QTimer* mouseInFrameTimer = nullptr;
 
     void setFreq(Frequency);
+    void setContestBandMode(QString band, QString mode);
     void setContest(BaseContestLog *c);
     void setHoldUpdateFlag(bool state);
     bool getPurgeSpotFlag(){return purgeSpotFlag;}

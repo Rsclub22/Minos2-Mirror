@@ -41,7 +41,6 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
     ignoreDistanceChangedFlag(false),
     ignoreEmptyDistanceChangedFlag(false),
     settingsChangedFlag(false)
-    //enableHFSpots(false)
 {
     ui->setupUi(this);
     QSettings settings;
@@ -54,15 +53,6 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
 
     bands = bands_;
     clustermodes = clustermodes_;
-
-
-    // read enable hf spots flag
-    //QString fileName = CLUSTER_SETTINGS_FILE;
-    //QSettings config(fileName, QSettings::IniFormat);
-    //config.beginGroup("HFSpots");
-   // enableHFSpots = config.value("enable", false).toBool();
-   // config.endGroup();
-
 
     initCheckFilterTab();
 }
@@ -1225,13 +1215,6 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
     }
 
 }
-
-
-//bool ClusterClientFilterDialog::getEnableHFSpotsFlag()
-//{
-//    return enableHFSpots;
-//}
-
 
 void ClusterClientFilterDialog::enableDistanceFields()
 {
