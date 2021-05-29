@@ -810,6 +810,8 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             QString sdt = spotDateTime.toString();
+            spotDateTime.setTimeSpec(Qt::UTC);
+            QString sdtutc = spotDateTime.toString();
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));

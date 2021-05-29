@@ -868,6 +868,7 @@ void ClusterClientFrame::addDxSpotToTable(const QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
+            spotDateTime.setTimeSpec(Qt::UTC);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch()/1000;
 
             QSharedPointer<ClusterSpotData> newSpot(new ClusterSpotData());

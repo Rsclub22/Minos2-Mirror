@@ -1485,6 +1485,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
 
     if (std::abs(freq - curFreq) < 1000 )
     {
+        // highlight this line as current frequency
         bLineStart = "<b>";
         bLineEnd = "</b>";
     }
