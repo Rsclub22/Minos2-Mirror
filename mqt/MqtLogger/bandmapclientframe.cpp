@@ -567,10 +567,6 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     setContestBandMode(ct->currentBand.getValue(), ct->currentMode.getValue());
 
-    int zoomLevel = readBandmapZoomLevel();     // set zoom to saved zoomlevel
-    bandmapView->setBandmapZoom(zoomLevel);
-    setZoomLevelLabelText(zoomLevel);
-
     if (operatingFreqExclusionsPlanOk)
     {
         // send operating freq to dial
@@ -785,7 +781,20 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             // check to see if spot is for this contest band
 
-            if (spotlist[DXBANDSTR] != contestBandStr)
+            QString band = spotlist[DXBANDSTR];
+            QString bandlist = ct->contestBands.getValue();
+            if (bandlist == allHF)
+            {
+                BandList &blist = BandList::getBandList();
+                QSharedPointer<BandInfo>  bi;
+                bool bandOK = blist.findBand(band, bi);
+                if (!bandOK || bi->getType() != "HF")
+                {
+                   return res;
+                }
+
+            }
+            else if (spotlist[DXBANDSTR] != contestBandStr)
             {
                 return res;  // not for this contest band
             }
@@ -932,8 +941,14 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 QString savedCall = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
                 Callsign savedCs;
                 savedCs.setFullCall(savedCall);
+                QString savedBand = bandmapDataModel->data(bandmapDataModel->index(row, DXBANDSTR_COL_NUM ),  BMP_DataStoredRole).toString();
+                QString savedMode = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_MODE_COL_NUM ),  BMP_DataStoredRole).toString();
+
                 Callsign loggedCall = spot->getDxCall();
-                if (savedCs == loggedCall)
+                QString band = spot->getBand();
+                QString mode = spot->getMode();
+
+                if (savedCs == loggedCall && savedBand == band && savedMode == mode)
                 {
                     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
                     if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
@@ -993,7 +1008,14 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 QString savedCall = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
                 Callsign savedCs;
                 savedCs.setFullCall(savedCall);
-                if (spot->getDxCall() == savedCs)
+                QString savedBand = bandmapDataModel->data(bandmapDataModel->index(row, DXBANDSTR_COL_NUM ),  BMP_DataStoredRole).toString();
+                QString savedMode = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_MODE_COL_NUM ),  BMP_DataStoredRole).toString();
+
+                Callsign loggedCall = spot->getDxCall();
+                QString band = spot->getBand();
+                QString mode = spot->getMode();
+
+                if (savedCs == loggedCall && savedBand == band && savedMode == mode)
                 {
                     Frequency savedFreq = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ),  BMP_DataStoredRole));
                     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
@@ -1456,6 +1478,11 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
             getBandLimitsFromBandListXML();
         }
     }
+    int zoomLevel = readBandmapZoomLevel();     // set zoom to saved zoomlevel
+    bandmapView->setBandmapZoom(zoomLevel);
+    setZoomLevelLabelText(zoomLevel);
+
+
 }
 
 bool BandmapClientFrame::checkContestBandMatch(Frequency curFreq)
