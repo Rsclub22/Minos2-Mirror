@@ -1813,6 +1813,13 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
             stopKeyer = true;
             trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr()).arg(sCurFreq.traceStr()));
         }
+        QString bandChanged = checkBandChange(f, sCurFreq);
+        if (!bandChanged.isEmpty())
+        {
+            contest->currentBand.setValue(bandChanged);
+            FKHRigControlFrame->setContestBand(bandChanged);
+        }
+
         sCurFreq = f;
         FKHRigControlFrame->setFreq(f);
         runButtonsFrame->setFreq(f);
