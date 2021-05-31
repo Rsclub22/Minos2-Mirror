@@ -14,7 +14,7 @@
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
 
-ContestContact::ContestContact( LoggerContestLog * ct, bool time_now ) : DisplayContestContact( ct, time_now )
+ContestContact::ContestContact( LoggerContestLog * ct, bool time_now, bool rInit ) : DisplayContestContact( ct, time_now, rInit )
 {}
 ContestContact::~ContestContact()
 {}

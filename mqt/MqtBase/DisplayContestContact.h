@@ -54,7 +54,7 @@ class DisplayContestContact: public BaseContact
       //      virtual bool GJVload( int diskBlock ){return false;}   // moved to BAseCointact
 
 
-      DisplayContestContact( BaseContestLog *contest, bool time_now );
+      DisplayContestContact(BaseContestLog *contest, bool time_now , bool rInit);
       ~DisplayContestContact() override;
       virtual bool ne( const ScreenContact& ) const override;
       virtual void checkContact(bool inScan) override;

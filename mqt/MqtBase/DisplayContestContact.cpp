@@ -14,7 +14,7 @@
 #include "DisplayContestContact.h"
 #include "BandList.h"
 //==========================================================================
-DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now )
+DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now, bool rInit )
       : BaseContact( ct, time_now ),
       modificationCount( 0 ),
       logSequence( 0 )
@@ -67,8 +67,16 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        }
        else
        {
-           repr.setInitialValue( "5  " );
-           reps.setInitialValue( "5  " );
+           if (rInit)
+           {
+               repr.setInitialValue( "5  " );
+               reps.setInitialValue( "5  " );
+           }
+           else
+           {
+               repr.setInitialValue( "   " );
+               reps.setInitialValue( "   " );
+           }
        }
    }
    else

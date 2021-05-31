@@ -25,7 +25,8 @@ private:
     Ui::DisplayOptions *ui;
 
     bool so = false;
-    bool autoFill = false;
+    bool reportReadabilityInitialise = false;
+    bool reportStrengthAutoFill = false;
     bool TabSandP = false;
     int cap = 0;
     int lcf;

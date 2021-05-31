@@ -32,7 +32,7 @@ class ScreenContact
          return logSequence;
       }
 
-      void initialise( BaseContestLog *ct );
+      void initialise( BaseContestLog *ct, bool rInit );
 
       void score();
 

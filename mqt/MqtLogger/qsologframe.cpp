@@ -439,7 +439,9 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 {
     catchup = false;
     contest = pcontest;
-    screenContact.initialise( contest ); // get ops etc correct
+    bool rInit;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
+    screenContact.initialise( contest, rInit ); // get ops etc correct
     setXferEnabled(false, contest, "Log");
 
     if (!pcontest)
@@ -929,7 +931,9 @@ void QSOLogFrame::startNextEntry( )
    if ( !restorePartial() )
    {
        // no partial to restore
-      screenContact.initialise( contest );
+       bool rInit;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
+      screenContact.initialise( contest, rInit );
    }
 
    updateQSOTime();
@@ -1629,6 +1633,7 @@ void QSOLogFrame::fillRst( QLineEdit *rIl, QString &rep, const QString &fmode )
    {
       bool autoFill;
       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
+
       if (autoFill)
       {
          if ( !Validator::validateRST( rIl->text().trimmed() ) )
@@ -3133,7 +3138,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             }
 
             ScreenContact scc;
-            scc.initialise(contest);
+            scc.initialise(contest, false);
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
             scc.mode = n[3];

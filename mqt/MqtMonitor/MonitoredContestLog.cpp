@@ -11,6 +11,6 @@ MonitoredContestLog::~MonitoredContestLog()
 
 void MonitoredContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lct )
 {
-   lct = QSharedPointer<BaseContact>(new DisplayContestContact( this, timeNow ));
+   lct = QSharedPointer<BaseContact>(new DisplayContestContact( this, timeNow, false ));
 }
 //=============================================================================================

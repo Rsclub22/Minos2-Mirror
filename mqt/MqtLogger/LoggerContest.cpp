@@ -41,7 +41,9 @@ LoggerContestLog::LoggerContestLog(bool hf) : BaseContestLog(hf),
 }
 void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lct )
 {
-   lct = QSharedPointer<BaseContact>(new ContestContact( this, timeNow ));
+    bool rInit;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
+    lct = QSharedPointer<BaseContact>(new ContestContact( this, timeNow, rInit ));
 }
 LoggerContestLog::~LoggerContestLog()
 {

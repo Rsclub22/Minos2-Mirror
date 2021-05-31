@@ -9,8 +9,9 @@
 #include "base_pch.h"
 #include "contest.h"
 #include "cutils.h"
-#include "ScreenContact.h"
 #include "BandList.h"
+
+#include "ScreenContact.h"
 
 ScreenContact::ScreenContact() :
     logSequence( 0 ),
@@ -18,7 +19,7 @@ ScreenContact::ScreenContact() :
 {}
 ScreenContact::~ScreenContact()
 {}
-void ScreenContact::initialise( BaseContestLog *ct )
+void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
 {
     contest = ct;
     logSequence = static_cast<unsigned long> (- 1);
@@ -81,8 +82,16 @@ void ScreenContact::initialise( BaseContestLog *ct )
         }
         else
         {
-            repr = "5  " ;
-            reps = "5  " ;
+            if (rInit)
+            {
+                repr = "5  " ;
+                reps = "5  " ;
+            }
+            else
+            {
+                repr = "   " ;
+                reps = "   " ;
+            }
         }
     }
     else

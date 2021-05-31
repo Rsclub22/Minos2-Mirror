@@ -118,7 +118,7 @@ bool decodeMessage::checkAsContact()
         return false;
 
     ScreenContact scc;
-    scc.initialise(cc);
+    scc.initialise(cc, false);
     scc.cs = fromCall;
     scc.loc = fromGrid;
     scc.time = dtg(true);

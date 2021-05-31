@@ -105,6 +105,13 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
+        <widget class="QCheckBox" name="ReadabilityAutofillcb">
+         <property name="text">
+          <string>Signal Readability Initialise to 5</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCheckBox" name="ReportAutofillcb">
          <property name="text">
           <string>Signal Report AutoFill</string>

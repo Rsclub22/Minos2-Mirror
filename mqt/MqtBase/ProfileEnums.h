@@ -55,6 +55,7 @@ enum LOGGERPROFILE {
    elpADIFPort,
    elpHelpFile, elpHelpEntryURL,
    elpPDFFile,
+   elpReadabilityInit,
    elpAutoFill,
    elpAllowHF,
    elpTabforSandP,

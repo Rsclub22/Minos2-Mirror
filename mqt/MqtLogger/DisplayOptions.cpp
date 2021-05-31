@@ -25,8 +25,11 @@ void DisplayOptions::initialise()
     so = LogContainer->isShowOperators();
     ui->ShowOperatorscb->setChecked(so);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, autoFill );
-    ui->ReportAutofillcb->setChecked(autoFill);
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, reportReadabilityInitialise );
+    ui->ReadabilityAutofillcb->setChecked(reportReadabilityInitialise);
+
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, reportStrengthAutoFill );
+    ui->ReportAutofillcb->setChecked(reportStrengthAutoFill);
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
     ui->TabSandPActioncb->setChecked(TabSandP);
@@ -85,8 +88,15 @@ void DisplayOptions::finalise()
         MinosLoggerEvents::SendShowOperators();
     }
 
+    bool rinit = ui->ReadabilityAutofillcb->isChecked();
+    if (reportReadabilityInitialise != rinit)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpReadabilityInit, rinit );
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+    }
+
     bool nautoFill = ui->ReportAutofillcb->isChecked();
-    if (autoFill != nautoFill)
+    if (reportStrengthAutoFill != nautoFill)
     {
         TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, nautoFill );
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
