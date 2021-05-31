@@ -1979,6 +1979,11 @@ void TSingleLogFrame::on_SetPttState(bool state)
     }
 }
 
+void TSingleLogFrame::setPlaceholders(QStringList nearMatches)
+{
+    GJVQSOLogFrame->setPlaceholders(nearMatches);
+}
+
 void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )

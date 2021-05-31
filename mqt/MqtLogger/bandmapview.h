@@ -179,7 +179,7 @@ private:
     bool traceDebugFlag = false;
 
     bool lessGreaterThanDistanceFlag = false;
-
+    QStringList nearMatches;
 
     void assembleSpotMsg(int row, QString& markerMsg);
     void assembleToolTip(int row, Frequency freq, QString& toolTipMsg);

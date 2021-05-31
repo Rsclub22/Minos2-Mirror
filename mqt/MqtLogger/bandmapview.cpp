@@ -14,6 +14,8 @@
 #include "bandmapview.h"
 #include "rigutils.h"
 #include "MinosLoggerEvents.h"
+#include "tsinglelogframe.h"
+#include "tlogcontainer.h"
 #include "rigutils.h"
 #include "ContestApp.h"
 #include "delayedaction.h"
@@ -1054,6 +1056,7 @@ void BandmapView::drawBandMapSpots()
         return;
     }
 
+    nearMatches.clear();
     traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
 
     deleteItemsFromMarkerList();
@@ -1263,7 +1266,12 @@ void BandmapView::drawBandMapSpots()
                 }
             }
         }
-
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (tslf)
+        {
+            nearMatches.sort();
+            tslf->setPlaceholders(nearMatches);
+        }
     }
 
 
@@ -1413,6 +1421,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
     Frequency curFreq = dial->getCurFreq();
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
+    QString dxMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     bool locWkd = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
     QString dxDist = model()->data(model()->index(row, DXDIST_COL_NUM), BMP_DataStoredRole).toString();
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
@@ -1483,11 +1492,20 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (std::abs(freq - curFreq) < 1000 )
+    int offset = std::abs(freq - curFreq);
+    if (offset < 1000 )
     {
         // highlight this line as current frequency
         bLineStart = "<b>";
         bLineEnd = "</b>";
+
+        QString nm;
+        QTextStream os(&nm);
+        os.setFieldWidth(5);
+        os << offset;
+        os.setFieldWidth(0);
+        os << "|" << dxCallsign << "|" << dxLoc << "|" << dxMode;
+        nearMatches.push_back(nm);
     }
 
     QString markSym = "";

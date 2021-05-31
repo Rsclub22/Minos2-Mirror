@@ -169,6 +169,8 @@ public:
     void onSetPttType(int type, PubSubName psn);
     void on_SetPttState(bool state);
 
+    void setPlaceholders(QStringList nearMatches);
+
     void buildFrame();
 
 private:

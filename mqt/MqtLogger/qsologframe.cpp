@@ -697,6 +697,16 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     // controls (this should really be the job of tab, but...)
 
     QWidget *currn = current;
+    QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
+    if (currn == cte && cte->text().isEmpty())
+    {
+        QString pht = cte->placeholderText();
+        if (!pht.isEmpty())
+        {
+            cte->setText(pht);
+        }
+    }
+
     if ( !valid( cmCheckValid ) || ( currn == ui->RSTTxFrame->getTextEditEdit() ) || ( currn == ui->RSTRxFrame->getTextEditEdit() ) )
        // make sure all single and cross field
        // validation has been done
@@ -3107,6 +3117,59 @@ void QSOLogFrame::setQrzButtonVisible(bool state)
 void QSOLogFrame::setqrzDisplayFrameLoaded(bool loaded)
 {
     qrzDisplayFrameLoaded = loaded;
+}
+
+void QSOLogFrame::setPlaceholders(QStringList nearMatches)
+{
+    if (nearMatches.size())
+    {
+        if (ui->CallsignFrame->getTextEditEdit()->text().isEmpty())
+        {
+            QStringList n = nearMatches[0].split('|');
+            ui->CallsignFrame->getTextEditEdit()->setPlaceholderText(n[1]);
+            if (contest->locatorMandatoryField.getValue())
+            {
+                ui->LocFrame->getTextEditEdit()->setPlaceholderText(n[2]);
+            }
+
+            ScreenContact scc;
+            scc.initialise(contest);
+            scc.cs.setFullCall(n[1]);
+            scc.loc.setLoc(n[2]);
+            scc.mode = n[3];
+            scc.time = dtg(true);
+            QString cb;
+            scc.frequency = contest->getTxFreqBand(Frequency(), cb);
+
+            scc.checkScreenContact();
+            if ( scc.cs.getValRes() == ERR_DUPCS)
+            {
+                ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditFrLightRedBkBk);
+            }
+            else
+            {
+                ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+            }
+        }
+        else
+        {
+            ui->CallsignFrame->getTextEditEdit()->setPlaceholderText("");
+            if (contest->locatorMandatoryField.getValue())
+            {
+                ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
+            }
+            ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+        }
+    }
+    else
+    {
+        ui->CallsignFrame->getTextEditEdit()->setPlaceholderText("");
+        if (contest->locatorMandatoryField.getValue())
+        {
+            ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
+        }
+        ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+    }
 }
 
 bool QSOLogFrame::isQrzDisplayFrameLoaded()

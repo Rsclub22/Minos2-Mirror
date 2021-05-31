@@ -99,6 +99,9 @@ public:
     void transferFromWSJTX(QString call);
     void setQrzButtonVisible(bool state);
     void setqrzDisplayFrameLoaded(bool loaded);
+
+    void setPlaceholders(QStringList nearMatches);
+
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -253,6 +256,7 @@ private:
 
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
+    QString ssLineEditFrLightRedBkBk = "QLineEdit { background-color: pink ; border-style: outset ; border-width: 1px ; border-color: red ; color : black }";
 
 
     QMap<QWidget *, QString> widgetStyles;
