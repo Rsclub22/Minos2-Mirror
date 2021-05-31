@@ -59,7 +59,9 @@ to be sure you are in your home directory,
 
 and run tools.sh (as above)
 
+cd Minos2
 sudo ./tools.sh
+cd ~
 
 Then
 
