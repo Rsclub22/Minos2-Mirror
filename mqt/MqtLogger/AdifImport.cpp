@@ -116,6 +116,11 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
          strcpysp( temp, FieldContent, FieldLength );
          aqso->extraText.setValue( temp );
       }
+      if ( Fieldname.toUpper() == "IOTA" )
+      {
+         strcpysp( temp, FieldContent, FieldLength );
+         aqso->extraText.setValue( temp );
+      }
       if ( Fieldname.toUpper() == "FREQ" )
       {
           strcpysp( temp, FieldContent, FieldLength );
@@ -292,7 +297,7 @@ bool ADIFImport::importAdifFile()
 {
    //Create and Open File Stream
     QTextStream in( adifContestFile.data() );
-    fileContent =in.readAll();
+    fileContent = in.readAll();
     offset = 0;
     limit = fileContent.size();
     return true;

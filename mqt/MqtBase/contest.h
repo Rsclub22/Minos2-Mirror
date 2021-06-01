@@ -76,8 +76,6 @@ class BaseContestLog: public BaseLogList
       // This is the basis behind all variants - currently we have Logger and Monitor
       // which hold slightly different info, and more importantly handle backing store
       // totally differently
-      QHash<QString, QHash<QString,int> > districtWorked;
-      QHash<QString, QHash<QString,int> > countryWorked;
 
       MinosItem<bool> protectedContest;
       // This is private as in general you shuld be using isReadOnly()
@@ -273,48 +271,13 @@ class BaseContestLog: public BaseLogList
       void loadBonusList();
       int getSquareBonus(QString sloc) const;
 
-      int getDistrictsWorked( const QString &item )
-      {
-          int n = 0;
-          for(auto &dc: qAsConst(districtWorked))
-          {
-              if (dc.contains(item))
-              {
-                  auto nc = dc.value(item);
-                  n += nc;
-              }
-          }
-          return n;
-      }
-      int getCountriesWorked( const QString &item )
-      {
-          int n = 0;
-          for(auto &dc: qAsConst(countryWorked))
-          {
-              if (dc.contains(item))
-              {
-                  auto nc = dc.value(item);
-                  n += nc;
-              }
-          }
-          return n;
-      }
-      int getDistrictsWorked( const QString &band, const QString &item )
-      {
-          if (districtWorked.contains(band))
-          {
-              return districtWorked[band][item];
-          }
-         return 0;
-      }
-      int getCountriesWorked( QString band, const QString &item )
-      {
-          if (countryWorked.contains(band))
-          {
-              return countryWorked[band][item];
-          }
-         return 0;
-      }
+      int getDistrictsWorked( const QString &item );
+      int getCountriesWorked( const QString &item );
+      int getDistrictsWorked( const QString &band, const QString &item );
+      int getCountriesWorked( QString band, const QString &item );
+
+      QHash<QString, QHash<QString,int> > districtWorked;
+      QHash<QString, QHash<QString,int> > countryWorked;
       QMap<QString, LocList > locs;
 
       QMap<QString, int > nctry;

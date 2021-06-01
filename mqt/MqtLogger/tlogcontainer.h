@@ -130,11 +130,15 @@ private:
     QAction *newCheckableAction(const QString text, QMenu *m, void (TLogContainer::*slotparam)(bool) );
     void setupMenus();
 
+    void FileImportActionExecute(bool hf);
+    void FileNewActionExecute(bool hf);
+
     QAction *HelpAction;
     QAction *HelpAboutAction;
 
     QAction *FileOpenAction;
-    QAction *FileImportAction;
+    QAction *FileImportVHFAction;
+    QAction *FileImportHFAction;
     QAction *ListOpenAccept;
     QAction *ContestDetailsAction;
     QAction *FileCloseAction;
@@ -197,7 +201,9 @@ private slots:
     void selectSessionAction();
     void openRecentFile();
     void FileOpenActionExecute();
-    void FileImportActionExecute();
+    void FileImportVHFActionExecute();
+    void FileImportHFActionExecute();
+
     void ManageListsActionExecute();
     void FileCloseActionExecute();
     void CloseAllActionExecute();
@@ -211,7 +217,6 @@ private slots:
     void MakeEntryActionExecute();
     void AppendAdifActionExecute();
     void onSetMemoryActionExecute();
-    void FileNewActionExecute(bool hf);
     void VHFFileNewActionExecute();
     void HFFileNewActionExecute();
     void ShiftTabLeftActionExecute();

@@ -1266,6 +1266,8 @@ bool LoggerContestLog::exportKML(QSharedPointer<QFile> expfd )
 //============================================================
 bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
 {
+    trace(QString("Importing LOG log %1").arg(hLogFile->fileName()));
+
     QStringList ls;
     QTextStream in( hLogFile.data() );
 
@@ -1490,11 +1492,14 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
 //====================================================================
 bool LoggerContestLog::importAdif(QSharedPointer<QFile> adifContestFile )
 {
+    trace(QString("Importing ADIF log %1").arg(adifContestFile->fileName()));
+
    return ADIFImport::doImportADIFLog( this, adifContestFile );
 }
 //====================================================================
 bool LoggerContestLog::importReg1Test(QSharedPointer<QFile> r1ContestFile )
 {
+    trace(QString("Importing Reg1Test log %1").arg(r1ContestFile->fileName()));
    // in AdjSQL we do this as a semi-colon separated format, not as something special
    return reg1test::doImportReg1test( this, r1ContestFile );
 }

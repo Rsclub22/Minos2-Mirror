@@ -423,7 +423,15 @@ void TLogContainer::setupMenus()
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
     FileOpenAction = newAction(QT_TR_NOOP("&Open Contest..."), ui->menuFile, &TLogContainer::FileOpenActionExecute);
-    FileImportAction = newAction(QT_TR_NOOP("&Import Contest..."), ui->menuFile, &TLogContainer::FileImportActionExecute);
+    FileImportVHFAction = newAction(QT_TR_NOOP("&Import VHF Contest..."), ui->menuFile, &TLogContainer::FileImportVHFActionExecute);
+    if (allowHF)
+    {
+        FileImportHFAction = newAction(QT_TR_NOOP("&Import HF Contest..."), ui->menuFile, &TLogContainer::FileImportHFActionExecute);
+    }
+    else
+    {
+        FileImportHFAction = nullptr;
+    }
     recentFilesMenu = newMenu(ui->menuFile, QT_TR_NOOP("Reopen Contest"));
 
     for (int i = 0; i < MaxRecentFiles; ++i)
@@ -491,7 +499,11 @@ void TLogContainer::setupMenus()
     setMemoryAction = newMemoryAction(QT_TR_NOOP("Add as new memory..."), &TabPopup, &TLogContainer::onSetMemoryActionExecute);
 
     TabPopup.addAction(FileOpenAction);
-    TabPopup.addAction(FileImportAction);
+    TabPopup.addAction(FileImportVHFAction);
+    if (FileImportHFAction)
+    {
+        TabPopup.addAction(FileImportHFAction);
+    }
     TabPopup.addMenu(recentFilesMenu);
     TabPopup.addAction(VHFFileNewAction);
     if (HFFileNewAction)
@@ -927,7 +939,16 @@ void TLogContainer::FileOpenActionExecute()
         }
     }
 }
-void TLogContainer::FileImportActionExecute()
+void TLogContainer::FileImportVHFActionExecute()
+{
+    FileImportActionExecute(false);
+}
+void TLogContainer::FileImportHFActionExecute()
+{
+    FileImportActionExecute(true);
+}
+
+void TLogContainer::FileImportActionExecute(bool hf)
 {
     // first choose file
 //"Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
@@ -945,7 +966,7 @@ void TLogContainer::FileImportActionExecute()
                      "All Files (*.*)") ;
 
     QStringList fnames = QFileDialog::getOpenFileNames( this,
-                       tr("Import contests"),
+                       tr("Import %1 contests").arg(hf?"HF":"VHF"),
                        InitialDir,  // dir
                        Filter
                        );
@@ -955,8 +976,9 @@ void TLogContainer::FileImportActionExecute()
         BaseContestLog *ct = nullptr;
         if ( !fname.isEmpty() )
         {
+            trace(QString("about to import %1 as %2").arg(fname, (hf?"HF":"VHF")));
             ContestDetails pced(this );
-            ct = addSlot( &pced, fname, false, -1, false );   // not automatically read only
+            ct = addSlot( &pced, fname, false, -1, hf );   // not automatically read only
             if (ct)
             {
                 selectContest(ct, QSharedPointer<BaseContact>());
@@ -1132,6 +1154,7 @@ void TLogContainer::AppendAdifActionExecute()
            return;
         }
 
+        trace(QString("Appending ADIF log %1 to %2").arg(fname, ct->cfileName));
         int spoint = ct->ctList.count();
         if (! ADIFImport::doImportADIFLog(dynamic_cast<LoggerContestLog *>(ct),  adifFile ))
         {

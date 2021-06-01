@@ -568,7 +568,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = time.getTime( DTGDISP );
             break;
          case egBand:
-            res = clp->getCabrilloFreqBand(frequency.getValue());
+            clp->getTxFreqBand(frequency.getValue(), res);
             break;
          case egCall:
             res = cs.getFullCall();

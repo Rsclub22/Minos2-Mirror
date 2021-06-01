@@ -1549,6 +1549,48 @@ int BaseContestLog::getNctry() const
     }
     return tot;
 }
+int BaseContestLog::getDistrictsWorked( const QString &item )
+{
+    int n = 0;
+    for(auto &dc: qAsConst(districtWorked))
+    {
+        if (dc.contains(item))
+        {
+            auto nc = dc.value(item);
+            n += nc;
+        }
+    }
+    return n;
+}
+int BaseContestLog::getCountriesWorked( const QString &item )
+{
+    int n = 0;
+    for(auto &dc: qAsConst(countryWorked))
+    {
+        if (dc.contains(item))
+        {
+            auto nc = dc.value(item);
+            n += nc;
+        }
+    }
+    return n;
+}
+int BaseContestLog::getDistrictsWorked( const QString &band, const QString &item )
+{
+    if (districtWorked.contains(band))
+    {
+        return districtWorked[band][item];
+    }
+   return 0;
+}
+int BaseContestLog::getCountriesWorked( QString band, const QString &item )
+{
+    if (countryWorked.contains(band))
+    {
+        return countryWorked[band][item];
+    }
+   return 0;
+}
 
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
