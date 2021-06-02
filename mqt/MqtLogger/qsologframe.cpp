@@ -707,6 +707,16 @@ void QSOLogFrame::on_GJVOKButton_clicked()
         {
             cte->setText(pht);
         }
+        if (contest->locatorMandatoryField.getValue())
+        {
+            QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+            pht = lte->placeholderText();
+            if (!pht.isEmpty())
+            {
+                lte->setText(pht);
+            }
+        }
+
     }
 
     if ( !valid( cmCheckValid ) || ( currn == ui->RSTTxFrame->getTextEditEdit() ) || ( currn == ui->RSTRxFrame->getTextEditEdit() ) )
