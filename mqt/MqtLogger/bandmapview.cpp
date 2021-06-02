@@ -102,6 +102,7 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     connect( bandmapGraphicsView, &BandmapGraphicsPanel::customContextMenuRequested, this, &BandmapView::on_bandmap_customContextMenuRequested);
 
 
+    bandmapGraphicsView->setBackgroundBrush(QBrush());
 }
 
 
