@@ -151,7 +151,6 @@ private:
 
     BandmapView *bandmapView = nullptr;
     QItemSelectionModel *selectionModel = nullptr;
-    QGraphicsView* bandmapGraphicsView = nullptr;
 
     BandmapSortFilterProxyModel* bandmapSpotProxyModel = nullptr;
     BandmapClientFilterDialog* filterSetup = nullptr;
@@ -239,6 +238,7 @@ private:
 
 protected:
 
+    void keyPressEvent(QKeyEvent *event) override;
 
 private slots:
 

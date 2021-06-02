@@ -1985,5 +1985,25 @@ void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
 {
     bandmapSpotProxyModel->setFilterString(filter);
     trace("BandmapView::bandmapUpdate() on_textFilterEdit_textChanged");
+
+    if (filter.isEmpty())
+    {
+        ui->bandmapGraphicsView->setBackgroundBrush(QBrush());
+    }
+    else
+    {
+        ui->bandmapGraphicsView->setBackgroundBrush(QBrush(static_cast< QColor> ( 0x00FF80C0 ).lighter(135)));
+    }
     bandmapView->bandmapUpdate();
+}
+void BandmapClientFrame::keyPressEvent(QKeyEvent *event)
+{
+    int Key = event->key();
+    if (Key == Qt::Key_Escape)
+    {
+        ui->textFilterEdit->clear();
+    }
+
+    QWidget::keyPressEvent(event);
+
 }
