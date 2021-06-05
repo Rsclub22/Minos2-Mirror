@@ -151,6 +151,10 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           {
               aqso->mode.setValue(temp);
           }
+          else if (temp == "SSB")
+          {
+              aqso->mode.setValue("PH");
+          }
           else if (temp == hamlibData::FM)
           {
               aqso->mode.setValue(temp);
