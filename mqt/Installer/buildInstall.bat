@@ -33,7 +33,7 @@ IF %ERRORLEVEL% == 0 goto make
   goto reset
 :make
 
-mingw32-make release
+mingw32-make -j8 release
 
 IF %ERRORLEVEL% == 0 goto installer
   echo mingw32-make failed; please fix errors and rebuild
