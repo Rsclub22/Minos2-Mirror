@@ -91,6 +91,18 @@ void RunButtonsFrame::radioIsConnected(bool on)
 }
 void RunButtonsFrame::setFreq(Frequency freq)
 {
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    QString bandChanged = tslf->checkBandChange(freq, curRadioFreq);
+    if (!bandChanged.isEmpty())
+    {
+        // we need to switch the run button mapping
+        trace(QString("runButtonsFrame band changed"));
+        runButOffActionSelected(RUN_BUTTON_1_ON);
+        runButOffActionSelected(RUN_BUTTON_2_ON);
+        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+    }
+
     curRadioFreq = freq;
     // rig frequency changed signal
     chkRunFreq();
@@ -108,7 +120,6 @@ void RunButtonsFrame::setFreq(Frequency freq)
 
 void RunButtonsFrame::initRunMemoryButton()
 {
-    memoryData::memData m;
     runButtonMap[0] = new RunMemoryButton(ui->RunButton1, this, 0);
     connect( runButtonMap[0], &RunMemoryButton::clearActionActivated , this, &RunButtonsFrame::runButClearActSel, Qt::QueuedConnection );
     connect( runButtonMap[0], &RunMemoryButton::buttonActivated, this, &RunButtonsFrame::runButActivated, Qt::QueuedConnection );
@@ -337,6 +348,8 @@ void RunButtonsFrame::runButWriteActSel(int buttonNumber)
     runData.mode = rigControl->curMode;
     runData.bearing = COMPASS_ERROR;
     runData.time = "00:00";
+    runData.memno = buttonNumber;
+
     // load run data into run memory
 
     RunButtonDialog runDialog(this);
@@ -513,9 +526,9 @@ memoryData::memData RunButtonsFrame::getRunMemoryData(int memoryNumber)
 
     if (ct != nullptr)
     {
-        if (ct->runMemories.size() > memoryNumber)
+        if (ct->runMemories[ct->currentBand.getValue()].size() > memoryNumber)
         {
-           m = ct->runMemories[memoryNumber].getValue();
+           m = ct->runMemories[ct->currentBand.getValue()][memoryNumber].getValue();
 
         }
     }
@@ -575,9 +588,7 @@ RunMemoryButton::~RunMemoryButton()
 
 void RunMemoryButton::memoryShortCutSelected()
 {
-//    rigControlFrame->memoryShortCutSelected(memNo);
     memButton->showMenu();
-    //emit lostFocus();
 }
 void RunMemoryButton::readActionSelected()
 {

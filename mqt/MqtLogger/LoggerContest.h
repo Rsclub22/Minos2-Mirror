@@ -122,7 +122,7 @@ protected:
       MinosStringItem<QString> entEMail;
       MinosStringItem<QString> sectionList; // needed to be carried forward
 
-      QVector<MinosItem<memoryData::memData> > runMemories;
+      QMap<QString, QVector<MinosItem<memoryData::memData> > > runMemories; // memories by band
       QVector<MinosItem<memoryData::memData> > rigMemories;
 
       MinosItem<ClusterClientFilterSettings> clusterFilterSettings;

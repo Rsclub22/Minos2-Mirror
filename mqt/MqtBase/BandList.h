@@ -95,6 +95,8 @@ class BandList
         bool findBand (const QString &freq, QSharedPointer<BandInfo> & );
         bool findBand ( const Frequency &freq, QSharedPointer<BandInfo>  &bi);
 
+        static QString getBand(const Frequency &freq);
+
         QString findType(const QString &band) const;
         QString findType(const Frequency &freq) const;
 

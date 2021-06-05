@@ -93,9 +93,12 @@ void LoggerContestLog::clearDirty()
    sectionList.clearDirty();
    bearingOffset.clearDirty();
 
-   for (int i = 0; i < runMemories.size(); i++)
+   for(auto &m:runMemories)
    {
-       runMemories[i].clearDirty();
+       for (auto &r: m)
+       {
+           r.clearDirty();
+       }
    }
    for (int i = 0; i < rigMemories.size(); i++)
    {
@@ -162,9 +165,12 @@ void LoggerContestLog::setDirty()
    entEMail.setDirty();
    bearingOffset.setDirty();
 
-   for (int i = 0; i < runMemories.size(); i++)
+   for(auto &m:runMemories)
    {
-       runMemories[i].setDirty();
+       for (auto &r: m)
+       {
+           r.setDirty();
+       }
    }
    for (int i = 0; i < rigMemories.size(); i++)
    {
@@ -599,20 +605,23 @@ void LoggerContestLog::removeContact( QSharedPointer<BaseContact> lct )
 //==========================================================================
 void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 {
-    if (runMemories.size() < memno + 1)
+    QString band = BandList::getBand(mem.freq);
+
+    if (runMemories[band].size() < memno + 1)
     {
-        runMemories.resize(memno + 1);
+        runMemories[band].resize(memno + 1);
     }
-    runMemories[memno ].setValue(mem);
+    runMemories[band][memno ].setValue(mem);
     commonSave(false);
 }
 void LoggerContestLog::saveInitialRunMemory(int memno, const memoryData::memData &mem)
 {
-    if (runMemories.size() < memno + 1)
+    QString band = BandList::getBand(mem.freq);
+    if (runMemories[band].size() < memno + 1)
     {
-        runMemories.resize(memno + 1);
+        runMemories[band].resize(memno + 1);
     }
-    runMemories[memno].setInitialValue(mem);
+    runMemories[band][memno].setInitialValue(mem);
 
 }
 //==========================================================================

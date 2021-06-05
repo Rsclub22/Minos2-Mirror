@@ -423,6 +423,19 @@ bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
    return false;
 }
 
+QString BandList::getBand(const Frequency &freq)
+{
+    QString band;
+    BandList &bl = getBandList();
+    QSharedPointer<BandInfo>  b1;
+    bool b1Ok = bl.findBand(freq, b1);
+    if (b1Ok)
+    {
+        band = b1->uk;
+    }
+    return band;
+}
+
 
 
 

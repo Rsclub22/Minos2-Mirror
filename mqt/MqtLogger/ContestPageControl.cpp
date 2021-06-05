@@ -48,9 +48,9 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
                     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( pc);
 
                     memoryData::memData m;
-                    if (ct->runMemories.size() > 0)
+                    if (ct->runMemories.size() > 0 && ct->runMemories[ct->currentBand.getValue()].size() > 0)
                     {
-                       m = ct->runMemories[0].getValue();
+                       m = ct->runMemories[ct->currentBand.getValue()][0].getValue();
                        Frequency cq = m.freq;
                        if (!cq.isClear())
                        {
@@ -58,9 +58,9 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
                        }
 
                     }
-                    if (ct->runMemories.size() > 1)
+                    if (ct->runMemories.size() > 0 && ct->runMemories[ct->currentBand.getValue()].size() > 1)
                     {
-                       m = ct->runMemories[1].getValue();
+                       m = ct->runMemories[ct->currentBand.getValue()][1].getValue();
                        Frequency cq = m.freq;
                        if (!cq.isClear())
                        {

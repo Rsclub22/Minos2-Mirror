@@ -1697,11 +1697,6 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 //        QString logContactMgmSubMode = lct->mgmSubmode.getValue();
         Frequency freq = lct->frequency.getValue();
 
-        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4")
-                 .arg(cs.getFullCall())
-                 .arg(freq.traceStr())
-                 .arg(loc)
-                 .arg(brg));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
@@ -1711,6 +1706,14 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 
         QString logModeStr = lct->mode.getValue();
         QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
+
+        traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4, mode %5")
+                 .arg(cs.getFullCall())
+                 .arg(freq.traceStr())
+                 .arg(loc)
+                 .arg(brg)
+                 .arg(logModeStr));
+
 
         QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::LOGGED));
         spot->setCallsign(cs);

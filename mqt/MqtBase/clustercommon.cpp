@@ -406,7 +406,18 @@ void BandmapClientFilterSettings::setModeFilter(QString mode, bool setting)
 
 bool BandmapClientFilterSettings::getModeFilter(QString mode)
 {
-    if (modeFilterFlag.contains(mode))
+    if (mode == "PH")
+    {
+        if (modeFilterFlag.getModeFilter("USB"))
+        {
+            return true;
+        }
+        if (modeFilterFlag.getModeFilter("LSB"))
+        {
+            return true;
+        }
+    }
+    else if (modeFilterFlag.contains(mode))
     {
         return modeFilterFlag.getModeFilter(mode);
     }

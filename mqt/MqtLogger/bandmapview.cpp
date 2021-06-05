@@ -961,6 +961,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         int yCoord = dial->getYCoordOnDial(f);
         int syCoord;
 
+        QString type = BandmapSpotData::spotName(savedSpotType);
         if (row >= markersAbove)
         {
             // marker at higher frequency
@@ -978,7 +979,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
                 syCoord = centreYCoord + fontOffset;
 
             }
-            //trace(QString("DrawBandmapSpot (above) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
+            //trace(QString("DrawBandmapSpot (above) row = %6 type = %5 curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset).arg(type).arg(row));
 
         }
         else
@@ -996,7 +997,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
                 syCoord = centreYCoord - fontOffset;
 
             }
-            //trace(QString("DrawBandmapSpot (below) curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset));
+            //trace(QString("DrawBandmapSpot (below) row = %6 type = %5 curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset).arg(type).arg(row));
         }
         lastOffset = fontOffset;
         //spotCoord is left, top

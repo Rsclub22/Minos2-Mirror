@@ -36,8 +36,6 @@ public:
 
     void setContest(BaseContestLog *);
 
-    int getMemNo(){return memNo;}
-
     void showButtonOnOff(bool state);
     void showRunToolButtonOffFreq();
     void showRunToolButtonOnFreq();

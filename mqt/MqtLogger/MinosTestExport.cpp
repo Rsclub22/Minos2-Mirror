@@ -541,15 +541,14 @@ void MinosTestExport::exportRigMemory(QSharedPointer<QFile> expfd, int memno )
         sendRequest(expfd, "MinosRigMemory", st);
     }
 }
-void MinosTestExport::exportRunMemory(QSharedPointer<QFile> expfd, int memno )
+void MinosTestExport::exportRunMemory(QSharedPointer<QFile> expfd, MinosItem<memoryData::memData> mem )
 {
-    MinosItem<memoryData::memData> mem = ct->runMemories[memno];
     if (mem.isDirty())
     {
         RPCParamStruct * st = new RPCParamStruct;
         makeHeader( st, 1 );
 
-        st->addMember(memno, "memno");
+        st->addMember(mem.getValue().memno, "memno");
         st->addMember(mem.getValue().freq.str(), "freq");
         st->addMember(mem.getValue().mode, "mode");
 
@@ -558,10 +557,14 @@ void MinosTestExport::exportRunMemory(QSharedPointer<QFile> expfd, int memno )
 }
 void MinosTestExport::exportAllMemories(QSharedPointer<QFile> expfd )
 {
-    for (int i = 0; i < ct->runMemories.size(); i++)
+    for(auto &m:ct->runMemories)
     {
-        exportRunMemory( expfd, i);
+        for (auto &r: m)
+        {
+            exportRunMemory( expfd, r);
+        }
     }
+
     for (int i = 0; i < ct->rigMemories.size(); i++)
     {
         exportRigMemory( expfd, i);
