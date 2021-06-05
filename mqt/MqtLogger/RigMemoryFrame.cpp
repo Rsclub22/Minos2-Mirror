@@ -721,8 +721,8 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
                 {
                     if (!m.freq.isClear())
                     {
-                        qint64 dfreq = m.freq;
-                        dfreq = dfreq/1000000.0;  // MHz
+                        qint64 ifreq = m.freq;
+                        double dfreq = ifreq/1000000.0;  // MHz
 
                         disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
                     }
