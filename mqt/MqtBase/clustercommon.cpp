@@ -22,21 +22,7 @@ ModeFilterSettings::ModeFilterSettings()
 
 bool ModeFilterSettings::operator==(const ModeFilterSettings& mfs) const
 {
-
-    bool state = true;
-
-    for (QMap<QString, bool>::const_iterator i = mfs.modeFilterFlag.begin(); i != mfs.modeFilterFlag.end(); i++)
-    {
-        if (modeFilterFlag.value(i.key()) == i.value())
-        {
-            state = false;
-            break;
-        }
-    }
-
-    return state;
-
-
+    return (modeFilterFlag == mfs.modeFilterFlag);
 }
 
 

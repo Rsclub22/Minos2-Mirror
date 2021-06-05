@@ -771,11 +771,11 @@ bool LocSquare::operator<( const LocSquare& rhs ) const
 }
 bool LocSquare::operator==( const LocSquare& rhs ) const
 {
-    return loc.compare(rhs.loc) < 0;
+    return loc.compare(rhs.loc) == 0;
 }
 bool LocSquare::operator!=( const LocSquare& rhs ) const
 {
-    return loc.compare(rhs.loc) < 0;
+    return loc.compare(rhs.loc) != 0;
 }
 
 //======================================================================

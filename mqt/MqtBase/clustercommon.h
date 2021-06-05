@@ -260,7 +260,7 @@ class BandFilterSettings
                 distanceFilter == bfs.distanceFilter &&
                 ignoreDistanceFlag == bfs.ignoreDistanceFlag &&
                 ignoreEmptyDistanceFlag == bfs.ignoreEmptyDistanceFlag &&
-                bandType != bfs.bandType)
+                bandType == bfs.bandType)
         {
             return true;
         }

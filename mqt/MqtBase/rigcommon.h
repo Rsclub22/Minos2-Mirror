@@ -121,34 +121,12 @@ public:
 
     bool operator==(const SupportBands &sbd)
     {
-        bool state = true;
-
-        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
-        {
-            if (supportBands.value(i.key()) != i.value())
-            {
-                state = false;
-                break;
-            }
-        }
-
-        return state;
+        return supportBands == sbd.supportBands;
     }
 
     bool operator!=(const SupportBands &sbd)
     {
-        bool state = false;
-
-        for (QMap<QString, bool>::const_iterator i = sbd.supportBands.begin(); i != sbd.supportBands.end(); i++)
-        {
-            if (supportBands.value(i.key()) != i.value())
-            {
-                state = true;
-                break;
-            }
-        }
-
-        return state;
+        return supportBands != sbd.supportBands;
     }
 
 
