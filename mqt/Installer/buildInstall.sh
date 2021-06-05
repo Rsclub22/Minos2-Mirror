@@ -21,7 +21,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal
 fi
 
-make -j8
+make -j2
 retVal=$?
 if [ $retVal -ne 0 ]; then
     echo "make failed; please fix errors and rebuild"
