@@ -22,7 +22,15 @@ class MinosItem
          d |= dirty;
          return val;
       }
-      void setValue( itemtype t )
+//      void setValue( itemtype t )
+//      {
+//         if ( val != t )        // so all item classes need != operator
+//         {
+//            dirty = true;
+//            val = t;
+//         }
+//      }
+      void setValue( const itemtype &t )
       {
          if ( val != t )        // so all item classes need != operator
          {
@@ -38,7 +46,7 @@ class MinosItem
             val = t.getValue();
          }
       }
-      void setInitialValue( itemtype t )
+      void setInitialValue( const itemtype &t )
       {
          dirty = false;
          val = t;
@@ -82,9 +90,9 @@ template < class QString >
 class MinosStringItem : public MinosItem<QString>
 {
 public:
-    virtual void setValue( QString t )
+    virtual void setValue( const QString &s )
     {
-       t = t.trimmed();
+       QString t = s.trimmed();
        if ( MinosItem<QString>::val != t )        // so all item classes need != operator
        {
           MinosItem<QString>::dirty = true;
@@ -99,7 +107,7 @@ public:
           MinosItem<QString>::val = t.getValue();
        }
     }
-    virtual void setInitialValue( QString t )
+    virtual void setInitialValue( const QString &t )
     {
        MinosItem<QString>::dirty = false;
        MinosItem<QString>::val = t;
@@ -109,7 +117,7 @@ template < class Frequency >
 class MinosFrequencyItem : public MinosItem<Frequency>
 {
 public:
-    virtual void setValue( Frequency t )
+    virtual void setValue( const Frequency &t )
     {
        if ( MinosItem<Frequency>::val != t )        // so all item classes need != operator
        {
