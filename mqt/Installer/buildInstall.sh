@@ -28,7 +28,7 @@ if [ $retVal -ne 0 ]; then
     exit $retVal
 fi
 
-  for j in TinyXML XMPPLib MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer
+  for j in TinyXML XMPPLib KeyerBase MqtBase MqtUtils MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lrelease -verbose ../mqt/${j}/${j}.pro
     if [ ! -d ${j}/translations ]; then
@@ -57,7 +57,7 @@ mkdir Help
 
 for i in en_GB fr_FR
 do
-  for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer
+  for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
     $DIR/build/MqtUtils/translations/minos_${i}.qm \
@@ -81,7 +81,10 @@ if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 	cp -r $DIR/build/MqtKSTClient/MqtKSTClient.app Bin
 	cp -r $DIR/build/MqtLogger/MqtLogger.app Bin
 	cp -r $DIR/build/MqtMonitor/MqtMonitor.app Bin
+	cp -r $DIR/build/MqtQrzServer/MqtQrzServer.app Bin
 	cp -r $DIR/build/MqtRigControl/MqtRigControl.app Bin
+	cp -r $DIR/build/MqtRigSync/MqtRigSync.app Bin
+	cp -r $DIR/build/MqtRigRecorder/MqtRigRecorder.app Bin
 	cp -r $DIR/build/MqtRotator/MqtRotator.app Bin
 	cp -r $DIR/build/MqtServer/MqtServer.app Bin
 
@@ -94,7 +97,10 @@ else
 	cp $DIR/build/MqtKSTClient/MqtKSTClient Bin
 	cp $DIR/build/MqtLogger/MqtLogger Bin
 	cp $DIR/build/MqtMonitor/MqtMonitor Bin
+	cp $DIR/build/MqtQrzServer/MqtQrzServer Bin
 	cp $DIR/build/MqtRigControl/MqtRigControl Bin
+	cp $DIR/build/MqtRigSync/MqtRigSync Bin
+	-r $DIR/build/MqtRigRecorder/MqtRigRecorder Bin
 	cp $DIR/build/MqtRotator/MqtRotator Bin
 	cp $DIR/build/MqtServer/MqtServer Bin
 fi

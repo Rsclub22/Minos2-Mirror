@@ -66,7 +66,10 @@ REM copy %MROOT%\build\MqtKeyer\release\MqtKeyer.exe Bin
 copy %MROOT%\build\MqtKSTClient\release\MqtKSTClient.exe Bin
 copy %MROOT%\build\MqtLogger\release\MqtLogger.exe Bin
 copy %MROOT%\build\MqtMonitor\release\MqtMonitor.exe Bin
+copy %MROOT%\build\MqtQrzServer\release\MqtQrzServer.exe Bin
 copy %MROOT%\build\MqtRigControl\release\MqtRigControl.exe Bin
+copy %MROOT%\build\MqtRigRecorder\release\MqtRigRecorder.exe Bin
+copy %MROOT%\build\MqtRigSync\release\MqtRigSync.exe Bin
 copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
 copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
 
@@ -107,7 +110,10 @@ REM windeployqt.exe MqtKeyer.exe
 windeployqt.exe MqtKSTClient.exe
 windeployqt.exe MqtLogger.exe
 windeployqt.exe MqtMonitor.exe
+windeployqt.exe MqtQrzServer.exe
 windeployqt.exe MqtRigControl.exe
+windeployqt.exe MqtRigRecorder.exe
+windeployqt.exe MqtRigSync.exe
 windeployqt.exe MqtRotator.exe
 windeployqt.exe MqtServer.exe
 
@@ -115,12 +121,13 @@ REM bin\translations now exists... we can build our translations
 
 @ECHO OFF
 for %%i in (en_GB fr_FR) do (
-  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtRigControl MqtRotator MqtServer) do (
+  for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
   %MROOT%\build\MqtUtils\release\minos_%%i.qm ^
   %MROOT%\build\TinyXML\release\minos_%%i.qm ^
   %MROOT%\build\XMPPLib\release\minos_%%i.qm ^
   %MROOT%\build\MqtBase\release\minos_%%i.qm ^
+  %MROOT%\build\KeyerBase\release\minos_%%i.qm ^
   %MROOT%\build\%%j\release\minos_%%i.qm
   )
 )
