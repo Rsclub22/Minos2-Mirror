@@ -64,6 +64,7 @@ do
     $DIR/build/TinyXML/translations/minos_${i}.qm \
     $DIR/build/XMPPLib/translations/minos_${i}.qm \
     $DIR/build/MqtBase/translations/minos_${i}.qm \
+    $DIR/build/KeyerBase/translations/minos_${i}.qm \
     $DIR/build/${j}/translations/minos_${i}.qm
   done
 done
@@ -100,7 +101,7 @@ else
 	cp $DIR/build/MqtQrzServer/MqtQrzServer Bin
 	cp $DIR/build/MqtRigControl/MqtRigControl Bin
 	cp $DIR/build/MqtRigSync/MqtRigSync Bin
-	-r $DIR/build/MqtRigRecorder/MqtRigRecorder Bin
+	cp $DIR/build/MqtRigRecorder/MqtRigRecorder Bin
 	cp $DIR/build/MqtRotator/MqtRotator Bin
 	cp $DIR/build/MqtServer/MqtServer Bin
 fi
