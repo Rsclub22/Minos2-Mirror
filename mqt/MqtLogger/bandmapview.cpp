@@ -1434,7 +1434,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     qlonglong elapsedTime = spotElapsedTime(spotTime) / 60;
     QString elapsedTimeStr = QString::number(elapsedTime) + " " + tr("min");
 
-    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance, bearing, elapsedTimeStr, markSym, newSpotMsg, bLineEnd);
+    QString msg = QString("%1%2 @ .%3 %4 %5 %6 %7 %8 %9%10").arg(bLineStart, callsign, freq.extractKhz(), locator, distance).arg(bearing, elapsedTimeStr, markSym, newSpotMsg, bLineEnd);
 
     if (model()->data(model()->index(row, SPOT_IS_SELECTED_COL_NUM), BMP_DataStoredRole).toBool())
     {
@@ -1488,8 +1488,8 @@ void BandmapView::assembleToolTip(int row, Frequency freq, QString& toolTipMsg)
     QString elapsedTimeStr = QString::number(elapsedTime);
 
     QString msg = tr("%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] \n%9 %10\n%11\n%12")
-                                            .arg(callsign, freq.convertFreqStrDisp(), locator, bearing, distance,
-                                            spotterCallsign, spotterLocator, elapsedTimeStr, spotModeMsg, computedMode, spotterComment, spotName);
+                                            .arg(callsign, freq.convertFreqStrDisp(), locator, bearing, distance)
+                                            .arg(spotterCallsign, spotterLocator, elapsedTimeStr, spotModeMsg, computedMode, spotterComment, spotName);
 
     toolTipMsg = msg;
 }
