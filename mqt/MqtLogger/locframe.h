@@ -60,6 +60,7 @@ public:
 
     void reInitialiseLocators();
     void setContest(BaseContestLog *contest);
+    void setBand(QString band);
 
 private:
     Ui::LocFrame *ui;

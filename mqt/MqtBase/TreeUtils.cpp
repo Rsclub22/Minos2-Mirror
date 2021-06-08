@@ -65,22 +65,6 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
-//        if (column == egTime)
-//        {
-//            BandList &blist = BandList::getBandList();
-//            QSharedPointer<BandInfo>  bi;
-//            bool bandOK = blist.findBand(ct->frequency.getValue(), bi);
-//            bool hf = false;
-//            if (bandOK)
-//            {
-//               hf = bi->getType() == "HF";
-//               if (hf)
-//               {
-//                   QColor colour = QColor(bi->bandColour).lighter(300);
-//                   return colour;
-//               }
-//            }
-//        }
         if ( ct->contactFlags.getValue() & FORCE_LOG )
         {
            return static_cast< QColor> ( 0x00FF80C0 );        // Pink(ish)

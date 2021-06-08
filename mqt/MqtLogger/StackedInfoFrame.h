@@ -84,6 +84,8 @@ private slots:
     void onRefreshStackMults(BaseContestLog *ct);
 
     void clearContestInFrame(BaseContestLog *ct);
+    void onContestBandChanged(BaseContestLog *ct);
+    void on_currentTabChangedSlot(int index);
 public slots:
     void setContest(LoggerContestLog *contest);
 };

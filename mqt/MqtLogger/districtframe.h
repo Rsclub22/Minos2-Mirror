@@ -19,6 +19,8 @@ class DistrictGridModel: public QAbstractItemModel
         QSharedPointer<HtmlDelegate> delegate ;
 
         BaseContestLog *ct;
+        QString band;
+
         QVector<QSharedPointer<DistrictEntry> > districts;
 
         void reset();
@@ -38,6 +40,7 @@ class DistrictSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
     QString scrolledDistrict;
+    QString band;
     DistrictSortFilterProxyModel(): scrolledDistrict(-1)
     {
     }
@@ -57,6 +60,8 @@ public:
     ~DistrictFrame();
 
     void setContest(BaseContestLog *contest);
+    void setBand(QString band);
+
     void reInitialiseDistricts();
     void scrollToDistrict( const QString &cd, bool makeVisible );
 private:

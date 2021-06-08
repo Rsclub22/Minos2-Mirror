@@ -31,6 +31,7 @@ public:
 signals:
    void ContestPageChanged();
    void ContestShownChanged();
+   void ContestBandChanged(BaseContestLog *);
    void ColumnsChanged();
    void doColumnChanges(BaseContestLog *);
    void SplittersChanged();
@@ -106,6 +107,7 @@ public:
 
    static void SendContestPageChanged();
    static void SendContestShownChanged();
+   static void SendContestBandChanged(BaseContestLog *);
    static void SendColumnsChanged();
    static void SendDoColumnChanges(BaseContestLog *);
    static void SendSplittersChanged();

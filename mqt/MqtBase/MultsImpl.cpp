@@ -244,10 +244,10 @@ bool DistrictList::procLine(QStringList a )
        insert ( dte, dte );
    return true;
 }
-int DistrictList::getWorked( const QString &item, BaseContestLog *const ct )
+int DistrictList::getWorked( const QString &item, BaseContestLog *const ct, const QString &band )
 {
    if ( ct )
-      return ct->getDistrictsWorked( item );
+      return ct->getDistrictsWorked( band, item );
    else
       return 0;
 }
@@ -643,10 +643,10 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
       }
    }
 }
-int CountryList::getWorked(const QString &item, BaseContestLog *const ct )
+int CountryList::getWorked(const QString &item, BaseContestLog *const ct, const QString &band )
 {
    if ( ct )
-      return ct->getCountriesWorked( item );
+      return ct->getCountriesWorked( band, item );
    else
       return 0;
 }
@@ -878,13 +878,13 @@ QSharedPointer<DistrictEntry> MultListsImpl::searchDistrict( const QString &syn 
 {
    return ::searchDistrict( syn );
 }
-QString MultListsImpl::getCtryListText( const QString &item, int Column, BaseContestLog *const ct )
+QString MultListsImpl::getCtryListText( const QString &item, int Column, BaseContestLog *const ct, const QString &band )
 {
-   return ctryList.getText( item, Column, ct );
+   return ctryList.getText( item, Column, ct, band );
 }
-QString MultListsImpl::getDistListText( const QString &item, int Column, BaseContestLog *const ct )
+QString MultListsImpl::getDistListText(const QString &item, int Column, BaseContestLog *const ct, const QString &band )
 {
-   return distList.getText( item, Column, ct );
+   return distList.getText( item, Column, ct, band );
 }
 bool MultListsImpl::isUKprefix(const Callsign &cs)
 {
@@ -903,14 +903,14 @@ bool MultListsImpl::isUKprefix(const Callsign &cs)
     return false;
 }
 
-int MultListsImpl::getDistWorked(const QString & item, BaseContestLog * const ct)
+int MultListsImpl::getDistWorked(const QString & item, BaseContestLog * const ct, const QString &band)
 {
-    return distList.getWorked(item, ct);
+    return distList.getWorked(item, ct, band);
 }
 
-int MultListsImpl::getCountryWorked(const QString & item, BaseContestLog * const ct)
+int MultListsImpl::getCountryWorked(const QString & item, BaseContestLog * const ct, const QString &band)
 {
-    return ctryList.getWorked(item, ct);
+    return ctryList.getWorked(item, ct, band);
 }
 QVector<QSharedPointer<DistrictEntry> > &MultListsImpl::getDistList()
 {

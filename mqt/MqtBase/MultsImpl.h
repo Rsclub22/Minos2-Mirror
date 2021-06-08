@@ -20,7 +20,7 @@ class MultList : public QObject, public QHash < MapWrapper<itemtype>, MapWrapper
 {
 
 public:
-      virtual int getWorked( const QString & /*item*/, BaseContestLog * const /*ct*/ )
+      virtual int getWorked( const QString & /*item*/, BaseContestLog * const /*ct*/, const QString &/*band*/ )
       {
          return 0;
       }
@@ -89,7 +89,7 @@ public:
           return ce;
       }
 
-      QString getText( const QString &item, int Column, BaseContestLog *const ct )
+      QString getText( const QString &item, int Column, BaseContestLog *const ct, const QString &band )
       {
          QString dest;
          if ( !ct )
@@ -106,7 +106,7 @@ public:
 
             case ectWorked:
                {
-                  dest = QString::number(getWorked( item, ct ));
+                  dest = QString::number(getWorked( item, ct, band ));
                   break;
                }
 
@@ -229,7 +229,7 @@ class DistrictList : public MultList < DistrictEntry >
       void load( );
       virtual bool procLine( QStringList );
       virtual int slen( bool );
-      virtual int getWorked(const QString &item, BaseContestLog *const ct );
+      virtual int getWorked(const QString &item, BaseContestLog *const ct, const QString &band );
 };
 
 class DistrictSynonymList : public MultList < DistrictSynonym >
@@ -255,7 +255,7 @@ class CountryList : public MultList < CountryEntry >
       virtual bool procLine( QStringList );
       virtual int slen( bool );
       void loadEntries( const QString &fname, const QString &fmess );
-      virtual int getWorked( const QString  &item, BaseContestLog *const ct );
+      virtual int getWorked(const QString  &item, BaseContestLog *const ct , const QString &band);
 };
 
 class CountrySynonymList : public MultList < CountrySynonym >
@@ -294,11 +294,11 @@ class MultListsImpl: public MultLists
       virtual int getCtryListSize();
       virtual int getDistListSize();
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult );
-      virtual QString getCtryListText( const QString &item, int Column, BaseContestLog *const ct );
-      virtual QString getDistListText(const QString &item, int Column, BaseContestLog *const ct );
+      virtual QString getCtryListText(const QString &item, int Column, BaseContestLog *const ct , const QString &band);
+      virtual QString getDistListText(const QString &item, int Column, BaseContestLog *const ct, const QString &band );
       virtual bool isUKprefix(const Callsign &cs);
-      virtual int getDistWorked(const QString & item, BaseContestLog *const ct );
-      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct );
+      virtual int getDistWorked(const QString & item, BaseContestLog *const ct , const QString &band);
+      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct, const QString &band );
 
       virtual QVector<QSharedPointer<DistrictEntry> > &getDistList();
       virtual QVector<QSharedPointer<CountryEntry> > &getCountryList();

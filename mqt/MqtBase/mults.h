@@ -238,11 +238,11 @@ class MultLists
       virtual int getCtryListSize() = 0;
       virtual int getDistListSize() = 0;
       virtual QSharedPointer<CountryEntry> getCtryForPrefix( const QString &forcedMult ) = 0;
-      virtual QString getCtryListText( const QString & item, int Column, BaseContestLog *const ct ) = 0;
-      virtual QString getDistListText( const QString & item, int Column, BaseContestLog *const ct ) = 0;
+      virtual QString getCtryListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
+      virtual QString getDistListText( const QString & item, int Column, BaseContestLog *const ct, const QString &band ) = 0;
       virtual bool isUKprefix(const Callsign &cs) = 0;
-      virtual int getDistWorked(const QString & item, BaseContestLog *const ct ) = 0;
-      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct ) = 0;
+      virtual int getDistWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
+      virtual int getCountryWorked(const QString & item, BaseContestLog *const ct, const QString &band ) = 0;
 
       virtual QVector<QSharedPointer<DistrictEntry> > &getDistList() = 0;
       virtual QVector<QSharedPointer<CountryEntry> > &getCountryList() = 0;

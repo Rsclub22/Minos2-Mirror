@@ -46,6 +46,13 @@ void DistrictFrame::setContest(BaseContestLog *contest)
     }
     ui->DistrictTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
+
+void DistrictFrame::setBand(QString band)
+{
+    model.band = band;
+    proxyModel.band = band;
+    model.initialise();
+}
 void DistrictFrame::reInitialiseDistricts()
 {
     model.reset();
@@ -120,7 +127,7 @@ QVariant DistrictGridModel::data( const QModelIndex &index, int role ) const
         if (ct)
         {
             QString cd = MultLists::getMultLists() ->getDistList()[index.row()]->districtCode;
-            disp = MultLists::getMultLists() ->getDistListText( cd, DistrictTreeColumns[ index.column() ].fieldId, ct );
+            disp = MultLists::getMultLists() ->getDistListText( cd, DistrictTreeColumns[ index.column() ].fieldId, ct, band );
         }
         return disp;
     }
@@ -187,7 +194,7 @@ bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelI
     if (scrolledDistrict == cd)
         return true;
 
-    int worked = MultLists::getMultLists()->getDistWorked(cd, ct) ;
+    int worked = MultLists::getMultLists()->getDistWorked(cd, ct, band) ;
 
     bool makeVisible = true;
     if ( worked && ct->showUnworked.getValue() && !ct->showWorked.getValue() )
@@ -209,6 +216,6 @@ void DistrictFrame::on_DistrictTable_clicked(const QModelIndex &index)
 
     QString cd = MultLists::getMultLists() ->getDistList()[sourceRow]->districtCode;
 
-    QString disp = MultLists::getMultLists() ->getDistListText( cd, 0, model.ct );
+    QString disp = MultLists::getMultLists() ->getDistListText( cd, 0, model.ct, model.band );
     MinosLoggerEvents::SendDistrictSelect(disp, model.ct);
 }

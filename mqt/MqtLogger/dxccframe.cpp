@@ -51,6 +51,13 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
                  this, &DXCCFrame::on_sectionResized, Qt::UniqueConnection);
     }
 }
+
+void DXCCFrame::setBand(QString band)
+{
+    model.band = band;
+    proxyModel.band = band;
+    model.initialise();
+}
 void DXCCFrame::reInitialiseCountries()
 {
     model.reset();
@@ -119,7 +126,7 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
         if (role == Qt::DisplayRole)
         {
             QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->getBasePrefix();
-            QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ index.column() ].fieldId, ct );
+            QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ index.column() ].fieldId, ct, band );
             return disp.trimmed();
         }
         if (role == Qt::TextAlignmentRole)
@@ -189,7 +196,8 @@ bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex
     if (scrolledCountry == bp)
         return true;
 
-    int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
+    //int worked = MultLists::getMultLists()->getCountryWorked(bp, ct) ;
+    int worked = ct->getCountriesWorked(band, bp);
 
     bool makeVisible = false;
     for ( auto const &c: qAsConst(contlist ))
@@ -221,7 +229,7 @@ void DXCCFrame::on_DXCCTable_clicked(const QModelIndex &index)
     int sourceRow = srcindex.row();
 
     QString bp = MultLists::getMultLists() ->getCountryList()[sourceRow]->getBasePrefix();
-    QString disp = MultLists::getMultLists() ->getCtryListText( bp, 0, model.ct );
+    QString disp = MultLists::getMultLists() ->getCtryListText( bp, 0, model.ct, model.band );
     MinosLoggerEvents::SendCountrySelect(disp, model.ct);
 
 }

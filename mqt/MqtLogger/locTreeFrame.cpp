@@ -32,6 +32,11 @@ void LocTreeFrame::setContest(BaseContestLog *contest)
     }
 }
 
+void LocTreeFrame::setBand(QString band)
+{
+
+}
+
 void LocTreeFrame::reInitialiseLocators()
 {
     ui->LocTree->clear();

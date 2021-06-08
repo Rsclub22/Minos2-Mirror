@@ -1583,7 +1583,7 @@ int BaseContestLog::getDistrictsWorked( const QString &band, const QString &item
     }
    return 0;
 }
-int BaseContestLog::getCountriesWorked( QString band, const QString &item )
+int BaseContestLog::getCountriesWorked(const QString &band, const QString &item )
 {
     if (countryWorked.contains(band))
     {

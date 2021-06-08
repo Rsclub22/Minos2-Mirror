@@ -19,6 +19,7 @@ public:
 
     void reInitialiseStats();
     void setContest(LoggerContestLog *ct );
+    void setBand(QString band);
 
 private slots:
     void on_P1Edit_valueChanged(int arg1);

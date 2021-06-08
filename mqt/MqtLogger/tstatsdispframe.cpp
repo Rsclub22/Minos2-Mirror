@@ -24,7 +24,12 @@ TStatsDispFrame::~TStatsDispFrame()
 }
 void TStatsDispFrame::setContest( LoggerContestLog *pct )
 {
-   ct = pct;
+    ct = pct;
+}
+
+void TStatsDispFrame::setBand(QString band)
+{
+
 }
 void TStatsDispFrame::RecheckTimerTimer(  )
 {

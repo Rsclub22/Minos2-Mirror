@@ -15,6 +15,7 @@
 
 #include "LoggerContest.h"
 
+#include "MinosLoggerEvents.h"
 #include "bandselbuttons.h"
 #include "BandList.h"
 
@@ -108,6 +109,8 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
     ct->currentBand.setValue(band);
     ct->commonSave(false);
     setContestBand(band);
+
+    MinosLoggerEvents::SendContestBandChanged(ct);
 
     freq = presetFreqs.getLastFreq(convertModeForPresets(curMode), band);
     emit sendPresetFreq(freq);

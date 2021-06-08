@@ -218,6 +218,11 @@ void LocFrame::setContest(BaseContestLog *contest)
         reInitialiseLocators();
     }
 }
+
+void LocFrame::setBand(QString band)
+{
+
+}
 void LocFrame::reInitialiseLocators()
 {
     QString oldTl = model->getTl();
@@ -229,10 +234,17 @@ void LocFrame::reInitialiseLocators()
     model->locMap.clear();
 
     if (!ct)
+    {
         return;
+    }
 
     //initialise these to a range round the contest location
     QString ctLoc = ct->myloc.getLoc();
+
+    if (ctLoc.size() < 4 )
+    {
+        return;
+    }
 
     QString ctLocN = l_add(ctLoc, 0, 5);
     QString NLoc = QString(ctLocN[1]) + ctLocN[3];

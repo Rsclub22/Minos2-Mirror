@@ -1818,6 +1818,7 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         {
             contest->currentBand.setValue(bandChanged);
             FKHRigControlFrame->setContestBand(bandChanged);
+            MinosLoggerEvents::SendContestBandChanged(contest);
         }
 
         sCurFreq = f;
@@ -2070,6 +2071,7 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         {
             contest->currentBand.setValue(bandChanged);
             FKHRigControlFrame->setContestBand(bandChanged);
+            MinosLoggerEvents::SendContestBandChanged(contest);
         }
 
         LogContainer->sendDM->sendRigControlFreq(this, freq);

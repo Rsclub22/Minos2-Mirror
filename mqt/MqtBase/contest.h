@@ -274,7 +274,7 @@ class BaseContestLog: public BaseLogList
       int getDistrictsWorked( const QString &item );
       int getCountriesWorked( const QString &item );
       int getDistrictsWorked( const QString &band, const QString &item );
-      int getCountriesWorked( QString band, const QString &item );
+      int getCountriesWorked( const QString &band, const QString &item );
 
       QHash<QString, QHash<QString,int> > districtWorked;
       QHash<QString, QHash<QString,int> > countryWorked;

@@ -21,6 +21,11 @@ void MinosLoggerEvents::SendContestShownChanged()
 {
     emit mle.ContestShownChanged();
 }
+
+void MinosLoggerEvents::SendContestBandChanged(BaseContestLog *ct)
+{
+    emit mle.ContestBandChanged(ct);
+}
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendColumnsChanged()
 {

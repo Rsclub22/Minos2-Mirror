@@ -19,6 +19,7 @@ class DXCCGridModel: public QAbstractItemModel
         QSharedPointer<HtmlDelegate> delegate;
 
         LoggerContestLog *ct;
+        QString band;
 
         void reset();
         void initialise( );
@@ -36,6 +37,7 @@ class DXCCSortFilterProxyModel : public QSortFilterProxyModel
 {
 public:
     QString scrolledCountry;
+    QString band;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     DXCCSortFilterProxyModel(): scrolledCountry(-1)
     {
@@ -55,6 +57,7 @@ public:
     ~DXCCFrame() override;
 
     void setContest(LoggerContestLog *contest);
+    void setBand(QString band);
     void reInitialiseCountries();
     void scrollToCountry(const QString &bp, bool makeVisible );
 
