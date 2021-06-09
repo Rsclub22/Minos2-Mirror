@@ -28,6 +28,7 @@ private:
     QSharedPointer<HtmlDelegate> delegate;
 
     BaseContestLog *ct;
+    QString band;
 };
 
 #endif // LOCTREEFRAME_H

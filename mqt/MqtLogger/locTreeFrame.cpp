@@ -28,13 +28,15 @@ void LocTreeFrame::setContest(BaseContestLog *contest)
 
     if (ct)
     {
+        band = ct->currentBand.getValue();
         reInitialiseLocators();
     }
 }
 
-void LocTreeFrame::setBand(QString band)
+void LocTreeFrame::setBand(QString cband)
 {
-
+    band = cband;
+    reInitialiseLocators();
 }
 
 void LocTreeFrame::reInitialiseLocators()
@@ -44,9 +46,9 @@ void LocTreeFrame::reInitialiseLocators()
     if (!ct)
         return;
 
-    for (int k = 0; k < ct->locs[ct->currentBand.getValue()].llist.size(); k++)
+    for (int k = 0; k < ct->locs[band].llist.size(); k++)
     {
-        QSharedPointer<LocSquare> l = ct->locs[ct->currentBand.getValue()].itemAt(k);
+        QSharedPointer<LocSquare> l = ct->locs[band].itemAt(k);
         if (!l)
             break;
 

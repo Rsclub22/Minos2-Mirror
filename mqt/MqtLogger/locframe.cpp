@@ -214,14 +214,18 @@ void LocFrame::setContest(BaseContestLog *contest)
     {
         currentCentre = ct->myloc.getLoc().left(4);
         model->myLoc = currentCentre;
+        band = ct->currentBand.getValue();
+        model->band = band;
 
         reInitialiseLocators();
     }
 }
 
-void LocFrame::setBand(QString band)
+void LocFrame::setBand(QString cband)
 {
-
+    band = cband;
+    model->band = cband;
+    reInitialiseLocators();
 }
 void LocFrame::reInitialiseLocators()
 {
@@ -259,15 +263,15 @@ void LocFrame::reInitialiseLocators()
     QString ELoc = QString(ctLocE[0]) + ctLocE[2];
 
 
-    for (int k = 0; k < ct->locs[ct->currentBand.getValue()].llist.size(); k++)
+    for (int k = 0; k < ct->locs[band].llist.size(); k++)
     {
-        QString locStart = ct->locs[ct->currentBand.getValue()].itemAt(k) ->loc;
+        QString locStart = ct->locs[band].itemAt(k) ->loc;
 
         for (int j = 0; j < 10; j++)
         {
             for (int i = 0; i < 10; i++)
             {
-                LocCount *lc = ct->locs[ct->currentBand.getValue()].itemAt(k) ->map( j * 10 + i );
+                LocCount *lc = ct->locs[band].itemAt(k) ->map( j * 10 + i );
                 QString disp = QString("%1").arg(j * 10 + i, 2, 10, QChar('0'));
 
                 if ( lc && (lc->UKLocCount || lc->nonUKLocCount))

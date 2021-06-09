@@ -207,6 +207,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = statsFrame;
         layout()->addWidget(statsFrame);
         statsFrame->setContest(contest);
+        setTabsVisible = false;
         break;
     }
 

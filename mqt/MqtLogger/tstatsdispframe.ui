@@ -19,11 +19,11 @@
   <property name="windowTitle">
    <string/>
   </property>
-  <property name="frameShape">
-   <enum>QFrame::StyledPanel</enum>
-  </property>
   <property name="frameShadow">
    <enum>QFrame::Raised</enum>
+  </property>
+  <property name="lineWidth">
+   <number>0</number>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
@@ -54,8 +54,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>274</width>
-        <height>184</height>
+        <width>276</width>
+        <height>186</height>
        </rect>
       </property>
       <property name="sizePolicy">

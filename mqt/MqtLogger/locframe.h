@@ -19,6 +19,7 @@ class LocGridModel: public QAbstractItemModel
         QSharedPointer<HtmlDelegate> delegate;
 
         QString myLoc;
+        QString band;
 
         BaseContestLog *ct;
         int rows;
@@ -67,6 +68,7 @@ private:
     BaseContestLog *ct;
     LocGridModel *model;
     QString currentCentre;
+    QString band;
 
 private slots:
     void on_minosViewScrolled();
