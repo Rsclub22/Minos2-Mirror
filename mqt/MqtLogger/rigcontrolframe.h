@@ -111,6 +111,7 @@ public:
     void logRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags);
     void setVmButtonsFrame(TxVmButtonsFrame *txVmButtonsFrame);
     void setContestBand(QString band);
+    void rigChangedFromDetails();
 signals:
     void selectRadio(QString, QString, Frequency, QString);  // radio name, freq, mode
     void sendFreqControl(Frequency);

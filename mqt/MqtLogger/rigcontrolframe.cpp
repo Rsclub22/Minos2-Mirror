@@ -723,7 +723,16 @@ void RigControlFrame::on_ContestPageChanged()
     }
 }
 
+void RigControlFrame::rigChangedFromDetails()
+{
+    if (ct && !ct->isReadOnly() && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        QString radNam = ct->radioName.getValue().toString();
 
+        traceMsg(QString("rigChangedFromDetails: radio = %1, uuid = %2").arg(radNam, ct->uuid));
+        setRadioName(radNam, true);
+    }
+}
 
 bool RigControlFrame::eventFilter(QObject *obj, QEvent *event)
 {
