@@ -1013,6 +1013,9 @@ void TLogContainer::ContestDetailsActionExecute()
                 }
 
                 sendDM->subscribeApps();
+
+                f->FKHRigControlFrame->on_ContestPageChanged();
+                f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
                 ct->scanContest();
