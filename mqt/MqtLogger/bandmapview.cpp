@@ -101,6 +101,7 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, &BandmapGraphicsPanel::customContextMenuRequested, this, &BandmapView::on_bandmap_customContextMenuRequested);
 
+    bandmapGraphicsView->horizontalScrollBar()->setValue(0);
 
     bandmapGraphicsView->setBackgroundBrush(QBrush());
 }
@@ -242,6 +243,7 @@ void BandmapView::scrollBandmapCenterToFreq(Frequency freq)
     int freqYCoord = dial->getYCoordOnDial(freq);
     int scrollStart = freqYCoord - (bandmapGraphicsView->viewport()->height() / 2);
     bandmapGraphicsView->verticalScrollBar()->setValue(scrollStart);
+    bandmapGraphicsView->horizontalScrollBar()->setValue(0);
 }
 
 int BandmapView::getViewPortStartYCoordOnScene()
