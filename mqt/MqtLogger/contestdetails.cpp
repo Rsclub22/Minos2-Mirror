@@ -912,6 +912,7 @@ void ContestDetails::setDetails( const IndividualContest &ic )
       else
           mode = hamlibData::USB;
    }
+
    int m = ui->ModeComboBox->findText( mode );
 
    if ( m >= 0 )

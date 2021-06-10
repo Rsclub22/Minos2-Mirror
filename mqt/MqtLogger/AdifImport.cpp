@@ -162,8 +162,18 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           else
           {
               aqso->mode.setValue(hamlibData::MGM);
-              aqso->mgmSubmode.setValue(temp.trimmed());
+              if (aqso->mgmSubmode.getValue().isEmpty())
+              {
+                aqso->mgmSubmode.setValue(temp.trimmed());
+              }
           }
+      }
+      if ( Fieldname.toUpper() == "SUBMODE" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+
+          temp = temp.toUpper();
+          aqso->mgmSubmode.setValue(temp.trimmed());
       }
    }
 }

@@ -17,7 +17,7 @@ static int monthLength[ 12 ] =
 //    };
 
 const char * Calendar::TypeVHFContest = QT_TR_NOOP("<VHF from VHFContests.xml>");
-const char * Calendar::TypeMwaveContest = QT_TR_NOOP("<Microwave from MicroContestsxx.xml>");
+const char * Calendar::TypeMwaveContest = QT_TR_NOOP("<Microwave from MicrContemodestsxx.xml>");
 
 QString Calendar::getTypeName ( const QString &xmlName, CalType calType )
 {
@@ -911,7 +911,10 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 {
                                                                                    mode = hamlibData::FM;
                                                                                 }
-                                                                                c.mode = mode;
+                                                                                if (mode == "[A-Z][A-Z]")
+                                                                                {
+                                                                                    c.mode = "MGM";
+                                                                                }
                                                                             }
                                                                             else
                                                                                 if ( checkElementName ( e, "entry_date" ) )
