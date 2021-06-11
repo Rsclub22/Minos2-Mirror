@@ -3150,7 +3150,9 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
 
     if (nearMatches.size() && !callstate)
     {
-        if (ui->CallsignFrame->getTextEditEdit()->text().isEmpty())
+        QString callText = ui->CallsignFrame->getTextEditEdit()->text();
+        QString locText = ui->LocFrame->getTextEditEdit()->text();
+        if (callText.isEmpty() && locText.isEmpty())
         {
             QStringList n = nearMatches[0].split('|');
             ui->CallsignFrame->getTextEditEdit()->setPlaceholderText(n[1]);

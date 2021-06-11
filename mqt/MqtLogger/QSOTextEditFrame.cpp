@@ -84,7 +84,6 @@ QLabel *QSOTextEditFrame::getTextEditlabel() const
 }
 void QSOTextEditFrame::onTextEdit_textChanged(const QString &arg)
 {
-
     if (arg.isEmpty())
     {
         clearButton->setText("");
