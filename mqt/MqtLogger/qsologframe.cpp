@@ -2231,6 +2231,7 @@ void QSOLogFrame::on_tabSandP()
     {
         ui->SandPrb->setChecked(true);
     }
+    setPlaceholders(QStringList());
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::closeContest()
@@ -3136,7 +3137,18 @@ void QSOLogFrame::setqrzDisplayFrameLoaded(bool loaded)
 
 void QSOLogFrame::setPlaceholders(QStringList nearMatches)
 {
-    if (nearMatches.size())
+    if (!contest)
+        return;
+
+    bool callstate;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, callstate );
+    if (callstate)
+    {
+        callstate = ui->callRb->isChecked();
+    }
+
+
+    if (nearMatches.size() && !callstate)
     {
         if (ui->CallsignFrame->getTextEditEdit()->text().isEmpty())
         {
