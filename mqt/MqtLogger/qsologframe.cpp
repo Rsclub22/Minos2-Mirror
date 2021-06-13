@@ -3177,7 +3177,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             }
             else
             {
-                ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+                ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
             }
         }
         else
@@ -3187,7 +3187,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             {
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
             }
-            ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+            ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
         }
     }
     else
@@ -3197,7 +3197,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         {
             ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
         }
-        ui->CallsignFrame->getTextEditEdit()->setStyleSheet("");
+        ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
     }
 }
 

@@ -976,6 +976,8 @@ void ContestDetails::setModes()
 //---------------------------------------------------------------------------
 static QString ssLineEditFrRedBkRed = "QLineEdit { border-style: outset ; border-width: 2px ; border-color: red  }";
 static QString ssComboBoxFrRedBkRed = "QComboBox { border-style: outset ; border-width: 2px ; border-color: red  }";
+QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
+QString ssComboBoxOK = "QComboBox { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
 
 void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*event*/)
 {
@@ -989,7 +991,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->ContestNameEdit->setStyleSheet("");
+            ui->ContestNameEdit->setStyleSheet(ssLineEditOK);
         }
 
         if ( ui->BandComboBox->currentText().trimmed().isEmpty() )
@@ -998,7 +1000,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->BandComboBox->setStyleSheet("");
+            ui->BandComboBox->setStyleSheet(ssComboBoxOK);
         }
 
         contestTransferObject->mycall.setFullCall( ui->CallsignEdit->text() );
@@ -1008,7 +1010,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->CallsignEdit->setStyleSheet("");
+            ui->CallsignEdit->setStyleSheet(ssLineEditOK);
         }
 
         contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
@@ -1018,7 +1020,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->LocatorEdit->setStyleSheet("");
+            ui->LocatorEdit->setStyleSheet(ssLineEditOK);
         }
 
         if ( ui->PowerEdit->text().trimmed().isEmpty() )
@@ -1027,7 +1029,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->PowerEdit->setStyleSheet("");
+            ui->PowerEdit->setStyleSheet(ssLineEditOK);
         }
 
 
@@ -1038,7 +1040,7 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         }
         else
         {
-            ui->MainOpComboBox->setStyleSheet("");
+            ui->MainOpComboBox->setStyleSheet(ssComboBoxOK);
         }
     }
 }
