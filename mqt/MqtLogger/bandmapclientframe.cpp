@@ -469,6 +469,7 @@ void BandmapClientFrame::context_moveFreqActionSelected()
     QVariant f;
     f.setValue(curFreq);
     bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, FREQ_COL_NUM), f, BMP_DataStoredRole);
+    bandmapDataModel->sortModel();
     bandmapView->bandmapUpdate();
 
 }
