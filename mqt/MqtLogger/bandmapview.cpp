@@ -880,9 +880,9 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
     }
     if (matchMode(row) && matchDistance(row))
     {
-        Frequency f = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
+        Frequency spotFreq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
 
-        if (f < contestBandFlow || f > contestBandFhigh)
+        if (spotFreq < contestBandFlow || spotFreq > contestBandFhigh)
         {
             return;
         }
@@ -893,25 +893,33 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         BandmapMarkerDetails* markerDetails = new BandmapMarkerDetails(QPoint(0, 0));
         listOfMarkers.append(markerDetails);
 
-        int yCoord = dial->getYCoordOnDial(f);
+        int yCoord = dial->getYCoordOnDial(spotFreq);
         int syCoord;
 
         if (row >= markersAbove)
         {
             // marker at higher frequency
             syCoord = centreYCoord + fontOffset;
-            if (syCoord < yCoord)
+            if ( row  == markersAbove)// don't move first one
             {
                 syCoord = yCoord;
                 fontOffset = yCoord - centreYCoord;
             }
-            if (fontOffset <= lastOffset + fontHeight)
+            else
             {
-                fontOffset = lastOffset + fontHeight;
-                if (fontOffset < 0)
-                    fontOffset = 0;
-                syCoord = centreYCoord + fontOffset;
+                if (syCoord < yCoord )
+                {
+                    syCoord = yCoord;
+                    fontOffset = yCoord - centreYCoord;
+                }
+                if (fontOffset <= lastOffset + fontHeight)
+                {
+                    fontOffset = lastOffset + fontHeight;
+                    if (fontOffset < 0)
+                        fontOffset = 0;
+                    syCoord = centreYCoord + fontOffset;
 
+                }
             }
             //QString type = BandmapSpotData::spotName(savedSpotType);
             //trace(QString("DrawBandmapSpot (above) row = %6 type = %5 curfreq %1 freq %2 syCoord %3 lastoffset %4").arg(curFreq.traceStr()).arg(f.traceStr()).arg(syCoord).arg(lastOffset).arg(type).arg(row));
@@ -960,13 +968,13 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         {
             assembleCqMsg(row, spotMsg);
             spotRect = calculateSpotRect(spotMsg, spotCoord);
-            assembleCqToolTip(row, f, spotTooltipText);
+            assembleCqToolTip(row, spotFreq, spotTooltipText);
         }
         else
         {
             assembleSpotMsg(row, spotMsg);
             spotRect = calculateSpotRect(spotMsg, spotCoord);
-            assembleToolTip(row, f, spotTooltipText);
+            assembleToolTip(row, spotFreq, spotTooltipText);
         }
 
         //trace(spotMsg);
