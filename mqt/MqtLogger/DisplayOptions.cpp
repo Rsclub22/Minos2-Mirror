@@ -75,7 +75,14 @@ void DisplayOptions::initialise()
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
     ui->cmb->setValue(cmb);
 }
+bool DisplayOptions::check()
+{
+    return true;
+}
+void DisplayOptions::cancel()
+{
 
+}
 void DisplayOptions::finalise()
 {
     bool doSelectSession = false;

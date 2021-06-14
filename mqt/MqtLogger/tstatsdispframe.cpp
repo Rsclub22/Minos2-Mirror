@@ -27,7 +27,7 @@ void TStatsDispFrame::setContest( LoggerContestLog *pct )
     ct = pct;
 }
 
-void TStatsDispFrame::setBand(QString band)
+void TStatsDispFrame::setBand(QString /*band*/)
 {
 
 }

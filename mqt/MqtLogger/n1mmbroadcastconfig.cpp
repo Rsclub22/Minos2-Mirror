@@ -58,6 +58,14 @@ void N1MMBroadcastConfig::initialise()
     ui->ADIFAddr->setText(ADIFAddr);
     ui->ADIFPort->setText(QString::number(ADIFPort));
 }
+bool N1MMBroadcastConfig::check()
+{
+    return true;
+}
+void N1MMBroadcastConfig::cancel()
+{
+
+}
 
 void N1MMBroadcastConfig::finalise()
 {

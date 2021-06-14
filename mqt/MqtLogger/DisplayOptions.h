@@ -18,6 +18,8 @@ public:
     void initialise();
     void finalise();
 
+    bool check();
+    void cancel();
 private slots:
     void on_FontChangeButton_clicked();
 

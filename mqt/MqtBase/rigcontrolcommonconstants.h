@@ -8,6 +8,7 @@
 
 #include <QStringList>
 #include <QSettings>
+#include "minositem.h"
 #include "frequency.h"
 
 
@@ -137,40 +138,11 @@ const QString BANDSWITCH_COMPORT_KEY_TEXT = "comport";
 
 namespace freqPresetData {
 
+    const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
-
-
-//enum bandOffSet { _1_8MHZ, _3_5MHZ, _7MHZ, _14MHZ, _21MHZ, _28MHZ,  _50MHZ, _70MHZ, _144MHZ, _432MHZ, _1296MHZ, _2300MHZ,
-//                 _3_4GHZ, _5_6GHZ, _10GHZ};
-
-//const QStringList bandNames = QStringList() << "1.8 MHz" << "3.5 MHz" << "7 MHz" << "14 MHz" << "21 MHz" << "28 MHz"
-//                                           << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz"
-//                                           << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
-
-const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
-
-const QStringList bandFreq = {  "1810000",
-                                "3500000",
-                                "7000000",
-                               "14000000",
-                               "21000000",
-                               "28000000",
-                               "50170000",
-                               "70210000",
-                              "144290000",
-                              "432170000",
-                             "1296100000",
-                             "2300100000",            // 2300 GHz
-                             "3400100000",  // 3.4 GHz
-                             "5760100000",  // 5.6 GHz
-                            "10368100000",  // 10 GHz
-
-                              };
-
-
-const QString PRESET_MODE_CW = "CW";
-const QString PRESET_MODE_PHONE = "PHONE";
-const QString PRESET_MODE_MGM = "MGM";
+    const QString PRESET_MODE_CW = "CW";
+    const QString PRESET_MODE_PHONE = "PHONE";
+    const QString PRESET_MODE_MGM = "MGM";
 
 }
 
@@ -185,7 +157,7 @@ public:
 
     };
 
-    Frequency presetFreq;
+    MinosItem<Frequency> presetFreq;
     Frequency lastFreq;
 };
 
@@ -197,19 +169,10 @@ public:
 
     ~PresetFreq();
 
-
-/*
-    PresetFreq operator= (const PresetFreq& presets)
-    {
-        QMap<QString, StoredPresetFreqs> mspf;
-        QMap<QString, StoredPresetFreqs>*  mspfptr = &mspf;
-
-        QMapIterator<PresetFreq> i(presets);
-
-    }
-*/
-
     void clear();
+
+    bool isDirty(const QString mode, const QString band);
+    void clearDirty();
 
     Frequency getPresetFreq(const QString mode, const QString band);
     void setPresetFreq(const QString mode, const QString band, const QString freq);
@@ -230,9 +193,6 @@ private:
     QMap<QString, StoredPresetFreqs> phoneFreqPresets;
 
     QMap<QString, StoredPresetFreqs> mgmFreqPresets;
-
-
-
 
 };
 

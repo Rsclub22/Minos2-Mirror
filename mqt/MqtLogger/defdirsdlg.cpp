@@ -24,6 +24,14 @@ void DefDirsDlg::initialise()
     QString deflist =TLogContainer::getDefaultDirectory(true);
     ui->listsDirEdit->setText(deflist);
 }
+bool DefDirsDlg::check()
+{
+    return true;
+}
+void DefDirsDlg::cancel()
+{
+
+}
 void DefDirsDlg::finalise()
 {
     QString temp;

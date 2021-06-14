@@ -57,12 +57,12 @@ int OptionsDialog::exec()
     QSettings settings;
     int curTabNo = settings.value("OptionsDialog/curTab").toInt();
 
-    ClusterBandmapConfigure *cbc = new ClusterBandmapConfigure();
-    DefDirsDlg *ddd = new DefDirsDlg();
-    DisplayOptions *dod = new DisplayOptions();
-    RadioSettingDialog *rdc = new RadioSettingDialog ();
-    N1MMBroadcastConfig *nbc= new N1MMBroadcastConfig();
-    WsjtxConfigure *wc = new WsjtxConfigure();
+    cbc = new ClusterBandmapConfigure();
+    ddd = new DefDirsDlg();
+    dod = new DisplayOptions();
+    rdc = new RadioSettingDialog ();
+    nbc = new N1MMBroadcastConfig();
+    wc  = new WsjtxConfigure();
 
     cbc->initialise();
     cbc->setAutoFillBackground(true);
@@ -101,13 +101,31 @@ int OptionsDialog::exec()
     return ret;
 
 }
+bool OptionsDialog::check()
+{
+    return cbc->check()
+           && ddd->check()
+           && dod->check()
+           && rdc->check()
+           && nbc->check()
+           && wc->check() ;
+}
 void OptionsDialog::on_OKButton_clicked()
 {
-    accept();
+    if (check())
+    {
+        accept();
+    }
 }
 
 void OptionsDialog::on_cancelButton_clicked()
 {
+    cbc->cancel();
+    ddd->cancel();
+    dod->cancel();
+    rdc->cancel();
+    nbc->cancel();
+    wc->cancel();
     reject();
 }
 

@@ -106,6 +106,14 @@ void ClusterBandmapConfigure::initialise()
      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, followRadioModeFlag );
      ui->modeOperatingFreqChkBox->setCheckState(followRadioModeFlag ? Qt::Checked : Qt::Unchecked);
 }
+bool ClusterBandmapConfigure::check()
+{
+    return true;
+}
+void ClusterBandmapConfigure::cancel()
+{
+
+}
 void ClusterBandmapConfigure::finalise()
 {
     saveDistances();

@@ -24,6 +24,82 @@ RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
     ui(new Ui::RadioSettingDialog)
 {
     ui->setupUi(this);
+
+    QWidget::setTabOrder(ui->PresetTabWidget, ui->cwLineEdit_1_8mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_1_8mhz, ui->cwLineEdit_3_5mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_3_5mhz, ui->cwLineEdit_7mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_7mhz, ui->cwLineEdit_14mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_14mhz, ui->cwLineEdit_21mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_21mhz, ui->cwLineEdit_28mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_28mhz, ui->cwLineEdit_50mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_50mhz, ui->cwLineEdit_70mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_70mhz, ui->cwLineEdit_144mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_144mhz, ui->cwLineEdit_432mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_432mhz, ui->cwLineEdit_1296mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_1296mhz, ui->cwLineEdit_2300mhz);
+    QWidget::setTabOrder(ui->cwLineEdit_2300mhz, ui->cwLineEdit_3_4ghz);
+    QWidget::setTabOrder(ui->cwLineEdit_3_4ghz, ui->cwLineEdit_5_6ghz);
+    QWidget::setTabOrder(ui->cwLineEdit_5_6ghz, ui->cwLineEdit_10ghz);
+    //QWidget::setTabOrder(ui->cwLineEdit_10ghz, ui->cwLineEdit_1_8mhz);
+
+    QWidget::setTabOrder(ui->phoneLineEdit_1_8mhz, ui->phoneLineEdit_3_5mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_3_5mhz, ui->phoneLineEdit_7mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_7mhz, ui->phoneLineEdit_14mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_14mhz, ui->phoneLineEdit_21mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_21mhz, ui->phoneLineEdit_28mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_28mhz, ui->phoneLineEdit_1296mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_50mhz, ui->phoneLineEdit_70mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_70mhz, ui->phoneLineEdit_144mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_144mhz, ui->phoneLineEdit_432mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_432mhz, ui->phoneLineEdit_1296mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_1296mhz, ui->phoneLineEdit_2300mhz);
+    QWidget::setTabOrder(ui->phoneLineEdit_2300mhz, ui->phoneLineEdit_3_4ghz);
+    QWidget::setTabOrder(ui->phoneLineEdit_3_4ghz, ui->phoneLineEdit_5_6ghz);
+    QWidget::setTabOrder(ui->phoneLineEdit_5_6ghz, ui->phoneLineEdit_10ghz);
+    //QWidget::setTabOrder(ui->phoneLineEdit_10ghz, ui->phoneLineEdit_1_8mhz);
+
+    QWidget::setTabOrder(ui->mgmLineEdit_1_8mhz, ui->mgmLineEdit_3_5mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_3_5mhz, ui->mgmLineEdit_7mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_7mhz, ui->mgmLineEdit_14mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_14mhz, ui->mgmLineEdit_21mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_21mhz, ui->mgmLineEdit_28mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_28mhz, ui->mgmLineEdit_50mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_50mhz, ui->mgmLineEdit_70mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_70mhz, ui->mgmLineEdit_144mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_144mhz, ui->mgmLineEdit_432mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_432mhz, ui->mgmLineEdit_1296mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_1296mhz, ui->mgmLineEdit_2300mhz);
+    QWidget::setTabOrder(ui->mgmLineEdit_2300mhz, ui->mgmLineEdit_3_4ghz);
+    QWidget::setTabOrder(ui->mgmLineEdit_3_4ghz, ui->mgmLineEdit_5_6ghz);
+    QWidget::setTabOrder(ui->mgmLineEdit_5_6ghz, ui->mgmLineEdit_10ghz);
+    //QWidget::setTabOrder(ui->mgmLineEdit_10ghz, ui->mgmLineEdit_1_8mhz);
+
+    QWidget::setTabOrder(ui->enableBandSwChkBox, ui->enableSerialBandSwChkBox);
+    QWidget::setTabOrder(ui->enableSerialBandSwChkBox, ui->bandSwCombo);
+    QWidget::setTabOrder(ui->bandSwCombo, ui->bandSwLineEdit_1_8mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_1_8mhz, ui->bandSwLineEdit_3_5mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_3_5mhz, ui->bandSwLineEdit_7mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_7mhz, ui->bandSwLineEdit_14mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_14mhz, ui->bandSwLineEdit_21mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_21mhz, ui->bandSwLineEdit_28mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_28mhz, ui->bandSwLineEdit_50mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_50mhz, ui->bandSwLineEdit_70mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_70mhz, ui->bandSwLineEdit_144mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_144mhz, ui->bandSwLineEdit_432mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_432mhz, ui->bandSwLineEdit_1296mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_1296mhz, ui->bandSwLineEdit_2300mhz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_2300mhz, ui->bandSwLineEdit_3_4ghz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_3_4ghz, ui->bandSwLineEdit_5_6ghz);
+    QWidget::setTabOrder(ui->bandSwLineEdit_5_6ghz, ui->bandSwLineEdit_10ghz);
+    //QWidget::setTabOrder(ui->bandSwLineEdit_10ghz, ui->bandSwLineEdit_1_8mhz);
+
+    //QWidget::setTabOrder(ui->radioSettingsTabWidget, ui->turnOffColourRadioFreqDialChkBox);
+    QWidget::setTabOrder(ui->turnOffColourRadioFreqDialChkBox, ui->contestStartIgnorePresetFreqChkBox);
+    QWidget::setTabOrder(ui->contestStartIgnorePresetFreqChkBox, ui->contestChangeIgnorePreviousFreqChkBox);
+    QWidget::setTabOrder(ui->contestChangeIgnorePreviousFreqChkBox, ui->constestChangeRestoreContestModeChkBox);
+    QWidget::setTabOrder(ui->constestChangeRestoreContestModeChkBox, ui->CQRitChkBox);
+
+
 }
 
 RadioSettingDialog::~RadioSettingDialog()
@@ -46,6 +122,7 @@ void RadioSettingDialog::initialise()
 
     for (int i = 0; i < cwPresetLineEditList.count(); i++)
     {
+        // If you hit "OK" then the frequencies get checked twice... and two error boxes are displayed
         connect(cwPresetLineEditList[i], &QLineEdit::editingFinished, this, [=]() {onCwPresetLineEditingFinished(i);});
 
     }
@@ -153,6 +230,45 @@ void RadioSettingDialog::initialise()
 
     loadSettingsToDialog();
 }
+bool RadioSettingDialog::check()
+{
+    if (cancelled)
+        return true;
+
+    checking = true;
+    errorShown = false;
+
+    presetFreq.clearDirty();
+
+    for (int i = 0; i < cwPresetLineEditList.size(); i++)
+    {
+        getFreq(cwPresetLineEditList[i], i);
+
+    }
+    for (int i = 0; i < phonePresetLineEditList.size(); i++)
+    {
+        getFreq(phonePresetLineEditList[i], i);
+
+    }
+    for (int i = 0; i < mgmPresetLineEditList.size(); i++)
+    {
+        getFreq(mgmPresetLineEditList[i], i);
+
+    }
+    checking = false;
+
+    if (errorShown)
+    {
+        errorShown = false;
+        return false;
+    }
+
+    return true;
+}
+void RadioSettingDialog::cancel()
+{
+    cancelled = true;
+}
 
 void RadioSettingDialog::finalise()
 {
@@ -191,7 +307,6 @@ void RadioSettingDialog::finalise()
 
         emit LogContainer->logRadioSettingsChanged(logRadioSettingsChangeFlag);
     }
-
 }
 
 void RadioSettingDialog::setHf(bool hfFlag)
@@ -222,17 +337,20 @@ void RadioSettingDialog::setHf(bool hfFlag)
 
 void RadioSettingDialog::onCwPresetLineEditingFinished(int i)
 {
-    getFreq(cwPresetLineEditList[i], i);
+    if (!checking)
+        getFreq(cwPresetLineEditList[i], i);
 }
 
 void RadioSettingDialog::onPhonePresetLineEditingFinished(int i)
 {
-    getFreq(phonePresetLineEditList[i], i);
+    if (!checking)
+        getFreq(phonePresetLineEditList[i], i);
 }
 
 void RadioSettingDialog::onMgmPresetLineEditingFinished(int i)
 {
-    getFreq(mgmPresetLineEditList[i], i);
+    if (!checking)
+        getFreq(mgmPresetLineEditList[i], i);
 }
 
 
@@ -240,7 +358,8 @@ void RadioSettingDialog::onMgmPresetLineEditingFinished(int i)
 
 void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 {
-
+    if (cancelled)
+        return;
     QString freq = f_box->text().trimmed().remove( QRegularExpression("^[0]*"));
     if (valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
     {
@@ -248,23 +367,23 @@ void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 
 
        // check in band
-       if (checkInBand(Frequency(freq), band))
+       QString mode;
+
+       if (cwPresetLineEditList.contains(f_box))
        {
-           QString mode;
+           mode = freqPresetData::PRESET_MODE_CW;
+       }
+       else if (phonePresetLineEditList.contains(f_box))
+       {
+           mode = freqPresetData::PRESET_MODE_PHONE;
+       }
+       else
+       {
+           mode = freqPresetData::PRESET_MODE_MGM;
+       }
 
-           if (cwPresetLineEditList.contains(f_box))
-           {
-               mode = freqPresetData::PRESET_MODE_CW;
-           }
-           else if (phonePresetLineEditList.contains(f_box))
-           {
-               mode = freqPresetData::PRESET_MODE_PHONE;
-           }
-           else
-           {
-               mode = freqPresetData::PRESET_MODE_MGM;
-           }
-
+       if (checkInBand(Frequency(freq), bands[band]->name(), mode))
+       {
            presetFreq.setPresetFreq(mode, bands[band].data()->uk, freq);
 
 
@@ -280,19 +399,16 @@ void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 
 // check in band
 
-bool RadioSettingDialog::checkInBand(Frequency freq, int band)
+bool RadioSettingDialog::checkInBand(Frequency freq, const QString &band, const QString &mode)
 {
-    if (freq >= bands[band]->fLow && freq <= bands[band]->fHigh)
+    if (BandList::getBandList().isFreqOK(freq, band, mode))
     {
         return true;
     }
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText(tr("Frequency %1 is out of band for %2").arg(freq.convertFreqStrDispSingle(), bands[band]->name()));
-        msgBox.exec();
-        return false;
-    }
+    errorShown = true;
+    QMessageBox msgBox;
+    msgBox.setText(tr("Frequency %1 is out of band/mode for %2/%3").arg(freq.convertFreqStrDispSingle(), band, mode));
+    msgBox.exec();
     return false;
 }
 
@@ -324,6 +440,8 @@ void RadioSettingDialog::saveSettings()
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_PHONE, config);
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_MGM, config);
 
+    presetFreq.clearDirty();
+
     saveRadioSettingsCheckBoxes();
     saveBandSwComport();
     saveBandSwData();
@@ -335,9 +453,13 @@ void RadioSettingDialog::saveSettings()
 void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &config)
 {
     config.beginGroup(mode);
-    for (int i = 0; i < bands.count(); i++)
+    for (const auto &b: qAsConst(bands))
     {
-        config.setValue(bands[i].data()->uk, presetFreq.getPresetFreq(mode, bands[i].data()->uk).str());
+        if (presetFreq.isDirty(mode, b->uk))
+        {
+            QString newFreq = presetFreq.getPresetFreq(mode, b->uk).str();
+            config.setValue(b->uk, newFreq);
+        }
     }
     config.endGroup();
 }
@@ -393,51 +515,10 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
 }
 
 
-void RadioSettingDialog::checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)  // static
-{
-    QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
-
-    QSettings config(fileName, QSettings::IniFormat);
-
-    QStringList keyList = config.childGroups();
-    if (keyList.contains("FreqPresets"))    // first version of freqPresets
-    {
-        config.beginGroup("FreqPresets");
-        for (int i = 0; i < bands.count(); i++)
-        {
-
-            presetFreq.setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
-
-        }
-        config.endGroup();
-
-        config.beginGroup(freqPresetData::PRESET_MODE_PHONE);
-        for (int i = 0; i < bands.count(); i++)
-        {
-            config.setValue(bands[i].data()->uk, presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk).str());
-        }
-        config.endGroup();
-
-        config.remove("FreqPresets");
-    }
-}
-
-
-
 void RadioSettingDialog::freqPresetReadSettings(PresetFreq  &presetFreq, const QVector<QSharedPointer<BandInfo> > &bands)
 {
-
-
     presetFreq.readSettings(bands);
-
-
 }
-
-
-
-
-
-
 
 void RadioSettingDialog::loadSettingsToDialog()
 {

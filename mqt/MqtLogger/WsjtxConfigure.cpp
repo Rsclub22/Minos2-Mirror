@@ -108,6 +108,14 @@ void WsjtxConfigure::initialise()
     ui->wsjtxAddr->setText(wsjtxRbAddr);
     ui->wsjtxPort->setText(QString::number(wsjtxRbPort));
 }
+bool WsjtxConfigure::check()
+{
+    return true;
+}
+void WsjtxConfigure::cancel()
+{
+
+}
 void WsjtxConfigure::finalise()
 {
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpWSJTXUdpRecEnabled, ui->udpRecCB->isChecked() );

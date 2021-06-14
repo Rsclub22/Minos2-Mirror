@@ -21,6 +21,8 @@ public:
     void initialise();
     void finalise();
 
+    bool check();
+    void cancel();
 private slots:
     void onDistanceEditingFinished(QLineEdit *distLineEdit);
     void onFreqToleranceValueChanged(int value);

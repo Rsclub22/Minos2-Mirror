@@ -54,6 +54,8 @@ public:
 
     void setType ( const QString &t );
     QString getType() const;
+
+    bool isFreqOK(const Frequency &f);
 };
 
 class BandInfo
@@ -62,6 +64,10 @@ class BandInfo
     public:
         Frequency fLow;
         Frequency fHigh;
+
+        Frequency fcLow;
+        Frequency fcHigh;
+
         QString wlen;
         QString uk;
         QString cabrillo;
@@ -110,6 +116,7 @@ class BandList
         void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands);
 
         static QString findBandNameFromIndex(int i, QVector<QSharedPointer<BandInfo> > &bands);
+        bool isFreqOK(const Frequency &f, const QString &band, const QString &mode);
 private:
         bool parseBand ( TiXmlElement * e );
         bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);

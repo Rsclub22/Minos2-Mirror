@@ -52,14 +52,12 @@ public:
     void finalise();
 
     void freqPresetReadSettings(PresetFreq &presetFreq, const QVector<QSharedPointer<BandInfo> > &band);
-    static void checkPreviousVersionIniFile(PresetFreq& presetFreq, const QVector<QSharedPointer<BandInfo> > &bands);
-
 
     bool getFreqChanged(){return freqChanged;}
     PresetFreq& getPresetSettings(){return presetFreq;}
     void saveSettings();
-
-
+    bool check();
+    void cancel();
 private slots:
 
     void onCwPresetLineEditingFinished(int i);
@@ -83,6 +81,10 @@ private:
     QVector<QSharedPointer<BandInfo> > bands;
     bool freqChanged = false;
     bool* freqPresetChanged;
+
+    bool checking = false;
+    bool errorShown = false;
+    bool cancelled = false;
 
     QList<QLineEdit*> cwPresetLineEditList;
 
@@ -109,7 +111,7 @@ private:
     //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
     //void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
 
-    bool checkInBand(Frequency freq, int band);
+    bool checkInBand(Frequency freq, const QString &band, const QString &mode);
     void getFreq(QLineEdit* f_box, int band);
 
     void loadSettingsToDialog();

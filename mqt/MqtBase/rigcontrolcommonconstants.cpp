@@ -22,10 +22,27 @@ void PresetFreq::clear()
     modePresetFreqList.clear();
 }
 
+bool PresetFreq::isDirty(const QString mode, const QString band)
+{
+    QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
+    return mspf->value(band).presetFreq.isDirty();
+}
+
+void PresetFreq::clearDirty()
+{
+    for (auto &m:modePresetFreqList)
+    {
+        for (auto &p:*m)
+        {
+            p.presetFreq.clearDirty();
+        }
+    }
+}
+
 Frequency PresetFreq::getPresetFreq(const QString mode, const QString band)
 {
    QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];
-   return mspf->value(band).presetFreq;
+   return mspf->value(band).presetFreq.getValue();
 }
 
 
@@ -61,7 +78,7 @@ void PresetFreq::setPresetFreq(const QString mode, const QString band, const QSt
 
        StoredPresetFreqs spf{};
        spf = mspf->value(band);
-       spf.presetFreq = freq;
+       spf.presetFreq.setValue(freq);
 
        mspf->insert(band, spf);
 
@@ -175,44 +192,69 @@ bool PresetFreq::contains(QString mode, QString band)
 
 void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
 {
-
     QString fileName = RADIO_PATH_LOGGER + FILENAME_FREQ_PRESETS;
-
     QSettings config(fileName, QSettings::IniFormat);
-
     clear();
 
 
     config.beginGroup(freqPresetData::PRESET_MODE_CW);
 
-    for (int i = 0; i < bands.count(); i++)
+    for (const auto &bi: bands)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_CW, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
-
+        Frequency fl;
+        QString band = bi->uk;
+        QSharedPointer<ModeInfo> mi = bi->findMode("CW");
+        fl = mi?mi->fcLow1:bi->fcLow;
+        QString mf = config.value(band, fl.str()).toString();
+        Frequency f(mf);
+        if (mi && mi->isFreqOK(f))
+        {
+            fl = f;
+        }
+        setPresetFreq(freqPresetData::PRESET_MODE_CW, band, fl.str());
     }
 
     config.endGroup();
 
     config.beginGroup(freqPresetData::PRESET_MODE_PHONE);
 
-    for (int i = 0; i < bands.count(); i++)
+    for (const auto &bi: bands)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
-
+        Frequency fl;
+        QString band = bi->uk;
+        QSharedPointer<ModeInfo> mi = bi->findMode("SSB");
+        fl = mi?mi->fcLow1:bi->fcLow;
+        QString mf = config.value(band, fl.str()).toString();
+        Frequency f(mf);
+        if (mi && mi->isFreqOK(f))
+        {
+            fl = f;
+        }
+        setPresetFreq(freqPresetData::PRESET_MODE_PHONE, band, fl.str());
     }
 
     config.endGroup();
 
     config.beginGroup(freqPresetData::PRESET_MODE_MGM);
 
-    for (int i = 0; i < bands.count(); i++)
+    for (const auto &bi: bands)
     {
-        setPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk, config.value(bands[i].data()->uk, freqPresetData::bandFreq[i]).toString());
-
+        Frequency fl;
+        QString band = bi->uk;
+        QSharedPointer<ModeInfo> mi = bi->findMode("MGM");
+        fl = mi?mi->fcLow1:bi->fcLow;
+        QString mf = config.value(band, fl.str()).toString();
+        Frequency f(mf);
+        if (mi && mi->isFreqOK(f))
+        {
+            fl = f;
+        }
+        setPresetFreq(freqPresetData::PRESET_MODE_MGM, band, fl.str());
     }
 
     config.endGroup();
 
+    clearDirty();
 
 }
 

@@ -18,6 +18,8 @@ public:
     void initialise();
     void finalise();
 
+    bool check();
+    void cancel();
 private:
     Ui::N1MMBroadcastConfig *ui;
 };

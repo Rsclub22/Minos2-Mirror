@@ -37,6 +37,13 @@ QSharedPointer<ModeInfo> BandInfo::findMode(const QString &mstr) const
 {
     for(auto m: modes)
     {
+        if (mstr == "SSB" || mstr == "PH" || mstr == "PHONE")
+        {
+            if (m->getType() == "LSB")
+                return m;
+            if (m->getType() == "USB")
+                return m;
+        }
         if (m->getType() == mstr)
             return m;
     }
@@ -69,6 +76,34 @@ void ModeInfo::setType ( const QString &t )
 QString ModeInfo::getType() const
 {
     return type;
+}
+
+bool ModeInfo::isFreqOK(const Frequency &f)
+{
+    for(const auto &exc:qAsConst(exclusions))
+    {
+        if (f >= exc->fLow && f <= exc->fHigh )
+        {
+            return false;
+        }
+    }
+    if (fcLow2)
+    {
+        if (f > fcHigh1 && f < fcLow2)
+        {
+            return false;
+        }
+        if (f >= fcLow2 && f <= fcHigh2)
+        {
+            return true;
+        }
+    }
+    if (f >= fcLow1 && f <= fcHigh1)
+    {
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -221,6 +256,28 @@ bool BandList::parseBand ( TiXmlElement * e )
                 return false;
             }
         }
+    }
+    if (band->modes.size() > 0)
+    {
+        band->fcLow = band->fHigh;
+        band->fcHigh = band->fLow;
+        for (const auto &mi:qAsConst(band->modes))
+        {
+            if (mi->fcLow1 < band->fcLow)
+            {
+                band->fcLow = mi->fcLow1;
+            }
+            Frequency fh = mi->fcHigh2?mi->fcHigh2:mi->fcHigh1;
+            if (fh > band->fcHigh)
+            {
+                band->fcHigh = fh;
+            }
+        }
+    }
+    else
+    {
+        band->fcLow = band->fLow;
+        band->fcHigh = band->fHigh;
     }
     bandList.push_back ( band );
 
@@ -532,4 +589,27 @@ QString BandList::findBandNameFromIndex(int idx, QVector<QSharedPointer<BandInfo
     }
 
     return "";
+}
+
+bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &mode)
+{
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = false;
+    bandOK = findBand(band, bi);
+    if (bandOK)
+    {
+        QSharedPointer<ModeInfo> mi = bi->findMode(mode);
+        if (mi)
+        {
+            return mi->isFreqOK(f);
+        }
+        if (bi->modes.size() == 0)
+        {
+            if (f >= bi->fcLow && f <= bi->fcHigh)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
 }
