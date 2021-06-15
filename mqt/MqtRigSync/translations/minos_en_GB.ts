@@ -5,7 +5,7 @@
     <name>RSConfigure</name>
     <message>
         <location filename="../RSConfigure.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Configure Rig Sync</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -4,9 +4,13 @@
 <context>
     <name>RSConfigure</name>
     <message>
-        <location filename="../RSConfigure.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue </translation>
+        <translation type="vanished">Dialogue </translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="14"/>
+        <source>Configure Rig Sync</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="22"/>

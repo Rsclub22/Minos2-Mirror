@@ -4,17 +4,21 @@
 <context>
     <name>QrzConfigureDialog</name>
     <message>
-        <location filename="../qrzconfiguredialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation>Dialogue (hidden?)</translation>
+        <translation type="vanished">Dialogue (hidden?)</translation>
     </message>
     <message>
-        <location filename="../qrzconfiguredialog.ui" line="45"/>
+        <location filename="../qrzconfiguredialog.ui" line="14"/>
+        <source>QRZ.com Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzconfiguredialog.ui" line="22"/>
         <source>Logon Callsign</source>
         <translation>Indicatif de connexion</translation>
     </message>
     <message>
-        <location filename="../qrzconfiguredialog.ui" line="67"/>
+        <location filename="../qrzconfiguredialog.ui" line="36"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
