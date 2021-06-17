@@ -628,6 +628,8 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->NonUKloc_mult = false;
           contestTransferObject->UKloc_multiplier = 0;
           contestTransferObject->NonUKloc_multiplier = 0;
+
+          contestTransferObject->otherOptionalExchange.setValue(true);
        }
        else
        {

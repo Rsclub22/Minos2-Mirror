@@ -45,7 +45,7 @@ BaseContestLog::BaseContestLog(bool hf)
   allowLoc4.setValue ( false );
   RSTMandatoryField.setValue( true );
   serialMandatoryField.setValue( true );
-  locatorMandatoryField.setValue( true );
+  locatorMandatoryField.setValue( !hf );
   otherExchange.setValue( false );
   otherOptionalExchange.setValue( false );
   countryMult.setValue( false );
