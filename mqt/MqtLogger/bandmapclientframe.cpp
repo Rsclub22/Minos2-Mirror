@@ -77,6 +77,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     resendSpotsAction = new QAction(tr("&Resend Cluster Spots"), this);
     clearSpotAction = new QAction(tr("Clear &Spot"), this);
     clearAllSpotsAction = new QAction(tr("Clear All Spots"), this);
+    clearClusterSpotsAction = new QAction(tr("Clear Cluster Spots"), this);
 
     spotsMenu->addAction(markSpotAction);
     spotsMenu->addAction(unMarkSpotAction);
@@ -89,6 +90,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     spotsMenu->addAction(resendSpotsAction);
     spotsMenu->addAction(clearSpotAction);
     spotsMenu->addAction(clearAllSpotsAction);
+    spotsMenu->addAction(clearClusterSpotsAction);
 
     ui->actionsButton->setMenu(spotsMenu);
     connect(spotsMenu, &QMenu::aboutToShow, this, &BandmapClientFrame::onMenuShow);
@@ -110,6 +112,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect(resendSpotsAction, &QAction::triggered, this, &BandmapClientFrame::on_resendClusterSpotSelected);
     connect( clearSpotAction, &QAction::triggered, this, &BandmapClientFrame::on_clearSpotActionSelected );
     connect( clearAllSpotsAction, &QAction::triggered, this, &BandmapClientFrame::on_clearAllSpotsActionSelected );
+    connect( clearClusterSpotsAction, &QAction::triggered, this, &BandmapClientFrame::on_clearClusterSpotsActionSelected );
 
     contextSpotsMenu = new QMenu(this);
     contextSpotsMenu_markSpotAction = new QAction(tr("M&ark Spot"), this);
@@ -415,6 +418,33 @@ void BandmapClientFrame::on_clearAllSpotsActionSelected()
         {
             traceMsg(QString("menu clear all bandmap spots selected"));
             bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
+            bandmapView->clearSelectedSpotData();
+            bandmapView->bandmapUpdate();
+        }
+    }
+}
+
+void BandmapClientFrame::on_clearClusterSpotsActionSelected()
+{
+    if (bandmapSpotProxyModel->rowCount() > 0)
+    {
+        int ret = QMessageBox::warning(this, tr("Bandmap"),
+                                       tr("Please confirm you want to delete all the cluster spots in the bandmap?"),
+                                       QMessageBox::Yes | QMessageBox::No);
+        if (ret == QMessageBox::Yes)
+        {
+            traceMsg(QString("menu clear cluster bandmap spots selected"));
+
+            for (int row = 0; row < bandmapDataModel->rowCount(); row++)
+            {
+                bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
+                if (savedSpotType == bandmapSpotType::CLUSTER )
+                {
+                    // delete the old logged/saved entry, add the new one
+                    bandmapDataModel->setData(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), bandmapSpotType::DELETED, BMP_DataStoredRole);
+                }
+            }
+            purgeSpots();
             bandmapView->clearSelectedSpotData();
             bandmapView->bandmapUpdate();
         }

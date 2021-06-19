@@ -176,6 +176,7 @@ private:
     QAction* resendSpotsAction = nullptr;
     QAction* clearSpotAction = nullptr;
     QAction* clearAllSpotsAction = nullptr;
+    QAction* clearClusterSpotsAction = nullptr;
 
     QMenu* contextSpotsMenu = nullptr;
     QAction* contextSpotsMenu_markSpotAction = nullptr;
@@ -277,6 +278,7 @@ private slots:
      void context_memoryActionSelected();
      void context_clearSpotActionSelected();
      void on_clearAllSpotsActionSelected();
+     void on_clearClusterSpotsActionSelected();
      void context_bearingActionSelected();
 
      void on_zoomIn();
