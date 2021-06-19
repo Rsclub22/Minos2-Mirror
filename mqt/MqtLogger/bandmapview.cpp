@@ -900,7 +900,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         {
             // marker at higher frequency
             syCoord = centreYCoord + fontOffset;
-            if ( row  == markersAbove)// don't move first one
+            if ( row  == 0)// don't move first one
             {
                 syCoord = yCoord;
                 fontOffset = yCoord - centreYCoord;
