@@ -871,7 +871,7 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
     }
 }
 
-void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset)
+void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn)
 {
     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
     if (savedSpotType == bandmapSpotType::DELETED)
@@ -900,7 +900,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         {
             // marker at higher frequency
             syCoord = centreYCoord + fontOffset;
-            if ( row  == 0)// don't move first one
+            if ( firstDrawn)// don't move first one
             {
                 syCoord = yCoord;
                 fontOffset = yCoord - centreYCoord;
@@ -987,6 +987,7 @@ void BandmapView::drawBandmapSpot(int row, int &fontOffset, int markersAbove, in
         markerDetails->setModelRowNum(row);
 
         fontOffset += fontHeight;
+        firstDrawn = false;
     }
 }
 
@@ -1088,9 +1089,10 @@ void BandmapView::drawBandMapSpots()
             int fontOffset = -1;
             int lastOffset = -1;
             int firstOffset = -1;
+            bool firstDrawn = true;
             for (int row = markersAbove - 1; row >= 0; --row)
             {
-                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset, firstDrawn);
                 if (firstOffset == -1)
                 {
                     firstOffset = fontOffset;
@@ -1105,7 +1107,7 @@ void BandmapView::drawBandMapSpots()
 
             for (int row = markersAbove; row < numrows; ++row)
             {
-                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset);
+                drawBandmapSpot(row, fontOffset, markersAbove, lastOffset, firstDrawn);
             }
 
             if (listOfMarkers.size() == 0)
