@@ -51,6 +51,7 @@ class DXCCFrame : public QFrame
     DXCCGridModel model;
     DXCCSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate ;
+    QString band;
 
 public:
     explicit DXCCFrame(QWidget *parent = nullptr);

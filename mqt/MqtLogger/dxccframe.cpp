@@ -44,6 +44,11 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
         ui->DXCCTable->setItemDelegate(delegate.data());
+
+        band = contest->currentBand.getValue();
+        model.band = band;
+        proxyModel.band = band;
+
         reInitialiseCountries();
         ui->DXCCTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
@@ -52,8 +57,9 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     }
 }
 
-void DXCCFrame::setBand(QString band)
+void DXCCFrame::setBand(QString pband)
 {
+    band = pband;
     model.band = band;
     proxyModel.band = band;
     model.initialise();

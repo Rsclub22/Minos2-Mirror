@@ -51,6 +51,7 @@ class DistrictFrame : public QFrame
 {
     Q_OBJECT
 
+    QString band;
     DistrictGridModel model;
     DistrictSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate;

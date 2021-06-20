@@ -40,6 +40,10 @@ void DistrictFrame::setContest(BaseContestLog *contest)
     ui->DistrictTable->setModel(&proxyModel);
     if (contest)
     {
+        band = contest->currentBand.getValue();
+        model.band = band;
+        proxyModel.band = band;
+
         reInitialiseDistricts();
         connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized,
                  this, &DistrictFrame::on_sectionResized, Qt::UniqueConnection);
