@@ -64,6 +64,8 @@ public:
 
 private:
     Ui::DXCCFrame *ui;
+    void doScrollToCountry();
+    
 private slots:
     void on_sectionResized(int, int , int);
     void on_DXCCTable_clicked(const QModelIndex &index);

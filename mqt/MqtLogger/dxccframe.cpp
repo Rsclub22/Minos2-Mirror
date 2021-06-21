@@ -64,15 +64,8 @@ void DXCCFrame::setBand(QString pband)
     proxyModel.band = band;
     model.initialise();
 }
-void DXCCFrame::reInitialiseCountries()
+void DXCCFrame::doScrollToCountry()
 {
-    model.reset();
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("DXCCTable/state").toByteArray();
-    ui->DXCCTable->horizontalHeader()->restoreState(state);
-
     for(int i = 0; i < proxyModel.rowCount(); i++)
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
@@ -86,13 +79,25 @@ void DXCCFrame::reInitialiseCountries()
         }
     }
 }
+
+void DXCCFrame::reInitialiseCountries()
+{
+    model.reset();
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("DXCCTable/state").toByteArray();
+    ui->DXCCTable->horizontalHeader()->restoreState(state);
+
+    doScrollToCountry();
+}
 void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
 {
     if (makeVisible)
         proxyModel.scrolledCountry = bp;
     else
         proxyModel.scrolledCountry.clear();
-   reInitialiseCountries();
+   doScrollToCountry();
 }
 
 void DXCCFrame::on_sectionResized(int, int , int)
