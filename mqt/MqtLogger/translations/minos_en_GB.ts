@@ -103,10 +103,11 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="25"/>
         <location filename="../bandmapclientframe.cpp" line="27"/>
-        <location filename="../bandmapclientframe.cpp" line="394"/>
-        <location filename="../bandmapclientframe.cpp" line="411"/>
-        <location filename="../bandmapclientframe.cpp" line="533"/>
-        <location filename="../bandmapclientframe.cpp" line="1600"/>
+        <location filename="../bandmapclientframe.cpp" line="397"/>
+        <location filename="../bandmapclientframe.cpp" line="414"/>
+        <location filename="../bandmapclientframe.cpp" line="431"/>
+        <location filename="../bandmapclientframe.cpp" line="563"/>
+        <location filename="../bandmapclientframe.cpp" line="1630"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -147,37 +148,37 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="69"/>
-        <location filename="../bandmapclientframe.cpp" line="115"/>
+        <location filename="../bandmapclientframe.cpp" line="118"/>
         <source>M&amp;ark Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="70"/>
-        <location filename="../bandmapclientframe.cpp" line="116"/>
+        <location filename="../bandmapclientframe.cpp" line="119"/>
         <source>&amp;Unmark Spot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="71"/>
-        <location filename="../bandmapclientframe.cpp" line="118"/>
+        <location filename="../bandmapclientframe.cpp" line="121"/>
         <source>Set &amp;Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="72"/>
-        <location filename="../bandmapclientframe.cpp" line="119"/>
+        <location filename="../bandmapclientframe.cpp" line="122"/>
         <source>Set &amp;Bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="73"/>
-        <location filename="../bandmapclientframe.cpp" line="120"/>
+        <location filename="../bandmapclientframe.cpp" line="123"/>
         <source>Send &amp;Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="74"/>
-        <location filename="../bandmapclientframe.cpp" line="121"/>
+        <location filename="../bandmapclientframe.cpp" line="124"/>
         <source>Send &amp;Memory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -198,7 +199,7 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="78"/>
-        <location filename="../bandmapclientframe.cpp" line="122"/>
+        <location filename="../bandmapclientframe.cpp" line="125"/>
         <source>Clear &amp;Spot</source>
         <translation type="unfinished"></translation>
     </message>
@@ -208,43 +209,53 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="117"/>
+        <location filename="../bandmapclientframe.cpp" line="80"/>
+        <source>Clear Cluster Spots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.cpp" line="120"/>
         <source>Move spot to current frequency</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="395"/>
-        <location filename="../bandmapclientframe.cpp" line="534"/>
+        <location filename="../bandmapclientframe.cpp" line="398"/>
+        <location filename="../bandmapclientframe.cpp" line="564"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="412"/>
+        <location filename="../bandmapclientframe.cpp" line="415"/>
         <source>Please confirm you want to delete all the spots in the bandmap?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1604"/>
+        <location filename="../bandmapclientframe.cpp" line="432"/>
+        <source>Please confirm you want to delete all the cluster spots in the bandmap?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../bandmapclientframe.cpp" line="1634"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1345"/>
+        <location filename="../bandmapclientframe.cpp" line="1375"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1383"/>
+        <location filename="../bandmapclientframe.cpp" line="1413"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1388"/>
+        <location filename="../bandmapclientframe.cpp" line="1418"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1500"/>
+        <location filename="../bandmapclientframe.cpp" line="1530"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -252,38 +263,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1336"/>
+        <location filename="../bandmapview.cpp" line="1338"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1362"/>
+        <location filename="../bandmapview.cpp" line="1364"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1445"/>
+        <location filename="../bandmapview.cpp" line="1447"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1462"/>
+        <location filename="../bandmapview.cpp" line="1464"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1490"/>
+        <location filename="../bandmapview.cpp" line="1492"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1493"/>
+        <location filename="../bandmapview.cpp" line="1495"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1500"/>
+        <location filename="../bandmapview.cpp" line="1502"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -1067,13 +1078,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="72"/>
-        <location filename="../contestdetails.cpp" line="1469"/>
+        <location filename="../contestdetails.cpp" line="1471"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="79"/>
-        <location filename="../contestdetails.cpp" line="1498"/>
+        <location filename="../contestdetails.cpp" line="1500"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1365,14 +1376,14 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1384"/>
+        <location filename="../contestdetails.cpp" line="1386"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1432"/>
+        <location filename="../contestdetails.cpp" line="1434"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1396,17 +1407,17 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1526"/>
+        <location filename="../contestdetails.cpp" line="1528"/>
         <source>Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1668"/>
+        <location filename="../contestdetails.cpp" line="1670"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1675"/>
+        <location filename="../contestdetails.cpp" line="1677"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
