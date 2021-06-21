@@ -1021,8 +1021,6 @@ void QSOLogFrame::onCallsignEdit_textChanged(const QString &text)
 void QSOLogFrame::onLocEdit_textChanged(const QString &/*arg1*/)
 {
    // force bearing calc
-   getScreenEntry();
-   calcLoc();
    doGJVEditChange( ui->LocFrame->getTextEditEdit() );
 }
 

@@ -157,20 +157,25 @@ QString RotControlFrame::convertBearingForDisplay(QString bearing)
 void RotControlFrame::setBrgFromQSOLog(QString brg)
 {
     // bearing arrives here correctly formatted for display
-    if (!brg.isEmpty())
+    if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
     {
-        traceMsg("Bearing from QSO Log" + brg);
-        setTurnDisplayText(convertBearingForDisplay(brg));
+        if (!brg.isEmpty())
+        {
+            traceMsg("Bearing from QSO Log" + brg);
+            setTurnDisplayText(convertBearingForDisplay(brg));
+        }
     }
-
 }
 
 // Note! This comes from the single click on Match Frame Entry. Double-click is via
 // QSOLog Frame
 void RotControlFrame::setBrgFromMatchFrame(QString brg)
 {
-    traceMsg(QString("Set bearing from single click match frame - %1").arg(brg));
-     setTurnDisplayText(convertBearingForDisplay(brg));
+    if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        traceMsg(QString("Set bearing from single click match frame - %1").arg(brg));
+        setTurnDisplayText(convertBearingForDisplay(brg));
+    }
 }
 
 /*
@@ -186,8 +191,11 @@ QString RotControlFrame::getBrgTxtFrmFrame()
 // bearing was calculated from a short locator.
 void RotControlFrame::setBrgFromFrmMemory(QString brg)
 {
-    traceMsg("Set Bearing from memory " + brg);
-    setTurnDisplayText(convertBearingForDisplay(brg));
+    if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        traceMsg("Set Bearing from memory " + brg);
+        setTurnDisplayText(convertBearingForDisplay(brg));
+    }
 
 }
 
@@ -195,10 +203,13 @@ void RotControlFrame::setBrgFromFrmMemory(QString brg)
 // bearing was calculated from a short locator.
 void RotControlFrame::setBrgFromSpot(QString brg)
 {
-    traceMsg(QString("Set Bearing from spot %1").arg(brg));
-    setTurnDisplayText(convertBearingForDisplay(brg));
-    traceMsg(QString("Bearing text box from spot %1").arg(ui->BrgSt->text()));
-    turnTo(getAngle(brg));
+    if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        traceMsg(QString("Set Bearing from spot %1").arg(brg));
+        setTurnDisplayText(convertBearingForDisplay(brg));
+        traceMsg(QString("Bearing text box from spot %1").arg(ui->BrgSt->text()));
+        turnTo(getAngle(brg));
+    }
 }
 
 
