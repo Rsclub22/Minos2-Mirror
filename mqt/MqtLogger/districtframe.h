@@ -67,6 +67,8 @@ public:
     void scrollToDistrict( const QString &cd, bool makeVisible );
 private:
     Ui::DistrictFrame *ui;
+    void doScrollToDistrict();
+    
 private slots:
     void on_sectionResized(int, int , int);
     void on_DistrictTable_clicked(const QModelIndex &index);

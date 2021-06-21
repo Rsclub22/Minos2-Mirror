@@ -57,15 +57,8 @@ void DistrictFrame::setBand(QString band)
     proxyModel.band = band;
     model.initialise();
 }
-void DistrictFrame::reInitialiseDistricts()
+void DistrictFrame::doScrollToDistrict()
 {
-    model.reset();
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("DistrictTable/state").toByteArray();
-    ui->DistrictTable->horizontalHeader()->restoreState(state);
-
     for(int i = 0; i < proxyModel.rowCount(); i++)
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
@@ -77,13 +70,26 @@ void DistrictFrame::reInitialiseDistricts()
         }
     }
 }
+
+void DistrictFrame::reInitialiseDistricts()
+{
+    model.reset();
+    QSettings settings;
+    QByteArray state;
+
+    state = settings.value("DistrictTable/state").toByteArray();
+    ui->DistrictTable->horizontalHeader()->restoreState(state);
+
+    doScrollToDistrict();
+}
 void DistrictFrame::scrollToDistrict( const QString &cd, bool makeVisible )
 {
     if (makeVisible)
         proxyModel.scrolledDistrict = cd;
     else
         proxyModel.scrolledDistrict.clear();
-   reInitialiseDistricts();
+
+    doScrollToDistrict();
 }
 void DistrictFrame::on_sectionResized(int, int , int)
 {
