@@ -6,7 +6,7 @@
 include($$PWD/../mqt.pri)
 include($$PWD/../mqtapplibs.pri)
 
-QT       += core gui network sql
+QT       += core gui network
 QT += widgets
 
 TARGET = MqtCluster
