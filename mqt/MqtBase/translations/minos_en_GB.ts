@@ -4,42 +4,42 @@
 <context>
     <name>BandmapSpotData</name>
     <message>
-        <location filename="../spotdatabase.cpp" line="452"/>
+        <location filename="../spotbasedata.cpp" line="452"/>
         <source>NONE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="455"/>
+        <location filename="../spotbasedata.cpp" line="455"/>
         <source>CLUSTER</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="458"/>
+        <location filename="../spotbasedata.cpp" line="458"/>
         <source>CLUSTER MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="461"/>
+        <location filename="../spotbasedata.cpp" line="461"/>
         <source>LOGGED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="464"/>
+        <location filename="../spotbasedata.cpp" line="464"/>
         <source>MARKED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="467"/>
+        <location filename="../spotbasedata.cpp" line="467"/>
         <source>SAVED</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="470"/>
+        <location filename="../spotbasedata.cpp" line="470"/>
         <source>CQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../spotdatabase.cpp" line="473"/>
+        <location filename="../spotbasedata.cpp" line="473"/>
         <source>DELETED</source>
         <translation type="unfinished"></translation>
     </message>

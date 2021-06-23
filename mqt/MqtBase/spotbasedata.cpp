@@ -12,17 +12,17 @@
 
 
 #include "base_pch.h"
-#include "spotdatabase.h"
+#include "spotbasedata.h"
 
 
 
-SpotdataBase::SpotdataBase()
+SpotBaseData::SpotBaseData()
 {
     clear();
 }
 
 
-SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
+SpotBaseData::SpotBaseData(const QSharedPointer<SpotBaseData> sdp)
 {
     rxTime = sdp->rxTime;
     clusterSpotType= sdp->clusterSpotType;
@@ -52,7 +52,7 @@ SpotdataBase::SpotdataBase(const QSharedPointer<SpotdataBase> sdp)
 
 
 
-SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
+SpotBaseData::SpotBaseData(const SpotBaseData &sdp)
 {
     rxTime = sdp.rxTime;
     clusterSpotType = sdp.clusterSpotType;
@@ -74,7 +74,7 @@ SpotdataBase::SpotdataBase(const SpotdataBase &sdp)
 
 
 
-void SpotdataBase::clear()
+void SpotBaseData::clear()
 {
     rxTime = 0;
     clusterSpotType.clear();
@@ -98,14 +98,14 @@ void SpotdataBase::clear()
 // --------------------------------------------------------------------------------------------
 
 
-ClusterSpotDataBase::ClusterSpotDataBase()
+ClusterSpotBaseData::ClusterSpotBaseData()
 {
     clear();
 
 }
 
 
-ClusterSpotDataBase::ClusterSpotDataBase(const ClusterSpotDataBase &cpd)
+ClusterSpotBaseData::ClusterSpotBaseData(const ClusterSpotBaseData &cpd)
 {
     dxLocatorIsFromNode = cpd.dxLocatorIsFromNode;
     askQrzFailed = cpd.askQrzFailed;
@@ -116,7 +116,7 @@ ClusterSpotDataBase::ClusterSpotDataBase(const ClusterSpotDataBase &cpd)
     sentToMemory = cpd.sentToMemory;
 }
 
-ClusterSpotDataBase::ClusterSpotDataBase(const QSharedPointer<ClusterSpotDataBase> cpd)
+ClusterSpotBaseData::ClusterSpotBaseData(const QSharedPointer<ClusterSpotBaseData> cpd)
 {
     dxLocatorIsFromNode = cpd->dxLocatorIsFromNode;
     askQrzFailed = cpd->askQrzFailed;
@@ -130,7 +130,7 @@ ClusterSpotDataBase::ClusterSpotDataBase(const QSharedPointer<ClusterSpotDataBas
 
 
 
-void ClusterSpotDataBase::clear()
+void ClusterSpotBaseData::clear()
 {
 
     dxLocatorIsFromNode = false;
@@ -155,11 +155,11 @@ ClusterSpotData::ClusterSpotData()
 
 void ClusterSpotData::clear()
 {
-    SpotdataBase::clear();
-    ClusterSpotDataBase::clear();
+    SpotBaseData::clear();
+    ClusterSpotBaseData::clear();
 }
 
-ClusterSpotData::ClusterSpotData(const ClusterSpotData &csd) : SpotdataBase(csd), ClusterSpotDataBase(csd)
+ClusterSpotData::ClusterSpotData(const ClusterSpotData &csd) : SpotBaseData(csd), ClusterSpotBaseData(csd)
 {
     dxLocatorIsFromNode = csd.dxLocatorIsFromNode;
     askQrzFailed = csd.askQrzFailed;
@@ -169,7 +169,7 @@ ClusterSpotData::ClusterSpotData(const ClusterSpotData &csd) : SpotdataBase(csd)
     dxLocatorWorked = csd.sentToMemory;
 }
 
-ClusterSpotData::ClusterSpotData(const QSharedPointer<ClusterSpotData> csd) : SpotdataBase(csd), ClusterSpotDataBase(csd)
+ClusterSpotData::ClusterSpotData(const QSharedPointer<ClusterSpotData> csd) : SpotBaseData(csd), ClusterSpotBaseData(csd)
 {
     dxLocatorIsFromNode = csd->dxLocatorIsFromNode;
     askQrzFailed = csd->askQrzFailed;
@@ -345,7 +345,7 @@ BandmapSpotData::BandmapSpotData(bandmapSpotType::SPOT_TYPE spotType_)
 }
 
 
-BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotdataBase(bsd), ClusterSpotDataBase(bsd)
+BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotBaseData(bsd), ClusterSpotBaseData(bsd)
 {
     runModeOn = bsd.runModeOn;
     offRunFreq = bsd.offRunFreq;
@@ -360,8 +360,8 @@ BandmapSpotData::BandmapSpotData(const BandmapSpotData &bsd) : SpotdataBase(bsd)
 
 void BandmapSpotData::clear()
 {
-    SpotdataBase::clear();
-    ClusterSpotDataBase::clear();
+    SpotBaseData::clear();
+    ClusterSpotBaseData::clear();
     runModeOn = false;
     offRunFreq = false;
     cqResponse = false;

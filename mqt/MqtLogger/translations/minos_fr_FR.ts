@@ -2544,7 +2544,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1840"/>
+        <location filename="../qsologframe.cpp" line="1838"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2555,57 +2555,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2036"/>
+        <location filename="../qsologframe.cpp" line="2034"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2040"/>
+        <location filename="../qsologframe.cpp" line="2038"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2044"/>
+        <location filename="../qsologframe.cpp" line="2042"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2052"/>
+        <location filename="../qsologframe.cpp" line="2050"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2360"/>
+        <location filename="../qsologframe.cpp" line="2358"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2367"/>
+        <location filename="../qsologframe.cpp" line="2365"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2396"/>
+        <location filename="../qsologframe.cpp" line="2394"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1)  </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2461"/>
+        <location filename="../qsologframe.cpp" line="2459"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2463"/>
+        <location filename="../qsologframe.cpp" line="2461"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2797"/>
+        <location filename="../qsologframe.cpp" line="2795"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2832"/>
+        <location filename="../qsologframe.cpp" line="2830"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3250,7 +3250,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="176"/>
-        <location filename="../rotcontrolframe.cpp" line="595"/>
+        <location filename="../rotcontrolframe.cpp" line="606"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
@@ -3261,8 +3261,8 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="166"/>
-        <location filename="../rotcontrolframe.cpp" line="473"/>
-        <location filename="../rotcontrolframe.cpp" line="480"/>
+        <location filename="../rotcontrolframe.cpp" line="484"/>
+        <location filename="../rotcontrolframe.cpp" line="491"/>
         <source>Turn</source>
         <translation>Tourner</translation>
     </message>
@@ -3287,62 +3287,62 @@ Non - Ignorer les modifications</translation>
         <translation>+3</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="226"/>
+        <location filename="../rotcontrolframe.cpp" line="237"/>
         <source>Bearing empty or invalid</source>
         <translation>Direction vide ou invalide</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="236"/>
+        <location filename="../rotcontrolframe.cpp" line="247"/>
         <source>Bearing too large - %1</source>
         <translation>Direction trop grande -%1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="244"/>
+        <location filename="../rotcontrolframe.cpp" line="255"/>
         <source>Bearing too small - %1</source>
         <translation>Direction trop petite - %1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="490"/>
-        <location filename="../rotcontrolframe.cpp" line="497"/>
+        <location filename="../rotcontrolframe.cpp" line="501"/>
+        <location filename="../rotcontrolframe.cpp" line="508"/>
         <source>(CCW) Left</source>
         <translation>Sens antihoraire (à gauche)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="504"/>
-        <location filename="../rotcontrolframe.cpp" line="511"/>
+        <location filename="../rotcontrolframe.cpp" line="515"/>
+        <location filename="../rotcontrolframe.cpp" line="522"/>
         <source>(CW) Right</source>
         <translation>Sens horaire (à droite)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="572"/>
-        <location filename="../rotcontrolframe.cpp" line="635"/>
+        <location filename="../rotcontrolframe.cpp" line="583"/>
+        <location filename="../rotcontrolframe.cpp" line="646"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="581"/>
-        <location filename="../rotcontrolframe.cpp" line="641"/>
-        <location filename="../rotcontrolframe.cpp" line="659"/>
+        <location filename="../rotcontrolframe.cpp" line="592"/>
+        <location filename="../rotcontrolframe.cpp" line="652"/>
+        <location filename="../rotcontrolframe.cpp" line="670"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="604"/>
+        <location filename="../rotcontrolframe.cpp" line="615"/>
         <source>Rotating CCW</source>
         <translation>Tournant sens antihoraire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="614"/>
+        <location filename="../rotcontrolframe.cpp" line="625"/>
         <source>Rotating CW</source>
         <translation>Tournant sens horaire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="625"/>
+        <location filename="../rotcontrolframe.cpp" line="636"/>
         <source>Turning to bearing</source>
         <translation>Passant à la direction choisie</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="647"/>
+        <location filename="../rotcontrolframe.cpp" line="658"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>

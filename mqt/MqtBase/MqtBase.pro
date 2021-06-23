@@ -91,7 +91,7 @@ SOURCES += \
     TreeUtils.cpp \
     serialdata.cpp \
     serialtvswitch.cpp \
-    spotdatabase.cpp \
+    spotbasedata.cpp \
     validators.cpp \
     dxspotdatamodel.cpp \
     qttelnet.cpp \
@@ -180,7 +180,7 @@ HEADERS += \
     TreeUtils.h \
     serialdata.h \
     serialtvswitch.h \
-    spotdatabase.h \
+    spotbasedata.h \
     validators.h \
     waitcursor.h \
     dxspotdatamodel.h \

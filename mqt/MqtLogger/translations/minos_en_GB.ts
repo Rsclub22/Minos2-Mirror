@@ -2461,7 +2461,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1840"/>
+        <location filename="../qsologframe.cpp" line="1838"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2469,57 +2469,57 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2036"/>
+        <location filename="../qsologframe.cpp" line="2034"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2040"/>
+        <location filename="../qsologframe.cpp" line="2038"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2044"/>
+        <location filename="../qsologframe.cpp" line="2042"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2052"/>
+        <location filename="../qsologframe.cpp" line="2050"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2360"/>
+        <location filename="../qsologframe.cpp" line="2358"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2367"/>
+        <location filename="../qsologframe.cpp" line="2365"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2396"/>
+        <location filename="../qsologframe.cpp" line="2394"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2461"/>
+        <location filename="../qsologframe.cpp" line="2459"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2463"/>
+        <location filename="../qsologframe.cpp" line="2461"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2797"/>
+        <location filename="../qsologframe.cpp" line="2795"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2832"/>
+        <location filename="../qsologframe.cpp" line="2830"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3157,7 +3157,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="176"/>
-        <location filename="../rotcontrolframe.cpp" line="595"/>
+        <location filename="../rotcontrolframe.cpp" line="606"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3168,8 +3168,8 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="166"/>
-        <location filename="../rotcontrolframe.cpp" line="473"/>
-        <location filename="../rotcontrolframe.cpp" line="480"/>
+        <location filename="../rotcontrolframe.cpp" line="484"/>
+        <location filename="../rotcontrolframe.cpp" line="491"/>
         <source>Turn</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3194,62 +3194,62 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="226"/>
+        <location filename="../rotcontrolframe.cpp" line="237"/>
         <source>Bearing empty or invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="236"/>
+        <location filename="../rotcontrolframe.cpp" line="247"/>
         <source>Bearing too large - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="244"/>
+        <location filename="../rotcontrolframe.cpp" line="255"/>
         <source>Bearing too small - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="490"/>
-        <location filename="../rotcontrolframe.cpp" line="497"/>
+        <location filename="../rotcontrolframe.cpp" line="501"/>
+        <location filename="../rotcontrolframe.cpp" line="508"/>
         <source>(CCW) Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="504"/>
-        <location filename="../rotcontrolframe.cpp" line="511"/>
+        <location filename="../rotcontrolframe.cpp" line="515"/>
+        <location filename="../rotcontrolframe.cpp" line="522"/>
         <source>(CW) Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="572"/>
-        <location filename="../rotcontrolframe.cpp" line="635"/>
+        <location filename="../rotcontrolframe.cpp" line="583"/>
+        <location filename="../rotcontrolframe.cpp" line="646"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="581"/>
-        <location filename="../rotcontrolframe.cpp" line="641"/>
-        <location filename="../rotcontrolframe.cpp" line="659"/>
+        <location filename="../rotcontrolframe.cpp" line="592"/>
+        <location filename="../rotcontrolframe.cpp" line="652"/>
+        <location filename="../rotcontrolframe.cpp" line="670"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="604"/>
+        <location filename="../rotcontrolframe.cpp" line="615"/>
         <source>Rotating CCW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="614"/>
+        <location filename="../rotcontrolframe.cpp" line="625"/>
         <source>Rotating CW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="625"/>
+        <location filename="../rotcontrolframe.cpp" line="636"/>
         <source>Turning to bearing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="647"/>
+        <location filename="../rotcontrolframe.cpp" line="658"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>

@@ -11,8 +11,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef SPOTDATABASE_H
-#define SPOTDATABASE_H
+#ifndef SPOTBASEDATA_H
+#define SPOTBASEDATA_H
 
 #include "callsign.h"
 
@@ -29,13 +29,13 @@ const QString SHOW_DXSPOT_TYPE = "showDxSpotType";
 
 }
 
-class SpotdataBase
+class SpotBaseData
 {
 public:
-    SpotdataBase();
+    SpotBaseData();
 
-    SpotdataBase(const SpotdataBase &sdp);
-    SpotdataBase(const QSharedPointer<SpotdataBase> sdp);
+    SpotBaseData(const SpotBaseData &sdp);
+    SpotBaseData(const QSharedPointer<SpotBaseData> sdp);
 
     void clear();
 
@@ -162,15 +162,15 @@ protected:
 
 //---------------------------------------------------------------------
 
-class ClusterSpotDataBase
+class ClusterSpotBaseData
 {
 
 public:
-    ClusterSpotDataBase();
-    ClusterSpotDataBase(const ClusterSpotDataBase &sdp);
-    ClusterSpotDataBase(const QSharedPointer<ClusterSpotDataBase> cpd);
+    ClusterSpotBaseData();
+    ClusterSpotBaseData(const ClusterSpotBaseData &sdp);
+    ClusterSpotBaseData(const QSharedPointer<ClusterSpotBaseData> cpd);
 
-    ClusterSpotDataBase &operator =(const ClusterSpotDataBase &cpd);
+    ClusterSpotBaseData &operator =(const ClusterSpotBaseData &cpd);
 
 
     void setDxLocatorIsFromNode(const bool dxLocatorIsFromNode_){dxLocatorIsFromNode = dxLocatorIsFromNode_;}
@@ -217,7 +217,7 @@ protected:
 //-------------------------------------------------------------------------
 
 
-class ClusterSpotData: public SpotdataBase, public ClusterSpotDataBase
+class ClusterSpotData: public SpotBaseData, public ClusterSpotBaseData
 {
 public:
 
@@ -247,7 +247,7 @@ public:
 //---------------------------------------------------------------------
 
 
-class BandmapSpotData: public SpotdataBase, public ClusterSpotDataBase
+class BandmapSpotData: public SpotBaseData, public ClusterSpotBaseData
 {
     Q_DECLARE_TR_FUNCTIONS(BandmapSpotData)
 public:
@@ -306,4 +306,4 @@ private:
 
 
 
-#endif // SPOTDATABASE_H
+#endif // SPOTBASEDATA_H

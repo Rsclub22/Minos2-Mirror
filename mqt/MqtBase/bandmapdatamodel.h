@@ -16,7 +16,7 @@
 #include <QAbstractTableModel>
 #include "clustercommon.h"
 #include "bandmapcommon.h"
-#include "spotdatabase.h"
+#include "spotbasedata.h"
 #include "cutils.h"
 
 const int bandmapColCount = 28;
