@@ -333,8 +333,8 @@ QString TEntryOptionsForm::doFileSave( )
         }
         case ECABRILLO:
         {
-            defext = "cbr";
-            filter =tr( "Cabrillo files (*.cbr);;All Files (*.*);;") ;
+            defext = "log";
+            filter =tr( "Cabrillo files (*.log);;All Files (*.*);;") ;
             title = tr("Save contest in Cabrillo file format as...");
             break;
         }
