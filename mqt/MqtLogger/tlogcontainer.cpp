@@ -884,7 +884,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
           }
 
           // we want to (re)open it WITHOUT using the dialog!
-          addSlot( nullptr, suggestedfName, false, -1, false );
+          addSlot( nullptr, suggestedfName, false, -1, hf );
           repeatDialog = false;
        }
        else

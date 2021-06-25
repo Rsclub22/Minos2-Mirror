@@ -1178,6 +1178,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
           currentBand.setValue("3.5 MHz");
       }
 
+      locatorMandatoryField.setValue(!isHF());
       BandList &blist = BandList::getBandList();
       QSharedPointer<BandInfo>  bi;
       bool bandOK = false;
