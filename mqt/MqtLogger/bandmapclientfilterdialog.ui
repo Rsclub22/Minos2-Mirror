@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>243</width>
+    <width>244</width>
     <height>328</height>
    </rect>
   </property>
@@ -17,88 +17,91 @@
    <item>
     <widget class="QTabWidget" name="bandmapFilterTab">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="modeTab">
       <attribute name="title">
        <string>Mode</string>
       </attribute>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QPushButton" name="modeSelectBut">
+        <widget class="QPushButton" name="modeSelectBut">
+         <property name="text">
+          <string>All Modes</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="cwModeChkBox">
            <property name="text">
-            <string>All Modes</string>
+            <string>CW</string>
            </property>
           </widget>
          </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="3" column="0">
-            <widget class="QCheckBox" name="rttyModeChkBox">
-             <property name="text">
-              <string>RTTY</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QCheckBox" name="msk144ModeChkBox">
-             <property name="text">
-              <string>MSK144</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QCheckBox" name="psk31ModeChkBox">
-             <property name="text">
-              <string>PSK31</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QCheckBox" name="fmModeChkBox">
-             <property name="text">
-              <string>FM</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QCheckBox" name="ft8ModeChkBox">
-             <property name="text">
-              <string>FT8</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="cwModeChkBox">
-             <property name="text">
-              <string>CW</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QCheckBox" name="jt65ModeChkBox">
-             <property name="text">
-              <string>JT65</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="usbModeChkBox">
-             <property name="text">
-              <string>USB</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <widget class="QCheckBox" name="noneModeChkBox">
-             <property name="text">
-              <string>Mode None</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="rttyModeChkBox">
+           <property name="text">
+            <string>RTTY</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QCheckBox" name="lsbModeChkBox">
+           <property name="text">
+            <string>LSB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QCheckBox" name="psk31ModeChkBox">
+           <property name="text">
+            <string>PSK31</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QCheckBox" name="usbModeChkBox">
+           <property name="text">
+            <string>USB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="ft8ModeChkBox">
+           <property name="text">
+            <string>FT8</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QCheckBox" name="fmModeChkBox">
+           <property name="text">
+            <string>FM</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QCheckBox" name="msk144ModeChkBox">
+           <property name="text">
+            <string>MSK144</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="noneModeChkBox">
+           <property name="text">
+            <string>Mode None</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="jt65ModeChkBox">
+           <property name="text">
+            <string>JT65</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

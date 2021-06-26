@@ -236,6 +236,9 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             case CQ_RESPONSE_COL:
                 d = bandmapSpot->getCqResponse();
             break;
+            case DXLOC_FROM_NODE_FLAG_COL_NUM:
+                d = bandmapSpot->getDxLocatorIsFromNode();
+            break;
             case DX_DISTRICT_COL_NUM:
                 d = bandmapSpot->getDistrict();
             break;
@@ -334,6 +337,9 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
             break;
             case CQ_RESPONSE_COL:
                 bandmapSpot->setCqResponse(value.toBool());
+            break;
+            case DXLOC_FROM_NODE_FLAG_COL_NUM:
+                bandmapSpot->setDxLocatorIsFromNode(value.toBool());
             break;
             case DX_DISTRICT_COL_NUM:
                 bandmapSpot->setDistrict(value.toString());

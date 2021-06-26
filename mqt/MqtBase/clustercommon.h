@@ -43,7 +43,7 @@ const QString MSK144_MODE = "MSK144";
 const QString JT65_MODE = "JT65";
 
 
-const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << MSK144_MODE << JT65_MODE;
+const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << MSK144_MODE << JT65_MODE;
 const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MODE << MSK144_MODE << JT65_MODE;
 
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";

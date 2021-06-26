@@ -1216,16 +1216,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
-/*
-        if (newSpot->getDxLocator().isEmpty())
-        {
-            // get locator based upon prefix
-            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
-            trace(QString("Unpack Show DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
-            newSpot->setDxLocatorIsFromNode(true);
-        }
-*/
-
         newSpot->setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode
@@ -1236,8 +1226,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
             newSpot->setMode(commentMode);
 
         }
-
-
 
         return SPOT_OK;
     }
@@ -1670,15 +1658,6 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setSpotterLocator(spotLocator);
         newSpot->setDxLocator(dxLocator);
 
-/*
-        if (newSpot->getDxLocator().isEmpty())
-        {
-            // get locator based up prefix
-            newSpot->setDxLocator(getQraFromCallsignPrefix(newSpot->getDxCall()));
-            trace(QString("Unpack DX Spot: sent locator empty, get from prefix = %1").arg(newSpot->getDxLocator()));
-            newSpot->setDxLocatorIsFromNode(true);
-        }
-*/
         newSpot->setDxPropMode(getPropMode(spotComment));
 
         // look for mode in comments, if found overide freq mode

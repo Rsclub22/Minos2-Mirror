@@ -1352,6 +1352,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString dxBrg = model()->data(model()->index(row, DXBRG_COL_NUM), BMP_DataStoredRole).toString();
     QString rotBrg = model()->data(model()->index(row, ROT_BEARING_COL_NUM), BMP_DataStoredRole).toString();
     bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
+    bool dxLocFromNodeFlag = model()->data(model()->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool();
+
+
 
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
@@ -1374,6 +1377,10 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         callsign = dxCallsign;
     }
 
+    if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
+    {
+        dxLoc = "<i>" + dxLoc + "</i>";
+    }
     QString locator;
     if (locWkd)
     {
