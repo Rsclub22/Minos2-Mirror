@@ -913,8 +913,9 @@ bool Calendar::parseContest ( TiXmlElement * tix )
                                                                                 }
                                                                                 if (mode == "[A-Z][A-Z]")
                                                                                 {
-                                                                                    c.mode = "MGM";
+                                                                                    mode = "MGM";
                                                                                 }
+                                                                                c.mode = mode;
                                                                             }
                                                                             else
                                                                                 if ( checkElementName ( e, "entry_date" ) )
