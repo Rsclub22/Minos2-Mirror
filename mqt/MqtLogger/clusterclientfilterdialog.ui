@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>443</width>
-    <height>586</height>
+    <width>463</width>
+    <height>593</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,278 +23,281 @@
       <attribute name="title">
        <string>Bands/Mode</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <layout class="QVBoxLayout" name="verticalLayout_17">
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_17">
-             <item>
-              <widget class="QPushButton" name="hfSelectBut">
+            <widget class="QPushButton" name="hfSelectBut">
+             <property name="text">
+              <string>HF</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_1_8MHzCheckBox">
+             <property name="text">
+              <string>1.8 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_3_5MHzCheckBox">
+             <property name="text">
+              <string>3.5 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_7MHzCheckBox">
+             <property name="text">
+              <string>7 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_14MHzCheckBox">
+             <property name="text">
+              <string>14 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_21MHzCheckBox">
+             <property name="text">
+              <string> 21 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_28MHzCheckBox">
+             <property name="text">
+              <string>28 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QPushButton" name="vhfSelectBut">
+             <property name="text">
+              <string>VHF</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_50MHzCheckBox">
+             <property name="text">
+              <string>50 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_70MHzCheckBox">
+             <property name="text">
+              <string>70 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_144MHzCheckBox">
+             <property name="text">
+              <string>144 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_432MHzCheckBox">
+             <property name="text">
+              <string>432 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QPushButton" name="mWSelectBut">
+             <property name="text">
+              <string>MWave</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_1296MHzCheckBox">
+             <property name="text">
+              <string>1296 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_2300MHzCheckBox">
+             <property name="text">
+              <string>2300 MHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_3_4GHzCheckBox">
+             <property name="text">
+              <string>3.4 GHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_5_6GHzCheckBox">
+             <property name="text">
+              <string>5.6 GHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="_10GHzCheckBox">
+             <property name="text">
+              <string>10 GHz</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QPushButton" name="modeSelectBut">
+             <property name="text">
+              <string>All Modes</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cwModeChkBox">
                <property name="text">
-                <string>HF</string>
+                <string>CW</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_1_8MHzCheckBox">
+             <item row="0" column="1">
+              <widget class="QCheckBox" name="rttyModeChkBox">
                <property name="text">
-                <string>1.8 MHz</string>
+                <string>RTTY</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_3_5MHzCheckBox">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="lsbModeChkBox">
                <property name="text">
-                <string>3.5 MHz</string>
+                <string>LSB</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_7MHzCheckBox">
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="psk31ModeChkBox">
                <property name="text">
-                <string>7 MHz</string>
+                <string>PSK31</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_14MHzCheckBox">
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="usbModeChkBox">
                <property name="text">
-                <string>14 MHz</string>
+                <string>USB</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_21MHzCheckBox">
+             <item row="2" column="1">
+              <widget class="QCheckBox" name="ft8ModeChkBox">
                <property name="text">
-                <string> 21 MHz</string>
+                <string>FT8</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QCheckBox" name="_28MHzCheckBox">
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="fmModeChkBox">
                <property name="text">
-                <string>28 MHz</string>
+                <string>FM</string>
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
+             <item row="3" column="1">
+              <widget class="QCheckBox" name="msk144ModeChkBox">
+               <property name="text">
+                <string>MSK144</string>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="noneModeChkBox">
+               <property name="text">
+                <string>Mode None</string>
                </property>
-              </spacer>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QCheckBox" name="jt65ModeChkBox">
+               <property name="text">
+                <string>JT65</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QPushButton" name="vhfSelectBut">
-               <property name="text">
-                <string>VHF</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_50MHzCheckBox">
-               <property name="text">
-                <string>50 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_70MHzCheckBox">
-               <property name="text">
-                <string>70 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_144MHzCheckBox">
-               <property name="text">
-                <string>144 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_432MHzCheckBox">
-               <property name="text">
-                <string>432 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="QPushButton" name="mWSelectBut">
-               <property name="text">
-                <string>MWave</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_1296MHzCheckBox">
-               <property name="text">
-                <string>1296 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_2300MHzCheckBox">
-               <property name="text">
-                <string>2300 MHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_3_4GHzCheckBox">
-               <property name="text">
-                <string>3.4 GHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_5_6GHzCheckBox">
-               <property name="text">
-                <string>5.6 GHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="_10GHzCheckBox">
-               <property name="text">
-                <string>10 GHz</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_2">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="QPushButton" name="modeSelectBut">
-               <property name="text">
-                <string>All Modes</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <layout class="QGridLayout" name="gridLayout">
-               <item row="3" column="1">
-                <widget class="QCheckBox" name="jt65ModeChkBox">
-                 <property name="text">
-                  <string>JT65</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="0">
-                <widget class="QCheckBox" name="fmModeChkBox">
-                 <property name="text">
-                  <string>FM</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QCheckBox" name="usbModeChkBox">
-                 <property name="text">
-                  <string>USB</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QCheckBox" name="ft8ModeChkBox">
-                 <property name="text">
-                  <string>FT8</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="0">
-                <widget class="QCheckBox" name="cwModeChkBox">
-                 <property name="text">
-                  <string>CW</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QCheckBox" name="psk31ModeChkBox">
-                 <property name="text">
-                  <string>PSK31</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="0">
-                <widget class="QCheckBox" name="rttyModeChkBox">
-                 <property name="text">
-                  <string>RTTY</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QCheckBox" name="msk144ModeChkBox">
-                 <property name="text">
-                  <string>MSK144</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QCheckBox" name="noneModeChkBox">
-                 <property name="text">
-                  <string>Mode None</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>

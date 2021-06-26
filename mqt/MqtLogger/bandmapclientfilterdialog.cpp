@@ -170,8 +170,10 @@ void BandmapClientFilterDialog::filtersAccepted()
         trace(QString("Bandmap Filters Changed - ContestUuid = %1").arg(contestUuid));
         if (modefilterChanged)
         {
-            trace(QString("Mode Filters CW = %1, USBMode = %2, FMMode = %3, RTTYMode = %4, PSK31Mode = %5, FT8Mode = %6, MSK144Mode = %7, JT65Mode = %8")
-                  .arg(filterSettings.getModeFilter(CW_MODE) ? "true" : "false").arg(filterSettings.getModeFilter(USB_MODE)  ? "true" : "false")
+            trace(QString("Mode Filters CW = %1, LSBMode = %2, USBMode = %3, FMMode = %4, RTTYMode = %5, PSK31Mode = %6, FT8Mode = %7, MSK144Mode = %8, JT65Mode = %9")
+                  .arg(filterSettings.getModeFilter(CW_MODE) ? "true" : "false")
+                  .arg(filterSettings.getModeFilter(LSB_MODE)  ? "true" : "false")
+                  .arg(filterSettings.getModeFilter(USB_MODE)  ? "true" : "false")
                   .arg(filterSettings.getModeFilter(FM_MODE)  ? "true" : "false").arg(filterSettings.getModeFilter(RTTY_MODE)  ? "true" : "false")
                   .arg(filterSettings.getModeFilter(PSK31_MODE) ? "true" : "false").arg(filterSettings.getModeFilter(FT8_MODE)  ? "true" : "false")
                   .arg(filterSettings.getModeFilter(MSK144_MODE)  ? "true" : "false").arg(filterSettings.getModeFilter(JT65_MODE)  ? "true" : "false"));

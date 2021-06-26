@@ -237,6 +237,7 @@ private:
     void readDefaultDistanceFilterSettings(BandmapClientFilterSettings *filterSettings);
 
 
+    bool compareMode(const QString &mode, const QString &savedMode);
 protected:
 
     void keyPressEvent(QKeyEvent *event) override;

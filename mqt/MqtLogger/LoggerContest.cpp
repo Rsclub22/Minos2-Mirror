@@ -1786,6 +1786,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
                                        ccfs.setModeFilter(hamlibData::CW, filterFlag);
 
+                                       mt->getStructArgMemberValue("modeFilterLSBMODE", filterFlag);
+                                       ccfs.setModeFilter(hamlibData::LSB, filterFlag);
+
                                        mt->getStructArgMemberValue("modeFilterUSBMODE", filterFlag);
                                        ccfs.setModeFilter(hamlibData::USB, filterFlag);
 
@@ -1824,6 +1827,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
 
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
                                        bcfs.setModeFilter("CW", filterFlag);
+                                       mt->getStructArgMemberValue("modeFilterLSBMODE", filterFlag);
+                                       bcfs.setModeFilter("LSB", filterFlag);
                                        mt->getStructArgMemberValue("modeFilterUSBMODE", filterFlag);
                                        bcfs.setModeFilter("USB", filterFlag);
                                        mt->getStructArgMemberValue("modeFilterFMMODE", filterFlag);

@@ -479,6 +479,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
 
         st->addMember(clusterFilter.getValue().getModeFilter("NONE"), "modeFilterNONE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
+        st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::LSB), "modeFilterLSBMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
@@ -503,6 +504,7 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
 
         st->addMember(bandmapFilter.getValue().getModeFilter("NONE"), "modeFilterNONEMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::CW), "modeFilterCW");
+        st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::LSB), "modeFilterLSBMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::USB), "modeFilterUSBMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
