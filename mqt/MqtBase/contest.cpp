@@ -202,6 +202,7 @@ Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
 void BaseContestLog::setCurrentBand(QString cb)
 {
     currentBand.setValue(cb);
+    commonSave(false);
 }
 
 //==========================================================================
@@ -1171,14 +1172,18 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       if (currentBand.getValue().isEmpty())
           currentBand = contestBands;
 
+      bool isHfContest = isHF();
       mt->getStructArgMemberValue( "hf", hfContest);
+      if (isHF() != isHfContest)
+      {
+          locatorMandatoryField.setValue(!isHF());
+      }
 
       if (currentBand.getValue() == allHF)
       {
           currentBand.setValue("3.5 MHz");
       }
 
-      locatorMandatoryField.setValue(!isHF());
       BandList &blist = BandList::getBandList();
       QSharedPointer<BandInfo>  bi;
       bool bandOK = false;

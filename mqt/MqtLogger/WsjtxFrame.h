@@ -64,6 +64,7 @@ private:
     QFile fos;
     QDataStream os;
     QTimer *replayTimer = nullptr;
+    bool replayEnabled = false;
 
     void reply(decodeMessage &dc);
     void restoreSplitters();

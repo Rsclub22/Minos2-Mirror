@@ -840,17 +840,31 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->NonUKloc_multiplier = 0;
        }
    }
-   if (ic.specialRules.indexOf("MGM") >= 0) // not a synonym for MGM mode!
+   contestTransferObject->MGMContestRules.setValue(false);
+   if (isHF)
    {
-       //contest->locMult.setValue( true );
-       contestTransferObject->MGMContestRules.setValue(true);
-       contestTransferObject->serialMandatoryField.setValue(false);
-       contestTransferObject->allowLoc4.setValue(true);
-       ui->AllowLoc4CB->setChecked(true);
+       if (ic.mode == "MGM")
+       {
+           contestTransferObject->locMult.setValue( true );
+           contestTransferObject->locatorMandatoryField.setValue( true );
+           contestTransferObject->MGMContestRules.setValue(true);
+           contestTransferObject->serialMandatoryField.setValue(false);
+           contestTransferObject->allowLoc4.setValue(true);
+           ui->AllowLoc4CB->setChecked(true);
+       }
+
    }
    else
    {
-       contestTransferObject->MGMContestRules.setValue(false);
+       if (ic.specialRules.indexOf("MGM") >= 0) // not a synonym for MGM mode!
+       {
+           //contest->locMult.setValue( true );
+           contestTransferObject->locatorMandatoryField.setValue( true );
+           contestTransferObject->MGMContestRules.setValue(true);
+           contestTransferObject->serialMandatoryField.setValue(false);
+           contestTransferObject->allowLoc4.setValue(true);
+           ui->AllowLoc4CB->setChecked(true);
+       }
    }
    ui->MGMCheckBox->setChecked(contestTransferObject->MGMContestRules.getValue());
    /*

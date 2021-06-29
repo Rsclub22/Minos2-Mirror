@@ -610,6 +610,8 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         {
             cb = bi->uk;
             ct->setCurrentBand(cb);
+
+            MinosLoggerEvents::SendContestBandChanged(ct);
         }
         else
         {
@@ -1150,7 +1152,7 @@ void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
 
 void WsjtxFrame::doReplayTimer()
 {
-    if (fos.isOpen())
+    if ( replayEnabled && fos.isOpen())
     {
         qint64 res = -1;
         if (!fos.atEnd())
@@ -1170,6 +1172,9 @@ void WsjtxFrame::doReplayTimer()
 
             if ( res < 0 )
             {
+                replayEnabled = false;
+                fos.close();
+                ui->replayButton->setText("Replay");
                 return;
             }
         }
@@ -1207,9 +1212,23 @@ void WsjtxFrame::on_replayButton_clicked()
             os.setDevice(&fos);
             os.setVersion (QDataStream::Qt_5_4);
 
+            replayEnabled = true;
+            ui->replayButton->setText("Pause Replay");
             replayTimer = new QTimer(this);
             connect(replayTimer, &QTimer::timeout, this, &WsjtxFrame::doReplayTimer);
             replayTimer->start(100);
+        }
+    }
+    else
+    {
+        replayEnabled = !replayEnabled;
+        if (replayEnabled)
+        {
+            ui->replayButton->setText("Pause Replay");
+        }
+        else
+        {
+            ui->replayButton->setText("Restart Replay");
         }
     }
 

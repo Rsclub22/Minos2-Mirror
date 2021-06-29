@@ -26,7 +26,7 @@ void TClockFrame::setContest(BaseContestLog *c)
 
 void TClockFrame::RecheckTimerTimer(  )
 {
-   if ( !isVisible() )
+   if ( !isVisible() || !contest )
       return ;
 
    QDateTime t = QDateTime::currentDateTimeUtc().addSecs( MinosParameters::getMinosParameters() ->getBigClockCorrection());

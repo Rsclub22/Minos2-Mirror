@@ -2082,8 +2082,10 @@ void QSOLogFrame::updateQSODisplay()
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    ui->SerRxFrame->setVisible(contest->serialMandatoryField.getValue());
-   ui->LocFrame->getTextEditEdit()->setEnabled(contest->locatorMandatoryField.getValue());  // loc remains enabled in protected to enable searching
-   ui->LocFrame->setVisible(contest->locatorMandatoryField.getValue());
+
+   bool locman = contest->locatorMandatoryField.getValue();
+   ui->LocFrame->getTextEditEdit()->setEnabled(locman);  // loc remains enabled in protected to enable searching
+   ui->LocFrame->setVisible(locman);
    bool exchangeNeeded = contest->otherExchange .getValue() || contest->districtMult.getValue() || contest->otherOptionalExchange.getValue();
    ui->QTHFrame->setEnabled( exchangeNeeded );
    ui->QTHFrame->setVisible(exchangeNeeded);
