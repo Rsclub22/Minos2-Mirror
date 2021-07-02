@@ -137,6 +137,15 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = nullptr;
     }
 
+    delete clockFrame;
+    delete dxccFrame;
+    delete districtFrame;
+    delete filterFrame;
+    delete rigMemFrame;
+    delete locFrame;
+    delete locTreeFrame;
+    delete statsFrame;
+
     clockFrame = nullptr;
     dxccFrame = nullptr;
     districtFrame = nullptr;
@@ -146,7 +155,12 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
-    bool setTabsVisible = contest && contest->contestBands.getValue() == allHF;
+    if (!contest)
+    {
+        return;
+    }
+
+    bool setTabsVisible = contest->contestBands.getValue() == allHF;
 
     switch ( getAuxEntryType(ui->infoCombo->currentText()) )
     {
@@ -270,6 +284,7 @@ void StackedInfoFrame::clearContestInFrame(BaseContestLog *ct)
 {
     if (contest == ct)
     {
+        trace("StackedInfoFrame::clearContestInFrame");
         setContest(nullptr);
     }
 }
