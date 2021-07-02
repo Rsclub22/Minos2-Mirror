@@ -140,8 +140,6 @@ private slots:
     void onRowsRemoved(const QModelIndex &parent, int first, int last);
     void onRowsInserted(const QModelIndex &parent, int first, int last);
     void zoomUpdated(bool dir);
-
-    void onHbarValueChanged(int v);
 private:
 
     QGraphicsScene *bandmapScene;
