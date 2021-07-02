@@ -67,12 +67,16 @@ BandmapView::~BandmapView()
 void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
 {
     bandmapGraphicsView = view;
+
+    trace(QString("BandmapView::onHbarValueChanged starts at %1").arg(bandmapGraphicsView->horizontalScrollBar()->value()));
+
     bandmapGraphicsView->setScene(bandmapScene);
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
 
+    connect(bandmapGraphicsView->horizontalScrollBar(), &QScrollBar::valueChanged, this, &BandmapView::onHbarValueChanged);
 
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
@@ -101,12 +105,16 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, &BandmapGraphicsPanel::customContextMenuRequested, this, &BandmapView::on_bandmap_customContextMenuRequested);
 
+    trace("hscrollbar set value to 0");
     bandmapGraphicsView->horizontalScrollBar()->setValue(0);
 
     bandmapGraphicsView->setBackgroundBrush(QBrush());
 }
 
-
+void BandmapView::onHbarValueChanged(int v)
+{
+    trace(QString("BandmapView::onHbarValueChanged to %1").arg(v));
+}
 
 void BandmapView::onFontChanged(QFont cf)
 {
@@ -642,6 +650,9 @@ void BandmapView::bandmapResize(int height, int width)
     Q_UNUSED(width)
     trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
     bandmapUpdate();
+    trace("hscrollbar set value to 0");
+    bandmapGraphicsView->horizontalScrollBar()->setValue(0);
+
 }
 
 int BandmapView::rows(const QModelIndex &index) const
