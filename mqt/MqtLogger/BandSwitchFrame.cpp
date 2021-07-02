@@ -78,6 +78,11 @@ void BandSwitchFrame::setContest(BaseContestLog *contest)
 
     bandSelButtons->setMode(mode);
     bandSelButtons->setContestBand(contestBand);
+
+    if (ct)
+    {
+        ui->bandSwitchButtomFrame->setVisible(ct->contestBands.getValue() == allHF);
+    }
 }
 
 void BandSwitchFrame::setContestBand(QString band)
