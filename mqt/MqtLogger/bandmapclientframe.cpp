@@ -192,9 +192,17 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(ui->clusterStatusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestBandChanged, this, &BandmapClientFrame::onContestBandChanged);
 
 }
 
+void BandmapClientFrame::onContestBandChanged(BaseContestLog *c)
+{
+    if (c && c == ct)
+    {
+        setContest(c);
+    }
+}
 
 void BandmapClientFrame::on_zoomIn()
 {

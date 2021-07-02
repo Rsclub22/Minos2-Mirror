@@ -55,13 +55,26 @@ bool CheckOperatingFreq::modeExists(const QString &band, const QString &mode)
 }
 
 
-int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFreqs, const QString &band, const QString &mode)
+int CheckOperatingFreq::getFreqLimitsForDial(ModeFreqDetail<Frequency> &listOfFreqs, const QString &band, const QString &pmode)
 {
     QMap<QString, ModeFreqDetail<Frequency>> modeList;
 
-
+    QString mode(pmode);
     if (bandModeFreqList.contains(band))
     {
+        if (mode == "PH")
+        {
+            auto modeTestFreq = bandModeFreqList.value(band).begin()->freq.at(0).at(0);
+            if (modeTestFreq > Frequency(10000000))
+            {
+                mode = "USB";
+            }
+            else
+            {
+                mode = "LSB";
+            }
+        }
+
         modeList = bandModeFreqList.value(band);
         if (modeList.contains(mode))
         {

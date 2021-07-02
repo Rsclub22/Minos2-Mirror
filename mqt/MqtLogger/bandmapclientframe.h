@@ -293,6 +293,7 @@ private slots:
 
      void on_waitClusterServerLoadedTimeout();
      void on_clusterStatusIndicatorClicked();
+     void onContestBandChanged(BaseContestLog *ct);
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };
