@@ -30,11 +30,15 @@ void RigMemoryFrame::traceMsg(QString msg)
 {
     trace("RigMemoryFrame: " + msg);
 }
+static int rmff = 0;
 RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     QFrame(parent)
     , ui(new Ui::RigMemoryFrame)
     , ct(nullptr)
+    , rmffInstance(rmff++)
 {
+    trace(QString("RigMemoryFrame::RigMemoryFrame %1").arg(rmffInstance));
+
     ui->setupUi(this);
 
     ui->rigMemTable->setObjectName( "rigMemTable" );
@@ -119,6 +123,7 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
 
 RigMemoryFrame::~RigMemoryFrame()
 {
+    trace(QString("RigMemoryFrame::~RigMemoryFrame %1").arg(rmffInstance));
     delete ui;
 }
 
@@ -218,6 +223,10 @@ void RigMemoryFrame::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder
 }
 void RigMemoryFrame::setContest( BaseContestLog *pct )
 {
+    trace(QString("RigMemoryFrame::setContest frame instance %1").arg(rmffInstance));
+    trace(QString("RigMemoryFrame::setContest from %1").arg(ct?ct->cfileName:QString("<>")));
+    trace(QString("RigMemoryFrame::setContest to %1").arg(pct?pct->cfileName:QString("<>")));
+
     ct = dynamic_cast<LoggerContestLog *>( pct);
 
     model.ct = pct;
@@ -797,11 +806,14 @@ QModelIndex RigMemoryGridModel::parent( const QModelIndex &/*index*/ ) const
 
 int RigMemoryGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
-
-    LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+    if (ct)
+    {
+        LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
         if (c)
+        {
             return c->rigMemories.size();
-
+        }
+    }
     return 0;
 }
 

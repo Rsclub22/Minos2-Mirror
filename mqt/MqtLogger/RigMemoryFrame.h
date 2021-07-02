@@ -61,6 +61,8 @@ class RigMemoryFrame : public QFrame
 {
     Q_OBJECT
 
+    int rmffInstance = -1;
+
     QHeaderView *vheader = nullptr;
     void sendUpdateMemories();
     RigMemoryGridModel model;
