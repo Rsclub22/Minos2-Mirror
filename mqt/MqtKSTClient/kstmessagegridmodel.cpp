@@ -240,26 +240,30 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
-    int m = mainWindow->getMaxDistance();
-    // How do we go about filtering for distance?
-    if (m == 0 || ((kstmsg->distance > 0 && kstmsg->distance < m)
-            || (kstmsg->otherDistance > 0 && kstmsg->otherDistance < m)
-            || (kstmsg->distance < 0 && kstmsg->otherDistance < 0)))
+    if (!filterString.isEmpty())
     {
-        int chat = kstmsg->chat;
-        if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 ))
+        if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+        if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+        if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+        if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+            return true;
+    }
+    else
+    {
+        int m = mainWindow->getMaxDistance();
+        // How do we go about filtering for distance?
+        if (m == 0 || ((kstmsg->distance > 0 && kstmsg->distance < m)
+                || (kstmsg->otherDistance > 0 && kstmsg->otherDistance < m)
+                || (kstmsg->distance < 0 && kstmsg->otherDistance < 0)))
         {
-            if (filterString.isEmpty())
+            int chat = kstmsg->chat;
+            if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0 ))
+            {
                 return true;
-
-            if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
-            if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
-            if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
-            if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
+            }
         }
     }
     return false;

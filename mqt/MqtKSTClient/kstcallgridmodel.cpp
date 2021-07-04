@@ -403,25 +403,31 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     QSharedPointer<KstUser> call = cgm->callVector->at(sourceRow);
 
-    int m = mainWindow->getMaxDistance();
-    if (m > 0 && call->distance > m)
-        return false;
-
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
     {
-        if (filterString.isEmpty())
-            return true;
+        if (!filterString.isEmpty())
+        {
+            if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
 
-        if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
+            if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
 
-        if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
+            if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                return true;
 
-        if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
+            return false;
+        }
+        else
+        {
+            int m = mainWindow->getMaxDistance();
+            if (m > 0 && call->distance > m)
+                return false;
+        }
+        return true;
     }
+
 
     return false;
 }
