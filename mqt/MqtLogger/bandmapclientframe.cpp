@@ -1757,12 +1757,12 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
-        QString logBandMask;
+        QString logBandType;
 
-        getBand(bands, freq, logBandStr, logBandMask);
+        getBand(bands, freq, logBandStr, logBandType);
 
         QString logModeStr = lct->mode.getValue();
-        QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
+        //QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
 
         traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4, mode %5")
                  .arg(cs.getFullCall())
@@ -1818,17 +1818,14 @@ void BandmapClientFrame::setCQFreq()
         traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq.traceStr()).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
-        QString logBandStr;
-        QString logBandMask;
-//        QString logModeStr;
-//        QString logModeMask;
 
         Frequency freq = runFreq;
         QString logModeStr = runMode;
-        QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
 
-        getBand(bands, freq, logBandStr, logBandMask);
-        //getMode(modeBandPlan, freq, logBandStr, logModeStr, logModeMask);
+        QString logBandStr;
+        QString logBandType;
+
+        getBand(bands, freq, logBandStr, logBandType);
 
         QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::CQ));
         spot->setDxCall("???");
@@ -1846,7 +1843,7 @@ void BandmapClientFrame::setCQFreq()
     }
 }
 
-void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString loc, QString brg, QString exchange)
+void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString mode, QString loc, QString brg, QString exchange)
 {
     Q_UNUSED(cs)
     if (!isProtected)
@@ -1855,13 +1852,14 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
-        QString logBandMask;
-        QString logModeStr;
-        QString logModeMask;
+        QString logBandType;
 
-        getBand(bands, _freq, logBandStr, logBandMask);
-        getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
-
+        getBand(bands, _freq, logBandStr, logBandType);
+        QString logModeStr = mode;
+        if(mode.isEmpty())
+        {
+            logModeStr = getMode(modeBandPlan, _freq, logBandStr);
+        }
 
         QSharedPointer<BandmapSpotData> spot( new BandmapSpotData(bandmapSpotType::MARKED));
         spot->setDxCall("???");
@@ -1880,7 +1878,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
     }
 }
 
-void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString loc, QString brg, QString exchange)
+void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString mode, QString loc, QString brg, QString exchange)
 {
     if (!isProtected)
     {
@@ -1888,12 +1886,14 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
-        QString logBandMask; // not using bandMask
-        QString logModeStr;
-        QString logModeMask; // not using modeMask
+        QString logBandType; // not using bandType
 
-        getBand(bands, _freq, logBandStr, logBandMask);
-        getMode(modeBandPlan, _freq, logBandStr, logModeStr, logModeMask);
+        getBand(bands, _freq, logBandStr, logBandType);
+        QString logModeStr = mode;
+        if(mode.isEmpty())
+        {
+            logModeStr = getMode(modeBandPlan, _freq, logBandStr);
+        }
 
         QSharedPointer<BandmapSpotData> spot(new BandmapSpotData(bandmapSpotType::SAVED));
         spot->setDxCall(cs);

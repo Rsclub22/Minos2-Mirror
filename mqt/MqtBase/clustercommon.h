@@ -43,8 +43,8 @@ const QString MSK144_MODE = "MSK144";
 const QString JT65_MODE = "JT65";
 
 
-const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << MSK144_MODE << JT65_MODE;
-const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MODE << MSK144_MODE << JT65_MODE;
+const QStringList clusterModes = QStringList() << NONE_MODE << CW_MODE << LSB_MODE << USB_MODE << FM_MODE << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
+const QStringList mgmModes = QStringList() << RTTY_MODE << PSK31_MODE << FT8_MODE << FT4_MODE << MSK144_MODE << JT65_MODE;
 
 const QStringList clusterPropModes = QStringList() << "TR" << "ES" << "MS" << "EME";
 enum bandPlanModeError {MODE_FREQ_MATCH, NO_MODE_FREQ_MATCH, MODE_NOT_FOUND, BAND_NOT_FOUND};
@@ -189,7 +189,7 @@ bool spotTimedOut(qlonglong spotTime, qlonglong timeToLive);
 
 qlonglong spotElapsedTime(qlonglong spotTime);
 
-void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask);
+QString getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand);
 
 bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandType);
 

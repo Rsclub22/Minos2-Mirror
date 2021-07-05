@@ -214,45 +214,10 @@
            </item>
            <item>
             <layout class="QGridLayout" name="gridLayout">
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="cwModeChkBox">
-               <property name="text">
-                <string>CW</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QCheckBox" name="rttyModeChkBox">
-               <property name="text">
-                <string>RTTY</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="lsbModeChkBox">
-               <property name="text">
-                <string>LSB</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QCheckBox" name="psk31ModeChkBox">
-               <property name="text">
-                <string>PSK31</string>
-               </property>
-              </widget>
-             </item>
              <item row="2" column="0">
               <widget class="QCheckBox" name="usbModeChkBox">
                <property name="text">
                 <string>USB</string>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
-              <widget class="QCheckBox" name="ft8ModeChkBox">
-               <property name="text">
-                <string>FT8</string>
                </property>
               </widget>
              </item>
@@ -263,21 +228,63 @@
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QCheckBox" name="msk144ModeChkBox">
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="lsbModeChkBox">
                <property name="text">
-                <string>MSK144</string>
+                <string>LSB</string>
                </property>
               </widget>
              </item>
-             <item row="4" column="0">
+             <item row="5" column="0">
               <widget class="QCheckBox" name="noneModeChkBox">
                <property name="text">
                 <string>Mode None</string>
                </property>
               </widget>
              </item>
+             <item row="0" column="0">
+              <widget class="QCheckBox" name="cwModeChkBox">
+               <property name="text">
+                <string>CW</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="rttyModeChkBox">
+               <property name="text">
+                <string>RTTY</string>
+               </property>
+              </widget>
+             </item>
              <item row="4" column="1">
+              <widget class="QCheckBox" name="psk31ModeChkBox">
+               <property name="text">
+                <string>PSK31</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="ft8ModeChkBox">
+               <property name="text">
+                <string>FT8</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QCheckBox" name="ft4ModeChkBox">
+               <property name="text">
+                <string>FT4</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QCheckBox" name="msk144ModeChkBox">
+               <property name="text">
+                <string>MSK144</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
               <widget class="QCheckBox" name="jt65ModeChkBox">
                <property name="text">
                 <string>JT65</string>

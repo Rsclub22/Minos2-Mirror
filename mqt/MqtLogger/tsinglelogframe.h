@@ -281,8 +281,8 @@ private slots:
 
     void on_doColumnChanges(BaseContestLog*);
     //void sendIgnoreRunChkBoxState(int num, bool checked);
-    void on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
-    void on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange);
+    void on_BandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
+    void on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
     void on_rotatorConnected(bool connected);
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);

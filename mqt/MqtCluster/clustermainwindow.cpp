@@ -1166,9 +1166,7 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
             return DISCARD_HF_SPOT * -1;
         }
 
-        QString dxModeStr;
-        QString dxModeMask;  // not using modemask
-        getMode(modeBandPlan, newSpot->getFreq().str(), dxBandStr, dxModeStr, dxModeMask);
+        QString dxModeStr = getMode(modeBandPlan, newSpot->getFreq().str(), dxBandStr);
         newSpot->setMode(dxModeStr);
 
         newSpot->setDxCall(dxMsg[1]);
@@ -1581,9 +1579,7 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         }
 
 
-        QString dxModeStr;
-        QString dxModeMask;  // not using modemask anymore
-        getMode(modeBandPlan, newSpot->getFreq().str(), newSpot->getBand(), dxModeStr, dxModeMask);
+        QString dxModeStr = getMode(modeBandPlan, newSpot->getFreq().str(), newSpot->getBand());
         newSpot->setMode(dxModeStr);
 
         newSpot->setDxCall(dxMsg[4]);

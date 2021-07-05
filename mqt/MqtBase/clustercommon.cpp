@@ -533,13 +533,14 @@ QStringList BandmapClientFilterSettings::unpackFilterList(QString &sl)
 
 
 
-void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand, QString &dxModeStr, QString &dxModeMask)
+QString getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &dxBand)
 {
-    trace(QString("getMode: freq %1, dxBand %2, dxModeStr %3, dxModeMask %4").arg(freq.traceStr()).arg(dxBand).arg(dxModeStr).arg(dxModeMask));
+    QString dxModeStr = NONE_MODE;
+
+    trace(QString("getMode: freq %1, dxBand %2").arg(freq.traceStr()).arg(dxBand));
     trace(QString("getMode: modeBandPlan loaded Ok - %1").arg(modeBandPlan->checkLoadedOk() ? "true" : "false"));
     if (dxBand != "")
     {
-
         if (modeBandPlan->checkLoadedOk() )
         {
             Frequency f = freq;
@@ -548,30 +549,14 @@ void getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QString &
             dxModeStr = modeBandPlan->getMode(b, f);
             trace(QString("getMode: found dxModeStr - %1").arg(dxModeStr));
 
-            int modeMask = clusterModes.indexOf(dxModeStr);
-            trace(QString("getMode: modeMask from clusterModes - %1").arg(QString::number(modeMask)));
-
-            if (modeMask == -1)
-            {
-                trace(QString("getmode: mode will be NONE"));
-                dxModeStr = NONE_MODE;
-                dxModeMask = "0";
-            }
-            else
-            {
-                dxModeMask = QString::number(modeMask);
-            }
-
         }
         else
         {
             // modeplan file missing
             trace(QString("getMode - modeplan missing, mode will be NONE"));
-            dxModeStr = NONE_MODE;
-            dxModeMask = "0";
-
         }
     }
+    return dxModeStr;
 }
 
 

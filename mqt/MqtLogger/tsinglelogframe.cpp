@@ -1602,15 +1602,15 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
 //}
 
 
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
+void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapMarkFreq(cs, freq, loc, brg, exchange);
+    bandmapControlFrame->setBandmapMarkFreq(cs, freq, mode, loc, brg, exchange);
 }
 
 
-void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString loc, QString brg, QString exchange)
+void TSingleLogFrame::on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange)
 {
-    bandmapControlFrame->setBandmapSaveFreq(cs, freq, loc, brg, exchange);
+    bandmapControlFrame->setBandmapSaveFreq(cs, freq, mode, loc, brg, exchange);
 }
 
 void TSingleLogFrame::sendBandmapRadioIsConnected(bool state)

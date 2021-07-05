@@ -3081,7 +3081,7 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
     getLogDetails(logData, valRes);
 
     trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
+    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.mode, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 }
 
@@ -3099,7 +3099,7 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
         doGJVCancelButton_clicked();
 
         trace(QString("bandmapSave: save clicked callsign %1").arg(logData.callsign));
-        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.locator, QString::number(logData.bearing), logData.exchange);
+        emit bandmapSaveFreq(logData.callsign, logData.freq, logData.mode, logData.locator, QString::number(logData.bearing), logData.exchange);
 
 
     }
