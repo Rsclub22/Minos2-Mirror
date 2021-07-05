@@ -104,9 +104,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     }
 
-
-
-    modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->lsbModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft4ModeChkBox << ui->ft8ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
+    modeChkBoxList << ui->noneModeChkBox << ui->cwModeChkBox << ui->lsbModeChkBox << ui->usbModeChkBox << ui->fmModeChkBox << ui->rttyModeChkBox << ui->psk31ModeChkBox << ui->ft8ModeChkBox << ui->ft4ModeChkBox << ui->msk144ModeChkBox << ui->jt65ModeChkBox;
 
     for (int i = 0; i < clustermodes.count(); i++)
     {
