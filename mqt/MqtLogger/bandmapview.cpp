@@ -1425,7 +1425,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         os.setFieldWidth(5);
         os << offset;
         os.setFieldWidth(0);
-        os << "|" << dxCallsign << "|" << dxLoc << "|" << dxMode;
+        os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
         nearMatches.push_back(nm);
     }
 
