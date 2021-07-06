@@ -24,7 +24,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     ui->setupUi(this);
 
-    ui->bandmapFrameTitle->setText(tr("Bandmap"));
+    ui->mouseInFrameLabel->setVisible(false);
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
 
@@ -1649,33 +1649,30 @@ bool BandmapClientFrame::eventFilter(QObject *obj, QEvent *event)
 
 void BandmapClientFrame::setTextToFrameTitle(QString text1, QString col, QString text2)
 {
-    QFontMetrics metrix(ui->bandmapFrameTitle->font());
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int width1 = metrix.horizontalAdvance(text1);
-#else
-    int width1 = metrix.width(text1);
-#endif
+    QFontMetrics metrix(ui->mouseInFrameLabel->font());
 
-    int width = ui->callLocLabel->x() - ui->bandmapFrameTitle->x() - width1 - 2;
+    int width = ui->mouseInFrameLabel->width()  - 2;
     QString clippedText;
     if (width > 0)
         clippedText = col + metrix.elidedText(text2, Qt::ElideRight, width);
-    ui->bandmapFrameTitle->setText(text1 + clippedText);
+    ui->mouseInFrameLabel->setText(text1 + clippedText);
 
-    ui->bandmapFrameTitle->setToolTip(text1 + col + text2);
+    ui->mouseInFrameLabel->setToolTip(text1 + col + text2);
 }
 void BandmapClientFrame::setHoldUpdateFlag(bool state)
 {
-    QString clText = tr("Bandmap");
+    QString clText /*= tr("Bandmap")*/;
     holdUpdateFlag = state;
     if (state)
     {
-        setTextToFrameTitle(clText, HtmlFontColour(Qt::red), tr(" - Mouse in frame, updates paused"));
+        setTextToFrameTitle(clText, HtmlFontColour(Qt::red), tr("Mouse in frame, updates paused"));
+        ui->mouseInFrameLabel->setVisible(true);
     }
     else
     {
-        ui->bandmapFrameTitle->setText(clText);
-        ui->bandmapFrameTitle->setToolTip(clText);  // not really needed, as if we hover we must be in frame
+        ui->mouseInFrameLabel->setVisible(false);
+        ui->mouseInFrameLabel->setText(clText);
+        ui->mouseInFrameLabel->setToolTip(clText);  // not really needed, as if we hover we must be in frame
     }
 }
 
