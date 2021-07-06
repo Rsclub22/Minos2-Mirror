@@ -238,6 +238,8 @@ private:
 
 
     bool compareMode(const QString &mode, const QString &savedMode);
+    void ShowFilter();
+
 protected:
 
     void keyPressEvent(QKeyEvent *event) override;

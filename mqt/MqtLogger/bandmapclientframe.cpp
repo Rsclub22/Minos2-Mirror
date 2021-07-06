@@ -591,6 +591,17 @@ void BandmapClientFrame::on_readZoomLevelActionSelected()
 }
 // end of actions
 //============================================================================
+void BandmapClientFrame::ShowFilter()
+{
+    QString ft;
+    bool ignoreDistance = filterSettings.getIgnoreDistanceFlag();
+    if (!ignoreDistance)
+    {
+        ft = tr("Filter %1").arg(filterSettings.getDistanceFilter());
+    }
+    ui->filterText->setText(ft);
+}
+
 void BandmapClientFrame::setContest(BaseContestLog *c)
 {
     ct = c;
@@ -648,6 +659,7 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
 
     }
+    ShowFilter();
 }
 
 
@@ -1598,6 +1610,7 @@ void BandmapClientFrame::filterButtonSelected()
         // reload filtersettings after change
         filterSettings = filterSetup->getFilterSettings();
         trace("BandmapView::bandmapUpdate() filterButtonSelected");
+        ShowFilter();
         bandmapView->bandmapUpdate();
 
     }
