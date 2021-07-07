@@ -98,7 +98,6 @@ signals:
 private:
 
     Ui::BandmapClientFrame *ui;
-    bool isProtected = false;
     BaseContestLog *ct = nullptr;
     QString contestUuid;
     QString contestBandStr;

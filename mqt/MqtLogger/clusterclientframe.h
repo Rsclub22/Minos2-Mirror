@@ -238,8 +238,6 @@ private:
 
     QString contestModeStr;
 
-    bool isProtected;
-
     void restoreCallsignViewColumns();
     void restoreLocatorViewColumns();
     void restoreSearchViewColumns();

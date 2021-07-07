@@ -46,8 +46,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     holdUpdateFlag(false),
     allowHF(false),
     clusterServerLoaded(false),
-    clusterServerConnected(false),
-    isProtected(false)
+    clusterServerConnected(false)
 {
 
     ui->setupUi(this);
@@ -196,14 +195,10 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
 
     waitClusterServerLoadedTimer = new QTimer(this);
-    if (!isProtected)
-    {
-        // wait for clusterserver to load before asking for spots
-        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
-        waitClusterServerLoadedTimer->start(250);
 
-    }
-
+    // wait for clusterserver to load before asking for spots
+    connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+    waitClusterServerLoadedTimer->start(250);
 
 }
 
@@ -751,7 +746,7 @@ void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void ClusterClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (!isProtected && ct)
+    if (ct && !ct->isReadOnly())
     {
         //get spot Message from queue
         for (int i = 0; i < spotMsg.count(); i++)
@@ -1278,27 +1273,7 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
         {
             traceMsg(QString("set Contest - ContestBand error %1").arg(contestBandStr));
         }
-
-
-
-
-
-
-
-        if (ct && ct == TContestApp::getContestApp() ->getCurrentContest())
-        {
-            if (!ct->isReadOnly())
-            {
-                isProtected = false;
-            }
-            else
-            {
-                isProtected = true;
-            }
-        }
     }
-
-
 }
 
 

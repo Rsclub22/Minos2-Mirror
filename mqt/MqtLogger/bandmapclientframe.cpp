@@ -182,13 +182,10 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     purgeTimer->start(PURGE_TIME);
 
     waitClusterServerLoadedTimer = new QTimer(this);
-    if (!isProtected)
-    {
-        // wait for clusterserver to load before asking for spots
-        connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
-        waitClusterServerLoadedTimer->start(250);
 
-    }
+    // wait for clusterserver to load before asking for spots
+    connect(waitClusterServerLoadedTimer, &QTimer::timeout, this, [=](){on_waitClusterServerLoadedTimeout();});
+    waitClusterServerLoadedTimer->start(250);
 
     connect(ui->clusterStatusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
 
@@ -758,7 +755,7 @@ void BandmapClientFrame::clusterClientServerList(QVector<ClusterServer> serverLi
 void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
 {
     // if contest is protected ignore
-    if (ct && !isProtected)
+    if (ct && !ct->isReadOnly())
     {
         //get spot Message from queue
         for (int i = 0; i < spotMsg.count(); i++)
@@ -1745,8 +1742,7 @@ void BandmapClientFrame::purgeSpots()
 
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
 {
-    Q_UNUSED(c)
-    if (!isProtected && ct == c)
+    if (ct == c && ct->isReadOnly())
     {
         if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
             return;
@@ -1823,7 +1819,7 @@ void BandmapClientFrame::setRunOffFreqFlag(Frequency _runFreq, bool _offRunFreq)
 
 void BandmapClientFrame::setCQFreq()
 {
-    if (!isProtected)
+    if (ct && !ct->isReadOnly())
     {
         traceMsg(QString("set CQFreq - runFreq %1, runModeOn %2, offRunFreq %3").arg(runFreq.traceStr()).arg(runModeOn ? "True" : "False").arg(offRunFreq ? "True" : "False"));
         QDateTime time = QDateTime::currentDateTimeUtc();
@@ -1856,7 +1852,7 @@ void BandmapClientFrame::setCQFreq()
 void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString mode, QString loc, QString brg, QString exchange)
 {
     Q_UNUSED(cs)
-    if (!isProtected)
+    if (ct && !ct->isReadOnly())
     {
         traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.traceStr()).arg(loc).arg(brg));
         QDateTime time = QDateTime::currentDateTimeUtc();
@@ -1890,7 +1886,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
 
 void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString mode, QString loc, QString brg, QString exchange)
 {
-    if (!isProtected)
+    if (ct && !ct->isReadOnly())
     {
         traceMsg(QString("save freq  add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.traceStr()).arg(loc).arg(brg));
         QDateTime time = QDateTime::currentDateTimeUtc();

@@ -55,7 +55,7 @@ ClusterClientServer::~ClusterClientServer()
 //---------------------------------------------------------------------------
 void ClusterClientServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString &from )
 {
-    trace(QString("ClusterClientServer: on_routerCallCall - Message from %1").arg(from));
+    trace(QString("ClusterClientServer: on_routerCall Call - Message from %1").arg(from));
     if ( !err )
     {
         RPCArgs *args = mro->getCallArgs();
