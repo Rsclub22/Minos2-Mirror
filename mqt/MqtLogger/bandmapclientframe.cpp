@@ -1742,7 +1742,7 @@ void BandmapClientFrame::purgeSpots()
 
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
 {
-    if (ct == c && ct->isReadOnly())
+    if (ct == c && !ct->isReadOnly())
     {
         if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
             return;
