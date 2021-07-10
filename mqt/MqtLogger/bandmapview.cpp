@@ -91,6 +91,8 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     connect(model(), SIGNAL(rowsRemoved(const QModelIndex, int, int)), SLOT(onRowsRemoved(const QModelIndex, int, int)));
     connect(model(), SIGNAL(rowsInserted(const QModelIndex, int, int)), SLOT(onRowsInserted(const QModelIndex, int, int)));
 
+    connect(&updateTimer, &QTimer::timeout, this, &BandmapView::updateTimerTimeout);
+
 
     bandmapGraphicsView->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( bandmapGraphicsView, &BandmapGraphicsPanel::customContextMenuRequested, this, &BandmapView::on_bandmap_customContextMenuRequested);
@@ -473,18 +475,35 @@ void BandmapView::onRowsInserted(const QModelIndex &parent, int first, int last)
 }
 
 
+void BandmapView::doBandmapUpdate()
+{
+    if (!getSuppressUpdate())
+    {
+        if (updateRequired)
+        {
+            dial->update();
+            // delay the spots until any dial update has happened
+            delayedAction(this, [=](){
+            drawBandMapSpots();});
+        }
+    }
+}
+
 void BandmapView::bandmapUpdate()
 {
     if (!getSuppressUpdate())
     {
-        dial->update();
-        // delay the spots until any dial update has happened
-        delayedAction(this, [=](){
-        drawBandMapSpots();});
+        updateRequired = true;
+        updateTimer.start(1000);    // reset the interval if already started
     }
 }
 
-
+void BandmapView::updateTimerTimeout()
+{
+    updateTimer.stop();
+    doBandmapUpdate();
+    updateRequired = false;
+}
 void BandmapView::leftMouseButtonPressed(QPoint p)
 {
     QPoint mappedP = bandmapGraphicsView->mapToScene(p).toPoint();

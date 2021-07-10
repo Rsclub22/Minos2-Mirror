@@ -37,21 +37,12 @@ public:
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
     QRect visualRect(const QModelIndex &index) const override;
 
-
-
-
-
-
-    //QSize minimumSizeHint() const override;
-    //QSize sizeHint() const override;
-
     void setFreq(Frequency f, bool legalFreq);
 
     int getBandmapFrameHeight();
     int getBandmapFrameWidth();
     void onFontChanged(QFont cf);
     void initBandmapView(BandmapGraphicsPanel *view);
-
 
     void bandmapUpdate();
 
@@ -86,8 +77,6 @@ public:
     int getDialZoomLevel();
     void setBandmapZoom(int level);
 
-
-
     void setDialRadioMode(QString mode);
     bool getSuppressUpdate() const;
     void setSuppressUpdate(bool value);
@@ -106,10 +95,6 @@ protected slots:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected) override;
     void updateGeometries() override;
 
-
-
-
-
 protected:
     int horizontalOffset() const override;
     int verticalOffset() const override;
@@ -119,17 +104,11 @@ protected:
 
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
-
-
-
-
 private slots:
     void bandmapResize(int, int);
 
     void leftMouseButtonPressed(QPoint p);
     void mouseDoubleClicked(QPoint p);
-
-
 
     void on_bandmap_customContextMenuRequested(const QPoint &p);
 
@@ -140,6 +119,7 @@ private slots:
     void onRowsRemoved(const QModelIndex &parent, int first, int last);
     void onRowsInserted(const QModelIndex &parent, int first, int last);
     void zoomUpdated(bool dir);
+    void updateTimerTimeout();
 private:
 
     QGraphicsScene *bandmapScene;
@@ -148,6 +128,8 @@ private:
     BandmapFreqDial *dial;
     Frequency curFreq;
 
+    QTimer updateTimer;
+    bool updateRequired = false;
     bool suppressUpdate = false;
     int totalSize = 300; //for test
 
@@ -206,6 +188,7 @@ private:
 
     void drawBandmapSpot(int row, int &fontOffset, int markersAbove, int &lastOffset, bool &firstDrawn);
     bool readLessGreaterThanDistanceFlag();
+    void doBandmapUpdate();
 };
 
 #endif // BANDMAPVIEW_H

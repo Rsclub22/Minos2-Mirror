@@ -1320,8 +1320,8 @@ void ClusterClientFrame::purgeSpots()
            {
                if (spotTimedOut(dxSpotDataModel->data(dxSpotDataModel->index(idx, RXTIME_COL_NUM), DataStoredRole).toLongLong(), timeToLive))
                {
+                   traceMsg(QString("purged spot = %1, count %2").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()).arg(dxSpotDataModel->rowCount()));
                    dxSpotDataModel->removeRows(idx, 1, QModelIndex());
-                   traceMsg(QString("purged spot = %1").arg(dxSpotDataModel->data(dxSpotDataModel->index(idx, DXSPOT_CALL_COL_NUM), DataStoredRole).toString()));
                }
                idx--;
            }
