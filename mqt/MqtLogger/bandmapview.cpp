@@ -77,7 +77,7 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     dial->setCurFreq(Frequency());
     dial->setCursorColour(Qt::black);
     trace("BandmapView::bandmapUpdate() initBandMapView");
-    bandmapUpdate();
+    bandmapUpdate(true);
 
     connect(dial, &BandmapFreqDial::zoomUpdated, this, &BandmapView::zoomUpdated);
 
@@ -137,7 +137,7 @@ void BandmapView::setBandmapZoom(int level)
         dial->setZoomLevel(level);
         setBandmapHeight(contestBandFlow, contestBandFhigh);
         trace("BandmapView::bandmapUpdate()setBandMapZoom ");
-        bandmapUpdate();
+        bandmapUpdate(true);
         scrollBandmapCenterToFreq(midScaleFreq);
         emit newZoomlevel(level);
     }
@@ -161,7 +161,7 @@ void BandmapView::zoomUpdated(bool dir)
             dial->setZoomLevel(zoomLevel);
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             trace("BandmapView::bandmapUpdate() zoomUpdated 1");
-            bandmapUpdate();
+            bandmapUpdate(true);
             scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
         }
@@ -174,7 +174,7 @@ void BandmapView::zoomUpdated(bool dir)
             dial->setZoomLevel(zoomLevel);
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             trace("BandmapView::bandmapUpdate() zoomUpdated 2");
-            bandmapUpdate();
+            bandmapUpdate(true);
             scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
         }
@@ -422,7 +422,7 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 
     QAbstractItemView::dataChanged(topLeft, bottomRight, roles);
     trace("BandmapView::bandmapUpdate() BandmapView::dataChanged");
-    bandmapUpdate();
+    bandmapUpdate(false);
 
 }
 
@@ -442,7 +442,7 @@ void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
 
     QAbstractItemView::rowsInserted(parent, start, end);
     trace("BandmapView::bandmapUpdate() bandmapView::rowsInserted");
-    bandmapUpdate();
+    bandmapUpdate(false);
 
 }
 
@@ -462,7 +462,7 @@ void BandmapView::onRowsRemoved(const QModelIndex &parent, int first, int last)
     Q_UNUSED(last)
 
     trace("BandmapView::bandmapUpdate() bandmapView::rowsRemoved");
-    bandmapUpdate();
+    bandmapUpdate(false);
 
 }
 
@@ -489,12 +489,12 @@ void BandmapView::doBandmapUpdate()
     }
 }
 
-void BandmapView::bandmapUpdate()
+void BandmapView::bandmapUpdate(bool now)
 {
     if (!getSuppressUpdate())
     {
         updateRequired = true;
-        updateTimer.start(1000);    // reset the interval if already started
+        updateTimer.start(now?0:1000);    // reset the interval if already started
     }
 }
 
@@ -650,7 +650,7 @@ void BandmapView::bandmapResize(int height, int width)
     Q_UNUSED(height)
     Q_UNUSED(width)
     trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
-    bandmapUpdate();
+    bandmapUpdate(true);
     trace("hscrollbar set value to 0");
     bandmapGraphicsView->horizontalScrollBar()->setValue(0);
 
@@ -706,7 +706,7 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
     if (!f.isClear())
     {
         trace("BandmapView::bandmapUpdate() bandmapView::setFreq");
-        bandmapUpdate();
+        bandmapUpdate(true);
     }
 
 }
@@ -715,7 +715,7 @@ void BandmapView::setDialRadioMode(QString mode)
 {
     dial->setRadioMode(mode);
     trace("BandmapView::bandmapUpdate() bandmapView::setDialRadioMode");
-    bandmapUpdate();
+    bandmapUpdate(true);
 }
 
 int BandmapView::dialCursorWithinViewport(Frequency freq)
@@ -819,7 +819,7 @@ void BandmapView::clearSelectedSpot()
             clearSpotData(selectedSpot );
 
             trace("BandmapView::bandmapUpdate() bandmapView::clearSelectedSpot");
-            bandmapUpdate();
+            bandmapUpdate(true);
         }
     }
 }
@@ -851,7 +851,7 @@ void BandmapView::setSelectedSpot(int spotViewNum)
     model()->setData(model()->index(selectedSpotDataRowNum , SPOT_IS_SELECTED_COL_NUM), true, BMP_DataStoredRole);
     selectedSpot.setIsSelected(true);
     trace("BandmapView::bandmapUpdate() bandmapView::setSelectedSpot");
-    bandmapUpdate();
+    bandmapUpdate(true);
 }
 
 void BandmapView::clearListOfMarkers()

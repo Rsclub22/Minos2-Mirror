@@ -44,7 +44,7 @@ public:
     void onFontChanged(QFont cf);
     void initBandmapView(BandmapGraphicsPanel *view);
 
-    void bandmapUpdate();
+    void bandmapUpdate(bool now);
 
     int rows(const QModelIndex &index) const;
 

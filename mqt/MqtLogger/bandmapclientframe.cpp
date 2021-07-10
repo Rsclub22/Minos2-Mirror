@@ -267,7 +267,7 @@ void BandmapClientFrame::on_FiltersChanged(bool state)
     if (state)
     {
         trace("BandmapView::bandmapUpdate() on_FiltersChanged");
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(true);
     }
 }
 
@@ -291,7 +291,7 @@ void BandmapClientFrame::on_markSpotActionSelected()
         if (spotType == bandmapSpotType::CLUSTER)
         {
             bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
-            bandmapView->bandmapUpdate();
+            bandmapView->bandmapUpdate(true);
         }
     }
 }
@@ -305,7 +305,7 @@ void BandmapClientFrame::on_unMarkSpotActionSelected()
         if (spotType == bandmapSpotType::CLUSTER_MARKED)
         {
             bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(bandmapView->getSelectedSpotDataRowNum(), SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
-            bandmapView->bandmapUpdate();
+            bandmapView->bandmapUpdate(true);
         }
     }
 }
@@ -407,7 +407,7 @@ void BandmapClientFrame::on_clearSpotActionSelected()
             traceMsg(QString("menu clear spot selected for callsign %1").arg(bandmapView->getSelectedSpotDataPtr()->getDxCallStr()));
             bandmapSpotProxyModel->removeRows(bandmapView->getSelectedSpotDataRowNum(), 1);
             bandmapView->clearSelectedSpotData();
-            bandmapView->bandmapUpdate();
+            bandmapView->bandmapUpdate(true);
         }
     }
 }
@@ -424,7 +424,7 @@ void BandmapClientFrame::on_clearAllSpotsActionSelected()
             traceMsg(QString("menu clear all bandmap spots selected"));
             bandmapSpotProxyModel->removeRows(0, bandmapSpotProxyModel->rowCount(), QModelIndex());
             bandmapView->clearSelectedSpotData();
-            bandmapView->bandmapUpdate();
+            bandmapView->bandmapUpdate(true);
         }
     }
 }
@@ -451,7 +451,7 @@ void BandmapClientFrame::on_clearClusterSpotsActionSelected()
             }
             purgeSpots();
             bandmapView->clearSelectedSpotData();
-            bandmapView->bandmapUpdate();
+            bandmapView->bandmapUpdate(true);
         }
     }
 }
@@ -482,7 +482,7 @@ void BandmapClientFrame::context_markSpotActionSelected()
     if (spotType == bandmapSpotType::CLUSTER)
     {
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER_MARKED, BMP_DataStoredRole);
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(true);
     }
 }
 
@@ -493,7 +493,7 @@ void BandmapClientFrame::context_unMarkSpotActionSelected()
     if (spotType == bandmapSpotType::CLUSTER_MARKED)
     {
         bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, SPOT_TYPE_COL_NUM), bandmapSpotType::CLUSTER, BMP_DataStoredRole);
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(true);
     }
 }
 
@@ -505,7 +505,7 @@ void BandmapClientFrame::context_moveFreqActionSelected()
     f.setValue(curFreq);
     bandmapSpotProxyModel->setData(bandmapSpotProxyModel->index(contextMenuSelectedSpotDataRowNum, FREQ_COL_NUM), f, BMP_DataStoredRole);
     bandmapDataModel->sortModel();
-    bandmapView->bandmapUpdate();
+    bandmapView->bandmapUpdate(true);
 
 }
 
@@ -930,7 +930,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
     bandmapView->setSuppressUpdate(false);
     if (doUpdate)
     {
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(false);
     }
 
 }
@@ -980,7 +980,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
     {
         addRemoveCQSpot(spot);
         trace("BandmapView::bandmapUpdate() addRemoveCQSpot");
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(true);
         return;
     }
 
@@ -1140,7 +1140,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                             bandmapDataModel->rowData->setRotConnected(rotatorConnected);
                         }
                         bandmapDataModel->sortModel();
-                        bandmapView->bandmapUpdate();
+                        bandmapView->bandmapUpdate(true);
 
                         // do we need to update the time as well????
                         // we don't need to save this incomming logger spot as we have moved it..
@@ -1203,7 +1203,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
         bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
     trace("BandmapView::bandmapUpdate() addLogSpotToBandmapTable completion");
-    bandmapView->bandmapUpdate();
+    bandmapView->bandmapUpdate(true);
 }
 
 void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
@@ -1608,7 +1608,7 @@ void BandmapClientFrame::filterButtonSelected()
         filterSettings = filterSetup->getFilterSettings();
         trace("BandmapView::bandmapUpdate() filterButtonSelected");
         ShowFilter();
-        bandmapView->bandmapUpdate();
+        bandmapView->bandmapUpdate(true);
 
     }
     filterSetup->close();
@@ -1737,7 +1737,7 @@ void BandmapClientFrame::purgeSpots()
         }
     }
     trace("BandmapView::bandmapUpdate() purgeSpots");
-    bandmapView->bandmapUpdate();
+    bandmapView->bandmapUpdate(false);
 }
 
 void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
@@ -2060,7 +2060,7 @@ void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
     {
         ui->bandmapGraphicsView->setBackgroundBrush(QBrush(static_cast< QColor> ( 0x00FF80C0 ).lighter(135)));
     }
-    bandmapView->bandmapUpdate();
+    bandmapView->bandmapUpdate(true);
 }
 void BandmapClientFrame::keyPressEvent(QKeyEvent *event)
 {
