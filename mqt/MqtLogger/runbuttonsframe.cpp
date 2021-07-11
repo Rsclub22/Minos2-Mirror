@@ -91,8 +91,7 @@ void RunButtonsFrame::radioIsConnected(bool on)
 }
 void RunButtonsFrame::setFreq(Frequency freq)
 {
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    QString bandChanged = tslf->checkBandChange(freq, curRadioFreq);
+    QString bandChanged = ct->checkBandChange(freq, curRadioFreq);
     if (!bandChanged.isEmpty())
     {
         // we need to switch the run button mapping

@@ -1597,7 +1597,23 @@ int BaseContestLog::getCountriesWorked(const QString &band, const QString &item 
     }
    return 0;
 }
+QString BaseContestLog::checkBandChange(Frequency freq, Frequency refFreq)
+{
+    if (contestBands.getValue() == allHF)
+    {
+        BandList &bl = BandList::getBandList();
+        QSharedPointer<BandInfo>  b1;
+        bool b1Ok = bl.findBand(freq, b1);
+        QSharedPointer<BandInfo>  b2;
+        bool b2Ok = bl.findBand(refFreq, b2);
 
+        if (b1Ok && b2Ok && b1 != b2)
+        {
+            return b1->uk;
+        }
+    }
+    return QString();
+}
 //====================================================================
 ContestScore::ContestScore(BaseContestLog *ct)
 {
@@ -1639,4 +1655,3 @@ QString ContestScore::disp()
    return buff;
 }
 //====================================================================
-

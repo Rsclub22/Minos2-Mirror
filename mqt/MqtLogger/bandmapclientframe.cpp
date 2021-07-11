@@ -850,7 +850,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             // check to see if call or locator worked
             bool callWorked = false;
             bool locWorked = false;
-            checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], &callWorked, &locWorked);
+            checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[DXMODESTR], spotlist[DXFREQ], &callWorked, &locWorked);
 
             QString distance;
             QString bearing;
@@ -1053,7 +1053,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 // check to see if call or locator worked
                 bool callWorked = false;
                 bool locWorked = false;
-                checkSpotWorked(call.getFullCall(), loc, &callWorked, &locWorked);
+                checkSpotWorked(call.getFullCall(), loc, spot->getMode(), spot->getFreq(), &callWorked, &locWorked);
                 if (locWorked)
                 {
                     spot->setDxLocatorWorked(true);
@@ -1305,7 +1305,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
     return true;
 }
 
-void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString &locator, bool* callWorked, bool* locatorWorked)
+void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString &locator, const QString &mode, const Frequency &freq, bool* callWorked, bool* locatorWorked)
 {
     bool callfound = false;
     bool locfound = false;
@@ -1323,6 +1323,19 @@ void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString 
                 continue;
             }
 
+            if (ct->isHF())
+            {
+                if (!compareMode(mode, (*i).wt->mode.getValue()))
+                {
+                    continue;
+                }
+                QString bandChanged;
+                bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
+                if (!bandChanged.isEmpty())
+                {
+                    continue;
+                }
+            }
             if (!callfound)
             {
                 if ((*i).wt->cs == mcs)
@@ -1459,14 +1472,10 @@ void BandmapClientFrame::setFreq(Frequency freq)
     if (lastfreq != freq)
     {
         QString bandChanged;
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf)
+        bandChanged = ct->checkBandChange(freq, lastfreq);
+        if (!bandChanged.isEmpty())
         {
-            bandChanged = tslf->checkBandChange(freq, lastfreq);
-            if (!bandChanged.isEmpty())
-            {
-                setContestBandMode(bandChanged, contestModeStr);
-            }
+            setContestBandMode(bandChanged, contestModeStr);
         }
         lastfreq = freq;
         curFreq = freq;
