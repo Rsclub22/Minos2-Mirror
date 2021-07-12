@@ -185,7 +185,10 @@ public:
     void setDxBrg(const QString dxBrg_){dxBrg = dxBrg_.trimmed();}
     QString getDxBrg()const{return dxBrg;}
 
-    void setDxCallWorked(const bool dxCallWorked_){dxCallWorked = dxCallWorked_;}
+    void setDxCallWorked(const bool dxCallWorked_)
+    {
+        dxCallWorked = dxCallWorked_;
+    }
     bool getDxCallWorked()const{return dxCallWorked;}
 
     void setDxLocatorWorked(const bool dxLocatorWorked_){dxLocatorWorked = dxLocatorWorked_;}

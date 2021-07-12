@@ -1009,11 +1009,15 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 QString savedBand = bandmapDataModel->data(bandmapDataModel->index(row, DXBANDSTR_COL_NUM ),  BMP_DataStoredRole).toString();
                 QString savedMode = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_MODE_COL_NUM ),  BMP_DataStoredRole).toString();
 
-                Callsign loggedCall = spot->getDxCall();
                 QString band = spot->getBand();
                 QString mode = spot->getMode();
+                if (ct->isHF() && (savedBand != band || !compareMode(mode, savedMode)))
+                {
+                    continue;
+                }
+                Callsign loggedCall = spot->getDxCall();
 
-                if (savedCs == loggedCall && savedBand == band && compareMode(mode, savedMode) )
+                if (savedCs == loggedCall )
                 {
                     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
                     if (savedSpotType == bandmapSpotType::LOGGED || savedSpotType == bandmapSpotType::SAVED)
@@ -1273,10 +1277,26 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
         for (int row = 0; row < bandmapDataModel->rowCount(); row++)
         {
 
-            Callsign spotCall;
-            spotCall.setFullCall( bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());            spotCall.setFullCall(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());
-            if (dxCallsign == spotCall)
+            Callsign rowCall;
+            rowCall.setFullCall( bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());            rowCall.setFullCall(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());
+            if (dxCallsign == rowCall)
             {
+                if (ct->isHF())
+                {
+                    QString rowMode = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_MODE_COL_NUM ), BMP_DataStoredRole).toString();
+                    if (!compareMode(rowMode, spot->getMode()))
+                    {
+                        continue;
+                    }
+                    Frequency spotFreq = Frequency(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ), BMP_DataStoredRole).toString());
+                    QString bandChanged;
+                    bandChanged = ct->checkBandChange(dxFreq, spotFreq);
+                    if (!bandChanged.isEmpty())
+                    {
+                        continue;
+                    }
+
+                }
                 bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ), BMP_DataStoredRole).toInt());
                 if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED || spotType == bandmapSpotType::CLUSTER_MARKED)
                 {
