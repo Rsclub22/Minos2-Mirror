@@ -91,29 +91,32 @@ void RunButtonsFrame::radioIsConnected(bool on)
 }
 void RunButtonsFrame::setFreq(Frequency freq)
 {
-    QString bandChanged = ct->checkBandChange(freq, curRadioFreq);
-    if (!bandChanged.isEmpty())
+    if (ct)
     {
-        // we need to switch the run button mapping
-        trace(QString("runButtonsFrame band changed"));
-        runButOffActionSelected(RUN_BUTTON_1_ON);
-        runButOffActionSelected(RUN_BUTTON_2_ON);
-        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
-        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
-    }
+        QString bandChanged = ct->checkBandChange(freq, curRadioFreq);
+        if (!bandChanged.isEmpty())
+        {
+            // we need to switch the run button mapping
+            trace(QString("runButtonsFrame band changed"));
+            runButOffActionSelected(RUN_BUTTON_1_ON);
+            runButOffActionSelected(RUN_BUTTON_2_ON);
+            runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+            runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+        }
 
-    curRadioFreq = freq;
-    // rig frequency changed signal
-    chkRunFreq();
+        curRadioFreq = freq;
+        // rig frequency changed signal
+        chkRunFreq();
 
-    if (!chkRadioFreqOnRunFreq())
-    {
-        trace(QString("returnFrequency clear both"));
-        runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
-        runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+        if (!chkRadioFreqOnRunFreq())
+        {
+            trace(QString("returnFrequency clear both"));
+            runButtonMap[RUN_BUTTON_1_ON]->returnFrequency.clear();
+            runButtonMap[RUN_BUTTON_2_ON]->returnFrequency.clear();
+        }
+        setRunButtonText(RUN_BUTTON_1_ON);
+        setRunButtonText(RUN_BUTTON_2_ON);
     }
-    setRunButtonText(RUN_BUTTON_1_ON);
-    setRunButtonText(RUN_BUTTON_2_ON);
 }
 //********************** Run Buttons *******************************
 
