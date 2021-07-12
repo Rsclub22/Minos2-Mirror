@@ -110,7 +110,11 @@ void StartConfig::reject()
 {
     bool running = MinosConfig::getMinosConfig() ->anyRunning();
     if (!running)
+    {
+        QString ccName = MinosConfig::getMinosConfig() ->getCurrConfig().configName;
         MinosConfig::getMinosConfig() ->reset();
+        MinosConfig::getMinosConfig() ->setCurConfig(ccName);
+    }
     QDialog::reject();
 }
 void StartConfig::accept()

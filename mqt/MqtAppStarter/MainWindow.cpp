@@ -204,7 +204,9 @@ void MainWindow::on_appsButton_clicked()
     StartConfigManager manageApps(this, true);
     manageApps.exec();
 
-    sbLabel->setText(MinosConfig::getMinosConfig() ->getCurrConfig().configName);
+    QString cc = MinosConfig::getMinosConfig() ->getCurrConfig().configName;
+
+    sbLabel->setText(cc);
 
 }
 
