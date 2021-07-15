@@ -484,6 +484,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
         st->addMember(clusterFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
         st->addMember(clusterFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
+        st->addMember(clusterFilter.getValue().getModeFilter("FT4"), "modeFilterFT4MODE");
         st->addMember(clusterFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
         st->addMember(clusterFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
         st->addMember(clusterFilter.getValue().getModeFilter("JT65"), "modeFilterJT65MODE");
@@ -509,6 +510,7 @@ void MinosTestExport::exportBandmapFilter(QSharedPointer<QFile> expfd)
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::FM), "modeFilterFMMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter(hamlibData::RTTY), "modeFilterRTTYMODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("PSK31"), "modeFilterPSK31MODE");
+        st->addMember(bandmapFilter.getValue().getModeFilter("FT4"), "modeFilterFT4MODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("FT8"), "modeFilterFT8MODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("MSK144"), "modeFilterMSK144MODE");
         st->addMember(bandmapFilter.getValue().getModeFilter("JT65"), "modeFilterJT65MODE");

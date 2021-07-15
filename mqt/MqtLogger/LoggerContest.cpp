@@ -1801,6 +1801,9 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        mt->getStructArgMemberValue("modeFilterPSK31MODE", filterFlag);
                                        ccfs.setModeFilter("PSK31", filterFlag);
 
+                                       mt->getStructArgMemberValue("modeFilterFT4MODE", filterFlag);
+                                       ccfs.setModeFilter("FT4", filterFlag);
+
                                        mt->getStructArgMemberValue("modeFilterFT8MODE", filterFlag);
                                        ccfs.setModeFilter("FT8", filterFlag);
 
@@ -1837,6 +1840,8 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        bcfs.setModeFilter("RTTY", filterFlag);
                                        mt->getStructArgMemberValue("modeFilterPSK31MODE", filterFlag);
                                        bcfs.setModeFilter("PSK31", filterFlag);
+                                       mt->getStructArgMemberValue("modeFilterFT4MODE", filterFlag);
+                                       bcfs.setModeFilter("FT4", filterFlag);
                                        mt->getStructArgMemberValue("modeFilterFT8MODE", filterFlag);
                                        bcfs.setModeFilter("FT8", filterFlag);
                                        mt->getStructArgMemberValue("modeFilterMSK144MODE", filterFlag);
