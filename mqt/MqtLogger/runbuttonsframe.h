@@ -81,6 +81,7 @@ public:
     void setContest(BaseContestLog *c);
     void setRigControl(RigControlFrame *);
 
+    void setCallFreq();
     void setFreq(Frequency freq);
 private:
     Ui::RunButtonsFrame *ui;

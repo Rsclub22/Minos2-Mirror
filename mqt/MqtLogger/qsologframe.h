@@ -344,6 +344,8 @@ private slots:
 
     void tuningAddMapChkBoxStateChange(int state);
     void onQrzButtonClicked();
+    void on_callRb_clicked();
+
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

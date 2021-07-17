@@ -542,6 +542,11 @@ void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
     ct->saveRunMemory(memoryNumber, m);
 
 }
+void RunButtonsFrame::setCallFreq()
+{
+
+}
+
 //*******************Run Memory Button *************************//
 
 
@@ -641,5 +646,5 @@ void RunMemoryButton::showRunToolButtonOffFreq()
 void RunMemoryButton::showRunToolButtonOnFreq()
 {
     memButton->setStyleSheet(RUN_BUTTON_ON_FREQ_STYLE);
-   // memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
+    // memoryMenu->setStyleSheet(RUN_BUTTON_OFF_STYLE);
 }
