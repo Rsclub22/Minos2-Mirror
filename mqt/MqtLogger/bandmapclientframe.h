@@ -235,8 +235,6 @@ private:
     void setTextToFrameTitle(QString text1, QString col, QString text2);
     void readDefaultDistanceFilterSettings(BandmapClientFilterSettings *filterSettings);
 
-
-    bool compareMode(const QString &mode, const QString &savedMode);
     void ShowFilter();
 
 protected:

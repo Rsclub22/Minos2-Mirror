@@ -954,24 +954,6 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>
     bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 }
 //======================================================================================
-bool BandmapClientFrame::compareMode(const QString &mode, const QString &savedMode)
-{
-    if (mode == savedMode)
-        return true;
-
-    QString m1 = mode;
-    if (mode == hamlibData::USB || mode == hamlibData::LSB || mode== hamlibData::AM || mode == hamlibData::FM)
-    {
-        m1 = "PH";
-    }
-    QString m2 = savedMode;
-    if (savedMode == hamlibData::USB || savedMode == hamlibData::LSB || savedMode== hamlibData::AM || savedMode == hamlibData::FM)
-    {
-        m2 = "PH";
-    }
-
-    return m1 == m2;
-}
 // log spots
 void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData>  spot)
 {
@@ -1011,7 +993,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
                 QString band = spot->getBand();
                 QString mode = spot->getMode();
-                if (ct->isHF() && (savedBand != band || !compareMode(mode, savedMode)))
+                if (ct->isHF() && savedBand != band )
                 {
                     continue;
                 }
@@ -1084,7 +1066,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 QString band = spot->getBand();
                 QString mode = spot->getMode();
 
-                if (savedCs == loggedCall && savedBand == band /*&& compareMode( mode, savedMode)*/ )
+                if (savedCs == loggedCall && savedBand == band )
                 {
                     Frequency savedFreq = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ),  BMP_DataStoredRole));
                     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());
@@ -1283,11 +1265,6 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
             {
                 if (ct->isHF())
                 {
-                    QString rowMode = bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_MODE_COL_NUM ), BMP_DataStoredRole).toString();
-                    if (!compareMode(rowMode, spot->getMode()))
-                    {
-                        continue;
-                    }
                     Frequency spotFreq = Frequency(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ), BMP_DataStoredRole).toString());
                     QString bandChanged;
                     bandChanged = ct->checkBandChange(dxFreq, spotFreq);
@@ -1345,10 +1322,6 @@ void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString 
 
             if (ct->isHF())
             {
-                if (!compareMode(mode, (*i).wt->mode.getValue()))
-                {
-                    continue;
-                }
                 QString bandChanged;
                 bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
                 if (!bandChanged.isEmpty())
