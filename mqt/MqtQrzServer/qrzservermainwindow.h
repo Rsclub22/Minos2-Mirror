@@ -167,6 +167,8 @@ private:
     QrzCallsignData qrzCallsignData;
     QrzSessionData qrzSessionData;
 
+    QString askQrzCallsign;
+
     QTimer *checkQrzRequestsTimer;
 
     QrzServerStateFlags qrzServerStateFlags;
