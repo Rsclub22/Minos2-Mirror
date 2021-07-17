@@ -1083,7 +1083,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 QString band = spot->getBand();
                 QString mode = spot->getMode();
 
-                if (savedCs == loggedCall && savedBand == band && compareMode( mode, savedMode) )
+                if (savedCs == loggedCall && savedBand == band /*&& compareMode( mode, savedMode)*/ )
                 {
                     Frequency savedFreq = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ),  BMP_DataStoredRole));
                     bandmapSpotType::SPOT_TYPE savedSpotType = static_cast<bandmapSpotType::SPOT_TYPE>(bandmapDataModel->data(bandmapDataModel->index(row, SPOT_TYPE_COL_NUM ),  BMP_DataStoredRole).toInt());

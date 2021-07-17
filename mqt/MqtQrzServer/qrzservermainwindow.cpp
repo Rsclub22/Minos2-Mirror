@@ -167,7 +167,7 @@ void QrzServerMainWindow::logon()
     }
 
     QString logonQrz = QRZURL + "username=" + logonCallsign.trimmed() + ";password=" + password.trimmed() + ";agent=" + AGENT;
-    addTextToLogWindow(QString("Logging on to QRZ.com with callsign: %1").arg(logonCallsign));
+    addTextToLogWindow(tr("Logging on to QRZ.com with callsign: %1").arg(logonCallsign));
     sendUrl(logonQrz);
 }
 
@@ -294,6 +294,14 @@ void QrzServerMainWindow::sessionDataReceived()
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
         addToErrorTextLabel(qrzSessionData.getError());
         addTextToLogWindow(qrzSessionData.getError());
+        if (qrzServerStateFlags.getAskCallsignFlag())
+        {
+            qrzServerStateFlags.setAskCallsignFlag(false);
+        }
+        if (qrzServerStateFlags.getAskLogonFlag())
+        {
+            qrzServerStateFlags.setAskLogonFlag(false);
+        }
 
     }
 
@@ -302,6 +310,15 @@ void QrzServerMainWindow::sessionDataReceived()
         trace(QString("Qrz Message: %1").arg(qrzSessionData.getMessage()));
         addToErrorTextLabel(qrzSessionData.getMessage());
         addTextToLogWindow(qrzSessionData.getMessage());
+        if (qrzServerStateFlags.getAskCallsignFlag())
+        {
+            qrzServerStateFlags.setAskCallsignFlag(false);
+        }
+        if (qrzServerStateFlags.getAskLogonFlag())
+        {
+            qrzServerStateFlags.setAskLogonFlag(false);
+        }
+
     }
 
     if (qrzServerStateFlags.getAskLogonFlag() && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
@@ -573,10 +590,46 @@ void QrzServerMainWindow::handleQrzRequests()
                 requestedStation = qrzRequestQueue[0];
                 qrzRequestQueue.remove(0);
 
-                // ask for qra locator
-                qrzServerStateFlags.setAskCallsignFlag(true);
-                trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(requestedStation.getDxCall()));
-                askCallsignData(requestedStation.getDxCall());
+                ui->errorText->clear();
+                ui->messageText->clear();
+                askQrzCallsign.clear();
+
+                if (requestedStation.getLoggerFlag())
+                {
+                    addTextToLogWindow(tr("Callsign received from logger - %1").arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: Callsign received from logger - %1").arg(requestedStation.getDxCall()));
+                }
+                else
+                {
+                    addTextToLogWindow(tr("Callsign received from cluster - %1").arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: Callsign received from cluster - %1").arg(requestedStation.getDxCall()));
+                }
+
+
+
+                Callsign callsign;
+                callsign.setFullCall(requestedStation.getDxCall());
+                if (callsign.getValRes() == CS_OK)
+                {
+                    addTextToLogWindow(tr("Callsign is valid - %1").arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: callsign is valid - %1").arg(requestedStation.getDxCall()));
+
+                    askQrzCallsign = callsign.realCall;
+
+                    // ask for qra locator
+                    addTextToLogWindow(tr("Ask QRZ for callsign - %1").arg(askQrzCallsign));
+                    trace(QString("handleQrzRequests: ask qrz data for callsign %1").arg(askQrzCallsign));
+
+                    qrzServerStateFlags.setAskCallsignFlag(true);
+                    askCallsignData(askQrzCallsign);
+                }
+                else
+                {
+                    addTextToLogWindow(tr("Callsign is invalid - %1").arg(requestedStation.getDxCall()));
+                    trace(QString("handleQrzRequests: callsign is invalid - %1").arg(requestedStation.getDxCall()));
+
+                }
+
 
             }
 
@@ -606,8 +659,8 @@ void QrzServerMainWindow::addToErrorTextLabel(QString message)
 
 void QrzServerMainWindow::addToMessageTextLabel(QString message)
 {
-    ui->messageTextLabel->clear();
-    ui->messageTextLabel->setText(message);
+    ui->messageText->clear();
+    ui->messageText->setText(message);
 }
 
 void QrzServerMainWindow::setQrzStatusConnected(bool state)

@@ -1096,6 +1096,7 @@ void ClusterMainWindow::askQrzForQraLocator(QSharedPointer<ClusterSpotData> newS
     QString dxCall = newSpot->getDxCall().getFullCall();
     QString spotterCall = newSpot->getSpotterCall().getFullCall();
 
+    trace(QString("askQrzForQraLocator: dxCall = %1, spotterCall = %2").arg(dxCall, spotterCall));
     clusterRpc->askQrzServerForQra(dxCall, spotterCall);
 
     askQrzQueue.insert((dxCall + ":" + spotterCall), newSpot);
@@ -1116,6 +1117,8 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
     {
         prefix = cs.dupPrefix;
     }
+
+    trace(QString("getQraFromCallsignPrefix: callsign = %1, prefix = %2").arg(cs.getFullCall(), prefix));
 
     QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( prefix );
     if (!syn)
@@ -1380,13 +1383,16 @@ QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<C
 
 void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState)
 {
-    Q_UNUSED(spotterGrid)
-    Q_UNUSED(spotterState)
+
+    trace(QString("onclusterQrzResponse: dxCall = %1, dxGrid = %2, dxCallState = %3, spotterCall = %4, spotterGrid = %5, spotterState = %6")
+          .arg(dxCall, dxGrid, dxCallState, spotterCall, spotterGrid, spotterState));
 
     QString callsignKey = dxCall + ":" + spotterCall;
 
     if (askQrzQueue.contains(callsignKey))
     {
+        trace(QString("onclusterQrzResponse: askQrzQueue contains key = %1").arg(callsignKey));
+
         QSharedPointer<ClusterSpotData> newSpot = askQrzQueue.value(callsignKey);
         askQrzQueue.remove(callsignKey);
 
@@ -1404,6 +1410,10 @@ void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QSt
             trace(QString("Qrz Server Response for callsign = %1, error = %2").arg(dxCallState));
             processNewSpot(newSpot);
         }
+    }
+    else
+    {
+        trace(QString("onclusterQrzResponse: askQrzQueue does not contain key = %1").arg(callsignKey));
     }
 
 
