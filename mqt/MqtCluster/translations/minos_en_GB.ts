@@ -229,7 +229,7 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="95"/>
-        <location filename="../clustermainwindow.cpp" line="2872"/>
+        <location filename="../clustermainwindow.cpp" line="2882"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
@@ -335,33 +335,33 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1812"/>
+        <location filename="../clustermainwindow.cpp" line="1822"/>
         <source>Sending command - Not logged in  - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2252"/>
+        <location filename="../clustermainwindow.cpp" line="2262"/>
         <source>Cluster %1 User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2253"/>
+        <location filename="../clustermainwindow.cpp" line="2263"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2872"/>
+        <location filename="../clustermainwindow.cpp" line="2882"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2878"/>
+        <location filename="../clustermainwindow.cpp" line="2888"/>
         <source>Cluster Node User Command Shortcut Keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2879"/>
+        <location filename="../clustermainwindow.cpp" line="2889"/>
         <source>VHF/UHF User Commands
 
 Send Cmd
