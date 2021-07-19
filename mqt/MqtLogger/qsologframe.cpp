@@ -2601,10 +2601,15 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
    ui->CallsignFrame->getTextEditEdit()->setText(lct->cs.getFullCall());
-   ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());
 
-   // only transfer qth info if required for this ContestLog
-   // and it might be valid...
+   // only transfer loc qth info if required for this ContestLog
+   // and it (qth) might be valid...
+
+   if (contest->locatorMandatoryField.getValue())
+   {
+       ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());
+   }
+
    if ( contest->districtMult.getValue() || contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
    {
       if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
