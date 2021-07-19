@@ -211,25 +211,22 @@ void BandmapClientFilterDialog::filtersRejected()
 void BandmapClientFilterDialog::onDistanceEditFinished()
 {
     bool ok;
-    int distance = 0;
-    if(!ui->spotDistanceEdit->text().isEmpty())
+    int distance = ui->spotDistanceEdit->text().toInt(&ok);
+    if (ok)
     {
-        distance = ui->spotDistanceEdit->text().toInt(&ok);
-        if (ok)
+        if (distance != filterSettings.getDistanceFilter())
         {
-            if (distance != filterSettings.getDistanceFilter())
-            {
-                filterSettings.setDistanceFilter(distance);
-                distanceChanged = true;
-            }
+            filterSettings.setDistanceFilter(distance);
+            distanceChanged = true;
         }
-        else
-        {
-            QMessageBox::information(this, tr("Distance Filter"),
-                                     tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
-                                      QMessageBox::Ok|QMessageBox::Default,
-                                      QMessageBox::NoButton, QMessageBox::NoButton);
-        }
+    }
+    else
+    {
+        QMessageBox::information(this, tr("Distance Filter"),
+                                 tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
+                                  QMessageBox::Ok|QMessageBox::Default,
+                                  QMessageBox::NoButton, QMessageBox::NoButton);
+        ui->spotDistanceEdit->setText(QString::number(filterSettings.getDistanceFilter()));
     }
 }
 
@@ -348,26 +345,3 @@ void BandmapClientFilterDialog::setModes()
     }
 
 }
-
-/*
-void BandmapClientFilterDialog::setModeFilter(bool state, int mode)
-{
-    if (mode >= 0 && mode < clusterModes.count())
-    {
-        *filterSettings.modeFilters[mode] = state;
-    }
-}
-
-
-void BandmapClientFilterDialog::restoreModes()
-{
-
-    for (int i = 0; i < clusterModes.count(); i++)
-    {
-
-        modeChkBoxList[i]->setChecked(filterSettings.modeFilters[i]);
-
-    }
-}
-
-*/
