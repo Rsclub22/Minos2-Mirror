@@ -3492,10 +3492,14 @@ void QSOLogFrame::on_callRb_clicked()
 {
     // Make sure we have a call frequency
 
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->runButtonsFrame)
+    if (ui->callRb->isChecked())
     {
-        tslf->runButtonsFrame->setCallFreq();
+
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (tslf && tslf->runButtonsFrame)
+        {
+            tslf->runButtonsFrame->setCallFreq();
+        }
     }
 }
 

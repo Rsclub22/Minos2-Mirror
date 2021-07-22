@@ -544,7 +544,27 @@ void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 }
 void RunButtonsFrame::setCallFreq()
 {
+    // "*" in the text means that no frequency has been set (yet)
+    // so choose the first with "*", or else button 1
 
+    if (!chkRunFreqTimer->isActive() || radioOffRunFreq)
+    {
+        int buttonNumber = runButtonOnNum;
+        if (runButtonMap[RUN_BUTTON_1_ON]->memButton->text().contains(QChar('*')))
+        {
+            buttonNumber = RUN_BUTTON_1_ON;
+        }
+        else if (runButtonMap[RUN_BUTTON_2_ON]->memButton->text().contains(QChar('*')))
+        {
+            buttonNumber = RUN_BUTTON_2_ON;
+        }
+        if (buttonNumber == NO_RUN_BUTTON_ON)
+        {
+            buttonNumber = RUN_BUTTON_1_ON;
+        }
+
+        runButWriteActSel(buttonNumber);
+    }
 }
 
 //*******************Run Memory Button *************************//
