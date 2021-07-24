@@ -1686,133 +1686,147 @@ void QSOLogFrame::lgTraceerr( int err )
 //==============================================================================
 void QSOLogFrame::contactValid( )
 {
-   // this is where we need to do all of our cross field validation
+    // this is where we need to do all of our cross field validation
 
-   getScreenEntry();
-   ScreenContact *vcct = &screenContact;
+    getScreenEntry();
+    ScreenContact *vcct = &screenContact;
 
-   if ( vcct->contactFlags & DONT_PRINT )
-   {
-      lgTraceerr(-1);
-      lgTraceerr( ERR_26 );
-   }
-   else
-   {
-      if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-         lgTraceerr( ERR_25 );
-      if ( vcct->contactFlags & NON_SCORING )
-         lgTraceerr( ERR_24 );
-   }
-   if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY | NON_SCORING | DONT_PRINT ) )
-   {
-      return ;
-   }
-   // we only validate this contact up to the validation point of the contest
-   contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
+    if ( vcct->contactFlags & DONT_PRINT )
+    {
+        lgTraceerr(-1);
+        lgTraceerr( ERR_26 );
+    }
+    else
+    {
+        if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY ) )
+            lgTraceerr( ERR_25 );
+        if ( vcct->contactFlags & NON_SCORING )
+            lgTraceerr( ERR_24 );
+    }
+    if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY | NON_SCORING | DONT_PRINT ) )
+    {
+        return ;
+    }
+    // we only validate this contact up to the validation point of the contest
+    contest->validationPoint = selectedContact?selectedContact->getLogSequence():0 ;
 
-   contest->DupSheet.clearCurDup();
-//   int csret = vcct->cs.reValidate();
-   int csret = vcct->cs.getValRes();
-   if ( csret == CS_OK )
-   {
-      if ( contest->DupSheet.checkCurDup( vcct, contest->validationPoint, false ) )
-      {
-         if ( contest->DupSheet.isCurDup( vcct ) )      // But vcct is screen contact... so it won't be curdup
-         {
-            vcct->cs.setValRes(ERR_DUPCS);
-            csret = ERR_DUPCS;
-         }
-      }
-   }
-   if ( csret != CS_OK )
-   {
-      csIl->tIfValid = false;
-      switch ( csret )
-      {
-         case CS_NOT_VALIDATED:
+    contest->DupSheet.clearCurDup();
+    //   int csret = vcct->cs.reValidate();
+    int csret = vcct->cs.getValRes();
+    if ( csret == CS_OK )
+    {
+        if ( contest->DupSheet.checkCurDup( vcct, contest->validationPoint, false ) )
+        {
+            if ( contest->DupSheet.isCurDup( vcct ) )      // But vcct is screen contact... so it won't be curdup
+            {
+                vcct->cs.setValRes(ERR_DUPCS);
+                csret = ERR_DUPCS;
+            }
+        }
+    }
+    if ( csret != CS_OK )
+    {
+        csIl->tIfValid = false;
+        switch ( csret )
+        {
+        case CS_NOT_VALIDATED:
             lgTraceerr( ERR_10 );
             break;
 
-         case ERR_NOCS:
+        case ERR_NOCS:
             lgTraceerr( ERR_11 );
             break;
 
-         case ERR_DUPCS:
+        case ERR_DUPCS:
             lgTraceerr( ERR_12 );
             break;
 
-         default:
+        default:
             lgTraceerr( ERR_13 );
             break;
-      }
-   }
+        }
+    }
 
-   // locator received
+    // locator received
 
-   int locrep = vcct->loc.getValRes();
-   if ( locrep != LOC_OK )
-   {
-      if ( contest->locatorMandatoryField.getValue() )
-         locIl->tIfValid = false;
-      if ( contest->locatorMandatoryField.getValue() && ( locrep == ERR_NOLOC ) )
-      {
-         lgTraceerr( ERR_18 );
-      }
-      else
-         if ( locrep == ERR_LOC_RANGE )
-         {
-            lgTraceerr( ERR_19 );
-         }
-   }
-
-   // If multiplier ContestLog, multiplier (e.g. district if needed)
-   // check anyway, this keeps country and loc charts up to date
-
-   vcct->checkScreenContact( );  // QSOLogFrame::contactValid, check multiplier, don't log it yet!
-
-   if (vcct->ctryMult)
-   {
-
-   // and look up in squares list for country
-   // look for square against main prefix in LocSquares.ini
-
-      QString sloc = vcct->loc.getLoc().left(4);
-      if (sloc.size())
-      {
-         bool LocOK;
-
-         QString prefix = vcct->ctryMult->getBasePrefix();
-         TContestApp::getContestApp() ->locsBundle.openSection(prefix);
-         if (TContestApp::getContestApp() ->locsBundle.isCurrSectionPresent() )
-         {
-            TContestApp::getContestApp() ->locsBundle.getBoolProfile( sloc, LocOK, false );
-            if (!LocOK)
+    int locrep = vcct->loc.getValRes();
+    if ( locrep != LOC_OK )
+    {
+        if ( contest->locatorMandatoryField.getValue() )
+            locIl->tIfValid = false;
+        if ( contest->locatorMandatoryField.getValue() && ( locrep == ERR_NOLOC ) )
+        {
+            lgTraceerr( ERR_18 );
+        }
+        else
+            if ( locrep == ERR_LOC_RANGE )
             {
-               lgTraceerr( ERR_15 );
-               locIl->tIfValid = false;
+                lgTraceerr( ERR_19 );
             }
-         }
-      }
-   }
-   if ( contest->districtMult.getValue() && !vcct->screenQSOValid )
-   {
-      // no district when required
-      // No CS means we should go to QTH, as its likely to be needed
-      if ( csret == ERR_NOCS || ( vcct->ctryMult && vcct->ctryMult->hasDistricts() && !vcct->districtMult ) )
-      {
-         lgTraceerr( ERR_20 );    // "Invalid district multiplier"
-         qthIl->tIfValid = false;
-      }
-      // What do we allow as valid? Should we error wrong postcode/country combination?
-   }
-   else
-      if ( contest->otherExchange .getValue() && !contest->districtMult.getValue() && ( vcct->extraText.trimmed().size() == 0 ) )
-      {
-         // no QTH info if required
+    }
 
-         lgTraceerr( ERR_21 );            // QTH required
-         qthIl->tIfValid = false;
-      }
+    // If multiplier ContestLog, multiplier (e.g. district if needed)
+    // check anyway, this keeps country and loc charts up to date
+
+    vcct->checkScreenContact( );  // QSOLogFrame::contactValid, check multiplier, don't log it yet!
+
+    if (vcct->ctryMult)
+    {
+
+        // and look up in squares list for country
+        // look for square against main prefix in LocSquares.ini
+
+        QString sloc = vcct->loc.getLoc().left(4);
+        if (sloc.size())
+        {
+            bool LocOK;
+
+            QString prefix = vcct->ctryMult->getBasePrefix();
+            TContestApp::getContestApp() ->locsBundle.openSection(prefix);
+            if (TContestApp::getContestApp() ->locsBundle.isCurrSectionPresent() )
+            {
+                TContestApp::getContestApp() ->locsBundle.getBoolProfile( sloc, LocOK, false );
+                if (!LocOK)
+                {
+                    lgTraceerr( ERR_15 );
+                    locIl->tIfValid = false;
+                }
+            }
+        }
+    }
+    if ( contest->districtMult.getValue() && !vcct->screenQSOValid )
+    {
+        // no district when required
+        // No CS means we should go to QTH, as its likely to be needed
+        if ( csret == ERR_NOCS || ( vcct->ctryMult && vcct->ctryMult->hasDistricts() && !vcct->districtMult ) )
+        {
+            lgTraceerr( ERR_20 );    // "Invalid district multiplier"
+            qthIl->tIfValid = false;
+        }
+        // What do we allow as valid? Should we error wrong postcode/country combination?
+    }
+    else
+        if ( contest->otherExchange .getValue() || contest->otherOptionalExchange .getValue())
+        {
+            if (!contest->districtMult.getValue())
+            {
+                if ( vcct->extraText.trimmed().size() == 0 )
+                {
+                    // no QTH info if required
+
+                    lgTraceerr( ERR_21 );            // QTH required
+                    qthIl->tIfValid = false;
+                }
+                else
+                {
+                    if (vcct->extraText.trimmed() == "-" && contest->otherExchange .getValue())
+                    {
+                        lgTraceerr( ERR_21 );            // QTH required
+                        qthIl->tIfValid = false;
+                    }
+                }
+            }
+        }
 }
 
 //---------------------------------------------------------------------------

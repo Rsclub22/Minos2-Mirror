@@ -315,8 +315,9 @@ void ScreenContact::checkScreenContact( )
     else
         if ( !checkret )
         {
+
             districtMult.reset();						// just in case we have changed the type...
-            if ( clp->otherExchange.getValue() )
+            if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
             {
                 if ( clp->districtMult.getValue() )
                 {

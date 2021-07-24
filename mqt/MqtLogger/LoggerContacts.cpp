@@ -466,6 +466,11 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     {
         outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
     }
+    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    {
+        QString extra = lcl->location.getValue();
+        outstr += getCabrilloField(extra, 6);
+    }
 
     outstr += getCabrilloField(cs.getFullCall(), 13);
 
@@ -485,6 +490,11 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (lcl->locatorMandatoryField.getValue())
     {
         outstr += getCabrilloField(loc.getLoc(), 6);
+    }
+    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    {
+        QString extra = extraText.getValue();
+        outstr += getCabrilloField(extra, 6);
     }
 }
 QString ContestContact::getADIFLine()
