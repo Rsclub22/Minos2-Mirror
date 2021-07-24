@@ -487,11 +487,11 @@ void RSMainWindow::mainRigControlFreq(const Frequency &lFreq, QString mode)
     if (qsl.count())
     {
         rigCache.setLogFreq(mainRigSelected, lFreq);
-        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
         QString loggerUuid = qsl[0];
         QString selc = rigCache.getSelectedContest(mainRigSelected, loggerUuid);
 
         {
+            RPCGeneralClient rpc(rpcConstants::rigControlMethod);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( loggerUuid, rpcConstants::loggerUuid );
             st->addMember( selc, rpcConstants::selected );
@@ -500,6 +500,7 @@ void RSMainWindow::mainRigControlFreq(const Frequency &lFreq, QString mode)
             rpc.queueCall( mainRigSelected);
         }
         {
+            RPCGeneralClient rpc(rpcConstants::rigControlMethod);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( loggerUuid, rpcConstants::loggerUuid );
             st->addMember( selc, rpcConstants::selected );
@@ -549,8 +550,8 @@ void RSMainWindow::subRigControlFreq(const Frequency &lFreq, QString mode)
         rigCache.setLogFreq(subRigSelected, lFreq);
         QString loggerUuid = qsl[0];
         QString selc = rigCache.getSelectedContest(subRigSelected, loggerUuid);
-        RPCGeneralClient rpc(rpcConstants::rigControlMethod);
         {
+            RPCGeneralClient rpc(rpcConstants::rigControlMethod);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( loggerUuid, rpcConstants::loggerUuid );
             st->addMember(selc, rpcConstants::selected);
@@ -559,6 +560,7 @@ void RSMainWindow::subRigControlFreq(const Frequency &lFreq, QString mode)
             rpc.queueCall( subRigSelected);
         }
         {
+            RPCGeneralClient rpc(rpcConstants::rigControlMethod);
             QSharedPointer<RPCParam>st(new RPCParamStruct);
             st->addMember( loggerUuid, rpcConstants::loggerUuid );
             st->addMember(selc, rpcConstants::selected);
