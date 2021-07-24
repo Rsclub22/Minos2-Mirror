@@ -59,6 +59,7 @@ void DistrictFrame::setBand(QString band)
 }
 void DistrictFrame::doScrollToDistrict()
 {
+    model.reset();  // or we don't see unworked districts
     for(int i = 0; i < proxyModel.rowCount(); i++)
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
@@ -73,7 +74,6 @@ void DistrictFrame::doScrollToDistrict()
 
 void DistrictFrame::reInitialiseDistricts()
 {
-    model.reset();
     QSettings settings;
     QByteArray state;
 

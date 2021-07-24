@@ -66,6 +66,7 @@ void DXCCFrame::setBand(QString pband)
 }
 void DXCCFrame::doScrollToCountry()
 {
+    model.reset(); // or we don't see unworked countries
     for(int i = 0; i < proxyModel.rowCount(); i++)
     {
         const QModelIndex index = proxyModel.mapToSource( proxyModel.index(i, 0) );
@@ -82,7 +83,6 @@ void DXCCFrame::doScrollToCountry()
 
 void DXCCFrame::reInitialiseCountries()
 {
-    model.reset();
     QSettings settings;
     QByteArray state;
 
