@@ -109,12 +109,12 @@
         <translation>Ignorer les spots sans valeur de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="228"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="225"/>
         <source>Distance Filter</source>
         <translation>Filtre de distance</translation>
     </message>
     <message>
-        <location filename="../bandmapclientfilterdialog.cpp" line="229"/>
+        <location filename="../bandmapclientfilterdialog.cpp" line="226"/>
         <source>Please enter a number between %1 and %2!</source>
         <translation>Entrer un nombre entre %1 et %2 SVP!</translation>
     </message>
@@ -260,7 +260,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1694"/>
+        <location filename="../bandmapclientframe.cpp" line="1669"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,22 +269,22 @@
         <translation type="vanished"> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1443"/>
+        <location filename="../bandmapclientframe.cpp" line="1418"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1481"/>
+        <location filename="../bandmapclientframe.cpp" line="1456"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1486"/>
+        <location filename="../bandmapclientframe.cpp" line="1461"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1594"/>
+        <location filename="../bandmapclientframe.cpp" line="1569"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -1104,12 +1104,12 @@ Le mode calculé est %2</translation>
         <translation>Pas de code de district</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="656"/>
+        <location filename="../LoggerContacts.cpp" line="674"/>
         <source>GJV file should have been opened read only!</source>
         <translation>Le fichier .GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="762"/>
+        <location filename="../LoggerContacts.cpp" line="780"/>
         <source>Invalid block number in contact block</source>
         <translation>Numéro de bloc non valide dans le bloc de contacts</translation>
     </message>
@@ -2571,7 +2571,7 @@ to</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1838"/>
+        <location filename="../qsologframe.cpp" line="1867"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2582,57 +2582,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2034"/>
+        <location filename="../qsologframe.cpp" line="2063"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2038"/>
+        <location filename="../qsologframe.cpp" line="2067"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2042"/>
+        <location filename="../qsologframe.cpp" line="2071"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2050"/>
+        <location filename="../qsologframe.cpp" line="2079"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2360"/>
+        <location filename="../qsologframe.cpp" line="2389"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2367"/>
+        <location filename="../qsologframe.cpp" line="2396"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2396"/>
+        <location filename="../qsologframe.cpp" line="2425"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1)  </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2461"/>
+        <location filename="../qsologframe.cpp" line="2490"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2463"/>
+        <location filename="../qsologframe.cpp" line="2492"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2797"/>
+        <location filename="../qsologframe.cpp" line="2831"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2832"/>
+        <location filename="../qsologframe.cpp" line="2866"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3501,27 +3501,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="569"/>
+        <location filename="../runbuttonsframe.cpp" line="589"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteint</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="570"/>
+        <location filename="../runbuttonsframe.cpp" line="590"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="571"/>
+        <location filename="../runbuttonsframe.cpp" line="591"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="572"/>
+        <location filename="../runbuttonsframe.cpp" line="592"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="573"/>
+        <location filename="../runbuttonsframe.cpp" line="593"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
@@ -4572,67 +4572,67 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Adresse e-mail pour les requêtes</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="304"/>
+        <location filename="../tentryoptionsform.cpp" line="311"/>
         <source>GJV ContestLog files (*.gjv);;All Files (*.*);;</source>
         <translation>Fichiers du Concours GJV (* .GJV) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="305"/>
+        <location filename="../tentryoptionsform.cpp" line="312"/>
         <source>Save contest in GJV format as...</source>
         <translation>Enregistrer le Concours au format GJV sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="309"/>
+        <location filename="../tentryoptionsform.cpp" line="316"/>
         <source>Minos ContestLog files (*.minos *.Minos);;All Files (*.*);;</source>
         <translation>Fichiers du Concours Minos (* .minos * .Minos) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="310"/>
+        <location filename="../tentryoptionsform.cpp" line="317"/>
         <source>Save contest in .minos format as...</source>
         <translation>Enregistrer le Concours au format .minos sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="314"/>
+        <location filename="../tentryoptionsform.cpp" line="321"/>
         <source>ADIF files (*.adi);;All Files (*.*);;</source>
         <translation>Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="315"/>
+        <location filename="../tentryoptionsform.cpp" line="322"/>
         <source>Save contest in ADIF format as...</source>
         <translation>Enregistrer le Concours au format ADIF sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="319"/>
+        <location filename="../tentryoptionsform.cpp" line="326"/>
         <source>KML(GoogleEarth) files (*.kml);;All Files (*.*);;</source>
         <translation>Fichiers du Concours GoogleEarth (* .KML) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="320"/>
+        <location filename="../tentryoptionsform.cpp" line="327"/>
         <source>Save contest in KML(GoogleEarth) format as...</source>
         <translation>Enregistrer le Concours au format KML(GoogleEarth) sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="324"/>
+        <location filename="../tentryoptionsform.cpp" line="331"/>
         <source>Region 1 EDI files (*.edi);;All Files (*.*);;</source>
         <translation>Fichiers EDI de la région 1 (* .edi) ;; Tous les fichiers (*. *) ;;</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="325"/>
+        <location filename="../tentryoptionsform.cpp" line="332"/>
         <source>Save contest in Region 1 EDI file format as...</source>
         <translation>Enregistrer le Concours au format Region 1 EDI sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="330"/>
+        <location filename="../tentryoptionsform.cpp" line="337"/>
         <source>Text output (*.txt);;All Files (*.*);;</source>
         <translation>Fichiers text (* .txt) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="331"/>
+        <location filename="../tentryoptionsform.cpp" line="338"/>
         <source>Save contest in printable text format as...</source>
         <translation>Enregistrer le Concours au format texte imprimable sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="337"/>
+        <location filename="../tentryoptionsform.cpp" line="344"/>
         <source>Cabrillo files (*.log);;All Files (*.*);;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4641,17 +4641,17 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation type="vanished">Fichiers de Cabrillo (* .cbr) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="338"/>
+        <location filename="../tentryoptionsform.cpp" line="345"/>
         <source>Save contest in Cabrillo file format as...</source>
         <translation>Enregistrer le Concours au format Cabrillo sous ...</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="362"/>
+        <location filename="../tentryoptionsform.cpp" line="369"/>
         <source>File is Read Only</source>
         <translation>Le fichier est en lecture seule</translation>
     </message>
     <message>
-        <location filename="../tentryoptionsform.cpp" line="377"/>
+        <location filename="../tentryoptionsform.cpp" line="384"/>
         <source>Failed to open Contest export file%1 : %2 </source>
         <translation>L&apos;ouverture du fichier d&apos;exportation du Concours %1 a échoué : %2 </translation>
     </message>
