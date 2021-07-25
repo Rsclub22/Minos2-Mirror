@@ -459,7 +459,11 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     }
     if (lcl->serialMandatoryField.getValue())
     {
-        outstr += getCabrilloField(serials.getValue(), 6);
+        QString ssbuff;
+        int ss = serials.getValue().toInt();
+        if ( ss )
+            ssbuff = QString("%1").arg(ss, 4, 10, QChar('0') );
+        outstr += getCabrilloField(ssbuff, 6);   // RX sno
     }
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
@@ -469,6 +473,10 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
     {
         QString extra = lcl->location.getValue();
+        if (extra.isEmpty())
+        {
+            extra = "-";
+        }
         outstr += getCabrilloField(extra, 6);
     }
 
