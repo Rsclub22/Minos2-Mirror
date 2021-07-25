@@ -1265,7 +1265,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
             {
                 if (ct->isHF())
                 {
-                    Frequency spotFreq = Frequency(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ), BMP_DataStoredRole).toString());
+                    Frequency spotFreq = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ),  BMP_DataStoredRole));
                     QString bandChanged;
                     bandChanged = ct->checkBandChange(dxFreq, spotFreq);
                     if (!bandChanged.isEmpty())
@@ -1278,9 +1278,11 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
                 if ( spotType == bandmapSpotType::LOGGED || spotType == bandmapSpotType::SAVED || spotType == bandmapSpotType::CLUSTER_MARKED)
                 {
                     // move the logged or marked spot to new freq
-                    traceMsg(QString("Check Spot in Table - Move Freq %1, %2")
+                    traceMsg(QString("Check Spot in Table - Move Freq %1, %2 to %3")
                              .arg(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString())
-                             .arg(qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM), BMP_DataStoredRole)).traceStr()));
+                             .arg(qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM), BMP_DataStoredRole)).traceStr())
+                             .arg(dxFreq.traceStr())
+                             );
 
                     QVariant f;
                     f.setValue(dxFreq);
