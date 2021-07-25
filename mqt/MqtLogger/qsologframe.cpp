@@ -719,7 +719,11 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
     }
 
-    if ( !valid( cmCheckValid ) || ( currn == ui->RSTTxFrame->getTextEditEdit() ) || ( currn == ui->RSTRxFrame->getTextEditEdit() ) )
+    if ( !valid( cmCheckValid )
+         || ( currn == ui->RSTTxFrame->getTextEditEdit() )
+         || ( currn == ui->RSTRxFrame->getTextEditEdit() )
+         || ( currn == ui->QTHFrame->getTextEditEdit() )
+         )
        // make sure all single and cross field
        // validation has been done
     {
@@ -1339,6 +1343,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
    }
    if ( ( current == ui->CallsignFrame->getTextEditEdit() ) || ( current == ui->LocFrame->getTextEditEdit() )
         || ( current == ui->SerRxFrame->getTextEditEdit() ) || ( current == ui->SerTxFrame->getTextEditEdit() )
+        || ( current == ui->QTHFrame->getTextEditEdit() )
         || ( current == ui->frequencyEdit ))
    {
       getScreenEntry(); // make sure it is saved
@@ -1615,6 +1620,7 @@ void QSOLogFrame::selectField( QWidget *v )
 
     if ( ( current == ui->CallsignFrame->getTextEditEdit() ) || ( current == ui->LocFrame->getTextEditEdit() )
          || ( current == ui->SerRxFrame->getTextEditEdit() ) || ( current == ui->SerTxFrame->getTextEditEdit() )
+         || ( current == ui->QTHFrame->getTextEditEdit() )
          || (current == ui->frequencyEdit)
          )
     {
@@ -1667,6 +1673,14 @@ void QSOLogFrame::fillRst( QLineEdit *rIl, QString &rep, const QString &fmode )
    }
 }
 //==============================================================================
+void QSOLogFrame::fillExchange( QLineEdit *rIl, QString &exch )
+{
+    if (current == rIl && exch.isEmpty() && contest->otherOptionalExchange.getValue())
+    {
+        rIl->setText("-");
+    }
+}
+//==============================================================================
 void QSOLogFrame::doAutofill()
 {
    if ( contest->isReadOnly() )
@@ -1677,6 +1691,7 @@ void QSOLogFrame::doAutofill()
 
    fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode );
    fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode );
+   fillExchange( ui->QTHFrame->getTextEditEdit(), vcct->extraText);
 }
 //==============================================================================
 void QSOLogFrame::lgTraceerr( int err )

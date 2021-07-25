@@ -138,6 +138,8 @@ private:
     QWidget *current;
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
+    void fillExchange(QLineEdit *rIl, QString &exch);
+
     virtual void showScreenEntry( );
     virtual void getScreenContactTime();
     virtual void showScreenContactTime( );
