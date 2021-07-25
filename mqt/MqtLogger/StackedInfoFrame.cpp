@@ -241,7 +241,6 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
     if (contest != ct)
     {
         contest = ct;
-        onInfoComboCurrentIndexChanged(-1);
 
         if (filterFrame)
         {
@@ -274,6 +273,10 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
                 if (!aux.isEmpty())
                 {
                     ui->infoCombo->setCurrentText(aux);
+                }
+                else
+                {
+                    onInfoComboCurrentIndexChanged(-1);
                 }
             }
         }
