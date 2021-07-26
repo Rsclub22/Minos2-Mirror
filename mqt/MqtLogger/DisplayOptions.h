@@ -30,7 +30,6 @@ private:
     bool reportReadabilityInitialise = false;
     bool reportStrengthAutoFill = false;
     bool TabSandP = false;
-    int cap = 0;
     int lcf;
     int qff;
     QFont f;

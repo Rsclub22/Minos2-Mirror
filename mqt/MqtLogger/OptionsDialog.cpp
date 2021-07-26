@@ -78,8 +78,8 @@ int OptionsDialog::exec()
     wc->setAutoFillBackground(true);
 
     ui->optionTabs->addTab(cbc, tr("Cluster/Bandmap"));
-    ui->optionTabs->addTab(ddd, tr("Default Directories"));
-    ui->optionTabs->addTab(dod, tr("DisplayOptions"));
+    ui->optionTabs->addTab(ddd, tr("General Options"));
+    ui->optionTabs->addTab(dod, tr("Display Options"));
     ui->optionTabs->addTab(rdc, tr("Log Radio Settings"));
     ui->optionTabs->addTab(nbc, tr("UDP Broadcast"));
     ui->optionTabs->addTab(wc, tr("WSJT-X"));

@@ -23,6 +23,15 @@ void DefDirsDlg::initialise()
     ui->logsDirEdit->setText(deflog);
     QString deflist =TLogContainer::getDefaultDirectory(true);
     ui->listsDirEdit->setText(deflist);
+
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+    ui->ageSpinner->setValue(cap);
+
+    bool allowHF = false;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
+
+    ui->HFSupportcb->setChecked(allowHF);
+
 }
 bool DefDirsDlg::check()
 {
@@ -34,6 +43,7 @@ void DefDirsDlg::cancel()
 }
 void DefDirsDlg::finalise()
 {
+    bool doSelectSession = false;
     QString temp;
 
     temp = ui->logsDirEdit->text().trimmed();
@@ -42,6 +52,23 @@ void DefDirsDlg::finalise()
 
     temp = ui->listsDirEdit->text().trimmed();
     TContestApp::getContestApp() ->loggerBundle.setStringProfile( elpListDirectory, temp );
+
+    int ncap = ui->ageSpinner->value();
+    if (cap != ncap)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, ncap);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+
+        doSelectSession = true;
+    }
+
+    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpAllowHF, ui->HFSupportcb->isChecked());
+    if (doSelectSession)
+    {
+        TWaitCursor wc(this);
+        LogContainer->selectSession(TContestApp::getContestApp()->currSession);
+    }
+
 
 }
 

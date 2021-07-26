@@ -28,6 +28,9 @@ private slots:
 
 private:
     Ui::DefDirsDlg *ui;
+
+    int cap = 0;
+
     void doCloseEvent();
 
     QString browseDefDir(const QString &prompt);

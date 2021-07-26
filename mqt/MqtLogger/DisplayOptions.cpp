@@ -34,9 +34,6 @@ void DisplayOptions::initialise()
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
     ui->TabSandPActioncb->setChecked(TabSandP);
 
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
-    ui->ageSpinner->setValue(cap);
-
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     ui->ListCompressionSpinner->setValue(lcf);
 
@@ -116,14 +113,6 @@ void DisplayOptions::finalise()
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         MinosLoggerEvents::SendTabSandP();
-    }
-    int ncap = ui->ageSpinner->value();
-    if (cap != ncap)
-    {
-        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, ncap);
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
-        doSelectSession = true;
     }
 
     int nlcf = ui->ListCompressionSpinner->value();
