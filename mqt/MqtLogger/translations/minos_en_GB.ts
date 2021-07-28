@@ -1647,28 +1647,48 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="22"/>
+        <location filename="../defdirsdlg.ui" line="35"/>
+        <source>Contest Age Protection after</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../defdirsdlg.ui" line="52"/>
+        <source>days</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../defdirsdlg.ui" line="87"/>
+        <source>NB HF Contest support is VERY experimental, and incomplete. Use at your own risk!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../defdirsdlg.ui" line="97"/>
+        <source>HF Contests Support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../defdirsdlg.ui" line="119"/>
         <source>Logs Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="32"/>
-        <location filename="../defdirsdlg.ui" line="53"/>
+        <location filename="../defdirsdlg.ui" line="129"/>
+        <location filename="../defdirsdlg.ui" line="150"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="43"/>
+        <location filename="../defdirsdlg.ui" line="140"/>
         <source>Lists Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="82"/>
+        <location filename="../defdirsdlg.cpp" line="109"/>
         <source>Set Default Logs Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="91"/>
+        <location filename="../defdirsdlg.cpp" line="118"/>
         <source>Set Default Lists Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1722,61 +1742,51 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="157"/>
-        <source>Contest Age Protection after</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../DisplayOptions.ui" line="174"/>
-        <source>days</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../DisplayOptions.ui" line="198"/>
         <source>Set List Spacing Compression Value as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="232"/>
+        <location filename="../DisplayOptions.ui" line="191"/>
         <source>QSO Field expansion as percentage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="266"/>
+        <location filename="../DisplayOptions.ui" line="225"/>
         <source>Layouts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="272"/>
+        <location filename="../DisplayOptions.ui" line="231"/>
         <source>Spacing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="305"/>
+        <location filename="../DisplayOptions.ui" line="264"/>
         <source>Content Margins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="311"/>
+        <location filename="../DisplayOptions.ui" line="270"/>
         <source>L</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="328"/>
+        <location filename="../DisplayOptions.ui" line="287"/>
         <source>T</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="345"/>
+        <location filename="../DisplayOptions.ui" line="304"/>
         <source>R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.ui" line="362"/>
+        <location filename="../DisplayOptions.ui" line="321"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.cpp" line="211"/>
+        <location filename="../DisplayOptions.cpp" line="200"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2188,12 +2198,12 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="81"/>
-        <source>Default Directories</source>
+        <source>General Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="82"/>
-        <source>DisplayOptions</source>
+        <source>Display Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
