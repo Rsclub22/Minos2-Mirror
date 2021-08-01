@@ -130,6 +130,11 @@ void StackedInfoFrame::setCurrentFrameType(QString s)
 
 void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 {
+    if (!contest)
+    {
+        return;
+    }
+
     if (currStackFrame)
     {
         layout()->removeWidget(currStackFrame);
@@ -154,11 +159,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     locFrame = nullptr;
     locTreeFrame = nullptr;
     statsFrame = nullptr;
-
-    if (!contest)
-    {
-        return;
-    }
 
     bool setTabsVisible = contest->contestBands.getValue() == allHF;
 
@@ -270,7 +270,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             if (stackInstance < STACKITEMS)
             {
                 QString aux = contest->currentStackItems[stackInstance].getValue();
-                if (!aux.isEmpty())
+                if (!aux.isEmpty() && aux != ui->infoCombo->currentText())
                 {
                     ui->infoCombo->setCurrentText(aux);
                 }
