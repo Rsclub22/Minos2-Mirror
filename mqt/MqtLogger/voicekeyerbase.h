@@ -115,8 +115,6 @@ public:
     virtual bool hasRecord() = 0;
     virtual void doRecording(VoiceKeyerParams *){}
 
-    //virtual int getKeyerState(int &state) = 0;
-
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) = 0;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams ) = 0;
 

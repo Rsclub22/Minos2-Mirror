@@ -41,6 +41,7 @@ SOURCES += \
     ContestPage.cpp \
     ContestPageControl.cpp \
     DisplayOptions.cpp \
+    ExternalMqtKeyer.cpp \
     FilterFrame.cpp \
     InternalVoiceMemoryKeyer.cpp \
     LocCalcFrame.cpp \
@@ -105,6 +106,8 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txVmExternalButtonDialog.cpp \
+    txVmExternalSetupDialog.cpp \
     txVmInternalSetupDialog.cpp \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
@@ -137,6 +140,7 @@ HEADERS  += \
     ContestPage.h \
     ContestPageControl.h \
     DisplayOptions.h \
+    ExternalMqtKeyer.h \
     FilterFrame.h \
     InternalVoiceMemoryKeyer.h \
     LocCalcFrame.h \
@@ -200,6 +204,8 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txVmExternalButtonDialog.h \
+    txVmExternalSetupDialog.h \
     txVmInternalSetupDialog.h \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
@@ -277,6 +283,8 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
+    txVmExternalButtonDialog.ui \
+    txVmExternalSetupDialog.ui \
     txVmInternalSetupDialog.ui \
     txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \

@@ -1,0 +1,34 @@
+#ifndef EXTERNALMQTKEYER_H
+#define EXTERNALMQTKEYER_H
+
+#include "voicekeyerbase.h"
+#include "voicekeyerfactory.h"
+
+class ExternalMqtKeyer:public VoiceKeyerBase
+{
+    Q_OBJECT
+public:
+    ExternalMqtKeyer(QObject *parent =nullptr);
+    virtual ~ExternalMqtKeyer() override;
+
+    static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
+
+    // VoiceKeyerBase interface
+    virtual void voiceKeyerInit(int numButtons) override;
+    virtual void sendMsgNum(int msgNum) override;
+    virtual void stopMsg() override;
+    virtual bool hasRecord() override{return true;}
+    virtual void doRecording(VoiceKeyerParams *vkParam) override;
+
+    virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
+    virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
+    virtual void setPttOnOff(bool onOff) override;
+
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
+    virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
+
+private slots:
+    void onDoPTT(bool onOff);
+};
+
+#endif // EXTERNALMQTKEYER_H
