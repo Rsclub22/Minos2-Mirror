@@ -30,8 +30,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , overstrike(false)
     , current(nullptr)
     , edit(false)
-    , rotatorLoaded(false)
-    , radioLoaded(false)
     , bandMapLoaded(false)
     , logDataFromBandmapOrMemory(false)
     , qrzDisplayFrameLoaded(false)
@@ -3372,27 +3370,16 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
 
 
 //---------------------------------------------------------
-void QSOLogFrame::setRadioLoaded()
-{
-    radioLoaded = true;
-
-}
-
 bool QSOLogFrame::isRadioLoaded()
 {
-    return radioLoaded;
+    return LogContainer->sendDM->isRadioLoaded();
 }
 
 //----------------------------------------------------------------
 
-void QSOLogFrame::setRotatorLoaded()
-{
-    rotatorLoaded = true;
-}
-
 bool QSOLogFrame::isRotatorLoaded()
 {
-    return rotatorLoaded;
+    return LogContainer->sendDM->isRotatorLoaded();
 }
 
 

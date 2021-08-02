@@ -28,7 +28,6 @@ RotControlFrame::RotControlFrame(QWidget *parent):
     QFrame(parent)
     , ct(nullptr)
     , ui(new Ui::RotControlFrame)
-    , rotatorLoaded(false)
 {
     ui->setupUi(this);
 
@@ -543,13 +542,9 @@ void RotControlFrame::clearRotatorFlags()
     showRotRightButOff();
 }
 
-void RotControlFrame::setRotatorLoaded()
-{
-    rotatorLoaded = true;
-}
 bool RotControlFrame::isRotatorLoaded()
 {
-    return rotatorLoaded;
+    return LogContainer->sendDM->isRotatorLoaded();
 }
 void RotControlFrame::setRotatorList()
 {

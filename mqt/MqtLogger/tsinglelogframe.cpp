@@ -82,7 +82,6 @@ void TSingleLogFrame::buildFrame()
 
     // RigControl Updates
     // From rig controller
-    connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &TSingleLogFrame::on_RadioLoaded);
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &TSingleLogFrame::on_SetRadioList);
 
     // To rig controller
@@ -105,7 +104,6 @@ void TSingleLogFrame::buildFrame()
 
     // Rotator updates
     // From rotator controller
-    connect(LogContainer->sendDM, &TSendDM::RotatorLoaded, this, &TSingleLogFrame::on_RotatorLoaded);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &TSingleLogFrame::on_RotatorList);
 
     // To rotator controller
@@ -159,9 +157,7 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ContestPage(parent, contest),
     ui(new Ui::TSingleLogFrame),
     bandMapLoaded(false),
-    rotatorLoaded(false),
     keyerLoaded(false),
-    radioLoaded(false),
     lastStanzaCount( 0 )
 
 
@@ -1895,14 +1891,6 @@ void TSingleLogFrame::on_SetVolume(int level)
     }
 }
 
-void TSingleLogFrame::on_RadioLoaded()
-{
-    FKHRigControlFrame->setRadioLoaded();
-    txVmButtonsFrame->setRadioLoaded();
-    GJVQSOLogFrame->setRadioLoaded();
-}
-
-
 void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsFlags)
 {
     if(FKHRigControlFrame)
@@ -1914,7 +1902,7 @@ void TSingleLogFrame::onLogRadioSettingsChanged(QSharedPointer<RadioSettingsDial
 
 bool TSingleLogFrame::isRadioLoaded()
 {
-   return FKHRigControlFrame->isRadioLoaded();
+   return LogContainer->sendDM->isRadioLoaded();
 }
 
 void TSingleLogFrame::on_SetRadioList()
@@ -2195,18 +2183,9 @@ void TSingleLogFrame::sendRadioPassBandState(int state)
 
 // RotatorControl
 
-
-
-void TSingleLogFrame::on_RotatorLoaded()
-{
-   rotatorLoaded = true;
-   FKHRotControlFrame->setRotatorLoaded();
-   GJVQSOLogFrame->setRotatorLoaded();
-}
-
 bool TSingleLogFrame::isRotatorLoaded()
 {
-   return rotatorLoaded;
+   return LogContainer->sendDM->isRotatorLoaded();
 }
 void TSingleLogFrame::on_RotatorList()
 {

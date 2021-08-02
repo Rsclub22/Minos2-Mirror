@@ -68,7 +68,7 @@ public:
     void getRigDetails(memoryData::memData &m);
 
 
-    void setRadioLoaded();
+    void on_RadioLoaded();
     void setRadioListFromTslf();
 
 
@@ -197,7 +197,6 @@ private:
     QShortcut *ritFreqEditShortCut;
 
     bool rigFrameStartFlag;
-    bool radioLoaded;
     bool radioConnected;
     bool radioError;
     bool freqEditOn;

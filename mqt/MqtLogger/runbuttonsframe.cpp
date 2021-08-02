@@ -5,6 +5,7 @@
 #include "rigutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "SendRPCDM.h"
 
 #include "runbuttonsframe.h"
 #include "ui_runbuttonsframe.h"
@@ -300,7 +301,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
 {
     trace(QString("Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
     memoryData::memData m = getRunMemoryData(buttonNumber);
-    if (rigControl->isRadioLoaded())
+    if (LogContainer->sendDM->isRadioLoaded())
     {
         if (rigControl->radioConnected && !rigControl->radioError)
         {

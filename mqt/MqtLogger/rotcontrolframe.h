@@ -45,8 +45,6 @@ public:
 
     void setContest(BaseContestLog *);
 
-    void setRotatorLoaded();
-
     void setRotatorList();
     void setRotatorState(const QString &s);
     void setRotatorBearing(const QString &s);
@@ -99,7 +97,6 @@ private:
     void clearRotatorFlags();
 
     QString antennaName;
-    bool rotatorLoaded;
     bool isRotatorLoaded();
 
 

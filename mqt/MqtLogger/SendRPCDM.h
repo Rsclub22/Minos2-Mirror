@@ -28,6 +28,9 @@ class TSendDM : public QObject
       RigCache rigCache;
       RotatorCache rotatorCache;
 
+      bool radioLoaded = false;
+      bool rotatorLoaded = false;
+
       PubSubName keyerApp;
       PubSubName clusterApp;
 
@@ -40,9 +43,6 @@ public:  		// User declarations
       ~TSendDM();
 
       void subscribeApps();
-
-      bool radioLoaded = false;
-      bool rotatorLoaded = false;
 
       void invalidateCache();
       void invalidateRigCache(const PubSubName &name);
@@ -104,7 +104,14 @@ public:  		// User declarations
           return &rigCache;
       }
 
-
+      bool isRadioLoaded()
+      {
+          return radioLoaded;
+      }
+      bool isRotatorLoaded()
+      {
+          return rotatorLoaded;
+      }
 
 
 private slots:

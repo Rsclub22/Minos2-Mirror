@@ -88,12 +88,6 @@ public:
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
 
-
-
-
-    void setRadioLoaded();
-
-
     void setPttEnabled(bool state, PubSubName psn);
 
     void setPttType(int type, PubSubName psn);
@@ -132,7 +126,6 @@ private:
 
     PubSubName selectedRadio;
     bool radioConnected;
-    bool radioLoaded;
     bool pttState;
 
 

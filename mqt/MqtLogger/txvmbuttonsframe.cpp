@@ -19,7 +19,6 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     ui(new Ui::TxVmButtonsFrame),
     buttonNumSent(NO_VM_BUTTON_ON),
     radioConnected(false),
-    radioLoaded(false),
     pttState(false)
 
 {
@@ -386,11 +385,6 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 void TxVmButtonsFrame::setRadioIsConnected(bool connected)
 {
     radioConnected = connected;
-}
-
-void TxVmButtonsFrame::setRadioLoaded()
-{
-    radioLoaded = true;
 }
 
 void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)

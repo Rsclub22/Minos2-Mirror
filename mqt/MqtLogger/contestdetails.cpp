@@ -1296,9 +1296,9 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->power.setValue( ui->PowerEdit->text() );
     contestTransferObject->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
 
-    if (LogContainer->sendDM->radioLoaded)
+    if (LogContainer->sendDM->isRadioLoaded())
         contestTransferObject->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
-    if (LogContainer->sendDM->rotatorLoaded)
+    if (LogContainer->sendDM->isRotatorLoaded())
         contestTransferObject->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
 
     contestTransferObject->currentMode.setValue(ui->ModeComboBox->currentText());
