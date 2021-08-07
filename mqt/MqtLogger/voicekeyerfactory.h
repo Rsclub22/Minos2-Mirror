@@ -26,7 +26,7 @@ enum VoiceKeyerId
     RigControl,
     SerialControl,
     InternalVoiceKeyer,
-    ExternalMqtKeyer
+    ExternalVoiceKeyer
 };
 
 const QStringList keyerTypes = {"None", "RigControl", "SerialControl", "Internal", "mqtKeyer"};

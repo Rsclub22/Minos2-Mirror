@@ -46,6 +46,10 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     {
         return new InternalVoiceMemoryKeyer(this);
     }
+    else if (vmKeyerId == VoiceKeyerId::ExternalVoiceKeyer)
+    {
+        return new ExternalMqtKeyer(this);
+    }
 
     return nullptr;
 }

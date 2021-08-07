@@ -607,6 +607,8 @@ void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 {
     QString band = BandList::getBand(mem.freq);
 
+    // after "clear" band will be blank...
+
     if (runMemories[band].size() < memno + 1)
     {
         runMemories[band].resize(memno + 1);

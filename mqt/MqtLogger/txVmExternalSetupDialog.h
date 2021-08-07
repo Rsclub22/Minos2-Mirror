@@ -34,6 +34,10 @@ private slots:
 
 //    void onNumButtonsValueChanged(int num);
 
+    void on_okButton_clicked();
+
+    void on_cancelButton_clicked();
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;

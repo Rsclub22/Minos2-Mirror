@@ -23,8 +23,8 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
     VoiceKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(VoiceKeyerId::ExternalMqtKeyer);
-    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::ExternalMqtKeyer]);
+    voiceMemCap.setVmIdNum(VoiceKeyerId::ExternalVoiceKeyer);
+    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::ExternalVoiceKeyer]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
