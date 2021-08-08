@@ -142,6 +142,26 @@
        </spacer>
       </item>
       <item>
+       <widget class="QCheckBox" name="ageCb">
+        <property name="text">
+         <string>Protect Contests by Age</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Contest Age Protection after</string>
@@ -151,7 +171,7 @@
       <item>
        <widget class="QSpinBox" name="ageSpinner">
         <property name="minimum">
-         <number>-1</number>
+         <number>0</number>
         </property>
         <property name="maximum">
          <number>365</number>

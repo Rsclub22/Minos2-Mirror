@@ -424,20 +424,33 @@ void LoggerContestLog::checkAgeProtection()
 {
     // check last time in contest against current date/time and the
 
-    int ageDays;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
-    if (ageDays >= 0)
+    bool doAge;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
+    if(!doAge)
     {
-        QString t1 = DTGEnd.getValue();
-        QDateTime end = CanonicalToTDT( t1 );
-
-        QDate endDate = end.date();
-
-        endDate = endDate.addDays(ageDays);
-        if (endDate.isValid() && endDate < QDate::currentDate())
+        ageProtected = false;
+    }
+    else
+    {
+        int ageDays;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
+        if (ageDays >= 0)
         {
-            // e.g. if ageDays is 1, allow contest day and all the following day
-            ageProtected = true;
+            QString t1 = DTGEnd.getValue();
+            QDateTime end = CanonicalToTDT( t1 );
+
+            QDate endDate = end.date();
+
+            endDate = endDate.addDays(ageDays);
+            if (endDate.isValid() && endDate < QDate::currentDate())
+            {
+                // e.g. if ageDays is 1, allow contest day and all the following day
+                ageProtected = true;
+            }
+        }
+        else
+        {
+            ageProtected = false;
         }
     }
 }

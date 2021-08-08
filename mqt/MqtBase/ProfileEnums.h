@@ -59,6 +59,7 @@ enum LOGGERPROFILE {
    elpAutoFill,
    elpAllowHF,
    elpTabforSandP,
+   elpAgeProtectContests,
    elpAgeToProtectContests,
    elpBandmapOldStyle,
    elpAddBandMapTuningTolerance,

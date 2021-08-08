@@ -27,6 +27,9 @@ void DefDirsDlg::initialise()
     TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
     ui->ageSpinner->setValue(cap);
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
+    ui->ageCb->setChecked(doAge);
+
     bool allowHF = false;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
 
@@ -57,6 +60,14 @@ void DefDirsDlg::finalise()
     if (cap != ncap)
     {
         TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, ncap);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+
+        doSelectSession = true;
+    }
+    bool ndoAge = ui->ageCb->isChecked();
+    if (doAge != ndoAge)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeToProtectContests, ndoAge);
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         doSelectSession = true;
@@ -121,3 +132,9 @@ void DefDirsDlg::on_listsDirBrowse_clicked()
         ui->listsDirEdit->setText(res);
     }
 }
+
+void DefDirsDlg::on_ageCb_stateChanged(int /*arg1*/)
+{
+    ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
+}
+
