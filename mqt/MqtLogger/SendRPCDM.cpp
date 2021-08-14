@@ -143,6 +143,20 @@ PubSubName TSendDM::getSelectedRot(QString loggerUuid)
 }
 
 //---------------------------------------------------------------------------
+void TSendDM::sendKeyerUser()
+{
+    // send our ID to the keyer, so it can subscribe to our config requests
+    if (!keyerApp.isEmpty())
+    {
+        RPCGeneralClient rpc(rpcConstants::keyerMethod);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( rpcConstants::keyerUser, rpcConstants::paramName );
+        st->addMember( 0, rpcConstants::paramValue );   // as the far end expects something here
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( keyerApp );
+    }
+}
+
 void TSendDM::sendKeyerPlay( TSingleLogFrame *tslf, int fno )
 {
     if (!keyerApp.isEmpty())
@@ -844,6 +858,24 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             else if ( an.getCategory() == rpcConstants::StationCategory)
             {
             }
+            else if (an.getCategory() == rpcConstants::KeyerCategory)
+            {
+                QString k = an.getKey();
+                QString v = an.getValue();
+                if ( k == rpcConstants::keyerReport )
+                {
+                    if (keyerApp.isEmpty())
+                        keyerApp = PubSubName(an);
+                    emit setKeyerLoaded();
+                    sendKeyerUser();
+                    LogContainer->setCaption( v );
+                    traceMsg( "KeyerReport " + v );
+                }
+                else
+                {
+                    emit keyerConfig(k, v);
+                }
+            }
         }
         else if (an.getState() == psRevoked)
         {
@@ -878,15 +910,6 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
         notifyRigDetailChanges();
         notifyRigChanges();
         notifyRotChanges();
-
-        if ( an.getCategory() == rpcConstants::KeyerCategory && an.getKey() == rpcConstants::keyerReport )
-        {
-            if (keyerApp.isEmpty())
-                keyerApp = PubSubName(an);
-            emit setKeyerLoaded();
-            LogContainer->setCaption( an.getValue() );
-            traceMsg( "KeyerReport " + an.getValue() );
-        }
 
         if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterReport )
         {

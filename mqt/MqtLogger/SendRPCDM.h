@@ -38,6 +38,7 @@ class TSendDM : public QObject
 
       void traceMsg(QString msg);
       void getRouterAppCatMap();
+      void sendKeyerUser();
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
@@ -131,6 +132,8 @@ signals:
       void setClusterServerLoaded();
       void setClusterState(QString);
       void setClusterTXSpotEnableState(QString);
+
+      void keyerConfig(QString, QString);
 
 };
 #endif

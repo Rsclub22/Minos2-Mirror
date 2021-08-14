@@ -106,14 +106,20 @@ static const QString ChatServerFrequency("MinosChatServerFrequency");
 // Keyer
 static const QString keyerApp           ("mqtKeyer");
 static const QString keyerMethod        ("Minos:KeyerControl");
+static const QString keyerUser          ("KeyerUser");
 static const QString keyerPlayFile      ("PlayFile");
 static const QString keyerRecordFile    ("RecordFile");
 static const QString keyerTone          ("Tone");
 static const QString keyerTwoTone       ("TwoTone");
 static const QString keyerStop          ("Stop");
+static const QString keyerConfig        ("Config");
+static const QString keyerMeter         ("Meter");
+static const QString keyerSliders       ("Sliders");
+static const QString keyerSendConfig    ("sendConfig");
 
-static const QString KeyerCategory      ("Keyer");
-static const QString keyerReport     ("Report");
+static const QString KeyerCategory       ("Keyer");
+static const QString KeyerConfigCategory ("KeyerConfig");
+static const QString keyerReport         ("Report");
 
 // Control
 static const QString controlApp         ("mqtControl");

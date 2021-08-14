@@ -9,6 +9,7 @@
 #include "sbdriver.h"
 #include "keyers.h"
 #include "portcon.h"
+#include "KeyerJson.h"
 
 KeyerMain *keyerMain = nullptr;
 
@@ -34,10 +35,23 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
     if (!inhibitCallbacks)
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
-void KeyerMain::doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
+
+void KeyerMain::doSliders(int rec, int rep, int pass)
+{
+    trace(QString("%1;%2;%3").arg(rec).arg(rep).arg(pass));
+    ui->recordSlider->setValue(rec);
+    ui->replaySlider->setValue(rep);
+    ui->passThroughSlider->setValue(pass);
+}
+void KeyerMain::doSetVU(unsigned int prmsvol , unsigned int ppeakvol, unsigned int psamples)
 {
     if (!inhibitCallbacks)
+    {
+        rmsvol = std::max(rmsvol, prmsvol);
+        peakvol = std::max(peakvol, ppeakvol);
+        samples += psamples;
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+    }
 }
 
 //---------------------------------------------------------------------------
@@ -128,8 +142,10 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KeyerMain::onPTT);
 
-}
+    KeyerServer::checkConnection();
+    connect (KS, &KeyerServer::sliders, this, &KeyerMain::doSliders);
 
+}
 KeyerMain::~KeyerMain()
 {
     inhibitCallbacks = true;
@@ -139,7 +155,6 @@ void KeyerMain::onStdInRead(QString cmd)
 {
     executeStdIn(cmd);
 }
-
 void KeyerMain::closeEvent(QCloseEvent *event)
 {
     inhibitCallbacks = true;
@@ -186,15 +201,16 @@ void KeyerMain::LineTimerTimer( )
     }
     else
     {
-        bool show = getShowApp();
-        if ( !isVisible() && show )
-        {
-           setVisible(true);
-        }
-        if ( isVisible() && !show )
-        {
-           setVisible(false);
-        }
+        return;     // closed
+    }
+    bool show = getShowApp();
+    if ( !isVisible() && show )
+    {
+       setVisible(true);
+    }
+    if ( isVisible() && !show )
+    {
+       setVisible(false);
     }
 
    syncSetLines();
@@ -237,6 +253,23 @@ void KeyerMain::LineTimerTimer( )
    {
       old = windowTitle();
       CaptionTimer.start(200);
+   }
+
+   if (currentKeyer)
+   {
+       KeyerJson kj;
+       kj.pipEnable = currentKeyer->kconf.enablePip;
+       kj.autoRepeat = currentKeyer->kconf.enableAutoRepeat;
+       kj.autoRepeatDelay = currentKeyer->kconf.autoRepeatDelay;
+
+       QString config = kj.makeConfig();
+       KeyerServer::publishConfig(config);
+
+       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
+       KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
+       rmsvol = 0;
+       peakvol = 0;
+       samples = 0;
    }
 }
 void KeyerMain::CaptionTimerTimer( )
@@ -510,4 +543,23 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
     {
         ui->passThroughSlider->setValue(static_cast<int>(arg1 * 10));
     }
+}
+
+void KeyerMain::doConfig(QString config)
+{
+    KeyerJson conf;
+    if (conf.parseConfig(config))
+    {
+        currentKeyer->kconf.enablePip = conf.pipEnable;
+        currentKeyer->kconf.enableAutoRepeat = conf.autoRepeat;
+        currentKeyer->kconf.autoRepeatDelay = conf.autoRepeatDelay;
+
+//        ui->recordSlider->setValue(conf.sliderPosition[0]);
+//        ui->replaySlider->setValue(conf.sliderPosition[1]);
+//        ui->passThroughSlider->setValue(conf.sliderPosition[2]);
+    }
+}
+void doConfig(QString config)
+{
+    keyerMain->doConfig(config);
 }

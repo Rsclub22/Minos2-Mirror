@@ -8,7 +8,6 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include "cutils.h"
-//#include <process.h>
 #include "keyers.h"
 #include "portcon.h"
 #include "VKMixer.h"
@@ -90,6 +89,7 @@ void stopKeyer()
 {
    keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "" ) );
 }
+
 //==========================================================================
 bool keyer_config( QString & /*errmess*/ )
 {

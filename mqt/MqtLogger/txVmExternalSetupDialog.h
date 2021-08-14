@@ -38,6 +38,8 @@ private slots:
 
     void on_cancelButton_clicked();
 
+    void onKeyerConfig(QString key, QString val);
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;

@@ -54,7 +54,7 @@ void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)
 
 bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
-
+    return false;
 }
 void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams )
 {

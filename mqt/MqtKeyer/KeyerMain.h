@@ -23,6 +23,7 @@ public:
 
     void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode);
 
+    void doConfig(QString);
 private slots:
 
     void onStdInRead(QString);
@@ -81,6 +82,8 @@ private slots:
     void doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
+    void doSliders(int, int, int);
+
 private:
     void syncSetLines();
     QTimer LineTimer;
@@ -98,6 +101,10 @@ private:
     bool recording;
 
     bool inVolChange;
+
+    unsigned int rmsvol= 0;
+    unsigned int peakvol = 0;
+    unsigned int samples = 0;
 
     QProcess *runner;
 

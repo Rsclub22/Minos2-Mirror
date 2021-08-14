@@ -16,14 +16,9 @@ public:
     explicit TxVmExternalButtonDialog(QWidget *parent = nullptr);
     ~TxVmExternalButtonDialog();
 
-    void doSetVU(unsigned int rmsvol, unsigned int peakvol, unsigned int samples);
     void setVmData(VoiceKeyerParams* vmData);
 
 private slots:
-    void on_okButtonCicked();
-    void on_cancelbuttonClicked();
-
-
     void onVmRepeatPauseDurEditingFinished();
     void onVmMessageDurEditingFinished();
     void on_replayButton_clicked();
@@ -34,6 +29,20 @@ private slots:
 
     void on_recordLevel_valueChanged(double arg1);
     void on_recordSlider_valueChanged(int position);
+
+    void onKeyerConfig(QString key, QString val);
+
+    void on_buttonBox_accepted();
+
+    void on_buttonBox_rejected();
+
+    void on_replayValue_valueChanged(double arg1);
+
+    void on_replaySlider_valueChanged(int value);
+
+    void on_passThroughValue_valueChanged(double arg1);
+
+    void on_passThroughSlider_valueChanged(int value);
 
 public Q_SLOTS:
     virtual void accept() override;
@@ -49,6 +58,7 @@ private:
     bool validateDur(QString durName, QString dur, int &dur_);
 
 
+    void pubSliders();
 };
 
 #endif // TXVMEXTERNALBUTTONDIALOG_H

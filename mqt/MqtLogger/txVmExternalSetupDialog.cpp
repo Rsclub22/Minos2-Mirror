@@ -1,5 +1,8 @@
 #include <QSettings>
 
+#include "SendRPCDM.h"
+#include "tlogcontainer.h"
+#include "KeyerJson.h"
 #include "txVmExternalSetupDialog.h"
 #include "ui_txVmExternalSetupDialog.h"
 
@@ -11,11 +14,14 @@ TxVmExternalSetupDialog::TxVmExternalSetupDialog(VoiceKeyerCapabilities voiceCap
 {
     ui->setupUi(this);
 
+    connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalSetupDialog::onKeyerConfig);
+
+    RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "sliders:config:meters", psPublished);
+
     QSettings settings;
     QByteArray geometry = settings.value("txVmWxternalSetupDialog/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
-
 
     initSetup();
 
@@ -23,6 +29,8 @@ TxVmExternalSetupDialog::TxVmExternalSetupDialog(VoiceKeyerCapabilities voiceCap
 
 TxVmExternalSetupDialog::~TxVmExternalSetupDialog()
 {
+    RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "", psRevoked);
+
     delete ui;
 }
 void TxVmExternalSetupDialog::doCloseEvent()
@@ -59,5 +67,28 @@ void TxVmExternalSetupDialog::on_okButton_clicked()
 void TxVmExternalSetupDialog::on_cancelButton_clicked()
 {
     reject();
+}
+
+void TxVmExternalSetupDialog::onKeyerConfig(QString key, QString val)
+{
+    if (key == rpcConstants::keyerConfig)
+    {
+        // JSON
+        KeyerJson kj;
+        kj.parseConfig(val);
+        // and now use it!
+    }
+    else
+        if (key == rpcConstants::keyerMeter)
+        {
+            //    vu = QString("%1;%2;%3").arg(rmsLevel, peakLevel).arg(numSamples);
+
+        }
+        else
+            if (key == rpcConstants::keyerSliders)
+            {
+                //    sliders = QString("%1;%2;%3").arg(rec, replay, passthrough);
+
+            }
 }
 

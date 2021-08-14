@@ -74,6 +74,7 @@ void playKeyerFile( int fileno, bool ptt );
 QVector < QString > get_keyer_list();
 commonPort *select_keyer( const QString &kn );
 
+void doConfig(QString config);
 void stopKeyer();
 void setKeyerType( const QString &mode );
 
