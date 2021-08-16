@@ -24,18 +24,12 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "delayedaction.h"
-
-
 #include "ui_clusterclientframe.h"
-
 
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonParseError>
-
-
 
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent),

@@ -10,6 +10,7 @@ public:
     int autoRepeatDelay = 0;
 
     int CQLength[10] = {};
+    QString CQName[10] = {};
 
     KeyerJson();
 

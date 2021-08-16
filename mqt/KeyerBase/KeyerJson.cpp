@@ -5,7 +5,6 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonParseError>
 
 #include "KeyerJson.h"
 

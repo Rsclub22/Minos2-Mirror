@@ -1,3 +1,8 @@
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+
 #include "CacheSelection.h"
 
 CacheSelection::CacheSelection()

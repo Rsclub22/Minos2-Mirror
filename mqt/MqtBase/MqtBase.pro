@@ -51,7 +51,6 @@ SOURCES += \
     freqmodebandplan.cpp \
     gjvparams.cpp \
     htmldelegate.cpp \
-    KeyerState.cpp \
     latlong.cpp \
     list.cpp \
     ListContact.cpp \
@@ -137,7 +136,6 @@ HEADERS += \
     freqmodebandplan.h \
     gjvparams.h \
     htmldelegate.h \
-    KeyerState.h \
     latlong.h \
     list.h \
     ListContact.h \

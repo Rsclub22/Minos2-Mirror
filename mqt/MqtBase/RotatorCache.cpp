@@ -1,4 +1,8 @@
 #include "base_pch.h"
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
 #include "rotatorcommon.h"
 #include "RotatorCache.h"
 
