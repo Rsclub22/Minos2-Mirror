@@ -39,9 +39,8 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     (*vmKeyersList)[keyerName] = voiceMemCap;
 
 }
-void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
+void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
-    Q_UNUSED(numButtons)
     sblog = true;
 
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";
@@ -49,6 +48,7 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
 
     QString indev = settings.value(indevKey, "").toString();
     QString outdev = settings.value(outdevKey, "").toString();
+    numButtons = settings.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
 
     QString errmess;
     if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ,0 ) )
@@ -160,17 +160,24 @@ void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 {
     setPttOnOff(onOff);
 }
-int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    txVmInternalSetupDialog setup(voiceCap, tslf->txVmButtonsFrame);
-    setup.setWindowTitle(tr("Internal Voice Memory Setup"));
+    txVmInternalSetupDialog txvmSetup(voiceCap, numButtons, tslf->txVmButtonsFrame);
+    txvmSetup.setWindowTitle(tr("Internal Voice Memory Setup"));
 
-    setup.setVmCommonParamsData(&vmCommonParams);
+    int ret = txvmSetup.exec();
 
-    return setup.exec();
+    if (ret == QDialog::Accepted)
+    {
+        numButtons = txvmSetup.getNumButtons();
+        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+        QSettings config(fileName, QSettings::IniFormat);
+        config.setValue("Common/NumButtons", numButtons);
+    }
+    return ret;
 }
 
 int InternalVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)

@@ -111,10 +111,7 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
          unsigned int sampleRate;
          int PipTone;
          int PipLength;
-         bool EnablePip;
          int StartDelay;
-         int AutoRepeatDelay;
-         bool EnableAutoRepeat;
          unsigned int PipStartDelay;
          int PlayPTTDelay;
          int voxHangTime;
@@ -129,20 +126,17 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
             sampleRate = static_cast<unsigned int>(temp);
             GetIntAttribute( c, "pipTone", PipTone, 1000 );
             GetIntAttribute( c, "pipLength", PipLength, 250 );
-            GetBoolAttribute( c, "enablePip", EnablePip, false );
             GetIntAttribute( c, "pipStartDelay", temp, 0 );
             PipStartDelay = static_cast<unsigned int>(temp);
             GetIntAttribute( c, "pipVolume", pipVolume, 80 );
             GetIntAttribute( c, "startDelay", StartDelay, 0 );
-            GetIntAttribute( c, "autoRepeat", AutoRepeatDelay, 6 );
-            GetBoolAttribute( c, "enableAutoRepeat", EnableAutoRepeat, false );
             GetIntAttribute( c, "playPTTDelay", PlayPTTDelay, 0 );
             GetIntAttribute( c, "voxHangTime", voxHangTime, 0 );
             GetIntAttribute( c, "clipRecord", ClipRecord, 0 );
             GetIntAttribute( c, "filterCorner", filterCorner, 0 );
 
-            KeyerConfig k( name, sampleRate, PipTone, pipVolume, PipLength, EnablePip, StartDelay,
-                           AutoRepeatDelay, EnableAutoRepeat, PipStartDelay, PlayPTTDelay, voxHangTime,
+            KeyerConfig k( name, sampleRate, PipTone, pipVolume, PipLength, StartDelay,
+                           PipStartDelay, PlayPTTDelay, voxHangTime,
                            ClipRecord, filterCorner );
             keyermap[ name ] = k;
          }

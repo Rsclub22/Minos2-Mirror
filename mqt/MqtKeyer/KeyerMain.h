@@ -5,7 +5,7 @@
 #include <QComboBox>
 #include <QMainWindow>
 #include <QProcess>
-
+#include "KeyerJson.h"
 #include "VKMixer.h"
 
 namespace Ui {
@@ -18,19 +18,22 @@ class KeyerMain : public QMainWindow
     Ui::KeyerMain *ui;
 
 public:
+    KeyerJson masterConfig;
+
     explicit KeyerMain(QWidget *parent = nullptr);
     virtual ~KeyerMain() override;
 
     void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode);
 
     void doConfig(QString);
+    bool writeConfig();
 private slots:
 
     void onStdInRead(QString);
 
     void CaptionTimerTimer();
 
-    void LineTimerTimer();
+    void lineTimerTimer();
 
 
     void on_recordButton_clicked();
@@ -84,9 +87,13 @@ private slots:
 
     void doSliders(int, int, int);
 
+    void on_messageName_editingFinished();
+
+    void on_keyCombo_currentIndexChanged(int index);
+
 private:
     void syncSetLines();
-    QTimer LineTimer;
+    QTimer lineTimer;
     QTimer CaptionTimer;
 
     StdInReader stdinReader;

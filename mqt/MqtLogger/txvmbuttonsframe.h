@@ -79,10 +79,6 @@ public:
 
     QMap<int, TxVoiceMemButton*> txVmButtonMap;
 
-
-
-
-
     void readActionSel(int buttonNumber);
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
@@ -104,13 +100,10 @@ signals:
 private:
     Ui::TxVmButtonsFrame *ui;
 
-
     QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
     QList<QShortcut *> shortCutKeyList;
-
-    VoiceKeyerCommonParams vmCommonParams;
 
     QString voiceKeyerType;
 
@@ -132,8 +125,6 @@ private:
     void initTxVmButton();
 
     void setRunButtonText(const int buttonNumber, const QString name);
-    void saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
-    void readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
     void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
@@ -146,6 +137,8 @@ private slots:
     void onMsgDurTimerTimeout();
     void clearActionSelected(int buttonNumber);
     void runButActivated(int buttonNumber);
+    void onRemoteConfigChanged();
+    void on_pipCb_stateChanged(int arg1);
 };
 
 #endif // TXVMBUTTONSFRAME_H

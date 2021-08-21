@@ -26,10 +26,6 @@
 #include "delayedaction.h"
 #include "ui_clusterclientframe.h"
 
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
 
 ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     QFrame(parent),

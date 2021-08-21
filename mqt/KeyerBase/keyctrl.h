@@ -78,12 +78,14 @@ void doConfig(QString config);
 void stopKeyer();
 void setKeyerType( const QString &mode );
 
-int getAutoRepeatDelay();
-void setAutoRepeatDelay( int );
-bool getEnableAutoRepeat();
-void setEnableAutoRepeat( bool );
+int getAutoRepeatDelay(int mno);
+void setAutoRepeatDelay( int mno, int d );
+bool getEnableAutoRepeat(int mno);
+void setEnableAutoRepeat( int mno, bool ar);
 bool getPipEnabled();
 void setPipEnabled( bool );
+QString getKeyName(int mno);
+void setKeyName(int mno, QString msg);
 int getCWSpeed();
 void setCWSpeed( int );
 int getCWTone();

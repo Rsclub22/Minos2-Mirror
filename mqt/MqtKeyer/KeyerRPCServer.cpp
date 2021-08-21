@@ -9,13 +9,13 @@
 
 #include "base_pch.h"
 #include "MinosRPC.h"
-
+#include "KeyerJson.h"
 #include "keyctrl.h"
 #include "KeyerRPCServer.h"
 
 KeyerServer *KS = nullptr;
 
-static bool sendConfig = false;
+//static bool sendConfig = false;
 static bool sendMeters = false;
 static bool sendSliders = false;
 //---------------------------------------------------------------------------
@@ -86,7 +86,7 @@ void KeyerServer::publishConfig(const QString &config)
 {
     checkConnection();
 
-    if (sendConfig)
+//    if (sendConfig)
         KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
@@ -159,7 +159,7 @@ void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const 
 
             else if ( nameOk && p1Value->getInt( Value ) )
             {
-                if ( Value >= 1 && Value <= 12 )
+                if ( Value >= 1 && Value <= KEYERKEYS )
                 {
                     if ( commandName == rpcConstants::keyerPlayFile )
                     {
@@ -227,24 +227,16 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                 QString value = an.getValue();
                 if (value.isEmpty())
                 {
-                    sendConfig = false;
+//                    sendConfig = false;
                     sendSliders = false;
                     sendMeters = false;
                 }
                 else
                 {
-                    if (value.contains("config"))
-                    {
-                        sendConfig = true;
-                    }
-                    if (value.contains("sliders"))
-                    {
-                        sendSliders = true;
-                    }
-                    if (value.contains("meter"))
-                    {
-                        sendMeters = true;
-                    }
+//                    sendConfig = true;
+                    sendSliders = true;
+                    sendMeters = true;
+                    emit keyerConfig(value);
                 }
               }
               else if (an.getKey() == rpcConstants::keyerSliders)
@@ -263,7 +255,7 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
       {
           if (an.getCategory() == rpcConstants::KeyerConfigCategory && an.getKey() == rpcConstants::keyerSendConfig)
           {
-              sendConfig = false;
+//              sendConfig = false;
               sendSliders = false;
               sendMeters = false;
           }

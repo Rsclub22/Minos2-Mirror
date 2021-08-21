@@ -54,6 +54,10 @@ void KeyerMain::doSetVU(unsigned int prmsvol , unsigned int ppeakvol, unsigned i
     }
 }
 
+KeyerJson *getMasterConfig()
+{
+    return &keyerMain->masterConfig;
+}
 //---------------------------------------------------------------------------
 void KeyerMain::setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode )
 {
@@ -95,19 +99,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     createCloseEvent();
 
-    inVolChange = true;
-
-    int recordLevel = settings.value("RecordLevel", 0).toInt();
-    int replayLevel = settings.value("ReplayLevel", 0).toInt();
-    int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
-
-    ui->recordSlider->setValue(recordLevel);
-    ui->replaySlider->setValue(replayLevel);
-    ui->passThroughSlider->setValue(passThroughLevel);
-
-    inVolChange = false;
-
-
     QSettings keyerSettings( GetCurrentDir() + "/Configuration/MixerSettings.ini" , QSettings::IniFormat ) ;
     QString alsaFileName = keyerSettings.value("AlsaCtlFile", "AlsaCtlFile.txt").toString();
     ui->setupScriptEdit->setText(alsaFileName);
@@ -123,28 +114,48 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     setVolumeMults();
 
-    connect(&LineTimer, &QTimer::timeout, this, &KeyerMain::LineTimerTimer);
-    LineTimer.start(100);
+    connect(&lineTimer, &QTimer::timeout, this, &KeyerMain::lineTimerTimer);
+    lineTimer.start(100);
 
     // NB CaptionTimer only runs after something changes - the line timer triggers it
     connect(&CaptionTimer, &QTimer::timeout, this, &KeyerMain::CaptionTimerTimer);
-
-    ui->PipCheckBox->setChecked(getPipEnabled());
-
-    ui->delayEdit->setValue(getAutoRepeatDelay());
-    ui->AutoRepeatCheckBox->setChecked( getEnableAutoRepeat());
-
-    for (int i = 1; i < 10; i++)
-    {
-        ui->keyCombo->addItem(QString::number(i));
-    }
-    ui->keyCombo->setCurrentIndex(0);
 
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::ptt, this, &KeyerMain::onPTT);
 
     KeyerServer::checkConnection();
     connect (KS, &KeyerServer::sliders, this, &KeyerMain::doSliders);
+    connect (KS, &KeyerServer::keyerConfig, this, &KeyerMain::doConfig);
 
+    inVolChange = true;
+
+    int recordLevel = settings.value("RecordLevel", 0).toInt();
+    int replayLevel = settings.value("ReplayLevel", 0).toInt();
+    int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
+
+    if (masterConfig.read("./Configuration/MinosKeyer.json"))
+    {
+        recordLevel = masterConfig.recordSliderPosition;
+        replayLevel = masterConfig.replaySliderPosition;
+        passThroughLevel = masterConfig.passthroughSliderPosition;
+    }
+
+    ui->recordSlider->setValue(recordLevel);
+    ui->replaySlider->setValue(replayLevel);
+    ui->passThroughSlider->setValue(passThroughLevel);
+
+    inVolChange = false;
+
+    ui->PipCheckBox->setChecked(getPipEnabled());
+
+    ui->delayEdit->setValue(getAutoRepeatDelay(0));
+    ui->AutoRepeatCheckBox->setChecked( getEnableAutoRepeat(0));
+
+    for (int i = 1; i <= KEYERKEYS; i++)
+    {
+        ui->keyCombo->addItem(QString::number(i));
+    }
+    ui->keyCombo->setCurrentIndex(0);
+//    on_keyCombo_currentIndexChanged(0);
 }
 KeyerMain::~KeyerMain()
 {
@@ -158,6 +169,7 @@ void KeyerMain::onStdInRead(QString cmd)
 void KeyerMain::closeEvent(QCloseEvent *event)
 {
     inhibitCallbacks = true;
+    lineTimer.stop();
     unloadKeyers();
 
     QWidget::closeEvent(event);
@@ -182,12 +194,24 @@ void KeyerMain::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
+bool KeyerMain::writeConfig()
+{
+    bool ret = true;
+    static QString old;
+    QString conf = masterConfig.makeConfig(QJsonDocument::Compact);
+    if (old != conf)
+    {
+        ret = masterConfig.write("./Configuration/MinosKeyer.json");
+        KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact));
+    }
+    return ret;
+}
 void KeyerMain::onPTT(bool s)
 {
     if (currentKeyer)
         currentKeyer->ptt(s);
 }
-void KeyerMain::LineTimerTimer( )
+void KeyerMain::lineTimerTimer( )
 {
     static bool closed = false;
     if ( !closed )
@@ -257,13 +281,7 @@ void KeyerMain::LineTimerTimer( )
 
    if (currentKeyer)
    {
-       KeyerJson kj;
-       kj.pipEnable = currentKeyer->kconf.enablePip;
-       kj.autoRepeat = currentKeyer->kconf.enableAutoRepeat;
-       kj.autoRepeatDelay = currentKeyer->kconf.autoRepeatDelay;
-
-       QString config = kj.makeConfig();
-       KeyerServer::publishConfig(config);
+       writeConfig();
 
        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
        KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
@@ -282,7 +300,7 @@ void KeyerMain::on_recordButton_clicked()
 {
     trace("Record Button");
     int fno = ui->keyCombo->currentText().toInt();
-    if ( fno >= 1 && fno <= 12 )
+    if ( fno >= 1 && fno <= KEYERKEYS )
     {
        startRecordDVPFile( fno );
        ui->recind->setText(tr("Push PTT to Commence Recording"));
@@ -295,7 +313,7 @@ void KeyerMain::on_playButton_clicked()
 {
     trace("Play Button");
     int fno = ui->keyCombo->currentText().toInt( );
-    if ( fno >= 1 && fno <= 12 )
+    if ( fno >= 1 && fno <= KEYERKEYS )
     {
        ui->recind->setText("");
        playKeyerFile( fno, false );
@@ -324,7 +342,8 @@ void KeyerMain::on_stopButton_clicked()
 
 void KeyerMain::on_AutoRepeatCheckBox_clicked()
 {
-    setEnableAutoRepeat( ui->AutoRepeatCheckBox->isChecked() );
+    int fno = ui->keyCombo->currentText().toInt( );
+    setEnableAutoRepeat(fno,  ui->AutoRepeatCheckBox->isChecked() );
 
 }
 
@@ -339,8 +358,15 @@ void KeyerMain::on_delayEdit_valueChanged(const QString &/*arg1*/)
     int val = temp.toInt();
     if (val > 0)
     {
-       setAutoRepeatDelay( val );
+        int fno = ui->keyCombo->currentText().toInt( );
+        setAutoRepeatDelay(fno, val );
     }
+
+}
+void KeyerMain::on_messageName_editingFinished()
+{
+    int fno = ui->keyCombo->currentText().toInt( );
+    setKeyName(fno, ui->messageName->text());
 
 }
 
@@ -547,19 +573,30 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
 
 void KeyerMain::doConfig(QString config)
 {
-    KeyerJson conf;
-    if (conf.parseConfig(config))
+    if (getMasterConfig()->parseConfig(config))
     {
-        currentKeyer->kconf.enablePip = conf.pipEnable;
-        currentKeyer->kconf.enableAutoRepeat = conf.autoRepeat;
-        currentKeyer->kconf.autoRepeatDelay = conf.autoRepeatDelay;
+        ui->PipCheckBox->setChecked(getMasterConfig()->pipEnable);
 
-//        ui->recordSlider->setValue(conf.sliderPosition[0]);
-//        ui->replaySlider->setValue(conf.sliderPosition[1]);
-//        ui->passThroughSlider->setValue(conf.sliderPosition[2]);
+        int fno = ui->keyCombo->currentText().toInt();
+        KeyerKeyJson &kjj = getMasterConfig()->kjj[fno - 1];
+        ui->messageName->setText(kjj.CQName);
+        ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
+        ui->delayEdit->setValue(kjj.autoRepeatDelay);
+
     }
 }
 void doConfig(QString config)
 {
     keyerMain->doConfig(config);
 }
+
+void KeyerMain::on_keyCombo_currentIndexChanged(int index)
+{
+    // fill the parameters in the box
+    int fno = ui->keyCombo->currentText().toInt();
+    KeyerKeyJson &kjj = getMasterConfig()->kjj[fno - 1];
+    ui->messageName->setText(kjj.CQName);
+    ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
+    ui->delayEdit->setValue(kjj.autoRepeatDelay);
+}
+

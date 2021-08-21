@@ -17,11 +17,10 @@ class TxVmRigSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent = nullptr);
+    explicit TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent = nullptr);
     ~TxVmRigSetupDialog();
 
-
-    void setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_);
+    int getNumButtons(){return numButtons;}
 
 private slots:
 
@@ -36,7 +35,8 @@ private:
     Ui::TxVmRigSetupDialog *ui;
 
     VoiceKeyerCapabilities voiceCap;
-    VoiceKeyerCommonParams *vmCommonParams;
+
+    int numButtons = MININUM_BUTTONS;
 
     void initSetup();
     void doCloseEvent();

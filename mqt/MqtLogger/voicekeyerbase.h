@@ -20,38 +20,8 @@
 class VoiceKeyerBase;
 class VoiceKeyerFactory;
 
-class VoiceKeyerCommonParams
-{
-
-public:
-
-    explicit VoiceKeyerCommonParams();
-    ~VoiceKeyerCommonParams();
-
-    VoiceKeyerCommonParams& operator = (const VoiceKeyerCommonParams& vkcp);
-    bool operator == (const VoiceKeyerCommonParams& vkcp);
-    bool operator != (const VoiceKeyerCommonParams& vkcp);
-
-    void clear();
-
-    void setComport(const QString comport_){comport = comport_;}
-    QString getComport(){return comport;}
-
-    void setNumButtons(const int numButtons_){numButtons = numButtons_;}
-    int getNumButtons(){return numButtons;}
-
-private:
-
-    QString comport;
-    int numButtons;
-
-
-};
-
-
-
-
-
+const int REPEAT_DUR_MIN = 0;
+const int REPEAT_DUR_MAX = 180; // secs
 
 class VoiceKeyerParams
 {
@@ -65,27 +35,27 @@ public:
     VoiceKeyerParams& operator = (const VoiceKeyerParams& vkp);
 
 
-    QString getType(){return type;}
+    QString getType() const {return type;}
     void setType(const QString type_){type = type_;}
 
 
-    QString getVmName(){return vmName;}
+    QString getVmName() const {return vmName;}
     void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
 
-    bool getVmRepeatFlag(){return vmRepeatFlag;}
+    bool getVmRepeatFlag() const {return vmRepeatFlag;}
     void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
 
-    int getVmRepeatPauseDur(){return vmRepeatPauseDur;}
+    int getVmRepeatPauseDur() const {return vmRepeatPauseDur;}
     void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
 
 
-    int getVmDuration(){return vmDuration;}
+    int getVmDuration() const {return vmDuration;}
     void setVmDuration(const int vmDuration_){vmDuration = vmDuration_;}
 
-    int getvmButtonNum(){return vmButtonNum;}
+    int getvmButtonNum() const {return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
 
-    QSharedPointer<VoiceKeyerBase> getVkBase() const{return vkBase;}
+    QSharedPointer<VoiceKeyerBase> getVkBase() const {return vkBase;}
     void setVkBase(QSharedPointer<VoiceKeyerBase> value){vkBase = value;}
 
     void clear();
@@ -106,10 +76,12 @@ class VoiceKeyerBase  : public QObject
     Q_OBJECT
 
 public:
+    int numButtons = 0;
+
     explicit VoiceKeyerBase(QObject *parent = nullptr);
     virtual ~VoiceKeyerBase();
 
-    virtual void voiceKeyerInit(int numButtons) = 0;
+    virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg() = 0;
     virtual bool hasRecord() = 0;
@@ -120,15 +92,28 @@ public:
 
     virtual void setPttOnOff(bool onOff) = 0;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) = 0;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) = 0;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) = 0;
 
-    int getMaxNumButtons(){return MAXNUM_BUTTONS;}
+    virtual bool hasPip() const
+    {
+        return false;
+    }
+    virtual bool hasSetup() const
+    {
+        return true;
+    }
+    virtual void setPip(bool){}
+    virtual bool getPip() const {return false;}
+
+    int getMaxNumButtons() const {return MAXNUM_BUTTONS;}
 
 signals:
 
     void vmVoiceKeyPressed(int msgNum);
     void vmVoiceKeyStopPressed();
+
+    void remoteConfigChanged();
 
 private:
 

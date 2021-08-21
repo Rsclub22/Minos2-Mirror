@@ -95,7 +95,7 @@ class dvkFile
          fptr = nullptr;
       }
 };
-#define MAXFILES 10
+#define MAXFILES 8
 static QVector <dvkFile *> recfil;
 //==============================================================================
 
@@ -115,6 +115,10 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
 
    if ( ihand >= 0 )
    {
+       if (ihand >= recfil.size())
+       {
+           return false;
+       }
       if ( !recording && !recfil[ ihand ] ->loaded )
       {
          return false;

@@ -40,6 +40,7 @@ class KeyerServer:public QObject
 
 signals:
       void sliders(int, int, int);
+      void keyerConfig(QString);
 
 private slots:
       void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );

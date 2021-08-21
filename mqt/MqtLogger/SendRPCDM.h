@@ -56,14 +56,17 @@ public:  		// User declarations
       PubSubName getSelectedRig(QString loggerUuid);
       PubSubName getSelectedRot(QString loggerUuid);
 
-      void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
-      void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
 
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const QString bandMask, const QString &uuid);
       void sendHfFlagToClusterServer(const bool state);
       void sendReconnectFlagToClusterServer(const bool state);
+
+      void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
+      void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
+
+      void publishKeyerConfig(const QString &config);
 
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
@@ -113,7 +116,6 @@ public:  		// User declarations
       {
           return rotatorLoaded;
       }
-
 
 private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );

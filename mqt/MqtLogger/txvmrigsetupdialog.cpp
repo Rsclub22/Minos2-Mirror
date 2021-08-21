@@ -2,10 +2,11 @@
 #include "txvmrigsetupdialog.h"
 #include "ui_txvmrigsetupdialog.h"
 
-TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent) :
+TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TxVmRigSetupDialog),
-    voiceCap(voiceCap_)
+    voiceCap(voiceCap_),
+    numButtons(nb)
 
 {
     ui->setupUi(this);
@@ -44,6 +45,7 @@ void TxVmRigSetupDialog::initSetup()
 {
 
     ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+    ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())
     {
@@ -65,13 +67,5 @@ void TxVmRigSetupDialog::initSetup()
 
 void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 {
-    vmCommonParams->setNumButtons(num);
-}
-
-
-void TxVmRigSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_)
-{
-
-    vmCommonParams = vmCommonParams_;
-    ui->numButtons->setValue(vmCommonParams->getNumButtons());
+    numButtons = num;
 }

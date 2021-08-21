@@ -8,10 +8,11 @@
 const QString indevKey("InDevice");
 const QString outdevKey("OutDevice");
 
-txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, QWidget *parent) :
+txVmInternalSetupDialog::txVmInternalSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::txVmInternalSetupDialog),
-    voiceCap(voiceCap_)
+    voiceCap(voiceCap_),
+    numButtons(nb)
 
 {
     ui->setupUi(this);
@@ -50,6 +51,7 @@ void txVmInternalSetupDialog::initSetup()
 {
 
     ui->numButtons->setRange(MININUM_BUTTONS, MAXNUM_BUTTONS);
+    ui->numButtons->setValue(numButtons);
 
     if (voiceCap.getSupportSerial())
     {
@@ -85,16 +87,10 @@ void txVmInternalSetupDialog::initSetup()
 
 void txVmInternalSetupDialog::onNumButtonsValueChanged(int num)
 {
-    vmCommonParams->setNumButtons(num);
+    numButtons = num;
 }
 
 
-void txVmInternalSetupDialog::setVmCommonParamsData(VoiceKeyerCommonParams *vmCommonParams_)
-{
-
-    vmCommonParams = vmCommonParams_;
-    ui->numButtons->setValue(vmCommonParams->getNumButtons());
-}
 void txVmInternalSetupDialog::inChannelCB_currentTextChanged(const QString &arg1)
 {
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + "Internal" + ".ini";

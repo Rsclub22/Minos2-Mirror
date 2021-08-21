@@ -115,7 +115,7 @@ static const QString keyerStop          ("Stop");
 static const QString keyerConfig        ("Config");
 static const QString keyerMeter         ("Meter");
 static const QString keyerSliders       ("Sliders");
-static const QString keyerSendConfig    ("sendConfig");
+static const QString keyerSendConfig    ("SendConfig");
 
 static const QString KeyerCategory       ("Keyer");
 static const QString KeyerConfigCategory ("KeyerConfig");

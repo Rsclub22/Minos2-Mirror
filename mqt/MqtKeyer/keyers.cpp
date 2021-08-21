@@ -12,7 +12,7 @@
 #include "portcon.h"
 #include "VKMixer.h"
 #include "sbdriver.h"
-
+#include "KeyerJson.h"
 #define TIMER_INTERVAL 55U         // 55-millisecond target interval
 
 //==============================================================================
@@ -40,6 +40,7 @@ static const char * lineModeStrings[] = {
 
 commonKeyer *currentKeyer = nullptr;
 
+extern KeyerJson *getMasterConfig();
 //=============================================================================
 bool keyer_docommand( const KeyerCtrl &keyer_ctrl )
 {
@@ -248,54 +249,39 @@ void setLines( bool PTT, bool L1, bool L2 )
    WindowsMonitorPort::L1State = L1;
    WindowsMonitorPort::L2State = L2;
 }
-int getAutoRepeatDelay()
+int getAutoRepeatDelay(int mno)
 {
-   if ( currentKeyer )
-   {
-      return currentKeyer->kconf.autoRepeatDelay;
-   }
-   return 0;
+    return getMasterConfig()->kjj[mno - 1].autoRepeatDelay;
 }
-void setAutoRepeatDelay( int d )
+void setAutoRepeatDelay(int mno , int d)
 {
-   if ( currentKeyer )
-   {
-      currentKeyer->kconf.autoRepeatDelay = d;
-   }
+    getMasterConfig()->kjj[mno - 1].autoRepeatDelay = d;
 }
-bool getEnableAutoRepeat()
+bool getEnableAutoRepeat(int mno)
 {
-   if ( currentKeyer )
-   {
-      return currentKeyer->kconf.enableAutoRepeat;
-   }
-   return false;
+    return getMasterConfig()->kjj[mno - 1].autoRepeat;
 }
-void setEnableAutoRepeat( bool b )
+void setEnableAutoRepeat(int mno, bool ar )
 {
-   if ( currentKeyer )
-   {
-      currentKeyer->kconf.enableAutoRepeat = b;
-   }
+    getMasterConfig()->kjj[mno - 1].autoRepeat = ar;
 }
 
 bool getPipEnabled()
 {
-   if ( currentKeyer )
-   {
-      return currentKeyer->kconf.enablePip;
-   }
-   return false;
+    return getMasterConfig()->pipEnable;
 }
 void setPipEnabled( bool val )
 {
-   if ( currentKeyer )
-   {
-      currentKeyer->kconf.enablePip = val;
-      trace(QString("Pip set to %1").arg(val?"true":"false"));
-   }
+    getMasterConfig()->pipEnable = val;
 }
-
+QString getKeyName(int mno)
+{
+    return getMasterConfig()->kjj[mno - 1].CQName;
+}
+void setKeyName(int mno, QString msg)
+{
+    getMasterConfig()->kjj[mno - 1].CQName = msg;
+}
 int getCWSpeed()
 {
    return CWSpeed;
@@ -526,7 +512,9 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
       case eKEYER_PLAY:      /* transmit file */
          {
             KeyerAction::currentAction.clear_after( KeyerAction::getCurrentAction() );
-            new PlayAction( dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, kconf.autoRepeatDelay, true, false );
+            bool ardelay = getEnableAutoRepeat(dvp_ctrl.intParam1);
+            bool ar = getEnableAutoRepeat(dvp_ctrl.intParam1);
+            new PlayAction( dvp_ctrl.intParam1, dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, ar?ardelay:0, true, false );
          }
          break;
 
@@ -752,6 +740,7 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
       if ( !state && !recPending && !boxRecPending )
       {
          QString cqWavFile;
+         int mno = -1;
          switch(sbc)
          {
             case eL1:
@@ -761,15 +750,18 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
                  case elmPlay12Pip:
                  case elmPlay12NoPip:
                      cqWavFile = "CQF1.WAV";
+                     mno = 0;
                      break;
 
                  case elmPlay34Pip:
                  case elmPlay34NoPip:
                      cqWavFile = "CQF3.WAV";
+                     mno = 2;
                      break;
                  case elmPlay56Pip:
                  case elmPlay56NoPip:
                      cqWavFile = "CQF5.WAV";
+                     mno = 4;
                      break;
                  default:
                      break;
@@ -783,15 +775,18 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
               case elmPlay12Pip:
               case elmPlay12NoPip:
                   cqWavFile = "CQF2.WAV";
+                  mno = 1;
                   break;
 
               case elmPlay34Pip:
               case elmPlay34NoPip:
                   cqWavFile = "CQF4.WAV";
+                  mno = 3;
                   break;
               case elmPlay56Pip:
               case elmPlay56NoPip:
                   cqWavFile = "CQF6.WAV";
+                  mno = 5;
                   break;
               default:
                   break;
@@ -805,7 +800,11 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
          if ( !ca || !ca->playingFile( cqWavFile ) )
          {
             KeyerAction::currentAction.clear_after( ca );
-            new PlayAction( cqWavFile, false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, false );
+
+            bool ardelay = getEnableAutoRepeat(mno);
+            bool ar = getEnableAutoRepeat(mno);
+
+            new PlayAction(mno,  cqWavFile, false, kconf.startDelay, ar?ardelay:0, true, false );
             KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
       }
@@ -876,7 +875,9 @@ bool voiceKeyer::sendCW( const char *message, int speed, int tone )
       KeyerAction::currentAction.freeAll();	// clear all the chains
 
       SoundSystemDriver::getSbDriver() ->createCWBuffer( message, speed, tone );
-      new PlayAction( "AudioCWFile", false, kconf.startDelay, kconf.enableAutoRepeat ? kconf.autoRepeatDelay : 0, true, true );
+      bool ar = getEnableAutoRepeat(0);
+      int ardelay = getAutoRepeatDelay(0);
+      new PlayAction( 0, "AudioCWFile", false, kconf.startDelay, ar?ardelay:0, true, true );
       return true;
    }
    return false;
@@ -1230,7 +1231,7 @@ void InitialPTTAction::timeOut()
 
       case einitPTTRelease:
          currentKeyer->stopMicPassThrough();
-         if ( currentKeyer->kconf.enablePip )
+         if ( getPipEnabled() )
          {
             if ( !getNextAction() )
                new PipAction();
@@ -1342,7 +1343,7 @@ void InterruptingPTTAction::timeOut()
 
       case einterPTTDoPip:
          currentKeyer->stopMicPassThrough();
-         if ( currentKeyer->kconf.enablePip )
+         if ( getPipEnabled() )
          {
             if ( !getNextAction() )
                new PipAction();
@@ -1363,9 +1364,9 @@ void InterruptingPTTAction::timeOut()
    }
 }
 //=============================================================================
-PlayAction::PlayAction( const QString &pfileName, bool noPTT, long pdelayStart,
+PlayAction::PlayAction(int mno, const QString &pfileName, bool noPTT, long pdelayStart,
                         long prepeatDelay, bool firstTime, bool CW )
-      : testMode( noPTT ), CW( CW ), actionState( epasInitial )
+      : mno(mno), testMode( noPTT ), CW( CW ), actionState( epasInitial )
 {
    if ( sblog )
    {
@@ -1501,7 +1502,7 @@ void PlayAction::timeOut()
             if (!fileName.isEmpty())
             {
                 pipStartDelaySamples = static_cast<unsigned int>(( currentKeyer->kconf.pipStartDelay * SoundSystemDriver::getSbDriver() ->rate ) / 1000);
-                tailWithPip = currentKeyer->kconf.enablePip;
+                tailWithPip = getPipEnabled();
             }
 
             if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode, currentKeyer->kconf.clipRecord ))
@@ -1526,9 +1527,12 @@ void PlayAction::timeOut()
          VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
 
          KeyerAction *sbn = getNextAction();
-         if ( !testMode && currentKeyer->kconf.enableAutoRepeat && currentKeyer->kconf.autoRepeatDelay && !sbn && !CW )
+         bool ardelay = getEnableAutoRepeat(mno);
+         bool ar = getEnableAutoRepeat(mno);
+
+         if ( !testMode && ar && ardelay && !sbn && !CW )
          {
-            new PlayAction( fileName, false, currentKeyer->kconf.startDelay, currentKeyer->kconf.autoRepeatDelay, false, false );
+            new PlayAction( mno, fileName, false, currentKeyer->kconf.startDelay, ardelay, false, false );
          }
 
          deleteAtTick = true;

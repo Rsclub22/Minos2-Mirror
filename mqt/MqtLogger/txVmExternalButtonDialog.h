@@ -54,7 +54,6 @@ private:
     bool inVolChange = false;
 
     void doCloseEvent();
-    void setVolumeMults();
     bool validateDur(QString durName, QString dur, int &dur_);
 
 

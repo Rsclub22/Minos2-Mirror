@@ -107,7 +107,6 @@ SOURCES += \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
     txVmExternalButtonDialog.cpp \
-    txVmExternalSetupDialog.cpp \
     txVmInternalSetupDialog.cpp \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
@@ -205,7 +204,6 @@ HEADERS  += \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
     txVmExternalButtonDialog.h \
-    txVmExternalSetupDialog.h \
     txVmInternalSetupDialog.h \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
@@ -284,7 +282,6 @@ FORMS    += \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
     txVmExternalButtonDialog.ui \
-    txVmExternalSetupDialog.ui \
     txVmInternalSetupDialog.ui \
     txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \

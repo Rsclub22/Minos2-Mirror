@@ -155,7 +155,6 @@ class LineEventsPort: public commonPort
 {
     Q_OBJECT
    private:
-    QTimer LineTimer;
       bool PTTState = false;
       bool linePTTState = false;
       bool lineL1State = false;

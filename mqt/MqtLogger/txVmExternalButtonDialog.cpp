@@ -15,13 +15,12 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
-    RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "sliders:config:meters", psPublished);
-
+    LogContainer->sendDM->publishKeyerConfig("sliders:config:meters");
 }
 
 TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
 {
-    RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "", psRevoked);
+    LogContainer->sendDM->publishKeyerConfig("");
     delete ui;
 }
 
@@ -33,13 +32,20 @@ void TxVmExternalButtonDialog::doCloseEvent()
     txvmbd = nullptr;
 }
 
-void TxVmExternalButtonDialog::setVolumeMults()
-{
-
-}
-
 bool TxVmExternalButtonDialog::validateDur(QString durName, QString dur, int &dur_)
 {
+    bool ok;
+    int d = dur.trimmed().toInt(&ok);
+    if (ok && (d >= REPEAT_DUR_MIN && d <= REPEAT_DUR_MAX))
+    {
+        dur_ = d;
+        return true;
+    }
+
+    QMessageBox msgBox;
+    msgBox.setText(tr("%1 Duration ").arg(durName) + dur + tr(" - out of range"));
+    msgBox.setInformativeText(tr("Please set value between 0 and 180 seconds"));
+    msgBox.exec();
     return false;
 }
 void TxVmExternalButtonDialog::reject()
@@ -55,6 +61,23 @@ void TxVmExternalButtonDialog::accept()
 
 void TxVmExternalButtonDialog::on_buttonBox_accepted()
 {
+    int repeatPauseDur_ = 0;
+    if (!validateDur(tr("Repeat Pause"), ui->repeatPauseDur->text(), repeatPauseDur_))
+    {
+        return;
+    }
+
+//    int messageDur_ = 0;
+//    if (!validateDur(tr("Message"), ui->txVmMessageDur->text(), messageDur_))
+//    {
+//        return;
+//    }
+
+    QString name = ui->txVmNameEdit->text();
+    vmData->setVmName(name);
+    vmData->setVmRepeatPauseDur(repeatPauseDur_);
+//    vmData->setVmDuration(messageDur_);
+    vmData->setVmRepeatFlag(ui->repeatChkBox->isChecked());
     accept();
 }
 
@@ -71,6 +94,8 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
+    ui->repeatChkBox->setChecked(vmData->getVmRepeatFlag());
+    ui->repeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
 
 }
@@ -187,6 +212,13 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
         KeyerJson kj;
         kj.parseConfig(val);
         // and now use it!
+
+        int buttonNumber = vmData->getvmButtonNum();
+        KeyerKeyJson &kkj = kj.kjj[buttonNumber];
+        ui->repeatChkBox->setChecked(kkj.autoRepeat);
+        ui->txVmNameEdit->setText(kkj.CQName);
+        ui->repeatPauseDur->setText(QString::number(kkj.autoRepeatDelay));
+
     }
     else
         if (key == rpcConstants::keyerMeter)

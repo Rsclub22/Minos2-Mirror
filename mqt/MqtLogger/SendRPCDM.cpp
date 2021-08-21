@@ -228,6 +228,22 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
         rpc.queueCall( keyerApp );
     }
 }
+void TSendDM::publishKeyerConfig(const QString &config)
+{
+    if (config.isEmpty())
+    {
+        RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "", psRevoked);
+    }
+    else
+    {
+        static QString old;
+        if (config != old)
+        {
+            old = config;
+            RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, config, psPublished);
+        }
+    }
+}
 //---------------------------------------------------------------------------
 
 void TSendDM::sendSpotToClusterServer(const Frequency &freq, const QString &call, const QString &loc )

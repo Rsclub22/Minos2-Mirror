@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>211</width>
-    <height>154</height>
+    <height>176</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -43,6 +43,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="pipCb">
+     <property name="text">
+      <string>Pip</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

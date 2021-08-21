@@ -266,6 +266,7 @@ class InterruptingPTTAction: public VoiceAction
 //=============================================================================
 class PlayAction: public VoiceAction
 {
+      int mno;
       QString fileName;
       long delayTime;
       long repeatTime;
@@ -281,7 +282,7 @@ class PlayAction: public VoiceAction
       virtual void linesModeChanged(int lmode) override;
       virtual void queueFinished() override;
       virtual void timeOut() override;
-      PlayAction( const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
+      PlayAction( int mno, const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
       virtual ~PlayAction() override;
       char statusLetter() override
       {

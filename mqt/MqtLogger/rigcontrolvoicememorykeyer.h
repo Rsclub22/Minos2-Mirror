@@ -32,7 +32,7 @@ public:
 
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
-    void voiceKeyerInit(int numButtons) override;
+    void voiceKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override;
     void stopMsg() override;
 
@@ -45,7 +45,7 @@ public:
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 

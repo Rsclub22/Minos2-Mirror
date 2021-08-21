@@ -1,12 +1,14 @@
 #ifndef EXTERNALMQTKEYER_H
 #define EXTERNALMQTKEYER_H
 
+#include "KeyerJson.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
 class ExternalMqtKeyer:public VoiceKeyerBase
 {
     Q_OBJECT
+    KeyerJson remoteConfig;
 public:
     ExternalMqtKeyer(QObject *parent =nullptr);
     virtual ~ExternalMqtKeyer() override;
@@ -14,7 +16,7 @@ public:
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
     // VoiceKeyerBase interface
-    virtual void voiceKeyerInit(int numButtons) override;
+    virtual void voiceKeyerInit(int &numButtons) override;
     virtual void sendMsgNum(int msgNum) override;
     virtual void stopMsg() override;
     virtual bool hasRecord() override{return true;}
@@ -24,11 +26,23 @@ public:
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
     virtual void setPttOnOff(bool onOff) override;
 
-    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams) override;
+    virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+    virtual bool hasPip() const override
+    {
+        return true;
+    }
+    virtual bool hasSetup() const override
+    {
+        return false;
+    }
+    virtual void setPip(bool) override;
+
+    virtual bool getPip() const override {return remoteConfig.pipEnable;}
+
 private slots:
-    void onDoPTT(bool onOff);
+    void onKeyerConfig(QString key, QString val);
 };
 
 #endif // EXTERNALMQTKEYER_H

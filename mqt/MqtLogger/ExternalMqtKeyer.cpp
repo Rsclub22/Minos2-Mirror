@@ -3,13 +3,12 @@
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
 #include "txVmExternalButtonDialog.h"
-#include "txVmExternalSetupDialog.h"
+#include "KeyerJson.h"
 
 #include "ExternalMqtKeyer.h"
 
 ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
-
 }
 
 ExternalMqtKeyer::~ExternalMqtKeyer()
@@ -26,7 +25,7 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
     voiceMemCap.setVmIdNum(VoiceKeyerId::ExternalVoiceKeyer);
     voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::ExternalVoiceKeyer]);
     voiceMemCap.setKeyerName(keyerName);
-    voiceMemCap.setNumVoiceKeys(8);
+    voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setSetupButton(false);
 
@@ -35,9 +34,10 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
 }
 
-void ExternalMqtKeyer::voiceKeyerInit(int numButtons)
+void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
-    Q_UNUSED(numButtons)
+    numButtons = VOICEKEYER_MAX_NUMBUTTONS;
+    connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &ExternalMqtKeyer::onKeyerConfig, Qt::UniqueConnection);
 }
 void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
@@ -54,29 +54,49 @@ void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)
 
 bool ExternalMqtKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
-    return false;
+    // This info should have come from the external keyer
+    vmParams.setVmRepeatFlag(remoteConfig.kjj[buttonNum].autoRepeat);
+    vmParams.setVmRepeatPauseDur(remoteConfig.kjj[buttonNum].autoRepeatDelay);
+    vmParams.setVmName(remoteConfig.kjj[buttonNum].CQName);
+    vmParams.setVmDuration(remoteConfig.kjj[buttonNum].CQLength);
+    vmParams.setvmButtonNum(buttonNum);
+
+    return true;
 }
-void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams )
+void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
+    // We should send this config to the external keyer
+
+    int buttonNum = vmParams_.getvmButtonNum();
+    KeyerKeyJson &kkj = remoteConfig.kjj[buttonNum];
+
+    kkj.keyno = buttonNum;
+    kkj.CQLength = vmParams_.getVmDuration();
+    kkj.CQName = vmParams_.getVmName();
+    kkj.autoRepeat = vmParams_.getVmRepeatFlag();
+    kkj.autoRepeatDelay = vmParams_.getVmRepeatPauseDur();
+
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact);
+    LogContainer->sendDM->publishKeyerConfig(config);
 
 }
 
 void ExternalMqtKeyer::setPttOnOff(bool onOff)
 {
-
+    Q_UNUSED(onOff)
 }
 
-int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("ExternalMqt");
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    // setup button shouldn't be visible, so shouldn't be called
 
-    TxVmExternalSetupDialog setup(voiceCap, tslf->txVmButtonsFrame);
-    setup.setWindowTitle(tr("Internal Voice Memory Setup"));
+    Q_UNUSED(voiceKeyerFactory)
+    Q_UNUSED(numButtons)
 
-    setup.setVmCommonParamsData(&vmCommonParams);
+    // This should never happen, so no tranlation required
+    mShowMessage("No setup available for external keyer ", nullptr);
 
-    return setup.exec();
+    return QDialog::Rejected;
 }
 int ExternalMqtKeyer::editButton(VoiceKeyerParams* vmData, QString title)
 {
@@ -90,7 +110,24 @@ int ExternalMqtKeyer::editButton(VoiceKeyerParams* vmData, QString title)
 
 }
 
-void ExternalMqtKeyer::onDoPTT(bool onOff)
+void ExternalMqtKeyer::setPip(bool p)
 {
+    remoteConfig.pipEnable = p;
+
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact);
+    LogContainer->sendDM->publishKeyerConfig(config);
+
+}
+
+void ExternalMqtKeyer::onKeyerConfig(QString key, QString val)
+{
+    if (key == rpcConstants::keyerConfig)
+    {
+        remoteConfig.parseConfig(val);
+        // and now use it!
+
+        emit remoteConfigChanged();
+
+    }
 
 }

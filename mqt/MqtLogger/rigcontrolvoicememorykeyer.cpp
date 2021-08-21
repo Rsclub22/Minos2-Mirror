@@ -42,9 +42,11 @@ void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
 }
 
 
-void RigControlVoiceMemoryKeyer::voiceKeyerInit(int numButtons)
+void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
-    Q_UNUSED(numButtons)
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+    numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
 }
 void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 {
@@ -97,18 +99,24 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
 
 }
 
-int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, VoiceKeyerCommonParams &vmCommonParams)
+int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    TxVmRigSetupDialog txVmSetupDialog(voiceCap, tslf->txVmButtonsFrame);
+    TxVmRigSetupDialog txVmSetupDialog(voiceCap, numButtons, tslf->txVmButtonsFrame);
     txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
 
-    txVmSetupDialog.setVmCommonParamsData(&vmCommonParams);
+    int ret = txVmSetupDialog.exec();
 
-    return txVmSetupDialog.exec();
-
+    if (ret == QDialog::Accepted)
+    {
+        numButtons = txVmSetupDialog.getNumButtons();
+        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+        QSettings config(fileName, QSettings::IniFormat);
+        config.setValue("Common/NumButtons", numButtons);
+    }
+    return ret;
 }
 
 int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
