@@ -13,6 +13,33 @@ KeyerJson::KeyerJson()
 
 }
 
+bool KeyerJson::getBool(QJsonObject o, QString key, bool def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isBool())
+    {
+        return pe.toBool();
+    }
+    return def;
+}
+int KeyerJson::getInt(QJsonObject o, QString key, int def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isDouble())
+    {
+        return pe.toDouble();
+    }
+    return def;
+}
+QString KeyerJson::getString(QJsonObject o, QString key, QString def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isString())
+    {
+        return pe.toString();
+    }
+    return def;
+}
 bool KeyerJson::parseConfig(QString conf)
 {
     QJsonParseError err;
@@ -22,11 +49,12 @@ bool KeyerJson::parseConfig(QString conf)
         if (json.isObject())
         {
             QJsonObject sconf = json.object();
-            QJsonValue pe = sconf.value("pipEnable");
-            if (pe.isBool())
-            {
-                pipEnable = pe.toBool();
-            }
+            pipEnable = getBool(sconf, "pipEnable", false);
+
+            recordSliderPosition = getInt(sconf, "record", 0);
+            replaySliderPosition = getInt(sconf, "replay", 0);
+            passthroughSliderPosition = getInt(sconf, "pass", 0);
+
             QJsonValue keys = sconf.value("keys");
             if (keys.isArray())
             {
@@ -40,10 +68,10 @@ bool KeyerJson::parseConfig(QString conf)
                     {
                         KeyerKeyJson &k = kjj[knum];
 
-                        k.CQLength = co.value("CQLength").toInt();
-                        k.CQName = co.value("CQName").toString();
-                        k.autoRepeat = co.value("autoRepeat").toBool();
-                        k.autoRepeatDelay = co.value("autoRepeatDelay").toInt();
+                        k.CQLength = getInt(co, "CQLength", 0);
+                        k.CQName = getString(co, "CQName", "");
+                        k.autoRepeat = getBool(co, "autoRepeat", false);
+                        k.autoRepeatDelay = getInt(co, "autoRepeatDelay", 0);
                     }
                 }
             }
@@ -59,12 +87,28 @@ bool KeyerJson::parseConfig(QString conf)
 
     return false;
 }
-QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format)
+QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force)
 {
     QJsonDocument json;
     QJsonObject sconf;
 
+    static int forceCount = 0;
+
+    if (format == QJsonDocument::Compact)
+    {
+        sconf.insert("forceCount", forceCount);
+        if (force)
+        {
+            forceCount++;
+        }
+    }
+
     sconf.insert("pipEnable", pipEnable);
+
+    sconf.insert("record", recordSliderPosition);
+    sconf.insert("replay", replaySliderPosition);
+    sconf.insert("pass", passthroughSliderPosition);
+
 
     QJsonArray ja;
     for (int i = 0; i < KEYERKEYS; i++)
@@ -109,7 +153,7 @@ bool KeyerJson::write(QString fileName)
         return false;
     }
 
-    QString conf = makeConfig(QJsonDocument::Indented);
+    QString conf = makeConfig(QJsonDocument::Indented, false);
     jf.write(conf.toUtf8());
 
     jf.close();

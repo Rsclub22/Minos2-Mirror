@@ -33,7 +33,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , bandMapLoaded(false)
     , logDataFromBandmapOrMemory(false)
     , qrzDisplayFrameLoaded(false)
-    , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
     , clusterClientLoaded(false)
@@ -2946,20 +2945,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
 
       // add the message into the error list
       errs.insert( &Validator::errDefs[ mess_no ], &Validator::errDefs[ mess_no ] );
-}
-
-//--------------------------------------------------------------
-
-// keyer
-
-
-void QSOLogFrame::setKeyerLoaded()
-{
-    keyerLoaded = true;
-}
-bool QSOLogFrame::isKeyerLoaded()
-{
-    return keyerLoaded;
 }
 
 //---------------------------------------------------------

@@ -248,15 +248,6 @@ void TLogContainer::on_TimeDisplayTimer( )
          ct->setScore( statbuf );
       }
       sblabel0->setText( statbuf );
-
-      if (ct)
-      {
-          TSingleLogFrame * lf = LogContainer ->findContest( ct );
-          ui->menuKeyer->menuAction()->setVisible(lf && lf->isKeyerLoaded());
-      }
-      else
-          ui->menuKeyer->menuAction()->setVisible(false);
-
    }
 
 }
@@ -534,19 +525,6 @@ void TLogContainer::setupMenus()
     //TabPopup.addAction(AnalyseMinosLogAction);
     newAction( QT_TR_NOOP("Cancel"), &TabPopup, &TLogContainer::CancelClick);
 
-    keyerRecordMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Record"));
-    keyerPlaybackMenu = newMenu(ui->menuKeyer, QT_TR_NOOP("Playback"));
-    KeyerToneAction = newAction(QT_TR_NOOP("Tune"), ui->menuKeyer, &TLogContainer::KeyerToneActionExecute);
-    KeyerTwoToneAction = newAction(QT_TR_NOOP("Two Tone"), ui->menuKeyer, &TLogContainer::KeyerTwoToneActionExecute);
-    KeyerStopAction = newAction(QT_TR_NOOP("Stop"), ui->menuKeyer, &TLogContainer::KeyerStopActionExecute);
-
-    for (int i = 1; i < 10; i++)
-    {
-        KeyerRecordAction = newAction(i, keyerRecordMenu, &TLogContainer::KeyerRecordActionExecute);
-        KeyerRecordAction->setData(i);
-        KeyerPlaybackAction = newAction(i, keyerPlaybackMenu, &TLogContainer::KeyerPlaybackActionExecute);
-        KeyerPlaybackAction->setData(i);
-    }
     HelpAction = newAction(QT_TR_NOOP("Help..."), ui->menuHelp, &TLogContainer::HelpActionExecute);
     HelpAboutAction = newAction(QT_TR_NOOP("About..."), ui->menuHelp, &TLogContainer::HelpAboutActionExecute);
 }
@@ -1255,38 +1233,6 @@ void TLogContainer::NextUnfilledActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     MinosLoggerEvents::SendNextUnfilled(ct);
-}
-void TLogContainer::KeyerToneActionExecute()
-{
-    emit sendKeyerTone( );
-}
-
-void TLogContainer::KeyerTwoToneActionExecute()
-{
-    emit sendKeyerTwoTone( );
-}
-
-void TLogContainer::KeyerStopActionExecute()
-{
-    emit sendKeyerStop( );
-}
-void TLogContainer::KeyerRecordActionExecute()
-{
-    QAction *qa = qobject_cast<QAction *>(sender());
-    if (qa)
-    {
-        int k = qa->data().toInt();
-        emit sendKeyerRecord( k );
-    }
-}
-void TLogContainer::KeyerPlaybackActionExecute()
-{
-    QAction *qa = qobject_cast<QAction *>(sender());
-    if (qa)
-    {
-        int k = qa->data().toInt();
-        emit sendKeyerPlay( k );
-    }
 }
 
 void TLogContainer::menuLogsActionExecute(bool)

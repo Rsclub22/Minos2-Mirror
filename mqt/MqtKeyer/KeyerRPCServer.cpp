@@ -86,8 +86,7 @@ void KeyerServer::publishConfig(const QString &config)
 {
     checkConnection();
 
-//    if (sendConfig)
-        KS->doPublishConfig(config);
+    KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
 void KeyerServer::doPublishSliders(int rec, int replay, int passthrough)

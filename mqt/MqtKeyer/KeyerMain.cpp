@@ -128,6 +128,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     inVolChange = true;
 
+    // Initially look in settings...
     int recordLevel = settings.value("RecordLevel", 0).toInt();
     int replayLevel = settings.value("ReplayLevel", 0).toInt();
     int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
@@ -194,15 +195,19 @@ void KeyerMain::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
-bool KeyerMain::writeConfig()
+bool KeyerMain::writeConfig(bool force)
 {
     bool ret = true;
     static QString old;
-    QString conf = masterConfig.makeConfig(QJsonDocument::Compact);
-    if (old != conf)
+    QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force);
+    if (force || old != conf)
     {
         ret = masterConfig.write("./Configuration/MinosKeyer.json");
-        KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact));
+        trace(QString("publishConfig force = %1").arg(force));
+
+        KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force));
+
+        old = conf;
     }
     return ret;
 }
@@ -281,7 +286,10 @@ void KeyerMain::lineTimerTimer( )
 
    if (currentKeyer)
    {
-       writeConfig();
+       masterConfig.recordSliderPosition = ui->recordSlider->value();
+       masterConfig.replaySliderPosition = ui->replaySlider->value();
+       masterConfig.passthroughSliderPosition = ui->passThroughSlider->value();
+       writeConfig(false);
 
        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
        KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
@@ -521,8 +529,8 @@ void KeyerMain::on_recordSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QSettings settings;
-        settings.setValue("RecordLevel", position);
+        masterConfig.recordSliderPosition = position;
+        writeConfig(false);
     }
     setVolumeMults();
 }
@@ -531,8 +539,8 @@ void KeyerMain::on_replaySlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QSettings settings;
-        settings.setValue("ReplayLevel", position);
+        masterConfig.replaySliderPosition = position;
+        writeConfig(false);
     }
     setVolumeMults();
 }
@@ -541,8 +549,8 @@ void KeyerMain::on_passThroughSlider_valueChanged(int position)
 {
     if (!inVolChange)
     {
-        QSettings settings;
-        settings.setValue("PassThroughLevel", position);
+        masterConfig.passthroughSliderPosition = position;
+        writeConfig(false);
     }
     setVolumeMults();
 }
@@ -584,13 +592,20 @@ void KeyerMain::doConfig(QString config)
         ui->delayEdit->setValue(kjj.autoRepeatDelay);
 
     }
+    else
+    {
+        writeConfig(true);
+        // the value change should cause a force publish. We have to set it back again or it stays there!
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
+    }
 }
 void doConfig(QString config)
 {
     keyerMain->doConfig(config);
 }
 
-void KeyerMain::on_keyCombo_currentIndexChanged(int index)
+void KeyerMain::on_keyCombo_currentIndexChanged(int /*index*/)
 {
     // fill the parameters in the box
     int fno = ui->keyCombo->currentText().toInt();

@@ -81,11 +81,6 @@
      <string>Tools</string>
     </property>
    </widget>
-   <widget class="QMenu" name="menuKeyer">
-    <property name="title">
-     <string>Keyer</string>
-    </property>
-   </widget>
    <widget class="QMenu" name="menuLogs">
     <property name="title">
      <string>Logs</string>
@@ -94,7 +89,6 @@
    <addaction name="menuFile"/>
    <addaction name="menuSearch"/>
    <addaction name="menuTools"/>
-   <addaction name="menuKeyer"/>
    <addaction name="menuLogs"/>
    <addaction name="menuHelp"/>
   </widget>

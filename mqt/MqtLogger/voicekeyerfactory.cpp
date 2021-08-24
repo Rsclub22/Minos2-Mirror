@@ -16,6 +16,8 @@
 #include "rigcontrolvoicememorykeyer.h"
 #include "InternalVoiceMemoryKeyer.h"
 #include "ExternalMqtKeyer.h"
+#include "tlogcontainer.h"
+#include "SendRPCDM.h"
 
 VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
@@ -48,7 +50,10 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     }
     else if (vmKeyerId == VoiceKeyerId::ExternalVoiceKeyer)
     {
-        return new ExternalMqtKeyer(this);
+        if (LogContainer->sendDM->isKeyerLoaded())
+        {
+            return new ExternalMqtKeyer(this);
+        }
     }
 
     return nullptr;

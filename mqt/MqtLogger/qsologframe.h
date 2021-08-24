@@ -26,7 +26,6 @@ public:
 
     void setAsEdit(bool s, QString b);
     void setBandMapLoaded(bool loaded);
-    void setKeyerLoaded();
     void setClusterClientLoaded(bool loaded);
     void setClusterServerLoaded(bool loaded);
 
@@ -201,9 +200,6 @@ private:
 
     bool qrzDisplayFrameLoaded;
     bool isQrzDisplayFrameLoaded();
-
-    bool keyerLoaded;
-    bool isKeyerLoaded();
 
     bool radioConnected;
     bool radioError;

@@ -13,7 +13,7 @@ ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : VoiceKeyerBase(parent)
 
 ExternalMqtKeyer::~ExternalMqtKeyer()
 {
-
+    LogContainer->sendDM->publishKeyerConfig("");
 }
 
 void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
@@ -38,6 +38,8 @@ void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &ExternalMqtKeyer::onKeyerConfig, Qt::UniqueConnection);
+    LogContainer->sendDM->publishKeyerConfig("config");
+
 }
 void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
@@ -76,7 +78,7 @@ void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
     kkj.autoRepeat = vmParams_.getVmRepeatFlag();
     kkj.autoRepeatDelay = vmParams_.getVmRepeatPauseDur();
 
-    QString config = remoteConfig.makeConfig(QJsonDocument::Compact);
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false);
     LogContainer->sendDM->publishKeyerConfig(config);
 
 }
@@ -114,7 +116,7 @@ void ExternalMqtKeyer::setPip(bool p)
 {
     remoteConfig.pipEnable = p;
 
-    QString config = remoteConfig.makeConfig(QJsonDocument::Compact);
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false);
     LogContainer->sendDM->publishKeyerConfig(config);
 
 }

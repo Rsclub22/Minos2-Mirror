@@ -30,10 +30,14 @@ public:
     KeyerJson();
 
     bool parseConfig(QString);
-    QString makeConfig(QJsonDocument::JsonFormat format);
+    QString makeConfig(QJsonDocument::JsonFormat format, bool force);
 
     bool read(QString fileName);
     bool write(QString fileName);
+private:
+    bool getBool(QJsonObject pe, QString key, bool def);
+    int getInt(QJsonObject pe, QString key, int def);
+    QString getString(QJsonObject o, QString key, QString def);
 };
 
 #endif // KEYERJSON_H

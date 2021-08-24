@@ -103,6 +103,7 @@ private:
     QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
+    QTimer *extKeyerConnectTimer = nullptr;
     QList<QShortcut *> shortCutKeyList;
 
     QString voiceKeyerType;
@@ -128,6 +129,7 @@ private:
     void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
+    void createKeyer(QString voiceKeyerName);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -139,6 +141,7 @@ private slots:
     void runButActivated(int buttonNumber);
     void onRemoteConfigChanged();
     void on_pipCb_stateChanged(int arg1);
+    void onExtConnect();
 };
 
 #endif // TXVMBUTTONSFRAME_H

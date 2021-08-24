@@ -99,8 +99,6 @@ private:
     QMenu *recentFilesMenu;
     QVector<QAction *> sessionActs;
     QMenu *sessionsMenu;
-    QMenu *keyerRecordMenu;
-    QMenu *keyerPlaybackMenu;
 
     QSharedPointer<HelpBrowser>  helpBrowser;
 
@@ -169,13 +167,6 @@ private:
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
 
-    QAction *KeyerToneAction;
-    QAction *KeyerTwoToneAction;
-    QAction *KeyerStopAction;
-
-    QAction *KeyerRecordAction;
-    QAction *KeyerPlaybackAction;
-
     QVector< QSharedPointer<QAction> > menuLogsActions;
 
     BaseContestLog *loadSession(QString sessName);
@@ -229,12 +220,6 @@ private slots:
 
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
-
-    void KeyerToneActionExecute();
-    void KeyerTwoToneActionExecute();
-    void KeyerStopActionExecute();
-    void KeyerRecordActionExecute();
-    void KeyerPlaybackActionExecute();
 
     void menuLogsActionExecute(bool);
 

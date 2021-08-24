@@ -137,7 +137,6 @@ void TSingleLogFrame::buildFrame()
 
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
-    connect(LogContainer->sendDM, &TSendDM::setKeyerLoaded, this, &TSingleLogFrame::on_KeyerLoaded);
 
 
     connect( QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &TSingleLogFrame::on_sectionResized);
@@ -157,7 +156,6 @@ TSingleLogFrame::TSingleLogFrame(QWidget *parent, BaseContestLog * contest) :
     ContestPage(parent, contest),
     ui(new Ui::TSingleLogFrame),
     bandMapLoaded(false),
-    keyerLoaded(false),
     lastStanzaCount( 0 )
 
 
@@ -1568,16 +1566,6 @@ void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData d
 
 
 //---------------------------------------------------------------------------
-void TSingleLogFrame::on_KeyerLoaded()
-{
-   keyerLoaded = true;
-   GJVQSOLogFrame->setKeyerLoaded();
-}
-bool TSingleLogFrame::isKeyerLoaded()
-{
-   return keyerLoaded;
-}
-
 
 void TSingleLogFrame::sendKeyerPlay( int fno )
 {

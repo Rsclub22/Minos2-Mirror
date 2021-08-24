@@ -230,13 +230,14 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
 }
 void TSendDM::publishKeyerConfig(const QString &config)
 {
+    static QString old("xxx");  // so it isn't initially empty
     if (config.isEmpty())
     {
+        old = config;
         RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "", psRevoked);
     }
     else
     {
-        static QString old;
         if (config != old)
         {
             old = config;
@@ -881,8 +882,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                 if ( k == rpcConstants::keyerReport )
                 {
                     if (keyerApp.isEmpty())
+                    {
                         keyerApp = PubSubName(an);
-                    emit setKeyerLoaded();
+                    }
+                    keyerLoaded = true;
                     sendKeyerUser();
                     LogContainer->setCaption( v );
                     traceMsg( "KeyerReport " + v );

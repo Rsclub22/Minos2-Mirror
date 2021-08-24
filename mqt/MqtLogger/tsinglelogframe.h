@@ -111,9 +111,6 @@ public:
 
     bool isRotatorLoaded();
 
-    bool keyerLoaded;
-    bool isKeyerLoaded();
-
     bool isRadioLoaded();
 
     bool qrzCallFrameLoaded;
@@ -231,8 +228,6 @@ private slots:
     void onColumnsChanged();
     void on_sectionResized(int, int, int);
     void EditContact(QSharedPointer<BaseContact> lct );
-
-    void on_KeyerLoaded();
 
     void on_SetRadioList();
     void on_SetMode(QString);

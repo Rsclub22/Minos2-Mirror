@@ -26,7 +26,7 @@ public:
     void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode);
 
     void doConfig(QString);
-    bool writeConfig();
+    bool writeConfig(bool force);
 private slots:
 
     void onStdInRead(QString);
