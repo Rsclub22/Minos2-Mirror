@@ -161,6 +161,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTurnOffOperatingFreqStrip , "bandmapTurnOffOperatingFreqStrip", false, QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapFollowRadioModeOperatingFreqStrip , "bandmapFollowRadioModeOperatingFreqStrip", true, QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapMouseInFrameDelay , "bandMapMouseInFrameDelay", true, QT_TR_NOOP("Bandmap Delay when mouse in frame"), QT_TR_NOOP("Bandmap Delay when mouse in frame"), false ) ) );
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTraceDebug , "bandmapTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpClusterTraceDebug , "clusterTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
 

@@ -1624,16 +1624,24 @@ bool BandmapClientFrame::event(QEvent *event)
 {
    if (event->type() == QEvent::Enter)
    {
-       setHoldUpdateFlag(true);
+       bool minBFlag;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
+       if (minBFlag)
+           setHoldUpdateFlag(true);
    }
    else if (event->type() == QEvent::Leave)
    {
-       mouseInFrameTimer->stop();
-       if (!purgeSpotFlag)
+       bool minBFlag;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
+       if (minBFlag)
        {
-           checkNewBandMapSpots();
+           mouseInFrameTimer->stop();
+           if (!purgeSpotFlag)
+           {
+               checkNewBandMapSpots();
+           }
+           setHoldUpdateFlag(false);
        }
-       setHoldUpdateFlag(false);
    }
    return QWidget::event(event);
 }
