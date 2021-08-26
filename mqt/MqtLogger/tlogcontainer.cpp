@@ -8,6 +8,7 @@
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
+#include "WindowsAppId.h"
 
 #include "tsinglelogframe.h"
 #include "taboutbox.h"
@@ -167,6 +168,11 @@ bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
         QToolTip::showText(helpEvent->globalPos(), toolTip);
         return true;
     }
+    if (event->type() == QEvent::Close)
+    {
+        clearWinAppId(this);
+    }
+
 
     return false;
 }
@@ -184,6 +190,9 @@ bool TLogContainer::show(int argc, char *argv[])
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemoryAction, this, &TLogContainer::mleSetMemoryAction);
 
     QMainWindow::show();
+
+    setWinAppId(this, QString("Minos2Qt.MqtLogger.SubScreen%1").arg(0) );
+
     if ( TAboutBox::ShowAboutBox( this, true ) == false )
     {
        close();

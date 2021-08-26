@@ -210,6 +210,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmt, "Content Margin Top", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmr, "Content Margin Right", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmb, "Content Margin Bottom", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpSeparateIcons, "SeparateIcons", false, "Separate Icons in Taskbar", "Separate Icons in Taskbar", false ) ) );
 
         break;
     case epENTRYPROFILE:

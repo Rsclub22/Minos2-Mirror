@@ -19,6 +19,7 @@ else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -
 #PRECOMPILED_HEADER = mqtUtils_pch.h
 
 SOURCES += \
+    WindowsAppId.cpp \
     delayedaction.cpp \
     fileutils.cpp \
     ConfigFile.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
     minossplitter.cpp
 
 HEADERS += \
+    WindowsAppId.h \
     baseconstants.h \
     delayedaction.h \
     fileutils.h \

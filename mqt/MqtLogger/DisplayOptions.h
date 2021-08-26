@@ -45,6 +45,8 @@ private:
     int cmr;
     int cmb;
 
+    bool sepIcons;
+
     void doFontChange();
 
     void doLanguageChange();

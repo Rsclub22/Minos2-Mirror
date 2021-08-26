@@ -747,6 +747,7 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
                || LogContainer->contestPageControls[i] == nullptr)
             {
                 ContestPageControl *cpc = new ContestPageControl();
+
                 cpc->setInstance(i);
                 if (i < LogContainer->contestPageControls.count())
                 {

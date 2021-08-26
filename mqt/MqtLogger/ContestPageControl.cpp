@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "WindowsAppId.h"
 
 #include <QSizeGrip>
 #include <QToolTip>
@@ -18,6 +19,7 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     ui(new Ui::ContestPageControl)
 {
     ui->setupUi(this);
+
     setWindowTitle(tr("Minos Contest Logger"));
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestShownChanged, this, &ContestPageControl::onContestShownChanged);
@@ -28,9 +30,20 @@ ContestPageControl::ContestPageControl(QWidget *parent) :
     tabBar()->installEventFilter(this);
 
 }
+ContestPageControl::~ContestPageControl()
+{
+    delete ui;
+}
 bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
 {
-    if (event->type() == QEvent::ToolTip)
+    if (event->type() == QEvent::Close)
+    {
+        if (instance > 0)
+        {
+            clearWinAppId(this);
+        }
+    }
+    else if (event->type() == QEvent::ToolTip)
     {
         QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
         int curtab = tabBar()->tabAt(helpEvent->pos());
@@ -91,11 +104,6 @@ bool ContestPageControl::eventFilter(QObject */*obj*/, QEvent *event)
     return false;
 }
 
-ContestPageControl::~ContestPageControl()
-{
-    delete ui;
-}
-
 int ContestPageControl::getInstance() const
 {
     return instance;
@@ -107,12 +115,33 @@ void ContestPageControl::setInstance(int value)
 
     if (instance > 0)
     {
+        // we seem to have to do the geometry before the appId stuff,
+        // or the geometry stuff doesn't work - don't know why!
+
         QSettings settings;
-        QByteArray geometry = settings.value(QString("screen%1/geometry").arg(getInstance())).toByteArray();
+        QByteArray geometry = settings.value(QString("screen%1/geometry").arg(instance)).toByteArray();
         if (geometry.size() > 0)
-            restoreGeometry(geometry);
+        {
+            bool restOk = restoreGeometry(geometry);
+            if (!restOk)
+            {
+                int a = 0;
+                a++;
+            }
+        }
 
         tabBar()->setVisible(false);
+        bool sep = false;
+        TContestApp::getContestApp() ->getBoolDisplayProfile( edpSeparateIcons, sep );
+
+        int subinst = 0;
+        if (sep)
+            subinst = instance;
+
+        // the string shoud be formed from "CompanyName.ProductName.SubProduct.VersionInformation"
+        // cf https://docs.microsoft.com/en-us/windows/win32/shell/appids
+
+        setWinAppId(this, QString("Minos2Qt.MqtLogger.SubScreen%1").arg(subinst) );
     }
 }
 

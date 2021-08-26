@@ -129,7 +129,8 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpcml,
                      edpcmt,
                      edpcmr,
-                     edpcmb
+                     edpcmb,
+                     edpSeparateIcons
                     };
 enum ENTRYPROFILE {eepCall,
                    eepMainOp, eepSecondOp,

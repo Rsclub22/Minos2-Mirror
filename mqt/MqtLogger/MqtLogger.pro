@@ -317,5 +317,5 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/libKeyerBase.a
 # include system libs last, so they get included for KeyerBase
 
 unix:!macos{ LIBS += -lasound}
-win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32}
+win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32 -lShlwapi}
 
