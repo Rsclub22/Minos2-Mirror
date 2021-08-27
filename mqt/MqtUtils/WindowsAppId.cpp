@@ -1,5 +1,6 @@
+#include <QWidget>
 
-#include <WinSDKVer.h>
+#ifdef Q_OS_WIN
 #define _WIN32_WINNT      _WIN32_WINNT_WIN7
 
 #include <SDKDDKVer.h>
@@ -7,8 +8,7 @@
 #include <propsys.h>
 #include <propkey.h>
 #include <shlwapi.h>
-
-#include <QWidget>
+#endif
 
 #include "WindowsAppId.h"
 
