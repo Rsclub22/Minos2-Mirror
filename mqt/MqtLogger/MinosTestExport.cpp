@@ -554,6 +554,7 @@ void MinosTestExport::exportRunMemory(QSharedPointer<QFile> expfd, MinosItem<mem
 
         st->addMember(mem.getValue().memno, "memno");
         st->addMember(mem.getValue().freq.str(), "freq");
+        st->addMember(mem.getValue().band, "band");
         st->addMember(mem.getValue().mode, "mode");
 
         sendRequest(expfd, "MinosRunMemory", st);

@@ -105,6 +105,7 @@ private:
     void loadRunButtonLabels();
     memoryData::memData getRunMemoryData(int memoryNumber);
     void setRunMemoryData(int memoryNumber, memoryData::memData m);
+    void clearRunMemoryData(int memoryNumber, memoryData::memData m);
     bool chkRadioFreqOnRunFreq();
     int otherButton(int buttonNumber);
 

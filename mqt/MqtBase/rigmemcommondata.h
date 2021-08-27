@@ -121,6 +121,7 @@ public:
 
     QString callsign;
     Frequency freq;
+    QString band;
     QString mode;
     QString locator;
     QString exchange;
@@ -136,6 +137,7 @@ public:
     {
         if (callsign.compare(rhs.callsign, Qt::CaseInsensitive) == 0
                 && freq == rhs.freq
+                && band == rhs.band
                 && mode.compare(rhs.mode, Qt::CaseInsensitive) == 0
                 && locator.compare(rhs.locator, Qt::CaseInsensitive) == 0
                 && exchange.compare(rhs.exchange, Qt::CaseInsensitive) == 0
