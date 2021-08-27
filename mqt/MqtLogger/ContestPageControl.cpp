@@ -122,12 +122,7 @@ void ContestPageControl::setInstance(int value)
         QByteArray geometry = settings.value(QString("screen%1/geometry").arg(instance)).toByteArray();
         if (geometry.size() > 0)
         {
-            bool restOk = restoreGeometry(geometry);
-            if (!restOk)
-            {
-                int a = 0;
-                a++;
-            }
+            restoreGeometry(geometry);
         }
 
         tabBar()->setVisible(false);
