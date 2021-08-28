@@ -260,7 +260,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1669"/>
+        <location filename="../bandmapclientframe.cpp" line="1677"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -338,124 +338,137 @@ Le mode calculé est %2</translation>
 <context>
     <name>ClusterBandmapConfigure</name>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="76"/>
         <source>Operating Freq Colour Band Follow Radio Mode </source>
-        <translation>Bande de couleurs de fréquence suivre mode de radio?</translation>
+        <translation type="vanished">Bande de couleurs de fréquence suivre mode de radio?</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <source>Old Bandmap</source>
         <translation>Vieux Carte des bandes</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="130"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="137"/>
         <source>HF</source>
         <translation>HF</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="214"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="221"/>
         <source>7 MHz</source>
         <translation>7 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="144"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="151"/>
         <source>1.8 MHz</source>
         <translation>1,8 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="172"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="179"/>
         <source>28 MHz</source>
         <translation>28 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="200"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="207"/>
         <source>21 MHz</source>
         <translation>21 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="158"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="165"/>
         <source>14 MHz</source>
         <translation>14 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="109"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="69"/>
+        <source>Turn Off Operating Frequency Colour Band</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="76"/>
+        <source>Operating Frequency Colour Band Follow Radio Mode </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
+        <source>Delay updates when mouse pointer is in the Bandmap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="116"/>
         <source>Cluster/Bandmap Distance</source>
         <translation>???What???</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="186"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="193"/>
         <source>3.5 MHz</source>
         <translation>3,5 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="254"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="261"/>
         <source>VHF/UHF</source>
         <translation>VHF/UHF</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="268"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="275"/>
         <source>144 MHz</source>
         <translation>144 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="282"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="289"/>
         <source>2300 MHz</source>
         <translation>2300 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="296"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="303"/>
         <source>432 MHz</source>
         <translation>432 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="310"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="317"/>
         <source>1296 MHz</source>
         <translation>1296 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="324"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="331"/>
         <source>3.4 GHz</source>
         <translation>3,4 GHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="338"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="345"/>
         <source>70 MHz</source>
         <translation>70 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="352"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="359"/>
         <source>50 MHz</source>
         <translation>50 MHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="366"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="373"/>
         <source>5.6 GHz</source>
         <translation>5,6 GHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="380"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="387"/>
         <source>10 GHz</source>
         <translation>10 GHz</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="411"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="418"/>
         <source>Default Distance when creating a new contest, you can change the distance during a contest, using the Filter Button.</source>
         <translation>Distance par défaut lors de la création d&apos;un nouveau concours, vous pouvez modifier la distance pendant un Concours par le bouton &apos;Filtre&apos;.</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="422"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="429"/>
         <source>Spot Less Than Distance</source>
         <translation>Spot à moins de distance</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="429"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="436"/>
         <source>Spot Greater Than Distance</source>
         <translation>Spot plus grand que le distance</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="69"/>
         <source>Turn Off Operating Freq Colour Band</source>
-        <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
+        <translation type="vanished">Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="30"/>
@@ -474,12 +487,12 @@ Le mode calculé est %2</translation>
         <translation>Configurer Cluster/Bandmap</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="184"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="143"/>
         <source>Distance Error - %1. Please enter a distance %2 to max %3</source>
         <translation>Erreur de distance - %1. Entrer une distance entre %2 et %3 SVP</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="185"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="144"/>
         <source>Distance Entry Error</source>
         <translation>Erreur d&apos;entrée de distance</translation>
     </message>
@@ -957,10 +970,10 @@ Le mode calculé est %2</translation>
     <name>ClusterClientFrame</name>
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
-        <location filename="../clusterclientframe.cpp" line="54"/>
-        <location filename="../clusterclientframe.cpp" line="1489"/>
-        <location filename="../clusterclientframe.cpp" line="1516"/>
-        <location filename="../clusterclientframe.cpp" line="1982"/>
+        <location filename="../clusterclientframe.cpp" line="44"/>
+        <location filename="../clusterclientframe.cpp" line="1479"/>
+        <location filename="../clusterclientframe.cpp" line="1506"/>
+        <location filename="../clusterclientframe.cpp" line="1972"/>
         <source>Cluster</source>
         <translation>Cluster</translation>
     </message>
@@ -1011,72 +1024,72 @@ Le mode calculé est %2</translation>
         <translation>Filtres</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="108"/>
+        <location filename="../clusterclientframe.cpp" line="98"/>
         <source>Set &amp;Freq</source>
         <translation>Définir &amp;Fréquences</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="109"/>
+        <location filename="../clusterclientframe.cpp" line="99"/>
         <source>Set &amp;Bearing</source>
         <translation>Définir la &amp;Direction</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="110"/>
+        <location filename="../clusterclientframe.cpp" line="100"/>
         <source>Send &amp;Log</source>
         <translation>Envoyer le &amp;Log</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="111"/>
+        <location filename="../clusterclientframe.cpp" line="101"/>
         <source>Send &amp;Memory</source>
         <translation>Envoyer en &amp;Mémoire</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="112"/>
+        <location filename="../clusterclientframe.cpp" line="102"/>
         <source>&amp;Resend Cluster Spots</source>
         <translation>&amp;Renvoyer les spots de cluster</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="113"/>
+        <location filename="../clusterclientframe.cpp" line="103"/>
         <source>Clear &amp;Spot</source>
         <translation>Effacer &amp;Spot</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="114"/>
+        <location filename="../clusterclientframe.cpp" line="104"/>
         <source>Clear &amp;All Spots</source>
         <translation>Effacer &amp;Tous les spots</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="289"/>
+        <location filename="../clusterclientframe.cpp" line="279"/>
         <source>DX Spots</source>
         <translation>DX Spots</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="349"/>
+        <location filename="../clusterclientframe.cpp" line="339"/>
         <source>Search Spots</source>
         <translation>Chercher les Spots</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="408"/>
+        <location filename="../clusterclientframe.cpp" line="398"/>
         <source>Callsign Spots</source>
         <translation>Spots d&apos;Indicatifs surveillés</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="471"/>
+        <location filename="../clusterclientframe.cpp" line="461"/>
         <source>Locator Spots</source>
         <translation>Spots des Locators surveillés</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1490"/>
+        <location filename="../clusterclientframe.cpp" line="1480"/>
         <source>Please confirm you want to delete this spot?</source>
         <translation>Voulez-vous vraiment supprimer ce Spot?</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1517"/>
+        <location filename="../clusterclientframe.cpp" line="1507"/>
         <source>Please confirm you want to delete all the spots in the %1 tab?</source>
         <translation>Voulez-vous vraiment supprimer tous les spots de l&apos;onglet%1?</translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1986"/>
+        <location filename="../clusterclientframe.cpp" line="1976"/>
         <source> - Mouse in frame, updates paused</source>
         <translation> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -1509,23 +1522,23 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Minos</translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="21"/>
-        <location filename="../ContestPageControl.cpp" line="221"/>
+        <location filename="../ContestPageControl.cpp" line="23"/>
+        <location filename="../ContestPageControl.cpp" line="245"/>
         <source>Minos Contest Logger</source>
         <translation>Minos Enregistreur de Concours</translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="57"/>
+        <location filename="../ContestPageControl.cpp" line="70"/>
         <source>Run Frequency 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="67"/>
+        <location filename="../ContestPageControl.cpp" line="80"/>
         <source>Run Frequency 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContestPageControl.cpp" line="151"/>
+        <location filename="../ContestPageControl.cpp" line="175"/>
         <source> (min)</source>
         <translation> (min)</translation>
     </message>
@@ -1701,48 +1714,53 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>Configurer les répertoires par défaut</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="35"/>
+        <location filename="../defdirsdlg.ui" line="33"/>
+        <source>Protect contests by Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../defdirsdlg.ui" line="42"/>
         <source>Contest Age Protection after</source>
         <translation type="unfinished">Protéger le Concours après</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="52"/>
+        <location filename="../defdirsdlg.ui" line="59"/>
         <source>days</source>
         <translation type="unfinished">jours</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="87"/>
+        <location filename="../defdirsdlg.ui" line="94"/>
         <source>NB HF Contest support is VERY experimental, and incomplete. Use at your own risk!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="97"/>
+        <location filename="../defdirsdlg.ui" line="104"/>
         <source>HF Contests Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="119"/>
+        <location filename="../defdirsdlg.ui" line="126"/>
         <source>Logs Directory</source>
         <translation>Répertoire des Logs</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="129"/>
-        <location filename="../defdirsdlg.ui" line="150"/>
+        <location filename="../defdirsdlg.ui" line="136"/>
+        <location filename="../defdirsdlg.ui" line="157"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.ui" line="140"/>
+        <location filename="../defdirsdlg.ui" line="147"/>
         <source>Lists Directory</source>
         <translation>Répertoire des Listes</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="109"/>
+        <location filename="../defdirsdlg.cpp" line="120"/>
         <source>Set Default Logs Directory</source>
         <translation>Définir le répertoire par défaut des Logs</translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="118"/>
+        <location filename="../defdirsdlg.cpp" line="129"/>
         <source>Set Default Lists Directory</source>
         <translation>Définir le répertoire par défaut des Listes</translation>
     </message>
@@ -1793,6 +1811,11 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <location filename="../DisplayOptions.ui" line="131"/>
         <source>Show Operators</source>
         <translation>Visualiser les opérateurs</translation>
+    </message>
+    <message>
+        <location filename="../DisplayOptions.ui" line="369"/>
+        <source>Separate Logger Icons on Taskbar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Contest Age Protection after</source>
@@ -1848,7 +1871,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.cpp" line="200"/>
+        <location filename="../DisplayOptions.cpp" line="213"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation>Les paramètres de police ne fonctionneront pas si la variable d&apos;environnement QT_QPA_PLATFORMTHEME est définie sur qt5ct</translation>
     </message>
@@ -2060,94 +2083,94 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <translation>La création du fichier %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="449"/>
+        <location filename="../LoggerContest.cpp" line="462"/>
         <source>(read) seek failed!</source>
         <translation>(Lire) la recherche a échoué!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="456"/>
+        <location filename="../LoggerContest.cpp" line="469"/>
         <source>Short read</source>
         <translation>Lecture courte</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="469"/>
+        <location filename="../LoggerContest.cpp" line="482"/>
         <source>Invalid block number for write!!</source>
         <translation>Numéro de bloc non valide pour l&apos;écriture!!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="474"/>
-        <location filename="../LoggerContest.cpp" line="1929"/>
+        <location filename="../LoggerContest.cpp" line="487"/>
+        <location filename="../LoggerContest.cpp" line="1982"/>
         <source>(write) seek failed!</source>
         <translation>(Écriture) la recherche a échoué!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="479"/>
-        <location filename="../LoggerContest.cpp" line="1049"/>
-        <location filename="../LoggerContest.cpp" line="1062"/>
-        <location filename="../LoggerContest.cpp" line="1068"/>
+        <location filename="../LoggerContest.cpp" line="492"/>
+        <location filename="../LoggerContest.cpp" line="1092"/>
+        <location filename="../LoggerContest.cpp" line="1105"/>
+        <location filename="../LoggerContest.cpp" line="1111"/>
         <source>bad reply from write!</source>
         <translation>mauvaise réponse depuis l&apos;écriture!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="566"/>
+        <location filename="../LoggerContest.cpp" line="579"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation>Insérer après le dernier contact - non autorisé. Merci de signaler un bug!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="722"/>
+        <location filename="../LoggerContest.cpp" line="765"/>
         <source>.GJV should have been opened read only!</source>
         <translation>.GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="816"/>
+        <location filename="../LoggerContest.cpp" line="859"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation>Fichier de Concours .GJV - bloc 0 non valide</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="823"/>
+        <location filename="../LoggerContest.cpp" line="866"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation>Format de fichier non valide (%1,%2 attendu)</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="955"/>
+        <location filename="../LoggerContest.cpp" line="998"/>
         <source>Unknown Country  </source>
         <translation>Pays inconnu  </translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="961"/>
+        <location filename="../LoggerContest.cpp" line="1004"/>
         <source>Unknown District   </source>
         <translation>District inconnu   </translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="987"/>
-        <location filename="../LoggerContest.cpp" line="1139"/>
+        <location filename="../LoggerContest.cpp" line="1030"/>
+        <location filename="../LoggerContest.cpp" line="1182"/>
         <source>Please give first serial to be written</source>
         <translation>Spécifier le premier numéro de série à écrire SVP</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="989"/>
-        <location filename="../LoggerContest.cpp" line="1141"/>
+        <location filename="../LoggerContest.cpp" line="1032"/>
+        <location filename="../LoggerContest.cpp" line="1184"/>
         <source>Please give last serial to be written</source>
         <translation>Spécifier le dernier numéro de série à écrire SVP</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="995"/>
-        <location filename="../LoggerContest.cpp" line="1147"/>
+        <location filename="../LoggerContest.cpp" line="1038"/>
+        <location filename="../LoggerContest.cpp" line="1190"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation>Écriture de tous les contacts entre la séquence %1 et %2 inclus</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1038"/>
+        <location filename="../LoggerContest.cpp" line="1081"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation>Exporté par Minos Logger Version %1 %2</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1040"/>
+        <location filename="../LoggerContest.cpp" line="1083"/>
         <source>From file %1</source>
         <translation>Depuis le fichier %1</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1922"/>
+        <location filename="../LoggerContest.cpp" line="1975"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation>Echec de l&apos;ouverture du fichier pour la surveillance de %1 : %2</translation>
     </message>
@@ -2183,7 +2206,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="618"/>
+        <location filename="../MinosTestExport.cpp" line="619"/>
         <source>bad reply from write!</source>
         <translation>mauvaise réponse depuis l&apos;écriture!</translation>
     </message>
@@ -2371,7 +2394,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="602"/>
+        <location filename="../qsologframe.cpp" line="599"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -2481,42 +2504,42 @@ to</source>
         <translation>Effacé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="56"/>
+        <location filename="../qsologframe.cpp" line="53"/>
         <source>Callsign (F1)</source>
         <translation>Indicatif d&apos;appel (F1)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="62"/>
+        <location filename="../qsologframe.cpp" line="59"/>
         <source>RS(T)Tx(F2)</source>
         <translation>RS(T)Tx(F2)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="68"/>
+        <location filename="../qsologframe.cpp" line="65"/>
         <source>Serial Tx</source>
         <translation>Numéro de série Tx</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="75"/>
+        <location filename="../qsologframe.cpp" line="72"/>
         <source>RS(T)Rx(F3)</source>
         <translation>RS(T)Rx(F3)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="81"/>
+        <location filename="../qsologframe.cpp" line="78"/>
         <source>Serial Rx (F4)</source>
         <translation>Numéro de série Rx (F4)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="87"/>
+        <location filename="../qsologframe.cpp" line="84"/>
         <source>Loc (F5)</source>
         <translation>Loc (F5)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="93"/>
+        <location filename="../qsologframe.cpp" line="90"/>
         <source>Exchange (F6)</source>
         <translation>Échange (F6)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="99"/>
+        <location filename="../qsologframe.cpp" line="96"/>
         <source>Comments</source>
         <translation>Commentaires</translation>
     </message>
@@ -2587,17 +2610,17 @@ to</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="431"/>
+        <location filename="../qsologframe.cpp" line="428"/>
         <source>Return to Log</source>
         <translation>Retourner au Log</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="611"/>
+        <location filename="../qsologframe.cpp" line="608"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1867"/>
+        <location filename="../qsologframe.cpp" line="1864"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2608,57 +2631,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2063"/>
+        <location filename="../qsologframe.cpp" line="2060"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2067"/>
+        <location filename="../qsologframe.cpp" line="2064"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2071"/>
+        <location filename="../qsologframe.cpp" line="2068"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2079"/>
+        <location filename="../qsologframe.cpp" line="2076"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2389"/>
+        <location filename="../qsologframe.cpp" line="2386"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2396"/>
+        <location filename="../qsologframe.cpp" line="2393"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2425"/>
+        <location filename="../qsologframe.cpp" line="2422"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1)  </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2490"/>
+        <location filename="../qsologframe.cpp" line="2487"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2492"/>
+        <location filename="../qsologframe.cpp" line="2489"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2831"/>
+        <location filename="../qsologframe.cpp" line="2828"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2866"/>
+        <location filename="../qsologframe.cpp" line="2863"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3020,7 +3043,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="194"/>
-        <location filename="../rigcontrolframe.cpp" line="558"/>
+        <location filename="../rigcontrolframe.cpp" line="559"/>
         <source>On</source>
         <translation>Actif</translation>
     </message>
@@ -3056,48 +3079,48 @@ Non - Ignorer les modifications</translation>
         <translation>Vol</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="565"/>
+        <location filename="../rigcontrolframe.cpp" line="566"/>
         <source>Off</source>
         <translation>Éteint</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1143"/>
+        <location filename="../rigcontrolframe.cpp" line="1144"/>
         <source>Selected radio details were not found, please add radio or restart rigcontrol!</source>
         <translation>Radio sélectionnée aucun détail trouvé, ajouter une bande ou transverter SVP!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1179"/>
+        <location filename="../rigcontrolframe.cpp" line="1180"/>
         <source>Radio Bandlist is empty!</source>
         <translatorcomment>Liste des bandes est vide!</translatorcomment>
         <translation>La liste des bandes est vide!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1188"/>
+        <location filename="../rigcontrolframe.cpp" line="1189"/>
         <source>Radio has no available bands</source>
         <translation>La radio n&apos;a pas de bandes disponibles</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1285"/>
+        <location filename="../rigcontrolframe.cpp" line="1286"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1396"/>
+        <location filename="../rigcontrolframe.cpp" line="1397"/>
         <source>Freq out of contest band</source>
         <translation>Fréquence hors bande du Concours</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1563"/>
+        <location filename="../rigcontrolframe.cpp" line="1564"/>
         <source>Error: %1</source>
         <translation>Erreur: %1</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1570"/>
+        <location filename="../rigcontrolframe.cpp" line="1571"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rigcontrolframe.cpp" line="1591"/>
+        <location filename="../rigcontrolframe.cpp" line="1592"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
@@ -3105,7 +3128,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlVoiceMemoryKeyer</name>
     <message>
-        <location filename="../rigcontrolvoicememorykeyer.cpp" line="106"/>
+        <location filename="../rigcontrolvoicememorykeyer.cpp" line="108"/>
         <source>Rig Control Voice Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3186,57 +3209,57 @@ Non - Ignorer les modifications</translation>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="80"/>
+        <location filename="../RigMemoryFrame.cpp" line="81"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="81"/>
+        <location filename="../RigMemoryFrame.cpp" line="82"/>
         <source>&amp;Set Bearing</source>
         <translation>&amp;Définir la direction</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="82"/>
+        <location filename="../RigMemoryFrame.cpp" line="83"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="83"/>
+        <location filename="../RigMemoryFrame.cpp" line="84"/>
         <source>&amp;Write</source>
         <translation>&amp;Écrire</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="84"/>
+        <location filename="../RigMemoryFrame.cpp" line="85"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="85"/>
+        <location filename="../RigMemoryFrame.cpp" line="86"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="87"/>
+        <location filename="../RigMemoryFrame.cpp" line="88"/>
         <source>Clear &amp;All</source>
         <translation>Effacer &amp;Tout</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="88"/>
+        <location filename="../RigMemoryFrame.cpp" line="89"/>
         <source>Clear Wor&amp;ked</source>
         <translation>Effacer &amp;Contacté</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="529"/>
+        <location filename="../RigMemoryFrame.cpp" line="530"/>
         <source>M%1 - Write</source>
         <translation>M%1 - Écrire</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="560"/>
+        <location filename="../RigMemoryFrame.cpp" line="561"/>
         <source>M%1 - Edit</source>
         <translation>M%1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="590"/>
+        <location filename="../RigMemoryFrame.cpp" line="591"/>
         <source>Please confirm deleting all memories</source>
         <translation>Veuillez confirmer supprimer tous les Mémoires</translation>
     </message>
@@ -3244,42 +3267,42 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigMemoryGridModel</name>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="21"/>
+        <location filename="../RigMemoryFrame.cpp" line="22"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="22"/>
+        <location filename="../RigMemoryFrame.cpp" line="23"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="23"/>
+        <location filename="../RigMemoryFrame.cpp" line="24"/>
         <source>Brg</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="24"/>
+        <location filename="../RigMemoryFrame.cpp" line="25"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="25"/>
+        <location filename="../RigMemoryFrame.cpp" line="26"/>
         <source>Time</source>
         <translation>L&apos;Heure</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="26"/>
+        <location filename="../RigMemoryFrame.cpp" line="27"/>
         <source>Wkd</source>
         <translation>Contacté</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="704"/>
+        <location filename="../RigMemoryFrame.cpp" line="705"/>
         <source>Y</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../RigMemoryFrame.cpp" line="704"/>
+        <location filename="../RigMemoryFrame.cpp" line="705"/>
         <source>N</source>
         <translation>Non</translation>
     </message>
@@ -3303,7 +3326,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="176"/>
-        <location filename="../rotcontrolframe.cpp" line="606"/>
+        <location filename="../rotcontrolframe.cpp" line="601"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
@@ -3314,8 +3337,8 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rotcontrolframe.ui" line="166"/>
-        <location filename="../rotcontrolframe.cpp" line="484"/>
-        <location filename="../rotcontrolframe.cpp" line="491"/>
+        <location filename="../rotcontrolframe.cpp" line="483"/>
+        <location filename="../rotcontrolframe.cpp" line="490"/>
         <source>Turn</source>
         <translation>Tourner</translation>
     </message>
@@ -3340,62 +3363,62 @@ Non - Ignorer les modifications</translation>
         <translation>+3</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="237"/>
+        <location filename="../rotcontrolframe.cpp" line="236"/>
         <source>Bearing empty or invalid</source>
         <translation>Direction vide ou invalide</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="247"/>
+        <location filename="../rotcontrolframe.cpp" line="246"/>
         <source>Bearing too large - %1</source>
         <translation>Direction trop grande -%1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="255"/>
+        <location filename="../rotcontrolframe.cpp" line="254"/>
         <source>Bearing too small - %1</source>
         <translation>Direction trop petite - %1</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="501"/>
-        <location filename="../rotcontrolframe.cpp" line="508"/>
+        <location filename="../rotcontrolframe.cpp" line="500"/>
+        <location filename="../rotcontrolframe.cpp" line="507"/>
         <source>(CCW) Left</source>
         <translation>Sens antihoraire (à gauche)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="515"/>
-        <location filename="../rotcontrolframe.cpp" line="522"/>
+        <location filename="../rotcontrolframe.cpp" line="514"/>
+        <location filename="../rotcontrolframe.cpp" line="521"/>
         <source>(CW) Right</source>
         <translation>Sens horaire (à droite)</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="583"/>
-        <location filename="../rotcontrolframe.cpp" line="646"/>
+        <location filename="../rotcontrolframe.cpp" line="578"/>
+        <location filename="../rotcontrolframe.cpp" line="641"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="592"/>
-        <location filename="../rotcontrolframe.cpp" line="652"/>
-        <location filename="../rotcontrolframe.cpp" line="670"/>
+        <location filename="../rotcontrolframe.cpp" line="587"/>
+        <location filename="../rotcontrolframe.cpp" line="647"/>
+        <location filename="../rotcontrolframe.cpp" line="665"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="615"/>
+        <location filename="../rotcontrolframe.cpp" line="610"/>
         <source>Rotating CCW</source>
         <translation>Tournant sens antihoraire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="625"/>
+        <location filename="../rotcontrolframe.cpp" line="620"/>
         <source>Rotating CW</source>
         <translation>Tournant sens horaire</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="636"/>
+        <location filename="../rotcontrolframe.cpp" line="631"/>
         <source>Turning to bearing</source>
         <translation>Passant à la direction choisie</translation>
     </message>
     <message>
-        <location filename="../rotcontrolframe.cpp" line="658"/>
+        <location filename="../rotcontrolframe.cpp" line="653"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -3479,47 +3502,47 @@ Non - Ignorer les modifications</translation>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="82"/>
+        <location filename="../runbuttonsframe.cpp" line="83"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="88"/>
+        <location filename="../runbuttonsframe.cpp" line="89"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="347"/>
+        <location filename="../runbuttonsframe.cpp" line="348"/>
         <source>Run</source>
         <translation>Run</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="358"/>
+        <location filename="../runbuttonsframe.cpp" line="359"/>
         <source>Run %1 - New</source>
         <translation>Run %1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="376"/>
+        <location filename="../runbuttonsframe.cpp" line="377"/>
         <source>Run %1 - Edit</source>
         <translation>Run %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="428"/>
+        <location filename="../runbuttonsframe.cpp" line="430"/>
         <source>Restore .%1    </source>
         <translation>Restaurer .%1    </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="429"/>
+        <location filename="../runbuttonsframe.cpp" line="431"/>
         <source>Restore freq: </source>
         <translation>Restaurer la fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="423"/>
+        <location filename="../runbuttonsframe.cpp" line="425"/>
         <source>Freq: </source>
         <translation>Fréquence: </translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="424"/>
+        <location filename="../runbuttonsframe.cpp" line="426"/>
         <source>Mode: </source>
         <translation>Mode: </translation>
     </message>
@@ -3527,27 +3550,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="589"/>
+        <location filename="../runbuttonsframe.cpp" line="596"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteint</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="590"/>
+        <location filename="../runbuttonsframe.cpp" line="597"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="591"/>
+        <location filename="../runbuttonsframe.cpp" line="598"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="592"/>
+        <location filename="../runbuttonsframe.cpp" line="599"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="593"/>
+        <location filename="../runbuttonsframe.cpp" line="600"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
@@ -3799,7 +3822,7 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>ScreenConfigFie</name>
     <message>
-        <location filename="../ScreenConfigFile.cpp" line="237"/>
+        <location filename="../ScreenConfigFile.cpp" line="236"/>
         <source>Invalid or missing screen configurations; using built in defaults</source>
         <translation>Configurations d&apos;écran non valides ou manquantes; en utilisant les valeurs par défaut intégrées</translation>
     </message>
@@ -4023,42 +4046,47 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     </message>
     <message>
         <location filename="../taboutbox.ui" line="147"/>
+        <source>Protect Contests by Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../taboutbox.ui" line="167"/>
         <source>Contest Age Protection after</source>
         <translation>Protéger le Concours après</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="164"/>
+        <location filename="../taboutbox.ui" line="184"/>
         <source>days</source>
         <translation>jours</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="184"/>
+        <location filename="../taboutbox.ui" line="204"/>
         <source>Current Contest Set</source>
         <translation>Ensemble de Concours actuel</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="194"/>
+        <location filename="../taboutbox.ui" line="214"/>
         <source>Manage Contest Sets</source>
         <translation>Gérer les ensembles de Concours</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="219"/>
+        <location filename="../taboutbox.ui" line="239"/>
         <source>Logger Only</source>
         <translatorcomment>uniquement?</translatorcomment>
         <translation>Enregistreur seulement</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="239"/>
+        <location filename="../taboutbox.ui" line="259"/>
         <source>Exit</source>
         <translation>Quitter</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="263"/>
+        <location filename="../taboutbox.ui" line="283"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../taboutbox.ui" line="286"/>
+        <location filename="../taboutbox.ui" line="306"/>
         <source>Apps</source>
         <translation>Applications</translation>
     </message>
@@ -4806,17 +4834,16 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Outils</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.ui" line="86"/>
         <source>Keyer</source>
-        <translation>Manipulateur</translation>
+        <translation type="vanished">Manipulateur</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.ui" line="91"/>
+        <location filename="../tlogcontainer.ui" line="86"/>
         <source>Logs</source>
         <translation>Logs</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="74"/>
+        <location filename="../tlogcontainer.cpp" line="75"/>
         <location filename="../tlogcontainer.cpp" line="354"/>
         <source>Minos Contest Logger</source>
         <translation>Minos Enregistreur deu Concours</translation>
@@ -4980,63 +5007,58 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="537"/>
         <source>Record</source>
-        <translation>Enregistrer</translation>
+        <translation type="vanished">Enregistrer</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="538"/>
         <source>Playback</source>
-        <translation>Relecture</translation>
+        <translation type="vanished">Relecture</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="539"/>
         <source>Tune</source>
-        <translation>Accorder l&apos;émetteur</translation>
+        <translation type="vanished">Accorder l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="540"/>
         <source>Two Tone</source>
-        <translation>Deux tons</translation>
+        <translation type="vanished">Deux tons</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="541"/>
         <source>Stop</source>
-        <translation>Arrêter</translation>
+        <translation type="vanished">Arrêter</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="550"/>
+        <location filename="../tlogcontainer.cpp" line="537"/>
         <source>Help...</source>
         <translation>Aide...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="551"/>
+        <location filename="../tlogcontainer.cpp" line="538"/>
         <source>About...</source>
         <translation>A propos...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="727"/>
+        <location filename="../tlogcontainer.cpp" line="714"/>
         <source>Documentation File %1 doesn&apos;t exist.</source>
         <translation>Le fichier de documentation %1 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="811"/>
-        <location filename="../tlogcontainer.cpp" line="895"/>
+        <location filename="../tlogcontainer.cpp" line="798"/>
+        <location filename="../tlogcontainer.cpp" line="882"/>
         <source>Failed to delete %1</source>
         <translation>Échec pour la suppression %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="853"/>
+        <location filename="../tlogcontainer.cpp" line="840"/>
         <source>Save new contest as</source>
         <translation>Enregistrer le nouveau Concours sous</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="855"/>
+        <location filename="../tlogcontainer.cpp" line="842"/>
         <source>Minos contest files %1</source>
         <translation>Fichiers du Concours Minos %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="863"/>
+        <location filename="../tlogcontainer.cpp" line="850"/>
         <source>%1 
 already exists.
 
@@ -5047,7 +5069,7 @@ existe déjà.
 Veuillez choisir un nouveau nom.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="882"/>
+        <location filename="../tlogcontainer.cpp" line="869"/>
         <source>Failed to rename
 %1
  as 
@@ -5061,23 +5083,23 @@ comme
 Veuillez choisir un nouveau nom.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="920"/>
-        <location filename="../tlogcontainer.cpp" line="1204"/>
+        <location filename="../tlogcontainer.cpp" line="907"/>
+        <location filename="../tlogcontainer.cpp" line="1191"/>
         <source>Minos contest files (*.minos *.Minos);;All Files (*.*)</source>
         <translation>Fichiers du Concours Minos (* .minos * .Minos) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="924"/>
+        <location filename="../tlogcontainer.cpp" line="911"/>
         <source>Open contests</source>
         <translation>Ouvrir les Concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="961"/>
+        <location filename="../tlogcontainer.cpp" line="948"/>
         <source>Use this combo for file types (*.*);;Reg1Test Files (*.edi);;GJV contest files (*.gjv);;RSGB Log Files (*.log);;ADIF Files (*.adi);;All Files (*.*)</source>
         <translation>Utiliser ce combo pour les types de fichiers (*. *) ;; Fichiers Reg1Test (* .edi) ;; Fichiers GJV Concours(* .gjv) ;; Fichiers RSGB Log (* .log) ;; Fichiers ADIF (* .adi); ;Tous les fichiers (*.*)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="969"/>
+        <location filename="../tlogcontainer.cpp" line="956"/>
         <source>Import %1 contests</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5086,7 +5108,7 @@ Veuillez choisir un nouveau nom.</translation>
         <translation type="vanished">Importer les Concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1107"/>
+        <location filename="../tlogcontainer.cpp" line="1094"/>
         <source>This action will clear registry entries for all of the apps within the Minos V2 Logger.<byte value="xd"/>
 <byte value="xd"/>
 Please confirm this action by pressing &quot;Yes&quot;.</source>
@@ -5095,105 +5117,105 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1121"/>
+        <location filename="../tlogcontainer.cpp" line="1108"/>
         <source>Clear registry only works under Windows</source>
         <translation>L&apos;effacement des registres ne fonctionne que sous Windows</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1137"/>
+        <location filename="../tlogcontainer.cpp" line="1124"/>
         <source>ADIF files (*.adi);;All Files (*.*)</source>
         <translation>Fichiers ADIF (* .adi) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1141"/>
+        <location filename="../tlogcontainer.cpp" line="1128"/>
         <source>Open ADIF for append</source>
         <translation>Ouvrir ADIF pour ajouter</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1155"/>
+        <location filename="../tlogcontainer.cpp" line="1142"/>
         <source>Failed to open ADIF file %1 : %2</source>
         <translation>L&apos;ouverture du fichier ADIF %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1164"/>
+        <location filename="../tlogcontainer.cpp" line="1151"/>
         <source>Failed to append %1</source>
         <translation>Échec de l&apos;ajout de %1</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1208"/>
+        <location filename="../tlogcontainer.cpp" line="1195"/>
         <source>Open contest for Analysis</source>
         <translation>Ouvrir le Concours pour analyse</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1220"/>
+        <location filename="../tlogcontainer.cpp" line="1207"/>
         <source>Failed to open Contest Log file %1 : %2</source>
         <translation>L&apos;ouverture du fichier %1 a échoué : %2</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1228"/>
+        <location filename="../tlogcontainer.cpp" line="1215"/>
         <source>Analysis of %1 complete; look in the trace log for analysis.</source>
         <translation>Analyse de %1 terminée; regarder dans le journal de suivi pour l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1244"/>
+        <location filename="../tlogcontainer.cpp" line="1231"/>
         <source>You may need to close and reload Minos to have these settings applied</source>
         <translation>Vous devrez peut-être fermer et redémarrer Minos pour appliquer ces paramètres</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1344"/>
-        <location filename="../tlogcontainer.cpp" line="1870"/>
+        <location filename="../tlogcontainer.cpp" line="1299"/>
+        <location filename="../tlogcontainer.cpp" line="1825"/>
         <source>Contest Sets</source>
         <translation>Ensembles de Concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1429"/>
+        <location filename="../tlogcontainer.cpp" line="1384"/>
         <source>Creating </source>
         <translation>Création </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1429"/>
-        <location filename="../tlogcontainer.cpp" line="1977"/>
+        <location filename="../tlogcontainer.cpp" line="1384"/>
+        <location filename="../tlogcontainer.cpp" line="1932"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1431"/>
+        <location filename="../tlogcontainer.cpp" line="1386"/>
         <source>Contest file </source>
         <translation>Fichier du Concours </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1598"/>
+        <location filename="../tlogcontainer.cpp" line="1553"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1707"/>
+        <location filename="../tlogcontainer.cpp" line="1662"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1979"/>
+        <location filename="../tlogcontainer.cpp" line="1934"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1989"/>
+        <location filename="../tlogcontainer.cpp" line="1944"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2013"/>
+        <location filename="../tlogcontainer.cpp" line="1968"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2017"/>
+        <location filename="../tlogcontainer.cpp" line="1972"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2190"/>
-        <location filename="../tlogcontainer.cpp" line="2191"/>
+        <location filename="../tlogcontainer.cpp" line="2145"/>
+        <location filename="../tlogcontainer.cpp" line="2146"/>
         <source>Minos contest Logger Application</source>
         <translation>Application Minos Enregistreur de Concours</translation>
     </message>
@@ -5465,22 +5487,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="856"/>
+        <location filename="../tsinglelogframe.cpp" line="851"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1437"/>
+        <location filename="../tsinglelogframe.cpp" line="1432"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1456"/>
+        <location filename="../tsinglelogframe.cpp" line="1451"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1478"/>
+        <location filename="../tsinglelogframe.cpp" line="1473"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
@@ -5602,19 +5624,24 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="52"/>
+        <location filename="../txvmbuttonsframe.ui" line="50"/>
+        <source>Pip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../txvmbuttonsframe.ui" line="59"/>
         <location filename="../txvmbuttonsframe.ui" line="66"/>
         <location filename="../txvmbuttonsframe.ui" line="73"/>
-        <location filename="../txvmbuttonsframe.ui" line="84"/>
+        <location filename="../txvmbuttonsframe.ui" line="80"/>
         <location filename="../txvmbuttonsframe.ui" line="91"/>
         <location filename="../txvmbuttonsframe.ui" line="98"/>
         <location filename="../txvmbuttonsframe.ui" line="105"/>
+        <location filename="../txvmbuttonsframe.ui" line="112"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="114"/>
+        <location filename="../txvmbuttonsframe.ui" line="121"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
@@ -5623,14 +5650,100 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="vanished">Configuration de la mémoire de voix </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="222"/>
+        <location filename="../txvmbuttonsframe.cpp" line="242"/>
         <source>Voice Memory %1 - Edit</source>
         <translation>Mémoire de voix %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="301"/>
+        <location filename="../txvmbuttonsframe.cpp" line="324"/>
         <source>Voice Memory %1 - New</source>
         <translation>Mémoire de voix %1 - Nouveau</translation>
+    </message>
+</context>
+<context>
+    <name>TxVmExternalButtonDialog</name>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished">Dialogue</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="39"/>
+        <source>Type: </source>
+        <translation type="unfinished">Type: </translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="73"/>
+        <source>Name</source>
+        <translation type="unfinished">Nom</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="97"/>
+        <source>Repeat Message</source>
+        <translation type="unfinished">Répéter le message</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="109"/>
+        <source>Repeat Pause Duration</source>
+        <translation type="unfinished">Durée du pause</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="144"/>
+        <source>Test Replay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="164"/>
+        <source>Record</source>
+        <translation type="unfinished">Enregistrer</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="184"/>
+        <source>Stop</source>
+        <translation type="unfinished">Arrêter</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="201"/>
+        <source>Message Duration</source>
+        <translation type="unfinished">Durée du message</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="313"/>
+        <source>
+Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="402"/>
+        <source>
+Replay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.ui" line="491"/>
+        <source>Pass
+Through</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.cpp" line="46"/>
+        <source>%1 Duration </source>
+        <translation type="unfinished">%1 Durée </translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.cpp" line="46"/>
+        <source> - out of range</source>
+        <translation type="unfinished">??? hors de limite</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.cpp" line="47"/>
+        <source>Please set value between 0 and 180 seconds</source>
+        <translation type="unfinished">Entrer un value entre 0 et 180 secondes SVP</translation>
+    </message>
+    <message>
+        <location filename="../txVmExternalButtonDialog.cpp" line="65"/>
+        <source>Repeat Pause</source>
+        <translation type="unfinished">Répéter la pause</translation>
     </message>
 </context>
 <context>
@@ -5813,22 +5926,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="522"/>
+        <location filename="../txvmbuttonsframe.cpp" line="537"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="523"/>
+        <location filename="../txvmbuttonsframe.cpp" line="538"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="524"/>
+        <location filename="../txvmbuttonsframe.cpp" line="539"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="525"/>
+        <location filename="../txvmbuttonsframe.cpp" line="540"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
