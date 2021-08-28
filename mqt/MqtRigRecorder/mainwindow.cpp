@@ -167,7 +167,7 @@ void MainWindow::onCloseTimer()
     bool autostart = ui->autostartCb->isChecked();
     bool link = ui->contestLinkCB->isChecked();
 
-    if (link && !autostart && tstart.isValid() && tend.isValid())
+    if (!stopped && link && !autostart && tstart.isValid() && tend.isValid())
     {
         QDateTime tnow = QDateTime::currentDateTimeUtc();
         QString t1 = tstart.addSecs(-60).toString();
@@ -212,6 +212,7 @@ void MainWindow::on_startRecButton_clicked()
 
     trace("Start stream complete");
     started = true;
+    stopped = false;
 
     ui->detailsFrame->setEnabled(false);
     ui->startRecButton->setEnabled(false);
@@ -224,6 +225,7 @@ void MainWindow::on_stopRecButton_clicked()
     rass.stopDMA();
     trace("audio stopped");
     started = false;
+    stopped = true;
     ui->detailsFrame->setEnabled(true);
     ui->startRecButton->setEnabled(true);
     ui->stopRecButton->setEnabled(false);
