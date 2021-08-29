@@ -76,7 +76,7 @@ void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
 {
     // play message - we need a PTT/NoPtt switch
     QString fileName;
-    fileName = QString("CQF%1.WAV").arg(msgNum);
+    fileName = QString("CQF%1.WAV").arg(msgNum + 1);
 
     if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, true/*xmit*/, 0/*clipRecord*/ ))
     {

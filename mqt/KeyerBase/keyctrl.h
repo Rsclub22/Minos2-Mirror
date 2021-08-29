@@ -24,9 +24,9 @@ enum KEYER_COMMAND {eKEYER_STOPRECORD,    		// kill record
 class KeyerCtrl
 {
    public:
-      KeyerCtrl( KEYER_COMMAND cmd, int mno1, int mno2, int mtime, const QString &fname, bool xm = false, bool ch = false, bool dely = false ) :
+      KeyerCtrl( KEYER_COMMAND cmd, int mno1, int mno2, int mtime, const QString &fname, const QString &kn, bool xm = false, bool ch = false, bool dely = false ) :
             command( cmd ), xmit( xm ), chain( ch ), delay_start( dely ), intParam1( mno1 ),
-            intParam2( mno2 ), intTime( mtime ), filename( fname )
+            intParam2( mno2 ), intTime( mtime ), filename( fname ), keyName(kn)
       {}
 
       KEYER_COMMAND command;				// what to do
@@ -37,6 +37,7 @@ class KeyerCtrl
       int intParam2;
       int intTime;
       QString filename;			// TX file name
+      QString keyName;
 };
 class KeyerInfo    // only passes info up
 {

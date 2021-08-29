@@ -19,18 +19,18 @@
 enum LineModes{
     elmNone = 0,
     elmTones,
-    elmPlay12Pip,
-    elmPlay12NoPip,
-    elm12Record,
-    elmPlay34Pip,
-    elmPlay34NoPip,
-    elm34Record,
-    elmPlay56Pip,
-    elmPlay56NoPip,
-    elm56Record,
-    elm11,
-    elm12,
-    elmMGM,                 // 13
+    elmPlay01Pip,
+    elmPlay01NoPip,
+    elm01Record,
+    elmPlay23Pip,
+    elmPlay23NoPip,
+    elm23Record,
+    elmPlay45Pip,
+    elmPlay45NoPip,
+    elm45Record,
+    elmPlay67Pip,
+    elmPlay67NoPip,
+    elm67Record,
     elmAppsRestartClose,    // 14
     elmOSRestartClose,      // 15
     elmMax                  // 16
@@ -268,6 +268,7 @@ class PlayAction: public VoiceAction
 {
       int mno;
       QString fileName;
+      QString keyName;
       long delayTime;
       long repeatTime;
       bool testMode;
@@ -282,7 +283,7 @@ class PlayAction: public VoiceAction
       virtual void linesModeChanged(int lmode) override;
       virtual void queueFinished() override;
       virtual void timeOut() override;
-      PlayAction( int mno, const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
+      PlayAction(int mno, const QString &keyName, const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
       virtual ~PlayAction() override;
       char statusLetter() override
       {

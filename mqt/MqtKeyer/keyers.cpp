@@ -57,25 +57,25 @@ bool keyer_docommand( const KeyerCtrl &keyer_ctrl )
 void startRecordDVPFile( int fileno )
 {
    char buff[ 20 ];
-   sprintf( buff, "CQF%d.WAV", fileno );
-   keyer_docommand( KeyerCtrl( eKEYER_RECORD, fileno, 0, 0, buff ) );
+   sprintf( buff, "CQF%d.WAV", fileno + 1 );
+   keyer_docommand( KeyerCtrl( eKEYER_RECORD, fileno, 0, 0, buff, getMasterConfig()->kjj[fileno].CQName ) );
 }
 void finishRecordDVPFile( )
 {
-   keyer_docommand( KeyerCtrl( eKEYER_STOPRECORD, -1, 0, 0, "" ) );
+   keyer_docommand( KeyerCtrl( eKEYER_STOPRECORD, -1, 0, 0, QString(), QString() ) );
 }
 void playKeyerFile( int fileno, bool ptt )
 {
    char buff[ 20 ];
-   sprintf( buff, "CQF%d.WAV", fileno );
-   keyer_docommand( KeyerCtrl( eKEYER_PLAY, fileno, 0, 0, buff, ptt ) );
+   sprintf( buff, "CQF%d.WAV", fileno + 1 );
+   keyer_docommand( KeyerCtrl( eKEYER_PLAY, fileno, 0, 0, buff, getMasterConfig()->kjj[fileno].CQName, ptt ) );
 }
 void sendTone1( )
 {
    KeyerInfo ki;
    if ( getKeyerInfo( &ki ) )
    {
-      keyer_docommand( KeyerCtrl( eKEYER_TONE1, ki.tone1, 0, ki.tuneTime, "" ) );
+      keyer_docommand( KeyerCtrl( eKEYER_TONE1, ki.tone1, 0, ki.tuneTime, "", "" ) );
    }
 }
 void sendTone2()
@@ -83,12 +83,12 @@ void sendTone2()
    KeyerInfo ki;
    if ( getKeyerInfo( &ki ) )
    {
-      keyer_docommand( KeyerCtrl( eKEYER_TONE2, ki.tone1, ki.tone2, ki.tuneTime, "" ) );
+      keyer_docommand( KeyerCtrl( eKEYER_TONE2, ki.tone1, ki.tone2, ki.tuneTime, "", "" ) );
    }
 }
 void stopKeyer()
 {
-   keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "" ) );
+   keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "", "" ) );
 }
 
 //==========================================================================
@@ -119,7 +119,7 @@ commonPort * select_keyer( const QString &kn )
    {
       trace( "Select keyer " + kn + " called." );
    }
-   keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "" ) );
+   keyer_docommand( KeyerCtrl( eKEYER_STOPALL, -1, 0, 0, "", "" ) );
    int i = 0;
 
    for ( auto const &cp: portChain )
@@ -251,19 +251,19 @@ void setLines( bool PTT, bool L1, bool L2 )
 }
 int getAutoRepeatDelay(int mno)
 {
-    return getMasterConfig()->kjj[mno - 1].autoRepeatDelay;
+    return getMasterConfig()->kjj[mno].autoRepeatDelay;
 }
 void setAutoRepeatDelay(int mno , int d)
 {
-    getMasterConfig()->kjj[mno - 1].autoRepeatDelay = d;
+    getMasterConfig()->kjj[mno].autoRepeatDelay = d;
 }
 bool getEnableAutoRepeat(int mno)
 {
-    return getMasterConfig()->kjj[mno - 1].autoRepeat;
+    return getMasterConfig()->kjj[mno].autoRepeat;
 }
 void setEnableAutoRepeat(int mno, bool ar )
 {
-    getMasterConfig()->kjj[mno - 1].autoRepeat = ar;
+    getMasterConfig()->kjj[mno].autoRepeat = ar;
 }
 
 bool getPipEnabled()
@@ -276,11 +276,11 @@ void setPipEnabled( bool val )
 }
 QString getKeyName(int mno)
 {
-    return getMasterConfig()->kjj[mno - 1].CQName;
+    return getMasterConfig()->kjj[mno].CQName;
 }
 void setKeyName(int mno, QString msg)
 {
-    getMasterConfig()->kjj[mno - 1].CQName = msg;
+    getMasterConfig()->kjj[mno].CQName = msg;
 }
 int getCWSpeed()
 {
@@ -512,9 +512,9 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
       case eKEYER_PLAY:      /* transmit file */
          {
             KeyerAction::currentAction.clear_after( KeyerAction::getCurrentAction() );
-            bool ardelay = getEnableAutoRepeat(dvp_ctrl.intParam1);
+            int ardelay = getAutoRepeatDelay(dvp_ctrl.intParam1);
             bool ar = getEnableAutoRepeat(dvp_ctrl.intParam1);
-            new PlayAction( dvp_ctrl.intParam1, dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, ar?ardelay:0, true, false );
+            new PlayAction( dvp_ctrl.intParam1, dvp_ctrl.keyName, dvp_ctrl.filename, !dvp_ctrl.xmit, kconf.startDelay, ar?ardelay:0, true, false );
          }
          break;
 
@@ -619,15 +619,15 @@ bool voiceKeyer::pttChanged( int state )
             // no current action...
              switch (linesMode)
              {
-             case elmPlay12Pip:
-             case elmPlay34Pip:
-             case elmPlay56Pip:
+             case elmPlay01Pip:
+             case elmPlay23Pip:
+             case elmPlay45Pip:
                  setPipEnabled(true);
                  break;
 
-             case elmPlay12NoPip:
-             case elmPlay34NoPip:
-             case elmPlay56NoPip:
+             case elmPlay01NoPip:
+             case elmPlay23NoPip:
+             case elmPlay45NoPip:
                  setPipEnabled(false);
                  break;
 
@@ -660,9 +660,10 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
 
        switch (linesMode)
        {
-       case elm12Record:
-       case elm34Record:
-       case elm56Record:
+       case elm01Record:
+       case elm23Record:
+       case elm45Record:
+       case elm67Record:
            if (state && !ca)
            {
                // trigger record on push, not release
@@ -671,16 +672,18 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
            }
            return true;
 
-       case elmPlay12Pip:
-       case elmPlay34Pip:
-       case elmPlay56Pip:
+       case elmPlay01Pip:
+       case elmPlay23Pip:
+       case elmPlay45Pip:
+       case elmPlay67Pip:
            if (!state && !ca)
                setPipEnabled(true);
            break;
 
-       case elmPlay12NoPip:
-       case elmPlay34NoPip:
-       case elmPlay56NoPip:
+       case elmPlay01NoPip:
+       case elmPlay23NoPip:
+       case elmPlay45NoPip:
+       case elmPlay67NoPip:
            if (!state && !ca)
                setPipEnabled(false);
            break;
@@ -731,9 +734,6 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
 
        default:
        case elmNone:
-       case elm11:
-       case elm12:
-       case elmMGM:
             return false;
 
        }
@@ -747,22 +747,30 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
              {
                  switch(linesMode)
                  {
-                 case elmPlay12Pip:
-                 case elmPlay12NoPip:
+                 case elmPlay01Pip:
+                 case elmPlay01NoPip:
                      cqWavFile = "CQF1.WAV";
                      mno = 0;
                      break;
 
-                 case elmPlay34Pip:
-                 case elmPlay34NoPip:
+                 case elmPlay23Pip:
+                 case elmPlay23NoPip:
                      cqWavFile = "CQF3.WAV";
                      mno = 2;
                      break;
-                 case elmPlay56Pip:
-                 case elmPlay56NoPip:
+
+                 case elmPlay45Pip:
+                 case elmPlay45NoPip:
                      cqWavFile = "CQF5.WAV";
                      mno = 4;
                      break;
+
+                 case elmPlay67Pip:
+                 case elmPlay67NoPip:
+                     cqWavFile = "CQF7.WAV";
+                     mno = 6;
+                     break;
+
                  default:
                      break;
                  }
@@ -772,22 +780,30 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
           {
               switch(linesMode)
               {
-              case elmPlay12Pip:
-              case elmPlay12NoPip:
+              case elmPlay01Pip:
+              case elmPlay01NoPip:
                   cqWavFile = "CQF2.WAV";
                   mno = 1;
                   break;
 
-              case elmPlay34Pip:
-              case elmPlay34NoPip:
+              case elmPlay23Pip:
+              case elmPlay23NoPip:
                   cqWavFile = "CQF4.WAV";
                   mno = 3;
                   break;
-              case elmPlay56Pip:
-              case elmPlay56NoPip:
+
+              case elmPlay45Pip:
+              case elmPlay45NoPip:
                   cqWavFile = "CQF6.WAV";
                   mno = 5;
                   break;
+
+              case elmPlay67Pip:
+              case elmPlay67NoPip:
+                  cqWavFile = "CQF8.WAV";
+                  mno = 7;
+                  break;
+
               default:
                   break;
               }
@@ -801,10 +817,10 @@ bool voiceKeyer::L12Changed( int state, sbControls sbc )
          {
             KeyerAction::currentAction.clear_after( ca );
 
-            bool ardelay = getEnableAutoRepeat(mno);
+            int ardelay = getAutoRepeatDelay(mno);
             bool ar = getEnableAutoRepeat(mno);
 
-            new PlayAction(mno,  cqWavFile, false, kconf.startDelay, ar?ardelay:0, true, false );
+            new PlayAction(mno,  getMasterConfig()->kjj[mno].CQName, cqWavFile, false, kconf.startDelay, ar?ardelay:0, true, false );
             KeyerAction::getCurrentAction() ->LxChanged( sbc, state );
          }
       }
@@ -877,7 +893,7 @@ bool voiceKeyer::sendCW( const char *message, int speed, int tone )
       SoundSystemDriver::getSbDriver() ->createCWBuffer( message, speed, tone );
       bool ar = getEnableAutoRepeat(0);
       int ardelay = getAutoRepeatDelay(0);
-      new PlayAction( 0, "AudioCWFile", false, kconf.startDelay, ar?ardelay:0, true, true );
+      new PlayAction( 0, "", "AudioCWFile", false, kconf.startDelay, ar?ardelay:0, true, true );
       return true;
    }
    return false;
@@ -1364,17 +1380,15 @@ void InterruptingPTTAction::timeOut()
    }
 }
 //=============================================================================
-PlayAction::PlayAction(int mno, const QString &pfileName, bool noPTT, long pdelayStart,
-                        long prepeatDelay, bool firstTime, bool CW )
-      : mno(mno), testMode( noPTT ), CW( CW ), actionState( epasInitial )
+PlayAction::PlayAction(int mno, const QString &keyName, const QString &pfileName, bool noPTT, long pdelayStart,
+                      long prepeatDelay, bool firstTime, bool CW )
+    : mno(mno), keyName(keyName), fileName(pfileName), delayTime(pdelayStart), testMode( noPTT ), CW( CW ), actionState( epasInitial )
 {
    if ( sblog )
    {
-      trace( "new PlayAction" );
+      trace( QString("new PlayAction repeatdelay %1").arg(prepeatDelay) );
    }
-   fileName = pfileName;
 
-   delayTime = pdelayStart;
    if ( delayTime <= 0 )
       delayTime = 1;	// so it starts on next tick
 
@@ -1404,7 +1418,8 @@ PlayAction::~PlayAction()
 }
 void PlayAction::getActionState( QString &s )
 {
-   s = "Play " + fileName + " : " + ActionStateString;
+    QString name = keyName.isEmpty()?fileName:keyName;
+    s = "Play " + name + " : " + ActionStateString;
 }
 void PlayAction::LxChanged( int line, bool state )
 {
@@ -1527,12 +1542,12 @@ void PlayAction::timeOut()
          VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
 
          KeyerAction *sbn = getNextAction();
-         bool ardelay = getEnableAutoRepeat(mno);
+         int ardelay = getAutoRepeatDelay(mno);
          bool ar = getEnableAutoRepeat(mno);
 
          if ( !testMode && ar && ardelay && !sbn && !CW )
          {
-            new PlayAction( mno, fileName, false, currentKeyer->kconf.startDelay, ardelay, false, false );
+            new PlayAction( mno, getMasterConfig()->kjj[mno].CQName, fileName, false, currentKeyer->kconf.startDelay, ardelay, false, false );
          }
 
          deleteAtTick = true;
@@ -1792,20 +1807,25 @@ void BoxRecordAction::LxChanged( int line, bool state )
    {
        switch(currentKeyer->linesMode)
        {
-       case elmPlay12Pip:
-       case elmPlay12NoPip:
-       case elm12Record:
+       case elmPlay01Pip:
+       case elmPlay01NoPip:
+       case elm01Record:
            new RecordAction( "CQF1.WAV" );
            break;
-       case elm34Record:
-       case elmPlay34Pip:
-       case elmPlay34NoPip:
+       case elm23Record:
+       case elmPlay23Pip:
+       case elmPlay23NoPip:
            new RecordAction( "CQF3.WAV" );
            break;
-       case elm56Record:
-       case elmPlay56Pip:
-       case elmPlay56NoPip:
+       case elm45Record:
+       case elmPlay45Pip:
+       case elmPlay45NoPip:
            new RecordAction( "CQF5.WAV" );
+           break;
+       case elm67Record:
+       case elmPlay67Pip:
+       case elmPlay67NoPip:
+           new RecordAction( "CQF7.WAV" );
            break;
         default:
            break;
@@ -1819,20 +1839,25 @@ void BoxRecordAction::LxChanged( int line, bool state )
       {
           switch(currentKeyer->linesMode)
           {
-          case elmPlay12Pip:
-          case elmPlay12NoPip:
-          case elm12Record:
+          case elmPlay01Pip:
+          case elmPlay01NoPip:
+          case elm01Record:
               new RecordAction( "CQF2.WAV" );
               break;
-          case elm34Record:
-          case elmPlay34Pip:
-          case elmPlay34NoPip:
+          case elm23Record:
+          case elmPlay23Pip:
+          case elmPlay23NoPip:
               new RecordAction( "CQF4.WAV" );
               break;
-          case elm56Record:
-          case elmPlay56Pip:
-          case elmPlay56NoPip:
+          case elm45Record:
+          case elmPlay45Pip:
+          case elmPlay45NoPip:
               new RecordAction( "CQF6.WAV" );
+              break;
+          case elm67Record:
+          case elmPlay67Pip:
+          case elmPlay67NoPip:
+              new RecordAction( "CQF8.WAV" );
               break;
           default:
               break;

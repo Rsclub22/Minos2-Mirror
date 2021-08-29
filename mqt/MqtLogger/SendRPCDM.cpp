@@ -738,7 +738,7 @@ void TSendDM::notifyRigChanges()
                     }
                     if (selState.pttState().isDirty())
                     {
-                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx"));
+                        traceMsg(QString("Rig ptt state = %1, uuid = %2").arg(selState.pttState().getValue() ? "Tx" : "Rx").arg(selStateUuid));
                         tslf->on_SetPttState(selState.pttState().getValue());
                     }
                     if (selState.status().isDirty())

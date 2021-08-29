@@ -307,8 +307,8 @@ void KeyerMain::CaptionTimerTimer( )
 void KeyerMain::on_recordButton_clicked()
 {
     trace("Record Button");
-    int fno = ui->keyCombo->currentText().toInt();
-    if ( fno >= 1 && fno <= KEYERKEYS )
+    int fno = ui->keyCombo->currentText().toInt() - 1;
+    if ( fno >= 0  && fno < KEYERKEYS )
     {
        startRecordDVPFile( fno );
        ui->recind->setText(tr("Push PTT to Commence Recording"));
@@ -320,8 +320,8 @@ void KeyerMain::on_recordButton_clicked()
 void KeyerMain::on_playButton_clicked()
 {
     trace("Play Button");
-    int fno = ui->keyCombo->currentText().toInt( );
-    if ( fno >= 1 && fno <= KEYERKEYS )
+    int fno = ui->keyCombo->currentText().toInt( ) - 1;
+    if ( fno >= 0 && fno < KEYERKEYS )
     {
        ui->recind->setText("");
        playKeyerFile( fno, false );
@@ -350,7 +350,7 @@ void KeyerMain::on_stopButton_clicked()
 
 void KeyerMain::on_AutoRepeatCheckBox_clicked()
 {
-    int fno = ui->keyCombo->currentText().toInt( );
+    int fno = ui->keyCombo->currentText().toInt( ) - 1;
     setEnableAutoRepeat(fno,  ui->AutoRepeatCheckBox->isChecked() );
 
 }
@@ -366,14 +366,14 @@ void KeyerMain::on_delayEdit_valueChanged(const QString &/*arg1*/)
     int val = temp.toInt();
     if (val > 0)
     {
-        int fno = ui->keyCombo->currentText().toInt( );
+        int fno = ui->keyCombo->currentText().toInt( ) - 1;
         setAutoRepeatDelay(fno, val );
     }
 
 }
 void KeyerMain::on_messageName_editingFinished()
 {
-    int fno = ui->keyCombo->currentText().toInt( );
+    int fno = ui->keyCombo->currentText().toInt( ) - 1;
     setKeyName(fno, ui->messageName->text());
 
 }
@@ -585,8 +585,8 @@ void KeyerMain::doConfig(QString config)
     {
         ui->PipCheckBox->setChecked(getMasterConfig()->pipEnable);
 
-        int fno = ui->keyCombo->currentText().toInt();
-        KeyerKeyJson &kjj = getMasterConfig()->kjj[fno - 1];
+        int fno = ui->keyCombo->currentText().toInt() - 1;
+        KeyerKeyJson &kjj = getMasterConfig()->kjj[fno];
         ui->messageName->setText(kjj.CQName);
         ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
         ui->delayEdit->setValue(kjj.autoRepeatDelay);
@@ -608,8 +608,8 @@ void doConfig(QString config)
 void KeyerMain::on_keyCombo_currentIndexChanged(int /*index*/)
 {
     // fill the parameters in the box
-    int fno = ui->keyCombo->currentText().toInt();
-    KeyerKeyJson &kjj = getMasterConfig()->kjj[fno - 1];
+    int fno = ui->keyCombo->currentText().toInt() - 1;
+    KeyerKeyJson &kjj = getMasterConfig()->kjj[fno];
     ui->messageName->setText(kjj.CQName);
     ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
     ui->delayEdit->setValue(kjj.autoRepeatDelay);

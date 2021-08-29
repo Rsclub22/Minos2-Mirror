@@ -158,7 +158,7 @@ void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const 
 
             else if ( nameOk && p1Value->getInt( Value ) )
             {
-                if ( Value >= 1 && Value <= KEYERKEYS )
+                if ( Value >= 0 && Value < KEYERKEYS )
                 {
                     if ( commandName == rpcConstants::keyerPlayFile )
                     {
