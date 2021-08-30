@@ -16,7 +16,6 @@
 #define TIMER_INTERVAL 55U         // 55-millisecond target interval
 
 //==============================================================================
-// ??? add up/down on volume sliders, and reload/save ALSA?
 // match against enum LineModes
 static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "None"),
@@ -30,9 +29,9 @@ static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - No Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 5/6"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 11"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Mode 12"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "MGM - Disable keyer"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/ - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/8 - No Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Record 7/8"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "OS - Restart(1)/Close(2)")
 };
