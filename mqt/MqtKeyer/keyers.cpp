@@ -1417,8 +1417,8 @@ PlayAction::~PlayAction()
 }
 void PlayAction::getActionState( QString &s )
 {
-    QString name = keyName.isEmpty()?fileName:keyName;
-    s = "Play " + name + " : " + ActionStateString;
+    QString name = keyName.isEmpty()?("Play " + fileName):keyName;
+    s = name + " : " + ActionStateString;
 }
 void PlayAction::LxChanged( int line, bool state )
 {
