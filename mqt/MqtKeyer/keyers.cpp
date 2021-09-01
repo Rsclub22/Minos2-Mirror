@@ -1328,6 +1328,7 @@ void InterruptingPTTAction::timeOut()
    {
       case einterPTTWaitDelay:
          {
+            //trace("einterPTTWaitDelay");
             actionState = einterPTTWaitDelayFinish;
             actionTime = currentKeyer->kconf.playPTTDelay;
             if ( actionTime < 1 )
@@ -1337,6 +1338,7 @@ void InterruptingPTTAction::timeOut()
 
       case einterPTTWaitDelayFinish:
          {
+            //trace("einterPTTWaitDelayFinish");
             // PTT releasing play, don't start for a bit!
             if ( currentKeyer->pttState )
             {
@@ -1345,30 +1347,39 @@ void InterruptingPTTAction::timeOut()
                // This is where we tail end a file play with a normal transmission
                currentKeyer->startMicPassThrough();
 
+               //trace("set einterPTTDoPip");
                actionState = einterPTTDoPip;   	// do a pip
             }
             else
             {
-               deleteAtTick = true; // short blip - don't pip
-               currentKeyer->ptt( 0 );	// if we got here then no "next" so kill ptt
+               // trace("set einterPTTQuickRelease");
                actionState = einterPTTQuickRelease;
+               actionTime = 1;
             }
             break;
          }
 
       case einterPTTDoPip:
+
+//         trace("einterPTTDoPip");
+
          currentKeyer->stopMicPassThrough();
          if ( getPipEnabled() )
          {
             if ( !getNextAction() )
-               new PipAction();
-            deleteAtTick = true;
+            {
+                new PipAction();
+                deleteAtTick = true;
+            }
          }
          actionState = einterPTTQuickRelease;
          actionTime = 1;
          break;
 
       case einterPTTQuickRelease:
+
+//         trace("einterPTTQuickRelease");
+
          currentKeyer->ptt( 0 );	// if we got here then no "next" so kill ptt
          VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
          deleteAtTick = true;
