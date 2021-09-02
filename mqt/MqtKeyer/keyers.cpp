@@ -1532,8 +1532,9 @@ void PlayAction::timeOut()
 
             if ( !SoundSystemDriver::getSbDriver() ->play_file( fileName, !testMode, currentKeyer->kconf.clipRecord ))
             {
-               actionTime = 1;
-               deleteAtTick = true;
+                stopKeyer();
+               //actionTime = 1;
+               //deleteAtTick = true;
             }
             else
             {

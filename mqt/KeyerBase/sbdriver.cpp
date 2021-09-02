@@ -278,7 +278,11 @@ bool SoundSystemDriver::play_file( const QString &filename, bool xmit, int clipR
       }
       if ( i < recfil.size() )
       {
-         if ( recfil[ i ] ->loaded && xmit )
+          if (!recfil[ i ] ->loaded)
+          {
+              return false;
+          }
+         if ( xmit )
          {
              emit ptt(true);
          }
