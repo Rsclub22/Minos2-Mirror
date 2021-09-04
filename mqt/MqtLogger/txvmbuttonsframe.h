@@ -140,6 +140,7 @@ private slots:
     void clearActionSelected(int buttonNumber);
     void runButActivated(int buttonNumber);
     void onRemoteConfigChanged();
+    void onRemoteKeyerStarted(int key);
     void onRemoteKeyerStopped();
     void on_pipCb_stateChanged(int arg1);
     void onExtConnect();

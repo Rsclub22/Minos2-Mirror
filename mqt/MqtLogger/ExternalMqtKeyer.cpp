@@ -137,12 +137,16 @@ void ExternalMqtKeyer::onKeyerConfig(QString key, QString val)
 }
 void ExternalMqtKeyer::onKeyerReport(QString val)
 {
-    VKMixer vmm;
-    vmm.SetCurrentMixerSet(emsPassThroughNoPTT);
-    QString ems = VKMixer::tr(vmm.getCurrentMixerText());
-    if (val.contains(ems))
+    int bracket = val.lastIndexOf('[');
+    int k = val.indexOf('K', bracket);
+    if (k > 0)
     {
-        // But this happens in the intervals :(
+        int key = val[k + 1].toLatin1() - '0';
+        emit remoteKeyerStarted(key - 1);
+
+    }
+    else
+    {
         emit remoteKeyerStopped();
     }
 }

@@ -115,6 +115,7 @@ signals:
 
     void remoteConfigChanged();
     void remoteKeyerStopped();
+    void remoteKeyerStarted(int key);
 
 private:
 

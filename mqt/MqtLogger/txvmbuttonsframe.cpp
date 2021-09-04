@@ -133,6 +133,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
             {
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteConfigChanged, this, &TxVmButtonsFrame::onRemoteConfigChanged, Qt::UniqueConnection);
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStopped, this, &TxVmButtonsFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
+                connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStarted, this, &TxVmButtonsFrame::onRemoteKeyerStarted, Qt::UniqueConnection);
 
                 txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
 
@@ -364,6 +365,19 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
         vmKeyParamList[i] = vmData;
         setRunButtonText(i, vmData.getVmName());
     }
+}
+void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
+{
+    onRemoteKeyerStopped();
+
+    buttonNumSent = key;
+
+    int msgDur = vmKeyParamList[buttonNumSent].getVmDuration() * 1000;
+    if (msgDur > 0)
+    {
+        msgDurTimer->start(msgDur);
+    }
+    txVmButtonMap[buttonNumSent]->showButtonOnOff(true);
 }
 void TxVmButtonsFrame::onRemoteKeyerStopped()
 {
