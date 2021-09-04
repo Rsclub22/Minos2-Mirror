@@ -17,18 +17,6 @@ static QString alsaStore("store");
 static QString alsaRestore("restore");
 static bool inhibitCallbacks = false;
 
-// texts for displaying the current mixer set
-
-static const char *msets[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "Unloaded"), QT_TRANSLATE_NOOP("VoiceKeyer", "No PTT"), QT_TRANSLATE_NOOP("VoiceKeyer", "PassThrough"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "Replay"), QT_TRANSLATE_NOOP("VoiceKeyer", "Pip"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone1"), QT_TRANSLATE_NOOP("VoiceKeyer", "Replay Tone2"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "Voice Record"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "CW Transmit"), QT_TRANSLATE_NOOP("VoiceKeyer", "CW PassThrough")
-                };
-static const char *levelLabels[emsMaxMixerSet] = {QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "none"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "input"),
-                 QT_TRANSLATE_NOOP("VoiceKeyer", "output"), QT_TRANSLATE_NOOP("VoiceKeyer", "output")
-                };
 
 void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )
 {
@@ -47,8 +35,16 @@ void KeyerMain::doSetVU(unsigned int prmsvol , unsigned int ppeakvol, unsigned i
 {
     if (!inhibitCallbacks)
     {
-        rmsvol = std::max(rmsvol, prmsvol);
-        peakvol = std::max(peakvol, ppeakvol);
+        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
+        {
+            rmsvol = 0;
+            peakvol = 0;
+        }
+        else
+        {
+            rmsvol = std::max(rmsvol, prmsvol);
+            peakvol = std::max(peakvol, ppeakvol);
+        }
         samples += psamples;
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
     }
@@ -258,9 +254,9 @@ void KeyerMain::lineTimerTimer( )
          recording = false;
       }
    KeyerServer::publishCommand( ui->recind->text() );
-   eMixerSets m = VKMixer::GetVKMixer()->GetCurrentMixerSet();
 
-   ui->levelLabel->setText(tr(levelLabels[m]));
+   const char *ll = VKMixer::GetVKMixer()->getCurrentLevelText();
+   ui->levelLabel->setText(tr(ll));
 
    QString astate;
    getActionState( astate );
@@ -271,10 +267,11 @@ void KeyerMain::lineTimerTimer( )
    // This isn't quite what we want - needs to be better english and slower changing
 
    QString kstatus;
+   const char *ms = VKMixer::GetVKMixer()->getCurrentMixerText();
    if ( getKeyerStatus( kstatus ) )
-      setWindowTitle(tr( msets[ m ] ) + " : " + astate + " : " + kstatus + " : " + tswitch);
+      setWindowTitle(VKMixer::tr( ms ) + " : " + astate + " : " + kstatus + " : " + tswitch);
    else
-      setWindowTitle(tr( msets[ m ] ) + " : " + astate + " : " + tswitch);
+      setWindowTitle(VKMixer::tr( ms ) + " : " + astate + " : " + tswitch);
 
    static QString old;
 
@@ -292,6 +289,10 @@ void KeyerMain::lineTimerTimer( )
        writeConfig(false);
 
        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
+       if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
+       {
+           doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
+       }
        KeyerServer::publishVUMeter(rmsvol, peakvol, samples);
        rmsvol = 0;
        peakvol = 0;

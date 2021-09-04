@@ -43,6 +43,7 @@ public:
 
 private slots:
     void onKeyerConfig(QString key, QString val);
+    void onKeyerReport(QString val);
 };
 
 #endif // EXTERNALMQTKEYER_H

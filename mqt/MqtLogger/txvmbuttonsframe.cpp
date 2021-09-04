@@ -132,6 +132,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
             if (txVoiceKeyer)
             {
                 connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteConfigChanged, this, &TxVmButtonsFrame::onRemoteConfigChanged, Qt::UniqueConnection);
+                connect(txVoiceKeyer.data(), &VoiceKeyerBase::remoteKeyerStopped, this, &TxVmButtonsFrame::onRemoteKeyerStopped, Qt::UniqueConnection);
 
                 txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
 
@@ -289,21 +290,15 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
 void TxVmButtonsFrame::onVmStopClicked()
 {
-
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
     {
         return;
     }
-
-
-
     txVoiceKeyer->stopMsg();
     msgDurTimer->stop();
     repeatPauseTimer->stop();
     txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
-
-
 }
 
 void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
@@ -370,7 +365,19 @@ void TxVmButtonsFrame::onRemoteConfigChanged()
         setRunButtonText(i, vmData.getVmName());
     }
 }
+void TxVmButtonsFrame::onRemoteKeyerStopped()
+{
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
+    {
+        return;
+    }
+    //txVoiceKeyer->stopMsg();
+    msgDurTimer->stop();
+    repeatPauseTimer->stop();
+    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    buttonNumSent = NO_VM_BUTTON_ON;
 
+}
 void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString name)
 {
     QString buttonText = QString("%1: %2").arg(buttonNumber + 1).arg(name);

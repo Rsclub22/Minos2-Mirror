@@ -889,6 +889,8 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                     sendKeyerUser();
                     LogContainer->setCaption( v );
                     traceMsg( "KeyerReport " + v );
+                    emit keyerReport(v);
+
                 }
                 else
                 {

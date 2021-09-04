@@ -114,6 +114,7 @@ signals:
     void vmVoiceKeyStopPressed();
 
     void remoteConfigChanged();
+    void remoteKeyerStopped();
 
 private:
 

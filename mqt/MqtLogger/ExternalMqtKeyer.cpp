@@ -2,6 +2,7 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
+#include "VKMixer.h"
 #include "txVmExternalButtonDialog.h"
 #include "KeyerJson.h"
 
@@ -38,6 +39,7 @@ void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &ExternalMqtKeyer::onKeyerConfig, Qt::UniqueConnection);
+    connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &ExternalMqtKeyer::onKeyerReport, Qt::UniqueConnection);
     LogContainer->sendDM->publishKeyerConfig("config");
 
 }
@@ -132,4 +134,15 @@ void ExternalMqtKeyer::onKeyerConfig(QString key, QString val)
 
     }
 
+}
+void ExternalMqtKeyer::onKeyerReport(QString val)
+{
+    VKMixer vmm;
+    vmm.SetCurrentMixerSet(emsPassThroughNoPTT);
+    QString ems = VKMixer::tr(vmm.getCurrentMixerText());
+    if (val.contains(ems))
+    {
+        // But this happens in the intervals :(
+        emit remoteKeyerStopped();
+    }
 }

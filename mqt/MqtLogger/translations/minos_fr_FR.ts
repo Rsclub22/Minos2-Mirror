@@ -5650,12 +5650,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="vanished">Configuration de la mémoire de voix </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="242"/>
+        <location filename="../txvmbuttonsframe.cpp" line="243"/>
         <source>Voice Memory %1 - Edit</source>
         <translation>Mémoire de voix %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="324"/>
+        <location filename="../txvmbuttonsframe.cpp" line="319"/>
         <source>Voice Memory %1 - New</source>
         <translation>Mémoire de voix %1 - Nouveau</translation>
     </message>
@@ -5926,22 +5926,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="537"/>
+        <location filename="../txvmbuttonsframe.cpp" line="544"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="538"/>
+        <location filename="../txvmbuttonsframe.cpp" line="545"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="539"/>
+        <location filename="../txvmbuttonsframe.cpp" line="546"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="540"/>
+        <location filename="../txvmbuttonsframe.cpp" line="547"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>

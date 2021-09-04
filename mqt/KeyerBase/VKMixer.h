@@ -11,6 +11,8 @@
 #ifndef VKMixerH
 #define VKMixerH
 
+#include <QObject>
+#include <QString>
 //======================================================================================
 enum eMixerSets {emsUnloaded, emsPassThroughNoPTT, emsPassThroughPTT,
                  emsReplay, emsReplayPip, emsReplayT1, emsReplayT2,
@@ -19,8 +21,9 @@ enum eMixerSets {emsUnloaded, emsPassThroughNoPTT, emsPassThroughPTT,
                  emsMaxMixerSet};
 //======================================================================================
 
-class VKMixer
+class VKMixer:public QObject
 {
+    Q_OBJECT
 private:
     static VKMixer *currentMixer;
     eMixerSets CurrMixerSet;
@@ -31,8 +34,10 @@ public:
 
       static VKMixer *GetVKMixer();
 
-      eMixerSets GetCurrentMixerSet();
+      eMixerSets GetCurrentMixerSet() const;
       void SetCurrentMixerSet( eMixerSets cms );
+      const char * getCurrentLevelText() const;
+      const char * getCurrentMixerText() const;
 };
 //======================================================================================
 #endif

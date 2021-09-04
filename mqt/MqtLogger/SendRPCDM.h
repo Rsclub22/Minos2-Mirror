@@ -139,6 +139,7 @@ signals:
       void setClusterTXSpotEnableState(QString);
 
       void keyerConfig(QString, QString);
+      void keyerReport(QString);
 
 };
 #endif

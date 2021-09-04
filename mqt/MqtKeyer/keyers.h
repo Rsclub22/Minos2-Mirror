@@ -205,9 +205,9 @@ class ToneAction: public KeyerAction
       virtual void queueFinished() override;
       virtual void timeOut() override;
       virtual void interruptOK( ) override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 't';
+         return "t";
       }
       ToneAction( int tones, long pdelayStart );
       virtual ~ToneAction() override;
@@ -239,9 +239,9 @@ class InitialPTTAction: public VoiceAction
       virtual void timeOut() override;
       InitialPTTAction();
       virtual ~InitialPTTAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'T';
+         return "T";
       }
 };
 //=============================================================================
@@ -258,9 +258,9 @@ class InterruptingPTTAction: public VoiceAction
       virtual void timeOut() override;
       InterruptingPTTAction();
       virtual ~InterruptingPTTAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'T';
+         return "I";
       }
 };
 //=============================================================================
@@ -285,9 +285,9 @@ class PlayAction: public VoiceAction
       virtual void timeOut() override;
       PlayAction(int mno, const QString &keyName, const QString &fileName, bool noPTT, long delayStart, long repeatDelay, bool firstTime, bool CW );
       virtual ~PlayAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'S';
+         return "K" + QString::number(mno + 1);
       }
       virtual bool playingFile( const QString & ) override;
 };
@@ -304,9 +304,9 @@ class PipAction: public VoiceAction
       virtual void timeOut() override;
       PipAction();
       virtual ~PipAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'P';
+         return "P";
       }
 };
 //=============================================================================
@@ -323,9 +323,9 @@ class RecordAction: public VoiceAction
       virtual void timeOut() override;
       RecordAction( const QString &fileName );
       virtual ~RecordAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'R';
+         return "R";
       }
 };
 //=============================================================================
@@ -341,9 +341,9 @@ class BoxRecordAction: public VoiceAction
       virtual void timeOut() override;
       BoxRecordAction();
       virtual ~BoxRecordAction() override;
-      char statusLetter() override
+      QString statusLetter() override
       {
-         return 'B';
+         return "B";
       }
 };
 //=============================================================================
