@@ -609,6 +609,11 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
+    if (bandmapView)
+    {
+        bandmapView->setContest(c);
+    }
+
     contestUuid = ct->uuid;
     traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
 

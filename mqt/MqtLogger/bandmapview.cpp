@@ -100,6 +100,10 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     bandmapGraphicsView->setBackgroundBrush(QBrush());
 }
 
+void BandmapView::setContest(BaseContestLog *c)
+{
+    contest = c;
+}
 void BandmapView::onFontChanged(QFont cf)
 {
     dial->onFontChanged(cf);
@@ -538,6 +542,7 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
         spotData.exchange = selectedSpot.getDistrict();
+        spotData.mode = selectedSpot.getMode();
 
         MinosLoggerEvents::SendSpotToLog(spotData);
     }
@@ -1231,7 +1236,7 @@ void BandmapView::drawBandMapSpots()
             }
         }
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf)
+        if (tslf && tslf->getContest() == contest)
         {
             nearMatches.sort();
             tslf->setPlaceholders(nearMatches);
