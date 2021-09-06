@@ -224,18 +224,20 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
               if (an.getKey() == rpcConstants::keyerSendConfig)
               {
                 QString value = an.getValue();
+                emit keyerConfig(value);
+              }
+              if (an.getKey() == rpcConstants::keyerSendMS)
+              {
+                QString value = an.getValue();
                 if (value.isEmpty())
                 {
-//                    sendConfig = false;
                     sendSliders = false;
                     sendMeters = false;
                 }
                 else
                 {
-//                    sendConfig = true;
                     sendSliders = true;
                     sendMeters = true;
-                    emit keyerConfig(value);
                 }
               }
               else if (an.getKey() == rpcConstants::keyerSliders)
@@ -252,9 +254,8 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
       }
       else
       {
-          if (an.getCategory() == rpcConstants::KeyerConfigCategory && an.getKey() == rpcConstants::keyerSendConfig)
+          if (an.getCategory() == rpcConstants::KeyerConfigCategory && an.getKey() == rpcConstants::keyerSendMS)
           {
-//              sendConfig = false;
               sendSliders = false;
               sendMeters = false;
           }

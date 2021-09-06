@@ -231,18 +231,21 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
 void TSendDM::publishKeyerConfig(const QString &config)
 {
     static QString old("xxx");  // so it isn't initially empty
-    if (config.isEmpty())
+    if (config != old)
     {
         old = config;
-        RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, "", psRevoked);
+        RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, config, psPublished);
+    }
+}
+void TSendDM::publishKeyerMS(bool send)
+{
+    if (send)
+    {
+        RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendMS, "sendms", psPublished);
     }
     else
     {
-        if (config != old)
-        {
-            old = config;
-            RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendConfig, config, psPublished);
-        }
+        RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSendMS, "", psRevoked);
     }
 }
 //---------------------------------------------------------------------------

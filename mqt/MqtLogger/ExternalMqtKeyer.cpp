@@ -14,7 +14,6 @@ ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : VoiceKeyerBase(parent)
 
 ExternalMqtKeyer::~ExternalMqtKeyer()
 {
-    LogContainer->sendDM->publishKeyerConfig("");
 }
 
 void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)

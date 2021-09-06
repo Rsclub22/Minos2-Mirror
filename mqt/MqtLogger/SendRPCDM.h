@@ -68,6 +68,7 @@ public:  		// User declarations
       void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
 
       void publishKeyerConfig(const QString &config);
+      void publishKeyerMS(bool send);
 
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);

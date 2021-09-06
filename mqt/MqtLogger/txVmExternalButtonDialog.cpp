@@ -15,12 +15,12 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
-    LogContainer->sendDM->publishKeyerConfig("sliders:config:meters");
+    LogContainer->sendDM->publishKeyerMS(true);
 }
 
 TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
 {
-    LogContainer->sendDM->publishKeyerConfig("");
+    LogContainer->sendDM->publishKeyerMS(false);
     delete ui;
 }
 

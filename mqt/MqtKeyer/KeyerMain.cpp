@@ -26,7 +26,7 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
 
 void KeyerMain::doSliders(int rec, int rep, int pass)
 {
-    trace(QString("%1;%2;%3").arg(rec).arg(rep).arg(pass));
+    trace(QString("Set Slider positions %1;%2;%3").arg(rec).arg(rep).arg(pass));
     ui->recordSlider->setValue(rec);
     ui->replaySlider->setValue(rep);
     ui->passThroughSlider->setValue(pass);
