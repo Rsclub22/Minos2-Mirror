@@ -35,7 +35,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , radioConnected(false)
     , radioError(false)
     , sendSpotToClusterOn(false)
-    , clusterServerConnected(false)
     , runButtonOnFlag(false)
     , radioOffRunFreq(false)
 
@@ -3292,24 +3291,6 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
     ui->lastSpotSentLbl->setDisabled(disabled);
 
 }
-
-void QSOLogFrame::setClusterServerState(QString stateMsg)
-{
-    QStringList s = stateMsg.split("<>");
-    if (s.size() < 2)
-        return;
-
-    if (s[0].contains("Connected"))
-    {
-         clusterServerConnected = true;
-    }
-    else
-    {
-         clusterServerConnected = false;
-    }
-}
-
-
 //--------------------------------------------------------
 
 void QSOLogFrame::checkBandMapAndClusterLoaded()

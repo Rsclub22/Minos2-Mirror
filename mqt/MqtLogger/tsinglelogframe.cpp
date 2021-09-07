@@ -1698,15 +1698,8 @@ void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 
 void TSingleLogFrame::on_clusterServerState(QString state)
 {
-    clusterServerState = state;
-    GJVQSOLogFrame->setClusterServerState(state);
     bandmapControlFrame->setClusterServerState(state);
     clusterControlFrame->setClusterServerState(state);
-}
-
-QString TSingleLogFrame::getClusterServerState()
-{
-    return clusterServerState;
 }
 
 //---------------------------------------------------------------------------

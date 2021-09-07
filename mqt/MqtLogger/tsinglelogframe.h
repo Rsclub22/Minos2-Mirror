@@ -165,7 +165,6 @@ private:
     QSOGridModel qsoModel;
     QString curScreenLayout;
 
-    QString clusterServerState;
     int lastStanzaCount;
 
     MatchTreeFrame *xferTree = nullptr;
@@ -188,7 +187,6 @@ private:
 
     void setClusterLoaded(bool loaded);
     void setBandmapLoaded(bool loaded);
-    QString getClusterServerState();
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);

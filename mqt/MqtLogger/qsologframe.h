@@ -81,15 +81,10 @@ public:
     ScreenContact *getPartialContact() const;
     void setPartialContact(ScreenContact *value);
 
-    //void setRunMemoryFreqUpdate(int num, Frequency freq);
-    //void setIgnoreRunChkBoxState(int num, bool checked);
-    void setClusterServerState(QString state);
     void setClusterTXSpotEnableState(bool txEnableState);
-
 
     void setRunOnFlag(bool runModeOn);
     void setRunOffFreqFlag(bool offRunFreq);
-
 
     void transferFromWSJTX(QString call);
     void setQrzButtonVisible(bool state);
@@ -204,9 +199,6 @@ private:
 
     void setClusterSendSpotControlsVisible(bool visible);
     bool sendSpotToClusterOn;
-    bool clusterServerConnected;
-
-
 
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();
