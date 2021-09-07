@@ -10,6 +10,7 @@
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"
+#include "SendRPCDM.h"
 #include "tsinglelogframe.h"
 #include "checkoperatingfreq.h"
 #include "BandList.h"
@@ -229,7 +230,7 @@ BandmapClientFrame::~BandmapClientFrame()
 void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
 {
     static int timeoutCount = 0;
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
         waitClusterServerLoadedTimer->stop();
         on_resendClusterSpotSelected();
@@ -1413,7 +1414,7 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
          ui->clusterStatusIndicator->setEnabled(true);  // enable to allow reconnect request
     }
 
-    if (clusterServerLoaded )
+    if (LogContainer->sendDM->isClusterServerLoaded() )
     {
         ui->clusterStatusIndicator->setToolTip(s[1]);
         traceMsg(QString("Cluster Status: %1").arg(stateMsg));
@@ -1434,11 +1435,6 @@ void BandmapClientFrame::on_clusterStatusIndicatorClicked()
                 MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
             }
     }
-}
-
-void BandmapClientFrame::setClusterServerLoaded(bool loaded)
-{
-    clusterServerLoaded = loaded;
 }
 
 void BandmapClientFrame::clusterStatusIndicatorToggle(bool on)

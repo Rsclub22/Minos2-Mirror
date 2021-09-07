@@ -31,6 +31,7 @@ class TSendDM : public QObject
       bool radioLoaded = false;
       bool rotatorLoaded = false;
       bool keyerLoaded = false;
+      bool clusterServerLoaded = false;
 
       PubSubName keyerApp;
       PubSubName clusterApp;
@@ -122,6 +123,10 @@ public:  		// User declarations
       {
           return keyerLoaded;
       }
+      bool isClusterServerLoaded()
+      {
+          return clusterServerLoaded;
+      }
 
 private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
@@ -135,7 +140,6 @@ signals:
 
       void setRadioLoaded();
       void setRadioList();
-      void setClusterServerLoaded();
       void setClusterState(QString);
       void setClusterTXSpotEnableState(QString);
 

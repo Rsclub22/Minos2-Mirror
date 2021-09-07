@@ -26,8 +26,6 @@ public:
 
     void setAsEdit(bool s, QString b);
     void setBandMapLoaded(bool loaded);
-    void setClusterClientLoaded(bool loaded);
-    void setClusterServerLoaded(bool loaded);
 
     bool savePartial(  );
     bool restorePartial( );
@@ -204,10 +202,6 @@ private:
     bool radioConnected;
     bool radioError;
 
-    bool clusterClientLoaded;
-    bool isClusterClientLoaded();
-    bool clusterServerLoaded;
-    bool isClusterServerLoaded();
     void setClusterSendSpotControlsVisible(bool visible);
     bool sendSpotToClusterOn;
     bool clusterServerConnected;

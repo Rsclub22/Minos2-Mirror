@@ -23,6 +23,7 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "SendRPCDM.h"
 #include "delayedaction.h"
 #include "ui_clusterclientframe.h"
 
@@ -35,7 +36,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     purgeSpotFlag(false),
     holdUpdateFlag(false),
     allowHF(false),
-    clusterServerLoaded(false),
     clusterServerConnected(false)
 {
 
@@ -211,7 +211,7 @@ ClusterClientFrame::~ClusterClientFrame()
 void ClusterClientFrame::on_waitClusterServerLoadedTimeout()
 {
     static int timeoutCount = 0;
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
         waitClusterServerLoadedTimer->stop();
         on_resendClusterSpots();
@@ -1816,7 +1816,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     }
 
 
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
 
         ui->statusIndicator->setToolTip(s[1]);
@@ -1840,17 +1840,6 @@ void ClusterClientFrame::on_clusterStatusIndicatorClicked()
     }
 
 }
-
-
-void ClusterClientFrame::setClusterServerLoaded(bool loaded)
-{
-    clusterServerLoaded = loaded;
-}
-
-
-
-
-
 
 void ClusterClientFrame::statusIndicatorToggle(bool on)
 {

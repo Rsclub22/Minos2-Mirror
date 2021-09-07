@@ -101,14 +101,6 @@ public:
     bool isBandMapLoaded();
     bool bandMapLoaded;
 
-    bool isClusterServerLoaded();
-    void setClusterServerLoaded(bool loaded);
-    bool clusterServerLoaded;
-
-    bool isClusterClientLoaded();
-    void setClusterClientLoaded(bool loaded);
-    bool clusterClientLoaded;
-
     bool isRotatorLoaded();
 
     bool isRadioLoaded();
@@ -277,7 +269,6 @@ private slots:
     void sendRunOffFreqFlag(Frequency, bool);
     void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
-    void on_clusterServerLoaded();
     void on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
     void on_dxSpotToMemory(BaseContestLog *c, memoryData::memData dxData);

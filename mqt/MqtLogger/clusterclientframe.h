@@ -158,11 +158,6 @@ public:
     void buttonHandleDxSpots();
     void restoreColumns();
     void setClusterServerState(QString stateMsg);
-
-
-
-
-    void setClusterServerLoaded(bool loaded);
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -198,7 +193,6 @@ private:
     MouseInObject* actionInObject;
 
     QVector<QString> spotQueue;
-    bool clusterServerLoaded;
     bool clusterServerConnected;
 
     bool traceDebugFlag = false;

@@ -10,7 +10,6 @@
 #include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
 #include "SendRPCDM.h"
-//#include "rigcontrolcommonconstants.h"
 #include "rigcommon.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
@@ -35,8 +34,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , qrzDisplayFrameLoaded(false)
     , radioConnected(false)
     , radioError(false)
-    , clusterClientLoaded(false)
-    , clusterServerLoaded(false)
     , sendSpotToClusterOn(false)
     , clusterServerConnected(false)
     , runButtonOnFlag(false)
@@ -3268,26 +3265,6 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
 
 
 //---------------------------------------------------------
-
-
-void QSOLogFrame::setClusterClientLoaded(bool loaded)
-{
-    clusterClientLoaded = loaded;
-}
-bool QSOLogFrame::isClusterClientLoaded()
-{
-    return clusterClientLoaded;
-}
-
-void QSOLogFrame::setClusterServerLoaded(bool loaded)
-{
-    clusterServerLoaded = loaded;
-}
-bool QSOLogFrame::isClusterServerLoaded()
-{
-    return clusterServerLoaded;
-}
-
 void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 {
     setClusterSendSpotControlsVisible(txEnableState);
@@ -3444,7 +3421,7 @@ void QSOLogFrame::setClusterSendSpotControlsState()
     }
     else
     {
-        if (isClusterServerLoaded() && sendSpotToClusterOn)
+        if (LogContainer->sendDM->isClusterServerLoaded() && sendSpotToClusterOn)
         {
             setClusterSendSpotControlsVisible(true);
             setClusterSendSpotControlsDisabled(false);
