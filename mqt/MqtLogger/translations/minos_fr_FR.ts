@@ -260,7 +260,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1677"/>
+        <location filename="../bandmapclientframe.cpp" line="1682"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -269,22 +269,22 @@
         <translation type="vanished"> - Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1418"/>
+        <location filename="../bandmapclientframe.cpp" line="1423"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1456"/>
+        <location filename="../bandmapclientframe.cpp" line="1461"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1461"/>
+        <location filename="../bandmapclientframe.cpp" line="1466"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1569"/>
+        <location filename="../bandmapclientframe.cpp" line="1574"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -292,39 +292,39 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1350"/>
+        <location filename="../bandmapview.cpp" line="1355"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation>%1%2CQ Frequency @ .%3%4%5</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1379"/>
+        <location filename="../bandmapview.cpp" line="1384"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1466"/>
+        <location filename="../bandmapview.cpp" line="1471"/>
         <source>min</source>
         <translation>min</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1483"/>
+        <location filename="../bandmapview.cpp" line="1488"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation>La fréquence CQ = %1
 Le mode calculé est %2</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1511"/>
+        <location filename="../bandmapview.cpp" line="1516"/>
         <source>The computed mode is</source>
         <translation>Mode calculé</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1514"/>
+        <location filename="../bandmapview.cpp" line="1519"/>
         <source>The mode is</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1521"/>
+        <location filename="../bandmapview.cpp" line="1526"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -5650,12 +5650,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="vanished">Configuration de la mémoire de voix </translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="243"/>
+        <location filename="../txvmbuttonsframe.cpp" line="244"/>
         <source>Voice Memory %1 - Edit</source>
         <translation>Mémoire de voix %1 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="319"/>
+        <location filename="../txvmbuttonsframe.cpp" line="320"/>
         <source>Voice Memory %1 - New</source>
         <translation>Mémoire de voix %1 - Nouveau</translation>
     </message>
@@ -5926,22 +5926,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="544"/>
+        <location filename="../txvmbuttonsframe.cpp" line="558"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="545"/>
+        <location filename="../txvmbuttonsframe.cpp" line="559"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="546"/>
+        <location filename="../txvmbuttonsframe.cpp" line="560"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="547"/>
+        <location filename="../txvmbuttonsframe.cpp" line="561"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
