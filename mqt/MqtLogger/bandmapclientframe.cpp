@@ -28,6 +28,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->mouseInFrameLabel->setVisible(false);
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
+    ui->radioStatusMsg->clear();
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &BandmapClientFrame::clusterClientServerList);
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
@@ -1455,11 +1456,21 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
     {
         ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
         ui->radioStatusIndicator->setToolTip(tr("Connected"));
+        ui->radioStatusIndicator->hide();
+        ui->radioStatusLabel->hide();
+        ui->freqDisplay->show();
+        ui->modeLabel->show();
+        ui->mode->show();
     }
     else
     {
        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
        ui->radioStatusIndicator->setToolTip(tr("Disconnected"));
+       ui->radioStatusIndicator->show();
+       ui->radioStatusLabel->show();
+       ui->freqDisplay->hide();
+       ui->modeLabel->hide();
+       ui->mode->hide();
     }
 }
 
