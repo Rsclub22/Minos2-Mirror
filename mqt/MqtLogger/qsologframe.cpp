@@ -2413,12 +2413,14 @@ void QSOLogFrame::logScreenEntry( )
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
 
-   // save for send spot to DX cluster
-   lastLoggedCallsign = lct->cs;
-   ui->spotLastLoggedPb->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
-   lastLoggedLocator = lct->loc.getLoc();
-   lastLoggedFreq = lct->frequency.getValue();
-
+   if (!lct->cqResponse.getValue())
+   {
+       // save for send spot to DX cluster
+       lastLoggedCallsign = lct->cs;
+       ui->spotLastLoggedPb->setText(tr("Spot Last Logged (%1) ").arg(lct->cs.getFullCall()));
+       lastLoggedLocator = lct->loc.getLoc();
+       lastLoggedFreq = lct->frequency.getValue();
+   }
 
    if (!edit )
         startNextEntry( );	// select the "next"
