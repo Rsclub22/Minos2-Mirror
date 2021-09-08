@@ -315,6 +315,10 @@ void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *
         {
            districtFrame->scrollToDistrict( dist->districtCode, true );
         }
+        else
+        {
+            districtFrame->scrollToDistrict(QString(), false );
+        }
     }
 }
 
@@ -329,6 +333,10 @@ void StackedInfoFrame::on_ScrollToCountry( const QString &csCs, BaseContestLog *
         if ( ctryMult )
         {
            dxccFrame->scrollToCountry( ctryMult->getBasePrefix(), true );
+        }
+        else
+        {
+            dxccFrame->scrollToCountry( QString(), false );
         }
     }
 }
