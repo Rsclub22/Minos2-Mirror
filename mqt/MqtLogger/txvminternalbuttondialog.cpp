@@ -7,7 +7,7 @@
 
 static bool inhibitCallbacks = false;
 
-TxVmInternalButtonDialog *txvmbd = nullptr;
+static TxVmInternalButtonDialog *txvmbd = nullptr;
 void TxVmInternalButtonDialog::doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
 {
     if (!inhibitCallbacks)

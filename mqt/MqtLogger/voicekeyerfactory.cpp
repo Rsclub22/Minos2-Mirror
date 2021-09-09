@@ -15,11 +15,15 @@
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "InternalVoiceMemoryKeyer.h"
+#include "ExternalMqtKeyer.h"
+#include "tlogcontainer.h"
+#include "SendRPCDM.h"
 
 VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
     RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
     InternalVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
+    ExternalMqtKeyer::registerVoiceKeyer(&vmKeyersList);
 }
 
 
@@ -40,9 +44,16 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     {
         return new RigControlVoiceMemoryKeyer(this);
     }
-    else if (vmKeyerId == VoiceKeyerId::Internal)
+    else if (vmKeyerId == VoiceKeyerId::InternalVoiceKeyer)
     {
         return new InternalVoiceMemoryKeyer(this);
+    }
+    else if (vmKeyerId == VoiceKeyerId::ExternalVoiceKeyer)
+    {
+        if (LogContainer->sendDM->isKeyerLoaded())
+        {
+            return new ExternalMqtKeyer(this);
+        }
     }
 
     return nullptr;

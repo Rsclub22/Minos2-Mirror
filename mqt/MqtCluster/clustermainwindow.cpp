@@ -364,10 +364,7 @@ void ClusterMainWindow::doStartup()
 
     connect(ui->pushButton, &QPushButton::pressed, this, &ClusterMainWindow::onpbpressed);
 
-
-
-
-
+    ui->clusterTab->setCurrentWidget(ui->bandFilter);
 }
 
 // this is for testing

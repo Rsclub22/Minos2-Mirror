@@ -96,15 +96,18 @@ void ClusterBandmapConfigure::initialise()
 
      ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
 
-     // get bandmap Operating Freq Flag
      bool operatingFreqFlag;
      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, operatingFreqFlag );
-     ui->operatingFreqChkBox->setCheckState(operatingFreqFlag ? Qt::Checked : Qt::Unchecked);
+     ui->operatingFreqChkBox->setChecked(operatingFreqFlag);
 
-     // get bandmap Follow Radio Mode Operating Freq Flag
      bool followRadioModeFlag;
      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, followRadioModeFlag );
-     ui->modeOperatingFreqChkBox->setCheckState(followRadioModeFlag ? Qt::Checked : Qt::Unchecked);
+     ui->modeOperatingFreqChkBox->setChecked(followRadioModeFlag);
+
+     bool minBFlag;
+     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
+     ui->mouseInBcb->setChecked(minBFlag);
+
 }
 bool ClusterBandmapConfigure::check()
 {
@@ -118,57 +121,13 @@ void ClusterBandmapConfigure::finalise()
 {
     saveDistances();
 
-    if (ui->addBandmapTuningTolSpinBox->value() != addBandmapTuningTolerance)
-    {
-        // changed save
-        TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
+    TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapTurnOffOperatingFreqStrip,  ui->operatingFreqChkBox->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip,  ui->modeOperatingFreqChkBox->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapMouseInFrameDelay,  ui->mouseInBcb->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, ui->oldBandmapChkBox->isChecked() );
 
-    }
-
-
-    // operating freq strip on/off flag
-    bool savedOperatingFreqFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, savedOperatingFreqFlag );
-
-    bool checkedOperatingFreqFlag = false;
-
-    if (ui->operatingFreqChkBox->checkState() == Qt::Checked)
-    {
-        checkedOperatingFreqFlag = true;
-    }
-
-    if (savedOperatingFreqFlag != checkedOperatingFreqFlag)
-    {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapTurnOffOperatingFreqStrip,  checkedOperatingFreqFlag);
-
-    }
-
-    // follow radioMode flag
-    bool savedFollowRadioModeFlag;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, savedFollowRadioModeFlag);
-
-
-    bool checkedFollowRadioModeFlag = false;
-
-    if (ui->modeOperatingFreqChkBox->checkState() == Qt::Checked)
-    {
-        checkedFollowRadioModeFlag = true;
-    }
-
-    if (savedFollowRadioModeFlag != checkedFollowRadioModeFlag)
-    {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip,  checkedFollowRadioModeFlag);
-
-    }
-
-    bool oldBandMap = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, oldBandMap );
-    if ( ui->oldBandmapChkBox->isChecked() != oldBandMap)
-    {
-        oldBandMap = ui->oldBandmapChkBox->isChecked();
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, oldBandMap );
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-    }
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
 void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 {

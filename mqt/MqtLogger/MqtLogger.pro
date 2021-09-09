@@ -41,6 +41,7 @@ SOURCES += \
     ContestPage.cpp \
     ContestPageControl.cpp \
     DisplayOptions.cpp \
+    ExternalMqtKeyer.cpp \
     FilterFrame.cpp \
     InternalVoiceMemoryKeyer.cpp \
     LocCalcFrame.cpp \
@@ -105,6 +106,7 @@ SOURCES += \
     tstatsdispframe.cpp \
     clusterclientfilterdialog.cpp \
     clusterclientframe.cpp \
+    txVmExternalButtonDialog.cpp \
     txVmInternalSetupDialog.cpp \
     txvmbuttonsframe.cpp \
     txvminternalbuttondialog.cpp \
@@ -137,6 +139,7 @@ HEADERS  += \
     ContestPage.h \
     ContestPageControl.h \
     DisplayOptions.h \
+    ExternalMqtKeyer.h \
     FilterFrame.h \
     InternalVoiceMemoryKeyer.h \
     LocCalcFrame.h \
@@ -200,6 +203,7 @@ HEADERS  += \
     tstatsdispframe.h \
     clusterclientfilterdialog.h \
     clusterclientframe.h \
+    txVmExternalButtonDialog.h \
     txVmInternalSetupDialog.h \
     txvmbuttonsframe.h \
     txvminternalbuttondialog.h \
@@ -277,6 +281,7 @@ FORMS    += \
     WsjtxConfigure.ui \
     bandmapclientframe.ui \
     Clusterbandmapconfigure.ui \
+    txVmExternalButtonDialog.ui \
     txVmInternalSetupDialog.ui \
     txvmbuttonsframe.ui \
     txvminternalbuttondialog.ui \
@@ -312,5 +317,5 @@ else:unix: PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/libKeyerBase.a
 # include system libs last, so they get included for KeyerBase
 
 unix:!macos{ LIBS += -lasound}
-win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32}
+win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32 -lShlwapi}
 

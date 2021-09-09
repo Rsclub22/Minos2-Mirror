@@ -79,20 +79,10 @@ public:
 
     QMap<int, TxVoiceMemButton*> txVmButtonMap;
 
-
-
-
-
     void readActionSel(int buttonNumber);
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
-
-
-
-
-    void setRadioLoaded();
-
 
     void setPttEnabled(bool state, PubSubName psn);
 
@@ -110,13 +100,11 @@ signals:
 private:
     Ui::TxVmButtonsFrame *ui;
 
-
     QSharedPointer<VoiceKeyerBase> txVoiceKeyer;
     VoiceKeyerFactory* voiceKeyerFactory;
 
+    QTimer *extKeyerConnectTimer = nullptr;
     QList<QShortcut *> shortCutKeyList;
-
-    VoiceKeyerCommonParams vmCommonParams;
 
     QString voiceKeyerType;
 
@@ -132,18 +120,16 @@ private:
 
     PubSubName selectedRadio;
     bool radioConnected;
-    bool radioLoaded;
     bool pttState;
 
 
     void initTxVmButton();
 
     void setRunButtonText(const int buttonNumber, const QString name);
-    void saveVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
-    void readVmCommonParams(VoiceKeyerCommonParams &vmCommonParams);
     void setVoiceNumMemButtonsVisible(int);
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
+    void createKeyer(QString voiceKeyerName);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -153,6 +139,11 @@ private slots:
     void onMsgDurTimerTimeout();
     void clearActionSelected(int buttonNumber);
     void runButActivated(int buttonNumber);
+    void onRemoteConfigChanged();
+    void onRemoteKeyerStarted(int key);
+    void onRemoteKeyerStopped();
+    void on_pipCb_stateChanged(int arg1);
+    void onExtConnect();
 };
 
 #endif // TXVMBUTTONSFRAME_H

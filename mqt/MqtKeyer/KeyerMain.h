@@ -5,7 +5,7 @@
 #include <QComboBox>
 #include <QMainWindow>
 #include <QProcess>
-
+#include "KeyerJson.h"
 #include "VKMixer.h"
 
 namespace Ui {
@@ -18,18 +18,22 @@ class KeyerMain : public QMainWindow
     Ui::KeyerMain *ui;
 
 public:
+    KeyerJson masterConfig;
+
     explicit KeyerMain(QWidget *parent = nullptr);
     virtual ~KeyerMain() override;
 
     void setLines(bool PTTOut, bool PTTIn, bool L1, bool L2, int lmode);
 
+    void doConfig(QString);
+    bool writeConfig(bool force);
 private slots:
 
     void onStdInRead(QString);
 
     void CaptionTimerTimer();
 
-    void LineTimerTimer();
+    void lineTimerTimer();
 
 
     void on_recordButton_clicked();
@@ -81,9 +85,15 @@ private slots:
     void doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
+    void doSliders(int, int, int);
+
+    void on_messageName_editingFinished();
+
+    void on_keyCombo_currentIndexChanged(int index);
+
 private:
     void syncSetLines();
-    QTimer LineTimer;
+    QTimer lineTimer;
     QTimer CaptionTimer;
 
     StdInReader stdinReader;
@@ -98,6 +108,10 @@ private:
     bool recording;
 
     bool inVolChange;
+
+    unsigned int rmsvol= 0;
+    unsigned int peakvol = 0;
+    unsigned int samples = 0;
 
     QProcess *runner;
 

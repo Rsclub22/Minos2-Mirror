@@ -8,9 +8,6 @@ namespace Ui {
 class TxVmInternalButtonDialog;
 }
 
-const int REPEAT_DUR_MIN = 0;
-const int REPEAT_DUR_MAX = 180; // secs
-
 class TxVmInternalButtonDialog : public QDialog
 {
     Q_OBJECT

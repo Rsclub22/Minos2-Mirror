@@ -24,13 +24,23 @@ class KeyerServer:public QObject
       QMap<QString, bool> lineStates;
       void doPublishState( const QString &state );
       void doPublishCommand( const QString &cmd );
+      void doPublishConfig(const QString &config);
+      void doPublishSliders(int rec, int replay, int passthrough);
+      void doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples);
    public:
       KeyerServer();
       ~KeyerServer();
       static void checkConnection();
       static void publishState( const QString &state );
       static void publishCommand( const QString &cmd );
+      static void publishConfig(const QString &config);
+      static void publishSliders(int rec, int replay, int passthrough);
+      static void publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples);
       bool getState( const QString &line );
+
+signals:
+      void sliders(int, int, int);
+      void keyerConfig(QString);
 
 private slots:
       void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );

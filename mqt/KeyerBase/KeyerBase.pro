@@ -23,6 +23,7 @@ SOURCES += \
     ../Chunkware/SimpleComp.cpp \
     ../Chunkware/SimpleCompProcess.inl \
     ../Chunkware/SimpleEnvelope.cpp \
+    KeyerJson.cpp \
     VKMixer.cpp \
     keyerBase.cpp \
     levelmeter.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     ../Chunkware/SimpleEnvelope.h \
     ../Chunkware/SimpleGain.h \
     ../Chunkware/SimpleHeader.h \
+    KeyerJson.h \
     VKMixer.h \
     ddc.h \
     keyctrl.h \

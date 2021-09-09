@@ -5,6 +5,7 @@
 #include "rigutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "SendRPCDM.h"
 
 #include "runbuttonsframe.h"
 #include "ui_runbuttonsframe.h"
@@ -300,7 +301,7 @@ void RunButtonsFrame::runButReadActSel(int buttonNumber)
 {
     trace(QString("Run Button Read Selected = %1").arg(QString::number(buttonNumber + 1)));
     memoryData::memData m = getRunMemoryData(buttonNumber);
-    if (rigControl->isRadioLoaded())
+    if (LogContainer->sendDM->isRadioLoaded())
     {
         if (rigControl->radioConnected && !rigControl->radioError)
         {
@@ -387,8 +388,9 @@ void RunButtonsFrame::runButClearActSel(int buttonNumber)
 {
     trace(QString("Run Button Clear Selected = %1").arg(QString::number(buttonNumber + 1)));
 
-    memoryData::memData m;
-    setRunMemoryData(buttonNumber, m);
+    memoryData::memData mr = getRunMemoryData(buttonNumber);
+
+    clearRunMemoryData(buttonNumber, mr);
     runButtonMap[buttonNumber]->returnFrequency.clear();
     runButtonUpdate(buttonNumber);
 }
@@ -536,6 +538,11 @@ memoryData::memData RunButtonsFrame::getRunMemoryData(int memoryNumber)
     }
 
     return m;
+}
+void RunButtonsFrame::clearRunMemoryData(int memoryNumber, memoryData::memData m)
+{
+    ct->clearRunMemory(memoryNumber, m);
+
 }
 void RunButtonsFrame::setRunMemoryData(int memoryNumber, memoryData::memData m)
 {

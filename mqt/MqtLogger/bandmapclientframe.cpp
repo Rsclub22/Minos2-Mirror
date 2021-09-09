@@ -609,6 +609,11 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
+    if (bandmapView)
+    {
+        bandmapView->setContest(c);
+    }
+
     contestUuid = ct->uuid;
     traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
 
@@ -850,7 +855,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             // check to see if call or locator worked
             bool callWorked = false;
             bool locWorked = false;
-            checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[DXMODESTR], spotlist[DXFREQ], &callWorked, &locWorked);
+            checkSpotWorked(spotlist[DXCALL], spotlist[DXLOCATOR], spotlist[DXFREQ], &callWorked, &locWorked);
 
             QString distance;
             QString bearing;
@@ -1039,7 +1044,7 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                 // check to see if call or locator worked
                 bool callWorked = false;
                 bool locWorked = false;
-                checkSpotWorked(call.getFullCall(), loc, spot->getMode(), spot->getFreq(), &callWorked, &locWorked);
+                checkSpotWorked(call.getFullCall(), loc, spot->getFreq(), &callWorked, &locWorked);
                 if (locWorked)
                 {
                     spot->setDxLocatorWorked(true);
@@ -1304,7 +1309,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
     return true;
 }
 
-void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString &locator, const QString &mode, const Frequency &freq, bool* callWorked, bool* locatorWorked)
+void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString &locator, const Frequency &freq, bool* callWorked, bool* locatorWorked)
 {
     bool callfound = false;
     bool locfound = false;
@@ -1624,16 +1629,24 @@ bool BandmapClientFrame::event(QEvent *event)
 {
    if (event->type() == QEvent::Enter)
    {
-       setHoldUpdateFlag(true);
+       bool minBFlag;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
+       if (minBFlag)
+           setHoldUpdateFlag(true);
    }
    else if (event->type() == QEvent::Leave)
    {
-       mouseInFrameTimer->stop();
-       if (!purgeSpotFlag)
+       bool minBFlag;
+       TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
+       if (minBFlag)
        {
-           checkNewBandMapSpots();
+           mouseInFrameTimer->stop();
+           if (!purgeSpotFlag)
+           {
+               checkNewBandMapSpots();
+           }
+           setHoldUpdateFlag(false);
        }
-       setHoldUpdateFlag(false);
    }
    return QWidget::event(event);
 }

@@ -25,10 +25,11 @@ enum VoiceKeyerId
     None = 0,
     RigControl,
     SerialControl,
-    Internal
+    InternalVoiceKeyer,
+    ExternalVoiceKeyer
 };
 
-const QStringList keyerTypes = {"None", "RigControl", "SerialControl", "Internal"};
+const QStringList keyerTypes = {"None", "RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
 const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
 const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";

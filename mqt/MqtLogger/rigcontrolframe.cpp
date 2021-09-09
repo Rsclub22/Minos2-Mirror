@@ -37,7 +37,6 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
     ui(new Ui::RigControlFrame),
     ct(nullptr),
     tslf(parent),
-    radioLoaded(false),
     radioConnected(false),
     radioError(false),
     freqEditOn(false),
@@ -123,6 +122,9 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
     checkFreqContestBandTimer = new QTimer(this);
     connect(checkFreqContestBandTimer, &QTimer::timeout, this, [=](){onCheckContestBandMatch();});
     checkFreqContestBandTimer->start(CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT);
+
+    connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &RigControlFrame::on_RadioLoaded);
+
 }
 
 RigControlFrame::~RigControlFrame()
@@ -379,16 +381,15 @@ void RigControlFrame::setBandList(QString s,PubSubName psn)
     }
 }
 
-void RigControlFrame::setRadioLoaded()
+void RigControlFrame::on_RadioLoaded()
 {
     traceMsg(QString("%1 Set Radio Loaded").arg(ct?ct->uuid:""));
-    radioLoaded = true;
     ui->modelbl->setVisible(true);
 }
 
 bool RigControlFrame::isRadioLoaded()
 {
-    return radioLoaded;
+    return LogContainer->sendDM->isRadioLoaded();
 }
 
 void RigControlFrame::noRadioSetFreq(Frequency f)
@@ -1728,7 +1729,7 @@ void RigControlFrame::setRitMaxKHzFreq(int maxRitFreq_)
 
 bool RigControlFrame::checkRadioState()
 {
-    if (radioLoaded && radioConnected && !radioError)
+    if (isRadioLoaded() && radioConnected && !radioError)
     {
         return true;
     }

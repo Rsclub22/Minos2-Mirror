@@ -109,13 +109,8 @@ public:
     void setClusterClientLoaded(bool loaded);
     bool clusterClientLoaded;
 
-    bool rotatorLoaded;
     bool isRotatorLoaded();
 
-    bool keyerLoaded;
-    bool isKeyerLoaded();
-
-    bool radioLoaded;
     bool isRadioLoaded();
 
     bool qrzCallFrameLoaded;
@@ -234,11 +229,6 @@ private slots:
     void on_sectionResized(int, int, int);
     void EditContact(QSharedPointer<BaseContact> lct );
 
-    void on_KeyerLoaded();
-
-
-
-    void on_RadioLoaded();
     void on_SetRadioList();
     void on_SetMode(QString);
     void on_SetFreq(Frequency);
@@ -247,7 +237,6 @@ private slots:
     void on_SetVolume(int level);
     void on_SetRadioStatus(QString);
 
-    void on_RotatorLoaded();
     void on_RotatorList();
     void on_RotatorPresetList(QString);
     void on_RotatorStatus(QString);

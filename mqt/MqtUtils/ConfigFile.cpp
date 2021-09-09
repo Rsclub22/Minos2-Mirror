@@ -7,7 +7,6 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonParseError>
 
 #include "fileutils.h"
 #include "ConfigFile.h"

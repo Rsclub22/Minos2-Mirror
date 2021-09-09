@@ -8,8 +8,6 @@ namespace Ui {
 class TxVmRigButtonDialog;
 }
 
-const int REPEAT_DUR_MIN = 0;
-const int REPEAT_DUR_MAX = 180; // secs
 
 class TxVmRigButtonDialog : public QDialog
 {

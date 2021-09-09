@@ -2,6 +2,7 @@
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
+#include "SendRPCDM.h"
 #include "BandList.h"
 #include "tsinglelogframe.h"
 #include "rigmemdialog.h"
@@ -296,7 +297,7 @@ void RigMemoryFrame::checkTimerTimer()
         rTriState onfreq = rtsNotLoaded;
         rTriState onbearing = rtsNotLoaded;
 
-        if (tslf->isRadioLoaded())
+        if (LogContainer->sendDM->isRadioLoaded())
         {
             if (std::abs(qint64(rigFreq - memFreq)) < 2000)
             {
@@ -307,7 +308,7 @@ void RigMemoryFrame::checkTimerTimer()
                 onfreq = rtsOff;
             }
         }
-        if (tslf->isRotatorLoaded())
+        if (LogContainer->sendDM->isRotatorLoaded())
         {
             if (abs(bearing - memBearing) < 15)
                 onbearing = rtsOn;

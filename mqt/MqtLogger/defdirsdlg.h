@@ -26,10 +26,13 @@ private slots:
 
     void on_listsDirBrowse_clicked();
 
+    void on_ageCb_stateChanged(int arg1);
+
 private:
     Ui::DefDirsDlg *ui;
 
     int cap = 0;
+    bool doAge = false;
 
     void doCloseEvent();
 

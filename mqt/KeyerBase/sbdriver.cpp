@@ -95,7 +95,7 @@ class dvkFile
          fptr = nullptr;
       }
 };
-#define MAXFILES 10
+#define MAXFILES 8
 static QVector <dvkFile *> recfil;
 //==============================================================================
 
@@ -115,6 +115,10 @@ bool SoundSystemDriver::dofile( int i, int clipRecord )
 
    if ( ihand >= 0 )
    {
+       if (ihand >= recfil.size())
+       {
+           return false;
+       }
       if ( !recording && !recfil[ ihand ] ->loaded )
       {
          return false;
@@ -274,7 +278,11 @@ bool SoundSystemDriver::play_file( const QString &filename, bool xmit, int clipR
       }
       if ( i < recfil.size() )
       {
-         if ( recfil[ i ] ->loaded && xmit )
+          if (!recfil[ i ] ->loaded)
+          {
+              return false;
+          }
+         if ( xmit )
          {
              emit ptt(true);
          }
@@ -384,7 +392,7 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess,
          dvkFile *dvk = new dvkFile;
 
          char buff[ 100 ];
-         sprintf( buff, "CQF%d.WAV", fileno );
+         sprintf( buff, "CQF%d.WAV", fileno + 1 );
          dvk->fileName = buff;
          dvk->sampleRate = rate;
 

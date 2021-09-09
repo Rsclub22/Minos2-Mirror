@@ -59,6 +59,7 @@ enum LOGGERPROFILE {
    elpAutoFill,
    elpAllowHF,
    elpTabforSandP,
+   elpAgeProtectContests,
    elpAgeToProtectContests,
    elpBandmapOldStyle,
    elpAddBandMapTuningTolerance,
@@ -105,6 +106,7 @@ enum LOGGERPROFILE {
    elpContestTurnOffOperatingFreqColorRadioDial,
    elpBandMapTurnOffOperatingFreqStrip,
    elpBandMapFollowRadioModeOperatingFreqStrip,
+   elpBandMapMouseInFrameDelay,
 
    elpBandMapTraceDebug,
    elpClusterTraceDebug
@@ -127,7 +129,8 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpcml,
                      edpcmt,
                      edpcmr,
-                     edpcmb
+                     edpcmb,
+                     edpSeparateIcons
                     };
 enum ENTRYPROFILE {eepCall,
                    eepMainOp, eepSecondOp,

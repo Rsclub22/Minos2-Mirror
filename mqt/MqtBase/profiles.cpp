@@ -108,6 +108,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", false, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeProtectContests, "AgeProtectContests", true, QT_TR_NOOP("Protect contests by age"), QT_TR_NOOP("Protect contests by age"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
 
@@ -160,6 +161,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTurnOffOperatingFreqStrip , "bandmapTurnOffOperatingFreqStrip", false, QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Turn Off Operating Freq Colour Strip"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapFollowRadioModeOperatingFreqStrip , "bandmapFollowRadioModeOperatingFreqStrip", true, QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), false ) ) );
 
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapMouseInFrameDelay , "bandMapMouseInFrameDelay", true, QT_TR_NOOP("Bandmap Delay when mouse in frame"), QT_TR_NOOP("Bandmap Delay when mouse in frame"), false ) ) );
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTraceDebug , "bandmapTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpClusterTraceDebug , "clusterTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
 
@@ -207,6 +210,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmt, "Content Margin Top", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmr, "Content Margin Right", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmb, "Content Margin Bottom", 2, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpSeparateIcons, "SeparateIcons", false, "Separate Icons in Taskbar", "Separate Icons in Taskbar", false ) ) );
 
         break;
     case epENTRYPROFILE:

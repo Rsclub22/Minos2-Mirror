@@ -4,7 +4,6 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QJsonParseError>
 #include "profiles.h"
 
 #include "ScreenConfigFile.h"

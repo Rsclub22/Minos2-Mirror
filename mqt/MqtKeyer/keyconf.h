@@ -35,10 +35,7 @@ class KeyerConfig
       KeyerType type;
       unsigned int sampleRate;
       int pipTone;
-      bool enablePip;
       int startDelay;
-      int autoRepeatDelay;
-      bool enableAutoRepeat;
       unsigned int pipStartDelay;
       int playPTTDelay;
       int voxHangTime;
@@ -49,10 +46,10 @@ class KeyerConfig
 
       KeyerConfig()
       {}
-      KeyerConfig( const QString &name, unsigned int rate, int pipTone, int pipVolume, int pipLength, bool enablePip, int startDelay,
-                   int autoRepeatDelay, bool enableAutoRepeat, unsigned int pipStartDelay, int playPTTDelay, int voxHangTime, int clipRecord, int filterCorner )
-            : name( name ), type( ektVoiceKeyer ), sampleRate(rate), pipTone( pipTone ), enablePip( enablePip ), startDelay( startDelay ),
-            autoRepeatDelay( autoRepeatDelay ), enableAutoRepeat( enableAutoRepeat ), pipStartDelay( pipStartDelay ), playPTTDelay( playPTTDelay ),
+      KeyerConfig( const QString &name, unsigned int rate, int pipTone, int pipVolume, int pipLength, int startDelay,
+                   unsigned int pipStartDelay, int playPTTDelay, int voxHangTime, int clipRecord, int filterCorner )
+            : name( name ), type( ektVoiceKeyer ), sampleRate(rate), pipTone( pipTone ), startDelay( startDelay ),
+            pipStartDelay( pipStartDelay ), playPTTDelay( playPTTDelay ),
             voxHangTime( voxHangTime ), pipVolume( pipVolume ), pipLength( pipLength ), clipRecord( clipRecord ), filterCorner(filterCorner)
       {}
 }

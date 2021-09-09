@@ -71,6 +71,12 @@ void DisplayOptions::initialise()
     ui->cmr->setValue(cmr);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
     ui->cmb->setValue(cmb);
+
+    TContestApp::getContestApp()->getBoolDisplayProfile(edpSeparateIcons, sepIcons);
+    ui->separateIconsCb->setChecked(sepIcons);
+#ifndef Q_OS_WIN
+    ui->separateIconsCb->hide();
+#endif
 }
 bool DisplayOptions::check()
 {
@@ -175,11 +181,18 @@ void DisplayOptions::finalise()
         sendMargins = true;
     }
 
+    bool sepIconcb = ui->separateIconsCb->isChecked();
+    if (sepIconcb != sepIcons)
+    {
+        TContestApp::getContestApp()->setBoolDisplayProfile(edpSeparateIcons, sepIconcb);
+        doSelectSession = true;
+    }
     if (doBounceOnExit)
     {
         TWaitCursor wc(this);
         MinosConfig::getMinosConfig() ->bounce();
     }
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
     if (doSelectSession)
     {

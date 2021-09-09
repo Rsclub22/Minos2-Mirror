@@ -59,6 +59,7 @@ private:
     QDateTime tstart;
     QDateTime tend;
     bool started = false;
+    bool stopped = false;
 
     StdInReader stdinReader;
     QTimer closeTimer;

@@ -37,6 +37,8 @@ public:
     void scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint) override;
     QRect visualRect(const QModelIndex &index) const override;
 
+    void setContest(BaseContestLog *c);
+
     void setFreq(Frequency f, bool legalFreq);
 
     int getBandmapFrameHeight();
@@ -137,6 +139,7 @@ private:
     int dialMaxZoomLevel;
     int zoomLevel;
 
+    BaseContestLog *contest = nullptr;
     Frequency contestBandFlow;
     Frequency contestBandFhigh;
     Frequency curViewPortStartFreq;

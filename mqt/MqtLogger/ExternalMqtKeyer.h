@@ -1,16 +1,17 @@
-#ifndef INTERNALVOICEMEMORYKEYER_H
-#define INTERNALVOICEMEMORYKEYER_H
+#ifndef EXTERNALMQTKEYER_H
+#define EXTERNALMQTKEYER_H
 
+#include "KeyerJson.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "keyerBase.h"
 
-class InternalVoiceMemoryKeyer : public VoiceKeyerBase
+class ExternalMqtKeyer:public VoiceKeyerBase
 {
     Q_OBJECT
+    KeyerJson remoteConfig;
 public:
-    explicit InternalVoiceMemoryKeyer(QObject *parent =nullptr);
-    virtual ~InternalVoiceMemoryKeyer() override;
+    ExternalMqtKeyer(QObject *parent =nullptr);
+    virtual ~ExternalMqtKeyer() override;
 
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
@@ -28,8 +29,21 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+    virtual bool hasPip() const override
+    {
+        return true;
+    }
+    virtual bool hasSetup() const override
+    {
+        return false;
+    }
+    virtual void setPip(bool) override;
+
+    virtual bool getPip() const override {return remoteConfig.pipEnable;}
+
 private slots:
-    void onDoPTT(bool onOff);
+    void onKeyerConfig(QString key, QString val);
+    void onKeyerReport(QString val);
 };
 
-#endif // INTERNALVOICEMEMORYKEYER_H
+#endif // EXTERNALMQTKEYER_H

@@ -28,6 +28,13 @@
     </spacer>
    </item>
    <item>
+    <widget class="QCheckBox" name="ageCb">
+     <property name="text">
+      <string>Protect contests by Age</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label_3">
@@ -39,7 +46,7 @@
      <item>
       <widget class="QSpinBox" name="ageSpinner">
        <property name="minimum">
-        <number>-1</number>
+        <number>0</number>
        </property>
        <property name="maximum">
         <number>365</number>

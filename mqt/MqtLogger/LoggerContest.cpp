@@ -424,20 +424,33 @@ void LoggerContestLog::checkAgeProtection()
 {
     // check last time in contest against current date/time and the
 
-    int ageDays;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
-    if (ageDays >= 0)
+    bool doAge;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
+    if(!doAge)
     {
-        QString t1 = DTGEnd.getValue();
-        QDateTime end = CanonicalToTDT( t1 );
-
-        QDate endDate = end.date();
-
-        endDate = endDate.addDays(ageDays);
-        if (endDate.isValid() && endDate < QDate::currentDate())
+        ageProtected = false;
+    }
+    else
+    {
+        int ageDays;
+        TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAgeToProtectContests, ageDays );
+        if (ageDays >= 0)
         {
-            // e.g. if ageDays is 1, allow contest day and all the following day
-            ageProtected = true;
+            QString t1 = DTGEnd.getValue();
+            QDateTime end = CanonicalToTDT( t1 );
+
+            QDate endDate = end.date();
+
+            endDate = endDate.addDays(ageDays);
+            if (endDate.isValid() && endDate < QDate::currentDate())
+            {
+                // e.g. if ageDays is 1, allow contest day and all the following day
+                ageProtected = true;
+            }
+        }
+        else
+        {
+            ageProtected = false;
         }
     }
 }
@@ -603,25 +616,55 @@ void LoggerContestLog::removeContact( QSharedPointer<BaseContact> lct )
     }
 }
 //==========================================================================
+void LoggerContestLog::clearRunMemory(int memno, const memoryData::memData &mem)
+{
+    QString band(mem.band);
+    if (band.isEmpty())
+    {
+        band = BandList::getBand(mem.freq);
+    }
+    if (runMemories[band].size() >= memno + 1)
+    {
+        memoryData::memData m;
+        m.band = band;
+        runMemories[band][memno ].setValue(m);
+        commonSave(false);
+    }
+
+}
 void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band = BandList::getBand(mem.freq);
+    QString band;
+    if (mem.band.isEmpty())
+    {
+        band = BandList::getBand(mem.freq);
+    }
+
+    // after "clear" band will be blank...
 
     if (runMemories[band].size() < memno + 1)
     {
         runMemories[band].resize(memno + 1);
     }
-    runMemories[band][memno ].setValue(mem);
+    memoryData::memData m(mem);
+    m.band = band;
+    runMemories[band][memno ].setValue(m);
     commonSave(false);
 }
 void LoggerContestLog::saveInitialRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band = BandList::getBand(mem.freq);
+    QString band = mem.band;
+    if (band.isEmpty())
+    {
+        band = BandList::getBand(mem.freq);
+    }
     if (runMemories[band].size() < memno + 1)
     {
         runMemories[band].resize(memno + 1);
     }
-    runMemories[band][memno].setInitialValue(mem);
+    memoryData::memData m(mem);
+    m.band = band;
+    runMemories[band][memno].setInitialValue(m);
 
 }
 //==========================================================================
@@ -1598,14 +1641,14 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                QString temp;
                                mt->getStructArgMemberValue( "freq", temp);
                                mem.freq = Frequency(temp);
+
+
                                mt->getStructArgMemberValue( "mode", mem.mode);
                                mt->getStructArgMemberValue( "locator", mem.locator);
                                mt->getStructArgMemberValue( "bearing", mem.bearing);
                                mt->getStructArgMemberValue( "time", mem.time);
                                mt->getStructArgMemberValue( "worked", mem.worked);
-
                                saveInitialRigMemory(memno, mem);
-
                            }
                            else
                                if (methodName == "MinosRunMemory")
@@ -1616,10 +1659,20 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                    QString temp;
                                    mt->getStructArgMemberValue( "freq", temp);
                                    mem.freq = Frequency(temp);
+                                   QString band;
+                                   mt->getStructArgMemberValue( "band", band);
+                                   if (band.isEmpty())
+                                   {
+                                       band = BandList::getBand(mem.freq);
+                                   }
+
                                    mt->getStructArgMemberValue( "mode", mem.mode);
 
-                                   saveInitialRunMemory(memno, mem);
-
+                                   if (!band.isEmpty())
+                                   {
+                                       mem.band = band;
+                                       saveInitialRunMemory(memno, mem);
+                                   }
                                }
                                else if (methodName == "MinosClusterFilter")
                                {

@@ -133,7 +133,7 @@ class KeyerAction
       static my_deque < KeyerAction *> currentAction;
       static KeyerAction *getCurrentAction();
       KeyerAction *getNextAction();
-      virtual char statusLetter() = 0;
+      virtual QString statusLetter() = 0;
       virtual bool playingFile( const QString & );
       virtual void activateVox( );
       virtual void interruptOK( ) = 0;

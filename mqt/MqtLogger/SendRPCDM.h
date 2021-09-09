@@ -28,6 +28,10 @@ class TSendDM : public QObject
       RigCache rigCache;
       RotatorCache rotatorCache;
 
+      bool radioLoaded = false;
+      bool rotatorLoaded = false;
+      bool keyerLoaded = false;
+
       PubSubName keyerApp;
       PubSubName clusterApp;
 
@@ -35,14 +39,12 @@ class TSendDM : public QObject
 
       void traceMsg(QString msg);
       void getRouterAppCatMap();
+      void sendKeyerUser();
 public:  		// User declarations
       TSendDM( QWidget* Owner );
       ~TSendDM();
 
       void subscribeApps();
-
-      bool radioLoaded = false;
-      bool rotatorLoaded = false;
 
       void invalidateCache();
       void invalidateRigCache(const PubSubName &name);
@@ -55,14 +57,18 @@ public:  		// User declarations
       PubSubName getSelectedRig(QString loggerUuid);
       PubSubName getSelectedRot(QString loggerUuid);
 
-      void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
-      void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
       //void sendBandMap( TSingleLogFrame *tslf,const QString &freq, const QString &call, const QString &utc, const QString &loc, const QString &qth );
 
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const QString bandMask, const QString &uuid);
       void sendHfFlagToClusterServer(const bool state);
       void sendReconnectFlagToClusterServer(const bool state);
+
+      void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
+      void sendKeyerRecord(TSingleLogFrame *tslf, int fno );
+
+      void publishKeyerConfig(const QString &config);
+      void publishKeyerMS(bool send);
 
       void sendKeyerTone(TSingleLogFrame *tslf);
       void sendKeyerTwoTone(TSingleLogFrame *tslf);
@@ -104,8 +110,18 @@ public:  		// User declarations
           return &rigCache;
       }
 
-
-
+      bool isRadioLoaded()
+      {
+          return radioLoaded;
+      }
+      bool isRotatorLoaded()
+      {
+          return rotatorLoaded;
+      }
+      bool isKeyerLoaded()
+      {
+          return keyerLoaded;
+      }
 
 private slots:
       void on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
@@ -119,11 +135,12 @@ signals:
 
       void setRadioLoaded();
       void setRadioList();
-
-      void setKeyerLoaded();
       void setClusterServerLoaded();
       void setClusterState(QString);
       void setClusterTXSpotEnableState(QString);
+
+      void keyerConfig(QString, QString);
+      void keyerReport(QString);
 
 };
 #endif

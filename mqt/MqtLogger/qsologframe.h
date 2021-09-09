@@ -26,9 +26,6 @@ public:
 
     void setAsEdit(bool s, QString b);
     void setBandMapLoaded(bool loaded);
-    void setKeyerLoaded();
-    void setRadioLoaded();
-    void setRotatorLoaded();
     void setClusterClientLoaded(bool loaded);
     void setClusterServerLoaded(bool loaded);
 
@@ -191,10 +188,8 @@ private:
 
     ValidatedControl *freqIl;
 
-    bool rotatorLoaded;
     bool isRotatorLoaded();
 
-    bool radioLoaded;
     bool isRadioLoaded();
 
     bool bandMapLoaded;
@@ -205,9 +200,6 @@ private:
 
     bool qrzDisplayFrameLoaded;
     bool isQrzDisplayFrameLoaded();
-
-    bool keyerLoaded;
-    bool isKeyerLoaded();
 
     bool radioConnected;
     bool radioError;

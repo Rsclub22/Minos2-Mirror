@@ -30,12 +30,9 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , overstrike(false)
     , current(nullptr)
     , edit(false)
-    , rotatorLoaded(false)
-    , radioLoaded(false)
     , bandMapLoaded(false)
     , logDataFromBandmapOrMemory(false)
     , qrzDisplayFrameLoaded(false)
-    , keyerLoaded(false)
     , radioConnected(false)
     , radioError(false)
     , clusterClientLoaded(false)
@@ -2950,20 +2947,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
       errs.insert( &Validator::errDefs[ mess_no ], &Validator::errDefs[ mess_no ] );
 }
 
-//--------------------------------------------------------------
-
-// keyer
-
-
-void QSOLogFrame::setKeyerLoaded()
-{
-    keyerLoaded = true;
-}
-bool QSOLogFrame::isKeyerLoaded()
-{
-    return keyerLoaded;
-}
-
 //---------------------------------------------------------
 
 
@@ -3372,27 +3355,16 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
 
 
 //---------------------------------------------------------
-void QSOLogFrame::setRadioLoaded()
-{
-    radioLoaded = true;
-
-}
-
 bool QSOLogFrame::isRadioLoaded()
 {
-    return radioLoaded;
+    return LogContainer->sendDM->isRadioLoaded();
 }
 
 //----------------------------------------------------------------
 
-void QSOLogFrame::setRotatorLoaded()
-{
-    rotatorLoaded = true;
-}
-
 bool QSOLogFrame::isRotatorLoaded()
 {
-    return rotatorLoaded;
+    return LogContainer->sendDM->isRotatorLoaded();
 }
 
 

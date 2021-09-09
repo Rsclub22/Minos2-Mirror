@@ -1,63 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
-//
-//
-//
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include "voicekeyerbase.h"
-
-
-VoiceKeyerCommonParams::VoiceKeyerCommonParams()
-{
-    clear();
-}
-
-VoiceKeyerCommonParams::~VoiceKeyerCommonParams()
-{
-
-}
-
-VoiceKeyerCommonParams& VoiceKeyerCommonParams::operator = (const VoiceKeyerCommonParams& vkcp)
-{
-    numButtons = vkcp.numButtons;
-    comport = vkcp.comport;
-    return *this;
-}
-
-bool VoiceKeyerCommonParams::operator == (const VoiceKeyerCommonParams& vkcp)
-{
-    if (numButtons == vkcp.numButtons &&
-            comport == vkcp.comport)
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool VoiceKeyerCommonParams::operator != (const VoiceKeyerCommonParams& vkcp)
-{
-    if (numButtons != vkcp.numButtons ||
-            comport != vkcp.comport)
-    {
-        return true;
-    }
-
-    return false;
-}
-void VoiceKeyerCommonParams::clear()
-{
-    comport.clear();
-}
-
-
 
 VoiceKeyerParams::VoiceKeyerParams()
 {

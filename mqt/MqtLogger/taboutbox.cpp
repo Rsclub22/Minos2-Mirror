@@ -169,8 +169,23 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
         int cap;
         TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
+        bool doAge;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
+
+        if (cap == -1)
+        {
+            cap = 0;
+            doAge = false;
+            TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, doAge);
+            TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
+            TContestApp::getContestApp() ->loggerBundle.flushProfile();
+        }
+
         ui->ageSpinner->setValue(cap);
 
+        ui->ageCb->setChecked(doAge);
+
+        ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
     }
 
     if (  onStartup && !checkRouterReady() )
@@ -258,3 +273,11 @@ void TAboutBox::on_ageSpinner_valueChanged(int cap)
     TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpAgeToProtectContests, cap);
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
+
+void TAboutBox::on_ageCb_stateChanged(int /*arg1*/)
+{
+    ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeToProtectContests, ui->ageCb->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
+}
+

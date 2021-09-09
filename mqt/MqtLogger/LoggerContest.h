@@ -150,6 +150,7 @@ protected:
       MinosStringItem<QString> currentStackItems[STACKITEMS];
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
+      void clearRunMemory(int memno, const memoryData::memData &mem);
       void saveRigMemory(int memno, const memoryData::memData &mem);
       void saveInitialRunMemory(int memno, const memoryData::memData &mem);
       void saveInitialRigMemory(int memno, const memoryData::memData &mem);

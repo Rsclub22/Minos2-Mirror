@@ -229,37 +229,37 @@
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="95"/>
-        <location filename="../clustermainwindow.cpp" line="2882"/>
+        <location filename="../clustermainwindow.cpp" line="2879"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="488"/>
+        <location filename="../clustermainwindow.cpp" line="485"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="489"/>
+        <location filename="../clustermainwindow.cpp" line="486"/>
         <source>Please confirm you want to delete all the spots?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="599"/>
+        <location filename="../clustermainwindow.cpp" line="596"/>
         <source>Disconnect Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="600"/>
+        <location filename="../clustermainwindow.cpp" line="597"/>
         <source>Connect to Node - Disconnect Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="636"/>
+        <location filename="../clustermainwindow.cpp" line="633"/>
         <source>Connect to Cluster Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="637"/>
+        <location filename="../clustermainwindow.cpp" line="634"/>
         <source>Personal Data missing.
 User Name: %1
 User Callsign: %2
@@ -269,99 +269,99 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="673"/>
+        <location filename="../clustermainwindow.cpp" line="670"/>
         <source>Connected to: %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="674"/>
+        <location filename="../clustermainwindow.cpp" line="671"/>
         <source>Connection Established with host %1 %2:%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="683"/>
+        <location filename="../clustermainwindow.cpp" line="680"/>
         <source>Connection Error: Error Code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="684"/>
+        <location filename="../clustermainwindow.cpp" line="681"/>
         <source>Connection failed error %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="693"/>
+        <location filename="../clustermainwindow.cpp" line="690"/>
         <source>Login Start - Send logon message
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="698"/>
+        <location filename="../clustermainwindow.cpp" line="695"/>
         <source>Logging in with callsign %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="704"/>
+        <location filename="../clustermainwindow.cpp" line="701"/>
         <source>Logged Out of node  %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="711"/>
+        <location filename="../clustermainwindow.cpp" line="708"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="905"/>
+        <location filename="../clustermainwindow.cpp" line="902"/>
         <source>handleCmdFile: Command file found - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="922"/>
+        <location filename="../clustermainwindow.cpp" line="919"/>
         <source>handleCmdFile: Command File missing - %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="930"/>
+        <location filename="../clustermainwindow.cpp" line="927"/>
         <source>handleCmdFile: Sending Commands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="945"/>
+        <location filename="../clustermainwindow.cpp" line="942"/>
         <source>handleCmdFile: Finished sending Commands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="952"/>
+        <location filename="../clustermainwindow.cpp" line="949"/>
         <source>handleCmdFile: Command file empty %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1822"/>
+        <location filename="../clustermainwindow.cpp" line="1819"/>
         <source>Sending command - Not logged in  - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2262"/>
+        <location filename="../clustermainwindow.cpp" line="2259"/>
         <source>Cluster %1 User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2263"/>
+        <location filename="../clustermainwindow.cpp" line="2260"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2882"/>
+        <location filename="../clustermainwindow.cpp" line="2879"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2888"/>
+        <location filename="../clustermainwindow.cpp" line="2885"/>
         <source>Cluster Node User Command Shortcut Keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2889"/>
+        <location filename="../clustermainwindow.cpp" line="2886"/>
         <source>VHF/UHF User Commands
 
 Send Cmd
