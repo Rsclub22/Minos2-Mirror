@@ -1389,6 +1389,7 @@ void TSingleLogFrame::refreshMults()
 
 void TSingleLogFrame::updateTrees()
 {
+    // this is what takes a long time...
    qsoModel.reset();
    refreshMults();
 }
