@@ -2098,27 +2098,27 @@ Please enter another bearing</source>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="737"/>
+        <location filename="../MatchThread.cpp" line="741"/>
         <source>Possible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="740"/>
+        <location filename="../MatchThread.cpp" line="744"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="744"/>
+        <location filename="../MatchThread.cpp" line="748"/>
         <source>District</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="748"/>
+        <location filename="../MatchThread.cpp" line="752"/>
         <source>Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="750"/>
+        <location filename="../MatchThread.cpp" line="754"/>
         <source> - %1%2 %3 matches</source>
         <translation type="unfinished"></translation>
     </message>
