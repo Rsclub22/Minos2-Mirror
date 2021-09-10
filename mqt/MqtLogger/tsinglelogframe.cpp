@@ -211,10 +211,10 @@ void TSingleLogFrame::createScreenComponents()
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
-    // the order of the next two lines is critical
     QSOTable->setItemDelegate( delegate.data() );
-    //QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
+    QSize ms = delegate->docSize("XX");
+    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
@@ -519,7 +519,12 @@ void TSingleLogFrame::applyScreenLayout()
 
     clearScreenLayout(true);
     buildScreenLayout();
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    QSOTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);
+
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -987,10 +992,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     FKHRotControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
-
-   //QHeaderView::ResizeMode rm =  QSOTable->verticalHeader()->sectionResizeMode(1);
-   // default seems to be 0, Interactive
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     update();   // this queues a repaint
 }
