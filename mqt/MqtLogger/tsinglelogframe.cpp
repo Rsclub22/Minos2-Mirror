@@ -1028,9 +1028,13 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 
         CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);
         QString qthBuff;
-        if (contest->location.getValue().size())
+
+        if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
         {
-            qthBuff = "<br>" + contest->location.getValue();
+            if (contest->location.getValue().size())
+            {
+                qthBuff = "<br>" + contest->location.getValue();
+            }
         }
 
         QString locBuff;
