@@ -525,6 +525,7 @@ void TSingleLogFrame::applyScreenLayout()
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
+    updateTrees();
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -1394,7 +1395,6 @@ void TSingleLogFrame::refreshMults()
 
 void TSingleLogFrame::updateTrees()
 {
-    // this is what takes a long time...
    qsoModel.reset();
    refreshMults();
 }
