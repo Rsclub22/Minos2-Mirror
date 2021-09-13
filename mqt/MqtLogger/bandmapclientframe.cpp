@@ -1771,19 +1771,14 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
             return;
 
+        Frequency freq = lct->frequency.getValue();
+        if (freq.isClear())
+        {
+            return;
+        }
         Callsign cs = lct->cs;
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
-
-//        QString logContactDistrict;
-//        if (lct->districtMult)
-//        {
-//            logContactDistrict = lct->districtMult->districtCode;
-//        }
-//        QString logContactMode = lct->mode.getValue();
-//        QString logContactMgmSubMode = lct->mgmSubmode.getValue();
-        Frequency freq = lct->frequency.getValue();
-
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
