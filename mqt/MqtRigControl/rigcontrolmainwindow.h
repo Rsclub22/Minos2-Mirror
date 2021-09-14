@@ -58,7 +58,7 @@ namespace displayIndicator {
 }
 
 namespace rigCtldTrace {
-    enum rigCtldTraceCodes {NONE, BUG, ERR, WARN, VERBOSE, TRACE};
+    enum rigCtldTraceCodes {rctNONE, rctBUG, rctERR, rctWARN, rctVERBOSE, rctTRACE};
     const QStringList  rigCtldTraceStr = {"", "-v", "-vv", "-vvv", "-vvvv", "-vvvvv"};
 }
 

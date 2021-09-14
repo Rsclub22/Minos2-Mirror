@@ -1163,10 +1163,10 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
             }
         }
 
-        rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::NONE;
+        rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::rctNONE;
         if (ui->actionTraceComms->isChecked())
         {
-            traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
+            traceCode = rigCtldTrace::rigCtldTraceCodes::rctVERBOSE;
         }
 
         QString parity;
@@ -2541,7 +2541,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
         trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
     }
 
-    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
+    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::rctNONE)
     {
         arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
     }

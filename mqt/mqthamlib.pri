@@ -2,7 +2,7 @@
 # comment out HAMLIBVER to use the current release
 # The files need to be in C:\Qt_Projects
 # Also make sure the Windows Path statement contains the path to the Hamlib Bin Dir
-# For example C:\Qt_Projects\hamlib-w32-4.0\bin
+# For example C:\Qt_Projects\hamlib-w32-4.3.1\bin
 
 
 HAMLIBVER = $$(hamlib)
@@ -39,19 +39,19 @@ equals(HAMLIBVER, 33) {
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
-      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
+      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
       #message(Hamlib path is $$HAMLIBDIR)
       }
    contains(QT_ARCH, x86_64) {
-      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
+      HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
       }
       LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
    } else {
       contains(QT_ARCH, i386) {
-         HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.0)
+         HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.3.1)
       }
       contains(QT_ARCH, x86_64) {
-         HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.0)
+         HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.3.1)
       }
       msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
       msvc: DEFINES += DLL_EXPORT
