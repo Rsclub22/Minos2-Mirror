@@ -1239,7 +1239,7 @@ void RigControlFrame::setRadioFreq( Frequency &sendFreq, bool &fromStartRigContr
            QString cb = ct->currentBand.getValue().trimmed();
            traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
 
-           BandList &blist = BandList::getBandList();       // not sure need this check now
+           BandList &blist = BandList::getBandList();
            QSharedPointer<BandInfo>  bi;
            bool bandOK = blist.findBand(cb, bi);
            if (bandOK)
@@ -1390,12 +1390,14 @@ bool RigControlFrame::checkContestBandMatch(const Frequency &freq)
 
             setRadioBandWarning("");
             freqLineEditBkgnd(false);
+            ui->resetBandFreqButton->show();
             return true;
         }
         else
         {
             setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Freq out of contest band"));
             freqLineEditBkgnd(true);
+            ui->resetBandFreqButton->hide();
         }
 
     }
@@ -2099,4 +2101,62 @@ void RigControlFrame::checkConnection()
     }
 }
 
+
+
+void RigControlFrame::on_resetBandFreqButton_clicked()
+{
+    //We want to select the frequency based on the contest band
+
+    traceMsg(QString("on_resetBandFreqButton_clicked"));
+
+    QString cb = ct->currentBand.getValue().trimmed();
+    traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
+
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = blist.findBand(cb, bi);
+    if (bandOK)
+    {
+        QString mode = ct->currentMode.getValue();
+        if (mode == "PH")
+        {
+            Frequency modeTestFreq = bi->fLow;
+            if (modeTestFreq > Frequency(10000000)) // over 10MHz is USB
+            {
+                mode = "USB";
+            }
+            else
+            {
+                mode = "LSB";
+            }
+        }
+
+        Frequency freq = tslf->bandSwitchFrame->getPresetFreq(cb, mode);
+
+        traceMsg(QString("setRadioFreq: set preset freq = %1").arg(freq.traceStr()));
+        if (checkValidFreq(freq))
+        {
+              traceMsg(QString("setRadioFreq: freq valid = %1, send freq to rigcontrol").arg(freq.traceStr()));
+              sendFreq = freq;
+              curFreq = freq;
+              lastFreq = freq;
+              traceMsg(QString("setRadioFreq: sendFreq = %1, curFreq = %2, lastFreq = %3")
+                      .arg(sendFreq.traceStr(), curFreq.traceStr(), lastFreq.traceStr()));
+
+        }
+        else
+        {
+              traceMsg(QString("setRadioFreq: freq not valid = %1").arg(freq.traceStr()));
+              sendFreq.clear();
+
+        }
+    }
+    else
+    {
+        // warn no band for this radio
+        setRadioBandWarning(HtmlFontColour(Qt::red) + tr("No %1 Band found for this radio!").arg(cb));
+        traceMsg(QString("SsetRadioFreq: %1 Band not found on this radio").arg(cb));
+        sendFreq = NO_BAND_SUPPORT;
+    }
+}
 
