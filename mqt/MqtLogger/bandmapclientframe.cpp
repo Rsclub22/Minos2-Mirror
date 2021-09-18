@@ -1476,7 +1476,7 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
 
 void BandmapClientFrame::setFreq(Frequency freq)
 {
-    if (lastfreq != freq)
+    if (ct && lastfreq != freq)
     {
         QString bandChanged;
         bandChanged = ct->checkBandChange(freq, lastfreq);
