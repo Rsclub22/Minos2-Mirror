@@ -841,9 +841,14 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        }
    }
    contestTransferObject->MGMContestRules.setValue(false);
+   QString setMode = ic.mode;
+   if (setMode == "FT8" || setMode == "FT4")
+   {
+       setMode = hamlibData::MGM;
+   }
    if (isHF)
    {
-       if (ic.mode == "MGM")
+       if (setMode == hamlibData::MGM)
        {
            contestTransferObject->locMult.setValue( true );
            contestTransferObject->locatorMandatoryField.setValue( true );
@@ -852,7 +857,6 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->allowLoc4.setValue(true);
            ui->AllowLoc4CB->setChecked(true);
        }
-
    }
    else
    {
@@ -916,11 +920,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
             ui->BonusComboBox->setCurrentIndex(2);
    }
 
-   contestTransferObject->modeList.setValue(ic.mode);
+   contestTransferObject->modeList.setValue(setMode);
    contestTransferObject->currentMode.setValue("");
    setModes();
 
-   QString mode = ic.mode;  // which is a list
+   QString mode = setMode;  // which is a list
    if (mode.isEmpty())
    {
       if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
