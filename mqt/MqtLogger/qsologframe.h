@@ -25,7 +25,6 @@ public:
     ~QSOLogFrame() override;
 
     void setAsEdit(bool s, QString b);
-    void setBandMapLoaded(bool loaded);
 
     bool savePartial(  );
     bool restorePartial( );
@@ -185,8 +184,6 @@ private:
 
     bool isRadioLoaded();
 
-    bool bandMapLoaded;
-    bool isBandMapLoaded();
     void setBandMapControlsVisible(bool visible);
     bool logDataFromBandmapOrMemory;
     int addToBandmapTuneTolerance;

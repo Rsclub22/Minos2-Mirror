@@ -29,7 +29,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     , overstrike(false)
     , current(nullptr)
     , edit(false)
-    , bandMapLoaded(false)
     , logDataFromBandmapOrMemory(false)
     , qrzDisplayFrameLoaded(false)
     , radioConnected(false)
@@ -888,7 +887,7 @@ void QSOLogFrame::on_GJVForceButton_clicked()
 }
 bool QSOLogFrame::savePartial()
 {
-   if ( !partialContact )
+   if (contest && !partialContact )
    {
       getScreenEntry();
       partialContact = new ScreenContact( );
@@ -899,7 +898,7 @@ bool QSOLogFrame::savePartial()
 }
 bool QSOLogFrame::restorePartial( )
 {
-   if ( partialContact )
+   if (contest && partialContact )
    {
       screenContact.copyFromArg( *( partialContact ) );
       showScreenEntry();
@@ -920,12 +919,10 @@ void QSOLogFrame::killPartial( )
 
 void QSOLogFrame::startNextEntry( )
 {
-    if (contest == nullptr)
+    if (!contest)
     {
         return;
     }
-    if (!contest)
-        return;
    if (contest->unfilledCount <= 0 || contest->isReadOnly())
    {
       ui->FirstUnfilledButton->setVisible(false);
@@ -1369,6 +1366,11 @@ void QSOLogFrame::setScoreText( int dist, bool partial, bool xband )
 //---------------------------------------------------------------------------
 void QSOLogFrame::calcLoc( )
 {
+    if (!contest)
+    {
+        return;
+    }
+
     QString gridref = ui->LocFrame->getTextEditEdit()->text().trimmed();
 
     if ( gridref.compare(oldloc, Qt::CaseInsensitive ) != 0 )
@@ -2082,18 +2084,10 @@ void QSOLogFrame::checkQsoFrameColour()
 
 void QSOLogFrame::updateQSODisplay()
 {
-    if (contest == nullptr)
+    if (!contest)
     {
         return;
     }
-   if ( contest->districtMult.getValue() )
-   {
-//      ui->QTHEdit->CharCase = ecUpperCase;
-   }
-   else
-   {
-//      ui->QTHEdit->CharCase = ecNormal;
-   }
    //CallsignEdit->Enabled = false; // leave this enabled in protected to allow searching
    bool notProtected = !contest->isReadOnly();
    ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
@@ -2325,7 +2319,7 @@ void QSOLogFrame::modeSentFromRig(QString m)
     }
     QString newMode = mlist[0];
 
-    if (contest->modeList.getValue().contains(newMode))
+    if (contest && contest->modeList.getValue().contains(newMode))
     {
         oldMode = ui->ModeComboBoxGJV->currentText();
         if (newMode != oldMode)
@@ -2591,6 +2585,10 @@ void QSOLogFrame::setDtgSection()
 
 void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
 {
+    if (!contest)
+    {
+        return;
+    }
    ui->CallsignFrame->getTextEditEdit()->setText(lct->cs.getFullCall());
    ui->LocFrame->getTextEditEdit()->setText(lct->loc.getLoc());  // also forces update of score etc
 
@@ -2624,6 +2622,10 @@ void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const B
 }
 void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /*matct*/ )
 {
+    if (!contest)
+    {
+        return;
+    }
    ui->CallsignFrame->getTextEditEdit()->setText(lct->cs.getFullCall());
 
    // only transfer loc qth info if required for this ContestLog
@@ -2660,6 +2662,10 @@ void QSOLogFrame::transferDetails( const ListContact *lct, const ContactList * /
 
 void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory )
 {
+    if (!contest)
+    {
+        return;
+    }
     if (fromBandmapOrMemory)
     {
         logDataFromBandmapOrMemory = fromBandmapOrMemory;
@@ -2692,6 +2698,10 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
 }
 void QSOLogFrame::transferFromWSJTX(QString call)
 {
+    if (!contest)
+    {
+        return;
+    }
     ui->CallsignFrame->getTextEditEdit()->setText(call);
     doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
 }
@@ -2947,16 +2957,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
 
 //---------------------------------------------------------
 
-
-void QSOLogFrame::setBandMapLoaded(bool loaded)
-{
-    bandMapLoaded = loaded;
-}
-bool QSOLogFrame::isBandMapLoaded()
-{
-    return bandMapLoaded;
-}
-
 void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
 
@@ -3019,23 +3019,19 @@ void QSOLogFrame::setTuningAddMapChkBoxState()
 bool QSOLogFrame::getTuneAddBandMapSetting()
 {
     bool state = false;
-    if (bandMapLoaded)
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf && tslf->isBandMapLoaded())
     {
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf)
-        {
-            state = tslf->getTuneAddBandMapSetting();
-        }
+        state = tslf->getTuneAddBandMapSetting();
     }
-
     return state;
 }
 
 void QSOLogFrame::setTuneAddBandMapSetting(bool state)
 {
-    if (bandMapLoaded)
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (tslf && tslf->isBandMapLoaded())
     {
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         tslf->setTuneAddBandMapSetting(state);
     }
 }
@@ -3297,8 +3293,8 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 
 void QSOLogFrame::checkBandMapAndClusterLoaded()
 {
-
-    if (contest && !contest->isReadOnly() && isBandMapLoaded())
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (contest && !contest->isReadOnly() && tslf && tslf->isBandMapLoaded())
     {
         setBandmapControlsState();
         setTuningAddMapChkBoxState();
@@ -3307,12 +3303,7 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
     {
         setBandMapControlsVisible(false);
     }
-
 }
-
-
-
-
 
 //---------------------------------------------------------
 bool QSOLogFrame::isRadioLoaded()
@@ -3380,7 +3371,8 @@ void QSOLogFrame::setBandmapControlsState()
     }
     else
     {
-        if (isBandMapLoaded())
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        if (tslf && tslf->isBandMapLoaded())
         {
             setBandMapControlsVisible(true);
             setBandMapControlsDisabled(false);
@@ -3416,8 +3408,8 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 
 void QSOLogFrame::on_FreqChanged(Frequency f)
 {
-
-    if (!logDataFromBandmapOrMemory && isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
     {
         qint64 dialFreq = qint64(f) / 1000;
         qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
@@ -3445,8 +3437,6 @@ void QSOLogFrame::on_FreqChanged(Frequency f)
             }
         }
     }
-
-
 }
 
 void QSOLogFrame::on_callRb_clicked()

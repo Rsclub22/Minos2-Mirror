@@ -969,12 +969,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
         columnsChanged = false;
     }
 
-//    if (splittersChanged)
-//    {
-//        MinosLoggerEvents::SendDoSplitterChanges(ct);
-//        splittersChanged = false;
-//    }
-
     refreshMults();
 
     GJVQSOLogFrame->selectField(nullptr);
@@ -982,8 +976,11 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     MinosLoggerEvents::SendShowOperators();
 
-    LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
+    if (ct)
+    {
+        LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+        LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
+    }
 
 
     LogContainer->sendDM->notifyRigChanges();
@@ -1658,7 +1655,6 @@ void TSingleLogFrame::sendKeyerStop()
 void TSingleLogFrame::setBandmapLoaded(bool loaded)
 {
    bandMapLoaded = loaded;
-   GJVQSOLogFrame->setBandMapLoaded(loaded);
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
@@ -1761,7 +1757,7 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         if (f != sCurFreq)
         {
             stopKeyer = true;
-            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr()).arg(sCurFreq.traceStr()));
+            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr(), sCurFreq.traceStr()));
         }
         QString bandChanged = contest->checkBandChange(f, sCurFreq);
         if (!bandChanged.isEmpty())
@@ -2073,7 +2069,7 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &ban
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
             LogContainer->sendDM->changeRigSelectionTo(radName, band, freq, mode, ct->uuid);  // send message including mode if it has been appended.
-            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.traceStr()).arg(mode).arg(uuid));
+            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName, freq.traceStr(), mode, uuid));
 
 
 
