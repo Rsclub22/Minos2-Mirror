@@ -363,13 +363,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                      loadOK = importReg1Test( ediContestFile );
                      needExport = true;
                   }
-      bool allowHF = false;
-      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-      if (!allowHF && isHF())
-      {
-           MinosParameters::getMinosParameters() -> mshowMessage(tr("Contest %1 is an HF contest - HF not enabled").arg(cfileName))  ;
-           return false;
-      }
 
       scanContest();
       clearDirty();  // what we have just read CAN'T be dirty

@@ -28,8 +28,6 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->setupUi(this);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
     trAllHf = tr("All HF");
 
     QSettings settings;
@@ -178,13 +176,13 @@ void ContestDetails::setDetails(  )
    // need to get legal bands from ContestLog
 
    BandList &blist = BandList::getBandList();
-   if (allowHF && contestTransferObject->isHF())
+   if (contestTransferObject->isHF())
    {
        ui->BandComboBox->addItem( trAllHf );
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if ( (allowHF && contestTransferObject->isHF()) && b->getType() == "HF")
+       if ( (contestTransferObject->isHF()) && b->getType() == "HF")
        {
            ui->BandComboBox->addItem( b->uk );
        }
@@ -1389,7 +1387,7 @@ void ContestDetails::enableControls()
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
-   ui->HFCalendarButton->setVisible(allowHF && contestTransferObject->isHF());
+   ui->HFCalendarButton->setVisible(contestTransferObject->isHF());
    ui->VHFCalendarButton->setVisible(!contestTransferObject->isHF());
    ui->uwaveCalendarButton->setVisible(!contestTransferObject->isHF());
 }

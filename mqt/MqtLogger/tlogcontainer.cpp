@@ -419,19 +419,9 @@ QAction *TLogContainer::newCheckableAction(const QString text, QMenu *m, void (T
 
 void TLogContainer::setupMenus()
 {
-    bool allowHF = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
     FileOpenAction = newAction(QT_TR_NOOP("&Open Contest..."), ui->menuFile, &TLogContainer::FileOpenActionExecute);
     FileImportVHFAction = newAction(QT_TR_NOOP("&Import VHF Contest..."), ui->menuFile, &TLogContainer::FileImportVHFActionExecute);
-    if (allowHF)
-    {
-        FileImportHFAction = newAction(QT_TR_NOOP("&Import HF Contest..."), ui->menuFile, &TLogContainer::FileImportHFActionExecute);
-    }
-    else
-    {
-        FileImportHFAction = nullptr;
-    }
+    FileImportHFAction = newAction(QT_TR_NOOP("&Import HF Contest..."), ui->menuFile, &TLogContainer::FileImportHFActionExecute);
     recentFilesMenu = newMenu(ui->menuFile, QT_TR_NOOP("Reopen Contest"));
 
     for (int i = 0; i < MaxRecentFiles; ++i)
@@ -444,14 +434,8 @@ void TLogContainer::setupMenus()
     updateRecentFileActions();
 
     VHFFileNewAction = newAction(QT_TR_NOOP("&New VHF Contest..."), ui->menuFile, &TLogContainer::VHFFileNewActionExecute);
-    if (allowHF)
-    {
-        HFFileNewAction = newAction(QT_TR_NOOP("&New HF Contest..."), ui->menuFile, &TLogContainer::HFFileNewActionExecute);
-    }
-    else
-    {
-        HFFileNewAction = nullptr;
-    }
+    HFFileNewAction = newAction(QT_TR_NOOP("&New HF Contest..."), ui->menuFile, &TLogContainer::HFFileNewActionExecute);
+
     FileCloseAction = newAction(QT_TR_NOOP("Close Contest"), ui->menuFile, &TLogContainer::FileCloseActionExecute);
     CloseAllAction = newAction(QT_TR_NOOP("Close all Contests"), ui->menuFile, &TLogContainer::CloseAllActionExecute);
     CloseAllButAction = newAction(QT_TR_NOOP("Close all but this Contest"), ui->menuFile, &TLogContainer::CloseAllButActionExecute);

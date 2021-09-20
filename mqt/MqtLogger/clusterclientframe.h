@@ -179,13 +179,8 @@ private:
     bool purgeSpotFlag;
     bool holdUpdateFlag;
 
-    bool allowHF;
-
-
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
-
-    QTimer* checkHfFlagTimer;
 
     QTimer* waitClusterServerLoadedTimer;
 
@@ -343,7 +338,6 @@ private slots:
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
     void on_resendClusterSpots();
-    void checkHfFlag();
     void on_waitClusterServerLoadedTimeout();
     void on_clusterStatusIndicatorClicked();
 };

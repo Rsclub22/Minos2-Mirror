@@ -105,7 +105,7 @@ BundleFile::BundleFile( PROFILES p )
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpReadabilityInit, "ReadabilityInit", true, QT_TR_NOOP("Auto set Readability to 5"), QT_TR_NOOP("Auto set Readability to 5"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAllowHF, "AllowHF", false, QT_TR_NOOP("Allow HF Bands"), QT_TR_NOOP("Allow HF Bands"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowOperateTime, "ShowOpTime", otRSGB, QT_TR_NOOP("Show Operating Time"), QT_TR_NOOP("Show Operating Time"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", false, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeProtectContests, "AgeProtectContests", true, QT_TR_NOOP("Protect contests by age"), QT_TR_NOOP("Protect contests by age"), false ) ) );

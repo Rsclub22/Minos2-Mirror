@@ -35,7 +35,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     timeToLive(0),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
-    allowHF(false),
     clusterServerConnected(false)
 {
 
@@ -177,10 +176,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-    checkHfFlagTimer = new QTimer(this);
-    connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
-    checkHfFlagTimer->start(1000);
-
     connect(ui->statusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
 
 
@@ -195,7 +190,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
 ClusterClientFrame::~ClusterClientFrame()
 {
-    checkHfFlagTimer->stop();
     delete ui;
     delete dxSpotDataModel;
 
@@ -544,27 +538,6 @@ void ClusterClientFrame::filterButtonSelected()
     delete filterSetup;
 
 }
-
-
-
-void ClusterClientFrame::checkHfFlag()
-{
-    bool hf = false;
-    if (TContestApp::getContestApp())
-    {
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, hf );
-        if (hf != allowHF)
-        {
-            allowHF = hf;
-            setHF(allowHF);
-        }
-    }
-
-
-
-
-}
-
 
 
 void ClusterClientFrame::setHF(bool /*hfFlag*/)

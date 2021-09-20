@@ -29,12 +29,6 @@ void DefDirsDlg::initialise()
 
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
     ui->ageCb->setChecked(doAge);
-
-    bool allowHF = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
-    ui->HFSupportcb->setChecked(allowHF);
-
 }
 bool DefDirsDlg::check()
 {
@@ -73,7 +67,6 @@ void DefDirsDlg::finalise()
         doSelectSession = true;
     }
 
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpAllowHF, ui->HFSupportcb->isChecked());
     if (doSelectSession)
     {
         TWaitCursor wc(this);

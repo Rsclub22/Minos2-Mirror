@@ -73,14 +73,10 @@ void ClusterBandmapConfigure::initialise()
         connect(distanceLineEdits[i], &QLineEdit::editingFinished, this, [=]() {onDistanceEditingFinished(distanceLineEdits[i]);});
     }
 
-    bool allowHF = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
-
     connect(ui->spotLessThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotLessThanDistanceRadioButClicked();});
     connect(ui->spotGreaterThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotGreaterThanDistanceRadioButClicked();});
 
-     ui->hfFrame->setVisible(allowHF);  // don't show Hf for this release
+     ui->hfFrame->setVisible(true);
 
    // get addBandmapTuningTolerance
 
