@@ -67,6 +67,15 @@ typedef QMap < MapWrapper<BaseContact>, MapWrapper<BaseContact> > LogList;
 typedef LogList::iterator LogIterator;
 typedef QMap < QString, QString > OperatorList;
 
+class Minute
+{
+    public:
+        int count = 0;
+        Minute()
+        {}
+};
+
+
 class BaseContestLog: public BaseLogList
 {
     Q_OBJECT
@@ -310,6 +319,10 @@ class BaseContestLog: public BaseLogList
       bool updateStat(QSharedPointer<BaseContact> cct , int sp1, int sp2);
       void updateStats(int p1, int p2);
 
+
+      QVector<Minute> qsoTimeMap;
+
+
       // methods
 
       // common file stuff
@@ -384,6 +397,7 @@ class BaseContestLog: public BaseLogList
 
       int getBonus() const;
 
+      void getOpTime(QString &otBuff, SHOWOPERATINGTIME temp);
 protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;

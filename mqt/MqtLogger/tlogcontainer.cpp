@@ -252,11 +252,16 @@ void TLogContainer::on_TimeDisplayTimer( )
        MinosLoggerEvents::SendTimerDistribution();
 
       QString statbuf;
+      QString otBuff;
       if ( ct )
       {
          ct->setScore( statbuf );
+         int temp;
+         TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpShowOperateTime, temp);
+         ct->getOpTime(otBuff, static_cast<SHOWOPERATINGTIME>(temp));
+
       }
-      sblabel0->setText( statbuf );
+      sblabel0->setText( QString(statbuf + " " + otBuff).trimmed());
    }
 
 }

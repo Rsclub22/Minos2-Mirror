@@ -782,6 +782,22 @@ void BaseContestLog::scanContest( )
    QString curop2 = currentOp2.getValue();
    oplist.insert( curop2, curop2 );
 
+   QDateTime  contestStart = CanonicalToTDT(DTGStart.getValue());
+   QDateTime  contestEnd = CanonicalToTDT(DTGEnd.getValue());
+//   qint64 fromContestStart = contestStart.secsTo(QDateTime::currentDateTime());
+
+   const int contestMinutes =  static_cast<int>(contestStart.secsTo(contestEnd)/60);
+
+   if (qsoTimeMap.size() != contestMinutes)
+   {
+        qsoTimeMap.resize(contestMinutes);
+   }
+   for(auto &m:qsoTimeMap)
+   {
+       m.count = 0;
+   }
+
+
    for(auto const &wnct: qAsConst(ctList))
    {
       // get the next contact in sequence and do any required scan checks
@@ -804,6 +820,15 @@ void BaseContestLog::scanContest( )
       {
          nct->contactScore.setValue( -1 );		// force it!
          continue;
+      }
+
+      QDateTime contactTime;
+      bool dirty = false;
+      nct->time.getDtg(contactTime, dirty);
+      if (contactTime >= contestStart && contactTime < contestEnd)
+      {
+          int qoffset = contestStart.secsTo(contactTime)/60;
+          qsoTimeMap[qoffset].count++;
       }
 
       validationPoint = nct->getLogSequence();
@@ -948,6 +973,148 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
    cs.totalScore = (cs.contestScore + cs.bonus)*cs.nmults;
 
 }
+class Period
+{
+    public:
+        bool isGap = false;
+        int length = 0;
+        int startMinute = -1;
+
+        Period()
+        {}
+};
+
+void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
+{
+    // scan qsoTimeMap
+
+    if (sot == otNone)
+    {
+        otBuff.clear();
+        return;
+    }
+    QVector<Period> periods;
+
+    int i = 0;
+    int cur = 0;
+    int curStart = -1;
+    int gap = 0;
+    int gapStart = -1;
+
+    int minGap = 60;
+    if (sot == otIARU)
+    {
+        minGap = 120;
+    }
+
+    QDateTime  contestStart = CanonicalToTDT(DTGStart.getValue());
+    QDateTime  contestEnd = CanonicalToTDT(DTGEnd.getValue());
+ //   qint64 fromContestStart = contestStart.secsTo(QDateTime::currentDateTime());
+
+    QDateTime now = QDateTime::currentDateTimeUtc();
+    if(now < contestStart || now > contestEnd)
+    {
+        now = contestEnd;
+    }
+    const int contestMinutes =  static_cast<int>(contestStart.secsTo(now)/60);
+
+    int maxGapLen = 0;
+    int maxGapOffset = 0;
+    while ( i < contestMinutes )
+    {
+        while ( i < contestMinutes && qsoTimeMap[ i ].count )
+        {
+            if ( curStart < 0 )
+            {
+                curStart = i;
+            }
+            cur++;
+
+            i++;
+        }
+
+        while ( i < contestMinutes && !qsoTimeMap[ i ].count )
+        {
+            if ( gapStart < 0 )
+            {
+                gapStart = i;
+            }
+            gap++;
+            i++;
+        }
+
+        if ( gapStart > 0 && gap > 0 && gap < minGap && i < contestMinutes )
+        {
+            // include gap into operate time
+            gapStart = -1;
+            cur += gap;
+
+            gap = 0;
+            if ( i < contestMinutes )
+                continue;
+        }
+
+        if ( cur )
+        {
+            Period p;
+            p.isGap = false;
+            p.length = cur;
+            p.startMinute = curStart;
+
+            periods.push_back ( p );
+
+            if (cur > maxGapLen)
+            {
+                maxGapLen = cur;
+                maxGapOffset = periods.length() - 1;
+            }
+        }
+        if ( gap )
+        {
+            Period p;
+            p.isGap = true;
+            p.length = gap;
+            p.startMinute = gapStart;
+            periods.push_back ( p );
+        }
+        cur = 0;
+        gap = 0;
+        curStart = -1;
+        gapStart = -1;
+    }
+
+    int operatingTime = 0;
+    int lastGapLength = 0;
+    for ( QVector<Period>::iterator i = periods.begin(); i != periods.end(); i++ )
+    {
+        int startMinute = ( *i ).startMinute;
+        int length = ( *i ).length;
+
+        if ( ( *i ).isGap && startMinute == 0 )
+        {
+            continue;   // don't show leading gap
+        }
+        if ( ( *i ).isGap && i == ( periods.end() - 1 ) )
+        {
+            lastGapLength = (*i).length;
+            continue;   // don't show trailing gap
+        }
+
+        // if IARU we have to look for the largest gap >= 120 mins, and disallow the rest
+        if ( ! ( *i ).isGap || (sot == otIARU && (i - periods.begin()) == maxGapOffset))
+        {
+            operatingTime += length;
+        }
+    }
+    int oh = operatingTime/60;
+    int om = operatingTime%60;
+    int gh = lastGapLength/60;
+    int gm = lastGapLength%60;
+    otBuff = QString("op time %1:%2 gap %3:%4").arg(oh).arg(om, 2, 10, QLatin1Char('0')).arg(gh).arg(gm, 2, 10, QLatin1Char('0'));
+
+
+}
+
 //============================================================
 DupContact::DupContact(QSharedPointer<BaseContact> c ) : dct( c ), sct( nullptr )
 {}
