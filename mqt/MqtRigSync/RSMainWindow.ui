@@ -189,12 +189,6 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuConfigure">
-    <property name="title">
-     <string>Configure</string>
-    </property>
-   </widget>
-   <addaction name="menuConfigure"/>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

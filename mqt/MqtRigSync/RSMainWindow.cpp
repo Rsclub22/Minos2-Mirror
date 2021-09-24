@@ -50,7 +50,7 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     n1mmLink.initialise();
 
     configAction = new QAction( tr("Configure..."), this );
-    ui->menuConfigure->addAction( configAction );
+    ui->menuBar->addAction( configAction );
     connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
 
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
