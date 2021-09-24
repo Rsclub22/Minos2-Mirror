@@ -34,25 +34,21 @@ Please enter a name for the radio</source>
     <message>
         <location filename="../addradiodialog.cpp" line="108"/>
         <source>Error Radio Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de Nom de la radio</translation>
     </message>
     <message>
         <location filename="../addradiodialog.cpp" line="115"/>
         <source>Radio %1 is marked for deletion,
  please use another name</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio %1 est marquée pour supprimer
+ utiliser un autre nom SVP</translation>
     </message>
     <message>
         <location filename="../addradiodialog.cpp" line="121"/>
         <source>Radio %1 already exists,
  please use another name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Radio name already exists,
- please use another name</source>
-        <translation type="vanished">Le nom de la radio existe déjà,
-utiliser un autre nom SVP</translation>
+        <translation>Radio %1 existe déjà
+ utiliser un autre nom SVP</translation>
     </message>
 </context>
 <context>
@@ -411,16 +407,9 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Mode de MGM:</translation>
     </message>
     <message>
-        <source>Radio Mode:</source>
-        <translation type="vanished">Mode de la radio:</translation>
-    </message>
-    <message>
-        <source>Enable</source>
-        <translation type="vanished">Activer</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="918"/>
         <source>Keyer</source>
+        <translatorcomment>manipulateur Clé</translatorcomment>
         <translation>Keyer???</translation>
     </message>
     <message>
@@ -452,7 +441,8 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1116"/>
         <source>CW Keyer</source>
-        <translation>CQ Keyer???</translation>
+        <translatorcomment>manipulateur/keyer</translatorcomment>
+        <translation>Clé CW </translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1123"/>
@@ -631,13 +621,13 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="559"/>
         <source>RigControl Select Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>RigControl Sélectionner la radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="560"/>
         <location filename="../rigcontrolmainwindow.cpp" line="565"/>
         <source>Radio No Longer Exists, please add</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio n&apos;existe plus, ajouter SVP</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1385"/>
@@ -709,7 +699,7 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1682"/>
         <source>Minos Rig Control - Logger - %1</source>
-        <translation>Minos Rig Control - Enregistreur  - %1 </translation>
+        <translation>Minos Rig Control - Enregistreur  - %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="1686"/>
@@ -797,7 +787,7 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
         <source>The Radio configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please delete them and set up the radios again</source>
-        <translation type="unfinished">Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
+        <translation>Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
 
 Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>
@@ -1129,14 +1119,6 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Modifier la nom de la radio</translation>
     </message>
     <message>
-        <source>The Radio configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
-<byte value="xd"/>
-Please delete them and set up the radios again</source>
-        <translation type="vanished">Les fichiers de configuration de la radio dans %1 proviennent d&apos;une ancienne version incompatible de Minos.
-
-Veuillez les supprimer et configurer à nouveau les radios</translation>
-    </message>
-    <message>
         <location filename="../rigsetupdialog.cpp" line="144"/>
         <source>Select the RS-232 serial port used for PTT control,
 this option is available when DTR or RTS is selected above.
@@ -1146,7 +1128,14 @@ But be careful if you need to force DTR or RTS to power a USB convertor.
 If that is the case, then use a different serial comport for PTT.
 Selecting the same port as the CAT interface will enable CAT Advanced Comms settings to show
 The handshake and forced settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le port série RS-232 utilisé pour le contrôle PTT,
+cette option est disponible lorsque DTR ou RTS est sélectionné ci-dessus.
+
+Ce port peut être le même que celui utilisé pour le contrôle CAT,
+mais attention si vous devez forcer DTR ou RTS pour alimenter un convertisseur USB.
+Si tel est le cas, utilisez un autre port série pour PTT.
+La sélection du même port que l&apos;interface CAT permettra aux paramètres CAT Advanced Comms d&apos;afficher
+la poignée de main et les réglages forcés.  </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="352"/>
@@ -1176,28 +1165,28 @@ The handshake and forced settings.</source>
     <message>
         <location filename="../rigsetupdialog.cpp" line="543"/>
         <source>%1 has been marked for deletion, please try another name</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 est marquée pour supprimer
+ essayer un autre nom SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="549"/>
         <source>%1 already exists, please try another name</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 existe déjà
+ essayer un autre nom SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="737"/>
         <source>Transvert Settings Out of Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres du Transverter sont hors bande </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="738"/>
         <source>The Transvert settings are out of band for the
 following:
 %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Edit Radio Name:</source>
-        <translation type="vanished">Modifier la nom de la radio:</translation>
+        <translatorcomment>just for %1</translatorcomment>
+        <translation>Paramètres du Transverter sont hors bande pour la suivant
+%1 </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="785"/>
@@ -1233,7 +1222,7 @@ ces définitions radio:
     <message>
         <location filename="../rigsetupform.cpp" line="440"/>
         <source>%1 Not Available</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 pas disponible</translation>
     </message>
     <message>
         <location filename="../rigsetupform.cpp" line="669"/>
@@ -1393,7 +1382,7 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="365"/>
         <source>EnableDisable CAT Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer/Désactiver les fonctionnalités CAT </translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="372"/>
@@ -1403,37 +1392,37 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../rigsetupform.ui" line="381"/>
         <source>Enable\Disable  CAT  Features</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer/désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="389"/>
         <source>RIT</source>
-        <translation type="unfinished">RIT</translation>
+        <translation>RIT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="396"/>
         <source>Signal Meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Compteur de signal </translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="403"/>
         <source>Volume</source>
-        <translation type="unfinished"></translation>
+        <translation>Volume</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="410"/>
         <source>CAT Ptt</source>
-        <translation type="unfinished"></translation>
+        <translation>CAT PTT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="417"/>
         <source>Voice TX Mem</source>
-        <translation type="unfinished"></translation>
+        <translation>Memoire Voix TX </translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="424"/>
         <source>CW TX Mem</source>
-        <translation type="unfinished"></translation>
+        <translation>Memoire CW TX?</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="455"/>

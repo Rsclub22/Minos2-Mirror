@@ -429,7 +429,7 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="108"/>
-        <source>Allow HF Bands</source>
+        <source>Show Operating Time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1089,12 +1089,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1637"/>
+        <location filename="../contest.cpp" line="1804"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1650"/>
+        <location filename="../contest.cpp" line="1817"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>

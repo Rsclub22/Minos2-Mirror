@@ -92,11 +92,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="194"/>
-        <source>Configure</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../RSMainWindow.cpp" line="52"/>
         <source>Configure...</source>
         <translation type="unfinished"></translation>

@@ -11,42 +11,42 @@
     <message>
         <location filename="../KeyerMain.ui" line="25"/>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="31"/>
         <source>Shift/Fx to play x, Shift/Ctrl/Fx to start record x</source>
-        <translation type="unfinished"></translation>
+        <translation>Shift/Fx pour jouer x, Shift/Ctrl/Fx pour commencer l&apos;enregistrement x</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="46"/>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Key </translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="56"/>
         <source>recind</source>
-        <translation type="unfinished"></translation>
+        <translation>???Record Indicator???</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="115"/>
         <source>Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="122"/>
         <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="142"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="156"/>
         <source>Input Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Lignes d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="163"/>
@@ -67,57 +67,58 @@
     <message>
         <location filename="../KeyerMain.ui" line="184"/>
         <source>Mode: </source>
-        <translation type="unfinished"></translation>
+        <translation>Mode: </translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="215"/>
         <source>Output Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Lignes de sortie</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="67"/>
         <source>Auto Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Répétition automatique</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="87"/>
         <source>Delay (secs)</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai (secs)</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="101"/>
         <source>Message Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du message</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="259"/>
         <source>Tune</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="279"/>
         <source>Two Tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Deux tonalité</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="303"/>
         <source>Use Pip Tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Utiliser la tonalité Pip</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="323"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>A propos</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="333"/>
         <source>Mixer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="354"/>
         <source>Setup Script (alsactl)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Script d&apos;installation (alsactl)</translatorcomment>
+        <translation>Script de configuration (alsactl) </translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="366"/>
@@ -127,60 +128,62 @@
     <message>
         <location filename="../KeyerMain.ui" line="392"/>
         <source>Save Alsa Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer la configuration Alsa</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="399"/>
         <source>Restore Alsa Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Restaurer la configuration Alsa</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="446"/>
         <source>Metering</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesure</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="453"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="541"/>
         <source>
 Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="630"/>
         <source>
 Replay</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Rejouer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="719"/>
         <source>Pass
 Through</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>mode intermédiaire ??</translatorcomment>
+        <translation>Passthrough </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="315"/>
         <source>Push PTT to Commence Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyer PTT pour commencer l&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="466"/>
         <source>Alsa Control Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers de contrôle Alsa</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="467"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="470"/>
         <source>File for mixer setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier pour la configuration du mixer</translation>
     </message>
 </context>
 <context>
@@ -188,82 +191,83 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="21"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="23"/>
         <source>Play 1/2 - Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 1/2 - Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="24"/>
         <source>Play 1/2 - No Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 1/2 - pas de Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="22"/>
         <source>Tuning Tones 1/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Adjustment tones 1/2  </translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="25"/>
         <source>Record 1/2</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer 1/2</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="26"/>
         <source>Play 3/4 - Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 3/4 - Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="27"/>
         <source>Play 3/4 - No Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 3/4 - pas de Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="28"/>
         <source>Record 3/4</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer 3/4</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="29"/>
         <source>Play 5/6 - Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 5/6 - Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="30"/>
         <source>Play 5/6 - No Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 5/6 - pas de Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="31"/>
         <source>Record 5/6</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer 5/6</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="32"/>
         <source>Play 7/ - Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 7/8 - Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="33"/>
         <source>Play 7/8 - No Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Jouer 7/8 - pas de Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="34"/>
         <source>Record 7/8</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer 7/8</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="35"/>
         <source>Apps - Restart(1)/Close(2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Applications - Redémarrer(1)/Fermer(2)</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="36"/>
         <source>OS - Restart(1)/Close(2)</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>SO or OS??</translatorcomment>
+        <translation>SO - Redémarrer(1)/Fermer(2) </translation>
     </message>
 </context>
 <context>
@@ -271,7 +275,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="396"/>
         <source>No current actions</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune action (en cours ?)</translation>
     </message>
 </context>
 <context>
@@ -279,17 +283,17 @@ Through</source>
     <message>
         <location filename="../keyerAbout.ui" line="14"/>
         <source>Minos Voice Keyer</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos Voice Keyer</translation>
     </message>
     <message>
         <location filename="../keyerAbout.ui" line="45"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../keyerAbout.cpp" line="13"/>
         <source>Welcome to Minos Voice Keyer Version </source>
-        <translation type="unfinished"></translation>
+        <translation>Bienvenue à Minos voice keyer version </translation>
     </message>
 </context>
 <context>
@@ -297,42 +301,42 @@ Through</source>
     <message>
         <location filename="../windowMonitor.ui" line="14"/>
         <source>Input Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Lignes d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="20"/>
         <source>PTT In</source>
-        <translation type="unfinished"></translation>
+        <translation>PTT</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="27"/>
         <source>L1 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L1</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="34"/>
         <source>L2 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L2</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="41"/>
         <source>L3 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L3</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="48"/>
         <source>L4 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L4</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="55"/>
         <source>L5 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L5</translation>
     </message>
     <message>
         <location filename="../windowMonitor.ui" line="62"/>
         <source>L6 In</source>
-        <translation type="unfinished"></translation>
+        <translation>L6</translation>
     </message>
 </context>
 </TS>

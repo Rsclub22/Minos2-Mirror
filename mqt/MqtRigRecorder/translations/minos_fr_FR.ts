@@ -46,7 +46,8 @@
     <message>
         <location filename="../mainwindow.ui" line="193"/>
         <source>Link to contest time</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Lien vers l&apos;heure du concours</translatorcomment>
+        <translation>WHAT is this???</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="209"/>

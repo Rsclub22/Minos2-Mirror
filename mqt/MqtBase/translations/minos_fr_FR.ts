@@ -6,42 +6,42 @@
     <message>
         <location filename="../spotbasedata.cpp" line="452"/>
         <source>NONE</source>
-        <translation type="unfinished"></translation>
+        <translation>AUCUN</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="455"/>
         <source>CLUSTER</source>
-        <translation type="unfinished"></translation>
+        <translation>CLUSTER</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="458"/>
         <source>CLUSTER MARKED</source>
-        <translation type="unfinished"></translation>
+        <translation>CLUSTER MARQUÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="461"/>
         <source>LOGGED</source>
-        <translation type="unfinished"></translation>
+        <translation>ENREGISTRÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="464"/>
         <source>MARKED</source>
-        <translation type="unfinished"></translation>
+        <translation>MARQUÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="467"/>
         <source>SAVED</source>
-        <translation type="unfinished"></translation>
+        <translation>SAUVÉ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="470"/>
         <source>CQ</source>
-        <translation type="unfinished"></translation>
+        <translation>CQ</translation>
     </message>
     <message>
         <location filename="../spotbasedata.cpp" line="473"/>
         <source>DELETED</source>
-        <translation type="unfinished">SUPPRIMÉ</translation>
+        <translation>SUPPRIMÉ</translation>
     </message>
 </context>
 <context>
@@ -55,7 +55,7 @@
         <location filename="../contacts.cpp" line="249"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translatorcomment>Does this need to be in English for log submission???</translatorcomment>
-        <translation type="unfinished">COMMENTAIRE POUR ARBITRE  </translation>
+        <translation>COMMENTAIRE POUR ARBITRE  </translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="250"/>
@@ -231,17 +231,18 @@
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP reacord Enabled</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>REACORD!!!</translatorcomment>
+        <translation>WSJTX UDP enregistrement activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX udpRecord Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>c/f WSJTX UDP reacord Enabled </translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX Path to record incoming UDP</source>
-        <translation type="unfinished"></translation>
+        <translation>???What???</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="84"/>
@@ -324,10 +325,6 @@
         <location filename="../profiles.cpp" line="65"/>
         <source>WSJTX 1 Group Address</source>
         <translation>WSJTX: Adresse du groupe 1</translation>
-    </message>
-    <message>
-        <source>WSJTX Path to ALL.TXT</source>
-        <translation type="vanished">WSJTX: Chemin d&apos;accès à ALL.TXT</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="66"/>
@@ -422,7 +419,7 @@
     <message>
         <location filename="../profiles.cpp" line="106"/>
         <source>Auto set Readability to 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Régler le rapport de signal sur 5 automatiquement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="107"/>
@@ -442,12 +439,12 @@
     <message>
         <location filename="../profiles.cpp" line="110"/>
         <source>Change Tab order for S&amp;P</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier l&apos;ordre des tabulations pour S&amp;P</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Protect contests by age</source>
-        <translation type="unfinished"></translation>
+        <translation>Protéger les concours par l&apos;âge</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="112"/>
@@ -467,37 +464,37 @@
     <message>
         <location filename="../profiles.cpp" line="116"/>
         <source>RIT on CQ</source>
-        <translation type="unfinished"></translation>
+        <translation>CQ avec RIT</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="120"/>
         <source>Default Filter Distance 1.8MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {1.8M?}</translation>
+        <translation>Distance de filtre par défaut 1,8MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
         <source>Default Filter Distance 3.5MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {3.5M?}</translation>
+        <translation>Distance de filtre par défaut 3,5MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="122"/>
         <source>Default Filter Distance 7MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {7M?}</translation>
+        <translation>Distance de filtre par défaut 7MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="123"/>
         <source>Default Filter Distance 14MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {14M?}</translation>
+        <translation>Distance de filtre par défaut 14MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
         <source>Default Filter Distance 21MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {21M?}</translation>
+        <translation>Distance de filtre par défaut 21MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="125"/>
         <source>Default Filter Distance 28MHz</source>
-        <translation type="unfinished">Distance de filtre par défaut (10 GHz) {28M?}</translation>
+        <translation>Distance de filtre par défaut 28MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="127"/>
@@ -547,7 +544,7 @@
     <message>
         <location filename="../profiles.cpp" line="138"/>
         <source>Radio Dial - Turn Off Operating Colour</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadran radio - Désactiver la couleur de fonctionnement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="140"/>
@@ -567,32 +564,32 @@
     <message>
         <location filename="../profiles.cpp" line="144"/>
         <source>Bandmap Start Zoomlevel 1.8MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {1.8M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 1,8MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="145"/>
         <source>Bandmap Start Zoomlevel 3.5MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {3.5M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 3,5MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="146"/>
         <source>Bandmap Start Zoomlevel 7MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {7M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 7MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="147"/>
         <source>Bandmap Start Zoomlevel 14MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {14M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 14MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="148"/>
         <source>Bandmap Start Zoomlevel 21MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {21M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 21MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="149"/>
         <source>Bandmap Start Zoomlevel 28MHz</source>
-        <translation type="unfinished">Bandmap: niveau de zoom initial (10GHz) {28M?}</translation>
+        <translation>Bandmap: niveau de zoom initial 28MHz</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="151"/>
@@ -652,7 +649,7 @@
     <message>
         <location filename="../profiles.cpp" line="164"/>
         <source>Bandmap Delay when mouse in frame</source>
-        <translation type="unfinished"></translation>
+        <translation>Retard de Bandmap lorsque le curseur est dans le cadre</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="171"/>
@@ -930,11 +927,7 @@
     <message>
         <location filename="../Calendar.cpp" line="20"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;Microwave from MicroContestsxx.xml&gt;</source>
-        <translation type="vanished">&lt;Micro-ondes de MicroContestsxx.xml&gt;</translation>
+        <translation>&lt;Microonde de MicrContemodestsxx.xml&gt;</translation>
     </message>
     <message>
         <location filename="../Calendar.cpp" line="40"/>
@@ -983,7 +976,7 @@
     <message>
         <location filename="../ChatServer.cpp" line="81"/>
         <source>%1/%2 changed state to %3</source>
-        <translation type="unfinished">%1 changé d&apos;état en %3 {1/%2 ?}</translation>
+        <translation>%1/%2 changé d&apos;état en %3</translation>
     </message>
 </context>
 <context>
@@ -1153,7 +1146,7 @@
     <message>
         <location filename="../profiles.cpp" line="22"/>
         <source>protected</source>
-        <translation type="unfinished"></translation>
+        <translation>protégé</translation>
     </message>
 </context>
 <context>
@@ -1427,32 +1420,33 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <location filename="../WsjtxMessageServer.cpp" line="70"/>
         <location filename="../WsjtxMessageServer.cpp" line="218"/>
         <source>Error creating UDP message</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
+        <translation>Erreur lors de la création du message UDP</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="396"/>
         <source>MessageServer warning: invalid UDP message received</source>
-        <translation type="unfinished"></translation>
+        <translation>ENG??</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="401"/>
         <source>MessageServer exception: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ENG??</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="405"/>
         <source>Unexpected exception in MessageServer</source>
-        <translation type="unfinished"></translation>
+        <translation>ENG??</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="439"/>
         <source>Message serialization error: read corrupt data</source>
-        <translation type="unfinished"></translation>
+        <translation>ENG??</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="443"/>
         <source>Message serialization error: write error</source>
-        <translation type="unfinished"></translation>
+        <translation>ENG??</translation>
     </message>
 </context>
 <context>
@@ -1691,7 +1685,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../TreeUtils.cpp" line="20"/>
         <source>Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Bande</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="21"/>
@@ -1770,7 +1764,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="151"/>
         <source>Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Bande</translation>
     </message>
     <message>
         <location filename="../MatchTreeFrame.cpp" line="152"/>
@@ -1916,72 +1910,72 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../serialtvswitch.h" line="50"/>
         <source>No Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun erreur</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="50"/>
         <source>Device Not Found</source>
-        <translation type="unfinished"></translation>
+        <translation>Appareil non trouvé</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="50"/>
         <source>Permission Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;autorisation</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="51"/>
         <source>Open Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;ouverture</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="51"/>
         <source>Parity Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de parité</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="51"/>
         <source>Framing Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;encadrement</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
         <source>Break Condition</source>
-        <translation type="unfinished"></translation>
+        <translation>État de rupture </translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
         <source>Write Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur d&apos;écriture</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
         <source>Read Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de lecture</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="53"/>
         <source>Resource Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de ressource</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="53"/>
         <source>Unsupported Operation Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur - opération n&apos;est pas supporté</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="54"/>
         <source>Unknown Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur inconnu</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="54"/>
         <source>Timeout Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de temporisation</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="54"/>
         <source>Not Open Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur - pas ouverte</translation>
     </message>
 </context>
 <context>
@@ -2045,7 +2039,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>TEXTLABEL!!!</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="152"/>
@@ -2058,73 +2052,73 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StartConfigManager.ui" line="14"/>
         <source>Manage Application Configurations</source>
-        <translation type="unfinished"></translation>
+        <translation>Gérer les configurations d&apos;application</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="24"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="31"/>
         <source>Clone</source>
-        <translation type="unfinished"></translation>
+        <translation>Cloner</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="38"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="45"/>
         <source>Rename</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="52"/>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifier</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="88"/>
         <source>Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="108"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.ui" line="115"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="52"/>
         <source>Stop all apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêter tous les Applications</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="56"/>
         <source>Start all apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer toutes les applications</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="136"/>
         <source>Please give a new name for the layout</source>
-        <translation type="unfinished"></translation>
+        <translation>Nouveau nom pour la mise en page SVP</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="140"/>
         <source>%1 already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 existe déjà</translation>
     </message>
     <message>
         <location filename="../StartConfigManager.cpp" line="163"/>
         <location filename="../StartConfigManager.cpp" line="182"/>
         <source>new app config</source>
-        <translation type="unfinished"></translation>
+        <translation>configuration de nouvelles applications</translation>
     </message>
 </context>
 <context>
@@ -2303,7 +2297,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../enqdlg.cpp" line="32"/>
         <location filename="../enqdlg.cpp" line="44"/>
         <source>Please supply value</source>
-        <translation type="unfinished"></translation>
+        <translation>Fournir une valeur SVP??</translation>
     </message>
 </context>
 <context>

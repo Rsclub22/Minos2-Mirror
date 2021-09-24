@@ -4,13 +4,9 @@
 <context>
     <name>RSConfigure</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue </translation>
-    </message>
-    <message>
         <location filename="../RSConfigure.ui" line="14"/>
         <source>Configure Rig Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer RigSync</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="22"/>
@@ -34,27 +30,27 @@
     <message>
         <location filename="../RSMainWindow.ui" line="14"/>
         <source>Sub &lt;-&gt; Main Rig Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Synchroniser  Secondaire &lt;-&gt; Principal appareil  </translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="25"/>
         <source>Main Rig</source>
-        <translation type="unfinished"></translation>
+        <translation>Appareil principale</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="42"/>
         <source>Main Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence principale</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="53"/>
         <source>Sub Rig</source>
-        <translation type="unfinished"></translation>
+        <translation>Appareil secondaire</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="67"/>
         <source>Sub freq</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence secondaire</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="82"/>
@@ -74,7 +70,7 @@
     <message>
         <location filename="../RSMainWindow.ui" line="115"/>
         <source>WSJT-X</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJT-X</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="135"/>
@@ -84,27 +80,27 @@
     <message>
         <location filename="../RSMainWindow.ui" line="166"/>
         <source>Transfer Main -&gt; Sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Transférer Principal -&gt; Secondaire</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="173"/>
         <source>Transfer Sub -&gt; Main</source>
-        <translation type="unfinished"></translation>
+        <translation>Transférer Secondaire -&gt; Principal</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="146"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="194"/>
         <source>Configure</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.cpp" line="52"/>
         <source>Configure...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer...</translation>
     </message>
 </context>
 </TS>

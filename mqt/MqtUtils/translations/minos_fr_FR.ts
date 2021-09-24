@@ -16,7 +16,7 @@
     <message>
         <location filename="../ConfigFile.cpp" line="334"/>
         <source>Default App Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="763"/>
@@ -64,13 +64,7 @@ What??</translation>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> Working directory is not valid - no Configuration/MinosConfig.ini
-
-</source>
-        <translation type="vanished"> Le répertoire de travail n&apos;est pas valide - pas de configuration / MinosConfig.ini
+        <translation> Le dossier de travail n&apos;est pas valide - pas de Configuration/MinosConfig.json
 
 </translation>
     </message>

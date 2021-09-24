@@ -12,7 +12,7 @@
     <message>
         <location filename="../MainWindow.ui" line="21"/>
         <source>Start Apps</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrer les applications</translation>
     </message>
     <message>
         <location filename="../MainWindow.ui" line="41"/>

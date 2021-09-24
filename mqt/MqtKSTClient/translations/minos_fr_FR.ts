@@ -303,7 +303,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="348"/>
         <source>Show read (ticked) messages</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les messages lus (cochés)</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="372"/>

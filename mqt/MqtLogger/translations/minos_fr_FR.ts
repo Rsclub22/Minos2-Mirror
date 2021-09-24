@@ -7,22 +7,18 @@
         <source>Preset</source>
         <translation type="obsolete">Prédéfini </translation>
     </message>
-    <message>
-        <source>Band</source>
-        <translation type="vanished">Bande</translation>
-    </message>
 </context>
 <context>
     <name>BandSwitchFrame</name>
     <message>
         <location filename="../BandSwitchFrame.ui" line="14"/>
         <source>Frame</source>
-        <translation type="unfinished">Cadre</translation>
+        <translation>Cadre</translation>
     </message>
     <message>
         <location filename="../BandSwitchFrame.ui" line="20"/>
         <source>HF Band Switching</source>
-        <translation type="unfinished"></translation>
+        <translation>Commutation de bande HF</translation>
     </message>
 </context>
 <context>
@@ -45,12 +41,12 @@
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="53"/>
         <source>LSB</source>
-        <translation type="unfinished"></translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="81"/>
         <source>FT4</source>
-        <translation type="unfinished">FT4</translation>
+        <translation>FT4</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.ui" line="95"/>
@@ -139,7 +135,7 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="92"/>
         <source>radio status</source>
-        <translation type="unfinished"></translation>
+        <translation>État de la radio</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="116"/>
@@ -159,7 +155,8 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="203"/>
         <source>mode</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>???</translatorcomment>
+        <translation>mode</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="244"/>
@@ -174,7 +171,7 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="264"/>
         <source>zoom level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de zoom</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="287"/>
@@ -246,7 +243,7 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="82"/>
         <source>Clear Cluster Spots</source>
-        <translation type="unfinished"></translation>
+        <translation>Effacer les Spots de cluster</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="122"/>
@@ -267,21 +264,17 @@
     <message>
         <location filename="../bandmapclientframe.cpp" line="439"/>
         <source>Please confirm you want to delete all the cluster spots in the bandmap?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous vraiment supprimer tous les Spots de cluster dans le Bandmap?</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="599"/>
         <source>Filter %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre %1</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1689"/>
         <source>Mouse in frame, updates paused</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> - Mouse in frame, updates paused</source>
-        <translation type="vanished"> - Souris dans le cadre, mises à jour suspendues</translation>
+        <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="1425"/>
@@ -353,10 +346,6 @@ Le mode calculé est %2</translation>
 <context>
     <name>ClusterBandmapConfigure</name>
     <message>
-        <source>Operating Freq Colour Band Follow Radio Mode </source>
-        <translation type="vanished">Bande de couleurs de fréquence suivre mode de radio?</translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <source>Old Bandmap</source>
         <translation>Vieux Carte des bandes</translation>
@@ -394,17 +383,17 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="69"/>
         <source>Turn Off Operating Frequency Colour Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="76"/>
         <source>Operating Frequency Colour Band Follow Radio Mode </source>
-        <translation type="unfinished"></translation>
+        <translation>Bande de couleurs de fréquence suivre mode de radio </translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Delay updates when mouse pointer is in the Bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Retarder les mises à jour lorsque le curseur est dans la Bandmap </translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="116"/>
@@ -480,10 +469,6 @@ Le mode calculé est %2</translation>
         <location filename="../Clusterbandmapconfigure.ui" line="436"/>
         <source>Spot Greater Than Distance</source>
         <translation>Spot plus grand que le distance</translation>
-    </message>
-    <message>
-        <source>Turn Off Operating Freq Colour Band</source>
-        <translation type="vanished">Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="30"/>
@@ -678,12 +663,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="234"/>
         <source>LSB</source>
-        <translation type="unfinished"></translation>
+        <translation>LSB</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="276"/>
         <source>FT4</source>
-        <translation type="unfinished">FT4</translation>
+        <translation>FT4</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="331"/>
@@ -1153,7 +1138,7 @@ Le mode calculé est %2</translation>
         <location filename="../contestdetails.ui" line="72"/>
         <location filename="../contestdetails.cpp" line="1485"/>
         <source>HF Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="79"/>
@@ -1164,7 +1149,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../contestdetails.ui" line="86"/>
         <source>uwave Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier Microonde</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="198"/>
@@ -1484,7 +1469,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
 
 TO BE CHECKED CAREFULLY:
 </translatorcomment>
-        <translation type="unfinished">Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
+        <translation>Ces paramètres sont des groupes de paramètres qui peuvent être appliqués à un concours en une seule fois.
 
 Il existe quatre groupes de base: - 
 
@@ -1508,7 +1493,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../contestdetails.cpp" line="1542"/>
         <source>Microwave Calendar</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier Microonde</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1684"/>
@@ -1545,12 +1530,12 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../ContestPageControl.cpp" line="70"/>
         <source>Run Frequency 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence d&apos;operation 1 </translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="80"/>
         <source>Run Frequency 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence d&apos;operation 2 </translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="175"/>
@@ -1731,27 +1716,29 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../defdirsdlg.ui" line="33"/>
         <source>Protect contests by Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Protéger les concours par âge</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="42"/>
         <source>Contest Age Protection after</source>
-        <translation type="unfinished">Protéger le Concours après</translation>
+        <translation>Protéger le Concours après</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="59"/>
         <source>days</source>
-        <translation type="unfinished">jours</translation>
+        <translation>jours</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="94"/>
         <source>NB HF Contest support is VERY experimental, and incomplete. Use at your own risk!</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>NB Le support du concours HF est TRÈS expérimental et incomplet. Utiliser à vos risques et périls!</translatorcomment>
+        <translation>Where is this displayed??</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="104"/>
         <source>HF Contests Support</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Assistance concours HF</translatorcomment>
+        <translation>Where is this displayed??</translation>
     </message>
     <message>
         <location filename="../defdirsdlg.ui" line="126"/>
@@ -1810,7 +1797,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="110"/>
         <source>Signal Readability Initialise to 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialiser le rapport de signal à 5</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="117"/>
@@ -1830,15 +1817,7 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="369"/>
         <source>Separate Logger Icons on Taskbar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Contest Age Protection after</source>
-        <translation type="vanished">Protéger le Concours après</translation>
-    </message>
-    <message>
-        <source>days</source>
-        <translation type="vanished">jours</translation>
+        <translation>Icônes séparées sur la barre des tâches</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="157"/>
@@ -1974,7 +1953,7 @@ Les continents ne s&apos;appliquent qu&apos;à DXCC</translation>
     <message>
         <location filename="../InternalVoiceMemoryKeyer.cpp" line="169"/>
         <source>Internal Voice Memory Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la mémoire vocale interne</translation>
     </message>
 </context>
 <context>
@@ -2090,7 +2069,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     <message>
         <location filename="../LoggerContest.cpp" line="370"/>
         <source>Contest %1 is an HF contest - HF not enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>???</translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="401"/>
@@ -2289,13 +2268,9 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
 <context>
     <name>OptionsDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../OptionsDialog.ui" line="14"/>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.ui" line="25"/>
@@ -2313,22 +2288,14 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <translation>Cluster/Bandmap</translation>
     </message>
     <message>
-        <source>Default Directories</source>
-        <translation type="vanished">Les répertoires par défaut</translation>
-    </message>
-    <message>
-        <source>DisplayOptions</source>
-        <translation type="vanished">???What???</translation>
-    </message>
-    <message>
         <location filename="../OptionsDialog.cpp" line="81"/>
         <source>General Options</source>
-        <translation type="unfinished"></translation>
+        <translation>Options générales</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="82"/>
         <source>Display Options</source>
-        <translation type="unfinished"></translation>
+        <translation>???What???</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="83"/>
@@ -2402,10 +2369,6 @@ Courant</translation>
 to</source>
         <translation>Changer
 à</translation>
-    </message>
-    <message>
-        <source>A1A</source>
-        <translation type="vanished">A1A</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
@@ -2678,7 +2641,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qsologframe.cpp" line="2420"/>
         <source>Spot Last Logged (%1) </source>
-        <translation>Spot dernière enregistrée (%1)  </translation>
+        <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="2485"/>
@@ -2816,7 +2779,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="38"/>
         <source>Turn Off Operating Frequency Colour in Radio Freq Dial</source>
-        <translation>???What does this mean??</translation>
+        <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="45"/>
@@ -3010,13 +2973,9 @@ Non - Ignorer les modifications</translation>
         <translation>Messages du commutateur de bande</translation>
     </message>
     <message>
-        <source>Frequency %1 is out of band for %2</source>
-        <translation type="vanished">Fréquence %1 est hors bande pour %2</translation>
-    </message>
-    <message>
         <location filename="../radiosettingdialog.cpp" line="410"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence %1 est hors bande/mode pour %2/%3</translation>
     </message>
 </context>
 <context>
@@ -3145,7 +3104,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolvoicememorykeyer.cpp" line="108"/>
         <source>Rig Control Voice Memory Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la mémoire de voix </translation>
     </message>
 </context>
 <context>
@@ -3744,7 +3703,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="21"/>
         <source>HF Band Switching</source>
-        <translation type="unfinished"></translation>
+        <translation>Commutation de bande HF</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="22"/>
@@ -3821,7 +3780,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="32"/>
         <source>QRZ Display</source>
-        <translation>QRZ ???</translation>
+        <translation>Affichage du QRZ  ??</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="33"/>
@@ -3884,7 +3843,7 @@ Non - Ignorer les modifications</translation>
         <source>Make Default
 Protected</source>
         <translatorcomment>rendre protégé par défaut</translatorcomment>
-        <translation>Protégé par défaut </translation>
+        <translation>Protégé par défaut</translation>
     </message>
     <message>
         <location filename="../ScreenConfigManager.ui" line="106"/>
@@ -4062,7 +4021,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../taboutbox.ui" line="147"/>
         <source>Protect Contests by Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Protéger les concours par âge</translation>
     </message>
     <message>
         <location filename="../taboutbox.ui" line="167"/>
@@ -4703,11 +4662,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="344"/>
         <source>Cabrillo files (*.log);;All Files (*.*);;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cabrillo files (*.cbr);;All Files (*.*);;</source>
-        <translation type="vanished">Fichiers de Cabrillo (* .cbr) ;; Tous les fichiers (*. *)</translation>
+        <translation>CABRILLO *.LOG???    </translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="345"/>
@@ -4849,10 +4804,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>Outils</translation>
     </message>
     <message>
-        <source>Keyer</source>
-        <translation type="vanished">Manipulateur</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.ui" line="86"/>
         <source>Logs</source>
         <translation>Logs</translation>
@@ -4879,17 +4830,9 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <translation>&amp;Ouvrir Concours...</translation>
     </message>
     <message>
-        <source>&amp;Import Contest...</source>
-        <translation type="vanished">&amp;Importer Concours...</translation>
-    </message>
-    <message>
         <location filename="../tlogcontainer.cpp" line="435"/>
         <source>Reopen Contest</source>
         <translation>Rouvrir le Concours</translation>
-    </message>
-    <message>
-        <source>&amp;New Contest...</source>
-        <translation type="vanished">&amp;Nouveau Concours...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="455"/>
@@ -4989,22 +4932,22 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tlogcontainer.cpp" line="426"/>
         <source>&amp;Import VHF Contest...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importer de Concours VHF...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="429"/>
         <source>&amp;Import HF Contest...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Importer de Concours HF...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="446"/>
         <source>&amp;New VHF Contest...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nouveau concours VHF...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="449"/>
         <source>&amp;New HF Contest...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nouveau concours HF...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="529"/>
@@ -5020,26 +4963,6 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
         <location filename="../tlogcontainer.cpp" line="535"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
-    </message>
-    <message>
-        <source>Record</source>
-        <translation type="vanished">Enregistrer</translation>
-    </message>
-    <message>
-        <source>Playback</source>
-        <translation type="vanished">Relecture</translation>
-    </message>
-    <message>
-        <source>Tune</source>
-        <translation type="vanished">Accorder l&apos;émetteur</translation>
-    </message>
-    <message>
-        <source>Two Tone</source>
-        <translation type="vanished">Deux tons</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="vanished">Arrêter</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="537"/>
@@ -5116,11 +5039,7 @@ Veuillez choisir un nouveau nom.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="956"/>
         <source>Import %1 contests</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import contests</source>
-        <translation type="vanished">Importer les Concours</translation>
+        <translation>Importer %1 Concours </translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1094"/>
@@ -5575,53 +5494,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
 </context>
 <context>
-    <name>TxVmButtonDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
-        <source>Type: </source>
-        <translation type="vanished">Type: </translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="vanished">Nom</translation>
-    </message>
-    <message>
-        <source>Message Duration</source>
-        <translation type="vanished">Durée du message</translation>
-    </message>
-    <message>
-        <source>Repeat Message</source>
-        <translation type="vanished">Répéter le message</translation>
-    </message>
-    <message>
-        <source>Repeat Pause Duration</source>
-        <translation type="vanished">Durée du pause</translation>
-    </message>
-    <message>
-        <source>Repeat Pause</source>
-        <translation type="vanished">Répéter la pause</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation type="vanished">Message</translation>
-    </message>
-    <message>
-        <source>%1 Duration </source>
-        <translation type="vanished">%1 Durée </translation>
-    </message>
-    <message>
-        <source> - out of range</source>
-        <translation type="vanished">??? hors de limite</translation>
-    </message>
-    <message>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="vanished">Entrer un value entre 0 et 180 secondes SVP</translation>
-    </message>
-</context>
-<context>
     <name>TxVmButtonsFrame</name>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="14"/>
@@ -5641,7 +5513,8 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="50"/>
         <source>Pip</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>What of #Setup?</translatorcomment>
+        <translation>???</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="59"/>
@@ -5661,10 +5534,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <source>Voice Memory Setup</source>
-        <translation type="vanished">Configuration de la mémoire de voix </translation>
-    </message>
-    <message>
         <location filename="../txvmbuttonsframe.cpp" line="244"/>
         <source>Voice Memory %1 - Edit</source>
         <translation>Mémoire de voix %1 - Modifier</translation>
@@ -5680,85 +5549,87 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="39"/>
         <source>Type: </source>
-        <translation type="unfinished">Type: </translation>
+        <translation>Type: </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="73"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="97"/>
         <source>Repeat Message</source>
-        <translation type="unfinished">Répéter le message</translation>
+        <translation>Répéter le message</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="109"/>
         <source>Repeat Pause Duration</source>
-        <translation type="unfinished">Durée du pause</translation>
+        <translation>Durée du pause</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="144"/>
         <source>Test Replay</source>
-        <translation type="unfinished"></translation>
+        <translation>???</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="164"/>
         <source>Record</source>
-        <translation type="unfinished">Enregistrer</translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="184"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="201"/>
         <source>Message Duration</source>
-        <translation type="unfinished">Durée du message</translation>
+        <translation>Durée du message</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="313"/>
         <source>
 Record</source>
-        <translation type="unfinished"></translation>
+        <translation>
+Enregistrer</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="402"/>
         <source>
 Replay</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="491"/>
         <source>Pass
 Through</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>??Mode intermédiaire</translatorcomment>
+        <translation>Passthrough </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="46"/>
         <source>%1 Duration </source>
-        <translation type="unfinished">%1 Durée </translation>
+        <translation>%1 Durée </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="46"/>
         <source> - out of range</source>
-        <translation type="unfinished">??? hors de limite</translation>
+        <translation>??? hors de limite</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="47"/>
         <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished">Entrer un value entre 0 et 180 secondes SVP</translation>
+        <translation>Entrer un value entre 0 et 180 secondes SVP</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="65"/>
         <source>Repeat Pause</source>
-        <translation type="unfinished">Répéter la pause</translation>
+        <translation>Répéter la pause</translation>
     </message>
 </context>
 <context>
@@ -5766,74 +5637,74 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="39"/>
         <source>Type: </source>
-        <translation type="unfinished">Type: </translation>
+        <translation>Type: </translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="73"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="106"/>
         <source>Test Replay</source>
-        <translation type="unfinished"></translation>
+        <translation>Tester la rejouer </translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="126"/>
         <source>Record</source>
-        <translation type="unfinished">Enregistrer</translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="146"/>
         <source>Stop</source>
-        <translation type="unfinished">Arrêter</translation>
+        <translation>Arrêter</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="163"/>
         <source>Message Duration</source>
-        <translation type="unfinished">Durée du message</translation>
+        <translation>Durée du message</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="185"/>
         <source>Repeat Message</source>
-        <translation type="unfinished">Répéter le message</translation>
+        <translation>Répéter le message</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="197"/>
         <source>Repeat Pause Duration</source>
-        <translation type="unfinished">Durée du pause</translation>
+        <translation>Durée du pause</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="91"/>
         <location filename="../txvminternalbuttondialog.cpp" line="121"/>
         <source>Repeat Pause</source>
-        <translation type="unfinished">Répéter la pause</translation>
+        <translation>Répéter la pause</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="97"/>
         <location filename="../txvminternalbuttondialog.cpp" line="127"/>
         <source>Message</source>
-        <translation type="unfinished">Message</translation>
+        <translation>Message</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="111"/>
         <source>%1 Duration </source>
-        <translation type="unfinished">%1 Durée </translation>
+        <translation>%1 Durée </translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="111"/>
         <source> - out of range</source>
-        <translation type="unfinished">??? hors de limite</translation>
+        <translation>??? hors de limite</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="112"/>
         <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished">Entrer un value entre 0 et 180 secondes SVP</translation>
+        <translation>Entrer un value entre 0 et 180 secondes SVP</translation>
     </message>
 </context>
 <context>
@@ -5841,59 +5712,59 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="35"/>
         <source>Type: </source>
-        <translation type="unfinished">Type: </translation>
+        <translation>Type: </translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="69"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="96"/>
         <source>Message Duration</source>
-        <translation type="unfinished">Durée du message</translation>
+        <translation>Durée du message</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="118"/>
         <source>Repeat Message</source>
-        <translation type="unfinished">Répéter le message</translation>
+        <translation>Répéter le message</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="130"/>
         <source>Repeat Pause Duration</source>
-        <translation type="unfinished">Durée du pause</translation>
+        <translation>Durée du pause</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="61"/>
         <location filename="../txvmrigbuttondialog.cpp" line="91"/>
         <source>Repeat Pause</source>
-        <translation type="unfinished">Répéter la pause</translation>
+        <translation>Répéter la pause</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="67"/>
         <location filename="../txvmrigbuttondialog.cpp" line="97"/>
         <source>Message</source>
-        <translation type="unfinished">Message</translation>
+        <translation>Message</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="81"/>
         <source>%1 Duration </source>
-        <translation type="unfinished">%1 Durée </translation>
+        <translation>%1 Durée </translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="81"/>
         <source> - out of range</source>
-        <translation type="unfinished">??? hors de limite</translation>
+        <translation>??? hors de limite</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="82"/>
         <source>Please set value between 0 and 180 seconds</source>
-        <translation type="unfinished">Entrer un value entre 0 et 180 secondes SVP</translation>
+        <translation>Entrer un value entre 0 et 180 secondes SVP</translation>
     </message>
 </context>
 <context>
@@ -5901,41 +5772,22 @@ Through</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="27"/>
         <source>Number Buttons</source>
-        <translation type="unfinished">???What is this???</translation>
+        <translation>???What is this???</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="41"/>
         <source>Comport</source>
-        <translation type="unfinished">Port COM</translation>
+        <translation>Port COM</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="50"/>
         <source>Use PTT For EOM</source>
-        <translation type="unfinished">???What??</translation>
-    </message>
-</context>
-<context>
-    <name>TxVmSetupDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
-        <source>Number Buttons</source>
-        <translation type="vanished">???What is this???</translation>
-    </message>
-    <message>
-        <source>Comport</source>
-        <translation type="vanished">Port COM</translation>
-    </message>
-    <message>
-        <source>Use PTT For EOM</source>
-        <translation type="vanished">???What??</translation>
+        <translation>Utiliser PTT pour EOM</translation>
     </message>
 </context>
 <context>
@@ -6001,16 +5853,12 @@ Through</source>
     <message>
         <location filename="../WsjtxConfigure.ui" line="68"/>
         <source>Record incoming UDP</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer l&apos;UDP entrant</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="75"/>
         <source>UDP Recording path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Path to WSJT-X data (containing ALL.TXT)</source>
-        <translation type="vanished">Chemin d&apos;accès aux données WSJT-X (contenant ALL.TXT)</translation>
+        <translation>Dossier d&apos;enregistrement UDP</translation>
     </message>
     <message>
         <location filename="../WsjtxConfigure.ui" line="85"/>
@@ -6031,10 +5879,6 @@ Through</source>
         <location filename="../WsjtxConfigure.ui" line="259"/>
         <source>Address</source>
         <translation>Adresse IP</translation>
-    </message>
-    <message>
-        <source>ALL.TXT for WSJT-X</source>
-        <translation type="vanished">ALL.TXT pour WSJT-X</translation>
     </message>
 </context>
 <context>
@@ -6146,16 +5990,12 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../WsjtxFrame.ui" line="376"/>
         <source>Replay</source>
-        <translation type="unfinished"></translation>
+        <translation>Relecture</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.ui" line="386"/>
         <source>test</source>
         <translation>test</translation>
-    </message>
-    <message>
-        <source>Failed to open %1</source>
-        <translation type="vanished">Échec pour ouvrir %1</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.cpp" line="626"/>
@@ -6166,12 +6006,12 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
         <location filename="../WsjtxFrame.cpp" line="1198"/>
         <location filename="../WsjtxFrame.cpp" line="1202"/>
         <source>WSJT-X recording Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers d&apos;enregistrement WSJT-X</translation>
     </message>
     <message>
         <location filename="../WsjtxFrame.cpp" line="1199"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fichiers</translation>
     </message>
 </context>
 <context>
@@ -6193,44 +6033,38 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     </message>
 </context>
 <context>
-    <name>enquireDialog</name>
-    <message>
-        <source>Please supply value</source>
-        <translatorcomment>SVP? (Autres)</translatorcomment>
-        <translation type="vanished">Donner une valeur</translation>
-    </message>
-</context>
-<context>
     <name>txVmInternalSetupDialog</name>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
+        <translation>Dialogue</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="25"/>
         <source>Number Buttons</source>
-        <translation type="unfinished">???What is this???</translation>
+        <translatorcomment>???What is this???</translatorcomment>
+        <translation>Boutons numériques</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="39"/>
         <source>Comport</source>
-        <translation type="unfinished">Port COM</translation>
+        <translation>Port COM</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="48"/>
         <source>Use PTT For EOM</source>
-        <translation type="unfinished">???What??</translation>
+        <translatorcomment>???What??</translatorcomment>
+        <translation>Utiliser PTT pour EOM</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="57"/>
         <source>Input Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="71"/>
         <source>Output Channel</source>
-        <translation type="unfinished"></translation>
+        <translation>Canal de sortie</translation>
     </message>
 </context>
 </TS>
