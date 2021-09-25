@@ -162,7 +162,9 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 
     bool setTabsVisible = contest->contestBands.getValue() == allHF;
 
-    switch ( getAuxEntryType(ui->infoCombo->currentText()) )
+    QString a = ui->infoCombo->currentText();
+
+    switch ( getAuxEntryType(a) )
     {
     case aeClock:
         clockFrame = new TClockFrame(this);
@@ -229,7 +231,9 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 
     if (contest && stackInstance < STACKITEMS)
     {
-        contest->currentStackItems[stackInstance].setValue(ui->infoCombo->currentText());
+        QString a = ui->infoCombo->currentText();
+        AuxEntries ae = getAuxEntryType(a);
+        contest->currentStackItems[stackInstance].setValue(auxoptions[ae].s);
         contest->commonSave(false);
     }
 }
@@ -270,9 +274,13 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             if (stackInstance < STACKITEMS)
             {
                 QString aux = contest->currentStackItems[stackInstance].getValue();
-                if (!aux.isEmpty() && aux != ui->infoCombo->currentText())
+                QString a = ui->infoCombo->currentText();
+
+                AuxEntries ae = getAuxEntryType(aux);
+                AuxEntries aec = getAuxEntryType(a);
+                if(ae != aec && ui->infoCombo->currentIndex() != ae)
                 {
-                    ui->infoCombo->setCurrentText(aux);
+                    ui->infoCombo->setCurrentIndex(ae);
                 }
                 else
                 {
