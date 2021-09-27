@@ -1067,12 +1067,6 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
-    QString cb = ui->BandComboBox->currentText();
-    if (cb == trAllHf)
-    {
-        cb = allHF;
-    }
-    contestTransferObject->contestBands.setValue( cb );
     contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
     contestTransferObject->sectionList.setValue( sectionList );
 
@@ -1089,6 +1083,23 @@ QWidget * ContestDetails::getDetails( )
         if (!nextD)
         {
             nextD = ui->BandComboBox;
+        }
+    }
+    else
+    {
+        QString cb = ui->BandComboBox->currentText();
+        if (cb == trAllHf)
+        {
+            cb = allHF;
+        }
+        contestTransferObject->contestBands.setValue( cb );
+
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK = blist.findBand(cb, bi);
+        if (bandOK)
+        {
+            contestTransferObject->currentBand.setValue(cb);
         }
     }
 

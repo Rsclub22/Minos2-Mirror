@@ -44,6 +44,7 @@
 #include "delayedaction.h"
 #include "ContestPageControl.h"
 #include "OptionsDialog.h"
+#include "bandmapclientframe.h"
 
 
 #include "tlogcontainer.h"
@@ -990,6 +991,8 @@ void TLogContainer::ContestDetailsActionExecute()
 
                 sendDM->subscribeApps();
 
+                f->FKHRigControlFrame->setContest(ct);
+                f->bandmapControlFrame->setContest(ct);
                 f->FKHRigControlFrame->rigChangedFromDetails();
                 f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
