@@ -466,7 +466,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
         QString secsPart = tnow.toString("ss");
         QString minsPart = tnow.toString("mm");
 
-        if (secsPart == "00" && minsPart[1] == "0" && tnow.msecsTo(swapTime) <= 0)
+        if (secsPart == "00" && /*minsPart[1] == "0" &&*/ tnow.msecsTo(swapTime) <= 0)
         {
             trace("Cycling wav file");
             // time to swap...

@@ -35,7 +35,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QFrame" name="">
+         <widget class="QFrame" name="frame1">
           <property name="frameShape">
            <enum>QFrame::Box</enum>
           </property>
@@ -179,7 +179,17 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="rotInterval"/>
+            <widget class="QSpinBox" name="rotInterval">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>120</number>
+             </property>
+             <property name="value">
+              <number>10</number>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
