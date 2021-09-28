@@ -464,7 +464,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
         }
         QDateTime tnow = QDateTime::currentDateTime();
         QString secsPart = tnow.toString("ss");
-        QString minsPart = tnow.toString("mm");
+//        QString minsPart = tnow.toString("mm");
 
         if (secsPart == "00" && /*minsPart[1] == "0" &&*/ tnow.msecsTo(swapTime) <= 0)
         {
