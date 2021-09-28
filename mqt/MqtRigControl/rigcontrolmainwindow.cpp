@@ -2670,7 +2670,7 @@ void RigControlMainWindow::getRigCtldConnectDelay()
 
 
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("RigCtld");
+    config.beginGroup(RIGCTLD_GROUP_NAME);
     rigCtldDetails->rigCtldConnectDelay = config.value("RigCtldConnectDelay", DEFAULT_RIGCTLD_CONNECT_DELAY).toInt();
     config.endGroup();
 
@@ -4411,6 +4411,12 @@ QString RigControlMainWindow::getRigCtldExePath()
 #endif
 
     settings.endGroup();
+
+    rigCtldExePath = rigCtldExePath.trimmed();
+    if (rigCtldExePath.right(1) != "/")
+    {
+        rigCtldExePath += "/";
+    }
 
     trace("getRigCtldExePath is " + rigCtldExePath);
 
