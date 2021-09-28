@@ -1173,7 +1173,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
         QString handshake;
         QString rtsState;
 
-        parity = serialData::parityStr[currentRadio->parity];
+        parity = serialData::rigctldParityStr[currentRadio->parity];
 
         handshake = serialData::rigctldHandshakeStr[currentRadio->handshake];
 
@@ -1209,7 +1209,10 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
                                                 .arg(dtrState)
                                                 .arg(traceCode));
 
-        runRigCtlDaemon(currentRadio->rigMfg_Name, QString::number(currentRadio->rigModelNumber), currentRadio->comport,
+        QString mfgName = currentRadio->rigMfg_Name;
+        int rmNumber = currentRadio->rigModelNumber;
+
+        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio->comport,
                                                    QString::number(currentRadio->baudrate), QString::number(currentRadio->databits), currentRadio->civAddress, currentRadio->rigCtldNetworkAdd, currentRadio->rigCtldNetworkPort,
                                                    QString::number(currentRadio->stopbits), parity, handshake, rtsState, dtrState, traceCode);
 
@@ -1239,11 +1242,6 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
             trace(QString("openRigCtldRadio: Delay = %1 secs before connecting to rigCtld").arg(rigCtldDetails->rigCtldConnectDelay));
             delay(rigCtldDetails->rigCtldConnectDelay);
         }
-
-
-
-
-
     }
 
     if (!localRigCtld)
@@ -2546,13 +2544,11 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
         arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
     }
 
-
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
           .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
 //    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
-
 
 }
 
@@ -4415,6 +4411,8 @@ QString RigControlMainWindow::getRigCtldExePath()
 #endif
 
     settings.endGroup();
+
+    trace("getRigCtldExePath is " + rigCtldExePath);
 
     return rigCtldExePath;
 
