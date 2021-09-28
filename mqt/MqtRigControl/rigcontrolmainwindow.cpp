@@ -1136,14 +1136,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         trace(QString("Starting Local rigctld"));
         // check rigctld file exists
-        getRigCtldExePath();
-    #if defined Q_OS_WIN32
-        QString filename = getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
-    #elif defined Q_OS_LINUX
-        QString filename = getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
-    #elif defined Q_OS_MAC
-        QString filename = getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
-    #endif
+        QString filename = getRigCtldExePath() + getRigCtldExeName();
 
         if (!FileExists(filename))
         {
@@ -2463,16 +2456,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
                                            const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
-
-    //getRigCtldExePath();
-
-#if defined Q_OS_WIN32
-    QString program = getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
-#elif defined Q_OS_LINUX
-    QString program = getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
-#elif defined Q_OS_MAC
-    QString program = getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
-#endif
+    QString program = getRigCtldExePath() + getRigCtldExeName();
 
     QStringList arguments;
 
@@ -4392,6 +4376,31 @@ void RigControlMainWindow::readTranVerterSetting(QSharedPointer<scatParams>radio
  }
 
 
+QString RigControlMainWindow::getRigCtldExeName()
+{
+#if defined Q_OS_WIN32
+    QString progname = RIGCTL_WIN32_EXE_FILENAME;
+#elif defined Q_OS_LINUX
+    QString progname = RIGCTL_LINUX_EXE_FILENAME;
+#elif defined Q_OS_MAC
+    QString progname = RIGCTL_MAC_EXE_FILENAME;
+#endif
+
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    QString rigCtldExeName = settings.value(RIGCTLD_NAME_SETTING_NAME, progname).toString();
+
+    settings.endGroup();
+
+    rigCtldExeName = rigCtldExeName.trimmed();
+
+    trace("getRigCtldExeName is " + rigCtldExeName);
+
+    return rigCtldExeName;
+}
 
 QString RigControlMainWindow::getRigCtldExePath()
 {
@@ -4578,6 +4587,7 @@ void RigControlMainWindow::aboutRigConfig()
                 msg.append(QString("\n"));
                 msg.append(tr("Using rigctld daemon = %1\n").arg(currentRadio->rigCtldEnable ? tr("True") : tr("False")));
                 msg.append(tr("Rigctld path = %1\n").arg(getRigCtldExePath()));
+                msg.append(tr("Rigctld name = %1\n").arg(getRigCtldExeName()));
                 msg.append(tr("Rigctld network address = %1\n").arg(currentRadio->rigCtldNetworkAdd));
                 msg.append(tr("Rigctld port address = %1\n").arg(currentRadio->rigCtldNetworkPort));
                 msg.append(tr("Rigctld Connect delay = %1\n").arg(rigCtldDetails->rigCtldConnectDelay));

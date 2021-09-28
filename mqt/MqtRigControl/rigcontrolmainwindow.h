@@ -513,6 +513,7 @@ private:
     void addCwKeyerMemoryStatusToRigCache(bool status);
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
+    QString getRigCtldExeName();
 
     void readTranVerterSetting(QSharedPointer<scatParams> radio, QString transvertName, QSettings &config);
     void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
