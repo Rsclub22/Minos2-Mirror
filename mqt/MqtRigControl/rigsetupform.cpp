@@ -222,8 +222,8 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                 advancedSerialDataEntryVisible(false);
                 setAdvancedCommsChkBoxVisible(false);
                 networkDataEntryVisible(false);
-                setRigctldCheckBoxVisible(false);
-                radioData->rigCtldEnable = false;
+                //setRigctldCheckBoxVisible(false);
+                //radioData->rigCtldEnable = false;
         }
 
         if (rigCap.supportGetSupBands)
