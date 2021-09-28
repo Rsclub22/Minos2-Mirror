@@ -1493,13 +1493,13 @@ bool HamlibRigControl::getTraceComms()
 
 void HamlibRigControl::setRigConnected(bool rigConnected_)
 {
-    trace(QString("Omnirig: setRigConnected = %1").arg(rigConnected_ ? "true" : "false"));
+    trace(QString("Hamlib: setRigConnected = %1").arg(rigConnected_ ? "true" : "false"));
     rigConnected = rigConnected_;
 }
 
 bool HamlibRigControl::getRigConnected()
 {
-    trace(QString("Omnirig: getRigConnected = %1").arg(rigConnected ? "true" : "false"));
+    trace(QString("Hamlib: getRigConnected = %1").arg(rigConnected ? "true" : "false"));
     return rigConnected;
 }
 
