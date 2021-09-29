@@ -197,8 +197,6 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
         radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
         radioTab.value(tabName)->networkDataEntryVisible(true);
-        radioTab.value(tabName)->setRigctldCheckBoxVisible(false);
-        radioTab.value(tabName)->getRadioData()->rigCtldEnable = false;
     }
     else if (rigCap.portType == RigCapConstants::PortType::serial)
     {
@@ -223,9 +221,10 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->advancedSerialDataEntryVisible(false);
         radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(false);
         radioTab.value(tabName)->networkDataEntryVisible(false);
-        radioTab.value(tabName)->setRigctldCheckBoxVisible(false);
-        radioTab.value(tabName)->getRadioData()->rigCtldEnable = false;
     }
+
+    radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.supportRigCtld);
+//    radioTab.value(tabName)->getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
 
     // serial ptt comport loaded with other comports
     radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
