@@ -367,7 +367,6 @@ void LocFrame::on_LocView_doubleClicked(const QModelIndex &index)
 {
     model->beginReset();
     QString tl = model->getTl();
-    QString oldTl = tl;
     if (index.row() == 0)
     {
         tl = l_add(tl, 0, 5);
