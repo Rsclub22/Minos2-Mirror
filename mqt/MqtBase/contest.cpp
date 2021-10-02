@@ -1016,7 +1016,7 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
     {
         now = contestEnd;
     }
-    const int contestMinutes =  static_cast<int>(contestStart.secsTo(now)/60);
+    const int contestMinutes =  static_cast<int>((contestStart.secsTo(now) + 59)/60);    // round up
 
     int maxGapLen = 0;
     int maxGapOffset = 0;
