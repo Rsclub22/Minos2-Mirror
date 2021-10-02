@@ -995,12 +995,6 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
     }
     QVector<Period> periods;
 
-    int i = 0;
-    int cur = 0;
-    int curStart = -1;
-    int gap = 0;
-    int gapStart = -1;
-
     int minGap = 60;
     if (sot == otIARU)
     {
@@ -1016,12 +1010,20 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
     {
         now = contestEnd;
     }
-    const int contestMinutes =  static_cast<int>((contestStart.secsTo(now) + 59)/60);    // round up
+    const int contestMinutes =  static_cast<int>((contestStart.secsTo(now) + 59)/60);    // round up so we include this minute
 
+    int gap = 0;
+    int cur = 0;
+    int curStart = -1;
+    int gapStart = -1;
     int maxGapLen = 0;
     int maxGapOffset = 0;
+
+    int i = 0;
+
     while ( i < contestMinutes )
     {
+
         while ( i < contestMinutes && qsoTimeMap[ i ].count )
         {
             if ( curStart < 0 )
@@ -1032,7 +1034,6 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
 
             i++;
         }
-
         while ( i < contestMinutes && !qsoTimeMap[ i ].count )
         {
             if ( gapStart < 0 )
@@ -1077,8 +1078,8 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
             p.startMinute = gapStart;
             periods.push_back ( p );
         }
-        cur = 0;
         gap = 0;
+        cur = 0;
         curStart = -1;
         gapStart = -1;
     }
@@ -1097,11 +1098,15 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
         if ( ( *i ).isGap && i == ( periods.end() - 1 ) )
         {
             lastGapLength = (*i).length;
+            if (now != contestEnd)
+            {
+                lastGapLength -= 1;    // as the current minute shouldn't be included when in contest
+            }
             continue;   // don't show trailing gap
         }
 
         // if IARU we have to look for the largest gap >= 120 mins, and disallow the rest
-        if ( ! ( *i ).isGap || (sot == otIARU && (i - periods.begin()) == maxGapOffset))
+        if ( ! ( *i ).isGap || (sot == otIARU && (i - periods.begin()) != maxGapOffset))
         {
             operatingTime += length;
         }
