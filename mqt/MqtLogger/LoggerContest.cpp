@@ -627,8 +627,8 @@ void LoggerContestLog::clearRunMemory(int memno, const memoryData::memData &mem)
 }
 void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band;
-    if (mem.band.isEmpty())
+    QString band(mem.band);
+    if (band.isEmpty())
     {
         band = BandList::getBand(mem.freq);
     }
@@ -646,7 +646,7 @@ void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 }
 void LoggerContestLog::saveInitialRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band = mem.band;
+    QString band( mem.band);
     if (band.isEmpty())
     {
         band = BandList::getBand(mem.freq);
