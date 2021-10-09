@@ -57,32 +57,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="170"/>
+        <location filename="../qrzservermainwindow.cpp" line="199"/>
         <source>Logging on to QRZ.com with callsign: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="599"/>
+        <location filename="../qrzservermainwindow.cpp" line="628"/>
         <source>Callsign received from logger - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="604"/>
+        <location filename="../qrzservermainwindow.cpp" line="633"/>
         <source>Callsign received from cluster - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="614"/>
+        <location filename="../qrzservermainwindow.cpp" line="643"/>
         <source>Callsign is valid - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="620"/>
+        <location filename="../qrzservermainwindow.cpp" line="649"/>
         <source>Ask QRZ for callsign - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="628"/>
+        <location filename="../qrzservermainwindow.cpp" line="657"/>
         <source>Callsign is invalid - %1</source>
         <translation type="unfinished"></translation>
     </message>
