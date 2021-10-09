@@ -19,12 +19,12 @@
         <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="763"/>
+        <location filename="../ConfigFile.cpp" line="774"/>
         <source>More than one router is defined and enabled</source>
         <translation>Plus d&apos;un routeur est défini et activé </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="772"/>
+        <location filename="../ConfigFile.cpp" line="783"/>
         <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
@@ -32,17 +32,17 @@
 What??</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="787"/>
+        <location filename="../ConfigFile.cpp" line="798"/>
         <source> contains bad characters [ and/or ]</source>
         <translation> contient de mauvais caractères [et / ou]</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="802"/>
+        <location filename="../ConfigFile.cpp" line="813"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation> apparaît plusieurs fois (les noms ne sont pas sensibles à la casse)</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="841"/>
+        <location filename="../ConfigFile.cpp" line="852"/>
         <source>%1 requires a local %2
 
 </source>
@@ -51,7 +51,7 @@ What??</translation>
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="851"/>
+        <location filename="../ConfigFile.cpp" line="862"/>
         <source> Executable path does not exist
 
 </source>
@@ -60,7 +60,7 @@ What??</translation>
 </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="855"/>
+        <location filename="../ConfigFile.cpp" line="866"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
