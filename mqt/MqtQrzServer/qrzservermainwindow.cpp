@@ -94,6 +94,35 @@ QrzServerMainWindow::~QrzServerMainWindow()
 {
     delete ui;
 }
+void QrzServerMainWindow::resizeEvent(QResizeEvent * event)
+{
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+    QWidget::resizeEvent(event);
+}
+void QrzServerMainWindow::moveEvent(QMoveEvent * event)
+{
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+    QWidget::moveEvent(event);
+}
+void QrzServerMainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue("geometry", saveGeometry());
+    }
+}
+void QrzServerMainWindow::closeEvent(QCloseEvent *event)
+{
+    trace("QrzServerMainWindow::closeEvent");
+
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+
+    QWidget::closeEvent(event);
+}
 
 void QrzServerMainWindow::LogTimerTimer()
 {
