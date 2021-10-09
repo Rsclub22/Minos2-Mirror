@@ -61,7 +61,7 @@ void DefDirsDlg::finalise()
     bool ndoAge = ui->ageCb->isChecked();
     if (doAge != ndoAge)
     {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeToProtectContests, ndoAge);
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, ndoAge);
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         doSelectSession = true;
