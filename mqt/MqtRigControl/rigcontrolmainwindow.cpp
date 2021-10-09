@@ -373,21 +373,12 @@ void RigControlMainWindow::initActionsConnections()
 
     connect(ui->selectRadioBox, QOverload<int>::of(&QComboBox::activated), this, &RigControlMainWindow::selectRadio);
 
-    //connect(ui->selectRadioBox, &QComboBox::activated, this, [=](int index){selectRadio(index);});
     connect(ui->actionSetup_Radios, &QAction::triggered, this,  [=](){onLaunchSetup();});
-    //connect(ui->actionEdit_Preset_Freq, &QAction::triggered,  this, [=](){setupBandFreq();});
+    connect(ui->actionConfigure_Rigctld, &QAction::triggered, this,  [=](){onConfigureRigctld();});
     connect(ui->actionTraceComms, &QAction::toggled,  this, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
     connect(ui->actionAbout, &QAction::triggered,  this, [=](){about();});
     connect(ui->actionAbout_Radio_Config, &QAction::triggered,  this, [=](){aboutRigConfig();});
     connect(pollTimer, &QTimer::timeout,  this, [=](){pollRadioInfo();});
-    //connect(ui->ritEnableChk, &QCheckBox::stateChanged,  this, [=](int chkState){ritEnableChecked(chkState);});
-
-
-    // configure radio dialog
-    //connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged,  this, [=](QString radioName){currentRadioSettingChanged(radioName);});
-    //connect(setupRadio, &RigSetupDialog::radioNameChange,  this, [=](){updateSelectRadioBox();});
-    //connect(setupRadio, &RigSetupDialog::radioTabChanged,  this, [=](){updateSelectRadioBox();});
-    //connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache,  this, [=](){updateRigDetailsCache();});
 
 
 
@@ -4246,7 +4237,45 @@ void RigControlMainWindow::onLaunchSetup()
 
 
 }
+void RigControlMainWindow::onConfigureRigctld()
+{
+    QString filepath = getRigCtldExePath();
+    QString filename = getRigCtldExeName();
 
+    QDir cdir(GetCurrentDir());
+    QString InitialDir = getRigCtldExePath();
+
+    QFileDialog dialog(this, tr("Select Rigctld Program"), InitialDir);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    const QStringList schemes = QStringList(QStringLiteral("file"));
+
+    dialog.setSupportedSchemes(schemes);
+#endif
+
+#ifdef Q_OS_WIN
+    QString Filter = QString("Executable Files") + " (*.exe);;"
+                     + QString(tr("All Files")) + " (*.*)" ;
+    dialog.setNameFilter(Filter);
+#else
+    dialog.setFilter(QDir::AllDirs | QDir::Files | QDir::Dirs /*| QDir::Executable*/); //executable doesn't seem to work
+#endif
+
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.selectFile( getRigCtldExeName());
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        // need to make path relative
+        QString progName = dialog.selectedUrls().value(0).toLocalFile();
+        QString rpath = ExtractFileDir(progName);
+        progName = ExtractFileName(progName);
+        setRigCtldExePath(rpath);
+        setRigCtldExeName(progName);
+
+    }
+
+
+}
 void RigControlMainWindow::readCurrentRadio(QString &currentRadioName)
 {
 
@@ -4432,6 +4461,31 @@ QString RigControlMainWindow::getRigCtldExePath()
     return rigCtldExePath;
 
 }
+void RigControlMainWindow::setRigCtldExePath(const QString &path)
+{
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    settings.setValue(RIGCTLD_PATH_SETTING_NAME, path);
+
+    settings.endGroup();
+
+}
+
+void RigControlMainWindow::setRigCtldExeName(const QString &progname)
+{
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    settings.setValue(RIGCTLD_NAME_SETTING_NAME, progname);
+
+    settings.endGroup();
+}
+
 
 
 void RigControlMainWindow::getAvailRadiosList(QStringList &availRadios)

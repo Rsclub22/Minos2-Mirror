@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1028</width>
-    <height>375</height>
+    <height>381</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1169,6 +1169,7 @@ Active</string>
      <string>Configure</string>
     </property>
     <addaction name="actionSetup_Radios"/>
+    <addaction name="actionConfigure_Rigctld"/>
     <addaction name="actionTraceComms"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
@@ -1198,7 +1199,7 @@ Active</string>
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Setup Radios</string>
+    <string>Setup Radios...</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -1249,6 +1250,11 @@ Active</string>
    </property>
    <property name="text">
     <string>Contest Change - Ignore Previous Freq</string>
+   </property>
+  </action>
+  <action name="actionConfigure_Rigctld">
+   <property name="text">
+    <string>Configure Rigctld...</string>
    </property>
   </action>
  </widget>
