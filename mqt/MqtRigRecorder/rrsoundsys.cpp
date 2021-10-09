@@ -425,7 +425,7 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
         int suff = baseName.indexOf(suffix);
         if (suff > 0)
         {
-            fname = fname.left(suff);
+            baseName = baseName.left(suff);
         }
     }
 

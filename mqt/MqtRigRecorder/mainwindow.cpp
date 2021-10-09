@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->inChannelCB->setCurrentText(indev);
     ui->outChannelCB->setCurrentText(outdev);
 
-    QString baseFile = settings.value(baseFileKey, "").toString();
+    QString baseFile = settings.value(baseFileKey, "./RigRecording/rigrec.wav").toString();
     ui->baseFilename->setText(baseFile);
 
     int cycleTime = settings.value(cycleRateKey, 10).toInt();
