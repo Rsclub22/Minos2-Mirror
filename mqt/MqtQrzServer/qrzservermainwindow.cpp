@@ -75,6 +75,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
 
+    connect(ui->connectPb, &QPushButton::clicked, this, [=](){onConnectPushButtonClicked();});
+
     checkQrzRequestsTimer = new QTimer(this);
     connect(checkQrzRequestsTimer, &QTimer::timeout, this, [=](){handleQrzRequests();});
     checkQrzRequestsTimer->start(500);
@@ -119,7 +121,11 @@ void QrzServerMainWindow::LogTimerTimer()
     }
 }
 
+void QrzServerMainWindow::onConnectPushButtonClicked()
+{
+    logon();
 
+}
 
 void QrzServerMainWindow::onPingStateTimerTimeout()
 {
