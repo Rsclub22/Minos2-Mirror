@@ -233,6 +233,8 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->allowLoc4 = allowLoc4;
     ct->allowLoc8 = allowLoc8;
 
+    ct->validateLoc();
+
     ct->RSTMandatoryField = RSTMandatoryField;
     ct->serialMandatoryField = serialMandatoryField;
     ct->locatorMandatoryField = locatorMandatoryField;
