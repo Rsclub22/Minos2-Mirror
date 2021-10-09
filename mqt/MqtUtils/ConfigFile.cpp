@@ -408,6 +408,17 @@ void MinosConfig::initialise()
 
             configs[defConfigName] = defConfig;
         }
+        else
+        {
+            NamedConfig defConfig;
+            defConfig.configName = defConfigName;
+            defConfig.autoStart = false;
+            QString h = QHostInfo::localHostName();
+            thisRouterName = h;
+            configs[defConfigName] = defConfig;
+
+        }
+
         saveAsJson(getConfigJsonName());
     }
     loadJson(getConfigJsonName());
