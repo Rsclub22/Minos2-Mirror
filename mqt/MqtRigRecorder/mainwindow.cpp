@@ -88,13 +88,15 @@ MainWindow::MainWindow(QWidget *parent)
     bool mono = settings.value("Mono", false).toBool();
     ui->recordMono->setChecked(mono);
 
-    bool autostart = settings.value("AutoStart", false).toBool();
-    ui->autostartCb->setChecked(autostart);
+    ui->autostartCb->hide();
 
-    if (autostart)
-    {
-        on_startRecButton_clicked();
-    }
+//    bool autostart = settings.value("AutoStart", false).toBool();
+//    ui->autostartCb->setChecked(autostart);
+
+//    if (autostart)
+//    {
+//        on_startRecButton_clicked();
+//    }
 
     bool link = settings.value("ContestLink", false).toBool();
     ui->contestLinkCB->setChecked(link);
@@ -196,10 +198,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     rass.closedown();
 
     QWidget::closeEvent(event);
-}
-void MainWindow::on_closeButton_clicked()
-{
-    close();
 }
 
 void MainWindow::on_startRecButton_clicked()
