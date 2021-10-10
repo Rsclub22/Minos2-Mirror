@@ -425,7 +425,7 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
         int suff = baseName.indexOf(suffix);
         if (suff > 0)
         {
-            fname = fname.left(suff);
+            baseName = baseName.left(suff);
         }
     }
 
@@ -464,9 +464,9 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
         }
         QDateTime tnow = QDateTime::currentDateTime();
         QString secsPart = tnow.toString("ss");
-        QString minsPart = tnow.toString("mm");
+//        QString minsPart = tnow.toString("mm");
 
-        if (secsPart == "00" && minsPart[1] == "0" && tnow.msecsTo(swapTime) <= 0)
+        if (secsPart == "00" && /*minsPart[1] == "0" &&*/ tnow.msecsTo(swapTime) <= 0)
         {
             trace("Cycling wav file");
             // time to swap...

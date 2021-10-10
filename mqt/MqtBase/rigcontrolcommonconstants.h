@@ -122,6 +122,7 @@ const QString RIGCTL_MAC_EXE_FILENAME = "rigctld";
 
 const QString RIGCTLD_GROUP_NAME = "Rigctld";
 const QString RIGCTLD_PATH_SETTING_NAME = "RigctldPath";
+const QString RIGCTLD_NAME_SETTING_NAME = "RigctldName";
 
 const QString DEFAULT_FT817_RADIO_RETRY = "3";
 const QString DEFAULT_FT817_RADIO_TIMEOUT = "1000";

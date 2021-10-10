@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>354</height>
+    <width>429</width>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -101,53 +101,79 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QCheckBox" name="ReadabilityAutofillcb">
-         <property name="text">
-          <string>Signal Readability Initialise to 5</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="ReportAutofillcb">
-         <property name="text">
-          <string>Signal Report AutoFill</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="TabSandPActioncb">
-         <property name="text">
-          <string>Change Tab Order for S&amp;&amp;P</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="ShowOperatorscb">
-         <property name="text">
-          <string>Show Operators</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QCheckBox" name="ReadabilityAutofillcb">
+       <property name="text">
+        <string>Signal Readability Initialise to 5</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <spacer name="horizontalSpacer_6">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QCheckBox" name="ReportAutofillcb">
+       <property name="text">
+        <string>Signal Report AutoFill</string>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+      </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QCheckBox" name="TabSandPActioncb">
+       <property name="text">
+        <string>Change Tab Order for S&amp;&amp;P</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="ShowOperatorscb">
+       <property name="text">
+        <string>Show Operators</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Display of Operating Time</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_11">
+      <item>
+       <widget class="QRadioButton" name="otNonerb">
+        <property name="text">
+         <string>None</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">otButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="otRSGBrb">
+        <property name="text">
+         <string>RSGB (Multiple 1 hour gaps)</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">otButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="otIARUrb">
+        <property name="text">
+         <string>IARU R1 (Single 2 hour gap)</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">otButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -387,4 +413,7 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="otButtonGroup"/>
+ </buttongroups>
 </ui>

@@ -20,10 +20,12 @@ TEMPLATE = app
 win32:RC_ICONS += ../MinosRig.ico
 
 win32 {
-DEFINES += WIN32
-QT += axcontainer
-#TYPELIBS = $$system(dumpcpp -getfile {4FE359C5-A58F-459D-BE95-CA559FB4F270})
-TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+    DEFINES += WIN32
+    QT += axcontainer
+    !msvc {
+        #TYPELIBS = $$system(dumpcpp -getfile {4FE359C5-A58F-459D-BE95-CA559FB4F270})
+        TYPELIBS = $$system(dumpcpp OmniRig.tlb)
+    }
 }
 
 SOURCES += main.cpp\

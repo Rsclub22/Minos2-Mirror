@@ -50,10 +50,6 @@
 <context>
     <name>Published</name>
     <message>
-        <source>key</source>
-        <translation type="vanished">Clé</translation>
-    </message>
-    <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
         <source>state</source>
         <translation>Etat</translation>

@@ -23,6 +23,7 @@
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
+#include "SendRPCDM.h"
 #include "delayedaction.h"
 #include "ui_clusterclientframe.h"
 
@@ -34,8 +35,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     timeToLive(0),
     purgeSpotFlag(false),
     holdUpdateFlag(false),
-    allowHF(false),
-    clusterServerLoaded(false),
     clusterServerConnected(false)
 {
 
@@ -177,10 +176,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     checkNewFilters->start(CHECK_NEWFILTERS_DURATION);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
-    checkHfFlagTimer = new QTimer(this);
-    connect(checkHfFlagTimer, &QTimer::timeout, this, [=](){checkHfFlag();});
-    checkHfFlagTimer->start(1000);
-
     connect(ui->statusIndicator, &QPushButton::clicked, this, [=](){on_clusterStatusIndicatorClicked();});
 
 
@@ -195,7 +190,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
 ClusterClientFrame::~ClusterClientFrame()
 {
-    checkHfFlagTimer->stop();
     delete ui;
     delete dxSpotDataModel;
 
@@ -211,7 +205,7 @@ ClusterClientFrame::~ClusterClientFrame()
 void ClusterClientFrame::on_waitClusterServerLoadedTimeout()
 {
     static int timeoutCount = 0;
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
         waitClusterServerLoadedTimer->stop();
         on_resendClusterSpots();
@@ -544,27 +538,6 @@ void ClusterClientFrame::filterButtonSelected()
     delete filterSetup;
 
 }
-
-
-
-void ClusterClientFrame::checkHfFlag()
-{
-    bool hf = false;
-    if (TContestApp::getContestApp())
-    {
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, hf );
-        if (hf != allowHF)
-        {
-            allowHF = hf;
-            setHF(allowHF);
-        }
-    }
-
-
-
-
-}
-
 
 
 void ClusterClientFrame::setHF(bool /*hfFlag*/)
@@ -1816,7 +1789,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     }
 
 
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
 
         ui->statusIndicator->setToolTip(s[1]);
@@ -1840,17 +1813,6 @@ void ClusterClientFrame::on_clusterStatusIndicatorClicked()
     }
 
 }
-
-
-void ClusterClientFrame::setClusterServerLoaded(bool loaded)
-{
-    clusterServerLoaded = loaded;
-}
-
-
-
-
-
 
 void ClusterClientFrame::statusIndicatorToggle(bool on)
 {

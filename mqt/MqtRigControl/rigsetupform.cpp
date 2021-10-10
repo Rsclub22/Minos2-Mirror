@@ -201,8 +201,6 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                advancedSerialDataEntryVisible(false);
                setAdvancedCommsChkBoxVisible(false);
                networkDataEntryVisible(true);
-               rigCtldItemsVisible(false);
-               setRigctldCheckBoxVisible(false);
                setStartMinosRigctldCheckbox(true);
 
 
@@ -222,9 +220,9 @@ void RigSetupForm::setupRadioModel(QString radioModel)
                 advancedSerialDataEntryVisible(false);
                 setAdvancedCommsChkBoxVisible(false);
                 networkDataEntryVisible(false);
-                setRigctldCheckBoxVisible(false);
-                radioData->rigCtldEnable = false;
         }
+        setRigctldCheckBoxVisible(rigCap.supportRigCtld);
+        //getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
 
         if (rigCap.supportGetSupBands)
         {

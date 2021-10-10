@@ -373,21 +373,12 @@ void RigControlMainWindow::initActionsConnections()
 
     connect(ui->selectRadioBox, QOverload<int>::of(&QComboBox::activated), this, &RigControlMainWindow::selectRadio);
 
-    //connect(ui->selectRadioBox, &QComboBox::activated, this, [=](int index){selectRadio(index);});
     connect(ui->actionSetup_Radios, &QAction::triggered, this,  [=](){onLaunchSetup();});
-    //connect(ui->actionEdit_Preset_Freq, &QAction::triggered,  this, [=](){setupBandFreq();});
+    connect(ui->actionConfigure_Rigctld, &QAction::triggered, this,  [=](){onConfigureRigctld();});
     connect(ui->actionTraceComms, &QAction::toggled,  this, [=](bool state){saveTraceLogFlag(state);});    // set/clear comms tracing
     connect(ui->actionAbout, &QAction::triggered,  this, [=](){about();});
     connect(ui->actionAbout_Radio_Config, &QAction::triggered,  this, [=](){aboutRigConfig();});
     connect(pollTimer, &QTimer::timeout,  this, [=](){pollRadioInfo();});
-    //connect(ui->ritEnableChk, &QCheckBox::stateChanged,  this, [=](int chkState){ritEnableChecked(chkState);});
-
-
-    // configure radio dialog
-    //connect(setupRadio, &RigSetupDialog::currentRadioSettingChanged,  this, [=](QString radioName){currentRadioSettingChanged(radioName);});
-    //connect(setupRadio, &RigSetupDialog::radioNameChange,  this, [=](){updateSelectRadioBox();});
-    //connect(setupRadio, &RigSetupDialog::radioTabChanged,  this, [=](){updateSelectRadioBox();});
-    //connect(setupRadio, &RigSetupDialog::upDateRadioDetailsCache,  this, [=](){updateRigDetailsCache();});
 
 
 
@@ -1136,14 +1127,7 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
 
         trace(QString("Starting Local rigctld"));
         // check rigctld file exists
-        getRigCtldExePath();
-    #if defined Q_OS_WIN32
-        QString filename = getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
-    #elif defined Q_OS_LINUX
-        QString filename = getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
-    #elif defined Q_OS_MAC
-        QString filename = getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
-    #endif
+        QString filename = getRigCtldExePath() + getRigCtldExeName();
 
         if (!FileExists(filename))
         {
@@ -1163,17 +1147,17 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
             }
         }
 
-        rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::NONE;
+        rigCtldTrace::rigCtldTraceCodes traceCode = rigCtldTrace::rigCtldTraceCodes::rctNONE;
         if (ui->actionTraceComms->isChecked())
         {
-            traceCode = rigCtldTrace::rigCtldTraceCodes::VERBOSE;
+            traceCode = rigCtldTrace::rigCtldTraceCodes::rctVERBOSE;
         }
 
         QString parity;
         QString handshake;
         QString rtsState;
 
-        parity = serialData::parityStr[currentRadio->parity];
+        parity = serialData::rigctldParityStr[currentRadio->parity];
 
         handshake = serialData::rigctldHandshakeStr[currentRadio->handshake];
 
@@ -1209,7 +1193,10 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
                                                 .arg(dtrState)
                                                 .arg(traceCode));
 
-        runRigCtlDaemon(currentRadio->rigMfg_Name, QString::number(currentRadio->rigModelNumber), currentRadio->comport,
+        QString mfgName = currentRadio->rigMfg_Name;
+        int rmNumber = currentRadio->rigModelNumber;
+
+        runRigCtlDaemon(mfgName, QString::number(rmNumber), currentRadio->comport,
                                                    QString::number(currentRadio->baudrate), QString::number(currentRadio->databits), currentRadio->civAddress, currentRadio->rigCtldNetworkAdd, currentRadio->rigCtldNetworkPort,
                                                    QString::number(currentRadio->stopbits), parity, handshake, rtsState, dtrState, traceCode);
 
@@ -1239,11 +1226,6 @@ int RigControlMainWindow::openRigCtldRadio(bool localRigCtld)
             trace(QString("openRigCtldRadio: Delay = %1 secs before connecting to rigCtld").arg(rigCtldDetails->rigCtldConnectDelay));
             delay(rigCtldDetails->rigCtldConnectDelay);
         }
-
-
-
-
-
     }
 
     if (!localRigCtld)
@@ -2465,16 +2447,7 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
                                            const QString stopBits, const QString parity, const QString handshake, const QString rtsState, const QString dtrState,
                                            rigCtldTrace::rigCtldTraceCodes diagnostics)
 {
-
-    //getRigCtldExePath();
-
-#if defined Q_OS_WIN32
-    QString program = getRigCtldExePath() + RIGCTL_WIN32_EXE_FILENAME;
-#elif defined Q_OS_LINUX
-    QString program = getRigCtldExePath() + RIGCTL_LINUX_EXE_FILENAME;
-#elif defined Q_OS_MAC
-    QString program = getRigCtldExePath() + RIGCTL_MAC_EXE_FILENAME;
-#endif
+    QString program = getRigCtldExePath() + getRigCtldExeName();
 
     QStringList arguments;
 
@@ -2541,18 +2514,16 @@ void RigControlMainWindow::runRigCtlDaemon(const QString manufacturer, const QSt
         trace(QString("runRigCtlDaemon:: port address is empty - using default %1").arg(networkPort));
     }
 
-    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::NONE)
+    if (diagnostics != rigCtldTrace::rigCtldTraceCodes::rctNONE)
     {
         arguments << rigCtldTrace::rigCtldTraceStr[diagnostics];
     }
-
 
     trace(QString("runRigCtlDaemon:: start rigCtlD - manufacturer = %1, model = %2, comport = %3, baudrate = %4, databits = %5, stopbits = %6, parity = %7, handshake = %8, rtsState = %9, dtrState = %10, civ = %11, netaddress = %12, netPort = %13")
           .arg(manufacturer).arg(model).arg(serPort).arg(baudRate).arg(dataBits).arg(stopBits).arg(parityName).arg(handshake).arg(rtsState).arg(dtrState).arg(civ).arg(networkAdd).arg(networkPort));
 
 //    trace(arguments.join(" ; "));
     rigCtldProcess->start(program, arguments);
-
 
 }
 
@@ -2674,7 +2645,7 @@ void RigControlMainWindow::getRigCtldConnectDelay()
 
 
     QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("RigCtld");
+    config.beginGroup(RIGCTLD_GROUP_NAME);
     rigCtldDetails->rigCtldConnectDelay = config.value("RigCtldConnectDelay", DEFAULT_RIGCTLD_CONNECT_DELAY).toInt();
     config.endGroup();
 
@@ -4266,7 +4237,45 @@ void RigControlMainWindow::onLaunchSetup()
 
 
 }
+void RigControlMainWindow::onConfigureRigctld()
+{
+    QString filepath = getRigCtldExePath();
+    QString filename = getRigCtldExeName();
 
+    QDir cdir(GetCurrentDir());
+    QString InitialDir = getRigCtldExePath();
+
+    QFileDialog dialog(this, tr("Select Rigctld Program"), InitialDir);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    const QStringList schemes = QStringList(QStringLiteral("file"));
+
+    dialog.setSupportedSchemes(schemes);
+#endif
+
+#ifdef Q_OS_WIN
+    QString Filter = QString("Executable Files") + " (*.exe);;"
+                     + QString(tr("All Files")) + " (*.*)" ;
+    dialog.setNameFilter(Filter);
+#else
+    dialog.setFilter(QDir::AllDirs | QDir::Files | QDir::Dirs /*| QDir::Executable*/); //executable doesn't seem to work
+#endif
+
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    dialog.selectFile( getRigCtldExeName());
+
+    if (dialog.exec() == QDialog::Accepted)
+    {
+        // need to make path relative
+        QString progName = dialog.selectedUrls().value(0).toLocalFile();
+        QString rpath = ExtractFileDir(progName);
+        progName = ExtractFileName(progName);
+        setRigCtldExePath(rpath);
+        setRigCtldExeName(progName);
+
+    }
+
+
+}
 void RigControlMainWindow::readCurrentRadio(QString &currentRadioName)
 {
 
@@ -4396,6 +4405,31 @@ void RigControlMainWindow::readTranVerterSetting(QSharedPointer<scatParams>radio
  }
 
 
+QString RigControlMainWindow::getRigCtldExeName()
+{
+#if defined Q_OS_WIN32
+    QString progname = RIGCTL_WIN32_EXE_FILENAME;
+#elif defined Q_OS_LINUX
+    QString progname = RIGCTL_LINUX_EXE_FILENAME;
+#elif defined Q_OS_MAC
+    QString progname = RIGCTL_MAC_EXE_FILENAME;
+#endif
+
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    QString rigCtldExeName = settings.value(RIGCTLD_NAME_SETTING_NAME, progname).toString();
+
+    settings.endGroup();
+
+    rigCtldExeName = rigCtldExeName.trimmed();
+
+    trace("getRigCtldExeName is " + rigCtldExeName);
+
+    return rigCtldExeName;
+}
 
 QString RigControlMainWindow::getRigCtldExePath()
 {
@@ -4416,9 +4450,42 @@ QString RigControlMainWindow::getRigCtldExePath()
 
     settings.endGroup();
 
+    rigCtldExePath = rigCtldExePath.trimmed();
+    if (rigCtldExePath.right(1) != "/")
+    {
+        rigCtldExePath += "/";
+    }
+
+    trace("getRigCtldExePath is " + rigCtldExePath);
+
     return rigCtldExePath;
 
 }
+void RigControlMainWindow::setRigCtldExePath(const QString &path)
+{
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    settings.setValue(RIGCTLD_PATH_SETTING_NAME, path);
+
+    settings.endGroup();
+
+}
+
+void RigControlMainWindow::setRigCtldExeName(const QString &progname)
+{
+    QString fileName;
+    fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
+    QSettings  settings(fileName, QSettings::IniFormat);
+    settings.beginGroup(RIGCTLD_GROUP_NAME);
+
+    settings.setValue(RIGCTLD_NAME_SETTING_NAME, progname);
+
+    settings.endGroup();
+}
+
 
 
 void RigControlMainWindow::getAvailRadiosList(QStringList &availRadios)
@@ -4574,6 +4641,7 @@ void RigControlMainWindow::aboutRigConfig()
                 msg.append(QString("\n"));
                 msg.append(tr("Using rigctld daemon = %1\n").arg(currentRadio->rigCtldEnable ? tr("True") : tr("False")));
                 msg.append(tr("Rigctld path = %1\n").arg(getRigCtldExePath()));
+                msg.append(tr("Rigctld name = %1\n").arg(getRigCtldExeName()));
                 msg.append(tr("Rigctld network address = %1\n").arg(currentRadio->rigCtldNetworkAdd));
                 msg.append(tr("Rigctld port address = %1\n").arg(currentRadio->rigCtldNetworkPort));
                 msg.append(tr("Rigctld Connect delay = %1\n").arg(rigCtldDetails->rigCtldConnectDelay));

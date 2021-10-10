@@ -174,6 +174,8 @@ private slots:
 
     void onRadioBandChange(QString band);
 
+    void on_resetBandFreqButton_clicked();
+
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 

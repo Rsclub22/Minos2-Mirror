@@ -28,8 +28,6 @@ ContestDetails::ContestDetails(QWidget *parent) :
 
     ui->setupUi(this);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-
     trAllHf = tr("All HF");
 
     QSettings settings;
@@ -178,13 +176,13 @@ void ContestDetails::setDetails(  )
    // need to get legal bands from ContestLog
 
    BandList &blist = BandList::getBandList();
-   if (allowHF && contestTransferObject->isHF())
+   if (contestTransferObject->isHF())
    {
        ui->BandComboBox->addItem( trAllHf );
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if ( (allowHF && contestTransferObject->isHF()) && b->getType() == "HF")
+       if ( (contestTransferObject->isHF()) && b->getType() == "HF")
        {
            ui->BandComboBox->addItem( b->uk );
        }
@@ -841,9 +839,14 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        }
    }
    contestTransferObject->MGMContestRules.setValue(false);
+   QString setMode = ic.mode;
+   if (setMode == "FT8" || setMode == "FT4")
+   {
+       setMode = hamlibData::MGM;
+   }
    if (isHF)
    {
-       if (ic.mode == "MGM")
+       if (setMode == hamlibData::MGM)
        {
            contestTransferObject->locMult.setValue( true );
            contestTransferObject->locatorMandatoryField.setValue( true );
@@ -852,7 +855,6 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->allowLoc4.setValue(true);
            ui->AllowLoc4CB->setChecked(true);
        }
-
    }
    else
    {
@@ -916,11 +918,11 @@ void ContestDetails::setDetails( const IndividualContest &ic )
             ui->BonusComboBox->setCurrentIndex(2);
    }
 
-   contestTransferObject->modeList.setValue(ic.mode);
+   contestTransferObject->modeList.setValue(setMode);
    contestTransferObject->currentMode.setValue("");
    setModes();
 
-   QString mode = ic.mode;  // which is a list
+   QString mode = setMode;  // which is a list
    if (mode.isEmpty())
    {
       if (contestTransferObject->MGMContestRules.getValue() || ic.specialRules.contains("S12"))
@@ -1065,12 +1067,6 @@ QWidget * ContestDetails::getDetails( )
     QWidget *nextD = getNextFocus();
 
     contestTransferObject->name.setValue( ui->ContestNameEdit->text() );
-    QString cb = ui->BandComboBox->currentText();
-    if (cb == trAllHf)
-    {
-        cb = allHF;
-    }
-    contestTransferObject->contestBands.setValue( cb );
     contestTransferObject->entSect.setValue( ui->SectionComboBox->currentText() );
     contestTransferObject->sectionList.setValue( sectionList );
 
@@ -1087,6 +1083,23 @@ QWidget * ContestDetails::getDetails( )
         if (!nextD)
         {
             nextD = ui->BandComboBox;
+        }
+    }
+    else
+    {
+        QString cb = ui->BandComboBox->currentText();
+        if (cb == trAllHf)
+        {
+            cb = allHF;
+        }
+        contestTransferObject->contestBands.setValue( cb );
+
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK = blist.findBand(cb, bi);
+        if (bandOK)
+        {
+            contestTransferObject->currentBand.setValue(cb);
         }
     }
 
@@ -1385,7 +1398,7 @@ void ContestDetails::enableControls()
 
    ui->MGMCheckBox->setEnabled(!protectedChecked);
 
-   ui->HFCalendarButton->setVisible(allowHF && contestTransferObject->isHF());
+   ui->HFCalendarButton->setVisible(contestTransferObject->isHF());
    ui->VHFCalendarButton->setVisible(!contestTransferObject->isHF());
    ui->uwaveCalendarButton->setVisible(!contestTransferObject->isHF());
 }

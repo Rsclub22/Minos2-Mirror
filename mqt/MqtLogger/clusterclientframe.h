@@ -158,11 +158,6 @@ public:
     void buttonHandleDxSpots();
     void restoreColumns();
     void setClusterServerState(QString stateMsg);
-
-
-
-
-    void setClusterServerLoaded(bool loaded);
 private:
     Ui::ClusterClientFrame *ui;
     BaseContestLog *ct = nullptr;
@@ -184,13 +179,8 @@ private:
     bool purgeSpotFlag;
     bool holdUpdateFlag;
 
-    bool allowHF;
-
-
     QTimer* checkNewSpotsTimer;
     QTimer* checkNewFilters;
-
-    QTimer* checkHfFlagTimer;
 
     QTimer* waitClusterServerLoadedTimer;
 
@@ -198,7 +188,6 @@ private:
     MouseInObject* actionInObject;
 
     QVector<QString> spotQueue;
-    bool clusterServerLoaded;
     bool clusterServerConnected;
 
     bool traceDebugFlag = false;
@@ -349,7 +338,6 @@ private slots:
     void on_unworkedLocCheckBox(int state);
     void on_unworkedCallsignsCheckBox(int state);
     void on_resendClusterSpots();
-    void checkHfFlag();
     void on_waitClusterServerLoadedTimeout();
     void on_clusterStatusIndicatorClicked();
 };

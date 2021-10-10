@@ -2,6 +2,7 @@
 #define DISPLAYOPTIONS_H
 
 #include <QFrame>
+#include "ProfileEnums.h"
 
 namespace Ui {
 class DisplayOptions;
@@ -37,6 +38,8 @@ private:
 
     int currLang = -1;
     bool doBounceOnExit = false;
+
+    SHOWOPERATINGTIME sot = otNone;
 
     int lm;
     int ls;

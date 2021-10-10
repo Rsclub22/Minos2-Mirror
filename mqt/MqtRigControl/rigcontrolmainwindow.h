@@ -58,7 +58,7 @@ namespace displayIndicator {
 }
 
 namespace rigCtldTrace {
-    enum rigCtldTraceCodes {NONE, BUG, ERR, WARN, VERBOSE, TRACE};
+    enum rigCtldTraceCodes {rctNONE, rctBUG, rctERR, rctWARN, rctVERBOSE, rctTRACE};
     const QStringList  rigCtldTraceStr = {"", "-v", "-vv", "-vvv", "-vvvv", "-vvvvv"};
 }
 
@@ -513,6 +513,9 @@ private:
     void addCwKeyerMemoryStatusToRigCache(bool status);
     void addPTTEnabledStatusToRigCache(bool status);
     QString getRigCtldExePath();
+    QString getRigCtldExeName();
+    void setRigCtldExePath(const QString &);
+    void setRigCtldExeName(const QString &);
 
     void readTranVerterSetting(QSharedPointer<scatParams> radio, QString transvertName, QSettings &config);
     void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
@@ -554,6 +557,7 @@ private slots:
     //void setupBandFreq();
     void selectRadio(int index);
     void onLaunchSetup();
+    void onConfigureRigctld();
 
     void setRitFreq(ShortFreq ritFreq);
     void setRitLogStatus(bool status);

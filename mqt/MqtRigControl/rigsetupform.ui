@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1191</width>
-    <height>447</height>
+    <height>475</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -479,7 +479,7 @@
      <item>
       <widget class="QCheckBox" name="startMinosRigCtldChkBox">
        <property name="text">
-        <string>Start Minos  RigCtld</string>
+        <string>Start Minos RigCtld</string>
        </property>
       </widget>
      </item>

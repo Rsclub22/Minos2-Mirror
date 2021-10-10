@@ -363,13 +363,6 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                      loadOK = importReg1Test( ediContestFile );
                      needExport = true;
                   }
-      bool allowHF = false;
-      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-      if (!allowHF && isHF())
-      {
-           MinosParameters::getMinosParameters() -> mshowMessage(tr("Contest %1 is an HF contest - HF not enabled").arg(cfileName))  ;
-           return false;
-      }
 
       scanContest();
       clearDirty();  // what we have just read CAN'T be dirty
@@ -634,8 +627,8 @@ void LoggerContestLog::clearRunMemory(int memno, const memoryData::memData &mem)
 }
 void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band;
-    if (mem.band.isEmpty())
+    QString band(mem.band);
+    if (band.isEmpty())
     {
         band = BandList::getBand(mem.freq);
     }
@@ -653,7 +646,7 @@ void LoggerContestLog::saveRunMemory(int memno, const memoryData::memData &mem)
 }
 void LoggerContestLog::saveInitialRunMemory(int memno, const memoryData::memData &mem)
 {
-    QString band = mem.band;
+    QString band( mem.band);
     if (band.isEmpty())
     {
         band = BandList::getBand(mem.freq);

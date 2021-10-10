@@ -23,8 +23,6 @@ public:
 private slots:
     void onStdInRead(QString);
 
-    void on_closeButton_clicked();
-
     void on_startRecButton_clicked();
 
     void on_stopRecButton_clicked();

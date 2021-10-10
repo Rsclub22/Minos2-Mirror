@@ -123,7 +123,6 @@ void TSingleLogFrame::buildFrame()
     connect(GJVQSOLogFrame, &QSOLogFrame::sendSpotToClusterServer, this, &TSingleLogFrame::on_SendSpotToClusterServer);
 
     // from cluster server
-    connect(LogContainer->sendDM, &TSendDM::setClusterServerLoaded,this, &TSingleLogFrame::on_clusterServerLoaded);
     connect(LogContainer->sendDM, &TSendDM::setClusterState, this, &TSingleLogFrame::on_clusterServerState);
     connect(LogContainer->sendDM, &TSendDM::setClusterTXSpotEnableState, this, &TSingleLogFrame::on_setClusterTXSpotEnableState);
 
@@ -212,10 +211,10 @@ void TSingleLogFrame::createScreenComponents()
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
-    // the order of the next two lines is critical
     QSOTable->setItemDelegate( delegate.data() );
-    //QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-
+    QSize ms = delegate->docSize("XX");
+    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
@@ -282,7 +281,6 @@ void TSingleLogFrame::createScreenComponents()
 
     clusterControlFrame->setVisible(false);
     clusterControlFrame->setContest(contest);
-    setClusterClientLoaded(false);
 
     bandmapControlFrame = new BandmapClientFrame(this);
     bandmapControlFrame->setObjectName(QStringLiteral("BandmapControlFrame"));
@@ -417,7 +415,6 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     //chatFrame
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
-    setClusterClientLoaded(false);
     bandmapControlFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
@@ -522,7 +519,13 @@ void TSingleLogFrame::applyScreenLayout()
 
     clearScreenLayout(true);
     buildScreenLayout();
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    QSOTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
+    QSOTable->verticalHeader()->setMinimumSectionSize(10);
+
+    updateTrees();
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -688,7 +691,6 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     hs->addWidget(clusterControlFrame);
                     clusterControlFrame->setVisible(true);
                     clusterControlFrame->setContest(ct);
-                    setClusterClientLoaded(true);
                     break;
 
                 }
@@ -967,12 +969,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
         columnsChanged = false;
     }
 
-//    if (splittersChanged)
-//    {
-//        MinosLoggerEvents::SendDoSplitterChanges(ct);
-//        splittersChanged = false;
-//    }
-
     refreshMults();
 
     GJVQSOLogFrame->selectField(nullptr);
@@ -980,8 +976,11 @@ void TSingleLogFrame::on_ContestPageChanged ()
 
     MinosLoggerEvents::SendShowOperators();
 
-    LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
-    LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
+    if (ct)
+    {
+        LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
+        LogContainer->sendDM->invalidateRotatorCache(ct->antennaName.getValue());
+    }
 
 
     LogContainer->sendDM->notifyRigChanges();
@@ -991,10 +990,6 @@ void TSingleLogFrame::on_ContestPageChanged ()
     FKHRotControlFrame->on_ContestPageChanged();
 
     updateQSODisplay();
-
-   //QHeaderView::ResizeMode rm =  QSOTable->verticalHeader()->sectionResizeMode(1);
-   // default seems to be 0, Interactive
-    QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     update();   // this queues a repaint
 }
@@ -1031,9 +1026,13 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
 
         CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);
         QString qthBuff;
-        if (contest->location.getValue().size())
+
+        if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
         {
-            qthBuff = "<br>" + contest->location.getValue();
+            if (contest->location.getValue().size())
+            {
+                qthBuff = "<br>" + contest->location.getValue();
+            }
         }
 
         QString locBuff;
@@ -1656,7 +1655,6 @@ void TSingleLogFrame::sendKeyerStop()
 void TSingleLogFrame::setBandmapLoaded(bool loaded)
 {
    bandMapLoaded = loaded;
-   GJVQSOLogFrame->setBandMapLoaded(loaded);
 }
 
 bool TSingleLogFrame::isBandMapLoaded()
@@ -1687,36 +1685,6 @@ void TSingleLogFrame::setTuneAddBandMapSetting(bool state)
 
 // Cluster
 
-
-void TSingleLogFrame::on_clusterServerLoaded()
-{
-    setClusterServerLoaded(true);
-}
-
-void TSingleLogFrame::setClusterServerLoaded(bool loaded)
-{
-   clusterServerLoaded = loaded;
-   GJVQSOLogFrame->setClusterServerLoaded(loaded);
-   bandmapControlFrame->setClusterServerLoaded(loaded);
-   clusterControlFrame->setClusterServerLoaded(loaded);
-}
-
-bool TSingleLogFrame::isClusterServerLoaded()
-{
-   return clusterServerLoaded;
-}
-
-void TSingleLogFrame::setClusterClientLoaded(bool loaded)
-{
-   clusterClientLoaded = loaded;
-   GJVQSOLogFrame->setClusterClientLoaded(loaded);
-}
-
-bool TSingleLogFrame::isClusterClientLoaded()
-{
-   return clusterClientLoaded;
-}
-
 void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 {
    bool txEnableState = false;
@@ -1732,15 +1700,8 @@ void TSingleLogFrame::on_setClusterTXSpotEnableState(QString state)
 
 void TSingleLogFrame::on_clusterServerState(QString state)
 {
-    clusterServerState = state;
-    GJVQSOLogFrame->setClusterServerState(state);
     bandmapControlFrame->setClusterServerState(state);
     clusterControlFrame->setClusterServerState(state);
-}
-
-QString TSingleLogFrame::getClusterServerState()
-{
-    return clusterServerState;
 }
 
 //---------------------------------------------------------------------------
@@ -1796,7 +1757,7 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         if (f != sCurFreq)
         {
             stopKeyer = true;
-            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr()).arg(sCurFreq.traceStr()));
+            trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr(), sCurFreq.traceStr()));
         }
         QString bandChanged = contest->checkBandChange(f, sCurFreq);
         if (!bandChanged.isEmpty())
@@ -2101,14 +2062,12 @@ void TSingleLogFrame::sendSelectRadio(const QString &radName, const QString &ban
             if (radName != GJVQSOLogFrame->getRadioName())
             {
                GJVQSOLogFrame->setRadioName(radName);
-               //FKHRigControlFrame->setRadioName(radName, mode);
-               //LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             }
 
             LogContainer->sendDM->invalidateRigCache(ct->radioName.getValue());
             QString uuid = ct->uuid;
             LogContainer->sendDM->changeRigSelectionTo(radName, band, freq, mode, ct->uuid);  // send message including mode if it has been appended.
-            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName).arg(freq.traceStr()).arg(mode).arg(uuid));
+            traceMsg(QString("changeRigSelectionTo radioName = %1, freq = %2, mode = %3, uuid = %4").arg(radName, freq.traceStr(), mode, uuid));
 
 
 

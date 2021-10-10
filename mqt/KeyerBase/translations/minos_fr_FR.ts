@@ -5,55 +5,56 @@
     <name>VoiceKeyer</name>
     <message>
         <source>Unloaded</source>
-        <translation type="unfinished"></translation>
+        <translation>Déchargé</translation>
     </message>
     <message>
         <source>No PTT</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de PTT </translation>
     </message>
     <message>
         <source>PassThrough</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>??Mode intermédiaire</translatorcomment>
+        <translation>Passthrough??</translation>
     </message>
     <message>
         <source>Replay</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejouer</translation>
     </message>
     <message>
         <source>Pip</source>
-        <translation type="unfinished"></translation>
+        <translation>Pip???</translation>
     </message>
     <message>
         <source>Replay Tone1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejouer Tonalité1</translation>
     </message>
     <message>
         <source>Replay Tone2</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejouer Tonalité2</translation>
     </message>
     <message>
         <source>Voice Record</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrement vocal</translation>
     </message>
     <message>
         <source>CW Transmit</source>
-        <translation type="unfinished"></translation>
+        <translation>Transmission CW</translation>
     </message>
     <message>
         <source>CW PassThrough</source>
-        <translation type="unfinished"></translation>
+        <translation>CW PassThrough??</translation>
     </message>
     <message>
         <source>none</source>
-        <translation type="unfinished"></translation>
+        <translation>aucun</translation>
     </message>
     <message>
         <source>output</source>
-        <translation type="unfinished"></translation>
+        <translation>sortie</translation>
     </message>
     <message>
         <source>input</source>
-        <translation type="unfinished"></translation>
+        <translation>entrée</translation>
     </message>
 </context>
 </TS>

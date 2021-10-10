@@ -940,7 +940,6 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             if (clusterApp.isEmpty())
             {
                 clusterApp = PubSubName(an);
-                emit setClusterServerLoaded();
             }
 
             emit setClusterState(an.getValue());

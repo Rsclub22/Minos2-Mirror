@@ -450,15 +450,19 @@ void Matcher::initMatch( )
             return ;
 
          unsigned char qth_changed = matchqth.set( mct->extraText );
+         QString md;
          if ( qth_changed & SET_CHANGED )
          {
-            matchDistrict( mct->extraText );
+             md = mct->extraText;
          }
+         matchDistrict( md );
          unsigned char changed = matchcs.set( mct->cs.getFullCall() );	// we rely on set to set up the search terms
+         QString mc;
          if ( changed & SET_CHANGED )
          {
-            matchCountry( mct->cs.getFullCall() );   // scroll to
+             mc = mct->cs.getFullCall();
          }
+         matchCountry( mc );   // scroll to
          changed |= matchloc.set( mct->loc.getLoc() );			// so don't do this all on one line
          changed |= qth_changed;
 

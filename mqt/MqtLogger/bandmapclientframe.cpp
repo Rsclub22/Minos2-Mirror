@@ -10,6 +10,7 @@
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"
+#include "SendRPCDM.h"
 #include "tsinglelogframe.h"
 #include "checkoperatingfreq.h"
 #include "BandList.h"
@@ -27,6 +28,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     ui->mouseInFrameLabel->setVisible(false);
     clusterStatusIndicatorToggle(false);
     radioStatusIndicatorToggle(false);
+    ui->radioStatusMsg->clear();
 
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::ClusterServerList, this, &BandmapClientFrame::clusterClientServerList);
     connect (ClusterClientServer::getClusterClientServer(), &ClusterClientServer::dxSpot, this, &BandmapClientFrame::dxSpots);
@@ -229,7 +231,7 @@ BandmapClientFrame::~BandmapClientFrame()
 void BandmapClientFrame::on_waitClusterServerLoadedTimeout()
 {
     static int timeoutCount = 0;
-    if (clusterServerLoaded)
+    if (LogContainer->sendDM->isClusterServerLoaded())
     {
         waitClusterServerLoadedTimer->stop();
         on_resendClusterSpotSelected();
@@ -1413,7 +1415,7 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
          ui->clusterStatusIndicator->setEnabled(true);  // enable to allow reconnect request
     }
 
-    if (clusterServerLoaded )
+    if (LogContainer->sendDM->isClusterServerLoaded() )
     {
         ui->clusterStatusIndicator->setToolTip(s[1]);
         traceMsg(QString("Cluster Status: %1").arg(stateMsg));
@@ -1436,11 +1438,6 @@ void BandmapClientFrame::on_clusterStatusIndicatorClicked()
     }
 }
 
-void BandmapClientFrame::setClusterServerLoaded(bool loaded)
-{
-    clusterServerLoaded = loaded;
-}
-
 void BandmapClientFrame::clusterStatusIndicatorToggle(bool on)
 {
     if (on)
@@ -1459,17 +1456,27 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
     {
         ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
         ui->radioStatusIndicator->setToolTip(tr("Connected"));
+        ui->radioStatusIndicator->hide();
+        ui->radioStatusLabel->hide();
+        ui->freqDisplay->show();
+        ui->modeLabel->show();
+        ui->mode->show();
     }
     else
     {
        ui->radioStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
        ui->radioStatusIndicator->setToolTip(tr("Disconnected"));
+       ui->radioStatusIndicator->show();
+       ui->radioStatusLabel->show();
+       ui->freqDisplay->hide();
+       ui->modeLabel->hide();
+       ui->mode->hide();
     }
 }
 
 void BandmapClientFrame::setFreq(Frequency freq)
 {
-    if (lastfreq != freq)
+    if (ct && lastfreq != freq)
     {
         QString bandChanged;
         bandChanged = ct->checkBandChange(freq, lastfreq);
@@ -1764,19 +1771,14 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
             return;
 
+        Frequency freq = lct->frequency.getValue();
+        if (freq.isClear())
+        {
+            return;
+        }
         Callsign cs = lct->cs;
         QString loc = lct->loc.getLoc();
         QString brg = QString::number(lct->bearing);
-
-//        QString logContactDistrict;
-//        if (lct->districtMult)
-//        {
-//            logContactDistrict = lct->districtMult->districtCode;
-//        }
-//        QString logContactMode = lct->mode.getValue();
-//        QString logContactMgmSubMode = lct->mgmSubmode.getValue();
-        Frequency freq = lct->frequency.getValue();
-
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;

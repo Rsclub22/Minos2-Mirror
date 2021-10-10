@@ -25,9 +25,6 @@ public:
     ~QSOLogFrame() override;
 
     void setAsEdit(bool s, QString b);
-    void setBandMapLoaded(bool loaded);
-    void setClusterClientLoaded(bool loaded);
-    void setClusterServerLoaded(bool loaded);
 
     bool savePartial(  );
     bool restorePartial( );
@@ -83,15 +80,10 @@ public:
     ScreenContact *getPartialContact() const;
     void setPartialContact(ScreenContact *value);
 
-    //void setRunMemoryFreqUpdate(int num, Frequency freq);
-    //void setIgnoreRunChkBoxState(int num, bool checked);
-    void setClusterServerState(QString state);
     void setClusterTXSpotEnableState(bool txEnableState);
-
 
     void setRunOnFlag(bool runModeOn);
     void setRunOffFreqFlag(bool offRunFreq);
-
 
     void transferFromWSJTX(QString call);
     void setQrzButtonVisible(bool state);
@@ -192,8 +184,6 @@ private:
 
     bool isRadioLoaded();
 
-    bool bandMapLoaded;
-    bool isBandMapLoaded();
     void setBandMapControlsVisible(bool visible);
     bool logDataFromBandmapOrMemory;
     int addToBandmapTuneTolerance;
@@ -204,15 +194,8 @@ private:
     bool radioConnected;
     bool radioError;
 
-    bool clusterClientLoaded;
-    bool isClusterClientLoaded();
-    bool clusterServerLoaded;
-    bool isClusterServerLoaded();
     void setClusterSendSpotControlsVisible(bool visible);
     bool sendSpotToClusterOn;
-    bool clusterServerConnected;
-
-
 
     void MainOpComboBox_Exit();
     void SecondOpComboBox_Exit();

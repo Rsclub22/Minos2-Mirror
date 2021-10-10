@@ -266,19 +266,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
     enableDistanceFields();
 
-    bool allowHF = false;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAllowHF, allowHF );
-    setHFVisible(allowHF);
-    if (allowHF)
-    {
-        ui->ClusterClientFilterTab->setCurrentIndex(0);
-    }
-    else
-    {
-        ui->ClusterClientFilterTab->setCurrentIndex(1);
-    }
-
-
+    setHFVisible(true);
+    ui->ClusterClientFilterTab->setCurrentIndex(0);
 }
 
 

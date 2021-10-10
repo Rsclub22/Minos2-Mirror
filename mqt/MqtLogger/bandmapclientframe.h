@@ -76,10 +76,6 @@ public:
 
     void setClusterServerState(QString stateMsg);
 
-
-
-    void setClusterServerLoaded(bool loaded);
-
     void saveTuneAddBandMapSetting(bool state);
     bool readTuneAddBandMapSetting();
 
@@ -136,7 +132,7 @@ private:
 
     // cluster spots
     QVector<QSharedPointer<BandmapSpotData> > spotQueue;
-    bool clusterServerLoaded = false;
+//    bool clusterServerLoaded = false;
     bool clusterServerConnected = false;
 
     // CQ Frequency

@@ -61,6 +61,25 @@ void DisplayOptions::initialise()
     ui->LanguageComboBox->addItems(sl);
     ui->LanguageComboBox->setCurrentIndex(currLang);
 
+    int temp;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpShowOperateTime, temp);
+    sot = static_cast<SHOWOPERATINGTIME>(temp);
+    switch(sot)
+    {
+    default:
+    case otNone:
+        ui->otNonerb->setChecked(true);
+        break;
+    case otRSGB:
+        ui->otRSGBrb->setChecked(true);
+        break;
+    case otIARU:
+        ui->otIARUrb->setChecked(true);
+        break;
+    }
+
+    ui->ls->setValue(ls);
+
     TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
     ui->ls->setValue(ls);
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
@@ -119,6 +138,26 @@ void DisplayOptions::finalise()
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         MinosLoggerEvents::SendTabSandP();
+    }
+
+    SHOWOPERATINGTIME nsot = otNone;
+    if (ui->otNonerb->isChecked())
+    {
+        nsot = otNone;
+    }
+    else if (ui->otRSGBrb->isChecked())
+    {
+        nsot = otRSGB;
+    }
+    else if (ui->otIARUrb->isChecked())
+    {
+        nsot = otIARU;
+    }
+    if (nsot != sot)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpShowOperateTime, nsot);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+        sot = nsot;
     }
 
     int nlcf = ui->ListCompressionSpinner->value();

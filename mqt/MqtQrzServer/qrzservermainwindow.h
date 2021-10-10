@@ -129,6 +129,11 @@ public:
     QrzServerMainWindow(QWidget *parent = nullptr);
     ~QrzServerMainWindow();
 
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
+
+
 private slots:
     void quit();
     void LogTimerTimer();
@@ -178,6 +183,8 @@ private:
 
 
     QString key;
+
+    void closeEvent(QCloseEvent *event) override;
 
     void sendUrl(QString url);
     void parseCallsignData(QXmlStreamReader &xmlData);

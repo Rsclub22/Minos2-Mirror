@@ -57,7 +57,7 @@ enum LOGGERPROFILE {
    elpPDFFile,
    elpReadabilityInit,
    elpAutoFill,
-   elpAllowHF,
+   elpShowOperateTime,
    elpTabforSandP,
    elpAgeProtectContests,
    elpAgeToProtectContests,
@@ -143,4 +143,6 @@ enum STATIONPROFILE {espPower, espTransmitter, espReceiver, espAntenna, espAGL, 
 enum PROFILES {epLOGGERPROFILE, epPRELOADPROFILE, epLISTSPROFILE, epDISPLAYPROFILE,
                epENTRYPROFILE, epQTHPROFILE, epSTATIONPROFILE, epLOCSQUARESPROFILE,
                epMAXPROFILE};
+
+enum SHOWOPERATINGTIME {otNone, otRSGB, otIARU};
 #endif
