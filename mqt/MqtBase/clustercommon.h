@@ -491,14 +491,14 @@ public:
     void initClusterFilterIdAndNames(const QVector<QSharedPointer<BandInfo> > &bands)
     {
         DefaultDistanceIniName ddin;
-        QString defTxt = "defaultFilterDistance_";
+
         for (auto &b:bands)
         {
 
             QString band = b.data()->uk;
             QString iniBand = band;
             iniBand.remove("\x20").replace(".", "_");   // remove/replace modify the QString
-            ddin.defaultDistanceName = defTxt.append(iniBand);
+            ddin.defaultDistanceName = QString("defaultFilterDistance_").append(iniBand);
             ddin.bandType = b.data()->getType();
             defaultDistanceIniNames.insert(band, ddin);
         }
