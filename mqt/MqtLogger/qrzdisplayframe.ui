@@ -7,13 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>282</width>
-    <height>303</height>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_6">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
@@ -464,9 +464,6 @@
             <width>16</width>
             <height>16</height>
            </size>
-          </property>
-          <property name="focusPolicy">
-           <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
            <string/>
