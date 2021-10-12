@@ -26,6 +26,10 @@ void ClusterBandmapConfigure::initialise()
                       << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
 
 
+    QSettings settings;
+    int curTabNo = settings.value("OptionsClusterBandmapConfigure/curTab").toInt();
+    ui->ClusterBandmapConfiguretabWidget->setCurrentIndex(curTabNo);
+
     BandList::getBandList().loadAllBands(bands);
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
@@ -125,6 +129,14 @@ void ClusterBandmapConfigure::finalise()
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
+
+
+void ClusterBandmapConfigure::on_ClusterBandmapConfiguretabWidget_currentChanged(int index)
+{
+    QSettings settings;
+    settings.setValue("OptionsClusterBandmapConfigure/curTab", index);
+}
+
 void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 {
     int distance = 0;

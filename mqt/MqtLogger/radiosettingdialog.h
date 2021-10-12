@@ -58,7 +58,10 @@ public:
     void saveSettings();
     bool check();
     void cancel();
+
 private slots:
+
+    void on_radioSettingsTabWidget_currentChanged(int index);
 
     void onCwPresetLineEditingFinished(int i);
     void onPhonePresetLineEditingFinished(int i);
@@ -74,6 +77,7 @@ private slots:
     void onEnableBandSwChkBox();
     void onEnableSerialBandSwChkBox();
 
+    void on_PresetTabWidget_currentChanged(int index);
 private:
     Ui::RadioSettingDialog *ui;
     //QStringList presetFreq;
