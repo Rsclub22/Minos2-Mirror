@@ -80,7 +80,7 @@ void ClusterBandmapConfigure::initialise()
     connect(ui->spotLessThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotLessThanDistanceRadioButClicked();});
     connect(ui->spotGreaterThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotGreaterThanDistanceRadioButClicked();});
 
-     ui->hfFrame->setVisible(true);
+     ui->HFgroupBox->setVisible(true);
 
    // get addBandmapTuningTolerance
 
