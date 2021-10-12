@@ -78,9 +78,10 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(rigCtldProcess, &QProcess::started, this, [=](){rigCtldStarted();});
 
     setRigCltdIndicatorVisible(false);
-    setVoiceMemIndVisible(false);
-    setCwMemIndVisible(false);
-    setpttIndVisible(false);
+    setMemoryGroupVisible(false);
+    setPttGroupItemsVisible(false);
+    setSmeterVisible(false);
+
 
     getRigCtldConnectDelay();
 
@@ -521,6 +522,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     clrRigctldNames();
     clearSupportRitFlags();
     rigStateDetails->curTransVertFreq.clear();
+
+    setRigCltdIndicatorVisible(false);
+    setMemoryGroupVisible(false);
+    setPttGroupItemsVisible(false);
+    setSmeterVisible(false);
 
     if (radioCommsOK)
     {
@@ -4981,6 +4987,7 @@ void RigControlMainWindow::supRadioIndToggle(QString band, displayIndicator::ind
 
 
 }
+
 
 
 void RigControlMainWindow::setMemoryGroupVisible(bool visible)
