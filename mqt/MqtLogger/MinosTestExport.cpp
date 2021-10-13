@@ -593,12 +593,18 @@ int MinosTestExport::exportStackDisplay(QSharedPointer<QFile> expfd )
     ct->showWorked.addIfDirty( st, "sw", dirty );
     ct->showUnworked.addIfDirty( st, "su", dirty );
 
+    bool siDirty = false;
+
     for (int i = 0; i < STACKITEMS; i++)
     {
-         ct->currentStackItems[i].addIfDirty( st, "sitem" + QString::number(i), dirty);
+         ct->currentStackItems[i].addIfDirty( st, "sitem" + QString::number(i), siDirty);
+    }
+    if (siDirty)
+    {
+        ct->currentStackItemsValid = true;
     }
 
-    if ( dirty )
+    if ( dirty || siDirty )
     {
        sendRequest( expfd, "MinosStackParams", st );
     }

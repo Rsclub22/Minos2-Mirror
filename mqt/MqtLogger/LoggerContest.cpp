@@ -1937,6 +1937,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                              {
                                                   mt->getStructArgMemberValue( "sitem" + QString::number(i), currentStackItems[i]);
                                              }
+                                             currentStackItemsValid = true;
                                          }
 }
 //====================================================================

@@ -148,6 +148,7 @@ protected:
       MinosItem<bool> showWorked;
       MinosItem<bool> showUnworked;
       MinosStringItem<QString> currentStackItems[STACKITEMS];
+      bool currentStackItemsValid = false;
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
       void clearRunMemory(int memno, const memoryData::memData &mem);

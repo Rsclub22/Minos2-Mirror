@@ -274,12 +274,14 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
             if (stackInstance < STACKITEMS)
             {
                 QString aux = contest->currentStackItems[stackInstance].getValue();
-                QString a = ui->infoCombo->currentText();
+                AuxEntries ae = getAuxEntryType(aux);   // contest setting
 
-                AuxEntries ae = getAuxEntryType(aux);
-                AuxEntries aec = getAuxEntryType(a);
-                if(ae != aec && ui->infoCombo->currentIndex() != ae)
+                QString a = ui->infoCombo->currentText();
+                AuxEntries aec = getAuxEntryType(a);    // screen setting - from layout
+
+                if(ct->currentStackItemsValid && ae != aec && ui->infoCombo->currentIndex() != ae)
                 {
+                    // set to contest value
                     ui->infoCombo->setCurrentIndex(ae);
                 }
                 else
