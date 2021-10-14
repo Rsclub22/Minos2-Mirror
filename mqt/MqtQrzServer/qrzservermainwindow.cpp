@@ -685,7 +685,7 @@ void QrzServerMainWindow::addTextToLogWindow(QString message)
 {
 
     //ui->messageTextWindow-> appendPlainText(QTime::currentTime().toString("hh:mm:ss.z") + " " + message);
-    ui->messageTextWindow-> appendPlainText(QDateTime::currentDateTimeUtc().time().toString("hh:mm:ss.z") + " " + message);
+    ui->messageTextWindow-> appendPlainText(QDateTime::currentDateTimeUtc().time().toString("hh:mm:ss.z") + " UTC - " + message);
 }
 
 void QrzServerMainWindow::addToErrorTextLabel(QString message)

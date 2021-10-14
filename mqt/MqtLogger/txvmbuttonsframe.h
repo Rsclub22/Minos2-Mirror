@@ -34,7 +34,8 @@ public:
     QToolButton* vmButton;
     QMenu* vmMenu;
     QShortcut* shortKey;
-    QShortcut* shiftShortKey;
+
+    //QShortcut* shiftShortKey;
     QAction* readAction;
     QAction* newAction;
     QAction* editAction;
@@ -104,8 +105,9 @@ private:
     VoiceKeyerFactory* voiceKeyerFactory;
 
     QTimer *extKeyerConnectTimer = nullptr;
-    QList<QShortcut *> shortCutKeyList;
+    //QList<QShortcut *> shortCutKeyList;
 
+    QShortcut *stopButtonShortcut;
     QString voiceKeyerType;
 
     QTimer* msgDurTimer;

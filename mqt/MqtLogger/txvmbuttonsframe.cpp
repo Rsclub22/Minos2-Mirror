@@ -15,7 +15,7 @@ const QStringList vmButtonShortCutKeys = {
                                     "Shift+F7", "Shift+F8"
 
                                     };
-
+const QString vmStopButtonShortCutKey = "Shift+F10";
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
@@ -66,6 +66,9 @@ void TxVmButtonsFrame::initTxVmButton()
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
         connect( txVmButtonMap[i], &TxVoiceMemButton::buttonActivated, this, &TxVmButtonsFrame::runButActivated, Qt::QueuedConnection );
     }
+
+    stopButtonShortcut = new QShortcut(QKeySequence(vmStopButtonShortCutKey), ui->vmStopPb);
+    connect(stopButtonShortcut, &QShortcut::activated, this, &TxVmButtonsFrame::onVmStopClicked);
 
     connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
     connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
