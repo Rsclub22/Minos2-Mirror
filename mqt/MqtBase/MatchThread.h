@@ -9,6 +9,7 @@
 
 #include "base_pch.h"
 #include "MatchCollection.h"
+#include "ScreenContact.h"
 
 #ifndef MatchThreadH
 #define MatchThreadH 
@@ -142,7 +143,7 @@ private:
    protected:
       virtual void Execute();    // TThread method
    public:
-      ScreenContact * contactToMatch = nullptr;
+      ScreenContact contactToMatch;
       void Terminate()
       {
           Terminated = true;

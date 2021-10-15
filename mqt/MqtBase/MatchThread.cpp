@@ -81,8 +81,7 @@ bool wildComp( const QString &ss, const QString &ee )
 
 TMatchThread::TMatchThread()
       : QThread(   ), myThisMatches( nullptr ), myOtherMatches( nullptr ),myListMatches( nullptr ),
-        Terminated(false),
-        contactToMatch(nullptr)
+        Terminated(false)
 {
    thisLogMatch = new ThisLogMatcher();
    otherLogMatch = new OtherLogMatcher();
@@ -123,9 +122,9 @@ void TMatchThread::on_ScreenContactChanged(ScreenContact *sct, BaseContestLog *c
    if (context == ct)
    {
        baseName = b;    // baseName makes sure that results are only acted on by the correct windows - log, edit, monitor
-       contactToMatch = sct;
-      if (contactToMatch)
+      if (sct)
       {
+         contactToMatch = *sct;
          // we want to initialise the search from the screen contact - break what couplings we can
          // we need to take care over thread safety as well!
          startMatch();
@@ -138,7 +137,9 @@ void TMatchThread::on_CountrySelect(QString sel, BaseContestLog *c)
     BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
    if (c == ct)
    {
-      contactToMatch = nullptr;
+      contactToMatch.cs = Callsign();
+      contactToMatch.loc = Locator();
+      contactToMatch.extraText.clear();
       QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCtryForPrefix( sel );
       startMatch(ce);
    }
@@ -445,7 +446,7 @@ void Matcher::initMatch( )
       {
          clearmatchall();
          // we need to have been sent this... in a start match action?
-         ScreenContact * mct = TMatchThread::getMatchThread()->contactToMatch;
+         ScreenContact * mct = &TMatchThread::getMatchThread()->contactToMatch;
          if ( !mct )
             return ;
 
