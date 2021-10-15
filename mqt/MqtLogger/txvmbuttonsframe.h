@@ -132,6 +132,7 @@ private:
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
+    void setPttStatusIndicatorOnOff(bool on);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

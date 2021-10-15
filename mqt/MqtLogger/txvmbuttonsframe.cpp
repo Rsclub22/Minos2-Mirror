@@ -43,6 +43,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnect);
 
     initTxVmButton();
+
+    setPttStatusIndicatorOnOff(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -476,6 +478,8 @@ void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
         rd.setPttEnabled (state);
         allRadioDetails[psn] = rd;
     }
+
+
 }
 
 void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
@@ -532,6 +536,7 @@ void TxVmButtonsFrame::setPttState(bool state)
     if (pttState != state)
     {
         pttState = state;
+        setPttStatusIndicatorOnOff(state);
         emit pttStatus(pttState);
     }
 
@@ -539,6 +544,23 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)
 {
     txVoiceKeyer->setPip(ui->pipCb->isChecked());
+}
+
+
+void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
+{
+    if (on)
+    {
+        ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->txStatusIndicator->setToolTip(tr("TX On"));
+
+    }
+    else
+    {
+       ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->txStatusIndicator->setToolTip(tr("TX Off"));
+    }
+
 }
 
 //*******************TX Voice Memory Button *************************//
