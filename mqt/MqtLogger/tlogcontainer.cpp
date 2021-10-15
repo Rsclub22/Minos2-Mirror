@@ -993,6 +993,8 @@ void TLogContainer::ContestDetailsActionExecute()
 
                 f->FKHRigControlFrame->setContest(ct);
                 f->bandmapControlFrame->setContest(ct);
+
+                MinosLoggerEvents::SendContestBandChanged(ct);  // in case it has...
                 f->FKHRigControlFrame->rigChangedFromDetails();
                 f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
