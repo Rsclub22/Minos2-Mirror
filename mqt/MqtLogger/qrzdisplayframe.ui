@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>414</width>
-    <height>396</height>
+    <width>286</width>
+    <height>295</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Frame</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_4">
+  <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>QRZ</string>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QVBoxLayout" name="verticalLayout_4">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -459,9 +459,15 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="logOnStatusPb">
+           <widget class="IndicatorPushButton" name="logOnStatusPb">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
             <property name="maximumSize">
              <size>
@@ -499,6 +505,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>IndicatorPushButton</class>
+   <extends>QPushButton</extends>
+   <header>indicatorpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

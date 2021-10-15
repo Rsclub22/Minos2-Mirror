@@ -4,6 +4,7 @@
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 
+#include <QSizePolicy>
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -19,7 +20,17 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     ui->setupUi(this);
     clear();
 
-    ui->logOnStatusPb->setFixedSize( 16, 16 );
+    const QSize BUTTON_SIZE = QSize(16, 16);
+    ui->logOnStatusPb->setFixedSize(BUTTON_SIZE);
+    ui->logOnStatusPb->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum );
+
+    qDebug()<<ui->logOnStatusPb->size();
+    qDebug()<<  "size hint = " << ui->logOnStatusPb->sizeHint();
+    qDebug()<<  "layout = " << ui->logOnStatusPb->layout();
+    qDebug()<<  "minimumsize = " << ui->logOnStatusPb->minimumSize();
+    qDebug()<<   "minimumsizehint = " << ui->logOnStatusPb->minimumSizeHint();
+    qDebug()<<   "size policy = " <<  ui->logOnStatusPb->sizePolicy();
+
 
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::loggerQrzReply, this, &QrzDisplayFrame::onLoggerQrzReply);
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
