@@ -5091,6 +5091,9 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
 {
     ui->selFreq->setVisible(visible);
     ui->freqInputBox->setVisible(visible);
+    ui->txPttTestPb->setVisible(visible);
+    ui->cwKeyerPb->setVisible(visible);
+    ui->cwKeyerStopPb->setVisible(visible);
 }
 
 
