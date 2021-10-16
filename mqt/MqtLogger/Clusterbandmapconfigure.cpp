@@ -104,6 +104,10 @@ void ClusterBandmapConfigure::initialise()
      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
      ui->mouseInBcb->setChecked(minBFlag);
 
+     bool showDerivedLocFlag;
+     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+     ui->showDerivedLocChkBox->setChecked(showDerivedLocFlag);
+
 }
 bool ClusterBandmapConfigure::check()
 {
@@ -122,6 +126,7 @@ void ClusterBandmapConfigure::finalise()
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip,  ui->modeOperatingFreqChkBox->isChecked());
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapMouseInFrameDelay,  ui->mouseInBcb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, ui->oldBandmapChkBox->isChecked() );
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpShowDerivedLoc, ui->showDerivedLocChkBox->isChecked() );
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }

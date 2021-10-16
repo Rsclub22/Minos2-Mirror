@@ -1371,6 +1371,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
     bool dxLocFromNodeFlag = model()->data(model()->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool();
 
+    bool showDerivedLocFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
     qlonglong spotTime = model()->data(model()->index(row, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong();
@@ -1392,20 +1395,23 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         callsign = dxCallsign;
     }
 
-    if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
-    {
-        dxLoc = "<i>" + dxLoc + "</i>";
-    }
     QString locator;
-    if (locWkd && !dxLocFromNodeFlag)
+    if (!dxLocFromNodeFlag || showDerivedLocFlag)
     {
-        locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
-    }
-    else
-    {
-        if (!dxLoc.isEmpty())
+        if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
         {
-            locator = dxLoc;
+            dxLoc = "<i>" + dxLoc + "</i>";
+        }
+        if (locWkd && !dxLocFromNodeFlag)
+        {
+            locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
+        }
+        else
+        {
+            if (!dxLoc.isEmpty())
+            {
+                locator = dxLoc;
+            }
         }
     }
 
