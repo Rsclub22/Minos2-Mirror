@@ -394,7 +394,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setVolume,  this, [=](int vol){loggerSetVolume(vol);});
     connect(msg, &RigControlRpc::setVoiceMessageNum, this, [=](QString msgNum){onSetVoiceMessageNum(msgNum);});
     connect(msg, &RigControlRpc::setPttOnOff, this, [=](bool pttOnOff){onSetPttOnOff(pttOnOff);});
-
+    connect(msg, &RigControlRpc::setCwTXMessage, this, [=](QString cwMsg){onSetCwTxMessage(cwMsg);});
 
 
 
@@ -5188,5 +5188,48 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
     {
         trace(QString("send Voice Memory - radio empty, msgNum invalid"));
     }
+
+}
+
+
+void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
+{
+
+    if (radio && !cwMsg.isEmpty())
+    {
+
+
+        if (cwMsg.length() == 1)
+        {
+            QChar c = cwMsg.at(0);
+            if (c == '\xff')
+            {
+                // send stop CW
+                trace(QString("Cw Tx Message Stop received from logger"));
+                radio->stopMorse(rigStateDetails->curVfo);
+            }
+            else
+            {
+                // error stop command incorrect!
+                trace(QString("Cw Tx Message Stop Char incorrect = %1").arg(c));
+                return;
+            }
+
+
+        }
+        else
+        {
+            trace(QString("Cw Tx Message Received from logger = %1").arg(cwMsg));
+            radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+        }
+    }
+    else
+    {
+        trace(QString("Cw Tx Message is empty or radio not defined"));
+        return;
+    }
+
+
+
 
 }

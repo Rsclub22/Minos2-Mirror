@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2017
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
 //
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2017
@@ -132,12 +132,14 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
         QSharedPointer<RPCParam> psName;
         QSharedPointer<RPCParam> psLoggerUuid;
         QSharedPointer<RPCParam> psVoiceMessageNum;
+        QSharedPointer<RPCParam> psCwMessage;
         QSharedPointer<RPCParam> psSelect;
         QSharedPointer<RPCParam> psRitFreq;
         QSharedPointer<RPCParam> psRitStatus;
         QSharedPointer<RPCParam> psVolLevel;
         QSharedPointer<RPCParam> psReq;
         QSharedPointer<RPCParam> psPttOnOff;
+
 
 
         RPCArgs *args = mro->getCallArgs();
@@ -292,6 +294,21 @@ void RigControlRpc::on_routerCall( bool err, QSharedPointer<MinosRPCObj>mro, con
                     // here you handle what the logger has sent to us
                     trace(QString("Rig RPC: VoiceMessage Number From Logger = %1").arg(msgNum));
                     emit setVoiceMessageNum(msgNum);
+                }
+            }
+        }
+        else if ( args->getStructArgMember( 0, rpcConstants::rigCwTxMessage, psCwMessage ))
+        {
+            PubSubName psn("test"); // just uses router/appname
+            QString cursel = rigCache.getSelectedContest(psn, loggeruuid);
+            if (cursel == selContest)
+            {
+                QString cwMsg;
+                if ( psCwMessage->getString( cwMsg ) )
+                {
+                    // here you handle what the logger has sent to us
+                    trace(QString("Rig RPC: Cw Message Number From Logger = %1").arg(cwMsg));
+                    emit setCwTXMessage(cwMsg);
                 }
             }
         }

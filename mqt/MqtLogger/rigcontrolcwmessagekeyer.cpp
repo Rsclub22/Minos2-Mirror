@@ -1,30 +1,46 @@
+/////////////////////////////////////////////////////////////////////////////
+// $Id$
+//
+// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+//                      CW Message Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
+//
+//
+//
+//
+/////////////////////////////////////////////////////////////////////////////
+
+
+#include <QSettings>
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "voicekeyerfactory.h"
 #include "txvmrigsetupdialog.h"
 #include "txvmrigbuttondialog.h"
-#include "rigcontrolvoicememorykeyer.h"
+#include "rigcontrolcwmessagekeyer.h"
 
-RigControlVoiceMemoryKeyer::RigControlVoiceMemoryKeyer(QObject *parent) : VoiceKeyerBase(parent)
+const QString STOPCW = "\xFF";
+
+RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 
 }
 
 
-RigControlVoiceMemoryKeyer::~RigControlVoiceMemoryKeyer()
+RigControlCwMessageKeyer::~RigControlCwMessageKeyer()
 {
 
 }
 
 
-void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
+void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
 {
-    QString keyerName = "rigControl";
+    QString keyerName = "cwRigControl";
 
     VoiceKeyerCapabilities voiceMemCap;
 
-    voiceMemCap.setVmIdNum(VoiceKeyerId::RigControl);
-    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::RigControl]);
+    voiceMemCap.setVmIdNum(VoiceKeyerId::CW_RigControl);
+    voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::CW_RigControl]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
@@ -35,44 +51,47 @@ void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*
 
 }
 
-
-void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
+void RigControlCwMessageKeyer::setPttOnOff(bool onOff)
 {
     Q_UNUSED(onOff)
 }
 
-
-void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
+void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
 {
-    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
 }
-void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
+
+
+
+void RigControlCwMessageKeyer::sendCwMsg(const QString message)
+{
+    if (!message.isEmpty())
+    {
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->sendRigTxCwMessage(message);
+    }
+
+}
+
+void RigControlCwMessageKeyer::stopCwMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
-    tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
-}
-void RigControlVoiceMemoryKeyer::stopMsg()
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-
-    tslf->sendRigTxVoiceMessage(STOPCODE);
+    tslf->sendRigTxCwMessage(STOPCW);
 }
 
 
-
-
-bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
+bool RigControlCwMessageKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)
 {
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vmParams.getType() + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup("button" + QString::number(buttonNum));
 
-
     vmParams.setType(config.value("type", "").toString());
     vmParams.setVmName(config.value("name", "").toString());
+    vmParams.setVmCwMessage(config.value("cwMessageText", "").toString());
     vmParams.setVmRepeatFlag(config.value("repeatFlag", false).toBool());
     vmParams.setVmDuration(config.value("messageDuration", 0).toInt());
     vmParams.setVmRepeatPauseDur(config.value("repeatPauseDuration", 0).toInt());
@@ -82,7 +101,7 @@ bool RigControlVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerPar
     return true;
 }
 
-void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
+void RigControlCwMessageKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
     VoiceKeyerParams vmParams = vmParams_;
 
@@ -92,6 +111,7 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
 
     config.setValue("type", vmParams.getType());
     config.setValue("name", vmParams.getVmName());
+    config.setValue("cwMessageText", vmParams.getVmCwMessage());
     config.setValue("repeatFlag", vmParams.getVmRepeatFlag());
     config.setValue("messageDuration", vmParams.getVmDuration());
     config.setValue("repeatPauseDuration", vmParams.getVmRepeatPauseDur());
@@ -100,8 +120,10 @@ void RigControlVoiceMemoryKeyer::saveVmButtonParams(const VoiceKeyerParams &vmPa
 
 }
 
-int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
+int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
+
+
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
@@ -118,21 +140,24 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         config.setValue("Common/NumButtons", numButtons);
     }
     return ret;
+
+
 }
 
-int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
+
+int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 {
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     TxVmRigButtonDialog vmButtonDialog(tslf->txVmButtonsFrame);
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setCwMessageTextBoxVisible(false);
+    vmButtonDialog.setCwMessageTextBoxVisible(true);
 
     int ret = vmButtonDialog.exec();
     return ret;
 
 }
-
 
 

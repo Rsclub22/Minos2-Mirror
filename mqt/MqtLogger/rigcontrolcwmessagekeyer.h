@@ -2,47 +2,40 @@
 // $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//                      Rig Voice Memory Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+//                      CW Message Keyer
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef RIGCONTROLCWMESSAGEKEYER_H
+#define RIGCONTROLCWMESSAGEKEYER_H
 
-
-#ifndef RIGCONTROLVOICEMEMORYKEYER_H
-#define RIGCONTROLVOICEMEMORYKEYER_H
-
-#include <QObject>
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include <QObject>
 
-
-const QString STOPCODE = "0";
-
-
-class RigControlVoiceMemoryKeyer : public VoiceKeyerBase
+class RigControlCwMessageKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
+
 public:
-    explicit RigControlVoiceMemoryKeyer(QObject *parent = nullptr);
-    virtual ~RigControlVoiceMemoryKeyer() override;
+    explicit RigControlCwMessageKeyer(QObject *parent = nullptr);
+    virtual ~RigControlCwMessageKeyer() override;
 
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
     void voiceKeyerInit(int &numButtons) override;
-    void sendMsgNum(int buttonNum) override;
-    void stopMsg() override;
+    void sendMsgNum(int buttonNum) override {Q_UNUSED(buttonNum)};
+    void stopMsg() override {};
 
-    void sendCwMsg(QString message) override {Q_UNUSED(message)};
-    void stopCwMsg() override {};
+    void sendCwMsg(const QString message) override;
+    void stopCwMsg() override;
 
     virtual bool hasRecord() override {return false;}
 
-
-    //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
@@ -51,16 +44,9 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
-
-signals:
-
-
-
 private:
-
-
 
 
 };
 
-#endif // RIGCONTROLVOICEMEMORYKEYER_H
+#endif // RIGCONTROLCWMESSAGEKEYER_H

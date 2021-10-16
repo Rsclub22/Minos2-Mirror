@@ -3,6 +3,7 @@
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
 
+const int MAX_CW_MESSAGE_LENGTH = 30;
 
 TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     QDialog(parent),
@@ -19,6 +20,7 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
+    connect(ui->txCwMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txCwMessageEditingFinshed);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished);
     connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmMessageDurEditingFinished);
 }
@@ -44,15 +46,42 @@ void TxVmRigButtonDialog::accept()
     QDialog::accept();
 }
 
+void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool state)
+{
+    ui->txCwMessageLineEdit->setVisible(state);
+    ui->cwMessageTextLabel->setVisible(state);
+}
+
 
 void TxVmRigButtonDialog::setVmData(VoiceKeyerParams* vmData_)
 {
     vmData = vmData_;
     ui->txVmTypeLbl->setText(vmData->getType());
     ui->txVmNameEdit->setText(vmData->getVmName());
+    ui->txCwMessageLineEdit->setText(vmData->getVmCwMessage());
     ui->txVmRepeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->txVmRepeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+}
+
+void TxVmRigButtonDialog::on_txCwMessageEditingFinshed()
+{
+    QString txt = ui->txCwMessageLineEdit->text();
+    checkLengthOfCwMessage(txt.length());
+
+}
+
+bool TxVmRigButtonDialog::checkLengthOfCwMessage(int length)
+{
+    if (length > MAX_CW_MESSAGE_LENGTH)
+    {
+        QMessageBox msgBox;
+        msgBox.setText(tr("CW Message too long - Max %1 chars.").arg(MAX_CW_MESSAGE_LENGTH));
+        msgBox.exec();
+        return false;
+    }
+
+    return true;
 }
 
 void TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished()
@@ -99,8 +128,15 @@ void TxVmRigButtonDialog::on_okButtonClicked()
         return;
     }
 
+
+    if (!checkLengthOfCwMessage(ui->txCwMessageLineEdit->text().length()))
+    {
+        return;
+    }
+
     QString name = ui->txVmNameEdit->text();
     vmData->setVmName(name);
+    vmData->setVmCwMessage(ui->txCwMessageLineEdit->text());
     vmData->setVmRepeatPauseDur(repeatPauseDur_);
     vmData->setVmDuration(messageDur_);
     vmData->setVmRepeatFlag(ui->txVmRepeatChkBox->isChecked());

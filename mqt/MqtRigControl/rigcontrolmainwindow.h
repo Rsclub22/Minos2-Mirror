@@ -603,6 +603,7 @@ private slots:
     void onTxPttTestPbClicked();
     void onSetPttOnOff(bool pttOnOff);
     void onPttState(bool state);
+    void onSetCwTxMessage(QString cwMsg);
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

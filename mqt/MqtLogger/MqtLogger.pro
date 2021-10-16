@@ -83,6 +83,7 @@ SOURCES += \
     qsologframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
+    rigcontrolcwmessagekeyer.cpp \
     rigcontrolframe.cpp \
     rigcontrolvoicememorykeyer.cpp \
     rigmemdialog.cpp \
@@ -180,6 +181,7 @@ HEADERS  += \
     qsologframe.h \
     radiosettingdialog.h \
     reg1test.h \
+    rigcontrolcwmessagekeyer.h \
     rigcontrolframe.h \
     rigcontrolvoicememorykeyer.h \
     rigmemdialog.h \

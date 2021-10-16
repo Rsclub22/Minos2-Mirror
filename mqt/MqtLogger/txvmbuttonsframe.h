@@ -94,6 +94,7 @@ public:
 
     void setSelectedRadio(PubSubName selectedRadio);
     void setRadioIsConnected(bool connected);
+    void setRadioName(const QString radName);
 signals:
 
     void pttStatus(bool);
@@ -109,6 +110,7 @@ private:
 
     QShortcut *stopButtonShortcut;
     QString voiceKeyerType;
+
 
     QTimer* msgDurTimer;
     QTimer* repeatPauseTimer;
@@ -133,6 +135,8 @@ private:
     void startVMMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
     void setPttStatusIndicatorOnOff(bool on);
+    bool isVoiceMemAvail(PubSubName psn);
+    bool isCwMessageAvail(PubSubName psn);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

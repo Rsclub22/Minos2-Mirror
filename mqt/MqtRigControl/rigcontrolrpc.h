@@ -46,6 +46,7 @@ signals:
     void setVolume(int volLevel);
     void setVoiceMessageNum(QString msgNum);
     void setPttOnOff(bool);
+    void setCwTXMessage(QString cwMsg);
 
 private slots:
     void on_notify(AnalysePubSubNotify an, const QString from );

@@ -1978,6 +1978,14 @@ void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
     }
 }
 
+void TSingleLogFrame::sendRigTxCwMessage(QString msg)
+{
+    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
+    {
+        LogContainer->sendDM->sendRigTxCwMessage(this, msg);
+    }
+}
+
 void TSingleLogFrame::sendRadioFreq(Frequency freq)
 {
     if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())

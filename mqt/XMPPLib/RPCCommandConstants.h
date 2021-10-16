@@ -181,6 +181,7 @@ static const QString rigControlRadioFreq   ("RadioFrequency");
 static const QString rigControlLogFreq     ("LogFrequency");
 static const QString rigControlLogBand     ("LogBand");
 static const QString rigVoiceMessageNum    ("RigVoiceMessageNum");
+static const QString rigCwTxMessage        ("RigTxCwMessage");
 static const QString rigControlRadioMode   ("RadioMode");
 static const QString rigControlLogMode     ("LogMode");
 static const QString rigControlSelectRadioName   ("SelectRadioName");

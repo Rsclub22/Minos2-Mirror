@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Voice Keyer
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
@@ -14,6 +14,7 @@
 #include <QComboBox>
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
+#include "rigcontrolcwmessagekeyer.h"
 #include "InternalVoiceMemoryKeyer.h"
 #include "ExternalMqtKeyer.h"
 #include "tlogcontainer.h"
@@ -22,6 +23,7 @@
 VoiceKeyerFactory::VoiceKeyerFactory(QObject *parent) : QObject(parent)
 {
     RigControlVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
+    RigControlCwMessageKeyer::registerVoiceKeyer(&vmKeyersList);
     InternalVoiceMemoryKeyer::registerVoiceKeyer(&vmKeyersList);
     ExternalMqtKeyer::registerVoiceKeyer(&vmKeyersList);
 }
@@ -41,8 +43,12 @@ VoiceKeyerFactory::VmKeyers* VoiceKeyerFactory::supportedVoiceKeyers()
 VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
 {
     if (vmKeyerId == VoiceKeyerId::RigControl)
-    {
+    {        
         return new RigControlVoiceMemoryKeyer(this);
+    }
+    else if (vmKeyerId == VoiceKeyerId::CW_RigControl)
+    {
+        return new RigControlCwMessageKeyer(this);
     }
     else if (vmKeyerId == VoiceKeyerId::InternalVoiceKeyer)
     {

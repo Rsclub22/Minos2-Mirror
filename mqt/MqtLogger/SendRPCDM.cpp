@@ -456,10 +456,26 @@ void TSendDM::sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );
-    traceMsg(QString("SendRigVocieMessageNum = %1 uuid = %2").arg(msgNum, tslf->getContest()->uuid));
+    traceMsg(QString("SendRigVoiceMessageNum = %1 uuid = %2").arg(msgNum, tslf->getContest()->uuid));
 }
 
 
+void TSendDM::sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg)
+{
+
+    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
+    rigCache.setCwTxMessage(rigSelected, msg);
+    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
+    QSharedPointer<RPCParam>st(new RPCParamStruct);
+
+    st->addMember( loggerUuid, rpcConstants::loggerUuid );
+    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
+    st->addMember( msg, rpcConstants::rigCwTxMessage );
+    rpc.getCallArgs() ->addParam( st );
+
+    rpc.queueCall( rigSelected );
+    traceMsg(QString("SendRigTxCwMessage = %1 uuid = %2").arg(msg, tslf->getContest()->uuid));
+}
 
 
 void TSendDM::sendRigControlMode(TSingleLogFrame *tslf,const QString &mode)

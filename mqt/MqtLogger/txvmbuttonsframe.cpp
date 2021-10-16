@@ -58,6 +58,8 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 }
 
 
+
+
 void TxVmButtonsFrame::initTxVmButton()
 {
     voiceMemButtonList << ui->vmToolButton1 << ui->vmToolButton2 << ui->vmToolButton3 << ui->vmToolButton4
@@ -132,6 +134,23 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
         if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
         {
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                if (!isVoiceMemAvail(selectedRadio))
+                {
+                    return;
+                }
+
+            }
+            else if ( voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                if (!isCwMessageAvail(selectedRadio))
+                {
+                    return;
+                }
+            }
+
+
             txVoiceKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
             if (txVoiceKeyer)
             {
@@ -247,7 +266,16 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         vmData.setVkBase(txVoiceKeyer);
         trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
 
-        QString title(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+        QString title1 = "";
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            title1 = tr("Rig CW Message");
+        }
+        else
+        {
+            title1 = tr("Voice Memory");
+        }
+        QString title(tr("%1 %2 - Edit").arg(title1).arg(buttonNumber + 1));
         int ret = txVoiceKeyer->editButton(&vmData, title);
         if (ret == QDialog::Accepted)
         {
@@ -283,7 +311,21 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
     buttonNumSent = buttonNumber;
-    txVoiceKeyer->sendMsgNum(buttonNumSent);
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        VoiceKeyerParams vmData;
+        vmData.setType(voiceKeyerType);
+        txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+
+        txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
+    }
+    else
+    {
+        txVoiceKeyer->sendMsgNum(buttonNumSent);
+    }
+
+
 
     int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
     if (msgDur > 0)
@@ -301,7 +343,16 @@ void TxVmButtonsFrame::onVmStopClicked()
     {
         return;
     }
-    txVoiceKeyer->stopMsg();
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        txVoiceKeyer->stopCwMsg();
+    }
+    else
+    {
+        txVoiceKeyer->stopMsg();
+    }
+
     msgDurTimer->stop();
     repeatPauseTimer->stop();
     txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
@@ -514,6 +565,18 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
     }
 }
 
+bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getVoiceMemAvail();
+    }
+
+    return false;
+}
+
 void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
 {
     RadioDetails rd;
@@ -528,6 +591,18 @@ void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
         rd.setCwMemAvail(avail);
         allRadioDetails[psn] = rd;
     }
+}
+
+bool TxVmButtonsFrame::isCwMessageAvail(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getCwMemAvail();
+    }
+
+    return false;
 }
 
 
