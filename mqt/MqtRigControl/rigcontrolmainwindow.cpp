@@ -755,7 +755,10 @@ void RigControlMainWindow::checkSupportCatFeatures()
 
     checkSupportRit();
 
-    if (checkSupportVoiceMemory() || checkSupportCwKeyerMemory())
+    bool supVoiceMem = checkSupportVoiceMemory();
+    bool supCwMem = checkSupportCwKeyerMemory();
+
+    if (supVoiceMem || supCwMem)
     {
         setMemoryGroupVisible(true);
     }
