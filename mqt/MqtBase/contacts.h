@@ -156,7 +156,7 @@ class BaseContact: public QObject
       QSharedPointer<DistrictEntry> districtMult;
       QSharedPointer<CountryEntry> ctryMult;
       virtual void makestrings( bool serialFields ) const;
-      virtual void getText(QString &dest, const BaseContestLog * const curcon ) const;
+      virtual void getText(QString &dest, const BaseContestLog * const curcon , bool forHistory) const;
       char multCount;
 
       // silly implementations that are needed to keep things isolated

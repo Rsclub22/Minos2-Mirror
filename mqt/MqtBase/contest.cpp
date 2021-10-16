@@ -543,7 +543,7 @@ void BaseContestLog::getMatchText( QSharedPointer<BaseContact> pct, QString &dis
       disp = tr("DUPLICATE OF ");
    }
    QString temp;
-   pct->getText( temp, ct );
+   pct->getText( temp, ct, false );
    disp += temp;
 
    disp = disp.trimmed();

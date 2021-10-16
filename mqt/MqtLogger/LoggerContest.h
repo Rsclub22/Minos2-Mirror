@@ -201,7 +201,6 @@ protected:
 
       bool export_contest( QSharedPointer<QFile>, ExportType, bool noSerials );
       bool exportGJV(QSharedPointer<QFile> );
-      void procUnknown( QSharedPointer<BaseContact> cct, writer &wr );
       bool exportADIF( QSharedPointer<QFile> expfd );
       bool exportKML( QSharedPointer<QFile> expfd );
       bool exportREG1TEST(QSharedPointer<QFile> expfd, bool noSerials );

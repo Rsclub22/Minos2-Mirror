@@ -176,7 +176,7 @@ void TQSOEditDlg::addTreeRoot(QSharedPointer<BaseContact> lct)
     QString line = lct->updtime.getDate( DTGACCURATE ) + " " + lct->updtime.getTime( DTGACCURATE ) + " UTC";
     treeItem->setText(0, line);
 
-    lct->getText(line, contest);
+    lct->getText(line, contest, true);
     addTreeChild(treeItem, line);
     treeItem->setExpanded(true);
 }
