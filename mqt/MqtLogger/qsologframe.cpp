@@ -3165,10 +3165,10 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         callstate = ui->callRb->isChecked();
     }
     ScreenContact scc;
+    QString callText = ui->CallsignFrame->getTextEditEdit()->text();
+    QString locText = ui->LocFrame->getTextEditEdit()->text();
     if (nearMatches.size() && !callstate)
     {
-        QString callText = ui->CallsignFrame->getTextEditEdit()->text();
-        QString locText = ui->LocFrame->getTextEditEdit()->text();
         if (callText.isEmpty() && locText.isEmpty())
         {
             QStringList n = nearMatches[0].split('|');
@@ -3216,7 +3216,10 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
 
     }
-    MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+    if (callText.isEmpty() && locText.isEmpty())
+    {
+        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+    }
 }
 
 bool QSOLogFrame::isQrzDisplayFrameLoaded()
