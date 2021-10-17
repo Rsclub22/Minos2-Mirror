@@ -199,7 +199,6 @@ bool TLogContainer::show(int argc, char *argv[])
        close();
        return false;
     }
-    sendDM->subscribeApps();
 
     if ( contestAppLoadFiles() )
     {
@@ -215,6 +214,7 @@ bool TLogContainer::show(int argc, char *argv[])
 
     }
     TContestApp::getContestApp()->setPreloadComplete();
+    sendDM->subscribeApps();
 
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();

@@ -1396,6 +1396,9 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     }
 
     QString locator;
+    QString bearing;
+    QString distance;
+
     if (!dxLocFromNodeFlag || showDerivedLocFlag)
     {
         if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
@@ -1413,29 +1416,27 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
                 locator = dxLoc;
             }
         }
-    }
 
-    QChar degSym = QChar(DEG_SYMBOL);
-    QString bearing;
-    if (dxLoc.isEmpty())
-    {
-       if (rotConnected)
-       {
-           bearing = QString("%1%2 R").arg(rotBrg).arg(degSym);
-       }
-    }
-    else
-    {
-        if (!dxBrg.isEmpty())
+        QChar degSym = QChar(DEG_SYMBOL);
+        if (dxLoc.isEmpty())
         {
-            bearing = QString("%1%2").arg(dxBrg).arg(degSym);
+           if (rotConnected)
+           {
+               bearing = QString("%1%2 R").arg(rotBrg).arg(degSym);
+           }
         }
-    }
+        else
+        {
+            if (!dxBrg.isEmpty())
+            {
+                bearing = QString("%1%2").arg(dxBrg).arg(degSym);
+            }
+        }
 
-    QString distance;
-    if (!dxDist.isEmpty())
-    {
-        distance = QString("%1 km").arg(dxDist);
+        if (!dxDist.isEmpty())
+        {
+            distance = QString("%1 km").arg(dxDist);
+        }
     }
 
     QString bLineStart = "";

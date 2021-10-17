@@ -1773,7 +1773,7 @@ void ClusterClientFrame::setClusterServerState(QString stateMsg)
     if (s.size() < 2)
         return;
 
-    if (s[0].contains("Connected"))
+    if (LogContainer->sendDM->isClusterConnected())
     {
          statusIndicatorToggle(true);
          clusterServerConnected = true;
