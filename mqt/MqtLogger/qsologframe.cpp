@@ -692,20 +692,22 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
     QWidget *currn = current;
     QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
+    QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+
     if (currn == cte && cte->text().isEmpty())
     {
         QString pht = cte->placeholderText();
+        QString lht = lte->placeholderText();
+
         if (!pht.isEmpty())
         {
             cte->setText(pht);
         }
         if (contest->locatorMandatoryField.getValue())
         {
-            QLineEdit *lte = ui->LocFrame->getTextEditEdit();
-            pht = lte->placeholderText();
-            if (!pht.isEmpty())
+            if (!lht.isEmpty())
             {
-                lte->setText(pht);
+                lte->setText(lht);
             }
         }
 
