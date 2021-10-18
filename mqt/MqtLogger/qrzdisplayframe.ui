@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>286</width>
-    <height>295</height>
+    <width>291</width>
+    <height>297</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="callsignText">
+           <widget class="MinosQLabel" name="callsignText">
             <property name="text">
              <string/>
             </property>
@@ -242,7 +242,7 @@
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
                <widget class="QLabel" name="label_9">
                 <property name="font">
@@ -257,15 +257,9 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="qraText">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
+               <widget class="MinosQLabel" name="qraText">
                 <property name="text">
-                 <string/>
+                 <string> </string>
                 </property>
                </widget>
               </item>
@@ -510,6 +504,11 @@
    <class>IndicatorPushButton</class>
    <extends>QPushButton</extends>
    <header>indicatorpushbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MinosQLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">minosqlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -30,6 +30,9 @@ private slots:
     void onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid);
 
     void onServerPingTimerTimeout();
+    void onCallsignTextMouseDoubleClicked();
+    void onQraTextMouseDoubleClicked();
+
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;

@@ -70,6 +70,7 @@ SOURCES += \
     MinosLoggerEvents.cpp \
     MinosParameters.cpp \
     MinosTableView.cpp \
+    minosqlabel.cpp \
     minostablewidget.cpp \
     MinosTestImport.cpp \
     mults.cpp \
@@ -156,6 +157,7 @@ HEADERS += \
     MinosLoggerEvents.h \
     MinosParameters.h \
     MinosTableView.h \
+    minosqlabel.h \
     minostablewidget.h \
     MinosTestImport.h \
     mults.h \

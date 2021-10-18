@@ -3,8 +3,10 @@
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
+#include "minosqlabel.h"
 
 #include <QSizePolicy>
+
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -36,6 +38,10 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
     onQrzServerLoggedState(false, "");
 
+    connect (ui->callsignText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onCallsignTextMouseDoubleClicked);
+    connect (ui->qraText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onQraTextMouseDoubleClicked);
+
+
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
     serverPingTimer->start(PINGTIMER_DURATION);
@@ -44,6 +50,18 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
 QrzDisplayFrame::~QrzDisplayFrame()
 {
     delete ui;
+}
+
+
+void QrzDisplayFrame::onCallsignTextMouseDoubleClicked()
+{
+
+}
+
+
+void QrzDisplayFrame::onQraTextMouseDoubleClicked()
+{
+
 }
 
 
