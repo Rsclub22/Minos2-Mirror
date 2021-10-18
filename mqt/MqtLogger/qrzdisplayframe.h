@@ -25,6 +25,8 @@ public:
     void getQrzDetailsForLogger(QString callign);
     void setContest(BaseContestLog *c);
 
+
+
 private slots:
     void onQrzServerLoggedState(bool, QString);
     void onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState, QString uuid);
@@ -33,6 +35,7 @@ private slots:
     void onCallsignTextMouseDoubleClicked();
     void onQraTextMouseDoubleClicked();
 
+    void onSearchQrzEditingFinished();
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;

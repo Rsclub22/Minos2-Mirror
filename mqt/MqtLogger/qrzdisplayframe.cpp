@@ -38,6 +38,7 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
     onQrzServerLoggedState(false, "");
 
+    connect (ui->searchQrzLineEdit, &QLineEdit::editingFinished, this, &QrzDisplayFrame::onSearchQrzEditingFinished);
     connect (ui->callsignText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onCallsignTextMouseDoubleClicked);
     connect (ui->qraText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onQraTextMouseDoubleClicked);
 
@@ -50,6 +51,17 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
 QrzDisplayFrame::~QrzDisplayFrame()
 {
     delete ui;
+}
+
+
+void QrzDisplayFrame::onSearchQrzEditingFinished()
+{
+    if (!ui->searchQrzLineEdit->text().isEmpty())
+    {
+        getQrzDetailsForLogger(ui->searchQrzLineEdit->text().trimmed());
+    }
+
+
 }
 
 
