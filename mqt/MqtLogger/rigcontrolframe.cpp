@@ -1917,18 +1917,30 @@ void RigControlFrame::mgmLabelVisible(bool state)
 
 void RigControlFrame::setFreqTextLegalColour(const Frequency _freq, QString mode)
 {
+    bool legalOperatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
+
+
     if (checkFreqIsLegal(_freq, mode))
     {
 
-        freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-        ui->freqInput->setPalette(*freqDisplayPalette);
+        if (!legalOperatingFreqFlag)
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+            ui->freqInput->setPalette(*freqDisplayPalette);
+        }
+
         legalFreq = true;
     }
     else
     {
 
-        freqDisplayPalette->setColor(QPalette::Text,Qt::red);
-        ui->freqInput->setPalette(*freqDisplayPalette);
+        if (!legalOperatingFreqFlag)
+        {
+            freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+            ui->freqInput->setPalette(*freqDisplayPalette);
+        }
+
         legalFreq = false;
     }
 

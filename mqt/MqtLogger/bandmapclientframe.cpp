@@ -1493,34 +1493,60 @@ void BandmapClientFrame::setFreq(Frequency freq)
         // check freq matches contest band
         checkContestBandMatch(curFreq);
 
+        bool legalOperatingFreqFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
+
+
         if (sf.count() >= 4)
         {
             ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
+
+
             if (isFreqLegal(freq, contestBandStr, contestModeStr))
             {
 
-                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                if (!legalOperatingFreqFlag)
+                {
+                    freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+                    ui->freqDisplay->setPalette(*freqDisplayPalette);
+                }
+
                 legalFreq = true;
             }
             else
             {
-                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
+                if (!legalOperatingFreqFlag)
+                {
+                    freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                    ui->freqDisplay->setPalette(*freqDisplayPalette);
+                }
+
                 legalFreq = false;
             }
+
             ui->freqDisplay->setText(sf);
         }
         else
         {
-            freqDisplayPalette->setColor(QPalette::Text, Qt::red);
-            ui->freqDisplay->setPalette(*freqDisplayPalette);
+            if (!legalOperatingFreqFlag)
+            {
+                freqDisplayPalette->setColor(QPalette::Text, Qt::red);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+            }
+
             legalFreq = false;
             ui->freqDisplay->setText(sf);
         }
         bandmapView->setFreq(curFreq, legalFreq);
     }
 }
+
+
+
+
+
+
+
 
 void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 {
