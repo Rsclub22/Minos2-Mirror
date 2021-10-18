@@ -1924,11 +1924,9 @@ void RigControlFrame::setFreqTextLegalColour(const Frequency _freq, QString mode
     if (checkFreqIsLegal(_freq, mode))
     {
 
-        if (!legalOperatingFreqFlag)
-        {
-            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-            ui->freqInput->setPalette(*freqDisplayPalette);
-        }
+        freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+        ui->freqInput->setPalette(*freqDisplayPalette);
+
 
         legalFreq = true;
     }
@@ -1938,6 +1936,11 @@ void RigControlFrame::setFreqTextLegalColour(const Frequency _freq, QString mode
         if (!legalOperatingFreqFlag)
         {
             freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+            ui->freqInput->setPalette(*freqDisplayPalette);
+        }
+        else
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
             ui->freqInput->setPalette(*freqDisplayPalette);
         }
 

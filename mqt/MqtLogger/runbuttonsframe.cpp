@@ -469,10 +469,18 @@ void RunButtonsFrame::runButtonUpdate(int buttonNumber)
 }
 void RunButtonsFrame::setFreqDisplay(Frequency f, bool legalFreq)
 {
+    bool legalOperatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
+
     QString freqCol;
     if (!legalFreq)
     {
-        freqCol = HtmlFontColour(Qt::red);
+        if (!legalOperatingFreqFlag)
+        {
+           freqCol = HtmlFontColour(Qt::red);
+        }
+
+
     }
     ui->freqDisplay->setText(freqCol + f.convertFreqStrDisp());
 }

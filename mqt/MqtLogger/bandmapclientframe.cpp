@@ -1505,11 +1505,8 @@ void BandmapClientFrame::setFreq(Frequency freq)
             if (isFreqLegal(freq, contestBandStr, contestModeStr))
             {
 
-                if (!legalOperatingFreqFlag)
-                {
-                    freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                    ui->freqDisplay->setPalette(*freqDisplayPalette);
-                }
+                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
 
                 legalFreq = true;
             }
@@ -1518,6 +1515,11 @@ void BandmapClientFrame::setFreq(Frequency freq)
                 if (!legalOperatingFreqFlag)
                 {
                     freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                    ui->freqDisplay->setPalette(*freqDisplayPalette);
+                }
+                else
+                {
+                    freqDisplayPalette->setColor(QPalette::Text, Qt::black);
                     ui->freqDisplay->setPalette(*freqDisplayPalette);
                 }
 
