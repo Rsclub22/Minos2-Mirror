@@ -3,7 +3,7 @@
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
-// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
+// Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2021
 //
 //
 //
@@ -42,6 +42,9 @@ public:
     QString getVmName() const {return vmName;}
     void setVmName(const QString vmName_){vmName = vmName_.trimmed();}
 
+    QString getVmCwMessage() const {return vmCwMessage;}
+    void setVmCwMessage(const QString msg){vmCwMessage = msg;}
+
     bool getVmRepeatFlag() const {return vmRepeatFlag;}
     void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
 
@@ -65,6 +68,7 @@ private:
     QString type;
     QSharedPointer<VoiceKeyerBase> vkBase;
     QString vmName;
+    QString vmCwMessage;
     int vmDuration;
     bool vmRepeatFlag;
     int vmRepeatPauseDur;
@@ -84,6 +88,10 @@ public:
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg() = 0;
+
+    virtual void sendCwMsg(QString message) = 0;
+    virtual void stopCwMsg() = 0;
+
     virtual bool hasRecord() = 0;
     virtual void doRecording(VoiceKeyerParams *){}
 

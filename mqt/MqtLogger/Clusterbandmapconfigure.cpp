@@ -26,6 +26,10 @@ void ClusterBandmapConfigure::initialise()
                       << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
 
 
+    QSettings settings;
+    int curTabNo = settings.value("OptionsClusterBandmapConfigure/curTab").toInt();
+    ui->ClusterBandmapConfiguretabWidget->setCurrentIndex(curTabNo);
+
     BandList::getBandList().loadAllBands(bands);
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
@@ -76,7 +80,7 @@ void ClusterBandmapConfigure::initialise()
     connect(ui->spotLessThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotLessThanDistanceRadioButClicked();});
     connect(ui->spotGreaterThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotGreaterThanDistanceRadioButClicked();});
 
-     ui->hfFrame->setVisible(true);
+     ui->HFgroupBox->setVisible(true);
 
    // get addBandmapTuningTolerance
 
@@ -130,6 +134,14 @@ void ClusterBandmapConfigure::finalise()
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
+
+
+void ClusterBandmapConfigure::on_ClusterBandmapConfiguretabWidget_currentChanged(int index)
+{
+    QSettings settings;
+    settings.setValue("OptionsClusterBandmapConfigure/curTab", index);
+}
+
 void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 {
     int distance = 0;
@@ -187,6 +199,9 @@ void ClusterBandmapConfigure::saveDistances()
         QString band = b.data()->uk;
         if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)
         {
+            DefaultDistanceIniName s = defaultDistIniNames.getDefaultDistIniName(band);
+            QString s1 = defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName;
+            int d = distanceValues.value(band).distance;
             config.setValue(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, distanceValues.value(band).distance);
         }
     }

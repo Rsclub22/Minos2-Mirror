@@ -28,6 +28,7 @@ private slots:
     void onFreqToleranceValueChanged(int value);
     void onSpotLessThanDistanceRadioButClicked();
     void onSpotGreaterThanDistanceRadioButClicked();
+    void on_ClusterBandmapConfiguretabWidget_currentChanged(int index);
 private:
     Ui::ClusterBandmapConfigure *ui;
 

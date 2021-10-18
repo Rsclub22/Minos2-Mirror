@@ -4,6 +4,7 @@
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 
+#include <QSizePolicy>
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -18,6 +19,17 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
 {
     ui->setupUi(this);
     clear();
+
+    const QSize BUTTON_SIZE = QSize(16, 16);
+    ui->logOnStatusPb->setFixedSize(BUTTON_SIZE);
+    ui->logOnStatusPb->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum );
+
+    qDebug()<<ui->logOnStatusPb->size();
+    qDebug()<<  "size hint = " << ui->logOnStatusPb->sizeHint();
+    qDebug()<<  "layout = " << ui->logOnStatusPb->layout();
+    qDebug()<<  "minimumsize = " << ui->logOnStatusPb->minimumSize();
+    qDebug()<<   "minimumsizehint = " << ui->logOnStatusPb->minimumSizeHint();
+    qDebug()<<   "size policy = " <<  ui->logOnStatusPb->sizePolicy();
 
 
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::loggerQrzReply, this, &QrzDisplayFrame::onLoggerQrzReply);
@@ -53,24 +65,24 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
 
     if (!stateMessage.isEmpty())
     {
-        ui->qrzMessageText->clear();
-        ui->qrzMessageText->setText(stateMessage);
+        //ui->qrzMessageText->clear(); ***************************
+        //ui->qrzMessageText->setText(stateMessage); ***************************
     }
 
 }
 
 void QrzDisplayFrame::onServerPingTimerTimeout()
 {
-    ui->off_onLineText->clear();
+    //ui->off_onLineText->clear(); ***************
 
     if (receivedServerPing)
     {
-        ui->off_onLineText->setText("OnLine");
+        //ui->off_onLineText->setText("OnLine"); **************
         receivedServerPing = false;
     }
     else
     {
-        ui->off_onLineText->setText("Offline");
+        //ui->off_onLineText->setText("Offline"); ************
     }
 }
 
@@ -99,14 +111,15 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
                 }
 
             }
+
             ui->countryText->setText(cd.getCountry());
             ui->cqZoneText->setText(cd.getCqZone());
             ui->ituZoneText->setText(cd.getItuZone());
         }
         else
         {
-            ui->callsignText->setText(cd.getCallsign());
-            ui->qrzMessageText->setText(qrzReplyState);
+            //ui->callsignText->setText(cd.getCallsign()); ***************************
+            //ui->qrzMessageText->setText(qrzReplyState); ***************************
         }
     }
 
@@ -157,7 +170,7 @@ void QrzDisplayFrame::clear()
     ui->bearingText->clear();
     ui->cqZoneText->clear();
     ui->ituZoneText->clear();
-    ui->qrzMessageText->clear();
+    //ui->qrzMessageText->clear();
 
 }
 

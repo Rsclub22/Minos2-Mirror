@@ -75,6 +75,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     connect(ui->actionSetup_QRZ, &QAction::triggered, this, [=](){onConfigure();});
 
+    connect(ui->connectPb, &QPushButton::clicked, this, [=](){onConnectPushButtonClicked();});
+
     checkQrzRequestsTimer = new QTimer(this);
     connect(checkQrzRequestsTimer, &QTimer::timeout, this, [=](){handleQrzRequests();});
     checkQrzRequestsTimer->start(500);
@@ -148,7 +150,11 @@ void QrzServerMainWindow::LogTimerTimer()
     }
 }
 
+void QrzServerMainWindow::onConnectPushButtonClicked()
+{
+    logon();
 
+}
 
 void QrzServerMainWindow::onPingStateTimerTimeout()
 {
@@ -337,7 +343,7 @@ void QrzServerMainWindow::sessionDataReceived()
     if (!qrzSessionData.getMessage().isEmpty())
     {
         trace(QString("Qrz Message: %1").arg(qrzSessionData.getMessage()));
-        addToErrorTextLabel(qrzSessionData.getMessage());
+        addToErrorTextLabel(tr("Qrz Message: %1").arg(qrzSessionData.getMessage()));
         addTextToLogWindow(qrzSessionData.getMessage());
         if (qrzServerStateFlags.getAskCallsignFlag())
         {
@@ -357,7 +363,7 @@ void QrzServerMainWindow::sessionDataReceived()
         qrzServerStateFlags.setAskLogonFlag(false);
         QString msg = QString("Qrz Logged on Ok with call %1").arg(logonCallsign);
         trace(msg);
-        addTextToLogWindow(msg);
+        addTextToLogWindow(tr("Qrz logged on Ok with call %1").arg(logonCallsign));
         addToErrorTextLabel("");
         addToMessageTextLabel("");
         setQrzStatusConnected(true);
@@ -410,7 +416,7 @@ void QrzServerMainWindow::callsignDataReceived()
 
             QString msg = QString("Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server").arg(requestedStation.getDxCall(), qrzCallsignData.getQra());
             trace(msg);
-            addTextToLogWindow(msg);
+            addTextToLogWindow(tr("Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server").arg(requestedStation.getDxCall(), qrzCallsignData.getQra()));
 
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(requestedStation.getDxCall(), qrzCallsignData.getQra(), QRA_LOOKUP_OK, requestedStation.getSpotterCall(), "", rpcConstants::qrzServerCallOK);
 
@@ -420,7 +426,7 @@ void QrzServerMainWindow::callsignDataReceived()
             // a request from logger
             QString msg = QString(QString("Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
             trace(msg);
-            addTextToLogWindow(msg);
+            addTextToLogWindow(tr("Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server").arg(requestedStation.getDxCall()));
             QString stateMsg = "";
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(), requestedStation.getLoggerUuid());
 
@@ -677,7 +683,9 @@ void QrzServerMainWindow::handleQrzRequests()
 
 void QrzServerMainWindow::addTextToLogWindow(QString message)
 {
-    ui->messageTextWindow-> appendPlainText(QTime::currentTime().toString("hh:mm:ss.z") + " " + message);
+
+    //ui->messageTextWindow-> appendPlainText(QTime::currentTime().toString("hh:mm:ss.z") + " " + message);
+    ui->messageTextWindow-> appendPlainText(QDateTime::currentDateTimeUtc().time().toString("hh:mm:ss.z") + " UTC - " + message);
 }
 
 void QrzServerMainWindow::addToErrorTextLabel(QString message)

@@ -93,6 +93,7 @@ public:
     void setPttOnOff(const PubSubName &name, bool onOff);
     void setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail);
     void setCwMemAvail(const PubSubName &name, bool cwMemAvail);
+    void setCwTxMessage(const PubSubName &name, const QString &msg);
 };
 
 #endif // RIGCACHE_H

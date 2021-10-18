@@ -285,6 +285,7 @@ public:
     void transferFromWSJTX(QString call);
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
     void onSetCwMemAvail(bool avail, PubSubName psn);
+    void sendRigTxCwMessage(QString msg);
 };
 
 #endif // TSINGLELOGFRAME_H

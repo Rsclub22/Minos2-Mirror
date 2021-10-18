@@ -18,12 +18,14 @@ public:
     ~TxVmRigButtonDialog();
 
     void setVmData(VoiceKeyerParams* vmData);
+    void setCwMessageTextBoxVisible(bool state);
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();
 
     void onVmRepeatPauseDurEditingFinished();
     void onVmMessageDurEditingFinished();
+    void on_txCwMessageEditingFinshed();
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
@@ -34,6 +36,7 @@ private:
 
     bool validateDur(QString durName, QString dur, int &dur_);
     void doCloseEvent();
+    bool checkLengthOfCwMessage(int length);
 };
 
 #endif // TXVMRIGBUTTONDIALOG_H

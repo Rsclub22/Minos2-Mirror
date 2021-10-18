@@ -15,7 +15,7 @@ const QStringList vmButtonShortCutKeys = {
                                     "Shift+F7", "Shift+F8"
 
                                     };
-
+const QString vmStopButtonShortCutKey = "Shift+F10";
 
 
 TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
@@ -43,6 +43,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnect);
 
     initTxVmButton();
+
+    setPttStatusIndicatorOnOff(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -56,6 +58,8 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 }
 
 
+
+
 void TxVmButtonsFrame::initTxVmButton()
 {
     voiceMemButtonList << ui->vmToolButton1 << ui->vmToolButton2 << ui->vmToolButton3 << ui->vmToolButton4
@@ -66,6 +70,9 @@ void TxVmButtonsFrame::initTxVmButton()
         txVmButtonMap[i] = new TxVoiceMemButton(voiceMemButtonList[i], this, i);
         connect( txVmButtonMap[i], &TxVoiceMemButton::buttonActivated, this, &TxVmButtonsFrame::runButActivated, Qt::QueuedConnection );
     }
+
+    stopButtonShortcut = new QShortcut(QKeySequence(vmStopButtonShortCutKey), ui->vmStopPb);
+    connect(stopButtonShortcut, &QShortcut::activated, this, &TxVmButtonsFrame::onVmStopClicked);
 
     connect(ui->vmSetupPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmSetupClicked);
     connect(ui->vmStopPb, &QPushButton::clicked, this, &TxVmButtonsFrame::onVmStopClicked);
@@ -127,6 +134,23 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
         if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
         {
+            if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                if (!isVoiceMemAvail(selectedRadio))
+                {
+                    return;
+                }
+
+            }
+            else if ( voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+            {
+                if (!isCwMessageAvail(selectedRadio))
+                {
+                    return;
+                }
+            }
+
+
             txVoiceKeyer = QSharedPointer<VoiceKeyerBase>(voiceKeyerFactory->createVoiceKeyer(voiceCap.getVmIdNum()));
             if (txVoiceKeyer)
             {
@@ -242,7 +266,16 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
         vmData.setVkBase(txVoiceKeyer);
         trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
 
-        QString title(tr("Voice Memory %1 - Edit").arg(buttonNumber + 1));
+        QString title1 = "";
+        if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+        {
+            title1 = tr("Rig CW Message");
+        }
+        else
+        {
+            title1 = tr("Voice Memory");
+        }
+        QString title(tr("%1 %2 - Edit").arg(title1).arg(buttonNumber + 1));
         int ret = txVoiceKeyer->editButton(&vmData, title);
         if (ret == QDialog::Accepted)
         {
@@ -278,7 +311,21 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
     buttonNumSent = buttonNumber;
-    txVoiceKeyer->sendMsgNum(buttonNumSent);
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        VoiceKeyerParams vmData;
+        vmData.setType(voiceKeyerType);
+        txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+
+        txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
+    }
+    else
+    {
+        txVoiceKeyer->sendMsgNum(buttonNumSent);
+    }
+
+
 
     int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
     if (msgDur > 0)
@@ -296,7 +343,16 @@ void TxVmButtonsFrame::onVmStopClicked()
     {
         return;
     }
-    txVoiceKeyer->stopMsg();
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        txVoiceKeyer->stopCwMsg();
+    }
+    else
+    {
+        txVoiceKeyer->stopMsg();
+    }
+
     msgDurTimer->stop();
     repeatPauseTimer->stop();
     txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
@@ -473,6 +529,8 @@ void TxVmButtonsFrame::setPttEnabled(bool state, PubSubName psn)
         rd.setPttEnabled (state);
         allRadioDetails[psn] = rd;
     }
+
+
 }
 
 void TxVmButtonsFrame::setPttType(int type, PubSubName psn)
@@ -507,6 +565,18 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
     }
 }
 
+bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getVoiceMemAvail();
+    }
+
+    return false;
+}
+
 void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
 {
     RadioDetails rd;
@@ -523,12 +593,25 @@ void TxVmButtonsFrame::setCwMemAvail(bool avail, PubSubName psn)
     }
 }
 
+bool TxVmButtonsFrame::isCwMessageAvail(PubSubName psn)
+{
+    RadioDetails rd;
+    if (allRadioDetails.contains(psn))
+    {
+        rd = allRadioDetails[psn];
+        return rd.getCwMemAvail();
+    }
+
+    return false;
+}
+
 
 void TxVmButtonsFrame::setPttState(bool state)
 {
     if (pttState != state)
     {
         pttState = state;
+        setPttStatusIndicatorOnOff(state);
         emit pttStatus(pttState);
     }
 
@@ -536,6 +619,23 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)
 {
     txVoiceKeyer->setPip(ui->pipCb->isChecked());
+}
+
+
+void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
+{
+    if (on)
+    {
+        ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_CONNECT_STYLE);
+        ui->txStatusIndicator->setToolTip(tr("TX On"));
+
+    }
+    else
+    {
+       ui->txStatusIndicator->setStyleSheet(STATUS_INDICATOR_DISCONNECT_STYLE);
+       ui->txStatusIndicator->setToolTip(tr("TX Off"));
+    }
+
 }
 
 //*******************TX Voice Memory Button *************************//

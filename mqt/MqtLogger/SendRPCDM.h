@@ -34,6 +34,7 @@ class TSendDM : public QObject
       bool clusterServerLoaded = false;
       bool clusterConnected = false;
 
+
       PubSubName keyerApp;
       PubSubName clusterApp;
 
@@ -86,6 +87,7 @@ public:  		// User declarations
       void sendRigControlFreq(TSingleLogFrame *tslf,const Frequency &freq);
       void sendRigControlBand(TSingleLogFrame *tslf, const QString &band);
       void sendRigTxVoiceMessage(TSingleLogFrame *tslf, const QString &msgNum);
+      void sendRigTxCwMessage(TSingleLogFrame *tslf, const QString &msg);
 
       void sendRigControlMode(TSingleLogFrame *tslf, const QString &mode);
       void sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level);

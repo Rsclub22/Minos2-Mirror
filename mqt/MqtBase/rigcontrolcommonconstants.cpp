@@ -22,6 +22,7 @@ void PresetFreq::clear()
     modePresetFreqList.clear();
 }
 
+
 bool PresetFreq::isDirty(const QString mode, const QString band)
 {
     QMap<QString, StoredPresetFreqs>*  mspf = modePresetFreqList[mode];

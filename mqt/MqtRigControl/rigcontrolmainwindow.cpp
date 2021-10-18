@@ -78,9 +78,10 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(rigCtldProcess, &QProcess::started, this, [=](){rigCtldStarted();});
 
     setRigCltdIndicatorVisible(false);
-    setVoiceMemIndVisible(false);
-    setCwMemIndVisible(false);
-    setpttIndVisible(false);
+    setMemoryGroupVisible(false);
+    setPttGroupItemsVisible(false);
+    setSmeterVisible(false);
+
 
     getRigCtldConnectDelay();
 
@@ -393,7 +394,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setVolume,  this, [=](int vol){loggerSetVolume(vol);});
     connect(msg, &RigControlRpc::setVoiceMessageNum, this, [=](QString msgNum){onSetVoiceMessageNum(msgNum);});
     connect(msg, &RigControlRpc::setPttOnOff, this, [=](bool pttOnOff){onSetPttOnOff(pttOnOff);});
-
+    connect(msg, &RigControlRpc::setCwTXMessage, this, [=](QString cwMsg){onSetCwTxMessage(cwMsg);});
 
 
 
@@ -521,6 +522,11 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     clrRigctldNames();
     clearSupportRitFlags();
     rigStateDetails->curTransVertFreq.clear();
+
+    setRigCltdIndicatorVisible(false);
+    setMemoryGroupVisible(false);
+    setPttGroupItemsVisible(false);
+    setSmeterVisible(false);
 
     if (radioCommsOK)
     {
@@ -749,7 +755,10 @@ void RigControlMainWindow::checkSupportCatFeatures()
 
     checkSupportRit();
 
-    if (checkSupportVoiceMemory() || checkSupportCwKeyerMemory())
+    bool supVoiceMem = checkSupportVoiceMemory();
+    bool supCwMem = checkSupportCwKeyerMemory();
+
+    if (supVoiceMem || supCwMem)
     {
         setMemoryGroupVisible(true);
     }
@@ -4983,6 +4992,7 @@ void RigControlMainWindow::supRadioIndToggle(QString band, displayIndicator::ind
 }
 
 
+
 void RigControlMainWindow::setMemoryGroupVisible(bool visible)
 {
     ui->memGroupBox->setVisible(visible);
@@ -5084,6 +5094,9 @@ void RigControlMainWindow::testBoxesVisible(bool visible)
 {
     ui->selFreq->setVisible(visible);
     ui->freqInputBox->setVisible(visible);
+    ui->txPttTestPb->setVisible(visible);
+    ui->cwKeyerPb->setVisible(visible);
+    ui->cwKeyerStopPb->setVisible(visible);
 }
 
 
@@ -5175,5 +5188,48 @@ void RigControlMainWindow::onSetVoiceMessageNum(QString msgNum)
     {
         trace(QString("send Voice Memory - radio empty, msgNum invalid"));
     }
+
+}
+
+
+void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
+{
+
+    if (radio && !cwMsg.isEmpty())
+    {
+
+
+        if (cwMsg.length() == 1)
+        {
+            QChar c = cwMsg.at(0);
+            if (c == '\xff')
+            {
+                // send stop CW
+                trace(QString("Cw Tx Message Stop received from logger"));
+                radio->stopMorse(rigStateDetails->curVfo);
+            }
+            else
+            {
+                // error stop command incorrect!
+                trace(QString("Cw Tx Message Stop Char incorrect = %1").arg(c));
+                return;
+            }
+
+
+        }
+        else
+        {
+            trace(QString("Cw Tx Message Received from logger = %1").arg(cwMsg));
+            radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+        }
+    }
+    else
+    {
+        trace(QString("Cw Tx Message is empty or radio not defined"));
+        return;
+    }
+
+
+
 
 }

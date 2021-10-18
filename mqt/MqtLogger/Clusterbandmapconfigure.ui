@@ -6,21 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>317</height>
+    <width>764</width>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Cluster/Bandmap Configure</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_8">
    <item>
     <widget class="QTabWidget" name="ClusterBandmapConfiguretabWidget">
      <property name="autoFillBackground">
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="bandmapGeneralTab">
       <property name="autoFillBackground">
@@ -126,32 +126,19 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_7">
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QFrame" name="hfFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+            <widget class="QGroupBox" name="HFgroupBox">
+             <property name="title">
+              <string>HF</string>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <layout class="QVBoxLayout" name="verticalLayout">
               <item>
                <layout class="QVBoxLayout" name="verticalLayout_2">
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>HF</string>
-                  </property>
-                 </widget>
-                </item>
                 <item>
                  <layout class="QGridLayout" name="gridLayout_3">
                   <item row="0" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_25">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter1_8MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_25">
                       <property name="text">
@@ -159,13 +146,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter1_8MHz"/>
+                    </item>
                    </layout>
                   </item>
                   <item row="0" column="1">
                    <layout class="QHBoxLayout" name="horizontalLayout_22">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter14MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_22">
                       <property name="text">
@@ -173,13 +160,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter14MHz"/>
+                    </item>
                    </layout>
                   </item>
                   <item row="2" column="1">
                    <layout class="QHBoxLayout" name="horizontalLayout_23">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter28MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_23">
                       <property name="text">
@@ -187,13 +174,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter28MHz"/>
+                    </item>
                    </layout>
                   </item>
                   <item row="1" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_24">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter3_5MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_24">
                       <property name="text">
@@ -201,13 +188,13 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter3_5MHz"/>
+                    </item>
                    </layout>
                   </item>
                   <item row="1" column="1">
                    <layout class="QHBoxLayout" name="horizontalLayout_20">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter21MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_20">
                       <property name="text">
@@ -215,19 +202,22 @@
                       </property>
                      </widget>
                     </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter21MHz"/>
+                    </item>
                    </layout>
                   </item>
                   <item row="2" column="0">
                    <layout class="QHBoxLayout" name="horizontalLayout_19">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter7MHz"/>
-                    </item>
                     <item>
                      <widget class="QLabel" name="label_19">
                       <property name="text">
                        <string>7 MHz</string>
                       </property>
                      </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="distanceFilter7MHz"/>
                     </item>
                    </layout>
                   </item>
@@ -252,167 +242,153 @@
             </widget>
            </item>
            <item>
-            <widget class="QFrame" name="vhfUhfFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+            <widget class="QGroupBox" name="VhfUhfgroupBox">
+             <property name="title">
+              <string>VHF/UHF</string>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_3">
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>VHF/UHF</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QGridLayout" name="gridLayout_2">
-                  <item row="2" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_10">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter144MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_10">
-                      <property name="text">
-                       <string>144 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="2" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_10">
+                  <item>
+                   <widget class="QLabel" name="label_10">
+                    <property name="text">
+                     <string>144 MHz</string>
+                    </property>
+                   </widget>
                   </item>
-                  <item row="1" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_11">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter2300MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_11">
-                      <property name="text">
-                       <string>2300 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="3" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_12">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter432MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_12">
-                      <property name="text">
-                       <string>432 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="0" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_13">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter1296MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_13">
-                      <property name="text">
-                       <string>1296 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="2" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_14">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter3_4GHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_14">
-                      <property name="text">
-                       <string>3.4 GHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="1" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_15">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter70MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_15">
-                      <property name="text">
-                       <string>70 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="0" column="0">
-                   <layout class="QHBoxLayout" name="horizontalLayout_16">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter50MHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_16">
-                      <property name="text">
-                       <string>50 MHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="3" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_17">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter5_6GHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_17">
-                      <property name="text">
-                       <string>5.6 GHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
-                  </item>
-                  <item row="4" column="1">
-                   <layout class="QHBoxLayout" name="horizontalLayout_18">
-                    <item>
-                     <widget class="QLineEdit" name="distanceFilter10GHz"/>
-                    </item>
-                    <item>
-                     <widget class="QLabel" name="label_18">
-                      <property name="text">
-                       <string>10 GHz</string>
-                      </property>
-                     </widget>
-                    </item>
-                   </layout>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter144MHz"/>
                   </item>
                  </layout>
                 </item>
-                <item>
-                 <spacer name="verticalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
+                <item row="1" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_11">
+                  <item>
+                   <widget class="QLabel" name="label_11">
+                    <property name="text">
+                     <string>2300 MHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter2300MHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="3" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_12">
+                  <item>
+                   <widget class="QLabel" name="label_12">
+                    <property name="text">
+                     <string>432 MHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter432MHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_13">
+                  <item>
+                   <widget class="QLabel" name="label_13">
+                    <property name="text">
+                     <string>1296 MHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter1296MHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_14">
+                  <item>
+                   <widget class="QLabel" name="label_14">
+                    <property name="text">
+                     <string>3.4 GHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter3_4GHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="1" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_15">
+                  <item>
+                   <widget class="QLabel" name="label_15">
+                    <property name="text">
+                     <string>70 MHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter70MHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_16">
+                  <item>
+                   <widget class="QLabel" name="label_16">
+                    <property name="text">
+                     <string>50 MHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter50MHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="3" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_17">
+                  <item>
+                   <widget class="QLabel" name="label_17">
+                    <property name="text">
+                     <string>5.6 GHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter5_6GHz"/>
+                  </item>
+                 </layout>
+                </item>
+                <item row="4" column="1">
+                 <layout class="QHBoxLayout" name="horizontalLayout_18">
+                  <item>
+                   <widget class="QLabel" name="label_18">
+                    <property name="text">
+                     <string>10 GHz</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="distanceFilter10GHz"/>
+                  </item>
+                 </layout>
                 </item>
                </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>

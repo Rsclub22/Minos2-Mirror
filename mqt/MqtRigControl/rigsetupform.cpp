@@ -423,6 +423,31 @@ void RigSetupForm::comportSelected()
         radioData->comport = ui->comPortBox->currentText();
 
     }
+
+    if (ui->pttEnable->isChecked())
+    {
+        if (isPttComportEqualCatComport())
+        {
+            if (!ui->pttCatEnable->isChecked())
+            {
+                if (ui->pttRTSEnable->isChecked())
+                {
+                    setForceRTSDisabled(true);
+                    setForceDTRDisabled(false);
+                }
+                else if (ui->pttDTREnable->isChecked())
+                {
+                    setForceRTSDisabled(false);
+                    setForceDTRDisabled(true);
+                }
+            }
+        }
+        else
+        {
+            setForceRTSDisabled(false);
+            setForceDTRDisabled(false);
+        }
+    }
 }
 
 QString RigSetupForm::getComport()
@@ -583,14 +608,19 @@ void RigSetupForm::on_forceDTRSelected()
     if (serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()] != radioData->forceDtr)
     {
         radioData->forceDtr = serialCommonData::forceLinesCodesList[ui->forceDtrBox->currentIndex()];
-        if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+
+        if (isPttComportEqualCatComport())
         {
-            setPttDTRDisabled(false);
+            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            {
+                setPttDTRDisabled(false);
+            }
+            else
+            {
+                setPttDTRDisabled(true);
+            }
         }
-        else
-        {
-            setPttDTRDisabled(true);
-        }
+
     }
 
 
@@ -1971,6 +2001,27 @@ void RigSetupForm::onPttEnableSelected(bool /*checked*/)
     {
         radioData->enablePTT = checked;
         setPttControlsVisible(checked);
+        if (checked)
+        {
+            if (isPttComportEqualCatComport())
+            {
+                if (ui->pttRTSEnable->isChecked())
+                {
+                    setForceDTRDisabled(true);
+                    setForceRTSDisabled(false);
+                }
+                else if (ui->pttDTREnable->isChecked())
+                {
+                    setForceRTSDisabled(true);
+                    setForceDTRDisabled(false);
+                }
+            }
+        }
+        else
+        {
+           setForceDTRDisabled(false);
+           setForceRTSDisabled(false);
+        }
 
     }
 

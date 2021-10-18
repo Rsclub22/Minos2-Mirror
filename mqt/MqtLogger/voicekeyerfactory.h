@@ -24,18 +24,21 @@ enum VoiceKeyerId
 {
     None = 0,
     RigControl,
+    CW_RigControl,    // Rig sends message by CW
     SerialControl,
     InternalVoiceKeyer,
     ExternalVoiceKeyer
 };
 
-const QStringList keyerTypes = {"None", "RigControl", "SerialControl", "Internal", "mqtKeyer"};
+const QStringList keyerTypes = {"None", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
 const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
 const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
 const QString VOICEKEYER_COMMON_PARAMS_PATH = VOICE_KEYER_PATH + "CommonParams/";
 const QString VOICEKEYER_COMMON_PARAMS_FILENAME = "txVoiceKeyCommonParams.ini";
 const QString VOICEKEYER_COMMON_PARAMS_GROUPNAME = "commonParams";
+
+const QString CW_MESSAGE_BASE_FILE_NAME = "txCwMemory";
 
 const int VOICEKEYER_MAX_NUMBUTTONS = 8;
 

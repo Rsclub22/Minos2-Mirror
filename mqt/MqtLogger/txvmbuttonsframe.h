@@ -34,7 +34,8 @@ public:
     QToolButton* vmButton;
     QMenu* vmMenu;
     QShortcut* shortKey;
-    QShortcut* shiftShortKey;
+
+    //QShortcut* shiftShortKey;
     QAction* readAction;
     QAction* newAction;
     QAction* editAction;
@@ -93,6 +94,7 @@ public:
 
     void setSelectedRadio(PubSubName selectedRadio);
     void setRadioIsConnected(bool connected);
+    void setRadioName(const QString radName);
 signals:
 
     void pttStatus(bool);
@@ -104,9 +106,11 @@ private:
     VoiceKeyerFactory* voiceKeyerFactory;
 
     QTimer *extKeyerConnectTimer = nullptr;
-    QList<QShortcut *> shortCutKeyList;
+    //QList<QShortcut *> shortCutKeyList;
 
+    QShortcut *stopButtonShortcut;
     QString voiceKeyerType;
+
 
     QTimer* msgDurTimer;
     QTimer* repeatPauseTimer;
@@ -130,6 +134,9 @@ private:
     void clearButtonLabels();
     void startVMMsg(int buttonNumber);
     void createKeyer(QString voiceKeyerName);
+    void setPttStatusIndicatorOnOff(bool on);
+    bool isVoiceMemAvail(PubSubName psn);
+    bool isCwMessageAvail(PubSubName psn);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

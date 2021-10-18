@@ -25,6 +25,12 @@ RadioSettingDialog::RadioSettingDialog( QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QSettings settings;
+    int curTabNo = settings.value("OptionsLogRadioSettingsDialog/curTab").toInt();
+    ui->radioSettingsTabWidget->setCurrentIndex(curTabNo);
+    int presetCurTabNo = settings.value("OptionsPresetFreqDialog/curTab").toInt();
+    ui->PresetTabWidget->setCurrentIndex(presetCurTabNo);
+
     QWidget::setTabOrder(ui->PresetTabWidget, ui->cwLineEdit_1_8mhz);
     QWidget::setTabOrder(ui->cwLineEdit_1_8mhz, ui->cwLineEdit_3_5mhz);
     QWidget::setTabOrder(ui->cwLineEdit_3_5mhz, ui->cwLineEdit_7mhz);
@@ -230,6 +236,8 @@ void RadioSettingDialog::initialise()
 
     loadSettingsToDialog();
 }
+
+
 bool RadioSettingDialog::check()
 {
     if (cancelled)
@@ -335,22 +343,66 @@ void RadioSettingDialog::setHf(bool hfFlag)
 
 }
 
+
+void RadioSettingDialog::on_radioSettingsTabWidget_currentChanged(int index)
+{
+    QSettings settings;
+    settings.setValue("OptionsLogRadioSettingsDialog/curTab", index);
+}
+
+
+void RadioSettingDialog::on_PresetTabWidget_currentChanged(int index)
+{
+    QSettings settings;
+    settings.setValue("OptionsPresetFreqDialog/curTab", index);
+}
+
 void RadioSettingDialog::onCwPresetLineEditingFinished(int i)
 {
     if (!checking)
-        getFreq(cwPresetLineEditList[i], i);
+    {
+        QString freq = cwPresetLineEditList[i]->text().trimmed().remove( QRegularExpression("^[0]*"));
+        if (valInputFreq(freq, QString("Invalid CW Preset Frequency for %1").arg(bands[i]->name())))
+        {
+           freq = convertFreqToFullDigit(freq).remove('.');
+
+           // check in band
+           QString mode = freqPresetData::PRESET_MODE_CW;
+           checkInBand(Frequency(freq), bands[i]->name(), mode);
+        }
+    }
 }
 
 void RadioSettingDialog::onPhonePresetLineEditingFinished(int i)
 {
     if (!checking)
-        getFreq(phonePresetLineEditList[i], i);
+    {
+        QString freq = phonePresetLineEditList[i]->text().trimmed().remove( QRegularExpression("^[0]*"));
+        if (valInputFreq(freq, tr("Invalid Phone Preset Frequency for %1").arg(bands[i]->name())))
+        {
+           freq = convertFreqToFullDigit(freq).remove('.');
+
+           // check in band
+           QString mode = freqPresetData::PRESET_MODE_PHONE;
+           checkInBand(Frequency(freq), bands[i]->name(), mode);
+        }
+    }
 }
 
 void RadioSettingDialog::onMgmPresetLineEditingFinished(int i)
 {
     if (!checking)
-        getFreq(mgmPresetLineEditList[i], i);
+    {
+        QString freq = mgmPresetLineEditList[i]->text().trimmed().remove( QRegularExpression("^[0]*"));
+        if (valInputFreq(freq, tr("Invalid MGM Preset Frequency for %1").arg(bands[i]->name())))
+        {
+           freq = convertFreqToFullDigit(freq).remove('.');
+
+           // check in band
+           QString mode = freqPresetData::PRESET_MODE_MGM;
+           checkInBand(Frequency(freq), bands[i]->name(), mode);
+        }
+    }
 }
 
 

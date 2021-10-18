@@ -149,6 +149,7 @@ private slots:
     void onLoggerQrzMsg(QrzServerMessage qrzRequest);
 
     void onPingStateTimerTimeout();
+    void onConnectPushButtonClicked();
 private:
     Ui::QrzServerMainWindow *ui;
 
