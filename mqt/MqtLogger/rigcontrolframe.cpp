@@ -1773,19 +1773,17 @@ void RigControlFrame::ritLineEditInFocus()
 
 void RigControlFrame::freqLineEditBkgnd(bool status)
 {
-
-    QPalette palette;
-
     if (status)
     {
-        palette.setColor(QPalette::Base,Qt::yellow);
+        freqDisplayPalette->setColor(QPalette::Base,Qt::yellow);
     }
     else
     {
-        palette.setColor(QPalette::Base,Qt::white);
+        freqDisplayPalette->setColor(QPalette::Base,Qt::white);
     }
 
-    ui->freqInput->setPalette(palette);
+
+    ui->freqInput->setPalette(*freqDisplayPalette);
 
 }
 
@@ -1928,6 +1926,7 @@ void RigControlFrame::setFreqTextLegalColour(const Frequency _freq, QString mode
     }
     else
     {
+
         freqDisplayPalette->setColor(QPalette::Text,Qt::red);
         ui->freqInput->setPalette(*freqDisplayPalette);
         legalFreq = false;

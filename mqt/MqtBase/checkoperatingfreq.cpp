@@ -11,13 +11,15 @@ int CheckOperatingFreq::freqValid(const QString &band, const QString &mode, cons
     QMap<QString, ModeFreqDetail<Frequency>> modeList;
     ModeFreqDetail<Frequency> freqs;
 
+    QString m = mode;
+    m = m.remove(':');
 
     if (bandModeFreqList.contains(band))
     {
         modeList = bandModeFreqList.value(band);
-        if (modeList.contains(mode))
+        if (modeList.contains(m))
         {
-            freqs = modeList.value(mode);
+            freqs = modeList.value(m);
             for (auto const &freqLimits: qAsConst(freqs.freq))
             {
                 if (freqLimits.count() == 0)
