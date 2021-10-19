@@ -972,47 +972,6 @@ bool LoggerContestLog::export_contest(QSharedPointer<QFile> expfd, ExportType ex
    clearDirty();    // BUT don't leave it dirty!!
    return ret;
 }
-static bool uhNeeded = false;
-static bool utNeeded = false;
-void LoggerContestLog::procUnknown(QSharedPointer<BaseContact> cct, writer &wr )
-{
-   QString lbuff;
-
-   if ( cct->QSOValid
-        && !( ( cct->cs.getValRes() == ERR_DUPCS )
-              || ( cct->contactFlags.getValue() & NON_SCORING )
-              || ( cct->contactScore.getValue() <= 0 )
-            )
-      )
-   {
-
-      // no district when required
-      if ( countryMult.getValue() && cct->ctryMult == nullptr )   	// invalid country
-         lbuff = tr("Unknown Country  ");
-
-      else
-         if ( districtMult.getValue() && cct->ctryMult && cct->ctryMult->hasDistricts()     // continentals dont have counties
-              && cct->districtMult == nullptr && !( cct->contactFlags.getValue() & VALID_DISTRICT ) )   	// invalid country
-         {
-            lbuff = tr("Unknown District   ");
-         }
-         else
-            return ;
-
-      QString sl;
-      cct->getText( sl, this );
-
-      lbuff += sl;
-
-      if ( uhNeeded )
-      {
-         uhNeeded = false;
-         utNeeded = true;
-         wr.lwrite( "\r\n\r\n    Contacts with Unknown Country/District\r\n" );
-      }
-      wr.lwrite( lbuff.toStdString().c_str() );
-   }
-}
 
 bool LoggerContestLog::exportGJV(QSharedPointer<QFile>fd )
 {
@@ -1937,6 +1896,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                              {
                                                   mt->getStructArgMemberValue( "sitem" + QString::number(i), currentStackItems[i]);
                                              }
+                                             currentStackItemsValid = true;
                                          }
 }
 //====================================================================

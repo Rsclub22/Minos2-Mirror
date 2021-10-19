@@ -32,6 +32,7 @@ class TSendDM : public QObject
       bool rotatorLoaded = false;
       bool keyerLoaded = false;
       bool clusterServerLoaded = false;
+      bool clusterConnected = false;
 
 
       PubSubName keyerApp;
@@ -128,6 +129,10 @@ public:  		// User declarations
       bool isClusterServerLoaded()
       {
           return clusterServerLoaded;
+      }
+      bool isClusterConnected()
+      {
+          return clusterConnected;
       }
 
 private slots:

@@ -1371,7 +1371,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
     bool dxLocFromNodeFlag = model()->data(model()->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool();
 
-
+    bool showDerivedLocFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
     bandmapSpotType::SPOT_TYPE spotType = static_cast<bandmapSpotType::SPOT_TYPE>(model()->data(model()->index(row, SPOT_TYPE_COL_NUM), BMP_DataStoredRole).toInt());
 
@@ -1394,44 +1395,48 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         callsign = dxCallsign;
     }
 
-    if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
-    {
-        dxLoc = "<i>" + dxLoc + "</i>";
-    }
     QString locator;
-    if (locWkd)
-    {
-        locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
-    }
-    else
-    {
-        if (!dxLoc.isEmpty())
-        {
-            locator = dxLoc;
-        }
-    }
-
-    QChar degSym = QChar(DEG_SYMBOL);
     QString bearing;
-    if (dxLoc.isEmpty())
-    {
-       if (rotConnected)
-       {
-           bearing = QString("%1%2 R").arg(rotBrg).arg(degSym);
-       }
-    }
-    else
-    {
-        if (!dxBrg.isEmpty())
-        {
-            bearing = QString("%1%2").arg(dxBrg).arg(degSym);
-        }
-    }
-
     QString distance;
-    if (!dxDist.isEmpty())
+
+    if (!dxLocFromNodeFlag || showDerivedLocFlag)
     {
-        distance = QString("%1 km").arg(dxDist);
+        if (!dxLoc.isEmpty() && dxLocFromNodeFlag)
+        {
+            dxLoc = "<i>" + dxLoc + "</i>";
+        }
+        if (locWkd && !dxLocFromNodeFlag)
+        {
+            locator = QString("%1%2%3").arg(HtmlFontColour(CALLSIGN_WORKED_COLOUR), dxLoc, HtmlFontColour(NOT_WORKED_COLOUR));
+        }
+        else
+        {
+            if (!dxLoc.isEmpty())
+            {
+                locator = dxLoc;
+            }
+        }
+
+        QChar degSym = QChar(DEG_SYMBOL);
+        if (dxLoc.isEmpty())
+        {
+           if (rotConnected)
+           {
+               bearing = QString("%1%2 R").arg(rotBrg).arg(degSym);
+           }
+        }
+        else
+        {
+            if (!dxBrg.isEmpty())
+            {
+                bearing = QString("%1%2").arg(dxBrg).arg(degSym);
+            }
+        }
+
+        if (!dxDist.isEmpty())
+        {
+            distance = QString("%1 km").arg(dxDist);
+        }
     }
 
     QString bLineStart = "";

@@ -148,6 +148,7 @@ protected:
       MinosItem<bool> showWorked;
       MinosItem<bool> showUnworked;
       MinosStringItem<QString> currentStackItems[STACKITEMS];
+      bool currentStackItemsValid = false;
 
       void saveRunMemory(int memno, const memoryData::memData &mem);
       void clearRunMemory(int memno, const memoryData::memData &mem);
@@ -200,7 +201,6 @@ protected:
 
       bool export_contest( QSharedPointer<QFile>, ExportType, bool noSerials );
       bool exportGJV(QSharedPointer<QFile> );
-      void procUnknown( QSharedPointer<BaseContact> cct, writer &wr );
       bool exportADIF( QSharedPointer<QFile> expfd );
       bool exportKML( QSharedPointer<QFile> expfd );
       bool exportREG1TEST(QSharedPointer<QFile> expfd, bool noSerials );

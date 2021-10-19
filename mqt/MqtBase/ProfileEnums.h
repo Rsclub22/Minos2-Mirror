@@ -107,6 +107,7 @@ enum LOGGERPROFILE {
    elpBandMapTurnOffOperatingFreqStrip,
    elpBandMapFollowRadioModeOperatingFreqStrip,
    elpBandMapMouseInFrameDelay,
+   elpShowDerivedLoc,
 
    elpBandMapTraceDebug,
    elpClusterTraceDebug

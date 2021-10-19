@@ -958,6 +958,12 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                 clusterApp = PubSubName(an);
             }
 
+            QStringList s = an.getValue().split("<>");
+            if (s.size() >= 2)
+            {
+                clusterConnected = s[0].contains("Connected");
+            }
+
             emit setClusterState(an.getValue());
         }
         else if ( an.getCategory() == rpcConstants::clusterCategory  && an.getKey() == rpcConstants::clusterTXSpotEnableState )

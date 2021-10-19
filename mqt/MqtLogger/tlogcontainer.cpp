@@ -199,7 +199,6 @@ bool TLogContainer::show(int argc, char *argv[])
        close();
        return false;
     }
-    sendDM->subscribeApps();
 
     if ( contestAppLoadFiles() )
     {
@@ -215,6 +214,7 @@ bool TLogContainer::show(int argc, char *argv[])
 
     }
     TContestApp::getContestApp()->setPreloadComplete();
+    sendDM->subscribeApps();
 
     n1mmBroadcast.configure();
     WsjtxServer::getWsjtxServer()->start();
@@ -993,6 +993,8 @@ void TLogContainer::ContestDetailsActionExecute()
 
                 f->FKHRigControlFrame->setContest(ct);
                 f->bandmapControlFrame->setContest(ct);
+
+                MinosLoggerEvents::SendContestBandChanged(ct);  // in case it has...
                 f->FKHRigControlFrame->rigChangedFromDetails();
                 f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display

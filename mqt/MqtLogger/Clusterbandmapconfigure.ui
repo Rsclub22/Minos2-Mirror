@@ -78,6 +78,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="showDerivedLocChkBox">
+           <property name="text">
+            <string>Display Locators Derived from Country</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="mouseInBcb">
            <property name="text">
             <string>Delay updates when mouse pointer is in the Bandmap</string>

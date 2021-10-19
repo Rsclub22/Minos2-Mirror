@@ -232,7 +232,7 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs )
    return ctryMult;
 }
 
-void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) const
+void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bool forHistory ) const
 {
    contactBuffs.scorebuff.clear();
    contactBuffs.scorebuff.clear();
@@ -274,6 +274,8 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
             // look at the contest dup
             if ( ( cs.getValRes() == ERR_DUPCS ) && ( curcon == contest ) )
                contactBuffs.scorebuff = tr("DUP");
+            else
+                contactBuffs.scorebuff = "   ";
          }
    }
 
@@ -313,6 +315,11 @@ void BaseContact::getText( QString &dest, const BaseContestLog * const curcon ) 
 
    next = placestr( contactBuffs.buff, contactBuffs.brgbuff, next + 1, 4 );
    next = placestr( contactBuffs.buff, contactBuffs.scorebuff, next, -5 );
+
+   if (forHistory)
+   {
+       next = placestr(contactBuffs.buff, frequency.getValue().convertFreqStrDispSingle() + " " + tr("MHz"), next, -20);
+   }
 
    next = placestr( contactBuffs.buff, op1.getValue(), next, -8 );
    next += 1;

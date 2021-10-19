@@ -1423,8 +1423,8 @@ void ClusterMainWindow::cancelPingTimeOut(QString msg)
         pingOk = true;
         trace(QString("response to ping received ok"));
     }
-
-
+    // we've had some kind of message from the cluster - so delay the next ping
+    pingClusterNodeTimer->start(getPingTimeoutValue());
 }
 
 void ClusterMainWindow::sendPingMessage()

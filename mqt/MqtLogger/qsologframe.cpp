@@ -692,20 +692,22 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
     QWidget *currn = current;
     QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
+    QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+
     if (currn == cte && cte->text().isEmpty())
     {
         QString pht = cte->placeholderText();
+        QString lht = lte->placeholderText();
+
         if (!pht.isEmpty())
         {
             cte->setText(pht);
         }
         if (contest->locatorMandatoryField.getValue())
         {
-            QLineEdit *lte = ui->LocFrame->getTextEditEdit();
-            pht = lte->placeholderText();
-            if (!pht.isEmpty())
+            if (!lht.isEmpty())
             {
-                lte->setText(pht);
+                lte->setText(lht);
             }
         }
 
@@ -2268,16 +2270,23 @@ void QSOLogFrame::doGJVEditChange( QObject *Sender )
    {
       getScreenEntry();
 
-      if ( current == ui->CallsignFrame->getTextEditEdit() || Sender == ui->CallsignFrame->getTextEditEdit() )
+      QLineEdit *csEdit = ui->CallsignFrame->getTextEditEdit();
+
+      if ( current == csEdit || Sender == csEdit )
       {
          // clear the error list
          contest->DupSheet.clearCurDup();	// as edited, no longer a dup(?)
 
       }
-      if ( current == ui->LocFrame->getTextEditEdit() || Sender == ui->LocFrame->getTextEditEdit() )
+      QLineEdit *locEdit = ui->LocFrame->getTextEditEdit();
+      if ( current == locEdit || Sender == locEdit )
       {
          // force bearing calc
          calcLoc();
+      }
+      if (!csEdit->text().isEmpty() || !locEdit->text().isEmpty())
+      {
+        setPlaceholders(QStringList());
       }
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
       valid( cmCheckValid ); // make sure all single and cross field
@@ -3184,12 +3193,11 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
     {
         callstate = ui->callRb->isChecked();
     }
-
-
+    ScreenContact scc;
+    QString callText = ui->CallsignFrame->getTextEditEdit()->text();
+    QString locText = ui->LocFrame->getTextEditEdit()->text();
     if (nearMatches.size() && !callstate)
     {
-        QString callText = ui->CallsignFrame->getTextEditEdit()->text();
-        QString locText = ui->LocFrame->getTextEditEdit()->text();
         if (callText.isEmpty() && locText.isEmpty())
         {
             QStringList n = nearMatches[0].split('|');
@@ -3199,7 +3207,6 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText(n[2]);
             }
 
-            ScreenContact scc;
             scc.initialise(contest, false);
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
@@ -3236,6 +3243,11 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
         }
         ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
+
+    }
+    if (callText.isEmpty() && locText.isEmpty())
+    {
+        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
     }
 }
 
