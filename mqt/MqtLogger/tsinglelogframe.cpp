@@ -134,6 +134,9 @@ void TSingleLogFrame::buildFrame()
     // to Qrz Display Panel
     connect(GJVQSOLogFrame, &QSOLogFrame::qrzCallsignRequest, this, &TSingleLogFrame::onQrzCallsignRequest);
 
+    // from Qrz Display Panel
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
+
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
 
@@ -2236,7 +2239,10 @@ void TSingleLogFrame::onQrzCallsignRequest(QString callsign)
     qrzDisplayFrame->getQrzDetailsForLogger(callsign);
 }
 
-
+void TSingleLogFrame::onQrzInfoToLog(QString callsign, QString qraLocator, QString name)
+{
+    GJVQSOLogFrame->transferFromQrz(callsign, qraLocator, name);
+}
 void TSingleLogFrame::setQrzDisplayFrameLoaded(bool loaded)
 {
    qrzCallFrameLoaded = loaded;

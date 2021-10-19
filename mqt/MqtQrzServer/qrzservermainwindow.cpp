@@ -329,10 +329,11 @@ void QrzServerMainWindow::sessionDataReceived()
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
         addToErrorTextLabel(qrzSessionData.getError());
         addTextToLogWindow(qrzSessionData.getError());
-        if (qrzServerStateFlags.getAskCallsignFlag())
-        {
-            qrzServerStateFlags.setAskCallsignFlag(false);
-        }
+        //if (qrzServerStateFlags.getAskCallsignFlag())
+        //{
+        //    qrzServerStateFlags.setAskCallsignFlag(false);
+        //}
+
         if (qrzServerStateFlags.getAskLogonFlag())
         {
             qrzServerStateFlags.setAskLogonFlag(false);
@@ -384,6 +385,11 @@ void QrzServerMainWindow::sessionDataReceived()
         else if (!qrzSessionData.getMessage().isEmpty())
         {
             stateMsg = qrzSessionData.getMessage();
+        }
+
+        if (qrzServerStateFlags.getAskCallsignFlag())
+        {
+            qrzServerStateFlags.setAskCallsignFlag(false);
         }
 
         qrzCallsignData.clear();

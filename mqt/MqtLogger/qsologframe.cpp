@@ -2705,6 +2705,33 @@ void QSOLogFrame::transferFromWSJTX(QString call)
     ui->CallsignFrame->getTextEditEdit()->setText(call);
     doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
 }
+void QSOLogFrame::transferFromQrz(QString callsign, QString locator, QString name)
+{
+    if (!contest)
+    {
+        return;
+    }
+
+    if (!callsign.isEmpty())
+    {
+        ui->CallsignFrame->getTextEditEdit()->setText(callsign);
+        doGJVEditChange(ui->CallsignFrame->getTextEditEdit());
+    }
+
+    if (!locator.isEmpty())
+    {
+        ui->LocFrame->getTextEditEdit()->setText(locator);
+        doGJVEditChange(ui->LocFrame->getTextEditEdit());
+    }
+
+    if (!name.isEmpty())
+    {
+        ui->commentsFrame->getTextEditEdit()->setText(name);
+        doGJVEditChange(ui->commentsFrame->getTextEditEdit());
+    }
+
+
+}
 void QSOLogFrame::sortUnfilledCatchupTime( )
 {
     if (contest && !contest->isReadOnly() && ((screenContact.contactFlags & TO_BE_ENTERED) || catchup))

@@ -280,6 +280,8 @@ private slots:
     void on_sendReconnectFlagToClusterServer(bool state);
 
     void onQrzCallsignRequest(QString callsign);
+    void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
+
 public:
     bool doKeyPressEvent(QKeyEvent *event);
     void transferFromWSJTX(QString call);

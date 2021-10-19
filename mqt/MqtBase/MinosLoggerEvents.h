@@ -72,9 +72,8 @@ signals:
    void SendResendSpotsCommand(QString);
    void SendReconnectFlagToServer(bool);
    void DxSpotToLog(memoryData::memData);         // cluster spot
-
    void DxSpotToMemory(BaseContestLog *, memoryData::memData);      // cluster spot
-
+   void QRZInfoToLog(QString callsign, QString locator, QString name);
 
    void CountrySelect(QString cty, BaseContestLog *c);
    void DistrictSelect(QString dist, BaseContestLog *c);
@@ -174,6 +173,7 @@ public:
     static void sendCallsignLookup(BaseContestLog *, QString);
 
     static void sendReconnectFlagToClusterServer(bool state);
+    static void sendQRZInfoToLog(QString callsign, QString locator, QString name);
 };
 //---------------------------------------------------------------------------
 #endif

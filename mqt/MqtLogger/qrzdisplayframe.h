@@ -3,7 +3,7 @@
 
 #include <QFrame>
 #include "base_pch.h"
-
+#include "cutils.h"
 #include "qrzServerCommon.h"
 
 
@@ -35,10 +35,13 @@ private slots:
     void onCallsignTextMouseDoubleClicked();
     void onQraTextMouseDoubleClicked();
 
-    void onSearchQrzEditingFinished();
+    void onSearchQrzReturnPressed();
+    void onBearingMouseDoubleClicked();
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;
+
+    UpperCaseValidator ucValidator;
 
     QrzDisplayServerRpc *qrzDisplayServerRpc;
 
@@ -54,6 +57,8 @@ private:
     void clear();
 
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
+    void setQrzMessageText(QString msg);
+    void setLogonPushButtonLabelText(bool loggedOn);
 };
 
 

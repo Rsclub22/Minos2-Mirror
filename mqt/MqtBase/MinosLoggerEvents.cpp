@@ -268,6 +268,11 @@ void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
 {
     emit mle.DxSpotToLog(spotData);
 }
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::sendQRZInfoToLog(QString callsign, QString locator, QString name)
+{
+    emit mle.QRZInfoToLog(callsign, locator, name);
+}
 void MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId frameId, QString command, QString bandmask, QString uuid)
 {
     emit mle.ResendSpotsFromClusterCommand(frameId, command, bandmask, uuid);

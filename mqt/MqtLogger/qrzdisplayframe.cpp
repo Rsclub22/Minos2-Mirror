@@ -22,26 +22,22 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     ui->setupUi(this);
     clear();
 
-    const QSize BUTTON_SIZE = QSize(16, 16);
-    ui->logOnStatusPb->setFixedSize(BUTTON_SIZE);
-    ui->logOnStatusPb->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum );
-
-    qDebug()<<ui->logOnStatusPb->size();
-    qDebug()<<  "size hint = " << ui->logOnStatusPb->sizeHint();
-    qDebug()<<  "layout = " << ui->logOnStatusPb->layout();
-    qDebug()<<  "minimumsize = " << ui->logOnStatusPb->minimumSize();
-    qDebug()<<   "minimumsizehint = " << ui->logOnStatusPb->minimumSizeHint();
-    qDebug()<<   "size policy = " <<  ui->logOnStatusPb->sizePolicy();
-
+    ui->searchQrzLineEdit->setValidator(&ucValidator);
 
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::loggerQrzReply, this, &QrzDisplayFrame::onLoggerQrzReply);
     connect (QrzDisplayServerRpc::getQrzDisplayServerRpc(), &QrzDisplayServerRpc::qrzServerLoggedState, this, &QrzDisplayFrame::onQrzServerLoggedState);
     onQrzServerLoggedState(false, "");
 
-    connect (ui->searchQrzLineEdit, &QLineEdit::editingFinished, this, &QrzDisplayFrame::onSearchQrzEditingFinished);
+    connect (ui->searchQrzLineEdit, &QLineEdit::returnPressed, this, &QrzDisplayFrame::onSearchQrzReturnPressed);
     connect (ui->callsignText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onCallsignTextMouseDoubleClicked);
     connect (ui->qraText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onQraTextMouseDoubleClicked);
+    connect (ui->bearingText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onBearingMouseDoubleClicked);
 
+    setLogonPushButtonLabelText(false);
+
+    ui->callsignText->setToolTip(tr("Double Click to transfer Callsign, Locator and Name to log"));
+    ui->qraText->setToolTip(tr("Double Click to transfer locator to log"));
+    ui->bearingText->setToolTip(tr("Double Click to transfer Bearing to rotator control"));
 
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
@@ -54,11 +50,25 @@ QrzDisplayFrame::~QrzDisplayFrame()
 }
 
 
-void QrzDisplayFrame::onSearchQrzEditingFinished()
+void QrzDisplayFrame::onSearchQrzReturnPressed()
 {
     if (!ui->searchQrzLineEdit->text().isEmpty())
     {
-        getQrzDetailsForLogger(ui->searchQrzLineEdit->text().trimmed());
+        Callsign cs;
+        QString callsign = ui->searchQrzLineEdit->text().trimmed();
+        cs.setFullCall(callsign);
+        if (cs.getValRes() == CS_OK)
+        {
+            trace(QString("QrzDisplayFrame - Search for callsign = %1").arg(callsign));
+            getQrzDetailsForLogger(cs.getFullCall());
+        }
+        else
+        {
+            setQrzMessageText(tr("Search callsign invalid"));
+        }
+
+
+
     }
 
 
@@ -68,12 +78,30 @@ void QrzDisplayFrame::onSearchQrzEditingFinished()
 void QrzDisplayFrame::onCallsignTextMouseDoubleClicked()
 {
 
+
+    if (!ui->callsignText->text().isEmpty())
+    {
+
+        MinosLoggerEvents::sendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
+    }
+
 }
 
 
 void QrzDisplayFrame::onQraTextMouseDoubleClicked()
 {
+    if (!ui->qraText->text().isEmpty())
+    {
+        MinosLoggerEvents::sendQRZInfoToLog("" , ui->qraText->text(), "");
+    }
+}
 
+void QrzDisplayFrame::onBearingMouseDoubleClicked()
+{
+    if (!ui->bearingText->text().isEmpty())
+    {
+        MinosLoggerEvents::SendSpotBrgStrToRot(ui->bearingText->text());
+    }
 }
 
 
@@ -84,35 +112,37 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
     if (state)
     {
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
+        setLogonPushButtonLabelText(true);
+        trace(QString("QRZDisplayFrame - Logged on to QRZ"));
 
     }
     else
     {
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
+        setLogonPushButtonLabelText(false);
+        trace(QString("QRZDisplayFrame - Logged off from QRZ"));
     }
 
 
 
     if (!stateMessage.isEmpty())
     {
-        //ui->qrzMessageText->clear(); ***************************
-        //ui->qrzMessageText->setText(stateMessage); ***************************
+        setQrzMessageText(stateMessage);
+
     }
 
 }
 
 void QrzDisplayFrame::onServerPingTimerTimeout()
 {
-    //ui->off_onLineText->clear(); ***************
-
     if (receivedServerPing)
     {
-        //ui->off_onLineText->setText("OnLine"); **************
+        setLogonPushButtonLabelText(true);;
         receivedServerPing = false;
     }
     else
     {
-        //ui->off_onLineText->setText("Offline"); ************
+        setLogonPushButtonLabelText(false);
     }
 }
 
@@ -137,6 +167,10 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
                 ui->distanceText->setText(QString::number(distance));
                 if (bearing >= 0 && bearing <= 360)
                 {
+                    if (bearing == 360)
+                    {
+                        bearing = 0;
+                    }
                     ui->bearingText->setText(QString::number(bearing));
                 }
 
@@ -148,8 +182,9 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
         }
         else
         {
-            //ui->callsignText->setText(cd.getCallsign()); ***************************
-            //ui->qrzMessageText->setText(qrzReplyState); ***************************
+            ui->callsignText->setText(cd.getCallsign());
+            setQrzMessageText(qrzReplyState);
+
         }
     }
 
@@ -200,7 +235,7 @@ void QrzDisplayFrame::clear()
     ui->bearingText->clear();
     ui->cqZoneText->clear();
     ui->ituZoneText->clear();
-    //ui->qrzMessageText->clear();
+    ui->qrzMessageText->clear();
 
 }
 
@@ -215,6 +250,26 @@ void QrzDisplayFrame::getQrzDetailsForLogger(QString callsign)
 
 }
 
+
+void QrzDisplayFrame::setQrzMessageText(QString msg)
+{
+    ui->qrzMessageText->clear();
+    ui->qrzMessageText->setText(msg);
+}
+
+void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
+{
+    if (loggedOn)
+    {
+        ui->logOnStatusPb->setText(tr("OnLine"));
+    }
+    else
+    {
+        ui->logOnStatusPb->setText(tr("OffLine"));
+    }
+
+
+}
 
 void QrzDisplayFrame::setContest(BaseContestLog( *c))
 {
