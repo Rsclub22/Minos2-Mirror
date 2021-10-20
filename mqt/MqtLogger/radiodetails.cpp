@@ -10,6 +10,7 @@ RadioDetails::RadioDetails()
   setVolumeStatus(false);
   setRitEnableStatus(false);
   setRitMaxKHzFreq(MAX_RITFREQ);
+  setCwMemType(hamlibData::CW_MEMORY_TYPES::NONE);
 
 
 }
@@ -112,13 +113,13 @@ bool RadioDetails::getVoiceMemAvail()
 {
     return voiceMemAvail;
 }
-void RadioDetails::setCwMemAvail(bool avail)
+void RadioDetails::setCwMemType(int _cwMemType)
 {
-    cwMemAvail = avail;
+    cwMemType = _cwMemType;
 }
-bool RadioDetails::getCwMemAvail()
+int RadioDetails::getCwMemType()
 {
-    return cwMemAvail;
+    return cwMemType;
 }
 
 

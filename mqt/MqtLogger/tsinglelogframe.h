@@ -286,7 +286,7 @@ public:
     bool doKeyPressEvent(QKeyEvent *event);
     void transferFromWSJTX(QString call);
     void onSetVoiceMemAvail(bool avail, PubSubName psn);
-    void onSetCwMemAvail(bool avail, PubSubName psn);
+    void onSetCwMemType(int cwMemType, PubSubName psn);
     void sendRigTxCwMessage(QString msg);
 };
 

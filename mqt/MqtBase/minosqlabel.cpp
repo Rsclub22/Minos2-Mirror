@@ -12,5 +12,6 @@ MinosQLabel::~MinosQLabel()
 
 void MinosQLabel::mouseDoubleClickEvent(QMouseEvent *ev)
 {
+    Q_UNUSED(ev)
     emit mouseDoubleClicked();
 }

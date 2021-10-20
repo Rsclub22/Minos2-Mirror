@@ -66,7 +66,7 @@ namespace hamlibData
 
     const int RIGCTL = 2;               // rigctl model number
 
-
+    enum CW_MEMORY_TYPES {NONE, ICOM, YAESU_MEM_RECALL };
 }
 
 const int Rig_OK = 0;
@@ -84,6 +84,7 @@ const QStringList radioOpenMessages = {"Open OK", "Open Failed", "RigCtld Failed
 const Frequency NO_BAND_SUPPORT;
 
 const QString TRANSSW_NUM_DEFAULT = "0";
+
 
 
 // File Name Constants

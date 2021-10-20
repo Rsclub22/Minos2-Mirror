@@ -1934,11 +1934,11 @@ void TSingleLogFrame::onSetVoiceMemAvail(bool avail, PubSubName psn)
     }
 }
 
-void TSingleLogFrame::onSetCwMemAvail(bool avail, PubSubName psn)
+void TSingleLogFrame::onSetCwMemType(int cwMemType, PubSubName psn)
 {
     if ( this == LogContainer->getCurrentLogFrame() )
     {
-        txVmButtonsFrame->setCwMemAvail(avail, psn);
+        txVmButtonsFrame->setCwMemType(cwMemType, psn);
     }
 }
 

@@ -22,7 +22,7 @@ RigDetails::RigDetails()
     _pttEnabled.setInitialValue(false);
     _pttType.setInitialValue(static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT));
     _voiceMemAvail.setInitialValue(false);
-    _cwMemAvail.setInitialValue(false);
+    _cwMemType.setInitialValue(false);
 
 
 
@@ -50,7 +50,7 @@ bool RigDetails::isDirty() const
             _pttEnabled.isDirty() ||
             _pttType.isDirty() ||
             _voiceMemAvail.isDirty() ||
-            _cwMemAvail.isDirty();
+            _cwMemType.isDirty();
 
 
 }
@@ -69,7 +69,7 @@ void RigDetails::clearDirty()
     _pttEnabled.clearDirty();
     _pttType.clearDirty();
     _voiceMemAvail.clearDirty();
-    _cwMemAvail.clearDirty();
+    _cwMemType.clearDirty();
 
 
 }
@@ -88,7 +88,7 @@ void RigDetails::setDirty()
     _pttEnabled.setDirty();
     _pttType.setDirty();
     _voiceMemAvail.setDirty();
-    _cwMemAvail.setDirty();
+    _cwMemType.setDirty();
 
 
 }
@@ -153,9 +153,9 @@ void RigDetails::setVoiceMemAvail(bool voiceMemAvail)
 {
     _voiceMemAvail.setValue(voiceMemAvail);
 }
-void RigDetails::setCwMemAvail(bool cwMemAvail)
+void RigDetails::setCwMemType(int cwMemType)
 {
-    _cwMemAvail.setValue(cwMemAvail);
+    _cwMemType.setValue(cwMemType);
 
 }
 
@@ -176,7 +176,7 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigPttEnabled, pttEnabled().getValue());
     jv.insert(rpcConstants::rigPttType, pttType().getValue());
     jv.insert(rpcConstants::rigVoiceMemAvail, voiceMemAvail().getValue());
-    jv.insert(rpcConstants::rigCwMemAvail, cwMemAvail().getValue());
+    jv.insert(rpcConstants::rigCwMemType, cwMemType().getValue());
 
 
     QJsonDocument json(jv);
@@ -205,7 +205,7 @@ void RigDetails::unpack(QString s)
         _pttEnabled.setValue(json.object().value(rpcConstants::rigPttEnabled).toBool());
         _pttType.setValue(json.object().value(rpcConstants::rigPttType).toInt());
         _voiceMemAvail.setValue(json.object().value(rpcConstants::rigVoiceMemAvail).toBool());
-        _cwMemAvail.setValue(json.object().value(rpcConstants::rigCwMemAvail).toBool());
+        _cwMemType.setValue(json.object().value(rpcConstants::rigCwMemType).toInt());
 
     }
     else
@@ -273,8 +273,8 @@ MinosItem<bool> RigDetails::voiceMemAvail() const
 {
     return _voiceMemAvail;
 }
-MinosItem<bool> RigDetails::cwMemAvail() const
+MinosItem<int> RigDetails::cwMemType() const
 {
-    return _cwMemAvail;
+    return _cwMemType;
 }
 

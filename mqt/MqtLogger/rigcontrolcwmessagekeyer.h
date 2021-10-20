@@ -15,6 +15,8 @@
 
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
+#include "rigcontrolcommonconstants.h"
+
 #include <QObject>
 
 class RigControlCwMessageKeyer : public VoiceKeyerBase
@@ -33,6 +35,7 @@ public:
 
     void sendCwMsg(const QString message) override;
     void stopCwMsg() override;
+    void setCwMemType(int cwMemType) override;
 
     virtual bool hasRecord() override {return false;}
 
@@ -44,7 +47,10 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
+
 private:
+
+    int cwMemType;
 
 
 };

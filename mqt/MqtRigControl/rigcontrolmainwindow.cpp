@@ -952,7 +952,24 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 setCwMemIndVisible(true);
                 setCwMemIndOnOff(true);
-                addCwKeyerMemoryStatusToRigCache(true);
+                if (currentRadio->rigModelNumber >= 1000 && currentRadio->rigModelNumber < 2000)
+                {
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+                }
+                else if (currentRadio->rigModelNumber >= 3000 && currentRadio->rigModelNumber < 4000)
+                {
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
+                }
+                else
+                {
+                    // only support Yaesu and Icom for now
+                    setCwMemIndVisible(false);
+                    setCwMemIndOnOff(false);
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+                    return false;
+                }
+
+
                 return true;
 
             }
@@ -960,14 +977,14 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
-                addCwKeyerMemoryStatusToRigCache(false);
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
                 return false;
 
             }
          }
     }
 
-    addCwKeyerMemoryStatusToRigCache(false);
+    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
     setCwMemIndVisible(false);
     setCwMemIndOnOff(false);
     selectedRigSupCap->supportWaitMorse = false;
@@ -4035,13 +4052,13 @@ void RigControlMainWindow::addVoiceMemStatusToRigCache(bool status)
     }
 }
 
-void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(bool status)
+void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(int cwMemType)
 {
     if (!appName.isEmpty())
     {
-        logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(status  ? "True" : "False"));
+        logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(cwMemType));
         PubSubName psname(currentRadio->radioName);
-        msg->rigCache.setCwMemAvail(psname, status);
+        msg->rigCache.setCwMemAvail(psname, cwMemType);
     }
 }
 

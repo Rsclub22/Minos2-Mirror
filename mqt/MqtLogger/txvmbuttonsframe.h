@@ -89,12 +89,13 @@ public:
 
     void setPttType(int type, PubSubName psn);
     void setVoiceMemAvail(bool avail, PubSubName psn);
-    void setCwMemAvail(bool avail, PubSubName psn);
+    void setCwMemType(int cwMemType, PubSubName psn);
     void setPttState(bool state);
 
     void setSelectedRadio(PubSubName selectedRadio);
     void setRadioIsConnected(bool connected);
     void setRadioName(const QString radName);
+    int getCwMemType(PubSubName psn);
 signals:
 
     void pttStatus(bool);
@@ -136,7 +137,14 @@ private:
     void createKeyer(QString voiceKeyerName);
     void setPttStatusIndicatorOnOff(bool on);
     bool isVoiceMemAvail(PubSubName psn);
-    bool isCwMessageAvail(PubSubName psn);
+    bool isCwMemTypeAvail(PubSubName psn);
+    void setAvailIndicatorVisible(bool visible);
+    void setAvailIndicatorOnOff(bool on);
+    void setAvailIndicatorForRadioOnOff(PubSubName radName);
+    void setRepeatIndicatorVisible(bool visible);
+    void setRepeatIndicatorForMessageOnOff(bool state);
+    void setFrameWidgetsState();
+    void setRepeatIndicatorOnOff(bool on);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
