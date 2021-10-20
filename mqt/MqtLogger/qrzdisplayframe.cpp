@@ -31,6 +31,7 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     connect (ui->searchQrzLineEdit, &QLineEdit::returnPressed, this, &QrzDisplayFrame::onSearchQrzReturnPressed);
     connect (ui->callsignText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onCallsignTextMouseDoubleClicked);
     connect (ui->qraText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onQraTextMouseDoubleClicked);
+    connect (ui->nameText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onNameTextMouseDoubleClicked);
     connect (ui->bearingText, &MinosQLabel::mouseDoubleClicked, this, &QrzDisplayFrame::onBearingMouseDoubleClicked);
 
     setLogonPushButtonLabelText(false);
@@ -38,6 +39,7 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     ui->callsignText->setToolTip(tr("Double Click to transfer Callsign, Locator and Name to log"));
     ui->qraText->setToolTip(tr("Double Click to transfer locator to log"));
     ui->bearingText->setToolTip(tr("Double Click to transfer Bearing to rotator control"));
+    ui->nameText->setToolTip(tr("Double Click to transfer Name to comments in log"));
 
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
@@ -101,6 +103,14 @@ void QrzDisplayFrame::onBearingMouseDoubleClicked()
     if (!ui->bearingText->text().isEmpty())
     {
         MinosLoggerEvents::SendSpotBrgStrToRot(ui->bearingText->text());
+    }
+}
+
+void QrzDisplayFrame::onNameTextMouseDoubleClicked()
+{
+    if (!ui->nameText->text().isEmpty())
+    {
+        MinosLoggerEvents::sendQRZInfoToLog("" , "", ui->nameText->text());
     }
 }
 
