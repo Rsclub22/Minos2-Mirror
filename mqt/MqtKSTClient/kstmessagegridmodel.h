@@ -75,11 +75,11 @@ class KstMessageGridModel: public QAbstractItemModel
 
 class KstMessageGridSortFilterModel: public QSortFilterProxyModel
 {
-    QString filterString;
+    QStringList filterStrings;
     int chatFilter = 0;
     bool isFiltered() const
     {
-        return !filterString.isEmpty() || chatFilter != 0;
+        return !filterStrings.isEmpty() || chatFilter != 0;
     }
 
 public:

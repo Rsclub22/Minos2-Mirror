@@ -300,7 +300,7 @@ when user selected</string>
            <item>
             <widget class="QLineEdit" name="messageFilter">
              <property name="toolTip">
-              <string>Look for this string in messages</string>
+              <string>Look for any of these strings (space separated) in messages</string>
              </property>
              <property name="clearButtonEnabled">
               <bool>true</bool>
@@ -331,7 +331,7 @@ when user selected</string>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <layout class="QVBoxLayout" name="verticalLayout_4">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">

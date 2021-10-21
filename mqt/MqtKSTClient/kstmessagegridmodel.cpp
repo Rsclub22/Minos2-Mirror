@@ -240,16 +240,22 @@ bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModel
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
-    if (!filterString.isEmpty())
+    if (!filterStrings.isEmpty())
     {
-        if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
-        if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
-        if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
-        if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-            return true;
+        for (auto const &filterString: qAsConst( filterStrings))
+        {
+            if (!filterString.isEmpty())
+            {
+                if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    return true;
+                if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    return true;
+                if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    return true;
+                if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    return true;
+            }
+        }
     }
     else
     {
@@ -274,7 +280,7 @@ void KstMessageGridSortFilterModel::setFilterString(QString f)
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (cgm)
         cgm->setFilterString(f);
-    filterString = f;
+    filterStrings = f.split(" ", Qt::SkipEmptyParts);
     invalidateFilter();
 }
 
