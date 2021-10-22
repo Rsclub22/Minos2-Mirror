@@ -280,7 +280,11 @@ void KstMessageGridSortFilterModel::setFilterString(QString f)
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (cgm)
         cgm->setFilterString(f);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
     filterStrings = f.split(" ", Qt::SkipEmptyParts);
+#else
+    filterStrings = f.split(" ", QString::SkipEmptyParts);
+#endif
     invalidateFilter();
 }
 
