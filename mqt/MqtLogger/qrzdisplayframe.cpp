@@ -271,11 +271,11 @@ void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
 {
     if (loggedOn)
     {
-        ui->logOnStatusPb->setText(tr("OnLine"));
+        ui->logOnStatusPb->setText(tr("Connected"));
     }
     else
     {
-        ui->logOnStatusPb->setText(tr("OffLine"));
+        ui->logOnStatusPb->setText(tr("Disconnected"));
     }
 
 

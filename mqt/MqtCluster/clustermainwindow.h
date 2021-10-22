@@ -480,6 +480,7 @@ private:
     void setBandsCheckBoxAndFilterFlag(const QString band, const bool state);
     bool getUseQrzForQraFlag();
     void askQrzForQraLocator(QSharedPointer<ClusterSpotData> newSpot);
+    void setSendSpotsToLogWarning(QString txt);
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 
@@ -528,6 +529,7 @@ private slots:
     void onpbpressed(); // for test .. remove
     void onReconnectCommandFromLog(bool state);
     void onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState);
+    void onLogFilterCheckBoxClicked();
 };
 
 #endif // CLUSTERMAINWINDOW_H

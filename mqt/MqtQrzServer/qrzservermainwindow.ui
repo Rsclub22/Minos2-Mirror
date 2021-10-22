@@ -30,20 +30,6 @@
       <item>
        <widget class="QPushButton" name="connectPb">
         <property name="text">
-         <string>PushButton</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="statusLabel">
-        <property name="text">
-         <string>Status:</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="statusText">
-        <property name="text">
          <string/>
         </property>
        </widget>
@@ -58,7 +44,7 @@
       <item>
        <widget class="QLabel" name="messageTextLabel">
         <property name="text">
-         <string>Message:</string>
+         <string>Qrz Message:</string>
         </property>
        </widget>
       </item>
@@ -79,7 +65,7 @@
       <item>
        <widget class="QLabel" name="errorLabel">
         <property name="text">
-         <string>Error:</string>
+         <string>Qrz Error:</string>
         </property>
        </widget>
       </item>

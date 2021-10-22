@@ -710,14 +710,14 @@ void QrzServerMainWindow::setQrzStatusConnected(bool state)
 {
     if (state)
     {
-        ui->statusText->clear();
-        ui->statusText->setText("Connected");
+        ui->connectPb->setText("");
+        ui->connectPb->setText("Connected");
         ui->connectPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
     }
     else
     {
-        ui->statusText->clear();
-        ui->statusText->setText("Disconnected");
+        ui->connectPb->setText("");
+        ui->connectPb->setText("Disconnected");
         ui->connectPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
     }
 }
