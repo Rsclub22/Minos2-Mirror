@@ -25,6 +25,10 @@
 
 [Setup]
 SourceDir={#SourcePath}
+
+;In your TEMP directory (in my case C:\Users\Mike\AppData\Local\Temp),
+; there should be a setup log, named something like 
+;"Setup Log 2021-10-18 #001.txt"
 SetupLogging=true
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
