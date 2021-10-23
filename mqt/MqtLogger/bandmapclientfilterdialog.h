@@ -58,7 +58,7 @@ private:
     QList<QCheckBox*> modeChkBoxList;
     QMap<QString, QCheckBox*> modeCheckBoxes;
 
-    bool modeButtonState;
+
     bool distanceChanged;
     bool distanceChkBoxChanged;
     bool distanceEmptyChkBoxChanged;
@@ -86,6 +86,7 @@ private:
     void getCurrentBandDistanceIniName();
 
     void loadSettingsToDialogBox();
+    bool areAnyModesSet();
 private slots:
 
     void modeButtonSelected();

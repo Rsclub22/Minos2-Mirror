@@ -29,10 +29,6 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
     QDialog(parent),
     ui(new Ui::ClusterClientFilterDialog),
     callsignListWidgetCurrentRow(-1),
-    hfButtonState(false),
-    vhfButtonState(false),
-    mWaveButtonState(false),
-    modeButtonState(false),
     bandFilterChangedFlag(false),
     modeFilterChangedFlag(false),
     callsignFilterChangedFlag(false),
@@ -72,7 +68,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
 
-    setWindowTitle(tr("Cluster Spot Filters"));
+    setWindowTitle(tr("Cluster Spot Filters initCheckFilterTab"));
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
@@ -173,11 +169,11 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 
         if (filterSettings.getIgnoreEmptyDistanceFlag(band))
         {
-           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(true);
+           bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->setChecked(true);
         }
         else
         {
-           bandDistanceWidgets.value(band).distFilterIgnoreCheckBox->setChecked(false);
+           bandDistanceWidgets.value(band).distFilterIgnoreEmptyCheckBox->setChecked(false);
         }
 
     }
@@ -254,6 +250,10 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     connect(ui->modeSelectBut, &QPushButton::clicked, this, [=](){modeButtonSelected();});
     connect(ui->clearAllBut,   &QPushButton::clicked, this, [=](){clearAllButtonSelected();});
 
+    ui->hfSelectBut->setToolTip(tr("Click to Set/Reset all HF Bands"));
+    ui->vhfSelectBut->setToolTip(tr("Click to Set/Reset all VHF Bands"));
+    ui->mWSelectBut->setToolTip(tr("Click to Set/Reset all Microwave Bands"));
+    ui->modeSelectBut->setToolTip(tr("Click to Set/Reset all Modes"));
 
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){filtersAccepted();});
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){filtersRejected();});
@@ -575,16 +575,17 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
 
 void ClusterClientFilterDialog::hfButtonSelected()
 {
-    if (!hfButtonState)
+    if (areAnyBandsChecked(HF_BANDTYPE))
     {
-        hfButtonState = true;
-        setBandsCheckBox(HF_BANDTYPE, hfButtonState);
+
+        setBandsCheckBox(HF_BANDTYPE, false);
     }
     else
     {
-        hfButtonState = false;
-        setBandsCheckBox(HF_BANDTYPE, hfButtonState);
+       setBandsCheckBox(HF_BANDTYPE, true);
     }
+
+    enableDistanceFields();
 }
 
 
@@ -592,43 +593,45 @@ void ClusterClientFilterDialog::hfButtonSelected()
 
 void ClusterClientFilterDialog::vhfButtonSelected()
 {
-    if (!vhfButtonState)
+    if (areAnyBandsChecked(VHF_BANDTYPE))
     {
-        vhfButtonState = true;
-        setBandsCheckBox(VHF_BANDTYPE, vhfButtonState);
+
+        setBandsCheckBox(VHF_BANDTYPE, false);
     }
     else
     {
-        vhfButtonState = false;
-        setBandsCheckBox(VHF_BANDTYPE, vhfButtonState);
+       setBandsCheckBox(VHF_BANDTYPE, true);
     }
+
+    enableDistanceFields();
 }
 
 void ClusterClientFilterDialog::mWaveButtonSelected()
 {
-    if (!mWaveButtonState)
+    if (areAnyBandsChecked(MW_BANDTYPE))
     {
-        mWaveButtonState = true;
-        setBandsCheckBox(MW_BANDTYPE, mWaveButtonState);
+
+        setBandsCheckBox(MW_BANDTYPE, false);
     }
     else
     {
-        mWaveButtonState = false;
-        setBandsCheckBox(MW_BANDTYPE, mWaveButtonState);
+       setBandsCheckBox(MW_BANDTYPE, true);
     }
+
+    enableDistanceFields();
 }
 
 void ClusterClientFilterDialog::modeButtonSelected()
 {
-    if (!modeButtonState)
+    if (areAnyModesSet())
     {
-        modeButtonState = true;
-        setModes();
+        clearModes();
+
     }
     else
     {
-        modeButtonState = false;
-        clearModes();
+        setModes();
+
     }
 }
 
@@ -655,13 +658,10 @@ void ClusterClientFilterDialog::clearAllButtonSelected()
 void ClusterClientFilterDialog::clearAllFilters()
 {
     setBandsCheckBox(HF_BANDTYPE, false);
-    hfButtonState = false;
     setBandsCheckBox(VHF_BANDTYPE, false);
-    vhfButtonState = false;
     setBandsCheckBox(MW_BANDTYPE, false);
-    mWaveButtonState = false;
     clearModes();
-    modeButtonState = false;
+
 
 }
 
@@ -678,6 +678,23 @@ void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, bool state)
         }
     }
 
+}
+
+bool ClusterClientFilterDialog::areAnyBandsChecked(QString bandType)
+{
+    for (auto &b:bands)
+    {
+        if (b->getType() == bandType)
+        {
+            if (bandCheckBoxes.value(b.data()->uk).bandChkBox->isChecked())
+            {
+                return true;
+            }
+        }
+
+    }
+
+    return false;
 }
 
 void ClusterClientFilterDialog::restoreBands()
@@ -721,6 +738,19 @@ void ClusterClientFilterDialog::setModes()
         modeCheckBoxes.value(m)->setChecked(true);
     }
 
+}
+
+bool ClusterClientFilterDialog::areAnyModesSet()
+{
+    for (auto &m:clustermodes)
+    {
+        if (modeCheckBoxes.value(m)->isChecked())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 
@@ -1380,7 +1410,7 @@ void ClusterClientFilterDialog::onMwSetAllIgnorePbClicked()
 
 void ClusterClientFilterDialog::onHfClearAllIgnorePbClicked()
 {
-    setIgnoreDistCheckBox(VHF_BANDTYPE, false);
+    setIgnoreDistCheckBox(HF_BANDTYPE, false);
 }
 
 
@@ -1414,7 +1444,7 @@ void ClusterClientFilterDialog::setIgnoreDistCheckBox(QString bandType, bool sta
 
 void ClusterClientFilterDialog::onHfSetAllEmptyPbClicked()
 {
-    setEmptyDistCheckBox(VHF_BANDTYPE, true);
+    setEmptyDistCheckBox(HF_BANDTYPE, true);
 }
 
 

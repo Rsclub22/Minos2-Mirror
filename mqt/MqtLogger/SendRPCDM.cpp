@@ -956,7 +956,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             if (clusterApp.isEmpty())
             {
                 clusterApp = PubSubName(an);
+
             }
+
+            clusterServerLoaded = true;
 
             QStringList s = an.getValue().split("<>");
             if (s.size() >= 2)

@@ -19,7 +19,6 @@ int BandmapClientFilterDialog::mainTabIndex;
 BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapClientFilterSettings &filterSettings_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::BandmapClientFilterDialog),
-    modeButtonState(false),
     distanceChanged(false),
     distanceChkBoxChanged(false),
     distanceEmptyChkBoxChanged(false),
@@ -47,15 +46,15 @@ BandmapClientFilterDialog::~BandmapClientFilterDialog()
 
 void BandmapClientFilterDialog::modeButtonSelected()
 {
-    if (!modeButtonState)
+    if (areAnyModesSet())
     {
-        modeButtonState = true;
-        setModes();
+        clearModes();
+
     }
     else
     {
-        modeButtonState = false;
-        clearModes();
+        setModes();
+
     }
 }
 
@@ -99,7 +98,7 @@ void BandmapClientFilterDialog::initCheckFilterTab()
     }
 
 
-
+    ui->modeSelectBut->setToolTip(tr("Click to set/reset all modes"));
     connect(ui->modeSelectBut, &QPushButton::clicked, this, &BandmapClientFilterDialog::modeButtonSelected);
 
     connect(ui->spotDistanceEdit, &QLineEdit::editingFinished, this, &BandmapClientFilterDialog::onDistanceEditFinished);
@@ -344,4 +343,17 @@ void BandmapClientFilterDialog::setModes()
 
     }
 
+}
+
+bool BandmapClientFilterDialog::areAnyModesSet()
+{
+    for (auto &m:clusterModes)
+    {
+        if (modeCheckBoxes.value(m)->isChecked())
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
