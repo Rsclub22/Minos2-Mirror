@@ -137,9 +137,29 @@
             </widget>
            </item>
            <item>
+            <widget class="QRadioButton" name="stringRb">
+             <property name="text">
+              <string>String</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">callStringButtonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="countryRb">
+             <property name="text">
+              <string>Country</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">callStringButtonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
             <widget class="QLineEdit" name="CSFilter">
              <property name="toolTip">
-              <string>Look for this string in users</string>
+              <string>Look for any of these strings/countries (space separated) in users</string>
              </property>
              <property name="clearButtonEnabled">
               <bool>true</bool>
@@ -633,5 +653,6 @@ when user selected</string>
  <connections/>
  <buttongroups>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

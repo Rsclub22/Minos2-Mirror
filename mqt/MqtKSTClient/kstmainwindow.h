@@ -214,6 +214,10 @@ private slots:
 
     void on_showReadcb_stateChanged(int arg1);
 
+    void on_stringRb_clicked();
+
+    void on_countryRb_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader stdinReader;

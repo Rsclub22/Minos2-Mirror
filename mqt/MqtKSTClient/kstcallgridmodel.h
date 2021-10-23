@@ -20,6 +20,7 @@ public:
     QString name;
     QString prefix;
     QString country;
+    QString dxcc;
     bool away = false;
     bool recent = false;
     int distance = -1;
@@ -84,17 +85,20 @@ public:
 
 class KstCallGridSortFilterModel: public QSortFilterProxyModel
 {
-    QString filterString;
+    QStringList filterStrings;
     int chatFilter = 0;
+    bool filterDxcc = false;
     bool isFiltered() const
     {
-        return !filterString.isEmpty() || chatFilter != 0;
+        return !filterStrings.isEmpty() || chatFilter != 0;
     }
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
 
     void setChatFilter(int value);
+
+    void setStringDXCC(bool dxcc);
 
 protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const override;

@@ -391,6 +391,12 @@ void KstCallGridSortFilterModel::setChatFilter(int value)
     invalidateFilter();
 }
 
+void KstCallGridSortFilterModel::setStringDXCC(bool dxcc)
+{
+    filterDxcc = dxcc;
+    invalidateFilter();
+}
+
 bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
@@ -406,17 +412,36 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
     int chat = call->chat;
     if ((chatFilter > 0 && chatFilter == chat) || (chatFilter == 0))
     {
-        if (!filterString.isEmpty())
+        if(!filterStrings.isEmpty())
         {
-            if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
+            if (filterDxcc)
+            {
+                for (auto const &filterString: qAsConst( filterStrings))
+                {
+                    if (!filterString.isEmpty())
+                    {
+                        if (call->dxcc == filterString)
+                            return true;
+                    }
+                }
+            }
+            else
+            {
+                for (auto const &filterString: qAsConst( filterStrings))
+                {
+                    if (!filterString.isEmpty())
+                    {
+                        if (call->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                            return true;
 
-            if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
+                        if (call->loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                            return true;
 
-            if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-                return true;
-
+                        if (call->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                            return true;
+                    }
+                }
+            }
             return false;
         }
         else
@@ -437,7 +462,11 @@ void KstCallGridSortFilterModel::setFilterString(QString f)
     KstCallGridModel *cgm = dynamic_cast<KstCallGridModel *>(sourceModel());
     if (cgm)
         cgm->setFilterString(f);
-    filterString = f;
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    filterStrings = f.split(" ", Qt::SkipEmptyParts);
+#else
+    filterStrings = f.split(" ", QString::SkipEmptyParts);
+#endif
     invalidateFilter();
 }
 

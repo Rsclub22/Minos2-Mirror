@@ -293,6 +293,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->genmsgButton->setDefault(true);
 
     ui->messageFilter->setFocus();
+
+    ui->stringRb->setChecked(true);
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -389,7 +391,7 @@ void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
     ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
-    kstMeepFilterModel.setFilterString(myCallsign);
+    kstMeepFilterModel.setFilterString(myCallsign.toUpper());
     kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
 }
@@ -795,6 +797,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->prefix = syn->getBasePrefix();
                 test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
+                test->dxcc = cs.locCtryPrefix;
                 test->distance = -2;
             }
 
@@ -972,6 +975,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->prefix = syn->getBasePrefix();
                 test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
+                test->dxcc = cs.locCtryPrefix;
             }
             int row = (std::lower_bound(callVector->begin(), callVector->end(), test, KstUserCompare ) - callVector->begin());
             kstCallModel.insertRow(row, test);
@@ -1017,14 +1021,14 @@ void KSTMainWindow::on_closeButton_clicked()
 
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
-    kstMessageFilterModel.setFilterString(arg1);
+    kstMessageFilterModel.setFilterString(arg1.toUpper());
     QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
     ui->messageTable->scrollTo(mesIndex);
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
 {
-    kstCallFilterModel.setFilterString(arg1);
+    kstCallFilterModel.setFilterString(arg1.toUpper());
 }
 
 void KSTMainWindow::on_kstSplitter_splitterMoved(int /*pos*/, int /*index*/)
@@ -1763,3 +1767,17 @@ void KSTMainWindow::on_showReadcb_stateChanged(int /*arg1*/)
 {
     kstMeepFilterModel.setShowRead(ui->showReadcb->isChecked());
 }
+
+void KSTMainWindow::on_stringRb_clicked()
+{
+    kstCallFilterModel.setStringDXCC(ui->countryRb->isChecked());
+    kstCallFilterModel.invalidate();
+}
+
+
+void KSTMainWindow::on_countryRb_clicked()
+{
+    kstCallFilterModel.setStringDXCC(ui->countryRb->isChecked());
+    kstCallFilterModel.invalidate();
+}
+
