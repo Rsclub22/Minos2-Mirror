@@ -254,6 +254,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->callEdit->installEventFilter(this);
     ui->msgEdit->installEventFilter(this);
     ui->planesView->installEventFilter(this);
+    ui->messageTable->installEventFilter(this);
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
@@ -672,8 +673,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
     else if (sl[0] == "CE")
     {
         // end of CR frames
-        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-        ui->messageTable->scrollTo(mesIndex);
+        if (!mouseInMessages)
+        {
+            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+            ui->messageTable->scrollTo(mesIndex);
+        }
 
         QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
         ui->meepTable->scrollTo(meepIndex);
@@ -711,9 +715,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kstMessageModel.appendLastRow(kst);
 
-        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-        ui->messageTable->scrollTo(mesIndex);
-
+        if (mouseInMessages)
+        {
+            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+            ui->messageTable->scrollTo(mesIndex);
+        }
         QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
         ui->meepTable->scrollTo(meepIndex);
 
@@ -823,8 +829,11 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
-        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-        ui->messageTable->scrollTo(mesIndex);
+        if (!mouseInMessages)
+        {
+            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+            ui->messageTable->scrollTo(mesIndex);
+        }
 
         QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
         ui->meepTable->scrollTo(meepIndex);
@@ -1025,8 +1034,11 @@ void KSTMainWindow::on_closeButton_clicked()
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
     kstMessageFilterModel.setFilterString(arg1.toUpper());
-    QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-    ui->messageTable->scrollTo(mesIndex);
+    if (!mouseInMessages)
+    {
+        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+        ui->messageTable->scrollTo(mesIndex);
+    }
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
@@ -1469,37 +1481,56 @@ void KSTMainWindow::on_clearButton_clicked()
 }
 bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
 {
-    if (event->type() == QEvent::KeyPress )
+    if (obj == ui->messageTable)
     {
-        QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
-        if (ke->key() == Qt::Key_Escape)
+       if (event->type() == QEvent::Enter)
+       {
+           mouseInMessages = true;
+       }
+       else if (event->type() == QEvent::Leave)
+       {
+           mouseInMessages = false;
+
+           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+           ui->messageTable->scrollTo(mesIndex);
+
+           ui->messageTable->repaint();
+       }
+    }
+    else
+    {
+        if (event->type() == QEvent::KeyPress )
         {
-            if (obj == ui->messageFilter)
+            QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
+            if (ke->key() == Qt::Key_Escape)
             {
-                ui->messageFilter->clear();
+                if (obj == ui->messageFilter)
+                {
+                    ui->messageFilter->clear();
+                }
+                else if (obj == ui->CSFilter)
+                {
+                    ui->CSFilter->clear();
+                }
+                else if (obj == ui->callEdit)
+                {
+                    ui->callEdit->clear();
+                }
+                else if (obj == ui->msgEdit)
+                {
+                    ui->msgEdit->clear();
+                }
             }
-            else if (obj == ui->CSFilter)
+            if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
             {
-                ui->CSFilter->clear();
-            }
-            else if (obj == ui->callEdit)
-            {
-                ui->callEdit->clear();
-            }
-            else if (obj == ui->msgEdit)
-            {
-                ui->msgEdit->clear();
-            }
-        }
-        if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
-        {
-            if (ui->meepButton->isDefault())
-            {
-                ui->meepButton->click();
-            }
-            else if (ui->genmsgButton->isDefault())
-            {
-                ui->genmsgButton->click();
+                if (ui->meepButton->isDefault())
+                {
+                    ui->meepButton->click();
+                }
+                else if (ui->genmsgButton->isDefault())
+                {
+                    ui->genmsgButton->click();
+                }
             }
         }
     }

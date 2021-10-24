@@ -91,6 +91,8 @@ class KSTMainWindow : public QMainWindow
 
     UpperCaseValidator ucValidator;
 
+    bool mouseInMessages = false;
+
     void closeEvent(QCloseEvent *event) override;
 
     void sendKST(QString msg);
