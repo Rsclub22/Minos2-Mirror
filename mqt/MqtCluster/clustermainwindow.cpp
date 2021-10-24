@@ -309,6 +309,8 @@ void ClusterMainWindow::doStartup()
 
     connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
 
+
+    connect(ui->overrideLogCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onOverrideLogCheckBoxClicked);
     connect(ui->hfLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
     connect(ui->vhfMwLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
 
@@ -1058,22 +1060,22 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
         {
             // send spot to clients if spotter isn't this station
             trace(QString("ProcessNewSpot: Spotter not this station, pass to clients, callsign %1").arg(newSpot->getDxCallStr()));
-            trace(QString("Check if HF Spots or VHF/MW Spots are filtered to logger"));
-            if (ui->hfLogFilterCheckBox->isChecked() && newSpot->getBandType() == HF_BANDTYPE)
+            trace(QString("processNewSpot:Check if HF Spots or VHF/MW Spots are filtered to logger"));
+            if ((ui->hfLogFilterCheckBox->isChecked() && newSpot->getBandType() == HF_BANDTYPE))
             {
-                trace(QString("HF Spots checked for pass to client - pass HF Spot"));
+                trace(QString("processNewSpot: HF Spots checked for pass to client - pass HF Spot"));
                 sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(newSpot, setupCluster->getTimeToLive())));
 
             }
             else if(ui->vhfMwLogFilterCheckBox->isChecked() && (newSpot->getBandType() == VHF_BANDTYPE || newSpot->getBandType() == MW_BANDTYPE))
             {
-                trace(QString("VHF/MW Spots checked for pass to client - pass VHF/MW Spot"));
+                trace(QString("processNewSpot: VHF/MW Spots checked for pass to client - pass VHF/MW Spot"));
                 sendSpotsToClientQueue.append(createSpotToSend(assembleSpotMsgToSendToClients(newSpot, setupCluster->getTimeToLive())));
 
             }
             else
             {
-                trace(QString("Neither HF or VHF/MW spots checked to pass to log - nothing sent"));
+                trace(QString("processNewSpot: Neither HF or VHF/MW spots checked to pass to log - nothing sent"));
             }
 
         }
@@ -1081,18 +1083,7 @@ void ClusterMainWindow::processNewSpot(const QSharedPointer<ClusterSpotData> new
         {
             trace(QString("ProcessNewSpot: Spotter is this station, only display on server"));
         }
-/*
-        // is spot already in the display list?
-        for (int i = 0; i < dxSpotDataModel->rowCount(); i++)
-        {
-            if (*dxSpotDataModel->getSpotData(i) == newSpot)
-            {
-                trace(QString("Spot Call = %1, already in display, skip").arg(newSpot.getDxCall().realCall));
-                return;
-            }
-        }
 
-*/
 
         trace(QString("ProcessNewSpot: Add spot for display callsign = %1, rxTime = %2").arg(newSpot->getDxCallStr()).arg(newSpot->getRxTime()));
         spotsList.append(QSharedPointer<ClusterSpotData>( new ClusterSpotData(newSpot)));
@@ -1177,13 +1168,6 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
         newSpot->setBand(dxBandStr);
         newSpot->setBandType(dxBandType);
 
-
-        //if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
-        //{
-            // discard spot as it is HF
-        //    trace(QString("Unpack Show DX Spot: Discard Spot HF = %1").arg(newSpot->getFreq().traceStr()));
-        //    return DISCARD_HF_SPOT * -1;
-        //}
 
         QString dxModeStr = getMode(modeBandPlan, newSpot->getFreq().str(), dxBandStr);
         newSpot->setMode(dxModeStr);
@@ -1341,6 +1325,8 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
             if (resendSpotsToClientQueue[i].getCmd().contains(RESEND_ALL_SPOTS))
             {
 
+                // check band to set logBandFilter
+                setLogBandFilter(resendSpotsToClientQueue[i].getBandmask());
                 resendAllSpotsToClients(resendSpotsToClientQueue[i]);
 
             }
@@ -1350,6 +1336,49 @@ void ClusterMainWindow::handleResendSpotToClientsCmds()
     }
 }
 
+
+void ClusterMainWindow::setLogBandFilter(QString band)
+{
+    if (!ui->overrideLogCheckBox->isChecked())
+    {
+        QString bandType = getBandType(band);
+        if (bandType == NO_BANDTYPE)
+        {
+            trace(QString("setLogBandFilter: error no bandType found for band %1").arg(band));
+            return;
+        }
+
+        if (bandType == HF_BANDTYPE)
+        {
+            ui->hfLogFilterCheckBox->setChecked(true);
+        }
+
+        if (bandType == VHF_BANDTYPE || bandType == MW_BANDTYPE)
+        {
+            ui->vhfMwLogFilterCheckBox->setChecked(true);
+        }
+
+        onLogFilterCheckBoxClicked();
+    }
+
+}
+
+
+QString ClusterMainWindow::getBandType(QString band)
+{
+
+    foreach(auto const &b, bands)
+    {
+        if (b.data()->uk == band)
+        {
+            return b.data()->getType();
+            break;
+        }
+    }
+
+    return NO_BANDTYPE;     // shouldn't get here if band is correct
+}
+
 void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
 {
 
@@ -1357,11 +1386,27 @@ void ClusterMainWindow::resendAllSpotsToClients(ResendSpotCommand cmd)
     {
         for (int row = 0; row < dxSpotDataModel->rowCount(); row ++)
         {
-            if (cmd.getBandmask() == dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString() || cmd.getBandmask() == IGNORE_BANDMASK)
+            QString bandMask = dxSpotDataModel->data(dxSpotDataModel->index(row, DXBANDSTR_COL_NUM), DataStoredRole).toString();
+            QString bandType = getBandType(bandMask);
+            if (bandType == NO_BANDTYPE)
             {
-                QString spot = createResendSpotToSend(assembleSpotMsgToSendToClients(dxSpotDataModel->getSpotData(row), setupCluster->getTimeToLive()));
-                trace(QString("resending this spot - %1 to uuid = %2").arg(spot, cmd.getuuid()));
-                clusterRpc->sendDXSpot(spot, cmd.getuuid(), cmd.getFrameId());   // send spot and loggeruuid
+                trace(QString("resendAllSpotsToClients: error no bandType found for band %1").arg(bandMask));
+            }
+
+            if (cmd.getBandmask() == bandMask)
+            {
+                if ((ui->hfLogFilterCheckBox->isChecked() && bandType == HF_BANDTYPE)
+                        || (ui->vhfMwLogFilterCheckBox->isChecked() && (bandType == VHF_BANDTYPE || bandType == MW_BANDTYPE)))
+                {
+
+                    QString spot = createResendSpotToSend(assembleSpotMsgToSendToClients(dxSpotDataModel->getSpotData(row), setupCluster->getTimeToLive()));
+                    trace(QString("resending this spot - %1 to uuid = %2").arg(spot, cmd.getuuid()));
+                    clusterRpc->sendDXSpot(spot, cmd.getuuid(), cmd.getFrameId());   // send spot and loggeruuid
+                }
+            }
+            else
+            {
+                trace(QString("processNewSpot: Neither HF or VHF/MW spots checked to pass to log - nothing sent"));
             }
 
         }
@@ -1597,14 +1642,6 @@ int ClusterMainWindow::upackDxSpot(QString txt, QSharedPointer<ClusterSpotData> 
         newSpot->setBandType(dxBandType);
 
 
-        //if (newSpot->getBandType() == HF_BANDTYPE && !hfFlag)
-        //{
-        //    // discard spot as it is HF
-        //    trace(QString("Unpack DX Spot: Discard Spot HF Call = %1, Freq = %2").arg(newSpot->getDxCall().getFullCall(), newSpot->getFreq().traceStr()));
-        //    return DISCARD_HF_SPOT * -1;
-       // }
-
-
         QString dxModeStr = getMode(modeBandPlan, newSpot->getFreq().str(), newSpot->getBand());
         newSpot->setMode(dxModeStr);
 
@@ -1821,6 +1858,27 @@ void ClusterMainWindow::setSendSpotsToLogWarning(QString txt)
 
 void ClusterMainWindow::onLogFilterCheckBoxClicked()
 {
+
+    if (ui->hfLogFilterCheckBox->isChecked())
+    {
+        setHfLogOverrideIndicatorOnOff(true);
+    }
+    else
+    {
+        setHfLogOverrideIndicatorOnOff(false);
+    }
+
+    if (ui->vhfMwLogFilterCheckBox->isChecked())
+    {
+        setVhfMwLogOverrideIndicatorOnOff(true);
+    }
+    else
+    {
+        setVhfMwLogOverrideIndicatorOnOff(false);
+    }
+
+
+
     if (!ui->hfLogFilterCheckBox->isChecked() && !ui->vhfMwLogFilterCheckBox->isChecked())
     {
         setSendSpotsToLogWarning(tr("No spots will be sent to the log - please check one of the boxes!"));
@@ -1828,6 +1886,21 @@ void ClusterMainWindow::onLogFilterCheckBoxClicked()
     else
     {
         setSendSpotsToLogWarning("");
+    }
+}
+
+
+void ClusterMainWindow::onOverrideLogCheckBoxClicked()
+{
+    if (ui->overrideLogCheckBox->isChecked())
+    {
+        ui->hfLogFilterCheckBox->setEnabled(true);
+        ui->vhfMwLogFilterCheckBox->setEnabled(true);
+    }
+    else
+    {
+        ui->hfLogFilterCheckBox->setEnabled(false);
+        ui->vhfMwLogFilterCheckBox->setEnabled(false);
     }
 }
 
@@ -2572,6 +2645,41 @@ void ClusterMainWindow::loadBandFilterSettingsToTab()
     }
 
 
+    if (!ui->overrideLogCheckBox->isChecked())
+    {
+        setHfLogOverrideIndicatorOnOff(false);
+        ui->hfLogFilterCheckBox->setChecked(false);
+        ui->hfLogFilterCheckBox->setEnabled(false);
+        setVhfMwLogOverrideIndicatorOnOff(false);
+        ui->vhfMwLogFilterCheckBox->setChecked(false);
+        ui->vhfMwLogFilterCheckBox->setEnabled(false);
+    }
+    else
+    {
+        ui->hfLogFilterCheckBox->setEnabled(true);
+        ui->vhfMwLogFilterCheckBox->setEnabled(true);
+        if (ui->hfLogFilterCheckBox->isChecked())
+        {
+            setHfLogOverrideIndicatorOnOff(true);
+        }
+        else
+        {
+            setHfLogOverrideIndicatorOnOff(false);
+        }
+
+        if (ui->vhfMwLogFilterCheckBox->isChecked())
+        {
+            setVhfMwLogOverrideIndicatorOnOff(true);
+        }
+        else
+        {
+            setVhfMwLogOverrideIndicatorOnOff(false);
+        }
+    }
+
+
+
+
 }
 
 
@@ -2599,6 +2707,7 @@ void ClusterMainWindow::saveBandFilterSettings()
 
     }
 
+    config.setValue(QString("logFilterOverride"), ui->overrideLogCheckBox->isChecked() ? true : false);
     config.setValue(QString("logFilterHF"), ui->hfLogFilterCheckBox->isChecked() ? true : false);
     config.setValue(QString("logFilterVHFMW"),ui->vhfMwLogFilterCheckBox->isChecked() ? true : false);
 
@@ -2629,10 +2738,41 @@ void ClusterMainWindow::readBandFilterSettings()
         }
     }
 
+    ui->overrideLogCheckBox->setChecked(config.value(QString("logFilterOverride"), false).toBool());
     ui->hfLogFilterCheckBox->setChecked(config.value(QString("logFilterHF"), true).toBool());
     ui->vhfMwLogFilterCheckBox->setChecked(config.value(QString("logFilterVHFMW"), true).toBool());
 
     config.endGroup();
+}
+
+
+void ClusterMainWindow::setHfLogOverrideIndicatorOnOff(bool on)
+{
+
+    if (on)
+    {
+        ui->hfFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+        ui->hfFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_OFF_STYLE);
+    }
+
+
+}
+
+void ClusterMainWindow::setVhfMwLogOverrideIndicatorOnOff(bool on)
+{
+
+    if (on)
+    {
+        ui->vhfMwFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_ON_STYLE);
+    }
+    else
+    {
+        ui->vhfMwFilterToLogIndicator->setStyleSheet(LOG_FILTER_INDICATOR_OFF_STYLE);
+    }
+
 }
 
 
@@ -2747,17 +2887,17 @@ void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
 
 void ClusterMainWindow::onHfSelectBandPbPressed()
 {
-    static bool selectButtonState = false;
 
-    if (!selectButtonState)
+
+    if (areAnyBandsChecked(HF_BANDTYPE))
     {
-        selectButtonState = true;
-        setAllHFBandsFilter(selectButtonState);
+
+        setAllHFBandsFilter(false);
     }
     else
     {
-        selectButtonState = false;
-        setAllHFBandsFilter(selectButtonState);
+
+        setAllHFBandsFilter(true);
     }
 }
 
@@ -2782,19 +2922,36 @@ void ClusterMainWindow::setBandsCheckBoxAndFilterFlag(const QString band, const 
     bandCheckBoxes.value(band).bandChkBox->setChecked(state);
 }
 
+
+bool ClusterMainWindow::areAnyBandsChecked(QString bandType)
+{
+    foreach(auto const &b, bands)
+    {
+        if (b->getType() == bandType)
+        {
+            if (bandCheckBoxes.value(b.data()->uk).bandChkBox->isChecked())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void ClusterMainWindow::onVhfSelectBandPbPressed()
 {
-    static bool selectButtonState = false;
 
-    if (!selectButtonState)
+
+    if (areAnyBandsChecked(VHF_BANDTYPE))
     {
-        selectButtonState = true;
-        setAllVHFBandsFilter(selectButtonState);
+
+        setAllVHFBandsFilter(false);
     }
     else
     {
-        selectButtonState = false;
-        setAllVHFBandsFilter(selectButtonState);
+
+        setAllVHFBandsFilter(true);
     }
 }
 
@@ -2814,17 +2971,17 @@ void ClusterMainWindow::setAllVHFBandsFilter(bool state)
 
 void ClusterMainWindow::onUhfSelectBandPbPressed()
 {
-    static bool selectButtonState = false;
 
-    if (!selectButtonState)
+
+    if (areAnyBandsChecked(MW_BANDTYPE))
     {
-        selectButtonState = true;
-        setAllUHFBandsFilter(selectButtonState);
+
+        setAllUHFBandsFilter(false);
     }
     else
     {
-        selectButtonState = false;
-        setAllUHFBandsFilter(selectButtonState);
+
+        setAllUHFBandsFilter(false);
     }
 }
 

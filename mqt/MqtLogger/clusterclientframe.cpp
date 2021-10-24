@@ -232,7 +232,7 @@ void ClusterClientFrame::on_resendClusterSpots()
     if (ct  && !contestBandStr.isEmpty())
     {
         traceMsg(QString("on_resendClusterSpots: uuid: %1").arg(ct->uuid));
-        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, IGNORE_BANDMASK, ct->uuid);
+        MinosLoggerEvents::SendRequestResendSpotsToClusterServer(resendFrameId::CLUSTER_CLIENT, RESEND_ALL_SPOTS, contestBandStr, ct->uuid);
     }
 }
 

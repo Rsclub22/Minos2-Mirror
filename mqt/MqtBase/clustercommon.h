@@ -176,6 +176,10 @@ const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: Sandybrown
 const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: Gainsboro;\n");
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: Sandybrown;\n");
 
+const QString LOG_FILTER_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString LOG_FILTER_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
+
 // resend clusterspots to client commands
 enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};
 const QString RESEND_ALL_SPOTS = "resendAll";
