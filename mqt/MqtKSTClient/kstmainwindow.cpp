@@ -234,6 +234,9 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect( ui->CSTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
              this, &KSTMainWindow::on_sortIndicatorChanged);
 
+    connect(ui->CSTable->selectionModel(),&QItemSelectionModel::selectionChanged,
+            this, &KSTMainWindow::onCSTableSelectionChanged);
+
 
     kstclient = new QTcpSocket(this);
 
@@ -1100,43 +1103,48 @@ void KSTMainWindow::showPlanes(QSharedPointer<KstUser> user)
     }
     kstPlanesModel.setPlanesVector(user->planes);
 
-//    ui->planesText->clear();
-//    ui->planesText->append(QString("%1 %2 at %3 to %4 at %5").arg(user->lastCalcTime).arg(user->fromCall).arg(user->fromLoc).arg(user->toCall).arg(user->toLoc) );
-//    ui->planesText->append(QString());
-//    for(auto const &ac: user->planes)
-//    {
-//        ui->planesText->append(ac.getAircraft() );
-//    }
-//    ui->planesText->moveCursor (QTextCursor::Start) ;
-//    ui->planesText->ensureCursorVisible() ;
 }
-
-void KSTMainWindow::on_CSTable_clicked(const QModelIndex &index)
+void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/, const QItemSelection &/*deselected*/)
 {
-    QModelIndex sourceIndex = kstCallFilterModel.mapToSource(index);
-    int row = sourceIndex.row();
-    if (row >= callVector->size())
-        return;
+    QModelIndexList mil = ui->CSTable->selectionModel()->selectedRows();
 
-    QSharedPointer<KstUser> user = callVector->at(row);
-
-    if (!ui->noSetCallcb->isChecked())
+    QString mselstring;
+    for(auto &mi: mil)
     {
-        // messages
-        QString call = user->call;
-
-        setNameFromCall(call);
-
-        ui->messageFilter->setText(call);
-        ui->callEdit->setText(call);
-        ui->msgEdit->setFocus();
-        setActive(user->chat);
-        ui->messageChatFilter->setCurrentIndex(user->chat);
+        QModelIndex m = kstCallFilterModel.mapToSource(mi);
+        int r = m.row();
+        QSharedPointer<KstUser> user = callVector->at(r);
+        if (!mselstring.isEmpty())
+        {
+            mselstring += " ";
+        }
+        mselstring += user->call;
     }
-    // Planes
-    showPlanes(user);
-}
+    ui->messageFilter->setText(mselstring);
+    if (mil.count() == 1)
+    {
+        QSharedPointer<KstUser> user = callVector->at(mil[0].row());
 
+        if (!ui->noSetCallcb->isChecked())
+        {
+            // messages
+            QString call = user->call;
+
+            setNameFromCall(call);
+
+            ui->callEdit->setText(call);
+            ui->msgEdit->setFocus();
+            setActive(user->chat);
+            ui->messageChatFilter->setCurrentIndex(user->chat);
+        }
+        // Planes
+        showPlanes(user);
+    }
+    else
+    {
+        on_clearMessageFilter_clicked();
+    }
+}
 bool KSTMainWindow::doConfiguration()
 {
     KSTConfigure conf;
@@ -1656,6 +1664,7 @@ void KSTMainWindow::on_clearUserFilter_clicked()
 {
     ui->CSChatFilter->setCurrentIndex(0);
     ui->CSFilter->clear();
+    ui->CSTable->clearSelection();
 }
 
 void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)

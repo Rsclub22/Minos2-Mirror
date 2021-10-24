@@ -158,7 +158,6 @@ private slots:
     void on_kstSplitter_splitterMoved(int pos, int index);
 
     void on_sectionResized(int, int, int);
-    void on_CSTable_clicked(const QModelIndex &index);
 
     void connected();
     void disconnected();
@@ -218,6 +217,7 @@ private slots:
 
     void on_countryRb_clicked();
 
+    void onCSTableSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 private:
     Ui::KSTMainWindow *ui;
     StdInReader stdinReader;
