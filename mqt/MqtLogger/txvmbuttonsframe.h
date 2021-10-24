@@ -53,6 +53,7 @@ private slots:
     void buttonSelected();
 
 
+    void clearActionSelected();
 signals:
 
     void buttonActivated(int);
@@ -84,6 +85,7 @@ public:
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
+    void clearActionSelected(int buttonNumber);
 
     void setPttEnabled(bool state, PubSubName psn);
 
@@ -152,8 +154,8 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
-    void clearActionSelected(int buttonNumber);
-    void runButActivated(int buttonNumber);
+
+
     void onRemoteConfigChanged();
     void onRemoteKeyerStarted(int key);
     void onRemoteKeyerStopped();

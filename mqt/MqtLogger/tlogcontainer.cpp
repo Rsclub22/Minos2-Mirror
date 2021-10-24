@@ -1333,11 +1333,6 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
             {
                 // send bandswitch data to control
                 msg = readBandSwitchDataFromIni(contestBand).toUtf8();
-                if (!msg.isEmpty())
-                {
-                    // need to add send data code here
-                }
-
                 if ( readEnableSerialBandSwitchFromIni() && serialTVSw->getOpenFlag())
                 {
                     if (!msg.isEmpty())
