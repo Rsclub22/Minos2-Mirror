@@ -507,7 +507,6 @@ void ClusterClientFrame::setupLocatorSpotView()
 void ClusterClientFrame::filterButtonSelected()
 {
     ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, bands, clusterModes, this);
-    //filterSetup-> setTabCurrentIndex(filterSetup->getTabCurrentIndex());
 
     filterSetup->exec();
     if (filterSetup->getSettingsChangedFlag())
@@ -543,20 +542,15 @@ void ClusterClientFrame::filterButtonSelected()
 void ClusterClientFrame::setHF(bool /*hfFlag*/)
 {
 
-
-        // this might not be the right thing to do...
-        //LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
-        //filterSettings = contest->getClusterFilter();
-
-
 }
+
 
 
 
 void ClusterClientFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
-    //ui->StationList->setFont(cf);
+
 }
 
 
@@ -624,13 +618,9 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
 
 void ClusterClientFrame::handleVertHeaderClickedItems(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
-    // check if spot has been sent to memory
-    //if (!spotProxyModel->data(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-    //{
     sendSpotToMemory(spotProxyModel, row);
 
-    //}
-}
+ }
 
 
 void ClusterClientFrame::onDxSpotViewClicked(const QModelIndex &index)
@@ -697,7 +687,7 @@ void ClusterClientFrame::sendBrgToRot(QString brg)
 //---------------------------------------------------------------------------
 void ClusterClientFrame::clusterClientServerList(QVector<ClusterServer> serverList)
 {
-    //ui->StationList->clear();
+
     for ( auto const &s: serverList )
     {
         QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
@@ -993,21 +983,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 
 
 
- /*
-        if (!locator.isEmpty())
-        {
-            QString loc = locator.mid(0,4);
 
-            for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
-            {
-                if ((*i).wt->loc.loc.getValue().mid(0,4) == loc)
-                {
-                    *locatorWorked = true;
-
-                }
-            }
-        }
-*/
 
 
 }
@@ -1170,15 +1146,12 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
     ct = c;
     LoggerContestLog* contest = dynamic_cast<LoggerContestLog *>( ct);
 
-    // set the contest in the filter dialog
-    //filterSetup->setContest(c);
 
     if (ct != nullptr)
     {
         contestUuid = ct->uuid;
         traceMsg(QString("Set Contest: ContestUuid = %1").arg(contestUuid));
         contestBandStr = ct->currentBand.getValue();
-        //contestBand = getBandOffSet(contestBandStr);
         contestModeStr = ct->currentMode.getValue();
 
 
@@ -1202,7 +1175,6 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 else
                 {
                     // no, save current mode filter for this contest
-                    //filterSetup->setModeFilter(true, contestMode);
                     filterSettings.setModeFilter(contestModeStr, true);
                 }
 
@@ -1224,7 +1196,6 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
 
                 config.endGroup();
 
-                //filterSetup->saveClusterFilterToContest();  // save these settings
                 contest->saveClusterFilter(filterSettings);
             }
             else
@@ -1304,15 +1275,7 @@ void ClusterClientFrame::purgeSpots()
 
 void ClusterClientFrame::onMenuShow()
 {
-   //ui->actionsButton->showMenu();
 
-    //int buttonNumber = getSelectedLine();
-
-    //freqAction->setEnabled(buttonNumber >= 0);
-    //bearingAction->setEnabled(buttonNumber >= 0);
-    //logAction->setEnabled(buttonNumber >= 0);
-    //memoryAction->setEnabled(buttonNumber >= 0);
-    //clearSpotsAction->setEnabled(buttonNumber >= 0);
 }
 
 
@@ -1390,28 +1353,7 @@ void ClusterClientFrame::memoryActionSelected()
 
 }
 
-/*
-// this sends spot to memory if it has allready been sent
-void ClusterClientFrame::memoryActionOverideSelected()
-{
-    int curTab = ui->dxSpotTab->currentIndex();
 
-    if (filterProxyModelList[curTab]->rowCount() > 0)
-    {
-        int currentRow = spotViewList[curTab]->currentIndex().row();
-        if (currentRow >= 0 && currentRow < filterProxyModelList[curTab]->rowCount())
-        {
-            // check if spot has been sent to memory
-            if (filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXSPOT_TO_MEMORY_FLAG_COL_NUM), DataStoredRole).toBool())
-            {
-                sendSpotToMemory(filterProxyModelList[curTab], currentRow);
-            }
-
-        }
-
-    }
-}
-*/
 
 void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyModel, int row)
 {
@@ -1530,28 +1472,23 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
               if (bandMask == contestBandStr)
               {
               QString callsign = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-                  //bool callsignWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
-                  //if (!callsignWkd)
-                  //{
-                      if (cs.realCall == callsign)
-                      {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                          worked = true;
-                      }
-                  //}
+
+              if (cs.realCall == callsign)
+              {
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  worked = true;
+              }
+
 
 
               QString locator = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_COL_NUM,  QModelIndex()), DataStoredRole).toString();
-                  //bool locatorWkd = dxSpotDataModel->data(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), DataStoredRole).toBool();
 
-                  //if(!locatorWkd)
-                  //{
-                      if (loc.mid(0,4) == locator.mid(0, 4) )
-                      {
-                          dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
-                          worked = true;
-                      }
-                  //}
+              if (loc.mid(0,4) == locator.mid(0, 4) )
+              {
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  worked = true;
+              }
+
               }
           }
 
@@ -1830,22 +1767,6 @@ void ClusterClientFrame::statusIndicatorToggle(bool on)
 
 
 
-/*
-void ClusterClientFrame::queueIndToggle(bool on)
-{
-
-    if (on)
-    {
-        ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_ON_STYLE);
-    }
-    else
-    {
-       ui->queueIndicator->setStyleSheet(NEWSPOT_INDICATOR_OFF_STYLE);
-    }
-
-}
-
-*/
 
 void ClusterClientFrame::newSpotIndToggle(bool on)
 {
