@@ -93,10 +93,6 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <source>Configure</source>
-        <translation type="vanished">Configurer</translation>
-    </message>
-    <message>
         <location filename="../RSMainWindow.cpp" line="52"/>
         <source>Configure...</source>
         <translation>Configurer...</translation>

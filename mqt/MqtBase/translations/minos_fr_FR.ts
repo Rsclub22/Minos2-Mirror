@@ -85,7 +85,7 @@
     <message>
         <location filename="../contacts.cpp" line="321"/>
         <source>MHz</source>
-        <translation type="unfinished"></translation>
+        <translation>MHz</translation>
     </message>
 </context>
 <context>
@@ -435,10 +435,6 @@
         <location filename="../profiles.cpp" line="107"/>
         <source>Auto Fill signal report on return</source>
         <translation>Rapport de signal remplissage automatique sur action ENTREE</translation>
-    </message>
-    <message>
-        <source>Allow HF Bands</source>
-        <translation type="vanished">Autoriser les bandes HF</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="108"/>

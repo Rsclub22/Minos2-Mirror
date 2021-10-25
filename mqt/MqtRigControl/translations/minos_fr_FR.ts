@@ -407,11 +407,6 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Mode de MGM:</translation>
     </message>
     <message>
-        <source>Keyer</source>
-        <translatorcomment>manipulateur Clé</translatorcomment>
-        <translation type="vanished">Keyer???</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="926"/>
         <source>CW</source>
         <translation>CW</translation>
@@ -451,7 +446,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1202"/>
         <source>Setup Radios...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer les radios...</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1236"/>
@@ -472,7 +467,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1257"/>
         <source>Configure Rigctld...</source>
-        <translation type="unfinished"></translation>
+        <translation>Configurer le programme Rigctld...</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="817"/>
@@ -493,7 +488,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="918"/>
         <source>Radio Memory Keyer</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire radio ??</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1083"/>
@@ -511,10 +506,6 @@ Actif</translation>
         <location filename="../rigcontrolmainwindow.ui" line="1177"/>
         <source>Help</source>
         <translation>Aide</translation>
-    </message>
-    <message>
-        <source>Setup Radios</source>
-        <translation type="vanished">Configurer les radios</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="1207"/>
@@ -798,12 +789,12 @@ Copyright D Balharrie G8FKH/M0DGB 2019</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4257"/>
         <source>Select Rigctld Program</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner le programme Rigctld</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4266"/>
         <source>All Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les fiches</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4538"/>
@@ -989,7 +980,8 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="4653"/>
         <source>Rigctld name = %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Nomr de RigCtld = %1
+</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4654"/>
@@ -1469,14 +1461,10 @@ utiliser un autre nom SVP</translation>
         <translation>Utiliser RigCtld</translation>
     </message>
     <message>
-        <source>Start Minos  RigCtld</source>
-        <translation type="vanished">Démarrer Minos RigCtld</translation>
-    </message>
-    <message>
         <location filename="../rigsetupform.ui" line="482"/>
         <source>Start Minos RigCtld</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <translation>Démarrer Minos RigCtld</translation>
+   </message>
     <message>
         <location filename="../rigsetupform.ui" line="547"/>
         <source>Supported Native Bands on Radio</source>

@@ -4,10 +4,6 @@
 <context>
     <name>QrzConfigureDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue (hidden?)</translation>
-    </message>
-    <message>
         <location filename="../qrzconfiguredialog.ui" line="14"/>
         <source>QRZ.com Configuration</source>
         <translation>Configuration de QRZ.com</translation>
@@ -28,7 +24,7 @@
     <message>
         <location filename="../qrzservermainwindow.ui" line="14"/>
         <source>QrzServerMainWindow</source>
-        <translation>Fenêtre principale du serveur QRZ (Visible???</translation>
+        <translation>Serveur QRZ</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="26"/>
@@ -68,22 +64,22 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="346"/>
         <source>Qrz Message: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Message QRZ %1</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="366"/>
         <source>Qrz logged on Ok with call %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté  à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="419"/>
         <source>Cluster Qrz Callsign Data received for call = %1, Qra = %2 - Send to Cluster Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Données d&apos;indicatif reçues pour l&apos;appel = %1, Qra = %2 - Envoyer au serveur de cluster</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="429"/>
         <source>Logger Qrz Callsign Data received for call = %1, Send to Qrz Display in Logger Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Données d&apos;indicatif reçues pour l&apos;appel = %1, envoyer à l&apos;affichage Qrz dans Logger Server</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="634"/>

@@ -4,13 +4,9 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <source>MainWindow</source>
-        <translation type="vanished">Fenêtre principale</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="14"/>
         <source>Minos Rig Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistreur d&apos;appareil</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="105"/>
@@ -51,7 +47,7 @@
         <location filename="../mainwindow.ui" line="208"/>
         <source>Link to contest time</source>
         <translatorcomment>Lien vers l&apos;heure du concours</translatorcomment>
-        <translation>WHAT is this???</translation>
+        <translation>Lien vers l&apos;heure du concours</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="224"/>
@@ -62,10 +58,6 @@
         <location filename="../mainwindow.ui" line="244"/>
         <source>Stop Record</source>
         <translation>Arrêter l&apos;enregistrement</translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="vanished">Fermer</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="236"/>

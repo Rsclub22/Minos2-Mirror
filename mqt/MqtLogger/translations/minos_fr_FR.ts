@@ -393,7 +393,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Display Locators Derived from Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les Locators dérivés du pays</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
@@ -403,8 +403,8 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="123"/>
         <source>Cluster/Bandmap Distance</source>
-        <translation>???What???</translation>
-    </message>
+        <translation>Distance Cluster/Bandmap</translation>
+     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="187"/>
         <source>3.5 MHz</source>
@@ -1734,16 +1734,6 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
         <translation>jours</translation>
     </message>
     <message>
-        <source>NB HF Contest support is VERY experimental, and incomplete. Use at your own risk!</source>
-        <translatorcomment>NB Le support du concours HF est TRÈS expérimental et incomplet. Utiliser à vos risques et périls!</translatorcomment>
-        <translation type="vanished">Where is this displayed??</translation>
-    </message>
-    <message>
-        <source>HF Contests Support</source>
-        <translatorcomment>Assistance concours HF</translatorcomment>
-        <translation type="vanished">Where is this displayed??</translation>
-    </message>
-    <message>
         <location filename="../defdirsdlg.ui" line="96"/>
         <source>Logs Directory</source>
         <translation>Répertoire des Logs</translation>
@@ -1820,22 +1810,22 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="142"/>
         <source>Display of Operating Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Affichage du temps de l&apos;opérateur</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="148"/>
         <source>None</source>
-        <translation type="unfinished">Aucun</translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="158"/>
         <source>RSGB (Multiple 1 hour gaps)</source>
-        <translation type="unfinished"></translation>
+        <translation>RSGB (Plusieurs intervalles d&apos;une heure)</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="168"/>
         <source>IARU R1 (Single 2 hour gap)</source>
-        <translation type="unfinished"></translation>
+        <translation>IARU R1 (Intervalle unique de 2 heures)</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="395"/>
@@ -2089,11 +2079,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <source>Failed to open Contest file %1 : %2 </source>
         <translation>L&apos;ouverture du fichier %1 a échoué : %2 </translation>
     </message>
-    <message>
-        <source>Contest %1 is an HF contest - HF not enabled</source>
-        <translation type="vanished">???</translation>
-    </message>
-    <message>
+   <message>
         <location filename="../LoggerContest.cpp" line="394"/>
         <source>Failed to create Contest file %1 : %2</source>
         <translation>La création du fichier %1 a échoué : %2</translation>
@@ -2146,14 +2132,6 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <location filename="../LoggerContest.cpp" line="859"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation>Format de fichier non valide (%1,%2 attendu)</translation>
-    </message>
-    <message>
-        <source>Unknown Country  </source>
-        <translation type="vanished">Pays inconnu  </translation>
-    </message>
-    <message>
-        <source>Unknown District   </source>
-        <translation type="vanished">District inconnu   </translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="982"/>
@@ -2315,13 +2293,13 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../OptionsDialog.cpp" line="82"/>
         <source>Display Options</source>
-        <translation>???What???</translation>
+        <translation>Options d&apos;Affichage</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="83"/>
         <source>Log Radio Settings</source>
         <translatorcomment>Paramètres de radio</translatorcomment>
-        <translation>???What???</translation>
+        <translation>Paramètres de radio</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="84"/>
@@ -2690,7 +2668,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../QSOTextEditFrame.cpp" line="52"/>
         <source>Click to clear edit content</source>
         <translatorcomment>Cliquer pour supprimer le contenu modifié</translatorcomment>
-        <translation>???What does this mean???</translation>
+        <translation>Cliquer pour supprimer le contenu modifié </translation>
     </message>
 </context>
 <context>
@@ -2701,13 +2679,9 @@ Non - Ignorer les modifications</translation>
         <translation>Cadre</translation>
     </message>
     <message>
-        <source>QRZ.com</source>
-        <translation type="vanished">??QRZ.com </translation>
-    </message>
-    <message>
         <location filename="../qrzdisplayframe.ui" line="20"/>
         <source>QRZ</source>
-        <translation type="unfinished">QRZ</translation>
+        <translation>QRZ</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="49"/>
@@ -2762,15 +2736,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="457"/>
         <source>Connect</source>
-        <translation type="unfinished">Se connecter</translation>
-    </message>
-    <message>
-        <source>LogOn</source>
-        <translation type="vanished">Se connecter</translation>
-    </message>
-    <message>
-        <source>OffLine</source>
-        <translation type="vanished">Hors ligne</translation>
+        <translation>Se connecter</translation>
     </message>
 </context>
 <context>
@@ -3002,12 +2968,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.cpp" line="381"/>
         <source>Invalid Phone Preset Frequency for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence de Phone prédéfinie non valide pour %1</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="397"/>
         <source>Invalid MGM Preset Frequency for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence de MGM prédéfinie non valide pour %1</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="462"/>
@@ -3020,7 +2986,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolcwmessagekeyer.cpp" line="131"/>
         <source>Rig Control Voice Memory Setup</source>
-        <translation type="unfinished">Configuration de la mémoire de voix </translation>
+        <translation>Configuration de la mémoire de voix </translation>
     </message>
 </context>
 <context>
@@ -3058,7 +3024,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolframe.ui" line="157"/>
         <source>Reset Frequency in Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Réinitialiser la fréquence dans la bande</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="191"/>
@@ -4713,7 +4679,7 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
     <message>
         <location filename="../tentryoptionsform.cpp" line="344"/>
         <source>Cabrillo files (*.log);;All Files (*.*);;</source>
-        <translation>CABRILLO *.LOG???    </translation>
+        <translation>Fichiers Cabrillo (*.log);;Tous les fichiers (*.*);;</translation>
     </message>
     <message>
         <location filename="../tentryoptionsform.cpp" line="345"/>
@@ -5559,12 +5525,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="28"/>
         <source>TX Status</source>
-        <translation type="unfinished"></translation>
+        <translation>État de TX</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="70"/>
         <source>Setup</source>
-        <translation></translation>
+        <translation>Configurer</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="79"/>
@@ -5589,24 +5555,20 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
-    <message>
-        <source>Voice Memory %1 - Edit</source>
-        <translation type="vanished">Mémoire de voix %1 - Modifier</translation>
-    </message>
-    <message>
+   <message>
         <location filename="../txvmbuttonsframe.cpp" line="272"/>
         <source>Rig CW Message</source>
-        <translation type="unfinished"></translation>
+        <translation>?? Message CW d&apos;apparat??</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="276"/>
         <source>Voice Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire de voix</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="278"/>
         <source>%1 %2 - Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="377"/>
@@ -5616,12 +5578,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="630"/>
         <source>TX On</source>
-        <translation type="unfinished"></translation>
+        <translation>TX Actif</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="636"/>
         <source>TX Off</source>
-        <translation type="unfinished"></translation>
+        <translation>TX Éteint</translation>
     </message>
 </context>
 <context>
@@ -5807,7 +5769,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="96"/>
         <source>CW Message Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte de Message CW </translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="110"/>
@@ -5827,8 +5789,8 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="79"/>
         <source>CW Message too long - Max %1 chars.</source>
-        <translation type="unfinished"></translation>
-    </message>
+        <translation>Message CW trop long - Max %1 caractères. </translation>
+     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="90"/>
         <location filename="../txvmrigbuttondialog.cpp" line="120"/>
