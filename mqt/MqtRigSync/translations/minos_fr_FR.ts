@@ -9,18 +9,27 @@
         <translation>Configurer RigSync</translation>
     </message>
     <message>
-        <location filename="../RSConfigure.ui" line="22"/>
         <source>Sub Rig Control</source>
         <translatorcomment>Contrôle du sous-rig</translatorcomment>
-        <translation>What does this mean??</translation>
+        <translation type="vanished">What does this mean??</translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="28"/>
+        <source>Main RigControl</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="49"/>
+        <source>Sub RigControl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="77"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../RSConfigure.ui" line="56"/>
+        <location filename="../RSConfigure.ui" line="84"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
@@ -38,62 +47,62 @@
         <translation>Appareil principale</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="42"/>
+        <location filename="../RSMainWindow.ui" line="39"/>
         <source>Main Freq</source>
         <translation>Fréquence principale</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="53"/>
+        <location filename="../RSMainWindow.ui" line="50"/>
         <source>Sub Rig</source>
         <translation>Appareil secondaire</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="67"/>
+        <location filename="../RSMainWindow.ui" line="70"/>
         <source>Sub freq</source>
         <translation>Fréquence secondaire</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="82"/>
+        <location filename="../RSMainWindow.ui" line="85"/>
         <source>No Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="95"/>
+        <location filename="../RSMainWindow.ui" line="98"/>
         <source>Track rig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="105"/>
+        <location filename="../RSMainWindow.ui" line="108"/>
         <source>Track Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="115"/>
+        <location filename="../RSMainWindow.ui" line="131"/>
         <source>WSJT-X</source>
         <translation>WSJT-X</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="135"/>
+        <location filename="../RSMainWindow.ui" line="151"/>
         <source>Track band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="166"/>
+        <location filename="../RSMainWindow.ui" line="182"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation>Transférer Principal -&gt; Secondaire</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="173"/>
+        <location filename="../RSMainWindow.ui" line="189"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation>Transférer Secondaire -&gt; Principal</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="146"/>
+        <location filename="../RSMainWindow.ui" line="162"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="52"/>
+        <location filename="../RSMainWindow.cpp" line="66"/>
         <source>Configure...</source>
         <translation>Configurer...</translation>
     </message>

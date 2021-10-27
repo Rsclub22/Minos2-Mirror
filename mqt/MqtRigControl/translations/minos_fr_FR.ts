@@ -1464,7 +1464,7 @@ utiliser un autre nom SVP</translation>
         <location filename="../rigsetupform.ui" line="482"/>
         <source>Start Minos RigCtld</source>
         <translation>Démarrer Minos RigCtld</translation>
-   </message>
+    </message>
     <message>
         <location filename="../rigsetupform.ui" line="547"/>
         <source>Supported Native Bands on Radio</source>

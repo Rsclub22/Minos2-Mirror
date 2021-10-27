@@ -272,7 +272,7 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1689"/>
+        <location filename="../bandmapclientframe.cpp" line="1717"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -292,7 +292,7 @@
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1581"/>
+        <location filename="../bandmapclientframe.cpp" line="1609"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -404,7 +404,7 @@ Le mode calculé est %2</translation>
         <location filename="../Clusterbandmapconfigure.ui" line="123"/>
         <source>Cluster/Bandmap Distance</source>
         <translation>Distance Cluster/Bandmap</translation>
-     </message>
+    </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="187"/>
         <source>3.5 MHz</source>
@@ -2079,7 +2079,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <source>Failed to open Contest file %1 : %2 </source>
         <translation>L&apos;ouverture du fichier %1 a échoué : %2 </translation>
     </message>
-   <message>
+    <message>
         <location filename="../LoggerContest.cpp" line="394"/>
         <source>Failed to create Contest file %1 : %2</source>
         <translation>La création du fichier %1 a échoué : %2</translation>
@@ -2652,12 +2652,12 @@ Non - Ignorer les modifications</translation>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2845"/>
+        <location filename="../qsologframe.cpp" line="2872"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2880"/>
+        <location filename="../qsologframe.cpp" line="2907"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -2684,75 +2684,114 @@ Non - Ignorer les modifications</translation>
         <translation>QRZ</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="49"/>
+        <location filename="../qrzdisplayframe.ui" line="36"/>
         <source>Callsign:</source>
         <translation>Indicatif d&apos;appel:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="90"/>
+        <location filename="../qrzdisplayframe.ui" line="77"/>
         <source>Name:</source>
         <translation>Nom:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="127"/>
+        <location filename="../qrzdisplayframe.ui" line="114"/>
         <source>Address 1:</source>
         <translation>Adresse 1:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="164"/>
+        <location filename="../qrzdisplayframe.ui" line="151"/>
         <source>Address 2:</source>
         <translation>Adresse 2:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="201"/>
+        <location filename="../qrzdisplayframe.ui" line="188"/>
         <source>Country:</source>
         <translation>Pays:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="255"/>
+        <location filename="../qrzdisplayframe.ui" line="242"/>
         <source>QRA:</source>
         <translation>QRA:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="298"/>
+        <location filename="../qrzdisplayframe.ui" line="279"/>
         <source>Bearing:</source>
         <translation>Direction:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="335"/>
+        <location filename="../qrzdisplayframe.ui" line="316"/>
         <source>Distance:</source>
         <translation>Distance:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="372"/>
+        <location filename="../qrzdisplayframe.ui" line="353"/>
         <source>ITU Zone:</source>
         <translation>Zone ITU:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="409"/>
+        <location filename="../qrzdisplayframe.ui" line="390"/>
         <source>CQ Zone:</source>
         <translation>Zone CQ:</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.ui" line="457"/>
+        <location filename="../qrzdisplayframe.ui" line="442"/>
+        <source>QRZ  Message: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.ui" line="493"/>
+        <source>Search</source>
+        <translation type="unfinished">Chercher</translation>
+    </message>
+    <message>
         <source>Connect</source>
-        <translation>Se connecter</translation>
+        <translation type="vanished">Se connecter</translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="38"/>
+        <source>Double Click to transfer Callsign, Locator and Name to log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="39"/>
+        <source>Double Click to transfer locator to log</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="40"/>
+        <source>Double Click to transfer Bearing to rotator control</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="67"/>
+        <source>Search callsign invalid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="264"/>
+        <source>OnLine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="268"/>
+        <source>OffLine</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="208"/>
+        <location filename="../qrzdisplayframe.cpp" line="293"/>
         <source>Available</source>
         <translation>Disponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="209"/>
+        <location filename="../qrzdisplayframe.cpp" line="294"/>
         <source>Not Available</source>
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="210"/>
+        <location filename="../qrzdisplayframe.cpp" line="295"/>
         <source>No Contact</source>
         <translation>Aucun contact</translation>
     </message>
@@ -3091,7 +3130,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1287"/>
-        <location filename="../rigcontrolframe.cpp" line="2159"/>
+        <location filename="../rigcontrolframe.cpp" line="2173"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
@@ -3541,27 +3580,27 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RunMemoryButton</name>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="596"/>
+        <location filename="../runbuttonsframe.cpp" line="604"/>
         <source>&amp;Off</source>
         <translation>&amp;Éteint</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="597"/>
+        <location filename="../runbuttonsframe.cpp" line="605"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="598"/>
+        <location filename="../runbuttonsframe.cpp" line="606"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="599"/>
+        <location filename="../runbuttonsframe.cpp" line="607"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.cpp" line="600"/>
+        <location filename="../runbuttonsframe.cpp" line="608"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
@@ -5438,22 +5477,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="853"/>
+        <location filename="../tsinglelogframe.cpp" line="856"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1431"/>
+        <location filename="../tsinglelogframe.cpp" line="1434"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1450"/>
+        <location filename="../tsinglelogframe.cpp" line="1453"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1472"/>
+        <location filename="../tsinglelogframe.cpp" line="1475"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
@@ -5555,7 +5594,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <source>Stop</source>
         <translation>Arrêter</translation>
     </message>
-   <message>
+    <message>
         <location filename="../txvmbuttonsframe.cpp" line="272"/>
         <source>Rig CW Message</source>
         <translation>?? Message CW d&apos;apparat??</translation>
@@ -5790,7 +5829,7 @@ Through</source>
         <location filename="../txvmrigbuttondialog.cpp" line="79"/>
         <source>CW Message too long - Max %1 chars.</source>
         <translation>Message CW trop long - Max %1 caractères. </translation>
-     </message>
+    </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="90"/>
         <location filename="../txvmrigbuttondialog.cpp" line="120"/>
