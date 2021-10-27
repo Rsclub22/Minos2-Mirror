@@ -7,26 +7,54 @@
     <x>0</x>
     <y>0</y>
     <width>240</width>
-    <height>76</height>
+    <height>186</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Configure Rig Sync</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Sub Rig Control</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="subControl"/>
-     </item>
-    </layout>
+    <widget class="QFrame" name="">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Main RigControl</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="mainControl"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="">
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Sub RigControl</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="subControl"/>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

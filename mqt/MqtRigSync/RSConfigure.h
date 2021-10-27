@@ -15,9 +15,9 @@ public:
     explicit RSConfigure(QWidget *parent = nullptr);
     ~RSConfigure();
 
-    void setServerList(QStringList rigServers, QString current);
+    void setServerList(QStringList rigServers, QString mainCurrent, QString subCurrent);
     QString getSubServer();
-
+    QString getMainServer();
 private slots:
     void on_OKButton_clicked();
 

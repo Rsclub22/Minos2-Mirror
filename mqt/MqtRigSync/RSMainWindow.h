@@ -75,6 +75,7 @@ private:
     QSharedPointer<ModeInfo>  lastBandMode;
     int lastModePart = -1;
 
+    QString mainServer;
     PubSubName mainRigSelected;
 
     QString subServer;

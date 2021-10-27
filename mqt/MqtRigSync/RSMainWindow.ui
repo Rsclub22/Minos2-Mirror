@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>628</width>
+    <width>715</width>
     <height>95</height>
    </rect>
   </property>
@@ -27,12 +27,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="Rig1Combo">
+         <widget class="QLineEdit" name="Rig1Rig">
           <property name="enabled">
            <bool>false</bool>
-          </property>
-          <property name="sizeAdjustPolicy">
-           <enum>QComboBox::AdjustToContents</enum>
           </property>
          </widget>
         </item>
@@ -56,6 +53,12 @@
         </item>
         <item>
          <widget class="QComboBox" name="Rig2Combo">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="sizeAdjustPolicy">
            <enum>QComboBox::AdjustToContents</enum>
           </property>
@@ -108,6 +111,19 @@
            <string notr="true">trackButtonGroup</string>
           </attribute>
          </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
         </item>
         <item>
          <widget class="QCheckBox" name="wsjtxCb">
@@ -185,7 +201,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>628</width>
+     <width>715</width>
      <height>21</height>
     </rect>
    </property>

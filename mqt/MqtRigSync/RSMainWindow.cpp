@@ -33,6 +33,20 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     bool trackBand = settings.value("trackBand", false).toBool();
     ui->trackBandcb->setChecked(trackBand);
 
+    int trackRig = settings.value("trackRig", false).toInt();
+    switch(trackRig)
+    {
+    case 0:
+        ui->noTrack->setChecked(true);
+        break;
+    case 1:
+        ui->trackRig->setChecked(true);
+        break;
+    case 2:
+        ui->trackSub->setChecked(true);
+        break;
+    }
+
     connect(&SyncTimer, &QTimer::timeout, this, &RSMainWindow::SyncTimerTimer);
     SyncTimer.start(100);
 
@@ -56,6 +70,9 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
 
+    mainServer = config.value("MainRigControlApp", mainServer).toString();
+    mainRigSelected = config.value("MainRigControlRig", mainRigSelected.toString()).toString();
+
     subServer = config.value("SyncRigControlApp", subServer).toString();
     subRigSelected = config.value("SyncRigControlRig", subRigSelected.toString()).toString();
 }
@@ -72,10 +89,13 @@ void RSMainWindow::configure()
     }
     sv.removeDuplicates();
 
-    rsc.setServerList(sv, subRigSelected.getRouterApp());
+    rsc.setServerList(sv, mainRigSelected.getRouterApp(), subRigSelected.getRouterApp());
 
     if (rsc.exec() == QDialog::Accepted)
     {
+        mainRigSelected = PubSubName(rsc.getMainServer() + "/x");    // expects r/a/k - this is just r/a
+        mainServer = mainRigSelected.getRouterApp();
+
         subRigSelected = PubSubName(rsc.getSubServer() + "/x");    // expects r/a/k - this is just r/a
         subServer = subRigSelected.getRouterApp();
 
@@ -87,6 +107,7 @@ void RSMainWindow::configure()
         QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
         QSettings config(fileName, QSettings::IniFormat);
 
+        config.setValue("MainRigControlApp", mainServer);
         config.setValue("SyncRigControlApp", subServer);
 
     }
@@ -148,7 +169,7 @@ void RSMainWindow::SyncTimerTimer(  )
         {
             mainRigFreq = n1mmLink.getFrequency();
             mainRigMode = n1mmLink.getMode();
-            ui->Rig1Combo->setCurrentText(n1mmLink.getRadioName());
+            ui->Rig1Rig->setText(n1mmLink.getRadioName());
             if (ui->trackRig->isChecked())
             {
                 on_transfer12Button_clicked();
@@ -156,7 +177,23 @@ void RSMainWindow::SyncTimerTimer(  )
             trackBand();
         }
     }
-    ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
+    if (mainRigFreq.isClear())
+    {
+        ui->QF1Label->clear();
+    }
+    else
+    {
+        ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
+    }
+    if (subRigFreq.isClear())
+    {
+        ui->QF2Label->clear();
+    }
+    else
+    {
+        ui->QF2Label->setText(subRigFreq.convertFreqStrDisp());
+    }
+
 }
 
 void RSMainWindow::on_closeButton_clicked()
@@ -236,10 +273,7 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             {
                 rigCache.addRigList(an.getValue());
 
-                ui->Rig1Combo->clear();
-                ui->Rig1Combo->addItem("");
-                ui->Rig1Combo->addItems( rigs());
-
+                ui->Rig1Rig->clear();
                 QString pub = an.getPublisherRouter() + "/" + an.getPublisherProgram();
 
                 if (pub == subRigSelected.getRouterApp())
@@ -265,13 +299,13 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 break;
             }
         }
-        ui->Rig1Combo->setCurrentText(mainRigSelected.toString());
+        ui->Rig1Rig->setText(mainRigSelected.toString());
 
         if (!mainRigSelected.isEmpty())
         {
             RigState &selState = rigCache.getState(mainRigSelected);
             RigDetails &selDetail = rigCache.getDetails(mainRigSelected);
-            ui->Rig1Combo->setCurrentText(mainRigSelected.toString());
+            ui->Rig1Rig->setText(mainRigSelected.toString());
 
             if (selDetail.isDirty())
             {
@@ -284,7 +318,14 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 mainRigFreq = selState.radioFreq().getValue();
 
                 selState.clearDirty();
-                ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
+                if (mainRigFreq.isClear())
+                {
+                    ui->QF1Label->clear();
+                }
+                else
+                {
+                    ui->QF1Label->setText(mainRigFreq.convertFreqStrDisp());
+                }
 
                 if (ui->trackRig->isChecked() || firstTime)
                 {
@@ -303,8 +344,8 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
         }
         else
         {
-            ui->Rig1Combo->setCurrentText("");
-            ui->QF1Label->setText("");
+            ui->Rig1Rig->clear();
+            ui->QF1Label->clear();
         }
     }
     if (!subRigSelected.isEmpty())
@@ -324,7 +365,15 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             subRigFreq = selState.radioFreq().getValue();
 
             selState.clearDirty();
-            ui->QF2Label->setText(subRigFreq.convertFreqStrDisp());
+            if (subRigFreq.isClear())
+            {
+                ui->QF2Label->clear();
+            }
+            else
+            {
+                ui->QF2Label->setText(subRigFreq.convertFreqStrDisp());
+            }
+
 
             if (ui->trackSub->isChecked())
             {
@@ -337,8 +386,8 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     }
     else
     {
-        ui->Rig2Combo->setCurrentText("");
-        ui->QF2Label->setText("");
+        ui->Rig2Combo->clear();
+        ui->QF2Label->clear();
     }
 }
 
@@ -426,18 +475,26 @@ void RSMainWindow::trackBand()
 void RSMainWindow::on_noTrack_clicked()
 {
     // do nothing
+    QSettings settings;
+    settings.setValue("trackRig", 0);
 }
 
 void RSMainWindow::on_trackRig_clicked()
 {
     // set rig2 to rig1
     on_transfer12Button_clicked();
+
+    QSettings settings;
+    settings.setValue("trackRig", 1);
 }
 
 void RSMainWindow::on_trackSub_clicked()
 {
     // set rig1 to rig2
     on_transfer21Button_clicked();
+
+    QSettings settings;
+    settings.setValue("trackRig", 2);
 }
 
 void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
