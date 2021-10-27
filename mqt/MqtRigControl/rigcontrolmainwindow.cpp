@@ -4654,6 +4654,7 @@ void RigControlMainWindow::aboutRigConfig()
             {
                 msg.append(tr("Comport = %1\n").arg(currentRadio->comport));
                 msg.append(tr("Baudrate = %1\n").arg(currentRadio->baudrate));
+                msg.append(tr("Data bits = %1").arg(currentRadio->databits));
                 msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio->stopbits)));
                 msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio->parity]));
                 msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio->handshake]));
@@ -4775,6 +4776,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         if (rigCap.portType == RigCapConstants::PortType::serial)
         {
             trace(QString("Comport = %1").arg(currentRadio->comport));
+            trace(QString("Data bits = %1").arg(currentRadio->databits));
             trace(QString("Baudrate = %1").arg(currentRadio->baudrate));
             trace(QString("Stop bits = %1").arg(QString::number(currentRadio->stopbits)));
             trace(QString("Parity = %1").arg(serialCommonData::parityStr[currentRadio->parity]));
