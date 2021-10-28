@@ -309,6 +309,10 @@ void ClusterMainWindow::doStartup()
 
     connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
 
+    //connect(ui->runStartCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runStartCmdFileChkBoxChanged(state);});
+    //connect(ui->runEndCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runEndCmdFileChkBoxChanged(state);});
+    //connect(ui->saveBandFilterSettingChkBox, &QCheckBox::stateChanged, [=](int state){onSaveBandFilterChkBoxClicked(state);});
+
 
     connect(ui->overrideLogCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onOverrideLogCheckBoxClicked);
     connect(ui->hfLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
@@ -370,6 +374,7 @@ void ClusterMainWindow::doStartup()
     connect(ui->pushButton, &QPushButton::pressed, this, &ClusterMainWindow::onpbpressed);
 
     ui->clusterTab->setCurrentWidget(ui->bandFilter);
+    ui->startCloseFileTab->setAutoFillBackground(true);
 }
 
 // this is for testing
@@ -734,7 +739,7 @@ void ClusterMainWindow::disconnectNode()
     //client->logout();
     if (nodeConnected)
     {
-        if (setupCluster->getRunEndFileFlag())
+        if (ui->runEndCmdFileChkBox->isChecked())
         {
             handleEndFile();          // send user commands
         }
@@ -804,7 +809,7 @@ void ClusterMainWindow::checkedLoggedIn(QString msg)
             //loginStatDetails = true;
 
 
-            if (setupCluster->getRunStartFileFlag())
+            if (ui->runStartCmdFileChkBox->isChecked())
             {
                 handleStartFile();          // send user commands
             }
@@ -877,7 +882,7 @@ void ClusterMainWindow::checkStationDetails(QString msg)
     }
 
 
-    if (setupCluster->getRunStartFileFlag())
+    if (ui->runStartCmdFileChkBox->isChecked())
     {
         handleStartFile();          // send user commands
     }
@@ -889,13 +894,38 @@ void ClusterMainWindow::checkStationDetails(QString msg)
 
 void ClusterMainWindow::handleStartFile()
 {
-    handleCmdFile(CLUSTER_PATH + CLUSTER_START_FILE);
+    if (ui->vhfScriptRadioButton->isChecked())
+    {
+       handleCmdFile(CLUSTER_PATH + CLUSTER_START_FILE);
+    }
+    else if (ui->hfScriptRadioButton->isChecked())
+    {
+       handleCmdFile(CLUSTER_PATH + CLUSTER_START_HF_FILE);
+    }
+    else
+    {
+        trace(QString("Start Script file requested, but no radiobutton selection"));
+    }
+
 }
 
 
 void ClusterMainWindow::handleEndFile()
 {
-    handleCmdFile(CLUSTER_PATH + CLUSTER_END_FILE);
+    if (ui->vhfScriptRadioButton->isChecked())
+    {
+        handleCmdFile(CLUSTER_PATH + CLUSTER_END_FILE);
+    }
+    else if(ui->hfScriptRadioButton->isChecked())
+    {
+        handleCmdFile(CLUSTER_PATH + CLUSTER_END_HF_FILE);
+    }
+    else
+    {
+        trace(QString("End Script file requested, but no radiobutton selection"));
+    }
+
+
 }
 
 void ClusterMainWindow::handleCmdFile(QString fileName)
@@ -2080,7 +2110,7 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     if (nodeConnected)
     {
-        if (setupCluster->getRunEndFileFlag())
+        if (ui->runEndCmdFileChkBox->isChecked())
         {
             handleEndFile();          // send user commands
         }
@@ -2091,9 +2121,14 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
     LogTimer.stop();
 
-    if (setupCluster->getBandFilterOnSaveFlag())
+    if (ui->saveBandFilterSettingChkBox->isChecked())
     {
         saveBandFilterSettings();
+    }
+
+    if (ui->saveStartSciptCheckBox->isChecked())
+    {
+        saveStartEndScriptSettings();
     }
 
 
@@ -2271,7 +2306,7 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
                         d[1].append('\n');
                         trace(QString("UserCmdButton %1 Read - Send Command to cluster = %2").arg(tabSelected, d[1]));
 
-                        if (setupCluster->getRunEndFileFlag())
+                        if (ui->runEndCmdFileChkBox->isChecked())
                         {
                             if (d[1].contains("bye", Qt::CaseInsensitive))
                             {
@@ -2707,9 +2742,9 @@ void ClusterMainWindow::saveBandFilterSettings()
 
     }
 
-    config.setValue(QString("logFilterOverride"), ui->overrideLogCheckBox->isChecked() ? true : false);
-    config.setValue(QString("logFilterHF"), ui->hfLogFilterCheckBox->isChecked() ? true : false);
-    config.setValue(QString("logFilterVHFMW"),ui->vhfMwLogFilterCheckBox->isChecked() ? true : false);
+    config.setValue(QString("logFilterOverride"), ui->overrideLogCheckBox->isChecked() );
+    config.setValue(QString("logFilterHF"), ui->hfLogFilterCheckBox->isChecked());
+    config.setValue(QString("logFilterVHFMW"),ui->vhfMwLogFilterCheckBox->isChecked());
 
     config.endGroup();
 
@@ -2744,6 +2779,53 @@ void ClusterMainWindow::readBandFilterSettings()
 
     config.endGroup();
 }
+
+
+
+
+void ClusterMainWindow::saveStartEndScriptSettings()
+{
+
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("StartEndScript");
+
+    if (ui->hfScriptRadioButton->isEnabled())
+    {
+        config.setValue("hfScriptFileEnabled", true);
+    }
+    else
+    {
+        config.setValue("vhfScriptFileEnabled", false);
+    }
+
+
+    config.setValue("enableStartCommandFile", ui->runStartCmdFileChkBox->isEnabled());
+    config.setValue("enableEndCommandFile", ui->runEndCmdFileChkBox->isEnabled());
+    config.setValue("saveStartScriptSettingsOnClose", ui->saveStartSciptCheckBox->isEnabled());
+    config.endGroup();
+}
+
+
+void ClusterMainWindow::readStartEndScriptSettings()
+{
+    QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
+    config.beginGroup("StartEndScript");
+
+    if (config.value(QString("hfScriptFileEnabled"), false).toBool())
+    {
+       ui->hfScriptRadioButton->setEnabled(config.value("hfScriptFileEnabled", false).toBool());
+    }
+    else
+    {
+       ui->vhfScriptRadioButton->setEnabled(!(config.value("hfScriptFileEnabled", false).toBool()));
+    }
+
+    ui->runStartCmdFileChkBox->setEnabled(config.value("enableStartCommandFile", false).toBool());
+    ui->runEndCmdFileChkBox->setEnabled(config.value("enableEndCommandFile", false).toBool());
+    ui->saveStartSciptCheckBox->setEnabled(config.value("saveStartScriptSettingsOnClose", false).toBool());
+    config.endGroup();
+}
+
 
 
 void ClusterMainWindow::setHfLogOverrideIndicatorOnOff(bool on)
@@ -2844,6 +2926,42 @@ void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
 
 }
 
+
+void ClusterMainWindow::saveEnableStartEndScriptFileFlags()
+{
+    QString fileName = CLUSTER_SETTINGS_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+
+    config.beginGroup("CommandFile");
+
+   // config.setValue("enableStartCommandFile", enableStartCmdFiles);
+    config.endGroup();
+
+
+
+
+    config.beginGroup("CommandFile");
+    //config.setValue("enableEndCommandFile", enableEndCmdFiles);
+    config.endGroup();
+
+
+}
+
+
+void ClusterMainWindow::saveBandFilterOnSaveFlag()
+{
+    QString fileName = CLUSTER_SETTINGS_FILE;
+
+    QSettings config(fileName, QSettings::IniFormat);
+/*
+    config.beginGroup("General");
+    if (band)
+    config.setValue("bandFilterSaveOnClose", bandFilterOnSaveFlag);
+    config.endGroup();
+ */
+}
+
 void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
 {
     Q_UNUSED(i)
@@ -2914,6 +3032,12 @@ void ClusterMainWindow::setAllHFBandsFilter(bool state)
 
      updateDisplay();
 }
+
+
+
+
+
+
 
 
 void ClusterMainWindow::setBandsCheckBoxAndFilterFlag(const QString band, const bool state)

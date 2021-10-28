@@ -65,7 +65,9 @@ public:
     void loadPersonalToSetupTab();
 
     bool getSendToDXClusterEnabled();
-    bool getBandFilterOnSaveFlag(){return bandFilterOnSaveFlag;}
+    //bool getBandFilterOnSaveFlag(){return bandFilterOnSaveFlag;}
+
+    //bool getStartEndScriptOnSaveFlag(){return startEndScriptOnSaveFlag;}
 
 signals:
 
@@ -99,12 +101,12 @@ private slots:
     void saveButtonPushed();
 
     void cancelButtonPushed();
-    void runStartCmdFileChkBoxChanged(int state);
-    void runEndCmdFileChkBoxChanged(int state);
+    //void runStartCmdFileChkBoxChanged(int state);
+    //void runEndCmdFileChkBoxChanged(int state);
 
 
     void sendSpotsToDXClusterChkBoxChanged(int state);
-    void onSaveBandFilterChkBoxClicked(int state);
+    //void onSaveBandFilterChkBoxClicked(int state);
     void onQrzCheckBoxChkBoxClicked(int state);
 private:
     Ui::SetupDialog *ui;
@@ -126,18 +128,21 @@ private:
     QString timeToLive;
     bool timeToLiveChanged;
 
-    bool runStartCmdFilesChanged;
-    bool enableStartCmdFiles;
-    bool runEndCmdFilesChanged;
-    bool enableEndCmdFiles;
+    //bool runStartCmdFilesChanged;
+    //bool enableStartCmdFiles;
+    //bool runEndCmdFilesChanged;
+    //bool enableEndCmdFiles;
 
     bool sendSpotToDXCluster;
     bool sendSpotsToDXClusterChanged;
 
     bool personalDataChanged;
 
-    bool bandFilterOnSaveFlag;
-    bool bandFilterOnSaveChanged;
+    //bool bandFilterOnSaveFlag;
+    //bool bandFilterOnSaveChanged;
+
+    //bool startEndScriptOnSaveFlag;
+    //bool startEndScriptOnSaveChanged;
 
     bool useQrzForQraFlag;
     bool useQrzForQraChanged;

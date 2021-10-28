@@ -487,6 +487,10 @@ private:
     bool areAnyBandsChecked(QString bandType);
     void setLogBandFilter(QString band);
     QString getBandType(QString band);
+    void saveEnableStartEndScriptFileFlags();
+    void saveBandFilterOnSaveFlag();
+    void readStartEndScriptSettings();
+    void saveStartEndScriptSettings();
 private slots:
     void personalDataChanged(QString callsign, QString name, QString locator, QString qth);
 

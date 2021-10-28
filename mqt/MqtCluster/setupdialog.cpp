@@ -26,15 +26,9 @@ SetupDialog::SetupDialog(QWidget *parent) :
     ui(new Ui::SetupDialog),
     listDataChanged(false),
     timeToLiveChanged(false),
-    runStartCmdFilesChanged(false),
-    enableStartCmdFiles(false),
-    runEndCmdFilesChanged(false),
-    enableEndCmdFiles(false),
     sendSpotToDXCluster(false),
     sendSpotsToDXClusterChanged(false),
     personalDataChanged(false),
-    bandFilterOnSaveFlag(false),
-    bandFilterOnSaveChanged(false),
     useQrzForQraFlag(false),
     useQrzForQraChanged(false)
 {
@@ -49,10 +43,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
 
     // General Tab
     connect(ui->timeToLive, &QLineEdit::editingFinished, [=](){timeToliveEditFinished();});
-    connect(ui->runStartCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runStartCmdFileChkBoxChanged(state);});
-    connect(ui->runEndCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runEndCmdFileChkBoxChanged(state);});
     connect(ui->sendSpotsToDXClusterChkBox, &QCheckBox::stateChanged, [=](int state){sendSpotsToDXClusterChkBoxChanged(state);});
-    connect(ui->saveBandFilterSettingChkBox, &QCheckBox::stateChanged, [=](int state){onSaveBandFilterChkBoxClicked(state);});
     connect(ui->useQrzCheckBox, &QCheckBox::stateChanged, [=](int state){onQrzCheckBoxChkBoxClicked(state);});
     readGeneralSettings();
     loadGeneralToSetupTab();
@@ -179,62 +170,42 @@ void SetupDialog::timeToliveEditFinished()
     }
 }
 
+
+
+
 void SetupDialog::saveGeneralSettings()
 {
-    if (timeToLiveChanged || runStartCmdFilesChanged
-        || runEndCmdFilesChanged || sendSpotsToDXClusterChanged
-        || bandFilterOnSaveChanged || useQrzForQraChanged)
+    if (timeToLiveChanged || sendSpotsToDXClusterChanged
+        || useQrzForQraChanged)
     {
         timeToLive = ui->timeToLive->text().trimmed();
         QString fileName = CLUSTER_SETTINGS_FILE;
 
         QSettings config(fileName, QSettings::IniFormat);
 
-        if (timeToLiveChanged)
+
+        config.beginGroup("TimeToLive");
+        if (timeToLive != config.value("timeToLive", "").toString())
         {
-            config.beginGroup("TimeToLive");
             config.setValue("timeToLive", timeToLive);
-            config.endGroup();
-            timeToLiveChanged = false;
         }
 
-        if (runStartCmdFilesChanged)
+        config.endGroup();
+        config.beginGroup("EnableSendSpotsToDXCluster");
+        if (sendSpotToDXCluster != config.value("enableSendToDXCluster", false).toBool())
         {
-            config.beginGroup("CommandFile");
-            config.setValue("enableStartCommandFile", enableStartCmdFiles);
-            config.endGroup();
-            runStartCmdFilesChanged = false;
-        }
-
-        if (runEndCmdFilesChanged)
-        {
-            config.beginGroup("CommandFile");
-            config.setValue("enableEndCommandFile", enableEndCmdFiles);
-            config.endGroup();
-            runEndCmdFilesChanged = false;
-        }
-
-        if (sendSpotsToDXClusterChanged)
-        {
-            config.beginGroup("EnableSendSpotsToDXCluster");
             config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
             config.endGroup();
             emit sendSpotToTxEnabled(sendSpotToDXCluster);
-            sendSpotsToDXClusterChanged = false;
         }
 
-        if (bandFilterOnSaveChanged)
+        config.beginGroup("UseQRZServer");
+        if (useQrzForQraFlag != config.value("enableGetQraFromQrz", false).toBool())
         {
-            config.beginGroup("General");
-            config.setValue("bandFilterSaveOnClose", bandFilterOnSaveFlag);
-            config.endGroup();
-        }
-        if (useQrzForQraChanged)
-        {
-            config.beginGroup("UseQRZServer");
             config.setValue("enableGetQraFromQrz", useQrzForQraFlag);
             config.endGroup();
         }
+
 
     }
 }
@@ -287,14 +258,14 @@ void SetupDialog::readGeneralSettings()
     }
     config.endGroup();
     config.beginGroup("CommandFile");
-    enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();
-    enableEndCmdFiles = config.value("enableEndCommandFile", false).toBool();
+    //enableStartCmdFiles = config.value("enableStartCommandFile", false).toBool();
+    //enableEndCmdFiles = config.value("enableEndCommandFile", false).toBool();
     config.endGroup();
     config.beginGroup("EnableSendSpotsToDXCluster");
     sendSpotToDXCluster = config.value("enableSendToDXCluster", false).toBool();
     config.endGroup();
     config.beginGroup("General");
-    bandFilterOnSaveFlag = config.value("bandFilterSaveOnClose", true).toBool();
+    //bandFilterOnSaveFlag = config.value("bandFilterSaveOnClose", true).toBool();
     config.endGroup();
     config.beginGroup("UseQRZServer");
     useQrzForQraFlag =  config.value("enableGetQraFromQrz", false).toBool();
@@ -305,14 +276,12 @@ void SetupDialog::readGeneralSettings()
 
 
 
+
 void SetupDialog::loadGeneralToSetupTab()
 {
 
     ui->timeToLive->setText(timeToLive);
-    ui->runStartCmdFileChkBox->setChecked(enableStartCmdFiles);
-    ui->runEndCmdFileChkBox->setChecked(enableEndCmdFiles);
     ui->sendSpotsToDXClusterChkBox->setChecked(sendSpotToDXCluster);
-    ui->saveBandFilterSettingChkBox->setChecked(bandFilterOnSaveFlag);
     ui->useQrzCheckBox->setChecked(useQrzForQraFlag);
 
 }
@@ -326,26 +295,6 @@ QString SetupDialog::getTimeToLive()
 }
 
 
-
-void SetupDialog::onSaveBandFilterChkBoxClicked(int state)
-{
-    if (state == Qt::Checked)
-    {
-        if (!bandFilterOnSaveFlag)
-        {
-           bandFilterOnSaveFlag = true;
-           bandFilterOnSaveChanged = true;
-        }
-    }
-    else if (state == Qt::Unchecked)
-    {
-        if (bandFilterOnSaveFlag)
-        {
-            bandFilterOnSaveFlag = false;
-            bandFilterOnSaveChanged = true;
-        }
-    }
-}
 
 void SetupDialog::onQrzCheckBoxChkBoxClicked(int state)
 {
@@ -366,51 +315,7 @@ void SetupDialog::onQrzCheckBoxChkBoxClicked(int state)
 }
 
 
-void SetupDialog::runStartCmdFileChkBoxChanged(int state)
-{
 
-    if (state ==  Qt::Checked)
-    {
-        if (!enableStartCmdFiles)
-        {
-            enableStartCmdFiles = true;
-            runStartCmdFilesChanged = true;
-        }
-    }
-    else if (state == Qt::Unchecked)
-    {
-        if (enableStartCmdFiles)
-        {
-            enableStartCmdFiles = false;
-            runStartCmdFilesChanged = true;
-        }
-    }
-}
-
-
-void SetupDialog::runEndCmdFileChkBoxChanged(int state)
-{
-
-    if (state ==  Qt::Checked)
-    {
-        if (!enableEndCmdFiles)
-        {
-            enableEndCmdFiles = true;
-            runEndCmdFilesChanged = true;
-        }
-
-    }
-    else if (state == Qt::Unchecked)
-    {
-        if (enableEndCmdFiles)
-        {
-           enableEndCmdFiles = false;
-           runEndCmdFilesChanged = true;
-        }
-
-
-    }
-}
 
 void SetupDialog::sendSpotsToDXClusterChkBoxChanged(int state)
 {
@@ -808,16 +713,16 @@ void SetupDialog::setTabNum(int num)
 }
 
 
-bool SetupDialog::getRunStartFileFlag()
-{
-    return enableStartCmdFiles;
-}
+//bool SetupDialog::getRunStartFileFlag()
+//{
+//    return enableStartCmdFiles;
+//}
 
 
-bool SetupDialog::getRunEndFileFlag()
-{
-   return enableEndCmdFiles;
-}
+//bool SetupDialog::getRunEndFileFlag()
+//{
+//   return enableEndCmdFiles;
+//}
 
 
 
