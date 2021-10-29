@@ -218,19 +218,30 @@ void SetupDialog::createDefaultGeneralSettingsFile()
     QSettings config(fileName, QSettings::IniFormat);
 
     config.beginGroup("Personal");
+
     config.setValue("Callsign", "");
     config.setValue("Name", "");
     config.setValue("Locator", "");
     config.setValue("Qth", "");
-    config.endGroup();
 
+    config.endGroup();
     config.beginGroup("TimeToLive");
     config.setValue("timeToLive", 30);
+
+    config.endGroup();
+    config.beginGroup("HFSpots");
+
+    config.setValue("enable", true);
     config.endGroup();
 
-    config.beginGroup("HFSpots");
-    config.setValue("enable", false);
+    /*
+    config.beginGroup("Spots_To_Log_Filter");
+    config.setValue("logFilterOverride", false);
+    config.setValue("logFilterHF", false);
+    config.setValue("logFilterVHFMW", true);
     config.endGroup();
+
+
 
     config.beginGroup("CommandFile");
     config.setValue("enableCommandFile", false);
@@ -243,6 +254,7 @@ void SetupDialog::createDefaultGeneralSettingsFile()
     config.beginGroup("UseQRZServer");
     config.setValue("enableGetQraFromQrz", false);
     config.endGroup();
+    */
 
 }
 

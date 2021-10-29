@@ -178,6 +178,14 @@ void ClusterMainWindow::doStartup()
     setupCluster->readPersonal();
     setupCluster->loadPersonalToSetupTab();
 
+    readBandFilterSettings();
+    loadBandFilterSettingsToTab();
+    ui->saveBandFilterSettingChkBox->setToolTip(tr("Always loads last saved settings"));
+
+    readStartEndScriptSettings();
+
+
+
     connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
 
     // read enable hf spots flag
@@ -332,9 +340,6 @@ void ClusterMainWindow::doStartup()
     connect(client, &QtTelnet::message, this, &ClusterMainWindow::parseDX);
     connect(client, &QtTelnet::message, this, &ClusterMainWindow::checkedLoggedIn);
     connect(client, &QtTelnet::message, this, &ClusterMainWindow::cancelPingTimeOut);
-
-    readBandFilterSettings();
-    loadBandFilterSettingsToTab();
 
 
     statusTimer = new QTimer(this);
@@ -1931,6 +1936,7 @@ void ClusterMainWindow::onOverrideLogCheckBoxClicked()
     {
         ui->hfLogFilterCheckBox->setEnabled(false);
         ui->vhfMwLogFilterCheckBox->setEnabled(false);
+        setSendSpotsToLogWarning("");
     }
 }
 
@@ -2665,17 +2671,9 @@ void ClusterMainWindow::loadBandFilterSettingsToTab()
     foreach (auto const &b, bands)
     {
         QString band = b.data()->uk;
-        if (hfFlag)
-        {
-           bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
-        }
-        else
-        {
-            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
-            {
-               bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
-            }
-        }
+
+        bandCheckBoxes.value(band).bandChkBox->setChecked(filterSettings.getBandFilter(band));
+
 
     }
 
@@ -2728,19 +2726,14 @@ void ClusterMainWindow::saveBandFilterSettings()
         QString band = b.data()->uk;
         QString iniBandName = band;
         iniBandName.remove(' ').replace('.', '_');
-        if (hfFlag)
-        {
-            config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
-        }
-        else
-        {
-            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
-            {
-                config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
-            }
-        }
-
+        config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
     }
+
+    config.setValue(QString("saveBandFilterSettingsOnClose"), ui->saveBandFilterSettingChkBox->isChecked() );
+
+    config.endGroup();
+
+    config.beginGroup("Spots_To_Log_Filter");
 
     config.setValue(QString("logFilterOverride"), ui->overrideLogCheckBox->isChecked() );
     config.setValue(QString("logFilterHF"), ui->hfLogFilterCheckBox->isChecked());
@@ -2760,22 +2753,19 @@ void ClusterMainWindow::readBandFilterSettings()
         QString band = b.data()->uk;
         QString iniBandName = band;
         iniBandName.remove(' ').replace('.', '_');
-        if (hfFlag)
-        {
-            filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
-        }
-        else
-        {
-            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
-            {
-                filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
-            }
-        }
+        filterSettings.setBandFilter(band, config.value(QString("bandFilter_%1").arg(iniBandName), true).toBool());
+
     }
 
-    ui->overrideLogCheckBox->setChecked(config.value(QString("logFilterOverride"), false).toBool());
-    ui->hfLogFilterCheckBox->setChecked(config.value(QString("logFilterHF"), true).toBool());
-    ui->vhfMwLogFilterCheckBox->setChecked(config.value(QString("logFilterVHFMW"), true).toBool());
+    ui->saveBandFilterSettingChkBox->setChecked(config.value("saveBandFilterSettingsOnClose", false).toBool());
+
+    config.endGroup();
+
+    config.beginGroup("Spots_To_Log_Filter");
+
+    ui->overrideLogCheckBox->setChecked(config.value("logFilterOverride", false).toBool());
+    ui->hfLogFilterCheckBox->setChecked(config.value("logFilterHF", true).toBool());
+    ui->vhfMwLogFilterCheckBox->setChecked(config.value("logFilterVHFMW", true).toBool());
 
     config.endGroup();
 }
@@ -3105,7 +3095,7 @@ void ClusterMainWindow::onUhfSelectBandPbPressed()
     else
     {
 
-        setAllUHFBandsFilter(false);
+        setAllUHFBandsFilter(true);
     }
 }
 
