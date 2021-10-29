@@ -1,4 +1,4 @@
      #! /bin/bash
 
-     ./buildInstall SECONDINSTALL
+     ./buildInstall.sh SECONDINSTALL
      

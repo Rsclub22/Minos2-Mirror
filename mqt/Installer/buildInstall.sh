@@ -5,7 +5,7 @@ SCRIPT=$(readlink -f $0)
 DIR=$(echo ${SCRIPT%/*}/../..)
 cd $DIR
 
-if [["$1" -eq "SECONDINSTALL"]]
+if [[ "$1" == "SECONDINSTALL" ]]; then
     BUILDDIR="buildBeta"
     QMAKEPARAM="SECONDINSTALL=true"
     RUNTIME="runtime-beta"
@@ -24,7 +24,7 @@ fi
 
 cd $BUILDDIR
 
-qmake ../mqt/mqt.pro
+qmake $QMAKEPARAM ../mqt/mqt.pro
 
 retVal=$?
 if [ $retVal -ne 0 ]; then
