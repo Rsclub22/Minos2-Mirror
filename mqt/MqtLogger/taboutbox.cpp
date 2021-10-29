@@ -278,7 +278,7 @@ void TAboutBox::on_ageSpinner_valueChanged(int cap)
 void TAboutBox::on_ageCb_stateChanged(int /*arg1*/)
 {
     ui->ageSpinner->setEnabled(ui->ageCb->isChecked());
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeToProtectContests, ui->ageCb->isChecked());
+    TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, ui->ageCb->isChecked());
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }
 
