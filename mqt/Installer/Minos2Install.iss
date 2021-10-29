@@ -14,7 +14,6 @@
 #define MyAppBuild ""
 #define MyFullVersion GetVersionComponents(AddBackslash(SourcePath) + "Bin\" + MyAppExeName, MyAppMajor, MyAppMinor, MyAppRev, MyAppBuild)
 #define MyAppVersion Str(MyAppMajor) + "." + Str(MyAppMinor) + "." + Str(MyAppRev)
-#define MyAppName "Minos"
 
 #define MainBinaryName  "MqtLogger.exe"
 #define SetupBaseName   "MinosInstall_"
@@ -30,27 +29,32 @@ SourceDir={#SourcePath}
 ; there should be a setup log, named something like 
 ;"Setup Log 2021-10-18 #001.txt"
 SetupLogging=true
+
+PrivilegesRequired=admin
+
+; as we have a constant in appid, these lines are needed
+UsePreviousLanguage=no
+VersionInfoDescription={code:GetAppName} + ' Setup'
+VersionInfoProductName={code:GetAppName}
+
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
-; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 
-#if "SECONDINSTALL" == myParam
-AppId={{CC0C4AE4-E4A2-4745-8B44-971F8CC60108}
-#else
-AppId={{617577AD-2218-40EF-8300-431EB77CD246}
-#endif
+AppId={code:GetAppID}
+
 ;Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{617577AD-2218-40EF-8300-431EB77CD246}_is1
 ;on a 64 bit machine; on 32 bit lose the WOW6432Node\
  
-AppName={#MyAppName}
+AppName={code:GetAppName}
+
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName=C:\{#MyAppName}
-DefaultGroupName={#MyAppName}
+DefaultDirName=C:\{code:GetAppName}
+DefaultGroupName={code:GetAppName}
 AllowNoIcons=yes
 DirExistsWarning=yes
 LicenseFile=C:\temp\mqtInstaller\Installer\gpl3.txt
@@ -59,7 +63,7 @@ OutputDir=..\InnoInstaller\
 OutputBaseFilename={#SetupBaseName + AppVersionFile}
 Compression=lzma
 SolidCompression=yes
-MinVersion=0,6.1
+MinVersion=6.1sp1
 UninstallDisplayIcon={app}\Bin\{#MainBinaryName}
 
 ChangesAssociations = yes
@@ -88,14 +92,14 @@ Type: files; Name: "{app}\Configuration\MinosKeyer.ini"
 Type: files; Name: "{app}\Configuration\MinosControl.ini"
 
 [Icons]
-Name: "{group}\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"
+Name: "{group}\{code:GetAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"
 Name: "{group}\{#MyDocFileName}"; Filename: "{app}\Docs\{#MyDocFileName}";WorkingDir: "{app}\Docs"
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: desktopicon
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: quicklaunchicon
+Name: "{group}\{cm:UninstallProgram,{code:GetAppName}}"; Filename: "{uninstallexe}"
+Name: "{commondesktop}\{code:GetAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: desktopicon
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{code:GetAppName}"; Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Tasks: quicklaunchicon
 
 [Run]
-Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Bin\{#MyAppExeName}";WorkingDir: "{app}"; Description: "{cm:LaunchProgram,{code:GetAppName}}"; Flags: nowait postinstall skipifsilent
 
 [Code]
 // global vars
@@ -146,6 +150,35 @@ begin
   { Find out if data dir already exists }
   Result := DirExists(GetLogsDir(''));
 end;
+
+function GetAppName(a: string): string;
+var
+  AppName: string;
+begin
+    {To generate a new GUID, click Tools | Generate GUID inside the IDE.}
+    #ifdef SECONDINSTALL
+        AppName:='Minos Beta'; 
+    #else
+        AppName:='Minos';
+    #endif
+
+    Result := AppName;
+end;
+
+function GetAppID(a: string): string;
+var
+  AppId: string;
+begin
+    {To generate a new GUID, click Tools | Generate GUID inside the IDE.}
+    #ifdef SECONDINSTALL
+        AppId:='CC0C4AE4-E4A2-4745-8B44-971F8CC60108';
+    #else
+        AppId:='617577AD-2218-40EF-8300-431EB77CD246';
+    #endif
+
+    Result := AppId;
+end;
+
 
 [CustomMessages]
 PleaseSelect=Undefined //just in case (should be equal to English)

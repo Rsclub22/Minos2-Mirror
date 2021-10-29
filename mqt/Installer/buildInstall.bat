@@ -3,10 +3,12 @@ C:
 setlocal
 
 if "%1"=="SECONDINSTALL"  goto second
+set builddir=build
  goto notsecond
  :second
-:set qmakeparam="SECONDINSTALL=true"
- set innoparam="-myParam SECONDINSTALL"
+set qmakeparam="SECONDINSTALL=true"
+set innoparam="/DSECONDINSTALL"
+set builddir=buildbeta
  :notsecond
 
 set QtTools=C:\Qt\Tools\mingw810_32\bin
@@ -31,8 +33,8 @@ cd %MROOT%
 
 git pull origin master
 
-if not exist build mkdir build
-cd build
+if not exist %builddir% mkdir %builddir%
+cd %builddir%
 
 qmake.exe %qmakeparam% ..\mqt\mqt.pro  -spec win32-g++
 IF %ERRORLEVEL% == 0 goto make
@@ -65,20 +67,20 @@ mkdir Bin
 mkdir Docs
 mkdir Help
 
-copy %MROOT%\build\MqtAppStarter\release\MqtAppStarter.exe Bin
-copy %MROOT%\build\MqtChat\release\MqtChat.exe Bin
-copy %MROOT%\build\MqtCluster\release\MqtCluster.exe Bin
-REM copy %MROOT%\build\MqtControl\release\MqtControl.exe Bin
-REM copy %MROOT%\build\MqtKeyer\release\MqtKeyer.exe Bin
-copy %MROOT%\build\MqtKSTClient\release\MqtKSTClient.exe Bin
-copy %MROOT%\build\MqtLogger\release\MqtLogger.exe Bin
-copy %MROOT%\build\MqtMonitor\release\MqtMonitor.exe Bin
-copy %MROOT%\build\MqtQrzServer\release\MqtQrzServer.exe Bin
-copy %MROOT%\build\MqtRigControl\release\MqtRigControl.exe Bin
-copy %MROOT%\build\MqtRigRecorder\release\MqtRigRecorder.exe Bin
-copy %MROOT%\build\MqtRigSync\release\MqtRigSync.exe Bin
-copy %MROOT%\build\MqtRotator\release\MqtRotator.exe Bin
-copy %MROOT%\build\MqtServer\release\MqtServer.exe Bin
+copy %MROOT%\%builddir%\MqtAppStarter\release\MqtAppStarter.exe Bin
+copy %MROOT%\%builddir%\MqtChat\release\MqtChat.exe Bin
+copy %MROOT%\%builddir%\MqtCluster\release\MqtCluster.exe Bin
+REM copy %MROOT%\%builddir%\MqtControl\release\MqtControl.exe Bin
+REM copy %MROOT%\%builddir%\MqtKeyer\release\MqtKeyer.exe Bin
+copy %MROOT%\%builddir%\MqtKSTClient\release\MqtKSTClient.exe Bin
+copy %MROOT%\%builddir%\MqtLogger\release\MqtLogger.exe Bin
+copy %MROOT%\%builddir%\MqtMonitor\release\MqtMonitor.exe Bin
+copy %MROOT%\%builddir%\MqtQrzServer\release\MqtQrzServer.exe Bin
+copy %MROOT%\%builddir%\MqtRigControl\release\MqtRigControl.exe Bin
+copy %MROOT%\%builddir%\MqtRigRecorder\release\MqtRigRecorder.exe Bin
+copy %MROOT%\%builddir%\MqtRigSync\release\MqtRigSync.exe Bin
+copy %MROOT%\%builddir%\MqtRotator\release\MqtRotator.exe Bin
+copy %MROOT%\%builddir%\MqtServer\release\MqtServer.exe Bin
 
 copy %HamlibPath%\bin\*.dll Bin
 copy %HamlibPath%\bin\*.exe Bin
@@ -130,12 +132,12 @@ REM bin\translations now exists... we can build our translations
 for %%i in (en_GB fr_FR) do (
   for %%j in (MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigRecorder MqtRigSync MqtRotator MqtServer) do (
   lconvert -verbose -o translations\%%j_%%i.qm ^
-  %MROOT%\build\MqtUtils\release\minos_%%i.qm ^
-  %MROOT%\build\TinyXML\release\minos_%%i.qm ^
-  %MROOT%\build\XMPPLib\release\minos_%%i.qm ^
-  %MROOT%\build\MqtBase\release\minos_%%i.qm ^
-  %MROOT%\build\KeyerBase\release\minos_%%i.qm ^
-  %MROOT%\build\%%j\release\minos_%%i.qm
+  %MROOT%\%builddir%\MqtUtils\release\minos_%%i.qm ^
+  %MROOT%\%builddir%\TinyXML\release\minos_%%i.qm ^
+  %MROOT%\%builddir%\XMPPLib\release\minos_%%i.qm ^
+  %MROOT%\%builddir%\MqtBase\release\minos_%%i.qm ^
+  %MROOT%\%builddir%\KeyerBase\release\minos_%%i.qm ^
+  %MROOT%\%builddir%\%%j\release\minos_%%i.qm
   )
 )
 
