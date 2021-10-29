@@ -18,7 +18,7 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
-
+#include "SecondInstall.h"
 #include "qrzservermainwindow.h"
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
@@ -46,7 +46,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     // this is only needed for standalone to store to registry - appname might not be correct here!
     if (appName.isEmpty())
     {
-        QApplication::setOrganizationName( "Minos2Qt" );
+        QApplication::setOrganizationName( SecondInstall::getOrgName() );
         QApplication::setOrganizationDomain( "g0gjv.org.uk" );
         QApplication::QCoreApplication::setApplicationName( "mqtQrzServer" );
 

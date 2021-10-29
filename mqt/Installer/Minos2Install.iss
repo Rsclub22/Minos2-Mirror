@@ -34,7 +34,11 @@ SetupLogging=true
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 
+#if "SECONDINSTALL" == myParam
+AppId={{CC0C4AE4-E4A2-4745-8B44-971F8CC60108}
+#else
 AppId={{617577AD-2218-40EF-8300-431EB77CD246}
+#endif
 ;Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{617577AD-2218-40EF-8300-431EB77CD246}_is1
 ;on a 64 bit machine; on 32 bit lose the WOW6432Node\
  

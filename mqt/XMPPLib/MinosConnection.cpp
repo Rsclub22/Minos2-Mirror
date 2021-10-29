@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 #include "LogEvents.h"
 #include "MTrace.h"
-#include "PortIds.h"
+#include "SecondInstall.h"
 #include "ServerEvent.h"
 #include "MinosConnection.h" 
 #include "XMPPStanzas.h"
@@ -91,7 +91,7 @@ void MinosAppConnection::on_waitConnectTimeout()
         return;
     }
     waitConnectTimer.stop();
-    sock->connectToHost("localhost", MinosClientPort);
+    sock->connectToHost("localhost", SecondInstall::getClientPort());
 }
 void MinosAppConnection::on_connected()
 {

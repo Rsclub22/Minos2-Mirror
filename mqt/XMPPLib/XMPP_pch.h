@@ -14,8 +14,6 @@
 
 #include "mqtUtils_pch.h"
 
-#include "PortIds.h"
-
 #include "ServerEvent.h"
 #include "XMPPEvents.h"
 

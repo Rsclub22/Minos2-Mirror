@@ -1,5 +1,5 @@
 #include "minos_pch.h"
-
+#include "SecondInstall.h"
 #include "MinosLink.h"
 #include "clientThread.h"
 #include "serverThread.h"
@@ -35,10 +35,10 @@ ServerMain::ServerMain(QWidget *parent) :
     QString sname = ThisMinosRouter::getThisMinosRouter()->getRouterName();
 
     clientListener = QSharedPointer<MinosClientListener>(new MinosClientListener);
-    clientListener ->initialise( "Client", MinosClientPort );
+    clientListener ->initialise( "Client", SecondInstall::getClientPort() );
 
     routerListener = QSharedPointer<MinosRouterListener>(new MinosRouterListener);
-    routerListener ->initialise( "Server", MinosRouterPort );
+    routerListener ->initialise( "Server", SecondInstall::getRouterPort() );
 
     ZConf = QSharedPointer<TZConf>(new TZConf);
 

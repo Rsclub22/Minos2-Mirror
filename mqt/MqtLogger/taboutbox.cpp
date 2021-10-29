@@ -1,5 +1,6 @@
 #include "base_pch.h"
 #include <QDesktopServices>
+#include "SecondInstall.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "TSessionManager.h"
@@ -9,7 +10,7 @@
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
-QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + "</h1>"
+QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
                                "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
                                "<br><br>";
 

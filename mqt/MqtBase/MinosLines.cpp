@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "SecondInstall.h"
 #include "MinosLines.h"
 
 #define MAX_LINE_SIZE 4096
@@ -52,7 +53,7 @@ LineFileBlock::~LineFileBlock()
 //===================================================================
 LineFileMapper::LineFileMapper() :
     lpPtr( nullptr ),
-    hFile( "LineMapFile" )
+    hFile( SecondInstall::getLineMapFileName() )
 {
     hFile.attach();
 }

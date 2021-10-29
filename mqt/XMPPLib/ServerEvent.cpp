@@ -8,18 +8,17 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include "XMPP_pch.h"
+#include "SecondInstall.h"
+#include "singleapplication.h"
 
 #ifdef Q_OS_WIN
     static QSharedMemory RouterEvent;
-#else
-    #include <signal.h>
-    #include <dirent.h>
-    #include <fstream>
 #endif
 void makeRouterEvent( bool create )
 {
+    // we keep this so that we appear to old systems
 #ifdef Q_OS_WIN
-    RouterEvent.setKey( "MinosQtServer" );
+    RouterEvent.setKey( SecondInstall::getRouterEventName() );
     if (create)
     {
         RouterEvent.create( 1 );
@@ -33,79 +32,10 @@ void makeRouterEvent( bool create )
     Q_UNUSED(create)
 #endif
 }
-#ifndef Q_OS_WIN
-
-static int getProcIdByName(QString procName)
-{
-    int pid = -1;
-
-    // Open the /proc directory
-    DIR *dp = opendir("/proc");
-    if (dp != nullptr)
-    {
-        // Enumerate all entries in directory until process found
-        struct dirent *dirp;
-        while (pid < 0 && (dirp = readdir(dp)))
-        {
-            // Skip non-numeric entries
-            int id = atoi(dirp->d_name);
-            if (id > 0)
-            {
-                // Read contents of virtual /proc/{pid}/cmdline file
-                QString cmdPath = QString("/proc/%1/cmdline").arg( dirp->d_name);
-
-                QFile data(cmdPath);
-                if (data.open(QFile::ReadOnly))
-                {
-                    QTextStream in(&data);
-                    QString cmdLine = in.readAll();
-
-                    if (!cmdLine.isEmpty())
-                    {
-                        // Keep first cmdline item which contains the program path
-                        int pos = cmdLine.indexOf('\0');
-                        if (pos != -1)
-                            cmdLine = cmdLine.left(pos);
-                        // Keep program name only, removing the path
-                        pos = cmdLine.lastIndexOf('/');
-                        if (pos != -1)
-                            cmdLine = cmdLine.mid(pos + 1);
-                        // Compare against requested process name
-                        if (procName == cmdLine)
-                            pid = id;
-                    }
-                }
-            }
-        }
-    }
-
-    closedir(dp);
-
-    return pid;
-}
-#endif
 
 bool checkRouterReady()
 {
-#ifdef Q_OS_WIN
-    QSharedMemory mem( "MinosQtServer" );
-    if ( mem.attach() )
-    {
-        mem.detach();
-        return true;
-    }
-#else
-    // on Linux, the shared memory can stick around when the process crashes
-    int pid = getProcIdByName("MqtServer");
-    if (pid > 0)
-    {
-        int err = kill(pid, 0);
-        if (err == 0 || err == EPERM)
-        {
-            return true;
-        }
-    }
-#endif
-    return false;
+    return SingleApplication::testRunning(SecondInstall::getSingleAppRouterName());
+
 }
 

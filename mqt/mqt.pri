@@ -4,6 +4,16 @@ DEFINES += PRERELEASETYPE=\\\"Pre-Beta\\\"
 #DEFINES += PRERELEASETYPE=\\\"Beta\\\"
 #DEFINES += PRERELEASETYPE=\\\"RC2\\\"
 #DEFINES += PRERELEASETYPE=\\\"\\\"
+
+#DEFINES += SECONDINSTALL
+# call using
+# qmake.exe "SECONDINSTALL=true" ..\mqt\mqt.pro  -spec win32-g++
+defined(SECONDINSTALL, var) {
+    equals(SECONDINSTALL, "true"){
+    DEFINES += SECONDINSTALL=SecondInstall
+    }
+}
+
 CONFIG += c++11
 DEFINES += TIXML_USE_STL
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG  -Winvalid-pch

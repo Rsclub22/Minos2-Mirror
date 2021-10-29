@@ -1,4 +1,5 @@
 #include "base_pch.h"
+#include "SecondInstall.h"
 #include "singleapplication.h"
 #include "tlogcontainer.h"
 
@@ -16,7 +17,7 @@ int main(int argc, char *argv[])
 {
     int appError = 1;
     {
-        SingleApplication a( QString("MinosLogger"), argc, argv);
+        SingleApplication a( SecondInstall::getSingleAppLoggerName(), argc, argv);
         if (a.isRunning())
         {
             if (argc > 1)
@@ -26,7 +27,7 @@ int main(int argc, char *argv[])
             else
             {
                 QMessageBox msgBox;
-                msgBox.setText("Minos Logger is already running!");
+                msgBox.setText(SecondInstall::getSingleAppLoggerDescription() + " is already running!");
                 msgBox.setIcon(QMessageBox::Critical);
                 msgBox.addButton("Close", QMessageBox::RejectRole);
                 msgBox.exec();

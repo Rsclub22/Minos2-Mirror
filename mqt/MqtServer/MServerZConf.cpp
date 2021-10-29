@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 #include "minos_pch.h"
 #include <QUuid>
-
+#include "SecondInstall.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 
@@ -129,7 +129,7 @@ void TZConf::startZConf(const QString &name)
 
                 if (res)
                 {
-                    trace(QString("iface %1 address %2").arg(i.humanReadableName()).arg(j.ip().toString()));
+                    trace(QString("iface %1 address %2").arg(i.humanReadableName(), j.ip().toString()));
                     TxSocks.push_back(qus);
                 }
             }
@@ -298,12 +298,12 @@ void TZConf::readRouterListFile()
 
       if ( port.size() == 0 )
       {
-         port = QString::number(MinosRouterPort);
+         port = QString::number(SecondInstall::getRouterPort());
       }
 
       QHostAddress ha;
       ha.setAddress(host);
-      zcPublishRouter( uuid, station, ha, toQUint16(port, MinosRouterPort ) );
+      zcPublishRouter( uuid, station, ha, toQUint16(port, SecondInstall::getRouterPort() ) );
 
    }
    //trace("Finished reading Server List File");
@@ -382,12 +382,12 @@ QString TZConf::getZConfString(bool beaconreq, const QString &h)
 {
    static int sequence = 0;
    QString Uuid = getRouterId();
-   return  QString("<minosServer ")
+   return  QString("<") + SecondInstall::getZConfName() + " "
                + "seq='" + QString::number(sequence++)
                + "' UUID='" + Uuid
                + "' name='" + getName()
                + "' ip='" + h
-               + "' port='" + QString::number(MinosRouterPort) + "'"
+               + "' port='" + QString::number(SecondInstall::getRouterPort()) + "'"
                + (beaconreq?" request='true'":"")
                + " />";
 }
@@ -400,7 +400,7 @@ Router *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
     TIXML_STRING smessage = message.toStdString();// allowed conversion through TIXML_STRING
     xdoc.Parse( smessage.c_str(), nullptr );
     TiXmlElement * tix = xdoc.RootElement();
-    if ( tix && checkElementName( tix, "minosServer" ) )
+    if ( tix && checkElementName( tix, SecondInstall::getZConfName() ) )
     {
         //"<minosServer UUID='" + Uuid + "' name='" + getName() + "' port='7778' request='true' />";
         QString UUID = getAttribute( tix, "UUID" );
@@ -420,7 +420,7 @@ Router *TZConf::processZConfString(const QString &message, QHostAddress &host, Q
 
         // publish what came in
 
-        quint16 iPort = toQUint16(port, MinosRouterPort);
+        quint16 iPort = toQUint16(port, SecondInstall::getRouterPort());
         srv = zcPublishRouter( UUID, station, host, iPort );
         if ( request.size() && UUID != getRouterId())
         {

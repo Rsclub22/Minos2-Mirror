@@ -4,8 +4,10 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QThread>
+#include "SecondInstall.h"
 
 #define TIME_OUT                (500)    // 500ms
+#define TEST_TIME_OUT           (10)    // 10ms
 
 SingleApplication::SingleApplication(QString routerName, int &argc, char **argv)
     :QApplication(argc, argv)
@@ -52,9 +54,8 @@ void SingleApplication::_newLocalConnection() {
 void SingleApplication::_initLocalConnection() {
     _isRunning = false;
 
-    QLocalSocket socket;
-    socket.connectToServer(_routerName);
-    if(socket.waitForConnected(TIME_OUT)) {
+    if (testRunning(_routerName, TIME_OUT))
+    {
         fprintf(stderr, "%s already running.\n",
                 _routerName.toLocal8Bit().constData());
         _isRunning = true;
@@ -65,7 +66,16 @@ void SingleApplication::_initLocalConnection() {
     //Failed to connect to server, create a
     _newLocalServer();
 }
-
+bool SingleApplication::testRunning(QString name, int timeout)
+{
+    QLocalSocket socket;
+    socket.connectToServer(name);
+    if(socket.waitForConnected((timeout > 0)?timeout:TEST_TIME_OUT))
+    {
+        return true;
+    }
+    return false;
+}
 ////////////////////////////////////////////////////////////////////////////////
 // Explain:
 // Create LocalServer
@@ -87,7 +97,7 @@ void SingleApplication::clearRegistry()
 {
 #ifdef Q_OS_WIN
     QThread::msleep(1000);
-    QSettings reg("HKEY_CURRENT_USER\\Software\\Minos2Qt", QSettings::NativeFormat);
+    QSettings reg("HKEY_CURRENT_USER\\Software\\" + SecondInstall::getOrgName(), QSettings::NativeFormat);
     reg.clear();
 #endif
 }

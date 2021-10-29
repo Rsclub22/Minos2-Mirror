@@ -1,7 +1,7 @@
 #include "base_pch.h"
 #include <QStyleFactory>
 #include "MinosLoggerEvents.h"
-
+#include "SecondInstall.h"
 #include <QFontDialog>
 #include <QDesktopServices>
 #include <QToolTip>
@@ -192,7 +192,7 @@ bool TLogContainer::show(int argc, char *argv[])
 
     QMainWindow::show();
 
-    setWinAppId(this, QString("Minos2Qt.MqtLogger.SubScreen%1").arg(0) );
+    setWinAppId(this, SecondInstall::getOrgName() + QString(".MqtLogger.SubScreen%1").arg(0) );
 
     if ( TAboutBox::ShowAboutBox( this, true ) == false )
     {

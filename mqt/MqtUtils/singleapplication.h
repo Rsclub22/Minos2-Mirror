@@ -13,6 +13,7 @@ class SingleApplication : public QApplication {
 
         bool isRunning();                // Are there instances running
         void sendArgs();
+        static bool testRunning(QString name, int timeout = -1);
 
     private slots:
         // A trigger new connections

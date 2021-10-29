@@ -2,6 +2,13 @@ C:
 
 setlocal
 
+if "%1"=="SECONDINSTALL"  goto second
+ goto notsecond
+ :second
+:set qmakeparam="SECONDINSTALL=true"
+ set innoparam="-myParam SECONDINSTALL"
+ :notsecond
+
 set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
@@ -27,7 +34,7 @@ git pull origin master
 if not exist build mkdir build
 cd build
 
-qmake.exe ..\mqt\mqt.pro  -spec win32-g++
+qmake.exe %qmakeparam% ..\mqt\mqt.pro  -spec win32-g++
 IF %ERRORLEVEL% == 0 goto make
   echo qmake failed; please fix errors and rebuild
   goto reset
@@ -140,7 +147,7 @@ mkdir Installer
 
 xcopy /E /F /Y %MROOT%\mqt\Installer .\Installer
 
-C:\"Program Files (x86)\Inno Setup 6\ISCC.exe" Installer\Minos2Install.iss
+C:\"Program Files (x86)\Inno Setup 6\ISCC.exe" %innoparam% Installer\Minos2Install.iss
 IF %ERRORLEVEL% == 0 goto reset
   echo Inno Setup failed; please fix errors and rebuild
 

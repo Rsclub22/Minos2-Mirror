@@ -20,7 +20,6 @@ INCLUDEPATH += ../MqtUtils
 
 SOURCES += \
     Dispatcher.cpp \
-    PortIds.cpp \
     PubSubClient.cpp \
     RPCPubSub.cpp \
     ServerEvent.cpp \
@@ -36,7 +35,6 @@ SOURCES += \
 
 HEADERS += \
     Dispatcher.h \
-    PortIds.h \
     PubSubClient.h \
     RPCPubSub.h \
     ServerEvent.h \

@@ -6,6 +6,7 @@
 #include <QProcessEnvironment>
 #include <QMessageBox>
 #include <QTranslator>
+#include "SecondInstall.h"
 
 static bool appClosing = false;
 static QString appStartupName;
@@ -180,7 +181,7 @@ void appStartup(const QString &pappName)
         appStartupName = pappName;
     }
 
-    QApplication::setOrganizationName( "Minos2Qt" );
+    QApplication::setOrganizationName( SecondInstall::getOrgName() );
     QApplication::setOrganizationDomain( "g0gjv.org.uk" );
     QApplication::QCoreApplication::setApplicationName( appStartupName );
 
@@ -244,7 +245,7 @@ void appStartup(const QString &pappName)
     }
     enableTrace( "./TraceLog", appStartupName + "_" );
 
-    QString Version = QString(STRINGVERSION)  + " " + PRERELEASETYPE ;
+    QString Version = QString(STRINGVERSION)  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() ;
 
     QString title = appStartupName;
 
