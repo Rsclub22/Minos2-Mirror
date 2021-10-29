@@ -5,13 +5,24 @@ SCRIPT=$(readlink -f $0)
 DIR=$(echo ${SCRIPT%/*}/../..)
 cd $DIR
 
-git pull origin
-
-if [ ! -d ./build ]; then
-   mkdir build
+if [["$1" -eq "SECONDINSTALL"]]
+    BUILDDIR="buildBeta"
+    QMAKEPARAM="SECONDINSTALL=true"
+    RUNTIME="runtime-beta"
+    INTERMEDIATE="minos-runtime-beta"
+else
+    BUILDDIR="buildBeta"
+    RUNTIME="runtime"
+    INTERMEDIATE="minos-runtime"
 fi
 
-cd build
+git pull origin
+
+if [ ! -d ./$BUILDDIR ]; then
+   mkdir $BUILDDIR
+fi
+
+cd $BUILDDIR
 
 qmake ../mqt/mqt.pro
 
@@ -39,13 +50,13 @@ fi
 
 cd ../..
 
-if [ -d ./minos-runtime ]; then
-  rm -rf ./minos-runtime
+if [ -d ./$INTERMEDIATE ]; then
+  rm -rf ./$INTERMEDIATE
 fi
 
-mkdir ./minos-runtime
+mkdir ./$INTERMEDIATE
 
-cd ./minos-runtime
+cd ./$INTERMEDIATE
 
 mkdir Configuration
 mkdir Lists
@@ -60,12 +71,12 @@ do
   for j in MqtAppStarter MqtChat MqtCluster MqtKSTClient MqtLogger MqtMonitor MqtQrzServer MqtRigControl MqtRigSync MqtRigRecorder MqtRotator MqtServer
   do
     lconvert -verbose -o Bin/translations/${j}_${i}.qm \
-    $DIR/build/MqtUtils/translations/minos_${i}.qm \
-    $DIR/build/TinyXML/translations/minos_${i}.qm \
-    $DIR/build/XMPPLib/translations/minos_${i}.qm \
-    $DIR/build/MqtBase/translations/minos_${i}.qm \
-    $DIR/build/KeyerBase/translations/minos_${i}.qm \
-    $DIR/build/${j}/translations/minos_${i}.qm
+    $DIR/$BUILDDIR/MqtUtils/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/TinyXML/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/XMPPLib/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/MqtBase/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/KeyerBase/translations/minos_${i}.qm \
+    $DIR/$BUILDDIR/${j}/translations/minos_${i}.qm
   done
 done
 cp /usr/share/qt5/translations/qt*.qm Bin/translations
@@ -74,36 +85,36 @@ echo $OSTYPE
 
 if [[ "$OSTYPE" == "darwin"* ]] ; then 		#MacOS
 
-	cp -r $DIR/build/MqtAppStarter/MqtAppStarter.app Bin
-	cp -r $DIR/build/MqtChat/MqtChat.app Bin
-	cp -r $DIR/build/MqtCluster/MqtCluster.app Bin
-	cp -r $DIR/build/MqtControl/MqtControl.app Bin
-	cp -r $DIR/build/MqtKeyer/MqtKeyer.app Bin
-	cp -r $DIR/build/MqtKSTClient/MqtKSTClient.app Bin
-	cp -r $DIR/build/MqtLogger/MqtLogger.app Bin
-	cp -r $DIR/build/MqtMonitor/MqtMonitor.app Bin
-	cp -r $DIR/build/MqtQrzServer/MqtQrzServer.app Bin
-	cp -r $DIR/build/MqtRigControl/MqtRigControl.app Bin
-	cp -r $DIR/build/MqtRigSync/MqtRigSync.app Bin
-	cp -r $DIR/build/MqtRigRecorder/MqtRigRecorder.app Bin
-	cp -r $DIR/build/MqtRotator/MqtRotator.app Bin
-	cp -r $DIR/build/MqtServer/MqtServer.app Bin
+	cp -r $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter.app Bin
+	cp -r $DIR/$BUILDDIR/MqtChat/MqtChat.app Bin
+	cp -r $DIR/$BUILDDIR/MqtCluster/MqtCluster.app Bin
+	cp -r $DIR/$BUILDDIR/MqtControl/MqtControl.app Bin
+	cp -r $DIR/$BUILDDIR/MqtKeyer/MqtKeyer.app Bin
+	cp -r $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient.app Bin
+	cp -r $DIR/$BUILDDIR/MqtLogger/MqtLogger.app Bin
+	cp -r $DIR/$BUILDDIR/MqtMonitor/MqtMonitor.app Bin
+	cp -r $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer.app Bin
+	cp -r $DIR/$BUILDDIR/MqtRigControl/MqtRigControl.app Bin
+	cp -r $DIR/$BUILDDIR/MqtRigSync/MqtRigSync.app Bin
+	cp -r $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder.app Bin
+	cp -r $DIR/$BUILDDIR/MqtRotator/MqtRotator.app Bin
+	cp -r $DIR/$BUILDDIR/MqtServer/MqtServer.app Bin
 
 else
-	cp $DIR/build/MqtAppStarter/MqtAppStarter Bin
-	cp $DIR/build/MqtChat/MqtChat Bin
-	cp $DIR/build/MqtCluster/MqtCluster Bin
-	cp $DIR/build/MqtControl/MqtControl Bin
-	cp $DIR/build/MqtKeyer/MqtKeyer Bin
-	cp $DIR/build/MqtKSTClient/MqtKSTClient Bin
-	cp $DIR/build/MqtLogger/MqtLogger Bin
-	cp $DIR/build/MqtMonitor/MqtMonitor Bin
-	cp $DIR/build/MqtQrzServer/MqtQrzServer Bin
-	cp $DIR/build/MqtRigControl/MqtRigControl Bin
-	cp $DIR/build/MqtRigSync/MqtRigSync Bin
-	cp $DIR/build/MqtRigRecorder/MqtRigRecorder Bin
-	cp $DIR/build/MqtRotator/MqtRotator Bin
-	cp $DIR/build/MqtServer/MqtServer Bin
+	cp $DIR/$BUILDDIR/MqtAppStarter/MqtAppStarter Bin
+	cp $DIR/$BUILDDIR/MqtChat/MqtChat Bin
+	cp $DIR/$BUILDDIR/MqtCluster/MqtCluster Bin
+	cp $DIR/$BUILDDIR/MqtControl/MqtControl Bin
+	cp $DIR/$BUILDDIR/MqtKeyer/MqtKeyer Bin
+	cp $DIR/$BUILDDIR/MqtKSTClient/MqtKSTClient Bin
+	cp $DIR/$BUILDDIR/MqtLogger/MqtLogger Bin
+	cp $DIR/$BUILDDIR/MqtMonitor/MqtMonitor Bin
+	cp $DIR/$BUILDDIR/MqtQrzServer/MqtQrzServer Bin
+	cp $DIR/$BUILDDIR/MqtRigControl/MqtRigControl Bin
+	cp $DIR/$BUILDDIR/MqtRigSync/MqtRigSync Bin
+	cp $DIR/$BUILDDIR/MqtRigRecorder/MqtRigRecorder Bin
+	cp $DIR/$BUILDDIR/MqtRotator/MqtRotator Bin
+	cp $DIR/$BUILDDIR/MqtServer/MqtServer Bin
 fi
 
 cp -r $DIR/mqt/ControlFiles/Configuration/* ./Configuration
@@ -130,7 +141,7 @@ wget https://microwave.rsgbcc.org/microcontests21.xml -O microcontests21.xml
 
 cd ..
 
-read -n 1 -p "Do you want to copy the build to ~/runtime (press y/n)? " ans;
+read -n 1 -p "Do you want to copy the build to ~/$RUNTIME (press y/n)? " ans;
 
 case $ans in
     y|Y)
@@ -139,22 +150,22 @@ case $ans in
         exit;;
 esac
 
-if [ ! -d .~/runtime ]; then
-   mkdir ~/runtime
+if [ ! -d .~/$RUNTIME ]; then
+   mkdir ~/$RUNTIME
 fi
-if [ ! -d ~/runtime/Logs ]; then
-   mkdir ~/runtime/Logs
+if [ ! -d ~/$RUNTIME/Logs ]; then
+   mkdir ~/$RUNTIME/Logs
 fi
-if [ ! -d ~/runtime/Lists ]; then
-   mkdir ~/runtime/Lists
+if [ ! -d ~/$RUNTIME/Lists ]; then
+   mkdir ~/$RUNTIME/Lists
 fi
-cp -rv Bin ~/runtime
-cp *.ico ~/runtime
-cp runAppStarter.sh ~/runtime
-cp Minos.sh ~/runtime
+cp -rv Bin ~/$RUNTIME
+cp *.ico ~/$RUNTIME
+cp runAppStarter.sh ~/$RUNTIME
+cp Minos.sh ~/$RUNTIME
 
-read -n 1 -p "Do you want to copy the configuration to ~/runtime (press y/n)? " ans;
+read -n 1 -p "Do you want to copy the configuration to ~/$RUNTIME (press y/n)? " ans;
 
 
-cp -rv Configuration ~/runtime
+cp -rv Configuration ~/$RUNTIME
 
