@@ -380,6 +380,7 @@ void ClusterMainWindow::doStartup()
 
     ui->clusterTab->setCurrentWidget(ui->bandFilter);
     ui->startCloseFileTab->setAutoFillBackground(true);
+    ui->clusterTab->setCurrentIndex(settings.value("ClusterServer/curTab", 0).toInt());
 }
 
 // this is for testing
@@ -2143,6 +2144,9 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.setValue(geoStr, saveGeometry());
 
+
+    settings.setValue("ClusterServer/curTab", ui->clusterTab->currentIndex());
+
     disconnectNode();
 
     trace("Minos Cluster Server Closing");
@@ -2789,9 +2793,9 @@ void ClusterMainWindow::saveStartEndScriptSettings()
     }
 
 
-    config.setValue("enableStartCommandFile", ui->runStartCmdFileChkBox->isEnabled());
-    config.setValue("enableEndCommandFile", ui->runEndCmdFileChkBox->isEnabled());
-    config.setValue("saveStartScriptSettingsOnClose", ui->saveStartSciptCheckBox->isEnabled());
+    config.setValue("enableStartCommandFile", ui->runStartCmdFileChkBox->isChecked());
+    config.setValue("enableEndCommandFile", ui->runEndCmdFileChkBox->isChecked());
+    config.setValue("saveStartScriptSettingsOnClose", ui->saveStartSciptCheckBox->isChecked());
     config.endGroup();
 }
 
@@ -2801,18 +2805,13 @@ void ClusterMainWindow::readStartEndScriptSettings()
     QSettings config(CLUSTER_SETTINGS_FILE, QSettings::IniFormat);
     config.beginGroup("StartEndScript");
 
-    if (config.value(QString("hfScriptFileEnabled"), false).toBool())
-    {
-       ui->hfScriptRadioButton->setEnabled(config.value("hfScriptFileEnabled", false).toBool());
-    }
-    else
-    {
-       ui->vhfScriptRadioButton->setEnabled(!(config.value("hfScriptFileEnabled", false).toBool()));
-    }
+    ui->hfScriptRadioButton->setChecked(config.value("hfScriptFileEnabled", false).toBool());
+    ui->vhfScriptRadioButton->setChecked(config.value("vhfScriptFileEnabled", true).toBool());
 
-    ui->runStartCmdFileChkBox->setEnabled(config.value("enableStartCommandFile", false).toBool());
-    ui->runEndCmdFileChkBox->setEnabled(config.value("enableEndCommandFile", false).toBool());
-    ui->saveStartSciptCheckBox->setEnabled(config.value("saveStartScriptSettingsOnClose", false).toBool());
+
+    ui->runStartCmdFileChkBox->setChecked(config.value("enableStartCommandFile", false).toBool());
+    ui->runEndCmdFileChkBox->setChecked(config.value("enableEndCommandFile", false).toBool());
+    ui->saveStartSciptCheckBox->setChecked(config.value("saveStartScriptSettingsOnClose", false).toBool());
     config.endGroup();
 }
 

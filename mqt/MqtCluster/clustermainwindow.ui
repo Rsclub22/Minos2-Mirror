@@ -299,7 +299,7 @@
         <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
-           <string>Cluster Start\End Script</string>
+           <string>Cluster Start/End Script</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_18">
            <item>
@@ -891,7 +891,7 @@
      <x>0</x>
      <y>0</y>
      <width>677</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuConfigure">
