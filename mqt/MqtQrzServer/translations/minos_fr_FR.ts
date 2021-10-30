@@ -32,32 +32,34 @@
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="33"/>
-        <source>PushButton</source>
+        <location filename="../qrzservermainwindow.ui" line="47"/>
+        <source>Qrz Message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="40"/>
+        <location filename="../qrzservermainwindow.ui" line="68"/>
+        <source>Qrz Error:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Status:</source>
-        <translation>Statut:</translation>
+        <translation type="vanished">Statut:</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="61"/>
         <source>Message:</source>
-        <translation>Message:</translation>
+        <translation type="vanished">Message:</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="82"/>
         <source>Error:</source>
-        <translation>Erreur:</translation>
+        <translation type="vanished">Erreur:</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="128"/>
+        <location filename="../qrzservermainwindow.ui" line="114"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.ui" line="137"/>
+        <location filename="../qrzservermainwindow.ui" line="123"/>
         <source>Setup QRZ</source>
         <translation>Configurer QRZ</translation>
     </message>
