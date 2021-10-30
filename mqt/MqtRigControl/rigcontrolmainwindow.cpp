@@ -952,7 +952,24 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 setCwMemIndVisible(true);
                 setCwMemIndOnOff(true);
-                addCwKeyerMemoryStatusToRigCache(true);
+                if (currentRadio->rigModelNumber >= 1000 && currentRadio->rigModelNumber < 2000)
+                {
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL);
+                }
+                else if (currentRadio->rigModelNumber >= 3000 && currentRadio->rigModelNumber < 4000)
+                {
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::ICOM);
+                }
+                else
+                {
+                    // only support Yaesu and Icom for now
+                    setCwMemIndVisible(false);
+                    setCwMemIndOnOff(false);
+                    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
+                    return false;
+                }
+
+
                 return true;
 
             }
@@ -960,14 +977,14 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             {
                 setCwMemIndVisible(false);
                 setCwMemIndOnOff(false);
-                addCwKeyerMemoryStatusToRigCache(false);
+                addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
                 return false;
 
             }
          }
     }
 
-    addCwKeyerMemoryStatusToRigCache(false);
+    addCwKeyerMemoryStatusToRigCache(hamlibData::CW_MEMORY_TYPES::NONE);
     setCwMemIndVisible(false);
     setCwMemIndOnOff(false);
     selectedRigSupCap->supportWaitMorse = false;
@@ -4035,13 +4052,13 @@ void RigControlMainWindow::addVoiceMemStatusToRigCache(bool status)
     }
 }
 
-void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(bool status)
+void RigControlMainWindow::addCwKeyerMemoryStatusToRigCache(int cwMemType)
 {
     if (!appName.isEmpty())
     {
-        logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(status  ? "True" : "False"));
+        logMessage(QString("Add CW Keyer Memory Status to rigcache = %1").arg(cwMemType));
         PubSubName psname(currentRadio->radioName);
-        msg->rigCache.setCwMemAvail(psname, status);
+        msg->rigCache.setCwMemAvail(psname, cwMemType);
     }
 }
 
@@ -4637,6 +4654,7 @@ void RigControlMainWindow::aboutRigConfig()
             {
                 msg.append(tr("Comport = %1\n").arg(currentRadio->comport));
                 msg.append(tr("Baudrate = %1\n").arg(currentRadio->baudrate));
+                msg.append(tr("Data bits = %1").arg(currentRadio->databits));
                 msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio->stopbits)));
                 msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio->parity]));
                 msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio->handshake]));
@@ -4758,6 +4776,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         if (rigCap.portType == RigCapConstants::PortType::serial)
         {
             trace(QString("Comport = %1").arg(currentRadio->comport));
+            trace(QString("Data bits = %1").arg(currentRadio->databits));
             trace(QString("Baudrate = %1").arg(currentRadio->baudrate));
             trace(QString("Stop bits = %1").arg(QString::number(currentRadio->stopbits)));
             trace(QString("Parity = %1").arg(serialCommonData::parityStr[currentRadio->parity]));

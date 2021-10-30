@@ -35,8 +35,8 @@ public:
 
     void setVoiceMemAvail(bool avail);
     bool getVoiceMemAvail();
-    void setCwMemAvail(bool avail);
-    bool getCwMemAvail();
+    void setCwMemType(int cwMemType);
+    int getCwMemType();
 private:
 
 double transVerterOffset;
@@ -49,7 +49,7 @@ int maxRitFreq;
 bool pttEnabled;
 int pttType;
 bool voiceMemAvail;
-bool cwMemAvail;
+int cwMemType;
 QString bandList;
 
 };

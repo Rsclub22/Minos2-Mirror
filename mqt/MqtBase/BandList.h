@@ -29,6 +29,7 @@ extern const QString allHF;
 const QString HF_BANDTYPE = "HF";
 const QString VHF_BANDTYPE = "VHF";
 const QString MW_BANDTYPE = "MWAVE";
+const QString NO_BANDTYPE = "NONE";
 
 
 class ExclusionInfo

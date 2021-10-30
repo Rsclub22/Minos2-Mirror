@@ -79,7 +79,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="nameText">
+               <widget class="MinosQLabel" name="nameText">
                 <property name="text">
                  <string/>
                 </property>

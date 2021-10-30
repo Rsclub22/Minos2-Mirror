@@ -2,6 +2,7 @@
 #include <QSettings>
 #include "txvmrigbuttondialog.h"
 #include "ui_txvmrigbuttondialog.h"
+#include "rigcontrolcommonconstants.h"
 
 const int MAX_CW_MESSAGE_LENGTH = 30;
 
@@ -46,10 +47,26 @@ void TxVmRigButtonDialog::accept()
     QDialog::accept();
 }
 
-void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool state)
+void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool visible)
 {
-    ui->txCwMessageLineEdit->setVisible(state);
-    ui->cwMessageTextLabel->setVisible(state);
+    ui->txCwMessageLineEdit->setVisible(visible);
+    ui->cwMessageTextLabel->setVisible(visible);
+}
+
+// This will overwrite the label with cwMemType
+void TxVmRigButtonDialog::setVmTypeLabelcwMemType(int cwMemType)
+{
+    QString type;
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::ICOM)
+    {
+        type = "Icom";
+    }
+    else if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    {
+        type = "Yaesu";
+    }
+
+    ui->txVmTypeLbl->setText(QString("%1 - %2").arg(vmData->getType(), type ));
 }
 
 

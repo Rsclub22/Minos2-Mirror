@@ -18,6 +18,8 @@ const QString CLUSTER_SITES = "ClusterSites.ini";
 const QString CLUSTER_COMMANDS = "ClusterCommands.ini";
 const QString CLUSTER_START_FILE = "cluster_start.txt";
 const QString CLUSTER_END_FILE = "cluster_end.txt";
+const QString CLUSTER_START_HF_FILE = "cluster_start_hf.txt";
+const QString CLUSTER_END_HF_FILE = "cluster_end_hf.txt";
 const QString CLUSTER_LOCATORLIST_DIR = "locatorFilterLists/";
 const QString CLUSTER_CALLSIGNLIST_DIR = "callsignFilterLists/";
 const QString CLUSTER_SETTINGS_FILE = "./Configuration/Cluster/ClusterSettings.ini";
@@ -175,6 +177,10 @@ const QString NEWSPOT_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro
 const QString NEWSPOT_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ;\n");
 const QString STATUS_INDICATOR_DISCONNECT_STYLE = QString("background-color: Gainsboro;\n");
 const QString STATUS_INDICATOR_CONNECT_STYLE = QString("background-color: Sandybrown;\n");
+
+const QString LOG_FILTER_INDICATOR_ON_STYLE = QString("background-color: Sandybrown ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+const QString LOG_FILTER_INDICATOR_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
+
 
 // resend clusterspots to client commands
 enum resendFrameId {ALL_CLIENTS = -1, CLUSTER_CLIENT = 0, BANDMAP_CLIENT};

@@ -130,6 +130,8 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, numButtons, tslf->txVmButtonsFrame);
     txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
 
+    cwMemType = hamlibData::CW_MEMORY_TYPES::NONE;
+
     int ret = txVmSetupDialog.exec();
 
     if (ret == QDialog::Accepted)
@@ -145,6 +147,12 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
 }
 
 
+void RigControlCwMessageKeyer::setCwMemType(int _cwMemType)
+{
+    cwMemType = _cwMemType;
+}
+
+
 int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 {
 
@@ -153,7 +161,17 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
 
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
-    vmButtonDialog.setCwMessageTextBoxVisible(true);
+    vmButtonDialog.setVmTypeLabelcwMemType(cwMemType);
+
+
+    if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+    {
+        vmButtonDialog.setCwMessageTextBoxVisible(false);
+    }
+    else
+    {
+       vmButtonDialog.setCwMessageTextBoxVisible(true);
+    }
 
     int ret = vmButtonDialog.exec();
     return ret;

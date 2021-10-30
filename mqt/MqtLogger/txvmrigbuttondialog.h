@@ -19,6 +19,8 @@ public:
 
     void setVmData(VoiceKeyerParams* vmData);
     void setCwMessageTextBoxVisible(bool state);
+    void setCwMessageLineEditVisible(bool visible);
+    void setVmTypeLabelcwMemType(int cwMemType);
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();

@@ -103,11 +103,6 @@ private:
     QListWidget* locatorListWidget;
     int locatorListWidgetCurrentRow;
 
-    bool hfButtonState;
-    bool vhfButtonState;
-    bool mWaveButtonState;
-    bool modeButtonState;
-
     QString contestUuid;
 
 
@@ -182,6 +177,8 @@ private:
     void setIgnoreDistCheckBox(QString bandType, bool state);
     void setEnableDistanceFields(QString band, bool state);
     QString findBandQLineEdit(QLineEdit *distanceLineEdit);
+    bool areAnyBandsChecked(QString bandType);
+    bool areAnyModesSet();
 private slots:
 
     void vhfButtonSelected();

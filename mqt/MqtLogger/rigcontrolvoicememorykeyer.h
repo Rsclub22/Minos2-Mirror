@@ -38,6 +38,7 @@ public:
 
     void sendCwMsg(QString message) override {Q_UNUSED(message)};
     void stopCwMsg() override {};
+    void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
 
     virtual bool hasRecord() override {return false;}
 

@@ -204,7 +204,7 @@ static const QString rigPttType ("PttType");
 static const QString rigPttState  ("PttState");
 static const QString rigPttOnOff ("PttOnOff");
 static const QString rigVoiceMemAvail ("VoiceMemAvail");
-static const QString rigCwMemAvail ("CwMemAvail");
+static const QString rigCwMemType ("CwMemType");
 
 
 // KSTClient

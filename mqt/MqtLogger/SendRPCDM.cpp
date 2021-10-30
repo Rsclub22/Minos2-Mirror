@@ -689,12 +689,12 @@ void TSendDM::notifyRigDetailChanges()
                     tslf->onSetVoiceMemAvail(selDetail.voiceMemAvail().getValue(),psn);
                 }
             }
-            if (selDetail.cwMemAvail().isDirty())
+            if (selDetail.cwMemType().isDirty())
             {
                 for (int i =0; i < frames.size(); i++)
                 {
                     TSingleLogFrame *tslf = frames[i];
-                    tslf->onSetCwMemAvail(selDetail.cwMemAvail().getValue(), psn);
+                    tslf->onSetCwMemType(selDetail.cwMemType().getValue(), psn);
                 }
             }
 
@@ -956,7 +956,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             if (clusterApp.isEmpty())
             {
                 clusterApp = PubSubName(an);
+
             }
+
+            clusterServerLoaded = true;
 
             QStringList s = an.getValue().split("<>");
             if (s.size() >= 2)

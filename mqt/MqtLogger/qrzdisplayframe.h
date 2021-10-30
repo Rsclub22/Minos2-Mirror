@@ -37,6 +37,7 @@ private slots:
 
     void onSearchQrzReturnPressed();
     void onBearingMouseDoubleClicked();
+    void onNameTextMouseDoubleClicked();
 private:
     Ui::QrzDisplayFrame *ui;
     BaseContestLog *ct = nullptr;

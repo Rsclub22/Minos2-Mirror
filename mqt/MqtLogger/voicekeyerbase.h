@@ -45,6 +45,7 @@ public:
     QString getVmCwMessage() const {return vmCwMessage;}
     void setVmCwMessage(const QString msg){vmCwMessage = msg;}
 
+
     bool getVmRepeatFlag() const {return vmRepeatFlag;}
     void setVmRepeatFlag(const bool vmRepeatFlag_){vmRepeatFlag = vmRepeatFlag_;}
 
@@ -91,6 +92,7 @@ public:
 
     virtual void sendCwMsg(QString message) = 0;
     virtual void stopCwMsg() = 0;
+    virtual void setCwMemType(int cwMemType) = 0;
 
     virtual bool hasRecord() = 0;
     virtual void doRecording(VoiceKeyerParams *){}

@@ -365,9 +365,9 @@ void RigCache::setVoiceMemAvail(const PubSubName &name, bool voiceMemAvail)
 {
     rigDetails[name].setVoiceMemAvail(voiceMemAvail);
 }
-void RigCache::setCwMemAvail(const PubSubName &name, bool cwMemAvail)
+void RigCache::setCwMemAvail(const PubSubName &name, int cwMemType)
 {
-    rigDetails[name].setCwMemAvail(cwMemAvail);
+    rigDetails[name].setCwMemType(cwMemType);
 }
 void RigCache::publishState()
 {

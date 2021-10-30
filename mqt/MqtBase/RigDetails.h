@@ -29,7 +29,7 @@ class RigDetails: public PubSubValue
     MinosItem<bool> _pttEnabled;
     MinosItem<int> _pttType;
     MinosItem<bool> _voiceMemAvail;
-    MinosItem<bool> _cwMemAvail;
+    MinosItem<int> _cwMemType;
 
 
 public:
@@ -58,7 +58,7 @@ public:
     MinosItem<bool> pttEnabled() const;
     MinosItem<int> pttType() const;
     MinosItem<bool> voiceMemAvail() const;
-    MinosItem<bool> cwMemAvail() const;
+    MinosItem<int> cwMemType() const;
 
 
     void setSelected(const QString &loggeruuid, const QString &selected);
@@ -74,7 +74,7 @@ public:
     void setPttEnabled(bool pttEnabled);
     void setPttType(int pttType);
     void setVoiceMemAvail(bool voiceMemAvail);
-    void setCwMemAvail(bool cwMemAvail);
+    void setCwMemType(int cwMemType);
 
 
 

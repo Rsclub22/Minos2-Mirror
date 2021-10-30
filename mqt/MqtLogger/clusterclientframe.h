@@ -216,12 +216,12 @@ private:
     QAction* resendSpotsAction;
     QAction* clearSpotAction;
     QAction* clearAllSpotsAction;
-    //QAction* memoryActionOveride;
+
 
     QString contestUuid;
 
     QString contestBandStr;
-    //int contestBand;
+
 
     QVector<QSharedPointer<BandInfo> > bands;
 
@@ -252,13 +252,10 @@ private:
 
     void handleClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, const QModelIndex &index);
     void handleVertHeaderClickedItems(DxSpotSortFilterProxyModel *spotProxyModel, int row);
-    //void queueIndToggle(bool on);
     void newCallsignSpotIndToggle(bool on);
     void newLocatorSpotIndToggle(bool on);
     void statusIndicatorToggle(bool on);
 
-
-    //void on_AfterLogContact(BaseContestLog *c, Callsign cs, Locator loc);
 
     bool event(QEvent *event) override;
 
@@ -266,7 +263,7 @@ private:
     int getBandOffSet(QString contestBandStr);
 
     int getModeOffSet(QString contestModeStr);
-    //void handleClusterStatusMessage(QString &msg);
+
 
     int getNumberSpotsIndicator(const QDateTime& lastTime, DxSpotSortFilterProxyModel *spotProxyModel);
     void restoreSplitters();
@@ -286,7 +283,7 @@ private:
     bool checkDbRowForMatch(bool incomingVal, int row, const int colNum);
     bool checkDbRowForMatch(Frequency incomingVal, int row, const int colNum);
 
-    //bool checkspotExists(ClusterSpotData *spotData);
+
     bool checkspotExists(QSharedPointer<ClusterSpotData> spotData);
 
     void setHF(bool hfOn);
@@ -313,7 +310,6 @@ private slots:
     void onCallsignSpotViewClicked(const QModelIndex &index);
     void onLocatorSpotViewClicked(const QModelIndex &index);
     void onSpotTabChanged(int index);
-    //void filtersChanged(bool bandfilterChanged, bool modefilterChanged,  bool callsignfilterChanged, bool locatorfilterChanged);
     void onSearchEditingFinished();
     void onDXSpotVertHeaderClicked(int row);
     void onLocatorSpotVertHeaderClicked(int row);
@@ -331,7 +327,6 @@ private slots:
 
     void on_clusterSplitter_splitterMoved(int pos, int index);
 
-    //void memoryActionOverideSelected();
 
     void on_doColumnChanges(BaseContestLog *);
     void on_doSplitterChanges(BaseContestLog *);
