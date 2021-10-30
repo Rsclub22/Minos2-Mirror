@@ -38,7 +38,7 @@ BaseContestLog::BaseContestLog(bool hf)
     QString h = QHostInfo::localHostName();
    uuid = /*makeUuid()*/ h + "_" + QString::number(inst++);
    bearingOffset.setValue(0);
-   currentMode.setValue( hamlibData::USB );
+   currentMode.setValue( isHF()?"PH":hamlibData::USB );
 
   protectedContest.setValue( false );
   allowLoc8.setValue( false );
