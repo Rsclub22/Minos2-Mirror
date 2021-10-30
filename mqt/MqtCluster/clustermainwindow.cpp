@@ -1545,7 +1545,7 @@ void ClusterMainWindow::handlePingClusterNodeTimeout()
     else
     {
         trace(QString("ping response was not received ok - connection lost?"));
-        trace(QString("logging out - node connected ").arg(nodeConnected ? "True" : "False"));
+        trace(QString("logging out - node connected %1").arg(nodeConnected ? "True" : "False"));
         loggedOut();
     }
 
