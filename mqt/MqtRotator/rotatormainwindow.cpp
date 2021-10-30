@@ -2043,7 +2043,7 @@ void RotatorMainWindow::overLapDisplayBox(overlapStat status)
     }
     else if (status == NEG_OVERLAP)
     {
-        style = "background-color: green; color black; font-weight: bold;\n";
+        style = "background-color: blue; color black; font-weight: bold;\n";
         btext = tr("Negative Overlap");
     }
     else
