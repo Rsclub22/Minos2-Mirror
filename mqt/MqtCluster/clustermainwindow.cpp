@@ -771,7 +771,6 @@ void ClusterMainWindow::onReconnectCommandFromLog(bool state)
 
 void ClusterMainWindow::messageRx(QString msg)
 {
-    //qDebug() << msg;
     rawClusterDataView->appendPlainText(msg.remove('\x07'));
 }
 
