@@ -136,7 +136,7 @@ void ContestPageControl::setInstance(int value)
         // the string shoud be formed from "CompanyName.ProductName.SubProduct.VersionInformation"
         // cf https://docs.microsoft.com/en-us/windows/win32/shell/appids
 
-        setWinAppId(this, SecondInstall::getOrgName() + QString("MqtLogger.SubScreen%1").arg(subinst) );
+        setWinAppId(this, SecondInstall::getOrgName() + QString(".MqtLogger.SubScreen%1").arg(subinst) );
     }
 }
 
