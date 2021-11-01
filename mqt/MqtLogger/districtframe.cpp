@@ -8,13 +8,13 @@
 #include "districtframe.h"
 #include "ui_districtframe.h"
 
-GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 1 ] =
+GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 3 ] =
    {
       GridColumn( ectCall, "XXXXXXX", QT_TR_NOOP("Code"), taLeftJustify ),
       GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
       GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
       GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
-      GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify ),
+      GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify )
    };
 
 DistrictFrame::DistrictFrame(QWidget *parent) :
@@ -36,6 +36,11 @@ void DistrictFrame::setContest(BaseContestLog *contest)
     delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
     model.delegate = delegate;
     ui->DistrictTable->setItemDelegate(delegate.data());
+
+    ui->DistrictTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    ui->DistrictTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+
     proxyModel.setSourceModel(&model);
     ui->DistrictTable->setModel(&proxyModel);
     if (contest)
@@ -48,7 +53,6 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized,
                  this, &DistrictFrame::on_sectionResized, Qt::UniqueConnection);
     }
-    ui->DistrictTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 void DistrictFrame::setBand(QString band)
@@ -191,7 +195,7 @@ int DistrictGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int DistrictGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return ectMultMaxCol - 1;
+    return ectMultMaxCol - 3;
 }
 bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {

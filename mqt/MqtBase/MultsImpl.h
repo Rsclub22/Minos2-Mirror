@@ -153,6 +153,14 @@ public:
                   ce->addSynonyms( dest );
                   break;
                }
+
+             case ectCQZone:
+                dest = QString::number(ce->getCQZone());
+                 break;
+
+             case ectITUZone:
+                 dest = QString::number(ce->getITUZone());
+                 break;
          }
          return dest;
       }
@@ -268,7 +276,7 @@ class CountrySynonymList : public MultList < CountrySynonym >
       virtual ~CountrySynonymList();
       void load( );
       virtual bool procLine(QStringList );
-      static void makeCountrySynonym(const QString &ssyn, const QString &sprefix);
+      static void makeCountrySynonym(const QString &ssyn, const QString &sprefix, const QString &ct, const QString &itu, const QString &ll, const QString &cont);
 };
 
 

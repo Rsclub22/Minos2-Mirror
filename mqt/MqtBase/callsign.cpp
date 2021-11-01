@@ -69,22 +69,7 @@ static bool isMobileNumeric ( QString p )
 {
     return ( p.length() == 1 &&  p[ 0 ].isNumber() );
 }
-static bool isNumeric ( const QString &s )
-{
-    int slen = s.length();
-    if ( slen == 0 )
-    {
-        return false;
-    }
-    for ( int i = 0; i < slen; i++ )
-    {
-        if ( !s[ i ].isNumber() )
-        {
-            return false;
-        }
-    }
-    return true;
-}
+
 static QString getPrefix ( QString p, QSharedPointer<CountrySynonym> &csyn )
 {
     QString testpart = p;
@@ -342,7 +327,7 @@ int Callsign::validate( )
             locCtryPrefix = prefix3;
 
             // What should we do with e.g. NH6T/W4
-            if ( isNumeric ( suffix ))    //eg for w3abc/6 US call areas changes w3 to w6
+            if ( isPureNumeric ( suffix ))    //eg for w3abc/6 US call areas changes w3 to w6
             {
                 locCtryPrefix += suffix;
             }

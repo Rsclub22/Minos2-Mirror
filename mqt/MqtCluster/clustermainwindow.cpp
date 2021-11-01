@@ -224,7 +224,6 @@ void ClusterMainWindow::doStartup()
     verticalHeader->setDefaultSectionSize(10);
     verticalHeader->setMinimumSectionSize(10);
 
-    //verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
     verticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
 
@@ -281,7 +280,6 @@ void ClusterMainWindow::doStartup()
     sentSpotVerticalHeader->setDefaultSectionSize(10);
     sentSpotVerticalHeader->setMinimumSectionSize(10);
 
-    //sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
     sentSpotVerticalHeader->setSectionResizeMode(QHeaderView::Interactive);
 
     restoreSentSpotViewColumns();

@@ -614,3 +614,19 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
     layout->setSpacing(ls);
     layout->setContentsMargins(cml, cmt, cmr, cmb);
 }
+bool isPureNumeric ( const QString &s )
+{
+    int slen = s.length();
+    if ( slen == 0 )
+    {
+        return false;
+    }
+    for ( int i = 0; i < slen; i++ )
+    {
+        if ( !s[ i ].isNumber() )
+        {
+            return false;
+        }
+    }
+    return true;
+}

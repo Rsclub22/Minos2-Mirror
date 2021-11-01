@@ -11,14 +11,16 @@
 #include "ui_dxccframe.h"
 
 GridColumn DXCCGridModel::CountryTreeColumns[ ectMultMaxCol ] =
-   {
-      GridColumn( ectCall, "XXXXXX", QT_TR_NOOP("Call"), taLeftJustify ),
-      GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
-      GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
-      GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
-      GridColumn( ectName, "This is a very long country", QT_TR_NOOP("Country"), taLeftJustify ),
-      GridColumn( ectOtherCalls, "This is a very very very very long country name", QT_TR_NOOP("Other calls"), taLeftJustify /*taRightJustify*/ )
-   };
+{
+    GridColumn( ectCall, "XXXXXX", QT_TR_NOOP("Call"), taLeftJustify ),
+    GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
+    GridColumn( ectLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
+    GridColumn( ectBearing, "BRGXXX", QT_TR_NOOP("brg"), taCenter ),
+    GridColumn( ectName, "This is a very long country", QT_TR_NOOP("Country"), taLeftJustify ),
+    GridColumn( ectCQZone, "1234", QT_TR_NOOP("CQ"), taCenter ),
+    GridColumn( ectITUZone, "1234", QT_TR_NOOP("ITU"), taCenter ),
+    GridColumn( ectOtherCalls, "This is a very very very very long country name", QT_TR_NOOP("Other calls"), taLeftJustify /*taRightJustify*/ )
+};
 
 DXCCFrame::DXCCFrame(QWidget *parent) :
     QFrame(parent),
@@ -41,6 +43,10 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
         model.delegate = delegate;
 
+        ui->DXCCTable->setItemDelegate( delegate.data() );
+        QSize ms = delegate->docSize("XX");
+        ui->DXCCTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+
         proxyModel.setSourceModel(&model);
         ui->DXCCTable->setModel(&proxyModel);
         ui->DXCCTable->setItemDelegate(delegate.data());
@@ -49,8 +55,18 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         model.band = band;
         proxyModel.band = band;
 
+        if (contest->isHF())
+        {
+            ui->DXCCTable->showColumn(ectCQZone);
+            ui->DXCCTable->showColumn(ectITUZone);
+        }
+        else
+        {
+            ui->DXCCTable->hideColumn(ectCQZone);
+            ui->DXCCTable->hideColumn(ectITUZone);
+        }
+
         reInitialiseCountries();
-        ui->DXCCTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
         connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::sectionResized,
                  this, &DXCCFrame::on_sectionResized, Qt::UniqueConnection);
@@ -137,7 +153,15 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
         if (role == Qt::DisplayRole)
         {
             QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->getBasePrefix();
-            QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ index.column() ].fieldId, ct, band );
+            int ic = index.column();
+            if (ct && !ct->isHF())
+            {
+                if (ic >= ectCQZone)
+                {
+                    ic += 2;
+                }
+            }
+            QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ ic].fieldId, ct, band );
             return disp.trimmed();
         }
         if (role == Qt::TextAlignmentRole)
@@ -152,7 +176,15 @@ QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
     {
         QString cell;
 
-        cell = tr(CountryTreeColumns[section].title);
+        int ic = section;
+        if (ct && !ct->isHF())
+        {
+            if (ic >= ectCQZone)
+            {
+                ic += 2;
+            }
+        }
+        cell = tr(CountryTreeColumns[ic].title);
 
         return cell.trimmed();
     }
@@ -193,7 +225,14 @@ int DXCCGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int DXCCGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return ectMultMaxCol;
+    if (ct->isHF())
+    {
+        return ectMultMaxCol;
+    }
+    else
+    {
+        return ectMultMaxCol - 2;
+    }
 }
 bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {

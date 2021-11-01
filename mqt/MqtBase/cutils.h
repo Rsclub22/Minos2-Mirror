@@ -128,6 +128,7 @@ void TSVToStringList( const QString &s, QStringList &sl );
 QString anchoredPattern(const QString &expression);
 int getStringlistOffSet(QStringList supportedBands, QString contestBandStr);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
+bool isPureNumeric ( const QString &s );
 
 
 #endif

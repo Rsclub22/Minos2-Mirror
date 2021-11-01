@@ -36,7 +36,8 @@ extern QVector<ContList> contlist;
 
 const int UKREGIONS = 10;
 
-enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName, ectOtherCalls,
+enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
+                    ectCQZone, ectITUZone, ectOtherCalls,
                     ectMultMaxCol
                    };
 
@@ -72,6 +73,8 @@ public:
       virtual void addSynonyms( QString & );
       Locator getCentral() const;
       QString getRealName() const;
+      virtual int getITUZone() const {return 0;}
+      virtual int getCQZone() const {return 0;};
 };
 #define DISTRICT_CODE_LENGTH 2
 class DistrictEntry : public MultEntry
@@ -128,11 +131,11 @@ class CountryEntry : public MultEntry
       int districtLimit( );
       bool hasDistricts( );
 
-      CountryEntry( const QString &continent, const QString &prefix, const QString &name, const QString &cloc );
+      CountryEntry(const QString &continent, const QString &prefix, const QString &name, const QString &cloc, int cq, int itu );
       CountryEntry( const QString &prefix );
       virtual ~CountryEntry();
-      virtual QString str( bool );
-      virtual void addSynonyms( QString & );
+      virtual QString str( bool ) override;
+      virtual void addSynonyms( QString & ) override;
       bool operator<( const CountryEntry& rhs ) const;
       bool operator==( const CountryEntry& rhs ) const;
       bool operator!=( const CountryEntry& rhs ) const;
@@ -142,14 +145,15 @@ class CountryEntry : public MultEntry
       }
       QString getBasePrefix() const;
       QString getContinent() const;
-      int getITUZone() const;
-      int getCQZone() const;
+      int getITUZone() const override;
+      int getCQZone() const override;
 };
 
 class CountrySynonym
 {
     QString synPrefix;
     QSharedPointer<CountryEntry> country;
+    Locator central;	// central point to take bearings to
 
     QString continent;
 
@@ -157,8 +161,7 @@ class CountrySynonym
     int CQZone = 0;
 public:
 
-      CountrySynonym( const QString &syn, const QString &prefix );
-      CountrySynonym( const QString &syn );
+      CountrySynonym(const QString &syn, const QString &prefix, const QString &cq, const QString &itu, const QString &ll, const QString &cont );
       virtual ~CountrySynonym();
 
       void getDupPrefix( QString & );

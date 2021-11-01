@@ -7,7 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
-
+#include "cutils.h"
 #include "contacts.h"
 #include "MultsImpl.h"
 
@@ -115,7 +115,6 @@ DistrictEntry::DistrictEntry( const QString &cd, const QString &name, const QStr
    districtCode = cd;
 
    // search country list for the prefix
-   QString v;
    MapWrapper<CountryEntry> test2(new CountryEntry(prefix2));
    MapWrapper<CountryEntry> test(new CountryEntry(prefix));
    MapWrapper<CountryEntry> res = MultListsImpl::getMultLists() ->ctryList.value(test2);
@@ -313,9 +312,9 @@ static QSharedPointer<DistrictEntry> searchDistrict( const QString &syn )
    return QSharedPointer<DistrictEntry>();
 }
 //======================================================================
-CountryEntry::CountryEntry( const QString &continent, const QString &prefix,
-                            const QString &name, const QString &cloc ) :
-      MultEntry( name, cloc ), distLimit( -1 ), continent( continent )
+CountryEntry::CountryEntry(const QString &continent, const QString &prefix,
+                            const QString &name, const QString &cloc , int cq, int itu) :
+      MultEntry( name, cloc ), distLimit( -1 ), continent( continent ), CQZone(cq), ITUZone(itu)
 {
    basePrefix = prefix.trimmed();
 }
@@ -384,8 +383,8 @@ bool CountryEntry::operator!=( const CountryEntry& rhs ) const
 //======================================================================
 static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
 {
-    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "" ));
-    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", ""));
+    MapWrapper < CountrySynonym > test(new CountrySynonym( syn, "", "", "", "", "" ));
+    MapWrapper < CountrySynonym > defVal(new CountrySynonym("", "", "", "", "", ""));
     MapWrapper < CountrySynonym > cs = MultListsImpl::getMultLists() ->ctrySynList.value(test, defVal);
 
     if (cs == defVal)
@@ -394,32 +393,53 @@ static QSharedPointer<CountrySynonym> searchCountrySynonym( const QString &syn )
         return cs.wt;
 
 }
-CountrySynonym::CountrySynonym( const QString &ssyn, const QString &sprefix ) :
-      country( nullptr )
+CountrySynonym::CountrySynonym(const QString &ssyn, const QString &sprefix , const QString &cq, const QString &itu, const QString &ll, const QString &cont) :
+    country( nullptr )
 {
-   QString syn = ssyn.trimmed();
-   QString prefix = sprefix.trimmed();
+    //    (#) Override CQ Zone
+    //    [#] Override ITU Zone
+    //    <#/#> Override latitude/longitude
+    //    {aa} Override Continent
 
-   if ( prefix.length() )   		// allow for stack based version to search by
-   {
-      synPrefix = syn;
-      // search country list for the prefix
-      for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
-      {
-         if (  i.wt->getBasePrefix().compare( prefix, Qt::CaseInsensitive ) == 0 )
-            country = i.wt;
-      }
-   }
-   else
-   {
-      synPrefix = syn;
-   }
+    // none of these at the moment, so ignore them
+    Q_UNUSED(ll)
+    Q_UNUSED(cont)
+
+    QString syn = ssyn.trimmed();
+    QString prefix = sprefix.trimmed();
+
+
+    if ( prefix.length() )   		// allow for stack based version to search by
+    {
+        synPrefix = syn;
+        // search country list for the prefix
+        for ( auto const &i: MultListsImpl::getMultLists() ->ctryList )
+        {
+            if (  i.wt->getBasePrefix().compare( prefix, Qt::CaseInsensitive ) == 0 )
+            {
+                country = i.wt;
+                CQZone = i.wt->getCQZone();
+                ITUZone = i.wt->getITUZone();
+                continent = i.wt->getContinent();
+                central = i.wt->getCentral();
+                break;
+            }
+        }
+    }
+    else
+    {
+        synPrefix = syn;
+    }
+    if (!cq.isEmpty() && isPureNumeric(cq))
+    {
+        CQZone = cq.toInt();
+    }
+    if (!itu.isEmpty() && isPureNumeric(itu))
+    {
+        ITUZone = itu.toInt();
+    }
 }
-CountrySynonym::CountrySynonym( const QString &ssyn ) :
-      country( nullptr )
-{
-   QString syn = ssyn.trimmed();
-}
+
 CountrySynonym::~CountrySynonym()
 {}
 void CountrySynonym::getDupPrefix( QString &sprefix2 )
@@ -561,11 +581,14 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
 {
    // load a CT9 formatted list
 
+    QRegExp ccOpen( "[\\(\\{\\[\\<]");
+    QRegExp ccClose("[\\)\\}\\]\\>]");
+
     QFile lf(fname);
 
     if (!lf.open(QIODevice::ReadOnly|QIODevice::Text))
     {
-        QString ebuff = tr( "Failed to open %1 (%2)" ).arg(fmess).arg(fname );
+        QString ebuff = tr( "Failed to open %1 (%2)" ).arg(fmess, fname );
         MinosParameters::getMinosParameters() ->mshowMessage( ebuff );
         return;
     }
@@ -599,7 +622,10 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          QString gridref;
          geotoloc( lat, -longi, gridref );	// kill temporary warning
 
-         MapWrapper<CountryEntry> cte(new CountryEntry ( a[ 3 ], a[ 7 ], a[ 0 ], gridref ));
+         int cq = a[1].toInt();
+         int itu = a[2].toInt();
+
+         MapWrapper<CountryEntry> cte(new CountryEntry ( a[ 3 ], a[ 7 ], a[ 0 ], gridref, cq, itu ));
          if (!contains(cte))
              insert ( cte, cte );
       }
@@ -630,13 +656,59 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
          parseLine( countrybuff, ',', b, 99, ';', sep2seen );
          int i = 0;
          QString part = b[i];
-         while ( !skip && i < 99 && !part.isEmpty()  && part[ 0 ] != '=')
+         while ( !skip && i < 99 && !part.isEmpty()  && part[ 0 ] != '=')   // = prefixes a full callsign
          {
-            QRegExp cc("[\\(\\{\\[\\<]");
-            int bracket = b[ i ].indexOf( cc );
-            if ( bracket >= 0 )
-               b[ i ] = b[i].left(bracket);   // chop off the brackets
-            CountrySynonymList::makeCountrySynonym( b[ i ], mainPrefix );
+//             (#) Override CQ Zone
+//             [#] Override ITU Zone
+//             <#/#> Override latitude/longitude
+//             {aa} Override Continent
+
+            QStringList overrides = {"", "", "", ""};
+            QString synName;
+            int openBracket = b[ i ].indexOf( ccOpen, 0 );
+            if (openBracket >= 0)
+            {
+                // We can have ALL the bracket types in sequence
+
+                synName = b[i].left(openBracket);   // chop off the brackets
+
+                while (openBracket >= 0)
+                {
+                    QChar btype = b[i][openBracket];
+
+                    int closeBracket = b[ i ].indexOf( ccClose, openBracket + 1 );
+                    if (closeBracket >= 0)
+                    {
+                        QString bracketted = b[i].mid(openBracket + 1, closeBracket - openBracket - 1);
+                        if (btype == '(')
+                        {
+                            overrides[0] = bracketted;
+                        }
+                        else if (btype == '[')
+                        {
+                            overrides[1] = bracketted;
+                        }
+                        else if (btype == '<')
+                        {
+                            // none at the moment
+                            overrides[2] = bracketted;
+                        }
+                        else if (btype == '{')
+                        {
+                            // none at the moment
+                            overrides[3] = bracketted;
+                        }
+                    }
+
+                    openBracket = b[ i ].indexOf( ccOpen, closeBracket + 1 );
+                }
+            }
+            else
+            {
+                synName = b[i];
+            }
+
+            CountrySynonymList::makeCountrySynonym( synName, mainPrefix, overrides[0], overrides[1], overrides[2], overrides[3] );
             i++;
             part = b[i];
          }
@@ -666,12 +738,12 @@ bool CountrySynonymList::procLine( QStringList a )
 {
    for ( int i = 1; i < a.length() && !a[ i ].isEmpty() ; i++ )
    {
-      makeCountrySynonym( a[ i ], a[ 0 ] );
+      makeCountrySynonym( a[ i ], a[ 0 ], "", "", "", "" );
    }
 
    return true;
 }
-void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString &sprefix )
+void CountrySynonymList::makeCountrySynonym(const QString &ssyn, const QString &sprefix, const QString &cq, const QString &itu, const QString &ll, const QString &cont)
 {
    // search country list for the prefix
 
@@ -680,7 +752,7 @@ void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString 
 
    if ( syn.indexOf( '-' ) >= 0 )
    {
-      MinosParameters::getMinosParameters() ->mshowMessage( ( tr( "Synonym ranges no longer allowed : %1 for %2" ).arg(ssyn).arg(sprefix) ) );
+      MinosParameters::getMinosParameters() ->mshowMessage( ( tr( "Synonym ranges no longer allowed : %1 for %2" ).arg(ssyn, sprefix) ) );
       return ;
    }
 
@@ -700,7 +772,7 @@ void CountrySynonymList::makeCountrySynonym( const QString &ssyn, const QString 
    if ( cts.wt && ( cts.wt->getCountry().data() == ctry.data() ) )
       return ;		// as already there
 
-   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix ));
+   cts = MapWrapper<CountrySynonym >(new CountrySynonym ( syn, prefix, cq, itu, ll, cont ));
 
    if ( cts.wt->getCountry() )
    {
