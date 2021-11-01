@@ -33,19 +33,10 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     bool trackBand = settings.value("trackBand", false).toBool();
     ui->trackBandcb->setChecked(trackBand);
 
-    int trackRig = settings.value("trackRig", false).toInt();
-    switch(trackRig)
-    {
-    case 0:
-        ui->noTrack->setChecked(true);
-        break;
-    case 1:
-        ui->trackRig->setChecked(true);
-        break;
-    case 2:
-        ui->trackSub->setChecked(true);
-        break;
-    }
+    bool trackRig = settings.value("trackRig", false).toBool();
+    ui->trackRig->setChecked(trackRig);
+    bool trackSub= settings.value("trackSub", false).toBool();
+    ui->trackSub->setChecked(trackSub);
 
     connect(&SyncTimer, &QTimer::timeout, this, &RSMainWindow::SyncTimerTimer);
     SyncTimer.start(100);
@@ -472,29 +463,27 @@ void RSMainWindow::trackBand()
     lastModePart = modePart;
 }
 
-void RSMainWindow::on_noTrack_clicked()
-{
-    // do nothing
-    QSettings settings;
-    settings.setValue("trackRig", 0);
-}
-
 void RSMainWindow::on_trackRig_clicked()
 {
-    // set rig2 to rig1
-    on_transfer12Button_clicked();
-
+    if (ui->trackRig->isChecked())
+    {
+        // set rig2 to rig1
+        on_transfer12Button_clicked();
+    }
     QSettings settings;
-    settings.setValue("trackRig", 1);
+    settings.setValue("trackRig", ui->trackRig->isChecked());
 }
 
 void RSMainWindow::on_trackSub_clicked()
 {
-    // set rig1 to rig2
-    on_transfer21Button_clicked();
+    if (ui->trackSub->isChecked())
+    {
+        // set rig1 to rig2
+        on_transfer21Button_clicked();
+    }
 
     QSettings settings;
-    settings.setValue("trackRig", 2);
+    settings.setValue("trackSub", ui->trackSub->isChecked());
 }
 
 void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)

@@ -36,7 +36,6 @@ private slots:
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
     void on_notify(AnalysePubSubNotify an, const QString from);
 
-    void on_noTrack_clicked();
     void on_trackRig_clicked();
     void on_trackSub_clicked();
     void on_trackBandcb_stateChanged(int);
