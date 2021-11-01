@@ -48,16 +48,13 @@ MainWindow::MainWindow(QWidget *parent)
     closeTimer.start(100);
 
     ui->inChannelCB->addItems(rass.inputDevices);
-    ui->outChannelCB->addItems(rass.outputDevices);
 
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
 
     QString indev = settings.value(indevKey, "").toString();
-    QString outdev = settings.value(outdevKey, "").toString();
 
     ui->inChannelCB->setCurrentText(indev);
-    ui->outChannelCB->setCurrentText(outdev);
 
     QString baseFile = settings.value(baseFileKey, "./RigRecording/rigrec.wav").toString();
     ui->baseFilename->setText(baseFile);
@@ -66,11 +63,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->rotInterval->setValue(cycleTime);
 
     connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_currentTextChanged);
-    connect(ui->outChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::outChannelCB_currentTextChanged);
 
     trace("About to initialise audio");
     rass.setRate(11025);
-    rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+    rass.initialise(ui->inChannelCB->currentText());
 
     rass.setVUCallBack( &::volcallback );
 
@@ -259,21 +255,8 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 
         trace("About to re-initialise audio");
         rass.closedown();
-        rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
+        rass.initialise(ui->inChannelCB->currentText());
 
-    }
-}
-
-void MainWindow::outChannelCB_currentTextChanged(const QString &arg1)
-{
-    if (!closing)
-    {
-        QString filename = "./Configuration/RigRecorder.ini";
-        QSettings settings(filename, QSettings::IniFormat);
-        settings.setValue(outdevKey, arg1);
-        trace("About to re-initialise audio");
-        rass.closedown();
-        rass.initialise(ui->inChannelCB->currentText(), ui->outChannelCB->currentText());
     }
 }
 

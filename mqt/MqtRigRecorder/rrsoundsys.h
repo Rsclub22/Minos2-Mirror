@@ -55,12 +55,11 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
-    virtual bool initialise( QString ind, QString outd );
+    virtual bool initialise(QString ind);
     void stop();
     void closedown();
 
     QStringList inputDevices;
-    QStringList outputDevices;
 
     virtual unsigned int setRate(unsigned int rate);
 

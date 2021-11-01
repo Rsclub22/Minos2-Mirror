@@ -103,7 +103,6 @@ RtAudioSoundSystem::RtAudioSoundSystem()
        wThread->start();
 
        unsigned int defInput = audio->getDefaultInputDevice();
-       unsigned int defOutput = audio->getDefaultOutputDevice();
        unsigned int devices = audio->getDeviceCount();
        RtAudio::DeviceInfo info;
        for ( unsigned int i=0; i<devices; i++ )
@@ -130,21 +129,13 @@ RtAudioSoundSystem::RtAudioSoundSystem()
          {
              inChannels = info.inputChannels;
          }
-         if (i == defOutput)
-         {
-             outChannels = info.outputChannels;
-         }
          if (info.inputChannels)
          {
              inputDevices.append(info.name.c_str());
          }
-         if (info.outputChannels)
-         {
-             outputDevices.append(info.name.c_str());
-         }
          deviceIds[QString(info.name.c_str())] = i;
        }
-       trace( "Default output channels = " + QString::number(outChannels) + " Default input channels = " + QString::number(inChannels));
+       trace( "Default input channels = " + QString::number(inChannels));
     }
     catch (RtAudioError &error)
     {
@@ -196,7 +187,7 @@ void RtAudioSoundSystem::setVUCallBack( VUCallBack cb )
    WinVUCallback = cb;
 }
 
-bool RtAudioSoundSystem::initialise( QString ind, QString outd )
+bool RtAudioSoundSystem::initialise( QString ind)
 {
     try
     {
@@ -204,15 +195,10 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd )
         {
             audio = new RtAudio();
         }
-        RtAudio::StreamParameters outParams;
         RtAudio::StreamParameters inParams;
         RtAudio::StreamOptions soptions;
 
         unsigned int bufferFrames = FRAMESAMPLES;
-
-        outParams.deviceId = deviceIds[outd];
-        outParams.firstChannel = 0;
-        outParams.nChannels = outChannels;
 
         inParams.deviceId = deviceIds[ind];
         inParams.firstChannel = 0;
@@ -223,7 +209,7 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd )
         soptions.priority = 0;
         soptions.streamName = "";
 
-        audio->openStream(&outParams,
+        audio->openStream(nullptr,
                           &inParams,
                           RTAUDIO_SINT16, sampleRate,
                           &bufferFrames, ::audioCallback,
@@ -276,12 +262,14 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
     }
     if (status == RTAUDIO_OUTPUT_UNDERFLOW)
     {
+        // shouldn't happen as we don't have an output device
         trace("Stream output overflow detected.");
     }
 
 
-    if (outputBuffer != nullptr && nFrames > 0)
+    if (outputBuffer != nullptr && nFrames)
     {
+        // shouldn't happen as we don't have an output device
         memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
     }
 

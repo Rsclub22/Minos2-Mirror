@@ -31,8 +31,6 @@ private slots:
 
     void inChannelCB_currentTextChanged(const QString &arg1);
 
-    void outChannelCB_currentTextChanged(const QString &arg1);
-
     void on_baseFilename_editingFinished();
 
     void on_rotInterval_editingFinished();
