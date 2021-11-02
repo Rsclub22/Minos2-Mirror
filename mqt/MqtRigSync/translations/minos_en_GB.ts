@@ -58,46 +58,41 @@
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="85"/>
-        <source>No Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../RSMainWindow.ui" line="98"/>
         <source>Track rig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="108"/>
+        <location filename="../RSMainWindow.ui" line="92"/>
         <source>Track Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="131"/>
+        <location filename="../RSMainWindow.ui" line="112"/>
         <source>WSJT-X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="151"/>
+        <location filename="../RSMainWindow.ui" line="132"/>
         <source>Track band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="182"/>
+        <location filename="../RSMainWindow.ui" line="163"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="189"/>
+        <location filename="../RSMainWindow.ui" line="170"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="162"/>
+        <location filename="../RSMainWindow.ui" line="143"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="66"/>
+        <location filename="../RSMainWindow.cpp" line="57"/>
         <source>Configure...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -19,53 +19,52 @@
         <translation>Canal d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="142"/>
         <source>Output Channel</source>
-        <translation>Canal de sortie</translation>
+        <translation type="vanished">Canal de sortie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="156"/>
+        <location filename="../mainwindow.ui" line="142"/>
         <source>Base Output Filename</source>
         <translation>Base du nom de fichier de sortie </translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="166"/>
+        <location filename="../mainwindow.ui" line="152"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="177"/>
+        <location filename="../mainwindow.ui" line="163"/>
         <source>File Rotation Interval (minutes)</source>
         <translation>Intervalle de rotation des fichiers (minutes) </translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="201"/>
+        <location filename="../mainwindow.ui" line="187"/>
         <source>Auto Start</source>
         <translation>Démarrage automatique</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="208"/>
+        <location filename="../mainwindow.ui" line="194"/>
         <source>Link to contest time</source>
         <translatorcomment>Lien vers l&apos;heure du concours</translatorcomment>
         <translation>Lien vers l&apos;heure du concours</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="224"/>
+        <location filename="../mainwindow.ui" line="210"/>
         <source>Start Record</source>
         <translation>Démarrer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="244"/>
+        <location filename="../mainwindow.ui" line="230"/>
         <source>Stop Record</source>
         <translation>Arrêter l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="236"/>
+        <location filename="../mainwindow.cpp" line="232"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *) </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="239"/>
+        <location filename="../mainwindow.cpp" line="235"/>
         <source>Recorded Files</source>
         <translation>Fichiers enregistrés</translation>
     </message>

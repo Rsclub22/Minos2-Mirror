@@ -1170,13 +1170,13 @@ Le mode calculé est %2</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="72"/>
-        <location filename="../contestdetails.cpp" line="1498"/>
+        <location filename="../contestdetails.cpp" line="1573"/>
         <source>HF Calendar</source>
         <translation>Calendrier HF</translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="79"/>
-        <location filename="../contestdetails.cpp" line="1527"/>
+        <location filename="../contestdetails.cpp" line="1602"/>
         <source>VHF Calendar</source>
         <translation>Calendrier VHF</translation>
     </message>
@@ -1443,23 +1443,23 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Bonus NAC</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="122"/>
+        <location filename="../contestdetails.cpp" line="129"/>
         <source>QTH</source>
         <translation>QTH</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="123"/>
+        <location filename="../contestdetails.cpp" line="130"/>
         <source>Station</source>
         <translation>Station</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="124"/>
+        <location filename="../contestdetails.cpp" line="131"/>
         <source>Entry</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="171"/>
-        <location filename="../contestdetails.cpp" line="491"/>
+        <location filename="../contestdetails.cpp" line="219"/>
+        <location filename="../contestdetails.cpp" line="513"/>
         <source>Details of Contest Entry - %1</source>
         <translation>Détails de l&apos;entrée du Concours - %1</translation>
     </message>
@@ -1469,7 +1469,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
         <translation>Toutes HF</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1413"/>
+        <location filename="../contestdetails.cpp" line="1488"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
@@ -1478,7 +1478,7 @@ Il s&apos;agit d&apos;un changement permanent qui peut être temporairement annu
 Veuillez confirmer cette modification en appuyant sur &quot;Oui&quot;.</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1461"/>
+        <location filename="../contestdetails.cpp" line="1536"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1525,17 +1525,17 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
 </translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1555"/>
+        <location filename="../contestdetails.cpp" line="1630"/>
         <source>Microwave Calendar</source>
         <translation>Calendrier Microonde</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1697"/>
+        <location filename="../contestdetails.cpp" line="1772"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation>Voulez-vous vraiment protéger ce Concours?</translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1704"/>
+        <location filename="../contestdetails.cpp" line="1779"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation>Voulez-vous vraiment désactiver la protection pour ce Concours?</translation>
     </message>
@@ -1606,6 +1606,16 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="20"/>
+        <source>CQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="21"/>
+        <source>ITU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="22"/>
         <source>Other calls</source>
         <translation>Autres Indicatifs d&apos;appel</translation>
     </message>
@@ -2227,7 +2237,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="625"/>
+        <location filename="../MinosTestExport.cpp" line="626"/>
         <source>bad reply from write!</source>
         <translation>mauvaise réponse depuis l&apos;écriture!</translation>
     </message>

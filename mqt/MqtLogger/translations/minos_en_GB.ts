@@ -1151,13 +1151,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="72"/>
-        <location filename="../contestdetails.cpp" line="1498"/>
+        <location filename="../contestdetails.cpp" line="1573"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="79"/>
-        <location filename="../contestdetails.cpp" line="1527"/>
+        <location filename="../contestdetails.cpp" line="1602"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1423,23 +1423,23 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="122"/>
+        <location filename="../contestdetails.cpp" line="129"/>
         <source>QTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="123"/>
+        <location filename="../contestdetails.cpp" line="130"/>
         <source>Station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="124"/>
+        <location filename="../contestdetails.cpp" line="131"/>
         <source>Entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="171"/>
-        <location filename="../contestdetails.cpp" line="491"/>
+        <location filename="../contestdetails.cpp" line="219"/>
+        <location filename="../contestdetails.cpp" line="513"/>
         <source>Details of Contest Entry - %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1449,14 +1449,14 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1413"/>
+        <location filename="../contestdetails.cpp" line="1488"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1461"/>
+        <location filename="../contestdetails.cpp" line="1536"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1480,17 +1480,17 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1555"/>
+        <location filename="../contestdetails.cpp" line="1630"/>
         <source>Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1697"/>
+        <location filename="../contestdetails.cpp" line="1772"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1704"/>
+        <location filename="../contestdetails.cpp" line="1779"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1561,6 +1561,16 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="20"/>
+        <source>CQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="21"/>
+        <source>ITU</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../dxccframe.cpp" line="22"/>
         <source>Other calls</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2164,7 +2174,7 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="625"/>
+        <location filename="../MinosTestExport.cpp" line="626"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>

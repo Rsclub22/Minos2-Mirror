@@ -91,12 +91,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="543"/>
+        <location filename="../contest.cpp" line="546"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="559"/>
+        <location filename="../contest.cpp" line="562"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -1107,12 +1107,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1809"/>
+        <location filename="../contest.cpp" line="1813"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1822"/>
+        <location filename="../contest.cpp" line="1826"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
@@ -1120,12 +1120,12 @@
 <context>
     <name>CountryList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="487"/>
+        <location filename="../MultsImpl.cpp" line="507"/>
         <source>CT9 Country File</source>
         <translation>CT9 Fichier  des Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="568"/>
+        <location filename="../MultsImpl.cpp" line="591"/>
         <source>Failed to open %1 (%2)</source>
         <translation>L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
     </message>
@@ -1133,12 +1133,12 @@
 <context>
     <name>CountrySynonymList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="663"/>
+        <location filename="../MultsImpl.cpp" line="735"/>
         <source>Country Synonym File</source>
         <translation>Fichier des synonymes de Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="683"/>
+        <location filename="../MultsImpl.cpp" line="755"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
         <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
