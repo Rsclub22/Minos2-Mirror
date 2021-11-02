@@ -146,15 +146,18 @@ class BaseContestLog: public BaseLogList
 
       MinosStringItem<QString> contestBands;
       MinosStringItem<QString> currentBand;
-      MinosItem<bool> otherExchange;
-      MinosItem<bool> otherOptionalExchange;
-      MinosItem<bool> countryMult;
-      MinosItem<bool> nonGCountryMult;
-      MinosItem<bool> locMult;
-      MinosItem<bool> GLocMult;
-      MinosItem<bool> districtMult;
 
-      MinosItem<bool> M7Mults;
+      MinosItem<bool> otherExchange;            // exchange field is required (also required for postcodes)
+      MinosItem<bool> otherOptionalExchange;    // but exchange is not mandatory
+
+      MinosItem<bool> countryMult;              // DXCC mults
+      MinosItem<bool> nonGCountryMult;          // Non G country mults
+      MinosItem<bool> locMult;                  // locator mults
+      MinosItem<bool> GLocMult;                 // G locs only mults
+      MinosItem<bool> districtMult;             // postcodes
+      MinosItem<int>  otherMult;                // type of "other" mult
+
+      MinosItem<bool> M7Mults;                  // loc mults, but more for G locs
 
       MinosItem<bool> usesBonus;
       MinosStringItem<QString> bonusType;

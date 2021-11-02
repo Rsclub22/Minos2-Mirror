@@ -38,6 +38,8 @@ private:
    FocusWatcher *BandComboBoxFW;
    FocusWatcher *CallsignEditFW;
    FocusWatcher *LocatorEditFW;
+   FocusWatcher *ExchangeEditFW;
+   FocusWatcher *ExchangeComboBoxFW;
    FocusWatcher *PowerEditFW;
    FocusWatcher *MainOpComboBoxFW;
 
@@ -51,6 +53,8 @@ private:
 
    void doCloseEvent();
 
+   void setExchangeComboBox();
+   
 public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;
@@ -82,6 +86,7 @@ private slots:
    void on_SetRadioList();
    void on_ageProtectedcb_stateChanged(int arg1);
    void on_BandComboBox_activated(const QString &arg1);
+   void on_ExchangeComboBox_activated(const QString &arg1);
 };
 
 #endif // CONTESTDETAILS_H

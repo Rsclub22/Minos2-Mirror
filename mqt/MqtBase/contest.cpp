@@ -53,6 +53,7 @@ BaseContestLog::BaseContestLog(bool hf)
   districtMult.setValue( false );
   locMult.setValue( false );
   GLocMult.setValue(false);
+  otherMult.setValue(0);
   M7Mults.setValue(false);
   usesBonus.setValue(false);
   scoreMode.setValue( PPKM );
@@ -234,6 +235,7 @@ void BaseContestLog::clearDirty()
    locMult.clearDirty();
    GLocMult.clearDirty();
    districtMult.clearDirty();
+   otherMult.clearDirty();
 
    M7Mults.clearDirty();
    usesBonus.clearDirty();
@@ -279,6 +281,7 @@ void BaseContestLog::setDirty()
    locMult.setDirty();
    GLocMult.setDirty();
    districtMult.setDirty();
+   otherMult.setDirty();
 
    M7Mults.setDirty();
    usesBonus.setDirty();
@@ -1377,6 +1380,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "DXCCMult", countryMult );
       mt->getStructArgMemberValue( "NonGCtryMult", nonGCountryMult );
       mt->getStructArgMemberValue( "locMult", locMult );
+      mt->getStructArgMemberValue( "OtherMultType", otherMult);
       mt->getStructArgMemberValue( "GLocMult", GLocMult );
       mt->getStructArgMemberValue( "QTHReq", otherExchange );
       mt->getStructArgMemberValue( "QTHOpt", otherOptionalExchange );

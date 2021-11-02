@@ -80,6 +80,11 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ui->PowerEdit->installEventFilter(this);
     MainOpComboBoxFW = new FocusWatcher(ui->MainOpComboBox);
     ui->MainOpComboBox->installEventFilter(this);
+    ExchangeEditFW = new FocusWatcher(ui->ExchangeEdit);
+    ui->ExchangeEdit->installEventFilter(this);
+    ExchangeComboBoxFW = new FocusWatcher(ui->ExchangeComboBox);
+    ui->ExchangeComboBox->installEventFilter(this);
+
 
     connect(ContestNameEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(BandComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
@@ -87,6 +92,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(LocatorEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(PowerEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(MainOpComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(ExchangeEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(ExchangeComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
 
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_RotatorList);
@@ -166,6 +173,47 @@ void ContestDetails::setDetails( LoggerContestLog * pcont )
    sectionList = contestTransferObject->sectionList.getValue(); // the combo will then be properly set up in setDetails()
    setDetails();
 }
+void ContestDetails::setExchangeComboBox()
+{   /*
+      ExchangeComboBox:
+
+      No Exchange Required
+      PostCode Multipliers
+      Other Exchange Multiplier
+      Optional Exchange Multiplier
+      Exchange Required (no multiplier)
+   */
+
+    if ( contestTransferObject->districtMult.getValue() )
+    {
+        // PostCode Multipliers
+       ui->ExchangeComboBox->setCurrentIndex( 1);
+    }
+    else
+       if ( contestTransferObject->otherExchange.getValue() && !contestTransferObject->otherOptionalExchange.getValue() && contestTransferObject->otherMult.getValue() > 0 )
+       {
+           // Other Exchange Multiplier
+           ui->ExchangeComboBox->setCurrentIndex( 2);
+       }
+       else
+           if (contestTransferObject->otherExchange.getValue() &&  contestTransferObject->otherOptionalExchange.getValue() && contestTransferObject->otherMult.getValue() > 0 )
+           {
+               // Optional Exchange Multiplier
+               ui->ExchangeComboBox->setCurrentIndex( 3);
+           }
+           else
+               if (contestTransferObject->otherExchange.getValue() && contestTransferObject->otherMult.getValue() <= 0 )
+               {
+                   // Exchange Required (no multiplier)
+                   ui->ExchangeComboBox->setCurrentIndex( 4);
+               }
+               else
+                   {
+                        // No Exchange Required
+                       ui->ExchangeComboBox->setCurrentIndex( 0);
+                   }
+ }
+
 void ContestDetails::setDetails(  )
 {
    setWindowTitle( (tr("Details of Contest Entry - %1").arg(contestTransferObject->cfileName)));
@@ -352,34 +400,8 @@ void ContestDetails::setDetails(  )
        break;
    }
 
-   /*
-      ExchangeComboBox:
+   setExchangeComboBox();
 
-      No Exchange Required
-      PostCode Multipliers
-      Other Exchange Multiplier
-      Optional Exchange Muktiplier
-      Exchange Required (no multiplier)
-   */
-
-   if ( contestTransferObject->districtMult.getValue() )
-   {
-      ui->ExchangeComboBox->setCurrentIndex( 1);
-   }
-   else
-      if ( contestTransferObject->otherExchange.getValue() )
-      {
-          ui->ExchangeComboBox->setCurrentIndex( 4);
-      }
-      else
-          if ( contestTransferObject->otherOptionalExchange.getValue() )
-          {
-              ui->ExchangeComboBox->setCurrentIndex( 3);
-          }
-          else
-              {
-                  ui->ExchangeComboBox->setCurrentIndex( 0);
-              }
    ui->DXCCMult->setChecked( contestTransferObject->countryMult.getValue()) ;
    ui->NonGCtryMult->setChecked( contestTransferObject->nonGCountryMult.getValue()) ;
 
@@ -563,6 +585,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = false;
@@ -581,6 +607,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( false );
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -601,6 +631,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(true);  // bonus, not mult, so usual code not right
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = false;
@@ -620,14 +654,16 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(true);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = false;
           contestTransferObject->NonUKloc_mult = false;
           contestTransferObject->UKloc_multiplier = 0;
           contestTransferObject->NonUKloc_multiplier = 0;
-
-          contestTransferObject->otherOptionalExchange.setValue(true);
        }
        else
        {
@@ -639,6 +675,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( false );
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -662,6 +702,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(true);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = false;
@@ -680,6 +724,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( true );
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -700,6 +748,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(true);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = true;
@@ -718,6 +770,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( true );
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -738,6 +794,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(false);
 
           contestTransferObject->UKloc_mult = true;
@@ -756,6 +816,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( true );
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( true );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -776,6 +840,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->GLocMult.setValue( true );
           contestTransferObject->nonGCountryMult.setValue( false );
 
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
+
           contestTransferObject->M7Mults.setValue(true);
 
           contestTransferObject->UKloc_mult = true;
@@ -793,6 +861,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->locMult.setValue( false );
            contestTransferObject->GLocMult.setValue( false );
            contestTransferObject->nonGCountryMult.setValue( false );
+
+           contestTransferObject->otherExchange.setValue(false);
+           contestTransferObject->otherOptionalExchange.setValue(false);
+           contestTransferObject->otherMult.setValue(0);
 
            contestTransferObject->M7Mults.setValue(false);
 
@@ -812,6 +884,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
            contestTransferObject->GLocMult.setValue( false );
            contestTransferObject->nonGCountryMult.setValue( false );
 
+           contestTransferObject->otherExchange.setValue(false);
+           contestTransferObject->otherOptionalExchange.setValue(false);
+           contestTransferObject->otherMult.setValue(0);
+
            contestTransferObject->M7Mults.setValue(false);
 
            contestTransferObject->UKloc_mult = false;
@@ -829,6 +905,10 @@ void ContestDetails::setDetails( const IndividualContest &ic )
           contestTransferObject->locMult.setValue( false );
           contestTransferObject->GLocMult.setValue( false );
           contestTransferObject->nonGCountryMult.setValue( false );
+
+          contestTransferObject->otherExchange.setValue(false);
+          contestTransferObject->otherOptionalExchange.setValue(false);
+          contestTransferObject->otherMult.setValue(0);
 
           contestTransferObject->M7Mults.setValue(false);
 
@@ -869,34 +949,9 @@ void ContestDetails::setDetails( const IndividualContest &ic )
        }
    }
    ui->MGMCheckBox->setChecked(contestTransferObject->MGMContestRules.getValue());
-   /*
-      ExchangeComboBox:
 
-      No Exchange Required
-      PostCode Multipliers
-      Other Exchange Multiplier
-      Optional Exchange Multilier
-      Exchange Required (no multiplier)
-   */
+   setExchangeComboBox();
 
-   if ( contestTransferObject->districtMult.getValue() )
-   {
-      ui->ExchangeComboBox->setCurrentIndex(1);
-   }
-   else
-      if ( contestTransferObject->otherExchange.getValue() )
-      {
-         ui->ExchangeComboBox->setCurrentIndex(4);
-      }
-      else
-          if ( contestTransferObject->otherOptionalExchange.getValue() )
-          {
-             ui->ExchangeComboBox->setCurrentIndex(3);
-          }
-          else
-              {
-                 ui->ExchangeComboBox->setCurrentIndex(0);
-              }
    ui->NonGCtryMult->setChecked(contestTransferObject->nonGCountryMult.getValue()) ;
    ui->DXCCMult->setChecked(contestTransferObject->countryMult.getValue()) ;
 
@@ -1050,6 +1105,14 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
             ui->PowerEdit->setStyleSheet(ssLineEditOK);
         }
 
+        if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+        {
+            ui->ExchangeEdit->setStyleSheet(ssLineEditFrRedBkRed);
+        }
+        else
+        {
+            ui->ExchangeEdit->setStyleSheet(ssLineEditOK);
+        }
 
         QString cop = ui->MainOpComboBox->currentText();
         if ( cop.trimmed().isEmpty() )
@@ -1130,6 +1193,13 @@ QWidget * ContestDetails::getDetails( )
         if (!nextD)
         {
             nextD = ui->LocatorEdit;
+        }
+    }
+    if ( ui->ExchangeComboBox->currentIndex() != 0 && ui->ExchangeEdit->text().trimmed().isEmpty() )
+    {
+        if (!nextD)
+        {
+            nextD = ui->ExchangeComboBox;
         }
     }
 
@@ -1271,34 +1341,39 @@ QWidget * ContestDetails::getDetails( )
    */
     switch ( ui->ExchangeComboBox->currentIndex() )
     {
-    case 0:
+    case 0:     //No Exchange Required
         contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->otherMult.setValue(0);
         break;
 
-    case 1:
+    case 1:     //PostCode Multipliers
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( true );
+        contestTransferObject->otherMult.setValue(0);
         break;
 
-    case 2:
+    case 2:     //Other Exchange Multiplier
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->otherMult.setValue(1);
         break;
 
-    case 3:
-        contestTransferObject->otherExchange.setValue( false );
+    case 3:     //Optional Exchange Multiplier
+        contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->otherMult.setValue(2);
         break;
 
-    case 4:
+    case 4:     //Exchange Required (no multiplier)
         contestTransferObject->otherExchange.setValue( true );
         contestTransferObject->otherOptionalExchange.setValue( false );
         contestTransferObject->districtMult.setValue( false );
+        contestTransferObject->otherMult.setValue(0);
         break;
 
     }
@@ -1793,5 +1868,12 @@ void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
         }
     }
     ui->LocatorField->setChecked(!hfBand);
+}
+
+
+void ContestDetails::on_ExchangeComboBox_activated(const QString &arg1)
+{
+    focusChange(nullptr, false, nullptr);
+
 }
 

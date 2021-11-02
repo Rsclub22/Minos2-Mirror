@@ -98,6 +98,7 @@ private:
     MinosItem<bool> locMult;
     MinosItem<bool> GLocMult;
     MinosItem<bool> districtMult;
+    MinosItem<int>  otherMult;
 
     MinosItem<bool> M7Mults;
 

@@ -1806,7 +1806,7 @@ void QSOLogFrame::contactValid( )
             }
         }
     }
-    if ( contest->districtMult.getValue() && !vcct->screenQSOValid )
+   if ( contest->districtMult.getValue() && !vcct->screenQSOValid )
     {
         // no district when required
         // No CS means we should go to QTH, as its likely to be needed

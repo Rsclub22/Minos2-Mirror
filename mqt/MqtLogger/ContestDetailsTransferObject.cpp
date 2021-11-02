@@ -139,6 +139,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
     locMult = ct->locMult;
     GLocMult = ct->GLocMult;
     districtMult = ct->districtMult;
+    otherMult = ct->otherMult;
 
     M7Mults = ct->M7Mults;
 
@@ -253,6 +254,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->locMult = locMult;
     ct->GLocMult = GLocMult;
     ct->districtMult = districtMult;
+    ct->otherMult = otherMult;
 
     ct->M7Mults = M7Mults;
 
