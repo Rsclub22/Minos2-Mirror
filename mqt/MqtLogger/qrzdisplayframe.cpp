@@ -192,6 +192,7 @@ void QrzDisplayFrame::onLoggerQrzReply(QrzCallsignData cd, QString qrzReplyState
         }
         else
         {
+
             ui->callsignText->setText(cd.getCallsign());
             setQrzMessageText(qrzReplyState);
 
@@ -238,11 +239,13 @@ void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* d
 void QrzDisplayFrame::clear()
 {
     ui->callsignText->clear();
+    ui->qraText->clear();
     ui->nameText->clear();
     ui->addr1Text->clear();
     ui->addr2Text->clear();
     ui->distanceText->clear();
     ui->bearingText->clear();
+    ui->countryText->clear();
     ui->cqZoneText->clear();
     ui->ituZoneText->clear();
     ui->qrzMessageText->clear();
