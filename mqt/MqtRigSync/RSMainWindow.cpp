@@ -195,6 +195,13 @@ void RSMainWindow::on_closeButton_clicked()
 void RSMainWindow::on_transfer12Button_clicked()
 {
     // set sub rig to main rig
+    trace("Transfer 1 - 2");
+    if (mainRigFreq.isClear() || (mainRigFreq == subRigFreq && mainRigMode == subRigMode))
+    {
+        trace("No change required");
+        return;
+    }
+
     subRigControlFreq(mainRigFreq, mainRigMode);
 }
 
@@ -202,7 +209,32 @@ void RSMainWindow::on_transfer12Button_clicked()
 void RSMainWindow::on_transfer21Button_clicked()
 {
     // set main rig to sub rig
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = blist.findBand(mainRigFreq, bi);
+    if (!bandOK)
+    {
+        return;
+    }
 
+    QSharedPointer<BandInfo>  bi2;
+    bandOK = blist.findBand(mainRigFreq, bi2);
+    if (!bandOK)
+    {
+        return;
+    }
+    if (bi != bi2)
+    {
+        trace("Transfer 2 - 1; bands are different, ignoring");
+        return;
+    }
+
+    trace("Transfer 2 - 1");
+    if (subRigFreq.isClear() || (mainRigFreq == subRigFreq && mainRigMode == subRigMode))
+    {
+        trace("No change required");
+        return;
+    }
     if (n1mmLink.isConnected())
     {
         n1mmLink.sendFrequencyRequest(subRigFreq, subRigMode);
@@ -366,7 +398,7 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             }
 
 
-            if (ui->trackSub->isChecked())
+            if (ui->trackSub->isChecked() &&!firstTime)
             {
                 on_transfer21Button_clicked();
             }
@@ -528,7 +560,7 @@ void RSMainWindow::on_Rig2Combo_activated(const QString &psn)
 }
 void RSMainWindow::mainRigControlFreq(const Frequency &lFreq, QString mode)
 {
-
+    trace(QString("Send %1 to MAIN").arg(lFreq.traceStr()));
     QStringList qsl = rigCache.getSelectedLoggers(mainRigSelected);
     if (qsl.count())
     {
@@ -589,6 +621,7 @@ void RSMainWindow::subRigSelection(const PubSubName &sd, bool state)
 
 void RSMainWindow::subRigControlFreq(const Frequency &lFreq, QString mode)
 {
+    trace(QString("Send %1 to SUB").arg(lFreq.traceStr()));
 
     QStringList qsl = rigCache.getSelectedLoggers(subRigSelected);
     if (qsl.count())
