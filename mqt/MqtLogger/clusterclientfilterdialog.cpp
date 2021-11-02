@@ -68,7 +68,7 @@ void ClusterClientFilterDialog::initCheckFilterTab()
 {
 
 
-    setWindowTitle(tr("Cluster Spot Filters initCheckFilterTab"));
+    setWindowTitle(tr("Cluster Spot Filters"));
     this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
@@ -296,13 +296,7 @@ void ClusterClientFilterDialog::setContest(BaseContestLog *c)
 
 void ClusterClientFilterDialog::filtersAccepted()
 {
-    bool bandFilterChangedFlag = false;
-    bool modeFilterChangedFlag = false;
-    bool callsignFilterChangedFlag = false;
-    bool locatorFilterChangedFlag = false;
-    bool distanceFilterChangedFlag = false;
-    bool ignoreDistanceChangedFlag = false;
-    bool ignoreEmptyDistanceChangedFlag = false;
+
 
     // check bandfilter changed
     for (auto &b: bands)
@@ -410,7 +404,7 @@ void ClusterClientFilterDialog::filtersAccepted()
 
     }
 
-    //emit filtersChanged(bandfilterChanged, modefilterChanged, callsignfilterChanged, locatorfilterChanged);
+
     doCloseEvent();
     //close();
 }

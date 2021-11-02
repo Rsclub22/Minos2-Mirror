@@ -514,10 +514,10 @@ void ClusterClientFrame::filterButtonSelected()
         filterSettings = filterSetup->getFilterSettings();
         //update views..
         if (filterSetup->getBandFilterChangedFlag()
-         || filterSetup->getModeFilterChangedFlag()
-         || filterSetup->getDistanceFilterChangedFlag()
-         || filterSetup->getIgnoreDistChangedFlag()
-         || filterSetup->getIgnoreEmptyDistChangedFlag())
+            || filterSetup->getModeFilterChangedFlag()
+            || filterSetup->getDistanceFilterChangedFlag()
+            || filterSetup->getIgnoreDistChangedFlag()
+            || filterSetup->getIgnoreEmptyDistChangedFlag())
         {
             dxSpotProxyModel->setFilterRegExp("");
         }
