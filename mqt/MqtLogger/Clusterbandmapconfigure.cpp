@@ -200,8 +200,8 @@ void ClusterBandmapConfigure::saveDistances()
         if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)
         {
             DefaultDistanceIniName s = defaultDistIniNames.getDefaultDistIniName(band);
-            QString s1 = defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName;
-            int d = distanceValues.value(band).distance;
+            //QString s1 = defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName;
+            //int d = distanceValues.value(band).distance;
             config.setValue(defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName, distanceValues.value(band).distance);
         }
     }

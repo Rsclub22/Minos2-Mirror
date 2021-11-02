@@ -1578,6 +1578,8 @@ bool RigSetupForm::isAnySupportBandChecked()
 
 void RigSetupForm::setTransVertTabText(int tabNum, QString tabName)
 {
+    Q_UNUSED(tabName)
+    Q_UNUSED(tabNum)
     //ui->transVertTab->setTabText(tabNum, tabName);
 }
 
