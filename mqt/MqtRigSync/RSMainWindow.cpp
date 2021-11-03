@@ -12,6 +12,8 @@
 
 static const char *rigSyncUuid = "RigSync";
 
+static const int masterHoldTime = 250;
+
 RSMainWindow::RSMainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::RSMainWindow),
@@ -40,7 +42,7 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     bool trackSub= settings.value("trackSub", false).toBool();
     ui->trackSub->setChecked(trackSub);
 
-    connect(&SyncTimer, &QTimer::timeout, this, &RSMainWindow::SyncTimerTimer);
+    connect(&SyncTimer, &QTimer::timeout, this, &RSMainWindow::syncTimerTimer);
     SyncTimer.start(100);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName(), false);
@@ -59,7 +61,6 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     configAction = new QAction( tr("Configure..."), this );
     ui->menuBar->addAction( configAction );
     connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
-
 }
 
 void RSMainWindow::configure()
@@ -101,7 +102,7 @@ void RSMainWindow::closeEvent(QCloseEvent *event)
 {
     // and tidy up all loose ends
 
-    SyncTimerTimer( );
+    syncTimerTimer( );
 
     QWidget::closeEvent(event);
 }
@@ -125,7 +126,7 @@ void RSMainWindow::changeEvent( QEvent* e )
         settings.setValue("geometry", saveGeometry());
     }
 }
-void RSMainWindow::SyncTimerTimer(  )
+void RSMainWindow::syncTimerTimer(  )
 {
     static bool closed = false;
     if ( !closed )
@@ -146,7 +147,7 @@ void RSMainWindow::SyncTimerTimer(  )
        }
        if (ui->trackBandcb->isChecked())
        {
-            subRig.trackBand(mainRig);
+            subRig.trackOtherBand(mainRig);
        }
     }
     if (mainRig.rigFreq.isClear())
@@ -168,6 +169,13 @@ void RSMainWindow::SyncTimerTimer(  )
 
 }
 
+void RSMainWindow::claimTimerTimer()
+{
+    claimTimer.stop();
+    mainRig.setMaster(false);
+    subRig.setMaster(false);
+}
+
 void RSMainWindow::on_closeButton_clicked()
 {
     close();
@@ -182,7 +190,9 @@ void RSMainWindow::on_transfer12Button_clicked()
         trace("No change required");
         return;
     }
-
+    mainRig.setMaster(true);
+    subRig.setMaster(false);
+    claimTimer.start(masterHoldTime);
     subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
 }
 
@@ -197,6 +207,9 @@ void RSMainWindow::on_transfer21Button_clicked()
         trace("No change required");
         return;
     }
+    subRig.setMaster(true);
+    mainRig.setMaster(false);
+    claimTimer.start(masterHoldTime);
     if (n1mmLink.isConnected())
     {
         n1mmLink.sendFrequencyRequest(subRig.rigFreq, subRig.rigMode);
@@ -282,20 +295,26 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                     ui->QF1Label->setText(subRig.rigFreq.convertFreqStrDisp());
                 }
 
-                if (ui->trackRig->isChecked() || firstTime)
+                if ((ui->trackRig->isChecked() && !subRig.isMaster()) || firstTime)
                 {
                     if (!mainRig.rigFreq.isClear())
                     {
                         // first time - transfer rig to SDR, which will set up transverter
                         // settings as required
-                        on_transfer12Button_clicked();
+                        if (!firstTime)
+                        {
+                            mainRig.setMaster(true);
+                            subRig.setMaster(false);
+                            claimTimer.start(masterHoldTime);
+                        }
+                        subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
                         firstTime = false;
                     }
                 }
                 delayedAction(this, [=]{
-                    if (ui->trackBandcb->isChecked())
+                    if (ui->trackBandcb->isChecked() && mainRig.isMaster())
                     {
-                         subRig.trackBand(mainRig);
+                         subRig.trackOtherBand(mainRig);
                     }
                 }, 50);
             }
@@ -332,14 +351,24 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             }
 
 
-            if (ui->trackSub->isChecked() &&!firstTime)
+            if ((ui->trackSub->isChecked() && !mainRig.isMaster()) && !subRig.rigFreq.isClear() && !firstTime)
             {
-                on_transfer21Button_clicked();
+                subRig.setMaster(true);
+                mainRig.setMaster(false);
+                claimTimer.start(masterHoldTime);
+                if (n1mmLink.isConnected())
+                {
+                    n1mmLink.sendFrequencyRequest(subRig.rigFreq, subRig.rigMode);
+                }
+                else
+                {
+                    mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
+                }
             }
             delayedAction(this, [=]{
-                if (ui->trackBandcb->isChecked())
+                if (ui->trackBandcb->isChecked() && mainRig.isMaster())
                 {
-                     subRig.trackBand(mainRig);
+                     subRig.trackOtherBand(mainRig);
                 }
             }, 50);
         }
@@ -361,10 +390,13 @@ void RSMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 
 void RSMainWindow::on_trackRig_clicked()
 {
-    if (ui->trackRig->isChecked())
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+
+    if (ui->trackRig->isChecked() && !mainRig.rigFreq.isClear())
     {
         // set rig2 to rig1
-        on_transfer12Button_clicked();
+        subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
     }
     QSettings settings;
     settings.setValue("trackRig", ui->trackRig->isChecked());
@@ -372,10 +404,13 @@ void RSMainWindow::on_trackRig_clicked()
 
 void RSMainWindow::on_trackSub_clicked()
 {
-    if (ui->trackSub->isChecked())
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+
+    if (ui->trackSub->isChecked() && !subRig.rigFreq.isClear())
     {
         // set rig1 to rig2
-        on_transfer21Button_clicked();
+        mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
     }
 
     QSettings settings;
@@ -384,6 +419,9 @@ void RSMainWindow::on_trackSub_clicked()
 
 void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 {
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+
     QSettings settings;
     settings.setValue("trackBand", ui->trackBandcb->isChecked());
 
@@ -400,6 +438,9 @@ void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
 
 void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
 {
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+
     if (ui->wsjtxCb->isChecked())
     {
         wsjtxLink.initialise();
@@ -484,7 +525,15 @@ bool SyncRadio::check(N1MMLink &n1mmLink)
     }
     return false;
 }
-void SyncRadio::trackBand(SyncRadio &tracked)
+void SyncRadio::setChoices(bool trthis, bool trother, bool tb, bool tw)
+{
+    trackThis = trthis;
+    trackOther = trother;
+    trackBand = tb;
+    trackWSJTX = tw;
+}
+
+void SyncRadio::trackOtherBand(SyncRadio &tracked)
 {
     if (tracked.rigFreq == tracked.lastRigFreq && tracked.rigMode == tracked.lastRigMode)
     {

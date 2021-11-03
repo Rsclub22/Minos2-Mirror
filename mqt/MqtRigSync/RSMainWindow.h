@@ -12,6 +12,8 @@ class ModeInfo;
 
 class SyncRadio
 {
+private:
+    bool master = false;
 public:
     QString which;
     RigCache &rigCache;
@@ -29,7 +31,14 @@ public:
     QSharedPointer<ModeInfo>  lastBandMode;
     int lastModePart = -1;
 
+    bool trackThis = false;
+    bool trackOther = false;
+    bool trackBand = false;
+    bool trackWSJTX = false;
+
     SyncRadio(const QString &w, RigCache &r);
+
+    void setChoices(bool trthis, bool trother, bool tb, bool tw);
 
     void selectRadio(PubSubName name);
     void subRigSelection(const PubSubName &s, bool state);
@@ -38,7 +47,10 @@ public:
     QStringList populateRig();
     bool check(N1MMLink &n1mmLink);
     void rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode);
-    void trackBand(SyncRadio &tracked);
+    void trackOtherBand(SyncRadio &tracked);
+
+    bool isMaster()const {return master;}
+    void setMaster(bool m){master = m;}
 };
 
 namespace Ui {
@@ -64,7 +76,9 @@ private slots:
     void on_wsjtxCb_stateChanged(int arg1);
     void on_Rig2Combo_activated(const QString &arg1);
 
-    void SyncTimerTimer();
+    void syncTimerTimer();
+
+    void claimTimerTimer();
 
     void onStdInRead(QString);
 
@@ -75,6 +89,8 @@ private slots:
 private:
 
     Ui::RSMainWindow *ui;
+
+    QTimer claimTimer;
     RigCache rigCache;
     N1MMLink n1mmLink;
     WsjtxLink wsjtxLink;
