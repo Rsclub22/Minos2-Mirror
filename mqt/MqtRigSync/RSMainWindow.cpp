@@ -61,6 +61,8 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     configAction = new QAction( tr("Configure..."), this );
     ui->menuBar->addAction( configAction );
     connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
+
+    connect(&claimTimer, &QTimer::timeout, this, &RSMainWindow::claimTimerTimer);
 }
 
 void RSMainWindow::configure()
@@ -580,9 +582,9 @@ void SyncRadio::trackOtherBand(SyncRadio &tracked)
             rigCentre(mi->fLow, mi->fHigh, tracked.rigMode);
         }
     }
-    tracked.lastBand = bi;
-    tracked.lastBandMode = mi;
-    tracked.lastModePart = modePart;
+    lastBand = bi;
+    lastBandMode = mi;
+    lastModePart = modePart;
 }
 
 void SyncRadio::rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode)
