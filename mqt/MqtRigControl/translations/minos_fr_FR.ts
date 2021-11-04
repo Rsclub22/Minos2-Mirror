@@ -1261,46 +1261,46 @@ ces définitions radio:
         <translation>Erreur d&apos;entrée d&apos;adresse réseau</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1609"/>
-        <location filename="../rigsetupform.cpp" line="1767"/>
+        <location filename="../rigsetupform.cpp" line="1611"/>
+        <location filename="../rigsetupform.cpp" line="1769"/>
         <source>Transverter Name Exists</source>
         <translation>Le nom du transverter existe</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1610"/>
-        <location filename="../rigsetupform.cpp" line="1768"/>
+        <location filename="../rigsetupform.cpp" line="1612"/>
+        <location filename="../rigsetupform.cpp" line="1770"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation>Transverter %1 existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1692"/>
+        <location filename="../rigsetupform.cpp" line="1694"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas supprimer ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1701"/>
+        <location filename="../rigsetupform.cpp" line="1703"/>
         <source>Remove Transverter</source>
         <translation>Supprimer le transverter</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1702"/>
+        <location filename="../rigsetupform.cpp" line="1704"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation>Voulez-vous vraiment supprimer le transverter %1?</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1743"/>
+        <location filename="../rigsetupform.cpp" line="1745"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas modifier la bande de ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1888"/>
+        <location filename="../rigsetupform.cpp" line="1890"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Numéro de Port de réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1889"/>
+        <location filename="../rigsetupform.cpp" line="1891"/>
         <source>Network Port Number out of range</source>
         <translation>Numéro du Port de réseau hors plage</translation>
     </message>

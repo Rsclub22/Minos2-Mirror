@@ -828,7 +828,7 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="71"/>
-        <source>Cluster Spot Filters initCheckFilterTab</source>
+        <source>Cluster Spot Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -852,132 +852,132 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="798"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="810"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="829"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="792"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="804"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="823"/>
         <source>Add Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="798"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="792"/>
         <source>Enter Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="811"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="805"/>
         <source>Callsign may be invalid, do you still want to use the callsign?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="830"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="824"/>
         <source>Callsign already exists in list!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="884"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="878"/>
         <source>Delete Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="885"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="879"/>
         <source>Please confirm you want to delete callsign %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="909"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="903"/>
         <source>Delete All Callsign Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="910"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="904"/>
         <source>Please confirm you want to delete all callsigns?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="930"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="924"/>
         <source>Edit Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="930"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="924"/>
         <source>Edit Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="977"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="994"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="1015"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="971"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="988"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1009"/>
         <source>Add Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="977"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="971"/>
         <source>Enter Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="995"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="989"/>
         <source>The locator may be invalid, do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1016"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1010"/>
         <source>Locator already exists in list!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1043"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1037"/>
         <source>Edit Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1043"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1037"/>
         <source>Edit Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1069"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1063"/>
         <source>Delete Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1070"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1064"/>
         <source>Do you want to delete locator %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1093"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1087"/>
         <source>Delete All Locator Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1094"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1088"/>
         <source>Please confirm you want to delete all locators?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1165"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1159"/>
         <source>Save %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1165"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="1215"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1159"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1209"/>
         <source>%1 List Files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1215"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1209"/>
         <source>Open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1294"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1288"/>
         <source>Distance Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1295"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1289"/>
         <source>Please enter a number between %1 and %2!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2728,12 +2728,12 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="274"/>
+        <location filename="../qrzdisplayframe.cpp" line="277"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="278"/>
+        <location filename="../qrzdisplayframe.cpp" line="281"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2741,17 +2741,17 @@ No          - Discard changes</source>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="303"/>
+        <location filename="../qrzdisplayframe.cpp" line="306"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="304"/>
+        <location filename="../qrzdisplayframe.cpp" line="307"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="305"/>
+        <location filename="../qrzdisplayframe.cpp" line="308"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>

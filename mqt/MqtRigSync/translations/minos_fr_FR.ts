@@ -97,7 +97,7 @@
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="57"/>
+        <location filename="../RSMainWindow.cpp" line="62"/>
         <source>Configure...</source>
         <translation>Configurer...</translation>
     </message>
