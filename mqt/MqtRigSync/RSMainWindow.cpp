@@ -1,6 +1,7 @@
 #include "base_pch.h"
 
 #include <QThread>
+#include "cutils.h"
 #include "MinosRPC.h"
 #include "ConfigFile.h"
 #include "rigutils.h"
@@ -12,7 +13,7 @@
 
 static const char *rigSyncUuid = "RigSync";
 
-static const int masterHoldTime = 250;
+static const int masterHoldTime = 1000;
 
 RSMainWindow::RSMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -173,6 +174,7 @@ void RSMainWindow::syncTimerTimer(  )
 
 void RSMainWindow::claimTimerTimer()
 {
+    trace("Master cleared");
     claimTimer.stop();
     mainRig.setMaster(false);
     subRig.setMaster(false);
@@ -209,8 +211,8 @@ void RSMainWindow::on_transfer21Button_clicked()
         trace("No change required");
         return;
     }
-    subRig.setMaster(true);
     mainRig.setMaster(false);
+    subRig.setMaster(true);
     claimTimer.start(masterHoldTime);
     if (n1mmLink.isConnected())
     {
@@ -282,10 +284,11 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 selDetail.clearDirty();
 
             }
-            if (selState.isDirty())
+            if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
             {
                 mainRig.rigMode = selState.radioMode().getValue().remove(":");
                 mainRig.rigFreq = selState.radioFreq().getValue();
+                trace(QString("main frequency changed to %1").arg(mainRig.rigFreq.traceStr()));
 
                 selState.clearDirty();
                 if (mainRig.rigFreq.isClear())
@@ -299,19 +302,21 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 
                 if ((ui->trackRig->isChecked() && !subRig.isMaster()) || firstTime)
                 {
+                    trace(QString("firstTime 1 is %1").arg(makeStr(firstTime)));
+
                     if (!mainRig.rigFreq.isClear())
                     {
                         // first time - transfer rig to SDR, which will set up transverter
                         // settings as required
-                        if (!firstTime)
-                        {
-                            mainRig.setMaster(true);
-                            subRig.setMaster(false);
-                            claimTimer.start(masterHoldTime);
-                        }
+
+                        mainRig.setMaster(true);
+                        subRig.setMaster(false);
+                        claimTimer.start(masterHoldTime);
+
                         subRig.controlFreq(mainRig.rigFreq, mainRig.rigMode);
                         firstTime = false;
                     }
+                    trace(QString("firstTime 2 is %1").arg(makeStr(firstTime)));
                 }
                 delayedAction(this, [=]{
                     if (ui->trackBandcb->isChecked() && mainRig.isMaster())
@@ -337,10 +342,11 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
             selDetail.clearDirty();
 
         }
-        if (selState.isDirty())
+        if (selState.radioMode().isDirty() || selState.radioFreq().isDirty())
         {
             subRig.rigMode = selState.radioMode().getValue().remove(":");
             subRig.rigFreq = selState.radioFreq().getValue();
+            trace(QString("sync frequency changed to %1").arg(subRig.rigFreq.traceStr()));
 
             selState.clearDirty();
             if (subRig.rigFreq.isClear())
@@ -355,8 +361,9 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 
             if ((ui->trackSub->isChecked() && !mainRig.isMaster()) && !subRig.rigFreq.isClear() && !firstTime)
             {
-                subRig.setMaster(true);
+                trace(QString("firstTime 3 is %1").arg(makeStr(firstTime)));
                 mainRig.setMaster(false);
+                subRig.setMaster(true);
                 claimTimer.start(masterHoldTime);
                 if (n1mmLink.isConnected())
                 {
@@ -652,4 +659,13 @@ void SyncRadio::controlFreq(const Frequency &lFreq, QString mode)
             rpc.queueCall( selected);
         }
     }
+}
+bool SyncRadio::isMaster() const
+{
+    return master;
+}
+void SyncRadio::setMaster(bool m)
+{
+    trace(QString(which + " master set to %1").arg(makeStr(m)));
+    master = m;
 }

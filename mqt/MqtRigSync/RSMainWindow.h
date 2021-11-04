@@ -49,8 +49,8 @@ public:
     void rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode);
     void trackOtherBand(SyncRadio &tracked);
 
-    bool isMaster()const {return master;}
-    void setMaster(bool m){master = m;}
+    bool isMaster()const;
+    void setMaster(bool m);
 };
 
 namespace Ui {
