@@ -697,7 +697,7 @@ Server=false
             ac.appType = a.trimmed();
             appConfig.getPrivateProfileString(a, "Path", "", ac.appPath);
 #ifdef Q_OS_WIN
-            if (!ac.appPath.isEmpty())
+            if (!ac.appPath.isEmpty() && ac.appPath.right(4).compare(".exe", Qt::CaseInsensitive) != 0)
             {
                 ac.appPath += ".exe";
             }
