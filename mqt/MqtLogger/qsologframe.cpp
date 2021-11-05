@@ -1194,7 +1194,14 @@ void QSOLogFrame::showScreenEntry( )
       {
           ui->radioEdit->setText(temp.rigName);
 
-          ui->frequencyEdit->setText(temp.frequency.convertFreqStrDispSingle());
+          if (temp.frequency.isClear())
+          {
+              ui->frequencyEdit->clear();
+          }
+          else
+          {
+              ui->frequencyEdit->setText(temp.frequency.convertFreqStrDispSingle());
+          }
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
 
@@ -2369,7 +2376,7 @@ void QSOLogFrame::logScreenEntry( )
    QSharedPointer<BaseContact> lct = selectedContact;
    if (!lct)
    {
-        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true) );	// "current" doesn't get flag, don't save ContestLog yet
+        lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
    }
 
    if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
@@ -2516,7 +2523,7 @@ void QSOLogFrame::logCurrentContact( )
                 LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                 QString currmode = ui->ModeComboBoxGJV->currentText();
                 QString currSubmode = ui->MGMSubModeEdit->text().trimmed();
-                ct->addContact( nct_no, orflag, true, false, currmode, currSubmode, ctTime ); // last contact
+                QSharedPointer<BaseContact> bct = ct->addContact( nct_no, orflag, true, false, currmode, currSubmode, ctTime, curFreq ); // last contact
                 nct_no++;
              }
              while ( nct_no < ctno ) ;

@@ -31,7 +31,6 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     hb->addWidget(TextEditlabel);
 
     TextEditEdit = new QLineEdit(this);
-    //TextEditEdit->setClearButtonEnabled(true);
     TextEditEdit->setObjectName(name + "Edit");
     connect(TextEditEdit, &QLineEdit::textChanged, this, &QSOTextEditFrame::onTextEdit_textChanged);
 
