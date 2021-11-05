@@ -174,10 +174,30 @@ void RSMainWindow::syncTimerTimer(  )
 
 void RSMainWindow::claimTimerTimer()
 {
+    SyncRadio *lastMaster = nullptr;
+    if (mainRig.isMaster())
+    {
+        lastMaster = &mainRig;
+    }
+    else if (subRig.isMaster())
+    {
+        lastMaster = &subRig;
+    }
     trace("Master cleared");
     claimTimer.stop();
     mainRig.setMaster(false);
     subRig.setMaster(false);
+
+    // now pick up any changes made by the sync radio since master's last tuning
+    if (lastMaster == &mainRig && ui->trackSub->isChecked())
+    {
+        on_transfer21Button_clicked();
+    }
+    else if (lastMaster == &subRig && ui->trackRig->isChecked())
+    {
+        on_transfer12Button_clicked();
+    }
+
 }
 
 void RSMainWindow::on_closeButton_clicked()
@@ -191,7 +211,7 @@ void RSMainWindow::on_transfer12Button_clicked()
     trace("Transfer 1 - 2");
     if (mainRig.rigFreq.isClear() || (mainRig.rigFreq == subRig.rigFreq && mainRig.rigMode == subRig.rigMode))
     {
-        trace("No change required");
+        trace("transfer12 - No change required");
         return;
     }
     mainRig.setMaster(true);
@@ -208,7 +228,7 @@ void RSMainWindow::on_transfer21Button_clicked()
     trace("Transfer 2 - 1");
     if (subRig.rigFreq.isClear() || (mainRig.rigFreq == subRig.rigFreq && mainRig.rigMode == subRig.rigMode))
     {
-        trace("No change required");
+        trace("transfer21 - No change required");
         return;
     }
     mainRig.setMaster(false);
