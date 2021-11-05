@@ -211,11 +211,11 @@
         <location filename="../kstmainwindow.ui" line="69"/>
         <location filename="../kstmainwindow.ui" line="76"/>
         <location filename="../kstmainwindow.ui" line="83"/>
-        <location filename="../kstmainwindow.ui" line="433"/>
-        <location filename="../kstmainwindow.ui" line="443"/>
-        <location filename="../kstmainwindow.ui" line="453"/>
-        <location filename="../kstmainwindow.ui" line="463"/>
-        <location filename="../kstmainwindow.ui" line="605"/>
+        <location filename="../kstmainwindow.ui" line="462"/>
+        <location filename="../kstmainwindow.ui" line="472"/>
+        <location filename="../kstmainwindow.ui" line="482"/>
+        <location filename="../kstmainwindow.ui" line="492"/>
+        <location filename="../kstmainwindow.ui" line="634"/>
         <source>-</source>
         <translatorcomment>Replaced by text?</translatorcomment>
         <translation>-</translation>
@@ -241,31 +241,31 @@
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="175"/>
-        <location filename="../kstmainwindow.ui" line="336"/>
+        <location filename="../kstmainwindow.ui" line="346"/>
         <source>X</source>
         <translation>X</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="202"/>
+        <location filename="../kstmainwindow.ui" line="205"/>
         <source>Max distance to show</source>
         <translation>Distance maximale à afficher</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="272"/>
+        <location filename="../kstmainwindow.ui" line="282"/>
         <source>Show me-&gt;user
 Path in AirScout</source>
         <translation>Afficher le chemin dans AirScout
 entre moi et le Spot</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="280"/>
+        <location filename="../kstmainwindow.ui" line="290"/>
         <source>Show Message call-&gt;other
 Path in AirScout</source>
         <translation>Afficher le chemin dans AirScout
 entre Spot et autre indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="288"/>
+        <location filename="../kstmainwindow.ui" line="298"/>
         <source>Don&apos;t set filter
 when user selected</source>
         <translatorcomment>Ne pas définir de filtre
@@ -274,12 +274,12 @@ lorsque l&apos;utilisateur a sélectionné</translatorcomment>
 l&apos;indicatif sélectionné</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="309"/>
+        <location filename="../kstmainwindow.ui" line="319"/>
         <source>Message Filter</source>
         <translation>Filtre de messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="316"/>
+        <location filename="../kstmainwindow.ui" line="326"/>
         <source>Only show messages for this band</source>
         <translation>Afficher uniquement les messages de cette bande</translation>
     </message>
@@ -303,90 +303,90 @@ l&apos;indicatif sélectionné</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="323"/>
+        <location filename="../kstmainwindow.ui" line="333"/>
         <source>Look for any of these strings (space separated) in messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="333"/>
+        <location filename="../kstmainwindow.ui" line="343"/>
         <source>Clear the message filters</source>
         <translation>Effacer les filtres des messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="361"/>
+        <location filename="../kstmainwindow.ui" line="384"/>
         <source>Including me</source>
         <translatorcomment>Context??</translatorcomment>
         <translation>y compris les miens</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="368"/>
+        <location filename="../kstmainwindow.ui" line="391"/>
         <source>Show read (ticked) messages</source>
         <translation>Afficher les messages lus (cochés)</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="392"/>
+        <location filename="../kstmainwindow.ui" line="421"/>
         <source>Chat to which messages will be sent</source>
         <translation>Envoyer des messages à ce Chat</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="410"/>
+        <location filename="../kstmainwindow.ui" line="439"/>
         <source>Active chat</source>
         <translation>Chat actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="486"/>
+        <location filename="../kstmainwindow.ui" line="515"/>
         <source>AS Band</source>
         <translation>AS Bande</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="496"/>
+        <location filename="../kstmainwindow.ui" line="525"/>
         <source>AS Active</source>
         <translation>AS actif</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="514"/>
+        <location filename="../kstmainwindow.ui" line="543"/>
         <source>General message</source>
         <translation>Message général</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="521"/>
+        <location filename="../kstmainwindow.ui" line="550"/>
         <source>Meep</source>
         <translation>Meep</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="532"/>
+        <location filename="../kstmainwindow.ui" line="561"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="550"/>
+        <location filename="../kstmainwindow.ui" line="579"/>
         <source>Message</source>
         <translation>Message</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="566"/>
+        <location filename="../kstmainwindow.ui" line="595"/>
         <source>Clear message</source>
         <translation>Effacer message</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="578"/>
-        <location filename="../kstmainwindow.ui" line="640"/>
+        <location filename="../kstmainwindow.ui" line="607"/>
+        <location filename="../kstmainwindow.ui" line="669"/>
         <source>Configure</source>
         <translation>Configurer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="585"/>
+        <location filename="../kstmainwindow.ui" line="614"/>
         <source>Clear Messages</source>
         <translation>Effacer messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="612"/>
+        <location filename="../kstmainwindow.ui" line="641"/>
         <location filename="../kstmainwindow.cpp" line="408"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="619"/>
+        <location filename="../kstmainwindow.ui" line="648"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
@@ -410,6 +410,11 @@ l&apos;indicatif sélectionné</translation>
         <location filename="../kstmainwindow.cpp" line="559"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
+    </message>
+    <message>
+        <location filename="../kstmainwindow.cpp" line="1492"/>
+        <source>Message updates paused</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
