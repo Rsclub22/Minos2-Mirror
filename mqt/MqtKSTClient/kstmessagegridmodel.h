@@ -35,12 +35,17 @@ class KstMessageGridModel: public QAbstractItemModel
 {
     Q_OBJECT
 
-    QString filterString;
-    int chatFilter = 0;
-    bool isFiltered() const
-    {
-        return !filterString.isEmpty() || chatFilter != 0;
-    }
+        QString filterString;
+        int chatFilter = 0;
+        bool isFiltered() const
+        {
+            return !filterString.isEmpty() || chatFilter != 0;
+        }
+        int pauseIndex = -1;
+        bool isPaused() const
+        {
+            return pauseIndex > 0;
+        }
         QSize cacheSize;
     public:
         KstMessageGridModel();
@@ -69,6 +74,8 @@ class KstMessageGridModel: public QAbstractItemModel
         void reset();
         void setFilterString(QString f);
         void setChatFilter(int value);
+        void setMousePausePoint(int index);
+
         virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
         virtual bool setData(const QModelIndex &index, const QVariant &value, int role) override;
 };
@@ -81,11 +88,18 @@ class KstMessageGridSortFilterModel: public QSortFilterProxyModel
     {
         return !filterStrings.isEmpty() || chatFilter != 0;
     }
+    int pauseIndex = -1;
+    bool isPaused() const
+    {
+        return pauseIndex >= 0;
+    }
 
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
     void setFilterString(QString f);
     void setChatFilter(int value);
+
+    void setMousePausePoint(int index);
 };
 class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 {

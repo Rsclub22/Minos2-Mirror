@@ -715,7 +715,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kstMessageModel.appendLastRow(kst);
 
-        if (mouseInMessages)
+        if (!mouseInMessages)
         {
             QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
             ui->messageTable->scrollTo(mesIndex);
@@ -1485,16 +1485,25 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
     {
        if (event->type() == QEvent::Enter)
        {
+           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
            mouseInMessages = true;
+           kstMessageFilterModel.setMousePausePoint(mesIndex.row());
+           ui->messageTable->update();
+           ui->pauseLabel->setText(HtmlFontColour(Qt::red) + tr("Message updates paused"));
        }
        else if (event->type() == QEvent::Leave)
        {
            mouseInMessages = false;
-
+           kstMessageFilterModel.setMousePausePoint(-1);
+           ui->messageTable->update();
+           ui->pauseLabel->clear();
            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-           ui->messageTable->scrollTo(mesIndex);
-
-           ui->messageTable->repaint();
+           delayedAction(this, [=]()
+           {
+               // NB a lambda function
+               ui->messageTable->scrollTo(mesIndex);
+           }
+           );
        }
     }
     else

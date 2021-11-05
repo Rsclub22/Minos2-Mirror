@@ -1,5 +1,5 @@
-#include "kstmessagegridmodel.h"
 #include "kstmainwindow.h"
+#include "kstmessagegridmodel.h"
 //==========================================================================================
 bool compMessages ( QSharedPointer<KstMessageLine> q1, const QSharedPointer<KstMessageLine> q2 )
 {
@@ -194,6 +194,11 @@ void KstMessageGridModel::setChatFilter(int value)
     chatFilter = value;
 }
 
+void KstMessageGridModel::setMousePausePoint(int index)
+{
+    pauseIndex = index;
+}
+
 Qt::ItemFlags KstMessageGridModel::flags(const QModelIndex& index) const
 {
   Qt::ItemFlags returnFlags = QAbstractItemModel::flags(index);
@@ -231,6 +236,10 @@ void KstMessageGridSortFilterModel::setChatFilter(int value)
 bool KstMessageGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
 
+    if (pauseIndex > 0 && sourceRow > pauseIndex)
+    {
+        return false;
+    }
     KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
     if (!cgm || sourceRow >= cgm->rowCount())
         return false;
@@ -285,6 +294,15 @@ void KstMessageGridSortFilterModel::setFilterString(QString f)
 #else
     filterStrings = f.split(" ", QString::SkipEmptyParts);
 #endif
+    invalidateFilter();
+}
+void KstMessageGridSortFilterModel::setMousePausePoint(int index)
+{
+    pauseIndex = index;
+    KstMessageGridModel *cgm = dynamic_cast<KstMessageGridModel *>(sourceModel());
+    if (cgm)
+        cgm->setMousePausePoint(index);
+
     invalidateFilter();
 }
 
