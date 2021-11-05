@@ -59,8 +59,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     loginStatDetails(false),
     nodeConnected(false),
     purgeSpotFlag(false),
-    reconnectFlag(false),
-    hfFlag(false)
+    reconnectFlag(false)
 {
     ui->setupUi(this);
 
@@ -187,15 +186,6 @@ void ClusterMainWindow::doStartup()
 
 
     connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
-
-    // read enable hf spots flag
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("HFSpots");
-    hfFlag = config.value("enable", true).toBool();
-    config.endGroup();
-
-
 
     // in comming spot tab
 
@@ -374,42 +364,10 @@ void ClusterMainWindow::doStartup()
 
     removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
 
-    connect(ui->pushButton, &QPushButton::pressed, this, &ClusterMainWindow::onpbpressed);
-
     ui->clusterTab->setCurrentWidget(ui->bandFilter);
     ui->startCloseFileTab->setAutoFillBackground(true);
     ui->clusterTab->setCurrentIndex(settings.value("ClusterServer/curTab", 0).toInt());
 }
-
-// this is for testing
-void ClusterMainWindow::onpbpressed()
-{
-    static bool state = false;
-    if (!state)
-    {
-        state = true;
-        setHF(state);
-    }
-    else
-    {
-        state = false;
-        setHF(state);
-    }
-
-    QString fileName = CLUSTER_SETTINGS_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-    config.beginGroup("HFSpots");
-    config.setValue("enable", state);
-    config.endGroup();
-}
-
-/*
-void ClusterMainWindow::startSendSpotsTimer()
-{
-    sendSpotsTimer->start(SEND_SPOTS_DUR);
-
-}
-*/
 
 void ClusterMainWindow::clusterListChanged()
 {
@@ -2264,7 +2222,7 @@ void ClusterMainWindow::initUserCommandButtons()
 
 void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 {
-    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
+    if (ui->clusterTab->currentIndex() == 1)
     {
        userVHFUHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2272,7 +2230,7 @@ void ClusterMainWindow::showVhfUhfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 {
-    if (hfFlag && ui->clusterTab->currentIndex() == 0)
+    if (ui->clusterTab->currentIndex() == 0)
     {
         userHFCmdButton[buttonNumber]->showButtonMenu();
     }
@@ -2280,7 +2238,7 @@ void ClusterMainWindow::showHfUserCmdButtonMenu(int buttonNumber)
 
 void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
-    if ((hfFlag && ui->clusterTab->currentIndex() == 1) || (!hfFlag && ui->clusterTab->currentIndex() == 0))
+    if (ui->clusterTab->currentIndex() == 1)
     {
         userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
     }
@@ -2288,7 +2246,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
-    if (hfFlag && ui->clusterTab->currentIndex() == 0)
+    if (ui->clusterTab->currentIndex() == 0)
     {
         userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
     }
@@ -2343,7 +2301,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
 {
-    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
     }
@@ -2396,7 +2354,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
 {
-    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
     }
@@ -2439,7 +2397,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 
 void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 {
-    if (hfFlag && ui->clusterTab->currentIndex() == HF_TABNUM)
+    if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
         userCmdButtonWrite("HF", buttonNumber);
     }
@@ -2758,7 +2716,7 @@ void ClusterMainWindow::readBandFilterSettings()
 
     }
 
-    ui->saveBandFilterSettingChkBox->setChecked(config.value("saveBandFilterSettingsOnClose", false).toBool());
+    ui->saveBandFilterSettingChkBox->setChecked(config.value("saveBandFilterSettingsOnClose", true).toBool());
 
     config.endGroup();
 
@@ -2844,58 +2802,7 @@ void ClusterMainWindow::setVhfMwLogOverrideIndicatorOnOff(bool on)
 }
 
 
-void ClusterMainWindow::setHF(bool hfFlag_)
-{
-    QString hfTabText = "HF User Commands";
-    QString hfTabName = "hfUserCommands";
-
-    hfFlag = hfFlag_;
-
-    if (hfFlag_)
-    {
-       // set hf Tab "visible" Can be replaced with Qt5.15 setTabInvisible - not supported yet in Linux
-        //QString t = ui->clusterTab->tabText(0);
-       if (ui->clusterTab->tabText(0) != hfTabText)
-       {
-           QWidget *hfTab = ui->clusterTab->findChild<QWidget *>(hfTabName);
-           if (hfTab)
-           {
-               ui->clusterTab->insertTab(0, hfTab, hfTabText);
-           }
-       }
-       // ensure hf Settings are correct
-       readBandFilterSettings();
-       loadBandFilterSettingsToTab();
-   }
-    else
-    {
-        // set hf tab "invisible"
-        //QString n = ui->clusterTab->tabText(0);
-        if (ui->clusterTab->tabText(0) == hfTabText)
-        {
-            ui->clusterTab->removeTab(0);
-        }
-
-        // clear the HF Bandfilters
-        foreach (auto const &b, bands)
-        {
-            if (b->getType() == HF_BANDTYPE)
-            {
-                QString band = b.data()->uk;
-                bandCheckBoxes.value(band).bandChkBox->setChecked(false);
-                filterSettings.setBandFilter(band, false);
-            }
-
-
-        }
-    }
-
-    setHfFilterControlsVisible(hfFlag);
-
-}
-
-
-void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
+void ClusterMainWindow::setHfFilterControlsVisible()
 {
 
     foreach(auto const &b, bands)
@@ -2903,12 +2810,12 @@ void ClusterMainWindow::setHfFilterControlsVisible(bool visible)
         if (b->getType() == HF_BANDTYPE)
         {
             QString band = b.data()->uk;
-            bandCheckBoxes.value(band).bandChkBox->setVisible(visible);
+            bandCheckBoxes.value(band).bandChkBox->setVisible(true);
         }
 
     }
 
-    ui->hfSelectBandPb->setVisible(visible);
+    ui->hfSelectBandPb->setVisible(true);
 
 }
 
@@ -2957,33 +2864,16 @@ void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
     {
         QString band = b.data()->uk;
 
-        if (hfFlag)
+        if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
         {
-            if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
-            {
-                filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
-                changed = true;
-            }
+            filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
+            changed = true;
         }
-        else
-        {
-            if (b.data()->getType() == VHF_BANDTYPE || b.data()->getType() == MW_BANDTYPE)
-            {
-                if (bandCheckBoxes.value(band).bandChkBox->isChecked() != filterSettings.getBandFilter(band))
-                {
-                    filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
-                    changed = true;
-                }
-            }
-        }
-
 
         if (changed)
         {
            updateDisplay();
         }
-
-
     }
 
 }

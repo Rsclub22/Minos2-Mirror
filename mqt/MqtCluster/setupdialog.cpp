@@ -229,33 +229,6 @@ void SetupDialog::createDefaultGeneralSettingsFile()
     config.setValue("timeToLive", 30);
 
     config.endGroup();
-    config.beginGroup("HFSpots");
-
-    config.setValue("enable", true);
-    config.endGroup();
-
-    /*
-    config.beginGroup("Spots_To_Log_Filter");
-    config.setValue("logFilterOverride", false);
-    config.setValue("logFilterHF", false);
-    config.setValue("logFilterVHFMW", true);
-    config.endGroup();
-
-
-
-    config.beginGroup("CommandFile");
-    config.setValue("enableCommandFile", false);
-    config.setValue("enableStartCommandFile", false);
-    config.setValue("enableEndCommandFile", false);
-    config.endGroup();
-    config.beginGroup("EnableSendSpotsToDXCluster");
-    config.setValue("enableSendToDXCluster", false);
-    config.endGroup();
-    config.beginGroup("UseQRZServer");
-    config.setValue("enableGetQraFromQrz", false);
-    config.endGroup();
-    */
-
 }
 
 void SetupDialog::readGeneralSettings()

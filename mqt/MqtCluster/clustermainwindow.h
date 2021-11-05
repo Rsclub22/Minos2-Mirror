@@ -363,8 +363,6 @@ private:
 
     bool reconnectFlag;
 
-    bool hfFlag;
-
     QTimer *statusTimer;
 
     QString geoStr;         // geometry registry location
@@ -464,14 +462,12 @@ private:
     void updateToNewVhfUhfGroupKey();
 
     void initFilterCheckBoxs();
-    void setHfFilterControlsVisible(bool visible);
+    void setHfFilterControlsVisible();
 
     void setAllUHFBandsFilter(bool state);
     void setAllVHFBandsFilter(bool state);
     void setAllHFBandsFilter(bool state);
-    void setHF(bool hfFlag);
     void updateDisplay();
-
 
     void saveBandFilterSettings();
     void readBandFilterSettings();
@@ -536,7 +532,6 @@ private slots:
     void onHfSelectBandPbPressed();
     void onVhfSelectBandPbPressed();
     void onUhfSelectBandPbPressed();
-    void onpbpressed(); // for test .. remove
     void onReconnectCommandFromLog(bool state);
     void onclusterQrzResponse(QString dxCall, QString dxGrid, QString dxCallState, QString spotterCall, QString spotterGrid, QString spotterState);
     void onLogFilterCheckBoxClicked();

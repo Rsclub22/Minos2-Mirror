@@ -2086,68 +2086,68 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="480"/>
-        <location filename="../LoggerContest.cpp" line="1935"/>
+        <location filename="../LoggerContest.cpp" line="1940"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="485"/>
-        <location filename="../LoggerContest.cpp" line="1044"/>
-        <location filename="../LoggerContest.cpp" line="1057"/>
-        <location filename="../LoggerContest.cpp" line="1063"/>
+        <location filename="../LoggerContest.cpp" line="1049"/>
+        <location filename="../LoggerContest.cpp" line="1062"/>
+        <location filename="../LoggerContest.cpp" line="1068"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="572"/>
+        <location filename="../LoggerContest.cpp" line="577"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="758"/>
+        <location filename="../LoggerContest.cpp" line="763"/>
         <source>.GJV should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="852"/>
+        <location filename="../LoggerContest.cpp" line="857"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="859"/>
+        <location filename="../LoggerContest.cpp" line="864"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="982"/>
-        <location filename="../LoggerContest.cpp" line="1134"/>
+        <location filename="../LoggerContest.cpp" line="987"/>
+        <location filename="../LoggerContest.cpp" line="1139"/>
         <source>Please give first serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="984"/>
-        <location filename="../LoggerContest.cpp" line="1136"/>
+        <location filename="../LoggerContest.cpp" line="989"/>
+        <location filename="../LoggerContest.cpp" line="1141"/>
         <source>Please give last serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="990"/>
-        <location filename="../LoggerContest.cpp" line="1142"/>
+        <location filename="../LoggerContest.cpp" line="995"/>
+        <location filename="../LoggerContest.cpp" line="1147"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1033"/>
+        <location filename="../LoggerContest.cpp" line="1038"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1035"/>
+        <location filename="../LoggerContest.cpp" line="1040"/>
         <source>From file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1928"/>
+        <location filename="../LoggerContest.cpp" line="1933"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2559,7 +2559,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1864"/>
+        <location filename="../qsologframe.cpp" line="1871"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2567,57 +2567,57 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2060"/>
+        <location filename="../qsologframe.cpp" line="2067"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2064"/>
+        <location filename="../qsologframe.cpp" line="2071"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2068"/>
+        <location filename="../qsologframe.cpp" line="2075"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2076"/>
+        <location filename="../qsologframe.cpp" line="2083"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2385"/>
+        <location filename="../qsologframe.cpp" line="2392"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2392"/>
+        <location filename="../qsologframe.cpp" line="2399"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2423"/>
+        <location filename="../qsologframe.cpp" line="2430"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2488"/>
+        <location filename="../qsologframe.cpp" line="2495"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2490"/>
+        <location filename="../qsologframe.cpp" line="2497"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2872"/>
+        <location filename="../qsologframe.cpp" line="2879"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2907"/>
+        <location filename="../qsologframe.cpp" line="2914"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2625,7 +2625,7 @@ No          - Discard changes</source>
 <context>
     <name>QSOTextEditFrame</name>
     <message>
-        <location filename="../QSOTextEditFrame.cpp" line="52"/>
+        <location filename="../QSOTextEditFrame.cpp" line="51"/>
         <source>Click to clear edit content</source>
         <translation type="unfinished"></translation>
     </message>
