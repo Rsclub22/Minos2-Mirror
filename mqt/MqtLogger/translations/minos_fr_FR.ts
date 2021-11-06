@@ -5193,7 +5193,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1293"/>
-        <location filename="../tlogcontainer.cpp" line="1814"/>
+        <location filename="../tlogcontainer.cpp" line="1816"/>
         <source>Contest Sets</source>
         <translation>Ensembles de Concours</translation>
     </message>
@@ -5204,7 +5204,7 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1373"/>
-        <location filename="../tlogcontainer.cpp" line="1921"/>
+        <location filename="../tlogcontainer.cpp" line="1923"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
@@ -5219,33 +5219,33 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1651"/>
+        <location filename="../tlogcontainer.cpp" line="1653"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1923"/>
+        <location filename="../tlogcontainer.cpp" line="1925"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1933"/>
+        <location filename="../tlogcontainer.cpp" line="1935"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1957"/>
+        <location filename="../tlogcontainer.cpp" line="1959"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1961"/>
+        <location filename="../tlogcontainer.cpp" line="1963"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2134"/>
-        <location filename="../tlogcontainer.cpp" line="2135"/>
+        <location filename="../tlogcontainer.cpp" line="2137"/>
+        <location filename="../tlogcontainer.cpp" line="2138"/>
         <source>Minos contest Logger Application</source>
         <translation>Application Minos Enregistreur de Concours</translation>
     </message>
@@ -5517,22 +5517,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="856"/>
+        <location filename="../tsinglelogframe.cpp" line="860"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1434"/>
+        <location filename="../tsinglelogframe.cpp" line="1438"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1453"/>
+        <location filename="../tsinglelogframe.cpp" line="1457"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1475"/>
+        <location filename="../tsinglelogframe.cpp" line="1479"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>

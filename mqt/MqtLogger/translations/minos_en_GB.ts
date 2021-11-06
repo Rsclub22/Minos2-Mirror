@@ -5089,7 +5089,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1293"/>
-        <location filename="../tlogcontainer.cpp" line="1814"/>
+        <location filename="../tlogcontainer.cpp" line="1816"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5100,7 +5100,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1373"/>
-        <location filename="../tlogcontainer.cpp" line="1921"/>
+        <location filename="../tlogcontainer.cpp" line="1923"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
@@ -5115,33 +5115,33 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1651"/>
+        <location filename="../tlogcontainer.cpp" line="1653"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1923"/>
+        <location filename="../tlogcontainer.cpp" line="1925"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1933"/>
+        <location filename="../tlogcontainer.cpp" line="1935"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1957"/>
+        <location filename="../tlogcontainer.cpp" line="1959"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1961"/>
+        <location filename="../tlogcontainer.cpp" line="1963"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2134"/>
-        <location filename="../tlogcontainer.cpp" line="2135"/>
+        <location filename="../tlogcontainer.cpp" line="2137"/>
+        <location filename="../tlogcontainer.cpp" line="2138"/>
         <source>Minos contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5413,22 +5413,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="856"/>
+        <location filename="../tsinglelogframe.cpp" line="860"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1434"/>
+        <location filename="../tsinglelogframe.cpp" line="1438"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1453"/>
+        <location filename="../tsinglelogframe.cpp" line="1457"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1475"/>
+        <location filename="../tsinglelogframe.cpp" line="1479"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
