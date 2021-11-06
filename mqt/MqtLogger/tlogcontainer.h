@@ -55,6 +55,7 @@ public:
     TSingleLogFrame *findContest(BaseContestLog *ct );
     QVector<TSingleLogFrame *> getLogFrames();
     int getLogFrameCount();
+    int getSlotNo(TSingleLogFrame *) const;
 
     QVector<ContestPageControl *> contestPageControls;
     SetMemoryAction *setMemoryAction;

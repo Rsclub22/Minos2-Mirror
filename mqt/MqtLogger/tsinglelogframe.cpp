@@ -41,11 +41,11 @@
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
 
-void TSingleLogFrame::buildFrame()
+void TSingleLogFrame::buildFrame(int slotNo)
 {
     createScreenComponents();
 
-    buildScreenLayout();
+    buildScreenLayout(slotNo);
 
     OtherMatchTreeFW = new FocusWatcher(otherMatchFrame->getTreeView());
     connect(OtherMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onOtherMatchTreeFocused);
@@ -517,11 +517,14 @@ void TSingleLogFrame::applyScreenLayout()
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( getContest() );
     if (!ct)
         return;
+
+    int slotNo = LogContainer->getSlotNo(this);
+
     traceMsg("applyScreenLayout for " + ct->name.getValue() + " uuid " + ct->uuid);
     QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 
     clearScreenLayout(true);
-    buildScreenLayout();
+    buildScreenLayout(slotNo);
 
     QSOTable->setItemDelegate( delegate.data() );
     QSize ms = delegate->docSize("XX");
@@ -735,7 +738,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
     }
 
 }
-void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
+void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance, int slotNo)
 {
     // we need to add this contest page to the relevant contestPageControl
     // as a new tab
@@ -787,10 +790,11 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
     {
         sname = ExtractFileName( contest->cfileName );
     }
-    LogContainer->contestPageControls[t]->addTab(cp, sname);
+
+    LogContainer->contestPageControls[t]->insertTab(slotNo, cp, sname);
     TContestApp::getContestApp() ->suppressWritePreload = temp;
 }
-void TSingleLogFrame::buildScreenLayout()
+void TSingleLogFrame::buildScreenLayout(int slotNo)
 {
     ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
@@ -819,7 +823,7 @@ void TSingleLogFrame::buildScreenLayout()
     int t = 0;
     for (auto &s: sc.baseElement->screens)
     {
-        buildScreen(s, t++, auxInstance);
+        buildScreen(s, t++, auxInstance, slotNo);
     }
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);

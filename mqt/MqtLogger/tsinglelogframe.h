@@ -158,7 +158,7 @@ public:
 
     void setPlaceholders(QStringList nearMatches);
 
-    void buildFrame();
+    void buildFrame(int slotNo);
 
 private:
     QSharedPointer<HtmlDelegate> delegate;
@@ -182,7 +182,7 @@ private:
 
     void createScreenComponents();
 
-    void buildScreenLayout();
+    void buildScreenLayout(int slotNo);
     void clearScreenLayout(bool clearAllTabs);
 
     void setClusterLoaded(bool loaded);
@@ -190,7 +190,7 @@ private:
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
-    void buildScreen(SCScreen &s, int t, int &auxInstance);
+    void buildScreen(SCScreen &s, int t, int &auxInstance, int slotNo);
 
     void setQrzDisplayFrameLoaded(bool loaded);
 private slots:

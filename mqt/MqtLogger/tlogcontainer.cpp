@@ -1418,7 +1418,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
 
          setUpdatesEnabled(false);
-         f->buildFrame();
+         f->buildFrame(slotno);
 
          f->setObjectName( QString( "LogFrame" ) + QString::number(namegen++));
 
@@ -1604,6 +1604,8 @@ void TLogContainer::selectLayoutAction()
 
         // The action of changing layouts closes and re-loads the frame, so
         // it appears as though current has switched, so we have to switch back.
+
+        // we are going to have to re-order the tabs as well - but I don't want to redo them all!
 
         selectContest( ct, QSharedPointer<BaseContact>() );
         TContestApp::getContestApp() ->setCurrentContest(ct);
@@ -2008,20 +2010,21 @@ void TLogContainer::ShiftTabRightActionExecute( )
 void TLogContainer::onTabMoved(int from, int to)
 {
     // we need to apply this across ALL ContestPageControl
+    ContestSlotList &contestSlotList = TContestApp::getContestApp() ->contestSlotList;
     while (from < to)
     {
         if ( from < ui->contestPageControl->count() - 1 )
         {
-           QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ from ];
+           QSharedPointer<ContestSlot> cs = contestSlotList[ from ];
            int s = cs->slotno;
 
-           QSharedPointer<ContestSlot> csp1 = TContestApp::getContestApp() ->contestSlotList[ from + 1 ];
+           QSharedPointer<ContestSlot> csp1 = contestSlotList[ from + 1 ];
            int sp1 = csp1->slotno;
 
-           TContestApp::getContestApp() ->contestSlotList[ from ] = csp1;
+           contestSlotList[ from ] = csp1;
            csp1->slotno = s;
 
-           TContestApp::getContestApp() ->contestSlotList[ from + 1 ] = cs;
+           contestSlotList[ from + 1 ] = cs;
            cs->slotno = sp1;
        }
        from++;
@@ -2031,16 +2034,16 @@ void TLogContainer::onTabMoved(int from, int to)
 
         if ( from > 1 )
         {
-           QSharedPointer<ContestSlot> cs = TContestApp::getContestApp() ->contestSlotList[ from ];
+           QSharedPointer<ContestSlot> cs = contestSlotList[ from ];
            int s = cs->slotno;
 
-           QSharedPointer<ContestSlot> csp1 = TContestApp::getContestApp() ->contestSlotList[ from - 1 ];
+           QSharedPointer<ContestSlot> csp1 = contestSlotList[ from - 1 ];
            int sp1 = csp1->slotno;
 
-           TContestApp::getContestApp() ->contestSlotList[ from ] = csp1;
+           contestSlotList[ from ] = csp1;
            csp1->slotno = s;
 
-           TContestApp::getContestApp() ->contestSlotList[ from - 1 ] = cs;
+           contestSlotList[ from - 1 ] = cs;
            cs->slotno = sp1;
        }
        from--;
@@ -2208,4 +2211,9 @@ QVector<TSingleLogFrame *> TLogContainer::getLogFrames()
 int TLogContainer::getLogFrameCount()
 {
     return ui->contestPageControl->count();
+}
+
+int TLogContainer::getSlotNo(TSingleLogFrame *f) const
+{
+    return ui->contestPageControl->indexOf(f);
 }
