@@ -90,7 +90,7 @@ void TxVmButtonsFrame::initTxVmButton()
 
     QString voiceKeyerName = config.value("KeyerName").toString();
     ui->voiceKeyerSelect->setCurrentText(voiceKeyerName);
-    qDebug() << "start keyer name = " << ui->voiceKeyerSelect->currentText();
+    trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
     setAvailIndicatorVisible(false);
     setRepeatIndicatorVisible(false);
