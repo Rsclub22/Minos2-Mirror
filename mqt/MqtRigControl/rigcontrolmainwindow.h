@@ -604,6 +604,7 @@ private slots:
     void onSetPttOnOff(bool pttOnOff);
     void onPttState(bool state);
     void onSetCwTxMessage(QString cwMsg);
+    void on_reconnectButton_clicked();
 };
 
 #endif // RIGCONTROLMAINWINDOW_H

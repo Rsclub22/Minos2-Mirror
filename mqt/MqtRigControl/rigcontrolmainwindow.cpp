@@ -1662,7 +1662,6 @@ void RigControlMainWindow::closeRadio()
 
 
 
-
     showStatusMessage(tr("Disconnected"));
     sendStatusToLogDisConnected();
     displayFreqVfo(Frequency());
@@ -3968,12 +3967,16 @@ void RigControlMainWindow::sendStatusToLogConnected()
 {
     logMessage(QString("Send status to logger connected"));
     sendStatusLogger(tr(RIG_STATUS_CONNECTED));
+    ui->reconnectButton->setVisible(false);
+
 }
 
 void RigControlMainWindow::sendStatusToLogDisConnected()
 {
     logMessage(QString("Send status to logger disconnected"));
     sendStatusLogger(tr(RIG_STATUS_DISCONNECTED));
+    ui->reconnectButton->setVisible(true);
+
 }
 
 
@@ -5252,3 +5255,9 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
 
 
 }
+
+void RigControlMainWindow::on_reconnectButton_clicked()
+{
+    upDateRadio(currentRadioName);
+}
+
