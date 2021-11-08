@@ -235,6 +235,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     connect(ui->cwKeyerStopPb, &QPushButton::clicked, this, &RigControlMainWindow::onCwKeyerStopPbClicked);
     connect(ui->txPttTestPb, &QPushButton::clicked, this, &RigControlMainWindow::onTxPttTestPbClicked);
 
+    ui->reconnectButton->setVisible(false);
+
     if (appName.isEmpty() && !currentRadioName.isEmpty())
     {
         upDateRadio(currentRadioName);
@@ -3975,7 +3977,11 @@ void RigControlMainWindow::sendStatusToLogDisConnected()
 {
     logMessage(QString("Send status to logger disconnected"));
     sendStatusLogger(tr(RIG_STATUS_DISCONNECTED));
-    ui->reconnectButton->setVisible(true);
+
+    if (!currentRadioName.isEmpty())
+    {
+        ui->reconnectButton->setVisible(true);
+    }
 
 }
 
