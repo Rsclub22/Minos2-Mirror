@@ -1485,7 +1485,7 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
     {
        if (event->type() == QEvent::Enter)
        {
-           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageModel.rowCount() - 1, 0);
            mouseInMessages = true;
            kstMessageFilterModel.setMousePausePoint(mesIndex.row());
            ui->messageTable->update();
@@ -1497,7 +1497,7 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
            kstMessageFilterModel.setMousePausePoint(-1);
            ui->messageTable->update();
            ui->pauseLabel->clear();
-           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageModel.rowCount() - 1, 0);
            delayedAction(this, [=]()
            {
                // NB a lambda function
