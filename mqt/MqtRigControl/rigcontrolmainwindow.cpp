@@ -3932,6 +3932,7 @@ void RigControlMainWindow::sendRadioListLogger(const QStringList &availRadios)
 
 void RigControlMainWindow::addBandListToRigCache(const QString radioName, const QStringList& supBandList)
 {
+// In 2.4.1 here is where Mike G8CUL came to grief - but the code has TOTALLY changed
 
     if (!supBandList.isEmpty() && !appName.isEmpty())
     {
