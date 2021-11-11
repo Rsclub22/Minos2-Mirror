@@ -26,6 +26,7 @@ public:
 
     bool transVertValueChanged = false;
     bool transVertNameChanged = false;
+    bool transVertTargetWarningFlag = false;
 
 
     bool transVertOffsetOk = false;

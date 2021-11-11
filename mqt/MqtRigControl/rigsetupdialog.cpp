@@ -669,6 +669,7 @@ void RigSetupDialog::done(int r)
     bool supportedBandsOK = false;
     //bool transvertFreqInBand = false;
 
+
     if(QDialog::Accepted == r)  // ok was pressed
     {
         supportedBandsOK = checkOmniRigSupportedBands();
