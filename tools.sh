@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 apt-get update -y
 apt-get upgrade -y
 
@@ -17,6 +16,9 @@ apt-get install libqt5serialport5 -y
 apt-get install libqt5serialport5-dev -y
 apt-get install qttools5-dev -y
 
+# ubuntu 21 doesn't seem to have g++ by default
+
+apt-get install g++
 apt-get install libasound2 -y
 apt-get install libasound2-dev -y
 
