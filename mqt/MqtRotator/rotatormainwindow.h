@@ -266,6 +266,7 @@ private slots:
     void showPresetMenu(int buttonNumber);
     void onSentCommandError(int errorCode, QString cmd);
     void onTestBearingEnter();
+    void onPSTRotatorConfig();
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);

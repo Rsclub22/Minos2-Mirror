@@ -608,6 +608,7 @@
     <addaction name="actionLog_Heading"/>
     <addaction name="actionSkyScan"/>
     <addaction name="actionTraceComms"/>
+    <addaction name="actionPST_Rotator_Config"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="contextMenuPolicy">
@@ -674,6 +675,11 @@
   <action name="actionAbout_Rotator_Config">
    <property name="text">
     <string>About Rotator Config</string>
+   </property>
+  </action>
+  <action name="actionPST_Rotator_Config">
+   <property name="text">
+    <string>PST Rotator Config</string>
    </property>
   </action>
  </widget>

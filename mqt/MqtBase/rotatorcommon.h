@@ -122,7 +122,8 @@ const QString CONFIGURATION_FILEPATH_LOGGER = "./Configuration/";
 const QString CONFIGURATION_FILEPATH_LOCAL = "./Configuration/";
 
 const QString MINOS_ROTATOR_CONFIG_FILE = "MinosRotatorConfig.ini";
-const QString ROTATOR_DATA_FILE = "rotators.ini";
+//const QString ROTATOR_DATA_FILE = "rotators.ini";
+const QString PST_CONFIG_FILE = "./Configuration/PSTConfig.ini";
 
 const QString ANTENNA_PATH_LOGGER = "./Configuration/Antenna/";
 const QString ANTENNA_PATH_LOCAL = "./Configuration/Antenna/";
