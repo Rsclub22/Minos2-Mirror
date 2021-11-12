@@ -74,10 +74,10 @@ public:
     void writeDataToFile(void *inp, unsigned int nFrames);
     RiffWriter *wThread = nullptr;
 
-    int audioCallback( void *outputBuffer, void *inputBuffer,
-                                    unsigned int nFrames,
-                                    double streamTime,
-                                    RtAudioStreamStatus status );
+    int audioCallback( void *inputBuffer,
+                        unsigned int nFrames,
+                        double streamTime,
+                        RtAudioStreamStatus status );
 
     void setVUCallBack(VUCallBack cb);
     void setRecordLevel(int l);
@@ -88,7 +88,6 @@ private:
     VUCallBack WinVUCallback;
 
     unsigned int inChannels = 0;
-    unsigned int outChannels = 0;
 
     QMap<QString, int> deviceIds;
 

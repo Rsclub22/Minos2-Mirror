@@ -83,14 +83,14 @@ void RiffWriter::run()
 }
 
 //==============================================================================
-int audioCallback( void *outputBuffer, void *inputBuffer,
+int audioCallback( void */*outputBuffer*/, void *inputBuffer,
                                 unsigned int nFrames,
                                 double streamTime,
                                 RtAudioStreamStatus status,
                                 void *userData )
 {
     RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
-    return qss->audioCallback(outputBuffer, inputBuffer, nFrames, streamTime, status);
+    return qss->audioCallback(inputBuffer, nFrames, streamTime, status);
 }
 //==============================================================================
 RtAudioSoundSystem::RtAudioSoundSystem()
@@ -245,13 +245,13 @@ void RtAudioSoundSystem::setMono(bool s)
 {
     mono = s;
 }
-int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
+int RtAudioSoundSystem::audioCallback( void *inputBuffer,
                                 unsigned int nFrames,
                                 double /*streamTime*/,
                                 RtAudioStreamStatus status )
 {
 
-    if (outputBuffer == nullptr && inputBuffer == nullptr)
+    if (inputBuffer == nullptr || nFrames == 0)
     {
         return 0;   // no data
     }
@@ -266,86 +266,76 @@ int RtAudioSoundSystem::audioCallback( void *outputBuffer, void *inputBuffer,
         trace("Stream output overflow detected.");
     }
 
-
-    if (outputBuffer != nullptr && nFrames)
-    {
-        // shouldn't happen as we don't have an output device
-        memset(outputBuffer, 0, nFrames * 2 * outChannels);   // 2 bytes, 2 channels
-    }
-
-    if (inputBuffer && nFrames)
-    {
 #if defined (_MSC_VER)
-        int16_t *inStageBuffer = new int16_t[nFrames * 2];
+    int16_t *inStageBuffer = new int16_t[nFrames * 2];
 #else
-        int16_t inStageBuffer[nFrames * 2];
+    int16_t inStageBuffer[nFrames * 2];
 #endif
 
-        int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
-        int16_t * p = &inStageBuffer[0];
-        qreal sqaccum = 0.0;
-        int16_t maxvol = 0;
+    int16_t * q = reinterpret_cast<  int16_t * > ( inputBuffer );
+    int16_t * p = &inStageBuffer[0];
+    qreal sqaccum = 0.0;
+    int16_t maxvol = 0;
 
-        for (unsigned int i = 0; i < nFrames ; i++)
+    for (unsigned int i = 0; i < nFrames ; i++)
+    {
+        // copy to staging buffer
+        int16_t s1 = q[i * inChannels];
+        int16_t s2 = (inChannels > 1)?q[i * inChannels + 1]:q[i * inChannels];
+
+        qreal val1 = s1 * recordMult;
+        qreal val2 = s2 * recordMult;
+
+        if (mono)
         {
-            // copy to staging buffer
-            int16_t s1 = q[i * inChannels];
-            int16_t s2 = (inChannels > 1)?q[i * inChannels + 1]:q[i * inChannels];
-
-            qreal val1 = s1 * recordMult;
-            qreal val2 = s2 * recordMult;
-
-            if (mono)
-            {
-                val1 = (val1 + val2)/2;
-                val2 = val1;
-            }
-
-            if (val1 > 32767.0)
-                val1 = 32767.0;
-            if (val1 < -32767.0)
-                val1 = -32767.0;
-
-            if (val2 > 32767.0)
-                val2 = 32767.0;
-            if (val2 < -32767.0)
-                val2 = -32767.0;
-
-            p[i * outChannels] = static_cast<qint16>(val1);
-            p[i * outChannels + 1] = static_cast<qint16>(val2);
-            int16_t sample = static_cast<int16_t>(std::max( val1, val2 ));
-
-            if ( sample > maxvol )
-               maxvol = sample;
-            sqaccum += sample * sample;
+            val1 = (val1 + val2)/2;
+            val2 = val1;
         }
 
-        qreal rmsval = sqrt(sqaccum/nFrames);
-        WinVUCallback( static_cast<unsigned int>(maxvol),
-                      static_cast<unsigned int>(rmsval),
-                      nFrames );
+        if (val1 > 32767.0)
+            val1 = 32767.0;
+        if (val1 < -32767.0)
+            val1 = -32767.0;
 
-        if (inputEnabled )
-        {
-            mutex.lock();
-            if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)
-                bufferNotFull.wait(&mutex);
-            mutex.unlock();
+        if (val2 > 32767.0)
+            val2 = 32767.0;
+        if (val2 < -32767.0)
+            val2 = -32767.0;
 
-            inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
-            memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
+        p[i * inChannels] = static_cast<qint16>(val1);
+        p[i * inChannels + 1] = static_cast<qint16>(val2);
+        int16_t sample = static_cast<int16_t>(std::max( val1, val2 ));
 
-            mutex.lock();
-            ++recIndex;
-            bufferNotEmpty.wakeAll();
-            mutex.unlock();
-        }
-#if defined (_MSC_VER)
-        delete [] inStageBuffer;
-#else
-        // nothing needed
-#endif
+        if ( sample > maxvol )
+           maxvol = sample;
+        sqaccum += sample * sample;
     }
+
+    qreal rmsval = sqrt(sqaccum/nFrames);
+    WinVUCallback( static_cast<unsigned int>(maxvol),
+                  static_cast<unsigned int>(rmsval),
+                  nFrames );
+
+    if (inputEnabled )
+    {
+        mutex.lock();
+        if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)
+            bufferNotFull.wait(&mutex);
+        mutex.unlock();
+
+        inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
+        memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
+
+        mutex.lock();
+        ++recIndex;
+        bufferNotEmpty.wakeAll();
+        mutex.unlock();
+    }
+#if defined (_MSC_VER)
+    delete [] inStageBuffer;
+#else
+    // nothing needed
+#endif
 
     /*
    To continue normal stream operation, the RtAudioCallback function
@@ -400,7 +390,6 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
     {
         return false;
     }
-    QString curdir = GetCurrentDir();
     QString baseName = ExtractFileName(fname);
     QString path = ExtractFileDir(fname);
     QString suffix = ExtractFileExt(fname);
@@ -461,7 +450,6 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
             outWave->Close();
             startInput(baseName, cycleTime, true);  // start continuation file
         }
-
     }
 }
 
@@ -470,21 +458,19 @@ bool RtAudioSoundSystem::startDMA( const QString &fname, int ct )
 {
     cycleTime = ct;
     baseName = fname;
-   // start input / output
 
-     trace( "(StartDMA) Starting input" );
+    trace( "(StartDMA) Starting input" );
 
-     if ( !startInput( fname, cycleTime, false ) )
+    if ( !startInput( fname, cycleTime, false ) )
         return false;
 
-     startInput();
+    startInput();
     return true;
 }
 void RtAudioSoundSystem::stopDMA()
 {
     if (inputEnabled)
     {
-    //    Here we need to stop input/output
         trace( "stopDMA" );
 
         stopInput();
