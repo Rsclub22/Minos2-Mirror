@@ -74,10 +74,10 @@ RotatorBase* RotatorFactory::createRotator(int rotatorId)
 bool RotatorFactory::checkPstRotatorInstalled()
 {
 
-    QString fileName = CONFIGURATION_FILEPATH_LOGGER + MINOS_ROTATOR_CONFIG_FILE;
+    QString fileName = PST_CONFIG_FILE;
     QSettings  config(fileName, QSettings::IniFormat);
 
-    config.beginGroup("PSTRotator");
+    config.beginGroup("PSTRotatorPath");
 
     QString pstRotatorFilePathx86 = config.value("pstRotatorPathx86", "C:/Program Files (x86)/PstRotator/").toString();
     QString pstRotatorFilePath = config.value("pstRotatorPath", "C:/Program Files/PstRotator/").toString();

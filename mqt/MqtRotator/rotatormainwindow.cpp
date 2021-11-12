@@ -24,6 +24,7 @@
 #include "rotsetupdialog.h"
 #include "logdialog.h"
 #include "serialdata.h"
+#include "pstconfigdialog.h"
 #include <QString>
 #include <QLabel>
 #include <QMessageBox>
@@ -670,6 +671,8 @@ void RotatorMainWindow::initActionsConnections()
     connect(setupAntenna, &RotSetupDialog::currentAntennaSettingChanged, this, &RotatorMainWindow::currentAntennaSettingChanged);
     connect(setupAntenna, &RotSetupDialog::antennaNameChange, this, &RotatorMainWindow::updateSelectAntennaBox);
     connect(setupAntenna, &RotSetupDialog::antennaTabChanged, this, &RotatorMainWindow::updateSelectAntennaBox);
+
+    connect(ui->actionPST_Rotator_Config, &QAction::triggered, this, &RotatorMainWindow::onPSTRotatorConfig);
 
     // Bearing Log
     connect(ui->actionLog_Heading, &QAction::triggered, setupLog, &LogDialog::loadLogConfig);
@@ -2115,6 +2118,48 @@ void RotatorMainWindow::onLaunchSetup()
     setupAntenna->setTabToCurrentAntenna();
     setupAntenna->loadAvailComports();
     setupAntenna->exec();
+}
+
+void RotatorMainWindow::onPSTRotatorConfig()
+{
+    PstConfigDialog* pstConfigDialog = new PstConfigDialog();
+    pstConfigDialog->setWindowTitle(tr("PST Rotator Config"));
+    int res = pstConfigDialog->exec();
+    if ( res == QDialog::Accepted )
+    {
+        QString fileName = PST_CONFIG_FILE;
+        QSettings  config(fileName, QSettings::IniFormat);
+
+        config.beginGroup("PSTRotatorPath");
+
+        if (pstConfigDialog->getPstRotatorFilePathx86Text() != config.value("pstRotatorPathx86", "C:/Program Files (x86)/PstRotator/").toString())
+        {
+            trace(QString("pstRotatorPathx86 has been changed to %1").arg(pstConfigDialog->getPstRotatorFilePathx86Text()));
+            config.setValue("pstRotatorPathx86", pstConfigDialog->getPstRotatorFilePathx86Text());
+        }
+
+        if (pstConfigDialog->getpstRotatorFilePathText() != config.value("pstRotatorPath", "C:/Program Files/PstRotator/").toString())
+        {
+            trace(QString("pstRotatorPath has been changed to %1").arg(pstConfigDialog->getpstRotatorFilePathText()));
+            config.setValue("pstRotatorPath", pstConfigDialog->getpstRotatorFilePathText());
+        }
+
+        if (pstConfigDialog->getPstRotatorAzFilePathx86Text() != config.value("pstRotatorAzPathx86", "C:/Program Files (x86)/PstRotatorAz/").toString())
+        {
+            trace(QString("pstRotatorAzPathx86 has been changed to %1").arg(pstConfigDialog->getPstRotatorAzFilePathx86Text()));
+            config.setValue("pstRotatorAzPathx86", pstConfigDialog->getPstRotatorAzFilePathx86Text());
+        }
+
+        if (pstConfigDialog->getPstRotatorAzFilePathText() != config.value("pstRotatorAzPath", "C:/Program Files/PstRotatorAz/").toString())
+        {
+            trace(QString("pstRotatorAzPath has been changed to %1").arg(pstConfigDialog->getPstRotatorAzFilePathText()));
+            config.setValue("pstRotatorAzPath", pstConfigDialog->getPstRotatorAzFilePathText());
+        }
+
+        config.endGroup();
+
+    }
+
 }
 
 
