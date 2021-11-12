@@ -234,10 +234,9 @@
         <translation>Section à utiliser dans le fichier des listes préchargées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP reacord Enabled</source>
         <translatorcomment>REACORD!!!</translatorcomment>
-        <translation>WSJTX UDP enregistrement activé</translation>
+        <translation type="vanished">WSJTX UDP enregistrement activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
@@ -315,6 +314,11 @@
         <location filename="../profiles.cpp" line="45"/>
         <source>Log Directory</source>
         <translation>Répertoire des Logs</translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="61"/>
+        <source>WSJTX UDP record Enabled</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="63"/>

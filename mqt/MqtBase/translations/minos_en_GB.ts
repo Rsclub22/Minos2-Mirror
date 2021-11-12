@@ -234,11 +234,6 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
-        <source>WSJTX UDP reacord Enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX udpRecord Enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -310,6 +305,11 @@
     <message>
         <location filename="../profiles.cpp" line="45"/>
         <source>Log Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="61"/>
+        <source>WSJTX UDP record Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
