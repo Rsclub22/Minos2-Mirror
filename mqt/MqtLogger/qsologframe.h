@@ -123,9 +123,14 @@ private:
 
     QVector <ValidatedControl *> vcs;
 
-    BaseContestLog * contest;
-    bool overstrike;
-    QWidget *current;
+    BaseContestLog * contest = nullptr;
+    bool overstrike = false;
+    QWidget *current = nullptr;
+
+    bool QRZControlsVisible = false;
+    bool bandmapControlsVisible = false;
+    bool clusterControlsVisible = false;
+
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
     void fillExchange(QLineEdit *rIl, QString &exch);
@@ -137,7 +142,7 @@ private:
     virtual void getscreenRotatorData();
     bool checkAndLogEntry( );
 
-    bool edit;
+    bool edit = false;
 
     FocusWatcher *CallsignFW;
     QString CallsignLabelString;
@@ -269,6 +274,7 @@ private:
     
     bool frameHasFocus();
     void checkQrzDisplayFrameLoaded();
+    void checkQRZClusterBandmapShowing();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

@@ -142,6 +142,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     on_tabSandP();  // show (or not) the Call/S&P choice
     on_ShowOperators();
     on_QSOMargins();
+    checkQRZClusterBandmapShowing();
 }
 
 void QSOLogFrame::on_FontChanged()
@@ -2999,27 +3000,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
 }
 
 //---------------------------------------------------------
-
-void QSOLogFrame::setBandMapControlsVisible(bool visible)
-{
-
-    ui->bandmapMarkFreqPb->setVisible(visible);
-    ui->bandmapSaveFreqPb->setVisible(visible);
-    ui->tuningAddMapChkBox->setVisible(visible);
-
-
-}
-
-void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
-{
-
-    ui->bandmapMarkFreqPb->setDisabled(disabled);
-    ui->bandmapMarkFreqPb->setDisabled(disabled);
-    ui->bandmapSaveFreqPb->setDisabled(disabled);
-    ui->tuningAddMapChkBox->setDisabled(disabled);
-}
-
-
 void QSOLogFrame::tuningAddMapChkBoxStateChange(int state)
 {
 
@@ -3178,17 +3158,6 @@ void QSOLogFrame::onQrzButtonClicked()
 
 }
 
-void QSOLogFrame::setQrzButtonVisible(bool state)
-{
-    ui->qrzToolButton->setVisible(state);
-}
-
-
-void QSOLogFrame::setqrzDisplayFrameLoaded(bool loaded)
-{
-    qrzDisplayFrameLoaded = loaded;
-}
-
 void QSOLogFrame::setPlaceholders(QStringList nearMatches)
 {
     if (!contest)
@@ -3258,6 +3227,12 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
     }
 }
 
+void QSOLogFrame::setqrzDisplayFrameLoaded(bool loaded)
+{
+    qrzDisplayFrameLoaded = loaded;
+}
+
+
 bool QSOLogFrame::isQrzDisplayFrameLoaded()
 {
     return qrzDisplayFrameLoaded;
@@ -3301,13 +3276,46 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
     {
         logData.bearing = tslf->getBearingFrmQSOLog();
     }
+}
+//---------------------------------------------------------
+void QSOLogFrame::checkQRZClusterBandmapShowing()
+{
+    if (QRZControlsVisible || bandmapControlsVisible || clusterControlsVisible)
+    {
+        ui->clusterFrame->setVisible(true);
+    }
+    else
+    {
+        ui->clusterFrame->setVisible(false);
+    }
 
-
+}
+void QSOLogFrame::setQrzButtonVisible(bool state)
+{
+    ui->qrzToolButton->setVisible(state);
+    QRZControlsVisible = state;
+    checkQRZClusterBandmapShowing();
 
 }
 
 
-//---------------------------------------------------------
+void QSOLogFrame::setBandMapControlsVisible(bool visible)
+{
+    ui->bandmapMarkFreqPb->setVisible(visible);
+    ui->bandmapSaveFreqPb->setVisible(visible);
+    ui->tuningAddMapChkBox->setVisible(visible);
+    bandmapControlsVisible = visible;
+    checkQRZClusterBandmapShowing();
+}
+
+void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
+{
+    ui->bandmapMarkFreqPb->setDisabled(disabled);
+    ui->bandmapSaveFreqPb->setDisabled(disabled);
+    ui->tuningAddMapChkBox->setDisabled(disabled);
+}
+
+
 void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 {
     setClusterSendSpotControlsVisible(txEnableState);
@@ -3317,23 +3325,19 @@ void QSOLogFrame::setClusterTXSpotEnableState(bool txEnableState)
 
 void QSOLogFrame::setClusterSendSpotControlsVisible(bool visible)
 {
-
     ui->spotLastLoggedPb->setVisible(visible);
     ui->spotPb->setVisible(visible);
     ui->lastSpotSentTitleLbl->setVisible(visible);
     ui->lastSpotSentLbl->setVisible(visible);
-
-
+    clusterControlsVisible = visible;
+    checkQRZClusterBandmapShowing();
 }
 
 void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 {
-
-    //ui->lastLoggedChkBx->setDisabled(disabled);
     ui->spotPb->setDisabled(disabled);
     ui->lastSpotSentTitleLbl->setDisabled(disabled);
     ui->lastSpotSentLbl->setDisabled(disabled);
-
 }
 //--------------------------------------------------------
 
