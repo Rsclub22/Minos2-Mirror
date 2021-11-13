@@ -107,7 +107,7 @@
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="101"/>
         <source>Click to set/reset all modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
     </message>
     <message>
         <location filename="../bandmapclientfilterdialog.cpp" line="224"/>
@@ -848,22 +848,22 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="253"/>
         <source>Click to Set/Reset all HF Bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les  bandes HF</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="254"/>
         <source>Click to Set/Reset all VHF Bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les  bandes VHF</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="255"/>
         <source>Click to Set/Reset all Microwave Bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les  bandes microondes</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="256"/>
         <source>Click to Set/Reset all Modes</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer pour définir/réinitialiser tous les modes</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.cpp" line="792"/>
@@ -1603,12 +1603,12 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../dxccframe.cpp" line="20"/>
         <source>CQ</source>
-        <translation type="unfinished"></translation>
+        <translation>CQ</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="21"/>
         <source>ITU</source>
-        <translation type="unfinished"></translation>
+        <translation>UIT</translation>
     </message>
     <message>
         <location filename="../dxccframe.cpp" line="22"/>
@@ -2771,51 +2771,47 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.ui" line="442"/>
         <source>QRZ  Message: </source>
-        <translation type="unfinished"></translation>
+        <translation>Message QRZ: </translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.ui" line="493"/>
         <source>Search</source>
-        <translation type="unfinished">Chercher</translation>
-    </message>
-    <message>
-        <source>Connect</source>
-        <translation type="vanished">Se connecter</translation>
+        <translation>Chercher</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="39"/>
         <source>Double Click to transfer Callsign, Locator and Name to log</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour transférer le Locator, le Direction, et le nom vers le journal</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="40"/>
         <source>Double Click to transfer locator to log</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour transférer le Locator vers le journal</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="41"/>
         <source>Double Click to transfer Bearing to rotator control</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour transférer le Direction au contrôle du rotateur</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="42"/>
         <source>Double Click to transfer Name to comments in log</source>
-        <translation type="unfinished"></translation>
+        <translation>Double-cliquer pour transférer le nom vers les commentaires journal</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="69"/>
         <source>Search callsign invalid</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif invalide dans la recherche</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="277"/>
         <source>Connected</source>
-        <translation type="unfinished">Connecté</translation>
+        <translation>Connecté</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="281"/>
         <source>Disconnected</source>
-        <translation type="unfinished">Déconnecté</translation>
+        <translation>Déconnecté</translation>
     </message>
 </context>
 <context>
@@ -5604,12 +5600,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="62"/>
         <source>Avail</source>
-        <translation type="unfinished"></translation>
+        <translation>Disponible </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="95"/>
         <source>Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Répéter </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="145"/>
@@ -5667,22 +5663,22 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="491"/>
         <source>Are you sure you want to clear this button %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vraiment effacer ce bouton %1&#xa0;? </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="492"/>
         <source>Click save to clear, cancel to ignore</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer sur enregistrer pour effacer, annuler pour ignorer </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="777"/>
         <source>Rig Voice Keyer Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire de voix disponible </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="781"/>
         <source>Rig CW Messages Available</source>
-        <translation type="unfinished"></translation>
+        <translation>Message CW disponible </translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="859"/>

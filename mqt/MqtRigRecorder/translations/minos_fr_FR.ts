@@ -19,10 +19,6 @@
         <translation>Canal d&apos;entrée</translation>
     </message>
     <message>
-        <source>Output Channel</source>
-        <translation type="vanished">Canal de sortie</translation>
-    </message>
-    <message>
         <location filename="../mainwindow.ui" line="142"/>
         <source>Base Output Filename</source>
         <translation>Base du nom de fichier de sortie </translation>

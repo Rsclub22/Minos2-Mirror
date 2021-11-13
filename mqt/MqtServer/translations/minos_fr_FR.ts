@@ -62,17 +62,17 @@
     <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
         <source>cat/key</source>
-        <translation type="unfinished"></translation>
+        <translation>???Where???</translation>
     </message>
     <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
         <source>router</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">???Where???</translation>
     </message>
     <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
         <source>pubid</source>
-        <translation type="unfinished"></translation>
+        <translation>???Where???</translation>
     </message>
 </context>
 <context>

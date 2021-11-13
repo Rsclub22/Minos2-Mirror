@@ -236,12 +236,12 @@
     <message>
         <source>WSJTX UDP reacord Enabled</source>
         <translatorcomment>REACORD!!!</translatorcomment>
-        <translation type="vanished">WSJTX UDP enregistrement activé</translation>
+        <translation type="vanished">WSJTX UDP enregistrement activé  </translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX udpRecord Enabled</source>
-        <translation>c/f WSJTX UDP reacord Enabled </translation>
+        <translation>c/f WSJTX UDP record Enabled  </translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="62"/>
@@ -443,7 +443,7 @@
     <message>
         <location filename="../profiles.cpp" line="108"/>
         <source>Show Operating Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le temps de fonctionnement</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="110"/>
@@ -663,7 +663,7 @@
     <message>
         <location filename="../profiles.cpp" line="165"/>
         <source>Bandmap show derived loc</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap afficher la Locator dérivée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="172"/>

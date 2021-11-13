@@ -19,11 +19,6 @@
         <translation>Test Spots</translation>
     </message>
     <message>
-        <source>HF Test</source>
-        <translatorcomment>Only used for testing?</translatorcomment>
-        <translation type="vanished">HF Test???</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="90"/>
         <source>HF User Commands</source>
         <translation>Commandes utilisateur HF</translation>
@@ -72,37 +67,37 @@
     <message>
         <location filename="../clustermainwindow.ui" line="289"/>
         <source>Start/Close Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Script Debut/Fermer </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="295"/>
         <source>Cluster Start/End Script</source>
-        <translation type="unfinished"></translation>
+        <translation>Script de début/fin de cluster </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="312"/>
         <source>VHF/UHF</source>
-        <translation type="unfinished"></translation>
+        <translation>VHF/UHF</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="338"/>
         <source>Run Script File  when Connecting to Cluster</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécuter le fichier script après la connexion au serveur </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="362"/>
         <source>Run Script File When Signing off from Cluster</source>
-        <translation type="unfinished"></translation>
+        <translation>Exécuter le fichier de script avant la déconnexion du cluster </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="386"/>
         <source>Save Start/Sign Off  Script Setting on Cluster Server Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer le paramètre de script à la fermeture </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="421"/>
         <source>Filter Server Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrer l&apos;affichage du serveur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="453"/>
@@ -192,37 +187,32 @@
     <message>
         <location filename="../clustermainwindow.ui" line="686"/>
         <source>Filter Spots Sent to Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrer les spots envoyés au journal</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="707"/>
         <source>Override Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Ignorer le journal</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="756"/>
         <source>HF Filter On</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre HF activé</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="770"/>
         <source>VHF/MW</source>
-        <translation type="unfinished"></translation>
+        <translation>VHF/MO </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="805"/>
         <source>VHF/MW Filter On</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre VHF/MO activé </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="871"/>
         <source>Save Band Filter Settings on Cluster Server Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Filter Server Display Only</source>
-        <translatorcomment>Is that what it means?</translatorcomment>
-        <translation type="vanished">Filtrer uniquement l&apos;affichage du serveur </translation>
+        <translation>Enregistrer les paramètres de filtre à la fermeture </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="892"/>
@@ -303,7 +293,7 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="182"/>
         <source>Always loads last saved settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Context? Charge toujours les derniers paramètres enregistrés </translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="457"/>
@@ -375,7 +365,7 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="1875"/>
         <source>No spots will be sent to the log - please check one of the boxes!</source>
-        <translation type="unfinished"></translation>
+        <translation>Rien ne sera envoyé au journal, sélectionner une option SVP</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2370"/>
@@ -567,14 +557,6 @@ C - Effacer cmd
         <translation>Général</translation>
     </message>
     <message>
-        <source>Run Command File at Logon</source>
-        <translation type="vanished">Exécuter le fichier de commandes à la connexion</translation>
-    </message>
-    <message>
-        <source>Run Command File at Logoff and Close</source>
-        <translation type="vanished">Exécuter le fichier de commandes à la fermeture de session et fermer</translation>
-    </message>
-    <message>
         <location filename="../setupdialog.ui" line="32"/>
         <source>Time to Live (mins)</source>
         <translation>Durée de vie (mins)</translation>
@@ -598,11 +580,6 @@ C - Effacer cmd
         <location filename="../setupdialog.ui" line="80"/>
         <source>Display Propagation Mode</source>
         <translation>Afficher le mode de propagation</translation>
-    </message>
-    <message>
-        <source>Save Band Filter Settings on Close</source>
-        <translatorcomment>de filtre de bande</translatorcomment>
-        <translation type="vanished">Enregistrer les paramètres à la fermeture </translation>
     </message>
     <message>
         <location filename="../setupdialog.ui" line="89"/>

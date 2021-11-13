@@ -77,18 +77,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="163"/>
+        <location filename="../RSMainWindow.ui" line="156"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="170"/>
+        <location filename="../RSMainWindow.ui" line="163"/>
         <source>Transfer Sub -&gt; Main</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../RSMainWindow.ui" line="143"/>
-        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

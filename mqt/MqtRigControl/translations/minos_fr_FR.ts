@@ -312,7 +312,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="147"/>
         <source>Reconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Reconnecter </translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="225"/>
@@ -911,7 +911,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4667"/>
         <source>Data bits = %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bits de données = %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4668"/>

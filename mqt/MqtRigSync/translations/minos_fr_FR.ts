@@ -9,19 +9,14 @@
         <translation>Configurer RigSync</translation>
     </message>
     <message>
-        <source>Sub Rig Control</source>
-        <translatorcomment>Contrôle du sous-rig</translatorcomment>
-        <translation type="vanished">What does this mean??</translation>
-    </message>
-    <message>
         <location filename="../RSConfigure.ui" line="28"/>
         <source>Main RigControl</source>
-        <translation type="unfinished"></translation>
+        <translation>RigControl principal</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="49"/>
         <source>Sub RigControl</source>
-        <translation type="unfinished"></translation>
+        <translation>RigControl secondaire</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="77"/>
@@ -64,12 +59,12 @@
     <message>
         <location filename="../RSMainWindow.ui" line="85"/>
         <source>Track rig</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivre l&apos;appareil</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="92"/>
         <source>Track Sub</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivre le secondaire</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="112"/>
@@ -79,22 +74,21 @@
     <message>
         <location filename="../RSMainWindow.ui" line="132"/>
         <source>Track band</source>
-        <translation type="unfinished"></translation>
+        <translation>Suivre la bande</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="163"/>
+        <location filename="../RSMainWindow.ui" line="156"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation>Transférer Principal -&gt; Secondaire</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="170"/>
+        <location filename="../RSMainWindow.ui" line="163"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation>Transférer Secondaire -&gt; Principal</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="143"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="vanished">Fermer</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.cpp" line="62"/>

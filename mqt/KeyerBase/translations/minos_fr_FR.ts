@@ -9,12 +9,12 @@
     </message>
     <message>
         <source>No PTT</source>
-        <translation>Pas de PTT </translation>
+        <translation>Pas de PTT</translation>
     </message>
     <message>
         <source>PassThrough</source>
         <translatorcomment>??Mode intermédiaire</translatorcomment>
-        <translation>Passthrough??</translation>
+        <translation>Passthrough</translation>
     </message>
     <message>
         <source>Replay</source>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <source>Pip</source>
-        <translation>Pip???</translation>
+        <translation>Pip</translation>
     </message>
     <message>
         <source>Replay Tone1</source>
@@ -42,7 +42,7 @@
     </message>
     <message>
         <source>CW PassThrough</source>
-        <translation>CW PassThrough??</translation>
+        <translation>CW PassThrough</translation>
     </message>
     <message>
         <source>none</source>

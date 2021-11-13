@@ -34,24 +34,12 @@
     <message>
         <location filename="../qrzservermainwindow.ui" line="47"/>
         <source>Qrz Message:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="68"/>
         <source>Qrz Error:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Status:</source>
-        <translation type="vanished">Statut:</translation>
-    </message>
-    <message>
-        <source>Message:</source>
-        <translation type="vanished">Message:</translation>
-    </message>
-    <message>
-        <source>Error:</source>
-        <translation type="vanished">Erreur:</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.ui" line="114"/>
