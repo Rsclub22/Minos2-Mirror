@@ -64,6 +64,9 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     connect(configAction, &QAction::triggered, this, &RSMainWindow::configure);
 
     connect(&claimTimer, &QTimer::timeout, this, &RSMainWindow::claimTimerTimer);
+
+    ui->Rig2Combo->addItem(subRig.selected.toString());
+    ui->Rig2Combo->setCurrentText(subRig.selected.toString());
 }
 
 void RSMainWindow::configure()
@@ -200,11 +203,6 @@ void RSMainWindow::claimTimerTimer()
 
 }
 
-void RSMainWindow::on_closeButton_clicked()
-{
-    close();
-}
-
 void RSMainWindow::on_transfer12Button_clicked()
 {
     // set sub rig to main rig
@@ -284,11 +282,14 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
 
         for (const auto &r: qAsConst(rigCache.getRigList()))
         {
-            QStringList selLogs = rigCache.getSelectedLoggers(r);
-            if (r.appName() != rigSyncUuid && selLogs.count() && !selLogs.contains(rigSyncUuid))
+            if (r.getRouterApp() == mainRig.server)
             {
-                mainRig.selected = r;
-                break;
+                QStringList selLogs = rigCache.getSelectedLoggers(r);
+                if (r.appName() != rigSyncUuid && selLogs.count() && !selLogs.contains(rigSyncUuid))
+                {
+                    mainRig.selected = r;
+                    break;
+                }
             }
         }
         ui->Rig1Rig->setText(mainRig.selected.toString());

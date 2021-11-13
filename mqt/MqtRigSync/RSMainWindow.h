@@ -67,7 +67,6 @@ public:
 public slots:
 
 private slots:
-    void on_closeButton_clicked();
     void on_transfer12Button_clicked();
     void on_transfer21Button_clicked();
     void on_trackRig_clicked();

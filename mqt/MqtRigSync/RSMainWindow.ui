@@ -138,13 +138,6 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_4">
         <item>
-         <widget class="QPushButton" name="closeButton">
-          <property name="text">
-           <string>Close</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -191,7 +184,4 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="trackButtonGroup"/>
- </buttongroups>
 </ui>
