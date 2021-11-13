@@ -38,7 +38,6 @@ class KeyerConfig
       int startDelay;
       unsigned int pipStartDelay;
       int playPTTDelay;
-      int voxHangTime;
       int pipVolume;
       int pipLength;
       int clipRecord;
@@ -47,10 +46,10 @@ class KeyerConfig
       KeyerConfig()
       {}
       KeyerConfig( const QString &name, unsigned int rate, int pipTone, int pipVolume, int pipLength, int startDelay,
-                   unsigned int pipStartDelay, int playPTTDelay, int voxHangTime, int clipRecord, int filterCorner )
+                   unsigned int pipStartDelay, int playPTTDelay, int clipRecord, int filterCorner )
             : name( name ), type( ektVoiceKeyer ), sampleRate(rate), pipTone( pipTone ), startDelay( startDelay ),
             pipStartDelay( pipStartDelay ), playPTTDelay( playPTTDelay ),
-            voxHangTime( voxHangTime ), pipVolume( pipVolume ), pipLength( pipLength ), clipRecord( clipRecord ), filterCorner(filterCorner)
+            pipVolume( pipVolume ), pipLength( pipLength ), clipRecord( clipRecord ), filterCorner(filterCorner)
       {}
 }
 ;

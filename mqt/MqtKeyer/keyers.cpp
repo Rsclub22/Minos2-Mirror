@@ -502,9 +502,13 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
    {
       case eKEYER_STOPALL:      /* kill audio */
          {
-            SoundSystemDriver::getSbDriver() ->stopall();
-            KeyerAction::currentAction.freeAll();
-            VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
+            if (VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughNoPTT && VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughPTT)
+            {
+                // don't kill if we are currently using the microphone - probably just delayed tuning reports
+                SoundSystemDriver::getSbDriver() ->stopall();
+                KeyerAction::currentAction.freeAll();
+                VKMixer::GetVKMixer()->SetCurrentMixerSet( emsPassThroughNoPTT );
+            }
             break;
          }
 
@@ -562,10 +566,6 @@ bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
          }
          break;
 
-      case eKEYER_VOXHANG:
-         kconf.voxHangTime = dvp_ctrl.intParam1;
-         break;
-
       default:
          break;
    }
@@ -577,7 +577,6 @@ bool voiceKeyer::getInfo( KeyerInfo *ki )
    ki->kspeed = 0;
    ki->CW = false;
    ki->voice = true;
-   ki->voxHang = kconf.voxHangTime;
    ki->tune = true;
    ki->twoTone = true;
    ki->tone1 = tone1;

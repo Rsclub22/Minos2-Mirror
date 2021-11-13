@@ -17,8 +17,7 @@ enum KEYER_COMMAND {eKEYER_STOPRECORD,    		// kill record
                     eKEYER_PLAY,    				// play text message
                     eKEYER_SENDCHAR,
                     eKEYER_TONE1,
-                    eKEYER_TONE2,
-                    eKEYER_VOXHANG
+                    eKEYER_TONE2
                    };
 
 class KeyerCtrl
@@ -47,7 +46,6 @@ class KeyerInfo    // only passes info up
       bool CW;
       bool voice;
 
-      int voxHang;
       bool tune;
       bool twoTone;
       int tone1;

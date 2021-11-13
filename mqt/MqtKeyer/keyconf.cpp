@@ -114,7 +114,6 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
          int StartDelay;
          unsigned int PipStartDelay;
          int PlayPTTDelay;
-         int voxHangTime;
          int pipVolume;
          int ClipRecord;
          int filterCorner;
@@ -131,12 +130,11 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
             GetIntAttribute( c, "pipVolume", pipVolume, 80 );
             GetIntAttribute( c, "startDelay", StartDelay, 0 );
             GetIntAttribute( c, "playPTTDelay", PlayPTTDelay, 0 );
-            GetIntAttribute( c, "voxHangTime", voxHangTime, 0 );
             GetIntAttribute( c, "clipRecord", ClipRecord, 0 );
             GetIntAttribute( c, "filterCorner", filterCorner, 0 );
 
             KeyerConfig k( name, sampleRate, PipTone, pipVolume, PipLength, StartDelay,
-                           PipStartDelay, PlayPTTDelay, voxHangTime,
+                           PipStartDelay, PlayPTTDelay,
                            ClipRecord, filterCorner );
             keyermap[ name ] = k;
          }

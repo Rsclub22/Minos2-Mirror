@@ -179,7 +179,7 @@ void TSendDM::sendKeyerRecord( TSingleLogFrame *tslf, int fno )
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( loggerUuid, rpcConstants::loggerUuid );
         st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-        st->addMember( QString("RecordFile"), rpcConstants::paramName );
+        st->addMember( rpcConstants::keyerRecordFile, rpcConstants::paramName );
         st->addMember( fno, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
@@ -194,7 +194,7 @@ void TSendDM::sendKeyerTone(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( loggerUuid, rpcConstants::loggerUuid );
         st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-        st->addMember( QString("Tone"), rpcConstants::paramName );
+        st->addMember( rpcConstants::keyerTone, rpcConstants::paramName );
         st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
@@ -208,7 +208,7 @@ void TSendDM::sendKeyerTwoTone(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( loggerUuid, rpcConstants::loggerUuid );
         st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-        st->addMember( QString("TwoTone"), rpcConstants::paramName );
+        st->addMember( rpcConstants::keyerTwoTone, rpcConstants::paramName );
         st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
@@ -222,7 +222,7 @@ void TSendDM::sendKeyerStop(TSingleLogFrame *tslf)
         QSharedPointer<RPCParam>st(new RPCParamStruct);
         st->addMember( loggerUuid, rpcConstants::loggerUuid );
         st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-        st->addMember( QString("Stop"), rpcConstants::paramName );
+        st->addMember( rpcConstants::keyerStop, rpcConstants::paramName );
         st->addMember( 0, rpcConstants::paramValue );
         rpc.getCallArgs() ->addParam( st );
         rpc.queueCall( keyerApp );
