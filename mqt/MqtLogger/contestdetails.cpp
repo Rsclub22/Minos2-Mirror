@@ -1871,7 +1871,7 @@ void ContestDetails::on_BandComboBox_activated(const QString &/*arg1*/)
 }
 
 
-void ContestDetails::on_ExchangeComboBox_activated(const QString &arg1)
+void ContestDetails::on_ExchangeComboBox_activated(const QString &/*arg1*/)
 {
     focusChange(nullptr, false, nullptr);
 
