@@ -488,13 +488,19 @@ void BandmapView::doBandmapUpdate()
             dial->update();
             // delay the spots until any dial update has happened
             delayedAction(this, [=](){
-            drawBandMapSpots();});
+                drawBandMapSpots();
+            }
+            );
         }
     }
 }
 
 void BandmapView::bandmapUpdate(bool now)
 {
+    if (!contest || contest->isReadOnly())
+    {
+        return;
+    }
     if (!getSuppressUpdate())
     {
         updateRequired = true;
@@ -710,7 +716,7 @@ void BandmapView::setFreq(Frequency f, bool legalFreq)
 
     if (!f.isClear())
     {
-        trace("BandmapView::bandmapUpdate() bandmapView::setFreq");
+        trace(QString("BandmapView::bandmapUpdate() bandmapView::setFreq %1").arg(f.traceStr()));
         bandmapUpdate(true);
     }
 
@@ -1340,12 +1346,12 @@ void BandmapView::assembleCqMsg(int row, QString& markerMsg)
 
     Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
 
-    Frequency curFreq = dial->getCurFreq();
+    Frequency cFreq = dial->getCurFreq();
 
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    if (freq == curFreq )
+    if (freq == cFreq )
     {
         bLineStart = "<b>";
         bLineEnd = "</b>";
@@ -1361,7 +1367,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString dxCallsign = model()->data(model()->index(row, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
     bool callWkd = model()->data(model()->index(row,DXSPOT_CALL_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
     Frequency freq = qvariant_cast<Frequency>(model()->data(model()->index(row, FREQ_COL_NUM), BMP_DataStoredRole));
-    Frequency curFreq = dial->getCurFreq();
+    Frequency cFreq = dial->getCurFreq();
     QString dxLoc = model()->data(model()->index(row, DXLOC_COL_NUM), BMP_DataStoredRole).toString();
     QString dxMode = model()->data(model()->index(row, DXSPOT_MODE_COL_NUM), BMP_DataStoredRole).toString();
     bool locWkd = model()->data(model()->index(row, DXLOC_WORKED_COL_NUM), BMP_DataStoredRole).toBool();
@@ -1442,7 +1448,7 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     QString bLineStart = "";
     QString bLineEnd = "";
 
-    int offset = std::abs(freq - curFreq);
+    int offset = std::abs(freq - cFreq);
     if (offset < 1000 )
     {
         // highlight this line as current frequency

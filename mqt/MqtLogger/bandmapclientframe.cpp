@@ -904,6 +904,9 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 }
 void BandmapClientFrame::checkNewBandMapSpots()
 {
+    if (!ct || ct->isReadOnly())
+        return;
+
     bandmapView->setSuppressUpdate(true);
     bool doUpdate = false;
     // any cluster spots
@@ -1476,7 +1479,10 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
 
 void BandmapClientFrame::setFreq(Frequency freq)
 {
-    if (ct && lastfreq != freq)
+    if (!ct || ct->isReadOnly())
+        return;
+
+    if (lastfreq != freq)
     {
         QString bandChanged;
         bandChanged = ct->checkBandChange(freq, lastfreq);
@@ -1543,15 +1549,11 @@ void BandmapClientFrame::setFreq(Frequency freq)
     }
 }
 
-
-
-
-
-
-
-
 void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 {
+    if (!ct || ct->isReadOnly())
+        return;
+
     contestBandStr = band;
     setMode(mode);
 
@@ -1595,10 +1597,10 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 
 }
 
-bool BandmapClientFrame::checkContestBandMatch(Frequency curFreq)
+bool BandmapClientFrame::checkContestBandMatch(Frequency cFreq)
 {
 
-    if (curFreq >= contestBandFlow && curFreq <= contestBandFHigh)
+    if (cFreq >= contestBandFlow && cFreq <= contestBandFHigh)
     {
 
         ui->radioStatusMsg->clear();
@@ -1615,6 +1617,9 @@ bool BandmapClientFrame::checkContestBandMatch(Frequency curFreq)
 
 void BandmapClientFrame::setMode(QString mode)
 {
+    if (!ct || ct->isReadOnly())
+        return;
+
     contestModeStr = mode;
     contestMode = getModeOffSet(contestModeStr);
 
@@ -1758,7 +1763,10 @@ void BandmapClientFrame::mouseTimerCheckNewSpots()
 
 void BandmapClientFrame::purgeSpots()
 {
-    if (timeToLive > 0 && !holdUpdateFlag /*&& (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    if (!ct || ct->isReadOnly())
+        return;
+
+    if (timeToLive > 0 && !holdUpdateFlag)      // don't purge spots if == 0 and holdupdateflag is on
     {
         if (bandmapDataModel->rowCount() > 0)
         {
