@@ -162,9 +162,28 @@ bool TLogContainer::eventFilter(QObject *obj, QEvent *event)
         QString toolTip;
         QWidget *f = QApplication::focusWidget ();
         if(f)
-             toolTip = f->metaObject()->className() + QString("|") + f->objectName();
+        {
+            QString name = f->objectName();
+            if (name.isEmpty())
+            {
+                QToolButton *tb = dynamic_cast<QToolButton *>(f);
+                if (tb)
+                {
+                    name = tb->text();
+                }
+            }
+            QWidget *p = f->parentWidget();
+            while ( p)
+            {
+                name += " | " + p->objectName();
+                p = p->parentWidget();
+            }
+             toolTip = f->metaObject()->className() + QString(" | ") + name;
+        }
         else
+        {
             toolTip = "<unknown>";
+        }
 
         QToolTip::showText(helpEvent->globalPos(), toolTip);
         return true;
