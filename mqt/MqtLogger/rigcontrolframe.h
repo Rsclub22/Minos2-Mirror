@@ -176,6 +176,7 @@ private slots:
 
     void on_resetBandFreqButton_clicked();
 
+    void on_QSOMargins();
 private:
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
@@ -209,6 +210,7 @@ private:
     Frequency curFStepButtonsFreq;
     QString curMode;
 
+    bool txVertShown;
     bool ritEnable;
     bool ritOn;
     bool ritEditOn;

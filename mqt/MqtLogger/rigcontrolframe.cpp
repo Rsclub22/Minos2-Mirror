@@ -125,7 +125,10 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
 
     connect(LogContainer->sendDM, &TSendDM::setRadioLoaded, this, &RigControlFrame::on_RadioLoaded);
 
-    ui->resetBandFreqButton->hide();
+    ui->resetBandFreqFrame->hide();
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &RigControlFrame::on_QSOMargins);
+    on_QSOMargins();
 }
 
 RigControlFrame::~RigControlFrame()
@@ -135,6 +138,23 @@ RigControlFrame::~RigControlFrame()
     delete operatingFreq;
     delete freqDisplayPalette;
 }
+void RigControlFrame::on_QSOMargins()
+{
+    int ls;
+    int cml;
+    int cmt;
+    int cmr;
+    int cmb;
+
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+
+    adjustMargins(layout(), ls, cml, cmt, cmr, cmb);
+}
+
 void RigControlFrame::on_FontChanged()
 {
     QFont cf = QApplication::font();
@@ -1391,14 +1411,14 @@ bool RigControlFrame::checkContestBandMatch(const Frequency &freq)
 
             setRadioBandWarning("");
             freqLineEditBkgnd(false);
-            ui->resetBandFreqButton->hide();
+            ui->resetBandFreqFrame->hide();
             return true;
         }
         else
         {
             setRadioBandWarning(HtmlFontColour(Qt::red) + tr("Freq out of contest band"));
             freqLineEditBkgnd(true);
-            ui->resetBandFreqButton->show();
+            ui->resetBandFreqFrame->show();
         }
 
     }
@@ -1657,8 +1677,9 @@ void RigControlFrame::setRadioVolumeState(bool state)
 
 void RigControlFrame::setRadioTxVertEnabled(bool s)
 {
-     ui->TxVertLabel->setVisible(s);
-     ui->transvertIndicator->setVisible(s);
+    txVertShown = s;
+    ui->ritTxvertFrame->setVisible( txVertShown || ritEnable);
+     ui->txVertFrame->setVisible(s);
      transVertIndicatorOff();
 }
 
@@ -1696,11 +1717,9 @@ void RigControlFrame::setRadioBandWarning(QString s)
 
 void RigControlFrame::setRitEnableState(bool s)
 {
-    ui->RitButton->setVisible(s);
-    ui->RitEdit->setVisible(s);
-    ui->RitClear->setVisible(s);
-    ui->RitGroupBox->setVisible(s);
     ritEnable = s;
+    ui->ritTxvertFrame->setVisible( txVertShown || ritEnable);
+    ui->RitFrame->setVisible(s);
     if (s)
     {
         ritButtonOff();
