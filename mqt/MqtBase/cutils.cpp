@@ -387,19 +387,24 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
         data.remove( QRegularExpression("\r") ); //remove all ocurrences of CR (Carriage Return)
         QString temp;
         QChar character;
-        QTextStream textStream(&data);
-        while (!textStream.atEnd())
+
+        int offset = 0;
+        while (offset < data.length())
         {
-            textStream >> character;
-            if (character == ',')
+            character = data[offset++];
+            if (character == '\r')
+            {
+                // ignore it
+            }
+            else if (character == ',')
             {
                 checkString(temp, character, csv);
             }
-            else if (character == '\n')
+            else if (character == '\r' || character == '\n')
             {
                 checkString(temp, character, csv);
             }
-            else if (textStream.atEnd())
+            else if (offset == data.length())
             {
                 temp.append(character);
                 checkString(temp, 0, csv);
@@ -471,8 +476,7 @@ void CsvReader::checkString(QString &temp, QChar character, QList<QStringList> &
     {
         if (temp.startsWith( QChar('\"')) && temp.endsWith( QChar('\"') ) )
         {
-            temp.remove( QRegularExpression("^\"") );
-            temp.remove( QRegularExpression("\"$") );
+            temp = temp.mid(1, temp.length() - 2);
         }
         temp.replace("\"\"", "\"");
         itemList.append(temp.trimmed());

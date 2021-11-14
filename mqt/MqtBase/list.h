@@ -21,7 +21,6 @@ class ContactList : public BaseLogList
       int slotno;
       bool errMessShown;
       bool cslLoad();
-      bool cslLoadContacts();
    public:
       QString cfileName;
       QString name;

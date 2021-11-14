@@ -62,7 +62,7 @@ bool ContactList::initialise(const QString &fn, int slotno )
    {
       if ( !cslLoad() )     // load the header so that we can display it
          return false;
-      loadOK = cslLoadContacts();
+      loadOK = true;
    }
 
    return loadOK;
@@ -115,10 +115,6 @@ bool ContactList::cslLoad( )
        return true;
    }
    return false;
-}
-bool ContactList::cslLoadContacts( )
-{
-   return true;
 }
 void ContactList::getMatchText(ListContact *, QString &disp, const BaseContestLog *const /*ct*/ ) const
 {
