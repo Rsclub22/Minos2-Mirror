@@ -219,33 +219,39 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
 
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter)
     {
-        QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
-        raise();
-        return true;
+        if (hasFocus())
+        {
+            QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
+            raise();
+            return true;
+        }
     }
     else if (Key == Qt::Key_Tab)
     {
-        if (ctrl || shift)
-            return false;
+        if (hasFocus())
+        {
+            if (ctrl || shift)
+                return false;
 
-         // Do we want "call" tab order or "S and P" tab order?
-         bool tabSandPstate;
-         TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
+             // Do we want "call" tab order or "S and P" tab order?
+             bool tabSandPstate;
+             TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
-         if (tabSandPstate)
-         {
-             tabSandPstate = ui->SandPrb->isChecked();
-         }
-
-         if (tabSandPstate && edit == false && catchup == false)
-         {
-             if (current == ui->CallsignFrame->getTextEditEdit() && !rrIl->valid( cmValidStatus, screenContact ))
+             if (tabSandPstate)
              {
-                 selectField( ui->RSTRxFrame->getTextEditEdit() );
-                 return true;
+                 tabSandPstate = ui->SandPrb->isChecked();
              }
-         }
-         return false;
+
+             if (tabSandPstate && edit == false && catchup == false)
+             {
+                 if (current == ui->CallsignFrame->getTextEditEdit() && !rrIl->valid( cmValidStatus, screenContact ))
+                 {
+                     selectField( ui->RSTRxFrame->getTextEditEdit() );
+                     return true;
+                 }
+             }
+             return false;
+        }
     }
     else if (Key == Qt::Key_Escape)
     {
