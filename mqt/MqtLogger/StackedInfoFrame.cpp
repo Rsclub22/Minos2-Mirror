@@ -64,6 +64,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
            ui->tabbar->addTab(b->uk);
        }
     }
+    ui->tabbar->setElideMode(Qt::ElideRight);
     connect( ui->tabbar , &QTabBar::currentChanged, this, &StackedInfoFrame::on_currentTabChangedSlot );
 
     ui->infoCombo->clear();
@@ -228,6 +229,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     }
 
     ui->tabbar->setVisible(setTabsVisible);
+    ui->tabbar->setFocusPolicy(Qt::NoFocus);
 
     if (contest && stackInstance < STACKITEMS)
     {

@@ -507,6 +507,9 @@ to</string>
        <layout class="QHBoxLayout" name="horizontalLayout_5">
         <item>
          <widget class="QToolButton" name="qrzToolButton">
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
           <property name="text">
            <string>QRZ</string>
           </property>

@@ -51,7 +51,9 @@ void BandSelButtons::setupButtons()
 
     for (int i = 0; i < 6; i++)
     {
-        toolButList.append(new QToolButton());
+        QToolButton *bb = new QToolButton();
+        toolButList.append(bb);
+        bb->setFocusPolicy(Qt::NoFocus);
 
     }
 

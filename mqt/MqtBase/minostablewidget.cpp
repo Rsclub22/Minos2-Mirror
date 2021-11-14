@@ -48,6 +48,7 @@
 MinosTableWidget::MinosTableWidget(QWidget *parent):QTableView(parent)
 {
       statusSortButton = new QToolButton(this);
+      statusSortButton->setFocusPolicy(Qt::NoFocus);
       resizeTimer = new QTimer(this);
       connect(resizeTimer, &QTimer::timeout, this, &MinosTableWidget::onResizeTimer);
       resizeTimer->start(1000);
