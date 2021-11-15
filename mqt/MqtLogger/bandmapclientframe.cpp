@@ -1557,39 +1557,8 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
     contestBandStr = band;
     setMode(mode);
 
-    QString bandplanLimits = readBandmapFreqLimit(contestBandStr, contestModeStr);
+    getBandLimitsFromBandListXML();
 
-    if (bandplanLimits.isEmpty())
-    {
-        getBandLimitsFromBandListXML();
-    }
-    else
-    {
-        // use user bandplan limits ini file
-        QStringList bpl = bandplanLimits.split(',');
-        if (bpl.count() == 2)
-        {
-            bool okL;
-            bool okH;
-            double flow = bpl[0].trimmed().remove('.').toDouble(&okL);
-            double fhigh = bpl[1].trimmed().remove('.').toDouble(&okH);
-            if (okL && okH)
-            {
-                contestBandFlow = flow * 1000;
-                contestBandFHigh = fhigh * 1000;
-                bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
-                bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
-            }
-            else
-            {
-                getBandLimitsFromBandListXML();
-            }
-        }
-        else
-        {
-            getBandLimitsFromBandListXML();
-        }
-    }
     int zoomLevel = readBandmapZoomLevel();     // set zoom to saved zoomlevel
     bandmapView->setBandmapZoom(zoomLevel);
     setZoomLevelLabelText(zoomLevel);
@@ -2008,30 +1977,6 @@ void BandmapClientFrame::updateZoom(bool dir)
     bandmapView->updateZoom(dir);
 }
 
-QString BandmapClientFrame::readBandmapFreqLimit(QString band, QString mode)
-{
-    QString limitFreqs = "";
-    QFile limitFile(BANDPLAN_FREQ_LIMITS_FILE);
-    if (limitFile.exists())
-    {
-        traceMsg(QString("bandmapLimit file found - %1").arg(BANDPLAN_FREQ_LIMITS_FILE));
-        QString fileName = BANDPLAN_FREQ_LIMITS_FILE;
-        QSettings settings(fileName, QSettings::IniFormat);
-        QStringList limitBands = settings.childGroups();
-        if (limitBands.contains(band))
-        {
-            traceMsg(QString("bandmapLimit band = %1, mode = %2").arg(band, mode));
-            if (mode.isEmpty())
-            {
-                mode = hamlibData::USB;
-            }
-            settings.beginGroup(band);
-            limitFreqs = settings.value(mode, "").toString();
-            settings.endGroup();
-        }
-    }
-    return limitFreqs;
-}
 
 void BandmapClientFrame::traceMsg(QString msg)
 {
