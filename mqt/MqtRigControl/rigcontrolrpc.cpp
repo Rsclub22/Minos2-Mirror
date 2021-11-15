@@ -112,9 +112,18 @@ void RigControlRpc::on_notify( AnalysePubSubNotify an, const QString from )
         {
             if ( an.getCategory() == rpcConstants::rigControlCategory && an.getKey() == rpcConstants::rigControlChangeList )
             {
+                MinosRPC *rpc = MinosRPC::getMinosRPC();
+
                 QString publisherRouter = an.getPublisherRouter();
                 QString publisherProgram = an.getPublisherProgram();
                 QString changeList = an.getValue();
+
+                QString s = MinosConfig::getMinosConfig()->getThisRouterName();
+
+                if (publisherRouter == s && publisherProgram != rpc->getAppName())
+                {
+                    emit rereadConfig();
+                }
             }
         }
     }
