@@ -268,7 +268,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1691"/>
+        <location filename="../bandmapclientframe.cpp" line="1722"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -288,7 +288,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1580"/>
+        <location filename="../bandmapclientframe.cpp" line="1611"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
