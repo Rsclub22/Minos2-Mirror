@@ -126,14 +126,9 @@ private:
 
     void clearAvailRadio();
     void clearCurrentRadio();
-    //    void enableCIVbox();
-    void clearRadioValueChanged();
-    void clearRadioNameChanged();
     void civSetToolTip();
     void networkDataEntryVisible(int radioNumber, bool visible);
     void serialDataEntryVisible(int radioNumber, bool visible);
-//    void loadMgmModes();
-//    void saveMgmList();
     void addTab(int tabNum, QString tabName);
     void loadSettingsToTab(int tabNum, QString tabName);
 

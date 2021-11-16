@@ -864,9 +864,10 @@ void RigSetupDialog::saveSettings()
     lk = availRadioData.keys();
     foreach (auto &k, lk)
     {
-        if (!availRadioData.value(k)->previousRadioName.isEmpty())
+        QString prevName = availRadioData.value(k)->previousRadioName;
+        if (!prevName.isEmpty())
         {
-            configRadio.beginGroup(k);
+            configRadio.beginGroup(prevName);
             configRadio.remove("");      // remove all keys for this group
             configRadio.endGroup();
             // remove transverters for this radio
