@@ -81,7 +81,7 @@ void RSMainWindow::configure()
     }
     sv.removeDuplicates();
 
-    rsc.setServerList(sv, mainRig.selected.getRouterApp(), subRig.selected.getRouterApp());
+    rsc.setServerList(sv, mainRig.server, subRig.server);
 
     if (rsc.exec() == QDialog::Accepted)
     {
@@ -266,7 +266,7 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                 ui->Rig1Rig->clear();
                 QString pub = an.getPublisherRouter() + "/" + an.getPublisherProgram();
 
-                if (pub == subRig.selected.getRouterApp())
+                if (pub == subRig.server)
                 {
                     QStringList cb = subRig.populateRig();
                     ui->Rig2Combo->clear();
@@ -405,7 +405,7 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
     }
     else
     {
-        ui->Rig2Combo->clear();
+        ui->Rig2Combo->setCurrentText(QString());
         ui->QF2Label->clear();
     }
 }
@@ -505,8 +505,8 @@ SyncRadio::SyncRadio(const QString &w, RigCache &r):which(w), rigCache(r)
 }
 void SyncRadio::configureServer(const QString s)
 {
-    selected = PubSubName(s + "/x");    // expects r/a/k - this is just r/a
-    server = selected.getRouterApp();
+    PubSubName test = PubSubName(s + "/x");    // expects r/a/k - this is just r/a
+    server = test.getRouterApp();
 
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);
@@ -519,9 +519,8 @@ QStringList SyncRadio::populateRig()
     cb.append("");
     for (const auto &r: qAsConst(rigCache.getRigList()))
     {
-        if (r.getRouterApp() == selected.getRouterApp() )
+        if (!r.isEmpty() && r.getRouterApp() == server )
         {
-            if (!r.isEmpty())
             cb.append( r.toString());
         }
     }
@@ -539,7 +538,7 @@ void SyncRadio::selectRadio(PubSubName name)
         subRigSelection(sel, false);
     }
 
-    subRigSelection(selected, true);
+    subRigSelection(sel, true);
 }
 bool SyncRadio::check(N1MMLink &n1mmLink)
 {

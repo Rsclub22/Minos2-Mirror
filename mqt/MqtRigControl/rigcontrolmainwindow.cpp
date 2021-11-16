@@ -102,7 +102,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     }
 
 
-
     ui->testRitButton->setVisible(false);
     ui->setRitSpinner->setVisible(false);
 
@@ -397,6 +396,7 @@ void RigControlMainWindow::initActionsConnections()
     connect(msg, &RigControlRpc::setVoiceMessageNum, this, [=](QString msgNum){onSetVoiceMessageNum(msgNum);});
     connect(msg, &RigControlRpc::setPttOnOff, this, [=](bool pttOnOff){onSetPttOnOff(pttOnOff);});
     connect(msg, &RigControlRpc::setCwTXMessage, this, [=](QString cwMsg){onSetCwTxMessage(cwMsg);});
+    connect(msg, &RigControlRpc::rereadConfig, this, &RigControlMainWindow::updateRigDetailsCache);
 
 
 
@@ -5267,4 +5267,3 @@ void RigControlMainWindow::on_reconnectButton_clicked()
 {
     upDateRadio(currentRadioName);
 }
-
