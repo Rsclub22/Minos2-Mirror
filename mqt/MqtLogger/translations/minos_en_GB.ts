@@ -268,27 +268,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1717"/>
+        <location filename="../bandmapclientframe.cpp" line="1722"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1425"/>
+        <location filename="../bandmapclientframe.cpp" line="1428"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1458"/>
+        <location filename="../bandmapclientframe.cpp" line="1461"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1468"/>
+        <location filename="../bandmapclientframe.cpp" line="1471"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1609"/>
+        <location filename="../bandmapclientframe.cpp" line="1611"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,38 +296,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1355"/>
+        <location filename="../bandmapview.cpp" line="1361"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1385"/>
+        <location filename="../bandmapview.cpp" line="1391"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1476"/>
+        <location filename="../bandmapview.cpp" line="1482"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1493"/>
+        <location filename="../bandmapview.cpp" line="1499"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1521"/>
+        <location filename="../bandmapview.cpp" line="1527"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1524"/>
+        <location filename="../bandmapview.cpp" line="1530"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1531"/>
+        <location filename="../bandmapview.cpp" line="1537"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11

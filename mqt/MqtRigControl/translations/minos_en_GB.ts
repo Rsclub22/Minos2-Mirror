@@ -526,7 +526,7 @@ Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="217"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="216"/>
         <source>Please select a radio!</source>
         <translation type="unfinished"></translation>
     </message>

@@ -533,7 +533,7 @@ Actif</translation>
         <translation>Suivre la communication de RigCtld</translation>
     </message>
     <message>
-        <location filename="../rigcontrolmainwindow.cpp" line="217"/>
+        <location filename="../rigcontrolmainwindow.cpp" line="216"/>
         <source>Please select a radio!</source>
         <translation>Sélectionner une radio SVP!</translation>
     </message>
