@@ -4878,27 +4878,29 @@ void RigControlMainWindow::loadBands()
 void RigControlMainWindow::initialiseSupportedRadioDisplay()
 {
     // table of indicators
-    allSupRadioInd << ui->_1_8mhz_Indicator <<ui->_3_5mhz_Indicator
-                   << ui->_7mhz_Indicator << ui->_14mhz_Indicator
-                   << ui->_21mhz_Indicator << ui->_28mhz_Indicator
-                   << ui->_50mhz_Indicator << ui->_70mhz_Indicator
-                   << ui->_144mhz_Indicator << ui->_432mhz_Indicator
-                   << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
-                   << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
-                   << ui->_10ghz_Indicator;
-
-    allSupRadioIndLabels << ui->_1_8_mhzIndLbl << ui->_3_5_mhzIndLbl
-                         << ui->_7_mhzIndLbl << ui->_14_mhzIndLbl
-                         << ui->_21_mhzIndLbl << ui->_28_mhzIndLbl
-                         << ui->_50_mhzIndLbl << ui->_70_mhzIndLbl
-                         << ui->_144_mhzIndLbl << ui->_432_mhzIndLbl
-                         << ui->_1296_mhzIndLbl << ui->_2300_mhzIndLbl
-                         << ui->_3_4_ghzIndLbl << ui->_5_6_ghzIndLbl
-                         << ui->_10_ghzIndLbl;
-
-
+    int row = 0;
+    int col = 0;
     for (int i = 0; i < bands.count(); i++)
     {
+        QLabel *l = new QLabel();
+        QPushButton *p = new QPushButton();
+
+        l->setText(bands[i].data()->uk);
+        l->setAlignment(Qt::AlignRight);
+        p->setMaximumSize(16, 16);
+        p->setEnabled(false);
+
+        allSupRadioInd << p;
+        allSupRadioIndLabels << l;
+
+        ui->gridLayout->addWidget(l, row, col++);
+        ui->gridLayout->addWidget(p, row, col++);
+
+        if (col % 8 == 0)
+        {
+            row++;
+            col = 0;
+        }
         QSharedPointer<SupIndicatorDetails> supInd = QSharedPointer<SupIndicatorDetails>(new SupIndicatorDetails());
         supInd->supIndicator = allSupRadioInd[i];
         supInd->supIndicatorLabel = allSupRadioIndLabels[i];

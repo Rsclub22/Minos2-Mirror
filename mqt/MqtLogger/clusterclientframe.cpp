@@ -50,6 +50,14 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     traceMsg(QString("Starting"));
 
+    QVector<QSharedPointer<BandInfo> > bands;
+    BandList::getBandList().loadAllBands(bands);
+    for (auto const &b:qAsConst(bands))
+    {
+        clusterBands << b.data()->uk;
+    }
+
+
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpClusterTraceDebug, traceDebugFlag );
 
 

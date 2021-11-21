@@ -134,13 +134,7 @@ const QString BANDSWITCH_ENABLE_KEY_TEXT = "bandSwEnable";
 const QString BANDSWITCH_SERIAL_ENABLE_KEY_TEXT = "bandSwSerialEnable";
 const QString BANDSWITCH_COMPORT_KEY_TEXT = "comport";
 
-// RadioName when no radio is connected
-//const QString NORADIO = "NoRadio";
-
-
 namespace freqPresetData {
-
-    const QStringList presetBands = QStringList() << "50 MHz" << "70 MHz" << "144 MHz" << "432 MHz" << "1296 MHz" << "2300 MHz" << "3.4 GHz" << "5.6 GHz" << "10 GHz";
 
     const QString PRESET_MODE_CW = "CW";
     const QString PRESET_MODE_PHONE = "PHONE";
