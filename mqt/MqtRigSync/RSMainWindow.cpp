@@ -535,10 +535,11 @@ void SyncRadio::selectRadio(PubSubName name)
 
     if (!sel.isEmpty() && sel != name)
     {
+        // deselect whatever was there
         subRigSelection(sel, false);
     }
 
-    subRigSelection(sel, true);
+    subRigSelection(name, true);
 }
 bool SyncRadio::check(N1MMLink &n1mmLink)
 {
