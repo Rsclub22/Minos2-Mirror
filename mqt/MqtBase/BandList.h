@@ -111,7 +111,6 @@ class BandList
 
 
         bool checkValidBand(Frequency freq);
-        void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
 
         static BandList &getBandList();
 

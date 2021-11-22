@@ -34,13 +34,11 @@ const QString BANDMAP_INI_FILE = "./Configuration/bandmap.ini";
 namespace dialData {
 
 
-
+// These are all indexed by zoom level
 const int khzStep[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 50, 50, 50};
 const int khzPixelStep[] = {200, 150, 110, 85, 65, 50, 35, 25, 20, 15, 11, 8, 6, 4, 3, 2, 1};
-//const int khzPixelStep[] = {225, 196, 169, 144, 121, 100, 81, 64, 49, 36, 25, 16, 9, 4, 1, 1, 1};
 const int hzPixelStep[] = {5, 6, 9, 12, 15, 20, 28, 40, 50, 66, 90, 125, 166, 250, 333, 500, 1000};
 const int minorMarker[] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 0, 0, 0};
-const int endScrollMult[] = {1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5};
 
 const int fMajMrkXStart = 50;
 const int fMajMrkXEnd = 70;
@@ -118,27 +116,6 @@ private:
     QMap <QString, QString> startZoomLevelIdByBand;
 
     QMap <QString, int> startZoomLevelDefaultByBand;
-
-
-//    const QList<LOGGERPROFILE> startZoomLevelId  {
-//                                            elpBandmapStartZoomLevel_1_8MHz,
-//                                            elpBandmapStartZoomLevel_3_5MHz,
-//                                            elpBandmapStartZoomLevel_7MHz,
-//                                            elpBandmapStartZoomLevel_14MHz,
-//                                            elpBandmapStartZoomLevel_21MHz,
-//                                            elpBandmapStartZoomLevel_28MHz,
-//                                            elpBandmapStartZoomLevel_50MHz,
-//                                            elpBandmapStartZoomLevel_70MHz,
-//                                            elpBandmapStartZoomLevel_144MHz,
-//                                            elpBandmapStartZoomLevel_432MHz,
-//                                            elpBandmapStartZoomLevel_1296MHz,
-//                                            elpBandmapStartZoomLevel_2300MHz,
-//                                            elpBandmapStartZoomLevel_3_4GHz,
-//                                            elpBandmapStartZoomLevel_5_6GHz,
-//                                            elpBandmapStartZoomLevel_10GHz};
-
-
-
 
 };
 

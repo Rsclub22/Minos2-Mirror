@@ -232,6 +232,8 @@ public:
 
     static const char *userCmdButtonLabels[4];
 
+    void connectToCluster();
+
 private slots:
     void connectionEstab();
     void connectionError(QAbstractSocket::SocketError);
@@ -528,7 +530,7 @@ private slots:
     void showHfUserCmdButtonMenu(int buttonNumber);
     void userVhfUhfCmdButtonRead(int buttonNumber);
     void userHfCmdButtonRead(int buttonNumber);
-    void onbandCheckBoxStateChanged(int i, bool state);
+    void onbandCheckBoxStateChanged();
     void onHfSelectBandPbPressed();
     void onVhfSelectBandPbPressed();
     void onUhfSelectBandPbPressed();

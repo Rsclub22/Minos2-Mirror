@@ -182,6 +182,13 @@ bool BandList::parseFile (const QString &fname )
             }
         }
     }
+
+    std::sort(bandList.begin(), bandList.end(),
+    [=](const QSharedPointer<BandInfo> a, const QSharedPointer<BandInfo> b)->bool
+      {
+          return a->fLow < b->fLow;
+      }
+    );
     return true;
 }
 
@@ -496,31 +503,6 @@ QString BandList::getBand(const Frequency &freq)
     }
     return band;
 }
-
-
-
-
-void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
-{
-    foreach ( auto const &b, bandList )       // just load VHF/UHF bands
-    {
-        // don't use bands > 10GHz (can't support Freq display)
-        if ( b->uk != "24 GHz" && b->uk != "47 GHz"
-             && b->uk != "76 GHz" && b->uk != "120 GHz"
-             && b->uk != "134 GHz" && b->uk != "248 GHz")
-
-        {
-            if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(b);
-        }
-    }
-
-}
-
-
-
-
 
 void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
 {

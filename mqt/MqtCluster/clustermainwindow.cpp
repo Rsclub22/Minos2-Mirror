@@ -63,20 +63,48 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // most of startup can be done immediately, so it all gets built before showing it
+    doStartup();
+
+    // but delay the actual connection
     delayedAction(this, [=](){
-        doStartup();
+        connectToCluster();
     });
 }
+void ClusterMainWindow::connectToCluster()
+{
+    // get list of clusters
+    loadNodesSelectBox(setupCluster->getListOfClusterNames());
+
+    // get user data
+    currentUserCallsign  = setupCluster->getUserCallsign();
+    currentUserName = setupCluster->getUserName();
+    currentUserLocator = setupCluster->getUserLocator();
+    currentUserQTH = setupCluster->getUserQth();
+
+
+    // get current node from file and then connect to host
+    currentNodeName = setupCluster->getCurrentNodeName();
+
+    connectToHost(currentNodeName);
+
+    connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
+
+    removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
+
+    ui->clusterTab->setCurrentWidget(ui->bandFilter);
+    ui->startCloseFileTab->setAutoFillBackground(true);
+
+    QSettings settings;
+    ui->clusterTab->setCurrentIndex(settings.value("ClusterServer/curTab", 0).toInt());
+}
+
 void ClusterMainWindow::doStartup()
 {
 
     connect(&stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
     stdinReader.start();
 
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    appName = env.value("MQTRPCNAME", "") ;
-
-    trace(QString("AppName = %1").arg(appName));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
 
@@ -98,7 +126,6 @@ void ClusterMainWindow::doStartup()
     connect(ui->actionAbout, &QAction::triggered, this, &ClusterMainWindow::about);
     connect(ui->actionUser_Command_Shortcuts, &QAction::triggered, this, &ClusterMainWindow::clusterNodeCommandsShortcutHelp);
 
-    //BandList::getBandList().loadVhfAndUpBands(bands);
     BandList::getBandList().loadAllBands(bands);
 
     filterSettings.initFilterSettings(bands);
@@ -305,11 +332,6 @@ void ClusterMainWindow::doStartup()
 
     connect(setupCluster, &SetupDialog::clusterListChanged, this, &ClusterMainWindow::clusterListChanged);
 
-    //connect(ui->runStartCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runStartCmdFileChkBoxChanged(state);});
-    //connect(ui->runEndCmdFileChkBox, &QCheckBox::stateChanged, [=](int state){runEndCmdFileChkBoxChanged(state);});
-    //connect(ui->saveBandFilterSettingChkBox, &QCheckBox::stateChanged, [=](int state){onSaveBandFilterChkBoxClicked(state);});
-
-
     connect(ui->overrideLogCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onOverrideLogCheckBoxClicked);
     connect(ui->hfLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
     connect(ui->vhfMwLogFilterCheckBox, &QCheckBox::clicked, this, &ClusterMainWindow::onLogFilterCheckBoxClicked);
@@ -342,31 +364,6 @@ void ClusterMainWindow::doStartup()
     purgeTimer = new QTimer(this);
     connect (purgeTimer, &QTimer::timeout, this, &ClusterMainWindow::purgeSpots);
     purgeTimer->start(PURGE_TIME);
-
-
-
-    // get list of clusters
-    loadNodesSelectBox(setupCluster->getListOfClusterNames());
-
-    // get user data
-    currentUserCallsign  = setupCluster->getUserCallsign();
-    currentUserName = setupCluster->getUserName();
-    currentUserLocator = setupCluster->getUserLocator();
-    currentUserQTH = setupCluster->getUserQth();
-
-
-    // get current node from file and then connect to host
-    currentNodeName = setupCluster->getCurrentNodeName();
-
-    connectToHost(currentNodeName);
-
-    connect(setupCluster, &SetupDialog::sendSpotToTxEnabled, this, &ClusterMainWindow::sendSpotToTxEnabled);
-
-    removeInsertSendSpotTab(setupCluster->getSendToDXClusterEnabled());
-
-    ui->clusterTab->setCurrentWidget(ui->bandFilter);
-    ui->startCloseFileTab->setAutoFillBackground(true);
-    ui->clusterTab->setCurrentIndex(settings.value("ClusterServer/curTab", 0).toInt());
 }
 
 void ClusterMainWindow::clusterListChanged()
@@ -2591,31 +2588,69 @@ void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNu
 
 void ClusterMainWindow::initFilterCheckBoxs()
 {
+    QGridLayout *hfLayout = new QGridLayout();
+    ui->HFFrame->setLayout(hfLayout);
 
+    QGridLayout *vhfLayout = new QGridLayout();
+    ui->VHFFrame->setLayout(vhfLayout);
 
-    QList<QCheckBox*> bandChkBoxList;
+    QGridLayout *mwLayout = new QGridLayout();
+    ui->MWFrame->setLayout(mwLayout);
 
-    bandChkBoxList << ui->_1_8MHzCheckBox << ui->_3_5MHzCheckBox  << ui->_7MHzCheckBox
-                   << ui->_14MHzCheckBox << ui->_21MHzCheckBox << ui->_28MHzCheckBox
-                   << ui->_50MHzCheckBox << ui->_70MHzCheckBox << ui->_144MHzCheckBox << ui->_432MHzCheckBox
-                   << ui->_1296MHzCheckBox << ui->_2300MHzCheckBox << ui->_3_4GHzCheckBox << ui->_5_6GHzCheckBox << ui->_10GHzCheckBox;
+    // bands only contains displayable bands (<10GHz) and is sorted
+    int hfRow = 0;
+    int hfCol = 0;
+    int vhfRow = 0;
+    int vhfCol = 0;
+    int mwRow = 0;
+    int mwCol = 0;
 
-    ClusterClientBandFilterDialogDetails ccfd;
-    for (int i = 0; i <bands.count(); i++)
+    for (auto const &b: qAsConst(bands))
     {
-        ccfd.bandChkBox = bandChkBoxList[i];
-        ccfd.bandType = bands[i].data()->getType();
-        bandCheckBoxes.insert(bands[i].data()->uk, ccfd);
+        QCheckBox *cb = new QCheckBox();
+        connect(cb, &QCheckBox::clicked, this, [=]() {onbandCheckBoxStateChanged();});
+
+        cb->setText(b->uk);
+        ClusterClientBandFilterDialogDetails ccfd;
+        ccfd.bandChkBox = cb;
+        ccfd.bandType = b->getType();
+        bandCheckBoxes.insert(b->uk, ccfd);
+
+        if (b->getType() == "HF")
+        {
+            hfLayout->addWidget(cb, hfRow, hfCol);
+            hfCol++;
+            if (hfCol %2 == 0)
+            {
+                hfCol = 0;
+                hfRow++;
+            }
+        }
+        else if (b->getType() == "VHF")
+        {
+            vhfLayout->addWidget(cb, vhfRow, vhfCol);
+            vhfCol++;
+            if (vhfCol %2 == 0)
+            {
+                vhfCol = 0;
+                vhfRow++;
+            }
+        }
+        else if (b->getType() == "MWAVE")
+        {
+            mwLayout->addWidget(cb, mwRow, mwCol);
+            mwCol++;
+            if (mwCol %2 == 0)
+            {
+                mwCol = 0;
+                mwRow++;
+            }
+        }
+        else
+        {
+            mShowMessage(b->uk, this);
+        }
     }
-
-
-    for (int i = 0; i < bandChkBoxList.count(); i++)
-    {
-        connect(bandChkBoxList[i], &QCheckBox::clicked, this, [=](bool state) {onbandCheckBoxStateChanged(i, state);});
-
-    }
-
-
 
     connect(ui->hfSelectBandPb, &QPushButton::pressed, this, [=]() {onHfSelectBandPbPressed();});
     connect(ui->vhfSelectBandPb, &QPushButton::pressed, this, [=]() {onVhfSelectBandPbPressed();});
@@ -2855,10 +2890,8 @@ void ClusterMainWindow::saveBandFilterOnSaveFlag()
  */
 }
 
-void ClusterMainWindow::onbandCheckBoxStateChanged(int i, bool state)
+void ClusterMainWindow::onbandCheckBoxStateChanged( )
 {
-    Q_UNUSED(i)
-    Q_UNUSED(state)
     bool changed = false;
     foreach (auto const &b, bands)
     {
