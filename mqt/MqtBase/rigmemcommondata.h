@@ -43,55 +43,6 @@ enum freqMask_lookup {
 
 
 }
-#ifdef BANDSELDATA
-namespace bandSelData {
-
-
-
-
-const QStringList bandNames = { "",
-                                "10m",
-                                "6m",
-                                "4m",
-                                "2m",
-                                "70cm",
-                                "23cm",
-                                "GHz"};
-
-const QStringList bandFreq = { "",
-                               "28170000",
-                               "50170000",
-                               "70210000",
-                               "144290000",
-                               "432170000",
-                               "1296210000",
-                               "10000000000"};
-
-const QStringList freqDialZero =  { "00.000.000",
-                                    "00.000.000",
-                                    "00.000.000",
-                                    "00.000.000",
-                                    "000.000.000",
-                                    "000.000.000",
-                                    "0.000.000.000",
-                                    "00.000.000.000"};
-
-
-
-
-
-const maskData::freqMask_lookup bandMaskIdx[] = { maskData::MHZ99,      /* Not used */
-                                                    maskData::MHZ99,    /* 10m  */
-                                                    maskData::MHZ99,    /* 6m  */
-                                                    maskData::MHZ99,    /* 4m  */
-                                                    maskData::MHZ999,   /* 2m  */
-                                                    maskData::MHZ999,   /* 70cm  */
-                                                    maskData::GHZ,      /* 23cm  */
-                                                    maskData::GHZ99};   /* GHz  */
-
-
-}
-#endif
 
 namespace memDefData {
 

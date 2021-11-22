@@ -2028,7 +2028,9 @@ int BandmapClientFrame::readBandmapZoomLevel()
 
     BandmapZoomLevelIdAndNames bandmapId;
     int zoomLevel;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandmapId.getStartZoomLevelId(contestBandStr), zoomLevel );
+    QString bandId = bandmapId.getStartZoomLevelId(contestBandStr);
+    int defZoomLevel = bandmapId.getStartZoomLevelDefault(contestBandStr);
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandId, zoomLevel, defZoomLevel );
     return zoomLevel;
 }
 

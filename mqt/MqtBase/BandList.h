@@ -69,6 +69,8 @@ class BandInfo
         Frequency fcLow;
         Frequency fcHigh;
 
+        int zoomDefault;
+
         QString wlen;
         QString uk;
         QString cabrillo;

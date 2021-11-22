@@ -65,23 +65,6 @@ enum LOGGERPROFILE {
    elpAddBandMapTuningTolerance,
    elpCQRit,
 
-   elpBandmapStartZoomLevel_1_8MHz,
-   elpBandmapStartZoomLevel_3_5MHz,
-   elpBandmapStartZoomLevel_7MHz,
-   elpBandmapStartZoomLevel_14MHz,
-   elpBandmapStartZoomLevel_21MHz,
-   elpBandmapStartZoomLevel_28MHz,
-
-   elpBandmapStartZoomLevel_50MHz,
-   elpBandmapStartZoomLevel_70MHz,
-   elpBandmapStartZoomLevel_144MHz,
-   elpBandmapStartZoomLevel_432MHz,
-   elpBandmapStartZoomLevel_1296MHz,
-   elpBandmapStartZoomLevel_2300MHz,
-   elpBandmapStartZoomLevel_3_4GHz,
-   elpBandmapStartZoomLevel_5_6GHz,
-   elpBandmapStartZoomLevel_10GHz,
-
    elpContestStartIgnorePresetFreq,
    elpContestChangeIgnorePreviousFreq,
    elpContestChangeRestoreContestMode,

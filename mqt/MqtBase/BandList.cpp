@@ -20,6 +20,7 @@
 ======================================================================================*/
 
 #include "base_pch.h"
+#include "bandmapcommon.h"
 #include "BandList.h"
 #include "cutils.h"
 //---------------------------------------------------------------------------
@@ -219,6 +220,9 @@ bool BandList::parseBand ( TiXmlElement * e )
     band->reg1test = getAttribute ( e, "Reg1Test" );
     band->adif = getAttribute ( e, "ADIF" );
     band->cabrillo = getAttribute ( e, "Cabrillo" );
+
+    temp = getAttribute(e, "zoom");
+    band->zoomDefault = toInt(temp, dialData::START_ZOOM_LEVEL);
 
     band->bandColour = getAttribute(e, "Colour");
 

@@ -75,22 +75,25 @@ public:
         QVector <QSharedPointer<BandInfo> > bands;
         BandList::getBandList().loadAllBands(bands);
 
-        for (int i = 0; i < bands.count() && i < startZoomLevelId.count(); i++)
+        for (int i = 0; i < bands.count(); i++)
         {
-
-            startZoomLevelIdByBand.insert(bands[i].data()->uk, startZoomLevelId[i]);
+            QString profile = bands[i].data()->uk;
+            profile.remove('\x20').replace('.', '_');
+            profile = "bandmapStartZoomLevel_" + profile;
+            startZoomLevelIdByBand.insert(bands[i].data()->uk, profile);
+            startZoomLevelDefaultByBand.insert(bands[i].data()->uk, bands[i].data()->zoomDefault);
         }
     }
 
 
-    LOGGERPROFILE getStartZoomLevelId(QString band)
+    QString getStartZoomLevelId(QString band)
     {
         if (startZoomLevelIdByBand.contains(band))
         {
                 return startZoomLevelIdByBand.value(band);
         }
 
-        return elpBandmapStartZoomLevel_1_8MHz;
+        return startZoomLevelIdByBand.value("1.8 MHz");
     }
 
     QString getStartZoomLevelName(QString band)
@@ -99,30 +102,40 @@ public:
         return name;
     }
 
+    int getStartZoomLevelDefault(QString band)
+    {
+        if (startZoomLevelIdByBand.contains(band))
+        {
+                return startZoomLevelDefaultByBand.value(band);
+        }
+
+        return startZoomLevelDefaultByBand.value("1.8 MHz");
+    }
 
 
 private:
 
-    QMap <QString, LOGGERPROFILE> startZoomLevelIdByBand;
+    QMap <QString, QString> startZoomLevelIdByBand;
+
+    QMap <QString, int> startZoomLevelDefaultByBand;
 
 
-
-    const QList<LOGGERPROFILE> startZoomLevelId  {
-                                            elpBandmapStartZoomLevel_1_8MHz,
-                                            elpBandmapStartZoomLevel_3_5MHz,
-                                            elpBandmapStartZoomLevel_7MHz,
-                                            elpBandmapStartZoomLevel_14MHz,
-                                            elpBandmapStartZoomLevel_21MHz,
-                                            elpBandmapStartZoomLevel_28MHz,
-                                            elpBandmapStartZoomLevel_50MHz,
-                                            elpBandmapStartZoomLevel_70MHz,
-                                            elpBandmapStartZoomLevel_144MHz,
-                                            elpBandmapStartZoomLevel_432MHz,
-                                            elpBandmapStartZoomLevel_1296MHz,
-                                            elpBandmapStartZoomLevel_2300MHz,
-                                            elpBandmapStartZoomLevel_3_4GHz,
-                                            elpBandmapStartZoomLevel_5_6GHz,
-                                            elpBandmapStartZoomLevel_10GHz};
+//    const QList<LOGGERPROFILE> startZoomLevelId  {
+//                                            elpBandmapStartZoomLevel_1_8MHz,
+//                                            elpBandmapStartZoomLevel_3_5MHz,
+//                                            elpBandmapStartZoomLevel_7MHz,
+//                                            elpBandmapStartZoomLevel_14MHz,
+//                                            elpBandmapStartZoomLevel_21MHz,
+//                                            elpBandmapStartZoomLevel_28MHz,
+//                                            elpBandmapStartZoomLevel_50MHz,
+//                                            elpBandmapStartZoomLevel_70MHz,
+//                                            elpBandmapStartZoomLevel_144MHz,
+//                                            elpBandmapStartZoomLevel_432MHz,
+//                                            elpBandmapStartZoomLevel_1296MHz,
+//                                            elpBandmapStartZoomLevel_2300MHz,
+//                                            elpBandmapStartZoomLevel_3_4GHz,
+//                                            elpBandmapStartZoomLevel_5_6GHz,
+//                                            elpBandmapStartZoomLevel_10GHz};
 
 
 

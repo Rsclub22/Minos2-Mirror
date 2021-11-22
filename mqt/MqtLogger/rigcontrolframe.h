@@ -31,21 +31,8 @@ namespace Ui {
     class RigControlFrame;
 }
 
-const int BANDLIST_TIMEOUT_DUR = 3000;
-
 class TxVmButtonsFrame;
 class TSingleLogFrame;
-
-class quickBandSelData
-{
-
-public:
-
-    QString band;
-    Frequency freq;
-
-
-};
 
 const int CHECK_FREQ_MATCH_CONTEST_BAND_TIMEOUT = 1500;
 
@@ -183,7 +170,6 @@ private:
     LoggerContestLog *ct = nullptr;
 
     TSingleLogFrame *tslf = nullptr;
-    //QVector<quickBandSelData> listOfBands;
     QStringList listOfBands;
 
     QMap<PubSubName, RadioDetails> allRadioDetails;
