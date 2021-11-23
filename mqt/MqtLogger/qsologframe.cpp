@@ -223,9 +223,28 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     bool ctrl = mods & Qt::ControlModifier;
     //bool alt = mods & Qt::AltModifier;
 
+    bool hasFocus = false;
+    if (Key == Qt::Key_Return || Key == Qt::Key_Enter ||Key == Qt::Key_Tab)
+    {
+        QWidget *f = QApplication::focusWidget ();
+        if(f)
+        {
+            QWidget *p = f->parentWidget();
+            while ( p)
+            {
+                if (p == this)
+                {
+                    hasFocus = true;
+                    break;
+                }
+                p = p->parentWidget();
+            }
+        }
+    }
+
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter)
     {
-        if (hasFocus())
+        if (hasFocus)
         {
             QMetaObject::invokeMethod(ui->GJVOKButton, "clicked", Qt::QueuedConnection);
             raise();
@@ -234,7 +253,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     }
     else if (Key == Qt::Key_Tab)
     {
-        if (hasFocus())
+        if (hasFocus)
         {
             if (ctrl || shift)
                 return false;
