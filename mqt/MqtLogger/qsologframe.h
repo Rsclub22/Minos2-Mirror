@@ -144,6 +144,9 @@ private:
 
     bool edit = false;
 
+    QString mySentLabelString;
+    QString theirSentLabelString;
+
     FocusWatcher *CallsignFW;
     QString CallsignLabelString;
 
