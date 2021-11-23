@@ -50,12 +50,16 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
     connect(ui->CallsignFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onCallsignEdit_textChanged);
 
+    mySentLabelString = tr("Sent by Me");
+    ui->mySentLabel->setText("<b>" + mySentLabelString);
     ui->RSTTxFrame->setup("RstTx", this);
     RSTTXLabelString = tr("RS(T)Tx(F2)");
     RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
     ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
     connect(ui->RSTTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTTXEdit_textChanged);
 
+    theirSentLabelString = tr("Sent by Them");
+    ui->theirSentLabel->setText("<b>" + theirSentLabelString);
     ui->SerTxFrame->setup("serTx", this);
     SerTXLabelString = tr("Serial Tx");
     SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
@@ -156,10 +160,12 @@ void QSOLogFrame::on_FontChanged()
     cf.setPointSize(fsi);
     ui->CallsignFrame->getTextEditEdit()->setFont(cf);
 
-    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
-    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
-    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
-    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
+    ui->mySentFrame->setFont(cf);
+//    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
+//    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
+    ui->themSentFrame->setFont(cf);
+//    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
+//    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
     ui->LocFrame->getTextEditEdit()->setFont(cf);
     ui->QTHFrame->getTextEditEdit()->setFont(cf);
 
@@ -380,6 +386,11 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
         ui->SerTxFrame->getTextEditlabel()->setText(colStr + SerTXLabelString);
     }
 
+    if ( obj == ui->RSTTxFrame->getTextEditEdit() || obj == ui->SerTxFrame->getTextEditEdit())
+    {
+        ui->mySentLabel->setText(colStr + mySentLabelString);
+    }
+
     if (obj == ui->RSTRxFrame->getTextEditEdit())
     {
         ui->RSTRxFrame->getTextEditlabel()->setText(colStr + RSTRXLabelString);
@@ -388,6 +399,11 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     if (obj == ui->SerRxFrame->getTextEditEdit())
     {
         ui->SerRxFrame->getTextEditlabel()->setText(colStr + SerRXLabelString);
+    }
+
+    if ( obj == ui->RSTRxFrame->getTextEditEdit() || obj == ui->SerRxFrame->getTextEditEdit())
+    {
+        ui->theirSentLabel->setText(colStr + theirSentLabelString);
     }
 
     if (obj == ui->LocFrame->getTextEditEdit())
@@ -2125,10 +2141,12 @@ void QSOLogFrame::updateQSODisplay()
     }
    //CallsignEdit->Enabled = false; // leave this enabled in protected to allow searching
    bool notProtected = !contest->isReadOnly();
+
    ui->RSTTxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTTxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerTxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
    ui->SerTxFrame->setVisible(contest->serialMandatoryField.getValue());
+
    ui->RSTRxFrame->setEnabled(notProtected && contest->RSTMandatoryField.getValue());
    ui->RSTRxFrame->setVisible(contest->RSTMandatoryField.getValue());
    ui->SerRxFrame->setEnabled(notProtected && contest->serialMandatoryField.getValue());
