@@ -14,7 +14,7 @@
    <string>Call Freqs</string>
   </property>
   <property name="title">
-   <string>Call Frequencies</string>
+   <string>Run Frequencies</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

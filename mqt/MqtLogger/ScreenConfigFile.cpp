@@ -13,7 +13,7 @@
 [{"name": "default",
 "rows":[
 [{"type": "Log"},{"type": "Aux"}],
-[{"type": "Rig"},{"type": "Call"},{"type": "Rot"},{"type": "RotP"}],
+[{"type": "Rig"},{"type": "Run"},{"type": "Rot"},{"type": "RotP"}],
 [{"type": "QSO"},{"type": "Crib"}],
 [{"type": "This"},{"type": "Other"},{"type": "Arch"}]
 ]}]
@@ -48,7 +48,7 @@
                   ],
                   [
                     { "type": "Rig" },
-                    { "type": "Call" },
+                    { "type": "Run" },
                     { "type": "Rot" },
                     { "type": "RotP" }
                   ],
