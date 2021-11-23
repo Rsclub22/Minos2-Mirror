@@ -19,7 +19,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctQSOEdit, QT_TR_NOOP("QSO Edit"), QT_TR_NOOP("QSO Edit")},
     {sctRigControl, QT_TR_NOOP("Rig Control"), QT_TR_NOOP("Rig Control")},
     {sctBandSwitch, QT_TR_NOOP("HF Band Switching"), QT_TR_NOOP("HF Band Switching")},
-    {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Call Freq Buttons")},
+    {sctRunButtons, QT_TR_NOOP("Call Freq Buttons"), QT_TR_NOOP("Run Freq Buttons")},
     {sctRotControl, QT_TR_NOOP("Rotator Control"), QT_TR_NOOP("Rotator Control")},
     {sctRotPresets, QT_TR_NOOP("Rotator Presets"), QT_TR_NOOP("Rotator Presets")},
     {sctThisMatch, QT_TR_NOOP("This Contest Match"), QT_TR_NOOP("This Contest Matches")},
@@ -130,7 +130,12 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
         {
             row = i;
         }
-        ui->elementTypeCombo->addItem(tr(opt.s), opt.type);
+        const char *disp = opt.s;
+        if (disp == scoptions[sctRunButtons].s)
+        {
+            disp = scoptions[sctRunButtons].hint;
+        }
+        ui->elementTypeCombo->addItem(tr(disp), opt.type);
         ui->elementTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 
@@ -188,7 +193,12 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
     {
         setType(sctNone);
     }
-    SCType t = getScreenType(ui->elementTypeCombo->currentText());
+    QString sel = ui->elementTypeCombo->currentText();
+    if (sel == tr(scoptions[sctRunButtons].hint))
+    {
+        sel = tr(scoptions[sctRunButtons].s);
+    }
+    SCType t = getScreenType(sel);
     ui->auxTypeCombo->setVisible(t == sctAux);
 
 }
