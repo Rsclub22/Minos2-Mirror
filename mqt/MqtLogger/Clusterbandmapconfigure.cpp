@@ -33,11 +33,11 @@ void ClusterBandmapConfigure::initialise()
     QGridLayout *hfLayout = new QGridLayout();
     ui->HFFrame->setLayout(hfLayout);
 
-    QGridLayout *vhfLayout = new QGridLayout();
-    ui->VHFUHFFrame->setLayout(vhfLayout);
-
     int hfRow = 0;
     int hfCol = 0;
+
+    QGridLayout *vhfLayout = new QGridLayout();
+    ui->VHFUHFFrame->setLayout(vhfLayout);
 
     int vhfRow = 0;
     int vhfCol = 0;
