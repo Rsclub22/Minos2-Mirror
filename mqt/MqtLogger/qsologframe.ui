@@ -513,9 +513,6 @@ to</string>
        <layout class="QHBoxLayout" name="horizontalLayout_23">
         <item>
          <widget class="QFrame" name="mySentFrame">
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
@@ -541,6 +538,19 @@ to</string>
                 <string/>
                </property>
               </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_12">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
              </item>
             </layout>
            </item>
@@ -596,7 +606,7 @@ to</string>
            <enum>QFrame::Raised</enum>
           </property>
           <property name="lineWidth">
-           <number>2</number>
+           <number>4</number>
           </property>
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -606,7 +616,7 @@ to</string>
         <item>
          <widget class="QFrame" name="themSentFrame">
           <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
+           <enum>QFrame::NoFrame</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>

@@ -401,10 +401,6 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
         ui->SerRxFrame->getTextEditlabel()->setText(colStr + SerRXLabelString);
     }
 
-    if ( obj == ui->RSTRxFrame->getTextEditEdit() || obj == ui->SerRxFrame->getTextEditEdit())
-    {
-        ui->theirSentLabel->setText(colStr + theirSentLabelString);
-    }
 
     if (obj == ui->LocFrame->getTextEditEdit())
     {
@@ -414,6 +410,12 @@ void QSOLogFrame::focusChange(QObject *obj, bool in, QFocusEvent *event)
     if (obj == ui->QTHFrame->getTextEditEdit())
     {
         ui->QTHFrame->getTextEditlabel()->setText(colStr + QTHLabelString);
+    }
+
+    if ( obj == ui->RSTRxFrame->getTextEditEdit() || obj == ui->SerRxFrame->getTextEditEdit() ||
+         obj == ui->LocFrame->getTextEditEdit() || obj == ui->QTHFrame->getTextEditEdit())
+    {
+        ui->theirSentLabel->setText(colStr + theirSentLabelString);
     }
 
     if (obj == ui->commentsFrame->getTextEditEdit())
