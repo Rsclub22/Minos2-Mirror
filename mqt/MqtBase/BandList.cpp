@@ -509,11 +509,10 @@ void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
     bands.clear();
     for ( auto const &b: qAsConst(bandList ))
     {
-        // don't use bands > 10GHz (can't support Freq display)
-        if ( b->uk != "24 GHz" && b->uk != "47 GHz"
-             && b->uk != "76 GHz" && b->uk != "120 GHz"
-             && b->uk != "134 GHz" && b->uk != "248 GHz")
+        // don't use bands > 1THz (can't support Freq display)
+        // (fortunate that there aren't any!)
 
+        if (b->fHigh < Frequency(1000000000000))
         {
             if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
                     || b->getType().compare("MWave", Qt::CaseInsensitive) == 0

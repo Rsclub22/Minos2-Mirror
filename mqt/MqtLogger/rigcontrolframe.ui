@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>744</width>
-    <height>202</height>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -127,10 +127,10 @@
              <enum>Qt::ClickFocus</enum>
             </property>
             <property name="inputMask">
-             <string>99.999.999.999</string>
+             <string>999.999.999.999</string>
             </property>
             <property name="text">
-             <string>00.000.000.000</string>
+             <string>000.000.000.000</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
