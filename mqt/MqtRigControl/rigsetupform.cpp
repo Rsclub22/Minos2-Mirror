@@ -275,8 +275,7 @@ void RigSetupForm::setupRadioModel(QString radioModel)
              setTransVertSwVisible(true);
              setEnableLocalTransVertSwVisible(true);
              QStringList tvList = radioData->transVertSettings.keys();
-             //for (int i = 0; i < radioData->numTransverters; i++)
-             foreach(const auto &tv, tvList)
+             for(const auto &tv: qAsConst(tvList))
              {
                  transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
              }
@@ -836,8 +835,7 @@ void RigSetupForm::enableTransVertSwSel(bool /*flag*/)
     {
         radioData->enableTransSwitch = checked;
         QStringList tvList = radioData->transVertSettings.keys();
-        //for (int i = 0; i < radioData->numTransverters; i++)
-        foreach(const auto &tv, tvList)
+        for(const auto &tv: qAsConst(tvList))
         {
             transVertTab.value(tv)->setEnableTransVertSwBoxVisible(checked);
         }
@@ -866,8 +864,7 @@ void RigSetupForm::setEnableTransVertSw(bool b)
     ui->enableTransVertSw->setChecked(b);
 
     QStringList tvList = radioData->transVertSettings.keys();
-    //for (int i = 0; i < radioData->numTransverters; i++)
-    foreach(const auto &tv, tvList)
+    for(const auto &tv: qAsConst(tvList))
     {
         transVertTab.value(tv)->setEnableTransVertSwBoxVisible(b);
     }
@@ -1503,24 +1500,24 @@ void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
     if (hfFlag)
     {
-       foreach (auto &b, bands)
+       for (const auto &b: qAsConst(bands))
        {
-           if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+           if (allSupBandsChkBoxesMap.contains(b->name()))
            {
-                allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->setVisible(visible);
+                allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
 
            }
        }
     }
     else
     {
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            if (b.data()->getType() != HF_BANDTYPE)
+            if (b->getType() != HF_BANDTYPE)
             {
-                if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+                if (allSupBandsChkBoxesMap.contains(b->name()))
                 {
-                    allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->setVisible(visible);
+                    allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
 
                 }
             }
@@ -1536,11 +1533,11 @@ bool RigSetupForm::isAnySupportBandChecked()
 {
     if (hfFlag)
     {
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+            if (allSupBandsChkBoxesMap.contains(b->name()))
             {
-                if (allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->isChecked())
+                if (allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->isChecked())
                 {
                     return true;
                 }
@@ -1549,13 +1546,13 @@ bool RigSetupForm::isAnySupportBandChecked()
     }
     else
     {
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            if (b.data()->getType() != HF_BANDTYPE)
+            if (b->getType() != HF_BANDTYPE)
             {
-                if (allSupBandsChkBoxesMap.contains(b.data()->name()))
+                if (allSupBandsChkBoxesMap.contains(b->name()))
                 {
-                    if (allSupBandsChkBoxesMap.value(b.data()->name()).supBandChkBox->isChecked())
+                    if (allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->isChecked())
                     {
                         return true;
                     }
@@ -1782,18 +1779,6 @@ void RigSetupForm::changeBand()
     radioData->transVertSettings.insert(transVertName, currentParams);
     radioData->transVertSettings.value(transVertName)->band = transVertName;
     radioData->transVertSettings.value(transVertName)->transVertName = transVertName;
-
-
-    //foreach (auto &b, bands)
-    //{
-    //     if (b->name() == transVertName)
-    //     {
-    //       radioData->transVertSettings.value(transVertName)->fLow = b->fLow;
-    //       radioData->transVertSettings.value(transVertName)->fHigh = b->fHigh;
-    //     }
-   // }
-
-
 
 
     transVertTab.remove(currentTransVertName);

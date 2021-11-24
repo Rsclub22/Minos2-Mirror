@@ -290,7 +290,7 @@ bool RPCParamStruct::getMember( const QString &mname, QSharedPointer<RPCParam>&p
 {
     for ( auto const &i: elements )
    {
-      if ( i->name == mname )
+      if ( i->name.compare(mname, Qt::CaseInsensitive) == 0 )
       {
          p = i;
          return true;

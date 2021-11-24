@@ -91,6 +91,17 @@ class BandInfo
         {
             return uk;
         }
+        static QString normalise(const QString s)
+        {
+            QString n = s;
+            n.remove('\x20').replace('H', 'h').replace('.', '_');
+            return n;
+        }
+        QString normalisedName() const
+        {
+            QString n = normalise(uk);
+            return n;
+        }
 };
 class TiXmlElement;
 class BandList

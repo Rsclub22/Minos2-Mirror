@@ -100,10 +100,10 @@ public:
 
         BandList::getBandList().loadAllBands(bands);
 
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
 
-            supportBands.insert(b.data()->name(), false);
+            supportBands.insert(b->name(), false);
         }
     }
 
@@ -111,9 +111,9 @@ public:
     SupportBands& operator=(const SupportBands &sbd)
     {
 
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            supportBands.insert(b.data()->name(), sbd.getSupportBandFlag(b.data()->name()));
+            supportBands.insert(b->name(), sbd.getSupportBandFlag(b->name()));
         }
 
         return *this;
@@ -133,9 +133,9 @@ public:
 
     void clear()
     {
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            supportBands.insert(b.data()->name(), false);
+            supportBands.insert(b->name(), false);
         }
     }
 

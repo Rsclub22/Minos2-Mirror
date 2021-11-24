@@ -408,7 +408,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     Frequency dvhffreq(ifreq * 1000000);
     Frequency dmwvfreq(ifreq * 1000000000);
 
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         if (
                 sfreq.compare(b->uk ) == 0
@@ -422,7 +422,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             return true;
         }
     }
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         QString bandType = b->getType();
         Frequency bfhigh = b->fHigh;
@@ -460,7 +460,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                     }
                 }
     }
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
         if ( b->uk.indexOf ( sfreq ) != -1
@@ -480,7 +480,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 
 bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
-   foreach ( auto const &b, bandList )
+   for ( auto const &b: qAsConst(bandList ))
    {
       if (b->fLow <= freq && b->fHigh >= freq)
       {
@@ -507,7 +507,7 @@ QString BandList::getBand(const Frequency &freq)
 void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
     bands.clear();
-    foreach ( auto const &b,  bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         // don't use bands > 10GHz (can't support Freq display)
         if ( b->uk != "24 GHz" && b->uk != "47 GHz"
@@ -538,11 +538,11 @@ bool BandList::checkValidBand(Frequency freq)
 
 QString BandList::findType(const QString &band) const
 {
-    for (auto const &b:bandList)
+    for (const auto &b: qAsConst(bandList))
     {
-        if (b.data()->uk == band)
+        if (b->uk == band)
         {
-            return b.data()->getType();
+            return b->getType();
         }
 
     }
@@ -551,11 +551,11 @@ QString BandList::findType(const QString &band) const
 }
 QString BandList::findType(const Frequency &freq) const
 {
-    for (auto const &b:bandList)
+    for (const auto &b: qAsConst(bandList))
     {
-        if (freq >= b.data()->fLow && freq <= b.data()->fHigh)
+        if (freq >= b->fLow && freq <= b->fHigh)
         {
-            return b.data()->getType();
+            return b->getType();
         }
     }
     return "";

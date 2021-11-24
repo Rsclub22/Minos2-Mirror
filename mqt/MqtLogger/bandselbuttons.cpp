@@ -88,9 +88,9 @@ void BandSelButtons::readPresetFreqsFromIni(const QVector <QSharedPointer <BandI
 
 void BandSelButtons::buildBandButtonLabels()
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         QStringList bl = band.split('\x20');
         if(bl.count() == 2)
         {
@@ -220,11 +220,11 @@ void BandSelButtons::setPreviousFreq(QString mode, Frequency freq)
 
 bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand )
 {
-    for (auto const &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (b->fLow <= freq && b->fHigh >= freq)
         {
-            foundBand = b.data()->uk;
+            foundBand = b->uk;
             return true;
         }
         else
@@ -324,11 +324,11 @@ void BandSelButtons::setPrevFreqToolTip(QString mode)
 
 bool BandSelButtons::checkButtonsAvailable(QString bandType)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (b.data()->getType() == bandType)
+        if (b->getType() == bandType)
         {
-            if (isBandAvailable(b.data()->uk))
+            if (isBandAvailable(b->uk))
             {
                 return true;
             }
@@ -340,11 +340,11 @@ bool BandSelButtons::checkButtonsAvailable(QString bandType)
 
 QString BandSelButtons::getBandType(const QString selectedBand)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (b.data()->uk == selectedBand)
+        if (b->uk == selectedBand)
         {
-            return b.data()->getType();
+            return b->getType();
         }
 
     }

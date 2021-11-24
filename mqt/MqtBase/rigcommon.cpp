@@ -101,7 +101,8 @@ void fillPortsInfo(QComboBox* comportSel)
 
     comportSel->addItem("");
 
-    foreach (auto const &info, QSerialPortInfo::availablePorts())
+    QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
+    for (auto const &info: qAsConst(availablePorts))
     {
         QStringList list;
         description = info.description();
@@ -128,7 +129,8 @@ void fillPortsInfo(QComboBox* comportSel)
 
 void getListOfComports(QStringList &listOfAvailComports)
 {
-    foreach (auto const &info, QSerialPortInfo::availablePorts())
+    QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
+    for (auto const &info: qAsConst(availablePorts))
     {
 
         listOfAvailComports << info.portName();
@@ -140,7 +142,8 @@ bool isComportAvail(const QString comport)
 {
     QStringList availComports;
 
-    foreach (auto const &info, QSerialPortInfo::availablePorts())
+    QList<QSerialPortInfo> availablePorts = QSerialPortInfo::availablePorts();
+    for (auto const &info: qAsConst(availablePorts))
     {
 
         availComports << info.portName();
@@ -326,7 +329,7 @@ bool scatParams::transVertSettingsNotEqual(const QMap<QString, QSharedPointer<Tr
         return true;
     }
 
-    foreach(const auto &tv, tvs1List)
+    for (const auto &tv: qAsConst(tvs1List))
     {
         if(transVertSettings.value(tv)->notEqual(tvs2.value(tv)))
         {

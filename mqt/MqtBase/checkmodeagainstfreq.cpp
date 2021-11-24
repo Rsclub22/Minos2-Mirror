@@ -17,7 +17,7 @@ QString checkModeAgainstFreq::getMode(const QString &band, Frequency freq)
         {
 
             ModeFreqDetail<Frequency> freqs = i.value();
-            foreach (auto const &freqLimits, freqs.freq)
+            for (auto const &freqLimits: qAsConst(freqs.freq))
             {
                 if (freqLimits.count() == 0)
                     continue;

@@ -87,11 +87,11 @@ void ClusterClientFilterSettings::initFilterSettings(const QVector<QSharedPointe
    bfs.ignoreDistanceFlag = false;
    bfs.ignoreEmptyDistanceFlag = false;
 
-   for (auto const &b: bands)
+   for (const auto &b: qAsConst(bands))
    {
 
-       bfs.bandType = b.data()->getType();
-       bandFilterSettings.insert(b.data()->uk, bfs);
+       bfs.bandType = b->getType();
+       bandFilterSettings.insert(b->uk, bfs);
    }
 
 
@@ -562,7 +562,7 @@ QString getMode(checkModeAgainstFreq* modeBandPlan, Frequency freq, const QStrin
 
 bool getBand(QVector<QSharedPointer<BandInfo> > &bands, Frequency fr, QString &band, QString &bandType)
 {
-    foreach (auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (fr <= b->fHigh && fr >= b->fLow)
         {

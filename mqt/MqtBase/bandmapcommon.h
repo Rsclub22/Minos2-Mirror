@@ -73,13 +73,12 @@ public:
         QVector <QSharedPointer<BandInfo> > bands;
         BandList::getBandList().loadAllBands(bands);
 
-        for (int i = 0; i < bands.count(); i++)
+        for(const auto &b: qAsConst(bands))
         {
-            QString profile = bands[i].data()->uk;
-            profile.remove('\x20').replace('.', '_');
+            QString profile = b->normalisedName();
             profile = "bandmapStartZoomLevel_" + profile;
-            startZoomLevelIdByBand.insert(bands[i].data()->uk, profile);
-            startZoomLevelDefaultByBand.insert(bands[i].data()->uk, bands[i].data()->zoomDefault);
+            startZoomLevelIdByBand.insert(b->uk, profile);
+            startZoomLevelDefaultByBand.insert(b->uk, b->zoomDefault);
         }
     }
 
@@ -92,12 +91,6 @@ public:
         }
 
         return startZoomLevelIdByBand.value("1.8 MHz");
-    }
-
-    QString getStartZoomLevelName(QString band)
-    {
-        QString name = "bandmapStartZoomLevel_" + band.remove('\x20').replace('.', '_');
-        return name;
     }
 
     int getStartZoomLevelDefault(QString band)

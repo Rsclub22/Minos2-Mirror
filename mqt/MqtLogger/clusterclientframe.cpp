@@ -51,9 +51,9 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     traceMsg(QString("Starting"));
 
     BandList::getBandList().loadAllBands(bands);
-    for (auto const &b:qAsConst(bands))
+    for (auto const &b: qAsConst(bands))
     {
-        clusterBands << b.data()->uk;
+        clusterBands << b->uk;
     }
 
 
@@ -199,7 +199,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    foreach(auto const &m, filterProxyModelList)
+    for(auto const &m: qAsConst(filterProxyModelList))
     {
         delete m;
     }
@@ -949,7 +949,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         Callsign mcs;
         mcs.setFullCall(callsign);
 
-        foreach ( auto const &c, ct->ctList )
+        for ( auto const &c: qAsConst( ct->ctList ))
         {
             unsigned short cf = c.wt->contactFlags.getValue();
             if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
@@ -1191,9 +1191,9 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
 
-                for (auto &b:bands)
+                for (const auto &b: qAsConst(bands))
                 {
-                    QString band = b.data()->uk;
+                    QString band = b->uk;
                     DefaultDistanceIniName ddin = defaultDistIniNames.getDefaultDistIniName(band);
                     QString key = ddin.defaultDistanceName;
                     int dist = config.value(key, DEFAULT_FILTER_DISTANCE).toInt();

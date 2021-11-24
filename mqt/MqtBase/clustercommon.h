@@ -491,14 +491,13 @@ public:
     {
         DefaultDistanceIniName ddin;
 
-        for (auto &b:bands)
+        for (const auto &b:qAsConst( bands))
         {
 
-            QString band = b.data()->uk;
-            QString iniBand = band;
-            iniBand.remove("\x20").replace(".", "_");   // remove/replace modify the QString
+            QString band = b->uk;
+            QString iniBand = b->normalisedName();
             ddin.defaultDistanceName = QString("defaultFilterDistance_").append(iniBand);
-            ddin.bandType = b.data()->getType();
+            ddin.bandType = b->getType();
             defaultDistanceIniNames.insert(band, ddin);
         }
     }

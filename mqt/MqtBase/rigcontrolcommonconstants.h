@@ -292,7 +292,6 @@ bool readEnableSerialBandSwitchFromIni();
 void writeEnableSerialBandSwitchDataToIni(bool data);
 QString readSerialComportBandSwitchFromIni();
 void writeSerialComportBandSwitchDataToIni(QString comport);
-QString convertBandForIni(QString band);
 
 class RadioSettingsDialogChangeFlag
 {

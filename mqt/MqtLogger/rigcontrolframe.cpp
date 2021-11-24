@@ -1485,7 +1485,7 @@ void RigControlFrame::setRadioList()
                ui->radioNameSel->addItem("");
             }
 
-           foreach (const auto &rn, listOfRadios)
+           for (const auto &rn: qAsConst(listOfRadios))
            {
                if (ui->radioNameSel->findText(rn) == -1)
                {

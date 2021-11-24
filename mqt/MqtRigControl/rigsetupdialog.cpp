@@ -262,10 +262,9 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     radioTab.value(tabName)->setMgmMode(availRadioData.value(tabName)->mgmMode);
 
-    //for (int i =0; i < radioTab[tabNum]->getRadioData()->supportBands.count(); i++)
-    foreach(auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-       radioTab.value(tabName)->setSupportBandChkBox(b.data()->name(), availRadioData.value(tabName)->supportBands.getSupportBandFlag(b.data()->name()));
+       radioTab.value(tabName)->setSupportBandChkBox(b->name(), availRadioData.value(tabName)->supportBands.getSupportBandFlag(b->name()));
     }
 
 
@@ -288,11 +287,9 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     if (availRadioData.value(tabName)->transVertSettings.count() > 0 )
     {
-        //for (int t = 0; t < availRadioData.value(tabName)->numTransverters; t++)
         QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
-        foreach(const auto &tv, tvList)
+        for(const auto &tv: qAsConst(tvList))
         {
-            //radioTab.value(tabName)->setTransVertTabText(tv, tvList);
             radioTab.value(tabName)->loadTransVertTab(tv);
         }
 
@@ -321,7 +318,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setEnableLocalTransVertSwVisible(true);
 
         QStringList tvList = availRadioData.value(tabName)->transVertSettings.keys();
-        foreach(const auto &tv, tvList)
+        for(const auto &tv: qAsConst(tvList))
         {
             radioTab.value(tabName)->transVertTab.value(tv)->setEnableTransVertSwBoxVisible(true);
         }
@@ -409,7 +406,7 @@ void RigSetupDialog::addRadio()
 
 void RigSetupDialog::getAvailRadiosList(QStringList &availRadios)
 {
-    foreach (const auto &rd, availRadioData)
+    for (const auto &rd: qAsConst(availRadioData))
     {
         if (!rd->markForDeletion)
         {
@@ -467,7 +464,7 @@ void RigSetupDialog::removeRadio()
     // allow for adding back and deleting the same radio name
     QList<QString> keys = availRadioData.keys();
     int keyCount = 0;
-    foreach(const auto &k, keys)
+    for (const auto &k: qAsConst(keys))
     {
         if (k.contains(newName))
         {
@@ -532,7 +529,7 @@ void RigSetupDialog::editRadioName()
             QStringList avrList = availRadioData.keys();
 
             // does the name already exist
-            foreach (const auto &r, avrList)
+            for (const auto &r: qAsConst(avrList))
             {
                 if (newName == availRadioData.value(r)->radioName)
                 {
@@ -554,7 +551,7 @@ void RigSetupDialog::editRadioName()
             }
 
 
-            foreach (const auto &r, avrList)
+            for (const auto &r: qAsConst(avrList))
             {
                 if (radioName == availRadioData.value(r)->radioName)
                 {
@@ -626,7 +623,7 @@ int RigSetupDialog::comportAvial(QString radioName, QString comport)
 void RigSetupDialog::loadAvailComports()
 {
     QStringList lk = radioTab.keys();
-    foreach (auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         loadAvailComportsToTab(k);
         loadAvailPttComportsToTab(k);
@@ -699,12 +696,12 @@ bool RigSetupDialog::checkTransvertFreqInBand()
     QStringList radList = availRadioData.keys();
     QStringList outOfBandTransverts;
 
-    foreach(const auto &r, radList)
+    for(const auto &r: qAsConst(radList))
     {
         if (availRadioData.value(r)->transVertEnable)
         {
             QStringList transvertList = availRadioData.value(r)->transVertSettings.keys();
-            foreach(const auto &tv, transvertList)
+            for(const auto &tv: qAsConst(transvertList))
             {
                 QString transVertBand;
                 if (!transVerterInBand(availRadioData.value(r)->transVertSettings.value(tv), transVertBand ))
@@ -724,7 +721,7 @@ bool RigSetupDialog::checkTransvertFreqInBand()
     else
     {
         QString outofBandTransvertMsg;
-        foreach(const auto &obt, outOfBandTransverts)
+        for(const auto &obt: qAsConst(outOfBandTransverts))
         {
             QStringList radioTransVert = obt.split(':');
             if (radioTransVert.count() == 2)
@@ -749,9 +746,9 @@ bool RigSetupDialog::transVerterInBand(const QSharedPointer<TransVertParams>tvp,
 
     Frequency targetFreq = tvp->radioFreq + tvp->transVertOffset;
 
-    foreach (const auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (b.data()->uk == tvp->band)
+        if (b->uk == tvp->band)
         {
             transVertBand = tvp->band;
 
@@ -800,7 +797,7 @@ bool RigSetupDialog::checkOmniRigSupportedBands()
 void RigSetupDialog::isAnySupportedBandsAvailForOmnirig(QString &supRadNames)
 {
     QStringList lk = radioTab.keys();
-    foreach (auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         RigCapabilities rigCap = rigFactory->supported_rigs()->value(radioTab.value(k)->getRadioData()->rigModel);
         if (!rigCap.supportGetSupBands)
@@ -836,7 +833,7 @@ void RigSetupDialog::saveSettings()
 
     QStringList lk = availRadioData.keys();
     // look for deleted radios or radio name change
-    foreach (auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         if (availRadioData.value(k)->markForDeletion )
         {
@@ -862,7 +859,7 @@ void RigSetupDialog::saveSettings()
 
     // look for radios with changed name
     lk = availRadioData.keys();
-    foreach (auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         QString prevName = availRadioData.value(k)->previousRadioName;
         if (!prevName.isEmpty())
@@ -887,7 +884,7 @@ void RigSetupDialog::saveSettings()
 
 
     // look for radios with changed data
-    foreach (auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         QString fileName;
         fileName = RADIO_PATH_LOGGER + FILENAME_AVAIL_RADIOS;
@@ -915,7 +912,7 @@ void RigSetupDialog::saveSettings()
         {
 
             // look for deleted bands
-            foreach( const auto &k, iniTvKey)
+            for( const auto &k: qAsConst(iniTvKey))
             {
                 if (!tvKeys.contains(k))
                 {
@@ -930,7 +927,7 @@ void RigSetupDialog::saveSettings()
             if (availRadioData.value(k)->transVertSettingsNotEqual(savedRadioData->transVertSettings))
             {
                 dataChanged = true;
-                foreach(const auto &tv ,tvKeys)
+                for(const auto &tv: qAsConst(tvKeys))
                 {
                     saveTranVerterSetting(availRadioData.value(k), tv, configTransvert);
                 }
@@ -989,21 +986,19 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
     config.setValue("cWMemEnable", radioData->enableDisableCatFeature.cWMemEnable);
     config.setValue("catEnable", radioData->enableDisableCatFeature.catEnable);
 
-    foreach (auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
+        if (hfFlag && b->getType() == HF_BANDTYPE)
         {
-            QString name = b.data()->name();
-            name.remove('\x20').replace('H', 'h').replace('.', '_');
-            config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b.data()->name()));
+            QString name = b->normalisedName();
+            config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b->name()));
         }
         else
         {
-            if (b.data()->getType() != HF_BANDTYPE)
+            if (b->getType() != HF_BANDTYPE)
             {
-                QString name = b.data()->name();
-                name.remove('\x20').replace('H', 'h').replace('.', '_');
-                config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b.data()->name()));
+                QString name = b->normalisedName();
+                config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b->name()));
             }
         }
 
@@ -1057,21 +1052,19 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
 
 
-    foreach (auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
+        if (hfFlag && b->getType() == HF_BANDTYPE)
         {
-            QString name = b.data()->uk;
-            name.remove('\x20').replace('H', 'h').replace('.', '_');
-            radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+            QString name = b->normalisedName();
+            radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());
         }
         else
         {
-            if (b.data()->getType() != HF_BANDTYPE)
+            if (b->getType() != HF_BANDTYPE)
             {
-                QString name = b.data()->uk;
-                name.remove('\x20').replace('H', 'h').replace('.', '_');
-                radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+                QString name = b->normalisedName();
+                radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());
             }
         }
 
@@ -1088,9 +1081,9 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
     QStringList tvList = configTransVert.childGroups();
-    foreach (const auto &t, tvList)
+    for(const auto &tv: qAsConst(tvList))
     {
-        readTranVerterSetting(radioData, t, configTransVert);
+        readTranVerterSetting(radioData, tv, configTransVert);
     }
 
     radioData->rigMfg_Name = rigFactory->supported_rigs()->value(radioData->rigModel).rigManufacturer;
@@ -1174,7 +1167,7 @@ void RigSetupDialog::updateAvailRadiosToVersion2(QSettings& settings)
 QString RigSetupDialog::getRadioComPort(QString radioName)
 {
     QStringList lk = availRadioData.keys();
-    foreach (const auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         if (availRadioData.value(k)->radioName == radioName)
         {
@@ -1195,7 +1188,7 @@ void RigSetupDialog::setCurrentRadioName(QString name)
     currentRadioName = name;
     // set currentRadioName in radio tab to test remove transverter
     QStringList lk = radioTab.keys();
-    foreach (const auto &k, lk)
+    for (const auto &k: qAsConst(lk))
     {
         radioTab.value(k)->setCurrentRadioName(name);
     }

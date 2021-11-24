@@ -594,7 +594,7 @@ void QrzServerMainWindow::onConfigure()
 void QrzServerMainWindow::clusterClientServerList(QVector<ClusterServer> serverList)
 {
 
-    foreach ( auto const &s, serverList )
+    for ( auto const &s:qAsConst(serverList) )
     {
         QString state = QString(clusterStateList[s.state]) + " " + s.app + "\r\n";
         trace(QString("clusterClientServerList - state = %1").arg(state));

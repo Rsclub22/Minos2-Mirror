@@ -451,15 +451,14 @@ void RadioSettingDialog::saveRadioSettingsCheckBoxes()
 
 void RadioSettingDialog::saveBandSwData()
 {
-    foreach(auto &b, bands)
+    for(const auto &b: qAsConst(bands))
     {
         QString bandIni;
-        bandIni = b.data()->uk;
-        bandIni.remove('\x20').replace('.', '_');
+        bandIni = b->normalisedName();
         QString storedData = readBandSwitchDataFromIni(bandIni);
-        if (bandSwDetails.value(b.data()->uk).bandSwLineEdit->text() != storedData)
+        if (bandSwDetails.value(b->uk).bandSwLineEdit->text() != storedData)
         {
-            writeBandSwitchDataToIni(bandIni, bandSwDetails.value(b.data()->uk).bandSwLineEdit->text().trimmed());
+            writeBandSwitchDataToIni(bandIni, bandSwDetails.value(b->uk).bandSwLineEdit->text().trimmed());
         }
     }
 }
@@ -514,14 +513,13 @@ void RadioSettingDialog::loadSettingsToDialog()
         mgmPresetLineEditList[i]->setText(presetFreq.getPresetFreq(freqPresetData::PRESET_MODE_MGM, bands[i].data()->uk).convertFreqStrDispSingleNoTrailZero());
     }
 
-    foreach(auto &b, bands)
+    for(const auto &b: qAsConst( bands))
     {
-        QString iniBand = b.data()->uk;
-        iniBand.remove('\x20').replace('.', '_');
+        QString iniBand = b->normalisedName();
         QString bandData = readBandSwitchDataFromIni(iniBand);
-        if (bandSwDetails.contains(b.data()->uk))
+        if (bandSwDetails.contains(b->uk))
         {
-            bandSwDetails.value(b.data()->uk).bandSwLineEdit->setText(bandData);
+            bandSwDetails.value(b->uk).bandSwLineEdit->setText(bandData);
         }
 
     }
@@ -537,10 +535,10 @@ void RadioSettingDialog::loadSettingsToDialog()
 
 void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
 {
-    foreach (auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-        bandSwDetails.value(b.data()->uk).bandSwLineEdit->setEnabled(enabled);
-        bandSwDetails.value(b.data()->uk).bandSwLabel->setEnabled(enabled);
+        bandSwDetails.value(b->uk).bandSwLineEdit->setEnabled(enabled);
+        bandSwDetails.value(b->uk).bandSwLabel->setEnabled(enabled);
         ui->bandSwMsgsLabel->setEnabled(enabled);
     }
 

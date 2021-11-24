@@ -321,9 +321,9 @@ void ClusterClientFilterDialog::filtersAccepted()
 
 
     // check bandfilter changed
-    for (auto &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (filterSettings.getBandFilter(band) != bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
@@ -364,9 +364,9 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (auto &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         if (filterSettings.getBandFilter(band))
         {
             if(bandDistanceWidgets.value(band).bandLineEdit->text() != QString::number(filterSettings.getDistanceFilter(band)))
@@ -380,9 +380,9 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (filterSettings.getBandFilter(band))
         {
@@ -397,9 +397,9 @@ void ClusterClientFilterDialog::filtersAccepted()
     }
 
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (filterSettings.getBandFilter(band))
         {
@@ -532,9 +532,9 @@ void ClusterClientFilterDialog::closeEvent (QCloseEvent *event)
 
 void ClusterClientFilterDialog::copyBandFiltersToDialog()
 {
-    for (auto &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
-        bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(filterSettings.getBandFilter(b.data()->uk));
+        bandCheckBoxes.value(b->uk).bandChkBox->setChecked(filterSettings.getBandFilter(b->uk));
     }
 
 }
@@ -548,15 +548,15 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
 
 
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (b->getType() == "HF")
         {
-            bandCheckBoxes.value(b.data()->uk).bandChkBox->setVisible(state);
-            bandDistanceWidgets.value(b.data()->uk).bandLabel->setVisible(state);
-            bandDistanceWidgets.value(b.data()->uk).bandLineEdit->setVisible(state);
-            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreCheckBox->setVisible(state);
-            bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreEmptyCheckBox->setVisible(state);
+            bandCheckBoxes.value(b->uk).bandChkBox->setVisible(state);
+            bandDistanceWidgets.value(b->uk).bandLabel->setVisible(state);
+            bandDistanceWidgets.value(b->uk).bandLineEdit->setVisible(state);
+            bandDistanceWidgets.value(b->uk).distFilterIgnoreCheckBox->setVisible(state);
+            bandDistanceWidgets.value(b->uk).distFilterIgnoreEmptyCheckBox->setVisible(state);
         }
     }
 
@@ -686,11 +686,11 @@ void ClusterClientFilterDialog::clearAllFilters()
 
 void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, bool state)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (b->getType() == bandType)
         {
-            bandCheckBoxes.value(b.data()->uk).bandChkBox->setChecked(state);
+            bandCheckBoxes.value(b->uk).bandChkBox->setChecked(state);
         }
     }
 
@@ -698,11 +698,11 @@ void ClusterClientFilterDialog::setBandsCheckBox(QString bandType, bool state)
 
 bool ClusterClientFilterDialog::areAnyBandsChecked(QString bandType)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (b->getType() == bandType)
         {
-            if (bandCheckBoxes.value(b.data()->uk).bandChkBox->isChecked())
+            if (bandCheckBoxes.value(b->uk).bandChkBox->isChecked())
             {
                 return true;
             }
@@ -716,9 +716,9 @@ bool ClusterClientFilterDialog::areAnyBandsChecked(QString bandType)
 void ClusterClientFilterDialog::restoreBands()
 {
 
-    for (auto &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (filterSettings.getBandFilter(band))
         {
@@ -1252,9 +1252,9 @@ void ClusterClientFilterDialog::importFilterToWidgetList(QStringList &listOfFilt
 void ClusterClientFilterDialog::enableDistanceFields()
 {
 
-    for (auto &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
@@ -1379,9 +1379,9 @@ void ClusterClientFilterDialog::setDefDistances(QString bandType)
 
 
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if (b->getType() == bandType && bandCheckBoxes.contains(band))
         {
@@ -1441,9 +1441,9 @@ void ClusterClientFilterDialog::onMwClearAllIgnorePbClicked()
 
 void ClusterClientFilterDialog::setIgnoreDistCheckBox(QString bandType, bool state)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
 
         if(b->getType() == bandType)
         {
@@ -1493,13 +1493,13 @@ void ClusterClientFilterDialog::onMwClearAllEmptyDistPbClicked()
 
 void ClusterClientFilterDialog::setEmptyDistCheckBox(QString bandType, bool state)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
         if(b->getType() == bandType)
         {
-            if (bandCheckBoxes.value(b.data()->uk).bandChkBox->isChecked())
+            if (bandCheckBoxes.value(b->uk).bandChkBox->isChecked())
             {
-               bandDistanceWidgets.value(b.data()->uk).distFilterIgnoreEmptyCheckBox->setChecked(state);
+               bandDistanceWidgets.value(b->uk).distFilterIgnoreEmptyCheckBox->setChecked(state);
             }
         }
 

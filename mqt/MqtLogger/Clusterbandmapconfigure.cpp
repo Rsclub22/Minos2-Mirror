@@ -196,9 +196,9 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 
 QString ClusterBandmapConfigure::findBandKey(QLineEdit *distLineEdit)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         if (distanceValues.value(band).distLineEdit == distLineEdit)
         {
             return band;
@@ -223,9 +223,9 @@ void ClusterBandmapConfigure::saveDistances()
     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)
         {
             DefaultDistanceIniName s = defaultDistIniNames.getDefaultDistIniName(band);
