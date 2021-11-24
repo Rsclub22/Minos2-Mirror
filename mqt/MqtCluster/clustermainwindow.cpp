@@ -2717,8 +2717,8 @@ void ClusterMainWindow::saveBandFilterSettings()
 
     for (auto const &b: qAsConst(bands))
     {
-        QString band = b->normalisedName();
-        QString iniBandName = band;
+        QString band = b->name();
+        QString iniBandName = b->normalisedName();
         config.setValue(QString("bandFilter_%1").arg(iniBandName), filterSettings.getBandFilter(band));
     }
 
