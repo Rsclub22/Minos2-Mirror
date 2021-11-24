@@ -50,7 +50,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     traceMsg(QString("Starting"));
 
-    QVector<QSharedPointer<BandInfo> > bands;
     BandList::getBandList().loadAllBands(bands);
     for (auto const &b:qAsConst(bands))
     {
@@ -79,7 +78,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     spotQueue.clear();
 
-    BandList::getBandList().loadAllBands(bands);
     filterSettings.initFilterSettings(bands);
 
     checkNewFilters = new QTimer(this);

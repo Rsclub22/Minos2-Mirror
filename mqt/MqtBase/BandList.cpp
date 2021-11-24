@@ -506,7 +506,7 @@ QString BandList::getBand(const Frequency &freq)
 
 void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
 {
-
+    bands.clear();
     foreach ( auto const &b,  bandList )
     {
         // don't use bands > 10GHz (can't support Freq display)

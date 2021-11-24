@@ -222,7 +222,7 @@ private slots:
 
     void onVhfClearAllEmptyDistPbClicked();
 
-    void onBandChkBoxChecked(QCheckBox * bandChkBox);
+    void onBandChkBoxChecked();
     void onFilterTabIndexChanged(int idx);
     void onDistanceFilterTabIndexChanged(int idx);
 
