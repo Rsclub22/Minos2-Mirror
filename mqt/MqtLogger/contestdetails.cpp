@@ -24,9 +24,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     saveContestOK(false), suppressProtectedOnClick(false),
     noMultRipple(false)
 {
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trAllHf = tr("All HF");
 

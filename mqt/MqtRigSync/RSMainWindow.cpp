@@ -22,11 +22,10 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     wsjtxLink(parent)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(&stdinReader,&StdInReader::stdinLine, this, &RSMainWindow::onStdInRead);
     stdinReader.start();
-
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
 

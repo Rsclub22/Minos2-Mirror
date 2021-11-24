@@ -100,7 +100,6 @@ SOURCES += \
     tloccalcform.cpp \
     tlogcontainer.cpp \
     tmanagelistsdlg.cpp \
-    tminosbandchooser.cpp \
     tqsoeditdlg.cpp \
     tsettingseditdlg.cpp \
     tsinglelogframe.cpp \
@@ -198,7 +197,6 @@ HEADERS  += \
     tloccalcform.h \
     tlogcontainer.h \
     tmanagelistsdlg.h \
-    tminosbandchooser.h \
     tqsoeditdlg.h \
     tsettingseditdlg.h \
     tsinglelogframe.h \
@@ -270,7 +268,6 @@ FORMS    += \
     tloccalcform.ui \
     tlogcontainer.ui \
     tmanagelistsdlg.ui \
-    tminosbandchooser.ui \
     tqsoeditdlg.ui \
     TSessionManager.ui \
     tsettingseditdlg.ui \
