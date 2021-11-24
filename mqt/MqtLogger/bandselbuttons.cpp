@@ -27,7 +27,6 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     bandSelGridLayout = _bandSelGrid;
     setupButtons();
 
-
     readPresetFreqsFromIni(bands);
 
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, bands);
@@ -48,32 +47,29 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
 
 void BandSelButtons::setupButtons()
 {
-
-    for (int i = 0; i < 6; i++)
+    int row = 0;
+    int col = 0;
+    for (const auto &b: qAsConst(bands))
     {
-        QToolButton *bb = new QToolButton();
-        toolButList.append(bb);
-        bb->setFocusPolicy(Qt::NoFocus);
+        if (b->getType() == "HF")
+        {
+            QToolButton *bb = new QToolButton();
+            toolButList.append(bb);
+            bb->setFocusPolicy(Qt::NoFocus);
+            bandSelGridLayout->addWidget(bb, row, col, Qt::AlignHCenter);
+            col++;
+            if (col %3 == 0)
+            {
+                row++;
+                col = 0;
+            }
+            connect(bb, &QToolButton::pressed, this, [=]() {onBandSelButtonPressed(bb);});
 
+            bb->setVisible(false);
+            QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
+            bb->setStyleSheet(buttonStyle);
+        }
     }
-
-    bandSelGridLayout->addWidget(toolButList[0], 1, 0, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[1], 1, 1, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[2], 1, 2, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[3], 2, 0, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[4], 2, 1, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[5], 2, 2, Qt::AlignHCenter);
-
-    QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
-    for (auto &tb:toolButList)
-    {
-
-        connect(tb, &QToolButton::pressed, this, [=]() {onBandSelButtonPressed(tb);});
-
-        tb->setVisible(false);
-        tb->setStyleSheet(buttonStyle);
-    }
-
 
     buildBandButtonLabels();
 
