@@ -26,6 +26,8 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapC
 
 {
     ui->setupUi(this);
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QSettings settings;
     QByteArray geometry = settings.value("BandmapClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -70,16 +72,13 @@ void BandmapClientFilterDialog::closeEvent (QCloseEvent *event)
 void BandmapClientFilterDialog::doCloseEvent()
 {
     QSettings settings;
-    settings.setValue("ClusterClientFilter/geometry", saveGeometry());
+    settings.setValue("BandmapClientFilter/geometry", saveGeometry());
 }
 
 
 void BandmapClientFilterDialog::initCheckFilterTab()
 {
-
-
     setWindowTitle("Bandmap Spot Filters");
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->bandmapFilterTab->setCurrentIndex(0);
 

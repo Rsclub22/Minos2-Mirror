@@ -39,6 +39,8 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
     settingsChangedFlag(false)
 {
     ui->setupUi(this);
+    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QSettings settings;
     QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -67,7 +69,6 @@ void ClusterClientFilterDialog::doCloseEvent()
 void ClusterClientFilterDialog::initCheckFilterTab()
 {
     setWindowTitle(tr("Cluster Spot Filters"));
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     {
         QVBoxLayout *hfLayout = new QVBoxLayout();
@@ -277,8 +278,8 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     ui->mWSelectBut->setToolTip(tr("Click to Set/Reset all Microwave Bands"));
     ui->modeSelectBut->setToolTip(tr("Click to Set/Reset all Modes"));
 
-    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){filtersAccepted();});
-    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){filtersRejected();});
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &ClusterClientFilterDialog::filtersAccepted);
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &ClusterClientFilterDialog::filtersRejected);
 
     connect(ui->ClusterClientFilterTab, &QTabWidget::currentChanged,  this, [=](int index){onFilterTabIndexChanged(index);});
     connect(ui->filterDistancesTab,  &QTabWidget::currentChanged,  this, [=](int index){onDistanceFilterTabIndexChanged(index);});

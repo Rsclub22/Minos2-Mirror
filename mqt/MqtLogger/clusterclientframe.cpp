@@ -512,36 +512,30 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, bands, clusterModes, this);
+    ClusterClientFilterDialog filterSetup(ct, filterSettings, bands, clusterModes, this);
 
-    filterSetup->exec();
-    if (filterSetup->getSettingsChangedFlag())
+    filterSetup.exec();
+    if (filterSetup.getSettingsChangedFlag())
     {
-        filterSettings = filterSetup->getFilterSettings();
+        filterSettings = filterSetup.getFilterSettings();
         //update views..
-        if (filterSetup->getBandFilterChangedFlag()
-            || filterSetup->getModeFilterChangedFlag()
-            || filterSetup->getDistanceFilterChangedFlag()
-            || filterSetup->getIgnoreDistChangedFlag()
-            || filterSetup->getIgnoreEmptyDistChangedFlag())
+        if (filterSetup.getBandFilterChangedFlag()
+            || filterSetup.getModeFilterChangedFlag()
+            || filterSetup.getDistanceFilterChangedFlag()
+            || filterSetup.getIgnoreDistChangedFlag()
+            || filterSetup.getIgnoreEmptyDistChangedFlag())
         {
             dxSpotProxyModel->setFilterRegExp("");
         }
-        else if (filterSetup->getCallsignFilerChangedFlag())
+        else if (filterSetup.getCallsignFilerChangedFlag())
         {
             callSignProxyModel->setFilterRegExp("");
         }
-        else if (filterSetup->getLocatorFilterChangedFlag())
+        else if (filterSetup.getLocatorFilterChangedFlag())
         {
             locatorProxyModel->setFilterRegExp("");
         }
-
     }
-
-
-    filterSetup->close();
-    delete filterSetup;
-
 }
 
 
