@@ -20,7 +20,8 @@
 #include <QColor>
 #include "rigcontrolcommonconstants.h"
 
-namespace maskData {
+namespace maskData
+{
 
 const QStringList freqMask = { "9.999",
                          "99.999",
@@ -32,22 +33,10 @@ const QStringList freqMask = { "9.999",
                          "99.999.999.999",
                          "999.999.999.999"
                              };
-//enum freqMask_lookup {
-//                  KHZ = 0,              /* 9 Khz   */
-//                  KHZ99,        		/* 99 khz  */
-//                  KHZ999,        		/* 999 khz */
-//                  MHZ,                  /* 9 Mhz   */
-//                  MHZ99,        		/* 99 Mhz  */
-//                  MHZ999,       		/* 999 Mhz */
-//                  GHZ,                  /* Ghz     */
-//                  GHZ99,                /* Ghz 99  */
-//                  GHZ999                /* Ghz 999  */
-//};
-
-
 }
 
-namespace memDefData {
+namespace memDefData
+{
 
 const QString DEFAULT_CALLSIGN = "";
 //const QString DEFAULT_FREQ = "0000000000";
@@ -59,7 +48,8 @@ const QString DEFAULT_TIME = "00:00";
 
 }
 
-namespace memoryData {
+namespace memoryData
+{
 
 class  memData
 {
@@ -117,7 +107,8 @@ public:
 }
 
 
-namespace runButData {
+namespace runButData
+{
 
 const int NUM_RUNBUTTONS = 2;
 
