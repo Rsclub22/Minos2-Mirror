@@ -2405,7 +2405,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="636"/>
+        <location filename="../qsologframe.cpp" line="638"/>
         <source>Catch-up (Post Entry)</source>
         <translation>Rattrapage (post-entrée)</translation>
     </message>
@@ -2415,7 +2415,12 @@ to</source>
         <translation>Premier QSO non rempli</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="791"/>
+        <location filename="../qsologframe.ui" line="347"/>
+        <source>Run</source>
+        <translation type="unfinished">Run</translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.ui" line="829"/>
         <source>Last Spot Sent: </source>
         <translation>Dernier Spot envoyé: </translation>
     </message>
@@ -2440,22 +2445,22 @@ to</source>
         <translation>Heure</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="730"/>
+        <location filename="../qsologframe.ui" line="768"/>
         <source>QRZ</source>
         <translation>QRZ</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="740"/>
+        <location filename="../qsologframe.ui" line="778"/>
         <source>Mark Freq</source>
         <translation>Noter la fréquence</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="750"/>
+        <location filename="../qsologframe.ui" line="788"/>
         <source>Save Freq</source>
         <translation>Enregistrer la fréquence</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="760"/>
+        <location filename="../qsologframe.ui" line="798"/>
         <source>Tuning - Add Map</source>
         <translation>Réglage - ajouter à Bandmap</translation>
     </message>
@@ -2495,9 +2500,8 @@ to</source>
         <translation>1234</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="347"/>
         <source>Call</source>
-        <translation>Indicatif d&apos;appel</translation>
+        <translation type="vanished">Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="334"/>
@@ -2565,83 +2569,83 @@ to</source>
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="774"/>
+        <location filename="../qsologframe.ui" line="812"/>
         <source>Spot Last Logged ()</source>
         <translation>Envoyer un spot pour le dernière enregistrée</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="784"/>
+        <location filename="../qsologframe.ui" line="822"/>
         <source>Spot Current</source>
         <translation>Envoyer un spot pour le courant???</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="844"/>
+        <location filename="../qsologframe.ui" line="882"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translation>Enregistrer le QSO ou passer au champ vide suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="847"/>
+        <location filename="../qsologframe.ui" line="885"/>
         <source>Log</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="857"/>
+        <location filename="../qsologframe.ui" line="895"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation>Forcer l&apos;enregistrement du QSO, même lorsqu&apos;il est incomplet</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="860"/>
+        <location filename="../qsologframe.ui" line="898"/>
         <source>Force...</source>
         <translation>Forcer...</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="876"/>
+        <location filename="../qsologframe.ui" line="914"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="886"/>
+        <location filename="../qsologframe.ui" line="924"/>
         <source>Get fields from current matching QSO</source>
         <translatorcomment>Obtenir les champs du QSO correspondant actuel</translatorcomment>
         <translation>Copier l&apos;entrée du QSO correspondant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="889"/>
+        <location filename="../qsologframe.ui" line="927"/>
         <source>Match Xfer F12</source>
         <translation>Transférer l&apos;entrée correspondante F12</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="949"/>
+        <location filename="../qsologframe.ui" line="987"/>
         <source>Insert Before</source>
         <translation>Insérer avant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="959"/>
+        <location filename="../qsologframe.ui" line="997"/>
         <source>Insert After</source>
         <translation>Insérer après</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="982"/>
+        <location filename="../qsologframe.ui" line="1020"/>
         <source>Prior</source>
         <translation>Précédent</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="992"/>
+        <location filename="../qsologframe.ui" line="1030"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="465"/>
+        <location filename="../qsologframe.cpp" line="467"/>
         <source>Return to Log</source>
         <translation>Retourner au Log</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="645"/>
+        <location filename="../qsologframe.cpp" line="647"/>
         <source>End Catch-up</source>
         <translation>Terminer rattrapage</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1913"/>
+        <location filename="../qsologframe.cpp" line="1915"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2652,57 +2656,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2109"/>
+        <location filename="../qsologframe.cpp" line="2111"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2113"/>
+        <location filename="../qsologframe.cpp" line="2115"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2117"/>
+        <location filename="../qsologframe.cpp" line="2119"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2125"/>
+        <location filename="../qsologframe.cpp" line="2127"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2436"/>
+        <location filename="../qsologframe.cpp" line="2438"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2443"/>
+        <location filename="../qsologframe.cpp" line="2445"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2474"/>
+        <location filename="../qsologframe.cpp" line="2476"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2539"/>
+        <location filename="../qsologframe.cpp" line="2541"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2541"/>
+        <location filename="../qsologframe.cpp" line="2543"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2923"/>
+        <location filename="../qsologframe.cpp" line="2925"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2958"/>
+        <location filename="../qsologframe.cpp" line="2960"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -3568,8 +3572,12 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="17"/>
+        <source>Run Frequencies</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Call Frequencies</source>
-        <translation>Fréquences d&apos;appel</translation>
+        <translation type="vanished">Fréquences d&apos;appel</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
@@ -3811,6 +3819,11 @@ Non - Ignorer les modifications</translation>
         <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Call Freq Buttons</source>
         <translation>Boutons de fréquence d&apos;appel</translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="22"/>
+        <source>Run Freq Buttons</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="23"/>
