@@ -10,6 +10,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
     ui(new Ui::ClusterBandmapConfigure)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()

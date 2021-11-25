@@ -21,7 +21,7 @@ SkyScanDialog::SkyScanDialog(QWidget *parent) :
     ui(new Ui::SkyScanDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 SkyScanDialog::~SkyScanDialog()

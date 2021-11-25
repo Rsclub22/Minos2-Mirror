@@ -146,7 +146,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(this, &BandmapClientFrame::freqDisplayClicked, this, &BandmapClientFrame::on_FreqDisplayClicked);
 
-    this->setMouseTracking(true);
+    setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, &QTimer::timeout, this, &BandmapClientFrame::mouseTimerCheckNewSpots);
 

@@ -32,8 +32,7 @@ RigMemDialog::RigMemDialog(QWidget *parent) :
     ui(new Ui::RigMemDialog)
 {
     ui->setupUi(this);
-
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->callSignLineEdit->setValidator(&ucValidator);
     ui->locatorLineEdit->setValidator(&ucValidator);

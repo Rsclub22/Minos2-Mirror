@@ -37,7 +37,8 @@ RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPoi
 
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     rigFactory = rigFactory_;
     bands = _bands;
 

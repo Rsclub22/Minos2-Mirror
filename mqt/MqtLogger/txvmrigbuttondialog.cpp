@@ -11,7 +11,7 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     ui(new Ui::TxVmRigButtonDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("TxVmRigButtonDialog/geometry").toByteArray();

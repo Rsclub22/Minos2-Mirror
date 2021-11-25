@@ -62,6 +62,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
   , ui(new Ui::TLogContainer)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->kbframe->setVisible(false);
 

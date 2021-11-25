@@ -14,6 +14,8 @@ TSessionManager::TSessionManager(QWidget *parent) :
   , inShowSessions(false)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     QSettings settings;
     QByteArray geometry = settings.value("TSessionManager/geometry").toByteArray();
     if (geometry.size() > 0)

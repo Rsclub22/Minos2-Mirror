@@ -62,6 +62,7 @@ ClusterMainWindow::ClusterMainWindow(QWidget *parent) :
     reconnectFlag(false)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // most of startup can be done immediately, so it all gets built before showing it
     doStartup();

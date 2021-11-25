@@ -67,7 +67,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     callsignDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
     locatorDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
 
-    this->setMouseTracking(true);
+    setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, &QTimer::timeout, this, [=](){mouseTimerCheckNewSpots();});
 

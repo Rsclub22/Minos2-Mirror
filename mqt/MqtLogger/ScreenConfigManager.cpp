@@ -18,6 +18,7 @@ ScreenConfigManager::ScreenConfigManager(QWidget *parent) :
     scf(ScreenConfigFile::getScreenConfigFile(parent))
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("ScreenConfigManager/geometry").toByteArray();

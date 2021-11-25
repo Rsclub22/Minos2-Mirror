@@ -833,7 +833,7 @@ bool RigMemorySortFilterProxyModel::lessThan(const QModelIndex &left,
     int lrow = left.row();
     int rrow = right.row();
 
-    RigMemoryGridModel *gridModel = dynamic_cast<RigMemoryGridModel *>(this->sourceModel());
+    RigMemoryGridModel *gridModel = dynamic_cast<RigMemoryGridModel *>(sourceModel());
     if (lrow >= gridModel->rowCount())
         return false;
     if (rrow >= gridModel->rowCount())

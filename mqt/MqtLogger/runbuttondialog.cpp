@@ -28,7 +28,7 @@ RunButtonDialog::RunButtonDialog(QWidget *parent) :
     ui(new Ui::RunButtonDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->freqLineEdit->setFocus();
     // validate the input

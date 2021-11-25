@@ -17,6 +17,8 @@ AddRadioDialog::AddRadioDialog(QMap<QString, QSharedPointer<scatParams> > *avail
     ui(new Ui::AddRadioDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     availRadioData = availRadioData_;
 
     setWindowTitle(windowTitle);

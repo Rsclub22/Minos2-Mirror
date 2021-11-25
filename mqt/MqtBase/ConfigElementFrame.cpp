@@ -37,7 +37,7 @@ void ConfigElementFrame::paintEvent(QPaintEvent *event)
 }
 void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
 {
-    this->configElement = c;
+    configElement = c;
 
     localOK = c->localOK;
     remoteOK = c->remoteOK;

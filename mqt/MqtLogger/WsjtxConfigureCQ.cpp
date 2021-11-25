@@ -9,6 +9,7 @@ WsjtxConfigureCQ::WsjtxConfigureCQ(QWidget *parent) :
     ui(new Ui::WsjtxConfigureCQ)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QString testCQ;
     QString nontestCQ;

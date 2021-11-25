@@ -47,7 +47,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 {
     ui->setupUi(this);
-
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
 
@@ -1688,11 +1688,11 @@ void RigControlMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rig Control - Logger - %1").arg(appName));
+        setWindowTitle(tr("Minos Rig Control - Logger - %1").arg(appName));
     }
     else
     {
-        this->setWindowTitle(tr("Minos Rig Control - Local"));
+        setWindowTitle(tr("Minos Rig Control - Local"));
     }
 
 }

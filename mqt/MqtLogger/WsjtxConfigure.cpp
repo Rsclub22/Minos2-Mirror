@@ -14,6 +14,7 @@ WsjtxConfigure::WsjtxConfigure(QWidget *parent) :
     ui(new Ui::WsjtxConfigure)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 WsjtxConfigure::~WsjtxConfigure()

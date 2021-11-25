@@ -19,7 +19,7 @@ TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     ui(new Ui::TxVmInternalButtonDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("TxVmInternalButtonDialog/geometry").toByteArray();

@@ -1130,11 +1130,11 @@ void RotatorMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rotator Control - Logger - %1").arg(appName));
+        setWindowTitle(tr("Minos Rotator Control - Logger - %1").arg(appName));
     }
     else
     {
-        this->setWindowTitle(tr("Minos Rotator Control - Local"));
+        setWindowTitle(tr("Minos Rotator Control - Local"));
     }
 
 }

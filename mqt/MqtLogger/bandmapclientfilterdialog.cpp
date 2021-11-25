@@ -26,7 +26,7 @@ BandmapClientFilterDialog::BandmapClientFilterDialog(BaseContestLog *c, BandmapC
 
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("BandmapClientFilter/geometry").toByteArray();

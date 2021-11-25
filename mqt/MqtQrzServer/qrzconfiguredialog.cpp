@@ -23,6 +23,8 @@ QrzConfigureDialog::QrzConfigureDialog(QWidget *parent) :
     ui(new Ui::QrzConfigureDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){onAccepted();});
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){onRejected();});
 

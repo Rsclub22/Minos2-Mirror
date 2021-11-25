@@ -41,7 +41,7 @@ userClusterCommandDialog::userClusterCommandDialog(QWidget *parent, QString tabS
     ,cmdStringChanged(false)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterUserCommand/geometry").toByteArray();

@@ -33,7 +33,7 @@ SetupDialog::SetupDialog(QWidget *parent) :
     useQrzForQraChanged(false)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterSetup/geometry").toByteArray();

@@ -28,6 +28,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     , ui(new Ui::QrzServerMainWindow)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
     connect(&stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);

@@ -31,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent)
     mainWindow = this;
 
     ui->setupUi(this);
-
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(&stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);

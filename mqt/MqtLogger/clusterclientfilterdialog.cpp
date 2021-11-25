@@ -39,7 +39,7 @@ ClusterClientFilterDialog::ClusterClientFilterDialog(BaseContestLog *c, const Cl
     settingsChangedFlag(false)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterClientFilter/geometry").toByteArray();
