@@ -54,12 +54,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="232"/>
+        <location filename="../mainwindow.cpp" line="231"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="235"/>
+        <location filename="../mainwindow.cpp" line="234"/>
         <source>Recorded Files</source>
         <translation type="unfinished"></translation>
     </message>

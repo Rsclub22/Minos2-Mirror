@@ -5,7 +5,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../MainWindow.ui" line="14"/>
-        <location filename="../MainWindow.cpp" line="111"/>
+        <location filename="../MainWindow.cpp" line="112"/>
         <source>Start Minos Apps</source>
         <translation type="unfinished"></translation>
     </message>
@@ -35,22 +35,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="38"/>
+        <location filename="../MainWindow.cpp" line="39"/>
         <source>E&amp;xit Minos Application Starter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="39"/>
+        <location filename="../MainWindow.cpp" line="40"/>
         <source>Select &amp;Font...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="40"/>
+        <location filename="../MainWindow.cpp" line="41"/>
         <source>Select &amp;Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="139"/>
+        <location filename="../MainWindow.cpp" line="140"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>

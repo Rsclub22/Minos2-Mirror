@@ -87,7 +87,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="62"/>
+        <location filename="../RSMainWindow.cpp" line="61"/>
         <source>Configure...</source>
         <translation type="unfinished"></translation>
     </message>
