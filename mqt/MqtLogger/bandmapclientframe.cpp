@@ -689,12 +689,10 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     BandList blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
 
-    for (int i = 0; i < blist.bandList.count(); i++)
+    for(const auto &bi: blist.bandList)
     {
-        bi = blist.bandList[i];
         if (bi->uk == contestBandStr)
         {
-
             contestBandFlow = bi->fLow;
             contestBandFHigh = bi->fHigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);

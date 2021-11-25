@@ -33,11 +33,9 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
 
-    BandList &blist = BandList::getBandList();
-
-    for (auto &b: blist.bandList)
+    for (auto &b: bands)
     {
-        if (b->getType() == "HF")
+        if (b->getType() == "HF" )
         {
             availHfBands.append(b->uk);
         }
@@ -136,7 +134,7 @@ void BandSelButtons::setButtonsToBandType(QString bandType)
     clearAllButtonLabels();
     bandToolButList.clear();
 
-    if (bandType == bandSelButtonData::HF_BAND_TYPE && !availHfBands.isEmpty())
+    if (/*bandType == bandSelButtonData::BandList::getBandList().bandList) &&*/ !availHfBands.isEmpty())
     {
         for (int i = 0; i < availHfBands.count(); i++)
         {
@@ -336,7 +334,7 @@ bool BandSelButtons::checkButtonsAvailable(QString bandType)
 
 QString BandSelButtons::getBandType(const QString selectedBand)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: qAsConst(BandList::getBandList().bandList))
     {
         if (b->uk == selectedBand)
         {

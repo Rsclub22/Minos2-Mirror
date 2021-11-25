@@ -29,6 +29,7 @@ SOURCES += \
     AntennaDetail.cpp \
     AntennaState.cpp \
     BandList.cpp \
+    BandsSelect.cpp \
     CacheSelection.cpp \
     StartConfigManager.cpp \
     bandmapmarkerdetails.cpp \
@@ -114,6 +115,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
+    BandsSelect.h \
     StartConfigManager.h \
     bandmapmarkerdetails.h \
     base_pch.h \
@@ -207,6 +209,7 @@ HEADERS += \
 
 
 FORMS += \
+    BandsSelect.ui \
     ChatFrame.ui \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \

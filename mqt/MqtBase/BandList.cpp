@@ -189,6 +189,8 @@ bool BandList::parseFile (const QString &fname )
           return a->fLow < b->fLow;
       }
     );
+
+    readEnabled();
     return true;
 }
 
@@ -504,7 +506,7 @@ QString BandList::getBand(const Frequency &freq)
     return band;
 }
 
-void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
+void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered)
 {
     bands.clear();
     for ( auto const &b: qAsConst(bandList ))
@@ -512,7 +514,7 @@ void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
         // don't use bands > 1THz (can't support Freq display)
         // (fortunate that there aren't any!)
 
-        if (b->fHigh < Frequency(1000000000000))
+        if (b->enabled && b->fHigh < Frequency(1000000000000))
         {
             if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
                     || b->getType().compare("MWave", Qt::CaseInsensitive) == 0
@@ -597,4 +599,23 @@ bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &
         }
     }
     return false;
+}
+
+void BandList::readEnabled()
+{
+    QString filename = "./Configuration/bandsEnabled.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    for ( auto const &b: qAsConst(bandList ))
+    {
+        b->enabled = settings.value("Enabled_" + b->normalisedName(), true).toBool();
+    }
+}
+void BandList::updateEnabled()
+{
+    QString filename = "./Configuration/bandsEnabled.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    for ( auto const &b: qAsConst(bandList ))
+    {
+        settings.setValue("Enabled_" + b->normalisedName(), b->enabled);
+    }
 }

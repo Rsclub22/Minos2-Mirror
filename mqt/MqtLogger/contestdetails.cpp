@@ -229,13 +229,16 @@ void ContestDetails::setDetails(  )
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if ( (contestTransferObject->isHF()) && b->getType() == "HF")
+       if (b->enabled)
        {
-           ui->BandComboBox->addItem( b->uk );
-       }
-       if ( !contestTransferObject->isHF() && b->getType() != "HF")
-       {
-           ui->BandComboBox->addItem( b->uk );
+           if ( (contestTransferObject->isHF()) && b->getType() == "HF")
+           {
+               ui->BandComboBox->addItem( b->uk );
+           }
+           if ( !contestTransferObject->isHF() && b->getType() != "HF")
+           {
+               ui->BandComboBox->addItem( b->uk );
+           }
        }
    }
 
