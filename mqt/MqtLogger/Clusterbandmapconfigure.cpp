@@ -49,7 +49,7 @@ void ClusterBandmapConfigure::initialise()
         QLabel *qlel = new QLabel();
         qlel->setText(b->uk);
 
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE)
         {
             hfLayout->addWidget(qlel, hfRow, hfCol);
             hfLayout->addWidget(qle, hfRow, hfCol + 1);
@@ -60,7 +60,7 @@ void ClusterBandmapConfigure::initialise()
                 hfCol = 0;
             }
         }
-        else if (b->getType() == "VHF" || b->getType() == "MWAVE")
+        else if (b->getType() == VHF_BANDTYPE || b->getType() == MW_BANDTYPE)
         {
             vhfLayout->addWidget(qlel, vhfRow, vhfCol);
             vhfLayout->addWidget(qle, vhfRow, vhfCol + 1);

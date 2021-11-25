@@ -439,7 +439,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             }
         }
         else
-            if ( bandType == "VHF" )
+            if ( bandType == VHF_BANDTYPE )
             {
                 if ( dvhffreq <= bfhigh && dvhffreq >= bflow )
                 {
@@ -448,7 +448,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                 }
             }
             else
-                if ( bandType == "MWAVE" )
+                if ( bandType == MW_BANDTYPE )
                 {
                     if ( dmwvfreq <= bfhigh && dmwvfreq >= bflow )
                     {
@@ -516,9 +516,9 @@ void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
 
         if (b->enabled && b->fHigh < Frequency(1000000000000))
         {
-            if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("MWave", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("HF", Qt::CaseInsensitive) == 0)
+            if (b->getType().compare(VHF_BANDTYPE, Qt::CaseInsensitive) == 0
+                    || b->getType().compare(MW_BANDTYPE, Qt::CaseInsensitive) == 0
+                    || b->getType().compare(HF_BANDTYPE, Qt::CaseInsensitive) == 0)
 
                 bands.append(b);
         }

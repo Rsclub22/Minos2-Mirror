@@ -841,7 +841,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
                 BandList &blist = BandList::getBandList();
                 QSharedPointer<BandInfo>  bi;
                 bool bandOK = blist.findBand(band, bi);
-                if (!bandOK || bi->getType() != "HF")
+                if (!bandOK || bi->getType() != HF_BANDTYPE)
                 {
                    return res;
                 }

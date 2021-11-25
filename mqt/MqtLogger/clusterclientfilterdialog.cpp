@@ -94,15 +94,15 @@ void ClusterClientFilterDialog::initCheckFilterTab()
             ccfd.bandType = b->getType();
             bandCheckBoxes.insert(b->uk, ccfd);
 
-            if (b->getType() == "HF")
+            if (b->getType() == HF_BANDTYPE)
             {
                 hfLayout->addWidget(cb);
             }
-            else if (b->getType() == "VHF")
+            else if (b->getType() == VHF_BANDTYPE)
             {
                 vhfLayout->addWidget(cb);
             }
-            else if (b->getType() == "MWAVE")
+            else if (b->getType() == MW_BANDTYPE)
             {
                 mwLayout->addWidget(cb);
             }
@@ -137,15 +137,15 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     for (const auto &b:qAsConst(bands))
     {
         QWidget *p = nullptr;
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE)
         {
             p = ui->hfDistanceFrame;
         }
-        else if (b->getType() == "VHF")
+        else if (b->getType() == VHF_BANDTYPE)
         {
             p = ui->vhfDistanceFrame;
         }
-        else if (b->getType() == "MWAVE")
+        else if (b->getType() == MW_BANDTYPE)
         {
             p = ui->mwDistanceFrame;
         }
@@ -551,7 +551,7 @@ void ClusterClientFilterDialog::setHFVisible(bool state)
 
     for (const auto &b: qAsConst(bands))
     {
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE)
         {
             bandCheckBoxes.value(b->uk).bandChkBox->setVisible(state);
             bandDistanceWidgets.value(b->uk).bandLabel->setVisible(state);

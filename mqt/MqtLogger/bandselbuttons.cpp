@@ -35,7 +35,7 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
 
     for (auto &b: bands)
     {
-        if (b->getType() == "HF" )
+        if (b->getType() == HF_BANDTYPE )
         {
             availHfBands.append(b->uk);
         }
@@ -49,7 +49,7 @@ void BandSelButtons::setupButtons()
     int col = 0;
     for (const auto &b: qAsConst(bands))
     {
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE)
         {
             QToolButton *bb = new QToolButton();
             toolButList.append(bb);
@@ -118,7 +118,7 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
 
     for (auto &b:listOfBands)
     {
-        if (getBandType(b) == bandSelButtonData::HF_BAND_TYPE)
+        if (getBandType(b) == HF_BANDTYPE)
         {
             availHfBands.append(b);
         }
@@ -127,22 +127,20 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
 
 
 
-void BandSelButtons::setButtonsToBandType(QString bandType)
+void BandSelButtons::setButtonsToBandType()
 {
     setAllButtonsOff();
     setAllButtonsVisible(false);
     clearAllButtonLabels();
     bandToolButList.clear();
 
-    if (/*bandType == bandSelButtonData::BandList::getBandList().bandList) &&*/ !availHfBands.isEmpty())
+    for (int i = 0; i < availHfBands.count(); i++)
     {
-        for (int i = 0; i < availHfBands.count(); i++)
-        {
-            toolButList[i]->setText(bandToButtonLabels.value(availHfBands[i]));
-            toolButList[i]->setVisible(true);
-            bandToolButList.insert(availHfBands[i], toolButList[i]);
-        }
+        toolButList[i]->setText(bandToButtonLabels.value(availHfBands[i]));
+        toolButList[i]->setVisible(true);
+        bandToolButList.insert(availHfBands[i], toolButList[i]);
     }
+
     if (!selectedBand.isEmpty())
     {
         setButtonOnOff(selectedBand, true);
@@ -250,7 +248,7 @@ int BandSelButtons::selectButtonGroupAndActiveBand(const Frequency &freq)
 int BandSelButtons::selectButtonGroupAndActiveBand(const QString band)
 {
     selectedBand = band;
-    setButtonsToBandType(getBandType(band));
+    setButtonsToBandType();
     return setButtonOnOff(band, true);
 }
 

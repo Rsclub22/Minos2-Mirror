@@ -2397,7 +2397,7 @@ void ClusterMainWindow::userHfCmdButtonWrite(int buttonNumber)
 {
     if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
-        userCmdButtonWrite("HF", buttonNumber);
+        userCmdButtonWrite(HF_BANDTYPE, buttonNumber);
     }
 }
 
@@ -2617,7 +2617,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
         ccfd.bandType = b->getType();
         bandCheckBoxes.insert(b->uk, ccfd);
 
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE)
         {
             hfLayout->addWidget(cb, hfRow, hfCol);
             hfCol++;
@@ -2627,7 +2627,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
                 hfRow++;
             }
         }
-        else if (b->getType() == "VHF")
+        else if (b->getType() == VHF_BANDTYPE)
         {
             vhfLayout->addWidget(cb, vhfRow, vhfCol);
             vhfCol++;
@@ -2637,7 +2637,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
                 vhfRow++;
             }
         }
-        else if (b->getType() == "MWAVE")
+        else if (b->getType() == MW_BANDTYPE)
         {
             mwLayout->addWidget(cb, mwRow, mwCol);
             mwCol++;

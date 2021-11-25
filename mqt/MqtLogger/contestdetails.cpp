@@ -231,11 +231,11 @@ void ContestDetails::setDetails(  )
    {
        if (b->enabled)
        {
-           if ( (contestTransferObject->isHF()) && b->getType() == "HF")
+           if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
            {
                ui->BandComboBox->addItem( b->uk );
            }
-           if ( !contestTransferObject->isHF() && b->getType() != "HF")
+           if ( !contestTransferObject->isHF() && b->getType() != HF_BANDTYPE)
            {
                ui->BandComboBox->addItem( b->uk );
            }

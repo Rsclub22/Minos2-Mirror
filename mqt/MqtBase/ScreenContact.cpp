@@ -58,7 +58,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
         bool hf = false;
         if (bandOK)
         {
-           hf = bi->getType() == "HF";
+           hf = bi->getType() == HF_BANDTYPE;
         }
         else
         {

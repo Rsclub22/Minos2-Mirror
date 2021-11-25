@@ -19,8 +19,6 @@ namespace bandSelButtonData
     const QString BUTTON_NOT_CONTEST_STYLE = QString("background-color: Yellow ; border-style: outset; border-width: 1px; border-color: black");
     const QString TYPE_BUTTON_ON_STYLE = QString("background-color: White ; border-style: outset; border-width: 1px; border-color: black");
     const QString TYPE_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black");
-
-    const QString HF_BAND_TYPE = "HF";
 }
 
 
@@ -92,7 +90,7 @@ private:
     void buildBandButtonLabels();
     QString getBandType(const QString selectedBand);
     void clearAllButtonLabels();
-    void setButtonsToBandType(QString bandType);
+    void setButtonsToBandType();
     void removeAllButtons();
 };
 
