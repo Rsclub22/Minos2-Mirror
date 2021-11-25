@@ -514,7 +514,7 @@ void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
         // don't use bands > 1THz (can't support Freq display)
         // (fortunate that there aren't any!)
 
-        if (b->enabled && b->fHigh < Frequency(1000000000000))
+        if (filtered && b->enabled && b->fHigh < Frequency(1000000000000))
         {
             if (b->getType().compare(VHF_BANDTYPE, Qt::CaseInsensitive) == 0
                     || b->getType().compare(MW_BANDTYPE, Qt::CaseInsensitive) == 0
