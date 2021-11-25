@@ -424,7 +424,7 @@ void RPCTestTest::testBands()
    QSharedPointer<BandInfo>  b;
    loaded = blist.findBand(144250000.0, b);
    QVERIFY( true == loaded );
-   QVERIFY( QString("VHF") == b->getType() );
+   QVERIFY( VHF_BANDTYPE == b->getType() );
    int cnt = blist.bandList.size();
    QVERIFY( 21 == cnt );
 

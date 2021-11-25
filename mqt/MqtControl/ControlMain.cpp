@@ -25,6 +25,7 @@ ControlMain::ControlMain(QWidget *parent) :
 
     controlMain = this;
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
 
@@ -37,7 +38,6 @@ ControlMain::ControlMain(QWidget *parent) :
     connect(&stdinReader, &StdInReader::stdinLine, this, &ControlMain::onStdInRead);
     stdinReader.start();
 
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, &MinosRPC::routerCall, this, &ControlMain::on_routerCall);

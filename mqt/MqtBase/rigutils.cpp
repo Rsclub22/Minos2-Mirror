@@ -23,7 +23,7 @@ const char * TARGET_FREQ_EDIT_ERR_MSG = QT_TRANSLATE_NOOP("FrequencyDisplay", "T
 
 bool validateFreqTxtInput(QString f)
 {
-    QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,5}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
+    QRegularExpression f1rx = QRegularExpression(anchoredPattern("\\d{1,6}\\.\\d{1,6}"));  // match ghz_mhz.khz_hz
     QRegularExpressionMatch f1rxm = f1rx.match(f);
     if (f1rxm.hasMatch())
     {

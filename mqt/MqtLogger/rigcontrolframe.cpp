@@ -1485,7 +1485,7 @@ void RigControlFrame::setRadioList()
                ui->radioNameSel->addItem("");
             }
 
-           foreach (const auto &rn, listOfRadios)
+           for (const auto &rn: qAsConst(listOfRadios))
            {
                if (ui->radioNameSel->findText(rn) == -1)
                {
@@ -2030,7 +2030,7 @@ bool RigControlFrame::checkFreqOK(const Frequency &freq)
 {
     qint64 fInt64 = freq;
 
-    if (fInt64 >=0 && fInt64 < 20000000000)
+    if (fInt64 >=0 && fInt64 < 500000000000)
     {
         return true;
     }

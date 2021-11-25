@@ -20,7 +20,8 @@
 #include <QColor>
 #include "rigcontrolcommonconstants.h"
 
-namespace maskData {
+namespace maskData
+{
 
 const QStringList freqMask = { "9.999",
                          "99.999",
@@ -29,71 +30,13 @@ const QStringList freqMask = { "9.999",
                          "99.999.999",
                          "999.999.999",
                          "9.999.999.999",
-                         "99.999.999.999"};
-enum freqMask_lookup {
-                  KHZ = 0,              /* 9 Khz   */
-                  KHZ99,        		/* 99 khz  */
-                  KHZ999,        		/* 999 khz */
-                  MHZ,                  /* 9 Mhz   */
-                  MHZ99,        		/* 99 Mhz  */
-                  MHZ999,       		/* 999 Mhz */
-                  GHZ,                  /* Ghz     */
-                  GHZ99                 /* Ghz 99  */
-};
-
-
+                         "99.999.999.999",
+                         "999.999.999.999"
+                             };
 }
-#ifdef BANDSELDATA
-namespace bandSelData {
 
-
-
-
-const QStringList bandNames = { "",
-                                "10m",
-                                "6m",
-                                "4m",
-                                "2m",
-                                "70cm",
-                                "23cm",
-                                "GHz"};
-
-const QStringList bandFreq = { "",
-                               "28170000",
-                               "50170000",
-                               "70210000",
-                               "144290000",
-                               "432170000",
-                               "1296210000",
-                               "10000000000"};
-
-const QStringList freqDialZero =  { "00.000.000",
-                                    "00.000.000",
-                                    "00.000.000",
-                                    "00.000.000",
-                                    "000.000.000",
-                                    "000.000.000",
-                                    "0.000.000.000",
-                                    "00.000.000.000"};
-
-
-
-
-
-const maskData::freqMask_lookup bandMaskIdx[] = { maskData::MHZ99,      /* Not used */
-                                                    maskData::MHZ99,    /* 10m  */
-                                                    maskData::MHZ99,    /* 6m  */
-                                                    maskData::MHZ99,    /* 4m  */
-                                                    maskData::MHZ999,   /* 2m  */
-                                                    maskData::MHZ999,   /* 70cm  */
-                                                    maskData::GHZ,      /* 23cm  */
-                                                    maskData::GHZ99};   /* GHz  */
-
-
-}
-#endif
-
-namespace memDefData {
+namespace memDefData
+{
 
 const QString DEFAULT_CALLSIGN = "";
 //const QString DEFAULT_FREQ = "0000000000";
@@ -105,7 +48,8 @@ const QString DEFAULT_TIME = "00:00";
 
 }
 
-namespace memoryData {
+namespace memoryData
+{
 
 class  memData
 {
@@ -163,7 +107,8 @@ public:
 }
 
 
-namespace runButData {
+namespace runButData
+{
 
 const int NUM_RUNBUTTONS = 2;
 

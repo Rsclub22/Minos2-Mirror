@@ -38,9 +38,6 @@ private:
         bool changed;
     };
 
-    QList<QLineEdit*> distanceLineEdits;
-    //QList<distValue> distanceValues;
-
     QVector<QSharedPointer<BandInfo> > bands;
     QMap<QString, distValue> distanceValues;
 

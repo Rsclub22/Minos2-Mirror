@@ -20,6 +20,7 @@
 ======================================================================================*/
 
 #include "base_pch.h"
+#include "bandmapcommon.h"
 #include "BandList.h"
 #include "cutils.h"
 //---------------------------------------------------------------------------
@@ -181,6 +182,15 @@ bool BandList::parseFile (const QString &fname )
             }
         }
     }
+
+    std::sort(bandList.begin(), bandList.end(),
+    [=](const QSharedPointer<BandInfo> a, const QSharedPointer<BandInfo> b)->bool
+      {
+          return a->fLow < b->fLow;
+      }
+    );
+
+    readEnabled();
     return true;
 }
 
@@ -219,6 +229,9 @@ bool BandList::parseBand ( TiXmlElement * e )
     band->reg1test = getAttribute ( e, "Reg1Test" );
     band->adif = getAttribute ( e, "ADIF" );
     band->cabrillo = getAttribute ( e, "Cabrillo" );
+
+    temp = getAttribute(e, "zoom");
+    band->zoomDefault = toInt(temp, dialData::START_ZOOM_LEVEL);
 
     band->bandColour = getAttribute(e, "Colour");
 
@@ -397,7 +410,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
     Frequency dvhffreq(ifreq * 1000000);
     Frequency dmwvfreq(ifreq * 1000000000);
 
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         if (
                 sfreq.compare(b->uk ) == 0
@@ -411,7 +424,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             return true;
         }
     }
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         QString bandType = b->getType();
         Frequency bfhigh = b->fHigh;
@@ -426,7 +439,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
             }
         }
         else
-            if ( bandType == "VHF" )
+            if ( bandType == VHF_BANDTYPE )
             {
                 if ( dvhffreq <= bfhigh && dvhffreq >= bflow )
                 {
@@ -435,7 +448,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                 }
             }
             else
-                if ( bandType == "MWAVE" )
+                if ( bandType == MW_BANDTYPE )
                 {
                     if ( dmwvfreq <= bfhigh && dmwvfreq >= bflow )
                     {
@@ -449,7 +462,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
                     }
                 }
     }
-    foreach ( auto const &b, bandList )
+    for ( auto const &b: qAsConst(bandList ))
     {
         // find in string isn't a massively good idea! But we are doing it after everything else has failed
         if ( b->uk.indexOf ( sfreq ) != -1
@@ -469,7 +482,7 @@ bool BandList::findBand ( const QString &psfreq, QSharedPointer<BandInfo> &bi )
 
 bool BandList::findBand(const Frequency &freq, QSharedPointer<BandInfo> &bi)
 {
-   foreach ( auto const &b, bandList )
+   for ( auto const &b: qAsConst(bandList ))
    {
       if (b->fLow <= freq && b->fHigh >= freq)
       {
@@ -493,45 +506,19 @@ QString BandList::getBand(const Frequency &freq)
     return band;
 }
 
-
-
-
-void BandList::loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands)
+void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered)
 {
-    foreach ( auto const &b, bandList )       // just load VHF/UHF bands
+    bands.clear();
+    for ( auto const &b: qAsConst(bandList ))
     {
-        // don't use bands > 10GHz (can't support Freq display)
-        if ( b->uk != "24 GHz" && b->uk != "47 GHz"
-             && b->uk != "76 GHz" && b->uk != "120 GHz"
-             && b->uk != "134 GHz" && b->uk != "248 GHz")
+        // don't use bands > 1THz (can't support Freq display)
+        // (fortunate that there aren't any!)
 
+        if (b->enabled && b->fHigh < Frequency(1000000000000))
         {
-            if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(b);
-        }
-    }
-
-}
-
-
-
-
-
-void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands)
-{
-
-    foreach ( auto const &b,  bandList )
-    {
-        // don't use bands > 10GHz (can't support Freq display)
-        if ( b->uk != "24 GHz" && b->uk != "47 GHz"
-             && b->uk != "76 GHz" && b->uk != "120 GHz"
-             && b->uk != "134 GHz" && b->uk != "248 GHz")
-
-        {
-            if (b->getType().compare("VHF", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("MWave", Qt::CaseInsensitive) == 0
-                    || b->getType().compare("HF", Qt::CaseInsensitive) == 0)
+            if (b->getType().compare(VHF_BANDTYPE, Qt::CaseInsensitive) == 0
+                    || b->getType().compare(MW_BANDTYPE, Qt::CaseInsensitive) == 0
+                    || b->getType().compare(HF_BANDTYPE, Qt::CaseInsensitive) == 0)
 
                 bands.append(b);
         }
@@ -552,11 +539,11 @@ bool BandList::checkValidBand(Frequency freq)
 
 QString BandList::findType(const QString &band) const
 {
-    for (auto const &b:bandList)
+    for (const auto &b: qAsConst(bandList))
     {
-        if (b.data()->uk == band)
+        if (b->uk == band)
         {
-            return b.data()->getType();
+            return b->getType();
         }
 
     }
@@ -565,11 +552,11 @@ QString BandList::findType(const QString &band) const
 }
 QString BandList::findType(const Frequency &freq) const
 {
-    for (auto const &b:bandList)
+    for (const auto &b: qAsConst(bandList))
     {
-        if (freq >= b.data()->fLow && freq <= b.data()->fHigh)
+        if (freq >= b->fLow && freq <= b->fHigh)
         {
-            return b.data()->getType();
+            return b->getType();
         }
     }
     return "";
@@ -612,4 +599,23 @@ bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &
         }
     }
     return false;
+}
+
+void BandList::readEnabled()
+{
+    QString filename = "./Configuration/bandsEnabled.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    for ( auto const &b: qAsConst(bandList ))
+    {
+        b->enabled = settings.value("Enabled_" + b->normalisedName(), true).toBool();
+    }
+}
+void BandList::updateEnabled()
+{
+    QString filename = "./Configuration/bandsEnabled.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    for ( auto const &b: qAsConst(bandList ))
+    {
+        settings.setValue("Enabled_" + b->normalisedName(), b->enabled);
+    }
 }

@@ -60,7 +60,7 @@ void RigControlRpc::publishListChangedRadioNames(QVector<QSharedPointer<RadioNam
     if (!listOfRadioNameChanges.isEmpty())
     {
 
-        foreach (const auto &lrnc, listOfRadioNameChanges)
+        for (const auto &lrnc: qAsConst(listOfRadioNameChanges))
         {
 
             QString rn;
@@ -80,7 +80,7 @@ void RigControlRpc::publishListChangedRadioNames(QVector<QSharedPointer<RadioNam
 
     if (!listOfRadiosDataChanged.isEmpty())
     {
-        foreach (const auto &n, listOfRadiosDataChanged)
+        for (const auto &n: qAsConst(listOfRadiosDataChanged))
         {
             if (listOfRadiosDataChangedStr.isEmpty())
             {

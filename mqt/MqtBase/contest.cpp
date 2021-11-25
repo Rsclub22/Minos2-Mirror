@@ -150,7 +150,7 @@ QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq ) const
             return cb;
         }
 
-        if (bi->getType() != "HF")
+        if (bi->getType() != HF_BANDTYPE)
         {
             return cb;
         }

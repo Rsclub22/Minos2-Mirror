@@ -7,6 +7,7 @@ KSTConfigure::KSTConfigure(QWidget *parent) :
     ui(new Ui::KSTConfigure)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     ui->portFrame->setVisible(false);
     ui->serverFrame->setVisible(false);
 

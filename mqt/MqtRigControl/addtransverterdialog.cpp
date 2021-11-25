@@ -16,6 +16,8 @@ AddTransVerterDialog::AddTransVerterDialog(QVector<QSharedPointer<BandInfo> > &_
     ui(new Ui::AddTransVerterDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     bands = _bands;
     transVerterNames = _transVertNames;
     loadBandSel();

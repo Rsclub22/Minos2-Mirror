@@ -7,6 +7,7 @@ LocatorInputDialog::LocatorInputDialog(QWidget *parent, QString textToEdit, cons
 
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowTitle(dialogTitle);
     ui->locatorInput->setText(lineEditLabel);
     ui->locatorInput->setValidator(&ucValidator);

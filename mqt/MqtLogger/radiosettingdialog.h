@@ -63,9 +63,9 @@ private slots:
 
     void on_radioSettingsTabWidget_currentChanged(int index);
 
-    void onCwPresetLineEditingFinished(int i);
-    void onPhonePresetLineEditingFinished(int i);
-    void onMgmPresetLineEditingFinished(int i);
+    void onCwPresetLineEditingFinished(QString bandName, QLineEdit *le);
+    void onPhonePresetLineEditingFinished(QString bandName, QLineEdit *le);
+    void onMgmPresetLineEditingFinished(QString bandName, QLineEdit *le);
 
 
 
@@ -73,7 +73,7 @@ private slots:
     void onIgnorePreviousFreqChecked(bool checked);
     void onTurnOffColourRadioFreqDialChkChanged(bool checked);
     void onRestoreContestModeChecked(bool checked);
-    void onBandSwLineEditingFinished(int i);
+    void onBandSwLineEditingFinished();
     void onEnableBandSwChkBox();
     void onEnableSerialBandSwChkBox();
 
@@ -100,7 +100,6 @@ private:
     QList<QLineEdit*> hfLineEdits;
 
     QList<QLineEdit*> bandSwLineEdits;
-    QList<QLabel*> bandSwLabels;
 
 
     QMap<QString, BandSwDetails> bandSwDetails;
@@ -119,7 +118,6 @@ private:
     void getFreq(QLineEdit* f_box, int band);
 
     void loadSettingsToDialog();
-    void setHf(bool hfFlag);
 
     void saveModePresetFreqSettings(QString mode, QSettings &config);
 

@@ -7,6 +7,8 @@ AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotatorFactory *r
     ui(new Ui::AddAntennaDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     availAntennas = _availAntennas;
 
     ui->rotatorModel->addItem("");   // add blank at begining

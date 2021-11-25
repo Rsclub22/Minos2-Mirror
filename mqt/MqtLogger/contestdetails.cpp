@@ -24,9 +24,8 @@ ContestDetails::ContestDetails(QWidget *parent) :
     saveContestOK(false), suppressProtectedOnClick(false),
     noMultRipple(false)
 {
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trAllHf = tr("All HF");
 
@@ -230,13 +229,16 @@ void ContestDetails::setDetails(  )
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if ( (contestTransferObject->isHF()) && b->getType() == "HF")
+       if (b->enabled)
        {
-           ui->BandComboBox->addItem( b->uk );
-       }
-       if ( !contestTransferObject->isHF() && b->getType() != "HF")
-       {
-           ui->BandComboBox->addItem( b->uk );
+           if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
+           {
+               ui->BandComboBox->addItem( b->uk );
+           }
+           if ( !contestTransferObject->isHF() && b->getType() != HF_BANDTYPE)
+           {
+               ui->BandComboBox->addItem( b->uk );
+           }
        }
    }
 

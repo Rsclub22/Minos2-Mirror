@@ -51,7 +51,7 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 {
     delete ui;
 
-    foreach(auto b, txVmButtonMap)
+    for(const auto &b: qAsConst(txVmButtonMap))
     {
         delete b;
     }

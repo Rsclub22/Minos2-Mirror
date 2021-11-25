@@ -7,6 +7,7 @@ RSConfigure::RSConfigure(QWidget *parent) :
     ui(new Ui::RSConfigure)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 RSConfigure::~RSConfigure()

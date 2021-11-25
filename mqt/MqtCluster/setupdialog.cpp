@@ -33,13 +33,12 @@ SetupDialog::SetupDialog(QWidget *parent) :
     useQrzForQraChanged(false)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("ClusterSetup/geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
-
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // General Tab
     connect(ui->timeToLive, &QLineEdit::editingFinished, [=](){timeToliveEditFinished();});

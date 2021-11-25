@@ -10,6 +10,7 @@ ClusterBandmapConfigure::ClusterBandmapConfigure(QWidget *parent) :
     ui(new Ui::ClusterBandmapConfigure)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 }
 
 ClusterBandmapConfigure::~ClusterBandmapConfigure()
@@ -19,13 +20,6 @@ ClusterBandmapConfigure::~ClusterBandmapConfigure()
 
 void ClusterBandmapConfigure::initialise()
 {
-    distanceLineEdits << ui->distanceFilter1_8MHz << ui->distanceFilter3_5MHz << ui->distanceFilter7MHz
-                      << ui->distanceFilter14MHz << ui->distanceFilter21MHz << ui->distanceFilter28MHz
-                      << ui->distanceFilter50MHz << ui->distanceFilter70MHz << ui->distanceFilter144MHz
-                      << ui->distanceFilter432MHz << ui->distanceFilter1296MHz << ui->distanceFilter2300MHz
-                      << ui->distanceFilter3_4GHz << ui->distanceFilter5_6GHz << ui->distanceFilter10GHz;
-
-
     QSettings settings;
     int curTabNo = settings.value("OptionsClusterBandmapConfigure/curTab").toInt();
     ui->ClusterBandmapConfiguretabWidget->setCurrentIndex(curTabNo);
@@ -37,9 +31,50 @@ void ClusterBandmapConfigure::initialise()
     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
-    for (int i = 0; i < bands.count(); i++)
+    QGridLayout *hfLayout = new QGridLayout();
+    ui->HFFrame->setLayout(hfLayout);
+
+    int hfRow = 0;
+    int hfCol = 0;
+
+    QGridLayout *vhfLayout = new QGridLayout();
+    ui->VHFUHFFrame->setLayout(vhfLayout);
+
+    int vhfRow = 0;
+    int vhfCol = 0;
+
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = bands[i].data()->uk;
+        QLineEdit *qle = new QLineEdit();
+        QLabel *qlel = new QLabel();
+        qlel->setText(b->uk);
+
+        if (b->getType() == HF_BANDTYPE)
+        {
+            hfLayout->addWidget(qlel, hfRow, hfCol);
+            hfLayout->addWidget(qle, hfRow, hfCol + 1);
+            hfCol += 2;
+            if (hfCol%4 == 0)
+            {
+                hfRow++;
+                hfCol = 0;
+            }
+        }
+        else if (b->getType() == VHF_BANDTYPE || b->getType() == MW_BANDTYPE)
+        {
+            vhfLayout->addWidget(qlel, vhfRow, vhfCol);
+            vhfLayout->addWidget(qle, vhfRow, vhfCol + 1);
+            vhfCol += 2;
+            if (vhfCol%4 == 0)
+            {
+                vhfRow++;
+                vhfCol = 0;
+            }
+        }
+
+        connect(qle, &QLineEdit::editingFinished, this, [=]() {onDistanceEditingFinished(qle);});
+
+        QString band = b->uk;
         distValue distItem;
         QString dKey = defaultDistIniNames.getDefaultDistIniName(band).defaultDistanceName;
         if (dKey.isEmpty())
@@ -50,7 +85,7 @@ void ClusterBandmapConfigure::initialise()
         {
             distItem.distance = config.value(dKey, DEFAULT_FILTER_DISTANCE).toInt();
         }
-        distItem.distLineEdit = distanceLineEdits[i];
+        distItem.distLineEdit = qle;
         distItem.distLineEdit->setText(QString::number(distItem.distance));
         distItem.changed = false;
         distanceValues.insert(band, distItem);
@@ -71,11 +106,6 @@ void ClusterBandmapConfigure::initialise()
        ui->spotLessThanDistanceRadioButton->setChecked(true);
        ui->spotGreaterThanDistanceRadioButton->setChecked(false);
    }
-
-    for (int i = 0; i < distanceLineEdits.count(); i++)
-    {
-        connect(distanceLineEdits[i], &QLineEdit::editingFinished, this, [=]() {onDistanceEditingFinished(distanceLineEdits[i]);});
-    }
 
     connect(ui->spotLessThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotLessThanDistanceRadioButClicked();});
     connect(ui->spotGreaterThanDistanceRadioButton, &QRadioButton::clicked, this, [=](){onSpotGreaterThanDistanceRadioButClicked();});
@@ -167,9 +197,9 @@ void ClusterBandmapConfigure::onDistanceEditingFinished(QLineEdit *distLineEdit)
 
 QString ClusterBandmapConfigure::findBandKey(QLineEdit *distLineEdit)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         if (distanceValues.value(band).distLineEdit == distLineEdit)
         {
             return band;
@@ -194,9 +224,9 @@ void ClusterBandmapConfigure::saveDistances()
     QSettings config(CLUSTER_FILTER_FILE, QSettings::IniFormat);
     config.beginGroup("Default Distance");
 
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         if (distanceValues.value(band).changed && distanceValues.value(band).distance != DEFAULT_FILTER_DISTANCE)
         {
             DefaultDistanceIniName s = defaultDistIniNames.getDefaultDistIniName(band);

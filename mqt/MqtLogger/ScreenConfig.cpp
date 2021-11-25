@@ -22,6 +22,7 @@ ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curC
     curConfigName(curConfigNamep)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     screenConfigDialog = this;
 
     QSettings settings;

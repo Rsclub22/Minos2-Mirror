@@ -43,7 +43,7 @@ DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now
        bool hf = false;
        if (bandOK)
        {
-          hf = bi->getType() == "HF";
+          hf = bi->getType() == HF_BANDTYPE;
        }
        else
        {

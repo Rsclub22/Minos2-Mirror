@@ -29,15 +29,11 @@ TransVertSetupForm::TransVertSetupForm(QSharedPointer<scatParams> _radioData, QS
     bandName(_bandName),
     bands(_bands)
 {
-
-
     ui->setupUi(this);
-
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     radioFreqEdit = new FocusWatcher(ui->radioFreq);
     targetFreqEdit = new FocusWatcher(ui->targetFreq);
-
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(radioFreqEdit, &FocusWatcher::focusChanged, this, &TransVertSetupForm::radioFreqEditfocusChange);
     connect(targetFreqEdit, &FocusWatcher::focusChanged, this, &TransVertSetupForm::targetFreqEditfocusChange);

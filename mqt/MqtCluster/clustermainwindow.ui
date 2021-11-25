@@ -420,262 +420,113 @@
           <property name="title">
            <string>Filter Server Display</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout_7">
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <spacer name="horizontalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>169</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <spacer name="horizontalSpacer_4">
+              <widget class="QPushButton" name="hfSelectBandPb">
+               <property name="text">
+                <string>HF</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="HFFrame"/>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_3">
                <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+                <enum>Qt::Vertical</enum>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_2">
-               <item>
-                <widget class="QPushButton" name="hfSelectBandPb">
-                 <property name="text">
-                  <string>HF</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                 <item>
-                  <widget class="QCheckBox" name="_1_8MHzCheckBox">
-                   <property name="text">
-                    <string>1.8 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_3_5MHzCheckBox">
-                   <property name="text">
-                    <string>3.5 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_2">
-                 <item>
-                  <widget class="QCheckBox" name="_7MHzCheckBox">
-                   <property name="text">
-                    <string>7 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_14MHzCheckBox">
-                   <property name="text">
-                    <string>14 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_3">
-                 <item>
-                  <widget class="QCheckBox" name="_21MHzCheckBox">
-                   <property name="text">
-                    <string> 21 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_28MHzCheckBox">
-                   <property name="text">
-                    <string>28 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <spacer name="verticalSpacer_3">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
-               <item>
-                <widget class="QPushButton" name="vhfSelectBandPb">
-                 <property name="text">
-                  <string>VHF</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_4">
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_8">
-                   <item>
-                    <widget class="QCheckBox" name="_50MHzCheckBox">
-                     <property name="text">
-                      <string>50 MHz</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QCheckBox" name="_70MHzCheckBox">
-                     <property name="text">
-                      <string>70 MHz</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <layout class="QHBoxLayout" name="horizontalLayout_9">
-                   <item>
-                    <widget class="QCheckBox" name="_144MHzCheckBox">
-                     <property name="text">
-                      <string>144 MHz</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QCheckBox" name="_432MHzCheckBox">
-                     <property name="text">
-                      <string>432 MHz</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </item>
-                 <item>
-                  <spacer name="verticalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Vertical</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>20</width>
-                     <height>40</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <item>
-                <widget class="QPushButton" name="uhfSelectBandPb">
-                 <property name="text">
-                  <string>MW</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_5">
-                 <item>
-                  <widget class="QCheckBox" name="_1296MHzCheckBox">
-                   <property name="text">
-                    <string>1296 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_2300MHzCheckBox">
-                   <property name="text">
-                    <string>2300 MHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_6">
-                 <item>
-                  <widget class="QCheckBox" name="_3_4GHzCheckBox">
-                   <property name="text">
-                    <string>3.4 GHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QCheckBox" name="_5_6GHzCheckBox">
-                   <property name="text">
-                    <string>5.6 GHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="horizontalLayout_7">
-                 <item>
-                  <widget class="QCheckBox" name="_10GHzCheckBox">
-                   <property name="text">
-                    <string>10 GHz</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer_2">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <spacer name="verticalSpacer">
-                 <property name="orientation">
-                  <enum>Qt::Vertical</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>20</width>
-                   <height>40</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>20</width>
+                 <height>40</height>
                 </size>
                </property>
               </spacer>
              </item>
             </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_15">
+             <item>
+              <widget class="QPushButton" name="vhfSelectBandPb">
+               <property name="text">
+                <string>VHF</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="VHFFrame"/>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <item>
+              <widget class="QPushButton" name="uhfSelectBandPb">
+               <property name="text">
+                <string>MW</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="MWFrame"/>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>168</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </widget>

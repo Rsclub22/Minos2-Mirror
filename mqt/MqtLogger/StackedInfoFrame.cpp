@@ -56,10 +56,10 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
     BandList &blist = BandList::getBandList();
 
-    for (auto &b:qAsConst(blist.bandList))
+    for (const auto &b:qAsConst(blist.bandList))
     {
-       bool hf = b->getType() == "HF";
-       if (hf)
+       bool hf = b->getType() == HF_BANDTYPE;
+       if (hf && b->enabled)
        {
            ui->tabbar->addTab(b->uk);
        }

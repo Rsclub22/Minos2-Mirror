@@ -160,10 +160,10 @@ void PresetFreq::setLastFreq(const QString mode, const QString band, const Frequ
 
 void PresetFreq::copyAllPrevFreqToLastFreqByMode(const QString mode, const QVector<QSharedPointer<BandInfo> > &bands)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        Frequency f = getPresetFreq(mode, b.data()->uk);
-        setLastFreq(mode, b.data()->uk, f);
+        Frequency f = getPresetFreq(mode, b->uk);
+        setLastFreq(mode, b->uk, f);
     }
 }
 
@@ -264,7 +264,7 @@ QString readBandSwitchDataFromIni(QString band)
 {
     QString fileName = BANDSWITCH_INI_FILENAME;
     QString iniBand = band;
-    iniBand = convertBandForIni(iniBand);
+    iniBand = BandInfo::normalise (iniBand);
     QSettings config(fileName, QSettings::IniFormat);
     QString value = config.value(iniBand + BANDSWITCH_KEY_TEXT, "").toString();
     return value;
@@ -275,7 +275,7 @@ void writeBandSwitchDataToIni(QString band, QString data)
 {
     QString fileName = BANDSWITCH_INI_FILENAME;
     QString iniBand = band;
-    iniBand = convertBandForIni(iniBand);
+    iniBand = BandInfo::normalise (iniBand);
     QSettings config(fileName, QSettings::IniFormat);
     config.setValue(iniBand + BANDSWITCH_KEY_TEXT, data);
 }
@@ -336,8 +336,4 @@ void writeSerialComportBandSwitchDataToIni(QString comport)
     config.setValue(BANDSWITCH_COMPORT_KEY_TEXT, comport);
 }
 
-QString convertBandForIni(QString band)
-{
-    return band.remove('\x20').replace('.', '_');
-}
 

@@ -26,6 +26,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     , ui(new Ui::KSTMainWindow)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     mainWindow = this;
     connect(&stdinReader, &StdInReader::stdinLine, this, &KSTMainWindow::onStdInRead);
@@ -128,9 +129,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     state = settings.value("callSplitterState").toByteArray();
     ui->callSplitter->restoreState(state);
-
-
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
     connect(&CloseTimer, &QTimer::timeout, this, &KSTMainWindow::CloseTimerTimer);

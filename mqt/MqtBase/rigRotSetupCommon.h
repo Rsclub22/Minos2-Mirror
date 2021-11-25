@@ -1,6 +1,6 @@
 #ifndef RIGROTSETUPCOMMON_H
 #define RIGROTSETUPCOMMON_H
-
+#include <QStringList>
 
 
 class SerialSetupData

@@ -50,6 +50,13 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     traceMsg(QString("Starting"));
 
+    BandList::getBandList().loadAllBands(bands);
+    for (auto const &b: qAsConst(bands))
+    {
+        clusterBands << b->uk;
+    }
+
+
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpClusterTraceDebug, traceDebugFlag );
 
 
@@ -60,7 +67,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
     callsignDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
     locatorDelegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0)) ;
 
-    this->setMouseTracking(true);
+    setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, &QTimer::timeout, this, [=](){mouseTimerCheckNewSpots();});
 
@@ -71,7 +78,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     spotQueue.clear();
 
-    BandList::getBandList().loadAllBands(bands);
     filterSettings.initFilterSettings(bands);
 
     checkNewFilters = new QTimer(this);
@@ -193,7 +199,7 @@ ClusterClientFrame::~ClusterClientFrame()
     delete ui;
     delete dxSpotDataModel;
 
-    foreach(auto const &m, filterProxyModelList)
+    for(auto const &m: qAsConst(filterProxyModelList))
     {
         delete m;
     }
@@ -506,36 +512,30 @@ void ClusterClientFrame::setupLocatorSpotView()
 
 void ClusterClientFrame::filterButtonSelected()
 {
-    ClusterClientFilterDialog *filterSetup = new ClusterClientFilterDialog(ct, filterSettings, bands, clusterModes, this);
+    ClusterClientFilterDialog filterSetup(ct, filterSettings, bands, clusterModes, this);
 
-    filterSetup->exec();
-    if (filterSetup->getSettingsChangedFlag())
+    filterSetup.exec();
+    if (filterSetup.getSettingsChangedFlag())
     {
-        filterSettings = filterSetup->getFilterSettings();
+        filterSettings = filterSetup.getFilterSettings();
         //update views..
-        if (filterSetup->getBandFilterChangedFlag()
-            || filterSetup->getModeFilterChangedFlag()
-            || filterSetup->getDistanceFilterChangedFlag()
-            || filterSetup->getIgnoreDistChangedFlag()
-            || filterSetup->getIgnoreEmptyDistChangedFlag())
+        if (filterSetup.getBandFilterChangedFlag()
+            || filterSetup.getModeFilterChangedFlag()
+            || filterSetup.getDistanceFilterChangedFlag()
+            || filterSetup.getIgnoreDistChangedFlag()
+            || filterSetup.getIgnoreEmptyDistChangedFlag())
         {
             dxSpotProxyModel->setFilterRegExp("");
         }
-        else if (filterSetup->getCallsignFilerChangedFlag())
+        else if (filterSetup.getCallsignFilerChangedFlag())
         {
             callSignProxyModel->setFilterRegExp("");
         }
-        else if (filterSetup->getLocatorFilterChangedFlag())
+        else if (filterSetup.getLocatorFilterChangedFlag())
         {
             locatorProxyModel->setFilterRegExp("");
         }
-
     }
-
-
-    filterSetup->close();
-    delete filterSetup;
-
 }
 
 
@@ -943,7 +943,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
         Callsign mcs;
         mcs.setFullCall(callsign);
 
-        foreach ( auto const &c, ct->ctList )
+        for ( auto const &c: qAsConst( ct->ctList ))
         {
             unsigned short cf = c.wt->contactFlags.getValue();
             if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
@@ -1185,9 +1185,9 @@ void ClusterClientFrame::setContest(BaseContestLog *c)
                 defaultDistIniNames.initClusterFilterIdAndNames(bands);
 
 
-                for (auto &b:bands)
+                for (const auto &b: qAsConst(bands))
                 {
-                    QString band = b.data()->uk;
+                    QString band = b->uk;
                     DefaultDistanceIniName ddin = defaultDistIniNames.getDefaultDistIniName(band);
                     QString key = ddin.defaultDistanceName;
                     int dist = config.value(key, DEFAULT_FILTER_DISTANCE).toInt();

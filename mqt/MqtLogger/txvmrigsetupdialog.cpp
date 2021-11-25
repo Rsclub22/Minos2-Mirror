@@ -10,6 +10,7 @@ TxVmRigSetupDialog::TxVmRigSetupDialog(VoiceKeyerCapabilities voiceCap_, int nb,
 
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     QSettings settings;
     QByteArray geometry = settings.value("TxVmSetupDialog/geometry").toByteArray();

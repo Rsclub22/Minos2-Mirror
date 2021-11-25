@@ -164,7 +164,7 @@ private:
     UpperCaseValidator ucValidator;
 
     ClusterClientFilterSettings filterSettings;
-
+    QStringList clusterBands;
 
     HtmlDelegate *delegate = nullptr;
 

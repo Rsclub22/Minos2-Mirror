@@ -42,10 +42,9 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     ui(new Ui::RotatorMainWindow)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
-
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     for (int i = 0; i < presetShortCutKeys.count(); i++)
     {
@@ -1131,11 +1130,11 @@ void RotatorMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rotator Control - Logger - %1").arg(appName));
+        setWindowTitle(tr("Minos Rotator Control - Logger - %1").arg(appName));
     }
     else
     {
-        this->setWindowTitle(tr("Minos Rotator Control - Local"));
+        setWindowTitle(tr("Minos Rotator Control - Local"));
     }
 
 }

@@ -235,12 +235,12 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui(new Ui::MonitorMain)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     monitorMain = this;
 
     connect(&stdinReader, &StdInReader::stdinLine, this, &MonitorMain::onStdInRead);
     stdinReader.start();
-
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     createCloseEvent();
 #ifdef Q_OS_ANDROID

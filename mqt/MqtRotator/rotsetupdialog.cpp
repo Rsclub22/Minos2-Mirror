@@ -36,7 +36,7 @@ RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     ui(new Ui::RotSetupDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     rotatorFactory = rotFactory_;
 
     QSettings settings;

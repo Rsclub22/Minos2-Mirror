@@ -1643,155 +1643,22 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        bool filterFlag = false;
                                        int distance = 0;
 
-                                       mt->getStructArgMemberValue("bandFilter1_8Mhz", filterFlag);
-                                       ccfs.setBandFilter("1.8 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter1_8MHz", distance);
-                                       ccfs.setDistanceFilter( "1.8 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag1_8MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag( "1.8 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag1_8MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("1.8 MHz", filterFlag );
+                                       for(const auto &b: qAsConst(bands))
+                                       {
+                                            QString bandIni = "bandFilter" + b->normalisedName();
+                                            QString distIni = "distanceFilter" + b->normalisedName();
+                                            QString igdistIni = "ignoreDistanceFlag" + b->normalisedName();
+                                            QString igedistIni = "ignoreEmptyDistanceFlag" + b->normalisedName();
 
-                                       mt->getStructArgMemberValue("bandFilter3_5Mhz", filterFlag);
-                                       ccfs.setBandFilter("3.5 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter3_5MHz", distance);
-                                       ccfs.setDistanceFilter("3.5 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag3_5MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag( "3.5 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag3_5MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("3.5 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter7Mhz", filterFlag);
-                                       ccfs.setBandFilter("7 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter7MHz", distance);
-                                       ccfs.setDistanceFilter("7 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag7MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("7 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag7MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("7 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter14Mhz", filterFlag);
-                                       ccfs.setBandFilter("14 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter14MHz", distance);
-                                       ccfs.setDistanceFilter("14 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag14MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("14 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag14MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("14 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter21Mhz", filterFlag);
-                                       ccfs.setBandFilter("21 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter21MHz", distance);
-                                       ccfs.setDistanceFilter("21 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag21MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("21 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag21MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("21 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter28Mhz", filterFlag);
-                                       ccfs.setBandFilter("28 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter28MHz", distance);
-                                       ccfs.setDistanceFilter("28 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag28MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("28 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag28MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("28 MHz", filterFlag);
-
-
-
-                                       mt->getStructArgMemberValue("bandFilter50Mhz", filterFlag);
-                                       ccfs.setBandFilter("50 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter50MHz", distance);
-                                       ccfs.setDistanceFilter("50 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag50MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("50 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag50MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("50 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter70Mhz", filterFlag);
-                                       ccfs.setBandFilter("70 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter70MHz", distance);
-                                       ccfs.setDistanceFilter("70 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag70MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("70 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag70MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("70 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter144Mhz", filterFlag);
-                                       ccfs.setBandFilter("144 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter144MHz", distance);
-                                       ccfs.setDistanceFilter("144 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag144MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("144 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag144MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("144 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter432Mhz", filterFlag);
-                                       ccfs.setBandFilter("432 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter432MHz", distance);
-                                       ccfs.setDistanceFilter("432 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag432MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("432 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag432MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("432 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter1296Mhz", filterFlag);
-                                       ccfs.setBandFilter("1296 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter1296MHz", distance);
-                                       ccfs.setDistanceFilter("1296 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag1296MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("1296 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag1296MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("1296 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter2300Mhz", filterFlag);
-                                       ccfs.setBandFilter("2300 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter2300MHz", distance);
-                                       ccfs.setDistanceFilter("2300 MHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag2300MHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("2300 MHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag2300MHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("2300 MHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter3_4Ghz", filterFlag);
-                                       ccfs.setBandFilter("3.4 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter3_4GHz", distance);
-                                       ccfs.setDistanceFilter("3.4 GHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag3_4GHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("3.4 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag3_4GHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("3.4 GHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter5_6Ghz", filterFlag);
-                                       ccfs.setBandFilter("5.6 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter5_6GHz", distance);
-                                       ccfs.setDistanceFilter("5.6 GHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag5_6GHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("5.6 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag5_6GHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("5.6 GHz", filterFlag);
-
-
-                                       mt->getStructArgMemberValue("bandFilter10Ghz", filterFlag);
-                                       ccfs.setBandFilter("10 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("distanceFilter10GHz", distance);
-                                       ccfs.setDistanceFilter("10 GHz", distance);
-                                       mt->getStructArgMemberValue("ignoreDistanceFlag10GHz", filterFlag);
-                                       ccfs.setIgnoreDistanceFlag("10 GHz", filterFlag);
-                                       mt->getStructArgMemberValue("ignoreEmptyDistanceFlag10GHz", filterFlag);
-                                       ccfs.setIgnoreEmptyDistanceFlag("10 GHz", filterFlag);
-
+                                            mt->getStructArgMemberValue(bandIni, filterFlag);
+                                            ccfs.setBandFilter(b->name(), filterFlag);
+                                            mt->getStructArgMemberValue(distIni, distance);
+                                            ccfs.setDistanceFilter( b->name(), distance);
+                                            mt->getStructArgMemberValue(igdistIni, filterFlag);
+                                            ccfs.setIgnoreDistanceFlag( b->name(), filterFlag);
+                                            mt->getStructArgMemberValue(igedistIni, filterFlag);
+                                            ccfs.setIgnoreEmptyDistanceFlag(b->name(), filterFlag );
+                                       }
 
                                        mt->getStructArgMemberValue("modeFilterCW", filterFlag);
                                        ccfs.setModeFilter(hamlibData::CW, filterFlag);

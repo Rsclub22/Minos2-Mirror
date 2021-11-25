@@ -38,6 +38,8 @@ rotSetupForm::rotSetupForm(RotatorFactory* rotFactory_, srotParams* _antennaData
     //antennaChanged(false)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     ui->netAddressBox->setVisible(false);
     ui->netAddressLbl->setVisible(false);
     ui->netPortBox->setVisible(false);

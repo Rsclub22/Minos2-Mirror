@@ -45,7 +45,7 @@
 #include "ContestPageControl.h"
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
-
+#include "BandsSelect.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -62,6 +62,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
   , ui(new Ui::TLogContainer)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->kbframe->setVisible(false);
 
@@ -476,6 +477,8 @@ void TLogContainer::setupMenus()
     ListOpenAction = newAction(QT_TR_NOOP("Open &Archive List..."), ui->menuFile, &TLogContainer::ListOpenActionExecute);
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, &TLogContainer::ManageListsActionExecute);
     ui->menuFile->addSeparator();
+
+    selectBandsAction = newAction(QT_TR_NOOP("Select usable bands..."), ui->menuFile, &TLogContainer::selectBandsActionExecute);
 
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
@@ -1996,6 +1999,15 @@ void TLogContainer::ManageListsActionExecute(  )
    manageListsDlg.exec();
    TMatchThread::InitialiseMatchThread();
    enableActions();
+}
+
+void TLogContainer::selectBandsActionExecute()
+{
+    BandsSelect bs(this);
+    if (bs.exec() == QDialog::Accepted)
+    {
+        mShowMessage(tr("You must restart Minos to implement any chnges"), this);
+    }
 }
 //---------------------------------------------------------------------------
 

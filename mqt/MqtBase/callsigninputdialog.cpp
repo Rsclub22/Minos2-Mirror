@@ -6,6 +6,7 @@ CallsignInputDialog::CallsignInputDialog(QWidget *parent, QString textToEdit, co
     ui(new Ui::CallsignInputDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setWindowTitle(dialogTitle);
     ui->callsignInput->setText(lineEditLabel);
     ui->callsignInput->setValidator(&ucValidator);

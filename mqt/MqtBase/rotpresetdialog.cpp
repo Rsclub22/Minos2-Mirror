@@ -23,7 +23,7 @@ RotPresetDialog::RotPresetDialog(QWidget *parent, int buttonNumber, RotPresetDat
     ui(new Ui::RotPresetDialog)
 {
     ui->setupUi(this);
-    this->setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     editData = _editData;
     curData = _curData;

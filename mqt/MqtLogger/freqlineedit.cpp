@@ -78,7 +78,7 @@ void FreqLineEdit::keyPressEvent(QKeyEvent *event)
 
 void FreqLineEdit::changeFreq(bool direction)
 {
-    static const double tuningData[][14] =
+    static const double tuningData[][15] =
                                         {
                                         {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                         {10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -93,7 +93,8 @@ void FreqLineEdit::changeFreq(bool direction)
                                         {100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0, 0, 0},
                                         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                                         {1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1, 0},
-                                        {10000000000, 1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1}
+                                        {10000000000, 1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1},
+                                        {100000000000, 10000000000, 1000000000, 0, 100000000, 10000000, 1000000, 0, 100000, 10000, 1000, 0, 100, 10, 1}
                                         };
 
 
@@ -105,7 +106,7 @@ void FreqLineEdit::changeFreq(bool direction)
     QString sfreq = text();
     int sfreqLen = sfreq.length();
     int pos = cursorPosition();
-    if (sfreqLen < 0 || sfreqLen > 14 || pos < 0 || pos > sfreqLen)
+    if (sfreqLen < 0 || sfreqLen > 15 || pos < 0 || pos > sfreqLen)
     {
         return;
     }

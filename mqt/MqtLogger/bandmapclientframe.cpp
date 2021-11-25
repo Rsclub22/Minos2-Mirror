@@ -146,7 +146,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(this, &BandmapClientFrame::freqDisplayClicked, this, &BandmapClientFrame::on_FreqDisplayClicked);
 
-    this->setMouseTracking(true);
+    setMouseTracking(true);
     mouseInFrameTimer = new QTimer(this);
     connect (mouseInFrameTimer, &QTimer::timeout, this, &BandmapClientFrame::mouseTimerCheckNewSpots);
 
@@ -689,12 +689,10 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     BandList blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
 
-    for (int i = 0; i < blist.bandList.count(); i++)
+    for(const auto &bi: blist.bandList)
     {
-        bi = blist.bandList[i];
         if (bi->uk == contestBandStr)
         {
-
             contestBandFlow = bi->fLow;
             contestBandFHigh = bi->fHigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
@@ -843,7 +841,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
                 BandList &blist = BandList::getBandList();
                 QSharedPointer<BandInfo>  bi;
                 bool bandOK = blist.findBand(band, bi);
-                if (!bandOK || bi->getType() != "HF")
+                if (!bandOK || bi->getType() != HF_BANDTYPE)
                 {
                    return res;
                 }
@@ -2028,7 +2026,9 @@ int BandmapClientFrame::readBandmapZoomLevel()
 
     BandmapZoomLevelIdAndNames bandmapId;
     int zoomLevel;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandmapId.getStartZoomLevelId(contestBandStr), zoomLevel );
+    QString bandId = bandmapId.getStartZoomLevelId(contestBandStr);
+    int defZoomLevel = bandmapId.getStartZoomLevelDefault(contestBandStr);
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile( bandId, zoomLevel, defZoomLevel );
     return zoomLevel;
 }
 

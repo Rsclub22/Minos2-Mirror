@@ -12,6 +12,7 @@ StartConfigManager::StartConfigManager(QWidget *parent, bool showAutoStart) :
   , showAutoStart(showAutoStart)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     MinosConfig *minosConfig = MinosConfig::getMinosConfig();
     curConfigName = minosConfig->getCurrConfig().configName;

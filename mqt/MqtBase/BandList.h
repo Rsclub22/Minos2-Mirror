@@ -63,11 +63,15 @@ class BandInfo
 {
         QString type;
     public:
+        bool enabled = true;
+
         Frequency fLow;
         Frequency fHigh;
 
         Frequency fcLow;
         Frequency fcHigh;
+
+        int zoomDefault;
 
         QString wlen;
         QString uk;
@@ -89,6 +93,17 @@ class BandInfo
         {
             return uk;
         }
+        static QString normalise(const QString s)
+        {
+            QString n = s;
+            n.remove('\x20').replace('H', 'h').replace('.', '_');
+            return n;
+        }
+        QString normalisedName() const
+        {
+            QString n = normalise(uk);
+            return n;
+        }
 };
 class TiXmlElement;
 class BandList
@@ -109,19 +124,20 @@ class BandList
 
 
         bool checkValidBand(Frequency freq);
-        void loadVhfAndUpBands(QVector<QSharedPointer<BandInfo> > &bands);
 
         static BandList &getBandList();
 
 
-        void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands);
+        void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered = true);
 
         static QString findBandNameFromIndex(int i, QVector<QSharedPointer<BandInfo> > &bands);
         bool isFreqOK(const Frequency &f, const QString &band, const QString &mode);
+        void updateEnabled();
 private:
         bool parseBand ( TiXmlElement * e );
         bool parseMode(QSharedPointer<BandInfo> band, QString unit, TiXmlElement *tix);
         bool parseExclusion(QSharedPointer<ModeInfo> mode, QString unit, TiXmlElement *e);
+        void readEnabled();
 };
 
 #endif

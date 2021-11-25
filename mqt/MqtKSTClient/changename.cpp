@@ -46,6 +46,7 @@ ChangeName::ChangeName(QWidget *parent) :
     ui(new Ui::ChangeName)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     delayedAction(this, [=]()
     {
         doChangeName();

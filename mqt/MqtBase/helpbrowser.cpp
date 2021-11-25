@@ -11,6 +11,7 @@ HelpBrowser::HelpBrowser(QString collectionFile, QUrl startUrl, QWidget *parent)
 
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     // Restore any settings
     QSettings settings;

@@ -17,6 +17,8 @@ AddRadioDialog::AddRadioDialog(QMap<QString, QSharedPointer<scatParams> > *avail
     ui(new Ui::AddRadioDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
     availRadioData = availRadioData_;
 
     setWindowTitle(windowTitle);
@@ -107,7 +109,7 @@ bool AddRadioDialog::checkNameAlreadyExists(QString radioName)
     msgBox.setModal( true );
     msgBox.setWindowTitle(tr("Error Radio Name"));
 
-    foreach (const auto &r, rList)
+    for (const auto &r: qAsConst(rList))
     {
         if (availRadioData->value(r)->radioName == radioName && availRadioData->value(r)->markForDeletion)
         {

@@ -27,18 +27,15 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     bandSelGridLayout = _bandSelGrid;
     setupButtons();
 
-
     readPresetFreqsFromIni(bands);
 
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_CW, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
 
-    BandList &blist = BandList::getBandList();
-
-    for (auto &b: blist.bandList)
+    for (auto &b: bands)
     {
-        if (b->getType() == "HF")
+        if (b->getType() == HF_BANDTYPE )
         {
             availHfBands.append(b->uk);
         }
@@ -48,32 +45,29 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
 
 void BandSelButtons::setupButtons()
 {
-
-    for (int i = 0; i < 6; i++)
+    int row = 0;
+    int col = 0;
+    for (const auto &b: qAsConst(bands))
     {
-        QToolButton *bb = new QToolButton();
-        toolButList.append(bb);
-        bb->setFocusPolicy(Qt::NoFocus);
+        if (b->getType() == HF_BANDTYPE)
+        {
+            QToolButton *bb = new QToolButton();
+            toolButList.append(bb);
+            bb->setFocusPolicy(Qt::NoFocus);
+            bandSelGridLayout->addWidget(bb, row, col, Qt::AlignHCenter);
+            col++;
+            if (col %3 == 0)
+            {
+                row++;
+                col = 0;
+            }
+            connect(bb, &QToolButton::pressed, this, [=]() {onBandSelButtonPressed(bb);});
 
+            bb->setVisible(false);
+            QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
+            bb->setStyleSheet(buttonStyle);
+        }
     }
-
-    bandSelGridLayout->addWidget(toolButList[0], 1, 0, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[1], 1, 1, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[2], 1, 2, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[3], 2, 0, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[4], 2, 1, Qt::AlignHCenter);
-    bandSelGridLayout->addWidget(toolButList[5], 2, 2, Qt::AlignHCenter);
-
-    QString buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
-    for (auto &tb:toolButList)
-    {
-
-        connect(tb, &QToolButton::pressed, this, [=]() {onBandSelButtonPressed(tb);});
-
-        tb->setVisible(false);
-        tb->setStyleSheet(buttonStyle);
-    }
-
 
     buildBandButtonLabels();
 
@@ -88,9 +82,9 @@ void BandSelButtons::readPresetFreqsFromIni(const QVector <QSharedPointer <BandI
 
 void BandSelButtons::buildBandButtonLabels()
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        QString band = b.data()->uk;
+        QString band = b->uk;
         QStringList bl = band.split('\x20');
         if(bl.count() == 2)
         {
@@ -124,7 +118,7 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
 
     for (auto &b:listOfBands)
     {
-        if (getBandType(b) == bandSelButtonData::HF_BAND_TYPE)
+        if (getBandType(b) == HF_BANDTYPE)
         {
             availHfBands.append(b);
         }
@@ -133,22 +127,20 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
 
 
 
-void BandSelButtons::setButtonsToBandType(QString bandType)
+void BandSelButtons::setButtonsToBandType()
 {
     setAllButtonsOff();
     setAllButtonsVisible(false);
     clearAllButtonLabels();
     bandToolButList.clear();
 
-    if (bandType == bandSelButtonData::HF_BAND_TYPE && !availHfBands.isEmpty())
+    for (int i = 0; i < availHfBands.count(); i++)
     {
-        for (int i = 0; i < availHfBands.count(); i++)
-        {
-            toolButList[i]->setText(bandToButtonLabels.value(availHfBands[i]));
-            toolButList[i]->setVisible(true);
-            bandToolButList.insert(availHfBands[i], toolButList[i]);
-        }
+        toolButList[i]->setText(bandToButtonLabels.value(availHfBands[i]));
+        toolButList[i]->setVisible(true);
+        bandToolButList.insert(availHfBands[i], toolButList[i]);
     }
+
     if (!selectedBand.isEmpty())
     {
         setButtonOnOff(selectedBand, true);
@@ -220,11 +212,11 @@ void BandSelButtons::setPreviousFreq(QString mode, Frequency freq)
 
 bool BandSelButtons::findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand )
 {
-    for (auto const &b: bands)
+    for (const auto &b: qAsConst(bands))
     {
         if (b->fLow <= freq && b->fHigh >= freq)
         {
-            foundBand = b.data()->uk;
+            foundBand = b->uk;
             return true;
         }
         else
@@ -256,7 +248,7 @@ int BandSelButtons::selectButtonGroupAndActiveBand(const Frequency &freq)
 int BandSelButtons::selectButtonGroupAndActiveBand(const QString band)
 {
     selectedBand = band;
-    setButtonsToBandType(getBandType(band));
+    setButtonsToBandType();
     return setButtonOnOff(band, true);
 }
 
@@ -324,11 +316,11 @@ void BandSelButtons::setPrevFreqToolTip(QString mode)
 
 bool BandSelButtons::checkButtonsAvailable(QString bandType)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (b.data()->getType() == bandType)
+        if (b->getType() == bandType)
         {
-            if (isBandAvailable(b.data()->uk))
+            if (isBandAvailable(b->uk))
             {
                 return true;
             }
@@ -340,11 +332,11 @@ bool BandSelButtons::checkButtonsAvailable(QString bandType)
 
 QString BandSelButtons::getBandType(const QString selectedBand)
 {
-    for (auto &b:bands)
+    for (const auto &b: qAsConst(BandList::getBandList().bandList))
     {
-        if (b.data()->uk == selectedBand)
+        if (b->uk == selectedBand)
         {
-            return b.data()->getType();
+            return b->getType();
         }
 
     }

@@ -14,5 +14,5 @@ QTabBar* QLogTabWidget::tabBar()
 }
 void QLogTabWidget::setTabColor(int index, QColor colour)
 {
-    this->tabBar()->setTabTextColor(index, colour);
+    tabBar()->setTabTextColor(index, colour);
 }

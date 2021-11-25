@@ -47,7 +47,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
 {
     ui->setupUi(this);
-
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     serialData::translateSerialData();
 
@@ -485,7 +485,7 @@ void RigControlMainWindow::initSelectRadioBox()
     ui->selectRadioBox->addItem("");
     QStringList availRadios;
     getAvailRadiosList(availRadios);
-    foreach(const auto &r, availRadios)
+    for (const auto &r: qAsConst(availRadios))
     {
         ui->selectRadioBox->addItem(r);
     }
@@ -1688,11 +1688,11 @@ void RigControlMainWindow::writeWindowTitle(QString appName)
 {
     if (appName.length() > 0)
     {
-        this->setWindowTitle(tr("Minos Rig Control - Logger - %1").arg(appName));
+        setWindowTitle(tr("Minos Rig Control - Logger - %1").arg(appName));
     }
     else
     {
-        this->setWindowTitle(tr("Minos Rig Control - Local"));
+        setWindowTitle(tr("Minos Rig Control - Local"));
     }
 
 }
@@ -2132,7 +2132,7 @@ bool RigControlMainWindow::findTransverter(QString &transVerterBand, QString ban
     bool b = false;
     //while (tvNum < currentRadio->numTransverters)
     QStringList tvList = currentRadio->transVertSettings.keys();
-    foreach(const auto &tv, tvList)
+    for(const auto &tv: qAsConst(tvList))
     {
         if (currentRadio->transVertSettings.value(tv)->band == band)
         {
@@ -2141,7 +2141,6 @@ bool RigControlMainWindow::findTransverter(QString &transVerterBand, QString ban
             logMessage(QString("FindTransverter: Found Transverter %1 for this band %2").arg(currentRadio->transVertSettings.value(tv)->band).arg(band));
             break;
         }
-        //tvNum++;
     }
 
     if (b)  // found a tranverter supporting this band
@@ -2315,8 +2314,7 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
 
             QStringList tvList = currentRadio->transVertSettings.keys();
             QString tvName;
-            //while (tvNum < currentRadio->numTransverters)
-            foreach(const auto &tv, tvList)
+            for(const auto &tv: qAsConst(tvList))
             {
                 if (currentRadio->transVertSettings.value(tv)->band == rigStateDetails->selTvBand)
                 {
@@ -2324,7 +2322,6 @@ void RigControlMainWindow::processRxFrequencyForDisplay()
                     tvName = tv;
                     break;
                 }
-                //tvNum++;
             }
 
             if (b)
@@ -2778,7 +2775,7 @@ void RigControlMainWindow::buildSupBandList(QSharedPointer<scatParams> radioData
     if(radioData->transVertEnable)
     {
 
-        foreach (auto const &b, bands)
+        for (auto const &b: qAsConst(bands))
         {
             if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioData))
             {
@@ -2804,7 +2801,7 @@ void RigControlMainWindow::buildSupportedRadioBands(QSharedPointer<scatParams> r
 
     if (radioData->rigModelNumber <= RigId::NonHamlibBaseId)
     {
-        foreach (auto const &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
 
             if (rigFactory->checkForBands(radioData->rigModelNumber, b->fLow))
@@ -2817,11 +2814,11 @@ void RigControlMainWindow::buildSupportedRadioBands(QSharedPointer<scatParams> r
     else
     {
         // non hamlib radios
-        foreach (auto &b, bands)
+        for (const auto &b: qAsConst(bands))
         {
-            if (radioData->supportBands.getSupportBandFlag(b.data()->name()))
+            if (radioData->supportBands.getSupportBandFlag(b->name()))
             {
-               supBandList.append(b.data()->name());
+               supBandList.append(b->name());
             }
         }
 
@@ -2857,7 +2854,7 @@ bool RigControlMainWindow::findSupTransBand(const QString band, const QSharedPoi
 
     QStringList tvList = radioData->transVertSettings.keys();
 
-    foreach(const auto &tv, tvList)
+    for(const auto &tv: qAsConst(tvList))
     {
         if (tv == band)
         {
@@ -3911,7 +3908,7 @@ void RigControlMainWindow::sendRadioListLogger(const QStringList &availRadios)
     if (!appName.isEmpty())
     {
         QStringList radioList;
-        foreach(const auto &rn, availRadios)
+        for(const auto &rn: qAsConst(availRadios))
         {
             if (!rn.isEmpty())
             {
@@ -3920,7 +3917,7 @@ void RigControlMainWindow::sendRadioListLogger(const QStringList &availRadios)
             }
         }
         logMessage(QString("Sending radiolist to logger"));
-        foreach (const auto &radio, radioList)
+        for (const auto &radio: qAsConst(radioList))
         {
             logMessage(QString("Send radioname %1").arg(radio));
         }
@@ -4259,7 +4256,7 @@ void RigControlMainWindow::onLaunchSetup()
 
 
 
-        foreach(const auto &r, setupRadio->listOfRadiosDataChanged)
+        for(const auto &r: qAsConst(setupRadio->listOfRadiosDataChanged))
         {
             if (r == currentRadioName)
             {
@@ -4387,21 +4384,19 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
     radioData->enableDisableCatFeature.catEnable = config.value("catEnable", true).toBool();
 
 
-    foreach (auto &b, bands)
+    for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b.data()->getType() == HF_BANDTYPE)
+        if (hfFlag && b->getType() == HF_BANDTYPE)
         {
-            QString name = b.data()->uk;
-            name.remove('\x20').replace('H', 'h').replace('.', '_');
-            radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+            QString name = b->normalisedName();
+            radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());
         }
         else
         {
-            if (b.data()->getType() != HF_BANDTYPE)
+            if (b->getType() != HF_BANDTYPE)
             {
-                QString name = b.data()->uk;
-                name.remove('\x20').replace('H', 'h').replace('.', '_');
-                radioData->supportBands.setSupportBandFlag(b.data()->name(), config.value("support" + name, false).toBool());
+                QString name = b->normalisedName();
+                radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());
             }
         }
 
@@ -4417,7 +4412,7 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
     QStringList tvList = configTransVert.childGroups();
-    foreach(const auto &tv, tvList)
+    for(const auto &tv: qAsConst(tvList))
     {
         readTranVerterSetting(radioData, tv, configTransVert);
     }
@@ -4689,8 +4684,7 @@ void RigControlMainWindow::aboutRigConfig()
             msg.append(tr("Number of TransVerters = %1\n").arg(currentRadio->transVertSettings.count()));
 
             QStringList tvList = currentRadio->transVertSettings.keys();
-            //for (int i = 0; i < currentRadio->numTransverters; i++)
-            foreach(const auto &tv, tvList)
+            for(const auto &tv: qAsConst(tvList))
             {
                 msg.append(QString("\n"));
                 msg.append(tr("Transverter %1\n").arg(tv));
@@ -4809,8 +4803,7 @@ void RigControlMainWindow::dumpRadioToTraceLog()
         trace(QString("Number of TransVerters = %1").arg(currentRadio->transVertSettings.count()));
 
         QStringList tvList = currentRadio->transVertSettings.keys();
-        //for (int i = 0; i < currentRadio->numTransverters; i++)
-        foreach(const auto &tv, tvList)
+        for(const auto &tv: qAsConst(tvList))
         {
             trace(QString("Transverter %1").arg(tv));
             trace(QString("Transverter Name = %1").arg(currentRadio->transVertSettings.value(tv)->transVertName));
@@ -4843,62 +4836,34 @@ void RigControlMainWindow::dumpRadioToTraceLog()
     }
 }
 
-/************************** Band Information ***********************************/
-/*
-void RigControlMainWindow::loadBands()
-{
-    BandList &blist = BandList::getBandList();
-
-    for (int i = 0; i < blist.bandList.size(); i++)   // just load VHF/UHF bands
-    {
-        // don't use bands > 10GHz (can't support Freq display)
-        if ( blist.bandList[i].uk != "24 GHz" && blist.bandList[i].uk != "47 GHz"
-             && blist.bandList[i].uk != "76 GHz" && blist.bandList[i].uk != "120 GHz"
-             && blist.bandList[i].uk != "134 GHz" && blist.bandList[i].uk != "248 GHz")
-
-        {
-            if (blist.bandList[i].getType().compare("VHF", Qt::CaseInsensitive) == 0 || blist.bandList[i].getType().compare("MWave", Qt::CaseInsensitive) == 0)
-                bands.append(new BandDetail(blist.bandList[i].uk, blist.bandList[i].flow, blist.bandList[i].fhigh));
-        }
-    }
-
-}
-
-*/
-
-
-
-
-
-
 /********************************* Supported Radio Display *****************************/
-
-
 
 void RigControlMainWindow::initialiseSupportedRadioDisplay()
 {
     // table of indicators
-    allSupRadioInd << ui->_1_8mhz_Indicator <<ui->_3_5mhz_Indicator
-                   << ui->_7mhz_Indicator << ui->_14mhz_Indicator
-                   << ui->_21mhz_Indicator << ui->_28mhz_Indicator
-                   << ui->_50mhz_Indicator << ui->_70mhz_Indicator
-                   << ui->_144mhz_Indicator << ui->_432mhz_Indicator
-                   << ui->_1296mhz_Indicator << ui->_2300mhz_Indicator
-                   << ui->_3_4ghz_Indicator << ui->_5_6ghz_Indicator
-                   << ui->_10ghz_Indicator;
-
-    allSupRadioIndLabels << ui->_1_8_mhzIndLbl << ui->_3_5_mhzIndLbl
-                         << ui->_7_mhzIndLbl << ui->_14_mhzIndLbl
-                         << ui->_21_mhzIndLbl << ui->_28_mhzIndLbl
-                         << ui->_50_mhzIndLbl << ui->_70_mhzIndLbl
-                         << ui->_144_mhzIndLbl << ui->_432_mhzIndLbl
-                         << ui->_1296_mhzIndLbl << ui->_2300_mhzIndLbl
-                         << ui->_3_4_ghzIndLbl << ui->_5_6_ghzIndLbl
-                         << ui->_10_ghzIndLbl;
-
-
+    int row = 0;
+    int col = 0;
     for (int i = 0; i < bands.count(); i++)
     {
+        QLabel *l = new QLabel();
+        QPushButton *p = new QPushButton();
+
+        l->setText(bands[i].data()->uk);
+        l->setAlignment(Qt::AlignRight);
+        p->setMaximumSize(16, 16);
+        p->setEnabled(false);
+
+        allSupRadioInd << p;
+        allSupRadioIndLabels << l;
+
+        ui->gridLayout->addWidget(l, row, col++);
+        ui->gridLayout->addWidget(p, row, col++);
+
+        if (col % 8 == 0)
+        {
+            row++;
+            col = 0;
+        }
         QSharedPointer<SupIndicatorDetails> supInd = QSharedPointer<SupIndicatorDetails>(new SupIndicatorDetails());
         supInd->supIndicator = allSupRadioInd[i];
         supInd->supIndicatorLabel = allSupRadioIndLabels[i];
@@ -4950,8 +4915,7 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
     if (!currentRadio->transVertSettings.isEmpty())
     {
         QStringList tvList = currentRadio->transVertSettings.keys();
-        //for (int i = 0; i < currentRadio->transVertSettings.count(); i++)
-        foreach(const auto &tv, tvList)
+        for(const auto &tv: qAsConst(tvList))
         {
             supRadioIndToggle(currentRadio->transVertSettings.value(tv)->band, displayIndicator::TRANSVERT);
 

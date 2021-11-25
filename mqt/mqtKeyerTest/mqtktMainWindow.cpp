@@ -10,6 +10,7 @@ mqtktMainWindow::mqtktMainWindow(QWidget *parent) :
     ui(new Ui::mqtktMainWindow)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     chart = new QChart();
     chart->legend()->hide();            // colours against series

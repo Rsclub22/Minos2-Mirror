@@ -7,6 +7,7 @@ PstConfigDialog::PstConfigDialog(QWidget *parent) :
     ui(new Ui::PstConfigDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     loadDialog();
 
