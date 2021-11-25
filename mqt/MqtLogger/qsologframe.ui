@@ -512,11 +512,52 @@ to</string>
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout_23">
         <item>
-         <widget class="QFrame" name="mySentFrame">
+         <widget class="QFrame" name="callBox">
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <spacer name="horizontalSpacer_14">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>81</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QSOTextEditFrame" name="CallsignFrame">
+             <property name="minimumSize">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="mySentFrame">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_21">
              <item>
@@ -546,7 +587,7 @@ to</string>
                </property>
                <property name="sizeHint" stdset="0">
                 <size>
-                 <width>40</width>
+                 <width>10</width>
                  <height>20</height>
                 </size>
                </property>
@@ -557,24 +598,11 @@ to</string>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
-              <widget class="QSOTextEditFrame" name="CallsignFrame">
-               <property name="minimumSize">
-                <size>
-                 <width>20</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QSOTextEditFrame" name="RSTTxFrame">
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -587,7 +615,7 @@ to</string>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -601,22 +629,9 @@ to</string>
          </widget>
         </item>
         <item>
-         <widget class="Line" name="line">
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <property name="lineWidth">
-           <number>4</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QFrame" name="themSentFrame">
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Box</enum>
           </property>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
@@ -624,6 +639,19 @@ to</string>
           <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_22">
+             <item>
+              <spacer name="horizontalSpacer_13">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
              <item>
               <widget class="QLabel" name="theirSentLabel">
                <property name="text">
@@ -653,7 +681,7 @@ to</string>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -666,7 +694,7 @@ to</string>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -679,7 +707,7 @@ to</string>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
@@ -692,7 +720,7 @@ to</string>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
-                 <height>0</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="frameShape">
