@@ -107,7 +107,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAutoFill, "AutoFill", false, QT_TR_NOOP("Auto Fill signal report"), QT_TR_NOOP("Auto Fill signal report on return"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowOperateTime, "ShowOpTime", otRSGB, QT_TR_NOOP("Show Operating Time"), QT_TR_NOOP("Show Operating Time"), false ) ) );
 
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", false, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpTabforSandP, "TabforSandP", true, QT_TR_NOOP("Change Tab order for S&P"), QT_TR_NOOP("Change Tab order for S&P"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeProtectContests, "AgeProtectContests", true, QT_TR_NOOP("Protect contests by age"), QT_TR_NOOP("Protect contests by age"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
