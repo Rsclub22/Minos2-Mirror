@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
+    <width>461</width>
     <height>313</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string/>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_41">
+  <layout class="QVBoxLayout" name="verticalLayout_10">
    <item>
     <widget class="QTabWidget" name="ClusterClientFilterTab">
      <property name="currentIndex">
@@ -425,11 +425,11 @@
       <attribute name="title">
        <string>Distance</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_29">
+      <layout class="QVBoxLayout" name="verticalLayout_9">
        <item>
         <widget class="QTabWidget" name="filterDistancesTab">
          <property name="currentIndex">
-          <number>0</number>
+          <number>2</number>
          </property>
          <widget class="QWidget" name="HF_DistanceTab">
           <attribute name="title">
@@ -437,13 +437,20 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_42">
            <item>
-            <widget class="QFrame" name="hfDistanceFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+            <widget class="QScrollArea" name="hfScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
+             <widget class="QWidget" name="hfScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>397</width>
+                <height>97</height>
+               </rect>
+              </property>
+             </widget>
             </widget>
            </item>
            <item>
@@ -501,15 +508,22 @@
           <attribute name="title">
            <string>VHF</string>
           </attribute>
-          <layout class="QVBoxLayout" name="verticalLayout_16">
+          <layout class="QVBoxLayout" name="verticalLayout_8">
            <item>
-            <widget class="QFrame" name="vhfDistanceFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+            <widget class="QScrollArea" name="vhfScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
+             <widget class="QWidget" name="vhfScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>397</width>
+                <height>97</height>
+               </rect>
+              </property>
+             </widget>
             </widget>
            </item>
            <item>
@@ -569,13 +583,20 @@
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_7">
            <item>
-            <widget class="QFrame" name="mwDistanceFrame">
-             <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+            <widget class="QScrollArea" name="mwScrollArea">
+             <property name="widgetResizable">
+              <bool>true</bool>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
-             </property>
+             <widget class="QWidget" name="mwScrollAreaWidgetContents">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>397</width>
+                <height>97</height>
+               </rect>
+              </property>
+             </widget>
             </widget>
            </item>
            <item>

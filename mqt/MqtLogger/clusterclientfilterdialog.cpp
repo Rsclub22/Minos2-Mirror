@@ -129,25 +129,32 @@ void ClusterClientFilterDialog::initCheckFilterTab()
     }
 
     //==============================================================================================
+    QVBoxLayout *hfvbl = new QVBoxLayout(ui->hfScrollAreaWidgetContents);
+    hfvbl->setContentsMargins(1, 1, 1, 1);
+    ui->hfScrollAreaWidgetContents->setLayout(hfvbl);
 
-    ui->hfDistanceFrame->setLayout(new QVBoxLayout());
-    ui->vhfDistanceFrame->setLayout(new QVBoxLayout());
-    ui->mwDistanceFrame->setLayout(new QVBoxLayout());
+    QVBoxLayout *vhfvbl = new QVBoxLayout(ui->vhfScrollAreaWidgetContents);
+    vhfvbl->setContentsMargins(1, 1, 1, 1);
+    ui->vhfScrollAreaWidgetContents->setLayout(vhfvbl);
+
+    QVBoxLayout *mwvbl = new QVBoxLayout(ui->mwScrollAreaWidgetContents);
+    mwvbl->setContentsMargins(1, 1, 1, 1);
+    ui->mwScrollAreaWidgetContents->setLayout(mwvbl);
 
     for (const auto &b:qAsConst(bands))
     {
         QWidget *p = nullptr;
         if (b->getType() == HF_BANDTYPE)
         {
-            p = ui->hfDistanceFrame;
+            p = ui->hfScrollAreaWidgetContents;
         }
         else if (b->getType() == VHF_BANDTYPE)
         {
-            p = ui->vhfDistanceFrame;
+            p = ui->vhfScrollAreaWidgetContents;
         }
         else if (b->getType() == MW_BANDTYPE)
         {
-            p = ui->mwDistanceFrame;
+            p = ui->mwScrollAreaWidgetContents;
         }
         else
         {
