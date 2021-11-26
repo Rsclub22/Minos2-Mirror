@@ -433,7 +433,7 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="68"/>
-        <location filename="../clusterclientfilterdialog.ui" line="502"/>
+        <location filename="../clusterclientfilterdialog.ui" line="509"/>
         <source>VHF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -573,59 +573,59 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="181"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="188"/>
         <source>Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="182"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="189"/>
         <source>Ignore Spots with no distance value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="454"/>
-        <location filename="../clusterclientfilterdialog.ui" line="520"/>
-        <location filename="../clusterclientfilterdialog.ui" line="600"/>
+        <location filename="../clusterclientfilterdialog.ui" line="461"/>
+        <location filename="../clusterclientfilterdialog.ui" line="534"/>
+        <location filename="../clusterclientfilterdialog.ui" line="621"/>
         <source>Set All Default Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="461"/>
-        <location filename="../clusterclientfilterdialog.ui" line="527"/>
-        <location filename="../clusterclientfilterdialog.ui" line="614"/>
+        <location filename="../clusterclientfilterdialog.ui" line="468"/>
+        <location filename="../clusterclientfilterdialog.ui" line="541"/>
+        <location filename="../clusterclientfilterdialog.ui" line="635"/>
         <source>Clear All No Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="468"/>
-        <location filename="../clusterclientfilterdialog.ui" line="534"/>
-        <location filename="../clusterclientfilterdialog.ui" line="586"/>
+        <location filename="../clusterclientfilterdialog.ui" line="475"/>
+        <location filename="../clusterclientfilterdialog.ui" line="548"/>
+        <location filename="../clusterclientfilterdialog.ui" line="607"/>
         <source>Clear All Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="475"/>
-        <location filename="../clusterclientfilterdialog.ui" line="541"/>
-        <location filename="../clusterclientfilterdialog.ui" line="607"/>
+        <location filename="../clusterclientfilterdialog.ui" line="482"/>
+        <location filename="../clusterclientfilterdialog.ui" line="555"/>
+        <location filename="../clusterclientfilterdialog.ui" line="628"/>
         <source>Set All No Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="482"/>
-        <location filename="../clusterclientfilterdialog.ui" line="548"/>
-        <location filename="../clusterclientfilterdialog.ui" line="593"/>
+        <location filename="../clusterclientfilterdialog.ui" line="489"/>
+        <location filename="../clusterclientfilterdialog.ui" line="562"/>
+        <location filename="../clusterclientfilterdialog.ui" line="614"/>
         <source>Set All Ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="491"/>
-        <location filename="../clusterclientfilterdialog.ui" line="557"/>
-        <location filename="../clusterclientfilterdialog.ui" line="623"/>
+        <location filename="../clusterclientfilterdialog.ui" line="498"/>
+        <location filename="../clusterclientfilterdialog.ui" line="571"/>
+        <location filename="../clusterclientfilterdialog.ui" line="644"/>
         <source>Enabled Fields Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.ui" line="568"/>
+        <location filename="../clusterclientfilterdialog.ui" line="582"/>
         <source>MW</source>
         <translation type="unfinished"></translation>
     </message>
@@ -635,152 +635,152 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="276"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="283"/>
         <source>Click to Set/Reset all HF Bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="277"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="284"/>
         <source>Click to Set/Reset all VHF Bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="278"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="285"/>
         <source>Click to Set/Reset all Microwave Bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="279"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="286"/>
         <source>Click to Set/Reset all Modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="815"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="827"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="846"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="822"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="834"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="853"/>
         <source>Add Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="815"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="822"/>
         <source>Enter Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="828"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="835"/>
         <source>Callsign may be invalid, do you still want to use the callsign?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="847"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="854"/>
         <source>Callsign already exists in list!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="901"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="908"/>
         <source>Delete Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="902"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="909"/>
         <source>Please confirm you want to delete callsign %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="926"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="933"/>
         <source>Delete All Callsign Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="927"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="934"/>
         <source>Please confirm you want to delete all callsigns?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="947"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="954"/>
         <source>Edit Callsign Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="947"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="954"/>
         <source>Edit Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="994"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="1011"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="1032"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1001"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1018"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1039"/>
         <source>Add Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="994"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1001"/>
         <source>Enter Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1012"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1019"/>
         <source>The locator may be invalid, do you still want to use it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1033"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1040"/>
         <source>Locator already exists in list!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1060"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1067"/>
         <source>Edit Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1060"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1067"/>
         <source>Edit Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1086"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1093"/>
         <source>Delete Locator Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1087"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1094"/>
         <source>Do you want to delete locator %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1110"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1117"/>
         <source>Delete All Locator Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1111"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1118"/>
         <source>Please confirm you want to delete all locators?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1182"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1189"/>
         <source>Save %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1182"/>
-        <location filename="../clusterclientfilterdialog.cpp" line="1232"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1189"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1239"/>
         <source>%1 List Files (*.txt)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1232"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1239"/>
         <source>Open %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1310"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1317"/>
         <source>Distance Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientfilterdialog.cpp" line="1311"/>
+        <location filename="../clusterclientfilterdialog.cpp" line="1318"/>
         <source>Please enter a number between %1 and %2!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2152,12 +2152,12 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="768"/>
+        <location filename="../qsologframe.ui" line="834"/>
         <source>QRZ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="829"/>
+        <location filename="../qsologframe.ui" line="895"/>
         <source>Last Spot Sent: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2182,17 +2182,17 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="778"/>
+        <location filename="../qsologframe.ui" line="844"/>
         <source>Mark Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="788"/>
+        <location filename="../qsologframe.ui" line="854"/>
         <source>Save Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="798"/>
+        <location filename="../qsologframe.ui" line="864"/>
         <source>Tuning - Add Map</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2297,67 +2297,67 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="812"/>
+        <location filename="../qsologframe.ui" line="878"/>
         <source>Spot Last Logged ()</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="822"/>
+        <location filename="../qsologframe.ui" line="888"/>
         <source>Spot Current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="882"/>
+        <location filename="../qsologframe.ui" line="948"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="885"/>
+        <location filename="../qsologframe.ui" line="951"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="895"/>
+        <location filename="../qsologframe.ui" line="961"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="898"/>
+        <location filename="../qsologframe.ui" line="964"/>
         <source>Force...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="914"/>
+        <location filename="../qsologframe.ui" line="980"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="924"/>
+        <location filename="../qsologframe.ui" line="990"/>
         <source>Get fields from current matching QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="927"/>
+        <location filename="../qsologframe.ui" line="993"/>
         <source>Match Xfer F12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="987"/>
+        <location filename="../qsologframe.ui" line="1053"/>
         <source>Insert Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="997"/>
+        <location filename="../qsologframe.ui" line="1063"/>
         <source>Insert After</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1020"/>
+        <location filename="../qsologframe.ui" line="1086"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1030"/>
+        <location filename="../qsologframe.ui" line="1096"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2400,37 +2400,37 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2438"/>
+        <location filename="../qsologframe.cpp" line="2464"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2445"/>
+        <location filename="../qsologframe.cpp" line="2471"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2476"/>
+        <location filename="../qsologframe.cpp" line="2502"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2541"/>
+        <location filename="../qsologframe.cpp" line="2567"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2543"/>
+        <location filename="../qsologframe.cpp" line="2569"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2925"/>
+        <location filename="../qsologframe.cpp" line="2951"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2960"/>
+        <location filename="../qsologframe.cpp" line="2986"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2438,7 +2438,7 @@ No          - Discard changes</source>
 <context>
     <name>QSOTextEditFrame</name>
     <message>
-        <location filename="../QSOTextEditFrame.cpp" line="51"/>
+        <location filename="../QSOTextEditFrame.cpp" line="52"/>
         <source>Click to clear edit content</source>
         <translation type="unfinished"></translation>
     </message>
