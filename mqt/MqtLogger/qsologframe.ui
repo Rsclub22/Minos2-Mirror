@@ -502,7 +502,7 @@ to</string>
      <item>
       <widget class="QFrame" name="qsoFrame">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -520,7 +520,7 @@ to</string>
         <item>
          <widget class="QFrame" name="callBox">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -547,6 +547,12 @@ to</string>
            </item>
            <item>
             <widget class="QSOTextEditFrame" name="CallsignFrame">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
              <property name="minimumSize">
               <size>
                <width>20</width>
@@ -564,7 +570,7 @@ to</string>
         <item>
          <widget class="QFrame" name="mySentFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -617,6 +623,12 @@ to</string>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
              <item>
               <widget class="QSOTextEditFrame" name="RSTTxFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
@@ -630,6 +642,12 @@ to</string>
              </item>
              <item>
               <widget class="QSOTextEditFrame" name="SerTxFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
@@ -649,7 +667,7 @@ to</string>
         <item>
          <widget class="QFrame" name="themSentFrame">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -702,6 +720,12 @@ to</string>
             <layout class="QHBoxLayout" name="horizontalLayout_18">
              <item>
               <widget class="QSOTextEditFrame" name="RSTRxFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
@@ -715,6 +739,12 @@ to</string>
              </item>
              <item>
               <widget class="QSOTextEditFrame" name="SerRxFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
@@ -728,6 +758,12 @@ to</string>
              </item>
              <item>
               <widget class="QSOTextEditFrame" name="LocFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
@@ -741,6 +777,12 @@ to</string>
              </item>
              <item>
               <widget class="QSOTextEditFrame" name="QTHFrame">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>20</width>
