@@ -30,6 +30,7 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditlabel->setObjectName(name + "label");
     hb->addWidget(TextEditlabel);
 
+
     TextEditEdit = new QLineEdit(this);
     TextEditEdit->setObjectName(name + "Edit");
     connect(TextEditEdit, &QLineEdit::textChanged, this, &QSOTextEditFrame::onTextEdit_textChanged);
@@ -71,6 +72,10 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditEdit->installEventFilter(filterWidget);
 
     setFocusPolicy(Qt::NoFocus);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    TextEditEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    TextEditlabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
+    clearButton->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 }
 QLineEdit *QSOTextEditFrame::getTextEditEdit() const
 {
