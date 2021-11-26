@@ -76,10 +76,15 @@
     <Mode type='USB' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
     <Mode type='MGM' flow='1296150' fclow1='1296150' fchigh1='1296400' fhigh='1296400'/>
 </Band>
-<Band type='MWave' flow='2300000'   fhigh='2450000'   unit='K' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
-    <Mode type='CW' flow='2300150' fclow1='2300150' fchigh1='2300200' fclow2='2300700' fchigh2='2300800' fhigh='2300800'/>
-    <Mode type='USB' flow='2300220' fclow1='2300220' fchigh1='2300250' fclow2='2300500' fchigh2='2300600' fhigh='2300600'/>
-    <Mode type='MGM' flow='2300220' fclow1='2300220' fchigh1='2300250' fclow2='2300500' fchigh2='2300600' fhigh='2300600'/>
+<Band type='MWave' flow='2300000'   fhigh='2302000'   unit='K' wlen='13cm'   UK='2300 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='teal'>
+    <Mode type='CW' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
+    <Mode type='USB' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
+    <Mode type='MGM' flow='2300000' fclow1='2300000' fchigh1='2300400'fhigh='2302000'/>
+</Band>
+<Band type='MWave' flow='2310000'   fhigh='2450000'   unit='K' wlen='13cm'   UK='2320 MHz' Reg1Test='2,3 GHz' ADIF='13cm'   Cabrillo='2.3G'  Colour='navy'>
+    <Mode type='CW' flow='2320000' fclow1='2320800' fchigh1='2320800' fhigh='2320800'/>
+    <Mode type='USB' flow='2320000' fclow1='2320800' fchigh1='2320800' fhigh='2320800'/>
+    <Mode type='MGM' flow='2320000' fclow1='2320800' fchigh1='2320800' fhigh='2320800'/>
 </Band>
 <Band type='MWave' flow='3400000'   fhigh='3475000'   unit='K' wlen='9cm'    UK='3.4 GHz'  Reg1Test='3,4 GHz' ADIF='9cm'    Cabrillo='3.4G'  Colour='black'>
 <Mode type='CW' flow='3400000' fclow1='3400000' fchigh1='3475000' fhigh='3475000'/>
