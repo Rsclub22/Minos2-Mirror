@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>764</width>
-    <height>359</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -111,7 +111,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,0,0,0,0">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -516,7 +516,7 @@ to</string>
        <property name="lineWidth">
         <number>2</number>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_23">
+       <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="15,20,35">
         <item>
          <widget class="QFrame" name="callBox">
           <property name="sizePolicy">

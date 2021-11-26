@@ -2162,6 +2162,32 @@ void QSOLogFrame::updateQSODisplay()
    ui->QTHFrame->setVisible(exchangeNeeded);
    ui->commentsFrame->setEnabled(notProtected);
 
+   int r = 0;
+   if (contest->RSTMandatoryField.getValue())
+   {
+       r = 20;
+   }
+   int s = 0;
+   if (contest->serialMandatoryField.getValue())
+   {
+       s = 20;
+   }
+   int l = 0;
+   if (locman)
+   {
+       l = 25;
+   }
+   int e = 0;
+   if (exchangeNeeded)
+   {
+       e = 25;
+   }
+   QHBoxLayout *hl = dynamic_cast<QHBoxLayout *>(ui->qsoFrame->layout());
+   hl->setStretch(0, 25);
+   hl->setStretch(1, r + s);
+   hl->setStretch(2, r + s + l + e);
+
+
 
    ui->ModeComboBoxGJV->setEnabled(notProtected);
    ui->MGMSubModeFrame->setEnabled(notProtected);

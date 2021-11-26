@@ -73,10 +73,8 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
 
     setFocusPolicy(Qt::NoFocus);
 
-    TextEditEdit->setMinimumWidth(10);
-    TextEditEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    TextEditEdit->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 
-    TextEditlabel->setMinimumWidth(10);
     TextEditlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
     clearButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
