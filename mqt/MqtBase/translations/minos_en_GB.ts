@@ -47,27 +47,37 @@
 <context>
     <name>BandsSelect</name>
     <message>
-        <location filename="../BandsSelect.ui" line="14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../BandsSelect.ui" line="20"/>
         <source>Choose the Bands that you want Minos to use.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="37"/>
-        <source>You will need to restart Minos to implement any changes.</source>
+        <location filename="../BandsSelect.ui" line="14"/>
+        <source>Select wanted bands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="59"/>
+        <location filename="../BandsSelect.ui" line="31"/>
+        <source>All HF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="52"/>
+        <source>All VHF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="73"/>
+        <source>All MW</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="109"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="66"/>
+        <location filename="../BandsSelect.ui" line="116"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -261,11 +271,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="61"/>
-        <source>WSJTX udpRecord Enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX Path to record incoming UDP</source>
         <translation type="unfinished"></translation>
@@ -338,6 +343,11 @@
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP record Enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../profiles.cpp" line="61"/>
+        <source>WSJTX UDP Record Enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

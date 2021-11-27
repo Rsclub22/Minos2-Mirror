@@ -188,7 +188,7 @@ utiliser un autre nom SVP</translation>
     <name>PstConfigDialog</name>
     <message>
         <location filename="../pstconfigdialog.ui" line="14"/>
-        <source>Dialog</source>
+        <source>Pst Rotator Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
