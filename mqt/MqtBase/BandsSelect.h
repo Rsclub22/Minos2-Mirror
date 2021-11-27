@@ -20,7 +20,12 @@ private slots:
 
     void on_OKButton_clicked();
 
-    void cbChanged(bool);
+    void on_allHFButton_clicked();
+
+    void on_allVHFButton_clicked();
+
+    void on_allMWButton_clicked();
+
 private:
     Ui::BandsSelect *ui;
     QVector<QSharedPointer<BandInfo> > bands;
@@ -28,6 +33,8 @@ private:
     QMap<QCheckBox *, QSharedPointer<BandInfo>> cbbands;
 
     void initCheckBoxes();
+    bool areAnyBandsChecked(QString bandType);
+    void changeAll(QString bandType);
 };
 
 #endif // BANDSSELECT_H

@@ -216,6 +216,7 @@ bool TLogContainer::show(int argc, char *argv[])
 
     if ( TAboutBox::ShowAboutBox( this, true ) == false )
     {
+        trace("exit called from About box");
        close();
        return false;
     }
@@ -2006,7 +2007,9 @@ void TLogContainer::selectBandsActionExecute()
     BandsSelect bs(this);
     if (bs.exec() == QDialog::Accepted)
     {
-        mShowMessage(tr("You must restart Minos to implement any chnges"), this);
+        TWaitCursor wc(this);
+        MinosConfig::getMinosConfig() ->bounce();
+        LogContainer->selectSession(TContestApp::getContestApp()->currSession);
     }
 }
 //---------------------------------------------------------------------------
