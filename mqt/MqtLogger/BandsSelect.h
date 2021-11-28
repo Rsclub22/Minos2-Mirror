@@ -7,7 +7,7 @@ namespace Ui {
 class BandsSelect;
 }
 
-class BandsSelect : public QDialog
+class BandsSelect : public QFrame
 {
     Q_OBJECT
 
@@ -15,11 +15,14 @@ public:
     explicit BandsSelect(QWidget *parent = nullptr);
     ~BandsSelect();
 
+    void initialise();
+    void finalise();
+
+    bool check();
+    void cancel();
+
+    bool checkChanged();
 private slots:
-    void on_cancelButton_clicked();
-
-    void on_OKButton_clicked();
-
     void on_allHFButton_clicked();
 
     void on_allVHFButton_clicked();

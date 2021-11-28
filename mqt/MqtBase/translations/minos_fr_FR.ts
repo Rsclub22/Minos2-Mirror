@@ -47,39 +47,12 @@
 <context>
     <name>BandsSelect</name>
     <message>
-        <location filename="../BandsSelect.ui" line="20"/>
-        <source>Choose the Bands that you want Minos to use.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="14"/>
-        <source>Select wanted bands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="31"/>
-        <source>All HF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="52"/>
-        <source>All VHF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="73"/>
-        <source>All MW</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="109"/>
         <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="116"/>
         <source>OK</source>
-        <translation type="unfinished">OK</translation>
+        <translation type="obsolete">OK</translation>
     </message>
 </context>
 <context>

@@ -479,8 +479,6 @@ void TLogContainer::setupMenus()
     ManageListsAction = newAction(QT_TR_NOOP("&Manage Archive Lists..."), ui->menuFile, &TLogContainer::ManageListsActionExecute);
     ui->menuFile->addSeparator();
 
-    selectBandsAction = newAction(QT_TR_NOOP("Select usable bands..."), ui->menuFile, &TLogContainer::selectBandsActionExecute);
-
     ui->menuFile->addSeparator();
 #ifdef Q_OS_WIN
     ExitClearAction = newAction(QT_TR_NOOP("E&xit Minos Contest Logger and Clear registry..."), ui->menuFile, &TLogContainer::ExitClearActionExecute);
@@ -2002,16 +2000,6 @@ void TLogContainer::ManageListsActionExecute(  )
    enableActions();
 }
 
-void TLogContainer::selectBandsActionExecute()
-{
-    BandsSelect bs(this);
-    if (bs.exec() == QDialog::Accepted)
-    {
-        TWaitCursor wc(this);
-        MinosConfig::getMinosConfig() ->bounce();
-        LogContainer->selectSession(TContestApp::getContestApp()->currSession);
-    }
-}
 //---------------------------------------------------------------------------
 
 void TLogContainer::ShiftTabRightActionExecute( )

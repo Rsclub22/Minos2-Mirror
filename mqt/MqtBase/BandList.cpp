@@ -20,6 +20,7 @@
 ======================================================================================*/
 
 #include "base_pch.h"
+#include "INIFile.h"
 #include "bandmapcommon.h"
 #include "BandList.h"
 #include "cutils.h"
@@ -604,18 +605,19 @@ bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &
 void BandList::readEnabled()
 {
     QString filename = "./Configuration/bandsEnabled.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    INIFile settings(filename);
     for ( auto const &b: qAsConst(bandList ))
     {
-        b->enabled = settings.value("Enabled_" + b->normalisedName(), true).toBool();
+        b->enabled = settings.getPrivateProfileBool("General", "Enabled_" + b->normalisedName(), true);
     }
 }
 void BandList::updateEnabled()
 {
     QString filename = "./Configuration/bandsEnabled.ini";
-    QSettings settings(filename, QSettings::IniFormat);
+    INIFile settings(filename);
     for ( auto const &b: qAsConst(bandList ))
     {
-        settings.setValue("Enabled_" + b->normalisedName(), b->enabled);
+        settings.writePrivateProfileBool("General", "Enabled_" + b->normalisedName(), b->enabled);
     }
+    settings.writePrivateProfileString( "", "", "" );
 }

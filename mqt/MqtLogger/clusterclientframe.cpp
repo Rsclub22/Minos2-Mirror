@@ -50,7 +50,7 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     traceMsg(QString("Starting"));
 
-    BandList::getBandList().loadAllBands(bands);
+    BandList::getBandList().loadAllBands(bands, false);
     for (auto const &b: qAsConst(bands))
     {
         clusterBands << b->uk;

@@ -3,16 +3,16 @@
 #include "bandmapcommon.h"
 #include "BandList.h"
 #include "cutils.h"
-
+#include "tlogcontainer.h"
+#include "ContestApp.h"
 #include "BandsSelect.h"
 #include "ui_BandsSelect.h"
 
 BandsSelect::BandsSelect(QWidget *parent) :
-    QDialog(parent),
+    QFrame(parent),
     ui(new Ui::BandsSelect)
 {
     ui->setupUi(this);
-    initCheckBoxes();
 }
 
 BandsSelect::~BandsSelect()
@@ -20,13 +20,32 @@ BandsSelect::~BandsSelect()
     delete ui;
 }
 
-void BandsSelect::on_cancelButton_clicked()
+void BandsSelect::initialise()
 {
-    reject();
+    initCheckBoxes();
+}
+bool BandsSelect::check()
+{
+    return true;
+}
+void BandsSelect::cancel()
+{
+
 }
 
-
-void BandsSelect::on_OKButton_clicked()
+bool BandsSelect::checkChanged()
+{
+   bool  changed = false;
+    for (auto cb = cbbands.constBegin(); cb != cbbands.constEnd(); cb++)
+    {
+        if (cb.value()->enabled != cb.key()->isChecked())
+        {
+            return true;
+        }
+    }
+    return changed;
+}
+void BandsSelect::finalise()
 {
     bool changed = false;
     for (auto cb = cbbands.constBegin(); cb != cbbands.constEnd(); cb++)
@@ -40,11 +59,10 @@ void BandsSelect::on_OKButton_clicked()
     if (changed)
     {
         BandList::getBandList().updateEnabled();
-        accept();
-    }
-    else
-    {
-        reject();
+
+        TWaitCursor wc(this);
+        MinosConfig::getMinosConfig() ->bounce();
+        LogContainer->selectSession(TContestApp::getContestApp()->currSession);
     }
 }
 
@@ -66,7 +84,7 @@ void BandsSelect::initCheckBoxes()
 
     BandList::getBandList().loadAllBands(bands, false); // don't filter on enabled
 
-    for (auto const &b: qAsConst(bands))
+    for (auto &b: bands)
     {
         QCheckBox *cb = new QCheckBox();
 

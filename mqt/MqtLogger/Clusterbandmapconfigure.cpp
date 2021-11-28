@@ -24,7 +24,7 @@ void ClusterBandmapConfigure::initialise()
     int curTabNo = settings.value("OptionsClusterBandmapConfigure/curTab").toInt();
     ui->ClusterBandmapConfiguretabWidget->setCurrentIndex(curTabNo);
 
-    BandList::getBandList().loadAllBands(bands);
+    BandList::getBandList().loadAllBands(bands, false);
     ClusterFilterDefaultDistIniName defaultDistIniNames;
     defaultDistIniNames.initClusterFilterIdAndNames(bands);
 

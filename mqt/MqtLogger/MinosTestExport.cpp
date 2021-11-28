@@ -404,7 +404,7 @@ void MinosTestExport::exportClusterFilter(QSharedPointer<QFile> expfd)
         st->addMember(clusterFilter.getValue().locatorFilterList, "locatorList");
 
         QVector<QSharedPointer<BandInfo> > bands;
-        BandList::getBandList().loadAllBands(bands);
+        BandList::getBandList().loadAllBands(bands, false);
         for(const auto &b: qAsConst(bands))
         {
              QString bandIni = "bandFilter" + b->normalisedName();

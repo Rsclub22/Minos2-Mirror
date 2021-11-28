@@ -1636,7 +1636,7 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                        clusterFilterSettingsExist = true;
                                        ClusterClientFilterSettings ccfs;
                                        QVector<QSharedPointer<BandInfo> > bands;
-                                       BandList::getBandList().loadAllBands(bands);
+                                       BandList::getBandList().loadAllBands(bands, false);
                                        ccfs.initFilterSettings(bands);
                                        mt->getStructArgMemberValue("callsignList", ccfs.callsignFilterList);
                                        mt->getStructArgMemberValue("locatorList", ccfs.locatorFilterList);

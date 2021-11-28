@@ -127,7 +127,7 @@ void ClusterMainWindow::doStartup()
     connect(ui->actionAbout, &QAction::triggered, this, &ClusterMainWindow::about);
     connect(ui->actionUser_Command_Shortcuts, &QAction::triggered, this, &ClusterMainWindow::clusterNodeCommandsShortcutHelp);
 
-    BandList::getBandList().loadAllBands(bands);
+    BandList::getBandList().loadAllBands(bands, false);
 
     filterSettings.initFilterSettings(bands);
     initFilterCheckBoxs();

@@ -155,7 +155,6 @@ private:
     QAction *HFFileNewAction;
     QAction *ListOpenAction;
     QAction *ManageListsAction;
-    QAction *selectBandsAction;
     QAction *ShiftTabLeftAction;
     QAction *ShiftTabRightAction;
 
@@ -198,7 +197,6 @@ private slots:
     void FileImportHFActionExecute();
 
     void ManageListsActionExecute();
-    void selectBandsActionExecute();
     void FileCloseActionExecute();
     void CloseAllActionExecute();
     void CloseAllButActionExecute();

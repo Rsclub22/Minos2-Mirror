@@ -14,6 +14,7 @@ class DisplayOptions;
 class RadioSettingDialog;
 class N1MMBroadcastConfig;
 class WsjtxConfigure;
+class BandsSelect;
 
 class OptionsDialog : public QDialog
 {
@@ -47,6 +48,9 @@ private:
     RadioSettingDialog *rdc = nullptr;
     N1MMBroadcastConfig *nbc= nullptr;
     WsjtxConfigure *wc = nullptr;
+    BandsSelect *bs = nullptr;
+
+    QWidget *current = nullptr;
 
     bool check();
 

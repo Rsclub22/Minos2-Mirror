@@ -34,8 +34,6 @@ private:
     int cap = 0;
     bool doAge = false;
 
-    void doCloseEvent();
-
     QString browseDefDir(const QString &prompt);
 };
 
