@@ -131,12 +131,12 @@ int BandmapView::getDialZoomLevel()
 
 void BandmapView::setBandmapZoom(int level)
 {
-    Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
-    Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
-    Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
-
     if (level < dialMaxZoomLevel && level >= dialMinZoomLevel)
     {
+        Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
+        Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
+        Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
+
         zoomLevel = level;
         dial->setZoomLevel(level);
         setBandmapHeight(contestBandFlow, contestBandFhigh);
