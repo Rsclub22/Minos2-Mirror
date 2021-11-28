@@ -39,7 +39,7 @@ void ScreenConfigScreen::setNameFocus()
 }
 bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElement *e, int &auxCount)
 {
-    QString etype = e->getType();
+    SCType etype = e->getType();
     if (row)
     {
         for (int j = 0; j < row->hbl->count(); j++)
@@ -48,7 +48,7 @@ bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElem
             const ScreenConfigElement *ele = dynamic_cast<const ScreenConfigElement *>(w);
             if (ele && ele != e)
             {
-                QString type = ele->getType();
+                SCType type = ele->getType();
                 if (ele->getIsSplitElement())
                 {
                     for (int i = 0; i < ele->vbl->count(); i++)
@@ -60,7 +60,7 @@ bool ScreenConfigScreen::checkRowOk(const ScreenConfigRow *row, ScreenConfigElem
                 }
                 else if (type == etype)
                 {
-                    if (type == ScreenConfigElement::getTrScreenTypeString(sctAux))
+                    if (type == sctAux)
                     {
                         auxCount++;
                     }
@@ -147,8 +147,8 @@ void ScreenConfigScreen::procRow(ScreenConfigRow *row, SCRow &scrow)
                 }
                 else
                 {
-                    scele.type = ScreenConfigElement::getScreenType(ele->getType());
-                    scele.auxType = StackedInfoFrame::getAuxEntryType(ele->getAuxType());
+                    scele.type = ele->getType();
+                    scele.auxType = ele->getAuxType();
                 }
                 scrow.elements.append(scele);
             }

@@ -75,6 +75,16 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
         ui->infoCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 
+    // for sorting you need the following 4 lines
+    QSortFilterProxyModel *proxy = new QSortFilterProxyModel(ui->infoCombo);
+    proxy->setSourceModel(ui->infoCombo->model());
+    // combo's current model must be reparented,
+    // otherwise QComboBox::setModel() will delete it
+    ui->infoCombo->model()->setParent(proxy);
+    ui->infoCombo->setModel(proxy);
+    // sort
+    ui->infoCombo->model()->sort(0); // "A","B","C
+
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToCountry, this, &StackedInfoFrame::on_ScrollToCountry, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToDistrict, this, &StackedInfoFrame::on_ScrollToDistrict, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &StackedInfoFrame::on_FontChanged, Qt::QueuedConnection);

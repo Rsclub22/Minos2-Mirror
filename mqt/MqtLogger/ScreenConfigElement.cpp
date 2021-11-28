@@ -51,9 +51,19 @@ const char * ScreenConfigElement::getRawScreenTypeString(SCType t)
     return getRawScreenTypeString(sctNone);
 
 }
-QString ScreenConfigElement::getTrScreenTypeString(SCType t)
+const char * ScreenConfigElement::getRawScreenHint(SCType t)
 {
-    return tr(getRawScreenTypeString(t));
+    for(auto const  &opt: qAsConst(scoptions))
+    {
+        if (opt.type == t)
+            return opt.hint;
+    }
+    return getRawScreenHint(sctNone);
+
+}
+QString ScreenConfigElement::getTrScreenHint(SCType t)
+{
+    return tr(getRawScreenHint(t));
 }
 
 void ScreenConfigElement::eraseLayout(QLayout * layout)
@@ -130,19 +140,30 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
         {
             row = i;
         }
-        const char *disp = opt.s;
-        if (disp == scoptions[sctRunButtons].s)
-        {
-            disp = scoptions[sctRunButtons].hint;
-        }
+        const char *disp = opt.hint;
         ui->elementTypeCombo->addItem(tr(disp), opt.type);
         ui->elementTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
 
+    // Find the "horizontal split" element
     QStandardItemModel *model = dynamic_cast< QStandardItemModel * >( ui->elementTypeCombo->model() );
     QStandardItem *item = model->item( row, 0 );
     item->setEnabled( false );
-    qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(row, true);
+    QModelIndex ind = model->index(row, 0);
+
+    // for sorting you need the following 4 lines
+    QSortFilterProxyModel* proxy = new QSortFilterProxyModel(ui->elementTypeCombo);
+    proxy->setSourceModel(model);
+    // combo's current model must be reparented,
+    // otherwise QComboBox::setModel() will delete it
+    model->setParent(proxy);
+    ui->elementTypeCombo->setModel(proxy);
+    // sort
+    ui->elementTypeCombo->model()->sort(0); // Column 0
+
+    // and disable h_split in the PROXY position
+    QModelIndex pind = proxy->mapFromSource(ind);
+    qobject_cast<QListView *>(ui->elementTypeCombo->view())->setRowHidden(pind.row(), true);
 
     i = 0;
     for(auto const &opt: qAsConst(StackedInfoFrame::auxoptions))
@@ -151,6 +172,15 @@ ScreenConfigElement::ScreenConfigElement(ScreenConfigRow *parentrow, ScreenConfi
         ui->auxTypeCombo->addItem(s, opt.type);
         ui->auxTypeCombo->setItemData( i++, tr(opt.hint), Qt::ToolTipRole );
     }
+    // for sorting you need the following 4 lines
+    proxy = new QSortFilterProxyModel(ui->auxTypeCombo);
+    proxy->setSourceModel(ui->auxTypeCombo->model());
+    // combo's current model must be reparented,
+    // otherwise QComboBox::setModel() will delete it
+    ui->auxTypeCombo->model()->setParent(proxy);
+    ui->auxTypeCombo->setModel(proxy);
+    // sort
+    ui->auxTypeCombo->model()->sort(0); // Column 0
 }
 
 ScreenConfigElement::~ScreenConfigElement()
@@ -160,22 +190,25 @@ ScreenConfigElement::~ScreenConfigElement()
 
 void ScreenConfigElement::setType(SCType t)
 {
-    ui->elementTypeCombo->setCurrentText(getTrScreenTypeString(t));
+    QString s = getTrScreenHint(t);
+    ui->elementTypeCombo->setCurrentText(s);
 
     ui->auxTypeCombo->setVisible(t == sctAux);
 }
-QString ScreenConfigElement::getType() const
+SCType ScreenConfigElement::getType() const
 {
-    return ui->elementTypeCombo->currentText();
+    int t = ui->elementTypeCombo->itemData(ui->elementTypeCombo->currentIndex()).toInt();
+    return static_cast<SCType>(t);
 }
 
 void ScreenConfigElement::setAuxType(AuxEntries ae)
 {
     ui->auxTypeCombo->setCurrentText(StackedInfoFrame::getTrAuxTypeString(ae));
 }
-QString ScreenConfigElement::getAuxType() const
+AuxEntries ScreenConfigElement::getAuxType() const
 {
-    return ui->auxTypeCombo->currentText();
+    int t = ui->auxTypeCombo->itemData(ui->auxTypeCombo->currentIndex()).toInt();
+    return static_cast<AuxEntries>(t);
 }
 
 void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
@@ -193,12 +226,7 @@ void ScreenConfigElement::on_elementTypeCombo_activated(const QString &/*arg1*/)
     {
         setType(sctNone);
     }
-    QString sel = ui->elementTypeCombo->currentText();
-    if (sel == tr(scoptions[sctRunButtons].hint))
-    {
-        sel = tr(scoptions[sctRunButtons].s);
-    }
-    SCType t = getScreenType(sel);
+    SCType t = getType();
     ui->auxTypeCombo->setVisible(t == sctAux);
 
 }
@@ -239,8 +267,8 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     // and replace "this" with the new one
     trace("ScreenConfigElement::on_splitAboveButton_clicked");
 
-    QString t = getType();
-    QString aux = getAuxType();
+    SCType t = getType();
+    AuxEntries aux = getAuxType();
     setIsSplitElement(true);
     setType(sctSplit);
 
@@ -252,8 +280,8 @@ void ScreenConfigElement::on_splitAboveButton_clicked()
     vbl->insertWidget( 1, newRow);
     ScreenConfigElement *e = newRow->addLeft(nullptr);
 
-    e->setType(getScreenType(t));
-    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
+    e->setType(t);
+    e->setAuxType(aux);
 }
 
 void ScreenConfigElement::on_splitBelowButton_clicked()
@@ -266,8 +294,8 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
 
     // and replace "this" with the new one
 
-    QString t = getType();
-    QString aux = getAuxType();
+    SCType t = getType();
+    AuxEntries aux = getAuxType();
     setIsSplitElement(true);
 
     ScreenConfigRow *baseRow = new ScreenConfigRow(this);
@@ -279,8 +307,8 @@ void ScreenConfigElement::on_splitBelowButton_clicked()
     vbl->insertWidget( 1, newRow);
     newRow->addLeft(nullptr);
 
-    e->setType(getScreenType(t));
-    e->setAuxType(StackedInfoFrame::getAuxEntryType(aux));
+    e->setType(t);
+    e->setAuxType(aux);
 }
 void ScreenConfigElement::addRowBefore(ScreenConfigRow *r)
 {

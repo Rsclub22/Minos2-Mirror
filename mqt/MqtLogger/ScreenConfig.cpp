@@ -99,8 +99,8 @@ bool ScreenConfig::checkOk(ScreenConfigElement *e)
             return false;
         }
     }
-    QString etype = e->getType();
-    if (etype != ScreenConfigElement::getTrScreenTypeString(sctAux) || auxCount < STACKITEMS)
+    SCType etype = e->getType();
+    if (etype != sctAux || auxCount < STACKITEMS)
     {
         return true;
     }

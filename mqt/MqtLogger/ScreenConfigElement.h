@@ -31,10 +31,10 @@ public:
     ~ScreenConfigElement();
 
     void setType(SCType);
-    QString getType() const;
+    SCType getType() const;
 
     void setAuxType(AuxEntries);
-    QString getAuxType() const;
+    AuxEntries getAuxType() const;
 
     bool getIsSplitElement() const;
     void setIsSplitElement(bool value);
@@ -48,8 +48,9 @@ public:
     bool checkOk(ScreenConfigElement *e);
 
     static SCType getScreenType(QString s);
-    static QString getTrScreenTypeString(SCType s);
+    static QString getTrScreenHint(SCType s);
     static const char *getRawScreenTypeString(SCType t);
+    static const char *getRawScreenHint(SCType t);
 private slots:
     void on_elementTypeCombo_activated(const QString &arg1);
 
