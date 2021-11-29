@@ -34,6 +34,10 @@ public:
 
     VoiceKeyerParams& operator = (const VoiceKeyerParams& vkp);
 
+    VoiceKeyerParams(const VoiceKeyerParams& vkp)
+    {
+        *this = vkp;
+    }
 
     QString getType() const {return type;}
     void setType(const QString type_){type = type_;}
