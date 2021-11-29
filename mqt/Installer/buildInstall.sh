@@ -11,7 +11,7 @@ if [[ "$1" == "SECONDINSTALL" ]]; then
     RUNTIME="runtime-beta"
     INTERMEDIATE="minos-runtime-beta"
 else
-    BUILDDIR="buildBeta"
+    BUILDDIR="build"
     RUNTIME="runtime"
     INTERMEDIATE="minos-runtime"
 fi
