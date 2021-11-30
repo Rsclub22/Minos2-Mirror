@@ -9,9 +9,13 @@ class N1MMLink:public QObject
 {
     Q_OBJECT
 public:
+    int port = 12060;
+    QString address;
+
     N1MMLink(QObject *parent);
 
     void initialise();
+    void disconnect();
 
     void sendFrequencyRequest(Frequency f, QString mode);
 
@@ -33,7 +37,7 @@ private:
     QString mode;
 
     QString genFreqStanza(const Frequency &f);
-    bool setAddress(QString addr, QHostAddress &host);
+
 private slots:
 
     void onReceiveUDP();

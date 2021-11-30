@@ -24,7 +24,9 @@ void WsjtxLink::initialise()
 {
     int port = 0;
     QString multicast_group_address;
-    QSettings settings;
+
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings settings(fileName, QSettings::IniFormat);
 
     port = settings.value("WSJT-X port", 2237).toInt();
     multicast_group_address = settings.value( "WSJT-X address", "" ).toString();
@@ -74,7 +76,7 @@ void WsjtxLink::remove_client (QString const& /*id*/)
     trace(QString("WsjtxServer::remove_client"));
 //    emit do_remove_client(id);
 }
-void WsjtxLink::update_status (QString const& /*id*/, Frequency f, QString const& mode, QString const& /*dx_call*/
+void WsjtxLink::update_status (QString const& /*id*/, Frequency f, QString const& pmode, QString const& /*dx_call*/
                                   , QString const& /*report*/, QString const& /*tx_mode*/, bool /*tx_enabled*/
                                   , bool /*transmitting*/, bool /*decoding*/, qint32 /*rx_df*/, qint32 /*tx_df*/
                                   , QString const& /*de_call*/, QString const& /*de_grid*/, QString const& /*dx_grid*/
@@ -87,10 +89,16 @@ void WsjtxLink::update_status (QString const& /*id*/, Frequency f, QString const
 //                          frequency_tolerance, tr_period, configuration_name, tx_message);
 
     currFrequency = f;
-    this->mode = mode;
+    mode = pmode;
     subMode = sub_mode;
 
-    //trace(QString("WsjtxServer::update_status transmitting %1 decoding %2").arg(transmitting).arg(decoding));
+    if (mode != hamlibData::USB && mode != hamlibData::LSB && mode != hamlibData::CW && mode != "PH")
+    {
+        mode = hamlibData::USB;
+    }
+
+
+    //trace(QString("WsjtxServer::update_status frequency %1 mode %2/%3").arg(f.traceStr()).arg(mode).arg(subMode));
 
 }
 

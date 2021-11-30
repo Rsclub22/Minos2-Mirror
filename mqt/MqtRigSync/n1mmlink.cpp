@@ -122,9 +122,14 @@ N1MMLink::N1MMLink(QObject *parent):
 
 void N1MMLink::initialise()
 {
+    QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RIGSYNC_CONFIG_FILE;
+    QSettings settings(fileName, QSettings::IniFormat);
+
+    int n1mmPort = settings.value("N1MM+ port", 12060).toInt();
+
     // set up receive UDP link
     qus = QSharedPointer<QUdpSocket>(new QUdpSocket());
-    qus->bind(QHostAddress::Any, 12060, (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
+    qus->bind(QHostAddress::Any, n1mmPort, (QUdpSocket::ShareAddress | QUdpSocket::ReuseAddressHint));
 
 
     connect (qus.data(), &QUdpSocket::readyRead, this, &N1MMLink::onReceiveUDP);
@@ -132,6 +137,13 @@ void N1MMLink::initialise()
     connect( &connectTimer, &QTimer::timeout, this, &N1MMLink::connectTimeout);
     connectTimer.start(N1MMTimerInterval);  // longer than the N1MM 10 sec repeat frequency
 
+}
+
+void N1MMLink::disconnect()
+{
+    connectTimer.stop();
+    qus.clear();
+    currFrequency.clear();
 }
 
 void N1MMLink::connectTimeout()

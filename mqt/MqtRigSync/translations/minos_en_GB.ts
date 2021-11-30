@@ -19,12 +19,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSConfigure.ui" line="77"/>
+        <location filename="../RSConfigure.ui" line="62"/>
+        <source>WSJT-X</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="68"/>
+        <source>If Logger is running, then either use the Logger WSJT-X re-broadcast port, or set logger, sync, and WSJT-X to all use the same Multicast Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="83"/>
+        <location filename="../RSConfigure.ui" line="118"/>
+        <source>Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="97"/>
+        <source>Multicast Group Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="112"/>
+        <source>N1MM+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../RSConfigure.ui" line="163"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSConfigure.ui" line="84"/>
+        <location filename="../RSConfigure.ui" line="170"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>

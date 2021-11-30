@@ -79,8 +79,22 @@ void RSMainWindow::configure()
         sv.append(s);
     }
     sv.removeDuplicates();
+    sv.prepend("");
 
+    trace(sv.join(';'));
     rsc.setServerList(sv, mainRig.server, subRig.server);
+
+    n1mmLink.disconnect();
+    bool wcon = wsjtxLink.isConnected();
+    if (wcon)
+    {
+        trace("Disconnecting WSJT-X link");
+        wsjtxLink.disconnect();
+    }
+    else
+    {
+        trace("WSJT-X link not connected");
+    }
 
     if (rsc.exec() == QDialog::Accepted)
     {
@@ -91,6 +105,12 @@ void RSMainWindow::configure()
         ui->Rig2Combo->clear();
         ui->Rig2Combo->addItems(cb);
         ui->Rig2Combo->setCurrentText(subRig.selected.toString());
+    }
+    n1mmLink.initialise();
+    if (wcon)
+    {
+        trace("Reconnecting WSJT-X link");
+        wsjtxLink.initialise();
     }
 }
 RSMainWindow::~RSMainWindow()
@@ -217,10 +237,10 @@ void RSMainWindow::claimTimerTimer()
 void RSMainWindow::on_transfer12Button_clicked()
 {
     // set sub rig to main rig
-    trace("Transfer 1 - 2");
+    //trace("Transfer 1 - 2");
     if (mainRig.rigFreq.isClear() || (mainRig.rigFreq == subRig.rigFreq && mainRig.rigMode == subRig.rigMode))
     {
-        trace("transfer12 - No change required");
+        //trace("transfer12 - No change required");
         return;
     }
     mainRig.setMaster(true);
@@ -234,10 +254,10 @@ void RSMainWindow::on_transfer21Button_clicked()
 {
     // set main rig to sub rig
 
-    trace("Transfer 2 - 1");
+    //trace("Transfer 2 - 1");
     if (subRig.rigFreq.isClear() || (mainRig.rigFreq == subRig.rigFreq && mainRig.rigMode == subRig.rigMode))
     {
-        trace("transfer21 - No change required");
+        //trace("transfer21 - No change required");
         return;
     }
     mainRig.setMaster(false);
@@ -678,7 +698,7 @@ void SyncRadio::subRigSelection(const PubSubName &sd, bool state)
 }
 void SyncRadio::controlFreq(const Frequency &lFreq, QString mode)
 {
-    trace(QString("Send %1 to %2").arg(lFreq.traceStr(), which));
+    //trace(QString("Send %1 to %2").arg(lFreq.traceStr(), which));
     QStringList qsl = rigCache.getSelectedLoggers(selected);
     if (qsl.count())
     {
@@ -712,6 +732,6 @@ bool SyncRadio::isMaster() const
 }
 void SyncRadio::setMaster(bool m)
 {
-    trace(QString(which + " master set to %1").arg(makeStr(m)));
+   // trace(QString(which + " master set to %1").arg(makeStr(m)));
     master = m;
 }
