@@ -32,53 +32,77 @@ void WsjtxLink::initialise()
     trace(QString("Wsjtxlink::start  1 port %1 address %2").arg(port).arg(multicast_group_address));
 
     msgServer->start(static_cast<MessageServer::port_type>( port), QHostAddress {multicast_group_address});
+
+    connected = true;
+}
+Frequency WsjtxLink::getFrequency()
+{
+    return currFrequency;
+}
+QString WsjtxLink::getMode()
+{
+    return mode;
+}
+QString WsjtxLink::getRadioName()
+{
+    return "WSJT-X";
+}
+
+bool WsjtxLink::isConnected()
+{
+    return connected;
 }
 
 void WsjtxLink::disconnect()
 {
+    connected = false;
     msgServer->stop();
 }
-void WsjtxLink::log_ADIF(QString const& id, QByteArray const& ADIF)
+void WsjtxLink::log_ADIF(QString const& /*id*/, QByteArray const& /*ADIF*/)
 {
     //trace(QString("WsjtxServer::log_ADIF %1").arg(QString(ADIF)));
-    emit do_log_ADIF(id, ADIF);
+//    emit do_log_ADIF(id, ADIF);
 }
-void WsjtxLink::add_client (QString const& id, QString const& version, QString const& revision)
+void WsjtxLink::add_client (QString const& /*id*/, QString const& /*version*/, QString const& /*revision*/)
 {
     trace(QString("WsjtxServer::add_client"));
-    emit do_add_client(id, version, revision);
+//    emit do_add_client(id, version, revision);
 }
 
-void WsjtxLink::remove_client (QString const& id)
+void WsjtxLink::remove_client (QString const& /*id*/)
 {
     trace(QString("WsjtxServer::remove_client"));
-    emit do_remove_client(id);
+//    emit do_remove_client(id);
 }
-void WsjtxLink::update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
-                                  , QString const& report, QString const& tx_mode, bool tx_enabled
-                                  , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
-                                  , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                                  , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
-                                  , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
-                                  , QString const& configuration_name, QString const& tx_message)
+void WsjtxLink::update_status (QString const& /*id*/, Frequency f, QString const& mode, QString const& /*dx_call*/
+                                  , QString const& /*report*/, QString const& /*tx_mode*/, bool /*tx_enabled*/
+                                  , bool /*transmitting*/, bool /*decoding*/, qint32 /*rx_df*/, qint32 /*tx_df*/
+                                  , QString const& /*de_call*/, QString const& /*de_grid*/, QString const& /*dx_grid*/
+                                  , bool /*watchdog_timeout*/, QString const& sub_mode, bool /*fast_mode*/
+                                  , quint8 /*special_op_mode*/, quint32 /*frequency_tolerance*/, quint32 /*tr_period*/
+                                  , QString const& /*configuration_name*/, QString const& /*tx_message*/)
 {
-    emit do_update_status(id, f, mode, dx_call, report, tx_mode, tx_enabled, transmitting, decoding, rx_df, tx_df,
-                          de_call, de_grid, dx_grid, watchdog_timeout, sub_mode, fast_mode, special_op_mode,
-                          frequency_tolerance, tr_period, configuration_name, tx_message);
+//    emit do_update_status(id, f, mode, dx_call, report, tx_mode, tx_enabled, transmitting, decoding, rx_df, tx_df,
+//                          de_call, de_grid, dx_grid, watchdog_timeout, sub_mode, fast_mode, special_op_mode,
+//                          frequency_tolerance, tr_period, configuration_name, tx_message);
+
+    currFrequency = f;
+    this->mode = mode;
+    subMode = sub_mode;
 
     //trace(QString("WsjtxServer::update_status transmitting %1 decoding %2").arg(transmitting).arg(decoding));
 
 }
 
-void WsjtxLink::decode_added (bool is_new, QString const& client_id, QTime time, qint32 snr
-                                 , float delta_time, quint32 delta_frequency, QString const& mode
-                                 , QString const& message, bool low_confidence, bool off_air)
+void WsjtxLink::decode_added (bool /*is_new*/, QString const& /*client_id*/, QTime /*time*/, qint32 /*snr*/
+                                 , float /*delta_time*/, quint32 /*delta_frequency*/, QString const& /*mode*/
+                                 , QString const& /*message*/, bool /*low_confidence*/, bool /*off_air*/)
 {
     //trace(QString("WsjtxServer::decode_added %1").arg(message));
-    emit do_decode_added(is_new, client_id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, off_air);
+//    emit do_decode_added(is_new, client_id, time, snr, delta_time, delta_frequency, mode, message, low_confidence, off_air);
 }
-void WsjtxLink::decodes_cleared (QString const& client_id)
+void WsjtxLink::decodes_cleared (QString const& /*client_id*/)
 {
     trace(QString("WsjtxServer::decodes_cleared"));
-    emit do_decodes_cleared(client_id);
+//    emit do_decodes_cleared(client_id);
 }

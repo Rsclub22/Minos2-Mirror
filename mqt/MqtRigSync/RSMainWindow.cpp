@@ -155,6 +155,18 @@ void RSMainWindow::syncTimerTimer(  )
             subRig.trackOtherBand(mainRig);
        }
     }
+    if (mainRig.check(wsjtxLink))
+    {
+       ui->Rig1Rig->setText(wsjtxLink.getRadioName());
+       if (ui->trackRig->isChecked())
+       {
+           on_transfer12Button_clicked();
+       }
+       if (ui->trackBandcb->isChecked())
+       {
+            subRig.trackOtherBand(mainRig);
+       }
+    }
     if (mainRig.rigFreq.isClear())
     {
         ui->QF1Label->clear();
@@ -549,6 +561,20 @@ bool SyncRadio::check(N1MMLink &n1mmLink)
         {
             rigFreq = n1mmLink.getFrequency();
             rigMode = n1mmLink.getMode();
+            return true;
+        }
+    }
+    return false;
+}
+bool SyncRadio::check(WsjtxLink &wsjtxLink)
+{
+    if (wsjtxLink.isConnected())
+    {
+        Frequency f = wsjtxLink.getFrequency();
+        if (f.isOK() )
+        {
+            rigFreq = wsjtxLink.getFrequency();
+            rigMode = wsjtxLink.getMode();
             return true;
         }
     }

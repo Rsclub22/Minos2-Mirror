@@ -13,10 +13,23 @@ public:
 
     void initialise();
 
+    Frequency getFrequency();
+    QString getMode();
+    QString getRadioName();
+
+    bool isConnected();
+
     void disconnect();
 
 private:
     MessageServer * msgServer = nullptr;
+
+    bool connected = false;
+    Frequency currFrequency;
+    QString radioName;
+    QString mode;
+    QString subMode;
+
 
 private slots:
     void add_client (QString const& id, QString const& version, QString const& revision);
@@ -45,24 +58,24 @@ private slots:
     void decodes_cleared (QString const& client_id);
 
 signals:
-    void do_add_client (QString const& id, QString const& version, QString const& revision);
+//    void do_add_client (QString const& id, QString const& version, QString const& revision);
 
-    void do_remove_client (QString const& id);
+//    void do_remove_client (QString const& id);
 
-    void do_decode_added (bool is_new, QString const& client_id, QTime, qint32 snr
-                              , float delta_time, quint32 delta_frequency, QString const& mode
-                              , QString const& message, bool low_confidence, bool off_air);
-    void do_decodes_cleared (QString const& client_id);
+//    void do_decode_added (bool is_new, QString const& client_id, QTime, qint32 snr
+//                              , float delta_time, quint32 delta_frequency, QString const& mode
+//                              , QString const& message, bool low_confidence, bool off_air);
+//    void do_decodes_cleared (QString const& client_id);
 
-    void do_log_ADIF(QString const& id, QByteArray const& ADIF);
+//    void do_log_ADIF(QString const& id, QByteArray const& ADIF);
 
-    void do_update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
-                               , QString const& report, QString const& tx_mode, bool tx_enabled
-                               , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
-                               , QString const& de_call, QString const& de_grid, QString const& dx_grid
-                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
-                               , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
-                               , QString const& configuration_name, QString const& tx_message);
+//    void do_update_status (QString const& id, Frequency f, QString const& mode, QString const& dx_call
+//                               , QString const& report, QString const& tx_mode, bool tx_enabled
+//                               , bool transmitting, bool decoding, qint32 rx_df, qint32 tx_df
+//                               , QString const& de_call, QString const& de_grid, QString const& dx_grid
+//                               , bool watchdog_timeout, QString const& sub_mode, bool fast_mode
+//                               , quint8 special_op_mode, quint32 frequency_tolerance, quint32 tr_period
+//                               , QString const& configuration_name, QString const& tx_message);
 };
 
 #endif // WSJTXLINK_H

@@ -46,6 +46,7 @@ public:
     void configureServer(const QString s);
     QStringList populateRig();
     bool check(N1MMLink &n1mmLink);
+    bool check(WsjtxLink &wsjtxLink);
     void rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode);
     void trackOtherBand(SyncRadio &tracked);
 
