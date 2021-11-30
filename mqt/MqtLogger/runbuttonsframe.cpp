@@ -94,8 +94,8 @@ void RunButtonsFrame::setFreq(Frequency freq)
 {
     if (ct)
     {
-        QString bandChanged = ct->checkBandChange(freq, curRadioFreq);
-        if (!bandChanged.isEmpty())
+        QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, curRadioFreq);
+        if (bandChanged)
         {
             // we need to switch the run button mapping
             trace(QString("runButtonsFrame band changed"));

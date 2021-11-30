@@ -1274,9 +1274,8 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
                 if (ct->isHF())
                 {
                     Frequency spotFreq = qvariant_cast<Frequency>(bandmapDataModel->data(bandmapDataModel->index(row, FREQ_COL_NUM ),  BMP_DataStoredRole));
-                    QString bandChanged;
-                    bandChanged = ct->checkBandChange(dxFreq, spotFreq);
-                    if (!bandChanged.isEmpty())
+                    QSharedPointer<BandInfo>  bandChanged = ct->checkBandChange(dxFreq, spotFreq);
+                    if (bandChanged)
                     {
                         continue;
                     }
@@ -1332,9 +1331,8 @@ void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString 
 
             if (ct->isHF())
             {
-                QString bandChanged;
-                bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
-                if (!bandChanged.isEmpty())
+                QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, (*i).wt->frequency.getValue().str());
+                if (bandChanged)
                 {
                     continue;
                 }
@@ -1482,11 +1480,10 @@ void BandmapClientFrame::setFreq(Frequency freq)
 
     if (lastfreq != freq)
     {
-        QString bandChanged;
-        bandChanged = ct->checkBandChange(freq, lastfreq);
-        if (!bandChanged.isEmpty())
+        QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, lastfreq);
+        if (bandChanged)
         {
-            setContestBandMode(bandChanged, contestModeStr);
+            setContestBandMode(bandChanged->uk, contestModeStr);
         }
         lastfreq = freq;
         curFreq = freq;

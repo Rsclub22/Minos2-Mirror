@@ -1766,11 +1766,11 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
             stopKeyer = true;
             trace(QString("Setting stop keyer f = %1 sCurFreq = %2").arg(f.traceStr(), sCurFreq.traceStr()));
         }
-        QString bandChanged = contest->checkBandChange(f, sCurFreq);
-        if (!bandChanged.isEmpty())
+        QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(f, sCurFreq);
+        if (bandChanged)
         {
-            contest->currentBand.setValue(bandChanged);
-            FKHRigControlFrame->setContestBand(bandChanged);
+            contest->currentBand.setValue(bandChanged->uk);
+            FKHRigControlFrame->setContestBand(bandChanged->uk);
             MinosLoggerEvents::SendContestBandChanged(contest);
         }
 
@@ -2000,17 +2000,17 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         trace("sendKeyerStop from TSingleLogFrame::sendRadioFreq");
         sendKeyerStop();    // don't keep calling while tuning!
 
-        QString bandChanged = contest->checkBandChange(freq, sCurFreq);
-        if (!bandChanged.isEmpty())
+        QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(freq, sCurFreq);
+        if (!bandChanged)
         {
-            contest->currentBand.setValue(bandChanged);
-            FKHRigControlFrame->setContestBand(bandChanged);
+            contest->currentBand.setValue(bandChanged->uk);
+            FKHRigControlFrame->setContestBand(bandChanged->uk);
             MinosLoggerEvents::SendContestBandChanged(contest);
         }
 
         LogContainer->sendDM->sendRigControlFreq(this, freq);
 
-        if (!bandChanged.isEmpty())
+        if (bandChanged)
         {
             LogContainer->sendDM->sendRigControlMode(this, sCurMode);
         }
