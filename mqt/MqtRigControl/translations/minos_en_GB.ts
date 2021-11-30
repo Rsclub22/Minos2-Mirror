@@ -1108,45 +1108,45 @@ these radio definitions:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1609"/>
-        <location filename="../rigsetupform.cpp" line="1767"/>
+        <location filename="../rigsetupform.cpp" line="1622"/>
+        <location filename="../rigsetupform.cpp" line="1780"/>
         <source>Transverter Name Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1610"/>
-        <location filename="../rigsetupform.cpp" line="1768"/>
+        <location filename="../rigsetupform.cpp" line="1623"/>
+        <location filename="../rigsetupform.cpp" line="1781"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1692"/>
+        <location filename="../rigsetupform.cpp" line="1705"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1701"/>
+        <location filename="../rigsetupform.cpp" line="1714"/>
         <source>Remove Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1702"/>
+        <location filename="../rigsetupform.cpp" line="1715"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1743"/>
+        <location filename="../rigsetupform.cpp" line="1756"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1876"/>
+        <location filename="../rigsetupform.cpp" line="1889"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1877"/>
+        <location filename="../rigsetupform.cpp" line="1890"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1174,7 +1174,7 @@ Please enter another name</source>
     <message>
         <location filename="../rigsetupform.ui" line="70"/>
         <location filename="../rigsetupform.ui" line="304"/>
-        <location filename="../rigsetupform.ui" line="718"/>
+        <location filename="../rigsetupform.ui" line="613"/>
         <source>Comport</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1322,92 +1322,37 @@ Please enter another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="559"/>
-        <source>1.8 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="566"/>
-        <source>3.5 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="573"/>
-        <source>7 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="580"/>
-        <source>14 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="587"/>
-        <source>21 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="594"/>
-        <source>28 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="618"/>
-        <source>50 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="625"/>
-        <source>70 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="632"/>
-        <source>144 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="639"/>
-        <source>432 MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="646"/>
-        <source>1296MHz</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rigsetupform.ui" line="670"/>
+        <location filename="../rigsetupform.ui" line="565"/>
         <source>Please select a band or add transverters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="697"/>
+        <location filename="../rigsetupform.ui" line="592"/>
         <source>Enable Transvert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="704"/>
+        <location filename="../rigsetupform.ui" line="599"/>
         <source>Enable Transvert Switch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="711"/>
+        <location filename="../rigsetupform.ui" line="606"/>
         <source>Enable Local Switch Control</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="761"/>
+        <location filename="../rigsetupform.ui" line="656"/>
         <source>Add Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="768"/>
+        <location filename="../rigsetupform.ui" line="663"/>
         <source>Remove Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.ui" line="775"/>
+        <location filename="../rigsetupform.ui" line="670"/>
         <source>Change Band</source>
         <translation type="unfinished"></translation>
     </message>

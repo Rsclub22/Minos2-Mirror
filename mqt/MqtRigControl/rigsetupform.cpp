@@ -1440,23 +1440,36 @@ void RigSetupForm::setEnableDisableCatFeaturesGroupVisible(bool visible)
 
 void RigSetupForm::initSupBandsChkBoxs()
 {
-    allSupBandsChkBoxList << ui->sup1_8MhzChkbox << ui->sup3_5MhzChkbox << ui->sup7MhzChkbox
-                          << ui->sup14MhzChkbox << ui->sup21MhzChkbox << ui->sup28MhzChkbox
-                          << ui->sup50MhzChkbox << ui->sup70MhzChkbox << ui->sup144MhzChkbox
-                          << ui->sup432MhzChkbox << ui->sup1296MhzChkbox;
-
-    for (int i = 0; i < allSupBandsChkBoxList.count(); i++)
+    QGridLayout *gl = new QGridLayout();
+    ui->supBandsFrame->setLayout(gl);
+    for (const auto &b: qAsConst(bands))
     {
-        SupCheckBoxData scbd;
-        scbd.supBandChkBox = allSupBandsChkBoxList[i];
-        scbd.bandType = bands[i].data()->getType();
-        allSupBandsChkBoxesMap.insert(bands[i].data()->name(), scbd);
-
-        connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
-
+        if (b->fcLow < Frequency(1999999999))
+        {
+            SupCheckBoxData scbd;
+            QCheckBox *cb = new QCheckBox(ui->supBandsFrame);
+            cb->setText(b->name());
+            scbd.supBandChkBox = cb;
+            scbd.bandType = b->getType();
+            allSupBandsChkBoxList << cb;
+            allSupBandsChkBoxesMap.insert(b->name(), scbd);
+        }
     }
 
-
+    int mod = (allSupBandsChkBoxList.count() + 1)/2;
+    int row = 0;
+    int col = 0;
+    for (int i = 0; i < allSupBandsChkBoxList.count(); i++)
+    {
+        gl->addWidget(allSupBandsChkBoxList[i], row, col);
+        col++;
+        if (col%mod == 0)
+        {
+            row++;
+            col = 0;
+        }
+        connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
+    }
 }
 
 

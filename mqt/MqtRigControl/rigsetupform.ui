@@ -550,119 +550,14 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_81">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_61">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_7">
-            <item>
-             <widget class="QCheckBox" name="sup1_8MhzChkbox">
-              <property name="text">
-               <string>1.8 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup3_5MhzChkbox">
-              <property name="text">
-               <string>3.5 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup7MhzChkbox">
-              <property name="text">
-               <string>7 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup14MhzChkbox">
-              <property name="text">
-               <string>14 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup21MhzChkbox">
-              <property name="text">
-               <string>21 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup28MhzChkbox">
-              <property name="text">
-               <string>28 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_51">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QCheckBox" name="sup50MhzChkbox">
-              <property name="text">
-               <string>50 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup70MhzChkbox">
-              <property name="text">
-               <string>70 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup144MhzChkbox">
-              <property name="text">
-               <string>144 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup432MhzChkbox">
-              <property name="text">
-               <string>432 MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="sup1296MhzChkbox">
-              <property name="text">
-               <string>1296MHz</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
+         <widget class="QFrame" name="supBandsFrame">
+          <property name="minimumSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="nativeBandLabel">
