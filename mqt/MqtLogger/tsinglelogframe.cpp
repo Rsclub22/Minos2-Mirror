@@ -2001,7 +2001,7 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         sendKeyerStop();    // don't keep calling while tuning!
 
         QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(freq, sCurFreq);
-        if (!bandChanged)
+        if (bandChanged)
         {
             contest->currentBand.setValue(bandChanged->uk);
             FKHRigControlFrame->setContestBand(bandChanged->uk);
