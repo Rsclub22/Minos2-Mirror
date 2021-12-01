@@ -44,7 +44,6 @@ static const QString clusterMethod      ("Minos:Cluster");
 static const QString clusterClientServer("MinosClusterClientServer");
 static const QString sendClusterSpot    ("SendClusterSpot");
 static const QString txSpotToCluster    ("txSpotToCluster");
-static const QString hfFlagToCluster    ("hfFlagToCluster");
 static const QString txSpotParamFreq    ("Freq");
 static const QString txSpotParamCallsign ("Callsign");
 static const QString txSpotParamLocator ("Locator");
@@ -57,7 +56,6 @@ static const QString clusterTXSpotEnableState ("ClusterTXSpotEnableState");
 static const QString clusterBandmask ("ClusterBandmask");
 static const QString clusterFrameId ("ClusterFrameId");
 static const QString clusterReconnect ("ClusterReconnect");
-static const QString clusterHfFlag ("ClusterHfFlag");
 
 // QRZ Server
 static const QString qrzServerApp  ("qrzServerApp");
@@ -198,7 +196,6 @@ static const QString rigRitMaxKHz ("RitMaxKHz");
 static const QString rigRadioVolLevel      ("RadioVolLevel");
 static const QString rigLogVolLevel      ("LogVolLevel");
 static const QString rigVolStatus           ("VolStatus");
-static const QString rigHfFlag           ("HfFlag");
 static const QString rigPttEnabled ("PttEnabled");
 static const QString rigPttType ("PttType");
 static const QString rigPttState  ("PttState");

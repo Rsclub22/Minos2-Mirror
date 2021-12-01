@@ -308,9 +308,6 @@ private:
 
     QString selTransVertBandIndicator = "";
 
-    bool hfFlag = false;
-
-
     void initActionsConnections();
     void initSelectRadioBox();
     void setSelectRadioBoxVisible(bool visible);

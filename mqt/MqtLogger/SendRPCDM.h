@@ -64,7 +64,6 @@ public:  		// User declarations
 
       void sendSpotToClusterServer(  const Frequency &freq, const QString &call, const QString &loc );
       void sendRequestSpotsResentFromClusterServer(resendFrameId frameId, const QString &cmd, const QString bandMask, const QString &uuid);
-      void sendHfFlagToClusterServer(const bool state);
       void sendReconnectFlagToClusterServer(const bool state);
 
       void sendKeyerPlay( TSingleLogFrame *tslf,int fno );
@@ -94,7 +93,6 @@ public:  		// User declarations
       void sendRigControlPassBandState(TSingleLogFrame *tslf,const int state);
       void sendRigControlRitFreq(TSingleLogFrame *tslf, ShortFreq freq);
       void sendRigControlRitStatus(TSingleLogFrame *tslf,const bool &status);
-      void sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status);
       void sendRigControlPttOnOff(TSingleLogFrame *tslf, const bool &onOff);
 
       QStringList rotators();

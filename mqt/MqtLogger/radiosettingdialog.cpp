@@ -40,7 +40,6 @@ RadioSettingDialog::~RadioSettingDialog()
 void RadioSettingDialog::initialise()
 {
     BandList::getBandList().loadAllBands(bands);
-    hfFlag = true;
     logRadioSettingsChangeFlag = QSharedPointer<RadioSettingsDialogChangeFlag>(new RadioSettingsDialogChangeFlag());
 
     //===========================================================================================================

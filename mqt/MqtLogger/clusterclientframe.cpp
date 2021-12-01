@@ -88,9 +88,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     connect (purgeTimer, &QTimer::timeout, this, [=](){purgeSpots();});
 
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &ClusterClientFrame::on_FontChanged, Qt::QueuedConnection);
-
     connect (ui->filtersBut, &QPushButton::clicked, this, [=](){filterButtonSelected();});
 
 
@@ -136,9 +133,6 @@ ClusterClientFrame::ClusterClientFrame(QWidget *parent):
 
     dxSpotDataModel = new DxSpotDataModel();
     dxSpotDataModel->delegate = dxDelegate;
-
-
-    on_FontChanged();
 
     setupDXSpotView();
 
@@ -537,22 +531,6 @@ void ClusterClientFrame::filterButtonSelected()
         }
     }
 }
-
-
-void ClusterClientFrame::setHF(bool /*hfFlag*/)
-{
-
-}
-
-
-
-
-void ClusterClientFrame::on_FontChanged()
-{
-    QFont cf = QApplication::font();
-
-}
-
 
 void ClusterClientFrame::setAllTabsColor(QColor c)
 {

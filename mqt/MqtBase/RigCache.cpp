@@ -339,11 +339,6 @@ void RigCache::setRadioRitStatus(const PubSubName &name, bool status)
     rigStates[name].setRitRadioStatus(status);
 }
 
-void RigCache::setHfFlag(const PubSubName &name, bool status)
-{
-    rigDetails[name].setHfFlag(status);
-}
-
 void RigCache::setPttEnabled(const PubSubName &name, bool state)
 {
     rigDetails[name].setPttEnabled(state);

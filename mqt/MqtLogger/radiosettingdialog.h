@@ -104,10 +104,6 @@ private:
 
     QMap<QString, BandSwDetails> bandSwDetails;
 
-
-
-    bool hfFlag;
-
     QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsChangeFlag;
 
 

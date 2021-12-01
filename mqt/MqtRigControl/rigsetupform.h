@@ -37,7 +37,7 @@ class RigSetupForm : public QWidget
 
 public:
     explicit RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
-                          const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _radioTab, bool hfFlag_, QWidget *parent = nullptr);
+                          const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _radioTab, QWidget *parent = nullptr);
     ~RigSetupForm();
 
 
@@ -258,9 +258,6 @@ private:
     QLogTabWidget* ui_RadioTab;
 
     QString appName;
-
-    bool hfFlag = false;
-
 
     QString currentRadioName;
 

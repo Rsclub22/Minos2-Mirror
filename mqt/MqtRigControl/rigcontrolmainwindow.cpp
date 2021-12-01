@@ -58,8 +58,6 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
 
-    hfFlag = true;
-
     writeWindowTitle(appName);
 
     createCloseEvent();
@@ -413,29 +411,6 @@ void RigControlMainWindow::pollRadioInfo()
 {
     getRadioInfo(PUBLISH_NOW);
 }
-
-/*
-void RigControlMainWindow::setupBandFreq()
-{
-
-
-    FreqPresetDialog*  fPresetDialog = new FreqPresetDialog(hfFlag, bands);
-
-    int ret = fPresetDialog->exec();
-    if (ret == QDialog::Accepted)
-    {
-        if (fPresetDialog->getFreqChanged())
-        {
-            logMessage(QString("RigControl: Band Freq Change, send new bandlist to logger"));
-            //presetFreq = fPresetDialog->getPresetSettings();
-            fPresetDialog->saveSettings();
-
-        }
-    }
-
-
-}
-*/
 
 void RigControlMainWindow::currentRadioSettingChanged(QString radioName)
 {
@@ -4232,7 +4207,7 @@ void RigControlMainWindow::sendPttStateLogger()
 void RigControlMainWindow::onLaunchSetup()
 {
 
-    RigSetupDialog *setupRadio = new RigSetupDialog(rigFactory, bands, hfFlag);
+    RigSetupDialog *setupRadio = new RigSetupDialog(rigFactory, bands);
     setupRadio->setAppName(appName);
     setupRadio->setCurrentRadioName(currentRadioName);
     setupRadio->setTabToCurrentRadio();
@@ -4386,7 +4361,7 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
 
     for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b->getType() == HF_BANDTYPE)
+        if (b->getType() == HF_BANDTYPE)
         {
             QString name = b->normalisedName();
             radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());

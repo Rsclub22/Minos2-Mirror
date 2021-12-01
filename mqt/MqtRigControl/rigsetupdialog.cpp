@@ -30,11 +30,9 @@
 
 
 
-RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, const bool hfFlag_, QWidget *parent) :
+RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RigSetupDialog),
-    hfFlag(hfFlag_)
-
+    ui(new Ui::RigSetupDialog)
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -132,7 +130,7 @@ void RigSetupDialog::addTab(int tabNum, QString tabName)
        availRadios.append(tabName);
     }
 
-    radioTab.insert(tabName, new RigSetupForm(rigFactory, availRadioData.value(tabName), bands, ui->radioTab, hfFlag));
+    radioTab.insert(tabName, new RigSetupForm(rigFactory, availRadioData.value(tabName), bands, ui->radioTab ));
     ui->radioTab->insertTab(tabNum, radioTab.value(tabName), tabName);
     ui->radioTab->setTabColor(tabNum, Qt::darkBlue);      // radioTab promoted to QLogTabWidget
 
@@ -989,7 +987,7 @@ void RigSetupDialog::saveRadioData(QSharedPointer<scatParams> radioData, QSettin
 
     for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b->getType() == HF_BANDTYPE)
+        if ( b->getType() == HF_BANDTYPE)
         {
             QString name = b->normalisedName();
             config.setValue("support" + name, radioData->supportBands.getSupportBandFlag(b->name()));
@@ -1055,7 +1053,7 @@ void RigSetupDialog::getRadioSetting(QSharedPointer<scatParams> radioData, QStri
 
     for (const auto &b: qAsConst(bands))
     {
-        if (hfFlag && b->getType() == HF_BANDTYPE)
+        if (b->getType() == HF_BANDTYPE)
         {
             QString name = b->normalisedName();
             radioData->supportBands.setSupportBandFlag(b->name(), config.value("support" + name, false).toBool());

@@ -30,11 +30,9 @@
 //static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
-                           const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab,
-                           bool hfFlag_, QWidget *parent):
+                           const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
     QWidget(parent),
-    ui(new Ui::rigSetupForm),
-    hfFlag(hfFlag_)
+    ui(new Ui::rigSetupForm)
 {
 
     ui->setupUi(this);
@@ -1512,65 +1510,27 @@ void RigSetupForm::setSupportBandChkBox(QString band, bool checked)
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
-    if (hfFlag)
+    for (const auto &b: qAsConst(bands))
     {
-       for (const auto &b: qAsConst(bands))
+       if (allSupBandsChkBoxesMap.contains(b->name()))
        {
-           if (allSupBandsChkBoxesMap.contains(b->name()))
-           {
-                allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
+            allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
 
-           }
        }
     }
-    else
-    {
-        for (const auto &b: qAsConst(bands))
-        {
-            if (b->getType() != HF_BANDTYPE)
-            {
-                if (allSupBandsChkBoxesMap.contains(b->name()))
-                {
-                    allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
-
-                }
-            }
-
-        }
-    }
-
     ui->supportedBandGroupBox->setVisible(visible);
     ui->nativeBandLabel->setVisible(visible);
 }
 
 bool RigSetupForm::isAnySupportBandChecked()
 {
-    if (hfFlag)
+    for (const auto &b: qAsConst(bands))
     {
-        for (const auto &b: qAsConst(bands))
+        if (allSupBandsChkBoxesMap.contains(b->name()))
         {
-            if (allSupBandsChkBoxesMap.contains(b->name()))
+            if (allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->isChecked())
             {
-                if (allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->isChecked())
-                {
-                    return true;
-                }
-            }
-        }
-    }
-    else
-    {
-        for (const auto &b: qAsConst(bands))
-        {
-            if (b->getType() != HF_BANDTYPE)
-            {
-                if (allSupBandsChkBoxesMap.contains(b->name()))
-                {
-                    if (allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->isChecked())
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
         }
     }

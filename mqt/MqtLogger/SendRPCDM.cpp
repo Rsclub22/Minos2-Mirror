@@ -268,22 +268,6 @@ void TSendDM::sendSpotToClusterServer(const Frequency &freq, const QString &call
     }
 }
 
-void TSendDM::sendHfFlagToClusterServer(const bool state)
-{
-    if (!clusterApp.isEmpty())
-    {
-        traceMsg(QString("Send HfFlag To Cluster Server - state = %1").arg(state ? "True": "False"));
-        RPCGeneralClient rpc(rpcConstants::clusterMethod);
-        QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-        st->addMember( rpcConstants::hfFlagToCluster, rpcConstants::paramName );
-        st->addMember( state, rpcConstants::clusterHfFlag );
-
-        rpc.getCallArgs() ->addParam( st );
-        rpc.queueCall( clusterApp  );
-    }
-}
-
 void TSendDM::sendReconnectFlagToClusterServer(const bool state)
 {
 
@@ -540,22 +524,6 @@ void TSendDM::sendRigControlVolumeLevel(TSingleLogFrame *tslf, int level)
     st->addMember( loggerUuid, rpcConstants::loggerUuid );
     st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
     st->addMember( level, rpcConstants::rigLogVolLevel);
-    rpc.getCallArgs() ->addParam( st );
-
-    rpc.queueCall( rigSelected );
-}
-
-void TSendDM::sendRigControlHfFlag(TSingleLogFrame *tslf, const bool &status)
-{
-
-    PubSubName rigSelected = rigCache.getSelected(loggerUuid);
-    rigCache.setHfFlag(rigSelected, status);
-    RPCGeneralClient rpc(rpcConstants::rigControlMethod);
-    QSharedPointer<RPCParam>st(new RPCParamStruct);
-
-    st->addMember( loggerUuid, rpcConstants::loggerUuid );
-    st->addMember( tslf->getContest()->uuid, rpcConstants::selected );
-    st->addMember( status, rpcConstants::rigHfFlag);
     rpc.getCallArgs() ->addParam( st );
 
     rpc.queueCall( rigSelected );

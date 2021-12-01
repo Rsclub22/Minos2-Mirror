@@ -286,7 +286,6 @@ private:
 
     bool checkspotExists(QSharedPointer<ClusterSpotData> spotData);
 
-    void setHF(bool hfOn);
     bool readLessGreaterThanDistanceFlag();
 private slots:
 
@@ -294,7 +293,6 @@ private slots:
 
     void clusterClientServerList(QVector<ClusterServer>);
     void dxSpots(QVector<ClusterMessage>);
-    void on_FontChanged();
     void filterButtonSelected();
     void purgeSpots();
     void onMenuShow();

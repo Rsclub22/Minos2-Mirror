@@ -44,7 +44,7 @@ class RigSetupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RigSetupDialog(RigFactory* rigFactory, const QVector<QSharedPointer<BandInfo> > &_bands, bool hfFlag_, QWidget *parent = nullptr);
+    explicit RigSetupDialog(RigFactory* rigFactory, const QVector<QSharedPointer<BandInfo> > &_bands, QWidget *parent = nullptr);
     ~RigSetupDialog();
 
     QVector<QSharedPointer<BandInfo> > bands;
@@ -109,8 +109,6 @@ private:
     QSettings availRadioIni;
 
     QString appName = "";
-
-    bool hfFlag;
 
     QString currentRadioName;
 

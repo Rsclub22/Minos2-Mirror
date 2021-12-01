@@ -18,7 +18,6 @@ RigDetails::RigDetails()
     _volumeStatus.setInitialValue(false);
     _ritEnableStatus.setInitialValue(false);
     _ritMaxKHzFreq.setInitialValue(MAX_RITFREQ);
-    _hfFlag.setInitialValue(false);
     _pttEnabled.setInitialValue(false);
     _pttType.setInitialValue(static_cast<int>(serialCommonData::PTTMethodCodes::PTT_METHOD_CAT));
     _voiceMemAvail.setInitialValue(false);
@@ -46,7 +45,6 @@ bool RigDetails::isDirty() const
             _bandList.isDirty() ||
             _ritEnableStatus.isDirty() ||
             _ritMaxKHzFreq.isDirty() ||
-            _hfFlag.isDirty();
             _pttEnabled.isDirty() ||
             _pttType.isDirty() ||
             _voiceMemAvail.isDirty() ||
@@ -65,7 +63,6 @@ void RigDetails::clearDirty()
     _bandList.clearDirty();
     _ritEnableStatus.clearDirty();
     _ritMaxKHzFreq.clearDirty();
-    _hfFlag.clearDirty();
     _pttEnabled.clearDirty();
     _pttType.clearDirty();
     _voiceMemAvail.clearDirty();
@@ -84,7 +81,6 @@ void RigDetails::setDirty()
     _bandList.setDirty();
     _ritEnableStatus.setDirty();
     _ritMaxKHzFreq.setDirty();
-    _hfFlag.setDirty();
     _pttEnabled.setDirty();
     _pttType.setDirty();
     _voiceMemAvail.setDirty();
@@ -137,10 +133,6 @@ void RigDetails::setBandList(const QString &bandList)
 }
 
 
-void RigDetails::setHfFlag(bool state)
-{
-    _hfFlag.setValue(state);
-}
 void RigDetails::setPttEnabled(bool pttEnabled)
 {
     _pttEnabled.setValue(pttEnabled);
@@ -172,7 +164,6 @@ QString RigDetails::pack() const
     jv.insert(rpcConstants::rigControlBandList, bandList().getValue());
     jv.insert(rpcConstants::rigRitEnableStatus, ritEnableStatus().getValue());
     jv.insert(rpcConstants::rigRitMaxKHz, ritMaxKHzFreq().getValue());
-    jv.insert(rpcConstants::rigHfFlag, hfFlag().getValue());
     jv.insert(rpcConstants::rigPttEnabled, pttEnabled().getValue());
     jv.insert(rpcConstants::rigPttType, pttType().getValue());
     jv.insert(rpcConstants::rigVoiceMemAvail, voiceMemAvail().getValue());
@@ -201,7 +192,6 @@ void RigDetails::unpack(QString s)
         _bandList.setValue(json.object().value(rpcConstants::rigControlBandList).toString());
         _ritEnableStatus.setValue(json.object().value(rpcConstants::rigRitEnableStatus).toBool());
         _ritMaxKHzFreq.setValue(json.object().value(rpcConstants::rigRitMaxKHz).toInt());
-        _hfFlag.setValue(json.object().value(rpcConstants::rigHfFlag).toBool());
         _pttEnabled.setValue(json.object().value(rpcConstants::rigPttEnabled).toBool());
         _pttType.setValue(json.object().value(rpcConstants::rigPttType).toInt());
         _voiceMemAvail.setValue(json.object().value(rpcConstants::rigVoiceMemAvail).toBool());
@@ -252,12 +242,6 @@ MinosItem<bool> RigDetails::ritEnableStatus() const
 MinosItem<int> RigDetails::ritMaxKHzFreq() const
 {
     return _ritMaxKHzFreq;
-}
-
-
-MinosItem<bool> RigDetails::hfFlag() const
-{
-    return _hfFlag;
 }
 
 
