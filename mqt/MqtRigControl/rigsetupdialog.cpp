@@ -45,9 +45,6 @@ RigSetupDialog::RigSetupDialog(RigFactory* rigFactory_, const QVector<QSharedPoi
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-
-    //connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &RigSetupDialog::saveButtonPushed);
-    //connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &RigSetupDialog::cancelButtonPushed);
     connect(ui->addRadio, &QPushButton::clicked, this, &RigSetupDialog::addRadio);
     connect(ui->removeRadio, &QPushButton::clicked, this, &RigSetupDialog::removeRadio);
     connect(ui->editRadioName, &QPushButton::clicked, this, &RigSetupDialog::editRadioName);
@@ -62,9 +59,6 @@ RigSetupDialog::~RigSetupDialog()
 {
     delete ui;
 }
-
-
-
 
 void RigSetupDialog::initSetup()
 {
@@ -681,13 +675,8 @@ void RigSetupDialog::done(int r)
         }
 
    }
-   // else    // cancel, close or exc was pressed
-  //  {
-        QDialog::done(r);
-
-  //  }
-
-
+   doCloseEvent();
+   QDialog::done(r);
 }
 
 bool RigSetupDialog::checkTransvertFreqInBand()
