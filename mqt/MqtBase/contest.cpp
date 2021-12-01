@@ -1773,18 +1773,18 @@ int BaseContestLog::getCountriesWorked(const QString &band, const QString &item 
     }
    return 0;
 }
-QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency freq, Frequency refFreq)
+QSharedPointer<BandInfo> BaseContestLog::checkBandChange(Frequency targetFreq, Frequency refFreq)
 {
     QSharedPointer<BandInfo>  nb;
     if (contestBands.getValue() == allHF)
     {
         BandList &bl = BandList::getBandList();
         QSharedPointer<BandInfo>  b1;
-        bool b1Ok = bl.findBand(freq, b1);
+        bool b1Ok = bl.findBand(targetFreq, b1);
         QSharedPointer<BandInfo>  b2;
-        bool b2Ok = bl.findBand(refFreq, b2);
+        /*bool b2Ok =*/ bl.findBand(refFreq, b2);
 
-        if (b1Ok && b2Ok && b1 != b2 && b1->enabled && b1->getType() == HF_BANDTYPE)
+        if (b1Ok && b1 != b2 && b1->enabled && b1->getType() == HF_BANDTYPE)
         {
             return b1;
         }

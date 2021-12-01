@@ -383,7 +383,7 @@ class BaseContestLog: public BaseLogList
       QString dateRange( DTG dstyle );
       bool checkTime(const dtg &t) const;
       bool checkTime(const QDateTime &t) const;
-      QSharedPointer<BandInfo> checkBandChange(Frequency freq, Frequency refFreq);
+      QSharedPointer<BandInfo> checkBandChange(Frequency targetFreq, Frequency refFreq);
 
 
       void addCountryWorked(QString band, const QString &basePrefix);
