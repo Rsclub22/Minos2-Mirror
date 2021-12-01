@@ -4207,31 +4207,31 @@ void RigControlMainWindow::sendPttStateLogger()
 void RigControlMainWindow::onLaunchSetup()
 {
 
-    RigSetupDialog *setupRadio = new RigSetupDialog(rigFactory, bands);
-    setupRadio->setAppName(appName);
-    setupRadio->setCurrentRadioName(currentRadioName);
-    setupRadio->setTabToCurrentRadio();
-    setupRadio->loadAvailComports();
-    if (setupRadio->exec() == QDialog::Accepted)
+    RigSetupDialog setupRadio(rigFactory, bands);
+    setupRadio.setAppName(appName);
+    setupRadio.setCurrentRadioName(currentRadioName);
+    setupRadio.setTabToCurrentRadio();
+    setupRadio.loadAvailComports();
+    if (setupRadio.exec() == QDialog::Accepted)
     {
-        if (!setupRadio->listOfRadioNameChanges.isEmpty() ||
-            !setupRadio->listOfRadiosDataChanged.isEmpty())
+        if (!setupRadio.listOfRadioNameChanges.isEmpty() ||
+            !setupRadio.listOfRadiosDataChanged.isEmpty())
         {
             updateRigDetailsCache();
             if (!appName.isEmpty())
             {
-                msg->publishListChangedRadioNames(setupRadio->listOfRadioNameChanges, setupRadio->listOfRadiosDataChanged);
+                msg->publishListChangedRadioNames(setupRadio.listOfRadioNameChanges, setupRadio.listOfRadiosDataChanged);
             }
         }
 
-        if (!setupRadio->listOfRadioNameChanges.isEmpty())
+        if (!setupRadio.listOfRadioNameChanges.isEmpty())
         {
             updateSelectRadioBox();
         }
 
 
 
-        for(const auto &r: qAsConst(setupRadio->listOfRadiosDataChanged))
+        for(const auto &r: qAsConst(setupRadio.listOfRadiosDataChanged))
         {
             if (r == currentRadioName)
             {
