@@ -1442,19 +1442,16 @@ void RigSetupForm::initSupBandsChkBoxs()
     ui->supBandsFrame->setLayout(gl);
     for (const auto &b: qAsConst(bands))
     {
-        if (b->fcLow < Frequency(1999999999))
-        {
-            SupCheckBoxData scbd;
-            QCheckBox *cb = new QCheckBox(ui->supBandsFrame);
-            cb->setText(b->name());
-            scbd.supBandChkBox = cb;
-            scbd.bandType = b->getType();
-            allSupBandsChkBoxList << cb;
-            allSupBandsChkBoxesMap.insert(b->name(), scbd);
-        }
+        SupCheckBoxData scbd;
+        QCheckBox *cb = new QCheckBox(ui->supBandsFrame);
+        cb->setText(b->name());
+        scbd.supBandChkBox = cb;
+        scbd.bandType = b->getType();
+        allSupBandsChkBoxList << cb;
+        allSupBandsChkBoxesMap.insert(b->name(), scbd);
     }
 
-    int mod = (allSupBandsChkBoxList.count() + 1)/2;
+    int mod = (allSupBandsChkBoxList.count() + 2)/3;
     int row = 0;
     int col = 0;
     for (int i = 0; i < allSupBandsChkBoxList.count(); i++)
