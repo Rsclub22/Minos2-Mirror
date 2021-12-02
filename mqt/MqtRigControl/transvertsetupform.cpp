@@ -169,19 +169,16 @@ void TransVertSetupForm::calcOffset()
 
         // display
         setOffsetFreqLabel(radioData->transVertSettings.value(bandName)->transVertOffset);
-        ui->targetWarningLabel->setText("");
+
         transVertOffsetOk = true;
         transVertValueChanged = true;
-        transVertTargetWarningFlag = false;
     }
     else
     {
-        //QMessageBox msgBox;
-        //msgBox.setText(tr("Target Freq. is out of band for %1").arg(radioData->transVertSettings.value(bandName)->band));
-        //msgBox.exec();
-        //ui->targetFreq->setFocus();
-        ui->targetWarningLabel->setText(tr("Target Freq. is out of band for %1").arg(radioData->transVertSettings.value(bandName)->band));
-        transVertTargetWarningFlag = true;
+        QMessageBox msgBox;
+        msgBox.setText(tr("Target Freq. is out of band for %1\nPlease correct the transverter entries.").arg(radioData->transVertSettings.value(bandName)->band));
+        msgBox.exec();
+
         return;
     }
 
