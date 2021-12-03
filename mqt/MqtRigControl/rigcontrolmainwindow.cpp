@@ -371,7 +371,7 @@ void RigControlMainWindow::onStdInRead(QString cmd)
 void RigControlMainWindow::initActionsConnections()
 {
 
-    connect(ui->selectRadioBox, QOverload<int>::of(&QComboBox::activated), this, &RigControlMainWindow::selectRadio);
+    connect(ui->selectRadioBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RigControlMainWindow::selectRadio);
 
     connect(ui->actionSetup_Radios, &QAction::triggered, this,  [=](){onLaunchSetup();});
     connect(ui->actionConfigure_Rigctld, &QAction::triggered, this,  [=](){onConfigureRigctld();});
