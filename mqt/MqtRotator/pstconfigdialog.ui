@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>410</width>
-    <height>209</height>
+    <width>384</width>
+    <height>199</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Pst Rotator Setup</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
@@ -73,11 +73,22 @@
       </layout>
      </item>
      <item>
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Minos Searches these path locations for PST Rotator to add to rotator lists</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Minos Searches these path locations for PST Rotator to add to rotator lists.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>Restart Rotator Server after making any changes here</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
