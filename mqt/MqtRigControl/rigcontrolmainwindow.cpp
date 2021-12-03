@@ -498,6 +498,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     clrRigctldNames();
     clearSupportRitFlags();
+
     rigStateDetails->curTransVertFreq.clear();
 
     setRigCltdIndicatorVisible(false);
@@ -4387,10 +4388,20 @@ void RigControlMainWindow::getRadioConfigData(QSharedPointer<scatParams>radioDat
     QSettings  configTransVert(fileNameTransVert, QSettings::IniFormat);
 
     QStringList tvList = configTransVert.childGroups();
-    for(const auto &tv: qAsConst(tvList))
+    if (!tvList.isEmpty())
     {
-        readTranVerterSetting(radioData, tv, configTransVert);
+        for(const auto &tv: qAsConst(tvList))
+        {
+            readTranVerterSetting(radioData, tv, configTransVert);
+        }
     }
+    else
+    {
+        // no transverters
+        radioData->transVertSettings.clear();
+
+    }
+
 
 
 }

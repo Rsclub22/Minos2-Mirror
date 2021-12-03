@@ -124,11 +124,11 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
 {
 
 
-    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("rigControl");
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("cwRigControl");
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     TxVmRigSetupDialog txVmSetupDialog(voiceCap, numButtons, tslf->txVmButtonsFrame);
-    txVmSetupDialog.setWindowTitle(tr("Rig Control Voice Memory Setup"));
+    txVmSetupDialog.setWindowTitle(tr("Rig Control CW Memory Setup"));
 
     cwMemType = hamlibData::CW_MEMORY_TYPES::NONE;
 
