@@ -176,7 +176,7 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 }
 
 
-int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld)
+int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
 {
     int retcode;
 
@@ -190,20 +190,20 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
 
     if (useRigCtld)
     {
-        if (currentRadio->rigCtldNetworkAdd.isEmpty() || isHostLocal(currentRadio->rigCtldNetworkAdd))
+        if (currentRadio.rigCtldNetworkAdd.isEmpty() || isHostLocal(currentRadio.rigCtldNetworkAdd))
         {
-            currentRadio->rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
+            currentRadio.rigCtldNetworkAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
         }
-        if (currentRadio->rigCtldNetworkPort.isEmpty())
+        if (currentRadio.rigCtldNetworkPort.isEmpty())
         {
-            currentRadio->rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
+            currentRadio.rigCtldNetworkPort = RIGCTLD_DEFAULT_PORT_ADDRESS;
         }
         my_rig = rig_init(RIGCTLD_MODEL_NUMBER);
 
     }
     else
     {
-        my_rig = rig_init(currentRadio->rigModelNumber);
+        my_rig = rig_init(currentRadio.rigModelNumber);
     }
 
 
@@ -217,27 +217,27 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
     // load cat params
     if (useRigCtld)
     {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio->rigCtldNetworkAdd + ":" + currentRadio->rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.rigCtldNetworkAdd + ":" + currentRadio.rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
     }
     else
     {
 
-        if (rig_port_e(currentRadio->portType) == RIG_PORT_SERIAL)
+        if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
         {
-            comport.append(currentRadio->comport);
+            comport.append(currentRadio.comport);
             strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), HAMLIB_FILPATHLEN);
-            my_rig->state.rigport.parm.serial.rate = currentRadio->baudrate;
-            my_rig->state.rigport.parm.serial.data_bits = currentRadio->databits;
-            my_rig->state.rigport.parm.serial.stop_bits = currentRadio->stopbits;
-            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio->parity);
-            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio->handshake);
+            my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
+            my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
+            my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
+            my_rig->state.rigport.parm.serial.parity = getSerialParityCode(currentRadio.parity);
+            my_rig->state.rigport.parm.serial.handshake = getSerialHandshakeCode(currentRadio.handshake);
 
 
 
             if (my_rig->state.rigport.parm.serial.handshake != RIG_HANDSHAKE_HARDWARE)
             {
 
-                if (currentRadio->forceRts)
+                if (currentRadio.forceRts)
                 {
                     my_rig->state.rigport.parm.serial.rts_state = RIG_SIGNAL_ON;
                 }
@@ -249,39 +249,39 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
             }
 
         }
-        else if (rig_port_e(currentRadio->portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio->portType) == RIG_PORT_UDP_NETWORK)
+        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NETWORK || rig_port_e(currentRadio.portType) == RIG_PORT_UDP_NETWORK)
         {
             QString netAdd;
-            if (currentRadio->networkAdd.isEmpty() || isHostLocal(currentRadio->networkAdd))
+            if (currentRadio.networkAdd.isEmpty() || isHostLocal(currentRadio.networkAdd))
             {
                 netAdd = RIGCTLD_LOCAL_HOST_ADDRESS;
             }
             else
             {
-                netAdd = currentRadio->networkAdd;
+                netAdd = currentRadio.networkAdd;
             }
-            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio->networkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
         }
-        else if (rig_port_e(currentRadio->portType) == RIG_PORT_NONE)
+        else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
         {
             strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN);
         }
 
-        if (currentRadio->enablePTT)
+        if (currentRadio.enablePTT)
         {
 
-            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio->pttType);
+            serialCommonData::PTTMethodCodes pttType = static_cast<serialCommonData::PTTMethodCodes>(currentRadio.pttType);
 
             if (pttType != serialCommonData::PTT_METHOD_CAT)
             {
-                if (!currentRadio->pttSerialPort.isEmpty())
+                if (!currentRadio.pttSerialPort.isEmpty())
                 {
 #if defined (WIN32)
 
-                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio->pttSerialPort).toLatin1 ().data ());
+                setConfigurationParameter("ptt_pathname", ("\\\\.\\" + currentRadio.pttSerialPort).toLatin1 ().data ());
 
 #else
-                setConfigurationParameter("ptt_pathname", currentRadio->pttSerialPort.toLatin1().data());
+                setConfigurationParameter("ptt_pathname", currentRadio.pttSerialPort.toLatin1().data());
 #endif
 
                 }
@@ -310,9 +310,9 @@ int HamlibRigControl::rigInit(QSharedPointer<scatParams>currentRadio, bool useRi
 
     if(QString(my_rig->caps->mfg_name) == "Icom")
     {
-        if(!currentRadio->civAddress.isEmpty())
+        if(!currentRadio.civAddress.isEmpty())
         {
-            rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio->civAddress.toLatin1());
+            rig_set_conf(my_rig, rig_token_lookup(my_rig, "civaddr"),currentRadio.civAddress.toLatin1());
         }
     }
 

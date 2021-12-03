@@ -284,7 +284,7 @@ private:
 
     QVector<QSharedPointer<BandInfo>  > bands;
 
-    QSharedPointer<scatParams> currentRadio;
+    scatParams currentRadio;
     QString currentRadioName;
     //QStringList availRadios;
 
@@ -514,8 +514,8 @@ private:
     void setRigCtldExePath(const QString &);
     void setRigCtldExeName(const QString &);
 
-    void readTranVerterSetting(QSharedPointer<scatParams> radio, QString transvertName, QSettings &config);
-    void getRadioConfigData(QSharedPointer<scatParams> radio, QString radioName);
+    void readTranVerterSetting(scatParams *radio, QString transvertName, QSettings &config);
+    void getRadioConfigData(scatParams *radio, QString radioName);
     void checkIniFileVersion();
     void updateAvailRadiosToVersion2(QSettings &settings, QStringList &availRadios, int numAvailRadios);
 
@@ -523,9 +523,9 @@ private:
     void readCurrentRadio(QString &currentRadioName);
 
     void saveCurrentRadio(const QString currentRadioName);
-    void buildSupportedRadioBands(QSharedPointer<scatParams> radioData, QStringList &supBandList);
-    bool findSupTransBand(const QString band, const QSharedPointer<scatParams> radioData);
-    void buildSupBandList(QSharedPointer<scatParams> radioData, QStringList &bandList);
+    void buildSupportedRadioBands(scatParams *radioData, QStringList &supBandList);
+    bool findSupTransBand(const QString band, const scatParams *radioData);
+    void buildSupBandList(scatParams *radioData, QStringList &bandList);
     void initCacheData(QStringList &availRadios);
     void addBandListToRigCache(const QString radioName, const QStringList &supBandList);
     void checkSupportCatFeatures();

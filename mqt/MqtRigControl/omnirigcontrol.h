@@ -44,7 +44,7 @@ public:
     void setRigConnected(bool rigConnected_) override;
     bool getRigConnected() override;
 
-    int rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld) override;
+    int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
 
     int getFrequency(VFO vfo, Frequency &) override;

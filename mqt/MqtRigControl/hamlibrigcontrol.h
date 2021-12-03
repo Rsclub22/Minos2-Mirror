@@ -50,7 +50,7 @@ public:
     static void register_rigs(RigFactory::Rigs*);
     static bool checkFreqRange(int rigNumber, const Frequency &freq);
 
-    int rigInit(QSharedPointer<scatParams>currentRadio, bool useRigCtld) override;
+    int rigInit(scatParams &currentRadio, bool useRigCtld) override;
     int closeRig() override;
 
     void setRigConnected(bool rigConnected_) override;
