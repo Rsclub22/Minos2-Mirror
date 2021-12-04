@@ -82,7 +82,7 @@ static bool isParentRunning()
     return true;
 
 #else
-    int ppid = getppid() ;
+    unsigned long ppid = getppid() ;
     //trace("ppid is " + QString::number(ppid));
     return ppid == original_ppid;
 #endif
