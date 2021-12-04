@@ -417,8 +417,14 @@ void ControlMain::on_notify( AnalysePubSubNotify an, const QString from )
                 commonLineControl *t2 = monitor.findLine( "T2", false );   // output line
 
                 // would be better to do this all in one...
-                t1->setState(transverterSwNum & 1);
-                t2->setState(transverterSwNum & 2);
+                if (t1)
+                {
+                    t1->setState(transverterSwNum & 1);
+                }
+                if (t2)
+                {
+                    t2->setState(transverterSwNum & 2);
+                }
             }
 
         }
