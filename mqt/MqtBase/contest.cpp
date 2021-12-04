@@ -1345,7 +1345,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "band", contestBands );
       mt->getStructArgMemberValue( "currentBand", currentBand );
       if (currentBand.getValue().isEmpty())
-          currentBand = contestBands;
+          setCurrentBand(contestBands.getValue());
 
       bool isHfContest = isHF();
       mt->getStructArgMemberValue( "hf", hfContest);
@@ -1356,7 +1356,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
 
       if (currentBand.getValue() == allHF)
       {
-          currentBand.setValue("3.5 MHz");
+          setCurrentBand("3.5 MHz");
       }
 
       BandList &blist = BandList::getBandList();
@@ -1365,7 +1365,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       bandOK = blist.findBand(currentBand.getValue(), bi);
       if (bandOK && currentBand.getValue() != bi->uk)
       {
-          currentBand.setValue(bi->uk);
+          setCurrentBand(bi->uk);
       }
 
 
