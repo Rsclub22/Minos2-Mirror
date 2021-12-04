@@ -160,7 +160,7 @@ private slots:
     void onRemoteKeyerStarted(int key);
     void onRemoteKeyerStopped();
     void on_pipCb_stateChanged(int arg1);
-    void onExtConnect();
+    void onExtConnectTimer();
 };
 
 #endif // TXVMBUTTONSFRAME_H

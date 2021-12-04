@@ -5219,89 +5219,94 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="95"/>
+        <location filename="../txvmbuttonsframe.ui" line="108"/>
         <source>Repeat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="145"/>
+        <location filename="../txvmbuttonsframe.ui" line="158"/>
         <source>TX Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="206"/>
+        <location filename="../txvmbuttonsframe.ui" line="219"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="230"/>
+        <location filename="../txvmbuttonsframe.ui" line="245"/>
         <source>Pip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="239"/>
-        <location filename="../txvmbuttonsframe.ui" line="246"/>
-        <location filename="../txvmbuttonsframe.ui" line="253"/>
-        <location filename="../txvmbuttonsframe.ui" line="260"/>
-        <location filename="../txvmbuttonsframe.ui" line="271"/>
-        <location filename="../txvmbuttonsframe.ui" line="278"/>
-        <location filename="../txvmbuttonsframe.ui" line="285"/>
-        <location filename="../txvmbuttonsframe.ui" line="292"/>
+        <location filename="../txvmbuttonsframe.ui" line="263"/>
+        <location filename="../txvmbuttonsframe.ui" line="270"/>
+        <location filename="../txvmbuttonsframe.ui" line="277"/>
+        <location filename="../txvmbuttonsframe.ui" line="284"/>
+        <location filename="../txvmbuttonsframe.ui" line="295"/>
+        <location filename="../txvmbuttonsframe.ui" line="302"/>
+        <location filename="../txvmbuttonsframe.ui" line="309"/>
+        <location filename="../txvmbuttonsframe.ui" line="316"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.ui" line="301"/>
+        <location filename="../txvmbuttonsframe.ui" line="338"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="330"/>
+        <location filename="../txvmbuttonsframe.cpp" line="252"/>
+        <source>To use the external keyer mqtKeyer must be running and connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="341"/>
         <source>Rig CW Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="334"/>
+        <location filename="../txvmbuttonsframe.cpp" line="345"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="336"/>
+        <location filename="../txvmbuttonsframe.cpp" line="347"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="458"/>
+        <location filename="../txvmbuttonsframe.cpp" line="469"/>
         <source>Voice Memory %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="491"/>
+        <location filename="../txvmbuttonsframe.cpp" line="502"/>
         <source>Are you sure you want to clear this button %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="492"/>
+        <location filename="../txvmbuttonsframe.cpp" line="503"/>
         <source>Click save to clear, cancel to ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="777"/>
+        <location filename="../txvmbuttonsframe.cpp" line="788"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="781"/>
+        <location filename="../txvmbuttonsframe.cpp" line="792"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="859"/>
+        <location filename="../txvmbuttonsframe.cpp" line="870"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="865"/>
+        <location filename="../txvmbuttonsframe.cpp" line="876"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5563,22 +5568,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="887"/>
+        <location filename="../txvmbuttonsframe.cpp" line="898"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="888"/>
+        <location filename="../txvmbuttonsframe.cpp" line="899"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="889"/>
+        <location filename="../txvmbuttonsframe.cpp" line="900"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="890"/>
+        <location filename="../txvmbuttonsframe.cpp" line="901"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5767,18 +5772,19 @@ Include the CQ as well as the type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="626"/>
+        <location filename="../WsjtxFrame.cpp" line="621"/>
+        <location filename="../WsjtxFrame.cpp" line="635"/>
         <source>&lt;h1&gt;&lt;b&gt;Contest band %1 not the same as %2 band %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1198"/>
-        <location filename="../WsjtxFrame.cpp" line="1202"/>
+        <location filename="../WsjtxFrame.cpp" line="1207"/>
+        <location filename="../WsjtxFrame.cpp" line="1211"/>
         <source>WSJT-X recording Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../WsjtxFrame.cpp" line="1199"/>
+        <location filename="../WsjtxFrame.cpp" line="1208"/>
         <source>All Files</source>
         <translation type="unfinished"></translation>
     </message>
