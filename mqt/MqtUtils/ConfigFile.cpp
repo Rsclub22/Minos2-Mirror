@@ -579,26 +579,30 @@ void MinosConfig::askStop()
 {
    terminated = true;
 
-   NamedConfig &nc = configs[thisConfigName];
-   for ( auto const &i: qAsConst(nc.elelist ))
+   for ( auto const &nc: configs)
    {
-      if ( i )
-      {
-         i->askStopProcess();
-      }
+       for ( auto const &i: qAsConst(nc.elelist ))
+       {
+          if ( i )
+          {
+             i->askStopProcess();
+          }
+       }
    }
 }
 void MinosConfig::forceStop()
 {
    terminated = true;
 
-   NamedConfig &nc = configs[thisConfigName];
-   for ( auto const &i: qAsConst(nc.elelist ))
+   for ( auto const &nc: configs)
    {
-      if ( i )
-      {
-         i->forceStopProcess();
-      }
+       for ( auto const &i: qAsConst(nc.elelist ))
+       {
+          if ( i )
+          {
+             i->forceStopProcess();
+          }
+       }
    }
 }
 
@@ -873,13 +877,15 @@ QString MinosConfig::checkConfig(QString name)
 
 bool MinosConfig::anyRunning()
 {
-    NamedConfig &nc = configs[thisConfigName];
-    for ( auto const &i: qAsConst(nc.elelist ))
+    for ( auto const &nc: configs)
     {
-       if ( i && i->isRunning() )
-       {
-           return true;
-       }
+        for ( auto const &i: qAsConst(nc.elelist ))
+        {
+           if ( i && i->isRunning() )
+           {
+               return true;
+           }
+        }
     }
     return false;
 }
