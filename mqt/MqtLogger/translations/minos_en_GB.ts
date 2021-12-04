@@ -2185,17 +2185,17 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="347"/>
+        <location filename="../qsologframe.ui" line="350"/>
         <source>Run</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="834"/>
+        <location filename="../qsologframe.ui" line="840"/>
         <source>QRZ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="895"/>
+        <location filename="../qsologframe.ui" line="901"/>
         <source>Last Spot Sent: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2220,32 +2220,32 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="844"/>
+        <location filename="../qsologframe.ui" line="850"/>
         <source>Mark Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="854"/>
+        <location filename="../qsologframe.ui" line="860"/>
         <source>Save Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="864"/>
+        <location filename="../qsologframe.ui" line="870"/>
         <source>Tuning - Add Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="440"/>
+        <location filename="../qsologframe.ui" line="443"/>
         <source>Op1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="464"/>
+        <location filename="../qsologframe.ui" line="467"/>
         <source>Op2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="364"/>
+        <location filename="../qsologframe.ui" line="367"/>
         <source>dist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2255,32 +2255,32 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="371"/>
+        <location filename="../qsologframe.ui" line="374"/>
         <source>(12345)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="388"/>
+        <location filename="../qsologframe.ui" line="391"/>
         <source>brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="395"/>
+        <location filename="../qsologframe.ui" line="398"/>
         <source>1234</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="334"/>
+        <location filename="../qsologframe.ui" line="337"/>
         <source>S&amp;&amp;P</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="417"/>
+        <location filename="../qsologframe.ui" line="420"/>
         <source>Non Scoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="427"/>
+        <location filename="../qsologframe.ui" line="430"/>
         <source>Deleted</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2335,67 +2335,67 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="878"/>
+        <location filename="../qsologframe.ui" line="884"/>
         <source>Spot Last Logged ()</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="888"/>
+        <location filename="../qsologframe.ui" line="894"/>
         <source>Spot Current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="948"/>
+        <location filename="../qsologframe.ui" line="954"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="951"/>
+        <location filename="../qsologframe.ui" line="957"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="961"/>
+        <location filename="../qsologframe.ui" line="967"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="964"/>
+        <location filename="../qsologframe.ui" line="970"/>
         <source>Force...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="980"/>
+        <location filename="../qsologframe.ui" line="986"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="990"/>
+        <location filename="../qsologframe.ui" line="996"/>
         <source>Get fields from current matching QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="993"/>
+        <location filename="../qsologframe.ui" line="999"/>
         <source>Match Xfer F12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1053"/>
+        <location filename="../qsologframe.ui" line="1059"/>
         <source>Insert Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1063"/>
+        <location filename="../qsologframe.ui" line="1069"/>
         <source>Insert After</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1086"/>
+        <location filename="../qsologframe.ui" line="1092"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1096"/>
+        <location filename="../qsologframe.ui" line="1102"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2433,42 +2433,42 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2127"/>
+        <location filename="../qsologframe.cpp" line="2128"/>
         <source>QSO Entry Frame not focussed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2464"/>
+        <location filename="../qsologframe.cpp" line="2466"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2471"/>
+        <location filename="../qsologframe.cpp" line="2473"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2502"/>
+        <location filename="../qsologframe.cpp" line="2504"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2567"/>
+        <location filename="../qsologframe.cpp" line="2569"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2569"/>
+        <location filename="../qsologframe.cpp" line="2571"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2951"/>
+        <location filename="../qsologframe.cpp" line="2953"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2986"/>
+        <location filename="../qsologframe.cpp" line="2988"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
