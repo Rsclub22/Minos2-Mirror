@@ -232,20 +232,8 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
         QByteArray rdcbuffer = ctfile->read( IO_BUF_SIZE);
         if ( rdcbuffer.size() > 0 )
         {
-            try {
             buffer += rdcbuffer;
-            }
-            catch(std::exception &/*a*/)
-            {
-//                int s = buffer.count();
-//                const char * aa = a.what();
-               trace("broken");
-            }
-            catch(...)
-            {
-                //int s = buffer.count();
-               trace("broken");
-            }
+
             int curfstart = buffer.indexOf("<iq", 0);
             int curfend = buffer.indexOf("</iq>", 0);
 
@@ -261,6 +249,7 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
                 bufOffset += curfend + 4 + 1;
                 curfstart = buffer.indexOf("<iq", 0);
                 curfend = buffer.indexOf("</iq>", 0);
+
             }
         }
         else

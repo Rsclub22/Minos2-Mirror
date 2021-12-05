@@ -31,8 +31,6 @@ public:
 
     void setContest(BaseContestLog *contest);
 
-    void setButtonVisible(QString band, bool visible);
-
     int setButtonOnOff(QString band, bool on);
     void setAllButtonsOff();
 

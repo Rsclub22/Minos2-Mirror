@@ -1769,7 +1769,7 @@ void TSingleLogFrame::on_SetFreq(Frequency f)
         QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(f, sCurFreq);
         if (bandChanged)
         {
-            contest->currentBand.setValue(bandChanged->uk);
+            contest->setCurrentBand(bandChanged->uk);
             FKHRigControlFrame->setContestBand(bandChanged->uk);
             MinosLoggerEvents::SendContestBandChanged(contest);
         }
@@ -2003,7 +2003,7 @@ void TSingleLogFrame::sendRadioFreq(Frequency freq)
         QSharedPointer<BandInfo>  bandChanged = contest->checkBandChange(freq, sCurFreq);
         if (bandChanged)
         {
-            contest->currentBand.setValue(bandChanged->uk);
+            contest->setCurrentBand(bandChanged->uk);
             FKHRigControlFrame->setContestBand(bandChanged->uk);
             MinosLoggerEvents::SendContestBandChanged(contest);
         }

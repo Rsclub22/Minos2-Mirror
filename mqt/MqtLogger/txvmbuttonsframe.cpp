@@ -2,6 +2,7 @@
 #include "delayedaction.h"
 #include "SendRPCDM.h"
 #include "KeyerJson.h"
+#include "cutils.h"
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
 
@@ -40,7 +41,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     connect(repeatPauseTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onRepeatPauseTimerTimeout);
 
     extKeyerConnectTimer = new QTimer(this);
-    connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnect);
+    connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
 
     initTxVmButton();
 
@@ -197,7 +198,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
         }
     }
 }
-void TxVmButtonsFrame::onExtConnect()
+void TxVmButtonsFrame::onExtConnectTimer()
 {
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
@@ -207,6 +208,7 @@ void TxVmButtonsFrame::onExtConnect()
         createKeyer(voiceKeyerName);
         if (txVoiceKeyer)
         {
+            ui->noExtKeyerLabel->clear();
             extKeyerConnectTimer->stop();
         }
         else
@@ -216,6 +218,7 @@ void TxVmButtonsFrame::onExtConnect()
     }
     else
     {
+        ui->noExtKeyerLabel->clear();
         extKeyerConnectTimer->stop();
     }
 }
@@ -246,14 +249,22 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
        setVoiceNumMemButtonsVisible(0);
        if (voiceKeyerType == keyerTypes[ VoiceKeyerId::ExternalVoiceKeyer])
        {
+           ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
            extKeyerConnectTimer->start(1000);
        }
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
        setAvailIndicatorVisible(false);
+       setRepeatIndicatorVisible(false);
+
+       ui->vmSetupPb->setVisible(false);
+       ui->pipCb->setVisible(false);
 
     }
-
+    else
+    {
+        ui->noExtKeyerLabel->clear();
+    }
 
 
 
