@@ -797,7 +797,7 @@ bool LoggerContestLog::GJVsave( GJVParams &gp )
    strtobuf( "0" );    // block number for LoggerContestLog block
    strtobuf( GJVVERSION );
    strtobuf( contestBands );
-   setCurrentBand(contestBands.getValue());
+   currentBand = contestBands;
    strtobuf( name );
    strtobuf( mycall.getFullCall() );
    strtobuf( myloc.getLoc() );
@@ -1352,7 +1352,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
                if (  stemp.toUpper().indexOf( "BAND IN MHZ" ) == 0 )
                {
                   contestBands.setValue( text );
-                  setCurrentBand(text);
+                  currentBand.setValue(text);
                }
                else
                   if ( stemp.toUpper().indexOf( "SECTION ENTERED" ) == 0 )

@@ -2087,7 +2087,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="480"/>
-        <location filename="../LoggerContest.cpp" line="1807"/>
+        <location filename="../LoggerContest.cpp" line="1813"/>
         <source>(write) seek failed!</source>
         <translation>(Écriture) la recherche a échoué!</translation>
     </message>
@@ -2148,7 +2148,7 @@ Double-cliquer sur un carré d&apos;arête pour étendre la zone de la carte.</t
         <translation>Depuis le fichier %1</translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1800"/>
+        <location filename="../LoggerContest.cpp" line="1806"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation>Echec de l&apos;ouverture du fichier pour la surveillance de %1 : %2</translation>
     </message>
