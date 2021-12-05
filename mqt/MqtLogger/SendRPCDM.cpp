@@ -117,6 +117,8 @@ void TSendDM::subscribeApps()
     traceMsg("subscribeApps");
     invalidateCache();
     getRouterAppCatMap();
+
+    RPCPubSub::reconnectPubSub();
 }
 
 void TSendDM::invalidateCache()
