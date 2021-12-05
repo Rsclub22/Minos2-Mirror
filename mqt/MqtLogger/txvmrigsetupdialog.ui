@@ -47,7 +47,7 @@
      <item>
       <widget class="QCheckBox" name="pttEOMChkBox">
        <property name="text">
-        <string>Use PTT For EOM</string>
+        <string>Use CAT PTT For EOM</string>
        </property>
       </widget>
      </item>

@@ -160,6 +160,12 @@ void InternalVoiceMemoryKeyer::onDoPTT(bool onOff)
 {
     setPttOnOff(onOff);
 }
+
+bool InternalVoiceMemoryKeyer::getUsePttForEomFlag()
+{
+    return usePttForEom;
+}
+
 int InternalVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value("internal");

@@ -59,10 +59,19 @@ void TxVmRigSetupDialog::initSetup()
         ui->comportLbl->setVisible(false);
     }
 
+    QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
+    QSettings config(fileName, QSettings::IniFormat);
+    ui->pttEOMChkBox->setChecked(config.value("Common/UseCatPttForEom", false).toBool());
+
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
 
 
 
+}
+
+bool TxVmRigSetupDialog::getCatPttForEomState()
+{
+    return ui->pttEOMChkBox->isChecked();
 }
 
 

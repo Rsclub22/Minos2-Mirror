@@ -21,6 +21,9 @@ public:
     void setCwMessageTextBoxVisible(bool state);
     void setCwMessageLineEditVisible(bool visible);
     void setVmTypeLabelcwMemType(int cwMemType);
+    void setDialogForCatPttEom(bool state);
+
+
 private slots:
     void on_okButtonClicked();
     void on_cancelbuttonClicked();
@@ -35,6 +38,8 @@ private:
 
     Ui::TxVmRigButtonDialog *ui;
     VoiceKeyerParams* vmData;
+
+
 
     bool validateDur(QString durName, QString dur, int &dur_);
     void doCloseEvent();

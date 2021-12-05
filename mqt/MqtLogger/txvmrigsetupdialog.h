@@ -22,6 +22,7 @@ public:
 
     int getNumButtons(){return numButtons;}
 
+    bool getCatPttForEomState();
 private slots:
 
     void onNumButtonsValueChanged(int num);

@@ -40,6 +40,7 @@ public:
     virtual bool hasRecord() override {return false;}
 
     void setPttOnOff(bool onOff) override;
+    virtual bool getUsePttForEomFlag() override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -51,6 +52,7 @@ public:
 private:
 
     int cwMemType;
+    bool usePttForEom = false;
 
 
 };

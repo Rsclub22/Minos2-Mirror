@@ -41,26 +41,34 @@ void RigControlVoiceMemoryKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
+bool RigControlVoiceMemoryKeyer::getUsePttForEomFlag()
+{
+    return usePttForEom;
+}
+
 
 void RigControlVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
 {
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
+    usePttForEom = config.value("Common/UseCatPttForEom", false).toBool();
 }
+
 void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
+
 }
+
 void RigControlVoiceMemoryKeyer::stopMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     tslf->sendRigTxVoiceMessage(STOPCODE);
 }
-
 
 
 
@@ -116,9 +124,14 @@ int RigControlVoiceMemoryKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int 
         QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
+        config.setValue("Common/UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        usePttForEom = txVmSetupDialog.getCatPttForEomState();
+
     }
     return ret;
 }
+
+
 
 int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString title)
 {
@@ -128,6 +141,7 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
     vmButtonDialog.setWindowTitle(title);
     vmButtonDialog.setVmData(vmData);
     vmButtonDialog.setCwMessageTextBoxVisible(false);
+    vmButtonDialog.setDialogForCatPttEom(usePttForEom);
 
     int ret = vmButtonDialog.exec();
     return ret;

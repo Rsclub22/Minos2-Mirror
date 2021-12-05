@@ -56,6 +56,11 @@ void RigControlCwMessageKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
+bool RigControlCwMessageKeyer::getUsePttForEomFlag()
+{
+    return usePttForEom;
+}
+
 void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
 {
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";

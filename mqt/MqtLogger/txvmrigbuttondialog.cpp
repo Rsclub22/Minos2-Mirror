@@ -88,6 +88,12 @@ void TxVmRigButtonDialog::on_txCwMessageEditingFinshed()
 
 }
 
+void TxVmRigButtonDialog::setDialogForCatPttEom(bool state)
+{
+    ui->messageDurLbl->setVisible(!state);
+    ui->txVmMessageDur->setVisible(!state);
+}
+
 bool TxVmRigButtonDialog::checkLengthOfCwMessage(int length)
 {
     if (length > MAX_CW_MESSAGE_LENGTH)

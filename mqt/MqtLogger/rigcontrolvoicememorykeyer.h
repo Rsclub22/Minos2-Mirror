@@ -43,8 +43,11 @@ public:
     virtual bool hasRecord() override {return false;}
 
 
+
+
     //int getKeyerState(int &state) override;
     void setPttOnOff(bool onOff) override;
+    bool getUsePttForEomFlag() override;
 
     bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;
@@ -58,6 +61,8 @@ signals:
 
 
 private:
+
+    bool usePttForEom = false;
 
 
 

@@ -925,8 +925,7 @@ bool RigControlMainWindow::checkSupportCwKeyerMemory()
             selectedRigSupCap->suportSendMorse = radio->supportSendMorse(currentRadio.rigModelNumber);
             selectedRigSupCap->supportStopMorse = radio->supportStopMorse(currentRadio.rigModelNumber);
             selectedRigSupCap->supportWaitMorse = radio->supportWaitMorse(currentRadio.rigModelNumber);
-            if (selectedRigSupCap->suportSendMorse
-                && selectedRigSupCap->supportStopMorse)
+            if (selectedRigSupCap->suportSendMorse)
             {
                 setCwMemIndVisible(true);
                 setCwMemIndOnOff(true);

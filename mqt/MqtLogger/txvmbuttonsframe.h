@@ -119,6 +119,8 @@ private:
     QTimer* repeatPauseTimer;
     int buttonNumSent;
 
+    bool usePttForEomFlag = false;
+
     QList<QToolButton*> voiceMemButtonList;
 
     QList<VoiceKeyerParams> vmKeyParamList;
@@ -147,6 +149,8 @@ private:
     void setRepeatIndicatorForMessageOnOff(bool state);
     void setFrameWidgetsState();
     void setRepeatIndicatorOnOff(bool on);
+    void pttStopMessage(bool state);
+
 private slots:
 
     void onVoiceKeyerSelect(int idx);

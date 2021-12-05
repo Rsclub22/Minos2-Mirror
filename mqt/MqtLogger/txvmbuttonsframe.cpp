@@ -118,12 +118,14 @@ void TxVmButtonsFrame::onVmSetupClicked()
     if (voiceKeyerType != keyerTypes[VoiceKeyerId::None])
     {
         int oldnb = txVoiceKeyer->numButtons;
+
         if (txVoiceKeyer->setup(voiceKeyerFactory, txVoiceKeyer->numButtons) == QDialog::Accepted)
         {
             if (txVoiceKeyer->numButtons != oldnb)
             {
                 setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
             }
+
         }
     }
 
@@ -333,7 +335,7 @@ void TxVmButtonsFrame::editActionSelected(int buttonNumber)
             vmData.setType(voiceKeyerType);
         }
         vmData.setVkBase(txVoiceKeyer);
-        trace(QString("[voiceMemSetup] edit selected button no = %1").arg(buttonNumber));
+        trace(QString("[txVmButtonsFrame] edit selected button no = %1").arg(buttonNumber));
 
         QString title1 = "";
         if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
@@ -365,25 +367,33 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 {
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
     {
-        trace(QString("TxVmButtonsFrame - readActionSelected No Keyer Selected "));
+        trace(QString("[TxVmButtonsFrame] readActionSelected No Keyer Selected "));
         return;
     }
 
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl] && !isVoiceMemAvail(selectedRadio))
     {
-        trace(QString("TxVmButtonsFrame - readActionSelected rigControl Voice Keyer Selected, but not available for this radio "));
+        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl Voice Keyer Selected, but not available for this radio "));
         return;
     }
     else if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] && !isCwMemTypeAvail(selectedRadio))
     {
-        trace(QString("TxVmButtonsFrame - readActionSelected rigControl CW Message Keyer Selected, but not available for this radio "));
+        trace(QString("[TxVmButtonsFrame] readActionSelected rigControl CW Message Keyer Selected, but not available for this radio "));
         return;
     }
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+
+    if (vmData.getVmName().isEmpty())
+    {
+        trace(QString("[TxVmButtonsFrame] Button Name Empty Ignore Button"));
+        return;
+    }
+
+
     setRepeatIndicatorOnOff(vmData.getVmRepeatFlag());
 
 
@@ -400,6 +410,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
     buttonNumSent = buttonNumber;
+    usePttForEomFlag = false;
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
@@ -411,16 +422,20 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     }
     else
     {
+        usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
         txVoiceKeyer->sendMsgNum(buttonNumSent);
     }
 
 
-
-    int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
-    if (msgDur > 0)
+    if (!usePttForEomFlag)
     {
-        msgDurTimer->start(msgDur);
+        int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
+        if (msgDur > 0)
+        {
+            msgDurTimer->start(msgDur);
+        }
     }
+
     txVmButtonMap[buttonNumber]->showButtonOnOff(true);
 
 }
@@ -461,7 +476,7 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
     vmData.clear();
 
 
-    trace(QString("[voiceMemSetup] write selected button no = %1").arg(buttonNumber));
+    trace(QString("[txVmButtonsFrame] write selected button no = %1").arg(buttonNumber));
 
 
 //    TxVmRigButtonDialog vmButtonDialog(this);
@@ -499,7 +514,8 @@ void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
     vmData.setVkBase(txVoiceKeyer);
 
     QMessageBox msgBox;
-    msgBox.setText(tr("Are you sure you want to clear this button %1?").arg(buttonNumber));
+    msgBox.setWindowTitle(tr("Voice Memory Button %1").arg(buttonNumber + 1));
+    msgBox.setText(tr("Are you sure you want to clear this Button?"));
     msgBox.setInformativeText(tr("Click save to clear, cancel to ignore"));
     msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Save);
@@ -852,8 +868,21 @@ void TxVmButtonsFrame::setPttState(bool state)
     {
         pttState = state;
         setPttStatusIndicatorOnOff(state);
+        pttStopMessage(state);
         emit pttStatus(pttState);
     }
+
+}
+
+
+void TxVmButtonsFrame::pttStopMessage(bool state)
+{
+    if (!state)
+    {
+       trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
+        onMsgDurTimerTimeout();
+    }
+
 
 }
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)

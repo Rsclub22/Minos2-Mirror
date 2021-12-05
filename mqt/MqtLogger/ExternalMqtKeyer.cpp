@@ -89,6 +89,11 @@ void ExternalMqtKeyer::setPttOnOff(bool onOff)
     Q_UNUSED(onOff)
 }
 
+bool ExternalMqtKeyer::getUsePttForEomFlag()
+{
+    return usePttForEom;
+}
+
 int ExternalMqtKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons)
 {
     // setup button shouldn't be visible, so shouldn't be called
