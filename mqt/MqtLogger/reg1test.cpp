@@ -298,7 +298,7 @@ bool reg1test::parseHeader(QString line )
                         {
                            //PBand=145 MHz
                            ct->contestBands.setValue( a[ 1 ] );
-                           ct->setCurrentBand( a[ 1 ] );
+                           ct->currentBand.setValue( a[ 1 ] );
                         }
                         else
                            if ( code == "PCLUB" )

@@ -1345,7 +1345,9 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
       mt->getStructArgMemberValue( "band", contestBands );
       mt->getStructArgMemberValue( "currentBand", currentBand );
       if (currentBand.getValue().isEmpty())
-          currentBand = contestBands;
+      {
+          currentBand.setValue(contestBands);
+      }
 
       bool isHfContest = isHF();
       mt->getStructArgMemberValue( "hf", hfContest);

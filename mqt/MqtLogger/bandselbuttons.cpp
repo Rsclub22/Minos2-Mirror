@@ -102,7 +102,7 @@ void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
     Frequency freq;
     QString band = buttonLabelsToBand.value(button->text());
 
-    ct->currentBand.setValue(band);
+    ct->setCurrentBand(band);
     ct->commonSave(false);
     setContestBand(band);
 
@@ -160,14 +160,6 @@ void BandSelButtons::setAllButtonsVisible(bool visible)
     for (auto &tb:toolButList)
     {
         tb->setVisible(visible);
-    }
-}
-
-void BandSelButtons::setButtonVisible(QString band, bool visible)
-{
-    if (bandToolButList.contains(band))
-    {
-       bandToolButList.value(band)->setVisible(visible);
     }
 }
 

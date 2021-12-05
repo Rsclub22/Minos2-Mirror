@@ -220,7 +220,7 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
             Callsign cs = bct->cs;
             const Locator loc = WsjtGetCallLoc(cs);
             bct->loc = loc;
-            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.getFullCall()).arg(loc.getLoc()));
+            trace(QString("loc for %1 is empty; filling in with %2").arg(cs.getFullCall(), loc.getLoc()));
         }
         bct->commonSave(bct);
     }
@@ -609,9 +609,18 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
         if (cb == allHF)
         {
             cb = bi->uk;
-            ct->setCurrentBand(cb);
+            if (bi->getType() == HF_BANDTYPE)
+            {
+                ct->setCurrentBand(cb);
 
-            MinosLoggerEvents::SendContestBandChanged(ct);
+                MinosLoggerEvents::SendContestBandChanged(ct);
+                ui->bandErrorLabel->clear();
+            }
+            else
+            {
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb, id, bi->uk);
+                ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
+            }
         }
         else
         {
@@ -623,7 +632,7 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
             }
             if (cb != bi->uk)
             {
-                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb).arg(id).arg(bi->uk);
+                QString mess = tr("<h1><b>Contest band %1 not the same as %2 band %3").arg(cb, id, bi->uk);
                 ui->bandErrorLabel->setText(HtmlFontColour(Qt::red) + mess);
             }
             else
