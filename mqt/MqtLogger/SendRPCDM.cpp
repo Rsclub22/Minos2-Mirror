@@ -9,7 +9,7 @@
 
 #include "base_pch.h"
 #include <QHostInfo>
-
+#include "cutils.h"
 
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
@@ -933,6 +933,7 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
             if (s.size() >= 2)
             {
                 clusterConnected = s[0].contains("Connected");
+                trace(QString("SetCluster Connected to %1").arg(makeStr(clusterConnected)));
             }
 
             emit setClusterState(an.getValue());
