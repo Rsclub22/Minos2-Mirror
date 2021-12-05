@@ -183,28 +183,34 @@ void SetupDialog::saveGeneralSettings()
         QSettings config(fileName, QSettings::IniFormat);
 
 
-        config.beginGroup("TimeToLive");
+
         if (timeToLive != config.value("timeToLive", "").toString())
         {
+            config.beginGroup("TimeToLive");
             config.setValue("timeToLive", timeToLive);
+            config.endGroup();
         }
 
-        config.endGroup();
-        config.beginGroup("EnableSendSpotsToDXCluster");
+
+
+
         if (sendSpotToDXCluster != config.value("enableSendToDXCluster", false).toBool())
         {
+            config.beginGroup("EnableSendSpotsToDXCluster");
             config.setValue("enableSendToDXCluster", sendSpotToDXCluster);
             config.endGroup();
             emit sendSpotToTxEnabled(sendSpotToDXCluster);
         }
 
-        config.beginGroup("UseQRZServer");
+
+
         if (useQrzForQraFlag != config.value("enableGetQraFromQrz", false).toBool())
         {
+            config.beginGroup("UseQRZServer");
             config.setValue("enableGetQraFromQrz", useQrzForQraFlag);
             config.endGroup();
-        }
 
+        }
 
     }
 }
