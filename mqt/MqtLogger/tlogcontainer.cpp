@@ -2203,8 +2203,11 @@ void TLogContainer::appStarted()
         for(auto cpc: qAsConst(LogContainer->contestPageControls))
         {
             // it would be nice to end with the primary pane...
-            Qt::WindowStates css = cpc->windowState();
-            cpc->setWindowState(css | Qt::WindowState::WindowActive);
+            if (cpc)
+            {
+                Qt::WindowStates css = cpc->windowState();
+                cpc->setWindowState(css | Qt::WindowState::WindowActive);
+            }
         }
         Qt::WindowStates ss = windowState();
         setWindowState(ss | Qt::WindowState::WindowActive);
