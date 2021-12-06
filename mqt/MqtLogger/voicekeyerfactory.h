@@ -99,7 +99,7 @@ public:
     VoiceKeyerBase* createVoiceKeyer(int vmKeyerId);
 
 
-    void populateComboKeyerList(QComboBox *comBox);
+    void populateComboKeyerList(QComboBox *comBox, QString voiceKeyerName);
 
     VoiceKeyerFactory::VmKeyers *supportedVoiceKeyers();
 

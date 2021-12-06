@@ -13,6 +13,9 @@ public:
     ExternalMqtKeyer(QObject *parent =nullptr);
     virtual ~ExternalMqtKeyer() override;
 
+    static QString keyerName;
+
+
     static void registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*);
 
     // VoiceKeyerBase interface

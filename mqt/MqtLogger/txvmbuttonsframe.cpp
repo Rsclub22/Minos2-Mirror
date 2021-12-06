@@ -82,15 +82,16 @@ void TxVmButtonsFrame::initTxVmButton()
 
     setVoiceNumMemButtonsVisible(VOICEKEYER_MAX_NUMBUTTONS);
 
-    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
-    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
     QString voiceKeyerName = config.value("KeyerName").toString();
-    ui->voiceKeyerSelect->setCurrentText(voiceKeyerName);
+
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
+
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
     setAvailIndicatorVisible(false);
@@ -201,6 +202,11 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 void TxVmButtonsFrame::onExtConnectTimer()
 {
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+
+    notifyComboChange = false;
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+    notifyComboChange = true;
+
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
     voiceKeyerType = voiceCap.getKeyerType();
     if (!txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::ExternalVoiceKeyer])
@@ -225,6 +231,9 @@ void TxVmButtonsFrame::onExtConnectTimer()
 void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 {
     Q_UNUSED(idx)
+
+    if (!notifyComboChange)
+        return;
 
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
     qDebug() << "keyer select name = " << ui->voiceKeyerSelect->currentText();

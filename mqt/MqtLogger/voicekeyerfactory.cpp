@@ -12,6 +12,7 @@
 
 
 #include <QComboBox>
+#include <QStandardItemModel>
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"
@@ -65,14 +66,31 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     return nullptr;
 }
 
-void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox)
+void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceKeyerName)
 {
 
     comBox->clear();
     comBox->addItem("");
+    int row = -1;
+    int i = 1;
     for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
     {
+        if (r.key() == ExternalMqtKeyer::keyerName)
+        {
+            row = i;
+        }
         QString vmText = r.key();
         comBox->addItem(vmText);
+        i++;
     }
+
+    if (voiceKeyerName != ExternalMqtKeyer::keyerName)
+    {
+        if (!LogContainer->sendDM->isKeyerLoaded())
+        {
+            QModelIndex ind = comBox->model()->index(row, 0);
+            qobject_cast<QListView *>(comBox->view())->setRowHidden(ind.row(), true);
+        }
+    }
+    comBox->setCurrentText(voiceKeyerName);
 }
