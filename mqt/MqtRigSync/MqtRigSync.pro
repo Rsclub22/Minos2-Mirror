@@ -8,7 +8,7 @@ QT       += widgets
 TARGET = MqtRigSync
 TEMPLATE = app
 
-win32:RC_ICONS += ../minos.ico
+win32:RC_ICONS += ../MinosSync.ico
 
 SOURCES += \
     RSConfigure.cpp \

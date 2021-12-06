@@ -7,7 +7,7 @@ QT       += core gui network widgets
 TARGET = MqtQrzServer
 TEMPLATE = app
 
-#win32:RC_ICONS += ../MinosRig.ico
+win32:RC_ICONS += ../MinosQRZ.ico
 
 
 

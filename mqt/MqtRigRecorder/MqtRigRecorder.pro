@@ -7,7 +7,7 @@ TARGET = MqtRigRecorder
 TEMPLATE = app
 
 
-win32:RC_ICONS += rr_Ylf_icon.ico
+win32:RC_ICONS += ../MinosRecorder.ico
 INCLUDEPATH += $$PWD/../rtaudio
 INCLUDEPATH += $$PWD/../Chunkware
 
