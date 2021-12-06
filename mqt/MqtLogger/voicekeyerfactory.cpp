@@ -86,7 +86,12 @@ void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceK
 
     if (voiceKeyerName != ExternalMqtKeyer::keyerName)
     {
-        if (!LogContainer->sendDM->isKeyerLoaded())
+        if (LogContainer->sendDM->isKeyerLoaded())
+        {
+            int a = 0;
+            a++;
+        }
+        else
         {
             QModelIndex ind = comBox->model()->index(row, 0);
             qobject_cast<QListView *>(comBox->view())->setRowHidden(ind.row(), true);

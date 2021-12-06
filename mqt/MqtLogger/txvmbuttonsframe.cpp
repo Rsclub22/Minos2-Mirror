@@ -203,12 +203,16 @@ void TxVmButtonsFrame::onExtConnectTimer()
 {
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
 
-    notifyComboChange = false;
-    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
-    notifyComboChange = true;
-
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
     voiceKeyerType = voiceCap.getKeyerType();
+
+    if (LogContainer->sendDM->isKeyerLoaded())
+    {
+        notifyComboChange = false;
+        voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+        notifyComboChange = true;
+    }
+
     if (!txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::ExternalVoiceKeyer])
     {
         createKeyer(voiceKeyerName);
@@ -222,7 +226,7 @@ void TxVmButtonsFrame::onExtConnectTimer()
             voiceKeyerType = keyerTypes[VoiceKeyerId::None];
         }
     }
-    else
+    else if (txVoiceKeyer)
     {
         ui->noExtKeyerLabel->clear();
         extKeyerConnectTimer->stop();
@@ -252,15 +256,14 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
     if (txVoiceKeyer == nullptr)
     {
-       txVoiceKeyer = nullptr;
        clearButtonLabels();
        vmKeyParamList.clear();
        setVoiceNumMemButtonsVisible(0);
        if (voiceKeyerType == keyerTypes[ VoiceKeyerId::ExternalVoiceKeyer])
        {
            ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
-           extKeyerConnectTimer->start(1000);
        }
+       extKeyerConnectTimer->start(1000);
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
        setAvailIndicatorVisible(false);
