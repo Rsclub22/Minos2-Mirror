@@ -42,6 +42,7 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     extKeyerConnectTimer = new QTimer(this);
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
+    connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
 
     initTxVmButton();
 
@@ -254,6 +255,8 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
     createKeyer(voiceKeyerName);
 
+    extKeyerConnectTimer->start(1000);
+
     if (txVoiceKeyer == nullptr)
     {
        clearButtonLabels();
@@ -263,7 +266,6 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
        {
            ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
        }
-       extKeyerConnectTimer->start(1000);
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
        setAvailIndicatorVisible(false);

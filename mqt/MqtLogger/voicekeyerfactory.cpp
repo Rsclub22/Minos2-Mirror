@@ -68,34 +68,41 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
 
 void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceKeyerName)
 {
-
-    comBox->clear();
-    comBox->addItem("");
-    int row = -1;
-    int i = 1;
-    for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+    if (comBox->count())
     {
-        if (r.key() == ExternalMqtKeyer::keyerName)
+        int row = -1;
+        int i = 1;
+        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
         {
-            row = i;
+            if (r.key() == ExternalMqtKeyer::keyerName)
+            {
+                row = i;
+            }
+            i++;
         }
-        QString vmText = r.key();
-        comBox->addItem(vmText);
-        i++;
+        extInd = comBox->model()->index(row, 0);
+        qobject_cast<QListView *>(comBox->view())->setRowHidden(extInd.row(), !LogContainer->sendDM->isKeyerLoaded());
     }
-
-    if (voiceKeyerName != ExternalMqtKeyer::keyerName)
+    else
     {
-        if (LogContainer->sendDM->isKeyerLoaded())
+        comBox->clear();
+        comBox->addItem("");
+        int row = -1;
+        int i = 1;
+        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
         {
-            int a = 0;
-            a++;
+            if (r.key() == ExternalMqtKeyer::keyerName)
+            {
+                row = i;
+            }
+            QString vmText = r.key();
+            comBox->addItem(vmText);
+            i++;
         }
-        else
-        {
-            QModelIndex ind = comBox->model()->index(row, 0);
-            qobject_cast<QListView *>(comBox->view())->setRowHidden(ind.row(), true);
-        }
+        extInd = comBox->model()->index(row, 0);
+        bool enableExt = !(LogContainer->sendDM->isKeyerLoaded() || voiceKeyerName == ExternalMqtKeyer::keyerName);
+        qobject_cast<QListView *>(comBox->view())->setRowHidden(extInd.row(), enableExt);
+
+        comBox->setCurrentText(voiceKeyerName);
     }
-    comBox->setCurrentText(voiceKeyerName);
 }
