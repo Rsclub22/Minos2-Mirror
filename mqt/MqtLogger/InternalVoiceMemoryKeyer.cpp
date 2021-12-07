@@ -31,9 +31,14 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setVmIdNum(VoiceKeyerId::InternalVoiceKeyer);
     voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::InternalVoiceKeyer]);
     voiceMemCap.setKeyerName(keyerName);
+    voiceMemCap.setsupportSerial(false);
+    voiceMemCap.setUseCatPTTForEom(false);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
+    voiceMemCap.setHasPip(false);
+    voiceMemCap.setHasTxStatus(false);
     voiceMemCap.setSetupButton(false);
+
 
 
     (*vmKeyersList)[keyerName] = voiceMemCap;

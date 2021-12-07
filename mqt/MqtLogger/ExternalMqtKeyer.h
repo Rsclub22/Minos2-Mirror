@@ -38,18 +38,18 @@ public:
     virtual int setup(VoiceKeyerFactory *voiceKeyerFactory, int &numButtons) override;
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
-    virtual bool hasPip() const override
-    {
-        return true;
-    }
-    virtual bool hasSetup() const override
-    {
-        return false;
-    }
-    virtual bool hasTxStatus() const override
-    {
-        return false;
-    }
+    //virtual bool hasPip() const override
+    //{
+    //    return true;
+    //}
+    //virtual bool hasSetup() const override
+    //{
+    //    return false;
+    //}
+    //virtual bool hasTxStatus() const override
+    //{
+    //    return false;
+    //}
 
     virtual void setPip(bool) override;
 

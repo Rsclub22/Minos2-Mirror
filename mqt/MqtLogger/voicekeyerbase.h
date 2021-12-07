@@ -115,14 +115,14 @@ public:
     {
         return false;
     }
-    virtual bool hasSetup() const
-    {
-        return true;
-    }
-    virtual bool hasTxStatus() const
-    {
-        return true;
-    }
+    //virtual bool hasSetup() const
+    //{
+    //    return true;
+    //}
+    //virtual bool hasTxStatus() const
+    //{
+    //    return true;
+    //}
     virtual void setPip(bool){}
     virtual bool getPip() const {return false;}
 

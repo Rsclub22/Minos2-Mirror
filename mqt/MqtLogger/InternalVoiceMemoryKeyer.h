@@ -26,10 +26,10 @@ public:
     virtual bool hasRecord() override{return true;}
     virtual void doRecording(VoiceKeyerParams *vkParam) override;
 
-    virtual bool hasTxStatus() const override
-    {
-        return false;
-    }
+    //virtual bool hasTxStatus() const override
+    //{
+    //    return false;
+    //}
 
     virtual bool readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams) override;
     virtual void saveVmButtonParams(const VoiceKeyerParams &vmParams) override;

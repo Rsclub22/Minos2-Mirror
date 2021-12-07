@@ -103,8 +103,10 @@ void TxVmButtonsFrame::initTxVmButton()
 
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
-    setAvailIndicatorVisible(false);
-    setRepeatIndicatorVisible(false);
+    onVoiceKeyerSelect(ui->voiceKeyerSelect->currentIndex());
+
+    //setAvailIndicatorVisible(false);
+    //setRepeatIndicatorVisible(false);
 
     config.endGroup();
 }
@@ -183,6 +185,8 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
                 txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
 
+
+
                for (int i = 0; i < voiceMemButtonList.count(); i++)
                {
                    VoiceKeyerParams vmData;
@@ -199,14 +203,14 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
 
 
-               ui->vmSetupPb->setVisible(txVoiceKeyer->hasSetup());
-               ui->pipCb->setVisible(txVoiceKeyer->hasPip());
-               ui->txStatusFrame->setVisible(txVoiceKeyer->hasTxStatus());
+               //ui->vmSetupPb->setVisible(voiceCap.getSetupButton());
+               //ui->pipCb->setVisible(voiceCap.getHasPip());
+               //ui->txStatusFrame->setVisible(voiceCap.getHasTxStatus());
 
-               if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
-               {
-                   setFrameWidgetsState();
-               }
+               //if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+               //{
+               //    setFrameWidgetsState();
+               //}
             }
         }
     }
@@ -252,7 +256,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
         return;
 
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
-    trace(QString("keyer select name = ").arg( ui->voiceKeyerSelect->currentText()));
+    trace(QString("keyer select name = %1").arg( ui->voiceKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -267,6 +271,8 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     createKeyer(voiceKeyerName);
 
     extKeyerConnectTimer->start(1000);
+
+    VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
 
     if (txVoiceKeyer == nullptr)
     {
@@ -290,6 +296,17 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
     else
     {
         ui->noExtKeyerLabel->clear();
+
+        VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
+
+        ui->vmSetupPb->setVisible(voiceCap.getSetupButton());
+        ui->pipCb->setVisible(voiceCap.getHasPip());
+        ui->txStatusFrame->setVisible(voiceCap.getHasTxStatus());
+
+        if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        {
+            setFrameWidgetsState();
+        }
     }
 
 

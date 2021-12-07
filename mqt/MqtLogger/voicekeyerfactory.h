@@ -68,6 +68,15 @@ public:
     bool getSupportSerial(){return supportSerial;}
     void setsupportSerial(const bool supportSerial_){supportSerial = supportSerial_;}
 
+    bool getUseCatPTTForEom() const {return useCatPTTForEom;}
+    void setUseCatPTTForEom(const bool useCatPTTForEom_){useCatPTTForEom = useCatPTTForEom_;}
+
+    bool getHasPip(){return hasPip;}
+    void setHasPip(const bool hasPip_){hasPip = hasPip_;}
+
+    bool getHasTxStatus(){return hasTxStatus;}
+    void setHasTxStatus(const bool hasTxStatus_){hasTxStatus = hasTxStatus_;}
+
     bool getSetupButton(){return setupButton;}
     void setSetupButton(const bool setupButton_){setupButton = setupButton_;}
 
@@ -79,9 +88,12 @@ private:
    QString keyerType;
    int numVoiceKeys;
    QString comPort;
-   bool supportRepeatMsg;
-   bool supportSerial;
-   bool setupButton;
+   bool supportRepeatMsg =false;
+   bool supportSerial = false;
+   bool useCatPTTForEom = false;
+   bool setupButton = false;
+   bool hasPip = false;
+   bool hasTxStatus = false;
 
 };
 

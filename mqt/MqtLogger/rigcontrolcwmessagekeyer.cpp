@@ -43,8 +43,13 @@ void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setKeyerType(keyerTypes[VoiceKeyerId::CW_RigControl]);
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setNumVoiceKeys(8);
+    voiceMemCap.setsupportSerial(false);
+    voiceMemCap.setUseCatPTTForEom(true);
     voiceMemCap.setSupportRepeatMsg(true);
-    voiceMemCap.setSetupButton(false);
+    voiceMemCap.setHasPip(false);
+    voiceMemCap.setHasTxStatus(true);
+    voiceMemCap.setSetupButton(true);
+
 
 
     (*vmKeyersList)[keyerName] = voiceMemCap;
