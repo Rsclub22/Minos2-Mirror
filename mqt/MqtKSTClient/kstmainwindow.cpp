@@ -1422,6 +1422,9 @@ void KSTMainWindow::on_messageTable_clicked(const QModelIndex &index)
     ui->callEdit->setText(call);
     ui->msgEdit->setFocus();
     setActive(line->chat);
+
+    QString t = line->message;
+    ui->bodyLabel->setText(t);
 }
 
 void KSTMainWindow::setActive(int chat)
