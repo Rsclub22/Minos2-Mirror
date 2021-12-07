@@ -19,7 +19,7 @@
 #include "txvmrigbuttondialog.h"
 #include "rigcontrolcwmessagekeyer.h"
 
-const QString STOPCW = "\xFF";
+
 
 RigControlCwMessageKeyer::RigControlCwMessageKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
@@ -66,6 +66,7 @@ void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
     QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
+    usePttForEom = config.value("Common/UseCatPttForEom", false).toBool();
 }
 
 
@@ -145,6 +146,8 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
         QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::RigControl] + ".ini";
         QSettings config(fileName, QSettings::IniFormat);
         config.setValue("Common/NumButtons", numButtons);
+        config.setValue("Common/UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
+        usePttForEom = txVmSetupDialog.getCatPttForEomState();
     }
     return ret;
 
@@ -177,6 +180,8 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     {
        vmButtonDialog.setCwMessageTextBoxVisible(true);
     }
+
+    vmButtonDialog.setDialogForCatPttEom(usePttForEom);
 
     int ret = vmButtonDialog.exec();
     return ret;

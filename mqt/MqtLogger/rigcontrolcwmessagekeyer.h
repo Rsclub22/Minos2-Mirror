@@ -19,6 +19,8 @@
 
 #include <QObject>
 
+const QString STOPCW = "\xFF";
+
 class RigControlCwMessageKeyer : public VoiceKeyerBase
 {
     Q_OBJECT
