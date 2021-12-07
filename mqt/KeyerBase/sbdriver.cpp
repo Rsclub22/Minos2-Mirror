@@ -330,12 +330,16 @@ void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough)
 
 int SoundSystemDriver::getMessageLen(int buttonNumber)
 {
+    int mlen = 0;
     if (buttonNumber < recfil.size())
     {
         dvkFile *d = recfil[buttonNumber];
-        return (d->fsample + d->sampleRate)/d->sampleRate;
+        if (d->fsample != 0)
+        {
+            mlen = (d->fsample + d->sampleRate)/d->sampleRate;
+        }
     }
-    return 0;
+    return mlen;
 }
 void SoundSystemDriver::closedown()
 {

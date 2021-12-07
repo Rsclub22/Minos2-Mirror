@@ -42,10 +42,19 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
 
     extKeyerConnectTimer = new QTimer(this);
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
+    connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
 
     initTxVmButton();
 
     setPttStatusIndicatorOnOff(false);
+    ui->txStatusFrame->setVisible(false);
+
+    setAvailIndicatorVisible(false);
+    setRepeatIndicatorVisible(false);
+
+    ui->vmSetupPb->setVisible(false);
+    ui->pipCb->setVisible(false);
+    ui->txStatusFrame->setVisible(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -80,17 +89,18 @@ void TxVmButtonsFrame::initTxVmButton()
 
     clearButtonLabels();
 
-    setVoiceNumMemButtonsVisible(VOICEKEYER_MAX_NUMBUTTONS);
+    setVoiceNumMemButtonsVisible(0);
 
-    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect);
-    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
     config.beginGroup(VOICEKEYER_COMMON_PARAMS_GROUPNAME);
 
     QString voiceKeyerName = config.value("KeyerName").toString();
-    ui->voiceKeyerSelect->setCurrentText(voiceKeyerName);
+
+    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
     setAvailIndicatorVisible(false);
@@ -191,6 +201,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
                ui->vmSetupPb->setVisible(txVoiceKeyer->hasSetup());
                ui->pipCb->setVisible(txVoiceKeyer->hasPip());
+               ui->txStatusFrame->setVisible(txVoiceKeyer->hasTxStatus());
 
                if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
                {
@@ -203,8 +214,17 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 void TxVmButtonsFrame::onExtConnectTimer()
 {
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
+
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
     voiceKeyerType = voiceCap.getKeyerType();
+
+    if (LogContainer->sendDM->isKeyerLoaded())
+    {
+        notifyComboChange = false;
+        voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+        notifyComboChange = true;
+    }
+
     if (!txVoiceKeyer && voiceKeyerType == keyerTypes[VoiceKeyerId::ExternalVoiceKeyer])
     {
         createKeyer(voiceKeyerName);
@@ -218,7 +238,7 @@ void TxVmButtonsFrame::onExtConnectTimer()
             voiceKeyerType = keyerTypes[VoiceKeyerId::None];
         }
     }
-    else
+    else if (txVoiceKeyer)
     {
         ui->noExtKeyerLabel->clear();
         extKeyerConnectTimer->stop();
@@ -228,8 +248,11 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 {
     Q_UNUSED(idx)
 
+    if (!notifyComboChange)
+        return;
+
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
-    qDebug() << "keyer select name = " << ui->voiceKeyerSelect->currentText();
+    trace(QString("keyer select name = ").arg( ui->voiceKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -243,16 +266,16 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
     createKeyer(voiceKeyerName);
 
+    extKeyerConnectTimer->start(1000);
+
     if (txVoiceKeyer == nullptr)
     {
-       txVoiceKeyer = nullptr;
        clearButtonLabels();
        vmKeyParamList.clear();
        setVoiceNumMemButtonsVisible(0);
        if (voiceKeyerType == keyerTypes[ VoiceKeyerId::ExternalVoiceKeyer])
        {
            ui->noExtKeyerLabel->setText(HtmlFontColour(Qt::red) +  tr("To use the external keyer mqtKeyer must be running and connected"));
-           extKeyerConnectTimer->start(1000);
        }
        voiceKeyerType = keyerTypes[VoiceKeyerId::None];
 
@@ -261,6 +284,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
        ui->vmSetupPb->setVisible(false);
        ui->pipCb->setVisible(false);
+       ui->txStatusFrame->setVisible(false);
 
     }
     else
@@ -456,7 +480,7 @@ void TxVmButtonsFrame::onVmStopClicked()
     }
     else
     {
-        txVoiceKeyer->stopMsg();
+        txVoiceKeyer->stopMsg(nullptr);
     }
 
     msgDurTimer->stop();

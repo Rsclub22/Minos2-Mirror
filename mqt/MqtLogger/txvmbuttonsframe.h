@@ -131,7 +131,7 @@ private:
     bool radioConnected;
     bool pttState;
 
-
+    bool notifyComboChange = true;
     void initTxVmButton();
 
     void setRunButtonText(const int buttonNumber, const QString name);

@@ -16,6 +16,7 @@
 #include <QObject>
 #include <QString>
 #include <QMap>
+#include <QModelIndex>
 #include "voicekeyerbase.h"
 
 class QComboBox;
@@ -99,7 +100,7 @@ public:
     VoiceKeyerBase* createVoiceKeyer(int vmKeyerId);
 
 
-    void populateComboKeyerList(QComboBox *comBox);
+    void populateComboKeyerList(QComboBox *comBox, QString voiceKeyerName);
 
     VoiceKeyerFactory::VmKeyers *supportedVoiceKeyers();
 
@@ -107,6 +108,8 @@ signals:
 
 private:
     VmKeyers vmKeyersList;
+
+    QModelIndex extInd;
 
 };
 

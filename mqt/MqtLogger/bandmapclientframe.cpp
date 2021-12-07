@@ -1403,12 +1403,14 @@ void BandmapClientFrame::setClusterServerState(QString stateMsg)
 
     if (LogContainer->sendDM->isClusterConnected())
     {
+         traceMsg("cluster is connected");
          clusterStatusIndicatorToggle(true);
          clusterServerConnected = true;
          ui->clusterStatusIndicator->setEnabled(false);
     }
     else
     {
+         traceMsg("cluster is not connected");
          clusterStatusIndicatorToggle(false);
          clusterServerConnected = false;
          ui->clusterStatusIndicator->setEnabled(true);  // enable to allow reconnect request

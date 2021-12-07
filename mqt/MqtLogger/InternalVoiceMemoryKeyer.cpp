@@ -85,11 +85,24 @@ void InternalVoiceMemoryKeyer::sendMsgNum(int msgNum)
 
 }
 
-void InternalVoiceMemoryKeyer::stopMsg()
+void InternalVoiceMemoryKeyer::stopMsg(VoiceKeyerParams * vkParam)
 {
     // stop recording/playing message
+    SoundSystemDriver::getSbDriver() ->stoprec();
     SoundSystemDriver::getSbDriver() ->stopDMA();
 
+    if (vkParam)
+    {
+        int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getvmButtonNum());
+        vkParam->setVmDuration(msgLen);
+        QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
+        QSettings config(inifileName, QSettings::IniFormat);
+        config.beginGroup("button" + QString::number(vkParam->getvmButtonNum()));
+
+        config.setValue("messageDuration", vkParam->getVmDuration());
+
+        config.endGroup();
+    }
 }
 
 
@@ -99,19 +112,9 @@ void InternalVoiceMemoryKeyer::doRecording(VoiceKeyerParams * vkParam)
     // button number and filename are in vkParam
 
     // Can we work it to use space bar as PTT for recording?
-    QString fileName = QString("CQF%1.WAV").arg(vkParam->getvmButtonNum());
+    QString fileName = QString("CQF%1.WAV").arg(vkParam->getvmButtonNum() + 1);
     SoundSystemDriver::getSbDriver() ->record_file( fileName );
 
-    int msgLen = SoundSystemDriver::getSbDriver() ->getMessageLen(vkParam->getvmButtonNum());
-    vkParam->setVmDuration(msgLen);
-
-    QString inifileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + vkParam->getType() + ".ini";
-    QSettings config(inifileName, QSettings::IniFormat);
-    config.beginGroup("button" + QString::number(vkParam->getvmButtonNum()));
-
-    config.setValue("messageDuration", vkParam->getVmDuration());
-
-    config.endGroup();
 }
 
 bool InternalVoiceMemoryKeyer::readVmButtonParams(int buttonNum, VoiceKeyerParams &vmParams)

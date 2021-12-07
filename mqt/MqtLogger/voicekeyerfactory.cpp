@@ -12,6 +12,7 @@
 
 
 #include <QComboBox>
+#include <QStandardItemModel>
 #include "voicekeyerfactory.h"
 #include "rigcontrolvoicememorykeyer.h"
 #include "rigcontrolcwmessagekeyer.h"
@@ -65,14 +66,43 @@ VoiceKeyerBase* VoiceKeyerFactory::createVoiceKeyer(int vmKeyerId)
     return nullptr;
 }
 
-void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox)
+void VoiceKeyerFactory::populateComboKeyerList(QComboBox* comBox, QString voiceKeyerName)
 {
-
-    comBox->clear();
-    comBox->addItem("");
-    for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+    if (comBox->count())
     {
-        QString vmText = r.key();
-        comBox->addItem(vmText);
+        int row = -1;
+        int i = 1;
+        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+        {
+            if (r.key() == ExternalMqtKeyer::keyerName)
+            {
+                row = i;
+            }
+            i++;
+        }
+        extInd = comBox->model()->index(row, 0);
+        qobject_cast<QListView *>(comBox->view())->setRowHidden(extInd.row(), !LogContainer->sendDM->isKeyerLoaded());
+    }
+    else
+    {
+        comBox->clear();
+        comBox->addItem("");
+        int row = -1;
+        int i = 1;
+        for (auto r = supportedVoiceKeyers()->cbegin(); r != supportedVoiceKeyers()->cend(); ++r)
+        {
+            if (r.key() == ExternalMqtKeyer::keyerName)
+            {
+                row = i;
+            }
+            QString vmText = r.key();
+            comBox->addItem(vmText);
+            i++;
+        }
+        extInd = comBox->model()->index(row, 0);
+        bool enableExt = !(LogContainer->sendDM->isKeyerLoaded() || voiceKeyerName == ExternalMqtKeyer::keyerName);
+        qobject_cast<QListView *>(comBox->view())->setRowHidden(extInd.row(), enableExt);
+
+        comBox->setCurrentText(voiceKeyerName);
     }
 }

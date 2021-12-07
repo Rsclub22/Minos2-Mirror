@@ -613,6 +613,7 @@ void TLogContainer::openRecentFile()
            BaseContestLog *ct = addSlot( &pced, FileName, false, -1, false );
            if (ct)
            {
+              sendDM->subscribeApps();
               selectContest(ct, QSharedPointer<BaseContact>());
            }
         }
@@ -894,6 +895,7 @@ void TLogContainer::FileNewActionExecute(bool hf)
             }
        }
     }
+    sendDM->subscribeApps();
     selectContest(c, QSharedPointer<BaseContact>());
 }
 void TLogContainer::VHFFileNewActionExecute()
@@ -932,6 +934,7 @@ void TLogContainer::FileOpenActionExecute()
             ct = addSlot( &pced, fname, false, -1, false );   // not automatically read only
             if (ct)
             {
+                sendDM->subscribeApps();
                 selectContest(ct, QSharedPointer<BaseContact>());
             }
         }
@@ -979,6 +982,7 @@ void TLogContainer::FileImportActionExecute(bool hf)
             ct = addSlot( &pced, fname, false, -1, hf );   // not automatically read only
             if (ct)
             {
+                sendDM->subscribeApps();
                 selectContest(ct, QSharedPointer<BaseContact>());
             }
         }
@@ -1450,8 +1454,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          MinosLoggerEvents::SendColumnsChanged();  // also causes show QSOs
          MinosLoggerEvents::SendSplittersChanged();
 
-         sendDM->subscribeApps();
-
          on_contestPageControl_currentChanged(tno);
 
          setUpdatesEnabled(true);
@@ -1812,7 +1814,10 @@ BaseContestLog *TLogContainer::loadSession( QString sessName)
         }
     }
     if (ct)
+    {
+        sendDM->subscribeApps();
         app->setCurrentContest(ct);
+    }
 
     preloadBundle.openSection(app->preloadsect);
     preloadBundle.setStringProfile(eppSession, sessName);
@@ -1901,6 +1906,7 @@ void TLogContainer::preloadFiles( const QString &conarg )
 
     if ( ct )
     {
+        sendDM->subscribeApps();
         selectContest( ct, QSharedPointer<BaseContact>() );
     }
 }
@@ -2203,8 +2209,11 @@ void TLogContainer::appStarted()
         for(auto cpc: qAsConst(LogContainer->contestPageControls))
         {
             // it would be nice to end with the primary pane...
-            Qt::WindowStates css = cpc->windowState();
-            cpc->setWindowState(css | Qt::WindowState::WindowActive);
+            if (cpc)
+            {
+                Qt::WindowStates css = cpc->windowState();
+                cpc->setWindowState(css | Qt::WindowState::WindowActive);
+            }
         }
         Qt::WindowStates ss = windowState();
         setWindowState(ss | Qt::WindowState::WindowActive);

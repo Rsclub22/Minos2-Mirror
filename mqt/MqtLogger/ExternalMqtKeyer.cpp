@@ -8,6 +8,9 @@
 
 #include "ExternalMqtKeyer.h"
 
+/*static*/ QString ExternalMqtKeyer::keyerName = "ExternalMqtKeyer";
+
+
 ExternalMqtKeyer::ExternalMqtKeyer(QObject *parent) : VoiceKeyerBase(parent)
 {
 }
@@ -18,7 +21,7 @@ ExternalMqtKeyer::~ExternalMqtKeyer()
 
 void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersList)
 {
-    QString keyerName = "ExternalMqtKeyer";
+   // QString keyerName = "ExternalMqtKeyer";
 
     VoiceKeyerCapabilities voiceMemCap;
 
@@ -46,7 +49,7 @@ void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
     emit LogContainer->sendKeyerPlay( msgNum );
 }
-void ExternalMqtKeyer::stopMsg()
+void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
 {
     emit LogContainer->sendKeyerStop();
 }

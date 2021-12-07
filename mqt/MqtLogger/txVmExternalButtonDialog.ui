@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>240</height>
+    <width>549</width>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -193,7 +193,11 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="txVmMessageDur"/>
+          <widget class="QLineEdit" name="txVmMessageDur">
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="messageDurLbl">

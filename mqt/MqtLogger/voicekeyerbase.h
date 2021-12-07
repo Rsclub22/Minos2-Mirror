@@ -93,7 +93,7 @@ public:
 
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
-    virtual void stopMsg() = 0;
+    virtual void stopMsg(VoiceKeyerParams * vkParam) = 0;
 
     virtual void sendCwMsg(QString message) = 0;
     virtual void stopCwMsg() = 0;
@@ -116,6 +116,10 @@ public:
         return false;
     }
     virtual bool hasSetup() const
+    {
+        return true;
+    }
+    virtual bool hasTxStatus() const
     {
         return true;
     }
