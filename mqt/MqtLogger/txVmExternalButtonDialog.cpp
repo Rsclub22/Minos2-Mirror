@@ -45,7 +45,7 @@ bool TxVmExternalButtonDialog::validateDur(QString durName, QString dur, int &du
 
     QMessageBox msgBox;
     msgBox.setText(tr("%1 Duration ").arg(durName) + dur + tr(" - out of range"));
-    msgBox.setInformativeText(tr("Please set value between 0 and 180 seconds"));
+    msgBox.setInformativeText(tr("Please set value between %1 and %2 seconds").arg(REPEAT_DUR_MIN).arg(REPEAT_DUR_MAX));
     msgBox.exec();
     return false;
 }
@@ -67,12 +67,6 @@ void TxVmExternalButtonDialog::on_buttonBox_accepted()
     {
         return;
     }
-
-//    int messageDur_ = 0;
-//    if (!validateDur(tr("Message"), ui->txVmMessageDur->text(), messageDur_))
-//    {
-//        return;
-//    }
 
     QString name = ui->txVmNameEdit->text();
     vmData->setVmName(name);
@@ -98,16 +92,6 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
     ui->repeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->repeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
     ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
-
-}
-
-void TxVmExternalButtonDialog::onVmRepeatPauseDurEditingFinished()
-{
-
-}
-
-void TxVmExternalButtonDialog::onVmMessageDurEditingFinished()
-{
 
 }
 

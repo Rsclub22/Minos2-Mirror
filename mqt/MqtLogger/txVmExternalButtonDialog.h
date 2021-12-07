@@ -19,8 +19,6 @@ public:
     void setVmData(VoiceKeyerParams* vmData);
 
 private slots:
-    void onVmRepeatPauseDurEditingFinished();
-    void onVmMessageDurEditingFinished();
     void on_replayButton_clicked();
 
     void on_recordButton_clicked();
