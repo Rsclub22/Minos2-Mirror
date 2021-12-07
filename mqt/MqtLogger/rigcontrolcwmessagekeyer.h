@@ -31,7 +31,7 @@ public:
 
     void voiceKeyerInit(int &numButtons) override;
     void sendMsgNum(int buttonNum) override {Q_UNUSED(buttonNum)};
-    void stopMsg() override {};
+    void stopMsg(VoiceKeyerParams * vkParam) override {};
 
     void sendCwMsg(const QString message) override;
     void stopCwMsg() override;

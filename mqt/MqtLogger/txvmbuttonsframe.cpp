@@ -47,6 +47,14 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     initTxVmButton();
 
     setPttStatusIndicatorOnOff(false);
+    ui->txStatusFrame->setVisible(false);
+
+    setAvailIndicatorVisible(false);
+    setRepeatIndicatorVisible(false);
+
+    ui->vmSetupPb->setVisible(false);
+    ui->pipCb->setVisible(false);
+    ui->txStatusFrame->setVisible(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -81,7 +89,7 @@ void TxVmButtonsFrame::initTxVmButton()
 
     clearButtonLabels();
 
-    setVoiceNumMemButtonsVisible(VOICEKEYER_MAX_NUMBUTTONS);
+    setVoiceNumMemButtonsVisible(0);
 
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
@@ -90,8 +98,8 @@ void TxVmButtonsFrame::initTxVmButton()
 
     QString voiceKeyerName = config.value("KeyerName").toString();
 
-    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
     connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
+    voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
 
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
@@ -191,6 +199,7 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
                ui->vmSetupPb->setVisible(txVoiceKeyer->hasSetup());
                ui->pipCb->setVisible(txVoiceKeyer->hasPip());
+               ui->txStatusFrame->setVisible(txVoiceKeyer->hasTxStatus());
 
                if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
                {
@@ -241,7 +250,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
         return;
 
     QString voiceKeyerName = ui->voiceKeyerSelect->currentText();
-    qDebug() << "keyer select name = " << ui->voiceKeyerSelect->currentText();
+    trace(QString("keyer select name = ").arg( ui->voiceKeyerSelect->currentText()));
 
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICEKEYER_COMMON_PARAMS_FILENAME;
     QSettings config(fileName, QSettings::IniFormat);
@@ -273,6 +282,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
        ui->vmSetupPb->setVisible(false);
        ui->pipCb->setVisible(false);
+       ui->txStatusFrame->setVisible(false);
 
     }
     else
@@ -455,7 +465,7 @@ void TxVmButtonsFrame::onVmStopClicked()
     }
     else
     {
-        txVoiceKeyer->stopMsg();
+        txVoiceKeyer->stopMsg(nullptr);
     }
 
     msgDurTimer->stop();

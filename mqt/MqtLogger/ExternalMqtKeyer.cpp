@@ -49,7 +49,7 @@ void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
     emit LogContainer->sendKeyerPlay( msgNum );
 }
-void ExternalMqtKeyer::stopMsg()
+void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
 {
     emit LogContainer->sendKeyerStop();
 }

@@ -54,7 +54,7 @@ void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 
     tslf->sendRigTxVoiceMessage(QString::number(buttonNum +1));  // add for Icom message Number
 }
-void RigControlVoiceMemoryKeyer::stopMsg()
+void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 

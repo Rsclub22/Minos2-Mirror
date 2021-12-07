@@ -30,7 +30,6 @@ TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmInternalButtonDialog::on_okButtonCicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmInternalButtonDialog::on_cancelbuttonClicked);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmInternalButtonDialog::onVmRepeatPauseDurEditingFinished);
-    connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmInternalButtonDialog::onVmMessageDurEditingFinished);
 }
 
 TxVmInternalButtonDialog::~TxVmInternalButtonDialog()
@@ -91,12 +90,6 @@ void TxVmInternalButtonDialog::onVmRepeatPauseDurEditingFinished()
     validateDur(tr("Repeat Pause"), ui->txVmRepeatPauseDur->text(), dur_);
 }
 
-void TxVmInternalButtonDialog::onVmMessageDurEditingFinished()
-{
-    int dur_ = 0;
-    validateDur(tr("Message"), ui->txVmMessageDur->text(), dur_);
-}
-
 bool TxVmInternalButtonDialog::validateDur(QString durName, QString dur, int& dur_)
 {
     bool ok;
@@ -109,7 +102,7 @@ bool TxVmInternalButtonDialog::validateDur(QString durName, QString dur, int& du
 
     QMessageBox msgBox;
     msgBox.setText(tr("%1 Duration ").arg(durName) + dur + tr(" - out of range"));
-    msgBox.setInformativeText(tr("Please set value between 0 and 180 seconds"));
+    msgBox.setInformativeText(tr("Please set value between %1 and %2 seconds").arg(REPEAT_DUR_MIN).arg(REPEAT_DUR_MAX));
     msgBox.exec();
     return false;
 
@@ -117,6 +110,7 @@ bool TxVmInternalButtonDialog::validateDur(QString durName, QString dur, int& du
 
 void TxVmInternalButtonDialog::on_okButtonCicked()
 {
+    on_stopButton_clicked();
     int repeatPauseDur_ = 0;
     if (!validateDur(tr("Repeat Pause"), ui->txVmRepeatPauseDur->text(), repeatPauseDur_))
     {
@@ -141,6 +135,7 @@ void TxVmInternalButtonDialog::on_okButtonCicked()
 
 void TxVmInternalButtonDialog::on_cancelbuttonClicked()
 {
+    on_stopButton_clicked();
     reject();
 }
 
@@ -155,12 +150,17 @@ void TxVmInternalButtonDialog::on_recordButton_clicked()
 {
     // make a recording for this button
     vmData->getVkBase()->doRecording(vmData);
+
+    ui->buttonBox->button(QDialogButtonBox::StandardButton::Cancel)->setEnabled(false);
+    ui->recordButton->setEnabled(false);
 }
 
 void TxVmInternalButtonDialog::on_stopButton_clicked()
 {
     // stop record/replay
-    vmData->getVkBase()->stopMsg();
+    vmData->getVkBase()->stopMsg(vmData);
+    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
+    ui->recordButton->setEnabled(true);
 }
 void TxVmInternalButtonDialog::setVolumeMults()
 {

@@ -21,7 +21,7 @@ public:
     // VoiceKeyerBase interface
     virtual void voiceKeyerInit(int &numButtons) override;
     virtual void sendMsgNum(int msgNum) override;
-    virtual void stopMsg() override;
+    virtual void stopMsg(VoiceKeyerParams * vkParam) override;
 
     void sendCwMsg(QString message) override {Q_UNUSED(message)};
     void stopCwMsg() override {};
@@ -45,6 +45,11 @@ public:
     {
         return false;
     }
+    virtual bool hasTxStatus() const override
+    {
+        return false;
+    }
+
     virtual void setPip(bool) override;
 
     virtual bool getPip() const override {return remoteConfig.pipEnable;}
