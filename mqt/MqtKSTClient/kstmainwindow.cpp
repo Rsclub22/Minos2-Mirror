@@ -32,6 +32,13 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     connect(&stdinReader, &StdInReader::stdinLine, this, &KSTMainWindow::onStdInRead);
     stdinReader.start();
 
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
+    ui->kstSplitter->setSizePolicy(sizePolicy);
+    ui->kstSplitter->setOrientation(Qt::Horizontal);
+
     QSettings settings;
 
     KSTserverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
@@ -1829,5 +1836,11 @@ void KSTMainWindow::on_countryRb_clicked()
 {
     kstCallFilterModel.setStringDXCC(ui->countryRb->isChecked());
     kstCallFilterModel.invalidate();
+}
+
+
+void KSTMainWindow::on_clearSelectedMessage_clicked()
+{
+    ui->bodyLabel->clear();
 }
 

@@ -220,6 +220,8 @@ private slots:
     void on_countryRb_clicked();
 
     void onCSTableSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void on_clearSelectedMessage_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader stdinReader;
