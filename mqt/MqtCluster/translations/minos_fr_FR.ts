@@ -458,25 +458,25 @@ C - Effacer cmd
     <name>QObject</name>
     <message>
         <location filename="../setupdialog.cpp" line="132"/>
-        <location filename="../setupdialog.cpp" line="516"/>
+        <location filename="../setupdialog.cpp" line="522"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="133"/>
-        <location filename="../setupdialog.cpp" line="517"/>
+        <location filename="../setupdialog.cpp" line="523"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="134"/>
-        <location filename="../setupdialog.cpp" line="518"/>
+        <location filename="../setupdialog.cpp" line="524"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="135"/>
-        <location filename="../setupdialog.cpp" line="519"/>
+        <location filename="../setupdialog.cpp" line="525"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>

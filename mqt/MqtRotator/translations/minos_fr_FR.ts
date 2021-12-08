@@ -212,8 +212,13 @@ utiliser un autre nom SVP</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstconfigdialog.ui" line="78"/>
-        <source>Minos Searches these path locations for PST Rotator to add to rotator lists</source>
+        <location filename="../pstconfigdialog.ui" line="80"/>
+        <source>Minos Searches these path locations for PST Rotator to add to rotator lists.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../pstconfigdialog.ui" line="87"/>
+        <source>Restart Rotator Server after making any changes here</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -319,7 +324,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <location filename="../rotatormainwindow.ui" line="17"/>
         <location filename="../rotatormainwindow.cpp" line="2033"/>
         <location filename="../rotatormainwindow.cpp" line="2078"/>
-        <location filename="../rotatormainwindow.cpp" line="2536"/>
+        <location filename="../rotatormainwindow.cpp" line="2537"/>
         <source>Minos Rotator</source>
         <translation>Rotateur Minos</translation>
     </message>
@@ -461,7 +466,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.ui" line="682"/>
-        <location filename="../rotatormainwindow.cpp" line="2125"/>
+        <location filename="../rotatormainwindow.cpp" line="2126"/>
         <source>PST Rotator Config</source>
         <translation type="unfinished"></translation>
     </message>
@@ -629,12 +634,12 @@ Do you want to reload the settings for the antenna now?</source>
 Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2361"/>
+        <location filename="../rotatormainwindow.cpp" line="2362"/>
         <source>Bearing = %1</source>
         <translation>Direction = %1</translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2474"/>
+        <location filename="../rotatormainwindow.cpp" line="2475"/>
         <source>*** Rotator Configuration ***
 
 </source>
@@ -643,231 +648,231 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2480"/>
+        <location filename="../rotatormainwindow.cpp" line="2481"/>
         <source>App Instance Name  = %1
 </source>
         <translation>Nom d&apos;instance d&apos;Application = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2483"/>
+        <location filename="../rotatormainwindow.cpp" line="2484"/>
         <source>Hamlib Version = %1
 </source>
         <translation>Version de Hamlib = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2488"/>
+        <location filename="../rotatormainwindow.cpp" line="2489"/>
         <source>Unable to determine library version at this time!
 </source>
         <translation>Impossible de déterminer la version de bibliothèque pour le moment!
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2491"/>
+        <location filename="../rotatormainwindow.cpp" line="2492"/>
         <source>Antenna Name = %1
 </source>
         <translation>Nom de l&apos;antenne = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2492"/>
+        <location filename="../rotatormainwindow.cpp" line="2493"/>
         <source>Antenna Number = %1
 </source>
         <translation>Numéro de l&apos;antenne = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2493"/>
+        <location filename="../rotatormainwindow.cpp" line="2494"/>
         <source>Rotator Model = %1
 </source>
         <translation>Type du rotateur = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2494"/>
+        <location filename="../rotatormainwindow.cpp" line="2495"/>
         <source>Rotator Number = %1
 </source>
         <translation>Numéro du rotateur = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2495"/>
+        <location filename="../rotatormainwindow.cpp" line="2496"/>
         <source>Rotator Manufacturer = %1
 </source>
         <translation>Fabricant du Rotateur = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2496"/>
+        <location filename="../rotatormainwindow.cpp" line="2497"/>
         <source>Rotator Type = %1
 </source>
         <translation>Type du rotateur = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2497"/>
+        <location filename="../rotatormainwindow.cpp" line="2498"/>
         <source>Rotator CW EndStop = %1
 </source>
         <translation>Rotator butée dans le sens horaire = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2498"/>
+        <location filename="../rotatormainwindow.cpp" line="2499"/>
         <source>Rotator CCW EndStop = %1
 </source>
         <translation>Rotator butée dans le sens antihoraire = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2499"/>
+        <location filename="../rotatormainwindow.cpp" line="2500"/>
         <source>Rotator PortType = %1
 </source>
         <translation>Type de port du rotateur = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2502"/>
+        <location filename="../rotatormainwindow.cpp" line="2503"/>
         <source>Network Address = %1
 </source>
         <translation>Adresse réseau = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2503"/>
+        <location filename="../rotatormainwindow.cpp" line="2504"/>
         <source>Network Port = %1
 </source>
         <translation>Port de réseau = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2507"/>
+        <location filename="../rotatormainwindow.cpp" line="2508"/>
         <source>Rotator Comport = %1
 </source>
         <translation>Port COM (du Rotateur) = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2508"/>
+        <location filename="../rotatormainwindow.cpp" line="2509"/>
         <source>Baudrate = %1
 </source>
         <translation>Taux de baud = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2509"/>
+        <location filename="../rotatormainwindow.cpp" line="2510"/>
         <source>Databits = %1
 </source>
         <translation>Bits de données = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2510"/>
+        <location filename="../rotatormainwindow.cpp" line="2511"/>
         <source>Stop bits = %1
 </source>
         <translation>Bits d&apos;arrêt = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2511"/>
+        <location filename="../rotatormainwindow.cpp" line="2512"/>
         <source>Parity = %1
 </source>
         <translation>Parité = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2512"/>
+        <location filename="../rotatormainwindow.cpp" line="2513"/>
         <source>Handshake = %1
 </source>
         <translation>Handshake = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2513"/>
+        <location filename="../rotatormainwindow.cpp" line="2514"/>
         <source>ForceDTR = %1
 </source>
         <translation>ForceDTR = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2514"/>
+        <location filename="../rotatormainwindow.cpp" line="2515"/>
         <source>ForceRTS = %1
 </source>
         <translation>ForceRTS = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2516"/>
+        <location filename="../rotatormainwindow.cpp" line="2517"/>
         <source>Antenna Offset = %1
 </source>
         <translation>Décalage d&apos;antenne = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2517"/>
+        <location filename="../rotatormainwindow.cpp" line="2518"/>
         <source>Current Rotator Type = %1
 </source>
         <translation>Type de rotateur actuel = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2518"/>
+        <location filename="../rotatormainwindow.cpp" line="2519"/>
         <source>Current Max Azimuth = %1
 </source>
         <translation>Azimut maximum actuel = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2519"/>
+        <location filename="../rotatormainwindow.cpp" line="2520"/>
         <source>Current Min Azimuth = %1
 </source>
         <translation>Azimut minimum actuel = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2520"/>
+        <location filename="../rotatormainwindow.cpp" line="2521"/>
         <source>South Stop Type = %1
 </source>
         <translation>Type d&apos;arrêt sud = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2521"/>
+        <location filename="../rotatormainwindow.cpp" line="2522"/>
         <source>Overrun flag = %1
 </source>
         <translation>Indicateur de dépassement = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2522"/>
+        <location filename="../rotatormainwindow.cpp" line="2523"/>
         <source>Support CW and CCW Commands = %1
 </source>
         <translation>Supporter les  commandes pour sens horaire et antihoraire = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2523"/>
+        <location filename="../rotatormainwindow.cpp" line="2524"/>
         <source>Simulate CW and CCW Commands selected = %1
 </source>
         <translation>Simulation des commandes dans le sens horaire et antihoraire sélectionnée = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2524"/>
+        <location filename="../rotatormainwindow.cpp" line="2525"/>
         <source>Rotator Polltime = %1
 </source>
         <translation>Intervalle de sondage (Polling) = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2525"/>
+        <location filename="../rotatormainwindow.cpp" line="2526"/>
         <source>Tracelog = %1
 </source>
         <translation>Journal de trace = %1
 </translation>
     </message>
     <message>
-        <location filename="../rotatormainwindow.cpp" line="2531"/>
+        <location filename="../rotatormainwindow.cpp" line="2532"/>
         <source>No Antenna Selected
 </source>
         <translatorcomment>Antenna or Rotator???</translatorcomment>
