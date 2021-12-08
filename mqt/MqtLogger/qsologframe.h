@@ -229,7 +229,7 @@ private:
     void setMode(QString m);
 
     QString ssQsoFrameBlue = " #qsoFrame { border: 2px solid blue; }";
-    QString ssQsoFrameRed = " #qsoFrame { border: 2px solid red; }";
+    QString ssQsoFrameRed = " #qsoFrame { background-color: lightcoral ;border: 2px solid red; }";
     QString ssRed = "color:red";
 
     QString ssDtgWhite = "QDateTimeEdit { background-color: white ; border-width: 1px ; border-color: black ; color: black ; }";

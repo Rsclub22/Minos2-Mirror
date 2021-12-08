@@ -2335,6 +2335,11 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../qsologframe.cpp" line="2145"/>
+        <source>No QSO entry field focussed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qsologframe.ui" line="564"/>
         <source>Spot Last Logged ()</source>
         <translation type="unfinished"></translation>
@@ -2430,11 +2435,6 @@ No          - Discard changes</source>
     <message>
         <location filename="../qsologframe.cpp" line="2136"/>
         <source>Protected by age of contest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qsologframe.cpp" line="2145"/>
-        <source>QSO Entry Frame not focussed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
