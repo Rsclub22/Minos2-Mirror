@@ -132,7 +132,7 @@ private:
     bool pttState;
 
     bool notifyComboChange = true;
-    void initTxVmButton();
+    void initTxVmButtonFrame();
 
     void setRunButtonText(const int buttonNumber, const QString name);
     void setVoiceNumMemButtonsVisible(int);
@@ -147,10 +147,13 @@ private:
     void setAvailIndicatorForRadioOnOff(PubSubName radName);
     void setRepeatIndicatorVisible(bool visible);
     void setRepeatIndicatorForMessageOnOff(bool state);
-    void setFrameWidgetsState();
+    void setFrameState(QString voiceKeyerName);
     void setRepeatIndicatorOnOff(bool on);
     void pttStopMessage(bool state);
 
+
+    void updateVoiceMemAvailStateAndCwType();
+    void setTXStatusVisible(bool visible);
 private slots:
 
     void onVoiceKeyerSelect(int idx);

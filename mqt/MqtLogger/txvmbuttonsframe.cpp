@@ -44,17 +44,17 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
 
-    initTxVmButton();
+    initTxVmButtonFrame();
 
-    setPttStatusIndicatorOnOff(false);
-    ui->txStatusFrame->setVisible(false);
+    //setPttStatusIndicatorOnOff(false);
+    //ui->txStatusFrame->setVisible(false);
 
-    setAvailIndicatorVisible(false);
-    setRepeatIndicatorVisible(false);
+    //setAvailIndicatorVisible(false);
+    //setRepeatIndicatorVisible(false);
 
-    ui->vmSetupPb->setVisible(false);
-    ui->pipCb->setVisible(false);
-    ui->txStatusFrame->setVisible(false);
+    //ui->vmSetupPb->setVisible(false);
+    //ui->pipCb->setVisible(false);
+    //ui->txStatusFrame->setVisible(false);
 }
 
 TxVmButtonsFrame::~TxVmButtonsFrame()
@@ -70,7 +70,7 @@ TxVmButtonsFrame::~TxVmButtonsFrame()
 
 
 
-void TxVmButtonsFrame::initTxVmButton()
+void TxVmButtonsFrame::initTxVmButtonFrame()
 {
     voiceMemButtonList << ui->vmToolButton1 << ui->vmToolButton2 << ui->vmToolButton3 << ui->vmToolButton4
                        << ui->vmToolButton5 << ui->vmToolButton6 << ui->vmToolButton7 << ui->vmToolButton8;
@@ -272,6 +272,22 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
     extKeyerConnectTimer->start(1000);
 
+
+    setFrameState(voiceKeyerName);
+
+
+}
+
+void TxVmButtonsFrame::updateVoiceMemAvailStateAndCwType()
+{
+    setFrameState(ui->voiceKeyerSelect->currentText());
+}
+
+
+void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
+{
+
+
     VoiceKeyerCapabilities voiceCap = voiceKeyerFactory->supportedVoiceKeyers()->value(voiceKeyerName);
 
     if (txVoiceKeyer == nullptr)
@@ -290,7 +306,7 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
        ui->vmSetupPb->setVisible(false);
        ui->pipCb->setVisible(false);
-       ui->txStatusFrame->setVisible(false);
+       setTXStatusVisible(false);
 
     }
     else
@@ -301,52 +317,29 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
         ui->vmSetupPb->setVisible(voiceCap.getSetupButton());
         ui->pipCb->setVisible(voiceCap.getHasPip());
-        ui->txStatusFrame->setVisible(voiceCap.getHasTxStatus());
+        setTXStatusVisible(voiceCap.getHasTxStatus());
 
-        if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+        if (voiceCap.getHasAvailStatus())
         {
-            setFrameWidgetsState();
-        }
-    }
-
-
-
-}
-
-
-void TxVmButtonsFrame::setFrameWidgetsState()
-{
-    if (voiceKeyerType == keyerTypes[ VoiceKeyerId::RigControl] || voiceKeyerType == keyerTypes[ VoiceKeyerId::CW_RigControl])
-    {
-        setAvailIndicatorVisible(true);
-        setAvailIndicatorForRadioOnOff(selectedRadio);
-        setRepeatIndicatorVisible(true);
-    }
-    else
-    {
-        setAvailIndicatorVisible(false);
-        setRepeatIndicatorVisible(false);
-        return;
-    }
-
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
-    {
-        txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
-        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
-        {
-            // no stop with CW Memory Recall
-            ui->vmStopPb->setVisible(false);
-
+            setAvailIndicatorVisible(voiceCap.getHasAvailStatus());
+            setAvailIndicatorForRadioOnOff(selectedRadio);
         }
         else
         {
-            ui->vmStopPb->setVisible(true);
+            setAvailIndicatorVisible(false);
         }
+
+        setRepeatIndicatorVisible(voiceCap.getHasMessageRepeat());
+
+
     }
 
 
 
 }
+
+
+
 
 void TxVmButtonsFrame::clearButtonLabels()
 {
@@ -699,7 +692,7 @@ void TxVmButtonsFrame::setSelectedRadio(PubSubName selectedRadio_)
     {
         selectedRadio = selectedRadio_;
 
-        setFrameWidgetsState();
+        updateVoiceMemAvailStateAndCwType();
 
 
     }
@@ -756,7 +749,7 @@ void TxVmButtonsFrame::setVoiceMemAvail(bool avail, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    setFrameWidgetsState();
+    updateVoiceMemAvailStateAndCwType();
 }
 
 bool TxVmButtonsFrame::isVoiceMemAvail(PubSubName psn)
@@ -786,7 +779,7 @@ void TxVmButtonsFrame::setCwMemType(int cwMemType, PubSubName psn)
         allRadioDetails[psn] = rd;
     }
 
-    setFrameWidgetsState();
+    updateVoiceMemAvailStateAndCwType();
 }
 
 bool TxVmButtonsFrame::isCwMemTypeAvail(PubSubName psn)
@@ -874,6 +867,12 @@ void TxVmButtonsFrame::setRepeatIndicatorVisible(bool visible)
 {
     ui->repeatIndicator->setVisible(visible);
     ui->repeatLabel->setVisible(visible);
+}
+
+void TxVmButtonsFrame::setTXStatusVisible(bool visible)
+{
+    ui->txStatusIndicator->setVisible(visible);
+    ui->txStatusLabel->setVisible(visible);
 }
 
 void TxVmButtonsFrame::setRepeatIndicatorForMessageOnOff(bool state)

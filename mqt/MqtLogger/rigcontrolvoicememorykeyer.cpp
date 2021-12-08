@@ -33,6 +33,8 @@ void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*
     voiceMemCap.setHasPip(false);
     voiceMemCap.setHasTxStatus(true);
     voiceMemCap.setSetupButton(true);
+    voiceMemCap.setHasAvailStatus(true);
+    voiceMemCap.setHasMessageRepeat(true);
 
 
     (*vmKeyersList)[keyerName] = voiceMemCap;
@@ -67,8 +69,9 @@ void RigControlVoiceMemoryKeyer::sendMsgNum(int buttonNum)
 
 }
 
-void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
+void RigControlVoiceMemoryKeyer::stopMsg(VoiceKeyerParams *vkParams)
 {
+    Q_UNUSED(vkParams)
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
 
     tslf->sendRigTxVoiceMessage(ICOM_STOPCODE);

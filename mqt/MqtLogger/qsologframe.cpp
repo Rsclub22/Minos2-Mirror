@@ -2142,7 +2142,7 @@ void QSOLogFrame::checkQsoFrameColour()
         {
             ui->RHSFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("QSO Entry Frame not focussed!"));
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("QSO Entry Field not focussed!"));
         }
         else
         {

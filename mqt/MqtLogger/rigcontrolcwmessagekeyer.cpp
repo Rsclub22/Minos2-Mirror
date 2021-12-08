@@ -49,6 +49,8 @@ void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setHasPip(false);
     voiceMemCap.setHasTxStatus(true);
     voiceMemCap.setSetupButton(true);
+    voiceMemCap.setHasAvailStatus(true);
+    voiceMemCap.setHasMessageRepeat(true);
 
 
 

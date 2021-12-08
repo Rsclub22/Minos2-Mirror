@@ -36,8 +36,10 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(false);
-    voiceMemCap.setHasTxStatus(false);
-    voiceMemCap.setSetupButton(false);
+    voiceMemCap.setHasTxStatus(true);
+    voiceMemCap.setSetupButton(true);
+    voiceMemCap.setHasAvailStatus(false);
+    voiceMemCap.setHasMessageRepeat(true);
 
 
 

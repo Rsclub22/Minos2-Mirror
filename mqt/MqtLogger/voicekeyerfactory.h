@@ -80,6 +80,12 @@ public:
     bool getSetupButton(){return setupButton;}
     void setSetupButton(const bool setupButton_){setupButton = setupButton_;}
 
+    bool getHasAvailStatus(){return hasAvailStatus;}
+    void setHasAvailStatus(const bool hasAvailStatus_){hasAvailStatus = hasAvailStatus_;}
+
+    bool getHasMessageRepeat(){return hasMessageRepeat;}
+    void setHasMessageRepeat(const bool hasMessageRepeat_){hasMessageRepeat = hasMessageRepeat_;}
+
 
 private:
 
@@ -87,13 +93,14 @@ private:
    QString keyerName;
    QString keyerType;
    int numVoiceKeys;
-   QString comPort;
    bool supportRepeatMsg =false;
    bool supportSerial = false;
    bool useCatPTTForEom = false;
    bool setupButton = false;
    bool hasPip = false;
    bool hasTxStatus = false;
+   bool hasAvailStatus = false;
+   bool hasMessageRepeat = false;
 
 };
 

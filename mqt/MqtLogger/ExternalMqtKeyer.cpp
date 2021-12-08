@@ -35,6 +35,8 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
     voiceMemCap.setHasPip(true);
     voiceMemCap.setHasTxStatus(false);
     voiceMemCap.setSetupButton(false);
+    voiceMemCap.setHasAvailStatus(false);
+    voiceMemCap.setHasMessageRepeat(false);
 
 
     (*vmKeyersList)[keyerName] = voiceMemCap;
