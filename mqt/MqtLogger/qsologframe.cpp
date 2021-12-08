@@ -2122,6 +2122,7 @@ void QSOLogFrame::checkQsoFrameColour()
     QString ssQsoFrame = ssQsoFrameBlue;
     if (contest->isReadOnly())
     {
+        ui->RHSFrame->setVisible(false);
         ssQsoFrame = ssQsoFrameRed;
         if (contest->isUnwriteable())
         {
@@ -2140,14 +2141,16 @@ void QSOLogFrame::checkQsoFrameColour()
     {
         if (!frameHasFocus())
         {
-            ui->RHSFrame->setVisible(false);
+            //ui->RHSFrame->setVisible(false);
+            doShowOperators(false);
             ssQsoFrame = ssQsoFrameRed;
             ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
         }
         else
         {
             ui->protectionLabel->setText("");
-            ui->RHSFrame->setVisible(true);
+            //ui->RHSFrame->setVisible(true);
+            on_ShowOperators();
         }
     }
 
@@ -2320,13 +2323,18 @@ void QSOLogFrame::refreshOps( ScreenContact &screenContact )
        // for the NEXT contact
     }
 }
+void QSOLogFrame::doShowOperators(bool so)
+{
+    ui->SecondOpComboBox->setVisible(so);
+    ui->SecondOpLabel->setVisible(so);
+    ui->MainOpComboBox->setVisible(so);
+    ui->OperatorLabel->setVisible(so);
+ }
+
 void QSOLogFrame::on_ShowOperators ( )
 {
    bool so = LogContainer->isShowOperators();
-   ui->SecondOpComboBox->setVisible(so);
-   ui->SecondOpLabel->setVisible(so);
-   ui->MainOpComboBox->setVisible(so);
-   ui->OperatorLabel->setVisible(so);
+   doShowOperators(so);
 }
 void QSOLogFrame::on_tabSandP()
 {

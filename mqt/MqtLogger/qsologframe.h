@@ -278,6 +278,8 @@ private:
     bool frameHasFocus();
     void checkQrzDisplayFrameLoaded();
     void checkQRZClusterBandmapShowing();
+    void doShowOperators(bool so);
+    
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
