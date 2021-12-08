@@ -8,6 +8,7 @@ const QString QRZ_BUTTON_ON_STYLE = QString("background-color: Sandybrown ; bord
 const QString QRZ_BUTTON_OFF_STYLE = QString("background-color: Gainsboro ; border-style: outset; border-width: 1px; border-color: black; min-width: 5em; padding: 3px;\n");
 
 const QString QRA_LOOKUP_OK = "qraLookUpOK";
+const QString QRA_NOT_FOUND = "qraNotFound";
 
 class QrzServer
 {
