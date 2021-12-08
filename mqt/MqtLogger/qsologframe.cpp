@@ -2142,7 +2142,9 @@ void QSOLogFrame::checkQsoFrameColour()
         {
             ui->RHSFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
-            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<h3><b>  " + tr("QSO Entry Field not focussed!"));
+
+            ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
+
         }
         else
         {
@@ -2150,8 +2152,8 @@ void QSOLogFrame::checkQsoFrameColour()
             ui->RHSFrame->setVisible(true);
         }
     }
-    ui->qsoFrame->setStyleSheet(ssQsoFrame);
-    widgetStyles[ui->qsoFrame] = ssQsoFrame;
+
+   ui->qsoFrame->setStyleSheet(ssQsoFrame);
  }
 
 void QSOLogFrame::updateQSODisplay()

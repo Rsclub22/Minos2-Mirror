@@ -2530,6 +2530,11 @@ to</source>
         <translation>Commentaires</translation>
     </message>
     <message>
+        <location filename="../qsologframe.cpp" line="2145"/>
+        <source>No QSO entry field focussed!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qsologframe.ui" line="564"/>
         <source>Spot Last Logged ()</source>
         <translation>Envoyer un spot pour le dernière enregistrée</translation>
@@ -2632,9 +2637,8 @@ Non - Ignorer les modifications</translation>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2145"/>
         <source>QSO Entry Frame not focussed!</source>
-        <translation>Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
+        <translation type="vanished">Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="2483"/>
