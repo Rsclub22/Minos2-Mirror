@@ -1446,6 +1446,7 @@ void ClusterMainWindow::onclusterQrzResponse(QString dxCall, QString dxGrid, QSt
         QSharedPointer<ClusterSpotData> newSpot = askQrzQueue.value(callsignKey);
         askQrzQueue.remove(callsignKey);
 
+
         if (!dxGrid.isEmpty() && dxCallState == QRA_LOOKUP_OK)
         {
             trace(QString("Qrz Server Response for callsign = %1, qra = %2").arg(dxCall, dxGrid));

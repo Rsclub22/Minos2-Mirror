@@ -325,6 +325,9 @@ QString QrzServerMainWindow::stripPasswordFromUrl(QString url)
 void QrzServerMainWindow::sessionDataReceived()
 {
 
+
+
+
     if (!qrzSessionData.getError().isEmpty())
     {
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
@@ -340,8 +343,13 @@ void QrzServerMainWindow::sessionDataReceived()
             qrzServerStateFlags.setAskLogonFlag(false);
         }
 
+
+
+
+
     }
 
+    /*
     if (!qrzSessionData.getMessage().isEmpty())
     {
         trace(QString("Qrz Message: %1").arg(qrzSessionData.getMessage()));
@@ -357,6 +365,7 @@ void QrzServerMainWindow::sessionDataReceived()
         }
 
     }
+    */
 
     if (qrzServerStateFlags.getAskLogonFlag() && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
     {
@@ -373,10 +382,10 @@ void QrzServerMainWindow::sessionDataReceived()
     }
     else
     {
-        qrzServerStateFlags.setAskLogonFlag(false);
+        qrzServerStateFlags.setAskLogonFlag(false);  // don't need this???
     }
 
-    if (qrzServerStateFlags.getAskCallsignFlag() && !qrzSessionData.getError().isEmpty() && requestedStation.getLoggerFlag())
+    if (qrzServerStateFlags.getAskCallsignFlag() /*&& requestedStation.getLoggerFlag()*/)
     {
         QString stateMsg;
         if (!qrzSessionData.getError().isEmpty())
@@ -405,7 +414,7 @@ void QrzServerMainWindow::sessionDataReceived()
             QrzServerRpc::getQrzServerRpc()->sendQrzResponseToClusterServer(qrzCallsignData.getCallsign(), "", stateMsg, "", "", "");
         }
 
-        QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
+        //QrzServerRpc::getQrzServerRpc()->sendQrzResponseToLoggerDisplay(qrzCallsignData, stateMsg, requestedStation.getFromStationName(),requestedStation.getLoggerUuid());
 
         qrzServerStateFlags.setAskCallsignFlag(false);
     }
@@ -623,10 +632,15 @@ void QrzServerMainWindow::handleQrzRequests()
 {
     if (!qrzRequestQueue.isEmpty())
     {
+
+        trace(QString("handQrzRequests: number of callsigns in queue = %1").arg(qrzRequestQueue.count()));
         if (qrzServerStateFlags.getQrzLoggedOnFlag())
         {
+            trace(QString("handQrzRequests: logged on to qrz"));
+
             if (!qrzServerStateFlags.getAskCallsignFlag())
             {
+
                 requestedStation.clear();
 
                 requestedStation = qrzRequestQueue[0];
