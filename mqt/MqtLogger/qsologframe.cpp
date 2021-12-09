@@ -3239,14 +3239,39 @@ void QSOLogFrame::on_bandmapSaveFreqPbClicked()
 
 void QSOLogFrame::onQrzButtonClicked()
 {
-    memoryData::memData logData;
-    int callRes = -1;
-    getLogDetails(logData, callRes);
-    if (callRes == CS_OK)
+
+    Callsign cs;
+
+    QString placeHolderCall = ui->CallsignFrame->getTextEditEdit()->placeholderText();
+    QString logCall = ui->CallsignFrame->getTextEditEdit()->text();
+
+    if (!placeHolderCall.isEmpty() || !logCall.isEmpty())
     {
-        trace(QString("qrzButtonClicked: callsign %1").arg(logData.callsign));
-        emit qrzCallsignRequest(logData.callsign);
+        if (!logCall.isEmpty())
+        {
+            cs.setFullCall(logCall);
+        }
+        else
+        {
+            cs.setFullCall(placeHolderCall);
+        }
+
+        if (cs.getValRes() == CS_OK)
+        {
+            trace(QString("qrzButtonClicked: send callsign %1 to QRZ").arg(cs.getFullCall()));
+            emit qrzCallsignRequest(cs.getFullCall());
+        }
+        else
+        {
+            trace(QString("qrzButtonClicked: callsign %1 is invalid").arg(cs.getFullCall()));
+        }
+
     }
+    else
+    {
+        trace(QString("qrzButtonClicked: callsign field is empty"));
+    }
+
 
 }
 
