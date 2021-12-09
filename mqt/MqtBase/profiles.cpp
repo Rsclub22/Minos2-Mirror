@@ -125,7 +125,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapFollowRadioModeOperatingFreqStrip , "bandmapFollowRadioModeOperatingFreqStrip", true, QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), QT_TR_NOOP("Bandmap Follow Radio Mode on Operating Freq Colour Strip"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapMouseInFrameDelay , "bandMapMouseInFrameDelay", false, QT_TR_NOOP("Bandmap Delay when mouse in frame"), QT_TR_NOOP("Bandmap Delay when mouse in frame"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowDerivedLoc, "bandMapShowDerivedLoc", false, QT_TR_NOOP("Bandmap show derived loc"), QT_TR_NOOP("Bandmap show derived loc"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowDerivedLoc, "bandMapShowDerivedLoc", true, QT_TR_NOOP("Bandmap show derived loc"), QT_TR_NOOP("Bandmap show derived loc"), true ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapTraceDebug , "bandmapTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpClusterTraceDebug , "clusterTraceDebug", false, QT_TR_NOOP(""), QT_TR_NOOP(""), false ) ) );
