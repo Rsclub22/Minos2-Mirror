@@ -268,13 +268,13 @@ void TxVmButtonsFrame::onVoiceKeyerSelect(int idx)
 
     txVoiceKeyer.clear();
 
-    createKeyer(voiceKeyerName);
-
+    delayedAction(this, [=]{
+        createKeyer(voiceKeyerName);
+        setFrameState(voiceKeyerName);
+    });
     extKeyerConnectTimer->start(1000);
 
-
-    setFrameState(voiceKeyerName);
-
+    ui->voiceKeyerSelect->repaint();   // or the combo doesn't update
 
 }
 
