@@ -20,7 +20,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="bandmapGeneralTab">
       <property name="autoFillBackground">
@@ -80,7 +80,7 @@
          <item>
           <widget class="QCheckBox" name="showDerivedLocChkBox">
            <property name="text">
-            <string>Display Locators Derived from Country</string>
+            <string>Display Locators in Cluster Spots  Derived from QRZ or Country</string>
            </property>
           </widget>
          </item>

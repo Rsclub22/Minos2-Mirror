@@ -871,9 +871,9 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            QString sdt = spotDateTime.toString();
+            //QString sdt = spotDateTime.toString();
             spotDateTime.setTimeSpec(Qt::UTC);
-            QString sdtutc = spotDateTime.toString();
+            //QString sdtutc = spotDateTime.toString();
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));
@@ -950,11 +950,12 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>
         return; // spot logged or marked and moved
     }
 
-    traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4")
+    traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4, dxLocatorIsFromNode = %5")
              .arg(spot->getDxCall().getFullCall())
              .arg(spot->getFreq().traceStr())
              .arg(spot->getMode())
              .arg(spot->getDxLocatorWorked())
+             .arg(spot->getDxLocatorIsFromNode() ? "true" : "false")
              );
 
     bandmapDataModel->rowData = spot;
