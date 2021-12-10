@@ -277,27 +277,27 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1688"/>
+        <location filename="../bandmapclientframe.cpp" line="1689"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1426"/>
+        <location filename="../bandmapclientframe.cpp" line="1427"/>
         <source>Cluster Server Not Running</source>
         <translation>Le Serveur du Cluster ne fonctionne pas</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1459"/>
+        <location filename="../bandmapclientframe.cpp" line="1460"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1469"/>
+        <location filename="../bandmapclientframe.cpp" line="1470"/>
         <source>Disconnected</source>
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1577"/>
+        <location filename="../bandmapclientframe.cpp" line="1578"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -419,9 +419,8 @@ Le mode calculé est %2</translation>
         <translation>Bande de couleurs de fréquence suivre mode de radio </translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Display Locators Derived from Country</source>
-        <translation>Afficher les Locators dérivés du pays</translation>
+        <translation type="vanished">Afficher les Locators dérivés du pays</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
@@ -477,6 +476,11 @@ Le mode calculé est %2</translation>
     <message>
         <source>10 GHz</source>
         <translation type="vanished">10 GHz</translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
+        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="189"/>

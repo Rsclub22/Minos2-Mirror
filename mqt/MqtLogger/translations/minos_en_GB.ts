@@ -268,27 +268,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1688"/>
+        <location filename="../bandmapclientframe.cpp" line="1689"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1426"/>
+        <location filename="../bandmapclientframe.cpp" line="1427"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1459"/>
+        <location filename="../bandmapclientframe.cpp" line="1460"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1469"/>
+        <location filename="../bandmapclientframe.cpp" line="1470"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1577"/>
+        <location filename="../bandmapclientframe.cpp" line="1578"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -387,7 +387,7 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
-        <source>Display Locators Derived from Country</source>
+        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

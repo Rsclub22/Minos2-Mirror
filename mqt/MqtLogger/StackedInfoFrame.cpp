@@ -125,17 +125,17 @@ void StackedInfoFrame::on_currentTabChangedSlot(int index)
 }
 void StackedInfoFrame::setCurrentFrameType(QString s)
 {
-    int n = getAuxEntryType(s);
-    if (ui->infoCombo->currentIndex() == n)
+    QString cur = ui->infoCombo->currentText();
+    if (cur == s)
     {
         if (!currStackFrame)
         {
-            onInfoComboCurrentIndexChanged(n);
+            onInfoComboCurrentIndexChanged(-1);
         }
     }
     else
     {
-        ui->infoCombo->setCurrentIndex(n);
+        ui->infoCombo->setCurrentText(s);
     }
 }
 
@@ -285,16 +285,14 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
         {
             if (stackInstance < STACKITEMS)
             {
-                QString aux = contest->currentStackItems[stackInstance].getValue();
-                AuxEntries ae = getAuxEntryType(aux);   // contest setting
+                QString aux = tr(contest->currentStackItems[stackInstance].getValue().toLatin1());
 
                 QString a = ui->infoCombo->currentText();
-                AuxEntries aec = getAuxEntryType(a);    // screen setting - from layout
 
-                if(ct->currentStackItemsValid && ae != aec && ui->infoCombo->currentIndex() != ae)
+                if(ct->currentStackItemsValid && aux != a )
                 {
                     // set to contest value
-                    ui->infoCombo->setCurrentIndex(ae);
+                    ui->infoCombo->setCurrentText(aux);
                 }
                 else
                 {
@@ -417,19 +415,3 @@ void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
     }
 }
 
-/*
-int StackedInfoFrame::getClusterInstanceNum()
-{
-    for (int i = 0; i < contest->clusterInstanceFlags.count(); i++)
-    {
-        if (!contest->clusterInstanceFlags[i])
-        {
-            contest->clusterInstanceFlags[i] = true;
-            return i;
-        }
-    }
-
-    return -1;   // no slots found
-
-}
-*/
