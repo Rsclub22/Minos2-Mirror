@@ -642,6 +642,8 @@ void SyncRadio::trackOtherBand(SyncRadio &tracked)
     else
     {
         trace("mode found OK");
+        trace(QString("mi %1 lastBndMode %2 modepart %3 lastmodepart %4 band %5 lastBand %6")
+              .arg(mi->fcLow1.traceStr(),lastBandMode->fcLow1.traceStr()).arg(modePart).arg(lastModePart).arg(bi->name(), lastBand->name()));
         if (modePart == 1)
         {
             rigCentre(mi->fcLow1, mi->fcHigh1, tracked.rigMode);
