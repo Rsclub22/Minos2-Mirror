@@ -542,6 +542,8 @@ void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
     }
 
     ui->enableSerialBandSwChkBox->setEnabled(enabled);
+    ui->bandSwCombo->setEnabled(enabled);
+    ui->comportLabel->setEnabled(enabled);
 }
 
 

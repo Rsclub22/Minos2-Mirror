@@ -126,7 +126,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
             else
             {
                 QString errMsg = serialTVSw->error();
-                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport).arg(errMsg));
+                trace(QString("Bandswitch Comport failed to open = %1 Error = %2").arg(comport, errMsg));
             }
         }
     }
@@ -1356,10 +1356,12 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
 
             if (readEnableBandSwitchFromIni())
             {
+                trace(QString("send no rigcontrol bandswitch message, enabled"));
                 // send bandswitch data to control
                 msg = readBandSwitchDataFromIni(contestBand).toUtf8();
-                if ( readEnableSerialBandSwitchFromIni() && serialTVSw->getOpenFlag())
+                if ( /*readEnableSerialBandSwitchFromIni() &&*/ serialTVSw->getOpenFlag())
                 {
+                    trace(QString("send no rigcontrol bandswitch message - serial port is open"));
                     if (!msg.isEmpty())
                     {
                         msg.prepend(TVSWMSG_START);
@@ -1371,6 +1373,10 @@ void TLogContainer::on_contestPageControl_currentChanged(int index)
                     {
                         trace(QString("bandswitch data is empty for band %1").arg(contestBand));
                     }
+                }
+                else
+                {
+                    trace(QString("send no rigcontrol bandswitch message - serial port is not open"));
                 }
             }
         }
