@@ -248,17 +248,17 @@ RigControlMainWindow::~RigControlMainWindow()
     delete msg;
 }
 
-
+// icom only
 void RigControlMainWindow::onCwKeyerPbClicked()
 {
-    QString msg = "Test M0DGB";
+    QString msg = "1";
     if (radio)
     {
-        radio->sendMorse(rigStateDetails->curVfo,msg);
+        radio->sendMorse(rigStateDetails->curVfo, msg);
     }
 
 }
-
+// icom only
 void RigControlMainWindow::onCwKeyerStopPbClicked()
 {
     if(radio)
@@ -5175,31 +5175,17 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
 
     if (radio && !cwMsg.isEmpty())
     {
-
-
-        if (cwMsg.length() == 1)
+        // probably should store cwMessageType locally in rigcontrol or get from cache
+        if (currentRadio.rigModelNumber >= 1000 && currentRadio.rigModelNumber < 2000)
         {
-            QChar c = cwMsg.at(0);
-            if (c == '\xff')
-            {
-                // send stop CW
-                trace(QString("Cw Tx Message Stop received from logger"));
-                radio->stopMorse(rigStateDetails->curVfo);
-            }
-            else
-            {
-                // error stop command incorrect!
-                trace(QString("Cw Tx Message Stop Char incorrect = %1").arg(c));
-                return;
-            }
-
-
+            handleYaesuCwMessage(cwMsg);
         }
-        else
+        else if (currentRadio.rigModelNumber >= 3000 && currentRadio.rigModelNumber < 4000)
         {
-            trace(QString("Cw Tx Message Received from logger = %1").arg(cwMsg));
-            radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+            handleIcomCwMessage(cwMsg);
         }
+
+
     }
     else
     {
@@ -5207,9 +5193,46 @@ void RigControlMainWindow::onSetCwTxMessage(QString cwMsg)
         return;
     }
 
+}
 
 
 
+void RigControlMainWindow::handleIcomCwMessage(QString cwMsg)
+{
+
+    if (cwMsg.length() == 1)
+    {
+        QChar c = cwMsg.at(0);
+        if (c == '\xff')
+        {
+            // send stop CW
+            trace(QString("Icom Cw Tx Message Stop received from logger"));
+            radio->stopMorse(rigStateDetails->curVfo);
+        }
+        else
+        {
+            // error stop command incorrect!
+            trace(QString("Icom Cw Tx Message Stop Char incorrect = %1").arg(c));
+            return;
+        }
+
+
+    }
+    else
+    {
+        trace(QString("Icom Cw Tx Message Received from logger = %1").arg(cwMsg));
+        radio->sendMorse(rigStateDetails->curVfo, cwMsg);
+    }
+
+}
+
+
+
+void RigControlMainWindow::handleYaesuCwMessage(QString cwMsg)
+{
+    // Yaesu does not support a CW Message stop command
+    trace(QString("Yaesu Cw Tx Message Received from logger = %1").arg(cwMsg));
+    radio->sendMorse(rigStateDetails->curVfo, cwMsg);
 }
 
 void RigControlMainWindow::on_reconnectButton_clicked()
