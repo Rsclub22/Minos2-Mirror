@@ -88,6 +88,8 @@ void RigControlCwMessageKeyer::sendCwMsg(const QString message)
 
 }
 
+
+
 void RigControlCwMessageKeyer::stopCwMsg()
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
@@ -178,6 +180,7 @@ int RigControlCwMessageKeyer::editButton(VoiceKeyerParams *vmData, QString title
     vmButtonDialog.setVmData(vmData);
     vmButtonDialog.setVmTypeLabelcwMemType(cwMemType);
 
+    vmButtonDialog.setSerialMessageTextBoxVisible(false);
 
     if (cwMemType == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
     {

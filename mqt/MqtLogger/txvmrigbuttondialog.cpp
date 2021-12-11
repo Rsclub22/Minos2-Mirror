@@ -22,6 +22,7 @@ TxVmRigButtonDialog::TxVmRigButtonDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmRigButtonDialog::on_okButtonClicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmRigButtonDialog::on_cancelbuttonClicked);
     connect(ui->txCwMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txCwMessageEditingFinshed);
+    connect(ui->txSerialMessageLineEdit, &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::on_txSerialMessageEditingFinshed);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmRepeatPauseDurEditingFinished);
     connect(ui->txVmMessageDur , &QLineEdit::editingFinished, this, &TxVmRigButtonDialog::onVmMessageDurEditingFinished);
 }
@@ -51,6 +52,12 @@ void TxVmRigButtonDialog::setCwMessageTextBoxVisible(bool visible)
 {
     ui->txCwMessageLineEdit->setVisible(visible);
     ui->cwMessageTextLabel->setVisible(visible);
+}
+
+void TxVmRigButtonDialog::setSerialMessageTextBoxVisible(bool visible)
+{
+    ui->txSerialMessageLineEdit->setVisible(visible);
+    ui->serialMessageLabel->setVisible(visible);
 }
 
 // This will overwrite the label with cwMemType
@@ -85,6 +92,11 @@ void TxVmRigButtonDialog::on_txCwMessageEditingFinshed()
 {
     QString txt = ui->txCwMessageLineEdit->text();
     checkLengthOfCwMessage(txt.length());
+
+}
+
+void TxVmRigButtonDialog::on_txSerialMessageEditingFinshed()
+{
 
 }
 

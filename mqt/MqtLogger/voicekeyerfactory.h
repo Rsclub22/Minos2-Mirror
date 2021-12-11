@@ -31,7 +31,7 @@ enum VoiceKeyerId
     ExternalVoiceKeyer
 };
 
-const QStringList keyerTypes = {"None", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
+const QStringList keyerTypes = {"", "Voice RigControl", "CW RigControl", "SerialControl", "Internal", "mqtKeyer"};
 
 const QString VOICE_KEYER_PATH = "./Configuration/VoiceKeyer/";
 const QString VOICE_KEYER_BASE_FILE_NAME = "txVoiceMemory";
@@ -58,6 +58,7 @@ public:
 
     int getNumVoiceKeys(){return numVoiceKeys;}
     void setNumVoiceKeys(const int numVoiceKeys_){numVoiceKeys = numVoiceKeys_;}
+
 
     int getVmIdNum(){return vmIdNum;}
     void setVmIdNum(const int vmIdNum_){vmIdNum = vmIdNum_;}

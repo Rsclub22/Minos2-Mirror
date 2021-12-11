@@ -20,6 +20,7 @@ public:
     void setVmData(VoiceKeyerParams* vmData);
     void setCwMessageTextBoxVisible(bool state);
     void setCwMessageLineEditVisible(bool visible);
+    void setSerialMessageTextBoxVisible(bool visible);
     void setVmTypeLabelcwMemType(int cwMemType);
     void setDialogForCatPttEom(bool state);
 
@@ -31,6 +32,7 @@ private slots:
     void onVmRepeatPauseDurEditingFinished();
     void onVmMessageDurEditingFinished();
     void on_txCwMessageEditingFinshed();
+    void on_txSerialMessageEditingFinshed();
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
@@ -44,6 +46,7 @@ private:
     bool validateDur(QString durName, QString dur, int &dur_);
     void doCloseEvent();
     bool checkLengthOfCwMessage(int length);
+
 };
 
 #endif // TXVMRIGBUTTONDIALOG_H

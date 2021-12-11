@@ -331,6 +331,14 @@ void TxVmButtonsFrame::setFrameState(QString voiceKeyerName)
 
         setRepeatIndicatorVisible(voiceCap.getHasMessageRepeat());
 
+        if (voiceKeyerName == "cwRigControl")
+        {
+            if (isCwMemTypeAvail(selectedRadio))
+            {
+                txVoiceKeyer->setCwMemType(getCwMemType(selectedRadio));
+            }
+        }
+
 
     }
 
@@ -448,11 +456,20 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
-        VoiceKeyerParams vmData;
-        vmData.setType(voiceKeyerType);
-        txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+        {
+            VoiceKeyerParams vmData;
+            vmData.setType(voiceKeyerType);
+            txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
+            txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
+            usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
 
-        txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
+        }
+        else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+        {
+            usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
+            txVoiceKeyer->sendCwMsg(QString::number(buttonNumSent + 1));        // Yaesu recalls messages prestored on the radio
+        }
     }
     else
     {
@@ -486,7 +503,16 @@ void TxVmButtonsFrame::onVmStopClicked()
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
-        txVoiceKeyer->stopCwMsg();
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+        {
+            txVoiceKeyer->stopCwMsg();
+        }
+
+        // Yaesu doesn't support a stop message command!
+        //else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
+        //{
+
+        //}
     }
     else
     {

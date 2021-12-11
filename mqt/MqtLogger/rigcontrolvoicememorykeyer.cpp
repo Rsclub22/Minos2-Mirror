@@ -149,6 +149,7 @@ int RigControlVoiceMemoryKeyer::editButton(VoiceKeyerParams *vmData, QString tit
     vmButtonDialog.setVmData(vmData);
     vmButtonDialog.setCwMessageTextBoxVisible(false);
     vmButtonDialog.setDialogForCatPttEom(usePttForEom);
+    vmButtonDialog.setSerialMessageTextBoxVisible(false);
 
     int ret = vmButtonDialog.exec();
     return ret;

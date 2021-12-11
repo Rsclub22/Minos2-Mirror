@@ -531,6 +531,8 @@ private:
     void checkSupportCatFeatures();
     bool availRadiosContains(const QString radioName);
     void setRigControlPttState(bool state);
+    void handleIcomCwMessage(QString cwMsg);
+    void handleYaesuCwMessage(QString msg);
 private slots:
 
     void onStdInRead(QString);
