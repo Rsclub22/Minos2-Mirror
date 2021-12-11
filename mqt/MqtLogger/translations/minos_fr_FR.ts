@@ -2943,22 +2943,27 @@ Non - Ignorer les modifications</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="166"/>
+        <location filename="../radiosettingdialog.ui" line="181"/>
+        <source>Allows external device notification of band without using Minos Rigcontrol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radiosettingdialog.ui" line="207"/>
         <source>Enable Band Switch</source>
         <translation>Activer le commutateur de bande</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="173"/>
+        <location filename="../radiosettingdialog.ui" line="214"/>
         <source>Enable Band Switch Serial Control</source>
         <translation>Activer le contrôle série du commutateur de bande</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="180"/>
+        <location filename="../radiosettingdialog.ui" line="221"/>
         <source>Comport</source>
         <translation>Port COM</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.ui" line="222"/>
+        <location filename="../radiosettingdialog.ui" line="263"/>
         <source>Bandswitch Messages</source>
         <translation>Messages du commutateur de bande</translation>
     </message>
@@ -5132,59 +5137,59 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1318"/>
-        <location filename="../tlogcontainer.cpp" line="1842"/>
+        <location filename="../tlogcontainer.cpp" line="1848"/>
         <source>Contest Sets</source>
         <translation>Ensembles de Concours</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1398"/>
+        <location filename="../tlogcontainer.cpp" line="1404"/>
         <source>Creating </source>
         <translation>Création </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1398"/>
-        <location filename="../tlogcontainer.cpp" line="1950"/>
+        <location filename="../tlogcontainer.cpp" line="1404"/>
+        <location filename="../tlogcontainer.cpp" line="1956"/>
         <source>Loading </source>
         <translation>Chargement </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1400"/>
+        <location filename="../tlogcontainer.cpp" line="1406"/>
         <source>Contest file </source>
         <translation>Fichier du Concours </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1565"/>
+        <location filename="../tlogcontainer.cpp" line="1571"/>
         <source>Configure Screen Layouts...</source>
         <translation>Configurer la disposition de l&apos;écran...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1676"/>
+        <location filename="../tlogcontainer.cpp" line="1682"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation>&amp;Gérer les ensembles de Concours ...</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1952"/>
+        <location filename="../tlogcontainer.cpp" line="1958"/>
         <source>List file </source>
         <translation>Fichier de liste </translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1962"/>
+        <location filename="../tlogcontainer.cpp" line="1968"/>
         <source>Open List %1?</source>
         <translation>Ouvrir la liste %1?</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1986"/>
+        <location filename="../tlogcontainer.cpp" line="1992"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation>Fichiers de la liste de contacts (* .csl) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1990"/>
+        <location filename="../tlogcontainer.cpp" line="1996"/>
         <source>Open Archive List</source>
         <translation>Ouvrir la liste des archives</translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="2165"/>
-        <location filename="../tlogcontainer.cpp" line="2166"/>
+        <location filename="../tlogcontainer.cpp" line="2171"/>
+        <location filename="../tlogcontainer.cpp" line="2172"/>
         <source>Minos contest Logger Application</source>
         <translation>Application Minos Enregistreur de Concours</translation>
     </message>
