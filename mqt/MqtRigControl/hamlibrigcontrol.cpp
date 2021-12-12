@@ -217,7 +217,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
     // load cat params
     if (useRigCtld)
     {
-        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.rigCtldNetworkAdd + ":" + currentRadio.rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
+        strncpy(my_rig->state.rigport.pathname, QString(currentRadio.rigCtldNetworkAdd + ":" + currentRadio.rigCtldNetworkPort).toLatin1().data(), HAMLIB_FILPATHLEN - 1);
     }
     else
     {
@@ -225,7 +225,7 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
         if (rig_port_e(currentRadio.portType) == RIG_PORT_SERIAL)
         {
             comport.append(currentRadio.comport);
-            strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), HAMLIB_FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, comport.toLatin1().data(), HAMLIB_FILPATHLEN - 1);
             my_rig->state.rigport.parm.serial.rate = currentRadio.baudrate;
             my_rig->state.rigport.parm.serial.data_bits = currentRadio.databits;
             my_rig->state.rigport.parm.serial.stop_bits = currentRadio.stopbits;
@@ -260,11 +260,11 @@ int HamlibRigControl::rigInit(scatParams &currentRadio, bool useRigCtld)
             {
                 netAdd = currentRadio.networkAdd;
             }
-            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString(netAdd + ":" + currentRadio.networkPort).toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }
         else if (rig_port_e(currentRadio.portType) == RIG_PORT_NONE)
         {
-            strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN);
+            strncpy(my_rig->state.rigport.pathname, QString("").toLatin1().data(), HAMLIB_FILPATHLEN - 1);
         }
 
         if (currentRadio.enablePTT)

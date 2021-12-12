@@ -168,7 +168,7 @@ int HamlibRotControl::rotInit(srotParams &selectedAntenna)
     my_rot = rot_init(selectedAntenna.rotatorModelNumber);
     if (!my_rot)
     {
-        return retcode = -14;
+        return -14;
     }
 
 
