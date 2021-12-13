@@ -18,6 +18,7 @@
 #include "qrzconfiguredialog.h"
 #include "ui_qrzconfiguredialog.h"
 
+
 QrzConfigureDialog::QrzConfigureDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::QrzConfigureDialog)
@@ -25,6 +26,7 @@ QrzConfigureDialog::QrzConfigureDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    ui->logonCallsignLineEdit->setValidator(&ucValidator);
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, [=](){onAccepted();});
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, [=](){onRejected();});
 

@@ -326,8 +326,6 @@ void QrzServerMainWindow::sessionDataReceived()
 {
 
 
-
-
     if (!qrzSessionData.getError().isEmpty())
     {
         trace(QString("Qrz Error: %1").arg(qrzSessionData.getError()));
@@ -338,10 +336,10 @@ void QrzServerMainWindow::sessionDataReceived()
         //    qrzServerStateFlags.setAskCallsignFlag(false);
         //}
 
-        if (qrzServerStateFlags.getAskLogonFlag())
-        {
-            qrzServerStateFlags.setAskLogonFlag(false);
-        }
+        //if (qrzServerStateFlags.getAskLogonFlag())
+        //{
+        //    qrzServerStateFlags.setAskLogonFlag(false);
+        //}
 
 
 
@@ -382,7 +380,9 @@ void QrzServerMainWindow::sessionDataReceived()
     }
     else
     {
-        qrzServerStateFlags.setAskLogonFlag(false);  // don't need this???
+        setQrzStatusConnected(false);
+        qrzServerStateFlags.clear();
+
     }
 
     if (qrzServerStateFlags.getAskCallsignFlag() /*&& requestedStation.getLoggerFlag()*/)
@@ -588,14 +588,41 @@ void QrzServerMainWindow::onConfigure()
     int ret = conf.exec();
     if (ret == QDialog::Accepted)
     {
-        logonCallsign = conf.logCallsign.trimmed();
-        password = conf.logPassword.trimmed();
+
+        bool callsignChanged = false;
+        bool passwordChanged = false;
+
 
         QSettings settings;
 
-        settings.setValue("logonCallsign", logonCallsign);
-        settings.setValue("password", password);
+        if (conf.logCallsign.trimmed() != settings.value("logonCallsign", "").toString())
+        {
+            settings.setValue("logonCallsign", logonCallsign);
+            logonCallsign = conf.logCallsign.trimmed();
+            callsignChanged = true;
+
+        }
+
+        if (conf.logPassword.trimmed() != settings.value("logonCallsign", "").toString())
+        {
+            settings.setValue("password", password);
+            password = conf.logPassword.trimmed();
+            passwordChanged = true;
+        }
+
+        if (callsignChanged || passwordChanged || !logonCallsign.isEmpty() || !password.isEmpty())
+        {
+            qrzSessionData.clear();
+            //logon();
+        }
+        //else if (logonCallsign.isEmpty() || password.isEmpty())
+        //{
+        //    qrzSessionData.clear();
+        //}
+
     }
+
+
 
 
 
@@ -726,13 +753,13 @@ void QrzServerMainWindow::setQrzStatusConnected(bool state)
     if (state)
     {
         ui->connectPb->setText("");
-        ui->connectPb->setText("Connected");
+        ui->connectPb->setText(tr("Connected"));
         ui->connectPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
     }
     else
     {
         ui->connectPb->setText("");
-        ui->connectPb->setText("Disconnected");
+        //ui->connectPb->setText(tr(Disconnected"));
         ui->connectPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
     }
 }

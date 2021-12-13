@@ -18,6 +18,7 @@
 #define QRZCONFIGUREDIALOG_H
 
 #include <QDialog>
+#include "cutils.h"
 
 namespace Ui {
 class QrzConfigureDialog;
@@ -46,6 +47,7 @@ private slots:
 
 private:
     Ui::QrzConfigureDialog *ui;
+    UpperCaseValidator ucValidator;
     void saveSettings();
 };
 
