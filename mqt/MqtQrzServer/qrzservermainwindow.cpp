@@ -58,8 +58,8 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     createCloseEvent();
 
-    //connect(&LogTimer, &QTimer::timeout, this, [=](){LogTimerTimer();});
-    //LogTimer.start(100);
+    connect(&LogTimer, &QTimer::timeout, this, &QrzServerMainWindow::LogTimerTimer);
+    LogTimer.start(100);
 
     trace(QString("AppName = %1").arg(appName));
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
