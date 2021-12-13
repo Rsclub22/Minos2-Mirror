@@ -57,7 +57,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="377"/>
+        <location filename="../qrzservermainwindow.cpp" line="375"/>
         <source>Qrz logged on Ok with call %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -72,28 +72,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="655"/>
+        <location filename="../qrzservermainwindow.cpp" line="682"/>
         <source>Callsign received from logger - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="660"/>
+        <location filename="../qrzservermainwindow.cpp" line="687"/>
         <source>Callsign received from cluster - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="670"/>
+        <location filename="../qrzservermainwindow.cpp" line="697"/>
         <source>Callsign is valid - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="676"/>
+        <location filename="../qrzservermainwindow.cpp" line="703"/>
         <source>Ask QRZ for callsign - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="684"/>
+        <location filename="../qrzservermainwindow.cpp" line="711"/>
         <source>Callsign is invalid - %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzservermainwindow.cpp" line="756"/>
+        <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

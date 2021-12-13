@@ -2713,7 +2713,7 @@ No          - Discard changes</source>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <location filename="../rigcontrolcwmessagekeyer.cpp" line="144"/>
+        <location filename="../rigcontrolcwmessagekeyer.cpp" line="146"/>
         <source>Rig Control CW Memory Setup</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5266,57 +5266,57 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="377"/>
+        <location filename="../txvmbuttonsframe.cpp" line="385"/>
         <source>Rig CW Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="381"/>
+        <location filename="../txvmbuttonsframe.cpp" line="389"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="383"/>
+        <location filename="../txvmbuttonsframe.cpp" line="391"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="518"/>
+        <location filename="../txvmbuttonsframe.cpp" line="544"/>
         <source>Voice Memory %1 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="551"/>
+        <location filename="../txvmbuttonsframe.cpp" line="577"/>
         <source>Voice Memory Button %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="552"/>
+        <location filename="../txvmbuttonsframe.cpp" line="578"/>
         <source>Are you sure you want to clear this Button?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="553"/>
+        <location filename="../txvmbuttonsframe.cpp" line="579"/>
         <source>Click save to clear, cancel to ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="838"/>
+        <location filename="../txvmbuttonsframe.cpp" line="864"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="842"/>
+        <location filename="../txvmbuttonsframe.cpp" line="868"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="939"/>
+        <location filename="../txvmbuttonsframe.cpp" line="965"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="945"/>
+        <location filename="../txvmbuttonsframe.cpp" line="971"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5505,48 +5505,53 @@ Through</source>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="110"/>
+        <source>Serial Message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmrigbuttondialog.ui" line="124"/>
         <source>Message Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.ui" line="132"/>
+        <location filename="../txvmrigbuttondialog.ui" line="146"/>
         <source>Repeat Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.ui" line="144"/>
+        <location filename="../txvmrigbuttondialog.ui" line="158"/>
         <source>Repeat Pause Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="102"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="114"/>
         <source>CW Message too long - Max %1 chars.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="113"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="143"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="125"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="155"/>
         <source>Repeat Pause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="119"/>
-        <location filename="../txvmrigbuttondialog.cpp" line="149"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="131"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="161"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="133"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="145"/>
         <source>%1 Duration </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="133"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="145"/>
         <source> - out of range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmrigbuttondialog.cpp" line="134"/>
+        <location filename="../txvmrigbuttondialog.cpp" line="146"/>
         <source>Please set value between 0 and 180 seconds</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5577,22 +5582,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="967"/>
+        <location filename="../txvmbuttonsframe.cpp" line="993"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="968"/>
+        <location filename="../txvmbuttonsframe.cpp" line="994"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="969"/>
+        <location filename="../txvmbuttonsframe.cpp" line="995"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="970"/>
+        <location filename="../txvmbuttonsframe.cpp" line="996"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>

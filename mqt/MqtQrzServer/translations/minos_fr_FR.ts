@@ -61,7 +61,7 @@
         <translation type="vanished">Message QRZ %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="377"/>
+        <location filename="../qrzservermainwindow.cpp" line="375"/>
         <source>Qrz logged on Ok with call %1</source>
         <translation>Connecté  à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
@@ -76,29 +76,34 @@
         <translation>Données d&apos;indicatif reçues pour l&apos;appel = %1, envoyer à l&apos;affichage Qrz dans Logger Server</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="655"/>
+        <location filename="../qrzservermainwindow.cpp" line="682"/>
         <source>Callsign received from logger - %1</source>
         <translation>Indicatif reçu de l&apos;enregistreur - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="660"/>
+        <location filename="../qrzservermainwindow.cpp" line="687"/>
         <source>Callsign received from cluster - %1</source>
         <translation>Indicatif reçu du cluster - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="670"/>
+        <location filename="../qrzservermainwindow.cpp" line="697"/>
         <source>Callsign is valid - %1</source>
         <translation>Indicatif d&apos;appel valide - %1</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="676"/>
+        <location filename="../qrzservermainwindow.cpp" line="703"/>
         <source>Ask QRZ for callsign - %1</source>
         <translation>Demander l&apos;indicatif %1 à QRZ</translation>
     </message>
     <message>
-        <location filename="../qrzservermainwindow.cpp" line="684"/>
+        <location filename="../qrzservermainwindow.cpp" line="711"/>
         <source>Callsign is invalid - %1</source>
         <translation>Indicatif d&apos;appel invalide - %1</translation>
+    </message>
+    <message>
+        <location filename="../qrzservermainwindow.cpp" line="756"/>
+        <source>Connected</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
