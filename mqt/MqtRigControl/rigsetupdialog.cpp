@@ -657,15 +657,15 @@ void RigSetupDialog::closeEvent (QCloseEvent *event)
 void RigSetupDialog::done(int r)
 {
     bool supportedBandsOK = false;
-    //bool transvertFreqInBand = false;
+    bool transvertFreqInBand = false;
 
 
     if(QDialog::Accepted == r)  // ok was pressed
     {
         supportedBandsOK = checkOmniRigSupportedBands();
-        //transvertFreqInBand = checkTransvertFreqInBand();
+        transvertFreqInBand = checkTransvertFreqInBand();
 
-        if (supportedBandsOK /*&& transvertFreqInBand*/)
+        if (supportedBandsOK && transvertFreqInBand)
         {
             saveSettings();
         }
@@ -719,10 +719,10 @@ bool RigSetupDialog::checkTransvertFreqInBand()
 
         }
 
-        QMessageBox::critical(this, tr("Transvert Settings Out of Band"),
+        QMessageBox::critical(this, tr("Save Radio - Transvert Settings Out of Band"),
                                        tr("The Transvert settings are out of band for the\n"
                                           "following:\n"
-                                          "%1").arg(outofBandTransvertMsg),
+                                          "%1\nPlease Correct before Continuing").arg(outofBandTransvertMsg),
                                        QMessageBox::Ok);
 
         return false;
@@ -732,7 +732,12 @@ bool RigSetupDialog::checkTransvertFreqInBand()
 bool RigSetupDialog::transVerterInBand(const QSharedPointer<TransVertParams>tvp, QString &transVertBand)
 {
 
-    Frequency targetFreq = tvp->radioFreq + tvp->transVertOffset;
+    Frequency calculatedTargetFreq = tvp->radioFreq + tvp->transVertOffset;
+    Frequency enteredTargetFreq = tvp->targetFreq;
+
+    bool testCalulatedTarget = false;
+    bool testEnteredTarget = false;
+
 
     for (const auto &b: qAsConst(bands))
     {
@@ -740,21 +745,49 @@ bool RigSetupDialog::transVerterInBand(const QSharedPointer<TransVertParams>tvp,
         {
             transVertBand = tvp->band;
 
-            if (targetFreq >= b->fLow && targetFreq <= b->fHigh)
+            if (calculatedTargetFreq >= b->fLow && calculatedTargetFreq <= b->fHigh)
             {
-                return true;
+                testCalulatedTarget =  true;
             }
             else
             {
-                return false;
+                testCalulatedTarget =  false;
             }
+
+            break;
+        }
+
+    }
+
+    for (const auto &b: qAsConst(bands))
+    {
+        if (b->uk == tvp->band)
+        {
+
+
+            if (enteredTargetFreq >= b->fLow && enteredTargetFreq <= b->fHigh)
+            {
+                testEnteredTarget =  true;
+            }
+            else
+            {
+                testEnteredTarget =  false;
+            }
+
+            break;
         }
 
     }
 
 
+    if (testCalulatedTarget && testEnteredTarget)
+    {
+        return true;
+    }
+
 
     return false;
+
 }
 
 
