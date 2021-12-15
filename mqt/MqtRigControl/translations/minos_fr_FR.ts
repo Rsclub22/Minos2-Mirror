@@ -1192,26 +1192,37 @@ la poignée de main et les réglages forcés.  </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="722"/>
-        <source>Transvert Settings Out of Band</source>
-        <translation>Paramètres du Transverter sont hors bande </translation>
+        <source>Save Radio - Transvert Settings Out of Band</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="723"/>
         <source>The Transvert settings are out of band for the
 following:
+%1
+Please Correct before Continuing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transvert Settings Out of Band</source>
+        <translation type="vanished">Paramètres du Transverter sont hors bande </translation>
+    </message>
+    <message>
+        <source>The Transvert settings are out of band for the
+following:
 %1</source>
         <translatorcomment>just for %1</translatorcomment>
-        <translation>Paramètres du Transverter sont hors bande pour la suivant
+        <translation type="vanished">Paramètres du Transverter sont hors bande pour la suivant
 %1 </translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="770"/>
+        <location filename="../rigsetupdialog.cpp" line="803"/>
         <source>Radio Supported Bands Missing</source>
         <translatorcomment>Les bandes supportées par la Radio sont manquantes</translatorcomment>
         <translation>&lt;&lt;Check context&gt;&gt;  </translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="771"/>
+        <location filename="../rigsetupdialog.cpp" line="804"/>
         <source>For Minos to work best with Radios,
 Please add bands or transverters to
 these radio definitions:

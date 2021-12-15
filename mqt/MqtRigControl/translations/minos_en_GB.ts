@@ -1056,23 +1056,24 @@ The handshake and forced settings.</source>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="722"/>
-        <source>Transvert Settings Out of Band</source>
+        <source>Save Radio - Transvert Settings Out of Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="723"/>
         <source>The Transvert settings are out of band for the
 following:
-%1</source>
+%1
+Please Correct before Continuing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="770"/>
+        <location filename="../rigsetupdialog.cpp" line="803"/>
         <source>Radio Supported Bands Missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="771"/>
+        <location filename="../rigsetupdialog.cpp" line="804"/>
         <source>For Minos to work best with Radios,
 Please add bands or transverters to
 these radio definitions:
