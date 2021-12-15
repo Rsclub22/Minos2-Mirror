@@ -143,6 +143,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 {
     if (!contest)
     {
+        ui->tabbar->setVisible(false);
         return;
     }
 
@@ -171,7 +172,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
-    bool setTabsVisible = contest->contestBands.getValue() == allHF;
+    bool setTabsVisible = (contest->contestBands.getValue() == allHF);
 
     QString a = ui->infoCombo->currentText();
 
@@ -325,6 +326,8 @@ void StackedInfoFrame::onContestBandChanged(BaseContestLog *ct)
             }
         }
     }
+    bool setTabsVisible = ct && (ct->contestBands.getValue() == allHF);
+    ui->tabbar->setVisible(setTabsVisible);
 }
 void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *c )
 {
