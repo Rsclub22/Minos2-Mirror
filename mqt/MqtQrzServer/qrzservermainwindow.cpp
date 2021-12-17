@@ -597,16 +597,16 @@ void QrzServerMainWindow::onConfigure()
 
         if (conf.logCallsign.trimmed() != settings.value("logonCallsign", "").toString())
         {
-            settings.setValue("logonCallsign", logonCallsign);
             logonCallsign = conf.logCallsign.trimmed();
+            settings.setValue("logonCallsign", logonCallsign);
             callsignChanged = true;
 
         }
 
-        if (conf.logPassword.trimmed() != settings.value("logonCallsign", "").toString())
+        if (conf.logPassword.trimmed() != settings.value("pasword", "").toString())
         {
-            settings.setValue("password", password);
             password = conf.logPassword.trimmed();
+            settings.setValue("password", password);
             passwordChanged = true;
         }
 
