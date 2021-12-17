@@ -341,49 +341,34 @@ void QrzServerMainWindow::sessionDataReceived()
         //    qrzServerStateFlags.setAskLogonFlag(false);
         //}
 
-
-
-
-
     }
 
-    /*
-    if (!qrzSessionData.getMessage().isEmpty())
+
+
+
+    if (qrzServerStateFlags.getAskLogonFlag())
     {
-        trace(QString("Qrz Message: %1").arg(qrzSessionData.getMessage()));
-        addToErrorTextLabel(tr("Qrz Message: %1").arg(qrzSessionData.getMessage()));
-        addTextToLogWindow(qrzSessionData.getMessage());
-        if (qrzServerStateFlags.getAskCallsignFlag())
+        if (!qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
         {
-            qrzServerStateFlags.setAskCallsignFlag(false);
-        }
-        if (qrzServerStateFlags.getAskLogonFlag())
-        {
+            // logon succesfull
+            qrzServerStateFlags.setQrzLoggedOnFlag(true);
             qrzServerStateFlags.setAskLogonFlag(false);
+            QString msg = QString("Qrz Logged on Ok with call %1").arg(logonCallsign);
+            trace(msg);
+            addTextToLogWindow(tr("Qrz logged on Ok with call %1").arg(logonCallsign));
+            addToErrorTextLabel("");
+            addToMessageTextLabel("");
+            setQrzStatusConnected(true);
+        }
+        else
+        {
+            setQrzStatusConnected(false);
+            qrzServerStateFlags.clear();
+
         }
 
     }
-    */
 
-    if (qrzServerStateFlags.getAskLogonFlag() && !qrzSessionData.getKey().isEmpty() && qrzSessionData.getError().isEmpty())
-    {
-        // logon succesfull
-        qrzServerStateFlags.setQrzLoggedOnFlag(true);
-        qrzServerStateFlags.setAskLogonFlag(false);
-        QString msg = QString("Qrz Logged on Ok with call %1").arg(logonCallsign);
-        trace(msg);
-        addTextToLogWindow(tr("Qrz logged on Ok with call %1").arg(logonCallsign));
-        addToErrorTextLabel("");
-        addToMessageTextLabel("");
-        setQrzStatusConnected(true);
-
-    }
-    else
-    {
-        setQrzStatusConnected(false);
-        qrzServerStateFlags.clear();
-
-    }
 
     if (qrzServerStateFlags.getAskCallsignFlag() /*&& requestedStation.getLoggerFlag()*/)
     {
