@@ -54,11 +54,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="206"/>
         <source>Logging on to QRZ.com with callsign: %1</source>
-        <translation>Connexion à QRZ.com avec l&apos;indicatif : %1 </translation>
-    </message>
-    <message>
-        <source>Qrz Message: %1</source>
-        <translation type="vanished">Message QRZ %1</translation>
+        <translation>Connexion à QRZ.com avec l&apos;indicatif : %1</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="358"/>
@@ -103,7 +99,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="741"/>
         <source>Connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Connecté</translation>
     </message>
 </context>
 <context>

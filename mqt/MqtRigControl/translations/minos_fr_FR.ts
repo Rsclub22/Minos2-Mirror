@@ -270,74 +270,14 @@ Vérifier le tracelog Rigcontrol</translation>
         <translation>Bandes prises en charge</translation>
     </message>
     <message>
-        <source>144 MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>1296 MHz</source>
-        <translation type="vanished">1296 MHz</translation>
-    </message>
-    <message>
-        <source>3.4 GHz</source>
-        <translation type="vanished">3,4 GHz</translation>
-    </message>
-    <message>
-        <source>5.6 GHz</source>
-        <translation type="vanished">5,6 GHz</translation>
-    </message>
-    <message>
-        <source>2300 MHz</source>
-        <translation type="vanished">2300 MHz</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="69"/>
         <source>Using: </source>
         <translation>En utilisant: </translation>
     </message>
     <message>
-        <source>70 MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>50 MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
         <location filename="../rigcontrolmainwindow.ui" line="147"/>
         <source>Reconnect</source>
-        <translation>Reconnecter </translation>
-    </message>
-    <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
-        <source>432 MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
-        <source>21 MHz</source>
-        <translation type="vanished">21 MHz</translation>
-    </message>
-    <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>10 GHz</source>
-        <translation type="vanished">10 GHz</translation>
-    </message>
-    <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
-        <source>3.5 MHz</source>
-        <translation type="vanished">3,5 MHz</translation>
+        <translation>Reconnecter</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="250"/>
@@ -426,7 +366,7 @@ Vérifier le tracelog Rigcontrol</translation>
         <location filename="../rigcontrolmainwindow.ui" line="837"/>
         <source>CW Keyer</source>
         <translatorcomment>manipulateur/keyer</translatorcomment>
-        <translation>Clé CW </translation>
+        <translation>Keyer CW</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="844"/>
@@ -478,7 +418,7 @@ Vérifier le tracelog Rigcontrol</translation>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="641"/>
         <source>Radio Memory Keyer</source>
-        <translation>Mémoire radio ??</translation>
+        <translation>Keyer  de Mémoire de radio</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.ui" line="804"/>
@@ -1192,37 +1132,26 @@ la poignée de main et les réglages forcés.  </translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="722"/>
-        <source>Save Radio - Transvert Settings Out of Band</source>
-        <translation type="unfinished"></translation>
+        <source>Transvert Settings Out of Band</source>
+        <translation>Paramètres du Transverter sont hors bande</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="723"/>
         <source>The Transvert settings are out of band for the
 following:
-%1
-Please Correct before Continuing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Transvert Settings Out of Band</source>
-        <translation type="vanished">Paramètres du Transverter sont hors bande </translation>
-    </message>
-    <message>
-        <source>The Transvert settings are out of band for the
-following:
 %1</source>
-        <translatorcomment>just for %1</translatorcomment>
-        <translation type="vanished">Paramètres du Transverter sont hors bande pour la suivant
-%1 </translation>
+        <translatorcomment>just for %1?</translatorcomment>
+        <translation>Paramètres du Transverter sont hors bande pour la suivant
+%1</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="803"/>
+        <location filename="../rigsetupdialog.cpp" line="770"/>
         <source>Radio Supported Bands Missing</source>
         <translatorcomment>Les bandes supportées par la Radio sont manquantes</translatorcomment>
         <translation>&lt;&lt;Check context&gt;&gt;  </translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="804"/>
+        <location filename="../rigsetupdialog.cpp" line="771"/>
         <source>For Minos to work best with Radios,
 Please add bands or transverters to
 these radio definitions:
@@ -1231,7 +1160,7 @@ these radio definitions:
         <translation>Pour que Minos fonctionne mieux avec les radios,
 Veuillez ajouter des bandes ou les transverters à
 ces définitions radio:
-%1   </translation>
+%1</translation>
     </message>
 </context>
 <context>
@@ -1309,14 +1238,11 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>TransVertSetupForm</name>
     <message>
-        <source>Target Freq. is out of band for %1</source>
-        <translation type="vanished">La fréquence désirée est hors bande pour %1</translation>
-    </message>
-    <message>
         <location filename="../transvertsetupform.cpp" line="179"/>
         <source>Target Freq. is out of band for %1
 Please correct the transverter entries.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréq. cible est hors bande pour %1
+Corriger les entrées du convertisseur SVP.</translation>
     </message>
 </context>
 <context>
@@ -1414,7 +1340,7 @@ Please correct the transverter entries.</source>
     <message>
         <location filename="../rigsetupform.ui" line="365"/>
         <source>EnableDisable CAT Features</source>
-        <translation>Activer/Désactiver les fonctionnalités CAT </translation>
+        <translation>Activer/Désactiver les fonctionnalités CAT</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="372"/>
@@ -1434,7 +1360,7 @@ Please correct the transverter entries.</source>
     <message>
         <location filename="../rigsetupform.ui" line="396"/>
         <source>Signal Meter</source>
-        <translation>Compteur de signal </translation>
+        <translation>Compteur de signal</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="403"/>
@@ -1449,12 +1375,12 @@ Please correct the transverter entries.</source>
     <message>
         <location filename="../rigsetupform.ui" line="417"/>
         <source>Voice TX Mem</source>
-        <translation>Memoire Voix TX </translation>
+        <translation>Memoire Voix TX</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="424"/>
         <source>CW TX Mem</source>
-        <translation>Memoire CW TX?</translation>
+        <translation>Memoire CW TX</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="455"/>
@@ -1480,50 +1406,6 @@ Please correct the transverter entries.</source>
         <location filename="../rigsetupform.ui" line="547"/>
         <source>Supported Native Bands on Radio</source>
         <translation>Bandes natives supportées par la radio</translation>
-    </message>
-    <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>3.5 MHz</source>
-        <translation type="vanished">3,5 MHz</translation>
-    </message>
-    <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
-        <source>21 MHz</source>
-        <translation type="vanished">21 MHz</translation>
-    </message>
-    <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
-        <source>50 MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
-        <source>70 MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>144 MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>432 MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
-        <source>1296MHz</source>
-        <translation type="vanished">1296MHz</translation>
     </message>
     <message>
         <location filename="../rigsetupform.ui" line="565"/>

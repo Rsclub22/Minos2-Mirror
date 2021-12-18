@@ -21,12 +21,12 @@
     <message>
         <location filename="../KeyerMain.ui" line="46"/>
         <source>Key</source>
-        <translation>Key </translation>
+        <translation>Key</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="56"/>
         <source>recind</source>
-        <translation>???Record Indicator???</translation>
+        <translation>Indicateur d&apos;enregistrement</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="115"/>
@@ -118,7 +118,7 @@
         <location filename="../KeyerMain.ui" line="354"/>
         <source>Setup Script (alsactl)</source>
         <translatorcomment>Script d&apos;installation (alsactl)</translatorcomment>
-        <translation>Script de configuration (alsactl) </translation>
+        <translation>Script de configuration (alsactl)</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="366"/>
@@ -149,7 +149,8 @@
         <location filename="../KeyerMain.ui" line="541"/>
         <source>
 Record</source>
-        <translation>Enregistrer</translation>
+        <translation>
+Enregistrer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="630"/>
@@ -163,7 +164,7 @@ Rejouer</translation>
         <source>Pass
 Through</source>
         <translatorcomment>mode intermédiaire ??</translatorcomment>
-        <translation>Passthrough </translation>
+        <translation>Passthrough</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="315"/>
@@ -206,7 +207,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="22"/>
         <source>Tuning Tones 1/2</source>
-        <translation>Adjustment tones 1/2  </translation>
+        <translation>Adjustment tones 1/2</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="25"/>
@@ -267,7 +268,7 @@ Through</source>
         <location filename="../keyers.cpp" line="36"/>
         <source>OS - Restart(1)/Close(2)</source>
         <translatorcomment>SO or OS??</translatorcomment>
-        <translation>SO - Redémarrer(1)/Fermer(2) </translation>
+        <translation>? Redémarrer(1)/Fermer(2)</translation>
     </message>
 </context>
 <context>

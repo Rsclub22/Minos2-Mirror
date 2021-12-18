@@ -135,7 +135,7 @@
     <message>
         <location filename="../bandmapclientframe.ui" line="45"/>
         <source>Call/Locator Filter</source>
-        <translation>Filtre de Indicatif/Locator   </translation>
+        <translation>Filtre de Indicatif/Locator</translation>
     </message>
     <message>
         <location filename="../bandmapclientframe.ui" line="92"/>
@@ -351,29 +351,9 @@ Le mode calculé est %2</translation>
 <context>
     <name>BandsSelect</name>
     <message>
-        <location filename="../BandsSelect.ui" line="14"/>
-        <source>Select wanted bands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="20"/>
-        <source>Choose the Bands that you want Minos to use.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../BandsSelect.ui" line="31"/>
         <source>All HF</source>
-        <translation type="unfinished">Toutes HF</translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="52"/>
-        <source>All VHF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../BandsSelect.ui" line="73"/>
-        <source>All MW</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes HF</translation>
     </message>
 </context>
 <context>
@@ -389,26 +369,6 @@ Le mode calculé est %2</translation>
         <translation>HF</translation>
     </message>
     <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
-        <source>21 MHz</source>
-        <translation type="vanished">21 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="69"/>
         <source>Turn Off Operating Frequency Colour Band</source>
         <translation>Désactiver la bande de couleurs de fréquence de fonctionnement</translation>
@@ -419,13 +379,9 @@ Le mode calculé est %2</translation>
         <translation>Bande de couleurs de fréquence suivre mode de radio </translation>
     </message>
     <message>
-        <source>Display Locators Derived from Country</source>
-        <translation type="vanished">Afficher les Locators dérivés du pays</translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <source>Delay updates when mouse pointer is in the Bandmap</source>
-        <translation>Retarder les mises à jour lorsque le curseur est dans la Bandmap </translation>
+        <translation>Retarder les mises à jour lorsque le curseur est dans la Bandmap</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="123"/>
@@ -433,54 +389,9 @@ Le mode calculé est %2</translation>
         <translation>Distance Cluster/Bandmap</translation>
     </message>
     <message>
-        <source>3.5 MHz</source>
-        <translation type="vanished">3,5 MHz</translation>
-    </message>
-    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="162"/>
         <source>VHF/UHF</source>
         <translation>VHF/UHF</translation>
-    </message>
-    <message>
-        <source>144 MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>2300 MHz</source>
-        <translation type="vanished">2300 MHz</translation>
-    </message>
-    <message>
-        <source>432 MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
-        <source>1296 MHz</source>
-        <translation type="vanished">1296 MHz</translation>
-    </message>
-    <message>
-        <source>3.4 GHz</source>
-        <translation type="vanished">3,4 GHz</translation>
-    </message>
-    <message>
-        <source>70 MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>50 MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
-        <source>5.6 GHz</source>
-        <translation type="vanished">5,6 GHz</translation>
-    </message>
-    <message>
-        <source>10 GHz</source>
-        <translation type="vanished">10 GHz</translation>
-    </message>
-    <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
-        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="189"/>
@@ -538,71 +449,15 @@ Le mode calculé est %2</translation>
         <translation>HF</translation>
     </message>
     <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>3.5 MHz</source>
-        <translation type="vanished">3,5 MHz</translation>
-    </message>
-    <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
         <location filename="../clusterclientfilterdialog.ui" line="68"/>
         <location filename="../clusterclientfilterdialog.ui" line="509"/>
         <source>VHF</source>
         <translation>VHF</translation>
     </message>
     <message>
-        <source>50 MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
-        <source>70 MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>144 MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>432 MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
         <location filename="../clusterclientfilterdialog.ui" line="102"/>
         <source>MWave</source>
         <translation>Micro-ondes</translation>
-    </message>
-    <message>
-        <source>1296 MHz</source>
-        <translation type="vanished">1296 MHz</translation>
-    </message>
-    <message>
-        <source>2300 MHz</source>
-        <translation type="vanished">2300 MHz</translation>
-    </message>
-    <message>
-        <source>3.4 GHz</source>
-        <translation type="vanished">3,4 GHz</translation>
-    </message>
-    <message>
-        <source>5.6 GHz</source>
-        <translation type="vanished">5,6 GHz</translation>
-    </message>
-    <message>
-        <source>10 GHz</source>
-        <translation type="vanished">10 GHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="136"/>
@@ -743,10 +598,6 @@ Le mode calculé est %2</translation>
         <location filename="../clusterclientfilterdialog.cpp" line="189"/>
         <source>Ignore Spots with no distance value</source>
         <translation>Ignorer les spots sans valeur de distance</translation>
-    </message>
-    <message>
-        <source>21 MHz</source>
-        <translation type="vanished">21 MHz</translation>
     </message>
     <message>
         <location filename="../clusterclientfilterdialog.ui" line="461"/>
@@ -1515,12 +1366,12 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../ContestPageControl.cpp" line="70"/>
         <source>Run Frequency 1</source>
-        <translation>Fréquence d&apos;operation 1 </translation>
+        <translation>Fréquence d&apos;operation 1</translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="80"/>
         <source>Run Frequency 2</source>
-        <translation>Fréquence d&apos;operation 2 </translation>
+        <translation>Fréquence d&apos;operation 2</translation>
     </message>
     <message>
         <location filename="../ContestPageControl.cpp" line="175"/>
@@ -2271,11 +2122,6 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../OptionsDialog.cpp" line="84"/>
-        <source>Wanted Bands</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../OptionsDialog.cpp" line="85"/>
         <source>Cluster/Bandmap</source>
         <translation>Cluster/Bandmap</translation>
@@ -2305,11 +2151,6 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <location filename="../OptionsDialog.cpp" line="90"/>
         <source>WSJT-X</source>
         <translation>WSJT-X</translation>
-    </message>
-    <message>
-        <location filename="../OptionsDialog.cpp" line="145"/>
-        <source>We must save the band changes before continuing</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2380,11 +2221,6 @@ to</source>
         <translation>Premier QSO non rempli</translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="350"/>
-        <source>Run</source>
-        <translation type="unfinished">Run</translation>
-    </message>
-    <message>
         <location filename="../qsologframe.ui" line="581"/>
         <source>Last Spot Sent: </source>
         <translation>Dernier Spot envoyé: </translation>
@@ -2447,7 +2283,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="289"/>
         <source>prot</source>
-        <translation>Protégé ???</translation>
+        <translation>Protégé</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="374"/>
@@ -2463,10 +2299,6 @@ to</source>
         <location filename="../qsologframe.ui" line="398"/>
         <source>1234</source>
         <translation>1234</translation>
-    </message>
-    <message>
-        <source>Call</source>
-        <translation type="vanished">Indicatif d&apos;appel</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="337"/>
@@ -2489,19 +2321,9 @@ to</source>
         <translation>Indicatif d&apos;appel (F1)</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="53"/>
-        <source>Sent by Me</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qsologframe.cpp" line="56"/>
         <source>RS(T)Tx(F2)</source>
         <translation>RS(T)Tx(F2)</translation>
-    </message>
-    <message>
-        <location filename="../qsologframe.cpp" line="61"/>
-        <source>Sent by Them</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="64"/>
@@ -2534,11 +2356,6 @@ to</source>
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2148"/>
-        <source>No QSO entry field focussed!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../qsologframe.ui" line="564"/>
         <source>Spot Last Logged ()</source>
         <translation>Envoyer un spot pour le dernière enregistrée</translation>
@@ -2546,7 +2363,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="574"/>
         <source>Spot Current</source>
-        <translation>Envoyer un spot pour le courant???</translation>
+        <translation>Envoyer un spot pour le courant</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="954"/>
@@ -2641,10 +2458,6 @@ Non - Ignorer les modifications</translation>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <source>QSO Entry Frame not focussed!</source>
-        <translation type="vanished">Cadre d&apos;entrée QSO n&apos;est pas focalisé !</translation>
-    </message>
-    <message>
         <location filename="../qsologframe.cpp" line="2493"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
@@ -2686,7 +2499,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../QSOTextEditFrame.cpp" line="52"/>
         <source>Click to clear edit content</source>
         <translatorcomment>Cliquer pour supprimer le contenu modifié</translatorcomment>
-        <translation>Cliquer pour supprimer le contenu modifié </translation>
+        <translation>Cliquer pour supprimer le contenu modifié</translation>
     </message>
 </context>
 <context>
@@ -2818,10 +2631,6 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RadioSettingDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../radiosettingdialog.ui" line="30"/>
         <source>Radio General Settings</source>
         <translation>Paramètres généraux de radio</translation>
@@ -2850,7 +2659,7 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="66"/>
         <source>Set RIT when calling CQ (radio permitting)</source>
         <translatorcomment>Activer?</translatorcomment>
-        <translation>Régler RIT lorsque en appelant CQ (si la radio le permet) </translation>
+        <translation>Régler RIT lorsque en appelant CQ (si la radio le permet)</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="92"/>
@@ -2868,66 +2677,6 @@ Non - Ignorer les modifications</translation>
         <translation>CW</translation>
     </message>
     <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
-        <source>3.5 MHZ</source>
-        <translation type="vanished">3,5 MHz</translation>
-    </message>
-    <message>
-        <source>70MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>432MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>144MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>21 MHz</source>
-        <translation type="vanished">21 MHz</translation>
-    </message>
-    <message>
-        <source>50MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
-        <source>1296MHz</source>
-        <translation type="vanished">1296 MHz</translation>
-    </message>
-    <message>
-        <source>10GHz</source>
-        <translation type="vanished">10 GHz</translation>
-    </message>
-    <message>
-        <source>5.6GHz</source>
-        <translation type="vanished">5,6 GHz</translation>
-    </message>
-    <message>
-        <source>3.4GHz</source>
-        <translation type="vanished">3,4 GHz</translation>
-    </message>
-    <message>
-        <source>2300MHz</source>
-        <translation type="vanished">2300 MHz</translation>
-    </message>
-    <message>
         <location filename="../radiosettingdialog.ui" line="128"/>
         <source>Phone</source>
         <translation>Phonie</translation>
@@ -2941,11 +2690,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../radiosettingdialog.ui" line="158"/>
         <source>Band Switch</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../radiosettingdialog.ui" line="181"/>
-        <source>Allows external device notification of band without using Minos Rigcontrol</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="207"/>
@@ -2986,13 +2730,9 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>RigControlCwMessageKeyer</name>
     <message>
-        <source>Rig Control Voice Memory Setup</source>
-        <translation type="vanished">Configuration de la mémoire de voix </translation>
-    </message>
-    <message>
         <location filename="../rigcontrolcwmessagekeyer.cpp" line="146"/>
         <source>Rig Control CW Memory Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration de la mémoire de CW</translation>
     </message>
 </context>
 <context>
@@ -3011,24 +2751,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.ui" line="114"/>
         <source>-</source>
         <translation>-</translation>
-    </message>
-    <message>
-        <source>99.999.999.999</source>
-        <translation type="vanished">99.999.999.999</translation>
-    </message>
-    <message>
-        <source>00.000.000.000</source>
-        <translation type="vanished">00.000.000.000</translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.ui" line="130"/>
-        <source>999.999.999.999</source>
-        <translation type="unfinished">000  {999.999.999.999?}</translation>
-    </message>
-    <message>
-        <location filename="../rigcontrolframe.ui" line="133"/>
-        <source>000.000.000.000</source>
-        <translation type="unfinished">000  {000.000.000.000?}</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="146"/>
@@ -3135,7 +2857,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolvoicememorykeyer.cpp" line="124"/>
         <source>Rig Control Voice Memory Setup</source>
-        <translation>Configuration de la mémoire de voix </translation>
+        <translation>Configuration de la mémoire de voix</translation>
     </message>
 </context>
 <context>
@@ -3496,15 +3218,6 @@ Non - Ignorer les modifications</translation>
         <translation>Fréquences d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../runbuttonsframe.ui" line="17"/>
-        <source>Run Frequencies</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Call Frequencies</source>
-        <translation type="vanished">Fréquences d&apos;appel</translation>
-    </message>
-    <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
         <location filename="../runbuttonsframe.ui" line="78"/>
         <source>...</source>
@@ -3748,7 +3461,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="22"/>
         <source>Run Freq Buttons</source>
-        <translation type="unfinished"></translation>
+        <translation>Boutons de fréquence d&apos;exploite</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="23"/>
@@ -3820,7 +3533,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="32"/>
         <source>QRZ Display</source>
-        <translation>Affichage du QRZ  ??</translation>
+        <translation>Affichage du QRZ</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="33"/>
@@ -3977,14 +3690,14 @@ Protected</source>
         <source>Please select (by mouse click) the top and bottom rows for the (right) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
         <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de droite.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée. </translation>
+L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
     </message>
     <message>
         <location filename="../ScreenConfigScreen.cpp" line="377"/>
         <source>Please select (by mouse click) the top and bottom rows for the (left) column.<byte value="xd"/>
 The row background will change colour when selected.</source>
         <translation>Veuillez sélectionner en cliquant sur les rangées supérieures et inférieures pour la colonne de gauche.
-L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée. </translation>
+L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélectionnée.</translation>
     </message>
 </context>
 <context>
@@ -5079,7 +4792,7 @@ Veuillez choisir un nouveau nom.</translation>
     <message>
         <location filename="../tlogcontainer.cpp" line="970"/>
         <source>Import %1 contests</source>
-        <translation>Importer %1 Concours </translation>
+        <translation>Importer %1 Concours</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1113"/>
@@ -5238,13 +4951,6 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
         <location filename="../tminosbshelpform.ui" line="48"/>
         <source>Close</source>
         <translation>Fermer</translation>
-    </message>
-</context>
-<context>
-    <name>TMinosBandChooser</name>
-    <message>
-        <source>Chose Band for Contest</source>
-        <translation type="vanished">Choisir la bande pour le Concours ENG=CHOSE</translation>
     </message>
 </context>
 <context>
@@ -5537,7 +5243,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="14"/>
         <source>GroupBox</source>
-        <translation>Boîte de groupe???</translation>
+        <translation>Boîte de groupe</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="17"/>
@@ -5547,12 +5253,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="62"/>
         <source>Avail</source>
-        <translation>Disponible </translation>
+        <translation>Disponible</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="108"/>
         <source>Repeat</source>
-        <translation>Répéter </translation>
+        <translation>Répéter</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="158"/>
@@ -5568,7 +5274,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <location filename="../txvmbuttonsframe.ui" line="245"/>
         <source>Pip</source>
         <translatorcomment>What of #Setup?</translatorcomment>
-        <translation>???</translation>
+        <translation>Pip</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.ui" line="263"/>
@@ -5588,14 +5294,9 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>Arrêter</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="300"/>
-        <source>To use the external keyer mqtKeyer must be running and connected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../txvmbuttonsframe.cpp" line="385"/>
         <source>Rig CW Message</source>
-        <translation>?? Message CW d&apos;apparat??</translation>
+        <translation>Message CW d&apos;apparat</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="389"/>
@@ -5615,31 +5316,27 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="577"/>
         <source>Voice Memory Button %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mémoire de voix %1</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="578"/>
         <source>Are you sure you want to clear this Button?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Are you sure you want to clear this button %1?</source>
-        <translation type="vanished">Vraiment effacer ce bouton %1&#xa0;? </translation>
+        <translation>Voulez-vous vraiment effacer ce bouton&#xa0;?</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="579"/>
         <source>Click save to clear, cancel to ignore</source>
-        <translation>Cliquer sur enregistrer pour effacer, annuler pour ignorer </translation>
+        <translation>Cliquer sur enregistrer pour effacer, annuler pour ignorer</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="864"/>
         <source>Rig Voice Keyer Available</source>
-        <translation>Mémoire de voix disponible </translation>
+        <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="868"/>
         <source>Rig CW Messages Available</source>
-        <translation>Message CW disponible </translation>
+        <translation>Message CW disponible</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="965"/>
@@ -5655,13 +5352,9 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
 <context>
     <name>TxVmExternalButtonDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../txVmExternalButtonDialog.ui" line="14"/>
         <source>External Keyer Button Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du bouton du Keyer externe</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="39"/>
@@ -5686,7 +5379,7 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="144"/>
         <source>Test Replay</source>
-        <translation>???</translation>
+        <translation>Tester la rejouer</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="164"/>
@@ -5721,7 +5414,7 @@ Replay</source>
         <source>Pass
 Through</source>
         <translatorcomment>??Mode intermédiaire</translatorcomment>
-        <translation>Passthrough </translation>
+        <translation>Passthrough</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="47"/>
@@ -5731,16 +5424,12 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="47"/>
         <source> - out of range</source>
-        <translation>??? hors de limite</translation>
+        <translation> - hors de limite</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="48"/>
         <source>Please set value between %1 and %2 seconds</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="vanished">Entrer un value entre 0 et 180 secondes SVP</translation>
+        <translation>Entrer un value entre %1 et %2 secondes SVP</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="66"/>
@@ -5751,13 +5440,9 @@ Through</source>
 <context>
     <name>TxVmInternalButtonDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../txvminternalbuttondialog.ui" line="14"/>
         <source>Internal Keyer Button Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du bouton du Keyer interne</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="39"/>
@@ -5772,7 +5457,7 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="106"/>
         <source>Test Replay</source>
-        <translation>Tester la rejouer </translation>
+        <translation>Tester la rejouer</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="126"/>
@@ -5808,7 +5493,7 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="105"/>
         <source>Please set value between %1 and %2 seconds</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrer un value entre %1 et %2 secondes SVP</translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="121"/>
@@ -5823,23 +5508,15 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.cpp" line="104"/>
         <source> - out of range</source>
-        <translation>??? hors de limite</translation>
-    </message>
-    <message>
-        <source>Please set value between 0 and 180 seconds</source>
-        <translation type="vanished">Entrer un value entre 0 et 180 secondes SVP</translation>
+        <translation> - hors de limite</translation>
     </message>
 </context>
 <context>
     <name>TxVmRigButtonDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../txvmrigbuttondialog.ui" line="14"/>
         <source>Rig Keyer Button Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du bouton Rig Keyer</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="35"/>
@@ -5854,12 +5531,12 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="96"/>
         <source>CW Message Text</source>
-        <translation>Texte de Message CW </translation>
+        <translation>Texte de Message CW</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="110"/>
         <source>Serial Message</source>
-        <translation type="unfinished"></translation>
+        <translation>Message en série</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.ui" line="124"/>
@@ -5879,7 +5556,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="114"/>
         <source>CW Message too long - Max %1 chars.</source>
-        <translation>Message CW trop long - Max %1 caractères. </translation>
+        <translation>Message CW trop long - Max %1 caractères.</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="125"/>
@@ -5901,7 +5578,7 @@ Through</source>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="145"/>
         <source> - out of range</source>
-        <translation>??? hors de limite</translation>
+        <translation> - hors de limite</translation>
     </message>
     <message>
         <location filename="../txvmrigbuttondialog.cpp" line="146"/>
@@ -5919,7 +5596,7 @@ Through</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="27"/>
         <source>Number Buttons</source>
-        <translation>???What is this???</translation>
+        <translation>Boutons numériques</translation>
     </message>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="41"/>
@@ -5929,11 +5606,7 @@ Through</source>
     <message>
         <location filename="../txvmrigsetupdialog.ui" line="50"/>
         <source>Use CAT PTT For EOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use PTT For EOM</source>
-        <translation type="vanished">Utiliser PTT pour EOM</translation>
+        <translation>Utiliser CAT PTT pour EOM</translation>
     </message>
 </context>
 <context>
@@ -6182,13 +5855,9 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
 <context>
     <name>txVmInternalSetupDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation type="vanished">Dialogue</translation>
-    </message>
-    <message>
         <location filename="../txVmInternalSetupDialog.ui" line="14"/>
         <source>Internal Keyer Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du Keyer interne</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="25"/>
@@ -6204,12 +5873,7 @@ Inclure le &quot;CQ&quot; ainsi que le type</translation>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="48"/>
         <source>Use CAT PTT For EOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Use PTT For EOM</source>
-        <translatorcomment>???What??</translatorcomment>
-        <translation type="vanished">Utiliser PTT pour EOM</translation>
+        <translation>Utiliser CAT PTT pour EOM</translation>
     </message>
     <message>
         <location filename="../txVmInternalSetupDialog.ui" line="57"/>

@@ -189,37 +189,37 @@ utiliser un autre nom SVP</translation>
     <message>
         <location filename="../pstconfigdialog.ui" line="14"/>
         <source>Pst Rotator Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du PSTrotator</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="24"/>
         <source>PstRotatorPathx86</source>
-        <translation type="unfinished"></translation>
+        <translation>PstRotatorPathx86</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="38"/>
         <source>PstRotatorPath</source>
-        <translation type="unfinished"></translation>
+        <translation>PstRotatorPath</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="52"/>
         <source>PstRotatorAzPathx86</source>
-        <translation type="unfinished"></translation>
+        <translation>PstRotatorAzPathx86</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="66"/>
         <source>PstRotatorAzPath</source>
-        <translation type="unfinished"></translation>
+        <translation>PstRotatorAzPath</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="80"/>
         <source>Minos Searches these path locations for PST Rotator to add to rotator lists.</source>
-        <translation type="unfinished"></translation>
+        <translation>Minos recherche ces emplacements pour PSTrotator à ajouter aux listes de rotateurs.</translation>
     </message>
     <message>
         <location filename="../pstconfigdialog.ui" line="87"/>
         <source>Restart Rotator Server after making any changes here</source>
-        <translation type="unfinished"></translation>
+        <translation>Redémarrer le serveur Rotator après avoir effectué des modifications ici</translation>
     </message>
 </context>
 <context>
@@ -468,7 +468,7 @@ Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
         <location filename="../rotatormainwindow.ui" line="682"/>
         <location filename="../rotatormainwindow.cpp" line="2126"/>
         <source>PST Rotator Config</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du PSTrotator</translation>
     </message>
     <message>
         <location filename="../rotatormainwindow.cpp" line="133"/>

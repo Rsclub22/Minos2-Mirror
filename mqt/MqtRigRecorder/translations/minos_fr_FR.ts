@@ -21,7 +21,7 @@
     <message>
         <location filename="../mainwindow.ui" line="142"/>
         <source>Base Output Filename</source>
-        <translation>Base du nom de fichier de sortie </translation>
+        <translation>Base du nom de fichier de sortie</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="152"/>
@@ -31,7 +31,7 @@
     <message>
         <location filename="../mainwindow.ui" line="163"/>
         <source>File Rotation Interval (minutes)</source>
-        <translation>Intervalle de rotation des fichiers (minutes) </translation>
+        <translation>Intervalle de rotation des fichiers (minutes)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="187"/>
@@ -57,7 +57,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="231"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
-        <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *) </translation>
+        <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="234"/>

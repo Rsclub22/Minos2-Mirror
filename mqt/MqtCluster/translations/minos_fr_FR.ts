@@ -67,12 +67,12 @@
     <message>
         <location filename="../clustermainwindow.ui" line="289"/>
         <source>Start/Close Script</source>
-        <translation>Script Debut/Fermer </translation>
+        <translation>Script Debut/Fermer</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="295"/>
         <source>Cluster Start/End Script</source>
-        <translation>Script de début/fin de cluster </translation>
+        <translation>Script de début/fin de cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="312"/>
@@ -82,17 +82,17 @@
     <message>
         <location filename="../clustermainwindow.ui" line="338"/>
         <source>Run Script File  when Connecting to Cluster</source>
-        <translation>Exécuter le fichier script après la connexion au serveur </translation>
+        <translation>Exécuter le fichier script après la connexion au serveur</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="362"/>
         <source>Run Script File When Signing off from Cluster</source>
-        <translation>Exécuter le fichier de script avant la déconnexion du cluster </translation>
+        <translation>Exécuter le fichier de script avant la déconnexion du cluster</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="386"/>
         <source>Save Start/Sign Off  Script Setting on Cluster Server Close</source>
-        <translation>Enregistrer le paramètre de script à la fermeture </translation>
+        <translation>Enregistrer le paramètre de script à la fermeture</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="421"/>
@@ -100,74 +100,14 @@
         <translation>Filtrer l&apos;affichage du serveur</translation>
     </message>
     <message>
-        <source>1.8 MHz</source>
-        <translation type="vanished">1,8 MHz</translation>
-    </message>
-    <message>
-        <source>3.5 MHz</source>
-        <translation type="vanished">3,5 MHz</translation>
-    </message>
-    <message>
-        <source>7 MHz</source>
-        <translation type="vanished">7 MHz</translation>
-    </message>
-    <message>
-        <source>14 MHz</source>
-        <translation type="vanished">14 MHz</translation>
-    </message>
-    <message>
-        <source> 21 MHz</source>
-        <translation type="vanished"> 21 MHz</translation>
-    </message>
-    <message>
-        <source>28 MHz</source>
-        <translation type="vanished">28 MHz</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="469"/>
         <source>VHF</source>
         <translation>VHF</translation>
     </message>
     <message>
-        <source>50 MHz</source>
-        <translation type="vanished">50 MHz</translation>
-    </message>
-    <message>
-        <source>70 MHz</source>
-        <translation type="vanished">70 MHz</translation>
-    </message>
-    <message>
-        <source>144 MHz</source>
-        <translation type="vanished">144 MHz</translation>
-    </message>
-    <message>
-        <source>432 MHz</source>
-        <translation type="vanished">432 MHz</translation>
-    </message>
-    <message>
         <location filename="../clustermainwindow.ui" line="496"/>
         <source>MW</source>
         <translation>MW</translation>
-    </message>
-    <message>
-        <source>1296 MHz</source>
-        <translation type="vanished">1296 MHz</translation>
-    </message>
-    <message>
-        <source>2300 MHz</source>
-        <translation type="vanished">2300 MHz</translation>
-    </message>
-    <message>
-        <source>3.4 GHz</source>
-        <translation type="vanished">3,4 GHz</translation>
-    </message>
-    <message>
-        <source>5.6 GHz</source>
-        <translation type="vanished">5,6 GHz</translation>
-    </message>
-    <message>
-        <source>10 GHz</source>
-        <translation type="vanished">10 GHz</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="537"/>
@@ -187,17 +127,17 @@
     <message>
         <location filename="../clustermainwindow.ui" line="621"/>
         <source>VHF/MW</source>
-        <translation>VHF/MO </translation>
+        <translation>VHF/MO</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="656"/>
         <source>VHF/MW Filter On</source>
-        <translation>Filtre VHF/MO activé </translation>
+        <translation>Filtre VHF/MO activé</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="722"/>
         <source>Save Band Filter Settings on Cluster Server Close</source>
-        <translation>Enregistrer les paramètres de filtre à la fermeture </translation>
+        <translation>Enregistrer les paramètres de filtre à la fermeture</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="743"/>
@@ -278,7 +218,7 @@
     <message>
         <location filename="../clustermainwindow.cpp" line="210"/>
         <source>Always loads last saved settings</source>
-        <translation>Context? Charge toujours les derniers paramètres enregistrés </translation>
+        <translation>Context? Charge toujours les derniers paramètres enregistrés</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="455"/>
@@ -350,13 +290,13 @@ Voulez-vous saisir \ modifier vos coordonnées?</translation>
     <message>
         <location filename="../clustermainwindow.cpp" line="1874"/>
         <source>No spots will be sent to the log - please check one of the boxes!</source>
-        <translation>Rien ne sera envoyé au journal, sélectionner une option SVP</translation>
+        <translation>Rien ne sera envoyé au journal, sélectionner une option SVP!</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2369"/>
         <source>Cluster %1 User Command Clear</source>
         <translatorcomment>Is this all commands?</translatorcomment>
-        <translation>Effacer commande(s?) utilisateur du cluster %1 </translation>
+        <translation>Effacer commande(s?) utilisateur du cluster %1</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.cpp" line="2370"/>

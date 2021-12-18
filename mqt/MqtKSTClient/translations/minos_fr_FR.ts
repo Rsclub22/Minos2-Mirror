@@ -283,22 +283,22 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.ui" line="136"/>
         <source>String</source>
-        <translation>Texte ??</translation>
+        <translation>Texte</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="146"/>
         <source>Country</source>
-        <translation>Pays </translation>
+        <translation>Pays</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="156"/>
         <source>Look for any of these strings/countries (space separated) in users</source>
-        <translation>Rechercher l&apos;une de ces chaînes/pays (séparées par des espaces) dans les utilisateurs </translation>
+        <translation>Rechercher l&apos;une de ces chaînes/pays (séparées par des espaces) dans les utilisateurs</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="327"/>
         <source>Look for any of these strings (space separated) in messages</source>
-        <translation>Rechercher l&apos;une de ces chaînes (séparées par des espaces) dans les messages </translation>
+        <translation>Rechercher l&apos;une de ces chaînes (séparées par des espaces) dans les messages</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="337"/>
@@ -408,7 +408,7 @@ l&apos;indicatif sélectionné</translation>
     <message>
         <location filename="../kstmainwindow.cpp" line="1500"/>
         <source>Message updates paused</source>
-        <translation>Mises à jour des messages suspendues </translation>
+        <translation>Mises à jour des messages suspendues</translation>
     </message>
 </context>
 <context>

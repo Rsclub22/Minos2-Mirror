@@ -21,28 +21,28 @@
     <message>
         <location filename="../RSConfigure.ui" line="62"/>
         <source>WSJT-X</source>
-        <translation type="unfinished">WSJT-X</translation>
+        <translation>WSJT-X</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="68"/>
         <source>If Logger is running, then either use the Logger WSJT-X re-broadcast port, or set logger, sync, and WSJT-X to all use the same Multicast Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Si Logger est en cours d&apos;exécution, utiliser le port de rediffusion Logger WSJT-X ou configurer Logger, Sync et WSJT-X pour qu&apos;ils utilisent tous la même adresse de multidiffusion</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="83"/>
         <location filename="../RSConfigure.ui" line="118"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Port</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="97"/>
         <source>Multicast Group Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du groupe multicast</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="112"/>
         <source>N1MM+</source>
-        <translation type="unfinished"></translation>
+        <translation>N1MM+</translation>
     </message>
     <message>
         <location filename="../RSConfigure.ui" line="163"/>
@@ -60,7 +60,7 @@
     <message>
         <location filename="../RSMainWindow.ui" line="14"/>
         <source>Sub &lt;-&gt; Main Rig Sync</source>
-        <translation>Synchroniser  Secondaire &lt;-&gt; Principal appareil  </translation>
+        <translation>Synchroniser  Secondaire &lt;-&gt; Principal appareil</translation>
     </message>
     <message>
         <location filename="../RSMainWindow.ui" line="25"/>

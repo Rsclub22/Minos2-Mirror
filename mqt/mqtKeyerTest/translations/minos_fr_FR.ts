@@ -11,17 +11,17 @@
     <message>
         <location filename="../mqtktMainWindow.ui" line="26"/>
         <source>Compressor</source>
-        <translation type="unfinished"></translation>
+        <translation>Compresseur</translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="33"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre</translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="40"/>
         <source>Tone</source>
-        <translation type="unfinished"></translation>
+        <translation>Ton</translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="60"/>

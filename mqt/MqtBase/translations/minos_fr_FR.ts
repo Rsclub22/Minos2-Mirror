@@ -66,7 +66,7 @@
         <location filename="../contacts.cpp" line="249"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translatorcomment>Does this need to be in English for log submission???</translatorcomment>
-        <translation>COMMENTAIRE POUR ARBITRE  </translation>
+        <translation>COMMENTAIRE POUR ARBITRE</translation>
     </message>
     <message>
         <location filename="../contacts.cpp" line="250"/>
@@ -245,18 +245,9 @@
         <translation>Section à utiliser dans le fichier des listes préchargées</translation>
     </message>
     <message>
-        <source>WSJTX UDP reacord Enabled</source>
-        <translatorcomment>REACORD!!!</translatorcomment>
-        <translation type="vanished">WSJTX UDP enregistrement activé  </translation>
-    </message>
-    <message>
-        <source>WSJTX udpRecord Enabled</source>
-        <translation type="vanished">c/f WSJTX UDP record Enabled  </translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX Path to record incoming UDP</source>
-        <translation>???What???</translation>
+        <translation>WSJTX Chemin pour enregistrer UDP entrants</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="84"/>
@@ -328,12 +319,12 @@
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP record Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX UDP enregistrement activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP Record Enabled</source>
-        <translation type="unfinished"></translation>
+        <translation>WSJTX UDP enregistrement activé</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="63"/>
@@ -473,12 +464,12 @@
     <message>
         <location filename="../profiles.cpp" line="112"/>
         <source>Days after which contests are protected</source>
-        <translation>Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)    </translation>
+        <translation>Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
         <source>Old style of band map</source>
-        <translation>Ancienne mise en page Bandmap   </translation>
+        <translation>Ancienne mise en page Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="115"/>
@@ -489,66 +480,6 @@
         <location filename="../profiles.cpp" line="116"/>
         <source>RIT on CQ</source>
         <translation>CQ avec RIT</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 1.8MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 1,8MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 3.5MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 3,5MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 7MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 7MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 14MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 14MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 21MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 21MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 28MHz</source>
-        <translation type="vanished">Distance de filtre par défaut 28MHz</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 50MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (50 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 70MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (70 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 144MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (144 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 432MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (432 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 1296MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (1296 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 2300MHz</source>
-        <translation type="vanished">Distance de filtre par défaut (2300 MHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 3.4GHz</source>
-        <translation type="vanished">Distance de filtre par défaut (3,4 GHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 5.6GHz</source>
-        <translation type="vanished">Distance de filtre par défaut (5,6 GHz)</translation>
-    </message>
-    <message>
-        <source>Default Filter Distance 10GHz</source>
-        <translation type="vanished">Distance de filtre par défaut (10 GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
@@ -569,66 +500,6 @@
         <location filename="../profiles.cpp" line="122"/>
         <source>Contest Change - Restore Contest Mode</source>
         <translation>Changement de concours - Restaurer la mode de concours</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 1.8MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 1,8MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 3.5MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 3,5MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 7MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 7MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 14MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 14MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 21MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 21MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 28MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial 28MHz</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 50MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (50MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 70MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (70MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 144MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (144MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 432MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (432MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 1296MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (1296MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 2300MHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (2300MHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 3.4GHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (3,4GHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 5.6GHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (5,6GHz)</translation>
-    </message>
-    <message>
-        <source>Bandmap Start Zoomlevel 10GHz</source>
-        <translation type="vanished">Bandmap: niveau de zoom initial (10GHz)</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="124"/>
@@ -1425,27 +1296,27 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="396"/>
         <source>MessageServer warning: invalid UDP message received</source>
-        <translation>ENG??</translation>
+        <translation>Avertissement de MessageServer : message UDP invalide reçu</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="401"/>
         <source>MessageServer exception: %1</source>
-        <translation>ENG??</translation>
+        <translation>Exception du serveur de messages&#xa0;: %1</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="405"/>
         <source>Unexpected exception in MessageServer</source>
-        <translation>ENG??</translation>
+        <translation>Exception inattendue dans MessageServer</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="439"/>
         <source>Message serialization error: read corrupt data</source>
-        <translation>ENG??</translation>
+        <translation>Erreur de sérialisation du message&#xa0;: lire les données corrompues</translation>
     </message>
     <message>
         <location filename="../WsjtxMessageServer.cpp" line="443"/>
         <source>Message serialization error: write error</source>
-        <translation>ENG??</translation>
+        <translation>Erreur de sérialisation du message&#xa0;: erreur d&apos;écriture</translation>
     </message>
 </context>
 <context>
@@ -1939,7 +1810,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
         <source>Break Condition</source>
-        <translation>État de rupture </translation>
+        <translation>État de rupture</translation>
     </message>
     <message>
         <location filename="../serialtvswitch.h" line="52"/>
@@ -2038,7 +1909,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StartConfig.ui" line="132"/>
         <source>TextLabel</source>
-        <translation>TEXTLABEL!!!</translation>
+        <translation>TEXTLABEL</translation>
     </message>
     <message>
         <location filename="../StartConfig.ui" line="152"/>
@@ -2296,7 +2167,7 @@ Entrer une autre direction SVP</translation>
         <location filename="../enqdlg.cpp" line="32"/>
         <location filename="../enqdlg.cpp" line="44"/>
         <source>Please supply value</source>
-        <translation>Fournir une valeur SVP??</translation>
+        <translation>Fournir une valeur SVP</translation>
     </message>
 </context>
 <context>
