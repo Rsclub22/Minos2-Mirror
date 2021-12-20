@@ -98,17 +98,16 @@
         <translation>WSJT-X</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="132"/>
         <source>Track band</source>
-        <translation>Suivre la bande</translation>
+        <translation type="vanished">Suivre la bande</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="156"/>
+        <location filename="../RSMainWindow.ui" line="149"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation>Transférer Principal -&gt; Secondaire</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="163"/>
+        <location filename="../RSMainWindow.ui" line="156"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation>Transférer Secondaire -&gt; Principal</translation>
     </message>
@@ -117,7 +116,7 @@
         <translation type="vanished">Fermer</translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="61"/>
+        <location filename="../RSMainWindow.cpp" line="58"/>
         <source>Configure...</source>
         <translation>Configurer...</translation>
     </message>

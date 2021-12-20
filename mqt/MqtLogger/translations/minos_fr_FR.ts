@@ -351,9 +351,29 @@ Le mode calculé est %2</translation>
 <context>
     <name>BandsSelect</name>
     <message>
+        <location filename="../BandsSelect.ui" line="14"/>
+        <source>Select wanted bands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="20"/>
+        <source>Choose the Bands that you want Minos to use.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../BandsSelect.ui" line="31"/>
         <source>All HF</source>
         <translation>Toutes HF</translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="52"/>
+        <source>All VHF</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../BandsSelect.ui" line="73"/>
+        <source>All MW</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -377,6 +397,11 @@ Le mode calculé est %2</translation>
         <location filename="../Clusterbandmapconfigure.ui" line="76"/>
         <source>Operating Frequency Colour Band Follow Radio Mode </source>
         <translation>Bande de couleurs de fréquence suivre mode de radio </translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="83"/>
+        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
@@ -425,12 +450,12 @@ Le mode calculé est %2</translation>
         <translation>Configurer Cluster/Bandmap</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="186"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="189"/>
         <source>Distance Error - %1. Please enter a distance %2 to max %3</source>
         <translation>Erreur de distance - %1. Entrer une distance entre %2 et %3 SVP</translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="187"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="190"/>
         <source>Distance Entry Error</source>
         <translation>Erreur d&apos;entrée de distance</translation>
     </message>
@@ -2122,6 +2147,11 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <translation>Annuler</translation>
     </message>
     <message>
+        <location filename="../OptionsDialog.cpp" line="84"/>
+        <source>Wanted Bands</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../OptionsDialog.cpp" line="85"/>
         <source>Cluster/Bandmap</source>
         <translation>Cluster/Bandmap</translation>
@@ -2151,6 +2181,11 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
         <location filename="../OptionsDialog.cpp" line="90"/>
         <source>WSJT-X</source>
         <translation>WSJT-X</translation>
+    </message>
+    <message>
+        <location filename="../OptionsDialog.cpp" line="145"/>
+        <source>We must save the band changes before continuing</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2219,6 +2254,11 @@ to</source>
         <location filename="../qsologframe.ui" line="181"/>
         <source>First Unfilled QSO</source>
         <translation>Premier QSO non rempli</translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.ui" line="350"/>
+        <source>Run</source>
+        <translation type="unfinished">Run</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="581"/>
@@ -2321,9 +2361,19 @@ to</source>
         <translation>Indicatif d&apos;appel (F1)</translation>
     </message>
     <message>
+        <location filename="../qsologframe.cpp" line="53"/>
+        <source>Sent by Me</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qsologframe.cpp" line="56"/>
         <source>RS(T)Tx(F2)</source>
         <translation>RS(T)Tx(F2)</translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="61"/>
+        <source>Sent by Them</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="64"/>
@@ -2456,6 +2506,11 @@ Non - Ignorer les modifications</translation>
         <location filename="../qsologframe.cpp" line="2137"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
+    </message>
+    <message>
+        <location filename="../qsologframe.cpp" line="2148"/>
+        <source>No QSO entry field focussed!</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="2493"/>
@@ -2692,6 +2747,11 @@ Non - Ignorer les modifications</translation>
         <translation></translation>
     </message>
     <message>
+        <location filename="../radiosettingdialog.ui" line="181"/>
+        <source>Allows external device notification of band without using Minos Rigcontrol</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../radiosettingdialog.ui" line="207"/>
         <source>Enable Band Switch</source>
         <translation>Activer le commutateur de bande</translation>
@@ -2751,6 +2811,16 @@ Non - Ignorer les modifications</translation>
         <location filename="../rigcontrolframe.ui" line="114"/>
         <source>-</source>
         <translation>-</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.ui" line="130"/>
+        <source>999.999.999.999</source>
+        <translation type="unfinished">000  {999.999.999.999?}</translation>
+    </message>
+    <message>
+        <location filename="../rigcontrolframe.ui" line="133"/>
+        <source>000.000.000.000</source>
+        <translation type="unfinished">000  {000.000.000.000?}</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="146"/>
@@ -3216,6 +3286,11 @@ Non - Ignorer les modifications</translation>
         <location filename="../runbuttonsframe.ui" line="14"/>
         <source>Call Freqs</source>
         <translation>Fréquences d&apos;appel</translation>
+    </message>
+    <message>
+        <location filename="../runbuttonsframe.ui" line="17"/>
+        <source>Run Frequencies</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
@@ -5295,11 +5370,13 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="385"/>
+        <location filename="../txvmbuttonsframe.cpp" line="545"/>
         <source>Rig CW Message</source>
         <translation>Message CW d&apos;apparat</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="389"/>
+        <location filename="../txvmbuttonsframe.cpp" line="549"/>
         <source>Voice Memory</source>
         <translation>Mémoire de voix</translation>
     </message>
@@ -5309,42 +5386,51 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="544"/>
         <source>Voice Memory %1 - New</source>
-        <translation>Mémoire de voix %1 - Nouveau</translation>
+        <translation type="vanished">Mémoire de voix %1 - Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="577"/>
+        <location filename="../txvmbuttonsframe.cpp" line="300"/>
+        <source>To use the external keyer mqtKeyer must be running and connected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="551"/>
+        <source>%1 %2 - New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="585"/>
         <source>Voice Memory Button %1</source>
         <translation>Mémoire de voix %1</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="578"/>
+        <location filename="../txvmbuttonsframe.cpp" line="586"/>
         <source>Are you sure you want to clear this Button?</source>
         <translation>Voulez-vous vraiment effacer ce bouton&#xa0;?</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="579"/>
+        <location filename="../txvmbuttonsframe.cpp" line="587"/>
         <source>Click save to clear, cancel to ignore</source>
         <translation>Cliquer sur enregistrer pour effacer, annuler pour ignorer</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="864"/>
+        <location filename="../txvmbuttonsframe.cpp" line="872"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="868"/>
+        <location filename="../txvmbuttonsframe.cpp" line="876"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="965"/>
+        <location filename="../txvmbuttonsframe.cpp" line="973"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="971"/>
+        <location filename="../txvmbuttonsframe.cpp" line="979"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
@@ -5612,22 +5698,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="993"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1001"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="994"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1002"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="995"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1003"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="996"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1004"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>

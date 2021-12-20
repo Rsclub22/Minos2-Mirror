@@ -98,22 +98,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="132"/>
-        <source>Track band</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../RSMainWindow.ui" line="156"/>
+        <location filename="../RSMainWindow.ui" line="149"/>
         <source>Transfer Main -&gt; Sub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.ui" line="163"/>
+        <location filename="../RSMainWindow.ui" line="156"/>
         <source>Transfer Sub -&gt; Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../RSMainWindow.cpp" line="61"/>
+        <location filename="../RSMainWindow.cpp" line="58"/>
         <source>Configure...</source>
         <translation type="unfinished"></translation>
     </message>
