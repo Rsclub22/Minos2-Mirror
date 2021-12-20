@@ -142,6 +142,9 @@ void ClusterBandmapConfigure::initialise()
      TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
      ui->showDerivedLocChkBox->setChecked(showDerivedLocFlag);
 
+     bool oldbmapFlag;
+     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, oldbmapFlag );
+     ui->oldBandmapChkBox->setChecked(oldbmapFlag);
 }
 bool ClusterBandmapConfigure::check()
 {
