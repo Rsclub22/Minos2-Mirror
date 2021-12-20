@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>715</width>
-    <height>95</height>
+    <height>99</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -125,13 +125,6 @@
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="trackBandcb">
-          <property name="text">
-           <string>Track band</string>
-          </property>
-         </widget>
         </item>
        </layout>
       </item>

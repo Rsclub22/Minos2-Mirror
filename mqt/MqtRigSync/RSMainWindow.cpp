@@ -34,9 +34,6 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-    bool trackBand = settings.value("trackBand", false).toBool();
-    ui->trackBandcb->setChecked(trackBand);
-
     bool trackRig = settings.value("trackRig", false).toBool();
     ui->trackRig->setChecked(trackRig);
     bool trackSub= settings.value("trackSub", false).toBool();
@@ -170,10 +167,6 @@ void RSMainWindow::syncTimerTimer(  )
        {
            on_transfer12Button_clicked();
        }
-       if (ui->trackBandcb->isChecked())
-       {
-            subRig.trackOtherBand(mainRig);
-       }
     }
     if (mainRig.check(wsjtxLink))
     {
@@ -181,10 +174,6 @@ void RSMainWindow::syncTimerTimer(  )
        if (ui->trackRig->isChecked())
        {
            on_transfer12Button_clicked();
-       }
-       if (ui->trackBandcb->isChecked())
-       {
-            subRig.trackOtherBand(mainRig);
        }
     }
     if (mainRig.rigFreq.isClear())
@@ -370,12 +359,6 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                     }
                     trace(QString("firstTime 2 is %1").arg(makeStr(firstTime)));
                 }
-                delayedAction(this, [=]{
-                    if (ui->trackBandcb->isChecked() && mainRig.isMaster())
-                    {
-                         subRig.trackOtherBand(mainRig);
-                    }
-                }, 50);
             }
         }
         else
@@ -426,12 +409,6 @@ void RSMainWindow::on_notify( AnalysePubSubNotify an, const QString from )
                     mainRig.controlFreq(subRig.rigFreq, subRig.rigMode);
                 }
             }
-            delayedAction(this, [=]{
-                if (ui->trackBandcb->isChecked() && mainRig.isMaster())
-                {
-                     subRig.trackOtherBand(mainRig);
-                }
-            }, 50);
         }
     }
     else
@@ -451,8 +428,8 @@ void RSMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, cons
 
 void RSMainWindow::on_trackRig_clicked()
 {
-    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
-    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->wsjtxCb->isChecked());
 
     if (ui->trackRig->isChecked() && !mainRig.rigFreq.isClear())
     {
@@ -465,8 +442,8 @@ void RSMainWindow::on_trackRig_clicked()
 
 void RSMainWindow::on_trackSub_clicked()
 {
-    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
-    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->wsjtxCb->isChecked());
 
     if (ui->trackSub->isChecked() && !subRig.rigFreq.isClear())
     {
@@ -478,29 +455,10 @@ void RSMainWindow::on_trackSub_clicked()
     settings.setValue("trackSub", ui->trackSub->isChecked());
 }
 
-void RSMainWindow::on_trackBandcb_stateChanged(int /*arg1*/)
-{
-    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
-    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
-
-    QSettings settings;
-    settings.setValue("trackBand", ui->trackBandcb->isChecked());
-
-    mainRig.rigMode.clear();
-    mainRig.lastRigMode.clear();
-
-    subRig.rigFreq.clear();
-    subRig.lastRigFreq.clear();
-
-    mainRig.lastBand.clear();
-    mainRig.lastBandMode.clear();
-
-}
-
 void RSMainWindow::on_wsjtxCb_stateChanged(int /*arg1*/)
 {
-    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
-    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(), ui->trackBandcb->isChecked(), ui->wsjtxCb->isChecked());
+    mainRig.setChoices(ui->trackRig->isChecked(), ui->trackSub->isChecked(), ui->wsjtxCb->isChecked());
+    subRig.setChoices(ui->trackSub->isChecked(), ui->trackRig->isChecked(),  ui->wsjtxCb->isChecked());
 
     if (ui->wsjtxCb->isChecked())
     {
@@ -600,95 +558,11 @@ bool SyncRadio::check(WsjtxLink &wsjtxLink)
     }
     return false;
 }
-void SyncRadio::setChoices(bool trthis, bool trother, bool tb, bool tw)
+void SyncRadio::setChoices(bool trthis, bool trother,  bool tw)
 {
     trackThis = trthis;
     trackOther = trother;
-    trackBand = tb;
     trackWSJTX = tw;
-}
-
-void SyncRadio::trackOtherBand(SyncRadio &tracked)
-{
-    if (tracked.rigFreq == tracked.lastRigFreq && tracked.rigMode == tracked.lastRigMode)
-    {
-        return; // nothing to do, tracked rig hasn't changed
-    }
-    tracked.lastRigFreq = tracked.rigFreq;
-    tracked.lastRigMode = tracked.rigMode;
-
-    trace(QString("RSMainWindow::trackBand(): rig %1 mode %2").arg(tracked.lastRigFreq.traceStr(), tracked.lastRigMode));
-
-    BandList &blist = BandList::getBandList();
-    QSharedPointer<BandInfo>  bi;
-    bool bandOK = blist.findBand(tracked.rigFreq, bi);
-    if (!bandOK)
-    {
-        return;
-    }
-
-    int modePart = -1;
-    QSharedPointer<ModeInfo> mi = bi->findMode(tracked.rigMode, tracked.rigFreq, modePart);
-    if (mi == lastBandMode && modePart ==lastModePart && bi == lastBand)
-    {
-        trace("band/mode unchanged");
-        return;
-    }
-    if (!mi)
-    {
-        trace("band/mode not found");
-        rigCentre(bi->fLow, bi->fHigh, tracked.rigMode);
-    }
-    else
-    {
-        trace("mode found OK");
-        if (mi && lastBandMode && bi && lastBand)
-        {
-            trace(QString("mi %1 lastBandMode %2 modepart %3 lastmodepart %4 band %5 lastBand %6")
-              .arg(mi->fcLow1.traceStr(),lastBandMode->fcLow1.traceStr())
-              .arg(modePart).arg(lastModePart)
-              .arg(bi->name(), lastBand->name()));
-        }
-        if (bi == lastBand && (mi == lastBandMode) && (modePart == -1 || lastModePart == -1))
-        {
-            trace("modepart not found, don't change ");
-            return;
-        }
-        if (modePart == 1)
-        {
-            rigCentre(mi->fcLow1, mi->fcHigh1, tracked.rigMode);
-        }
-        else if (modePart == 2)
-        {
-            rigCentre(mi->fcLow2, mi->fcHigh2, tracked.rigMode);
-        }
-        else
-        {
-            rigCentre(mi->fLow, mi->fHigh, tracked.rigMode);
-        }
-    }
-    lastBand = bi;
-    lastBandMode = mi;
-    lastModePart = modePart;
-}
-
-void SyncRadio::rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode)
-{
-    trace(QString("%1 %2 %3").arg(which, fLow.traceStr(), fHigh.traceStr()));
-    qint64 bandWidth = qint64(fHigh) - qint64(fLow);
-    qint64 centre = qint64(fLow) + bandWidth/2;
-    centre += 12500;
-    centre /= 25000;
-    centre *= 25000;
-
-
-    //qint64 lFreq = qint64(subRig.rigFreq);
-    qint64 fCentre = centre;
-
-    // tune rig2 to "fcentre"
-
-    controlFreq(fCentre, mode);
-
 }
 void SyncRadio::subRigSelection(const PubSubName &sd, bool state)
 {
