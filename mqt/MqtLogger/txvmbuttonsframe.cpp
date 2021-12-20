@@ -526,6 +526,7 @@ void TxVmButtonsFrame::onVmStopClicked()
     buttonNumSent = NO_VM_BUTTON_ON;
 }
 
+// this probably should be called newActionSelected!
 void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 {
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
@@ -538,10 +539,17 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
     trace(QString("[txVmButtonsFrame] write selected button no = %1").arg(buttonNumber));
 
+    QString title1 = "";
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+        title1 = tr("Rig CW Message");
+    }
+    else
+    {
+        title1 = tr("Voice Memory");
+    }
+    QString title(tr("%1 %2 - New").arg(title1).arg(buttonNumber + 1));
 
-//    TxVmRigButtonDialog vmButtonDialog(this);
-
-    QString title(tr("Voice Memory %1 - New").arg(buttonNumber + 1));
     vmData.setvmButtonNum(buttonNumber);
     vmData.setType(voiceKeyerType);
     vmData.setVkBase(txVoiceKeyer);
