@@ -738,7 +738,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
     }
 
 }
-void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance, int slotNo)
+void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance)
 {
     // we need to add this contest page to the relevant contestPageControl
     // as a new tab
@@ -783,16 +783,6 @@ void TSingleLogFrame::buildScreen(SCScreen &s, int t, int &auxInstance, int slot
     cp->pageNo = t;
     cp->buildScreen(this, s, auxInstance);
 
-    bool temp = TContestApp::getContestApp() ->suppressWritePreload;
-    TContestApp::getContestApp() ->suppressWritePreload = true;
-    QString sname  = s.name;
-    if (t == 0 || sname.isEmpty())
-    {
-        sname = ExtractFileName( contest->cfileName );
-    }
-
-    LogContainer->contestPageControls[t]->insertTab(slotNo, cp, sname);
-    TContestApp::getContestApp() ->suppressWritePreload = temp;
 }
 void TSingleLogFrame::buildScreenLayout(int slotNo)
 {
@@ -819,12 +809,35 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
 
     SC sc = scf.configs[curConfigName];
 
+    // build the pages
     int auxInstance = 0;
     int t = 0;
     for (auto &s: sc.baseElement->screens)
     {
-        buildScreen(s, t++, auxInstance, slotNo);
+        buildScreen(s, t++, auxInstance);
     }
+
+    // and now insert/show them
+    bool temp = TContestApp::getContestApp() ->suppressWritePreload;
+    TContestApp::getContestApp() ->suppressWritePreload = true;
+    for (int t = 0; t < LogContainer->contestPageControls.count(); t++)
+    {
+        ContestPageControl *cp = LogContainer->contestPageControls[t];
+        if (!cp)
+            continue;
+        ContestPage *p = cp->pages[contest];
+        if (!p)
+            continue;
+
+        QString sname  = sc.baseElement->screens[t].name;
+        if (t == 0 || sname.isEmpty())
+        {
+            sname = ExtractFileName( contest->cfileName );
+        }
+
+        LogContainer->contestPageControls[t]->insertTab(slotNo, p, sname);
+    }
+    TContestApp::getContestApp() ->suppressWritePreload = temp;
     qsoModel.initialise(contest);
     QSOTable->setModel(&qsoModel);
 
