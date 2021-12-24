@@ -1757,6 +1757,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             FKHRigControlFrame->setMode(m);
             GJVQSOLogFrame->modeSentFromRig(m);
             bandmapControlFrame->setMode(m);
+            bandmapControlFrame->checkLegalFrequencies(sCurFreq);
         }
     }
 }

@@ -81,6 +81,8 @@ public:
     void setMode(QString mode);
 
 
+    void checkLegalFrequencies(Frequency freq);
+    
 signals:
 
     void freqDisplayClicked();

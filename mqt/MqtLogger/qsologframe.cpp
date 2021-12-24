@@ -2419,6 +2419,7 @@ void QSOLogFrame::on_ModeButton_clicked()
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    contest->currentMode.setValue(mode);
     EditControlExit(ui->ModeButton);
 }
 
