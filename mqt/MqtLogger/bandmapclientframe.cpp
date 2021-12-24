@@ -1476,6 +1476,58 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
     }
 }
 
+void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
+{
+    bool legalOperatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
+
+    QString sf = freq.str();
+
+    if (sf.count() >= 4)
+    {
+        ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
+
+
+        if (isFreqLegal(freq, contestBandStr, contestModeStr))
+        {
+
+            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+
+            legalFreq = true;
+        }
+        else
+        {
+            if (!legalOperatingFreqFlag)
+            {
+                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+            }
+            else
+            {
+                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+            }
+
+            legalFreq = false;
+        }
+
+        ui->freqDisplay->setText(sf);
+    }
+    else
+    {
+        if (!legalOperatingFreqFlag)
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::red);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+        }
+
+        legalFreq = false;
+        ui->freqDisplay->setText(sf);
+    }
+    bandmapView->setFreq(curFreq, legalFreq);
+}
+
 void BandmapClientFrame::setFreq(Frequency freq)
 {
     if (!ct || ct->isReadOnly())
@@ -1484,66 +1536,19 @@ void BandmapClientFrame::setFreq(Frequency freq)
     if (lastfreq != freq)
     {
         QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, lastfreq);
+        curFreq = freq;
         if (bandChanged)
         {
             setContestBandMode(bandChanged->uk, contestModeStr);
+            checkLegalFrequencies(freq);
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         }
         lastfreq = freq;
-        curFreq = freq;
-
-        QString sf = freq.str();
-
 
         // check freq matches contest band
         checkContestBandMatch(curFreq);
 
-        bool legalOperatingFreqFlag;
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
-
-
-        if (sf.count() >= 4)
-        {
-            ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
-
-
-            if (isFreqLegal(freq, contestBandStr, contestModeStr))
-            {
-
-                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
-
-                legalFreq = true;
-            }
-            else
-            {
-                if (!legalOperatingFreqFlag)
-                {
-                    freqDisplayPalette->setColor(QPalette::Text,Qt::red);
-                    ui->freqDisplay->setPalette(*freqDisplayPalette);
-                }
-                else
-                {
-                    freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                    ui->freqDisplay->setPalette(*freqDisplayPalette);
-                }
-
-                legalFreq = false;
-            }
-
-            ui->freqDisplay->setText(sf);
-        }
-        else
-        {
-            if (!legalOperatingFreqFlag)
-            {
-                freqDisplayPalette->setColor(QPalette::Text, Qt::red);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
-            }
-
-            legalFreq = false;
-            ui->freqDisplay->setText(sf);
-        }
-        bandmapView->setFreq(curFreq, legalFreq);
+        checkLegalFrequencies(freq);
     }
 }
 
@@ -1554,6 +1559,10 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 
     contestBandStr = band;
     setMode(mode);
+
+//    Frequency temp = lastfreq;
+//    lastfreq.clear();
+//    setFreq(temp);  // get legal freqs correct
 
     getBandLimitsFromBandListXML();
 
@@ -1607,9 +1616,6 @@ void BandmapClientFrame::setMode(QString mode)
 
         bandmapView->setDialRadioMode(radioMode);
         ui->mode->setText(radioMode);
-        Frequency temp = lastfreq;
-        lastfreq.clear();
-        setFreq(temp);  // get legal freqs correct
     }
 }
 
