@@ -268,7 +268,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1689"/>
+        <location filename="../bandmapclientframe.cpp" line="1695"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -288,7 +288,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1578"/>
+        <location filename="../bandmapclientframe.cpp" line="1587"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2438,37 +2438,37 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2493"/>
+        <location filename="../qsologframe.cpp" line="2494"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2500"/>
+        <location filename="../qsologframe.cpp" line="2501"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2531"/>
+        <location filename="../qsologframe.cpp" line="2532"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2596"/>
+        <location filename="../qsologframe.cpp" line="2597"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2598"/>
+        <location filename="../qsologframe.cpp" line="2599"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2980"/>
+        <location filename="../qsologframe.cpp" line="2981"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3015"/>
+        <location filename="../qsologframe.cpp" line="3016"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5141,22 +5141,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="860"/>
+        <location filename="../tsinglelogframe.cpp" line="873"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1438"/>
+        <location filename="../tsinglelogframe.cpp" line="1451"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1457"/>
+        <location filename="../tsinglelogframe.cpp" line="1470"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1479"/>
+        <location filename="../tsinglelogframe.cpp" line="1492"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
