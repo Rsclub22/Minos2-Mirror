@@ -4,1183 +4,956 @@
 <context>
     <name>BandmapSpotData</name>
     <message>
-        <location filename="../spotbasedata.cpp" line="452"/>
         <source>NONE</source>
-        <translation>AUCUN</translation>
+        <translation type="vanished">AUCUN</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="455"/>
         <source>CLUSTER</source>
-        <translation>CLUSTER</translation>
+        <translation type="vanished">CLUSTER</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="458"/>
         <source>CLUSTER MARKED</source>
-        <translation>CLUSTER MARQUÉ</translation>
+        <translation type="vanished">CLUSTER MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="461"/>
         <source>LOGGED</source>
-        <translation>ENREGISTRÉ</translation>
+        <translation type="vanished">ENREGISTRÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="464"/>
         <source>MARKED</source>
-        <translation>MARQUÉ</translation>
+        <translation type="vanished">MARQUÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="467"/>
         <source>SAVED</source>
-        <translation>SAUVÉ</translation>
+        <translation type="vanished">SAUVÉ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="470"/>
         <source>CQ</source>
-        <translation>CQ</translation>
+        <translation type="vanished">CQ</translation>
     </message>
     <message>
-        <location filename="../spotbasedata.cpp" line="473"/>
         <source>DELETED</source>
-        <translation>SUPPRIMÉ</translation>
+        <translation type="vanished">SUPPRIMÉ</translation>
     </message>
 </context>
 <context>
     <name>BandsSelect</name>
     <message>
-        <location filename="../BandsSelect.ui" line="20"/>
         <source>Choose the Bands that you want Minos to use.</source>
-        <translation>Choisir les bandes pour Minos à utiliser.</translation>
+        <translation type="vanished">Choisir les bandes pour Minos à utiliser.</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="14"/>
         <source>Select wanted bands</source>
-        <translation>Sélectionner les bandes requises</translation>
+        <translation type="vanished">Sélectionner les bandes requises</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="31"/>
         <source>All HF</source>
-        <translation>Tous les HF</translation>
+        <translation type="vanished">Tous les HF</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="52"/>
         <source>All VHF</source>
-        <translation>Tous les VHF</translation>
+        <translation type="vanished">Tous les VHF</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="73"/>
         <source>All MW</source>
-        <translation>Tous les MO</translation>
+        <translation type="vanished">Tous les MO</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="109"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="vanished">Annuler</translation>
     </message>
     <message>
-        <location filename="../BandsSelect.ui" line="116"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
 </context>
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="248"/>
         <source>LOCAL COMMENT</source>
-        <translation>COMMENTAIRE LOCAL</translation>
+        <translation type="vanished">COMMENTAIRE LOCAL</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="249"/>
         <source>COMMENT FOR ADJUDICATOR</source>
         <translatorcomment>Does this need to be in English for log submission???</translatorcomment>
-        <translation>COMMENTAIRE POUR ARBITRE</translation>
+        <translation type="vanished">COMMENTAIRE POUR ARBITRE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="250"/>
         <source>DELETED</source>
-        <translation>SUPPRIMÉ</translation>
+        <translation type="vanished">SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="265"/>
         <source>MAN</source>
-        <translation>MANUELLE</translation>
+        <translation type="vanished">MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="268"/>
         <source>DEL</source>
-        <translation>SUPPRIMER</translation>
+        <translation type="vanished">SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="271"/>
         <source>N/S</source>
-        <translation>NON SIGNIFICATIF</translation>
+        <translation type="vanished">NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="276"/>
         <source>DUP</source>
-        <translation>DUPLIQUER</translation>
+        <translation type="vanished">DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="321"/>
         <source>MHz</source>
-        <translation>MHz</translation>
+        <translation type="vanished">MHz</translation>
     </message>
 </context>
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="546"/>
         <source>DUPLICATE OF </source>
-        <translation>Duplicata de </translation>
+        <translation type="vanished">Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="562"/>
         <source>DUP OF</source>
-        <translation>Duplicata de</translation>
+        <translation type="vanished">Duplicata de</translation>
     </message>
 </context>
 <context>
     <name>BundleFile</name>
     <message>
-        <location filename="../profiles.cpp" line="44"/>
         <source>Default archive list directory</source>
-        <translation>Répertoire par défaut de la liste archive</translation>
+        <translation type="vanished">Répertoire par défaut de la liste archive</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="45"/>
         <source>Default logs directory</source>
-        <translation>Répertoire par défaut des Logs</translation>
+        <translation type="vanished">Répertoire par défaut des Logs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="47"/>
         <source>Entry settings file</source>
-        <translation>Fichier de paramètres d&apos;entrée</translation>
+        <translation type="vanished">Fichier de paramètres d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="47"/>
         <source>File containing entry settings</source>
-        <translation>Fichier contenant les paramètres d&apos;entrée</translation>
+        <translation type="vanished">Fichier contenant les paramètres d&apos;entrée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="48"/>
         <source>Station settings file</source>
-        <translation>Fichier des paramètres de la Station</translation>
+        <translation type="vanished">Fichier des paramètres de la Station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="48"/>
         <source>File containing station settings</source>
-        <translation>Fichier contenant les paramètres de la Station</translation>
+        <translation type="vanished">Fichier contenant les paramètres de la Station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="49"/>
         <source>QTH settings file</source>
-        <translation>Fichier de paramètres du QTH</translation>
+        <translation type="vanished">Fichier de paramètres du QTH</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="49"/>
         <source>File containing QTH settings</source>
-        <translation>Fichier contenant les paramètres du QTH</translation>
+        <translation type="vanished">Fichier contenant les paramètres du QTH</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="50"/>
         <source>Country locators file</source>
-        <translation>Fichier des locators  de pays</translation>
+        <translation type="vanished">Fichier des locators  de pays</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="50"/>
         <source>File containing valid locators for countries</source>
-        <translation>Fichier contenant les locators valides pour les pays</translation>
+        <translation type="vanished">Fichier contenant les locators valides pour les pays</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="52"/>
         <source>Display settings file</source>
-        <translation>Fichier de paramètres d&apos;affichage</translation>
+        <translation type="vanished">Fichier de paramètres d&apos;affichage</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="52"/>
         <source>File containing saved display settings</source>
-        <translation>Fichier contenant les paramètres d&apos;affichage enregistrés</translation>
+        <translation type="vanished">Fichier contenant les paramètres d&apos;affichage enregistrés</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="53"/>
         <source>Display file section</source>
-        <translation>Section du fichier de paramètres d&apos;affichage</translation>
+        <translation type="vanished">Section du fichier de paramètres d&apos;affichage</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="53"/>
         <source>Section to use in display file</source>
-        <translation>Section à utiliser dans le fichier de paramètres d&apos;affichage</translation>
+        <translation type="vanished">Section à utiliser dans le fichier de paramètres d&apos;affichage</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="54"/>
         <source>Operators file</source>
-        <translation>Fichier des opérateurs</translation>
+        <translation type="vanished">Fichier des opérateurs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="54"/>
         <source>File containing operators</source>
-        <translation>Fichier contenant les opérateurs</translation>
+        <translation type="vanished">Fichier contenant les opérateurs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="55"/>
         <source>Operators file section</source>
-        <translation>Section du fichier des opérateurs</translation>
+        <translation type="vanished">Section du fichier des opérateurs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="55"/>
         <source>section to use in operators file</source>
-        <translation>Section à utiliser dans le fichier des opérateurs</translation>
+        <translation type="vanished">Section à utiliser dans le fichier des opérateurs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="56"/>
         <source>Log preload file</source>
-        <translation>Fichier de préchargement du Log</translation>
+        <translation type="vanished">Fichier de préchargement du Log</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="56"/>
         <source>File containing log pre-loads</source>
-        <translation>Fichier contenant le préchargement des Logs</translation>
+        <translation type="vanished">Fichier contenant le préchargement des Logs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="57"/>
         <source>Preload contests default section</source>
-        <translation>Section par défaut du préchargement des concours</translation>
+        <translation type="vanished">Section par défaut du préchargement des concours</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="57"/>
         <source>Section to use in preload file</source>
-        <translation>Section à utiliser dans le fichier de préchargement</translation>
+        <translation type="vanished">Section à utiliser dans le fichier de préchargement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="58"/>
         <source>List preload file</source>
-        <translation>Fichier des listes préchargées</translation>
+        <translation type="vanished">Fichier des listes préchargées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="58"/>
         <source>File containing list pre-loads</source>
-        <translation>Fichier contenant les listes préchargées</translation>
+        <translation type="vanished">Fichier contenant les listes préchargées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="59"/>
         <source>Preload Lists file section</source>
-        <translation>Section du fichier des listes préchargées</translation>
+        <translation type="vanished">Section du fichier des listes préchargées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="59"/>
         <source>Section to use in lists preload file</source>
-        <translation>Section à utiliser dans le fichier des listes préchargées</translation>
+        <translation type="vanished">Section à utiliser dans le fichier des listes préchargées</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="62"/>
         <source>WSJTX Path to record incoming UDP</source>
-        <translation>???What???</translation>
+        <translation type="vanished">???What???</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="84"/>
         <source>UDP Contacts Enabled</source>
-        <translation>UDP: Contacts activés</translation>
+        <translation type="vanished">UDP: Contacts activés</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="88"/>
         <source>UDP External Callsign Lookup Enabled</source>
-        <translation>UDP: Recherche externe des Indicatifs activée</translation>
+        <translation type="vanished">UDP: Recherche externe des Indicatifs activée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="96"/>
         <source>WSJTX re-broadcast Enabled</source>
-        <translation>WSJTX: Rediffusion activée</translation>
+        <translation type="vanished">WSJTX: Rediffusion activée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="92"/>
         <source>UDP ADIF Enabled</source>
-        <translation>UDP ADIF activé</translation>
+        <translation type="vanished">UDP ADIF activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="85"/>
         <source>UDP Contacts Address</source>
-        <translation>UDP: Adresse pour les Contacts</translation>
+        <translation type="vanished">UDP: Adresse pour les Contacts</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="86"/>
         <source>UDP Contacts Port</source>
-        <translation>UDP: Port pour les Contacts</translation>
+        <translation type="vanished">UDP: Port pour les Contacts</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="89"/>
         <source>UDP External Callsign Lookup Address</source>
-        <translation>UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
+        <translation type="vanished">UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="89"/>
         <source>UDP External Callsign Lookup  Address</source>
         <translatorcomment>DUPLICATE</translatorcomment>
-        <translation>UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
+        <translation type="vanished">UDP: Adresse pour Indicatif d&apos;appel recherche externe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="93"/>
         <source>UDP ADIF Address</source>
-        <translation>UDP: Adresse pour ADIF</translation>
+        <translation type="vanished">UDP: Adresse pour ADIF</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="94"/>
         <source>UDP ADIF Port</source>
-        <translation>UDP ADIF numéro de port</translation>
+        <translation type="vanished">UDP ADIF numéro de port</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="90"/>
         <source>UDP External Callsign Lookup  Port</source>
         <translatorcomment>UDP: Port pour la recherche externe d&apos;Indicatif d&apos;appel</translatorcomment>
-        <translation>UDP: Port pour la recherche externe d&apos;Indicatif d&apos;appel</translation>
+        <translation type="vanished">UDP: Port pour la recherche externe d&apos;Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="44"/>
         <source>List Directory</source>
-        <translation>Répertoire des Liste</translation>
+        <translation type="vanished">Répertoire des Liste</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="45"/>
         <source>Log Directory</source>
-        <translation>Répertoire des Logs</translation>
+        <translation type="vanished">Répertoire des Logs</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP record Enabled</source>
-        <translation>WSJTX UDP Enregistrement activé</translation>
+        <translation type="vanished">WSJTX UDP Enregistrement activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="61"/>
         <source>WSJTX UDP Record Enabled</source>
-        <translation>WSJTX UDP Enregistrement activé</translation>
+        <translation type="vanished">WSJTX UDP Enregistrement activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="63"/>
         <source>WSJTX 1 Enabled</source>
-        <translation>WSJTX 1 activé</translation>
+        <translation type="vanished">WSJTX 1 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="64"/>
         <source>WSJTX 1 Port</source>
-        <translation>WSJTX: Port 1</translation>
+        <translation type="vanished">WSJTX: Port 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="65"/>
         <source>WSJTX 1 Group Address</source>
-        <translation>WSJTX: Adresse du groupe 1</translation>
+        <translation type="vanished">WSJTX: Adresse du groupe 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="66"/>
         <source>WSJTX 1 Auto Enabled</source>
-        <translation>WSJTX 1 activé automatiquement</translation>
+        <translation type="vanished">WSJTX 1 activé automatiquement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="67"/>
         <source>WSJTX 1 Test Enabled</source>
-        <translation>WSJTX 1 Test activé</translation>
+        <translation type="vanished">WSJTX 1 Test activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="69"/>
         <source>CQ types in test mode</source>
-        <translation>Types de CQ en mode test</translation>
+        <translation type="vanished">Types de CQ en mode test</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="70"/>
         <source>CQ types in ordinary mode</source>
-        <translation>Types de CQ en mode ordinaire</translation>
+        <translation type="vanished">Types de CQ en mode ordinaire</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="72"/>
         <source>WSJTX 2 Enabled</source>
-        <translation>WSJTX 2 activé</translation>
+        <translation type="vanished">WSJTX 2 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="73"/>
         <source>WSJTX 2 Port</source>
-        <translation>WSJTX: Port 2</translation>
+        <translation type="vanished">WSJTX: Port 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="74"/>
         <source>WSJTX 2 Group Address</source>
-        <translation>WSJTX: Adresse du groupe 2</translation>
+        <translation type="vanished">WSJTX: Adresse du groupe 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="76"/>
         <source>WSJTX 3 Enabled</source>
-        <translation>WSJTX 3 activé</translation>
+        <translation type="vanished">WSJTX 3 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="77"/>
         <source>WSJTX 3 Port</source>
-        <translation>WSJTX: Port 3</translation>
+        <translation type="vanished">WSJTX: Port 3</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="78"/>
         <source>WSJTX 3 Group Address</source>
-        <translation>WSJTX: Adresse du groupe 3</translation>
+        <translation type="vanished">WSJTX: Adresse du groupe 3</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="80"/>
         <source>WSJTX 4 Enabled</source>
-        <translation>WSJTX 4 activé</translation>
+        <translation type="vanished">WSJTX 4 activé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="81"/>
         <source>WSJTX 4 Port</source>
-        <translation>WSJTX: Port 4</translation>
+        <translation type="vanished">WSJTX: Port 4</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="82"/>
         <source>WSJTX 4 Group Address</source>
-        <translation>WSJTX: Adresse du groupe 4</translation>
+        <translation type="vanished">WSJTX: Adresse du groupe 4</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="97"/>
         <source>WSJTX re-broadcast Address</source>
-        <translation>WSJTX: Adresse de rediffusion</translation>
+        <translation type="vanished">WSJTX: Adresse de rediffusion</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="98"/>
         <source>WSJTX re-broadcast Port</source>
-        <translation>WSJTX: Port de rediffusion</translation>
+        <translation type="vanished">WSJTX: Port de rediffusion</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="101"/>
         <source>Help file</source>
-        <translation>Fichier d&apos;aide</translation>
+        <translation type="vanished">Fichier d&apos;aide</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="102"/>
         <source>Help entry point</source>
-        <translation>Point d&apos;entrée d&apos;aide</translation>
+        <translation type="vanished">Point d&apos;entrée d&apos;aide</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="103"/>
         <source>PDF documentation file</source>
-        <translation>Fichier de documentation PDF (En anglais)</translation>
+        <translation type="vanished">Fichier de documentation PDF (En anglais)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="106"/>
         <source>Auto set Readability to 5</source>
-        <translation>Régler le rapport de signal sur 5 automatiquement</translation>
+        <translation type="vanished">Régler le rapport de signal sur 5 automatiquement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="107"/>
         <source>Auto Fill signal report</source>
-        <translation>Rapport de signal remplissage automatique</translation>
+        <translation type="vanished">Rapport de signal remplissage automatique</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="107"/>
         <source>Auto Fill signal report on return</source>
-        <translation>Rapport de signal remplissage automatique sur action ENTREE</translation>
+        <translation type="vanished">Rapport de signal remplissage automatique sur action ENTREE</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="108"/>
         <source>Show Operating Time</source>
-        <translation>Afficher le temps de fonctionnement</translation>
+        <translation type="vanished">Afficher le temps de fonctionnement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="110"/>
         <source>Change Tab order for S&amp;P</source>
-        <translation>Modifier l&apos;ordre des tabulations pour S&amp;P</translation>
+        <translation type="vanished">Modifier l&apos;ordre des tabulations pour S&amp;P</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="111"/>
         <source>Protect contests by age</source>
-        <translation>Protéger les concours par l&apos;âge</translation>
+        <translation type="vanished">Protéger les concours par l&apos;âge</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="112"/>
         <source>Days after which contests are protected</source>
-        <translation>Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)</translation>
+        <translation type="vanished">Définir le nombre de jours après lequel protéger les concours (-1 pour toujours)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="113"/>
         <source>Old style of band map</source>
-        <translation>Ancienne mise en page Bandmap</translation>
+        <translation type="vanished">Ancienne mise en page Bandmap</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="115"/>
         <source>Add to Bandmap tuning tolerance</source>
-        <translation>Bandmap: Ajouter la tolérance de réglage</translation>
+        <translation type="vanished">Bandmap: Ajouter la tolérance de réglage</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="116"/>
         <source>RIT on CQ</source>
-        <translation>CQ avec RIT</translation>
+        <translation type="vanished">CQ avec RIT</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="118"/>
         <source>Radio Dial - Turn Off Operating Colour</source>
-        <translation>Cadran radio - Désactiver la couleur de fonctionnement</translation>
+        <translation type="vanished">Cadran radio - Désactiver la couleur de fonctionnement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="120"/>
         <source>Contest Start - Ignore Preset Frequency</source>
-        <translation>Début du concours - Ignorer la fréquence prédéfinie</translation>
+        <translation type="vanished">Début du concours - Ignorer la fréquence prédéfinie</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="121"/>
         <source>Contest Change - Ignore Previous Frequency</source>
-        <translation>Changement de concours - Ignorer la fréquence précédente</translation>
+        <translation type="vanished">Changement de concours - Ignorer la fréquence précédente</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="122"/>
         <source>Contest Change - Restore Contest Mode</source>
-        <translation>Changement de concours - Restaurer la mode de concours</translation>
+        <translation type="vanished">Changement de concours - Restaurer la mode de concours</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="124"/>
         <source>Bandmap Turn Off Operating Freq Colour Strip</source>
-        <translation>Désactiver la bande de couleur de fréquence</translation>
+        <translation type="vanished">Désactiver la bande de couleur de fréquence</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="125"/>
         <source>Bandmap Follow Radio Mode on Operating Freq Colour Strip</source>
-        <translation>Bandmap: Suivre le mode Radio sur la bande de couleur de fréquence</translation>
+        <translation type="vanished">Bandmap: Suivre le mode Radio sur la bande de couleur de fréquence</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="127"/>
         <source>Bandmap Delay when mouse in frame</source>
-        <translation>Retard de Bandmap lorsque le curseur est dans le cadre</translation>
+        <translation type="vanished">Retard de Bandmap lorsque le curseur est dans le cadre</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="128"/>
         <source>Bandmap show derived loc</source>
-        <translation>Bandmap afficher la Locator dérivée</translation>
+        <translation type="vanished">Bandmap afficher la Locator dérivée</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="135"/>
-        <location filename="../profiles.cpp" line="139"/>
-        <location filename="../profiles.cpp" line="140"/>
         <source>hint</source>
         <translatorcomment>référence, indice</translatorcomment>
-        <translation>indication</translation>
+        <translation type="vanished">indication</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="159"/>
         <source>Default editor</source>
-        <translation>Éditeur par défaut</translation>
+        <translation type="vanished">Éditeur par défaut</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="160"/>
         <source>Statistics Period 1</source>
-        <translation>Période statistique 1</translation>
+        <translation type="vanished">Période statistique 1</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="161"/>
         <source>Statistics Period 2</source>
-        <translation>Période statistique 2</translation>
+        <translation type="vanished">Période statistique 2</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="181"/>
         <source>Call Used</source>
-        <translation>Indicatif d&apos;appel utilisé</translation>
+        <translation type="vanished">Indicatif d&apos;appel utilisé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="181"/>
         <source>Call sign used</source>
-        <translation>Indicatif d&apos;appel utilisé</translation>
+        <translation type="vanished">Indicatif d&apos;appel utilisé</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="182"/>
         <source>Main Op</source>
-        <translation>Opérateur principal</translation>
+        <translation type="vanished">Opérateur principal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="182"/>
         <source>Main Operator</source>
-        <translation>Opérateur principal</translation>
+        <translation type="vanished">Opérateur principal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="183"/>
         <source>Second Op</source>
-        <translation>Second opérateur</translation>
+        <translation type="vanished">Second opérateur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="183"/>
         <source>Second  Operator</source>
-        <translation>Second opérateur</translation>
+        <translation type="vanished">Second opérateur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="184"/>
         <source>On Behalf Of (Club)</source>
-        <translation>Au nom de (club)</translation>
+        <translation type="vanished">Au nom de (club)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="184"/>
         <source>Name of club/group</source>
-        <translation>Nom du club / groupe</translation>
+        <translation type="vanished">Nom du club / groupe</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="185"/>
         <source>My Name</source>
-        <translation>Mon Nom</translation>
+        <translation type="vanished">Mon Nom</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="185"/>
         <source>Name of responsible operator</source>
-        <translation>Nom de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Nom de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="186"/>
         <source>My Call</source>
-        <translation>Mon Indicatif d&apos;appel</translation>
+        <translation type="vanished">Mon Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="186"/>
         <source>Callsign of responsible operator</source>
-        <translation>Indicatif de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Indicatif de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="188"/>
         <source>My Address Line 1</source>
-        <translation>Ligne 1 de mon adresse</translation>
+        <translation type="vanished">Ligne 1 de mon adresse</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="188"/>
         <source>Address line 1 of responsible operator</source>
-        <translation>Ligne 1 de l&apos;adresse de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Ligne 1 de l&apos;adresse de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="189"/>
         <source>My Address Line 2</source>
-        <translation>Ligne 2 de mon adresse</translation>
+        <translation type="vanished">Ligne 2 de mon adresse</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="189"/>
         <source>Address line 2 of responsible operator</source>
-        <translation>Ligne 2 de l&apos;adresse de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Ligne 2 de l&apos;adresse de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="190"/>
         <source>My City</source>
-        <translation>Ma ville</translation>
+        <translation type="vanished">Ma ville</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="190"/>
         <source>City of responsible operator</source>
-        <translation>Ville de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Ville de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="191"/>
         <source>My Country</source>
-        <translation>Mon pays</translation>
+        <translation type="vanished">Mon pays</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="191"/>
         <source>Country of responsible operator</source>
-        <translation>Pays de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Pays de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="192"/>
         <source>My Postcode</source>
-        <translation>Mon code postal</translation>
+        <translation type="vanished">Mon code postal</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="192"/>
         <source>Post Code of responsible operator</source>
-        <translation>Code postal de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Code postal de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="193"/>
         <source>My Phone</source>
-        <translation>Mon téléphone</translation>
+        <translation type="vanished">Mon téléphone</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="193"/>
         <source>Phone no. of responsible operator</source>
-        <translation>No de Téléphone de l&apos;opérateur responsable</translation>
+        <translation type="vanished">No de Téléphone de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="194"/>
         <source>My Email</source>
-        <translation>Mon email</translation>
+        <translation type="vanished">Mon email</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="194"/>
         <source>eMail address of responsible operator</source>
-        <translation>Adresse Email de l&apos;opérateur responsable</translation>
+        <translation type="vanished">Adresse Email de l&apos;opérateur responsable</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="197"/>
         <source>Locator</source>
-        <translation>Locator</translation>
+        <translation type="vanished">Locator</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="198"/>
         <source>District Exchange</source>
-        <translation>Échange de district</translation>
+        <translation type="vanished">Échange de district</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="199"/>
         <source>Location Exchange</source>
-        <translation>Échange d&apos;emplacement</translation>
+        <translation type="vanished">Échange d&apos;emplacement</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="199"/>
         <source>Descriptive Location Exchange</source>
-        <translation>Échange d&apos;emplacement descriptif</translation>
+        <translation type="vanished">Échange d&apos;emplacement descriptif</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="200"/>
         <source>Station QTH Line 1</source>
-        <translation>Ligne 1 du QTH de la station</translation>
+        <translation type="vanished">Ligne 1 du QTH de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="200"/>
         <source>Address line 1/2 of station</source>
-        <translation>Ligne 1 de l&apos;adresse de la station</translation>
+        <translation type="vanished">Ligne 1 de l&apos;adresse de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="201"/>
         <source>Station QTH Line 2</source>
-        <translation>Ligne 2 du QTH de la station</translation>
+        <translation type="vanished">Ligne 2 du QTH de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="201"/>
         <source>Address line 2/2 of station</source>
-        <translation>Ligne 2 de l&apos;adresse de la station</translation>
+        <translation type="vanished">Ligne 2 de l&apos;adresse de la station</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="202"/>
         <source>QTH Height ASL (metres)</source>
-        <translation>Altitude du QTH (metres)</translation>
+        <translation type="vanished">Altitude du QTH (metres)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="202"/>
         <source>QTH height ASL (metres)</source>
-        <translation>Altitude du QTH (metres)</translation>
+        <translation type="vanished">Altitude du QTH (metres)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="203"/>
         <source>ITU Zone</source>
-        <translation>Zone ITU</translation>
+        <translation type="vanished">Zone ITU</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="204"/>
         <source>CQ Zone</source>
-        <translation>Zone CQ</translation>
+        <translation type="vanished">Zone CQ</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="207"/>
         <source>Transmitter Power</source>
-        <translation>Puissance de l&apos;émetteur</translation>
+        <translation type="vanished">Puissance de l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="207"/>
         <source>Transmit Power (Watts)</source>
-        <translation>Puissance transmise (Watts)</translation>
+        <translation type="vanished">Puissance transmise (Watts)</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="208"/>
         <source>Transmit Equipment</source>
-        <translation>Détails de l&apos;émetteur</translation>
+        <translation type="vanished">Détails de l&apos;émetteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="209"/>
         <source>Receive Equipment</source>
-        <translation>Détails du récepteur</translation>
+        <translation type="vanished">Détails du récepteur</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="210"/>
         <source>Antenna details</source>
-        <translation>Détails de l&apos;antenne</translation>
+        <translation type="vanished">Détails de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="211"/>
         <source>Antenna Height AGL (metres)</source>
-        <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
+        <translation type="vanished">Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="212"/>
         <source>Antenna Bearing Offset</source>
-        <translation>Hauteur au-dessus du sol de l&apos;antenne</translation>
+        <translation type="vanished">Hauteur au-dessus du sol de l&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="212"/>
         <source>Amount to offset antenna bearings</source>
         <translatorcomment>DUPE??</translatorcomment>
-        <translation>Valeur du décalage d&apos;antenne</translation>
+        <translation type="vanished">Valeur du décalage d&apos;antenne</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="213"/>
         <source>Radio in Rig Control</source>
         <translatorcomment>In settings editor for station details</translatorcomment>
-        <translation>Radio dans RigControl</translation>
+        <translation type="vanished">Radio dans RigControl</translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="214"/>
         <source>Rotator in Rotator Control</source>
-        <translation>Rotateur dans Rotator Control</translation>
+        <translation type="vanished">Rotateur dans Rotator Control</translation>
     </message>
 </context>
 <context>
     <name>Calendar</name>
     <message>
-        <location filename="../Calendar.cpp" line="19"/>
         <source>&lt;VHF from VHFContests.xml&gt;</source>
-        <translation>&lt;VHF de VHFContests.xml&gt;</translation>
+        <translation type="vanished">&lt;VHF de VHFContests.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="20"/>
         <source>&lt;Microwave from MicrContemodestsxx.xml&gt;</source>
-        <translation>&lt;Microonde de MicrContemodestsxx.xml&gt;</translation>
+        <translation type="vanished">&lt;Microonde de MicrContemodestsxx.xml&gt;</translation>
     </message>
     <message>
-        <location filename="../Calendar.cpp" line="40"/>
         <source>Undefined</source>
-        <translation>Indéterminée</translation>
+        <translation type="vanished">Indéterminée</translation>
     </message>
 </context>
 <context>
     <name>CallsignInputDialog</name>
     <message>
-        <location filename="../callsigninputdialog.ui" line="22"/>
         <source>Callsign</source>
-        <translation>Indicatif d&apos;appel</translation>
+        <translation type="vanished">Indicatif d&apos;appel</translation>
     </message>
 </context>
 <context>
     <name>ChatFrame</name>
     <message>
-        <location filename="../ChatFrame.ui" line="89"/>
         <source>Type here</source>
-        <translation>Tapper ici</translation>
+        <translation type="vanished">Tapper ici</translation>
     </message>
     <message>
-        <location filename="../ChatFrame.ui" line="117"/>
         <source>Send</source>
-        <translation>Envoyer</translation>
+        <translation type="vanished">Envoyer</translation>
     </message>
 </context>
 <context>
     <name>ChatServer</name>
     <message>
-        <location filename="../ChatServer.cpp" line="8"/>
         <source>Available</source>
-        <translation>Disponible</translation>
+        <translation type="vanished">Disponible</translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="9"/>
         <source>Not Available</source>
-        <translation>Non disponible</translation>
+        <translation type="vanished">Non disponible</translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="10"/>
         <source>No Contact</source>
-        <translation>Pas de contact</translation>
+        <translation type="vanished">Pas de contact</translation>
     </message>
     <message>
-        <location filename="../ChatServer.cpp" line="81"/>
         <source>%1/%2 changed state to %3</source>
-        <translation>%1/%2 changé d&apos;état en %3</translation>
+        <translation type="vanished">%1/%2 changé d&apos;état en %3</translation>
     </message>
 </context>
 <context>
     <name>ConfigElementFrame</name>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="31"/>
         <source>Enabled</source>
-        <translation>Activé</translation>
+        <translation type="vanished">Activé</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="38"/>
         <source>Hide when running</source>
-        <translation>Masquer pendant l&apos;exécution</translation>
+        <translation type="vanished">Masquer pendant l&apos;exécution</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="81"/>
         <source>Show Advanced</source>
-        <translation>Affichage avancé</translation>
+        <translation type="vanished">Affichage avancé</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="92"/>
         <source>App Instance Name</source>
-        <translation>Nom d&apos;instance d&apos;application</translation>
+        <translation type="vanished">Nom d&apos;instance d&apos;application</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="109"/>
         <source>App Type</source>
-        <translation>Type d&apos;application</translation>
+        <translation type="vanished">Type d&apos;application</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="136"/>
         <source>Delete Entry</source>
-        <translation>Supprimer entrée</translation>
+        <translation type="vanished">Supprimer entrée</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="145"/>
         <source>Advanced</source>
-        <translation>Avancé</translation>
+        <translation type="vanished">Avancé</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="156"/>
         <source>Action</source>
-        <translation>Action</translation>
+        <translation type="vanished">Action</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="177"/>
         <source>Run Locally</source>
-        <translation>Exécuter localement</translation>
+        <translation type="vanished">Exécuter localement</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="187"/>
         <source>Connect Remote</source>
-        <translation>Connecter éloigné</translation>
+        <translation type="vanished">Connecter éloigné</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="249"/>
         <source>Program</source>
-        <translation>Programme</translation>
+        <translation type="vanished">Programme</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="263"/>
-        <location filename="../ConfigElementFrame.ui" line="312"/>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="vanished">...</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="277"/>
         <source>Parameters</source>
-        <translation>Paramètres</translation>
+        <translation type="vanished">Paramètres</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="298"/>
         <source>Home Directory</source>
-        <translation>Dossier home</translation>
+        <translation type="vanished">Dossier home</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="333"/>
         <source>Leave the app name and/or the server name empty to get information from any app on a server, any server, or any app on any server</source>
         <translatorcomment>Can surely be simplififed?</translatorcomment>
-        <translation>Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
+        <translation type="vanished">Laissez le nom de l&apos;application et / ou le nom du serveur vide pour obtenir des informations à partir de n&apos;importe quelle application sur un serveur, n&apos;importe quel serveur ou n&apos;importe quelle application sur n&apos;importe quel serveur</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="348"/>
         <source>Remote App Name</source>
-        <translation>Nom de Application à distance</translation>
+        <translation type="vanished">Nom de Application à distance</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.ui" line="362"/>
         <source>Remote Server</source>
-        <translation>Serveur distant</translation>
+        <translation type="vanished">Serveur distant</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="6"/>
         <source>&lt;Deleted&gt;</source>
-        <translation>&lt;Supprimé&gt;</translation>
+        <translation type="vanished">&lt;Supprimé&gt;</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="158"/>
         <source>Minos Component Program</source>
-        <translation>Element du programme Minos</translation>
+        <translation type="vanished">Element du programme Minos</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="167"/>
         <source>All Files</source>
-        <translation>Tous les fichiers</translation>
+        <translation type="vanished">Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="194"/>
         <source>Set Working Directory</source>
-        <translation>Définir le répertoire de travail</translation>
+        <translation type="vanished">Définir le répertoire de travail</translation>
     </message>
     <message>
-        <location filename="../ConfigElementFrame.cpp" line="234"/>
         <source>Local</source>
-        <translation>Local</translation>
+        <translation type="vanished">Local</translation>
     </message>
 </context>
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1813"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
-        <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
+        <translation type="vanished">QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1826"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
-        <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
+        <translation type="vanished">Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
 </context>
 <context>
     <name>CountryList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="507"/>
         <source>CT9 Country File</source>
-        <translation>CT9 Fichier  des Pays</translation>
+        <translation type="vanished">CT9 Fichier  des Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="591"/>
         <source>Failed to open %1 (%2)</source>
-        <translation>L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
+        <translation type="vanished">L&apos;ouverture du fichier %1 (%2)  a échoué</translation>
     </message>
 </context>
 <context>
     <name>CountrySynonymList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="735"/>
         <source>Country Synonym File</source>
-        <translation>Fichier des synonymes de Pays</translation>
+        <translation type="vanished">Fichier des synonymes de Pays</translation>
     </message>
     <message>
-        <location filename="../MultsImpl.cpp" line="755"/>
         <source>Synonym ranges no longer allowed : %1 for %2</source>
-        <translation>Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
+        <translation type="vanished">Les plages de synonymes ne sont plus autorisées: %1 pour %2</translation>
     </message>
 </context>
 <context>
     <name>Default Log Session</name>
     <message>
-        <location filename="../profiles.cpp" line="26"/>
         <source>Default Session</source>
-        <translation>Session par défaut</translation>
+        <translation type="vanished">Session par défaut</translation>
     </message>
 </context>
 <context>
     <name>Default Protected Screen Config</name>
     <message>
-        <location filename="../profiles.cpp" line="22"/>
         <source>protected</source>
-        <translation>protégé</translation>
+        <translation type="vanished">protégé</translation>
     </message>
 </context>
 <context>
     <name>Default Screen Config</name>
     <message>
-        <location filename="../profiles.cpp" line="18"/>
         <source>default</source>
-        <translation>défaut</translation>
+        <translation type="vanished">défaut</translation>
     </message>
 </context>
 <context>
     <name>DisplayContestContact</name>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>DELETED</source>
-        <translation>SUPPRIMÉ</translation>
+        <translation type="vanished">SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>LOCAL COMMENT</source>
-        <translation>COMMENTAIRE LOCAL</translation>
+        <translation type="vanished">COMMENTAIRE LOCAL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="556"/>
         <source>COMMENT FOR ADJUDICATOR</source>
-        <translation>COMMENTAIRE POUR L&apos;ARBITRE</translation>
+        <translation type="vanished">COMMENTAIRE POUR L&apos;ARBITRE</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="610"/>
         <source>MAN</source>
-        <translation>MANUEL</translation>
+        <translation type="vanished">MANUEL</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="680"/>
         <source>DEL</source>
-        <translation>SUPPRIMÉ</translation>
+        <translation type="vanished">SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="683"/>
         <source>N/S</source>
-        <translation>NON SIGNIFICATIF</translation>
+        <translation type="vanished">NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="690"/>
         <source>DUP</source>
-        <translation>DUPLIQUER</translation>
+        <translation type="vanished">DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../DisplayContestContact.cpp" line="771"/>
         <source>UNFILLED CONTACT </source>
-        <translation>CONTACT NON REMPLI </translation>
+        <translation type="vanished">CONTACT NON REMPLI </translation>
     </message>
 </context>
 <context>
     <name>DxSpotDataModel</name>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="39"/>
         <source>UTC</source>
-        <translation>UTC</translation>
+        <translation type="vanished">UTC</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="41"/>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation type="vanished">Date</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="43"/>
         <source>Freq</source>
-        <translation>Fréquence</translation>
+        <translation type="vanished">Fréquence</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="45"/>
         <source>Dx</source>
-        <translation>DX</translation>
+        <translation type="vanished">DX</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="47"/>
-        <location filename="../dxspotdatamodel.cpp" line="57"/>
         <source>Wkd</source>
-        <translation>Contacté</translation>
+        <translation type="vanished">Contacté</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="49"/>
         <source>Mode</source>
-        <translation>Mode</translation>
+        <translation type="vanished">Mode</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="51"/>
-        <location filename="../dxspotdatamodel.cpp" line="61"/>
         <source>Loc</source>
-        <translation>Loc</translation>
+        <translation type="vanished">Loc</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="53"/>
         <source>Dist</source>
-        <translation>Distance</translation>
+        <translation type="vanished">Distance</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="55"/>
         <source>Brg</source>
-        <translation>Direction</translation>
+        <translation type="vanished">Direction</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="59"/>
         <source>Spotter</source>
-        <translation>Observateur</translation>
+        <translation type="vanished">Observateur</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="63"/>
         <source>Comment</source>
-        <translation>Commentaire</translation>
+        <translation type="vanished">Commentaire</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="65"/>
         <source>Spot to Mem Flag</source>
-        <translation>Indicateur Spot Mémorisé</translation>
+        <translation type="vanished">Indicateur Spot Mémorisé</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="67"/>
         <source>Prop Mode</source>
-        <translation>Mode de propagation</translation>
+        <translation type="vanished">Mode de propagation</translation>
     </message>
     <message>
-        <location filename="../dxspotdatamodel.cpp" line="82"/>
         <source>Mem</source>
-        <translation>Memoire</translation>
+        <translation type="vanished">Memoire</translation>
     </message>
 </context>
 <context>
     <name>FrequencyDisplay</name>
     <message>
-        <location filename="../rigutils.cpp" line="16"/>
         <source>Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
@@ -1188,12 +961,11 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../rigutils.cpp" line="17"/>
         <source>Radio Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence a des caractères invalides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
@@ -1201,12 +973,11 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 </translation>
     </message>
     <message>
-        <location filename="../rigutils.cpp" line="18"/>
         <source>Target Frequency has invalid characters or missing periods.<byte value="xd"/>
 <byte value="xd"/>
 The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 </source>
-        <translation>La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
+        <translation type="vanished">La fréquence cible comporte des caractères non valides ou des périodes manquantes.<byte value="xd"/>
 <byte value="xd"/>
 Le format requis est (par exemple) 1296.3, 144.32 ou 144.290123<byte value="xd"/>
 <byte value="xd"/>
@@ -1217,1034 +988,752 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>GlistList</name>
     <message>
-        <location filename="../MultsImpl.cpp" line="82"/>
         <source>prefix synonyms file</source>
-        <translation>Fichier de synonymes de préfixe</translation>
+        <translation type="vanished">Fichier de synonymes de préfixe</translation>
     </message>
 </context>
 <context>
     <name>HelpBrowser</name>
     <message>
-        <location filename="../helpbrowser.ui" line="14"/>
         <source>Help Browser</source>
-        <translation>Navigateur d&apos;aide</translation>
+        <translation type="vanished">Navigateur d&apos;aide</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="28"/>
         <source>Contents</source>
-        <translation>Contenu</translation>
+        <translation type="vanished">Contenu</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="50"/>
         <source>Index</source>
-        <translation>Index</translation>
+        <translation type="vanished">Index</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="67"/>
         <source>Look for:</source>
-        <translation>Chercher:</translation>
+        <translation type="vanished">Chercher:</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="88"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="vanished">Fermer</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="103"/>
         <source>Back</source>
-        <translation>Retour</translation>
+        <translation type="vanished">Retour</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="106"/>
         <source>Left</source>
         <translatorcomment>Context? La gauche?</translatorcomment>
-        <translation>à gauche</translation>
+        <translation type="vanished">à gauche</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="119"/>
         <source>Forward</source>
-        <translation>Vers l&apos;avant</translation>
+        <translation type="vanished">Vers l&apos;avant</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="122"/>
         <source>Right</source>
-        <translation>à droite</translation>
+        <translation type="vanished">à droite</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="132"/>
-        <location filename="../helpbrowser.ui" line="135"/>
         <source>Zoom In</source>
-        <translation>Zoom avant</translation>
+        <translation type="vanished">Zoom avant</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="138"/>
         <source>Down</source>
-        <translation>Vers le bas</translation>
+        <translation type="vanished">Vers le bas</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="148"/>
-        <location filename="../helpbrowser.ui" line="151"/>
         <source>Zoom Out</source>
-        <translation>Zoom arrière</translation>
+        <translation type="vanished">Zoom arrière</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="154"/>
         <source>Up</source>
-        <translation>En haut</translation>
+        <translation type="vanished">En haut</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.cpp" line="85"/>
         <source>Choose</source>
-        <translation>Choisir</translation>
+        <translation type="vanished">Choisir</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.cpp" line="85"/>
         <source>Select topic for: </source>
-        <translation>Sélectionner le sujet pour: </translation>
+        <translation type="vanished">Sélectionner le sujet pour: </translation>
     </message>
 </context>
 <context>
     <name>LocatorInputDialog</name>
     <message>
-        <location filename="../locatorinputdialog.ui" line="22"/>
         <source>Locator</source>
-        <translation>QRA Locator</translation>
+        <translation type="vanished">QRA Locator</translation>
     </message>
 </context>
 <context>
     <name>MessageServer::impl</name>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="70"/>
-        <location filename="../WsjtxMessageServer.cpp" line="218"/>
         <source>Error creating UDP message</source>
         <translatorcomment>Tracelog? (Hence in ENglish?)</translatorcomment>
-        <translation>Erreur lors de la création du message UDP</translation>
+        <translation type="vanished">Erreur lors de la création du message UDP</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="396"/>
         <source>MessageServer warning: invalid UDP message received</source>
-        <translation>ENG??</translation>
+        <translation type="vanished">ENG??</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="401"/>
         <source>MessageServer exception: %1</source>
-        <translation>ENG??</translation>
+        <translation type="vanished">ENG??</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="405"/>
         <source>Unexpected exception in MessageServer</source>
-        <translation>ENG??</translation>
+        <translation type="vanished">ENG??</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="439"/>
         <source>Message serialization error: read corrupt data</source>
-        <translation>ENG??</translation>
+        <translation type="vanished">ENG??</translation>
     </message>
     <message>
-        <location filename="../WsjtxMessageServer.cpp" line="443"/>
         <source>Message serialization error: write error</source>
-        <translation>ENG??</translation>
+        <translation type="vanished">ENG??</translation>
     </message>
 </context>
 <context>
     <name>MinosKeyboard</name>
     <message>
-        <location filename="../minoskeyboard.ui" line="28"/>
         <source>Esc</source>
-        <translation>Échap</translation>
+        <translation type="vanished">Échap</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="48"/>
         <source>1</source>
-        <translation>1</translation>
+        <translation type="vanished">1</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="55"/>
-        <source>2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="62"/>
-        <source>3</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="69"/>
-        <source>4</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="76"/>
-        <source>5</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="83"/>
-        <source>6</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="90"/>
-        <source>7</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="97"/>
-        <source>8</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="104"/>
-        <source>9</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="111"/>
-        <source>0</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="131"/>
         <source>Backspace</source>
-        <translation>Retour arrière</translation>
+        <translation type="vanished">Retour arrière</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="155"/>
-        <source>Q</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="162"/>
-        <source>W</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="169"/>
-        <source>E</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="176"/>
-        <source>R</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="183"/>
-        <source>T</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="190"/>
-        <source>Y</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="197"/>
-        <source>U</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="204"/>
-        <source>I</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="211"/>
-        <source>O</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="218"/>
-        <source>P</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="238"/>
         <source>Del</source>
-        <translation>Effacer</translation>
+        <translation type="vanished">Effacer</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="262"/>
-        <source>A</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="269"/>
-        <source>S</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="276"/>
-        <source>D</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="283"/>
-        <source>F</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="290"/>
-        <source>G</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="297"/>
-        <source>H</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="304"/>
-        <source>J</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="311"/>
-        <source>K</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="318"/>
-        <source>L</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="355"/>
-        <source>Z</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="362"/>
-        <source>X</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="369"/>
-        <source>C</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="376"/>
-        <source>V</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="383"/>
-        <source>B</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="390"/>
-        <source>N</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="397"/>
-        <source>M</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../minoskeyboard.ui" line="421"/>
         <source>Tab</source>
-        <translation>→|    TAB</translation>
+        <translation type="vanished">→|    TAB</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="441"/>
         <source>Space Bar</source>
-        <translation>Barre d&apos;espace</translation>
+        <translation type="vanished">Barre d&apos;espace</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="461"/>
         <source>/</source>
-        <translation>/</translation>
+        <translation type="vanished">/</translation>
     </message>
     <message>
-        <location filename="../minoskeyboard.ui" line="468"/>
         <source>Return</source>
-        <translation>←┘     Entrée</translation>
+        <translation type="vanished">←┘     Entrée</translation>
     </message>
 </context>
 <context>
     <name>MinosParameters</name>
     <message>
-        <location filename="../MinosParameters.cpp" line="24"/>
         <source>MinosParameters not initialised</source>
-        <translation>Paramètres Minos non initialisés</translation>
+        <translation type="vanished">Paramètres Minos non initialisés</translation>
     </message>
 </context>
 <context>
     <name>QSOGridModel</name>
     <message>
-        <location filename="../TreeUtils.cpp" line="19"/>
         <source>UTC</source>
-        <translation>UTC</translation>
+        <translation type="vanished">UTC</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="20"/>
         <source>Band</source>
-        <translation>Bande</translation>
+        <translation type="vanished">Bande</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="21"/>
         <source>Callsign</source>
-        <translation>Indicatif d&apos;appel</translation>
+        <translation type="vanished">Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="22"/>
         <source>RepTx</source>
-        <translation>Report Tx</translation>
+        <translation type="vanished">Report Tx</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="23"/>
         <source>SnTx</source>
-        <translation>Numéro de série Tx</translation>
+        <translation type="vanished">Numéro de série Tx</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="24"/>
         <source>RepRx</source>
-        <translation>Report Rx</translation>
+        <translation type="vanished">Report Rx</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="25"/>
         <source>SnRx</source>
-        <translation>Numéro de série Rx</translation>
+        <translation type="vanished">Numéro de série Rx</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="26"/>
         <source>Loc</source>
-        <translation>Locator</translation>
+        <translation type="vanished">Locator</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="27"/>
         <source>dist</source>
-        <translation>Distance</translation>
+        <translation type="vanished">Distance</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="28"/>
         <source>brg</source>
-        <translation>Direction</translation>
+        <translation type="vanished">Direction</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="29"/>
         <source>Exchange</source>
-        <translation>Échange</translation>
+        <translation type="vanished">Échange</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="30"/>
         <source>Comments</source>
-        <translation>Commentaires</translation>
+        <translation type="vanished">Commentaires</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="31"/>
         <source>Freq</source>
-        <translation>Fréquence</translation>
+        <translation type="vanished">Fréquence</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="32"/>
         <source>Rot Heading</source>
-        <translation>Direction du rotateur</translation>
+        <translation type="vanished">Direction du rotateur</translation>
     </message>
     <message>
-        <location filename="../TreeUtils.cpp" line="33"/>
         <source>Rig</source>
-        <translation>Appareil</translation>
+        <translation type="vanished">Appareil</translation>
     </message>
 </context>
 <context>
     <name>QSOMatchGridModel</name>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="150"/>
-        <location filename="../MatchTreeFrame.cpp" line="169"/>
         <source>UTC</source>
-        <translation>UTC</translation>
+        <translation type="vanished">UTC</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="151"/>
         <source>Band</source>
-        <translation>Bande</translation>
+        <translation type="vanished">Bande</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="152"/>
-        <location filename="../MatchTreeFrame.cpp" line="170"/>
-        <location filename="../MatchTreeFrame.cpp" line="183"/>
         <source>Callsign</source>
-        <translation>Indicatif d&apos;appel</translation>
+        <translation type="vanished">Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="153"/>
         <source>RepTx</source>
-        <translation>Report Tx</translation>
+        <translation type="vanished">Report Tx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="154"/>
         <source>SnTx</source>
-        <translation>Numéro de série Tx</translation>
+        <translation type="vanished">Numéro de série Tx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="155"/>
         <source>RepRx</source>
-        <translation>Report Rx</translation>
+        <translation type="vanished">Report Rx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="156"/>
         <source>SnRx</source>
-        <translation>Numéro de série Rx</translation>
+        <translation type="vanished">Numéro de série Rx</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="157"/>
-        <location filename="../MatchTreeFrame.cpp" line="171"/>
-        <location filename="../MatchTreeFrame.cpp" line="184"/>
         <source>Loc</source>
-        <translation>Locator</translation>
+        <translation type="vanished">Locator</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="158"/>
-        <location filename="../MatchTreeFrame.cpp" line="172"/>
-        <location filename="../MatchTreeFrame.cpp" line="185"/>
         <source>dist</source>
-        <translation>Distance</translation>
+        <translation type="vanished">Distance</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="159"/>
-        <location filename="../MatchTreeFrame.cpp" line="173"/>
-        <location filename="../MatchTreeFrame.cpp" line="186"/>
         <source>brg</source>
-        <translation>Direction</translation>
+        <translation type="vanished">Direction</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="160"/>
-        <location filename="../MatchTreeFrame.cpp" line="174"/>
-        <location filename="../MatchTreeFrame.cpp" line="187"/>
         <source>Exchange</source>
-        <translation>Échange</translation>
+        <translation type="vanished">Échange</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="161"/>
-        <location filename="../MatchTreeFrame.cpp" line="175"/>
-        <location filename="../MatchTreeFrame.cpp" line="188"/>
         <source>Comments</source>
-        <translation>Commentaires</translation>
+        <translation type="vanished">Commentaires</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="162"/>
-        <location filename="../MatchTreeFrame.cpp" line="176"/>
         <source>Freq</source>
-        <translation>Fréquence</translation>
+        <translation type="vanished">Fréquence</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="163"/>
-        <location filename="../MatchTreeFrame.cpp" line="177"/>
         <source>Rot Heading</source>
-        <translation>Direction du rotateur</translation>
+        <translation type="vanished">Direction du rotateur</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="164"/>
-        <location filename="../MatchTreeFrame.cpp" line="178"/>
         <source>Rig</source>
-        <translation>Appareil</translation>
+        <translation type="vanished">Appareil</translation>
     </message>
     <message>
-        <location filename="../MatchTreeFrame.cpp" line="452"/>
         <source>Current contest: </source>
-        <translation>Concours en cours: </translation>
+        <translation type="vanished">Concours en cours: </translation>
     </message>
 </context>
 <context>
     <name>RotPresetData</name>
     <message>
-        <location filename="../rotatorcommon.cpp" line="15"/>
         <source>&amp;Read</source>
-        <translation>&amp;Lire</translation>
+        <translation type="vanished">&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="16"/>
         <source>&amp;New</source>
-        <translation>&amp;Nouveau</translation>
+        <translation type="vanished">&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="17"/>
         <source>&amp;Edit</source>
-        <translation>&amp;Modifier</translation>
+        <translation type="vanished">&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../rotatorcommon.cpp" line="18"/>
         <source>&amp;Clear</source>
-        <translation>&amp;Supprimer</translation>
+        <translation type="vanished">&amp;Supprimer</translation>
     </message>
 </context>
 <context>
     <name>RotPresetDialog</name>
     <message>
-        <location filename="../rotpresetdialog.ui" line="24"/>
         <source>Name</source>
-        <translation>Nom</translation>
+        <translation type="vanished">Nom</translation>
     </message>
     <message>
-        <location filename="../rotpresetdialog.ui" line="38"/>
         <source>Bearing</source>
-        <translation>Direction</translation>
+        <translation type="vanished">Direction</translation>
     </message>
     <message>
-        <location filename="../rotpresetdialog.cpp" line="30"/>
         <source>Rotator Preset %1 - %2</source>
-        <translation>Préconfiguration de  rotateur  %1 - %2</translation>
+        <translation type="vanished">Préconfiguration de  rotateur  %1 - %2</translation>
     </message>
     <message>
-        <location filename="../rotpresetdialog.cpp" line="69"/>
         <source>Bearing Out of range</source>
-        <translation>Direction Hors de portée</translation>
+        <translation type="vanished">Direction Hors de portée</translation>
     </message>
     <message>
-        <location filename="../rotpresetdialog.cpp" line="70"/>
         <source>Bearing: %1, out of range, should be 0-360 
 Please enter another bearing</source>
-        <translation>Direction: %1, hors plage, doit être compris entre 0 et 360
+        <translation type="vanished">Direction: %1, hors plage, doit être compris entre 0 et 360
 Entrer une autre direction SVP</translation>
     </message>
 </context>
 <context>
     <name>SerialTVSwitch</name>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
         <source>No Error</source>
-        <translation>Aucun erreur</translation>
+        <translation type="vanished">Aucun erreur</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
         <source>Device Not Found</source>
-        <translation>Appareil non trouvé</translation>
+        <translation type="vanished">Appareil non trouvé</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="50"/>
         <source>Permission Error</source>
-        <translation>Erreur d&apos;autorisation</translation>
+        <translation type="vanished">Erreur d&apos;autorisation</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
         <source>Open Error</source>
-        <translation>Erreur d&apos;ouverture</translation>
+        <translation type="vanished">Erreur d&apos;ouverture</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
         <source>Parity Error</source>
-        <translation>Erreur de parité</translation>
+        <translation type="vanished">Erreur de parité</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="51"/>
         <source>Framing Error</source>
-        <translation>Erreur d&apos;encadrement</translation>
+        <translation type="vanished">Erreur d&apos;encadrement</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
         <source>Break Condition</source>
-        <translation>État de rupture</translation>
+        <translation type="vanished">État de rupture</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
         <source>Write Error</source>
-        <translation>Erreur d&apos;écriture</translation>
+        <translation type="vanished">Erreur d&apos;écriture</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="52"/>
         <source>Read Error</source>
-        <translation>Erreur de lecture</translation>
+        <translation type="vanished">Erreur de lecture</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
         <source>Resource Error</source>
-        <translation>Erreur de ressource</translation>
+        <translation type="vanished">Erreur de ressource</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="53"/>
         <source>Unsupported Operation Error</source>
-        <translation>Erreur - opération n&apos;est pas supporté</translation>
+        <translation type="vanished">Erreur - opération n&apos;est pas supporté</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
         <source>Unknown Error</source>
-        <translation>Erreur inconnu</translation>
+        <translation type="vanished">Erreur inconnu</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
         <source>Timeout Error</source>
-        <translation>Erreur de temporisation</translation>
+        <translation type="vanished">Erreur de temporisation</translation>
     </message>
     <message>
-        <location filename="../serialtvswitch.h" line="54"/>
         <source>Not Open Error</source>
-        <translation>Erreur - pas ouverte</translation>
+        <translation type="vanished">Erreur - pas ouverte</translation>
     </message>
 </context>
 <context>
     <name>SettingsBundle</name>
     <message>
-        <location filename="../profiles.cpp" line="255"/>
         <source>&lt;None&gt;</source>
-        <translation>Aucun</translation>
+        <translation type="vanished">Aucun</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../rigcommon.h" line="19"/>
         <source>N/A</source>
-        <translation>N/A</translation>
+        <translation type="vanished">N/A</translation>
     </message>
 </context>
 <context>
     <name>StartConfig</name>
     <message>
-        <location filename="../StartConfig.ui" line="14"/>
         <source>Minos App Configuration</source>
-        <translation>Configurer les applications Minos</translation>
+        <translation type="vanished">Configurer les applications Minos</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="42"/>
         <source>Autostart</source>
-        <translation>Lancement automatique</translation>
+        <translation type="vanished">Lancement automatique</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="62"/>
         <source>Save and Start Apps</source>
-        <translation>Enregistrer et démarrer les applications</translation>
+        <translation type="vanished">Enregistrer et démarrer les applications</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="69"/>
         <source>Stop Apps</source>
-        <translation>Arrêter les Applications</translation>
+        <translation type="vanished">Arrêter les Applications</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="76"/>
         <source>New Entry</source>
-        <translation>Nouvelle entrée</translation>
+        <translation type="vanished">Nouvelle entrée</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="87"/>
         <source>Server Name</source>
-        <translation>Nom du server</translation>
+        <translation type="vanished">Nom du server</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="101"/>
         <source>Set Server Name</source>
-        <translation>Configurer le Nom du server</translation>
+        <translation type="vanished">Configurer le Nom du server</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="112"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="vanished">Annuler</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="132"/>
         <source>TextLabel</source>
-        <translation>TEXTLABEL!!!</translation>
+        <translation type="vanished">TEXTLABEL!!!</translation>
     </message>
     <message>
-        <location filename="../StartConfig.ui" line="152"/>
         <source>Save and Close</source>
-        <translation>Enregistrer et fermer</translation>
+        <translation type="vanished">Enregistrer et fermer</translation>
     </message>
 </context>
 <context>
     <name>StartConfigManager</name>
     <message>
-        <location filename="../StartConfigManager.ui" line="14"/>
         <source>Manage Application Configurations</source>
-        <translation>Gérer les configurations d&apos;application</translation>
+        <translation type="vanished">Gérer les configurations d&apos;application</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="24"/>
         <source>New</source>
-        <translation>Nouveau</translation>
+        <translation type="vanished">Nouveau</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="31"/>
         <source>Clone</source>
-        <translation>Cloner</translation>
+        <translation type="vanished">Cloner</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="38"/>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation type="vanished">Supprimer</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="45"/>
         <source>Rename</source>
-        <translation>Renommer</translation>
+        <translation type="vanished">Renommer</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="52"/>
         <source>Edit</source>
-        <translation>Modifier</translation>
+        <translation type="vanished">Modifier</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="88"/>
         <source>Start</source>
-        <translation>Démarrer</translation>
+        <translation type="vanished">Démarrer</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="108"/>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="vanished">Annuler</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.ui" line="115"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="vanished">OK</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="53"/>
         <source>Stop all apps</source>
-        <translation>Arrêter tous les Applications</translation>
+        <translation type="vanished">Arrêter tous les Applications</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="57"/>
         <source>Start all apps</source>
-        <translation>Démarrer toutes les applications</translation>
+        <translation type="vanished">Démarrer toutes les applications</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="137"/>
         <source>Please give a new name for the layout</source>
-        <translation>Nouveau nom pour la mise en page SVP</translation>
+        <translation type="vanished">Nouveau nom pour la mise en page SVP</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="141"/>
         <source>%1 already exists</source>
-        <translation>%1 existe déjà</translation>
+        <translation type="vanished">%1 existe déjà</translation>
     </message>
     <message>
-        <location filename="../StartConfigManager.cpp" line="164"/>
-        <location filename="../StartConfigManager.cpp" line="183"/>
         <source>new app config</source>
-        <translation>configuration de nouvelles applications</translation>
+        <translation type="vanished">configuration de nouvelles applications</translation>
     </message>
 </context>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="742"/>
         <source>Possible</source>
-        <translation>Possible</translation>
+        <translation type="vanished">Possible</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="745"/>
         <source>Country</source>
-        <translation>Pays</translation>
+        <translation type="vanished">Pays</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="749"/>
         <source>District</source>
-        <translation>District</translation>
+        <translation type="vanished">District</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="753"/>
         <source>Locator</source>
-        <translation>Locator</translation>
+        <translation type="vanished">Locator</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="755"/>
         <source> - %1%2 %3 matches</source>
-        <translation> - %1%2 %3 correspondances</translation>
+        <translation type="vanished"> - %1%2 %3 correspondances</translation>
     </message>
 </context>
 <context>
     <name>Validator</name>
     <message>
-        <location filename="../validators.cpp" line="18"/>
         <source>null validator failed</source>
-        <translation>Erreur interne - validateur nul a échoué</translation>
+        <translation type="vanished">Erreur interne - validateur nul a échoué</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="19"/>
         <source>Invalid time</source>
-        <translation>Heure non valide</translation>
+        <translation type="vanished">Heure non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="20"/>
         <source>Invalid date</source>
-        <translation>Date non valide</translation>
+        <translation type="vanished">Date non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="21"/>
         <source>Invalid power(0.01 - 1000 W)</source>
-        <translation>Puissance non valide (0.01 - 1000 W)</translation>
+        <translation type="vanished">Puissance non valide (0.01 - 1000 W)</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="22"/>
         <source>Invalid locator</source>
-        <translation>Locator non valide</translation>
+        <translation type="vanished">Locator non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="23"/>
         <source>Invalid Serial</source>
-        <translation>Numéro de série non valide</translation>
+        <translation type="vanished">Numéro de série non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="24"/>
         <source>Invalid RS(T)</source>
-        <translation>RS(T) non valide</translation>
+        <translation type="vanished">RS(T) non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="25"/>
         <source>Invalid power(-40 - +40 dBW)</source>
-        <translation>Puissance non valide (-40 - +40 dBW)</translation>
+        <translation type="vanished">Puissance non valide (-40 - +40 dBW)</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="26"/>
         <source>Invalid district</source>
-        <translation>District non valide</translation>
+        <translation type="vanished">District non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="27"/>
         <source>Invalid band</source>
-        <translation>Bande  non valide</translation>
+        <translation type="vanished">Bande  non valide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="28"/>
         <source>!!! Callsign not validated !!!</source>
-        <translation>!!! Indicatif d&apos;appel non validé !!!</translation>
+        <translation type="vanished">!!! Indicatif d&apos;appel non validé !!!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="29"/>
         <source>!!! No Callsign present !!!</source>
-        <translation>!!! Pas d&apos;indicatif d&apos;appel présent !!!</translation>
+        <translation type="vanished">!!! Pas d&apos;indicatif d&apos;appel présent !!!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="30"/>
         <source>!!! Duplicate Callsign !!!</source>
-        <translation>!!! Indicatif d&apos;appel en double !!!</translation>
+        <translation type="vanished">!!! Indicatif d&apos;appel en double !!!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="31"/>
         <source>Invalid Callsign!</source>
-        <translation>Indicatif  non valide!</translation>
+        <translation type="vanished">Indicatif  non valide!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="32"/>
         <source>No RX Serial Number</source>
-        <translation>Pas de numéro de série RX</translation>
+        <translation type="vanished">Pas de numéro de série RX</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="33"/>
         <source>Locator probably not within country.</source>
-        <translation>Locator probablement pas à l&apos;intérieur du pays.</translation>
+        <translation type="vanished">Locator probablement pas à l&apos;intérieur du pays.</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="36"/>
         <source>No Locator</source>
-        <translation>Aucun Locator</translation>
+        <translation type="vanished">Aucun Locator</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="37"/>
         <source>!!Loc not AA00AA to RR99XX!!</source>
-        <translation>!! Le format du Locator n&apos;est pas AA00AA à RR99XX !!</translation>
+        <translation type="vanished">!! Le format du Locator n&apos;est pas AA00AA à RR99XX !!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="38"/>
         <source>Invalid district multiplier</source>
-        <translation>Multiplicateur de District invalide</translation>
+        <translation type="vanished">Multiplicateur de District invalide</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="39"/>
         <source>QTH required</source>
-        <translation>QTH requis</translation>
+        <translation type="vanished">QTH requis</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="41"/>
         <source>Unknown Country</source>
-        <translation>Pays inconnu</translation>
+        <translation type="vanished">Pays inconnu</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="42"/>
         <source>!!! Non Scoring Contact !!!</source>
-        <translation>!!! Contact non comptabilisé !!!</translation>
+        <translation type="vanished">!!! Contact non comptabilisé !!!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="43"/>
         <source>!!! Comment Only !!!</source>
-        <translation>!!! Commentaire seulement !!!</translation>
+        <translation type="vanished">!!! Commentaire seulement !!!</translation>
     </message>
     <message>
-        <location filename="../validators.cpp" line="44"/>
         <source>!!! DELETED !!!</source>
-        <translation>!!! Supprimé !!!</translation>
+        <translation type="vanished">!!! Supprimé !!!</translation>
+    </message>
+</context>
+<context>
+    <name>VoiceKeyer</name>
+    <message>
+        <location filename="../VKMixer.cpp" line="9"/>
+        <source>Unloaded</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="9"/>
+        <source>No PTT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="9"/>
+        <source>PassThrough</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="10"/>
+        <source>Replay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="10"/>
+        <source>Pip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="10"/>
+        <source>Replay Tone1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="10"/>
+        <source>Replay Tone2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="11"/>
+        <source>Voice Record</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="12"/>
+        <source>CW Transmit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="12"/>
+        <source>CW PassThrough</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="14"/>
+        <source>none</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="14"/>
+        <location filename="../VKMixer.cpp" line="15"/>
+        <location filename="../VKMixer.cpp" line="17"/>
+        <source>output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../VKMixer.cpp" line="16"/>
+        <source>input</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>clusterState</name>
     <message>
-        <location filename="../clustercommon.cpp" line="7"/>
         <source>Available</source>
-        <translation>Disponible</translation>
+        <translation type="vanished">Disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="8"/>
         <source>Not Available</source>
-        <translation>Non disponible</translation>
+        <translation type="vanished">Non disponible</translation>
     </message>
     <message>
-        <location filename="../clustercommon.cpp" line="9"/>
         <source>No Contact</source>
         <translatorcomment>Dupe?</translatorcomment>
-        <translation>Pas de contact</translation>
+        <translation type="vanished">Pas de contact</translation>
     </message>
 </context>
 <context>
     <name>enquireDialog</name>
     <message>
-        <location filename="../enqdlg.cpp" line="32"/>
-        <location filename="../enqdlg.cpp" line="44"/>
         <source>Please supply value</source>
-        <translation>Fournir une valeur SVP</translation>
+        <translation type="vanished">Fournir une valeur SVP</translation>
     </message>
 </context>
 <context>
     <name>serialData</name>
     <message>
-        <location filename="../serialdata.cpp" line="23"/>
-        <location filename="../serialdata.cpp" line="24"/>
-        <location filename="../serialdata.cpp" line="25"/>
         <source>None</source>
-        <translation>Aucune</translation>
+        <translation type="vanished">Aucune</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="23"/>
         <source>Odd</source>
-        <translation>Impaire</translation>
+        <translation type="vanished">Impaire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="23"/>
         <source>Even</source>
-        <translation>Paire</translation>
+        <translation type="vanished">Paire</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="23"/>
         <source>Mark</source>
-        <translation>Marque</translation>
+        <translation type="vanished">Marque</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="23"/>
         <source>Space</source>
-        <translation>Espace</translation>
+        <translation type="vanished">Espace</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="24"/>
         <source>XON/XOFF</source>
-        <translation>XON/XOFF</translation>
+        <translation type="vanished">XON/XOFF</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="24"/>
         <source>CTS/RTS</source>
-        <translation>CTS/RTS</translation>
+        <translation type="vanished">CTS/RTS</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="25"/>
         <source>High</source>
-        <translation>Haut</translation>
+        <translation type="vanished">Haut</translation>
     </message>
     <message>
-        <location filename="../serialdata.cpp" line="25"/>
         <source>Low</source>
-        <translation>Bas</translation>
+        <translation type="vanished">Bas</translation>
     </message>
 </context>
 </TS>

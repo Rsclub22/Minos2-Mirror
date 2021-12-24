@@ -190,7 +190,7 @@ private:
 
     void traceMsg(QString msg);
     void updateFreq(Frequency f);
-    void buildScreen(SCScreen &s, int t, int &auxInstance, int slotNo);
+    void buildScreen(SCScreen &s, int t, int &auxInstance);
 
     void setQrzDisplayFrameLoaded(bool loaded);
 private slots:

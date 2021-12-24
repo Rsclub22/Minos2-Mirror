@@ -207,23 +207,23 @@ bool BandList::parseBand ( TiXmlElement * e )
     band->fLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
     band->fHigh = Frequency(temp);
+    int fMult = 1;
     if ( unit == "K" )
     {
-        band->fLow  = qint64(band->fLow) * 1000;
-        band->fHigh = qint64(band->fHigh) * 1000;
+        fMult = 1000;
     }
     else
         if ( unit == "M" )
         {
-            band->fLow  = qint64(band->fLow) * 1000000;
-            band->fHigh = qint64(band->fHigh) * 1000000;
+            fMult = 1000000;
         }
         else
             if ( unit == "G" )
             {
-                band->fLow  = qint64(band->fLow) * 1000000000;
-                band->fHigh = qint64(band->fHigh) * 1000000000;
+                fMult = 1000000000;
             }
+    band->fLow  = qint64(band->fLow) * fMult;
+    band->fHigh = qint64(band->fHigh) * fMult;
 
     band->wlen = getAttribute ( e, "wlen" );
     band->uk = getAttribute ( e, "UK" );
@@ -231,8 +231,37 @@ bool BandList::parseBand ( TiXmlElement * e )
     band->adif = getAttribute ( e, "ADIF" );
     band->cabrillo = getAttribute ( e, "Cabrillo" );
 
-    temp = getAttribute(e, "zoom");
-    band->zoomDefault = toInt(temp, dialData::START_ZOOM_LEVEL);
+    band->bandmapHigh = band->fHigh;
+    temp = getAttribute(e, "bandmapHigh");
+    if (!temp.isEmpty())
+    {
+        Frequency fTemp = Frequency(temp);
+        fTemp = fTemp * fMult;
+        band->bandmapHigh = fTemp;
+    }
+    band->bandmapLow = band->fLow;
+    temp = getAttribute(e, "bandmapLow");
+    if (!temp.isEmpty())
+    {
+        Frequency fTemp = Frequency(temp);
+        fTemp = fTemp * fMult;
+        band->bandmapLow = fTemp;
+    }
+    if (band->bandmapHigh < band->fLow || band->bandmapHigh > band->fHigh)
+    {
+        band->bandmapHigh = band->fHigh;
+    }
+    if (band->bandmapLow < band->fLow || band->bandmapLow > band->fHigh)
+    {
+        band->bandmapLow = band->fLow;
+    }
+
+    if (band->bandmapLow > band->bandmapHigh)
+    {
+        Frequency temp = band->bandmapLow;
+        band->bandmapLow = band->bandmapHigh;
+        band->bandmapHigh = temp;
+    }
 
     band->bandColour = getAttribute(e, "Colour");
 

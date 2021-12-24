@@ -78,7 +78,7 @@ public:
             QString profile = b->normalisedName();
             profile = "bandmapStartZoomLevel_" + profile;
             startZoomLevelIdByBand.insert(b->uk, profile);
-            startZoomLevelDefaultByBand.insert(b->uk, b->zoomDefault);
+            startZoomLevelDefaultByBand.insert(b->uk, dialData::START_ZOOM_LEVEL);
         }
     }
 

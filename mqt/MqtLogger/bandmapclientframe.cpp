@@ -693,8 +693,8 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     {
         if (bi->uk == contestBandStr)
         {
-            contestBandFlow = bi->fLow;
-            contestBandFHigh = bi->fHigh;
+            contestBandFlow = bi->bandmapLow;
+            contestBandFHigh = bi->bandmapHigh;
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
             traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow.traceStr()).arg(contestBandFHigh.traceStr()));

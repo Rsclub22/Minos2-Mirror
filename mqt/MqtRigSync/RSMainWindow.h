@@ -27,18 +27,13 @@ public:
     Frequency rigFreq;
     Frequency lastRigFreq;
 
-    QSharedPointer<BandInfo>  lastBand;
-    QSharedPointer<ModeInfo>  lastBandMode;
-    int lastModePart = -1;
-
     bool trackThis = false;
     bool trackOther = false;
-    bool trackBand = false;
     bool trackWSJTX = false;
 
     SyncRadio(const QString &w, RigCache &r);
 
-    void setChoices(bool trthis, bool trother, bool tb, bool tw);
+    void setChoices(bool trthis, bool trother, bool tw);
 
     void selectRadio(PubSubName name);
     void subRigSelection(const PubSubName &s, bool state);
@@ -47,8 +42,6 @@ public:
     QStringList populateRig();
     bool check(N1MMLink &n1mmLink);
     bool check(WsjtxLink &wsjtxLink);
-    void rigCentre(const Frequency &fLow, const Frequency &fHigh, const QString &mode);
-    void trackOtherBand(SyncRadio &tracked);
 
     bool isMaster()const;
     void setMaster(bool m);
@@ -72,7 +65,6 @@ private slots:
     void on_transfer21Button_clicked();
     void on_trackRig_clicked();
     void on_trackSub_clicked();
-    void on_trackBandcb_stateChanged(int);
     void on_wsjtxCb_stateChanged(int arg1);
     void on_Rig2Combo_activated(const QString &arg1);
 
