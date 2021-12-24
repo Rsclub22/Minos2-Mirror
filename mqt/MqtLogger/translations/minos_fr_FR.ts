@@ -277,7 +277,7 @@
         <translation>Filtre %1</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1689"/>
+        <location filename="../bandmapclientframe.cpp" line="1695"/>
         <source>Mouse in frame, updates paused</source>
         <translation>Souris dans le cadre, mises à jour suspendues</translation>
     </message>
@@ -297,7 +297,7 @@
         <translation>Déconnecté</translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1578"/>
+        <location filename="../bandmapclientframe.cpp" line="1587"/>
         <source>Freq out of band</source>
         <translation>Fréquence hors bande</translation>
     </message>
@@ -2513,37 +2513,37 @@ Non - Ignorer les modifications</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2493"/>
+        <location filename="../qsologframe.cpp" line="2494"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2500"/>
+        <location filename="../qsologframe.cpp" line="2501"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2531"/>
+        <location filename="../qsologframe.cpp" line="2532"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2596"/>
+        <location filename="../qsologframe.cpp" line="2597"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2598"/>
+        <location filename="../qsologframe.cpp" line="2599"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2980"/>
+        <location filename="../qsologframe.cpp" line="2981"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3015"/>
+        <location filename="../qsologframe.cpp" line="3016"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -5241,22 +5241,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="860"/>
+        <location filename="../tsinglelogframe.cpp" line="873"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1438"/>
+        <location filename="../tsinglelogframe.cpp" line="1451"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1457"/>
+        <location filename="../tsinglelogframe.cpp" line="1470"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1479"/>
+        <location filename="../tsinglelogframe.cpp" line="1492"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>
