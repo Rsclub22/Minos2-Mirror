@@ -277,16 +277,16 @@
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="rotInvertBut">
+           <widget class="QRadioButton" name="compassBut">
             <property name="text">
-             <string>S-Stop  0-360</string>
+             <string>S-Stop  180-180</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QRadioButton" name="compassBut">
+           <widget class="QRadioButton" name="rotInvertBut">
             <property name="text">
-             <string>S-Stop  180-180</string>
+             <string>S-Stop  0-360</string>
             </property>
            </widget>
           </item>

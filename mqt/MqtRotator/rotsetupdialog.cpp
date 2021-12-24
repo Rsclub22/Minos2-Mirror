@@ -168,6 +168,7 @@ void RotSetupDialog::loadSettingsToTab(int tabNum)
 
         // set southstop visible if rotator is 0 - 360
 
+
         if (availAntData[tabNum]->rotType == ROT_0_360)
         {
            if (rotCap.allowSouthStopConfig)
@@ -433,6 +434,7 @@ void RotSetupDialog::saveSettings()
             config.setValue("rotatorPollInterval", availAntData[i]->pollInterval);
             config.setValue("simulateCwCCw", availAntData[i]->simCwCcwCmd);
             config.setValue("overRun", availAntData[i]->overRunFlag);
+            config.setValue("southStopType", availAntData[i]->southStopType);
             config.setValue("antennaOffset", availAntData[i]->antennaOffset);
             config.setValue("portType", availAntData[i]->portType);
             config.setValue("comport", availAntData[i]->comport);
@@ -486,6 +488,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
+    availAntData[antNum]->southStopType = (southStop) config.value("southStopType", southStop::S_STOPOFF).toInt();
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
     availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
