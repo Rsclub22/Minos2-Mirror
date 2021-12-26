@@ -41,6 +41,7 @@ class StackedInfoFrame : public QFrame
 
 public:
     static QVector <AuxTypeOption> auxoptions;
+
     explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
     ~StackedInfoFrame();
 
@@ -50,14 +51,11 @@ public:
     static const char *getRawAuxTypeString(AuxEntries t);
     static QString getTrAuxTypeString(AuxEntries t);
 
-
 private:
     Ui::StackedInfoFrame *ui;
 
     int stackInstance = 0;
-
-
-    LoggerContestLog *contest;
+    LoggerContestLog *contest = nullptr;
 
     TClockFrame *clockFrame = nullptr;
     DXCCFrame *dxccFrame = nullptr;
@@ -70,12 +68,12 @@ private:
 
     QFrame *currStackFrame = nullptr;
 
+    void setTabVisibility();
 
 private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );
     void on_ScrollToCountry( const QString &csCs, BaseContestLog* );
 
-    void on_FontChanged();
     void onInfoComboCurrentIndexChanged(int arg1);
 
     void onFiltersChanged(BaseContestLog *ct);
