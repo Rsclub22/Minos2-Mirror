@@ -316,7 +316,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
 
                 QString a = ui->infoCombo->currentText();
 
-                if(ct->currentStackItemsValid && aux != a )
+                if(ct->currentStackItemsValid && aux != a && !aux.isEmpty())
                 {
                     // set to contest value
                     ui->infoCombo->setCurrentText(aux);
