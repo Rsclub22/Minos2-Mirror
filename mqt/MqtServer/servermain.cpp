@@ -21,8 +21,7 @@ ServerMain::ServerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
 
     createCloseEvent();
     QSettings settings;
@@ -61,7 +60,6 @@ void ServerMain::onStdInRead(QString cmd)
     {
         closeApp = true;
     }
-    executeStdIn(cmd);
 }
 
 void ServerMain::LogTimerTimer( )
@@ -99,16 +97,6 @@ void ServerMain::LogTimerTimer( )
    {
       lastPubCount = pubCount;
       ui->PubLabel->setText(QString::number(pubCount));
-   }
-
-   bool show = getShowApp();
-   if ( !isVisible() && show )
-   {
-      setVisible(true);
-   }
-   if ( isVisible() && !show )
-   {
-      setVisible(false);
    }
 
    if ( closeApp )

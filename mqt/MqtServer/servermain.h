@@ -43,7 +43,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QSharedPointer<MinosClientListener> clientListener;
     QSharedPointer<MinosRouterListener> routerListener;
     QSharedPointer<TZConf> ZConf;

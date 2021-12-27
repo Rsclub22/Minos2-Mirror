@@ -33,9 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
-    stdinReader.start();
-
     QSettings gsettings;
     QByteArray geometry = gsettings.value("RigRecorderMain/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -107,10 +104,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
-}
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
@@ -151,15 +144,6 @@ void MainWindow::onCloseTimer()
     {
         trace("closing set in close timer");
         return;
-    }
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
     }
     bool autostart = ui->autostartCb->isChecked();
     bool link = ui->contestLinkCB->isChecked();

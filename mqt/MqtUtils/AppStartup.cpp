@@ -321,20 +321,4 @@ void setAppClosing()
     appClosing = true;
 }
 
-void executeStdIn(QString cmd)
-{
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowApp(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowApp(false);
-    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
-    {
-        setAppFont(cmd);
-    }
-    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
-    {
-        QApplication::closeAllWindows();
-    }
-}
 

@@ -51,9 +51,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialData::translateSerialData();
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
-    stdinReader.start();
-
+    connect(stdinReader, &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
@@ -305,16 +303,6 @@ void RigControlMainWindow::logMessage( QString s )
 
 void RigControlMainWindow::LogTimerTimer()
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
-
     static bool closed = false;
     if ( !closed )
     {
@@ -360,7 +348,6 @@ void RigControlMainWindow::onStdInRead(QString cmd)
         pollTimer->stop();
         RigCtldStatusTimer->stop();
     }
-    executeStdIn(cmd);
     if (doClose)
         close();
 

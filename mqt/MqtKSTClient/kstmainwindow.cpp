@@ -29,8 +29,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     mainWindow = this;
-    connect(&stdinReader, &StdInReader::stdinLine, this, &KSTMainWindow::onStdInRead);
-    stdinReader.start();
 
     QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     sizePolicy.setHorizontalStretch(0);
@@ -309,10 +307,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 KSTMainWindow::~KSTMainWindow()
 {
     delete ui;
-}
-void KSTMainWindow::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {

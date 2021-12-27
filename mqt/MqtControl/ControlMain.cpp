@@ -34,10 +34,6 @@ ControlMain::ControlMain(QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
-
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ControlMain::onStdInRead);
-    stdinReader.start();
-
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
     connect(rpc, &MinosRPC::routerCall, this, &ControlMain::on_routerCall);
@@ -137,10 +133,6 @@ void ControlMain::subscribeApps()
 
 }
 
-void ControlMain::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
-}
 void ControlMain::on_formShown( )
 {
     static bool shown = false;
@@ -187,16 +179,6 @@ void ControlMain::changeEvent( QEvent* e )
 }
 void ControlMain::LogTimerTimer( )
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-       setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-       setVisible(false);
-    }
-
    static bool closed = false;
    if ( !closed )
    {

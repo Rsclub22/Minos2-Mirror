@@ -48,13 +48,11 @@ private:
     RigCache rigCache;
     PubSubName rigSelected;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QTimer LogTimer;
     QTimer formShowTimer;
 
 private slots:
-    void onStdInRead(QString);
-
     void on_formShown();
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
     void on_notify( AnalysePubSubNotify an, const QString from );

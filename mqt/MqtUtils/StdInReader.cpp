@@ -3,9 +3,10 @@
 
 #include "StdInReader.h"
 
-StdInReader::StdInReader()
+StdInReader::StdInReader(QMainWindow *m):qmw(m)
 {
-
+    connect(this, &StdInReader::stdinLine, this, &StdInReader::executeStdIn);
+    start();
 }
 StdInReader::~StdInReader()
 {
@@ -26,12 +27,26 @@ void StdInReader::run()
         emit stdinLine(line);
     }
 }
-static bool showApp = true;
-bool getShowApp()
+void StdInReader::setShowApp(bool state)
 {
-    return showApp;
+    if (qmw)
+    {
+        qmw->setVisible(state);
+    }
 }
-void setShowApp(bool state)
+void StdInReader::executeStdIn(QString cmd)
 {
-    showApp = state;
+    trace("Command read from stdin: " + cmd);
+    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowApp(true);
+    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
+        setShowApp(false);
+    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
+    {
+        setAppFont(cmd);
+    }
+    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
+    {
+        QApplication::closeAllWindows();
+    }
 }

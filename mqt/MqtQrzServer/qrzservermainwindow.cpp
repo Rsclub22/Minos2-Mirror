@@ -31,8 +31,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &QrzServerMainWindow::onStdInRead);
 
     QSettings settings;
     QByteArray geometry = settings.value("geometry").toByteArray();
@@ -129,16 +128,6 @@ void QrzServerMainWindow::closeEvent(QCloseEvent *event)
 
 void QrzServerMainWindow::LogTimerTimer()
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
-
     static bool closed = false;
     if ( !closed )
     {
@@ -165,17 +154,10 @@ void QrzServerMainWindow::onPingStateTimerTimeout()
 
 void QrzServerMainWindow::onStdInRead(QString cmd)
 {
-
-    bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-//        closeApp = true;
-        doClose = true;
-    }
-    executeStdIn(cmd);
-    if (doClose)
         close();
-
+    }
 }
 
 

@@ -266,7 +266,7 @@ signals:
     void disconnectTimerfinished();
 private:
     Ui::ClusterMainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
 
     class QTimer LogTimer;

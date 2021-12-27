@@ -29,8 +29,6 @@ public:
     bool writeConfig(bool force);
 private slots:
 
-    void onStdInRead(QString);
-
     void CaptionTimerTimer();
 
     void lineTimerTimer();
@@ -96,7 +94,7 @@ private:
     QTimer lineTimer;
     QTimer CaptionTimer;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     bool PTT;
     bool PTTRef;

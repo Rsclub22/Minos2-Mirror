@@ -249,7 +249,7 @@ public:
 private:
 
     Ui::RigControlMainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 

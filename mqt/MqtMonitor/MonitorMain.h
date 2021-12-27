@@ -161,8 +161,6 @@ private slots:
     void on_routerCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
     void on_provider(Provider provider, QString cat);
 
-    void onStdInRead(QString cmd);
-
     void on_monitorTimeout();
 
     void on_monitorTree_doubleClicked(const QModelIndex &index);
@@ -202,7 +200,7 @@ private:
     virtual void changeEvent( QEvent* e ) override;
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QString localRouterName;
 
     MonitorTreeModel *treeModel;

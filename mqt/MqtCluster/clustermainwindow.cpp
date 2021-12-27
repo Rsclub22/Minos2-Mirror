@@ -103,8 +103,7 @@ void ClusterMainWindow::connectToCluster()
 void ClusterMainWindow::doStartup()
 {
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
@@ -1942,16 +1941,6 @@ void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)
 
 void ClusterMainWindow::LogTimerTimer()
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
-
     static bool closed = false;
     if ( !closed )
     {
@@ -2110,16 +2099,10 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
 void ClusterMainWindow::onStdInRead(QString cmd)
 {
-    bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-//        closeApp = true;
-        doClose = true;
-    }
-    executeStdIn(cmd);
-    if (doClose)
         close();
-
+    }
 }
 
 /*

@@ -99,7 +99,7 @@ signals:
 private:
     Ui::RotatorMainWindow *ui;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     bool closeApp = false;
     RotatorRpc *msg;

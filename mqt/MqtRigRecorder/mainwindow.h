@@ -21,8 +21,6 @@ public:
 
     void volcallback(unsigned int rmsvol, unsigned int peakvol, unsigned int samples);
 private slots:
-    void onStdInRead(QString);
-
     void on_startRecButton_clicked();
 
     void on_stopRecButton_clicked();
@@ -57,7 +55,7 @@ private:
     bool started = false;
     bool stopped = false;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QTimer closeTimer;
 
     bool closing = false;

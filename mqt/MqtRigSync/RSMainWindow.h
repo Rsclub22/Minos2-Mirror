@@ -72,8 +72,6 @@ private slots:
 
     void claimTimerTimer();
 
-    void onStdInRead(QString);
-
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
     void on_notify(AnalysePubSubNotify an, const QString from);
 
@@ -88,7 +86,7 @@ private:
     WsjtxLink wsjtxLink;
     bool firstTime = true;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     QTimer SyncTimer;
 

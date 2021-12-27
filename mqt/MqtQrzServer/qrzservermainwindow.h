@@ -154,10 +154,8 @@ private:
     Ui::QrzServerMainWindow *ui;
 
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QString appName = "";
-
-
 
     QTimer LogTimer;
     QTimer *pingStateTimer;

@@ -16,9 +16,6 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &TMinosChatForm::onStdInRead);
-    stdinReader.start();
-
     createCloseEvent();
     connect(&CloseTimer, &QTimer::timeout, this, &TMinosChatForm::CloseTimerTimer);
     CloseTimer.start(100);
@@ -32,10 +29,6 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
 TMinosChatForm::~TMinosChatForm()
 {
     delete ui;
-}
-void TMinosChatForm::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
 }
 void TMinosChatForm::CloseTimerTimer(  )
 {

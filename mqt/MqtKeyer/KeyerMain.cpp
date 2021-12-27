@@ -85,9 +85,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &KeyerMain::onStdInRead);
-    stdinReader.start();
-
     QSettings settings;
     QByteArray geometry = settings.value("KeyerMain/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -159,10 +156,6 @@ KeyerMain::~KeyerMain()
     inhibitCallbacks = true;
     delete ui;
 }
-void KeyerMain::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
-}
 void KeyerMain::closeEvent(QCloseEvent *event)
 {
     inhibitCallbacks = true;
@@ -227,15 +220,6 @@ void KeyerMain::lineTimerTimer( )
     else
     {
         return;     // closed
-    }
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-       setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-       setVisible(false);
     }
 
    syncSetLines();

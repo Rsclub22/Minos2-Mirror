@@ -24,9 +24,6 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader,&StdInReader::stdinLine, this, &RSMainWindow::onStdInRead);
-    stdinReader.start();
-
     createCloseEvent();
 
     QSettings settings;
@@ -115,11 +112,6 @@ RSMainWindow::~RSMainWindow()
     delete ui;
 }
 
-void RSMainWindow::onStdInRead(QString cmd)
-{
-    trace(QString("RSMainWindow::onStdInRead %1").arg(cmd));
-    executeStdIn(cmd);
-}
 void RSMainWindow::closeEvent(QCloseEvent *event)
 {
     // and tidy up all loose ends

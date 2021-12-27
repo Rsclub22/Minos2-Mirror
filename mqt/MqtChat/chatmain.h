@@ -19,7 +19,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QTimer CloseTimer;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     virtual void closeEvent(QCloseEvent *event) override;
     virtual void resizeEvent(QResizeEvent *event) override;
@@ -27,7 +27,6 @@ private:
     virtual void changeEvent( QEvent* e ) override;
 
 private slots:
-    void onStdInRead(QString);
     void CloseTimerTimer();
 };
 

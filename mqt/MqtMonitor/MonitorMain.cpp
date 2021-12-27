@@ -239,9 +239,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
 
     monitorMain = this;
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &MonitorMain::onStdInRead);
-    stdinReader.start();
-
     createCloseEvent();
 #ifdef Q_OS_ANDROID
     splitterHandleWidth = 20;
@@ -378,10 +375,6 @@ bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
         }
     }
     return false;
-}
-void MonitorMain::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
 }
 
 void MonitorMain::on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/)
