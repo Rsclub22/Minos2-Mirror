@@ -183,7 +183,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 
     if (currStackFrame)
     {
-        layout()->removeWidget(currStackFrame);
+        ui->stackFrame->layout()->removeWidget(currStackFrame);
         currStackFrame->deleteLater();
         currStackFrame = nullptr;
     }
@@ -213,56 +213,56 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     case aeClock:
         clockFrame = new TClockFrame(this);
         currStackFrame = clockFrame;
-        layout()->addWidget(currStackFrame);
+        ui->stackFrame->layout()->addWidget(currStackFrame);
         clockFrame->setContest(contest);
         break;
 
     case aeDXCC:
         dxccFrame = new DXCCFrame(this);
         currStackFrame = dxccFrame;
-        layout()->addWidget(currStackFrame);
+        ui->stackFrame->layout()->addWidget(currStackFrame);
         dxccFrame->setContest(contest);
         break;
 
     case aeDistrict:
         districtFrame = new DistrictFrame(this);
         currStackFrame = districtFrame;
-        layout()->addWidget(districtFrame);
+        ui->stackFrame->layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
         break;
 
     case aeFilter:
         filterFrame = new FilterFrame(this);
         currStackFrame = filterFrame;
-        layout()->addWidget(filterFrame);
+        ui->stackFrame->layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
         break;
 
     case aeMemories:
         rigMemFrame = new RigMemoryFrame(this);
         currStackFrame = rigMemFrame;
-        layout()->addWidget(rigMemFrame);
+        ui->stackFrame->layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
         break;
 
     case aeLocatorMap:
         locFrame = new LocFrame(this);
         currStackFrame = locFrame;
-        layout()->addWidget(locFrame);
+        ui->stackFrame->layout()->addWidget(locFrame);
         locFrame->setContest(contest);
         break;
 
     case aeLocatorTree:
         locTreeFrame = new LocTreeFrame(this);
         currStackFrame = locTreeFrame;
-        layout()->addWidget(locTreeFrame);
+        ui->stackFrame->layout()->addWidget(locTreeFrame);
         locTreeFrame->setContest(contest);
         break;
 
     case aeStats:
         statsFrame = new TStatsDispFrame(this);
         currStackFrame = statsFrame;
-        layout()->addWidget(statsFrame);
+        ui->stackFrame->layout()->addWidget(statsFrame);
         statsFrame->setContest(contest);
         break;
     }
