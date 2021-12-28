@@ -1140,7 +1140,8 @@ void KSTMainWindow::onCSTableSelectionChanged(const QItemSelection &/*selected*/
     ui->messageFilter->setText(mselstring);
     if (mil.count() == 1)
     {
-        QSharedPointer<KstUser> user = callVector->at(mil[0].row());
+        QModelIndex m = kstCallFilterModel.mapToSource(mil[0]);
+        QSharedPointer<KstUser> user = callVector->at(m.row());
 
         if (!ui->noSetCallcb->isChecked())
         {
