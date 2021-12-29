@@ -239,7 +239,10 @@ void WsjtxServer::wsjtxDatagram(int instance, QByteArray *datagram)
 
             fos.setFileName(dpath + baseName);
             if (!fos.open(QIODevice::WriteOnly|QIODevice::Append))
+            {
+                trace(QString("WSTT-X UDP recording: Failed to open %1").arg(dpath + baseName));
                return;
+            }
 
             os.setDevice(&fos);
             os.setVersion (QDataStream::Qt_5_4);
@@ -249,9 +252,13 @@ void WsjtxServer::wsjtxDatagram(int instance, QByteArray *datagram)
         os << tnow;
         os << *datagram;
 
-//        QString dtg = tnow.toString("yyyy-MM-dd hh-mm-ss");
-//        int s = datagram->size();
-
         fos.flush();
+    }
+    else
+    {
+        if(fos.isOpen())
+        {
+            fos.close();
+        }
     }
 }
