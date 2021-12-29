@@ -2034,8 +2034,36 @@ void QSOLogFrame::setMode(QString m)
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
 {
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     if (curFreq != f)
     {
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK;
+
+        bandOK = blist.findBand(f, bi);
+        if (bandOK)
+        {
+            if (bi->uk != contest->currentBand.getValue())
+            {
+                f.clear();
+            }
+        }
+        else
+        {
+            f.clear();
+        }
+
+        if (qint64(f) < 100)
+        {
+            QString cband = contest->currentBand.getValue().trimmed();
+            bandOK = blist.findBand(cband, bi);
+            if (bandOK)
+            {
+                f = bi->fLow;
+            }
+        }
+
         curFreq = f;
         emit freqChanged(f);
 
