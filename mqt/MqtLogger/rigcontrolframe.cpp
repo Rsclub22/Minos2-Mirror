@@ -2147,6 +2147,18 @@ void RigControlFrame::on_resetBandFreqButton_clicked()
     QString cb = ct->currentBand.getValue().trimmed();
     traceMsg(QString("setRadioFreq: contest band = %1").arg(cb));
 
+    if (readIgnorePresetFreqFlag() || readIgnorePreviousFreqFlag())
+    {
+        traceMsg(QString("Ignore Preset Flag = %1 or Ignore Previous Freq Flag = %2, just send Band = %3")
+                .arg(readIgnorePresetFreqFlag() ? "True" : "False")
+                .arg(readIgnorePreviousFreqFlag() ? "True" : "False")
+                .arg(cb));
+        emit sendBandToRigControl(cb);
+        return;
+    }
+
+
+
     BandList &blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
     bool bandOK = blist.findBand(cb, bi);

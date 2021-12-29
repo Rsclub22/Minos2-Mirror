@@ -273,24 +273,65 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
 
         else if (maxRot == COMPASS_MAX360 && minRot == COMPASS_MIN0)
         {
-            antennaData->max_azimuth = maxRot;
-            antennaData->min_azimuth = minRot;
-            antennaData->rotType = ROT_0_360;
-            antennaData->endStopType = ROT_0_360;
 
-            antennaData->overRunFlag = false;
-            antennaData->southStopType = S_STOPOFF;
+            antennaData->rotType = ROT_0_360;
+
+            if (antennaData->southStopType ==  S_STOPCOMP)
+            {
+                antennaData->max_azimuth = COMPASS_HALF - 1;
+                antennaData->min_azimuth = COMPASS_HALF + 1;
+                antennaData->endStopType = ROT_180_180;
+            }
+            else if (antennaData->southStopType ==  S_STOPINV)
+            {
+                antennaData->max_azimuth = COMPASS_MAX360;
+                antennaData->min_azimuth = COMPASS_MIN0;
+                antennaData->endStopType = ROT_0_360;
+            }
+            else if (antennaData->southStopType == S_STOPOFF)
+            {
+                antennaData->max_azimuth = maxRot;
+                antennaData->min_azimuth = minRot;
+                antennaData->endStopType = ROT_0_360;
+            }
+
+
         }
         else if (maxRot > COMPASS_MAX360 && minRot == COMPASS_MIN0)
         {                                                                                                               // ROT_0_450, mainly GS232B rotator
 
             antennaData->rotType = ROT_0_450;
-            antennaData->endStopType = ROT_0_450;
-            antennaData->max_azimuth = maxRot;
 
-            antennaData->min_azimuth = minRot;
-            antennaData->overRunFlag = true;
-            antennaData->southStopType = S_STOPOFF;
+            if (!antennaData->overRunFlag)
+            {
+
+                if (antennaData->southStopType ==  S_STOPCOMP)
+                {
+                    antennaData->max_azimuth = COMPASS_HALF - 1;
+                    antennaData->min_azimuth = COMPASS_HALF + 1;
+                    antennaData->endStopType = ROT_180_180;
+                }
+                else if (antennaData->southStopType ==  S_STOPINV)
+                {
+                    antennaData->max_azimuth = COMPASS_MAX360;
+                    antennaData->min_azimuth = COMPASS_MIN0;
+                    antennaData->endStopType = ROT_0_360;
+                }
+                else if (antennaData->southStopType == S_STOPOFF)
+                {
+                    antennaData->max_azimuth = maxRot;
+                    antennaData->min_azimuth = minRot;
+                    antennaData->endStopType = ROT_0_360;
+                }
+            }
+            else
+            {
+                antennaData->max_azimuth = maxRot;
+                antennaData->min_azimuth = minRot;
+                antennaData->southStopType = S_STOPOFF;
+                antennaData->endStopType = ROT_0_450;
+            }
+
 
          }
          else if (maxRot > COMPASS_MAX360 && minRot < COMPASS_MIN0 )
@@ -302,11 +343,11 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->endStopType = ROT_NEG180_540;
             antennaData->overRunFlag = true;
             antennaData->southStopType = S_STOPOFF;
-          }
-          else
-          {
-             return false;
-          }
+        }
+        else
+        {
+            return false;
+        }
 
 
         return true;
@@ -664,8 +705,7 @@ void rotSetupForm::setRotInvertButVisible(bool s)
 
 void rotSetupForm::compassButSelected()
 {
-//    if (!chkloadflg)
-//    {
+
     antennaData->southStopType = S_STOPCOMP;
     antennaData->max_azimuth = COMPASS_HALF - 1;
     antennaData->min_azimuth = COMPASS_HALF + 1;
@@ -673,7 +713,7 @@ void rotSetupForm::compassButSelected()
 
     antennaValueChanged = true;
 
-//    }
+
 }
 
 

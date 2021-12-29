@@ -374,13 +374,24 @@ void RadioSettingDialog::getFreq(QLineEdit* f_box, int band)
 
 bool RadioSettingDialog::checkInBand(Frequency freq, const QString &band, const QString &mode)
 {
-    if (BandList::getBandList().isFreqOK(freq, band, mode))
+    bool excludedFreq = false;
+
+    if (BandList::getBandList().isFreqOK(freq, band, mode, excludedFreq))
     {
         return true;
     }
     errorShown = true;
     QMessageBox msgBox;
-    msgBox.setText(tr("Frequency %1 is out of band/mode for %2/%3").arg(freq.convertFreqStrDispSingle(), band, mode));
+
+    if (excludedFreq)
+    {
+       msgBox.setText(tr("Frequency %1 should be avoided as part of the bandplan for %2/%3").arg(freq.convertFreqStrDispSingle(), band, mode));
+    }
+    else
+    {
+       msgBox.setText(tr("Frequency %1 is out of band/mode for %2/%3").arg(freq.convertFreqStrDispSingle(), band, mode));
+    }
+
     msgBox.exec();
     return false;
 }

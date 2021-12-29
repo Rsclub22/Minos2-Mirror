@@ -291,10 +291,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
     int markCount = 0;
     Frequency markFreq = contestBandFlow;
 
-    if (markStep < dialHeight/1000)
-    {
-        markStep = dialHeight/1000; // or we can get a ridiculous loop
-    }
+    //if (markStep < dialHeight/1000)
+   // {
+   //     markStep = dialHeight/1000; // or we can get a ridiculous loop
+   // }
 
     if (dialData::minorMarker[zoomLevel] == 0)
     {
@@ -506,6 +506,7 @@ Frequency BandmapFreqDial::getFreqFromYCoordOnDial(int y)
 int BandmapFreqDial::getFullBandHeight(const Frequency &flow, const Frequency &fhigh)
 {
     Frequency bandRange = fhigh - flow;
+    Frequency f = bandRange/1000;
     fullBandHeight = static_cast<int>(qint64(bandRange)/1000 * dialData::khzPixelStep[zoomLevel]);
     return fullBandHeight;
 
