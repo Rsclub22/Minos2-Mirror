@@ -80,12 +80,14 @@ QString ModeInfo::getType() const
     return type;
 }
 
-bool ModeInfo::isFreqOK(const Frequency &f)
+bool ModeInfo::isFreqOK(const Frequency &f, bool &excludedFreq)
 {
     for(const auto &exc:qAsConst(exclusions))
     {
         if (f >= exc->fLow && f <= exc->fHigh )
         {
+
+            excludedFreq = true;
             return false;
         }
     }
@@ -608,17 +610,21 @@ QString BandList::findBandNameFromIndex(int idx, QVector<QSharedPointer<BandInfo
     return "";
 }
 
-bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &mode)
+bool BandList::isFreqOK(const Frequency &f, const QString &band, const QString &mode, bool &excludedFreq)
 {
     QSharedPointer<BandInfo>  bi;
     bool bandOK = false;
+    bool excludedF = false;
     bandOK = findBand(band, bi);
     if (bandOK)
     {
         QSharedPointer<ModeInfo> mi = bi->findMode(mode);
         if (mi)
         {
-            return mi->isFreqOK(f);
+
+            bool fOk = mi->isFreqOK(f, excludedF);
+            excludedFreq = excludedF;
+            return fOk;
         }
         if (bi->modes.size() == 0)
         {

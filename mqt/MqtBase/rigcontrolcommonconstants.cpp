@@ -207,8 +207,9 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
         QSharedPointer<ModeInfo> mi = bi->findMode("CW");
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
+        bool excludedFreq = false;
         Frequency f(mf);
-        if (mi && mi->isFreqOK(f))
+        if (mi && mi->isFreqOK(f, excludedFreq))
         {
             fl = f;
         }
@@ -226,8 +227,9 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
         QSharedPointer<ModeInfo> mi = bi->findMode("SSB");
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
+        bool excludedFreq = false;
         Frequency f(mf);
-        if (mi && mi->isFreqOK(f))
+        if (mi && mi->isFreqOK(f, excludedFreq))
         {
             fl = f;
         }
@@ -245,8 +247,9 @@ void PresetFreq::readSettings(const QVector<QSharedPointer<BandInfo> > &bands)
         QSharedPointer<ModeInfo> mi = bi->findMode("MGM");
         fl = mi?mi->fcLow1:bi->fcLow;
         QString mf = config.value(band, fl.str()).toString();
+        bool excludedFreq = false;
         Frequency f(mf);
-        if (mi && mi->isFreqOK(f))
+        if (mi && mi->isFreqOK(f, excludedFreq))
         {
             fl = f;
         }
