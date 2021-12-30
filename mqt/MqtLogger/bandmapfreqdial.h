@@ -95,6 +95,7 @@ public:
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);
 
     void setRadioMode(QString mode);
+
 signals:
 
     void zoomUpdated(bool);
@@ -149,6 +150,9 @@ private:
     QList< QSharedPointer<DialFreqText> > dialFreqList;
     int readBandmapZoomLevel();
     void saveBandmapZoomLevel(int &level);
+
+    void drawMarkerText(QPainter *painter, int ycoord, Frequency markFreq);
+    void drawMarkerLine(QPainter *painter, int ycoord);
 };
 
 #endif // BANDMAPFREQDIAL_H

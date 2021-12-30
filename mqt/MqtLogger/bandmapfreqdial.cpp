@@ -174,6 +174,23 @@ Frequency BandmapFreqDial::getScaleEndFreq()
 
 
 
+void BandmapFreqDial::drawMarkerText(QPainter *painter, int ycoord, Frequency markFreq)
+{
+    painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET),
+                      QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
+    QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET,
+                          dialData::fMajTextXStart + freqTextWidth, fontHeight);
+    QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
+    dialFreqList.append(dft);
+    painter->drawText(textPos,  Qt::AlignLeft, convertFreqDialDisplay(markFreq));
+}
+
+void BandmapFreqDial::drawMarkerLine(QPainter *painter, int ycoord)
+{
+    painter->drawLine(QPoint(dialWidth - dialData::fMinMrkLength, ycoord + dialData::DIAL_VERT_OFFSET),
+                      QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
+}
+
 void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scaleHeight)
 {
 
@@ -294,105 +311,69 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
     if (markStep < dialHeight/1000)
     {
         markStep = dialHeight/1000; // or we can get a ridiculous loop
+                                    // but this doesn't work either
+        // as we now aren't incrementing correctly
     }
 
-    if (dialData::minorMarker[zoomLevel] == 0)
+    for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
     {
-
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        if (dialData::minorMarker[zoomLevel] == 0)
         {
-
-            painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
-            QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-            QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
-            dialFreqList.append(dft);
-            painter->drawText(textPos,  Qt::AlignLeft, convertFreqDialDisplay(markFreq));
-            if (dialData::khzStep[zoomLevel] == 1)
+ //           if (markCount == 0 || markCount % 1 == 0)   // just to match other cases
             {
-                markFreq = markFreq + Frequency(1000);
+                drawMarkerText(painter, ycoord, markFreq);
+                if (dialData::khzStep[zoomLevel] == 1)
+                {
+                    markFreq = markFreq + Frequency(1000);
+                }
+                else
+                {
+                    markFreq = markFreq + Frequency(50000);
+                }
             }
-            else
-            {
-                markFreq = markFreq + Frequency(50000);
-            }
+//            else
+//            {
+//                drawMarkerLine(painter, ycoord);
+//            }
         }
-
-    }
-    else if (dialData::minorMarker[zoomLevel] == 1)
-    {
-
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        else if (dialData::minorMarker[zoomLevel] == 1)
         {
-
             if (markCount == 0 || markCount % 5 == 0)
             {
-                painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
-                QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
-                dialFreqList.append(dft);
-                painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
+                drawMarkerText(painter, ycoord, markFreq);
                 markFreq = markFreq + Frequency(5000);
             }
             else
             {
-                painter->drawLine(QPoint(dialWidth - dialData::fMinMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
-
+                drawMarkerLine(painter, ycoord);
             }
-
-            markCount++;
-
         }
-    }
-    else if (dialData::minorMarker[zoomLevel] == 2)
-    {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        else if (dialData::minorMarker[zoomLevel] == 2)
         {
-
             if (markCount == 0 || markCount % 10 == 0)
             {
-                painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
-                QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
-                dialFreqList.append(dft);
-                painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
+                drawMarkerText(painter, ycoord, markFreq);
                 markFreq = markFreq + Frequency(10000);
             }
             else
             {
-                painter->drawLine(QPoint(dialWidth - dialData::fMinMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
+                drawMarkerLine(painter, ycoord);
             }
-
-
-            markCount++;
         }
-
-
-    }
-    else if (dialData::minorMarker[zoomLevel] == 3)
-    {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        else if (dialData::minorMarker[zoomLevel] == 3)
         {
-
             if (markCount == 0 || markCount % 2 == 0)
             {
-                painter->drawLine(QPoint(dialData::fMajMrkXStart, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialData::fMajMrkXEnd, ycoord + dialData::DIAL_VERT_OFFSET));
-                QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) + dialData::DIAL_VERT_OFFSET, dialData::fMajTextXStart + freqTextWidth, fontHeight);
-                QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
-                dialFreqList.append(dft);
-                painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
+                drawMarkerText(painter, ycoord, markFreq);
                 markFreq = markFreq + Frequency(50000);
             }
             else
             {
-                painter->drawLine(QPoint(dialWidth - dialData::fMinMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
+                drawMarkerLine(painter, ycoord);
             }
-
-            markCount++;
-
         }
-
+        markCount++;
     }
-
 }
 
 
