@@ -237,6 +237,8 @@ void WsjtxServer::wsjtxDatagram(int instance, QByteArray *datagram)
             QString now = tnow.toString("_yyyy-MM-dd hh-mm-ss");
             baseName = baseName + now + ".wsjtx";
 
+            CreateDir(dpath);
+
             fos.setFileName(dpath + baseName);
             if (!fos.open(QIODevice::WriteOnly|QIODevice::Append))
             {
