@@ -17,7 +17,7 @@
 <Band type='HF'    flow='7000'   fhigh='7200'   unit='K' wlen='40m'    UK='7 MHz'    Reg1Test=''        ADIF='40m'    Cabrillo='7000'  Colour='blue'>
     <Mode type='CW' flow='7000' fclow1='7000' fchigh1='7040' fhigh='7040'/>
     <Mode type='LSB' flow='7050' fclow1='7060' fchigh1='7100' fclow2='7130' fchigh2='7200' fhigh='7200'/>
-    <Mode type='MGM' flow='7053' fclow1='7053' fchigh1='7060' fhigh='7060'/>
+    <Mode type='MGM' flow='7053' fclow1='7053' fchigh1='7100' fhigh='7100'/>
 </Band>
 <Band type='HF'    flow='14000'  fhigh='14350'  unit='K' wlen='20m'    UK='14 MHz'   Reg1Test=''        ADIF='20m'    Cabrillo='14000' Colour='teal'>
     <Mode type='CW' flow='14000' fclow1='14000' fchigh1='14060' fhigh='14070'/>
