@@ -450,6 +450,10 @@ QString BandmapFreqDial::convertFreqDialDisplay(const Frequency &freq)
 
     switch(len)
     {
+    case 9:
+        sfreq = sfreq.insert(6, '.');
+        sfreq = sfreq.insert(3, '.');
+        break;
     case 8:
         sfreq = sfreq.insert(5, '.');
         sfreq = sfreq.insert(2, '.');
