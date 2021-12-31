@@ -2,25 +2,14 @@
 #include <QDebug>
 #include <QMouseEvent>
 
-BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget *parent)
+BandmapGraphicsPanel::BandmapGraphicsPanel(QWidget */*parent*/)
 {
-    Q_UNUSED(parent)
-
     setFocusPolicy(Qt::NoFocus);
 }
-
-
-
-
 void BandmapGraphicsPanel::resizeEvent(QResizeEvent *)
 {
-
-    // do we need to keep this.....
-    emit bandmapResize(size().height(), size().width());
-
+    emit bandmapResize(size());
 }
-
-
 void BandmapGraphicsPanel::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
@@ -30,11 +19,7 @@ void BandmapGraphicsPanel::mousePressEvent(QMouseEvent *event)
         QPoint p = event->pos();
         emit leftMouseButtonPressed(p);
     }
-
-
 }
-
-
 void BandmapGraphicsPanel::mouseDoubleClickEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseDoubleClickEvent(event);
@@ -50,17 +35,6 @@ void BandmapGraphicsPanel::keyPressEvent(QKeyEvent *event)
     //bool shift = mods & Qt::ShiftModifier;
     bool ctrl = mods & Qt::ControlModifier;
     bool alt = mods & Qt::AltModifier;
-/*
-    if (Key == Qt::Key_Less)
-    {
-        emit zoomMap(true);
-    }
-    else if (Key == Qt::Key_Greater)
-    {
-        emit zoomMap(false);
-    }
-    else
-*/
     if (Key == Qt::Key_Up && ctrl && alt)
     {
         emit nextSpot(true, true);

@@ -284,7 +284,7 @@ signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
-    void bandmapMarkFreq(QString, Frequency, QString, QString, QString, QString);
+    void bandmapMarkFreq(Frequency, QString);
     void bandmapSaveFreq(QString, Frequency, QString, QString, QString, QString);
     void sendFreqControl(Frequency);
     void freqChanged(Frequency);

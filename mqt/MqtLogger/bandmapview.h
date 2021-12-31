@@ -107,7 +107,7 @@ protected:
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
 private slots:
-    void bandmapResize(int, int);
+    void bandmapResize(QSize s);
 
     void leftMouseButtonPressed(QPoint p);
     void mouseDoubleClicked(QPoint p);
@@ -148,9 +148,7 @@ private:
     int idealHeight;
     int fullBandHeight;
     int fontHeight;
-    int maxNumSpots;
 
-    //void changeZoom(bool direction);
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 

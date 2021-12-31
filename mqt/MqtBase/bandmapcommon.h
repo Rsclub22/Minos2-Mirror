@@ -34,25 +34,15 @@ const QString BANDMAP_INI_FILE = "./Configuration/bandmap.ini";
 namespace dialData {
 
 
-// These are all indexed by zoom level
-const int khzStep[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 25, 50, 50, 50};
-const int khzPixelStep[] = {200, 150, 110, 85, 65, 50, 35, 25, 20, 15, 11, 8, 6, 4, 3, 2, 1};
-const int hzPixelStep[] = {5, 6, 9, 12, 15, 20, 28, 40, 50, 66, 90, 125, 166, 250, 333, 500, 1000};
-const int minorMarker[] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 3, 0, 0, 0};
 
-const int fMajMrkXStart = 50;
-const int fMajMrkXEnd = 70;
 const int fMajMrkLength = 20;
 const int fMajTextXStart = 5;
 
-const int fMinMrkXStart = 60;
-const int fMinMrkXEnd = 70;
 const int fMinMrkLength = 10;
 
 const int additionalWidth = 30;  // width in addition to freq text
 
 
-const int MAXSCALEY = 675;
 const int MAXSCALEX = 100;
 
 const int MIN_ZOOM_LEVEL = 0;

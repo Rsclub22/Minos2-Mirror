@@ -1599,16 +1599,9 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
         LogContainer->sendDM->sendKeyerRecord(this, fno);
 }
 
-//void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
-//{
-//    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-//        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
-//}
-
-
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange)
+void TSingleLogFrame::on_BandmapMarkFreq(Frequency freq, QString mode)
 {
-    bandmapControlFrame->setBandmapMarkFreq(cs, freq, mode, loc, brg, exchange);
+    bandmapControlFrame->setBandmapMarkFreq(freq, mode);
 }
 
 

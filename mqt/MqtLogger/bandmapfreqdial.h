@@ -23,8 +23,6 @@ public:
     QRect getTextRect(){return textRect;}
     Frequency getFreqText(){return freqText;}
 
-
-
 private:
 
     QRect textRect;
@@ -44,16 +42,16 @@ class BandmapFreqDial : public QObject, public QGraphicsItem
 public:
     //BandmapFreqDial(int width, int height, QGraphicsItem *parent = nullptr);
     BandmapFreqDial(int width, int height);
+    void setHeight(int h);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
-    QRectF boundingRect() const override;
+    QRectF boundingRect() const override;   // pure virtual in QGraphicsItem
 
     void setCurFreq(const Frequency &frequency);
     Frequency getCurFreq();
-    void setCurHeight(int height);
     int getCurHeight();
 
-    void drawScale(QPainter *painter, Frequency frequency, int scaleHeight);
+    void drawScale(QPainter *painter);
     void drawCursor(QPainter *painter, Frequency frequency);
 
 
@@ -83,7 +81,7 @@ public:
     Frequency checkSelectedFreqTextOnDial(QPoint p);
 
 
-    int getFullBandHeight(const Frequency &flow, const Frequency &fhigh);
+    int getFullBandHeight(const Frequency &flow, const Frequency &fhigh) const;
 
 
     Frequency getViewPortFreq(int startPos, Frequency contestBandFlow);
@@ -108,12 +106,12 @@ protected:
 
 private:
 
+    int width = 0;
+    int height = 0;
     int zoomLevel = 0;
-    int dialHeight = dialData::MAXSCALEY;
     int dialWidth  = dialData::MAXSCALEX;
     int newFreqTextWidth = 0;
     int freqTextWidth = 0;
-    int fontHeight = 0;
 
     Frequency currentFreq;
 
@@ -122,7 +120,6 @@ private:
 
     int scaleStartYCoord;
     int scaleEndYCoord;
-    int fullBandHeight;
 
     Frequency contestBandFlow;
     Frequency contestBandFhigh;
@@ -140,18 +137,17 @@ private:
 
     void changeZoom(bool direction);
 
-//    QPainter  *painter;
-
+    double getHzPixelStepR() const;
 
     QString convertFreqDialDisplay(const Frequency &freq);
 
-    int getFontHeight();
+    int getFontHeight() const;
 
     QList< QSharedPointer<DialFreqText> > dialFreqList;
     int readBandmapZoomLevel();
     void saveBandmapZoomLevel(int &level);
 
-    void drawMarkerText(QPainter *painter, int ycoord, Frequency markFreq);
+    void drawMarkerText(QPainter *painter, int ycoord, Frequency markFreq, int fontHeight);
     void drawMarkerLine(QPainter *painter, int ycoord);
 };
 

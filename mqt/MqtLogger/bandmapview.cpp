@@ -34,7 +34,6 @@ BandmapView::BandmapView(QWidget *parent) :
     idealHeight(0),
     fullBandHeight(4000),
     fontHeight(0),
-    maxNumSpots(0),
     selectedSpot(bandmapSpotType::NONE),
     selectedSpotDataRowNum(NO_SELECTED_ROWNUM),
     selectedSpotViewRowNum(NO_SELECTED_ROWNUM)
@@ -66,7 +65,7 @@ void BandmapView::initBandmapView(BandmapGraphicsPanel* view )
     bandmapGraphicsView->setAlignment(Qt::AlignTop|Qt::AlignLeft);
     bandmapGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded );
     bandmapGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
+    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight + horizontalScrollBar()->height() + dialData::DIAL_VERT_OFFSET);
 
 
     dial = new BandmapFreqDial(70, bandmapGraphicsView->viewport()->height());
@@ -131,14 +130,15 @@ int BandmapView::getDialZoomLevel()
 
 void BandmapView::setBandmapZoom(int level)
 {
-    if (level < dialMaxZoomLevel && level >= dialMinZoomLevel)
+    if (level <= dialMaxZoomLevel && level >= dialMinZoomLevel)
     {
+        zoomLevel = level;
+        dial->setZoomLevel(level);
+
         Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
         Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
         Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
 
-        zoomLevel = level;
-        dial->setZoomLevel(level);
         setBandmapHeight(contestBandFlow, contestBandFhigh);
         trace("BandmapView::bandmapUpdate()setBandMapZoom ");
         bandmapUpdate(true);
@@ -432,13 +432,9 @@ void BandmapView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bot
 
 
 
-void BandmapView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void BandmapView::selectionChanged(const QItemSelection &/*selected*/, const QItemSelection &/*deselected*/)
 {
     // do nothing
-
-    Q_UNUSED(selected)
-    Q_UNUSED(deselected)
-
 }
 
 void BandmapView::rowsInserted(const QModelIndex &parent, int start, int end)
@@ -459,23 +455,16 @@ void BandmapView::rowsAboutToBeRemoved(const QModelIndex &parent,
 
 }
 
-void BandmapView::onRowsRemoved(const QModelIndex &parent, int first, int last)
+void BandmapView::onRowsRemoved(const QModelIndex &/*parent*/, int /*first*/, int /*last*/)
 {
-    Q_UNUSED(parent)
-    Q_UNUSED(first)
-    Q_UNUSED(last)
-
     trace("BandmapView::bandmapUpdate() bandmapView::rowsRemoved");
     bandmapUpdate(false);
 
 }
 
 // this is not used...
-void BandmapView::onRowsInserted(const QModelIndex &parent, int first, int last)
+void BandmapView::onRowsInserted(const QModelIndex &/*parent*/, int /*first*/, int /*last*/)
 {
-    Q_UNUSED(parent)
-    Q_UNUSED(first)
-    Q_UNUSED(last)
 }
 
 
@@ -574,21 +563,16 @@ int BandmapView::horizontalOffset() const
     return horizontalScrollBar()->value();
 }
 
-QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction cursorAction, Qt::KeyboardModifiers)
+QModelIndex BandmapView::moveCursor(QAbstractItemView::CursorAction /*cursorAction*/, Qt::KeyboardModifiers)
 {
-    // unused
-    Q_UNUSED(cursorAction)
-
     QModelIndex index = currentIndex();
 
     return index;
 }
 
-void BandmapView::setSelection(const QRect &rect, QFlags<QItemSelectionModel::SelectionFlag> flags)
+void BandmapView::setSelection(const QRect &/*rect*/, QFlags<QItemSelectionModel::SelectionFlag> /*flags*/)
 {
     // do nothing
-    Q_UNUSED(rect)
-    Q_UNUSED(flags)
 }
 
 int BandmapView::verticalOffset() const
@@ -596,10 +580,9 @@ int BandmapView::verticalOffset() const
     return verticalScrollBar()->value();
 }
 
-QRegion BandmapView::visualRegionForSelection(const QItemSelection &selection) const
+QRegion BandmapView::visualRegionForSelection(const QItemSelection &/*selection*/) const
 {
     // unused
-    Q_UNUSED(selection)
     return QRegion();
 }
 
@@ -614,9 +597,8 @@ QModelIndex BandmapView::indexAt(const QPoint &point_) const
     return QModelIndex();
 }
 
-void BandmapView::scrollTo(const QModelIndex &index, QAbstractItemView::ScrollHint)
+void BandmapView::scrollTo(const QModelIndex &/*index*/, QAbstractItemView::ScrollHint)
 {
-    Q_UNUSED(index)
 }
 
 QRect BandmapView::visualRect(const QModelIndex &index) const
@@ -656,15 +638,14 @@ void BandmapView::setFilterSettings(BandmapClientFilterSettings* filterSettings_
     filterSettings = filterSettings_;
 }
 
-void BandmapView::bandmapResize(int height, int width)
+void BandmapView::bandmapResize(QSize s)
 {
-    Q_UNUSED(height)
-    Q_UNUSED(width)
-    trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
-    bandmapUpdate(true);
+    dial->setHeight(s.height() - bandmapGraphicsView->horizontalScrollBar()->height());
     trace("hscrollbar set value to 0");
     bandmapGraphicsView->horizontalScrollBar()->setValue(0);
 
+    trace("BandmapView::bandmapUpdate() bandmapView::bandmapResize");
+    bandmapUpdate(false);
 }
 
 int BandmapView::rows(const QModelIndex &index) const
@@ -732,7 +713,7 @@ void BandmapView::setDialRadioMode(QString mode)
 int BandmapView::dialCursorWithinViewport(Frequency freq)
 {
     int sceneStartYCoord = bandmapGraphicsView->mapToScene(0,0).toPoint().y();
-    int sceneEndYCoord = bandmapGraphicsView->mapToScene(0, bandmapGraphicsView->viewport()->height() - bandmapGraphicsView->horizontalScrollBar()->height()).toPoint().y();
+    int sceneEndYCoord = bandmapGraphicsView->mapToScene(0, bandmapGraphicsView->viewport()->height()).toPoint().y();
 
     dial->setViewPortStartEndFreq(sceneStartYCoord, sceneEndYCoord, contestBandFlow);
 
@@ -771,8 +752,8 @@ void BandmapView::setBandFreqLimits(Frequency flow, Frequency fhigh)
 void BandmapView::setBandmapHeight(Frequency flow, Frequency fhigh)
 {
     fullBandHeight = dial->getFullBandHeight(flow, fhigh);
-    dial->changeBoundingRect(fullBandHeight, dial->getCurWidth());
-    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight);
+    dial->changeBoundingRect(fullBandHeight + horizontalScrollBar()->height() + dialData::DIAL_VERT_OFFSET, dial->getCurWidth());
+    bandmapScene->setSceneRect(0,0, bandmapGraphicsView->width(), fullBandHeight + horizontalScrollBar()->height() + dialData::DIAL_VERT_OFFSET);
 
 }
 
@@ -1027,7 +1008,7 @@ void BandmapView::drawBandMapSpots()
     }
 
     nearMatches.clear();
-    traceMsg(QString("Drawspots: Start Drawing - Clear Map"));
+    traceMsg(QString("drawBandMapSpots: Start Drawing - Clear Map"));
 
     deleteItemsFromMarkerList();
 
@@ -1053,11 +1034,6 @@ void BandmapView::drawBandMapSpots()
     if (dialHeight == 0 || fontHeight == 0)
         return;
 
-    maxNumSpots = dialHeight/fontHeight;
-
-    if (maxNumSpots == 0)
-        return;
-
     bool centreTextOnFrequency = true;
     bool btemp;
     ta->loggerBundle.getBoolProfile( elpBandmapOldStyle, btemp );
@@ -1065,6 +1041,10 @@ void BandmapView::drawBandMapSpots()
 
     if (!centreTextOnFrequency)
     {
+        int maxNumSpots = dialHeight/fontHeight;
+
+        if (maxNumSpots == 0)
+            return;
         int textYCoord = 0;
 
         for (int i = 0; i < maxNumSpots; i++)
@@ -1078,7 +1058,7 @@ void BandmapView::drawBandMapSpots()
 
     if (numrows != 0)
     {
-        traceMsg(QString("Drawspots: Number of Rows to Check = %1").arg(numrows));
+        traceMsg(QString("drawBandMapSpots: Number of Rows to Check = %1").arg(numrows));
 
         // this is for test
         ta ->loggerBundle.getBoolProfile( elpBandMapTraceDebug, traceDebugFlag );
@@ -1151,7 +1131,7 @@ void BandmapView::drawBandMapSpots()
             int maxycorr = -std::min(miny, 0);
             maxy = std::max(fullBandHeight + maxycorr, maxy + maxycorr);
 
-            bandmapScene->setSceneRect(0, miny, bandmapGraphicsView->width(), maxy);
+            bandmapScene->setSceneRect(0, miny, bandmapGraphicsView->width(), maxy + horizontalScrollBar()->height() + dialData::DIAL_VERT_OFFSET);
 
         }
         else

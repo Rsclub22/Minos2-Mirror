@@ -3243,8 +3243,8 @@ void QSOLogFrame::on_BandmapMarkFreqPbClicked()
     int valRes = -1;
     getLogDetails(logData, valRes);
 
-    trace(QString("bandmapMark: mark clicked callsign %1").arg(logData.callsign));
-    emit bandmapMarkFreq(logData.callsign, logData.freq, logData.mode, logData.locator, QString::number(logData.bearing), logData.exchange);
+    trace(QString("bandmapMark: mark clicked frequency %1 mode %2").arg(logData.freq.traceStr(), mode));
+    emit bandmapMarkFreq(logData.freq, logData.mode);
 
 }
 

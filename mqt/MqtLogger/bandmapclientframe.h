@@ -61,7 +61,7 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void setBandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
+    void setBandmapMarkFreq(Frequency freq, QString mode);
     void setBandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
 
     void setRotatorBearing(QString s);
@@ -93,7 +93,6 @@ private:
     BaseContestLog *ct = nullptr;
     QString contestUuid;
     QString contestBandStr;
-    //int contestBand = -1;
     Frequency contestBandFlow;
     Frequency contestBandFHigh;
     QString contestModeStr;
@@ -128,7 +127,6 @@ private:
 
     // cluster spots
     QVector<QSharedPointer<BandmapSpotData> > spotQueue;
-//    bool clusterServerLoaded = false;
     bool clusterServerConnected = false;
 
     // CQ Frequency
@@ -148,12 +146,9 @@ private:
 
     UpperCaseValidator ucValidator;
 
-    //QString sfreq;
     Frequency curFreq;
-    int mapViewHeight = 0;
 
     BandmapDataModel *bandmapDataModel = nullptr;
-//    BandmapSpotData *bandmapData = nullptr;
 
     QMenu* spotsMenu = nullptr;
     QAction* markSpotAction = nullptr;
@@ -193,12 +188,8 @@ private:
     QString curRotBearing;
     bool rotatorConnected = false;
 
-
-
-    //int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
-    //void handleClusterStatusMessage(QString &msg);
     void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
@@ -284,6 +275,8 @@ private slots:
      void on_waitClusterServerLoadedTimeout();
      void on_clusterStatusIndicatorClicked();
      void onContestBandChanged(BaseContestLog *ct);
+     void on_zoomSpinner_valueChanged(int arg1);
+
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };
@@ -294,9 +287,8 @@ class BMP_MouseInObject : public QObject
 {
     Q_OBJECT
 public:
-    BMP_MouseInObject(QWidget *parent, BandmapClientFrame* frame)
+    BMP_MouseInObject(QWidget */*parent*/, BandmapClientFrame* frame)
     {
-        Q_UNUSED(parent)
         bandmapFrame = frame;
     }
 

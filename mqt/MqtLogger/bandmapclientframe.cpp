@@ -1877,12 +1877,11 @@ void BandmapClientFrame::setCQFreq()
     }
 }
 
-void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString mode, QString loc, QString brg, QString exchange)
+void BandmapClientFrame::setBandmapMarkFreq(Frequency _freq, QString mode)
 {
-    Q_UNUSED(cs)
     if (ct && !ct->isReadOnly())
     {
-        traceMsg(QString("mark freq add marker - callsign %1, freq %2, loc %3, brg %4").arg(cs).arg(_freq.traceStr()).arg(loc).arg(brg));
+        traceMsg(QString("mark freq add marker - freq %1, mode %2").arg(_freq.traceStr(), mode));
         QDateTime time = QDateTime::currentDateTimeUtc();
 
         QString logBandStr;
@@ -1906,7 +1905,7 @@ void BandmapClientFrame::setBandmapMarkFreq(QString cs, Frequency _freq, QString
         spot->setSpotDateTime(time);
         spot->setRunModeOn(false);
         spot->setOffRunFreq(false);
-        spot->setDistrict(exchange);
+        spot->setDistrict("????");
 
         logSpotQueue.append(spot);
     }
@@ -2045,12 +2044,13 @@ void BandmapClientFrame::on_newZoomlevel(int level)
 
 void BandmapClientFrame::setZoomLevelLabelText(int level)
 {
-    QString levStr = QString::number(level);
-    if (level < 10)
-    {
-        levStr.prepend('0');
-    }
-    ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
+    ui->zoomSpinner->setValue(level);
+//    QString levStr = QString::number(level);
+//    if (level < 10)
+//    {
+//        levStr.prepend('0');
+//    }
+//    ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
 }
 
 void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)
@@ -2079,3 +2079,12 @@ void BandmapClientFrame::keyPressEvent(QKeyEvent *event)
     QWidget::keyPressEvent(event);
 
 }
+
+void BandmapClientFrame::on_zoomSpinner_valueChanged(int z)
+{
+    if (bandmapView->getDialZoomLevel() != z)
+    {
+        bandmapView->setBandmapZoom(z);
+    }
+}
+
