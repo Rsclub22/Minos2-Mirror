@@ -1,10 +1,11 @@
 #include "base_pch.h"
 #include <QTabBar>
-#include "StackedInfoFrame.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "LoggerContest.h"
+#include "ContestApp.h"
 
+#include "StackedInfoFrame.h"
 #include "ui_StackedInfoFrame.h"
 
 QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
@@ -83,6 +84,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     // sort
     ui->infoCombo->model()->sort(0); // "A","B","C
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::showAuxHeaders, this, &StackedInfoFrame::on_ShowAuxHeaders);
+
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToCountry, this, &StackedInfoFrame::on_ScrollToCountry, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToDistrict, this, &StackedInfoFrame::on_ScrollToDistrict, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FiltersChanged, this, &StackedInfoFrame::onFiltersChanged, Qt::QueuedConnection);
@@ -104,6 +107,13 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 StackedInfoFrame::~StackedInfoFrame()
 {
     delete ui;
+}
+void StackedInfoFrame::on_ShowAuxHeaders()
+{
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowAuxHeaders, showAuxHeaders );
+
+    int topSplit = showAuxHeaders?1:0;
+    ui->stackSplitter->setSizes({topSplit, 10});
 }
 void StackedInfoFrame::on_currentTabChangedSlot(int index)
 {
@@ -275,9 +285,27 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         contest->commonSave(false);
     }
     setTabVisibility();
+    on_ShowAuxHeaders();
+    stackMargins();
 }
 
+void StackedInfoFrame::stackMargins()
+{
+    int ls;
+    int cml;
+    int cmt;
+    int cmr;
+    int cmb;
 
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+
+    adjustMargins(layout(), ls, cml, cmt, cmr, cmb);
+
+}
 
 void StackedInfoFrame::setContest(LoggerContestLog *ct)
 {

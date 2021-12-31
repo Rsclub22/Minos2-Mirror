@@ -62,7 +62,7 @@ signals:
    void tabSandP();
    void MainRaised();
    void QSOMargins();
-
+   void showAuxHeaders();
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -174,6 +174,7 @@ public:
 
     static void sendReconnectFlagToClusterServer(bool state);
     static void sendQRZInfoToLog(QString callsign, QString locator, QString name);
+    static void SendShowAuxHeaders();
 };
 //---------------------------------------------------------------------------
 #endif

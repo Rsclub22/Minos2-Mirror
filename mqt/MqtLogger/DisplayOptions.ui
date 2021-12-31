@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>429</width>
-    <height>363</height>
+    <width>457</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -135,6 +135,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ShowAuxHeadersCheckBox">
+     <property name="text">
+      <string>Show Auxiliary Headers</string>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_3">

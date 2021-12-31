@@ -59,6 +59,7 @@ enum LOGGERPROFILE {
    elpAutoFill,
    elpShowOperateTime,
    elpTabforSandP,
+   elpShowAuxHeaders,
    elpAgeProtectContests,
    elpAgeToProtectContests,
    elpBandmapOldStyle,

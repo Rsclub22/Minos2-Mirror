@@ -31,6 +31,7 @@ private:
     bool reportReadabilityInitialise = false;
     bool reportStrengthAutoFill = false;
     bool TabSandP = false;
+    bool showAuxHeaders = true;
     int lcf;
     int qff;
     QFont f;

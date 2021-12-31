@@ -112,6 +112,11 @@ void MinosLoggerEvents::SendTabSandP()
     emit mle.tabSandP();
 }
 //---------------------------------------------------------------------------
+void MinosLoggerEvents::SendShowAuxHeaders()
+{
+    emit mle.showAuxHeaders();
+}
+//---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()
 {
     emit mle.MainRaised();

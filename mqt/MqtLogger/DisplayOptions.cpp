@@ -34,6 +34,9 @@ void DisplayOptions::initialise()
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
     ui->TabSandPActioncb->setChecked(TabSandP);
 
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowAuxHeaders, showAuxHeaders );
+    ui->ShowAuxHeadersCheckBox->setChecked(showAuxHeaders);
+
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     ui->ListCompressionSpinner->setValue(lcf);
 
@@ -138,6 +141,14 @@ void DisplayOptions::finalise()
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
         MinosLoggerEvents::SendTabSandP();
+    }
+    bool nShowAuxHeaders = ui->ShowAuxHeadersCheckBox->isChecked();
+    if (showAuxHeaders != nShowAuxHeaders)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpShowAuxHeaders, nShowAuxHeaders );
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+
+        MinosLoggerEvents::SendShowAuxHeaders();
     }
 
     SHOWOPERATINGTIME nsot = otNone;

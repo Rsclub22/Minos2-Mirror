@@ -68,8 +68,11 @@ private:
 
     QFrame *currStackFrame = nullptr;
 
+    bool showAuxHeaders = true;
+
     void setTabVisibility();
 
+    void stackMargins();
 private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );
     void on_ScrollToCountry( const QString &csCs, BaseContestLog* );
@@ -84,6 +87,8 @@ private slots:
     void clearContestInFrame(BaseContestLog *ct);
     void onContestBandChanged(BaseContestLog *ct);
     void on_currentTabChangedSlot(int index);
+
+    void on_ShowAuxHeaders();
 public slots:
     void setContest(LoggerContestLog *contest);
 };

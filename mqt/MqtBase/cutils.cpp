@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include <QSplitter>
 #include "MinosLoggerEvents.h"
 
 #include "cutils.h"
@@ -598,25 +599,39 @@ int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
 
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
 {
-    for(int i = 0; i < layout->count(); i++)
+    if (layout)
     {
-        QLayoutItem *li = layout->itemAt(i);
-        QLayout *l = li->layout();
-        QWidget *w = li->widget();
-        if (l)
+        for(int i = 0; i < layout->count(); i++)
         {
-            adjustMargins(l, ls, cml, cmt, cmr, cmb);
-        }
-        if (w)
-        {
-            if (w->layout())
+            QLayoutItem *li = layout->itemAt(i);
+            QLayout *l = li->layout();
+            QWidget *w = li->widget();
+            if (l)
             {
-                adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                adjustMargins(l, ls, cml, cmt, cmr, cmb);
+            }
+            if (w)
+            {
+                if (w->layout())
+                {
+                    adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                }
+                else
+                {
+                    QSplitter *s = dynamic_cast<QSplitter *>(w);
+                    if (s)
+                    {
+                        for (int j = 0; j< s->count(); j++)
+                        {
+                            adjustMargins(s->widget(j)->layout(), ls, cml, cmt, cmr, cmb);
+                        }
+                    }
+                }
             }
         }
+        layout->setSpacing(ls);
+        layout->setContentsMargins(cml, cmt, cmr, cmb);
     }
-    layout->setSpacing(ls);
-    layout->setContentsMargins(cml, cmt, cmr, cmb);
 }
 bool isPureNumeric ( const QString &s )
 {
