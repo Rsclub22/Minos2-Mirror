@@ -144,7 +144,7 @@ void RitLineEdit::wheelEvent(QWheelEvent *event)
     {
        changeFreq(true);
     }
-    else
+    else if (numTicks <= -1)
     {
         changeFreq(false);
     }
