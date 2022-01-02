@@ -14,7 +14,7 @@
 #include "tsinglelogframe.h"
 #include "checkoperatingfreq.h"
 #include "BandList.h"
-
+#include "delayedaction.h"
 #include "ui_bandmapclientframe.h"
 #include "bandmapclientframe.h"
 
@@ -585,8 +585,12 @@ void BandmapClientFrame::on_saveZoomLevelActionSelected()
 
 void BandmapClientFrame::on_readZoomLevelActionSelected()
 {
-    int zoomLevel = readBandmapZoomLevel();
-    bandmapView->setBandmapZoom(zoomLevel);
+    // Operating directly from the action seems to produce the wrong effect
+    // The highest frequenvy is off the bottom, and not dispayed as text
+    delayedAction(this, [=]{
+        int zoomLevel = readBandmapZoomLevel();
+        bandmapView->setBandmapZoom(zoomLevel);
+        });
 }
 // end of actions
 //============================================================================
