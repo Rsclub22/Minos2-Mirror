@@ -422,7 +422,7 @@ double BandmapFreqDial::getHzPixelStepR() const
 
     int h = height; // use the actual height, not the mapped height
 
-    double ps = ((h * 1.0) * (17.0 - zoomLevel))/range;
+    double ps = ((h * 1.0) * (dialData::MAX_ZOOM_LEVEL - zoomLevel + 1))/range;
 
     return ps;
 }

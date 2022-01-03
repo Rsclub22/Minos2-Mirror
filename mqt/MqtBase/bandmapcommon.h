@@ -41,7 +41,7 @@ const int additionalWidth = 30;  // width in addition to freq text
 const int MAXSCALEX = 100;
 
 const int MIN_ZOOM_LEVEL = 0;
-const int MAX_ZOOM_LEVEL = 16;
+const int MAX_ZOOM_LEVEL = 20;
 const int START_ZOOM_LEVEL = MAX_ZOOM_LEVEL;
 
 

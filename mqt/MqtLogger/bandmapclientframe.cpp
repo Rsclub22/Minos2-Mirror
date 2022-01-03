@@ -193,6 +193,9 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestBandChanged, this, &BandmapClientFrame::onContestBandChanged);
 
+    ui->zoomSpinner->setMinimum(dialData::MIN_ZOOM_LEVEL);
+    ui->zoomSpinner->setMaximum(dialData::MAX_ZOOM_LEVEL);
+
 }
 
 void BandmapClientFrame::onContestBandChanged(BaseContestLog *c)
