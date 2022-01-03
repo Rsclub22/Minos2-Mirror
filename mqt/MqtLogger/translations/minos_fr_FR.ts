@@ -353,12 +353,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../BandsSelect.ui" line="14"/>
         <source>Select wanted bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner les bandes recherchées</translation>
     </message>
     <message>
         <location filename="../BandsSelect.ui" line="20"/>
         <source>Choose the Bands that you want Minos to use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisissez les bandes pour Minos à utiliser.</translation>
     </message>
     <message>
         <location filename="../BandsSelect.ui" line="31"/>
@@ -368,12 +368,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../BandsSelect.ui" line="52"/>
         <source>All VHF</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes VHF</translation>
     </message>
     <message>
         <location filename="../BandsSelect.ui" line="73"/>
         <source>All MW</source>
-        <translation type="unfinished"></translation>
+        <translation>Toutes MO</translation>
     </message>
 </context>
 <context>
@@ -401,7 +401,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Dans les emplacements de cluster, affichez les localisateurs dérivés de QRZ ou de pays</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
@@ -2149,7 +2149,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../OptionsDialog.cpp" line="84"/>
         <source>Wanted Bands</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandes recherchées</translation>
     </message>
     <message>
         <location filename="../OptionsDialog.cpp" line="85"/>
@@ -2185,7 +2185,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../OptionsDialog.cpp" line="145"/>
         <source>We must save the band changes before continuing</source>
-        <translation type="unfinished"></translation>
+        <translation>Les changements de bande doivent être enregistrés avant de continuer</translation>
     </message>
 </context>
 <context>
@@ -2258,7 +2258,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="350"/>
         <source>Run</source>
-        <translation type="unfinished">Run</translation>
+        <translation>Run </translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="581"/>
@@ -2363,7 +2363,7 @@ to</source>
     <message>
         <location filename="../qsologframe.cpp" line="53"/>
         <source>Sent by Me</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyé par moi</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="56"/>
@@ -2373,7 +2373,7 @@ to</source>
     <message>
         <location filename="../qsologframe.cpp" line="61"/>
         <source>Sent by Them</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyé par eux</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="64"/>
@@ -2493,57 +2493,57 @@ Oui - Enregistrer  comme indiqué
 Non - Ignorer les modifications</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2129"/>
+        <location filename="../qsologframe.cpp" line="2157"/>
         <source>Read Only</source>
         <translation>Lecture seulement</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2133"/>
+        <location filename="../qsologframe.cpp" line="2161"/>
         <source>Protected</source>
         <translation>Protégé</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2137"/>
+        <location filename="../qsologframe.cpp" line="2165"/>
         <source>Protected by age of contest</source>
         <translation>Protégé par l&apos;âge du concours</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2148"/>
+        <location filename="../qsologframe.cpp" line="2176"/>
         <source>No QSO entry field focussed!</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun champ d&apos;entrée QSO focalisé&#xa0;!</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2494"/>
+        <location filename="../qsologframe.cpp" line="2522"/>
         <source>Change mode to CW?</source>
         <translation>Changer de mode en CW?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2501"/>
+        <location filename="../qsologframe.cpp" line="2529"/>
         <source>Change mode to USB?</source>
         <translation>Changer de mode en USB?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2532"/>
+        <location filename="../qsologframe.cpp" line="2560"/>
         <source>Spot Last Logged (%1) </source>
         <translation>Spot dernière enregistrée (%1) </translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2597"/>
+        <location filename="../qsologframe.cpp" line="2625"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation>&quot;Numéro Tx&quot; est trop élevé - est-ce correct?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2599"/>
+        <location filename="../qsologframe.cpp" line="2627"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation>Voulez-vous entrer les contacts manquants plus tard?</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2981"/>
+        <location filename="../qsologframe.cpp" line="3009"/>
         <source>Start of QSOs</source>
         <translation>Début des QSO</translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3016"/>
+        <location filename="../qsologframe.cpp" line="3044"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
     </message>
@@ -2749,7 +2749,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.ui" line="181"/>
         <source>Allows external device notification of band without using Minos Rigcontrol</source>
-        <translation type="unfinished"></translation>
+        <translation>Permet la notification de la bande par un périphérique externe sans utiliser Minos Rigcontrol</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.ui" line="207"/>
@@ -2782,7 +2782,12 @@ Non - Ignorer les modifications</translation>
         <translation>Fréquence de MGM prédéfinie non valide pour %1</translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="383"/>
+        <location filename="../radiosettingdialog.cpp" line="388"/>
+        <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radiosettingdialog.cpp" line="392"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation>Fréquence %1 est hors bande/mode pour %2/%3</translation>
     </message>
@@ -2815,12 +2820,12 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../rigcontrolframe.ui" line="130"/>
         <source>999.999.999.999</source>
-        <translation type="unfinished">000  {999.999.999.999?}</translation>
+        <translation>999.999.999.999</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="133"/>
         <source>000.000.000.000</source>
-        <translation type="unfinished">000  {000.000.000.000?}</translation>
+        <translation>000.000.000.000</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.ui" line="146"/>
@@ -2897,7 +2902,7 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1307"/>
-        <location filename="../rigcontrolframe.cpp" line="2192"/>
+        <location filename="../rigcontrolframe.cpp" line="2204"/>
         <source>No %1 Band found for this radio!</source>
         <translation>Aucune Bande %1 trouvée pour cette radio!</translation>
     </message>
@@ -3290,7 +3295,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../runbuttonsframe.ui" line="17"/>
         <source>Run Frequencies</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquences d&apos;operation</translation>
     </message>
     <message>
         <location filename="../runbuttonsframe.ui" line="65"/>
@@ -5392,12 +5397,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="300"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="551"/>
         <source>%1 %2 - New</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 %2 - Nouveau</translation>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="585"/>
