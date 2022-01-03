@@ -1091,7 +1091,7 @@ Ce port peut être le même que celui utilisé pour le contrôle CAT,
 mais attention si vous devez forcer DTR ou RTS pour alimenter un convertisseur USB.
 Si tel est le cas, utilisez un autre port série pour PTT.
 La sélection du même port que l&apos;interface CAT permettra aux paramètres CAT Advanced Comms d&apos;afficher
-la poignée de main et les réglages forcés.  </translation>
+la poignée de main et les réglages forcés.</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="341"/>
@@ -1133,7 +1133,7 @@ la poignée de main et les réglages forcés.  </translation>
     <message>
         <location filename="../rigsetupdialog.cpp" line="722"/>
         <source>Save Radio - Transvert Settings Out of Band</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres du Transverter sont hors bande</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="723"/>
@@ -1141,25 +1141,16 @@ la poignée de main et les réglages forcés.  </translation>
 following:
 %1
 Please Correct before Continuing</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Transvert Settings Out of Band</source>
-        <translation type="vanished">Paramètres du Transverter sont hors bande</translation>
-    </message>
-    <message>
-        <source>The Transvert settings are out of band for the
-following:
-%1</source>
         <translatorcomment>just for %1?</translatorcomment>
-        <translation type="vanished">Paramètres du Transverter sont hors bande pour la suivant
-%1</translation>
+        <translation>Paramètres du Transverter sont hors bande pour la suivant
+%1
+Corriger avant de continuer SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="803"/>
         <source>Radio Supported Bands Missing</source>
-        <translatorcomment>Les bandes supportées par la Radio sont manquantes</translatorcomment>
-        <translation>&lt;&lt;Check context&gt;&gt;  </translation>
+        <translatorcomment>&lt;&lt;Check context&gt;&gt;</translatorcomment>
+        <translation>Les bandes supportées par la Radio sont manquantes</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="804"/>
