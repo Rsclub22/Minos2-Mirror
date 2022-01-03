@@ -1005,7 +1005,7 @@ void BandmapView::drawBandMapSpots()
     clearListOfMarkers();
 
     // don't draw spots when freq is zero, or no spots
-    if (curFreq.isClear() || model()->rowCount() == 0)
+    if (/*curFreq.isClear() ||*/ model()->rowCount() == 0)
     {
         traceMsg(QString("CurFreq = %1, Number of Spots = %2 - Don't draw markers").arg(curFreq.traceStr()).arg(model()->rowCount()));
         return;
