@@ -406,7 +406,7 @@ l&apos;indicatif sélectionné</translation>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1500"/>
+        <location filename="../kstmainwindow.cpp" line="1501"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>

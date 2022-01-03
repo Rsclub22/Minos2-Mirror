@@ -2335,7 +2335,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2148"/>
+        <location filename="../qsologframe.cpp" line="2176"/>
         <source>No QSO entry field focussed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2423,52 +2423,52 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2129"/>
+        <location filename="../qsologframe.cpp" line="2157"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2133"/>
+        <location filename="../qsologframe.cpp" line="2161"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2137"/>
+        <location filename="../qsologframe.cpp" line="2165"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2494"/>
+        <location filename="../qsologframe.cpp" line="2522"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2501"/>
+        <location filename="../qsologframe.cpp" line="2529"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2532"/>
+        <location filename="../qsologframe.cpp" line="2560"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2597"/>
+        <location filename="../qsologframe.cpp" line="2625"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2599"/>
+        <location filename="../qsologframe.cpp" line="2627"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2981"/>
+        <location filename="../qsologframe.cpp" line="3009"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3016"/>
+        <location filename="../qsologframe.cpp" line="3044"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2705,7 +2705,12 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="383"/>
+        <location filename="../radiosettingdialog.cpp" line="388"/>
+        <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../radiosettingdialog.cpp" line="392"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2819,7 +2824,7 @@ No          - Discard changes</source>
     </message>
     <message>
         <location filename="../rigcontrolframe.cpp" line="1307"/>
-        <location filename="../rigcontrolframe.cpp" line="2192"/>
+        <location filename="../rigcontrolframe.cpp" line="2204"/>
         <source>No %1 Band found for this radio!</source>
         <translation type="unfinished"></translation>
     </message>

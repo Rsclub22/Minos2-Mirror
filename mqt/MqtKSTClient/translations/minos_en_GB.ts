@@ -398,7 +398,7 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1500"/>
+        <location filename="../kstmainwindow.cpp" line="1501"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>
