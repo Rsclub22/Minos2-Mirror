@@ -271,7 +271,7 @@ Please enter a name for the antenna</source>
     </message>
     <message>
         <location filename="../rotsetupdialog.ui" line="28"/>
-        <location filename="../rotsetupdialog.cpp" line="694"/>
+        <location filename="../rotsetupdialog.cpp" line="697"/>
         <source>Remove Antenna</source>
         <translation type="unfinished"></translation>
     </message>
@@ -288,27 +288,27 @@ Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="687"/>
+        <location filename="../rotsetupdialog.cpp" line="690"/>
         <source>You can not remove the current antenna!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="695"/>
+        <location filename="../rotsetupdialog.cpp" line="698"/>
         <source>Do you really want to remove antenna - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="730"/>
+        <location filename="../rotsetupdialog.cpp" line="733"/>
         <source>You can not change the name of the current antenna - %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="736"/>
+        <location filename="../rotsetupdialog.cpp" line="739"/>
         <source>Edit Antenna Name - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="737"/>
+        <location filename="../rotsetupdialog.cpp" line="740"/>
         <source>New Antenna Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -947,12 +947,12 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.ui" line="282"/>
+        <location filename="../rotsetupform.ui" line="289"/>
         <source>S-Stop  0-360</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.ui" line="289"/>
+        <location filename="../rotsetupform.ui" line="282"/>
         <source>S-Stop  180-180</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,32 +977,32 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="490"/>
+        <location filename="../rotsetupform.cpp" line="531"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="491"/>
+        <location filename="../rotsetupform.cpp" line="532"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="522"/>
+        <location filename="../rotsetupform.cpp" line="563"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="523"/>
+        <location filename="../rotsetupform.cpp" line="564"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="793"/>
+        <location filename="../rotsetupform.cpp" line="833"/>
         <source>Value must be between %1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="794"/>
+        <location filename="../rotsetupform.cpp" line="834"/>
         <source>Antenna Offset Error</source>
         <translation type="unfinished"></translation>
     </message>

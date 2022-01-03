@@ -274,7 +274,7 @@ utiliser un autre nom SVP</translation>
     </message>
     <message>
         <location filename="../rotsetupdialog.ui" line="28"/>
-        <location filename="../rotsetupdialog.cpp" line="694"/>
+        <location filename="../rotsetupdialog.cpp" line="697"/>
         <source>Remove Antenna</source>
         <translation>Supprimer une Antenne</translation>
     </message>
@@ -293,27 +293,27 @@ Please delete them and set up the rotators again</source>
 Veuillez les supprimer et configurer les rotateurs à nouveau</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="687"/>
+        <location filename="../rotsetupdialog.cpp" line="690"/>
         <source>You can not remove the current antenna!</source>
         <translation>Antenne actuelle, impossible à supprimer!</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="695"/>
+        <location filename="../rotsetupdialog.cpp" line="698"/>
         <source>Do you really want to remove antenna - %1?</source>
         <translation>Voulez-vous vraiment supprimer l&apos;Antenne %1?</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="730"/>
+        <location filename="../rotsetupdialog.cpp" line="733"/>
         <source>You can not change the name of the current antenna - %1!</source>
         <translation>Antenne actuelle, impossible à renommer %1!</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="736"/>
+        <location filename="../rotsetupdialog.cpp" line="739"/>
         <source>Edit Antenna Name - %1</source>
         <translation>Modifier le nom de l&apos;antenne - %1</translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="737"/>
+        <location filename="../rotsetupdialog.cpp" line="740"/>
         <source>New Antenna Name:</source>
         <translation>Nom de la nouvelle antenne:</translation>
     </message>
@@ -994,12 +994,12 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <translation>Arrêt au Sud désactivé</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.ui" line="282"/>
+        <location filename="../rotsetupform.ui" line="289"/>
         <source>S-Stop  0-360</source>
         <translation>Arrêt Sud 0-360</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.ui" line="289"/>
+        <location filename="../rotsetupform.ui" line="282"/>
         <source>S-Stop  180-180</source>
         <translation>Arrêt Sud 180-180</translation>
     </message>
@@ -1024,32 +1024,32 @@ Voulez-vous recharger les paramètres de l&apos;antenne maintenant?</translation
         <translation>Afficher le cadran du compas</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="490"/>
+        <location filename="../rotsetupform.cpp" line="531"/>
         <source>Invalid Network Address %1</source>
         <translation>Adresse réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="491"/>
+        <location filename="../rotsetupform.cpp" line="532"/>
         <source>Network Address Entry Error</source>
         <translation>Erreur d&apos;entrée d&apos;adresse réseau</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="522"/>
+        <location filename="../rotsetupform.cpp" line="563"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Numéro de Port réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="523"/>
+        <location filename="../rotsetupform.cpp" line="564"/>
         <source>Network Port Number out of range</source>
         <translation>Numéro de Port de réseau hors plage</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="793"/>
+        <location filename="../rotsetupform.cpp" line="833"/>
         <source>Value must be between %1 and %2</source>
         <translation>La valeur doit être comprise entre %1 et %2</translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="794"/>
+        <location filename="../rotsetupform.cpp" line="834"/>
         <source>Antenna Offset Error</source>
         <translation>Erreur de décalage d&apos;antenne</translation>
     </message>
