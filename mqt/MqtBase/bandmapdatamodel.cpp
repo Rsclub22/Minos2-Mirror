@@ -55,12 +55,8 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-//    BandmapData* bandmapSpot = new BandmapData();
-
     if (role == Qt::DisplayRole)
     {
-
-
         int row = index.row();
         if (row < 0 && row >= bandmapData.size())
         {
@@ -82,12 +78,12 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getBand();
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (bandmapSpot->getDxCallWorked() )
                 {
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
                 d = d + bandmapSpot->getDxCallStr();
-                if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (bandmapSpot->getDxCallWorked() )
                 {
                     d = d + HtmlFontColour(NOT_WORKED_COLOUR);
                 }
@@ -98,11 +94,11 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
 
             case DXLOC_COL_NUM:
-                if (bandmapSpot->getDxLocatorWorked() == BOOL_NO && bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (!bandmapSpot->getDxLocatorWorked() && bandmapSpot->getDxCallWorked())
                 {
                     d = HtmlFontColour(NOT_WORKED_COLOUR);
                 }
-                else if (bandmapSpot->getDxLocatorWorked() == BMP_BOOL_YES)
+                else if (bandmapSpot->getDxLocatorWorked())
                 {
                     d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
                 }
@@ -110,8 +106,6 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = d + bandmapSpot->getDxLocator() + HtmlFontColour(NOT_WORKED_COLOUR);
             break;
             case DXDIST_COL_NUM:
-                //d = HtmlFontColour(NOT_WORKED_COLOUR);
-                //d = d + bandmapSpot->dxDist;
                 d = bandmapSpot->getDxDist();
             break;
             case DXBRG_COL_NUM:
@@ -355,17 +349,10 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 return false;
 
         }
-
-
-        //bandmapData.replace(row, bandmapSpot);    // not needed as bandmapspot points to the data anyway
         emit dataChanged(index, index);
-
-
         return true;
     }
-
-
-        return false;
+    return false;
 }
 
 
@@ -468,21 +455,11 @@ bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
 
     QString call = cgm->data(cgm->index(sourceRow, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
     QString loc = cgm->data(cgm->index(sourceRow, DXLOC_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString spotterCall = cgm->data(cgm->index(sourceRow, SPOTTER_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString spotterLoc = cgm->data(cgm->index(sourceRow, SPOTTER_LOC_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString comment = cgm->data(cgm->index(sourceRow, COMMENT_COL_NUM ),  BMP_DataStoredRole).toString();
 
     if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
     if (loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
-
-//    if (spotterCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
-//    if (spotterLoc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
-//    if (comment.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
 
     return false;
 }

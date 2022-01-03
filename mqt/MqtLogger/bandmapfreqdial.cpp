@@ -1,12 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Bandmap Dial
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
-//
-///
-//
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +13,6 @@
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     height(_height),
-    width(_width),
     zoomLevel(dialData::MAX_ZOOM_LEVEL),
     dialWidth(_width),
     scaleStartYCoord(0),
@@ -39,11 +34,6 @@ void BandmapFreqDial::setHeight(int h)
 void BandmapFreqDial::onFontChanged(QFont /*cf*/)
 {
     newFreqTextWidth = checkFreqWidth(currentFreq);
-//    QFontMetrics fm(cf);
-//    if (fontHeight != fm.height())
-//    {
-//        fontHeight = fm.height();
-//    }
 
     update();
 }
@@ -402,12 +392,7 @@ void BandmapFreqDial::drawCursor(QPainter *painter, Frequency frequency)
     QPainterPath freqCursorPath;
     freqCursorPath.addPolygon(freqCursor);
     painter->fillPath(freqCursorPath, freqCursorBrush);
-
-
-
 }
-
-
 
 void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
 {

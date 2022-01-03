@@ -97,9 +97,6 @@ const int CQ_RESPONSE_COL = 26;    // used in bandmap
 const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
 const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
 
-const bool BOOL_YES = true;
-const bool BOOL_NO = false;
-
 const QString SPOT_TX_ON = "TxSpotOn";
 const QString SPOT_TX_OFF = "TxSpotOff";
 

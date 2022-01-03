@@ -1339,7 +1339,7 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), true, DataStoredRole);
 
 }
 
@@ -1453,7 +1453,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               if (cs.realCall == callsign)
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
               }
 
@@ -1463,7 +1463,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               if (loc.mid(0,4) == locator.mid(0, 4) )
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
               }
 

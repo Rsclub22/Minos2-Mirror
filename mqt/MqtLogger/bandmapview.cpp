@@ -1,11 +1,8 @@
 ////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Bandmap View
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
-//
-///
 //
 //
 /////////////////////////////////////////////////////////////////////////////
@@ -40,12 +37,10 @@ BandmapView::BandmapView(QWidget *parent) :
 {
 
     setFocusPolicy((Qt::ClickFocus));
-    //setMinimumSize(minimumSizeHint());
 
     bandmapScene = new QGraphicsScene(parent);
 
     lessGreaterThanDistanceFlag = readLessGreaterThanDistanceFlag();
-
 }
 
 BandmapView::~BandmapView()
@@ -111,11 +106,7 @@ void BandmapView::onFontChanged(QFont cf)
     {
         fontHeight = fm.height();
     }
-
-
 }
-
-// this is called from other frames
 
 void BandmapView::updateZoom(bool dir)
 {
@@ -126,7 +117,6 @@ int BandmapView::getDialZoomLevel()
 {
     return dial->getZoomLevel();
 }
-
 
 void BandmapView::setBandmapZoom(int level)
 {
@@ -253,9 +243,6 @@ int BandmapView::getViewPortEndYCoordOnScene()
                                                 bandmapGraphicsView->viewport()->width(),
                                                 bandmapGraphicsView->viewport()->height() )).toPoint().y();
 }
-
-
-
 
 void BandmapView::on_nextSpot(bool nextFreqUpDown, bool nextMult)
 {
@@ -831,7 +818,10 @@ void BandmapView::clearSpotData(BandmapSpotData &selectedSpot)
 
 void BandmapView::setSelectedSpot(int spotViewNum)
 {
-    if (spotViewNum > listOfMarkers.count() || spotViewNum == NO_SELECTED_ROWNUM || listOfMarkers[spotViewNum]->getModelRowNum() > model()->rowCount() || listOfMarkers[spotViewNum]->getModelRowNum() < 0)
+    if (spotViewNum > listOfMarkers.count()
+            || spotViewNum == NO_SELECTED_ROWNUM
+            || listOfMarkers[spotViewNum]->getModelRowNum() > model()->rowCount()
+            || listOfMarkers[spotViewNum]->getModelRowNum() < 0)
     {
         return;
     }

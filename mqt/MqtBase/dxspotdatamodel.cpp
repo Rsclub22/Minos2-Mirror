@@ -179,7 +179,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = removeHundredHzAndHzDigits(dxSpot->getFreq().convertFreqStrDisp());
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (dxSpot->getDxCallWorked() == BOOL_YES)
+                if (dxSpot->getDxCallWorked())
                 {
                     QColor colour = CALLSIGN_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
@@ -188,7 +188,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = d + dxSpot->getDxCallStr();
             break;
             case DXLOC_COL_NUM:
-                if (dxSpot->getDxLocatorWorked() == BOOL_YES)
+                if (dxSpot->getDxLocatorWorked())
                 {
                     QColor colour = LOCATOR_WORKED_COLOUR;
                     d = HtmlFontColour(colour);

@@ -91,7 +91,6 @@ private:
 
     Ui::BandmapClientFrame *ui;
     BaseContestLog *ct = nullptr;
-    QString contestUuid;
     QString contestBandStr;
     Frequency contestBandFlow;
     Frequency contestBandFHigh;
@@ -100,7 +99,6 @@ private:
 
     QString radioMode;
 
-    bool radioIsConnected = false;
     QString radioError;
     Frequency lastfreq;
     QPalette *freqDisplayPalette = nullptr;

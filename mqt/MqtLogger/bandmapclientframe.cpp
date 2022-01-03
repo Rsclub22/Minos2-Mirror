@@ -586,7 +586,7 @@ void BandmapClientFrame::on_saveZoomLevelActionSelected()
 void BandmapClientFrame::on_readZoomLevelActionSelected()
 {
     // Operating directly from the action seems to produce the wrong effect
-    // The highest frequenvy is off the bottom, and not dispayed as text
+    // The highest frequency is off the bottom, and not dispayed as text
     delayedAction(this, [=]{
         int zoomLevel = readBandmapZoomLevel();
         bandmapView->setBandmapZoom(zoomLevel);
@@ -617,11 +617,10 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
     if (bandmapView)
     {
-        bandmapView->setContest(c);
+        bandmapView->setContest(ct);
     }
 
-    contestUuid = ct->uuid;
-    traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(contestUuid));
+    traceMsg(QString("Set Contest: contest uuid =  ContestUuid = %1").arg(ct->uuid));
 
     setContestBandMode(ct->currentBand.getValue(), ct->currentMode.getValue());
 
@@ -636,10 +635,6 @@ void BandmapClientFrame::setContest(BaseContestLog *c)
 
         if (!contest->bandmapFilterSettingsExist)       // have settings been saved before?
         {
-
-            //ClusterFilterIdAndNames clustId;
-            //TContestApp::getContestApp() ->loggerBundle.getIntProfile( clustId.getAllDefaultFilterId(contestBand), filterSettings.distanceFilter );
-
             readDefaultDistanceFilterSettings(&filterSettings);
 
             //set current mode
@@ -875,9 +870,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
             spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
-            //QString sdt = spotDateTime.toString();
             spotDateTime.setTimeSpec(Qt::UTC);
-            //QString sdtutc = spotDateTime.toString();
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
             traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL]).arg(spotlist[DXFREQ]).arg(spotlist[DXMODESTR]).arg(spotlist[DXLOCATOR]));
@@ -1273,7 +1266,7 @@ bool BandmapClientFrame::checkSpotInTable(QSharedPointer<BandmapSpotData> spot)
         {
 
             Callsign rowCall;
-            rowCall.setFullCall( bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());            rowCall.setFullCall(bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());
+            rowCall.setFullCall( bandmapDataModel->data(bandmapDataModel->index(row, DXSPOT_CALL_COL_NUM ), BMP_DataStoredRole).toString());
             if (dxCallsign == rowCall)
             {
                 if (ct->isHF())
@@ -1545,7 +1538,6 @@ void BandmapClientFrame::setFreq(Frequency freq)
         {
             setContestBandMode(bandChanged->uk, contestModeStr);
             checkLegalFrequencies(freq);
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         }
         lastfreq = freq;
 
@@ -1563,10 +1555,6 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 
     contestBandStr = band;
     setMode(mode);
-
-//    Frequency temp = lastfreq;
-//    lastfreq.clear();
-//    setFreq(temp);  // get legal freqs correct
 
     getBandLimitsFromBandListXML();
 
@@ -1800,7 +1788,6 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         getBand(bands, freq, logBandStr, logBandType);
 
         QString logModeStr = lct->mode.getValue();
-        //QString logModeMask = QString::number(clusterModes.indexOf(logModeStr));
 
         traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4, mode %5")
                  .arg(cs.getFullCall())
@@ -1817,7 +1804,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
         spot->setMode(logModeStr);
         spot->setFreq(freq);
         spot->setBand(logBandStr);
-         spot->setDxCallWorked(true);
+        spot->setDxCallWorked(true);
         spot->setDxLocatorWorked(true);
         spot->setSpotDateTime(time);
         spot->setRunModeOn(runModeOn);
@@ -1951,7 +1938,6 @@ void BandmapClientFrame::setBandmapSaveFreq(QString cs, Frequency _freq, QString
 
 void BandmapClientFrame::setBandmapRadioIsConnect(bool state)
 {
-    radioIsConnected = state;
     radioStatusIndicatorToggle(state);
 
     ui->radioStatusMsg->clear();
@@ -2049,12 +2035,6 @@ void BandmapClientFrame::on_newZoomlevel(int level)
 void BandmapClientFrame::setZoomLevelLabelText(int level)
 {
     ui->zoomSpinner->setValue(level);
-//    QString levStr = QString::number(level);
-//    if (level < 10)
-//    {
-//        levStr.prepend('0');
-//    }
-//    ui->zoomLevelLabel->setText(QString("Zoom - %1").arg(levStr));
 }
 
 void BandmapClientFrame::on_textFilterEdit_textChanged(const QString &filter)

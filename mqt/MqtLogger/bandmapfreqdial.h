@@ -7,11 +7,8 @@
 #include "bandmapcommon.h"
 #include "checkoperatingfreq.h"
 
-
-
 class DialFreqText
 {
-
 public:
 
     DialFreqText(QRect _textRect, Frequency _freqText)
@@ -30,17 +27,12 @@ private:
 
 };
 
-
-
-
 class BandmapFreqDial : public QObject, public QGraphicsItem
 {
     Q_OBJECT
-    Q_INTERFACES(QGraphicsItem)
-
+    Q_INTERFACES(QGraphicsItem) // This removes a warning; not sure it is useful!
 
 public:
-    //BandmapFreqDial(int width, int height, QGraphicsItem *parent = nullptr);
     BandmapFreqDial(int width, int height);
     void setHeight(int h);
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
@@ -105,8 +97,6 @@ protected:
 
 
 private:
-
-    int width = 0;
     int height = 0;
     int zoomLevel = 0;
     int dialWidth  = dialData::MAXSCALEX;
@@ -130,8 +120,6 @@ private:
     bool operatingPlanOk;
 
     QString radioMode;
-
-
 
     QColor cursorColour;
 
