@@ -359,6 +359,9 @@ void BandmapFreqDial::setContestBandLimits(const Frequency &flow, const Frequenc
 {
     contestBandFlow = flow;
     contestBandFhigh = fhigh;
+
+    newFreqTextWidth = checkFreqWidth(fhigh);
+
 }
 
 Frequency BandmapFreqDial::getViewPortFreq(int startPos, Frequency contestBandFlow)
