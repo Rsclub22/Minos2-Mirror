@@ -313,7 +313,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
         {
             max_az = capsList[i]->max_az;
         }
-/*
+
         // uncomment to dump the rotator values to tracelog
         trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
               .arg(capsList[i]->mfg_name)
@@ -323,7 +323,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
               .arg(capsList[i]->stop  ? "True" : "False")
               .arg(capsList[i]->min_az)
               .arg(capsList[i]->max_az));
-*/
+
 
 
         (*rotatorsList)[key] = RotCapabilities(capsList[i]->rot_model,
