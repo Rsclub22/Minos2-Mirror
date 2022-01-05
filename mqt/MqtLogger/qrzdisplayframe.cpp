@@ -6,7 +6,7 @@
 #include "minosqlabel.h"
 
 #include <QSizePolicy>
-
+#include <QDebug>
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -40,6 +40,8 @@ QrzDisplayFrame::QrzDisplayFrame(QWidget *parent) :
     ui->qraText->setToolTip(tr("Double Click to transfer locator to log"));
     ui->bearingText->setToolTip(tr("Double Click to transfer Bearing to rotator control"));
     ui->nameText->setToolTip(tr("Double Click to transfer Name to comments in log"));
+
+    setQrzMessageText(tr("Note! Qrz XML subscription required to get QRA"));
 
     serverPingTimer = new QTimer(this);
     connect (serverPingTimer, &QTimer::timeout, this, [=](){onServerPingTimerTimeout();});
@@ -123,6 +125,7 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
     {
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
         setLogonPushButtonLabelText(true);
+        setQrzMessageText("");
         trace(QString("QRZDisplayFrame - Logged on to QRZ"));
 
     }
@@ -147,7 +150,7 @@ void QrzDisplayFrame::onServerPingTimerTimeout()
 {
     if (receivedServerPing)
     {
-        setLogonPushButtonLabelText(true);;
+       // setLogonPushButtonLabelText(true);;
         receivedServerPing = false;
     }
     else
@@ -272,6 +275,7 @@ void QrzDisplayFrame::setQrzMessageText(QString msg)
 
 void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
 {
+    qDebug() << "state = " << (loggedOn ? "true" : "false");
     if (loggedOn)
     {
         ui->logOnStatusPb->setText(tr("Connected"));
