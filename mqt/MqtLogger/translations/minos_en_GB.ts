@@ -1083,128 +1083,128 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="634"/>
+        <location filename="../contestdetails.ui" line="637"/>
         <source>Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="657"/>
+        <location filename="../contestdetails.ui" line="664"/>
         <source>Antenna Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="680"/>
+        <location filename="../contestdetails.ui" line="691"/>
         <source>Screen Layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="697"/>
+        <location filename="../contestdetails.ui" line="712"/>
         <source>Scoring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="706"/>
+        <location filename="../contestdetails.ui" line="721"/>
         <source>Commenced Kilometer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="713"/>
+        <location filename="../contestdetails.ui" line="728"/>
         <source>Point per QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="723"/>
+        <location filename="../contestdetails.ui" line="738"/>
         <source>Bonus Scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="741"/>
+        <location filename="../contestdetails.ui" line="756"/>
         <source>Antenna Offset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="774"/>
+        <location filename="../contestdetails.ui" line="789"/>
         <source>RSGB MGM Contest Rules
 Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="795"/>
+        <location filename="../contestdetails.ui" line="810"/>
         <source>Locator Length</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="801"/>
+        <location filename="../contestdetails.ui" line="816"/>
         <source>Allow 4 char Locators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="808"/>
+        <location filename="../contestdetails.ui" line="823"/>
         <source>Allow 8 char Locators</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="818"/>
+        <location filename="../contestdetails.ui" line="833"/>
         <source>Mandatory QSO Fields</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="826"/>
+        <location filename="../contestdetails.ui" line="841"/>
         <source>RS(T)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="833"/>
+        <location filename="../contestdetails.ui" line="848"/>
         <source>Serial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="844"/>
+        <location filename="../contestdetails.ui" line="859"/>
         <source>Locator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="860"/>
+        <location filename="../contestdetails.ui" line="875"/>
         <source>Multipliers and Exchange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="866"/>
+        <location filename="../contestdetails.ui" line="881"/>
         <source>DXCC Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="873"/>
+        <location filename="../contestdetails.ui" line="888"/>
         <source>Non UK Countries Only (M6)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="880"/>
+        <location filename="../contestdetails.ui" line="895"/>
         <source>Locator Multiplier</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="887"/>
+        <location filename="../contestdetails.ui" line="902"/>
         <source>UK Locs only (M5, M6)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="894"/>
+        <location filename="../contestdetails.ui" line="909"/>
         <source>All locs; UK locs x2 (M7)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="930"/>
+        <location filename="../contestdetails.ui" line="949"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="953"/>
+        <location filename="../contestdetails.ui" line="972"/>
         <source>Entry Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.ui" line="973"/>
+        <location filename="../contestdetails.ui" line="992"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2574,17 +2574,22 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="69"/>
+        <location filename="../qrzdisplayframe.cpp" line="44"/>
+        <source>Note! Qrz XML subscription required to get QRA</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qrzdisplayframe.cpp" line="71"/>
         <source>Search callsign invalid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="277"/>
+        <location filename="../qrzdisplayframe.cpp" line="281"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="281"/>
+        <location filename="../qrzdisplayframe.cpp" line="285"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2592,17 +2597,17 @@ No          - Discard changes</source>
 <context>
     <name>QrzDisplayServerRpc</name>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="306"/>
+        <location filename="../qrzdisplayframe.cpp" line="310"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="307"/>
+        <location filename="../qrzdisplayframe.cpp" line="311"/>
         <source>Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qrzdisplayframe.cpp" line="308"/>
+        <location filename="../qrzdisplayframe.cpp" line="312"/>
         <source>No Contact</source>
         <translation type="unfinished"></translation>
     </message>
