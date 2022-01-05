@@ -364,6 +364,10 @@ void QrzServerMainWindow::sessionDataReceived()
         }
         else
         {
+            // send error message to client
+            QString errorMsg = qrzSessionData.getError();
+            trace(errorMsg);
+            addTextToLogWindow(tr("Logon failed to Qrz.com, logon callsign = %1, error = %2").arg(logonCallsign, errorMsg));
             setQrzStatusConnected(false);
             qrzServerStateFlags.clear();
 
