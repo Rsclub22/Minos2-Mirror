@@ -30,8 +30,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>621</width>
-        <height>770</height>
+        <width>628</width>
+        <height>754</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
@@ -436,20 +436,20 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
             <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
-                <item>
-                 <widget class="QLabel" name="label_8">
-                  <property name="text">
-                   <string>Start Date</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDateEdit" name="StartDateEdit">
-                  <property name="calendarPopup">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+              <item>
+               <widget class="QLabel" name="label_8">
+                <property name="text">
+                 <string>Start Date</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="StartDateEdit">
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -487,20 +487,20 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_10">
             <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
-                <item>
-                 <widget class="QLabel" name="label_10">
-                  <property name="text">
-                   <string>End Date</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QDateEdit" name="EndDateEdit">
-                  <property name="calendarPopup">
-                   <bool>true</bool>
-                  </property>
-                 </widget>
+             <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,1">
+              <item>
+               <widget class="QLabel" name="label_10">
+                <property name="text">
+                 <string>End Date</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDateEdit" name="EndDateEdit">
+                <property name="calendarPopup">
+                 <bool>true</bool>
+                </property>
+               </widget>
               </item>
              </layout>
             </item>
@@ -600,6 +600,9 @@
               <property name="editable">
                <bool>true</bool>
               </property>
+              <property name="sizeAdjustPolicy">
+               <enum>QComboBox::AdjustToContents</enum>
+              </property>
              </widget>
             </item>
            </layout>
@@ -636,7 +639,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="radioNameEdit"/>
+           <widget class="QComboBox" name="radioNameEdit">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="horizontalSpacer">
@@ -659,7 +666,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="antennaNameEdit"/>
+           <widget class="QComboBox" name="antennaNameEdit">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
           </item>
           <item>
            <spacer name="horizontalSpacer_8">
@@ -682,7 +693,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="screenLayoutCombo"/>
+           <widget class="QComboBox" name="screenLayoutCombo">
+            <property name="sizeAdjustPolicy">
+             <enum>QComboBox::AdjustToContents</enum>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -899,7 +914,11 @@ Score between 4 fig loc centres</string>
             </widget>
            </item>
            <item>
-            <widget class="QComboBox" name="ExchangeComboBox"/>
+            <widget class="QComboBox" name="ExchangeComboBox">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
