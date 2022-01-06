@@ -1169,14 +1169,14 @@ void TLogContainer::AppendAdifActionExecute()
         {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("Failed to append %1").arg(fname) );
         }
-        ct->scanContest();
-        ct->validateLoc();
         for ( int i = spoint; i != ct->ctList.count(); i++ )
         {
             QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
             bct->commonSave(bct);
         }
         ct->commonSave( false );
+        ct->scanContest();
+        ct->validateLoc();
         MinosLoggerEvents::SendAfterLogContact(ct);
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
