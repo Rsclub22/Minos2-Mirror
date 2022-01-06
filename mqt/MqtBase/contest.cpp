@@ -1207,7 +1207,7 @@ bool DupContact::operator==( const DupContact& rhs ) const
       }
 
 
-   return (*c1 == *c2 && b1 == b2);
+   return (c1 && c2 && *c1 == *c2 && b1 == b2);
 }
 bool DupContact::operator!=( const DupContact& rhs ) const
 {
