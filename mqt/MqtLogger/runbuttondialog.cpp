@@ -16,9 +16,10 @@
 
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-//#include "rigcontrolcommonconstants.h"
 #include "rigcommon.h"
 #include "rotatorcommon.h"
+#include "tsinglelogframe.h"
+#include "tlogcontainer.h"
 
 #include "runbuttondialog.h"
 #include "ui_runbuttondialog.h"
@@ -75,15 +76,25 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
     QStringList ml = mlist.split('|');
     ui->modecb->insertItems(0, ml);
 
-
     memoryNumber = buttonNumber;
     logdata = ldata;
 
-    //setWindowTitle(QString("Run%1 - Edit").arg(QString::number(buttonNumber + 1)));
+    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+    ScreenContact sc = tslf->getScreenEntry();
+
+    QString m = ldata->mode;
+    if (m.isEmpty())
+    {
+        logdata->mode = sc.mode;
+    }
 
     ui->modecb->setCurrentText(ldata->mode);
 
 
+    if (logdata->freq.isClear())
+    {
+        logdata->freq = sc.frequency;
+    }
     if (logdata->freq.isClear())
     {
         ui->freqLineEdit->setText("");
