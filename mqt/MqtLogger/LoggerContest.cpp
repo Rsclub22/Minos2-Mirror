@@ -516,7 +516,7 @@ void LoggerContestLog::closeFile( )
    ediContestFile.reset();
 }
 QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup,
-                                                          QString mode, QString mgmSubmode, dtg ctTime, Frequency &freq )
+                                                          QString mode, QString mgmSubmode, dtg ctTime, const Frequency &freq )
 {
    // add the contact number as an new empty contact, with disk block and log_seq
 
