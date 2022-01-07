@@ -451,6 +451,10 @@ bool QSOLogFrame::frameHasFocus()
             || ui->LocFrame->getTextEditEdit()->hasFocus()
             || ui->QTHFrame->getTextEditEdit()->hasFocus()
             || ui->commentsFrame->getTextEditEdit()->hasFocus()
+            || ui->MainOpComboBox->hasFocus()
+            || ui->SecondOpComboBox->hasFocus()
+            || ui->MainOpComboBox->view()->hasFocus()
+            || ui->SecondOpComboBox->view()->hasFocus()
             )
     {
         return true;
@@ -2169,8 +2173,7 @@ void QSOLogFrame::checkQsoFrameColour()
     {
         if (!frameHasFocus())
         {
-            //ui->RHSFrame->setVisible(false);
-            doShowOperators(false);
+            ui->flagsFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
 
             ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
@@ -2179,8 +2182,7 @@ void QSOLogFrame::checkQsoFrameColour()
         else
         {
             ui->protectionLabel->setText("");
-            //ui->RHSFrame->setVisible(true);
-            on_ShowOperators();
+            ui->flagsFrame->setVisible(true);
         }
     }
 
