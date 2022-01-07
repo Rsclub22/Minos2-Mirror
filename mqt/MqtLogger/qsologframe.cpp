@@ -2584,15 +2584,13 @@ void QSOLogFrame::showScreenContactTime()
 }
 void QSOLogFrame::getScreenRigData()
 {
-    if (!edit && !catchup && isRadioLoaded())
+    screenContact.rigName = curRadioName;
+    if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
     {
-        screenContact.rigName = curRadioName;
         screenContact.frequency = curFreq;
     }
     else
     {
-        screenContact.rigName.clear();
-
         QString cb;
         screenContact.frequency = contest->getTxFreqBand(Frequency(), cb);
     }
@@ -3660,7 +3658,6 @@ void QSOLogFrame::on_callRb_clicked()
 
     if (ui->callRb->isChecked())
     {
-
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         if (tslf && tslf->runButtonsFrame)
         {
