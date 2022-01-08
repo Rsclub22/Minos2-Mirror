@@ -392,7 +392,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
                         switch ( QSOGridModel::QSOTreeColumns[ column ].fieldId )
                         {
                         case egTime:
-                            if (!contest->checkTime(ct->time))
+                            if (!contest->checkTime(ct->timeOff))
                             {
                                 setHighlight = true;
                             }

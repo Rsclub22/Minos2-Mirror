@@ -239,50 +239,49 @@ QString dtg::getDate( DTG dstyle ) const
 }
 QString dtg::getTime( DTG dstyle, bool &d ) const
 {
-   QString temp_time;
-   QString timeValue = stime.getValue( d );
-   timeValue += "            ";
+    QString temp_time;
+    QString timeValue = stime.getValue( d );
+    timeValue += "            ";
 
-   if ( dstyle == DTGLOG )
-   {
-      temp_time = timeValue.left( 4);
-   }
-   else
-      if ( dstyle == DTGReg1Test )
-      {
-         temp_time += timeValue [ 0 ];
-         temp_time += timeValue [ 1 ];
-         temp_time += timeValue [ 2 ];
-         temp_time += timeValue [ 3 ];
-      }
-      else if (dstyle == DTGACCURATE)
-      {
-         temp_time += timeValue [ 0 ];
-         temp_time += timeValue [ 1 ];
-         temp_time += ':';
-         temp_time += timeValue [ 2 ];
-         temp_time += timeValue [ 3 ];
-         temp_time += ':';
-         temp_time += timeValue [ 4 ];
-         temp_time += timeValue [ 5 ];
+    if ( dstyle == DTGLOG )
+    {
+        temp_time = timeValue.left( 4);
+    }
+    else if ( dstyle == DTGReg1Test )
+    {
+        temp_time += timeValue [ 0 ];
+        temp_time += timeValue [ 1 ];
+        temp_time += timeValue [ 2 ];
+        temp_time += timeValue [ 3 ];
+    }
+    else if (dstyle == DTGACCURATE)
+    {
+        temp_time += timeValue [ 0 ];
+        temp_time += timeValue [ 1 ];
+        temp_time += ':';
+        temp_time += timeValue [ 2 ];
+        temp_time += timeValue [ 3 ];
+        temp_time += ':';
+        temp_time += timeValue [ 4 ];
+        temp_time += timeValue [ 5 ];
 
-         for ( int i = 0; i < 8; i++ )
+        for ( int i = 0; i < 8; i++ )
             if ( temp_time[ i ].unicode() == 0 )
-               temp_time[ i ] = ' ';
-      }
-         else
-         {
-            temp_time += timeValue [ 0 ];
-            temp_time += timeValue [ 1 ];
-            temp_time += ':';
-            temp_time += timeValue [ 2 ];
-            temp_time += timeValue [ 3 ];
+                temp_time[ i ] = ' ';
+    }
+    else
+    {
+        temp_time += timeValue [ 0 ];
+        temp_time += timeValue [ 1 ];
+        temp_time += ':';
+        temp_time += timeValue [ 2 ];
+        temp_time += timeValue [ 3 ];
 
-            for ( int i = 0; i < 5; i++ )
-               if ( temp_time[ i ].unicode() == 0 )
-                  temp_time[ i ] = ' ';
-         }
-   return temp_time;
+        for ( int i = 0; i < 5; i++ )
+            if ( temp_time[ i ].unicode() == 0 )
+                temp_time[ i ] = ' ';
+    }
+    return temp_time;
 }
 QString dtg::getTime( DTG dstyle ) const
 {

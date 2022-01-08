@@ -104,7 +104,8 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
 
    cs = cct.cs;
 
-   time.setValue( cct.time );
+   timeOn.setValue( cct.timeOn );
+   timeOff.setValue( cct.timeOff );
 
    reps.setValue( cct.reps );
    serials.setValue( cct.serials );
@@ -148,13 +149,13 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
 
 bool DisplayContestContact::ne(const ScreenContact &mct) const
 {
-   QString ne_temp_date = mct.time.getDate( DTGDISP );
-   QString ne_temp_time = mct.time.getTime( DTGDISP );
+   QString ne_temp_date = mct.timeOff.getDate( DTGDISP );
+   QString ne_temp_time = mct.timeOff.getTime( DTGDISP );
 
-    if ( strcmpsp( ne_temp_date, time.getDate( DTGDISP ) ) )
+    if ( strcmpsp( ne_temp_date, timeOff.getDate( DTGDISP ) ) )
      return true; // i.e. not equal
 
-    if ( strcmpsp( ne_temp_time, time.getTime( DTGDISP ) ) )
+    if ( strcmpsp( ne_temp_time, timeOff.getTime( DTGDISP ) ) )
      return true; // i.e. not equal
 
    if ( strcmpsp( mct.cs.getFullCall(), cs.getFullCall() ) )
@@ -550,7 +551,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
       switch ( ACol )
       {
          case egTime:
-            res = time.getTime( DTGDISP );
+            res = timeOff.getTime( DTGDISP );
             break;
          case egCall:
             res = ( cf & DONT_PRINT ) ? tr("DELETED") : ( cf & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR");
@@ -565,7 +566,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
       switch ( ACol )
       {
          case egTime:
-            res = time.getTime( DTGDISP );
+            res = timeOff.getTime( DTGDISP );
             break;
          case egBand:
             clp->getTxFreqBand(frequency.getValue(), res);
@@ -805,9 +806,16 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
 
    if ( methodName == "MinosLogComment" )
    {
-      QString ctime;
-      mt->getStructArgMemberValueDTG( "logTime", ctime );
-      time.setIsoDTG( ctime );
+      QString ctimeoff;
+      QString ctimeon;
+      if (mt->getStructArgMemberValueDTG( "logTime", ctimeoff ))
+      {
+        timeOff.setIsoDTG( ctimeoff );
+      }
+      if (mt->getStructArgMemberValueDTG( "QSOStartTime", ctimeon ))
+      {
+        timeOn.setIsoDTG( ctimeon );
+      }
 
       bool btemp = false;
       unsigned short cf = contactFlags.getValue();
@@ -826,9 +834,16 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
 
          updtime.setIsoDTG( updtg );
 
-         QString ctime;
-         if ( mt->getStructArgMemberValueDTG( "logTime", ctime ) )
-            time.setIsoDTG( ctime );
+         QString ctimeoff;
+         QString ctimeon;
+         if (mt->getStructArgMemberValueDTG( "logTime", ctimeoff ))
+         {
+            timeOff.setIsoDTG( ctimeoff );
+         }
+         if (mt->getStructArgMemberValueDTG( "QSOStartTime", ctimeon ))
+         {
+           timeOn.setIsoDTG( ctimeon );
+         }
 
          unsigned short cf = contactFlags.getValue();
          bool btemp = false;
