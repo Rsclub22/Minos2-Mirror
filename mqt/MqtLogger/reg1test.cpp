@@ -538,8 +538,9 @@ bool reg1test::parseQSO( QString line )
 
          (N) says either "N;" or ";"
       */
-      aqso->time.setDate( a[ 0 ], DTGReg1Test );
-      aqso->time.setTime( a[ 1 ], DTGReg1Test );
+      aqso->timeOff.setDate( a[ 0 ], DTGReg1Test );
+      aqso->timeOff.setTime( a[ 1 ], DTGReg1Test );
+      aqso->timeOn = aqso->timeOff;
       aqso->cs.setFullCall( a[ 2 ].toUpper() );
       // a[3] mode
       aqso->reps.setValue( a[ 4 ] );

@@ -530,7 +530,8 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    makeContact( timenow, bct );
    if (timenow == false)
    {
-       bct->time.setValue(ctTime);
+       bct->timeOn.setValue(ctTime);
+       bct->timeOff.setValue(ctTime);
    }
 
    QString temp = QString( "%1" ).arg(newctno, 3, 10, QChar('0') );  //leading zeros
@@ -582,7 +583,8 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    QSharedPointer<BaseContact> bct;
    makeContact( timenow, bct );
 
-   bct->time = ctTime;
+   bct->timeOn = ctTime;
+   bct->timeOff = ctTime;
    bct->serials.setValue( "" );
    bct->mode.setValue(prior->mode.getValue());
    bct->mgmSubmode.setValue(prior->mgmSubmode.getValue());
@@ -1436,9 +1438,10 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
 
       QString temp;
       strcpysp( temp, lbuff, 6 );
-      bct->time.setDate( temp, DTGLOG );
+      bct->timeOff.setDate( temp, DTGLOG );
       strcpysp( temp, lbuff.mid(7), 4 );
-      bct->time.setTime( temp, DTGLOG );
+      bct->timeOff.setTime( temp, DTGLOG );
+      bct->timeOn = bct->timeOff;
       strcpysp( temp, lbuff.mid(21), 15 );
       bct->cs.setFullCall( temp );
       strcpysp( temp, lbuff.mid( 37 ), 3 );

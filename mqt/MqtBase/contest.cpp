@@ -581,7 +581,7 @@ bool BaseContestLog::updateStat( QSharedPointer<BaseContact> cct, int sp1, int s
 
    QDateTime cttime;
 
-   if ( ( cct->contactScore.getValue() <= 0 ) || !cct->time.getDtg( cttime ) )
+   if ( ( cct->contactScore.getValue() <= 0 ) || !cct->timeOff.getDtg( cttime ) )
       return true;
 
    QDateTime t = QDateTime::currentDateTimeUtc().addSecs( MinosParameters::getMinosParameters() ->getBigClockCorrection());
@@ -736,16 +736,16 @@ QString BaseContestLog::dateRange( DTG dstyle )
    {
       if ( i->wt ->contactScore.getValue() > 0 )
       {
-         QString qsodate = i->wt ->time.getDate( DTGLOG );
+         QString qsodate = i->wt ->timeOff.getDate( DTGLOG );
          if ( qsodate < date1 )
          {
             low = i;
-            date1 = i->wt ->time.getDate( DTGLOG );
+            date1 = i->wt ->timeOff.getDate( DTGLOG );
          }
          if ( qsodate > date2 )
          {
             high = i;
-            date2 = i->wt ->time.getDate( DTGLOG );
+            date2 = i->wt ->timeOff.getDate( DTGLOG );
          }
       }
    }
@@ -753,7 +753,7 @@ QString BaseContestLog::dateRange( DTG dstyle )
    {
       return "";
    }
-   return low->wt->time.getDate( dstyle ) + ";" + high->wt->time.getDate( dstyle );
+   return low->wt->timeOff.getDate( dstyle ) + ";" + high->wt->timeOff.getDate( dstyle );
 }
 
 void BaseContestLog::setScore( QString &buff )
@@ -834,7 +834,7 @@ void BaseContestLog::scanContest( )
 
       QDateTime contactTime;
       bool dirty = false;
-      nct->time.getDtg(contactTime, dirty);
+      nct->timeOff.getDtg(contactTime, dirty);
       if (contactTime >= contestStart && contactTime < contestEnd)
       {
           int qoffset = contestStart.secsTo(contactTime)/60;
@@ -860,11 +860,11 @@ void BaseContestLog::scanContest( )
       nct->newBonus = false;
       nct->checkContact( true);   // in scanContest
 
-      if (nct->time.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
+      if (nct->timeOff.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
       {
-         nct->time = nct->getHistory()[0]->updtime;
-         nct->time.clearDirty();
-         nct->time.setBadDtg();
+         nct->timeOff = nct->getHistory()[0]->updtime;
+         nct->timeOff.clearDirty();
+         nct->timeOff.setBadDtg();
       }
    }
    if ( isReadOnly() )
@@ -896,7 +896,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
 
 // NB this doesn't cope with crazy times from test contests and QSOs
 
-      QString dtgstr = nct->time.getDate(DTGFULL) + nct->time.getTime(DTGLOG);
+      QString dtgstr = nct->timeOff.getDate(DTGFULL) + nct->timeOff.getTime(DTGLOG);
       QDateTime ncheck = CanonicalToTDT( dtgstr );
 
       if (ncheck > limit)

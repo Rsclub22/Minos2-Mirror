@@ -40,7 +40,8 @@ class ScreenContact
 
       Callsign cs;   //CONTAIN MinosItem
       Locator loc;   //CONTAIN MinosItem
-      dtg time;      //CONTAIN MinosItem
+      dtg timeOn;    //CONTAIN MinosItem
+      dtg timeOff;   //CONTAIN MinosItem
 
       QString mode;
       QString mgmSubmode;

@@ -115,7 +115,8 @@ class BaseContact: public QObject
 
       Callsign cs;   //CONTAIN MinosItem
       Locator loc;   //CONTAIN MinosItem
-      dtg time;      //CONTAIN MinosItem
+      dtg timeOn;    //CONTAIN MinosItem
+      dtg timeOff;   //CONTAIN MinosItem
 
       MinosStringItem<QString> extraText;
       MinosStringItem<QString> mode;

@@ -121,7 +121,8 @@ bool decodeMessage::checkAsContact()
     scc.initialise(cc, false);
     scc.cs = fromCall;
     scc.loc = fromGrid;
-    scc.time = dtg(true);
+    scc.timeOn = dtg(true);
+    scc.timeOff = dtg(true);
     QString cb;
     scc.frequency = cc->getTxFreqBand(Frequency(), cb);
 

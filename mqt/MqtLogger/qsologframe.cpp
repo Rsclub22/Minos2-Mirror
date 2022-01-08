@@ -651,8 +651,10 @@ void QSOLogFrame::on_CatchupButton_clicked()
 
     }
     // set the screencontact dtg as not entered
-    screenContact.time.setDate(QString(), DTGLOG);
-    screenContact.time.setTime(QString(), DTGLOG);
+    screenContact.timeOn.setDate(QString(), DTGLOG);
+    screenContact.timeOn.setTime(QString(), DTGLOG);
+    screenContact.timeOff.setDate(QString(), DTGLOG);
+    screenContact.timeOff.setTime(QString(), DTGLOG);
     setTimeStyles();
     sortUnfilledCatchupTime();
     selectField( nullptr );
@@ -2538,7 +2540,7 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
-   lct->time.setDirty(); // As we may have created the contact with the same time as the screen contact
+   lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
                          // But this only happens when seconds are :00, as the main log
                          // is only to a minute resolution
@@ -2569,14 +2571,16 @@ void QSOLogFrame::logScreenEntry( )
 void QSOLogFrame::getScreenContactTime()
 {
    updateQSOTime();
-   screenContact.time.setDate( ui->dateEdit->date() );
-   screenContact.time.setTime( ui->timeEdit->time() );
+   screenContact.timeOn.setDate( ui->dateEdit->date() );
+   screenContact.timeOn.setTime( ui->timeEdit->time() );
+   screenContact.timeOff.setDate( ui->dateEdit->date() );
+   screenContact.timeOff.setTime( ui->timeEdit->time() );
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::showScreenContactTime()
 {
-   ui->dateEdit->setDate(screenContact.time.getDate( ));
-   ui->timeEdit->setTime(screenContact.time.getTime( ));
+   ui->dateEdit->setDate(screenContact.timeOff.getDate( ));
+   ui->timeEdit->setTime(screenContact.timeOff.getTime( ));
 
    setDtgSection();
 }
@@ -2624,13 +2628,13 @@ void QSOLogFrame::logCurrentContact( )
       {
          if ( mShowYesNoMessage( this, tr("Do you want to enter the missing contacts later?") ) )
          {
-             dtg ctTime(screenContact.time);
+             dtg ctTime(screenContact.timeOff);
              QSharedPointer<BaseContact> pct;
              if (contest->getContactCount() > 0)
                 pct = contest->pcontactAt(contest->getContactCount() - 1);
              if ( pct )
              {
-                ctTime = pct->time;
+                ctTime = pct->timeOff;
              }
              else
              {
@@ -2890,7 +2894,7 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
         ui->timeEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         */
 
-        int tne = screenContact.time.notEntered(); // partial dtg will give +fe
+        int tne = screenContact.timeOff.notEntered(); // partial dtg will give +fe
         // full dtg gives -ve, none gives 0
         if ( tne == 0 )
         {
@@ -2901,9 +2905,10 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
                 pct = getPriorContact();
             if ( pct )
             {
-                screenContact.time = pct->time;
-                ui->dateEdit->setDate(screenContact.time.getDate( ));
-                ui->timeEdit->setTime(screenContact.time.getTime( ));
+                screenContact.timeOn = pct->timeOn;
+                screenContact.timeOff = pct->timeOff;
+                ui->dateEdit->setDate(screenContact.timeOff.getDate( ));
+                ui->timeEdit->setTime(screenContact.timeOff.getTime( ));
             }
             else
             {
@@ -2914,7 +2919,8 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
                 dtg time(false);
                 time.setDate( ui->dateEdit->date());
                 time.setTime( ui->timeEdit->time() );
-                screenContact.time = time;
+                screenContact.timeOn = time;
+                screenContact.timeOff = time;
             }
 
             setDtgSection();
@@ -2945,7 +2951,7 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    sortUnfilledCatchupTime();
    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
 
-   int tne = screenContact.time.notEntered(); // partial dtg will give +fe
+   int tne = screenContact.timeOff.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0
 
    if (tne < 0)
@@ -3048,10 +3054,10 @@ void QSOLogFrame::on_InsertBeforeButton_clicked()
     QSharedPointer<BaseContact> pct = getPriorContact();
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
-    dtg ctTime = selectedContact->time;
+    dtg ctTime = selectedContact->timeOff;
 
     if (pct)
-        ctTime = pct->time;
+        ctTime = pct->timeOff;
 
     QSharedPointer<BaseContact> newct = ct->addContactBetween(pct, selectedContact, ctTime);
     newct->contactFlags.setValue(newct->contactFlags.getValue()|TO_BE_ENTERED);
@@ -3062,7 +3068,7 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
 {
     QSharedPointer<BaseContact> nct = getNextContact();
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    dtg ctTime = selectedContact->time;
+    dtg ctTime = selectedContact->timeOff;
 
     QSharedPointer<BaseContact> newct = ct->addContactBetween(selectedContact, nct, ctTime);
     newct->contactFlags.setValue(newct->contactFlags.getValue()|TO_BE_ENTERED);
@@ -3281,7 +3287,8 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
             scc.mode = n[3];
-            scc.time = dtg(true);
+            scc.timeOn = dtg(true);
+            scc.timeOff = dtg(true);
             QString cb;
             scc.frequency = contest->getTxFreqBand(Frequency(), cb);
 
