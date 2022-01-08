@@ -935,6 +935,21 @@ void TSingleLogFrame::restoreColumns()
     columnsChanged = false;
 
 }
+void TSingleLogFrame::on_sectionResized(int, int, int)
+{
+    QSettings settings;
+    QByteArray state;
+
+    state = QSOTable->horizontalHeader()->saveState();
+    settings.setValue("QSOTable/state", state);
+
+    MinosLoggerEvents::SendColumnsChanged();
+}
+
+void TSingleLogFrame::onColumnsChanged()
+{
+    columnsChanged = true;
+}
 
 void TSingleLogFrame::showQSOs()
 {
@@ -1419,20 +1434,6 @@ bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
 {
    return contest->getStanza( stanza, stanzaData );
 }
-void TSingleLogFrame::on_sectionResized(int, int, int)
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = QSOTable->horizontalHeader()->saveState();
-    settings.setValue("QSOTable/state", state);
-
-    MinosLoggerEvents::SendColumnsChanged();
-}
-void TSingleLogFrame::onColumnsChanged()
-{
-    columnsChanged = true;
-}
 void TSingleLogFrame::goNextUnfilled()
 {
    QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
@@ -1635,11 +1636,6 @@ void TSingleLogFrame::sendRunOffFreqFlag(Frequency runFreq, bool offRunFreq)
 {
     GJVQSOLogFrame->setRunOffFreqFlag(offRunFreq);
     bandmapControlFrame->setRunOffFreqFlag(runFreq, offRunFreq);
-}
-
-void TSingleLogFrame::on_ZoomMap(bool dir)
-{
-    bandmapControlFrame->updateZoom(dir);
 }
 
 void TSingleLogFrame::sendKeyerTone()
@@ -1962,24 +1958,6 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
     }
 }
 
-/*
-
-void TSingleLogFrame::on_SetRadioVolumeState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRadioVolumeState(s);
-    }
-}
-
-void TSingleLogFrame::on_SetRitEnableState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRitEnableState(s);
-    }
-}
-*/
 //---- Send to RigController
 
 void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)
