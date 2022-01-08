@@ -92,7 +92,7 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
            switch ( QSOTreeColumns[ column ].fieldId )
            {
               case egTime:
-                 if (!contest->checkTime(ct->time))
+                 if (!contest->checkTime(ct->timeOff))
                  {
                     setHighlight = true;
                  }

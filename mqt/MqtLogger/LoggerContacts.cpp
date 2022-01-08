@@ -44,21 +44,21 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
 
    if ( contactFlags.getValue() & DONT_PRINT )
    {
-      placestr( contactBuffs.buff2, time.getDate( DTGPRINT ), 0, 10 );
-      placestr( contactBuffs.buff2, time.getTime( DTGPRINT ), 11, 5 );
+      placestr( contactBuffs.buff2, timeOff.getDate( DTGPRINT ), 0, 10 );
+      placestr( contactBuffs.buff2, timeOff.getTime( DTGPRINT ), 11, 5 );
       placestr( contactBuffs.buff2, "DON'T PRINT", 21, 14 );
    }
    else if ( contactFlags.getValue() & LOCAL_COMMENT  )
    {
-      placestr( contactBuffs.buff2, time.getDate( DTGDISP ), 0, 10 );
-      placestr( contactBuffs.buff2, time.getTime( DTGDISP ), 11, 5 );
+      placestr( contactBuffs.buff2, timeOff.getDate( DTGDISP ), 0, 10 );
+      placestr( contactBuffs.buff2, timeOff.getTime( DTGDISP ), 11, 5 );
       placestr( contactBuffs.buff2, "LOCAL COMMENT", 23, 14 );
       placestr( contactBuffs.buff2, comments.getValue(), 31, 60 );
    }
    else if ( contactFlags.getValue() & COMMENT_ONLY )
    {
-      placestr( contactBuffs.buff2, time.getDate( DTGDISP ), 0, 10 );
-      placestr( contactBuffs.buff2, time.getTime( DTGDISP ), 11, 5 );
+      placestr( contactBuffs.buff2, timeOff.getDate( DTGDISP ), 0, 10 );
+      placestr( contactBuffs.buff2, timeOff.getTime( DTGDISP ), 11, 5 );
       placestr( contactBuffs.buff2, "LOGGED COMMENT", 23, 14 );
       placestr( contactBuffs.buff2, comments.getValue(), 31, 60 );
 
@@ -141,8 +141,8 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       contactBuffs.buff = QString("%1 %2 %3").arg(contactBuffs.buff2).arg(exp_buff).arg(multbuff );
 
       int next = 0;
-      next = placestr( contactBuffs.buff2, time.getDate( DTGPRINT ), next, 10 );
-      next = placestr( contactBuffs.buff2, time.getTime( DTGPRINT ), next + 1, 5 );
+      next = placestr( contactBuffs.buff2, timeOff.getDate( DTGPRINT ), next, 10 );
+      next = placestr( contactBuffs.buff2, timeOff.getTime( DTGPRINT ), next + 1, 5 );
       next = placestr( contactBuffs.buff2, cs.getFullCall(), next + 1, 10 );
       next = placestr( contactBuffs.buff2, reps.getValue(), next + 1, 3 );
       next = placestr( contactBuffs.buff2, contactBuffs.ssbuff, next + 1, -4 );
@@ -190,9 +190,9 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
 void ContestContact::addReg1TestComment( QStringList &remarks )
 {
    QString cmnt;
-   cmnt += time.getDate( DTGLOG );
+   cmnt += timeOff.getDate( DTGLOG );
    cmnt += ';';
-   cmnt += time.getTime( DTGLOG );
+   cmnt += timeOff.getTime( DTGLOG );
    cmnt += ';';
    if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
       return ;
@@ -275,9 +275,9 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
 
    BaseContestLog * clp = contest;
 
-   sdest += time.getDate( DTGReg1Test );
+   sdest += timeOff.getDate( DTGReg1Test );
    sdest += ';';
-   sdest += time.getTime( DTGReg1Test );
+   sdest += timeOff.getTime( DTGReg1Test );
    sdest += ';';
 
    //callsign
@@ -449,7 +449,7 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     outstr += smode;
     outstr += " ";
 
-    outstr += getCabrilloField(time.getCabrilloDTG(), 15);
+    outstr += getCabrilloField(timeOff.getCabrilloDTG(), 15);
 
     outstr += getCabrilloField(lcl->mycall.getFullCall(), 13);
 
@@ -536,16 +536,36 @@ QString ContestContact::getADIFLine()
     if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
         return outstr;
 
-    exp_buff = time.getDate( DTGLOG ).left(6 );
+    //---------------------------------------
+    dtg on = timeOn;
+    if (on.isBadDtg())
+    {
+        on = timeOff;
+    }
+    exp_buff = on.getDate( DTGLOG ).left(6 );
     QString cent = "19";
     if ( exp_buff.toInt() < 300000 )
         cent = "20";
 
     outstr += makeADIFField( "QSO_DATE", cent + exp_buff );
 
-    exp_buff = time.getTime( DTGLOG ).left( 4 );
+    exp_buff = on.getTime( DTGLOG ).left( 4 );
 
     outstr += makeADIFField( "TIME_ON", exp_buff );
+
+    exp_buff = on.getDate( DTGLOG ).left(6 );
+    //---------------------------------------
+
+    cent = "19";
+    if ( exp_buff.toInt() < 300000 )
+        cent = "20";
+
+    outstr += makeADIFField( "QSO_DATE_OFF", cent + exp_buff );
+
+    exp_buff = timeOff.getTime( DTGLOG ).left( 4 );
+
+    outstr += makeADIFField( "TIME_OFF", exp_buff );
+    //---------------------------------------
 
 
     QString cb;
@@ -724,8 +744,8 @@ bool ContestContact::GJVsave( GJVParams &gp )
 
    strtobuf( op1.getValue() );
    strtobuf( op2.getValue() );
-   strtobuf( time.getDate( DTGDISP ) );
-   strtobuf( time.getTime( DTGDISP ) );
+   strtobuf( timeOff.getDate( DTGDISP ) );
+   strtobuf( timeOff.getTime( DTGDISP ) );
 
    if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY ) )
    {
@@ -793,9 +813,9 @@ bool ContestContact::GJVload( int diskBlock )
    op2.setInitialValue( temp );
 
    buftostr( temp );
-   time.setDate( temp, DTGDISP );
+   timeOff.setDate( temp, DTGDISP );
    buftostr( temp );
-   time.setTime( temp, DTGDISP );
+   timeOff.setTime( temp, DTGDISP );
 
    buftostr( temp );
    cs.setFullCall( temp );

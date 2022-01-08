@@ -18,7 +18,8 @@ ContactBuffs contactBuffs;
 BaseContact::BaseContact( BaseContestLog * contest, dtg time_now ) :
       contest( contest )
     , updtime( true )
-    , time( time_now )
+    , timeOn( time_now )
+    , timeOff( time_now )
     , contactFlags( 0 )
     , contactScore( -1 )
     , bearing( -1 )
@@ -36,7 +37,8 @@ BaseContact::BaseContact( BaseContestLog * contest, dtg time_now ) :
 BaseContact::BaseContact( const BaseContact &ct )
       : QObject()
       , updtime( false )
-      , time( false )
+      , timeOn( false )
+      , timeOff( false )
 {
    *this = ct;
 }
@@ -46,7 +48,8 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
    updtime = ct.updtime;      //CONTAIN MinosItem
    cs = ct.cs;   //CONTAIN MinosItem
    loc = ct.loc;   //CONTAIN MinosItem
-   time = ct.time;      //CONTAIN MinosItem
+   timeOn = ct.timeOn;      //CONTAIN MinosItem
+   timeOff = ct.timeOff;      //CONTAIN MinosItem
 
    extraText = ct.extraText;
    mode = ct.mode;
@@ -82,7 +85,8 @@ void BaseContact::clearDirty()
 {
    cs.clearDirty();
    loc.clearDirty();
-   time.clearDirty();
+   timeOn.clearDirty();
+   timeOff.clearDirty();
 
    extraText.clearDirty();
    mode.clearDirty();
@@ -106,7 +110,8 @@ void BaseContact::setDirty()
 {
    cs.setDirty();
    loc.setDirty();
-   time.setDirty();
+   timeOn.setDirty();
+   timeOff.setDirty();
 
    extraText.setDirty();
    mode.setDirty();
@@ -250,7 +255,7 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
        QString deleted = tr("DELETED");
 
        contactBuffs.buff = QString("%1 %2 %3")
-               .arg(time.getTime( DTGDISP ), 5)
+               .arg(timeOff.getTime( DTGDISP ), 5)
                .arg(( contactFlags.getValue() & DONT_PRINT ) ? deleted: ( contactFlags.getValue() & LOCAL_COMMENT ) ? locComment: adjComment)
                .arg(comments.getValue(), 60);
    }
@@ -297,9 +302,9 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
 
    contactBuffs.buff.clear();
    int next = 0;
-   next = placestr( contactBuffs.buff, time.getDate( DTGDISP ), next, 8 );
+   next = placestr( contactBuffs.buff, timeOff.getDate( DTGDISP ), next, 8 );
    next += 2;
-   next = placestr( contactBuffs.buff, time.getTime( DTGDISP ), next, 5 );
+   next = placestr( contactBuffs.buff, timeOff.getTime( DTGDISP ), next, 5 );
 
    next += 1;
    next = placestr( contactBuffs.buff, cs.getFullCall(), next, 11 );

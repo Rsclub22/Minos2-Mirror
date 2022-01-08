@@ -35,6 +35,11 @@ class ADIFImport
 
       LoggerContestLog * acontest;
       QSharedPointer<BaseContact> aqso;
+
+      QString dateOn;
+      QString timeOn;
+      QString dateOff;
+      QString timeOff;
    public:
       static bool doImportADIFLog( LoggerContestLog * c, QSharedPointer<QFile> hFile );
       static bool doImportADIFString(LoggerContestLog * c, const QString &adif);

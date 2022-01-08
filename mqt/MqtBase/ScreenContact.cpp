@@ -14,8 +14,9 @@
 #include "ScreenContact.h"
 
 ScreenContact::ScreenContact() :
-    logSequence( 0 ),
-    time( false )
+    logSequence( 0 )
+    , timeOn( false )
+    , timeOff( false )
 {}
 ScreenContact::~ScreenContact()
 {}
@@ -25,7 +26,8 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     logSequence = static_cast<unsigned long> (- 1);
     cs = Callsign();
     loc = Locator();
-    time = dtg( false );
+    timeOn = dtg( false );
+    timeOff = dtg( false );
 
     if (!ct)
     {
@@ -143,8 +145,10 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     cs = cct->cs;
     cs.clearDirty();
 
-    time = cct->time;
-    time.clearDirty();
+    timeOn = cct->timeOff;
+    timeOn.clearDirty();
+    timeOff = cct->timeOff;
+    timeOff.clearDirty();
 
     reps = cct->reps.getValue();
     serials = cct->serials.getValue();
@@ -193,8 +197,10 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     cs = cct.cs;
     cs.clearDirty();
 
-    time = cct.time;
-    time.clearDirty();
+    timeOn = cct.timeOn;
+    timeOn.clearDirty();
+    timeOff = cct.timeOff;
+    timeOff.clearDirty();
 
     reps = cct.reps;
     serials = cct.serials;
