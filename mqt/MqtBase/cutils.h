@@ -130,5 +130,7 @@ int getStringlistOffSet(QStringList supportedBands, QString contestBandStr);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
 
+void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
+void restoreHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 
 #endif

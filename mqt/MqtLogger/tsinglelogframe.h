@@ -176,10 +176,13 @@ public:
     void on_RotatorMinAzimuth(int);
     void on_cwCcwCmdEnable(bool);
     void presetTurn(QString);
+
 private:
     QSharedPointer<HtmlDelegate> delegate;
     QSOGridModel qsoModel;
     QString curScreenLayout;
+    QMenu columnsMenu;
+
 
     int lastStanzaCount = 0;
 
@@ -192,6 +195,7 @@ private:
 
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
+    void saveColumns();
     void restoreColumns();
 
     MatchTreeItem *getXferItem();
@@ -233,6 +237,9 @@ private slots:
 
     void onColumnsChanged();
     void on_sectionResized(int, int, int);
+    void onQSOGrid_customContextMenuRequested(const QPoint &pos);
+    void onQSOGrid_sectionMoved(int, int, int);
+
     void EditContact(QSharedPointer<BaseContact> lct );
 
     void on_SetRadioList();
@@ -281,6 +288,7 @@ private slots:
 
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
+    void viewColumn();
 };
 
 #endif // TSINGLELOGFRAME_H

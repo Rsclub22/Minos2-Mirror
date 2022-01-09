@@ -145,7 +145,7 @@ void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
 
 //=============================================================================
 
-GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
+QVector<GridColumn> QSOMatchGridModel::ThisMatchTreeColumns =
 {
     GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
     GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // band
@@ -164,7 +164,7 @@ GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
     GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
 };
 //---------------------------------------------------------------------------
-GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
+QVector<GridColumn>  QSOMatchGridModel::OtherMatchTreeColumns =
 {
     GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
     GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
@@ -178,7 +178,7 @@ GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
     GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
 };
 //---------------------------------------------------------------------------
-GridColumn QSOMatchGridModel::ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
+QVector<GridColumn>  QSOMatchGridModel::ArchiveMatchTreeColumns =
 {
     GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
     GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
@@ -558,15 +558,15 @@ int QSOMatchGridModel::columnCount( const QModelIndex &/*parent*/ ) const
     switch (type)
     {
     case ThisMatch:
-        cols = THISMATCHTREECOLS;
+        cols = ThisMatchTreeColumns.count();
         break;
 
     case OtherMatch:
-        cols = OTHERMATCHTREECOLS;
+        cols = OtherMatchTreeColumns.count();
         break;
 
     case ArchiveMatch:
-        cols = ARCHIVEMATCHTREECOLS;
+        cols = ArchiveMatchTreeColumns.count();
         break;
     }
     return cols;

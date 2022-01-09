@@ -17,7 +17,7 @@
 enum eRigMemGridCols {ermCallsign, ermLocator, ermBearing, ermFreq, ermTime, ermWorked,
                     ermMaxCol
                    };
-GridColumn RigMemoryGridModel::RigMemoryColumns[  ] =
+QVector<GridColumn> RigMemoryGridModel::RigMemoryColumns =
    {
       GridColumn( ermCallsign, "(GM4ABC/P) FBXX", QT_TR_NOOP("Callsign"), taLeftJustify ),
       GridColumn( ermLocator, "MM00MM00", QT_TR_NOOP("Locator"), taLeftJustify ),
@@ -672,113 +672,118 @@ void RigMemoryGridModel::reset()
 
 QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
 {
-    int row = index.row();
-    int col = index.column();
     if (ct)
     {
-        if (role == Qt::DisplayRole || role == Qt::UserRole)
+        int row = index.row();
+        int col = index.column();
+        if (ct)
         {
-            LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
-            memoryData::memData m = c->getRigMemoryData(row);
-            QString disp;
-            switch(col)
+            if (role == Qt::DisplayRole || role == Qt::UserRole)
             {
-            case ermCallsign:
-            {
-                if (role == Qt::UserRole)
+                LoggerContestLog *c = dynamic_cast<LoggerContestLog *>( ct );
+                memoryData::memData m = c->getRigMemoryData(row);
+                QString disp;
+                switch(col)
                 {
-                    disp = m.callsign;
-                }
-                else
+                case ermCallsign:
                 {
-                    disp = frame->headerVal[row].text;
-                    if (disp.isEmpty())
+                    if (role == Qt::UserRole)
                     {
-                        disp = "     " + m.callsign + "    ";
+                        disp = m.callsign;
                     }
-                    QColor colour = frame->headerVal[row].colour;
-                    disp = HtmlFontColour(colour) + disp;
-                }
-                break;
-            }
-            case ermWorked:
-                disp = m.worked?tr("Y"):tr("N");
-                break;
-            case ermLocator:
-
-                if (m.dxLocFromNode)
-                {
-                    disp = "<i>" + m.locator + "</i>";
-                }
-                else
-                {
-                    disp = m.locator;
-                }
-                break;
-            case ermBearing:
-                disp = QString("%1").arg( m.bearing, 3, 10, QChar('0'));
-                break;
-            case ermFreq:
-                {
-                    if (!m.freq.isClear())
+                    else
                     {
-                        qint64 ifreq = m.freq;
-                        double dfreq = ifreq/1000000.0;  // MHz
-
-                        disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+                        disp = frame->headerVal[row].text;
+                        if (disp.isEmpty())
+                        {
+                            disp = "     " + m.callsign + "    ";
+                        }
+                        QColor colour = frame->headerVal[row].colour;
+                        disp = HtmlFontColour(colour) + disp;
                     }
                     break;
                 }
-            case ermTime:
-                {
-                    disp = m.time;
+                case ermWorked:
+                    disp = m.worked?tr("Y"):tr("N");
                     break;
+                case ermLocator:
+
+                    if (m.dxLocFromNode)
+                    {
+                        disp = "<i>" + m.locator + "</i>";
+                    }
+                    else
+                    {
+                        disp = m.locator;
+                    }
+                    break;
+                case ermBearing:
+                    disp = QString("%1").arg( m.bearing, 3, 10, QChar('0'));
+                    break;
+                case ermFreq:
+                    {
+                        if (!m.freq.isClear())
+                        {
+                            qint64 ifreq = m.freq;
+                            double dfreq = ifreq/1000000.0;  // MHz
+
+                            disp = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
+                        }
+                        break;
+                    }
+                case ermTime:
+                    {
+                        disp = m.time;
+                        break;
+                    }
                 }
+                return disp;
             }
-            return disp;
+
+            else if (role == Qt::TextAlignmentRole)
+                return Qt::AlignLeft;
         }
-
-        else if (role == Qt::TextAlignmentRole)
-            return Qt::AlignLeft;
     }
     return QVariant();
 }
 QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (orientation == Qt::Horizontal)
+    if (ct)
     {
-        if (role == Qt::DisplayRole)
+        if (orientation == Qt::Horizontal)
         {
-            QString cell;
-
-            cell = tr(RigMemoryColumns[section].title);
-
-            return cell;
-        }
-        else if (role == Qt::TextAlignmentRole)
-            return Qt::AlignLeft;
-    }
-    else if (orientation == Qt::Vertical)
-    {
-        if (role == Qt::SizeHintRole)
-        {
-            if (delegate)
+            if (role == Qt::DisplayRole)
             {
-                // BUT the headers aren't drawn using the delegate, so this
-                // all fails to work
+                QString cell;
 
-                // Do we lose the vertical header?
-                QString s = "__";
-                QSize r = delegate->docSize(s);
-                return r;
+                cell = tr(RigMemoryColumns[section].title);
+
+                return cell;
+            }
+            else if (role == Qt::TextAlignmentRole)
+                return Qt::AlignLeft;
+        }
+        else if (orientation == Qt::Vertical)
+        {
+            if (role == Qt::SizeHintRole)
+            {
+                if (delegate)
+                {
+                    // BUT the headers aren't drawn using the delegate, so this
+                    // all fails to work
+
+                    // Do we lose the vertical header?
+                    QString s = "__";
+                    QSize r = delegate->docSize(s);
+                    return r;
+                }
+            }
+            else if (role == Qt::ToolTipRole)
+            {
+                return "Click here to transfer memory to QSO";
             }
         }
-        else if (role == Qt::ToolTipRole)
-        {
-            return "Click here to transfer memory to QSO";
-        }
-
     }
     return QVariant();
 }

@@ -649,3 +649,14 @@ bool isPureNumeric ( const QString &s )
     }
     return true;
 }
+void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+    for (int i = 0; i < hdr->count(); i++)
+    {
+
+    }
+}
+void resoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+
+}

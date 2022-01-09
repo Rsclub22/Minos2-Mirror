@@ -8,7 +8,7 @@
 #include "districtframe.h"
 #include "ui_districtframe.h"
 
-GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 3 ] =
+QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
    {
       GridColumn( ectCall, "XXXXXXX", QT_TR_NOOP("Code"), taLeftJustify ),
       GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
@@ -150,26 +150,29 @@ QVariant DistrictGridModel::data( const QModelIndex &index, int role ) const
 QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (ct)
     {
-        QString cell;
-
-        cell = tr(DistrictTreeColumns[section].title);
-
-        return cell;
-    }
-    else if (role == Qt::TextAlignmentRole)
-    {
-        return Qt::AlignLeft;
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (delegate)
+        if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         {
-            QString s = data(index(section, 0), Qt::DisplayRole).toString();
-            QSize r = delegate->docSize(s);
-            r.setWidth(0);
-            return r;
+            QString cell;
+
+            cell = tr(DistrictTreeColumns[section].title);
+
+            return cell;
+        }
+        else if (role == Qt::TextAlignmentRole)
+        {
+            return Qt::AlignLeft;
+        }
+        else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+        {
+            if (delegate)
+            {
+                QString s = data(index(section, 0), Qt::DisplayRole).toString();
+                QSize r = delegate->docSize(s);
+                r.setWidth(0);
+                return r;
+            }
         }
     }
     return QVariant();
@@ -195,7 +198,7 @@ int DistrictGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int DistrictGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return ectMultMaxCol - 3;
+    return DistrictTreeColumns.count();
 }
 bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {

@@ -5,6 +5,8 @@
 #include "ContestApp.h"
 #include "MatchThread.h"
 #include "BandList.h"
+#include "qheaderview.h"
+#include "qtableview.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
@@ -52,6 +54,20 @@ void TSingleLogFrame::buildFrame(int slotNo)
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
+
+    columnsMenu.clear();
+    for ( int i = 0; i < QSOGridModel::QSOTreeColumns.count(); i++ )
+    {
+        QString h = tr(QSOGridModel::QSOTreeColumns[ i ].title);
+
+        QAction *newAct = new QAction( h, this );
+        newAct->setData( i );
+        newAct->setCheckable( true );
+
+        columnsMenu.addAction( newAct );
+
+        connect( newAct, &QAction::triggered, this, &TSingleLogFrame::viewColumn );
+    }
     restoreColumns();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestPageChanged, this, &TSingleLogFrame::on_ContestPageChanged);
@@ -204,7 +220,6 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->setCornerButtonEnabled(false);
     QSOTable->verticalHeader()->setMinimumSectionSize(1);
     QSOTable->verticalHeader()->setDefaultSectionSize(1);
-
     QSOTable->horizontalHeader()->setMinimumSectionSize(10);
 
     int lcf;
@@ -220,6 +235,13 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
     QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+
+    QSOTable->horizontalHeader() ->setSectionsMovable( true );
+
+    QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TSingleLogFrame::onQSOGrid_customContextMenuRequested );
+
+    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &TSingleLogFrame::onQSOGrid_sectionMoved);
 
     QSOTable->setVisible(false);
 
@@ -925,17 +947,12 @@ void TSingleLogFrame::restoreColumns()
 
     QSOTable->horizontalHeader()->setMinimumSectionSize(10);
 
-// these now subscribe for themselves
-//    thisMatchFrame->restoreColumns();
-//    otherMatchFrame->restoreColumns();
-//    archiveMatchFrame->restoreColumns();
-
     QFont cf = QApplication::font();
     QSOTable->horizontalHeader()->setFont(cf);
     columnsChanged = false;
 
 }
-void TSingleLogFrame::on_sectionResized(int, int, int)
+void TSingleLogFrame::saveColumns()
 {
     QSettings settings;
     QByteArray state;
@@ -946,9 +963,48 @@ void TSingleLogFrame::on_sectionResized(int, int, int)
     MinosLoggerEvents::SendColumnsChanged();
 }
 
+void TSingleLogFrame::on_sectionResized(int, int, int)
+{
+    saveColumns();
+}
+
 void TSingleLogFrame::onColumnsChanged()
 {
     columnsChanged = true;
+}
+void TSingleLogFrame::onQSOGrid_customContextMenuRequested(const QPoint &pos)
+{
+    // go through columnsMenu, see which columns are visible
+    //int col = QSOTable->horizontalHeader()->logicalIndexAt(pos);
+
+    QPoint globalPos = QSOTable->mapToGlobal( pos );
+
+    for (int i = 0; i < QSOGridModel::QSOTreeColumns.count(); i++)
+    {
+        bool vis = !QSOTable->horizontalHeader()->isSectionHidden(i);
+        columnsMenu.actions().at(i)->setChecked(vis);
+    }
+    columnsMenu.popup( globalPos );
+
+}
+void TSingleLogFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        bool check = act->isChecked();
+        QSOTable->horizontalHeader()->setSectionHidden(col, !check);
+    }
+    saveColumns();
+}
+void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
+{
+    //to move sections, we wat a combination of moveSection, which uses visual indexes,
+    // and visualIndex, which works from logical index.
+
+    saveColumns();
 }
 
 void TSingleLogFrame::showQSOs()
@@ -1056,7 +1112,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             bic = Qt::red;
         }
 
-        //we want to put a line across, and colour the bands - need a map of band->colour
+        // we want to put a line across, and colour the bands - need a map of band->colour
         // ideally we want it configurable...
 
         CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);

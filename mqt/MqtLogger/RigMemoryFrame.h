@@ -2,6 +2,7 @@
 #define RIGMEMORYFRAME_H
 
 #include "base_pch.h"
+#include "qvector.h"
 #include "rigmemcommondata.h"
 
 class LoggerContestLog;
@@ -13,7 +14,7 @@ class RigMemoryFrame;
 class RigMemoryGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-    static GridColumn RigMemoryColumns[ ];
+    static QVector<GridColumn> RigMemoryColumns;
     public:
         RigMemoryGridModel();
         ~RigMemoryGridModel() Q_DECL_OVERRIDE;

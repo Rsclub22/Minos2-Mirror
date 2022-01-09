@@ -42,10 +42,6 @@ enum eLogGridCols {egTime,
                    egLogMaxCol
                   };
 //---------------------------------------------------------------------------
-#define LOGTREECOLS egLogMaxCol
-#define THISMATCHTREECOLS egLogMaxCol
-#define OTHERMATCHTREECOLS egLogMaxCol - 5
-#define ARCHIVEMATCHTREECOLS egLogMaxCol - 9
 
 class QSOGridModel: public QAbstractItemModel
 {
@@ -53,7 +49,7 @@ class QSOGridModel: public QAbstractItemModel
     protected:
         BaseContestLog *contest = nullptr;
     public:
-        static GridColumn QSOTreeColumns[ LOGTREECOLS ];
+        static QVector<GridColumn> QSOTreeColumns;
 
 
         QSOGridModel();

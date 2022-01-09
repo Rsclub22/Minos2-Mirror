@@ -14,7 +14,7 @@
 #include "htmldelegate.h"
 #include "BandList.h"
 
-GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
+QVector<GridColumn> QSOGridModel::QSOTreeColumns =
    {
       GridColumn( egTime, "XXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
       GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // time
@@ -192,5 +192,5 @@ int QSOGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int QSOGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return  LOGTREECOLS;
+    return  QSOGridModel::QSOTreeColumns.count();
 }

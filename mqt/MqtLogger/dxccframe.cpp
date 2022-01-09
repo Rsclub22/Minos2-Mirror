@@ -4,13 +4,14 @@
 #include "LoggerContest.h"
 #include "ContestApp.h"
 
+#include "qvariant.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 
 #include "dxccframe.h"
 #include "ui_dxccframe.h"
 
-GridColumn DXCCGridModel::CountryTreeColumns[ ectMultMaxCol ] =
+QVector<GridColumn> DXCCGridModel::CountryTreeColumns =
 {
     GridColumn( ectCall, "XXXXXX", QT_TR_NOOP("Call"), taLeftJustify ),
     GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
@@ -172,34 +173,37 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
 QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
+    if (ct)
     {
-        QString cell;
-
-        int ic = section;
-        if (ct && !ct->isHF())
+        if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         {
-            if (ic >= ectCQZone)
+            QString cell;
+
+            int ic = section;
+            if (ct && !ct->isHF())
             {
-                ic += 2;
+                if (ic >= ectCQZone)
+                {
+                    ic += 2;
+                }
             }
-        }
-        cell = tr(CountryTreeColumns[ic].title);
+            cell = tr(CountryTreeColumns[ic].title);
 
-        return cell.trimmed();
-    }
-    if (role == Qt::TextAlignmentRole)
-    {
-        return Qt::AlignLeft;
-    }
-    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-    {
-        if (delegate)
+            return cell.trimmed();
+        }
+        if (role == Qt::TextAlignmentRole)
         {
-            QString s = data(index(section, 0), Qt::DisplayRole).toString();
-            QSize r = delegate->docSize(s);
-            r.setWidth(0);
-            return r;
+            return Qt::AlignLeft;
+        }
+        else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+        {
+            if (delegate)
+            {
+                QString s = data(index(section, 0), Qt::DisplayRole).toString();
+                QSize r = delegate->docSize(s);
+                r.setWidth(0);
+                return r;
+            }
         }
     }
     return QVariant();
@@ -227,11 +231,11 @@ int DXCCGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
     if (ct->isHF())
     {
-        return ectMultMaxCol;
+        return CountryTreeColumns.count();
     }
     else
     {
-        return ectMultMaxCol - 2;
+        return CountryTreeColumns.count() - 2;
     }
 }
 bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const

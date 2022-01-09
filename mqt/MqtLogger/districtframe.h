@@ -12,7 +12,7 @@ class BaseContestLog;
 class DistrictGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-    static GridColumn DistrictTreeColumns[ ectMultMaxCol - 3 ];
+    static QVector<GridColumn> DistrictTreeColumns;
     public:
         DistrictGridModel();
         ~DistrictGridModel() override;
