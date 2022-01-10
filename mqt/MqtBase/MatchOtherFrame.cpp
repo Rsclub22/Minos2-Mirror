@@ -5,6 +5,10 @@
 MatchOtherFrame::MatchOtherFrame(QWidget *parent) :
     MatchTreeFrame(parent)
 {
+    SharedMatchCollection matchCollection;
+    otherMatchModel.initialise(OtherMatch, matchCollection);
+    getTreeView()->setModel(&otherMatchModel);
+
 }
 
 MatchOtherFrame::~MatchOtherFrame()

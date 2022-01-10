@@ -135,6 +135,6 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr);
 void restoreHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void resetHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
 void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr);
-void createColumnsMenu(QMenu &menu, QVector<GridColumn> def, QWidget *p, std::function<void()> pred);
+void createColumnsMenu(QMenu &menu, QHeaderView *h, QWidget *p, std::function<void()> pred);
 
 #endif

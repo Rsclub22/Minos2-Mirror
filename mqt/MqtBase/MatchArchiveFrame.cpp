@@ -6,6 +6,9 @@
 MatchArchiveFrame::MatchArchiveFrame(QWidget *parent) :
     MatchTreeFrame(parent)
 {
+    SharedMatchCollection matchCollection;
+    archiveMatchModel.initialise(ArchiveMatch, matchCollection);
+    getTreeView()->setModel(&archiveMatchModel);
 }
 
 MatchArchiveFrame::~MatchArchiveFrame()

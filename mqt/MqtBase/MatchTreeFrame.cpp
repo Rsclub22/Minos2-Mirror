@@ -79,23 +79,7 @@ void MatchTreeFrame::initialise()
     setItemDelegate( delegate.data() );
     setUniformRowHeights(true);
 
-    MatchType mt = getMatchType();
-    QVector<GridColumn> *gct = nullptr;
-    switch (mt)
-    {
-    case ThisMatch:
-        gct = &QSOMatchGridModel::ThisMatchTreeColumns;
-        break;
-
-    case OtherMatch:
-        gct = &QSOMatchGridModel::OtherMatchTreeColumns;
-        break;
-
-    case ArchiveMatch:
-        gct = &QSOMatchGridModel::ArchiveMatchTreeColumns;
-        break;
-    }
-    createColumnsMenu(columnsMenu, *gct, this,
+    createColumnsMenu(columnsMenu, header(), this,
               [=]{
                     viewColumn();
               });

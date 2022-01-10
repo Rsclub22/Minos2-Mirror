@@ -55,7 +55,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
-    createColumnsMenu(columnsMenu, QSOGridModel::QSOTreeColumns, this,
+    createColumnsMenu(columnsMenu, QSOTable->horizontalHeader(), this,
               [=]{
                     viewColumn();
               });

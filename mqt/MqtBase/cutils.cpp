@@ -796,7 +796,7 @@ void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)
     }
     menu.popup( globalPos );
 }
-void createColumnsMenu(QMenu &menu, QVector<GridColumn> def, QWidget *p, std::function<void()> pred)
+void createColumnsMenu(QMenu &menu, QHeaderView *hdr, QWidget *p, std::function<void()> pred)
 {
     menu.clear();
 
@@ -810,9 +810,10 @@ void createColumnsMenu(QMenu &menu, QVector<GridColumn> def, QWidget *p, std::fu
             pred();
         }
     );
-    for ( int i = 0; i < def.count(); i++ )
+    for ( int i = 0; i < hdr->count(); i++ )
     {
-        QString h = p->tr(def[ i ].title);
+        QString h = hdr->model()->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+                //p->tr(def[ i ].title);
 
         newAct = new QAction( h, p );
         newAct->setData( i );
