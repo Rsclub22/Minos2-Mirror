@@ -8,6 +8,8 @@ class DXCCFrame;
 }
 
 class LoggerContestLog;
+class StackedInfoFrame;
+class TSingleLogFrame;
 
 class DXCCGridModel: public QAbstractItemModel
 {
@@ -52,23 +54,34 @@ class DXCCFrame : public QFrame
     DXCCSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate ;
     QString band;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    TSingleLogFrame *tslf = nullptr;
 
 public:
-    explicit DXCCFrame(QWidget *parent = nullptr);
+    explicit DXCCFrame(StackedInfoFrame  *parent);
     ~DXCCFrame() override;
 
     void setContest(LoggerContestLog *contest);
     void setBand(QString band);
     void reInitialiseCountries();
     void scrollToCountry(const QString &bp, bool makeVisible );
-
 private:
     Ui::DXCCFrame *ui;
     void doScrollToCountry();
     
+    void saveDXCCTableColumns();
+
+    void restoreDXCCTableColumns();
+
 private slots:
     void on_sectionResized(int, int , int);
     void on_DXCCTable_clicked(const QModelIndex &index);
+    void onDXCCGrid_customContextMenuRequested(const QPoint &pos);
+    void onDXCCGrid_sectionMoved(int, int, int);
+
+    void viewColumn();
+
 };
 
 #endif // DXCCFRAME_H

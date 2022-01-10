@@ -46,10 +46,11 @@ QString StackedInfoFrame::getTrAuxTypeString(AuxEntries t)
 bool showWorked = false;
 bool showUnworked = false;
 
-StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
+StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t) :
     QFrame(parent),
     ui(new Ui::StackedInfoFrame),
-    stackInstance(instance)
+    stackInstance(instance),
+    tslf(t)
 {
     ui->setupUi(this);
 

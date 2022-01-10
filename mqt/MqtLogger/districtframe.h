@@ -8,6 +8,8 @@ class DistrictFrame;
 }
 
 class BaseContestLog;
+class TSingleLogFrame;
+class StackedInfoFrame;
 
 class DistrictGridModel: public QAbstractItemModel
 {
@@ -55,9 +57,12 @@ class DistrictFrame : public QFrame
     DistrictGridModel model;
     DistrictSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    TSingleLogFrame *tslf = nullptr;
 
 public:
-    explicit DistrictFrame(QWidget *parent = nullptr);
+    explicit DistrictFrame(StackedInfoFrame *parent);
     ~DistrictFrame();
 
     void setContest(BaseContestLog *contest);
@@ -69,9 +74,17 @@ private:
     Ui::DistrictFrame *ui;
     void doScrollToDistrict();
     
+    void restoreDistrictTableColumns();
+    void saveDistrictTableColumns();
+
 private slots:
     void on_sectionResized(int, int , int);
     void on_DistrictTable_clicked(const QModelIndex &index);
+    void onDistrictGrid_customContextMenuRequested(const QPoint &pos);
+    void onDistrictGrid_sectionMoved(int, int, int);
+
+    void viewColumn();
+
 };
 
 #endif // DISTRICTFRAME_H

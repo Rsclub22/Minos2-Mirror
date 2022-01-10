@@ -17,17 +17,80 @@ QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
       GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify )
    };
 
-DistrictFrame::DistrictFrame(QWidget *parent) :
+DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
     QFrame(parent),
-    ui(new Ui::DistrictFrame)
+    ui(new Ui::DistrictFrame),
+    tslf(parent->tslf)
 {
     ui->setupUi(this);
+    ui->DistrictTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->DistrictTable->horizontalHeader()->setSectionsMovable(true);
+
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &DistrictFrame::onDistrictGrid_customContextMenuRequested );
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &DistrictFrame::onDistrictGrid_sectionMoved);
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized, this, &DistrictFrame::on_sectionResized);
+
+    createColumnsMenu(columnsMenu, ui->DistrictTable->horizontalHeader(), this,
+              [=]{
+                    viewColumn();
+              });
 }
 
 DistrictFrame::~DistrictFrame()
 {
     delete ui;
 }
+
+void DistrictFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->DistrictTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/loggerTableHeaders.ini");
+            resetHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+        }
+    }
+    saveDistrictTableColumns();
+}
+void DistrictFrame::saveDistrictTableColumns()
+{
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/loggerTableHeaders.ini");
+        saveHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+}
+void DistrictFrame::restoreDistrictTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/loggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+    inRestoreColumns = false;
+}
+void DistrictFrame::onDistrictGrid_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->DistrictTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->DistrictTable->horizontalHeader());
+}
+void DistrictFrame::onDistrictGrid_sectionMoved(int, int, int)
+{
+    saveDistrictTableColumns();
+}
+void DistrictFrame::on_sectionResized(int, int , int)
+{
+    saveDistrictTableColumns();
+}
+
 void DistrictFrame::setContest(BaseContestLog *contest)
 {
     model.ct = contest;
@@ -78,11 +141,7 @@ void DistrictFrame::doScrollToDistrict()
 
 void DistrictFrame::reInitialiseDistricts()
 {
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("DistrictTable/state").toByteArray();
-    ui->DistrictTable->horizontalHeader()->restoreState(state);
+    restoreDistrictTableColumns();
 
     doScrollToDistrict();
 }
@@ -94,14 +153,6 @@ void DistrictFrame::scrollToDistrict( const QString &cd, bool makeVisible )
         proxyModel.scrolledDistrict.clear();
 
     doScrollToDistrict();
-}
-void DistrictFrame::on_sectionResized(int, int , int)
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = ui->DistrictTable->horizontalHeader()->saveState();
-    settings.setValue("DistrictTable/state", state);
 }
 
 DistrictGridModel::DistrictGridModel():
@@ -150,7 +201,7 @@ QVariant DistrictGridModel::data( const QModelIndex &index, int role ) const
 QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (ct)
+    if (section >= 0)
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         {

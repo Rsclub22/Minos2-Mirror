@@ -31,10 +31,11 @@ void RigMemoryFrame::traceMsg(QString msg)
 {
     trace("RigMemoryFrame: " + msg);
 }
-RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
+RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
     QFrame(parent)
     , ui(new Ui::RigMemoryFrame)
     , ct(nullptr)
+    , tslf(parent->tslf)
 {
     ui->setupUi(this);
 
@@ -42,6 +43,12 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     ui->rigMemTable->horizontalHeader() ->setSectionsMovable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionsClickable( true );
     ui->rigMemTable->horizontalHeader() ->setSectionResizeMode( QHeaderView::Interactive );
+
+    ui->rigMemTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->rigMemTable->horizontalHeader()->setSectionsMovable(true);
+
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &RigMemoryFrame::onRigMemTable_customContextMenuRequested );
+
     ui->rigMemTable->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     proxyModel.setSourceModel(&model);
@@ -58,21 +65,22 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::RotBearingChanged, this, &RigMemoryFrame::onRotBearingChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &RigMemoryFrame::on_AfterLogContact, Qt::QueuedConnection);
 
-    reloadColumns();
+    restoreRigMemTableColumns();
+    createColumnsMenu(columnsMenu, ui->rigMemTable->horizontalHeader(), this,
+              [=]{
+                    viewColumn();
+              });
+
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &RigMemoryFrame::on_doColumnChanges);
 
     ui->rigMemTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionMoved,
-             this, &RigMemoryFrame::on_sectionMoved);
-    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionResized,
-             this, &RigMemoryFrame::on_sectionResized);
-    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged,
-             this, &RigMemoryFrame::on_sortIndicatorChanged);
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &RigMemoryFrame::onRigMemTable_sectionMoved);
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sectionResized, this, &RigMemoryFrame::onRigMemTable_sectionResized);
+    connect( ui->rigMemTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &RigMemoryFrame::on_sortIndicatorChanged);
 
-    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::sectionClicked,
-             this, &RigMemoryFrame::vsectionClicked);
+    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::sectionClicked, this, &RigMemoryFrame::vsectionClicked);
 
     memoryMenu = new QMenu(ui->flushMemoriesButton);
 
@@ -110,12 +118,10 @@ RigMemoryFrame::RigMemoryFrame(QWidget *parent) :
     connect( clearWorkedAction, &QAction::triggered, this, &RigMemoryFrame::clearWorkedActionSelected );
 
     ui->rigMemTable->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( ui->rigMemTable, &MinosTableWidget::customContextMenuRequested,
-             this, &RigMemoryFrame::on_rigMemTable_customContextMenuRequested);
+    connect( ui->rigMemTable, &MinosTableWidget::customContextMenuRequested, this, &RigMemoryFrame::on_rigMemTable_customContextMenuRequested);
 
     ui->rigMemTable->verticalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::customContextMenuRequested,
-             this, &RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested);
+    connect( ui->rigMemTable->verticalHeader(), &QHeaderView::customContextMenuRequested, this, &RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested);
 }
 
 RigMemoryFrame::~RigMemoryFrame()
@@ -149,12 +155,68 @@ void RigMemoryFrame::on_rigMemTable_clicked(const QModelIndex &/*index*/)
 
 void RigMemoryFrame::on_rigMemTable_customContextMenuRequested( const QPoint &pos )
 {
+    // horizontal
     QPoint globalPos = ui->rigMemTable->mapToGlobal( pos );
     memoryMenu->popup( globalPos );
 
 }
+void RigMemoryFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->rigMemTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/loggerTableHeaders.ini");
+            resetHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
+        }
+    }
+    saveRigMemTableColumns();
+}
+void RigMemoryFrame::saveRigMemTableColumns()
+{
+    if (!inRestoreColumns && !suppressSaveColumns)
+    {
+        QString fname("./Configuration/loggerTableHeaders.ini");
+        saveHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
+
+        //And we need to send this out to all other instances
+
+        sendUpdateMemories();
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+}
+void RigMemoryFrame::restoreRigMemTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/loggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "RigMemTable", tslf->getCurScreenLayout(), ui->rigMemTable->horizontalHeader());
+    inRestoreColumns = false;
+}
+void RigMemoryFrame::onRigMemTable_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->rigMemTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->rigMemTable->horizontalHeader());
+}
+void RigMemoryFrame::onRigMemTable_sectionMoved(int, int, int)
+{
+    saveRigMemTableColumns();
+}
+void RigMemoryFrame::onRigMemTable_sectionResized(int, int , int)
+{
+    saveRigMemTableColumns();
+}
+
 void RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested( const QPoint &pos )
 {
+    //vertical
     // use the ALREADY SELECTED rows
     int logrow = ui->rigMemTable->verticalHeader()->logicalIndexAt(pos);
     if (logrow >= 0)
@@ -167,54 +229,17 @@ void RigMemoryFrame::rigMemTable_Hdr_customContextMenuRequested( const QPoint &p
     on_rigMemTable_customContextMenuRequested(pos);
 }
 
-void RigMemoryFrame::saveAllColumnWidthsAndPositions()
-{
-    if (!suppressSaveColumns)
-    {
-        QSettings settings;
-        QByteArray state;
-
-        state = ui->rigMemTable->horizontalHeader()->saveState();
-        settings.setValue("RigMem/state", state);
-
-        //And we need to send this out to all other instances
-
-        sendUpdateMemories();
-        MinosLoggerEvents::SendColumnsChanged();
-    }
-}
-void RigMemoryFrame::reloadColumns()
-{
-    QSettings settings;
-    QByteArray state = settings.value("RigMem/state").toByteArray();
-    if (state.size())
-    {
-        suppressSendUpdate = true;
-        // this will fire signals, so... don't save at the same time
-        ui->rigMemTable->horizontalHeader()->restoreState(state);
-        suppressSendUpdate = false;
-    }
-}
 void RigMemoryFrame::on_doColumnChanges(BaseContestLog *b)
 {
     if (b == ct)
     {
-        reloadColumns();
+        restoreRigMemTableColumns();
     }
-}
-void RigMemoryFrame:: on_sectionMoved(int /*logicalIndex*/, int /*oldVisualIndex*/, int /*newVisualIndex*/)
-{
-    saveAllColumnWidthsAndPositions();
-}
-
-void RigMemoryFrame::on_sectionResized(int /*logicalIndex*/, int /*oldSize*/, int /*newSize*/)
-{
-    saveAllColumnWidthsAndPositions();
 }
 
 void RigMemoryFrame::on_sortIndicatorChanged(int /*logicalIndex*/, Qt::SortOrder /*order*/)
 {
-    saveAllColumnWidthsAndPositions();
+    saveRigMemTableColumns();
 }
 void RigMemoryFrame::setContest( BaseContestLog *pct )
 {
@@ -241,7 +266,7 @@ void RigMemoryFrame::doMemoryUpdates()
     // clear all the "old" buttons
 
     model.reset();
-    reloadColumns();
+    restoreRigMemTableColumns();
     firstTime = true;
     on_AfterLogContact(ct);
 }
@@ -351,7 +376,7 @@ void RigMemoryFrame::checkTimerTimer()
     {
         scrollIntoView(firstMatch);
     }
-    proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
+    emit proxyModel.headerDataChanged(Qt::Vertical, 0, model.rowCount() - 1);
 }
 void RigMemoryFrame::onRigFreqChanged(Frequency /*f*/, BaseContestLog *c)
 {
@@ -748,7 +773,7 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
 QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (ct)
+    if (section >= 0)
     {
         if (orientation == Qt::Horizontal)
         {

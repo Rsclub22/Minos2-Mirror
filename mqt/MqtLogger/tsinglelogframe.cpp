@@ -622,7 +622,7 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 }
                 case sctAux:
                 {
-                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
+                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
 
                     f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
                     f->setContest(ct);
@@ -991,17 +991,12 @@ void TSingleLogFrame::viewColumn()
         {
             QString fname("./Configuration/loggerTableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
-
-            MinosLoggerEvents::SendColumnsChanged();
         }
     }
     saveQSOTableColumns();
 }
 void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
 {
-    //to move sections, we wat a combination of moveSection, which uses visual indexes,
-    // and visualIndex, which works from logical index.
-
     saveQSOTableColumns();
 }
 

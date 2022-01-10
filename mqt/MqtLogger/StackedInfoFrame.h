@@ -10,6 +10,7 @@
 #include "locframe.h"
 #include "tstatsdispframe.h"
 #include "FilterFrame.h"
+#include "tsinglelogframe.h"
 
 namespace Ui {
 class StackedInfoFrame;
@@ -41,8 +42,9 @@ class StackedInfoFrame : public QFrame
 
 public:
     static QVector <AuxTypeOption> auxoptions;
+    TSingleLogFrame *tslf;
 
-    explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
+    explicit StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t);
     ~StackedInfoFrame();
 
     void setCurrentFrameType(QString);

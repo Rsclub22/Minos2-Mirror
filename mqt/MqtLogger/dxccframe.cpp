@@ -23,13 +23,77 @@ QVector<GridColumn> DXCCGridModel::CountryTreeColumns =
     GridColumn( ectOtherCalls, "This is a very very very very long country name", QT_TR_NOOP("Other calls"), taLeftJustify /*taRightJustify*/ )
 };
 
-DXCCFrame::DXCCFrame(QWidget *parent) :
+DXCCFrame::DXCCFrame(StackedInfoFrame *parent) :
     QFrame(parent),
-    ui(new Ui::DXCCFrame)
+    ui(new Ui::DXCCFrame),
+    tslf(parent->tslf)
 {
     ui->setupUi(this);
-}
+    ui->DXCCTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->DXCCTable->horizontalHeader()->setSectionsMovable(true);
 
+    connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &DXCCFrame::onDXCCGrid_customContextMenuRequested );
+    connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &DXCCFrame::onDXCCGrid_sectionMoved);
+    connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::sectionResized, this, &DXCCFrame::on_sectionResized);
+
+    proxyModel.setSourceModel(&model);
+    ui->DXCCTable->setModel(&proxyModel);
+
+    createColumnsMenu(columnsMenu, ui->DXCCTable->horizontalHeader(), this,
+              [=]{
+                    viewColumn();
+              });
+
+}
+void DXCCFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->DXCCTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/loggerTableHeaders.ini");
+            resetHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
+        }
+    }
+    saveDXCCTableColumns();
+}
+void DXCCFrame::saveDXCCTableColumns()
+{
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/loggerTableHeaders.ini");
+        saveHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+}
+void DXCCFrame::restoreDXCCTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/loggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
+    inRestoreColumns = false;
+}
+void DXCCFrame::onDXCCGrid_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->DXCCTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->DXCCTable->horizontalHeader());
+}
+void DXCCFrame::onDXCCGrid_sectionMoved(int, int, int)
+{
+    saveDXCCTableColumns();
+}
+void DXCCFrame::on_sectionResized(int, int , int)
+{
+    saveDXCCTableColumns();
+}
 DXCCFrame::~DXCCFrame()
 {
     delete ui;
@@ -56,21 +120,8 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
         model.band = band;
         proxyModel.band = band;
 
-        if (contest->isHF())
-        {
-            ui->DXCCTable->showColumn(ectCQZone);
-            ui->DXCCTable->showColumn(ectITUZone);
-        }
-        else
-        {
-            ui->DXCCTable->hideColumn(ectCQZone);
-            ui->DXCCTable->hideColumn(ectITUZone);
-        }
-
         reInitialiseCountries();
 
-        connect( ui->DXCCTable->horizontalHeader(), &QHeaderView::sectionResized,
-                 this, &DXCCFrame::on_sectionResized, Qt::UniqueConnection);
     }
 }
 
@@ -100,11 +151,7 @@ void DXCCFrame::doScrollToCountry()
 
 void DXCCFrame::reInitialiseCountries()
 {
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("DXCCTable/state").toByteArray();
-    ui->DXCCTable->horizontalHeader()->restoreState(state);
+    restoreDXCCTableColumns();
 
     doScrollToCountry();
 }
@@ -115,15 +162,6 @@ void DXCCFrame::scrollToCountry( const QString &bp, bool makeVisible )
     else
         proxyModel.scrolledCountry.clear();
    doScrollToCountry();
-}
-
-void DXCCFrame::on_sectionResized(int, int , int)
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = ui->DXCCTable->horizontalHeader()->saveState();
-    settings.setValue("DXCCTable/state", state);
 }
 
 DXCCGridModel::DXCCGridModel():ct(nullptr)
@@ -155,13 +193,6 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
         {
             QString bp = MultLists::getMultLists() ->getCountryList()[index.row()]->getBasePrefix();
             int ic = index.column();
-            if (ct && !ct->isHF())
-            {
-                if (ic >= ectCQZone)
-                {
-                    ic += 2;
-                }
-            }
             QString disp = MultLists::getMultLists() ->getCtryListText( bp, CountryTreeColumns[ ic].fieldId, ct, band );
             return disp.trimmed();
         }
@@ -173,20 +204,13 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
 QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (ct)
+    if (section >= 0)
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
         {
             QString cell;
 
             int ic = section;
-            if (ct && !ct->isHF())
-            {
-                if (ic >= ectCQZone)
-                {
-                    ic += 2;
-                }
-            }
             cell = tr(CountryTreeColumns[ic].title);
 
             return cell.trimmed();
@@ -229,14 +253,7 @@ int DXCCGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int DXCCGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    if (ct->isHF())
-    {
-        return CountryTreeColumns.count();
-    }
-    else
-    {
-        return CountryTreeColumns.count() - 2;
-    }
+    return CountryTreeColumns.count();
 }
 bool DXCCSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {
