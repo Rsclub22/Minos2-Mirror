@@ -11,139 +11,6 @@
 #include "MatchTreeFrame.h"
 #include "ui_MatchTreeFrame.h"
 
-MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
-    QTreeView(parent),
-    ui(new Ui::MatchTreeFrame),
-    contest(nullptr)
-{
-    ui->setupUi(this);
-
-    setUniformRowHeights(true);
-
-}
-void MatchTreeFrame::initialise()
-{
-    setModel(getMatchModel());
-    header()->setSectionResizeMode(QHeaderView::Interactive);
-    int lcf;
-    MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
-    if (lcf == 0)
-        lcf = 100;
-
-    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate(1.0, lcf/100.0) );
-    setItemDelegate( delegate.data() );
-    setUniformRowHeights(true);
-
-
-    connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
-
-    connect(this, &MatchTreeFrame::matchTreeClicked, this, &MatchTreeFrame::afterMatchTreeClicked, Qt::QueuedConnection);
-
-    connect(selectionModel(), &QItemSelectionModel::selectionChanged,
-            this, &MatchTreeFrame::on_MatchTreeSelectionChanged, Qt::UniqueConnection);
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected,
-            this, &MatchTreeFrame::MatchTreeSelected);
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &MatchTreeFrame::on_doColumnChanges);
-}
-MatchTreeFrame::~MatchTreeFrame()
-{
-    delete ui;
-}
-QTreeView *MatchTreeFrame::getTreeView()
-{
-    return this;
-}
-
-
-void MatchTreeFrame::setBaseName(QString b)
-{
-    baseName = b;
-    getMatchModel()->baseName = b;
-}
-
-void MatchTreeFrame::setContest(BaseContestLog *ct)
-{
-    contest = ct;
-    if (!ct)
-    {
-        showThisMatchQSOs(SharedMatchCollection());
-        showOtherMatchQSOs(SharedMatchCollection());
-        showMatchList(SharedMatchCollection());
-    }
-}
-void MatchTreeFrame::restoreColumns()
-{
-    QSettings settings;
-    QByteArray state;
-
-    QString treeName = getTreeName();
-
-    state = settings.value(baseName + "/" + getTreeName() + "/state").toByteArray();
-    header()->restoreState(state);
-    QFont cf = QApplication::font();
-    header()->setFont(cf);
-    header()->setMinimumSectionSize(10);
-
-}
-void MatchTreeFrame::setCurrentModel(bool s)
-{
-    getMatchModel()->currentModel = s;
-}
-//---------------------------------------------------------------------------
-void MatchTreeFrame::doCustomContextMenuRequested()
-{
-    QModelIndex index;
-
-    index = treeClickIndex;
-
-    if (index.isValid())
-    {
-        MatchTreeItem * MatchTreeIndex = static_cast<MatchTreeItem *>( index.internalPointer() );
-
-        QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
-        if (mc)
-        {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
-            ListContact *lct = mc->getListContact();
-            if (bct)
-            {
-                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
-            }
-            else if (lct)
-            {
-                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
-            }
-        }
-    }
-}
-//---------------------------------------------------------------------------
-void MatchTreeFrame::on_sectionResized(int, int, int)
-{
-    QSettings settings;
-    QByteArray state;
-    QString treeName = getTreeName();
-
-    state = header()->saveState();
-    settings.setValue(baseName + "/" + treeName + "/state", state);
-
-    MinosLoggerEvents::SendColumnsChanged();
-}
-
-void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
-{
-    if (b == contest)
-    {
-        restoreColumns();
-    }
-}
-void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
-{
-    emit matchTreeClicked();
-}
-
-//=============================================================================
 
 QVector<GridColumn> QSOMatchGridModel::ThisMatchTreeColumns =
 {
@@ -189,6 +56,196 @@ QVector<GridColumn>  QSOMatchGridModel::ArchiveMatchTreeColumns =
 };
 //---------------------------------------------------------------------------
 
+MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
+    QTreeView(parent),
+    ui(new Ui::MatchTreeFrame),
+    contest(nullptr)
+{
+    ui->setupUi(this);
+
+    setUniformRowHeights(true);
+
+}
+void MatchTreeFrame::initialise()
+{
+    setModel(getMatchModel());
+    header()->setSectionResizeMode(QHeaderView::Interactive);
+    int lcf;
+    MinosParameters::getMinosParameters() ->getIntDisplayProfile(edpListCompression, lcf);
+    if (lcf == 0)
+        lcf = 100;
+
+    delegate = QSharedPointer<HtmlDelegate> (new HtmlDelegate(1.0, lcf/100.0) );
+    setItemDelegate( delegate.data() );
+    setUniformRowHeights(true);
+
+    MatchType mt = getMatchType();
+    QVector<GridColumn> *gct = nullptr;
+    switch (mt)
+    {
+    case ThisMatch:
+        gct = &QSOMatchGridModel::ThisMatchTreeColumns;
+        break;
+
+    case OtherMatch:
+        gct = &QSOMatchGridModel::OtherMatchTreeColumns;
+        break;
+
+    case ArchiveMatch:
+        gct = &QSOMatchGridModel::ArchiveMatchTreeColumns;
+        break;
+    }
+    createColumnsMenu(columnsMenu, *gct, this,
+              [=]{
+                    viewColumn();
+              });
+
+
+    connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
+    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( header(), &QHeaderView::customContextMenuRequested, this, &MatchTreeFrame::onMatch_customContextMenuRequested );
+
+    connect(this, &MatchTreeFrame::matchTreeClicked, this, &MatchTreeFrame::afterMatchTreeClicked, Qt::QueuedConnection);
+
+    connect(selectionModel(), &QItemSelectionModel::selectionChanged,
+            this, &MatchTreeFrame::on_MatchTreeSelectionChanged, Qt::UniqueConnection);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MatchTreeSelected,
+            this, &MatchTreeFrame::MatchTreeSelected);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &MatchTreeFrame::on_doColumnChanges);
+}
+MatchTreeFrame::~MatchTreeFrame()
+{
+    delete ui;
+}
+QTreeView *MatchTreeFrame::getTreeView()
+{
+    return this;
+}
+
+
+void MatchTreeFrame::setBaseName(QString b)
+{
+    baseName = b;
+    getMatchModel()->baseName = b;
+}
+
+void MatchTreeFrame::setContest(BaseContestLog *ct)
+{
+    contest = ct;
+    if (!ct)
+    {
+        showThisMatchQSOs(SharedMatchCollection());
+        showOtherMatchQSOs(SharedMatchCollection());
+        showMatchList(SharedMatchCollection());
+    }
+}
+void MatchTreeFrame::setCurrentModel(bool s)
+{
+    getMatchModel()->currentModel = s;
+}
+void MatchTreeFrame::setCurScreenLayout(const QString &value)
+{
+    curScreenLayout = value;
+}
+
+//---------------------------------------------------------------------------
+void MatchTreeFrame::doCustomContextMenuRequested()
+{
+    QModelIndex index;
+
+    index = treeClickIndex;
+
+    if (index.isValid())
+    {
+        MatchTreeItem * MatchTreeIndex = static_cast<MatchTreeItem *>( index.internalPointer() );
+
+        QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
+        if (mc)
+        {
+            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            ListContact *lct = mc->getListContact();
+            if (bct)
+            {
+                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
+            }
+            else if (lct)
+            {
+                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
+            }
+        }
+    }
+}
+void MatchTreeFrame::onMatch_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = this->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, header());
+}
+void MatchTreeFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            this->header()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/loggerTableHeaders.ini");
+            resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
+
+            MinosLoggerEvents::SendColumnsChanged();
+        }
+    }
+    saveHeaderLayout();
+}
+//---------------------------------------------------------------------------
+void MatchTreeFrame::saveHeaderLayout()
+{
+    if (!inRestoreColumns)
+    {
+        QString treeName = getTreeName();
+        QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+        saveHeaderColumns(fname, treeName, curScreenLayout, header());
+
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+
+}
+
+void MatchTreeFrame::on_sectionResized(int, int, int)
+{
+    saveHeaderLayout();
+}
+void MatchTreeFrame::restoreColumns()
+{
+    inRestoreColumns = true;
+    QString treeName = getTreeName();
+    QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+    restoreHeaderColumns(fname, treeName, curScreenLayout, header());
+
+    inRestoreColumns = false;
+}
+
+void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == contest)
+    {
+        restoreColumns();
+    }
+}
+void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
+{
+    emit matchTreeClicked();
+}
+
+//=============================================================================
+
 MatchTreeItem::MatchTreeItem(MatchTreeItem *parent, BaseMatchContest *matchContest, QSharedPointer<MatchContact> matchContact)
     :
       matchContest(matchContest),
@@ -226,7 +283,7 @@ BaseMatchContest *MatchTreeItem::getMatchContest()
     return matchContest;
 }
 
-
+//==========================================================================
 QSOMatchGridModel::QSOMatchGridModel():
     match(nullptr),
     rootItem(nullptr),

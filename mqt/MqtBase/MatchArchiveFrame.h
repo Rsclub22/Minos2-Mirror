@@ -22,6 +22,10 @@ public:
     {
         return &archiveMatchModel;
     }
+    virtual MatchType getMatchType() override
+    {
+        return ArchiveMatch;
+    }
 private slots:
     virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;
 

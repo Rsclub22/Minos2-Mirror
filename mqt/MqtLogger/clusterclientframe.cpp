@@ -1036,7 +1036,6 @@ void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
     state = searchView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/searchView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 void ClusterClientFrame::restoreDxSpotViewColumns()
@@ -1047,7 +1046,6 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
     state = settings.value("ClusterClientFilter/dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 
@@ -1059,7 +1057,6 @@ void ClusterClientFrame::restoreCallsignViewColumns()
     state = settings.value("ClusterClientFilter/callSignView/state").toByteArray();
     callSignView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 

@@ -1069,7 +1069,6 @@ void WsjtxFrame::saveAllColumnWidthsAndPositions()
         //And we need to send this out to all other instances
 
         MinosLoggerEvents::SendColumnsChanged();
-
     }
 }
 void WsjtxFrame::reloadColumns()

@@ -184,7 +184,6 @@ private:
     QString curScreenLayout;
     QMenu columnsMenu;
 
-
     int lastStanzaCount = 0;
 
     MatchTreeFrame *xferTree = nullptr;

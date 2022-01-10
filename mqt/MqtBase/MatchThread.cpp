@@ -726,7 +726,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
                 QString baseName = TMatchThread::getMatchThread() ->getBaseName();
                 BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
-                if (baseName == "Log" && bool( ct ) && ( matchPhase != empCountry )  && ( matchPhase != empDistrict )  && ( matchPhase != empLocator ) )
+                if (baseName == "Logger" && bool( ct ) && ( matchPhase != empCountry )  && ( matchPhase != empDistrict )  && ( matchPhase != empLocator ) )
                 {
                    addMatch( ct->DupSheet.getCurDup(), ct );	// in case it isn't already
                 }

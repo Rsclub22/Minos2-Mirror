@@ -245,7 +245,7 @@ void TSingleLogFrame::createScreenComponents()
     GJVQSOLogFrame->setMidLineWidth(2);
 
     GJVQSOLogFrame->setVisible(false);
-    GJVQSOLogFrame->setAsEdit(false, "Log");
+    GJVQSOLogFrame->setAsEdit(false, "Logger");
     GJVQSOLogFrame->initialise( );
 
     txVmButtonsFrame = new TxVmButtonsFrame(this);
@@ -358,7 +358,7 @@ void TSingleLogFrame::createScreenComponents()
 
     thisMatchFrame->setVisible(false);
     thisMatchFrame->initialise();
-    thisMatchFrame->setBaseName("Log");
+    thisMatchFrame->setBaseName("Logger");
 
     otherMatchFrame = new MatchOtherFrame(this);
 
@@ -368,7 +368,7 @@ void TSingleLogFrame::createScreenComponents()
 
     otherMatchFrame->setVisible(false);
     otherMatchFrame->initialise();
-    otherMatchFrame->setBaseName("Log");
+    otherMatchFrame->setBaseName("Logger");
 
     archiveMatchFrame = new MatchArchiveFrame(this);
 
@@ -378,7 +378,7 @@ void TSingleLogFrame::createScreenComponents()
 
     archiveMatchFrame->setVisible(false);
     archiveMatchFrame->initialise();
-    archiveMatchFrame->setBaseName("Log");
+    archiveMatchFrame->setBaseName("Logger");
 
     chatFrame = new ChatFrame(this);
     chatFrame->setObjectName(QStringLiteral("chatFrame"));
@@ -559,6 +559,18 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
+    if (thisMatchFrame)
+    {
+        thisMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
+    if (otherMatchFrame)
+    {
+        otherMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
+    if (archiveMatchFrame)
+    {
+        archiveMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
 }
 void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
@@ -819,7 +831,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
         curConfigName = defaultLayoutName();
         ct->screenLayout.setValue(curConfigName);
     }
-    curScreenLayout = curConfigName;
+    setCurScreenLayout(curConfigName);
 
     SC sc = scf.configs[curConfigName];
 
@@ -1225,7 +1237,7 @@ void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
       otherMatchFrame->treeClickIndex = QModelIndex();
       archiveMatchFrame->treeClickIndex = QModelIndex();
 
-      GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+      GJVQSOLogFrame->setXferEnabled(false, contest, "Logger");
     }
 }
 
@@ -1255,7 +1267,7 @@ MatchTreeItem * TSingleLogFrame::getXferItem()
 void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
 {
    // transfer from current match
-   if (!contest || contest->isReadOnly() || c != contest || basename != "Log" )
+   if (!contest || contest->isReadOnly() || c != contest || basename != "Logger" )
       return ;
 
    MatchTreeItem *mi = getXferItem();
@@ -1264,7 +1276,7 @@ void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
 }
 void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)
 {
-    if (contest == c && basename == "Log")
+    if (contest == c && basename == "Logger")
     {
         switch (m)
         {

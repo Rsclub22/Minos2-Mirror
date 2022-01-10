@@ -483,7 +483,7 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
     bool rInit;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, rInit );
     screenContact.initialise( contest, rInit ); // get ops etc correct
-    setXferEnabled(false, contest, "Log");
+    setXferEnabled(false, contest, "Logger");
 
     if (!pcontest)
     {

@@ -181,7 +181,6 @@ void RigMemoryFrame::saveAllColumnWidthsAndPositions()
 
         sendUpdateMemories();
         MinosLoggerEvents::SendColumnsChanged();
-
     }
 }
 void RigMemoryFrame::reloadColumns()

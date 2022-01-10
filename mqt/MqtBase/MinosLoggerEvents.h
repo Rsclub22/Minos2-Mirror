@@ -55,7 +55,6 @@ signals:
    void ScrollToDistrict(QString prefix, BaseContestLog *);
    void MatchStarting(BaseContestLog *);
    void ShowOperators();
-   //void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
    void clearContestInFrame(BaseContestLog *);
