@@ -127,6 +127,7 @@ public:
     QString getCurScreenLayout() const;
 
     void setCurScreenLayout(const QString &value);
+    void restoreQSOTableColumns();
 
 
     void on_SetTransVertOffset(double offset, PubSubName psn);
@@ -195,8 +196,8 @@ private:
 
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
-    void saveColumns();
-    void restoreColumns();
+    void saveQSOTableColumns();
+    bool inRestoreColumns = false;
 
     MatchTreeItem *getXferItem();
 

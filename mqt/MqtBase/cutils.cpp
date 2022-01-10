@@ -11,6 +11,7 @@
 #include "MinosLoggerEvents.h"
 
 #include "cutils.h"
+#include "qnamespace.h"
 
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor
@@ -651,12 +652,179 @@ bool isPureNumeric ( const QString &s )
 }
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
+    trace(QString("saveHeaderColumns %1").arg(layoutName));
+    QString hLine;
     for (int i = 0; i < hdr->count(); i++)
     {
+        int w = hdr->sectionSize(i);
+        int visPos = hdr->visualIndex(i);
+        bool visible = !hdr->isSectionHidden(i);
 
+        if (i != 0)
+        {
+            hLine += ";";
+        }
+        hLine += QString("( %1, %2, %3)").arg(w).arg(visPos).arg(visible);
+    }
+    int sort = hdr->sortIndicatorSection();
+    Qt::SortOrder so = hdr->sortIndicatorOrder();
+    hLine += QString(";%1,%2").arg(sort).arg(so);
+
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", hLine);
+}
+class HdrCol
+{
+public:
+    int logPos = 0;
+    int w = 0;
+    int visPos = 0;
+    bool visible = false;
+
+};
+
+void setHeaderColumns(QString hLine, QHeaderView *hdr)
+{
+    QVector<HdrCol> hdrs;
+    int sort = 0;
+    int sortOrder = Qt::AscendingOrder;
+    QStringList sl = hLine.split(";");
+
+    int lp = 0;
+    for(QString s:qAsConst(sl))
+    {
+        if (s[0] == "(")
+        {
+            s = s.mid(1, s.length() - 2);
+            QStringList hl = s.split(",");
+            if (hl.count() != 3)
+            {
+                continue;
+            }
+            HdrCol hc;
+            hc.w = hl[0].toInt();
+            hc.visPos = hl[1].toInt();
+            hc.visible = (hl[2].toInt() != 0);
+            hc.logPos = lp;
+            lp++;
+            hdrs.push_back(hc);
+        }
+        else
+        {
+            QStringList ss = s.split(",");
+            if (ss.count() == 2)
+            {
+                sort = ss[0].toInt();
+                sortOrder  = ss[1].toInt();
+            }
+        }
+    }
+    std::sort(hdrs.begin(), hdrs.end(),
+    [=](const HdrCol &a, const HdrCol &b)->bool
+      {
+          return a.visPos < b.visPos;
+      }
+    );
+
+    for(const auto &h:hdrs)
+    {
+        hdr->setSectionHidden(h.logPos, !h.visible);
+        if (h.w > 0)
+        {
+            hdr->resizeSection(h.logPos, h.w);
+        }
+        else
+        {
+            hdr->resizeSection(h.logPos, 100);
+        }
+        hdr->moveSection(hdr->visualIndex(h.logPos), h.visPos);
+    }
+    hdr->setSortIndicator(sort, static_cast<Qt::SortOrder>(sortOrder));
+
+    QFont cf = QApplication::font();
+    hdr->setFont(cf);
+
+}
+void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+    trace(QString("restoreHeaderColumns %1").arg(layoutName));
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    QString hLine = hdrSettings.value(tableName + "/" + layoutName + "_" + "state", "").toString();
+
+    if (hLine.isEmpty())
+    {
+        resetHeaderColumns(fileName, tableName, layoutName, hdr);
+        return;
+    }
+
+    setHeaderColumns(hLine, hdr);
+
+}
+void resetHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+    trace(QString("resetHeaderColumns %1").arg(layoutName));
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", "");
+
+    QString hLine;
+    for (int i = 0; i < hdr->count(); i++)
+    {
+        int w = -1;
+        int visPos = i;
+        bool visible = true;
+
+        if (i != 0)
+        {
+            hLine += ";";
+        }
+        hLine += QString("( %1, %2, %3)").arg(w).arg(visPos).arg(visible);
+    }
+    int sort = 0;
+    Qt::SortOrder so = Qt::AscendingOrder;
+    hLine += QString(";%1,%2").arg(sort).arg(so);
+
+    setHeaderColumns(hLine, hdr);
+}
+void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)
+{
+    // go through columnsMenu, see which columns are visible
+
+    for (int i = 0; i < hdr->count(); i++)
+    {
+        bool vis = !hdr->isSectionHidden(i );
+        menu.actions().at(i + 2)->setChecked(vis);   // miss out reset and separator
+    }
+    menu.popup( globalPos );
+}
+void createColumnsMenu(QMenu &menu, QVector<GridColumn> def, QWidget *p, std::function<void()> pred)
+{
+    menu.clear();
+
+    QAction *newAct = new QAction(p->tr("Reset Columns"), p);
+    newAct->setData( -1 );
+    menu.addAction( newAct );
+    menu.addSeparator();
+
+    p->connect( newAct, &QAction::triggered, p, [=]()
+        {
+            pred();
+        }
+    );
+    for ( int i = 0; i < def.count(); i++ )
+    {
+        QString h = p->tr(def[ i ].title);
+
+        newAct = new QAction( h, p );
+        newAct->setData( i );
+        newAct->setCheckable( true );
+
+        menu.addAction( newAct );
+
+        p->connect( newAct, &QAction::triggered, p, [=]()
+            {
+                pred();
+            }
+        );
     }
 }
-void resoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
-{
 
-}

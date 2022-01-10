@@ -5,6 +5,7 @@
 #include "ContestApp.h"
 #include "MatchThread.h"
 #include "BandList.h"
+#include "cutils.h"
 #include "qheaderview.h"
 #include "qtableview.h"
 #include "tqsoeditdlg.h"
@@ -54,21 +55,12 @@ void TSingleLogFrame::buildFrame(int slotNo)
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
+    createColumnsMenu(columnsMenu, QSOGridModel::QSOTreeColumns, this,
+              [=]{
+                    viewColumn();
+              });
 
-    columnsMenu.clear();
-    for ( int i = 0; i < QSOGridModel::QSOTreeColumns.count(); i++ )
-    {
-        QString h = tr(QSOGridModel::QSOTreeColumns[ i ].title);
-
-        QAction *newAct = new QAction( h, this );
-        newAct->setData( i );
-        newAct->setCheckable( true );
-
-        columnsMenu.addAction( newAct );
-
-        connect( newAct, &QAction::triggered, this, &TSingleLogFrame::viewColumn );
-    }
-    restoreColumns();
+    restoreQSOTableColumns();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestPageChanged, this, &TSingleLogFrame::on_ContestPageChanged);
 
@@ -214,13 +206,21 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSOTable->setWordWrap(false);
-    QSOTable->horizontalHeader()->setHighlightSections(false);
-    QSOTable->horizontalHeader()->setStretchLastSection(true);
-    QSOTable->verticalHeader()->setVisible(false);
     QSOTable->setCornerButtonEnabled(false);
+
+    QSOTable->verticalHeader()->setVisible(false);
     QSOTable->verticalHeader()->setMinimumSectionSize(1);
     QSOTable->verticalHeader()->setDefaultSectionSize(1);
+
+    QSOTable->horizontalHeader()->setHighlightSections(false);
+    QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->horizontalHeader()->setMinimumSectionSize(10);
+    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    QSOTable->horizontalHeader() ->setSectionsMovable( true );
+    QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TSingleLogFrame::onQSOGrid_customContextMenuRequested );
+    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &TSingleLogFrame::onQSOGrid_sectionMoved);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -233,15 +233,6 @@ void TSingleLogFrame::createScreenComponents()
     QSize ms = delegate->docSize("XX");
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
-
-    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-
-    QSOTable->horizontalHeader() ->setSectionsMovable( true );
-
-    QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TSingleLogFrame::onQSOGrid_customContextMenuRequested );
-
-    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &TSingleLogFrame::onQSOGrid_sectionMoved);
 
     QSOTable->setVisible(false);
 
@@ -563,6 +554,7 @@ QString TSingleLogFrame::getCurScreenLayout() const
 
 void TSingleLogFrame::setCurScreenLayout(const QString &value)
 {
+    trace(QString("setCurScreenLayout %1").arg(value));
     curScreenLayout = value;
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
@@ -937,35 +929,29 @@ void TSingleLogFrame::addAllQSOsToBandmap()
         bandmapControlFrame->on_AfterLogContact(contest, cct);
     }
 }
-void TSingleLogFrame::restoreColumns()
+void TSingleLogFrame::restoreQSOTableColumns()
 {
-    QSettings settings;
-    QByteArray state;
+    inRestoreColumns = true;
+    QString fname("./Configuration/loggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
-    state = settings.value("QSOTable/state").toByteArray();
-    QSOTable->horizontalHeader()->restoreState(state);
-
-    QSOTable->horizontalHeader()->setMinimumSectionSize(10);
-
-    QFont cf = QApplication::font();
-    QSOTable->horizontalHeader()->setFont(cf);
     columnsChanged = false;
-
+    inRestoreColumns = false;
 }
-void TSingleLogFrame::saveColumns()
+void TSingleLogFrame::saveQSOTableColumns()
 {
-    QSettings settings;
-    QByteArray state;
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/loggerTableHeaders.ini");
+        saveHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
-    state = QSOTable->horizontalHeader()->saveState();
-    settings.setValue("QSOTable/state", state);
-
-    MinosLoggerEvents::SendColumnsChanged();
+        MinosLoggerEvents::SendColumnsChanged();
+    }
 }
 
 void TSingleLogFrame::on_sectionResized(int, int, int)
 {
-    saveColumns();
+    saveQSOTableColumns();
 }
 
 void TSingleLogFrame::onColumnsChanged()
@@ -974,18 +960,8 @@ void TSingleLogFrame::onColumnsChanged()
 }
 void TSingleLogFrame::onQSOGrid_customContextMenuRequested(const QPoint &pos)
 {
-    // go through columnsMenu, see which columns are visible
-    //int col = QSOTable->horizontalHeader()->logicalIndexAt(pos);
-
     QPoint globalPos = QSOTable->mapToGlobal( pos );
-
-    for (int i = 0; i < QSOGridModel::QSOTreeColumns.count(); i++)
-    {
-        bool vis = !QSOTable->horizontalHeader()->isSectionHidden(i);
-        columnsMenu.actions().at(i)->setChecked(vis);
-    }
-    columnsMenu.popup( globalPos );
-
+    popupColumnsMenu(columnsMenu, globalPos, QSOTable->horizontalHeader());
 }
 void TSingleLogFrame::viewColumn()
 {
@@ -994,17 +970,27 @@ void TSingleLogFrame::viewColumn()
     if (act)
     {
         int col = act->data().toInt();
-        bool check = act->isChecked();
-        QSOTable->horizontalHeader()->setSectionHidden(col, !check);
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            QSOTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/loggerTableHeaders.ini");
+            resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
+
+            MinosLoggerEvents::SendColumnsChanged();
+        }
     }
-    saveColumns();
+    saveQSOTableColumns();
 }
 void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
 {
     //to move sections, we wat a combination of moveSection, which uses visual indexes,
     // and visualIndex, which works from logical index.
 
-    saveColumns();
+    saveQSOTableColumns();
 }
 
 void TSingleLogFrame::showQSOs()
@@ -1014,7 +1000,7 @@ void TSingleLogFrame::showQSOs()
 
    NextContactDetailsTimerTimer( );
 
-   restoreColumns();
+   restoreQSOTableColumns();
    columnsChanged = false;
 
    GJVQSOLogFrame->clearCurrentField();

@@ -1649,6 +1649,7 @@ void TLogContainer::selectLayout(QString layout)
         f->setCurScreenLayout(layout);
         f->applyScreenLayout();
         updateLayoutsMenu();
+        f->restoreQSOTableColumns();
     }
 }
 void TLogContainer::applyScreenLayouts()
