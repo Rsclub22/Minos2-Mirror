@@ -1772,11 +1772,12 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                          }
 }
 //====================================================================
-void LoggerContestLog::setStanza(unsigned int stanza, int stanzaStart )
+void LoggerContestLog::setStanza(unsigned int stanza, int stanzaStart, int stanzaEnd )
 {
    StanzaPos s;
    s.stanza = stanza;
    s.stanzaStart = stanzaStart;
+   s.stanzaEnd = stanzaEnd;
    stanzaLocations.push_back( s );
 }
 //====================================================================
@@ -1806,7 +1807,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( tr("(write) seek failed!") );
    }
-   QByteArray buffer = contestFile.read( 8192 );
+   QByteArray buffer = contestFile.read( s->stanzaEnd - s->stanzaStart );
 
    bool readOK = true;
    if ( buffer.size() > 0 )

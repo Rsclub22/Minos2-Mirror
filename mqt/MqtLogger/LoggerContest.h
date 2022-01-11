@@ -25,6 +25,7 @@ struct StanzaPos
 {
    unsigned int stanza;
    long stanzaStart;
+   long stanzaEnd;
 };
 class LoggerContestLog : public BaseContestLog
 {
@@ -75,7 +76,7 @@ protected:
       }
 
       virtual void processMinosStanza( const QString &methodName, MinosTestImport * const mt ) override;
-      virtual void setStanza( unsigned int stanza, int stanzaStart ) override;
+      virtual void setStanza(unsigned int stanza, int stanzaStart , int stanzaEnd) override;
       virtual bool getStanza(unsigned int Stanza, QString &stanzaData ) override;
 
       // The contest details

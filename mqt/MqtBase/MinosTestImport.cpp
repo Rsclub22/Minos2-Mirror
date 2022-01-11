@@ -172,7 +172,7 @@ void MinosTestImport::processMinosStanza( RPCRequest *rq )
 
    body = rq->args[ 0 ];
 
-   ct->setStanza( static_cast<unsigned int>(imp_stanzaCount), curfpos );
+   ct->setStanza( static_cast<unsigned int>(imp_stanzaCount), curfpos, endfpos );
    ct->processMinosStanza( rq->methodName, this );
 
 }
@@ -242,6 +242,7 @@ int MinosTestImport::readTestFile(QSharedPointer<QFile> ctfile )
                 curfpos = curfstart + bufOffset;
                 QByteArray bbuff = buffer.mid(curfstart, curfend - curfstart + 4 + 1);
 
+                endfpos = curfpos + bbuff.size();
                 stanzas = importTestBuffer(bbuff);
                 curfpos = curfend + 4 + 1;
 

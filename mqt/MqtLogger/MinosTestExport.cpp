@@ -57,7 +57,7 @@ void MinosTestExport::sendRequest(QSharedPointer<QFile> expfd, const QString &cm
    }
    // set the stanza into the contest so we can monitor it later
    exp_stanzaCount += 1;
-   ct->setStanza( static_cast<unsigned int>(exp_stanzaCount), static_cast<int>(fpos) );
+   ct->setStanza( static_cast<unsigned int>(exp_stanzaCount), static_cast<int>(fpos), static_cast<int>(fpos) + written );
 
 
    delete m;
