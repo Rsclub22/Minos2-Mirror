@@ -69,7 +69,7 @@ void DXCCFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/loggerTableHeaders.ini");
+            QString fname("./Configuration/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         }
     }
@@ -79,7 +79,7 @@ void DXCCFrame::saveDXCCTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/loggerTableHeaders.ini");
+        QString fname("./Configuration/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -87,7 +87,7 @@ void DXCCFrame::saveDXCCTableColumns()
 void DXCCFrame::restoreDXCCTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/loggerTableHeaders.ini");
+    QString fname("./Configuration/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DXCCTable", tslf->getCurScreenLayout(), ui->DXCCTable->horizontalHeader());
     inRestoreColumns = false;
 }

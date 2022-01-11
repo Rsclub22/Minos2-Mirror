@@ -70,7 +70,7 @@ void DistrictFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/loggerTableHeaders.ini");
+            QString fname("./Configuration/LoggerTableHeaders.ini");
             resetHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         }
     }
@@ -80,7 +80,7 @@ void DistrictFrame::saveDistrictTableColumns()
 {
     if (!inRestoreColumns)
     {
-        QString fname("./Configuration/loggerTableHeaders.ini");
+        QString fname("./Configuration/LoggerTableHeaders.ini");
         saveHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
         MinosLoggerEvents::SendColumnsChanged();
     }
@@ -88,7 +88,7 @@ void DistrictFrame::saveDistrictTableColumns()
 void DistrictFrame::restoreDistrictTableColumns()
 {
     inRestoreColumns = true;
-    QString fname("./Configuration/loggerTableHeaders.ini");
+    QString fname("./Configuration/LoggerTableHeaders.ini");
     restoreHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
     inRestoreColumns = false;
 }

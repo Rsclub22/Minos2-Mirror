@@ -180,7 +180,7 @@ void MatchTreeFrame::viewColumn()
         }
         else
         {
-            QString fname("./Configuration/loggerTableHeaders.ini");
+            QString fname("./Configuration/" + baseName + "TableHeaders.ini");
             resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
 
             MinosLoggerEvents::SendColumnsChanged();
