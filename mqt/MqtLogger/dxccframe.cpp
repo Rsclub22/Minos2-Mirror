@@ -39,10 +39,20 @@ DXCCFrame::DXCCFrame(StackedInfoFrame *parent) :
     proxyModel.setSourceModel(&model);
     ui->DXCCTable->setModel(&proxyModel);
 
-    createColumnsMenu(columnsMenu, ui->DXCCTable->horizontalHeader(), this,
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+    model.delegate = delegate;
+
+    ui->DXCCTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    ui->DXCCTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+
+    createColumnsMenu(columnsMenu, &model, this,
               [=]{
                     viewColumn();
               });
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &DXCCFrame::on_doColumnChanges);
 
 }
 void DXCCFrame::viewColumn()
@@ -94,6 +104,14 @@ void DXCCFrame::on_sectionResized(int, int , int)
 {
     saveDXCCTableColumns();
 }
+void DXCCFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == model.ct)
+    {
+        restoreDXCCTableColumns();
+    }
+}
+
 DXCCFrame::~DXCCFrame()
 {
     delete ui;
@@ -103,19 +121,6 @@ void DXCCFrame::setContest(LoggerContestLog *contest)
     model.ct = contest;
     if (contest)
     {
-        int lcf;
-        TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-        delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
-        model.delegate = delegate;
-
-        ui->DXCCTable->setItemDelegate( delegate.data() );
-        QSize ms = delegate->docSize("XX");
-        ui->DXCCTable->verticalHeader()->setDefaultSectionSize(ms.height() );
-
-        proxyModel.setSourceModel(&model);
-        ui->DXCCTable->setModel(&proxyModel);
-        ui->DXCCTable->setItemDelegate(delegate.data());
-
         band = contest->currentBand.getValue();
         model.band = band;
         proxyModel.band = band;
@@ -204,24 +209,26 @@ QVariant DXCCGridModel::data( const QModelIndex &index, int role ) const
 QVariant DXCCGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (section >= 0)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        {
-            QString cell;
+        QString cell;
 
-            int ic = section;
-            cell = tr(CountryTreeColumns[ic].title);
+        if (section >= 0)
+        {
+            cell = tr(CountryTreeColumns[section].title);
+        }
 
-            return cell.trimmed();
-        }
-        if (role == Qt::TextAlignmentRole)
+        return cell;
+    }
+    if (role == Qt::TextAlignmentRole)
+    {
+        return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
         {
-            return Qt::AlignLeft;
-        }
-        else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-        {
-            if (delegate)
+            if (section >= 0)
             {
                 QString s = data(index(section, 0), Qt::DisplayRole).toString();
                 QSize r = delegate->docSize(s);

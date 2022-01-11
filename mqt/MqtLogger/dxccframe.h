@@ -82,6 +82,7 @@ private slots:
 
     void viewColumn();
 
+    void on_doColumnChanges(BaseContestLog *b);
 };
 
 #endif // DXCCFRAME_H

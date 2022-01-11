@@ -30,10 +30,25 @@ DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
     connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &DistrictFrame::onDistrictGrid_sectionMoved);
     connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized, this, &DistrictFrame::on_sectionResized);
 
-    createColumnsMenu(columnsMenu, ui->DistrictTable->horizontalHeader(), this,
+    proxyModel.setSourceModel(&model);
+    ui->DistrictTable->setModel(&proxyModel);
+
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+    model.delegate = delegate;
+
+    ui->DistrictTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    ui->DistrictTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+
+    createColumnsMenu(columnsMenu, &model, this,
               [=]{
                     viewColumn();
               });
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &DistrictFrame::on_doColumnChanges);
+
 }
 
 DistrictFrame::~DistrictFrame()
@@ -90,22 +105,18 @@ void DistrictFrame::on_sectionResized(int, int , int)
 {
     saveDistrictTableColumns();
 }
+void DistrictFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == model.ct)
+    {
+        restoreDistrictTableColumns();
+    }
+}
 
 void DistrictFrame::setContest(BaseContestLog *contest)
 {
     model.ct = contest;
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
-    model.delegate = delegate;
-    ui->DistrictTable->setItemDelegate(delegate.data());
 
-    ui->DistrictTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    ui->DistrictTable->verticalHeader()->setDefaultSectionSize(ms.height() );
-
-    proxyModel.setSourceModel(&model);
-    ui->DistrictTable->setModel(&proxyModel);
     if (contest)
     {
         band = contest->currentBand.getValue();
@@ -113,8 +124,6 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         proxyModel.band = band;
 
         reInitialiseDistricts();
-        connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized,
-                 this, &DistrictFrame::on_sectionResized, Qt::UniqueConnection);
     }
 }
 
@@ -201,24 +210,28 @@ QVariant DistrictGridModel::data( const QModelIndex &index, int role ) const
 QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (section >= 0)
+    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
     {
-        if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-        {
-            QString cell;
+        QString cell;
 
+        if (section >= 0)
+        {
             cell = tr(DistrictTreeColumns[section].title);
+        }
 
-            return cell;
-        }
-        else if (role == Qt::TextAlignmentRole)
+        return cell;
+    }
+    else if (role == Qt::TextAlignmentRole)
+    {
+        return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
+    {
+        if (delegate)
         {
-            return Qt::AlignLeft;
-        }
-        else if (orientation == Qt::Vertical && role == Qt::SizeHintRole)
-        {
-            if (delegate)
+            if (section >= 0)
             {
+
                 QString s = data(index(section, 0), Qt::DisplayRole).toString();
                 QSize r = delegate->docSize(s);
                 r.setWidth(0);

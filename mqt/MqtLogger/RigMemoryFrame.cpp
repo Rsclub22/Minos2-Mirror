@@ -66,7 +66,7 @@ RigMemoryFrame::RigMemoryFrame(StackedInfoFrame *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &RigMemoryFrame::on_AfterLogContact, Qt::QueuedConnection);
 
     restoreRigMemTableColumns();
-    createColumnsMenu(columnsMenu, ui->rigMemTable->horizontalHeader(), this,
+    createColumnsMenu(columnsMenu, &model, this,
               [=]{
                     viewColumn();
               });
@@ -773,40 +773,40 @@ QVariant RigMemoryGridModel::data( const QModelIndex &index, int role ) const
 QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientation,
                      int role ) const
 {
-    if (section >= 0)
+    if (orientation == Qt::Horizontal)
     {
-        if (orientation == Qt::Horizontal)
+        if (role == Qt::DisplayRole)
         {
-            if (role == Qt::DisplayRole)
-            {
-                QString cell;
+            QString cell;
 
+            if (section >= 0)
+            {
                 cell = tr(RigMemoryColumns[section].title);
-
-                return cell;
             }
-            else if (role == Qt::TextAlignmentRole)
-                return Qt::AlignLeft;
+
+            return cell;
         }
-        else if (orientation == Qt::Vertical)
+        else if (role == Qt::TextAlignmentRole)
+            return Qt::AlignLeft;
+    }
+    else if (orientation == Qt::Vertical)
+    {
+        if (role == Qt::SizeHintRole)
         {
-            if (role == Qt::SizeHintRole)
+            if (delegate)
             {
-                if (delegate)
-                {
-                    // BUT the headers aren't drawn using the delegate, so this
-                    // all fails to work
+                // BUT the headers aren't drawn using the delegate, so this
+                // all fails to work
 
-                    // Do we lose the vertical header?
-                    QString s = "__";
-                    QSize r = delegate->docSize(s);
-                    return r;
-                }
+                // Do we lose the vertical header?
+                QString s = "__";
+                QSize r = delegate->docSize(s);
+                return r;
             }
-            else if (role == Qt::ToolTipRole)
-            {
-                return "Click here to transfer memory to QSO";
-            }
+        }
+        else if (role == Qt::ToolTipRole)
+        {
+            return "Click here to transfer memory to QSO";
         }
     }
     return QVariant();
