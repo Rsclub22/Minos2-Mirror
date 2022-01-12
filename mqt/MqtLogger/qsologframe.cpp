@@ -2171,7 +2171,7 @@ void QSOLogFrame::checkQsoFrameColour()
     }
     else
     {
-        if (!frameHasFocus())
+        if (!edit && !frameHasFocus())
         {
             ui->flagsFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
