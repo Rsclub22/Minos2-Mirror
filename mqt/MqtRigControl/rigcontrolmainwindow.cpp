@@ -485,6 +485,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
     clrRigctldNames();
     clearSupportRitFlags();
+    currentRadio.clear();
 
     rigStateDetails->curTransVertFreq.clear();
 

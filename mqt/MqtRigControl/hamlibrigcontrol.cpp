@@ -128,9 +128,17 @@ void HamlibRigControl::register_rigs(RigFactory::Rigs* rigsList)
 
         bool supportSMeter = HamlibRigControl::supportSMeter(capsList[i]->rig_model);
 
-        bool supportGetPtt = capsList[i]->get_ptt ? true:false;
 
-        bool supportSetPtt = capsList[i]->set_ptt ? true:false;
+        // hamlib 4.5 - Dummy need to enable PTT to use PTT, so disable for now
+        bool supportGetPtt = false;
+        bool supportSetPtt = false;
+
+        if (!key.contains("Hamlib Dummy"))
+        {
+            supportGetPtt = capsList[i]->get_ptt ? true:false;
+            supportSetPtt = capsList[i]->set_ptt ? true:false;
+        }
+
 
         bool supportGetVox = rigHasGetFunc(capsList[i]->rig_model, RIG_FUNC_VOX) ? true:false;
         bool supportSetVox = rigHasSetFunc(capsList[i]->rig_model, RIG_FUNC_VOX) ? true:false;

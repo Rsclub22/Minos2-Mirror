@@ -173,6 +173,7 @@ class EnableDisableCatFeature
 {
 public:
     EnableDisableCatFeature(){};
+    void clear();
 
     bool operator ==(const EnableDisableCatFeature &edcf);
     bool operator !=(const EnableDisableCatFeature &edcf);
@@ -214,6 +215,8 @@ class scatParams
 public:
 
   scatParams(){}
+
+  void clear();
 
   bool operator ==(const scatParams radParams);
   bool compareEqual(QSharedPointer<scatParams> radParams);
