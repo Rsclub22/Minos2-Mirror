@@ -160,6 +160,57 @@ bool isComportAvail(const QString comport)
 
 }
 
+void scatParams::clear()
+{
+    radioName.clear();
+    previousRadioName.clear();
+    markForDeletion = false;
+    radioNumber.clear();
+    comport.clear();
+    comport.clear();
+    rigMfg_Name.clear();
+    rigModelName.clear();
+    rigModel.clear();
+    rigModelNumber = 1;
+    pollInterval = RIG_DEFAULT_POLLINTERVAL;
+    civAddress.clear();
+    baudrate = 0;
+    parity = 0;
+    stopbits = 0;
+    databits = 0;
+    handshake = 0;
+    forceDtr = 0;
+    forceRts = 0;
+    portType = 0;
+    advancedCommsFlag = false;
+    networkAdd.clear();
+    networkPort.clear();
+    enablePTT  = false;
+    pttSerialPort.clear();
+    pttType = 0;
+    rigCtldEnable = false;
+    startMinosRigCtld = true;
+    rigCtldNetworkAdd.clear();
+    rigCtldNetworkPort.clear();
+    mgmMode = hamlibData::USB;
+    antSwitchAvail = false;
+    ritSupported = false;
+
+    transVertEnable  = false;
+    supportBands.clear();        // for non hamlib radios
+    transVertSettings.clear();
+    enableTransSwitch = false;
+    enableLocTVSwMsg = false;
+    locTVSwComport = "";
+    radioSupBands.clear();  // bands supported by radio
+    radioTransSupBands.clear(); // band supported by radio and transverters
+
+
+    enableDisableCatFeature.clear();
+
+
+}
+
 
 
 
@@ -222,53 +273,7 @@ bool scatParams::compareEqual(QSharedPointer <scatParams> radParams)
 
 bool scatParams::compareNotEqual(const QSharedPointer<scatParams> radParams)
 {
-/*
-    radioName != radParams->radioName ? qDebug() << "radioName = true" : qDebug() << "radioName = false";
-    radioNumber != radParams->radioNumber ? qDebug() << "radioNumber = true" : qDebug() << "radioNumber = false";
-    previousRadioName != radParams->previousRadioName ? qDebug() << "previousRadioName = true" : qDebug() << "previousRadioName = false";
-    markForDeletion != radParams->markForDeletion ? qDebug() << "markForDeletion = true" : qDebug() << "markForDeletion = false";
-                comport != radParams->comport ? qDebug() << "comport = true" : qDebug() << "comport = false";
-                rigMfg_Name != radParams->rigMfg_Name ? qDebug() << "rigMfg_Name = true" : qDebug() << "rigMfg_Name = false";
-                rigModelName != radParams->rigModelName ? qDebug() << "rigModelName = true" : qDebug() << "rigModelName = false";
-                rigModel != radParams->rigModel ? qDebug() << "rigModel = true" : qDebug() << "rigModel = false";
-                rigModelNumber != radParams->rigModelNumber ? qDebug() << "rigModelNumber = true" : qDebug() << "rigModelNumber = false";
-                pollInterval != radParams->pollInterval ? qDebug() << "pollInterval = true" : qDebug() << "pollInterval = false";
-                civAddress != radParams->civAddress ? qDebug() << "civAddress = true" : qDebug() << "civAddress = false";
-                baudrate != radParams->baudrate ? qDebug() << "baudrate = true" : qDebug() << "baudrate = false";
-                parity != radParams->parity ? qDebug() << "parity = true" : qDebug() << "parity = false";
-                stopbits != radParams->stopbits ? qDebug() << "stopbits = true" : qDebug() << "stopbits = false";
-                databits != radParams->databits ? qDebug() << "databits = true" : qDebug() << "databits = false";
-                handshake != radParams->handshake ? qDebug() << "handshake = true" : qDebug() << "handshake = false";
-                forceDtr != radParams->forceDtr ? qDebug() << "forceDtr = true" : qDebug() << "forceDtr = false";
-                forceRts != radParams->forceRts ? qDebug() << "forceRts = true" : qDebug() << "forceRts = false";
-                portType != radParams->portType ? qDebug() << "portType = true" : qDebug() << "portType = false";
-                advancedCommsFlag != radParams->advancedCommsFlag ? qDebug() << "advancedCommsFlag = true" : qDebug() << "advancedCommsFlag = false";
-                networkAdd != radParams->networkAdd ? qDebug() << "networkAdd = true" : qDebug() << "networkAdd = false";
-                networkPort != radParams->networkPort ? qDebug() << "networkPort = true" : qDebug() << "networkPort = false";
-                enablePTT != radParams->enablePTT ? qDebug() << "enablePTT = true" : qDebug() << "enablePTT = false";
-                pttSerialPort != radParams->pttSerialPort ? qDebug() << "pttSerialPort = true" : qDebug() << "pttSerialPort = false";
-                pttType != radParams->pttType ? qDebug() << "pttType = true" : qDebug() << "pttType = false";
-                rigCtldEnable != radParams->rigCtldEnable ? qDebug() << "rigCtldEnable = true" : qDebug() << "rigCtldEnable = false";
-                startMinosRigCtld != radParams->startMinosRigCtld ? qDebug() << "startMinosRigCtld = true" : qDebug() << "startMinosRigCtld = false";
-                rigCtldNetworkAdd != radParams->rigCtldNetworkAdd ? qDebug() << "rigCtldNetworkAdd = true" : qDebug() << "rigCtldNetworkAdd = false";
-                rigCtldNetworkPort != radParams->rigCtldNetworkPort ? qDebug() << "rigCtldNetworkPort = true" : qDebug() << "rigCtldNetworkPort = false";
-                mgmMode != radParams->mgmMode ? qDebug() << "mgmMode = true" : qDebug() << "mgmMode = false";
-                antSwitchAvail != radParams->antSwitchAvail ? qDebug() << "antSwitchAvail = true" : qDebug() << "antSwitchAvail = false";
-                ritSupported != radParams->ritSupported ? qDebug() << "ritSupported = true" : qDebug() << "ritSupported = false";
 
-                transVertEnable != radParams->transVertEnable ? qDebug() << "transVertEnable = true" : qDebug() << "transVertEnable = false";
-                supportBands != radParams->supportBands ? qDebug() << "supportBands = true" : qDebug() << "supportBands = false";
-                //!compareStringList(transVertNames, radParams->transVertNames) ? qDebug() << "transVertNames = true" : qDebug() << "transVertNames = false";
-                //numTransverters != radParams->numTransverters ? qDebug() << "radioName = true" : qDebug() << "radioName = false";
-                enableTransSwitch != radParams->enableTransSwitch ? qDebug() << "enableTransSwitch = true" : qDebug() << "enableTransSwitch = false";
-                enableLocTVSwMsg != radParams->enableLocTVSwMsg ? qDebug() << "enableLocTVSwMsg = true" : qDebug() << "enableLocTVSwMsg = false";
-                locTVSwComport != radParams->locTVSwComport ? qDebug() << "locTVSwComport = true" : qDebug() << "locTVSwComport = false";
-                !compareStringList(radioSupBands, radParams->radioSupBands) ? qDebug() << "radioSupBands = true" : qDebug() << "radioSupBands = false";
-                !compareStringList(radioTransSupBands, radParams->radioTransSupBands) ? qDebug() << "radioTransSupBands = true" : qDebug() << "radioTransSupBands = false";
-                //transVertSettings != radParams->transVertSettings ? qDebug() << "transVertSettings = true" : qDebug() << "transVertSettings = false";
-                enableDisableCatFeature != radParams->enableDisableCatFeature ? qDebug() << "enableDisableCatFeature = true" : qDebug() << "enableDisableCatFeature = false";
-
-*/
     if (radioName != radParams->radioName ||
             radioNumber != radParams->radioNumber ||
             previousRadioName != radParams->previousRadioName ||
@@ -416,6 +421,18 @@ void scatParams::scatParamsCopy(const QSharedPointer<scatParams> srce)
 
     //return QSharedPointer<scatParams>(this);
 
+}
+
+
+void EnableDisableCatFeature::clear()
+{
+    enableDisplay = false;
+    ritEnable = false;
+    sMeterEnable = true;
+    volumeEnable = true;
+    voiceMemEnable = true;
+    cWMemEnable = true;
+    catEnable = true;
 }
 
 
