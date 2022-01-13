@@ -2239,7 +2239,7 @@ void ClusterMainWindow::userVhfUhfCmdButtonRead(int buttonNumber)
 {
     if (ui->clusterTab->currentIndex() == 1)
     {
-        userCmdButtonRead(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+        userCmdButtonRead(vhfUhfUserCommands, VHF_UHF_USERCOMMAND_TABNAME, buttonNumber);
     }
 }
 
@@ -2247,7 +2247,7 @@ void ClusterMainWindow::userHfCmdButtonRead(int buttonNumber)
 {
     if (ui->clusterTab->currentIndex() == 0)
     {
-        userCmdButtonRead(hfUserCommands, "HF", buttonNumber);
+        userCmdButtonRead(hfUserCommands, HF_USERCOMMAND_TABNAME, buttonNumber);
     }
 }
 
@@ -2293,7 +2293,7 @@ void ClusterMainWindow::userCmdButtonRead(QStringList userCommands, QString tabS
 void ClusterMainWindow::userVhfUhfCmdButtonEdit(int buttonNumber)
 {
 
-   userCmdButtonEdit(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+   userCmdButtonEdit(vhfUhfUserCommands, VHF_UHF_USERCOMMAND_TABNAME, buttonNumber);
 
 }
 
@@ -2302,7 +2302,7 @@ void ClusterMainWindow::userHfCmdButtonEdit(int buttonNumber)
 {
     if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
-        userCmdButtonEdit(hfUserCommands, "HF", buttonNumber);
+        userCmdButtonEdit(hfUserCommands, HF_USERCOMMAND_TABNAME, buttonNumber);
     }
 }
 
@@ -2346,7 +2346,7 @@ void ClusterMainWindow::userCmdButtonEdit(QStringList userCommands, QString tabS
 void ClusterMainWindow::userVhfUhfCmdButtonClear(int buttonNumber)
 {
 
-    userCmdButtonClear(vhfUhfUserCommands, "VHF/UHF", buttonNumber);
+    userCmdButtonClear(vhfUhfUserCommands, VHF_UHF_USERCOMMAND_TABNAME, buttonNumber);
 
 }
 
@@ -2355,7 +2355,7 @@ void ClusterMainWindow::userHfCmdButtonClear(int buttonNumber)
 {
     if (ui->clusterTab->currentIndex() == HF_TABNUM)
     {
-        userCmdButtonClear(hfUserCommands, "HF", buttonNumber);
+        userCmdButtonClear(hfUserCommands, HF_USERCOMMAND_TABNAME, buttonNumber);
     }
 }
 
@@ -2390,7 +2390,7 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
 void ClusterMainWindow::userVhfUhfCmdButtonWrite(int buttonNumber)
 {
-    userCmdButtonWrite("VHF/UHF", buttonNumber);
+    userCmdButtonWrite(VHF_UHF_USERCOMMAND_TABNAME, buttonNumber);
 
 }
 
@@ -2433,13 +2433,13 @@ void ClusterMainWindow::userCmdButtonWrite(QString tabSelected, int buttonNumber
 
 void ClusterMainWindow::userCommandButtonUpdate(QString tabSelected, int buttonNumber, ClusterUserCommandData& buttonData)
 {
-    if (tabSelected == "VHF/UHF")
+    if (tabSelected == VHF_UHF_USERCOMMAND_TABNAME)
     {
         userVHFUHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), buttonData.name) );
         // update store
         vhfUhfUserCommands[buttonNumber] = buttonData.name + ":" + buttonData.cmdString;
     }
-    else if (tabSelected == "HF")
+    else if (tabSelected == HF_USERCOMMAND_TABNAME)
     {
         userHFCmdButton[buttonNumber]->setText(QString("%1: %2").arg(QString::number(buttonNumber + 1), buttonData.name) );
         // update store
@@ -2464,7 +2464,7 @@ void ClusterMainWindow::userCommandAllButtonUpdate()
             {
                buttonData.name = cmdData[0];
                buttonData.cmdString = cmdData[1];
-               userCommandButtonUpdate("VHF/UHF", i, buttonData);
+               userCommandButtonUpdate(VHF_UHF_USERCOMMAND_TABNAME, i, buttonData);
             }
 
         }
@@ -2479,7 +2479,7 @@ void ClusterMainWindow::userCommandAllButtonUpdate()
             {
                buttonData.name = cmdData[0];
                buttonData.cmdString = cmdData[1];
-               userCommandButtonUpdate("HF", i, buttonData);
+               userCommandButtonUpdate(HF_USERCOMMAND_TABNAME, i, buttonData);
             }
 
         }
@@ -2551,10 +2551,10 @@ void ClusterMainWindow::updateToNewVhfUhfGroupKey()
             if (cl.count() == 2)
             {
                 buttonData.name = cl[0];
-                buttonData.cmdString = cl[0];
+                buttonData.cmdString = cl[1];
             }
 
-            saveUserCommandString("VHFUHF", i, buttonData);
+            saveUserCommandString(VHF_UHF_USERCOMMAND_TABNAME, i, buttonData);
         }
     }
 
@@ -2569,11 +2569,11 @@ void ClusterMainWindow:: saveUserCommandString(QString tabSelected, int buttonNu
 {
 
     QSettings config(CLUSTER_PATH + CLUSTER_COMMANDS, QSettings::IniFormat);
-    if (tabSelected == "VHFUHF")
+    if (tabSelected == VHF_UHF_USERCOMMAND_TABNAME)
     {
        config.beginGroup("VHF_UHF_UserCommandStrings");
     }
-    else if (tabSelected == "HF")
+    else if (tabSelected == HF_USERCOMMAND_TABNAME)
     {
        config.beginGroup("HF_UserCommandStrings");
     }
@@ -2622,7 +2622,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
         {
             hfLayout->addWidget(cb, hfRow, hfCol);
             hfCol++;
-            if (hfCol %2 == 0)
+            if (hfCol %4 == 0)
             {
                 hfCol = 0;
                 hfRow++;
@@ -2632,7 +2632,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
         {
             vhfLayout->addWidget(cb, vhfRow, vhfCol);
             vhfCol++;
-            if (vhfCol %2 == 0)
+            if (vhfCol %4 == 0)
             {
                 vhfCol = 0;
                 vhfRow++;
@@ -2642,7 +2642,7 @@ void ClusterMainWindow::initFilterCheckBoxs()
         {
             mwLayout->addWidget(cb, mwRow, mwCol);
             mwCol++;
-            if (mwCol %2 == 0)
+            if (mwCol %4 == 0)
             {
                 mwCol = 0;
                 mwRow++;
