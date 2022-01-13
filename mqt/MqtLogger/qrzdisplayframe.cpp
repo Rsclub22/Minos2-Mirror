@@ -275,7 +275,7 @@ void QrzDisplayFrame::setQrzMessageText(QString msg)
 
 void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
 {
-    qDebug() << "state = " << (loggedOn ? "true" : "false");
+    //qDebug() << "state = " << (loggedOn ? "true" : "false");
     if (loggedOn)
     {
         ui->logOnStatusPb->setText(tr("Connected"));

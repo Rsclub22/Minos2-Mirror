@@ -86,6 +86,9 @@ const int ASKQRA_TIMEOUT = 10000;
 const int HF_TABNUM = 0;
 const int VHFUHF_TABNUM = 1;
 
+const QString VHF_UHF_USERCOMMAND_TABNAME = "VHF/UHF";
+const QString HF_USERCOMMAND_TABNAME = "HF";
+
 class ClusterAddress
 {
 
