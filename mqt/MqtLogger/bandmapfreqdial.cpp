@@ -288,18 +288,22 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
 
 
     int markStep = dialData::khzStep[zoomLevel] * dialData::khzPixelStep[zoomLevel];
-    int markCount = 0;
-    Frequency markFreq = contestBandFlow;
+    int nMarks = dialHeight/markStep;
 
-    if (markStep < dialHeight/1000)
+    Frequency fRange = contestBandFhigh - contestBandFlow;
+    if (nMarks > 500)
     {
-        markStep = dialHeight/1000; // or we can get a ridiculous loop
+        nMarks = 500;
     }
+    int dialInc = dialHeight /nMarks;
+    markStep = fRange / nMarks;
 
+    Frequency markFreq = contestBandFlow;
+    int markCount = 0;
     if (dialData::minorMarker[zoomLevel] == 0)
     {
 
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = 0; ycoord < dialHeight; ycoord += dialInc)
         {
 
             painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
@@ -307,21 +311,23 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
             QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
             dialFreqList.append(dft);
             painter->drawText(textPos,  Qt::AlignLeft, convertFreqDialDisplay(markFreq));
-            if (dialData::khzStep[zoomLevel] == 1)
-            {
-                markFreq = markFreq + Frequency(1000);
-            }
-            else
-            {
-                markFreq = markFreq + Frequency(50000);
-            }
+
+//            if (dialData::khzStep[zoomLevel] == 1)
+//            {
+//                markFreq = markFreq + Frequency(1000);
+//            }
+//            else
+//            {
+//                markFreq = markFreq + Frequency(50000);
+//            }
+            markFreq = markFreq + Frequency(markStep);
         }
 
     }
     else if (dialData::minorMarker[zoomLevel] == 1)
     {
 
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = 0; ycoord < dialHeight; ycoord += dialInc)
         {
 
             if (markCount == 0 || markCount % 5 == 0)
@@ -331,7 +337,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
                 QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
-                markFreq = markFreq + Frequency(5000);
+//                markFreq = markFreq + Frequency(5000);
             }
             else
             {
@@ -339,13 +345,14 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
 
             }
 
+            markFreq = markFreq + Frequency(markStep);
             markCount++;
 
         }
     }
     else if (dialData::minorMarker[zoomLevel] == 2)
     {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = 0; ycoord < dialHeight; ycoord += dialInc)
         {
 
             if (markCount == 0 || markCount % 10 == 0)
@@ -355,7 +362,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
                 QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
-                markFreq = markFreq + Frequency(10000);
+//                markFreq = markFreq + Frequency(10000);
             }
             else
             {
@@ -363,6 +370,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
             }
 
 
+            markFreq = markFreq + Frequency(markStep);
             markCount++;
         }
 
@@ -370,7 +378,7 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
     }
     else if (dialData::minorMarker[zoomLevel] == 3)
     {
-        for (int ycoord = 0; ycoord < dialHeight; ycoord += markStep)
+        for (int ycoord = 0; ycoord < dialHeight; ycoord += dialInc)
         {
 
             if (markCount == 0 || markCount % 2 == 0)
@@ -380,13 +388,14 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
                 QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
                 dialFreqList.append(dft);
                 painter->drawText(textPos, Qt::AlignLeft, convertFreqDialDisplay(markFreq));
-                markFreq = markFreq + Frequency(50000);
+//                markFreq = markFreq + Frequency(50000);
             }
             else
             {
                 painter->drawLine(QPoint(dialWidth - dialData::fMinMrkLength, ycoord + dialData::DIAL_VERT_OFFSET), QPoint(dialWidth, ycoord + dialData::DIAL_VERT_OFFSET));
             }
 
+            markFreq = markFreq + Frequency(markStep);
             markCount++;
 
         }
@@ -565,12 +574,12 @@ void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
     int numDegrees = event->delta() / 8;
     int numTicks = numDegrees / 15;
 
-    if (numTicks == 1)
+    if (numTicks >= 1)
     {
        changeZoom(false);
 
     }
-    else
+    else if (numTicks <= -1)
     {
         changeZoom(true);
 
@@ -582,26 +591,7 @@ void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
 
 void BandmapFreqDial::changeZoom(bool direction)
 {
-    if (direction)
-    {
-        //if (zoomLevel < dialData::MAX_ZOOM_LEVEL && zoomLevel >= dialData::MIN_ZOOM_LEVEL)
-        //{
-        //    ++zoomLevel;
-        //    update();
-            emit zoomUpdated(true);
-
-        //}
-    }
-    else
-    {
-        //if (zoomLevel != dialData::MIN_ZOOM_LEVEL && zoomLevel <= dialData::MAX_ZOOM_LEVEL)
-        //{
-        //    --zoomLevel;
-        //    update();
-        emit zoomUpdated(false);
-
-        //}
-    }
+    emit zoomUpdated(direction);
 }
 
 
