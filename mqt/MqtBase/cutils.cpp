@@ -693,7 +693,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
     int lp = 0;
     for(QString s:qAsConst(sl))
     {
-        if (s[0] == "(")
+        if (s[0] == '(')
         {
             s = s.mid(1, s.length() - 2);
             QStringList hl = s.split(",");
