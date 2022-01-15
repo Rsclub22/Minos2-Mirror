@@ -501,6 +501,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     currentRadio.clear();
 
     rigStateDetails->curTransVertFreq.clear();
+    rigStateDetails->selTvBand.clear();
 
     setRigCltdIndicatorVisible(false);
     setMemoryGroupVisible(false);
@@ -621,7 +622,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
         trace(QString("VFO = %1").arg(vfoToStr(rigStateDetails->curVfo)));
 
         ui->usingLibText->setText(radio->getLibraryName());
-
+        trace(QString("Using library = %1").arg(radio->getLibraryName()));
         if (currentRadio.rigModelNumber == hamlibData::RIGCTL)     // is it rigctl?
         {
             getRigctldNames(currentRadio.networkAdd, currentRadio.networkPort.toUShort());
@@ -2106,7 +2107,7 @@ bool RigControlMainWindow::findTransverter(QString &transVerterBand, QString ban
     logMessage((QString("FindTransverter: Looking for Transverters that support this band %1").arg(band)));
 
     bool b = false;
-    //while (tvNum < currentRadio.numTransverters)
+
     QStringList tvList = currentRadio.transVertSettings.keys();
     for(const auto &tv: qAsConst(tvList))
     {
@@ -2206,6 +2207,7 @@ void RigControlMainWindow::clearTransVertSupport()
 {
     rigStateDetails->selTvBand.clear();
     displayTransVertVfo(0.0);
+    //setTransVertDisplayVisible(false);
     rigStateDetails->curTransVertFreq.clear();
     ui->transVertBandDisp->setText("");
     transVertSwNum = TRANSSW_NUM_DEFAULT;
