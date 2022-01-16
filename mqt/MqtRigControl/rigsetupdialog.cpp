@@ -91,7 +91,6 @@ void RigSetupDialog::initSetup()
         QSettings  configTransvert(fileName, QSettings::IniFormat);
 
         QStringList listOfTransverters = configTransvert.childGroups();  // get transvert names for this radio
-        //availRadioData.value(availRadios[i])->transVertSettings.count() =  availRadioData.value(availRadios[i])->transVertNames.count();
 
         if (listOfTransverters.count() > 0)
         {
@@ -154,7 +153,6 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
 
     radioTab.value(tabName)->setCIVAddress(availRadioData.value(tabName)->civAddress);
     loadAvailComportsToTab(tabName);                                                 // finds comports first
-    //radioTab[tabNum]->setComport(radioTab[tabNum]->getRadioData()->comport);
     radioTab.value(tabName)->setDataSpeed(QString::number(availRadioData.value(tabName)->baudrate));
     radioTab.value(tabName)->setDataBits(QString::number(availRadioData.value(tabName)->databits));
     radioTab.value(tabName)->setStopBits(QString::number(availRadioData.value(tabName)->stopbits));
@@ -217,7 +215,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
     }
 
     radioTab.value(tabName)->setRigctldCheckBoxVisible(rigCap.supportRigCtld);
-//    radioTab.value(tabName)->getRadioData()->rigCtldEnable = rigCap.supportRigCtld;
+
 
     // serial ptt comport loaded with other comports
     radioTab.value(tabName)->setPttTypeRadioButtons(availRadioData.value(tabName)->pttType);
