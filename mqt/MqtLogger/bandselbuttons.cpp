@@ -1,5 +1,4 @@
 /////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //
@@ -8,10 +7,7 @@
 // Interprocess Control Logic
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2019
 //
-//
-//
 /////////////////////////////////////////////////////////////////////////////
-
 
 #include "LoggerContest.h"
 
@@ -33,9 +29,11 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_PHONE, bands);
     presetFreqs.copyAllPrevFreqToLastFreqByMode(freqPresetData::PRESET_MODE_MGM, bands);
 
+    // availHFBands is those available in logger
+    // we gt Rig Control's isdea later
     for (auto &b: bands)
     {
-        if (b->getType() == HF_BANDTYPE )
+        if (b->getType() == HF_BANDTYPE && b->enabled )
         {
             availHfBands.append(b->uk);
         }
@@ -52,6 +50,7 @@ void BandSelButtons::setupButtons()
         if (b->getType() == HF_BANDTYPE)
         {
             QToolButton *bb = new QToolButton();
+            bb->setText(b->uk);
             toolButList.append(bb);
             bb->setFocusPolicy(Qt::NoFocus);
             bandSelGridLayout->addWidget(bb, row, col, Qt::AlignHCenter);
@@ -68,10 +67,6 @@ void BandSelButtons::setupButtons()
             bb->setStyleSheet(buttonStyle);
         }
     }
-
-    buildBandButtonLabels();
-
-
 }
 
 void BandSelButtons::readPresetFreqsFromIni(const QVector <QSharedPointer <BandInfo> > bands)
@@ -79,28 +74,10 @@ void BandSelButtons::readPresetFreqsFromIni(const QVector <QSharedPointer <BandI
     presetFreqs.readSettings(bands);
 }
 
-
-void BandSelButtons::buildBandButtonLabels()
-{
-    for (const auto &b: qAsConst(bands))
-    {
-        QString band = b->uk;
-        QStringList bl = band.split('\x20');
-        if(bl.count() == 2)
-        {
-            QString label = bl[0];
-            bandToButtonLabels.insert(band, label);
-            buttonLabelsToBand.insert(label, band);
-        }
-
-    }
-}
-
-
 void BandSelButtons::onBandSelButtonPressed(QToolButton* button)
 {
     Frequency freq;
-    QString band = buttonLabelsToBand.value(button->text());
+    QString band = button->text();
 
     ct->setCurrentBand(band);
     ct->commonSave(false);
@@ -125,25 +102,37 @@ void BandSelButtons::selectSupportedBands(const QStringList &listOfBands)
     }
 }
 
-
+QToolButton *BandSelButtons::findToolButton(QString band)
+{
+    for (int i = 0; i < toolButList.count(); i++)
+    {
+        QString tb = toolButList[i]->text();
+        if (tb == band)
+        {
+            return toolButList[i];
+        }
+    }
+    return nullptr;
+}
 
 void BandSelButtons::setButtonsToBandType()
 {
     setAllButtonsOff();
     setAllButtonsVisible(false);
-    clearAllButtonLabels();
-    bandToolButList.clear();
 
     for (int i = 0; i < availHfBands.count(); i++)
     {
-        toolButList[i]->setText(bandToButtonLabels.value(availHfBands[i]));
-        toolButList[i]->setVisible(true);
-        bandToolButList.insert(availHfBands[i], toolButList[i]);
+        QToolButton *t = findToolButton(availHfBands[i]);
+        if (t)
+        {
+            t->setVisible(true);
+        }
     }
 
     if (!selectedBand.isEmpty())
     {
-        setButtonOnOff(selectedBand, true);
+        QToolButton *t = findToolButton(selectedBand);
+        setButtonOnOff(t, true);
     }
 }
 
@@ -173,24 +162,13 @@ bool BandSelButtons::isBandAvailable(QString band)
     return false;
 }
 
-QString BandSelButtons::getCurrentButtonOn_Band()
-{
-    return selectedBand;
-}
-
-
-
 void BandSelButtons::setAllButtonsOff()
 {
-
-    for (QMap<QString, QToolButton*>::const_iterator i = bandToolButList.constBegin(); i != bandToolButList.constEnd(); i++)
+    for (auto t:qAsConst(toolButList))
     {
-
-        setButtonOnOff(i.key(), false);
-
+        setButtonOnOff(t, false);
     }
 }
-
 
 void BandSelButtons::setPreviousFreq(QString mode, Frequency freq)
 {
@@ -241,18 +219,24 @@ int BandSelButtons::selectButtonGroupAndActiveBand(const QString band)
 {
     selectedBand = band;
     setButtonsToBandType();
-    return setButtonOnOff(band, true);
+    QToolButton *t = findToolButton(band);
+    if (t)
+    {
+        setButtonOnOff(t, true);
+        return 0;
+    }
+    return -1;
 }
 
 
-int BandSelButtons::setButtonOnOff(const QString band, const bool on)
+void BandSelButtons::setButtonOnOff(QToolButton *t, const bool on)
 {
-    if (bandToolButList.contains(band))
+    if (t)
     {
         QString buttonStyle;
         if (on)
         {
-            if (band != contestBand)
+            if (t->text() != contestBand)
             {
                 buttonStyle = bandSelButtonData::BUTTON_NOT_CONTEST_STYLE;
             }
@@ -260,30 +244,22 @@ int BandSelButtons::setButtonOnOff(const QString band, const bool on)
             {
                buttonStyle = bandSelButtonData::BUTTON_ON_STYLE;
             }
-
         }
         else
         {
             buttonStyle = bandSelButtonData::BUTTON_OFF_STYLE;
         }
-
-        bandToolButList.value(band)->setStyleSheet( buttonStyle);
-
-        return 0;
-    }
-    else
-    {
-        return -1;
+        t->setStyleSheet( buttonStyle);
     }
 }
 
 void BandSelButtons::setToolTip(QString band, QString tipTxt)
 {
-    if (bandToolButList.contains(band))
+    QToolButton *t = findToolButton(band);
+    if (t)
     {
-       bandToolButList.value(band)->setToolTip(tipTxt);
+       t->setToolTip(tipTxt);
     }
-
 }
 
 void BandSelButtons::setPrevFreqToolTip(QString mode)
@@ -330,9 +306,7 @@ QString BandSelButtons::getBandType(const QString selectedBand)
         {
             return b->getType();
         }
-
     }
-
     return "";
 }
 
@@ -345,11 +319,6 @@ void BandSelButtons::setMode(QString mode)
 void BandSelButtons::setContest(BaseContestLog *contest)
 {
     ct = contest;
-//    if (ct)
-//    {
-//        setMode(contest->currentMode.getValue());
-//        setContestBand(ct->currentBand.getValue());
-//    }
 }
 void BandSelButtons::setContestBand(QString contestBand_)
 {

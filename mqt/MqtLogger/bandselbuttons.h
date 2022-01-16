@@ -31,10 +31,9 @@ public:
 
     void setContest(BaseContestLog *contest);
 
-    int setButtonOnOff(QString band, bool on);
+    void setButtonOnOff(QToolButton *t, bool on);
     void setAllButtonsOff();
 
-    QString getCurrentButtonOn_Band();
     void setAllButtonsVisible(bool visible);
     void selectSupportedBands(const QStringList &listOfBands);
 
@@ -45,6 +44,7 @@ public:
     int selectButtonGroupAndActiveBand(const Frequency &freq);
     void setContestBand(QString contestBand_);
     bool findBand(const Frequency &freq, QVector<QSharedPointer<BandInfo> > &bands, QString &foundBand);
+    QToolButton *findToolButton(QString band);
 
     void setPreviousFreq(QString mode, Frequency freq);
     void setPrevFreqToolTip(QString mode);
@@ -58,11 +58,8 @@ private slots:
     void onBandSelButtonPressed(QToolButton *button);
 private:
 
-    QMap<QString, QToolButton*> bandToolButList;
     QList<QString> availHfBands;
 
-    QMap<QString, QString> bandToButtonLabels;
-    QMap<QString, QString> buttonLabelsToBand;
     QGridLayout *bandSelGridLayout;
 
     QList<QToolButton* > toolButList;
@@ -85,7 +82,6 @@ private:
     bool isBandAvailable(QString band);
     QString convertModeForPresets(const QString mode);
     void setupButtons();
-    void buildBandButtonLabels();
     QString getBandType(const QString selectedBand);
     void clearAllButtonLabels();
     void setButtonsToBandType();

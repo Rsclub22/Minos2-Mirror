@@ -117,7 +117,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigFactory = new RigFactory(false, this);
 
 
-    BandList::getBandList().loadAllBands(bands);
+    BandList::getBandList().loadAllBands(bands, false);
 
     //currentRadio = QSharedPointer<scatParams>(new scatParams);
 
