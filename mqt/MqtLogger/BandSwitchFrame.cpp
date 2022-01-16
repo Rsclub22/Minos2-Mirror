@@ -22,7 +22,13 @@ void BandSwitchFrame::setRigControl(RigControlFrame *rc)
 
 int BandSwitchFrame::setButtonOnOff(QString band, bool on)
 {
-    return bandSelButtons->setButtonOnOff(band, on);
+    QToolButton *t = bandSelButtons->findToolButton(band);
+    if (t)
+    {
+        bandSelButtons->setButtonOnOff(t, on);
+        return 0;
+    }
+    return -1;
 }
 
 void BandSwitchFrame::setAllButtonsOff()
