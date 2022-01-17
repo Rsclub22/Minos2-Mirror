@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 #include <QSplitter>
+#include <QScrollArea>
 #include "MinosLoggerEvents.h"
 
 #include "cutils.h"
@@ -626,6 +627,12 @@ void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
                         {
                             adjustMargins(s->widget(j)->layout(), ls, cml, cmt, cmr, cmb);
                         }
+                    }
+                    QScrollArea *sa = dynamic_cast<QScrollArea *>(w);
+                    if (sa)
+                    {
+                        w = sa->widget();
+                        adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
                     }
                 }
             }
