@@ -126,25 +126,11 @@ void ClusterBandmapConfigure::initialise()
 
      ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
 
-     bool operatingFreqFlag;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapTurnOffOperatingFreqStrip, operatingFreqFlag );
-     ui->operatingFreqChkBox->setChecked(operatingFreqFlag);
-
-     bool followRadioModeFlag;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip, followRadioModeFlag );
-     ui->modeOperatingFreqChkBox->setChecked(followRadioModeFlag);
-
-     bool minBFlag;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandMapMouseInFrameDelay, minBFlag );
-     ui->mouseInBcb->setChecked(minBFlag);
-
-     bool showDerivedLocFlag;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
-     ui->showDerivedLocChkBox->setChecked(showDerivedLocFlag);
-
-     bool oldbmapFlag;
-     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpBandmapOldStyle, oldbmapFlag );
-     ui->oldBandmapChkBox->setChecked(oldbmapFlag);
+     BandMapTurnOffOperatingFreqStrip.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapTurnOffOperatingFreqStrip, ui->operatingFreqChkBox);
+     BandMapFollowRadioModeOperatingFreqStrip.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapFollowRadioModeOperatingFreqStrip, ui->modeOperatingFreqChkBox);
+     BandMapMouseInFrameDelay.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapMouseInFrameDelay, ui->mouseInBcb);
+     BandMapShowDerivedLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowDerivedLoc, ui->showDerivedLocChkBox);
+     BandmapOldStyle.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandmapOldStyle, ui->oldBandmapChkBox);
 }
 bool ClusterBandmapConfigure::check()
 {
@@ -159,11 +145,12 @@ void ClusterBandmapConfigure::finalise()
     saveDistances();
 
     TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapTurnOffOperatingFreqStrip,  ui->operatingFreqChkBox->isChecked());
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapFollowRadioModeOperatingFreqStrip,  ui->modeOperatingFreqChkBox->isChecked());
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandMapMouseInFrameDelay,  ui->mouseInBcb->isChecked());
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpBandmapOldStyle, ui->oldBandmapChkBox->isChecked() );
-    TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpShowDerivedLoc, ui->showDerivedLocChkBox->isChecked() );
+
+    BandMapTurnOffOperatingFreqStrip.finalise();
+    BandMapFollowRadioModeOperatingFreqStrip.finalise();
+    BandMapMouseInFrameDelay.finalise();
+    BandMapShowDerivedLoc.finalise();
+    BandmapOldStyle.finalise();
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }

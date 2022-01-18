@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include "OptionsDialog.h"
+#include "ConfigurationOption.h"
 
 namespace Ui {
 class DefDirsDlg;
@@ -32,7 +33,7 @@ private:
     Ui::DefDirsDlg *ui;
 
     int cap = 0;
-    bool doAge = false;
+    ConfigurationOption ConfAgeProtectContests;
 
     QString browseDefDir(const QString &prompt);
 };
