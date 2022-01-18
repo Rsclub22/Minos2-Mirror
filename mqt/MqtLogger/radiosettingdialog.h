@@ -1,17 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// $Id$
 //
 // PROJECT NAME 		Minos Amateur Radio Control and Logging System
 //                      Rig Control
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2021
 //
-//
-//
-//
 /////////////////////////////////////////////////////////////////////////////
-
-
-
 
 #ifndef RADIOSETTINGDIALOG_H
 #define RADIOSETTINGDIALOG_H
@@ -22,7 +15,7 @@
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
 #include "rigutils.h"
-
+#include "ConfigurationOption.h"
 
 namespace Ui {
 class RadioSettingDialog;
@@ -67,12 +60,6 @@ private slots:
     void onPhonePresetLineEditingFinished(QString bandName, QLineEdit *le);
     void onMgmPresetLineEditingFinished(QString bandName, QLineEdit *le);
 
-
-
-    void onIgnorePresetFreqChecked(bool checked);
-    void onIgnorePreviousFreqChecked(bool checked);
-    void onTurnOffColourRadioFreqDialChkChanged(bool checked);
-    void onRestoreContestModeChecked(bool checked);
     void onBandSwLineEditingFinished();
     void onEnableBandSwChkBox();
     void onEnableSerialBandSwChkBox();
@@ -80,7 +67,7 @@ private slots:
     void on_PresetTabWidget_currentChanged(int index);
 private:
     Ui::RadioSettingDialog *ui;
-    //QStringList presetFreq;
+
     PresetFreq presetFreq;
     QVector<QSharedPointer<BandInfo> > bands;
     bool freqChanged = false;
@@ -107,8 +94,11 @@ private:
     QSharedPointer<RadioSettingsDialogChangeFlag> logRadioSettingsChangeFlag;
 
 
-    //bool checkInBand(Frequency freq, freqPresetData::bandOffSet band);
-    //void getFreq(QLineEdit* f_box, freqPresetData::bandOffSet band);
+    ConfigurationOption turnOffColourRadioFreqDial;
+    ConfigurationOption contestStartIgnorePresetFreq;
+    ConfigurationOption contestChangeIgnorePreviousFreq;
+    ConfigurationOption constestChangeRestoreContestMode;
+    ConfigurationOption CQRit;
 
     bool checkInBand(Frequency freq, const QString &band, const QString &mode);
     void getFreq(QLineEdit* f_box, int band);
@@ -117,13 +107,6 @@ private:
 
     void saveModePresetFreqSettings(QString mode, QSettings &config);
 
-
-
-
-
-    bool readRadioSettingsCheckBox(LOGGERPROFILE profile);
-    void saveRadioSettingsCheckBox(QCheckBox *chkbox, LOGGERPROFILE profile);
-    void saveRadioSettingsCheckBoxes();
     void saveBandSwData();
     void enableBandSwLineEdits(bool enabled);
     void saveBandSwComport();

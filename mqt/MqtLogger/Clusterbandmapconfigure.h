@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include "clustercommon.h"
+#include "ConfigurationOption.h"
 
 namespace Ui {
 class ClusterBandmapConfigure;
@@ -31,6 +32,12 @@ private slots:
     void on_ClusterBandmapConfiguretabWidget_currentChanged(int index);
 private:
     Ui::ClusterBandmapConfigure *ui;
+
+    ConfigurationOption BandMapTurnOffOperatingFreqStrip;
+    ConfigurationOption BandMapFollowRadioModeOperatingFreqStrip;
+    ConfigurationOption BandMapMouseInFrameDelay;
+    ConfigurationOption BandmapOldStyle;
+    ConfigurationOption BandMapShowDerivedLoc;
 
     struct distValue{
         QLineEdit *distLineEdit;

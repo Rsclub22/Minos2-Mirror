@@ -30,6 +30,7 @@ SOURCES += \
     AntennaState.cpp \
     BandList.cpp \
     CacheSelection.cpp \
+    ConfigurationOption.cpp \
     StartConfigManager.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
@@ -114,6 +115,7 @@ HEADERS += \
     AntennaDetail.h \
     AntennaState.h \
     BandList.h \
+    ConfigurationOption.h \
     StartConfigManager.h \
     bandmapmarkerdetails.h \
     base_pch.h \

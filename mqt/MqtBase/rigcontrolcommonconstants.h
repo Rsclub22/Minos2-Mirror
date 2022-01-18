@@ -314,6 +314,7 @@ public:
         enableBandSwitch = false;
         enableSerialBandSwitch = false;
         serialComport = false;
+        cqRit = false;
     }
 
     bool isChanged()
@@ -327,7 +328,8 @@ public:
         mgmPresetsChanged ||
         enableBandSwitch ||
         enableSerialBandSwitch ||
-        serialComport;
+        serialComport ||
+        cqRit;
     }
 
 
@@ -341,6 +343,7 @@ public:
     bool enableBandSwitch;
     bool enableSerialBandSwitch;
     bool serialComport;
+    bool cqRit;
 
 
 
