@@ -1532,7 +1532,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
 }
 
 //====================================================================
-void BaseContestLog::setStanza(unsigned int /*stanza*/, int /*stanzaStart*/ , int stanzaEnd)
+void BaseContestLog::setStanza(unsigned int /*stanza*/, int /*stanzaStart*/ , int /*stanzaEnd*/)
 {
    // not used in base log
    // Used in Logger to give file position of stanza
