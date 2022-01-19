@@ -61,7 +61,6 @@
            <widget class="QLabel" name="usingLbl">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -81,7 +80,6 @@
            <widget class="QLabel" name="radioNameDispLbl">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -196,7 +194,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="supportBandsLabel">
             <property name="text">
              <string>Supported Bands</string>
             </property>
@@ -256,7 +254,6 @@
              <property name="font">
               <font>
                <pointsize>12</pointsize>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -284,7 +281,6 @@
               <widget class="QLabel" name="ritFreq">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -350,7 +346,6 @@
              <property name="font">
               <font>
                <pointsize>12</pointsize>
-               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -451,7 +446,6 @@
               <widget class="QLabel" name="vfo_state_label">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -475,7 +469,6 @@
               <widget class="QLabel" name="modeA">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -499,7 +492,6 @@
               <widget class="QLabel" name="mgmMode">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
