@@ -24,11 +24,7 @@ void DefDirsDlg::initialise()
     QString deflist =TLogContainer::getDefaultDirectory(true);
     ui->listsDirEdit->setText(deflist);
 
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpAgeToProtectContests, cap);
-    ui->ageSpinner->setValue(cap);
-
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAgeProtectContests, doAge );
-    ui->ageCb->setChecked(doAge);
+    ConfAgeProtectContests.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAgeProtectContests, ui->ageCb);
 }
 bool DefDirsDlg::check()
 {
@@ -58,22 +54,17 @@ void DefDirsDlg::finalise()
 
         doSelectSession = true;
     }
-    bool ndoAge = ui->ageCb->isChecked();
-    if (doAge != ndoAge)
+    if (ConfAgeProtectContests.finalise())
     {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile(elpAgeProtectContests, ndoAge);
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
         doSelectSession = true;
     }
 
+    TContestApp::getContestApp() ->loggerBundle.flushProfile();
     if (doSelectSession)
     {
         TWaitCursor wc(this);
         LogContainer->selectSession(TContestApp::getContestApp()->currSession);
     }
-
-
 }
 
 QString DefDirsDlg::browseDefDir(const QString &prompt)

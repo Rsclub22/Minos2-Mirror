@@ -129,7 +129,7 @@ class BandList
         static BandList &getBandList();
 
 
-        void loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered = true);
+        bool loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered = true);
 
         static QString findBandNameFromIndex(int i, QVector<QSharedPointer<BandInfo> > &bands);
         bool isFreqOK(const Frequency &f, const QString &band, const QString &mode, bool &excludedFreq);

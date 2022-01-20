@@ -1211,11 +1211,17 @@ void BandmapView::drawBandMapSpots()
                 }
             }
         }
-        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-        if (tslf && tslf->getContest() == contest)
+        bool disablePlaceHolders;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisablePlaceHolders, disablePlaceHolders);
+
+        if (!disablePlaceHolders)
         {
-            nearMatches.sort();
-            tslf->setPlaceholders(nearMatches);
+            TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+            if (tslf && tslf->getContest() == contest)
+            {
+                nearMatches.sort();
+                tslf->setPlaceholders(nearMatches);
+            }
         }
     }
 }

@@ -265,10 +265,6 @@ private:
 
     QString getRunMemoryFreq(int memoryNumber);
 
-    bool getTuneAddBandMapSetting();
-    void setTuneAddBandMapSetting(bool state);
-
-    void setTuningAddMapChkBoxState();
     void setBandmapControlsState();
     void setClusterSendSpotControlsState();
     void setBandMapControlsDisabled(bool disabled);
@@ -280,6 +276,7 @@ private:
     void checkQRZClusterBandmapShowing();
     void doShowOperators(bool so);
     
+    bool readTuneAddBandMapSetting();
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
@@ -331,7 +328,6 @@ private slots:
 
     void on_FreqChanged(Frequency f);
 
-    void tuningAddMapChkBoxStateChange(int state);
     void onQrzButtonClicked();
     void on_callRb_clicked();
 

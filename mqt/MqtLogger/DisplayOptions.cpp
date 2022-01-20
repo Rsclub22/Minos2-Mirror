@@ -22,20 +22,34 @@ DisplayOptions::~DisplayOptions()
 
 void DisplayOptions::initialise()
 {
-    so = LogContainer->isShowOperators();
-    ui->ShowOperatorscb->setChecked(so);
+    ShowOperators.initialise(&TContestApp::getContestApp() ->displayBundle, edpShowOperators, ui->ShowOperatorscb);
+    ReadabilityInit.initialise(&TContestApp::getContestApp() ->loggerBundle, elpReadabilityInit, ui->ReadabilityAutofillcb);
+    AutoFill.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAutoFill, ui->ReportAutofillcb);
+    TabforSandP.initialise(&TContestApp::getContestApp() ->loggerBundle, elpTabforSandP, ui->TabSandPActioncb);
+    SeparateIcons.initialise(&TContestApp::getContestApp() ->displayBundle, edpSeparateIcons, ui->separateIconsCb);
+    ShowAuxHeaders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowAuxHeaders, ui->ShowAuxHeadersCheckBox);
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpReadabilityInit, reportReadabilityInitialise );
-    ui->ReadabilityAutofillcb->setChecked(reportReadabilityInitialise);
+#ifndef Q_OS_WIN
+    ui->separateIconsCb->hide();
+#endif
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpAutoFill, reportStrengthAutoFill );
-    ui->ReportAutofillcb->setChecked(reportStrengthAutoFill);
+    int temp;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpShowOperateTime, temp);
+    sot = static_cast<SHOWOPERATINGTIME>(temp);
+    switch(sot)
+    {
+    default:
+    case otNone:
+        ui->otNonerb->setChecked(true);
+        break;
+    case otRSGB:
+        ui->otRSGBrb->setChecked(true);
+        break;
+    case otIARU:
+        ui->otIARUrb->setChecked(true);
+        break;
+    }
 
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, TabSandP );
-    ui->TabSandPActioncb->setChecked(TabSandP);
-
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowAuxHeaders, showAuxHeaders );
-    ui->ShowAuxHeadersCheckBox->setChecked(showAuxHeaders);
 
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
     ui->ListCompressionSpinner->setValue(lcf);
@@ -64,22 +78,6 @@ void DisplayOptions::initialise()
     ui->LanguageComboBox->addItems(sl);
     ui->LanguageComboBox->setCurrentIndex(currLang);
 
-    int temp;
-    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpShowOperateTime, temp);
-    sot = static_cast<SHOWOPERATINGTIME>(temp);
-    switch(sot)
-    {
-    default:
-    case otNone:
-        ui->otNonerb->setChecked(true);
-        break;
-    case otRSGB:
-        ui->otRSGBrb->setChecked(true);
-        break;
-    case otIARU:
-        ui->otIARUrb->setChecked(true);
-        break;
-    }
 
     ui->ls->setValue(ls);
 
@@ -94,11 +92,6 @@ void DisplayOptions::initialise()
     TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
     ui->cmb->setValue(cmb);
 
-    TContestApp::getContestApp()->getBoolDisplayProfile(edpSeparateIcons, sepIcons);
-    ui->separateIconsCb->setChecked(sepIcons);
-#ifndef Q_OS_WIN
-    ui->separateIconsCb->hide();
-#endif
 }
 bool DisplayOptions::check()
 {
@@ -112,45 +105,25 @@ void DisplayOptions::finalise()
 {
     bool doSelectSession = false;
 
-    bool nso = ui->ShowOperatorscb->isChecked();
-    if (nso != so)
+    if (ShowOperators.finalise())
     {
-        TContestApp::getContestApp() ->displayBundle.setBoolProfile( edpShowOperators, nso );
-        TContestApp::getContestApp() ->displayBundle.flushProfile();
         MinosLoggerEvents::SendShowOperators();
     }
-
-    bool rinit = ui->ReadabilityAutofillcb->isChecked();
-    if (reportReadabilityInitialise != rinit)
+    ReadabilityInit.finalise();
+    AutoFill.finalise();
+    if (TabforSandP.finalise())
     {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpReadabilityInit, rinit );
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-    }
-
-    bool nautoFill = ui->ReportAutofillcb->isChecked();
-    if (reportStrengthAutoFill != nautoFill)
-    {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpAutoFill, nautoFill );
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-    }
-
-    bool nTabSandP = ui->TabSandPActioncb->isChecked();
-    if (TabSandP != nTabSandP)
-    {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpTabforSandP, nTabSandP );
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
         MinosLoggerEvents::SendTabSandP();
     }
-    bool nShowAuxHeaders = ui->ShowAuxHeadersCheckBox->isChecked();
-    if (showAuxHeaders != nShowAuxHeaders)
+    if (SeparateIcons.finalise())
     {
-        TContestApp::getContestApp() ->loggerBundle.setBoolProfile( elpShowAuxHeaders, nShowAuxHeaders );
-        TContestApp::getContestApp() ->loggerBundle.flushProfile();
-
-        MinosLoggerEvents::SendShowAuxHeaders();
+        doSelectSession = true;
     }
 
+    if (ShowAuxHeaders.finalise())
+    {
+        MinosLoggerEvents::SendShowAuxHeaders();
+    }
     SHOWOPERATINGTIME nsot = otNone;
     if (ui->otNonerb->isChecked())
     {
@@ -231,12 +204,6 @@ void DisplayOptions::finalise()
         sendMargins = true;
     }
 
-    bool sepIconcb = ui->separateIconsCb->isChecked();
-    if (sepIconcb != sepIcons)
-    {
-        TContestApp::getContestApp()->setBoolDisplayProfile(edpSeparateIcons, sepIconcb);
-        doSelectSession = true;
-    }
     if (doBounceOnExit)
     {
         TWaitCursor wc(this);

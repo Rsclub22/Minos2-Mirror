@@ -37,6 +37,13 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
+              <widget class="QCheckBox" name="tuningAddMapcb">
+               <property name="text">
+                <string>Tuning - add to map</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QSpinBox" name="addBandmapTuningTolSpinBox"/>
              </item>
             </layout>
@@ -62,6 +69,27 @@
             </spacer>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="disableNotShowncb">
+           <property name="text">
+            <string>Disable Bandmap when not shown</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="disableLoggedCallscb">
+           <property name="text">
+            <string>Disable adding logged Calls to bandmap</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="disablePlaceHolderscb">
+           <property name="text">
+            <string>Disable setting placeholders from current frequency on bandmap</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QCheckBox" name="operatingFreqChkBox">

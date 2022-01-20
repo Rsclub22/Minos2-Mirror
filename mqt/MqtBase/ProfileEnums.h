@@ -60,10 +60,15 @@ enum LOGGERPROFILE {
    elpShowOperateTime,
    elpTabforSandP,
    elpShowAuxHeaders,
+
    elpAgeProtectContests,
    elpAgeToProtectContests,
    elpBandmapOldStyle,
+   elpAddBandMapTuningEnable,
    elpAddBandMapTuningTolerance,
+   elpBandMapDisableNotShown,
+   elpBandMapDisableLoggedCalls,
+   elpBandMapDisablePlaceHolders,
    elpCQRit,
 
    elpContestStartIgnorePresetFreq,
@@ -93,12 +98,12 @@ enum DISPLAYPROFILE {edpShowContinentEU, edpShowContinentAS,
                      edpProtectedLayout,
                      edpListCompression,
                      edpQSOFieldFont,
+                     edpSeparateIcons,
                      edpls,
                      edpcml,
                      edpcmt,
                      edpcmr,
-                     edpcmb,
-                     edpSeparateIcons
+                     edpcmb
                     };
 enum ENTRYPROFILE {eepCall,
                    eepMainOp, eepSecondOp,
