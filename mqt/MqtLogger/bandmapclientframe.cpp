@@ -689,7 +689,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     BandList blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
 
-    for(const auto &bi: blist.bandList)
+    for(const auto &bi: qAsConst(blist.bandList))
     {
         if (bi->uk == contestBandStr)
         {
@@ -905,6 +905,19 @@ void BandmapClientFrame::checkNewBandMapSpots()
     if (!ct || ct->isReadOnly())
         return;
 
+    if (!isVisible())
+    {
+        bool disableNotShown;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisableNotShown, disableNotShown);
+
+        if (disableNotShown)
+        {
+            spotQueue.clear();
+            logSpotQueue.clear();
+            return;
+        }
+    }
+
     bandmapView->setSuppressUpdate(true);
     bool doUpdate = false;
     // any cluster spots
@@ -923,15 +936,20 @@ void BandmapClientFrame::checkNewBandMapSpots()
     // any logger spots
     if (!logSpotQueue.isEmpty())
     {
-        for (int i = 0; i < logSpotQueue.count(); i++)
+        bool disableLoggedCalls;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisableLoggedCalls, disableLoggedCalls);
+        if (!disableLoggedCalls)
         {
-            traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
-                     .arg(logSpotQueue[i]->spotName())
-                     .arg(logSpotQueue[i]->getDxCallStr())
-                     .arg(logSpotQueue[i]->getFreq().traceStr())
-                     .arg(logSpotQueue[i]->getDxLocator()));
-            addLogSpotToBandmapTable(logSpotQueue[i]);
-            doUpdate = true;
+            for (int i = 0; i < logSpotQueue.count(); i++)
+            {
+                traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
+                         .arg(logSpotQueue[i]->spotName())
+                         .arg(logSpotQueue[i]->getDxCallStr())
+                         .arg(logSpotQueue[i]->getFreq().traceStr())
+                         .arg(logSpotQueue[i]->getDxLocator()));
+                addLogSpotToBandmapTable(logSpotQueue[i]);
+                doUpdate = true;
+            }
         }
         logSpotQueue.clear();
     }
@@ -1985,29 +2003,6 @@ void BandmapClientFrame::updateZoom(bool dir)
 void BandmapClientFrame::traceMsg(QString msg)
 {
     trace(QString("[bandmapFrame] %1").arg(msg));
-}
-
-void BandmapClientFrame::saveTuneAddBandMapSetting(bool state)
-{
-    QString fileName = BANDMAP_INI_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-    config.beginGroup("Bandmap");
-    config.setValue("TuneAddBandmap", state);
-
-    config.endGroup();
-}
-
-bool BandmapClientFrame::readTuneAddBandMapSetting()
-{
-    QString fileName = BANDMAP_INI_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-    config.beginGroup("Bandmap");
-    bool state = config.value("TuneAddBandmap", true).toBool();
-    config.endGroup();
-
-    return state;
 }
 
 void BandmapClientFrame::saveBandmapZoomLevel(int &level)

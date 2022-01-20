@@ -144,10 +144,6 @@ public:
     void on_SetBandList(QString s, PubSubName psn);
     void on_SetTransVertEnabled(bool status, PubSubName psn);
 
-    void setTuneAddBandMapSetting(bool state);
-    bool getTuneAddBandMapSetting();
-
-
     void on_SupportStopCommand(bool state);
     void setPauseRigControlUpdatesFlag(bool status);
     void sendRigTxVoiceMessage(QString msgNum);
