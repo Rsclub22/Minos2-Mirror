@@ -130,8 +130,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &QSOLogFrame::on_FontChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &QSOLogFrame::on_QSOMargins);
 
-    connect(ui->tuningAddMapChkBox, &QCheckBox::stateChanged, this, &QSOLogFrame::tuningAddMapChkBoxStateChange);
-
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
 
     if (addToBandmapTuneTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addToBandmapTuneTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
@@ -3129,64 +3127,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
 }
 
 //---------------------------------------------------------
-void QSOLogFrame::tuningAddMapChkBoxStateChange(int state)
-{
-
-
-    if (state == Qt::Checked)
-    {
-        if (!getTuneAddBandMapSetting())
-        {
-            setTuneAddBandMapSetting(true);
-        }
-
-    }
-    else
-    {
-        if (getTuneAddBandMapSetting())
-        {
-            setTuneAddBandMapSetting(false);
-        }
-
-    }
-}
-
-void QSOLogFrame::setTuningAddMapChkBoxState()
-{
-    bool state = getTuneAddBandMapSetting();
-    if (state != ui->tuningAddMapChkBox->isChecked())
-    {
-        if (state)
-        {
-            ui->tuningAddMapChkBox->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            ui->tuningAddMapChkBox->setCheckState(Qt::Unchecked);
-        }
-    }
-
-}
-
-bool QSOLogFrame::getTuneAddBandMapSetting()
-{
-    bool state = false;
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->isBandMapLoaded())
-    {
-        state = tslf->getTuneAddBandMapSetting();
-    }
-    return state;
-}
-
-void QSOLogFrame::setTuneAddBandMapSetting(bool state)
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->isBandMapLoaded())
-    {
-        tslf->setTuneAddBandMapSetting(state);
-    }
-}
 
 void QSOLogFrame::on_SpotLastLoggedPbClicked()
 {
@@ -3466,7 +3406,6 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
-    ui->tuningAddMapChkBox->setVisible(visible);
     bandmapControlsVisible = visible;
     checkQRZClusterBandmapShowing();
 }
@@ -3475,7 +3414,6 @@ void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
 {
     ui->bandmapMarkFreqPb->setDisabled(disabled);
     ui->bandmapSaveFreqPb->setDisabled(disabled);
-    ui->tuningAddMapChkBox->setDisabled(disabled);
 }
 
 
@@ -3510,7 +3448,6 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
     if (contest && !contest->isReadOnly() && tslf && tslf->isBandMapLoaded())
     {
         setBandmapControlsState();
-        setTuningAddMapChkBoxState();
     }
     else
     {
@@ -3622,7 +3559,7 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(Frequency f)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
+    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && readTuneAddBandMapSetting())
     {
         qint64 dialFreq = qint64(f) / 1000;
         qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
@@ -3666,3 +3603,9 @@ void QSOLogFrame::on_callRb_clicked()
     }
 }
 
+bool QSOLogFrame::readTuneAddBandMapSetting()
+{
+    bool state;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnable, state);
+    return state;
+}

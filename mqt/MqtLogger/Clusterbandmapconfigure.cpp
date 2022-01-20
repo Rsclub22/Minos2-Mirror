@@ -126,6 +126,11 @@ void ClusterBandmapConfigure::initialise()
 
      ui->addBandmapTuningTolSpinBox->setValue(addBandmapTuningTolerance);
 
+     tuningAddMap.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAddBandMapTuningEnable, ui->tuningAddMapcb);
+     disableNotShown.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisableNotShown, ui->disableNotShowncb);
+     disableLoggedCalls.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisableLoggedCalls, ui->disableLoggedCallscb);
+     disablePlaceHolders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapDisablePlaceHolders, ui->disablePlaceHolderscb);
+
      BandMapTurnOffOperatingFreqStrip.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapTurnOffOperatingFreqStrip, ui->operatingFreqChkBox);
      BandMapFollowRadioModeOperatingFreqStrip.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapFollowRadioModeOperatingFreqStrip, ui->modeOperatingFreqChkBox);
      BandMapMouseInFrameDelay.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapMouseInFrameDelay, ui->mouseInBcb);
@@ -145,6 +150,11 @@ void ClusterBandmapConfigure::finalise()
     saveDistances();
 
     TContestApp::getContestApp()->loggerBundle.setIntProfile(elpAddBandMapTuningTolerance, ui->addBandmapTuningTolSpinBox->value());
+
+    tuningAddMap.finalise();
+    disableNotShown.finalise();
+    disableLoggedCalls.finalise();
+    disablePlaceHolders.finalise();
 
     BandMapTurnOffOperatingFreqStrip.finalise();
     BandMapFollowRadioModeOperatingFreqStrip.finalise();

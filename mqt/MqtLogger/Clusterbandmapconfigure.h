@@ -33,6 +33,11 @@ private slots:
 private:
     Ui::ClusterBandmapConfigure *ui;
 
+    ConfigurationOption tuningAddMap;
+    ConfigurationOption disableNotShown;
+    ConfigurationOption disableLoggedCalls;
+    ConfigurationOption disablePlaceHolders;
+
     ConfigurationOption BandMapTurnOffOperatingFreqStrip;
     ConfigurationOption BandMapFollowRadioModeOperatingFreqStrip;
     ConfigurationOption BandMapMouseInFrameDelay;
