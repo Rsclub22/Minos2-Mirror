@@ -322,6 +322,13 @@ when user selected</string>
             </widget>
            </item>
            <item>
+            <widget class="QLabel" name="pauseLabel">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QLineEdit" name="messageFilter">
              <property name="toolTip">
               <string>Look for any of these strings (space separated) in messages</string>
@@ -338,13 +345,6 @@ when user selected</string>
              </property>
              <property name="text">
               <string>X</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="pauseLabel">
-             <property name="text">
-              <string/>
              </property>
             </widget>
            </item>
