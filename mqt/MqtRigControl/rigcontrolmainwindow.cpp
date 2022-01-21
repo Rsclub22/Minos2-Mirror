@@ -2758,15 +2758,17 @@ void RigControlMainWindow::buildSupBandList(scatParams *radioData, QStringList &
         trace(QString("[buildSupBandList] - Transverters enabled - look for configured transverters"));
         for (auto const &b: qAsConst(bands))
         {
-            if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioData))
+            bool transVertFound = findSupTransBand(b->name(), radioData);
+            if (findSupRadioBand(b->name(), supBandsList) ||  transVertFound)
             {
-                trace(QString("[buildSupBandList] - Transverter Found for band = %1").arg(b->name()));
+                if (transVertFound)
+                {
+                    trace(QString("[buildSupBandList] - Transverter Found for band = %1").arg(b->name()));
+                }
+
                 bandList.append(b->name());
             }
-            else
-            {
-                trace(QString("[buildSupBandList] - No Transverter Found for band = %1").arg(b->name()));
-            }
+
         }
 
     }
