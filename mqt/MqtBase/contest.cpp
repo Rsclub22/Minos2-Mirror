@@ -375,6 +375,12 @@ void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) 
    if ( co < 0.0 )
       ca = pi - ca ;
    double dx = 6371.291 * ca ;       /* 6371.291 is approved radius of earth */
+#ifndef DIAGNOSTICS
+   if (dx > 5000)
+   {
+       dx += 1.0;
+   }
+#endif
 
    // and then the bearing
 
@@ -800,6 +806,7 @@ void BaseContestLog::scanContest( )
        m.count = 0;
    }
 
+   validateLoc();
 
    for(auto const &wnct: qAsConst(ctList))
    {

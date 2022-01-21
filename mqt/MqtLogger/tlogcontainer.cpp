@@ -1425,7 +1425,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          {
             if ( ced->exec() == QDialog::Accepted )
             {
-               contest->scanContest();
                show = true;
             }
             else
@@ -1438,13 +1437,13 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
       }
       else
       {
-         contest->scanContest();
          show = true;
       }
 
       if ( show )
       {
          TContestApp::getContestApp() ->setCurrentContest( contest );
+         contest->scanContest();
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
 
