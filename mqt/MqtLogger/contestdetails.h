@@ -43,6 +43,9 @@ private:
    FocusWatcher *PowerEditFW;
    FocusWatcher *MainOpComboBoxFW;
 
+   FocusWatcher *allowLoc4FW;
+   FocusWatcher *allowLoc8FW;
+
    QWidget * getNextFocus();
    void setDetails( const IndividualContest &ic );
    void setDetails( );
