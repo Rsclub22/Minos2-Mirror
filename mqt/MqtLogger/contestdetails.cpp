@@ -1100,26 +1100,14 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
 
         contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
         contestTransferObject->validateLoc();
-        bool locOk = true;
-        if (contestTransferObject->locatorMandatoryField.getValue())
+        bool locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
+        if (locOk)
         {
-            locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
-            if (locOk)
+            locOk = false;
+            int locLen = contestTransferObject->myloc.getLoc().length();
+            if (locLen == 6 || locLen == 8)
             {
-                locOk = false;
-                int locLen = contestTransferObject->myloc.getLoc().length();
-                if (locLen == 4 && contestTransferObject->allowLoc4.getValue())
-                {
-                    locOk = true;
-                }
-                else if (locLen == 6)
-                {
-                    locOk = true;
-                }
-                if (locLen == 8 && contestTransferObject->allowLoc8.getValue())
-                {
-                    locOk = true;
-                }
+                locOk = true;
             }
         }
 
@@ -1229,26 +1217,14 @@ QWidget * ContestDetails::getDetails( )
 
     contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
     contestTransferObject->validateLoc();
-    bool locOk = true;
-    if (contestTransferObject->locatorMandatoryField.getValue())
+    bool locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
+    if (locOk)
     {
-        locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
-        if (locOk)
+        locOk = false;
+        int locLen = contestTransferObject->myloc.getLoc().length();
+        if (locLen == 6 || locLen == 8)
         {
-            locOk = false;
-            int locLen = contestTransferObject->myloc.getLoc().length();
-            if (locLen == 4 && contestTransferObject->allowLoc4.getValue())
-            {
-                locOk = true;
-            }
-            else if (locLen == 6)
-            {
-                locOk = true;
-            }
-            if (locLen == 8 && contestTransferObject->allowLoc8.getValue())
-            {
-                locOk = true;
-            }
+            locOk = true;
         }
     }
 

@@ -59,8 +59,8 @@
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="305"/>
-        <location filename="../clustermainwindow.ui" line="442"/>
-        <location filename="../clustermainwindow.ui" line="572"/>
+        <location filename="../clustermainwindow.ui" line="448"/>
+        <location filename="../clustermainwindow.ui" line="589"/>
         <source>HF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -95,82 +95,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="421"/>
+        <location filename="../clustermainwindow.ui" line="423"/>
         <source>Filter Server Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="469"/>
+        <location filename="../clustermainwindow.ui" line="475"/>
         <source>VHF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="496"/>
+        <location filename="../clustermainwindow.ui" line="502"/>
         <source>MW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="537"/>
+        <location filename="../clustermainwindow.ui" line="554"/>
         <source>Filter Spots Sent to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="558"/>
+        <location filename="../clustermainwindow.ui" line="575"/>
         <source>Override Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="607"/>
+        <location filename="../clustermainwindow.ui" line="624"/>
         <source>HF Filter On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="621"/>
+        <location filename="../clustermainwindow.ui" line="638"/>
         <source>VHF/MW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="656"/>
+        <location filename="../clustermainwindow.ui" line="673"/>
         <source>VHF/MW Filter On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="722"/>
+        <location filename="../clustermainwindow.ui" line="542"/>
         <source>Save Band Filter Settings on Cluster Server Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="743"/>
+        <location filename="../clustermainwindow.ui" line="755"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="749"/>
+        <location filename="../clustermainwindow.ui" line="761"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="756"/>
+        <location filename="../clustermainwindow.ui" line="768"/>
         <source>Actions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="775"/>
+        <location filename="../clustermainwindow.ui" line="787"/>
         <source>Setup</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="780"/>
+        <location filename="../clustermainwindow.ui" line="792"/>
         <source>Clear All Spots</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="785"/>
+        <location filename="../clustermainwindow.ui" line="797"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.ui" line="790"/>
+        <location filename="../clustermainwindow.ui" line="802"/>
         <source>User Command Shortcuts</source>
         <translation type="unfinished"></translation>
     </message>

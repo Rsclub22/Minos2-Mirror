@@ -1438,6 +1438,7 @@ void RigSetupForm::setEnableDisableCatFeaturesGroupVisible(bool visible)
 
 void RigSetupForm::initSupBandsChkBoxs()
 {
+
     QGridLayout *gl = new QGridLayout();
     ui->supBandsFrame->setLayout(gl);
     for (const auto &b: qAsConst(bands))
@@ -1451,6 +1452,8 @@ void RigSetupForm::initSupBandsChkBoxs()
         allSupBandsChkBoxesMap.insert(b->name(), scbd);
     }
 
+
+
     int mod = (allSupBandsChkBoxList.count() + 2)/3;
     int row = 0;
     int col = 0;
@@ -1458,13 +1461,18 @@ void RigSetupForm::initSupBandsChkBoxs()
     {
         gl->addWidget(allSupBandsChkBoxList[i], row, col);
         col++;
-        if (col%mod == 0)
+        if (col % mod == 0)
         {
             row++;
             col = 0;
         }
         connect(allSupBandsChkBoxList[i], &QCheckBox::stateChanged, this, [=](int state) {onSupbandCheckBoxStateChanged(i, state);});
     }
+
+    ui->supportedBandGroupBox->setTitle(tr("Omnirig Supported Bands - Please select the bands available on radio"));
+
+
+
 }
 
 
@@ -1507,16 +1515,15 @@ void RigSetupForm::setSupportBandChkBox(QString band, bool checked)
 
 void RigSetupForm::setSupportBandCheckBoxVisible(bool visible)
 {
-    for (const auto &b: qAsConst(bands))
+    for (const auto &b: qAsConst(bands))   // do we need this as the visibility of the groupbox manages the individual checkboxes
     {
        if (allSupBandsChkBoxesMap.contains(b->name()))
        {
             allSupBandsChkBoxesMap.value(b->name()).supBandChkBox->setVisible(visible);
-
        }
     }
     ui->supportedBandGroupBox->setVisible(visible);
-    ui->nativeBandLabel->setVisible(visible);
+    //ui->nativeBandLabel->setVisible(visible);
 }
 
 bool RigSetupForm::isAnySupportBandChecked()

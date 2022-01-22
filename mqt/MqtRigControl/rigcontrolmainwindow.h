@@ -290,7 +290,7 @@ private:
 
 
 
-    bool radioCommsOK;
+    bool radioCommsOK = false;
 
     bool ritTestEnabled = false; // for test....
 

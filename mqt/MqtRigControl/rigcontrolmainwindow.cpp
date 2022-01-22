@@ -142,8 +142,8 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     }
 
 
-    //if (appName.length() > 0)
-    //{
+    if (appName.length() > 0)
+    {
         // init cache with radio data
         trace(QString("rigcontrol: Started by logger appname = %1").arg(appName));
         QStringList availRadios;
@@ -153,7 +153,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
         initCacheData(availRadios);
         msg->rigCache.publish();
 
-   // }
+    }
 
     serialTVSw = new SerialTVSwitch();     // create local serial sw
 
@@ -543,7 +543,6 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     currentRadioName = radioName;
     updateCurrentRadioFromAvailRadios(currentRadioName);
 
-    dumpRadioToTraceLog();
 
     if (currentRadio.rigCtldEnable)
     {
@@ -563,6 +562,8 @@ void RigControlMainWindow::upDateRadio(QString radioName)
     {
         //initCacheData();
         int retCode;
+
+        dumpRadioToTraceLog();
 
         selectedRigSupCap->supportGetVfo = radio->supportReadVfo(currentRadio.rigModelNumber);
         trace(QString("Supports reading Vfo = %1").arg(selectedRigSupCap->supportGetVfo ? "true" : "false"));
@@ -2741,18 +2742,27 @@ void RigControlMainWindow::buildSupBandList(scatParams *radioData, QStringList &
     if(radioData->transVertEnable)
     {
 
+        trace(QString("[buildSupBandList] - Transverters enabled - look for configured transverters"));
         for (auto const &b: qAsConst(bands))
         {
-            if (findSupRadioBand(b->name(), supBandsList) ||  findSupTransBand(b->name(), radioData))
+            bool transVertFound = findSupTransBand(b->name(), radioData);
+            if (findSupRadioBand(b->name(), supBandsList) ||  transVertFound)
             {
+                if (transVertFound)
+                {
+                    trace(QString("[buildSupBandList] - Transverter Found for band = %1").arg(b->name()));
+                }
+
                 bandList.append(b->name());
             }
+
         }
 
     }
     else
     {
         // no transverters enabled
+        trace(QString("[buildSupBandList] - Transverters not enabled"));
         bandList = supBandsList;
     }
 
@@ -2767,24 +2777,38 @@ void RigControlMainWindow::buildSupportedRadioBands(scatParams *radioData, QStri
 
     if (radioData->rigModelNumber <= RigId::NonHamlibBaseId)
     {
+        trace(QString("[buildSupportedRadioBands] - hamlib radios"));
         for (const auto &b: qAsConst(bands))
         {
 
+
             if (rigFactory->checkForBands(radioData->rigModelNumber, b->fLow))
             {
+                trace(QString("[buildSupportedRadioBands] - Radio supports band = %1").arg(b->uk));
                 supBandList.append(b->name());
 
+            }
+            else
+            {
+                trace(QString("[buildSupportedRadioBands] - Radio Does not support band = %1").arg(b->uk));
             }
         }
     }
     else
     {
+        trace(QString("[buildSupportedRadioBands] - non hamlib radios"));
         // non hamlib radios
         for (const auto &b: qAsConst(bands))
         {
+
             if (radioData->supportBands.getSupportBandFlag(b->name()))
             {
+               trace(QString("[buildSupportedRadioBands] - Radio supports band = %1").arg(b->uk));
                supBandList.append(b->name());
+            }
+            else
+            {
+                trace(QString("[buildSupportedRadioBands] - Radio Does not support band or supported band not set for band = %1").arg(b->uk));
             }
         }
 
@@ -4880,22 +4904,34 @@ void RigControlMainWindow::updateSupportedRadioIndicators()
     // turn on supported bands
     if (!currentRadio.radioTransSupBands.isEmpty())
     {
+        trace(QString("[updateSupportedRadioIndicators] - bands available for indicators"));
         for (int i = 0; i < currentRadio.radioTransSupBands.count(); i++)
         {
+            trace(QString("[updateSupportedRadioIndicators] - turn on Radio Indicator for band = %1").arg(currentRadio.radioTransSupBands[i]));
             supRadioIndToggle(currentRadio.radioTransSupBands[i], displayIndicator::RADIO);
         }
+    }
+    else
+    {
+        trace(QString("[updateSupportedRadioIndicators] - radioTransSupBands is empty"));
     }
 
 
     // turn on supported transverters
     if (!currentRadio.transVertSettings.isEmpty())
     {
+        trace(QString("[updateSupportedRadioIndicators] - transverters available"));
         QStringList tvList = currentRadio.transVertSettings.keys();
         for(const auto &tv: qAsConst(tvList))
         {
+            trace(QString("[updateSupportedRadioIndicators] - turn on Transverter Indicator for band = %1").arg(currentRadio.transVertSettings.value(tv)->band));
             supRadioIndToggle(currentRadio.transVertSettings.value(tv)->band, displayIndicator::TRANSVERT);
 
         }
+    }
+    else
+    {
+        trace(QString("[updateSupportedRadioIndicators] - No transverters available"));
     }
 
 
