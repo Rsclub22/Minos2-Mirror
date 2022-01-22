@@ -236,7 +236,7 @@
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="169"/>
-        <location filename="../kstmainwindow.ui" line="340"/>
+        <location filename="../kstmainwindow.ui" line="347"/>
         <location filename="../kstmainwindow.ui" line="396"/>
         <source>X</source>
         <translation type="unfinished"></translation>
@@ -290,12 +290,12 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="327"/>
+        <location filename="../kstmainwindow.ui" line="334"/>
         <source>Look for any of these strings (space separated) in messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="337"/>
+        <location filename="../kstmainwindow.ui" line="344"/>
         <location filename="../kstmainwindow.ui" line="393"/>
         <source>Clear the message filters</source>
         <translation type="unfinished"></translation>
