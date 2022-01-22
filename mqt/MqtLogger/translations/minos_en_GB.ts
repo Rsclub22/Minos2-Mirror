@@ -268,27 +268,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1695"/>
+        <location filename="../bandmapclientframe.cpp" line="1713"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1427"/>
+        <location filename="../bandmapclientframe.cpp" line="1445"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1460"/>
+        <location filename="../bandmapclientframe.cpp" line="1478"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1470"/>
+        <location filename="../bandmapclientframe.cpp" line="1488"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1587"/>
+        <location filename="../bandmapclientframe.cpp" line="1605"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,38 +296,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1361"/>
+        <location filename="../bandmapview.cpp" line="1367"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1391"/>
+        <location filename="../bandmapview.cpp" line="1397"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1482"/>
+        <location filename="../bandmapview.cpp" line="1488"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1499"/>
+        <location filename="../bandmapview.cpp" line="1505"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1527"/>
+        <location filename="../bandmapview.cpp" line="1533"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1530"/>
+        <location filename="../bandmapview.cpp" line="1536"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1537"/>
+        <location filename="../bandmapview.cpp" line="1543"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -366,57 +366,77 @@ The mode is %2</source>
 <context>
     <name>ClusterBandmapConfigure</name>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="97"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="125"/>
         <source>Old Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="133"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="161"/>
         <source>HF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="69"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="97"/>
         <source>Turn Off Operating Frequency Colour Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="42"/>
+        <source>Tuning - add to map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../Clusterbandmapconfigure.ui" line="76"/>
-        <source>Operating Frequency Colour Band Follow Radio Mode </source>
+        <source>Disable Bandmap when not shown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
-        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
+        <source>Disable adding logged Calls to bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
+        <source>Disable setting placeholders from current frequency on bandmap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="104"/>
+        <source>Operating Frequency Colour Band Follow Radio Mode </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="111"/>
+        <source>Display Locators in Cluster Spots  Derived from QRZ or Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../Clusterbandmapconfigure.ui" line="118"/>
         <source>Delay updates when mouse pointer is in the Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="123"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="151"/>
         <source>Cluster/Bandmap Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="162"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="190"/>
         <source>VHF/UHF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="189"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="217"/>
         <source>Default Distance when creating a new contest, you can change the distance during a contest, using the Filter Button.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="200"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="228"/>
         <source>Spot Less Than Distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="207"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="235"/>
         <source>Spot Greater Than Distance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -426,7 +446,7 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.ui" line="47"/>
+        <location filename="../Clusterbandmapconfigure.ui" line="54"/>
         <source>Add Spot to Bandmap Tuning Tolerance khz</source>
         <translation type="unfinished"></translation>
     </message>
@@ -436,12 +456,12 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="189"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="186"/>
         <source>Distance Error - %1. Please enter a distance %2 to max %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../Clusterbandmapconfigure.cpp" line="190"/>
+        <location filename="../Clusterbandmapconfigure.cpp" line="187"/>
         <source>Distance Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -963,12 +983,12 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="674"/>
+        <location filename="../LoggerContacts.cpp" line="694"/>
         <source>GJV file should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="780"/>
+        <location filename="../LoggerContacts.cpp" line="800"/>
         <source>Invalid block number in contact block</source>
         <translation type="unfinished"></translation>
     </message>
@@ -982,13 +1002,13 @@ The mode is %2</source>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="72"/>
-        <location filename="../contestdetails.cpp" line="1575"/>
+        <location filename="../contestdetails.cpp" line="1611"/>
         <source>HF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../contestdetails.ui" line="79"/>
-        <location filename="../contestdetails.cpp" line="1604"/>
+        <location filename="../contestdetails.cpp" line="1640"/>
         <source>VHF Calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1254,23 +1274,23 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="128"/>
+        <location filename="../contestdetails.cpp" line="136"/>
         <source>QTH</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="129"/>
+        <location filename="../contestdetails.cpp" line="137"/>
         <source>Station</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="130"/>
+        <location filename="../contestdetails.cpp" line="138"/>
         <source>Entry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="218"/>
-        <location filename="../contestdetails.cpp" line="515"/>
+        <location filename="../contestdetails.cpp" line="226"/>
+        <location filename="../contestdetails.cpp" line="523"/>
         <source>Details of Contest Entry - %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1280,14 +1300,14 @@ Score between 4 fig loc centres</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1490"/>
+        <location filename="../contestdetails.cpp" line="1526"/>
         <source>This contest will be marked as protected.<byte value="xd"/>
 This is a permanent change that may be temporarily overridden.<byte value="xd"/>
 Please confirm this change by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1538"/>
+        <location filename="../contestdetails.cpp" line="1574"/>
         <source>These settings are groups of settings that can be applied to a contest all in one go.<byte value="xd"/>
 <byte value="xd"/>
 There are four basic groups: - <byte value="xd"/>
@@ -1311,17 +1331,17 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1632"/>
+        <location filename="../contestdetails.cpp" line="1668"/>
         <source>Microwave Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1774"/>
+        <location filename="../contestdetails.cpp" line="1810"/>
         <source>Are you sure you want to protect this contest?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contestdetails.cpp" line="1781"/>
+        <location filename="../contestdetails.cpp" line="1817"/>
         <source>Are you sure you want to disable protection for this contest?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1569,12 +1589,12 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="113"/>
+        <location filename="../defdirsdlg.cpp" line="104"/>
         <source>Set Default Logs Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../defdirsdlg.cpp" line="122"/>
+        <location filename="../defdirsdlg.cpp" line="113"/>
         <source>Set Default Lists Directory</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1697,7 +1717,7 @@ Move between components of a group using the mouse or up/down arrow keys.<byte v
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../DisplayOptions.cpp" line="252"/>
+        <location filename="../DisplayOptions.cpp" line="225"/>
         <source>Font setting will not work while the QT_QPA_PLATFORMTHEME environment variable is set to qt5ct</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1917,68 +1937,68 @@ Double click on an edge square to extend the area of the map.</source>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="480"/>
-        <location filename="../LoggerContest.cpp" line="1807"/>
+        <location filename="../LoggerContest.cpp" line="1811"/>
         <source>(write) seek failed!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="485"/>
-        <location filename="../LoggerContest.cpp" line="1049"/>
-        <location filename="../LoggerContest.cpp" line="1062"/>
-        <location filename="../LoggerContest.cpp" line="1068"/>
+        <location filename="../LoggerContest.cpp" line="1051"/>
+        <location filename="../LoggerContest.cpp" line="1064"/>
+        <location filename="../LoggerContest.cpp" line="1070"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="577"/>
+        <location filename="../LoggerContest.cpp" line="578"/>
         <source>Attempt to insert after last contact - not allowed. Please report a bug!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="763"/>
+        <location filename="../LoggerContest.cpp" line="765"/>
         <source>.GJV should have been opened read only!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="857"/>
+        <location filename="../LoggerContest.cpp" line="859"/>
         <source>Invalid block 0 in .GJV Contest file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="864"/>
+        <location filename="../LoggerContest.cpp" line="866"/>
         <source>Invalid Contest file format (%1, %2 expected)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../LoggerContest.cpp" line="987"/>
-        <location filename="../LoggerContest.cpp" line="1139"/>
-        <source>Please give first serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../LoggerContest.cpp" line="989"/>
         <location filename="../LoggerContest.cpp" line="1141"/>
+        <source>Please give first serial to be written</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../LoggerContest.cpp" line="991"/>
+        <location filename="../LoggerContest.cpp" line="1143"/>
         <source>Please give last serial to be written</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="995"/>
-        <location filename="../LoggerContest.cpp" line="1147"/>
+        <location filename="../LoggerContest.cpp" line="997"/>
+        <location filename="../LoggerContest.cpp" line="1149"/>
         <source>Writing all contacts between serials %1 and %2 inclusive</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1038"/>
+        <location filename="../LoggerContest.cpp" line="1040"/>
         <source>Exported by Minos VHF logging system Version %1 %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1040"/>
+        <location filename="../LoggerContest.cpp" line="1042"/>
         <source>From file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContest.cpp" line="1800"/>
+        <location filename="../LoggerContest.cpp" line="1804"/>
         <source>Failed to open Contest file for monitoring %1 : %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2005,7 +2025,7 @@ and send the .EDI file produced.<byte value="xd"/>
     </message>
     <message>
         <location filename="../MinosTestExport.cpp" line="56"/>
-        <location filename="../MinosTestExport.cpp" line="566"/>
+        <location filename="../MinosTestExport.cpp" line="574"/>
         <source>bad reply from write!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2175,7 +2195,7 @@ to</source>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="171"/>
-        <location filename="../qsologframe.cpp" line="643"/>
+        <location filename="../qsologframe.cpp" line="641"/>
         <source>Catch-up (Post Entry)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2195,7 +2215,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="583"/>
+        <location filename="../qsologframe.ui" line="573"/>
         <source>Last Spot Sent: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -2227,11 +2247,6 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="542"/>
         <source>Save Freq</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qsologframe.ui" line="552"/>
-        <source>Tuning - Add Map</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2340,77 +2355,77 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="566"/>
+        <location filename="../qsologframe.ui" line="556"/>
         <source>Spot Last Logged ()</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="576"/>
+        <location filename="../qsologframe.ui" line="566"/>
         <source>Spot Current</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="956"/>
+        <location filename="../qsologframe.ui" line="946"/>
         <source>Log the QSO, or move to next unfilled field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="959"/>
+        <location filename="../qsologframe.ui" line="949"/>
         <source>Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="969"/>
+        <location filename="../qsologframe.ui" line="959"/>
         <source>Force logging the QSO, even when incomplete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="972"/>
+        <location filename="../qsologframe.ui" line="962"/>
         <source>Force...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="988"/>
+        <location filename="../qsologframe.ui" line="978"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="998"/>
+        <location filename="../qsologframe.ui" line="988"/>
         <source>Get fields from current matching QSO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1001"/>
+        <location filename="../qsologframe.ui" line="991"/>
         <source>Match Xfer F12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1061"/>
+        <location filename="../qsologframe.ui" line="1051"/>
         <source>Insert Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1071"/>
+        <location filename="../qsologframe.ui" line="1061"/>
         <source>Insert After</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1094"/>
+        <location filename="../qsologframe.ui" line="1084"/>
         <source>Prior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.ui" line="1104"/>
+        <location filename="../qsologframe.ui" line="1094"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="472"/>
+        <location filename="../qsologframe.cpp" line="470"/>
         <source>Return to Log</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="652"/>
+        <location filename="../qsologframe.cpp" line="650"/>
         <source>End Catch-up</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2453,22 +2468,22 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2625"/>
+        <location filename="../qsologframe.cpp" line="2627"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2627"/>
+        <location filename="../qsologframe.cpp" line="2629"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3009"/>
+        <location filename="../qsologframe.cpp" line="3013"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3044"/>
+        <location filename="../qsologframe.cpp" line="3048"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2700,22 +2715,22 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="302"/>
+        <location filename="../radiosettingdialog.cpp" line="324"/>
         <source>Invalid Phone Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="318"/>
+        <location filename="../radiosettingdialog.cpp" line="340"/>
         <source>Invalid MGM Preset Frequency for %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="388"/>
+        <location filename="../radiosettingdialog.cpp" line="410"/>
         <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../radiosettingdialog.cpp" line="392"/>
+        <location filename="../radiosettingdialog.cpp" line="414"/>
         <source>Frequency %1 is out of band/mode for %2/%3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4835,7 +4850,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1318"/>
-        <location filename="../tlogcontainer.cpp" line="1848"/>
+        <location filename="../tlogcontainer.cpp" line="1847"/>
         <source>Contest Sets</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4846,7 +4861,7 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="1404"/>
-        <location filename="../tlogcontainer.cpp" line="1956"/>
+        <location filename="../tlogcontainer.cpp" line="1955"/>
         <source>Loading </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4856,38 +4871,38 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1571"/>
+        <location filename="../tlogcontainer.cpp" line="1570"/>
         <source>Configure Screen Layouts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1682"/>
+        <location filename="../tlogcontainer.cpp" line="1681"/>
         <source>&amp;Manage Contest Sets...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1958"/>
+        <location filename="../tlogcontainer.cpp" line="1957"/>
         <source>List file </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1968"/>
+        <location filename="../tlogcontainer.cpp" line="1967"/>
         <source>Open List %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1992"/>
+        <location filename="../tlogcontainer.cpp" line="1991"/>
         <source>Contact list files (*.csl);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tlogcontainer.cpp" line="1996"/>
+        <location filename="../tlogcontainer.cpp" line="1995"/>
         <source>Open Archive List</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../tlogcontainer.cpp" line="2170"/>
         <location filename="../tlogcontainer.cpp" line="2171"/>
-        <location filename="../tlogcontainer.cpp" line="2172"/>
         <source>Minos contest Logger Application</source>
         <translation type="unfinished"></translation>
     </message>
