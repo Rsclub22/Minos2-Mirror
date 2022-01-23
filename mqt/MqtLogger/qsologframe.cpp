@@ -508,7 +508,7 @@ void QSOLogFrame::initialise()
     vcs.push_back( ssIl );
     rrIl = new ValidatedControl( ui->RSTRxFrame->getTextEditEdit(), vtRST );
     vcs.push_back( rrIl );
-    srIl = new ValidatedControl( ui->SerRxFrame->getTextEditEdit(), vtSN );
+    srIl = new ValidatedControl( ui->SerRxFrame->getTextEditEdit(), vtSN0 );
     vcs.push_back( srIl );
     locIl = new ValidatedControl( ui->LocFrame->getTextEditEdit(), vtLoc );
     vcs.push_back( locIl );

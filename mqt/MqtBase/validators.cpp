@@ -70,7 +70,7 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
          return !allSpaces( str );
 
       case vtNumeric:
-         return validNumber( str);
+         return validNumber( str, false, false);
 
       case vtDate:
          {
@@ -158,13 +158,22 @@ bool Validator::validate(const QString &str, ScreenContact &screenContact )
         return true;
 
       case vtSN:
-         if ( validNumber( str ) || str == "-" )
+         if ( validNumber( str, false, false ) )
          {
             return true;
          }
          else
             setError( ERR_5 );
          return false;
+
+   case vtSN0:
+      if ( validNumber( str, false, true ) || str == "-" )
+      {
+         return true;
+      }
+      else
+         setError( ERR_5 );
+      return false;
 
        case vtRST:
        {
@@ -236,7 +245,7 @@ bool Validator::allSpaces( const QString &str )
 
    return false;
 }
-bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed)
+bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed, bool zAllowed )
 {
    int i = 0;
    int maxi = str.length();
@@ -259,8 +268,10 @@ bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed)
 
       if ( str[ i ].isDigit() )
       {
-         if ( str[ i ] != '0' )
+         if ( str[ i ] != '0' || zAllowed )
+         {
             NonZ = true;
+         }
          if ( space_found )
          {
             return false;
@@ -277,7 +288,7 @@ bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed)
       if (S[S.size() - 1].isLetter())
       {
          S = S.left(S.size() - 1);
-         return(validNumber(S));
+         return(validNumber(S, trailingAlphaAllowed, zAllowed));
       }
    }
    return false;
@@ -322,7 +333,7 @@ bool Validator::validNumber( const QString &str, bool trailingAlphaAllowed)
       }
    }
    if ( picvalid )
-      picvalid = validNumber( t, true );
+      picvalid = validNumber( t, true, false );
    if ( picvalid )
    {
       // must be more than one digit in a RST
