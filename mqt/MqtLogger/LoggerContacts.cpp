@@ -333,9 +333,9 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
    else
    {
        QString srbuff;
+       // if serial logged as "-" or "0" then cabrillo logs 0
        int sr = serialr.getValue().toInt();
-       if ( sr )
-           srbuff = QString("%1").arg(sr, 3, 10, QChar('0') );
+       srbuff = QString("%1").arg(sr, 3, 10, QChar('0') );
        sdest += srbuff;   // RX sno
    }
    sdest += ';';
@@ -489,9 +489,9 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (lcl->serialMandatoryField.getValue())
     {
         QString srbuff;
+        // if serial logged as "-" or "0" then cabrillo logs 0
         int sr = serialr.getValue().toInt();
-        if ( sr )
-            srbuff = QString("%1").arg(sr, 4, 10, QChar('0') );
+        srbuff = QString("%1").arg(sr, 4, 10, QChar('0') );
         outstr += getCabrilloField(srbuff, 6);   // RX sno
     }
     // loc - or other exchange
