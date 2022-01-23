@@ -268,27 +268,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1713"/>
+        <location filename="../bandmapclientframe.cpp" line="1714"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1445"/>
+        <location filename="../bandmapclientframe.cpp" line="1446"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1478"/>
+        <location filename="../bandmapclientframe.cpp" line="1479"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1488"/>
+        <location filename="../bandmapclientframe.cpp" line="1489"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1605"/>
+        <location filename="../bandmapclientframe.cpp" line="1606"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>

@@ -463,11 +463,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../profiles.cpp" line="114"/>
-        <source>Add to Bandmap tuning ebabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../profiles.cpp" line="115"/>
         <source>Add to Bandmap tuning tolerance</source>
         <translation type="unfinished"></translation>
