@@ -905,7 +905,8 @@ void BandmapClientFrame::checkNewBandMapSpots()
     if (!ct || ct->isReadOnly())
         return;
 
-    if (!isVisible())
+    TSingleLogFrame * tslf = LogContainer ->findContest( ct );
+    if (!tslf || !tslf->bandMapLoaded)
     {
         bool disableNotShown;
         TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisableNotShown, disableNotShown);
