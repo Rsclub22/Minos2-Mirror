@@ -116,8 +116,8 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableNotShown , "BandMapDisableNotShown", true, QT_TR_NOOP("Disable Bandmap when not shown"), QT_TR_NOOP("Disable Bandmap when not shown"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableLoggedCalls , "BandMapDisableLoggedCalls", false, QT_TR_NOOP("Disable sending logged calls to bandmap"), QT_TR_NOOP("Disable sending logged calls to bandmap"), false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisablePlaceHolders , "BandMapDisablePlaceHolders", false, QT_TR_NOOP("Disable frequency matching calls from bandmap"), QT_TR_NOOP("Disable frequency matching calls from bandmap"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableLoggedCalls , "BandMapDisableLoggedCalls", false, QT_TR_NOOP("Disable adding logged Calls to bandmap"), QT_TR_NOOP("Disable adding logged Calls to bandmap"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisablePlaceHolders , "BandMapDisablePlaceHolders", false, QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpCQRit , "CQRit", true, QT_TR_NOOP("RIT on CQ"), QT_TR_NOOP("RIT on CQ"), false ) ) );
 
