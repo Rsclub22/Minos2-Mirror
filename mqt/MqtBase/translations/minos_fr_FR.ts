@@ -488,12 +488,12 @@
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
-        <source>Disable sending logged calls to bandmap</source>
+        <source>Disable adding logged Calls to bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
-        <source>Disable frequency matching calls from bandmap</source>
+        <source>Disable setting placeholders from current frequency on bandmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
