@@ -51,7 +51,7 @@ void ContestPage::buildScreen(TSingleLogFrame *tslfp, SCScreen &s, int &auxInsta
     tslf = tslfp;
     for (auto &r: s.baseElement->rows)
     {
-        tslf->buildRow(r, auxInstance, singleLogFrameSplitter);
+        tslf->buildRow(this, r, auxInstance, singleLogFrameSplitter);
     }
     // set frame to Vertical Layout, insert LogFrameSplitter
     if (!verticalLayout)
