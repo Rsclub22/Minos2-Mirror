@@ -498,10 +498,13 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
                 {
                     if (cp.key() == contest)
                     {
-                        cp.value()->clearScreen();
-                        if (cp.value() != this)
+                        if (cp.value())
                         {
-                            cp.value()->deleteLater();
+                            cp.value()->clearScreen();
+                            if (cp.value() != this)
+                            {
+                                cp.value()->deleteLater();
+                            }
                         }
                         (*cpc)->pages.remove(cp.key());
                         break;
@@ -546,7 +549,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
 }
-void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
+void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
     // This builds the dependant ContestPage (including the one we derive from)
     if (scrow.elements.count())
@@ -558,7 +561,9 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
         hs->setObjectName("row" + QString::number(rowSplitters.size()) + "splitter");
         hs->setOrientation(Qt::Horizontal);
         hs->setChildrenCollapsible(false);
-        rowSplitters.push_back(hs);
+
+        // we want this in the contest page...
+        cp->rowSplitters.push_back(hs);
 
         for (auto &scele: scrow.elements)
         {
@@ -722,11 +727,11 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                     vs->setObjectName("splitRow" + QString::number(rowSplitters.size()) + "splitter");
                     vs->setOrientation(Qt::Vertical);
                     vs->setChildrenCollapsible(false);
-                    rowSplitters.push_back(vs);
+                    cp->rowSplitters.push_back(vs);
 
                     for (auto &srow: scele.rows)
                     {
-                        buildRow(srow, auxInstance, vs);
+                        buildRow(cp, srow, auxInstance, vs);
                     }
 
                     hs->addWidget(vs);
