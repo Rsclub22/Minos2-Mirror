@@ -70,7 +70,7 @@ public:
 
     BandmapClientFrame *bandmapControlFrame = nullptr;
 
-    void buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
+    void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 
     void showQSOs();
     void goSerial( );

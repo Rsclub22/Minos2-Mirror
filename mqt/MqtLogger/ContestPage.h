@@ -48,7 +48,6 @@ class ContestPage : public QFrame
 protected:
     QVBoxLayout *verticalLayout = nullptr;
 
-    QVector <MinosSplitter *> rowSplitters;
     BaseContestLog *contest = nullptr;
 
 public:
@@ -57,6 +56,7 @@ public:
 
     int pageNo = -1;
     QString pageName;
+    QVector <MinosSplitter *> rowSplitters;
 
     BaseContestLog * getContest();
 
