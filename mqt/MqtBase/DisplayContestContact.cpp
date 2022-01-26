@@ -395,7 +395,7 @@ void DisplayContestContact::checkContact( bool inScan)
    if (inScan)
        dupContact = (csret == ERR_DUPCS);
 
-   if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+   if ( !notValidContact() )
    {
        if (!clp->locatorMandatoryField.getValue())
        {

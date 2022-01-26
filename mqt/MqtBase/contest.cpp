@@ -375,12 +375,6 @@ void BaseContestLog::disbeara( double lon, double lat, double &dist, int &brg ) 
    if ( co < 0.0 )
       ca = pi - ca ;
    double dx = 6371.291 * ca ;       /* 6371.291 is approved radius of earth */
-#ifndef DIAGNOSTICS
-   if (dx > 5000)
-   {
-       dx += 1.0;
-   }
-#endif
 
    // and then the bearing
 
@@ -698,7 +692,7 @@ int BaseContestLog::getValidQSOs()
    {
       QSharedPointer<BaseContact> dct = i.wt;
 
-      if ( dct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+      if ( dct->notValidContact() )
          continue;
 
       if ( dct->contactScore.getValue() > 0 )
@@ -710,7 +704,7 @@ int BaseContestLog::getValidQSOs()
 static void isBestDX( QSharedPointer<BaseContact> cct, QSharedPointer<BaseContact> *bestDX )
 {
 
-   if ( cct->contactFlags.getValue() & ( NON_SCORING | COMMENT_ONLY | LOCAL_COMMENT | DONT_PRINT ) )
+   if ( cct->notValidContact() )
       return ;
 
    if ( cct->cs.getValRes() != CS_OK )
@@ -826,7 +820,7 @@ void BaseContestLog::scanContest( )
       curop2 = nct->op2.getValue();
       oplist.insert( curop2, curop2 );
 
-      if ( nct->contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | LOCAL_COMMENT | COMMENT_ONLY ) )
+      if ( nct->notValidContact() )
       {
          nct->contactScore.setValue( -1 );		// force it!
          continue;
@@ -905,7 +899,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
       }
 
 
-      if ( nct->contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | LOCAL_COMMENT | COMMENT_ONLY | TO_BE_ENTERED ) )
+      if ( nct->notValidContact() )
       {
          continue;
       }

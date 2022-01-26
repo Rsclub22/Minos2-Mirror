@@ -911,10 +911,8 @@ void TSingleLogFrame::addAllQSOsToBandmap()
     for ( auto const &c: qAsConst(contest->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
-        // Extract comments for "Remarks" section
-        //cct->addReg1TestComment( remarks );
 
-        if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+        if ( cct->notValidContact() )
            continue;
 
         bandmapControlFrame->on_AfterLogContact(contest, cct);
