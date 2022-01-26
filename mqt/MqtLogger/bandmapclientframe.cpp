@@ -1337,14 +1337,12 @@ void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString 
     bool locfound = false;
     if (ct && !ct->isReadOnly())
     {
-
         Callsign mcs;
         mcs.setFullCall(callsign);
 
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
-            unsigned short cf = (*i).wt->contactFlags.getValue();
-            if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            if ((*i).wt->notValidContact() )
             {
                 continue;
             }
@@ -1791,7 +1789,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 {
     if (ct == c && !ct->isReadOnly())
     {
-        if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT | TO_BE_ENTERED) )
+        if ( lct->notValidContact() )
             return;
 
         Frequency freq = lct->frequency.getValue();
