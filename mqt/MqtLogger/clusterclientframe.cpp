@@ -923,8 +923,7 @@ void ClusterClientFrame::checkSpotWorked(QString &callsign, QString &locator, bo
 
         for ( auto const &c: qAsConst( ct->ctList ))
         {
-            unsigned short cf = c.wt->contactFlags.getValue();
-            if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            if ( c.wt->notValidContact() )
             {
                 continue;
             }

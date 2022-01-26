@@ -82,6 +82,10 @@ class BaseContact: public QObject
       {
          return 0;
       }
+      bool notValidContact()
+      {
+          return ( contactFlags.getValue() & ( NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT | TO_BE_ENTERED) );
+      }
       virtual QVector < QSharedPointer<BaseContact> > &getHistory()
       {
          return history;
