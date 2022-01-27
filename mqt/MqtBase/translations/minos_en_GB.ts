@@ -90,12 +90,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="552"/>
+        <location filename="../contest.cpp" line="546"/>
         <source>DUPLICATE OF </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="568"/>
+        <location filename="../contest.cpp" line="562"/>
         <source>DUP OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -969,12 +969,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1823"/>
+        <location filename="../contest.cpp" line="1817"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1836"/>
+        <location filename="../contest.cpp" line="1830"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>

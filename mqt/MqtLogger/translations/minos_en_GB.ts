@@ -268,27 +268,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1714"/>
+        <location filename="../bandmapclientframe.cpp" line="1712"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1446"/>
+        <location filename="../bandmapclientframe.cpp" line="1444"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1479"/>
+        <location filename="../bandmapclientframe.cpp" line="1477"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1489"/>
+        <location filename="../bandmapclientframe.cpp" line="1487"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1606"/>
+        <location filename="../bandmapclientframe.cpp" line="1604"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -838,9 +838,9 @@ The mode is %2</source>
     <message>
         <location filename="../clusterclientframe.ui" line="45"/>
         <location filename="../clusterclientframe.cpp" line="43"/>
-        <location filename="../clusterclientframe.cpp" line="1372"/>
-        <location filename="../clusterclientframe.cpp" line="1399"/>
-        <location filename="../clusterclientframe.cpp" line="1833"/>
+        <location filename="../clusterclientframe.cpp" line="1371"/>
+        <location filename="../clusterclientframe.cpp" line="1398"/>
+        <location filename="../clusterclientframe.cpp" line="1832"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
@@ -945,17 +945,17 @@ The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1373"/>
+        <location filename="../clusterclientframe.cpp" line="1372"/>
         <source>Please confirm you want to delete this spot?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1400"/>
+        <location filename="../clusterclientframe.cpp" line="1399"/>
         <source>Please confirm you want to delete all the spots in the %1 tab?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clusterclientframe.cpp" line="1837"/>
+        <location filename="../clusterclientframe.cpp" line="1836"/>
         <source> - Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5166,22 +5166,22 @@ Please confirm this action by pressing &quot;Yes&quot;.</source>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="873"/>
+        <location filename="../tsinglelogframe.cpp" line="878"/>
         <source>Save imported log as a .minos file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1451"/>
+        <location filename="../tsinglelogframe.cpp" line="1454"/>
         <source>No unfilled contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1470"/>
+        <location filename="../tsinglelogframe.cpp" line="1473"/>
         <source>Please give serial wanted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1492"/>
+        <location filename="../tsinglelogframe.cpp" line="1495"/>
         <source>Serial number %1 not found</source>
         <translation type="unfinished"></translation>
     </message>
