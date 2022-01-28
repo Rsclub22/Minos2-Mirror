@@ -125,14 +125,15 @@ void BandmapView::setBandmapZoom(int level)
         zoomLevel = level;
         dial->setZoomLevel(level);
 
-        Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
-        Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
-        Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
+//        Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
+//        Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
+//        Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
 
         setBandmapHeight(contestBandFlow, contestBandFhigh);
         trace("BandmapView::bandmapUpdate()setBandMapZoom ");
         bandmapUpdate(true);
-        scrollBandmapCenterToFreq(midScaleFreq);
+        scrollBandmapCenterToFreq(dial->getCurFreq());
+//        scrollBandmapCenterToFreq(midScaleFreq);
         emit newZoomlevel(level);
     }
 }
@@ -142,9 +143,9 @@ void BandmapView::zoomUpdated(bool dir)
 {
     zoomLevel = dial->getZoomLevel();
 
-    Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
-    Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
-    Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
+//    Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
+//    Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
+//    Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
 
     if (dir)
     {
@@ -156,7 +157,8 @@ void BandmapView::zoomUpdated(bool dir)
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             trace("BandmapView::bandmapUpdate() zoomUpdated 1");
             bandmapUpdate(true);
-            scrollBandmapCenterToFreq(midScaleFreq);
+            scrollBandmapCenterToFreq(dial->getCurFreq());
+//            scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
         }
     }
@@ -169,7 +171,8 @@ void BandmapView::zoomUpdated(bool dir)
             setBandmapHeight(contestBandFlow, contestBandFhigh);
             trace("BandmapView::bandmapUpdate() zoomUpdated 2");
             bandmapUpdate(true);
-            scrollBandmapCenterToFreq(midScaleFreq);
+            scrollBandmapCenterToFreq(dial->getCurFreq());
+//            scrollBandmapCenterToFreq(midScaleFreq);
             emit newZoomlevel(zoomLevel);
         }
     }
