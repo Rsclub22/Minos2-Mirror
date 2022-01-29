@@ -55,12 +55,12 @@
         <translation>Arrêter l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="231"/>
+        <location filename="../mainwindow.cpp" line="215"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation>Fichiers d&apos;enregistrement (* .wav) ;; Tous les fichiers (*. *)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="234"/>
+        <location filename="../mainwindow.cpp" line="218"/>
         <source>Recorded Files</source>
         <translation>Fichiers enregistrés</translation>
     </message>

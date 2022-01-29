@@ -6,7 +6,7 @@
     <message>
         <location filename="../KeyerMain.ui" line="14"/>
         <source>Minos Voice Keyer</source>
-        <translation></translation>
+        <translation>Minos Voice Keyer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="25"/>
@@ -167,22 +167,22 @@ Through</source>
         <translation>Passthrough</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="315"/>
+        <location filename="../KeyerMain.cpp" line="299"/>
         <source>Push PTT to Commence Recording</source>
         <translation>Appuyer PTT pour commencer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="466"/>
+        <location filename="../KeyerMain.cpp" line="450"/>
         <source>Alsa Control Files</source>
         <translation>Fichiers de contrôle Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="467"/>
+        <location filename="../KeyerMain.cpp" line="451"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="470"/>
+        <location filename="../KeyerMain.cpp" line="454"/>
         <source>File for mixer setup</source>
         <translation>Fichier pour la configuration du mixer</translation>
     </message>

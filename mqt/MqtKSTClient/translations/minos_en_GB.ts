@@ -368,7 +368,7 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="668"/>
-        <location filename="../kstmainwindow.cpp" line="413"/>
+        <location filename="../kstmainwindow.cpp" line="407"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
@@ -378,27 +378,27 @@ when user selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="402"/>
+        <location filename="../kstmainwindow.cpp" line="396"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="405"/>
+        <location filename="../kstmainwindow.cpp" line="399"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="560"/>
+        <location filename="../kstmainwindow.cpp" line="554"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="564"/>
+        <location filename="../kstmainwindow.cpp" line="558"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1501"/>
+        <location filename="../kstmainwindow.cpp" line="1495"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>

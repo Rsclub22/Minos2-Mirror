@@ -37,7 +37,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="309"/>
+        <location filename="../MonitorMain.cpp" line="306"/>
         <source>Close tab</source>
         <translation type="unfinished"></translation>
     </message>
