@@ -45,17 +45,6 @@
     </message>
 </context>
 <context>
-    <name>BandsSelect</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuler</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-</context>
-<context>
     <name>BaseContact</name>
     <message>
         <location filename="../contacts.cpp" line="253"/>
@@ -474,7 +463,7 @@
     <message>
         <location filename="../profiles.cpp" line="114"/>
         <source>Add to Bandmap tuning enabled</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="115"/>
@@ -484,17 +473,17 @@
     <message>
         <location filename="../profiles.cpp" line="117"/>
         <source>Disable Bandmap when not shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver Bandmap lorsqu&apos;elle n&apos;est pas affichée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
         <source>Disable adding logged Calls to bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver l&apos;addition d&apos;appels enregistrés à Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
         <source>Disable setting placeholders from current frequency on bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la configuration des espaces réservés Bandmap à partir de la fréquence actuelle</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>

@@ -11,12 +11,12 @@
     <message>
         <location filename="../qrzconfiguredialog.ui" line="22"/>
         <source>NOTE! An XML Subscription is required to look up</source>
-        <translation type="unfinished"></translation>
+        <translation>Noter! Abonnement QRZ XML requis pour obtenir QRA</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="29"/>
         <source>QRA Locators on QRZ.com</source>
-        <translation type="unfinished"></translation>
+        <translation>QRA Locators sur QRZ.com</translation>
     </message>
     <message>
         <location filename="../qrzconfiguredialog.ui" line="40"/>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="90"/>
         <source>Note! An xml subscription is required to look up QRA data on QRZ.com</source>
-        <translation type="unfinished"></translation>
+        <translation>Noter! Abonnement QRZ XML requis pour obtenir QRA</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="208"/>
@@ -79,7 +79,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="370"/>
         <source>Logon failed to Qrz.com, logon callsign = %1, error = %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de la connexion à QRZ.com, indicatif = %1, erreur = %2</translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="426"/>

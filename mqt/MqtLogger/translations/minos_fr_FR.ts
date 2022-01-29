@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="fr_FR">
 <context>
-    <name>BandSelButtons</name>
-    <message>
-        <source>Preset</source>
-        <translation type="obsolete">Prédéfini </translation>
-    </message>
-</context>
-<context>
     <name>BandSwitchFrame</name>
     <message>
         <location filename="../BandSwitchFrame.ui" line="14"/>
@@ -396,22 +389,22 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="42"/>
         <source>Tuning - add to map</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglage - ajouter à Bandmap</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="76"/>
         <source>Disable Bandmap when not shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver Bandmap lorsqu&apos;elle n&apos;est pas affichée</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="83"/>
         <source>Disable adding logged Calls to bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="90"/>
         <source>Disable setting placeholders from current frequency on bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la configuration des espaces réservés Bandmap à partir de la fréquence actuelle</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="104"/>
@@ -2278,7 +2271,7 @@ to</source>
     <message>
         <location filename="../qsologframe.ui" line="350"/>
         <source>Run</source>
-        <translation>Run </translation>
+        <translation>Run</translation>
     </message>
     <message>
         <location filename="../qsologframe.ui" line="573"/>
@@ -2671,7 +2664,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="44"/>
         <source>Note! Qrz XML subscription required to get QRA</source>
-        <translation type="unfinished"></translation>
+        <translation>Noter! Abonnement QRZ XML requis pour obtenir QRA</translation>
     </message>
     <message>
         <location filename="../qrzdisplayframe.cpp" line="71"/>
@@ -2808,7 +2801,7 @@ Non - Ignorer les modifications</translation>
     <message>
         <location filename="../radiosettingdialog.cpp" line="410"/>
         <source>Frequency %1 should be avoided as part of the bandplan for %2/%3</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence %1 doit être évitée dans le cadre du plan de bande pour %2/%3</translation>
     </message>
     <message>
         <location filename="../radiosettingdialog.cpp" line="414"/>

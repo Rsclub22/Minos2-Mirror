@@ -6,7 +6,7 @@
     <message>
         <location filename="../KeyerMain.ui" line="14"/>
         <source>Minos Voice Keyer</source>
-        <translation></translation>
+        <translation>Minos Voice Keyer</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="25"/>
