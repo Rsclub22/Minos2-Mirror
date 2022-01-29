@@ -555,7 +555,7 @@ Certaines radios / interfaces peuvent nécessiter de forcer DTR ou RTS au niveau
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="123"/>
         <source>Minos Selected Bands</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="537"/>
@@ -1138,7 +1138,7 @@ la poignée de main et les réglages forcés.</translation>
     <message>
         <location filename="../rigsetupdialog.cpp" line="698"/>
         <source>%1 Transvert band not enabled : %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bande transverter non activée: %2</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.cpp" line="730"/>
@@ -1205,7 +1205,7 @@ ces définitions radio:
     <message>
         <location filename="../rigsetupform.cpp" line="1472"/>
         <source>Omnirig Supported Bands - Please select the bands available on radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandes supportées par Omnirig - sélectionner les bandes disponibles à la radio SVP</translation>
     </message>
     <message>
         <location filename="../rigsetupform.cpp" line="1586"/>

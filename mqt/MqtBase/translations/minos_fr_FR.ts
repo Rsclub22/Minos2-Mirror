@@ -45,17 +45,6 @@
     </message>
 </context>
 <context>
-    <name>BandsSelect</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Annuler</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="obsolete">OK</translation>
-    </message>
-</context>
-<context>
     <name>BaseContact</name>
     <message>
         <location filename="../contacts.cpp" line="253"/>
@@ -102,12 +91,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="552"/>
+        <location filename="../contest.cpp" line="546"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="568"/>
+        <location filename="../contest.cpp" line="562"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -474,7 +463,7 @@
     <message>
         <location filename="../profiles.cpp" line="114"/>
         <source>Add to Bandmap tuning enabled</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="115"/>
@@ -484,17 +473,17 @@
     <message>
         <location filename="../profiles.cpp" line="117"/>
         <source>Disable Bandmap when not shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver Bandmap lorsqu&apos;elle n&apos;est pas affichée</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="118"/>
         <source>Disable adding logged Calls to bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver l&apos;addition d&apos;appels enregistrés à Bandmap</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="119"/>
         <source>Disable setting placeholders from current frequency on bandmap</source>
-        <translation type="unfinished"></translation>
+        <translation>Désactiver la configuration des espaces réservés Bandmap à partir de la fréquence actuelle</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
@@ -987,12 +976,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1823"/>
+        <location filename="../contest.cpp" line="1817"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1836"/>
+        <location filename="../contest.cpp" line="1830"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
