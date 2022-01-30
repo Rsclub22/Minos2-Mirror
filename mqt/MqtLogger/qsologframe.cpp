@@ -717,49 +717,51 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
 
     getScreenEntry(); // make sure it is saved
+    bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
 
-    if ( screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
+    if ( selectedContact && screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
     {
         if ( !checkAndLogEntry() )  // if it is the same, then don't log
         {
            return;
         }
-//       logCurrentContact( );
-//       return;
     }
-    // Do we want "call" tab order or "S and P" tab order?
-    bool tabSandPstate;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
-
-    if (tabSandPstate)
-    {
-        tabSandPstate = ui->SandPrb->isChecked();
-    }
-
-    // validate the entry; if still invalid, spin round the invalid
-    // controls (this should really be the job of tab, but...)
-
+    bool tabSandPstate = false;
     QWidget *currn = current;
-    QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
-    QLineEdit *lte = ui->LocFrame->getTextEditEdit();
-
-    if (currn == cte && cte->text().isEmpty())
+    if (!edit && !was_unfilled && !catchup)
     {
-        QString pht = cte->placeholderText();
-        QString lht = lte->placeholderText();
+        // Do we want "call" tab order or "S and P" tab order?
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
-        if (!pht.isEmpty())
+        if (tabSandPstate)
         {
-            cte->setText(pht);
+            tabSandPstate = ui->SandPrb->isChecked();
         }
-        if (contest->locatorMandatoryField.getValue())
+
+        // validate the entry; if still invalid, spin round the invalid
+        // controls (this should really be the job of tab, but...)
+
+        QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
+        QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+
+        if (currn == cte && cte->text().isEmpty())
         {
-            if (!lht.isEmpty())
+            QString pht = cte->placeholderText();
+            QString lht = lte->placeholderText();
+
+            if (!pht.isEmpty())
             {
-                lte->setText(lht);
+                cte->setText(pht);
             }
-        }
+            if (contest->locatorMandatoryField.getValue())
+            {
+                if (!lht.isEmpty())
+                {
+                    lte->setText(lht);
+                }
+            }
 
+        }
     }
 
     if ( !valid( cmCheckValid )
@@ -772,7 +774,6 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     {
        doAutofill();
     }
-    bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
                                     // validation has been done
     {
@@ -1922,36 +1923,39 @@ bool QSOLogFrame::checkAndLogEntry()
 
    // check if the screen contact and selected log contact differ
    bool retval = true;
-   getScreenEntry();
-   QSharedPointer<BaseContact> sct = selectedContact ;
-   if ( sct->ne( screenContact ) )
+   if (selectedContact)
    {
-      bool mresp = true;
+       getScreenEntry();
+       QSharedPointer<BaseContact> sct = selectedContact ;
+       if ( sct->ne( screenContact ) )
+       {
+          bool mresp = true;
 
-      // Dont check with op if not entered, and e.g. ESC pressed
-      // Also allows for partial saving when in Uri mode
-      if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
-      {
-         mresp = mShowYesNoMessage( this,
-                             tr("This Contact has changed: Shall I log the changes?\n"
-                             "\n"
-                             "Yes         - Log as shown\n"
-                             "No          - Discard changes")
-                              );
-      }
-      if ( mresp )
-      {
-         //Yes - log and continue
-         logScreenEntry( );
-         retval = true;
-      }
-      else
-      {
-         //Cancel - Discard changes, continue action
-         screenContact.copyFromArg( selectedContact );  // we have to ACTUALLY revert, as the action may not conmplete
-         showScreenEntry();
-         retval = false;	// stay where we are
-      }
+          // Dont check with op if not entered, and e.g. ESC pressed
+          // Also allows for partial saving when in Uri mode
+          if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
+          {
+             mresp = mShowYesNoMessage( this,
+                                 tr("This Contact has changed: Shall I log the changes?\n"
+                                 "\n"
+                                 "Yes         - Log as shown\n"
+                                 "No          - Discard changes")
+                                  );
+          }
+          if ( mresp )
+          {
+             //Yes - log and continue
+             logScreenEntry( );
+             retval = true;
+          }
+          else
+          {
+             //Cancel - Discard changes, continue action
+             screenContact.copyFromArg( selectedContact );  // we have to ACTUALLY revert, as the action may not conmplete
+             showScreenEntry();
+             retval = false;	// stay where we are
+          }
+       }
    }
    return retval;
 }
