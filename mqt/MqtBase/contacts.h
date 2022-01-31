@@ -48,12 +48,12 @@ QSharedPointer<CountryEntry> findCtryPrefix( const Callsign &cs );
 // NB we still have the FF00 flags available!
 // And these are in the GJV file, so don't change the values!
 
-const short LOCAL_COMMENT = 0x0800;		// Local comment only
+//const short LOCAL_COMMENT = 0x0800;		// Local comment only
 const short VALID_DISTRICT = 0x0400;		// Treat district as valid when checking
 const short COUNTRY_FORCED = 0x0200;		// take the country forced in
 const short UNKNOWN_COUNTRY = 0x0100;		// country not in control files
 const short NON_SCORING = 0x0080;     // general non scoring
-const short COMMENT_ONLY = 0x0040;     // only a (long) comment
+//const short COMMENT_ONLY = 0x0040;     // only a (long) comment
 const short MANUAL_SCORE = 0x0020;     // scored manually
 const short DONT_PRINT = 0x0010;     // Not to be printed (deleted)
 const short VALID_DUPLICATE = 0x0008;		// e.g. backpacker, second time
@@ -84,7 +84,7 @@ class BaseContact: public QObject
       }
       bool notValidContact()
       {
-          return ( contactFlags.getValue() & ( NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT | TO_BE_ENTERED) );
+          return ( contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED) );
       }
       virtual QVector < QSharedPointer<BaseContact> > &getHistory()
       {

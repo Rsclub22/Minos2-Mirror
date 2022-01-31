@@ -719,7 +719,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     getScreenEntry(); // make sure it is saved
     bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
 
-    if ( selectedContact && screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
+    if ( selectedContact && screenContact.contactFlags & ( DONT_PRINT ) )
     {
         if ( !checkAndLogEntry() )  // if it is the same, then don't log
         {
@@ -1275,12 +1275,7 @@ void QSOLogFrame::showScreenEntry( )
       }
 
       valid( cmCheckValid ); // make sure contact is valid - display any errors
-      if ( temp.contactFlags & ( COMMENT_ONLY | LOCAL_COMMENT ) )
-      {
-         selectField( ui->commentsFrame->getTextEditEdit() );
-      }
-      else
-         selectField( nullptr );
+      selectField( nullptr );
 
       MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
    }
@@ -1474,7 +1469,7 @@ void QSOLogFrame::calcLoc( )
                 {
                     sct.bearing = brg;
 
-                    if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+                    if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
                     {
                         sct.contactScore = static_cast<int>(dist);
                     }
@@ -1783,12 +1778,10 @@ void QSOLogFrame::contactValid( )
     }
     else
     {
-        if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-            lgTraceerr( ERR_25 );
         if ( vcct->contactFlags & NON_SCORING )
             lgTraceerr( ERR_24 );
     }
-    if ( vcct->contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY | NON_SCORING | DONT_PRINT ) )
+    if ( vcct->contactFlags & (NON_SCORING | DONT_PRINT ) )
     {
         return ;
     }

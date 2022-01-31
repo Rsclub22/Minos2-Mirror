@@ -786,7 +786,7 @@ bool ThisLogMatcher::idleMatch( int limit )
              return true;
 
           unsigned short cf = cct->contactFlags.getValue();
-          if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+          if ( cf & DONT_PRINT )
           {
               continue;
           }
@@ -1010,7 +1010,7 @@ bool OtherLogMatcher::idleMatch( int limit )
             return true;
 
          unsigned short cf = cct->contactFlags.getValue();
-         if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+         if ( cf & DONT_PRINT )
          {
              continue;
          }

@@ -247,8 +247,6 @@ void ScreenContact::checkScreenContact( )
     int checkret = 0;
     BaseContestLog * clp = contest;
 
-    if ( contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-        return ;
     if ( contactFlags & NON_SCORING )
         return ;
 
@@ -394,7 +392,7 @@ void ScreenContact::score()
             }
         }
 
-        if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+        if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
         {
             double dist;
             int brg = 0;

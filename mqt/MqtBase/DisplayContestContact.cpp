@@ -232,9 +232,6 @@ void DisplayContestContact::checkContact( bool inScan)
    double dist = 0.0;
    BaseContestLog * clp = contest;
 
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-      return ;
-
    // calc the bearing and score anyway; otherwise dups get a bearing of -1
 
    if ( bearing < 0 )
@@ -546,7 +543,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
    BaseContestLog * clp = contest;
 
    unsigned short cf = contactFlags.getValue();
-   if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+   if ( cf & DONT_PRINT )
    {
       switch ( ACol )
       {
@@ -554,7 +551,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = timeOff.getTime( DTGDISP );
             break;
          case egCall:
-            res = ( cf & DONT_PRINT ) ? tr("DELETED") : ( cf & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR");
+            res = tr("DELETED");
             break;
          case egRSTTx:
             res = comments.getValue();
@@ -804,30 +801,6 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
       logSequence = static_cast< unsigned long > (itemp);
    mt->getStructArgMemberValueDTG( "uDTG", updtg );
 
-   if ( methodName == "MinosLogComment" )
-   {
-      QString ctimeoff;
-      QString ctimeon;
-      if (mt->getStructArgMemberValueDTG( "logTime", ctimeoff ))
-      {
-        timeOff.setIsoDTG( ctimeoff );
-      }
-      if (mt->getStructArgMemberValueDTG( "QSOStartTime", ctimeon ))
-      {
-        timeOn.setIsoDTG( ctimeon );
-      }
-
-      bool btemp = false;
-      unsigned short cf = contactFlags.getValue();
-      if ( mt->getStructArgMemberValue( "LocalComment", btemp ) )
-         mt->setBit( cf, LOCAL_COMMENT, btemp );
-      if ( mt->getStructArgMemberValue( "dontPrint", btemp ) )
-         mt->setBit( cf, DONT_PRINT, btemp );
-      contactFlags.setInitialValue( cf );
-      mt->getStructArgMemberValue( "comment", comments );
-
-   }
-   else
       if ( methodName == "MinosLogQSO" )
       {
          modificationCount++;

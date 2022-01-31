@@ -248,15 +248,13 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
    contactBuffs.ssbuff.clear();
    contactBuffs.buff.clear();
 
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+   if ( contactFlags.getValue() & DONT_PRINT )
    {
-       QString locComment = tr("LOCAL COMMENT");
-       QString adjComment = tr("COMMENT FOR ADJUDICATOR");
        QString deleted = tr("DELETED");
 
        contactBuffs.buff = QString("%1 %2 %3")
                .arg(timeOff.getTime( DTGDISP ), 5)
-               .arg(( contactFlags.getValue() & DONT_PRINT ) ? deleted: ( contactFlags.getValue() & LOCAL_COMMENT ) ? locComment: adjComment)
+               .arg(deleted)
                .arg(comments.getValue(), 60);
    }
    else
