@@ -558,7 +558,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
 
         // insert horizontal splitter in splitterParent
         MinosSplitter *hs = new MinosSplitter();
-        hs->setObjectName("row" + QString::number(rowSplitters.size()) + "splitter");
+        hs->setObjectName("row" + QString::number(cp->rowSplitters.size()) + "splitter");
         hs->setOrientation(Qt::Horizontal);
         hs->setChildrenCollapsible(false);
 
@@ -724,7 +724,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 case sctSplit:
                 {
                     MinosSplitter *vs = new MinosSplitter();
-                    vs->setObjectName("splitRow" + QString::number(rowSplitters.size()) + "splitter");
+                    vs->setObjectName("splitRow" + QString::number(cp->rowSplitters.size()) + "splitter");
                     vs->setOrientation(Qt::Vertical);
                     vs->setChildrenCollapsible(false);
                     cp->rowSplitters.push_back(vs);
