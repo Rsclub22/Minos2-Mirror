@@ -15,9 +15,10 @@
 
 KeyerServer *KS = nullptr;
 
-//static bool sendConfig = false;
 static bool sendMeters = false;
 static bool sendSliders = false;
+static int metersSeq = 0;
+static int slidersSeq = 0;
 //---------------------------------------------------------------------------
 KeyerServer::KeyerServer()
 {
@@ -89,11 +90,11 @@ void KeyerServer::publishConfig(const QString &config)
     KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
-void KeyerServer::doPublishSliders(int rec, int replay, int passthrough)
+void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, int seq)
 {
     static QString old;
     QString sliders;
-    sliders = QString("%1;%2;%3").arg(rec).arg(replay).arg(passthrough);
+    sliders = QString("%1;%2;%3;%4").arg(rec).arg(replay).arg(passthrough).arg(seq);
     if (sliders != old)
     {
         old = sliders;
@@ -105,14 +106,14 @@ void KeyerServer::publishSliders(int rec, int replay, int passthrough)
     checkConnection();
 
     if (sendSliders)
-        KS->doPublishSliders(rec, replay, passthrough);
+        KS->doPublishSliders(rec, replay, passthrough, slidersSeq);
 }
 //---------------------------------------------------------------------------
-void KeyerServer::doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples)
+void KeyerServer::doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples, int seq)
 {
     static QString old;
     QString vu;
-    vu = QString("%1;%2;%3").arg(rmsLevel).arg(peakLevel).arg(numSamples);
+    vu = QString("%1;%2;%3;%4").arg(rmsLevel).arg(peakLevel).arg(numSamples).arg(seq);
     if (vu != old)
     {
         old = vu;
@@ -124,7 +125,7 @@ void KeyerServer::publishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, 
     checkConnection();
 
     if (sendMeters)
-        KS->doPublishVUMeter(rmsLevel, peakLevel, numSamples);
+        KS->doPublishVUMeter(rmsLevel, peakLevel, numSamples, metersSeq);
 }
 //---------------------------------------------------------------------------
 void KeyerServer::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
@@ -238,6 +239,8 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                 {
                     sendSliders = true;
                     sendMeters = true;
+                    metersSeq++;
+                    slidersSeq++;
                 }
               }
               else if (an.getKey() == rpcConstants::keyerSliders)

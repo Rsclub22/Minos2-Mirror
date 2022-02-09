@@ -16,7 +16,7 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
-    LogContainer->sendDM->publishKeyerMS(true);
+    LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
 }
 
 TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
