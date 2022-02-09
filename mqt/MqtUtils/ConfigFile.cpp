@@ -775,7 +775,7 @@ QString MinosConfig::checkConfig(QString name)
             {
                 if (routerPresent)
                 {
-                    reqErrs += tr("More than one router is defined and enabled");
+                    reqErrs += tr("More than one server is defined and enabled");
                 }
                 routerPresent = true;
             }
@@ -784,7 +784,7 @@ QString MinosConfig::checkConfig(QString name)
 
     if (eleListSize && !routerPresent)
     {
-        reqErrs += tr("A local router is required.\r\n\r\n") ;
+        reqErrs += tr("A local server is required.\r\n\r\n") ;
     }
 
     //Check that the name is not blank, and only has allowed characters

@@ -380,7 +380,7 @@ void Published::buildPublishedTree(QTreeWidget *tree)
 {
     tree->clear();
     tree->setColumnCount(4);
-    QStringList h = {tr("cat/key"), tr("router"), tr("pubid"), tr("state"), tr("value")};
+    QStringList h = {tr("cat/key"), tr("server"), tr("pubid"), tr("state"), tr("value")};
     tree->setHeaderLabels(h);
     for ( auto const &p: qAsConst(Published::publist) )
     {
