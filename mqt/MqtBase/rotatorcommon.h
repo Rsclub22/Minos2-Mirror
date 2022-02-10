@@ -93,6 +93,7 @@ const QStringList presetMenuShortCutKeys = {
                                              };
 
 const int COMPASS_MAX360 = 360;
+const int COMPASS_MAX359 = 359; // Green Heron Rotator
 const int COMPASS_HALF = 180;
 const int COMPASS_NEG_HALF = -180;
 const int COMPASS_MIN0 = 0;
