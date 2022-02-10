@@ -516,7 +516,7 @@ void LoggerContestLog::closeFile( )
    ediContestFile.reset();
 }
 QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned short extraFlags, bool saveNew, bool catchup,
-                                                          QString mode, QString mgmSubmode, dtg ctTime, Frequency &freq )
+                                                          QString mode, QString mgmSubmode, dtg ctTime, const Frequency &freq )
 {
    // add the contact number as an new empty contact, with disk block and log_seq
 
@@ -530,7 +530,8 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    makeContact( timenow, bct );
    if (timenow == false)
    {
-       bct->time.setValue(ctTime);
+       bct->timeOn.setValue(ctTime);
+       bct->timeOff.setValue(ctTime);
    }
 
    QString temp = QString( "%1" ).arg(newctno, 3, 10, QChar('0') );  //leading zeros
@@ -582,7 +583,8 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    QSharedPointer<BaseContact> bct;
    makeContact( timenow, bct );
 
-   bct->time = ctTime;
+   bct->timeOn = ctTime;
+   bct->timeOff = ctTime;
    bct->serials.setValue( "" );
    bct->mode.setValue(prior->mode.getValue());
    bct->mgmSubmode.setValue(prior->mgmSubmode.getValue());
@@ -1436,9 +1438,10 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
 
       QString temp;
       strcpysp( temp, lbuff, 6 );
-      bct->time.setDate( temp, DTGLOG );
+      bct->timeOff.setDate( temp, DTGLOG );
       strcpysp( temp, lbuff.mid(7), 4 );
-      bct->time.setTime( temp, DTGLOG );
+      bct->timeOff.setTime( temp, DTGLOG );
+      bct->timeOn = bct->timeOff;
       strcpysp( temp, lbuff.mid(21), 15 );
       bct->cs.setFullCall( temp );
       strcpysp( temp, lbuff.mid( 37 ), 3 );
@@ -1772,11 +1775,12 @@ void LoggerContestLog::processMinosStanza( const QString &methodName, MinosTestI
                                          }
 }
 //====================================================================
-void LoggerContestLog::setStanza(unsigned int stanza, int stanzaStart )
+void LoggerContestLog::setStanza(unsigned int stanza, int stanzaStart, int stanzaEnd )
 {
    StanzaPos s;
    s.stanza = stanza;
    s.stanzaStart = stanzaStart;
+   s.stanzaEnd = stanzaEnd;
    stanzaLocations.push_back( s );
 }
 //====================================================================
@@ -1806,7 +1810,7 @@ bool LoggerContestLog::getStanza( unsigned int stanza, QString &stanzaData )
    {
       MinosParameters::getMinosParameters() ->mshowMessage( tr("(write) seek failed!") );
    }
-   QByteArray buffer = contestFile.read( 8192 );
+   QByteArray buffer = contestFile.read( s->stanzaEnd - s->stanzaStart );
 
    bool readOK = true;
    if ( buffer.size() > 0 )

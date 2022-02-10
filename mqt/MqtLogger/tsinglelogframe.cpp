@@ -498,10 +498,13 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
                 {
                     if (cp.key() == contest)
                     {
-                        cp.value()->clearScreen();
-                        if (cp.value() != this)
+                        if (cp.value())
                         {
-                            cp.value()->deleteLater();
+                            cp.value()->clearScreen();
+                            if (cp.value() != this)
+                            {
+                                cp.value()->deleteLater();
+                            }
                         }
                         (*cpc)->pages.remove(cp.key());
                         break;
@@ -546,7 +549,7 @@ void TSingleLogFrame::setCurScreenLayout(const QString &value)
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
 }
-void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
+void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
     // This builds the dependant ContestPage (including the one we derive from)
     if (scrow.elements.count())
@@ -555,10 +558,12 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
 
         // insert horizontal splitter in splitterParent
         MinosSplitter *hs = new MinosSplitter();
-        hs->setObjectName("row" + QString::number(rowSplitters.size()) + "splitter");
+        hs->setObjectName("row" + QString::number(cp->rowSplitters.size()) + "splitter");
         hs->setOrientation(Qt::Horizontal);
         hs->setChildrenCollapsible(false);
-        rowSplitters.push_back(hs);
+
+        // we want this in the contest page...
+        cp->rowSplitters.push_back(hs);
 
         for (auto &scele: scrow.elements)
         {
@@ -719,14 +724,14 @@ void TSingleLogFrame::buildRow(SCRow &scrow, int &auxInstance, MinosSplitter *sp
                 case sctSplit:
                 {
                     MinosSplitter *vs = new MinosSplitter();
-                    vs->setObjectName("splitRow" + QString::number(rowSplitters.size()) + "splitter");
+                    vs->setObjectName("splitRow" + QString::number(cp->rowSplitters.size()) + "splitter");
                     vs->setOrientation(Qt::Vertical);
                     vs->setChildrenCollapsible(false);
-                    rowSplitters.push_back(vs);
+                    cp->rowSplitters.push_back(vs);
 
                     for (auto &srow: scele.rows)
                     {
-                        buildRow(srow, auxInstance, vs);
+                        buildRow(cp, srow, auxInstance, vs);
                     }
 
                     hs->addWidget(vs);
@@ -906,10 +911,8 @@ void TSingleLogFrame::addAllQSOsToBandmap()
     for ( auto const &c: qAsConst(contest->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
-        // Extract comments for "Remarks" section
-        //cct->addReg1TestComment( remarks );
 
-        if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+        if ( cct->notValidContact() )
            continue;
 
         bandmapControlFrame->on_AfterLogContact(contest, cct);
@@ -1682,25 +1685,6 @@ bool TSingleLogFrame::isBandMapLoaded()
    return bandMapLoaded;
 }
 
-bool TSingleLogFrame::getTuneAddBandMapSetting()
-{
-    bool state = false;
-    if (bandmapControlFrame)
-    {
-        state = bandmapControlFrame->readTuneAddBandMapSetting();
-    }
-
-    return state;
-}
-
-void TSingleLogFrame::setTuneAddBandMapSetting(bool state)
-{
-    if (bandmapControlFrame)
-    {
-        bandmapControlFrame->saveTuneAddBandMapSetting(state);
-    }
-}
-
 //---------------------------------------------------------------------------
 
 // Cluster
@@ -1757,6 +1741,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             FKHRigControlFrame->setMode(m);
             GJVQSOLogFrame->modeSentFromRig(m);
             bandmapControlFrame->setMode(m);
+            bandmapControlFrame->checkLegalFrequencies(sCurFreq);
         }
     }
 }

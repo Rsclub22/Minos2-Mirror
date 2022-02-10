@@ -538,8 +538,9 @@ QString BandList::getBand(const Frequency &freq)
     return band;
 }
 
-void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered)
+bool BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filtered)
 {
+    bool filtret = false;
     bands.clear();
     for ( auto const &b: qAsConst(bandList ))
     {
@@ -554,8 +555,12 @@ void BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
 
                 bands.append(b);
         }
+        else
+        {
+            filtret = true;
+        }
     }
-
+    return filtret;
 }
 
 

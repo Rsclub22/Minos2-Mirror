@@ -689,7 +689,7 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     BandList blist = BandList::getBandList();
     QSharedPointer<BandInfo>  bi;
 
-    for(const auto &bi: blist.bandList)
+    for(const auto &bi: qAsConst(blist.bandList))
     {
         if (bi->uk == contestBandStr)
         {
@@ -905,6 +905,20 @@ void BandmapClientFrame::checkNewBandMapSpots()
     if (!ct || ct->isReadOnly())
         return;
 
+    TSingleLogFrame * tslf = LogContainer ->findContest( ct );
+    if (!tslf || !tslf->bandMapLoaded)
+    {
+        bool disableNotShown;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisableNotShown, disableNotShown);
+
+        if (disableNotShown)
+        {
+            spotQueue.clear();
+            logSpotQueue.clear();
+            return;
+        }
+    }
+
     bandmapView->setSuppressUpdate(true);
     bool doUpdate = false;
     // any cluster spots
@@ -923,15 +937,20 @@ void BandmapClientFrame::checkNewBandMapSpots()
     // any logger spots
     if (!logSpotQueue.isEmpty())
     {
-        for (int i = 0; i < logSpotQueue.count(); i++)
+        bool disableLoggedCalls;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandMapDisableLoggedCalls, disableLoggedCalls);
+        if (!disableLoggedCalls)
         {
-            traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
-                     .arg(logSpotQueue[i]->spotName())
-                     .arg(logSpotQueue[i]->getDxCallStr())
-                     .arg(logSpotQueue[i]->getFreq().traceStr())
-                     .arg(logSpotQueue[i]->getDxLocator()));
-            addLogSpotToBandmapTable(logSpotQueue[i]);
-            doUpdate = true;
+            for (int i = 0; i < logSpotQueue.count(); i++)
+            {
+                traceMsg(QString("New Logger Spot: %1 %2 %3 %4")
+                         .arg(logSpotQueue[i]->spotName())
+                         .arg(logSpotQueue[i]->getDxCallStr())
+                         .arg(logSpotQueue[i]->getFreq().traceStr())
+                         .arg(logSpotQueue[i]->getDxLocator()));
+                addLogSpotToBandmapTable(logSpotQueue[i]);
+                doUpdate = true;
+            }
         }
         logSpotQueue.clear();
     }
@@ -1318,14 +1337,12 @@ void BandmapClientFrame::checkSpotWorked(const QString &callsign, const QString 
     bool locfound = false;
     if (ct && !ct->isReadOnly())
     {
-
         Callsign mcs;
         mcs.setFullCall(callsign);
 
         for ( LogIterator i = ct->ctList.begin(); i != ct->ctList.end(); i++ )
         {
-            unsigned short cf = (*i).wt->contactFlags.getValue();
-            if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+            if ((*i).wt->notValidContact() )
             {
                 continue;
             }
@@ -1476,6 +1493,58 @@ void BandmapClientFrame::radioStatusIndicatorToggle(bool on)
     }
 }
 
+void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
+{
+    bool legalOperatingFreqFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
+
+    QString sf = freq.str();
+
+    if (sf.count() >= 4)
+    {
+        ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
+
+
+        if (isFreqLegal(freq, contestBandStr, contestModeStr))
+        {
+
+            freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+
+            legalFreq = true;
+        }
+        else
+        {
+            if (!legalOperatingFreqFlag)
+            {
+                freqDisplayPalette->setColor(QPalette::Text,Qt::red);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+            }
+            else
+            {
+                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
+                ui->freqDisplay->setPalette(*freqDisplayPalette);
+            }
+
+            legalFreq = false;
+        }
+
+        ui->freqDisplay->setText(sf);
+    }
+    else
+    {
+        if (!legalOperatingFreqFlag)
+        {
+            freqDisplayPalette->setColor(QPalette::Text, Qt::red);
+            ui->freqDisplay->setPalette(*freqDisplayPalette);
+        }
+
+        legalFreq = false;
+        ui->freqDisplay->setText(sf);
+    }
+    bandmapView->setFreq(curFreq, legalFreq);
+}
+
 void BandmapClientFrame::setFreq(Frequency freq)
 {
     if (!ct || ct->isReadOnly())
@@ -1484,66 +1553,19 @@ void BandmapClientFrame::setFreq(Frequency freq)
     if (lastfreq != freq)
     {
         QSharedPointer<BandInfo> bandChanged = ct->checkBandChange(freq, lastfreq);
+        curFreq = freq;
         if (bandChanged)
         {
             setContestBandMode(bandChanged->uk, contestModeStr);
+            checkLegalFrequencies(freq);
+//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
         }
         lastfreq = freq;
-        curFreq = freq;
-
-        QString sf = freq.str();
-
 
         // check freq matches contest band
         checkContestBandMatch(curFreq);
 
-        bool legalOperatingFreqFlag;
-        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpContestTurnOffOperatingFreqColorRadioDial, legalOperatingFreqFlag );
-
-
-        if (sf.count() >= 4)
-        {
-            ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
-
-
-            if (isFreqLegal(freq, contestBandStr, contestModeStr))
-            {
-
-                freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
-
-                legalFreq = true;
-            }
-            else
-            {
-                if (!legalOperatingFreqFlag)
-                {
-                    freqDisplayPalette->setColor(QPalette::Text,Qt::red);
-                    ui->freqDisplay->setPalette(*freqDisplayPalette);
-                }
-                else
-                {
-                    freqDisplayPalette->setColor(QPalette::Text, Qt::black);
-                    ui->freqDisplay->setPalette(*freqDisplayPalette);
-                }
-
-                legalFreq = false;
-            }
-
-            ui->freqDisplay->setText(sf);
-        }
-        else
-        {
-            if (!legalOperatingFreqFlag)
-            {
-                freqDisplayPalette->setColor(QPalette::Text, Qt::red);
-                ui->freqDisplay->setPalette(*freqDisplayPalette);
-            }
-
-            legalFreq = false;
-            ui->freqDisplay->setText(sf);
-        }
-        bandmapView->setFreq(curFreq, legalFreq);
+        checkLegalFrequencies(freq);
     }
 }
 
@@ -1554,6 +1576,10 @@ void BandmapClientFrame::setContestBandMode(QString band, QString mode)
 
     contestBandStr = band;
     setMode(mode);
+
+//    Frequency temp = lastfreq;
+//    lastfreq.clear();
+//    setFreq(temp);  // get legal freqs correct
 
     getBandLimitsFromBandListXML();
 
@@ -1607,9 +1633,6 @@ void BandmapClientFrame::setMode(QString mode)
 
         bandmapView->setDialRadioMode(radioMode);
         ui->mode->setText(radioMode);
-        Frequency temp = lastfreq;
-        lastfreq.clear();
-        setFreq(temp);  // get legal freqs correct
     }
 }
 
@@ -1771,7 +1794,7 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 {
     if (ct == c && !ct->isReadOnly())
     {
-        if ( lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT | TO_BE_ENTERED) )
+        if ( lct->notValidContact() )
             return;
 
         Frequency freq = lct->frequency.getValue();
@@ -1979,29 +2002,6 @@ void BandmapClientFrame::updateZoom(bool dir)
 void BandmapClientFrame::traceMsg(QString msg)
 {
     trace(QString("[bandmapFrame] %1").arg(msg));
-}
-
-void BandmapClientFrame::saveTuneAddBandMapSetting(bool state)
-{
-    QString fileName = BANDMAP_INI_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-    config.beginGroup("Bandmap");
-    config.setValue("TuneAddBandmap", state);
-
-    config.endGroup();
-}
-
-bool BandmapClientFrame::readTuneAddBandMapSetting()
-{
-    QString fileName = BANDMAP_INI_FILE;
-    QSettings config(fileName, QSettings::IniFormat);
-
-    config.beginGroup("Bandmap");
-    bool state = config.value("TuneAddBandmap", true).toBool();
-    config.endGroup();
-
-    return state;
 }
 
 void BandmapClientFrame::saveBandmapZoomLevel(int &level)

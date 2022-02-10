@@ -117,10 +117,11 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
     rigFactory = new RigFactory(false, this);
 
 
-    BandList::getBandList().loadAllBands(bands);
-
-    //currentRadio = QSharedPointer<scatParams>(new scatParams);
-
+    bool filtret = BandList::getBandList().loadAllBands(bands, true);  // filter by available
+    if (filtret)
+    {
+        ui->supportBandsLabel->setText(tr("Minos Selected Bands"));
+    }
 
     QString fileName = RIG_CONFIGURATION_FILEPATH_LOGGER + MINOS_RADIO_CONFIG_FILE;
     QSettings config(fileName, QSettings::IniFormat);

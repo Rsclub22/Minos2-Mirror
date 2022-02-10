@@ -92,12 +92,12 @@ typedef QMap < ErrEntry *, ErrEntry *> ErrorList;
 
 enum validTypes { /*cmNone, cmCancel, cmValid,*/ cmCheckValid, cmValidStatus /*, cmReleasedFocus*/};
 enum validatorTypes {vtNone, vtNotEmpty, vtNumeric, vtDate, vtTime, vtCallsign,
-                     vtSN, vtRST, vtLoc, vtQTH, vtComments, vtFreq};
+                     vtSN, vtSN0, vtRST, vtLoc, vtQTH, vtComments, vtFreq};
 
 class Validator: QObject
 {
     Q_OBJECT
-      static bool validNumber( const QString &S, bool trailingAlphaAllowed = false);
+      static bool validNumber(const QString &S, bool trailingAlphaAllowed, bool zAllowed);
       static bool allSpaces( const QString &S );
       bool status;
       validatorTypes vt;

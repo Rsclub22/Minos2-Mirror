@@ -237,7 +237,7 @@
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="169"/>
-        <location filename="../kstmainwindow.ui" line="340"/>
+        <location filename="../kstmainwindow.ui" line="347"/>
         <location filename="../kstmainwindow.ui" line="396"/>
         <source>X</source>
         <translation>X</translation>
@@ -296,12 +296,12 @@ l&apos;indicatif sélectionné</translation>
         <translation>Rechercher l&apos;une de ces chaînes/pays (séparées par des espaces) dans les utilisateurs</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="327"/>
+        <location filename="../kstmainwindow.ui" line="334"/>
         <source>Look for any of these strings (space separated) in messages</source>
         <translation>Rechercher l&apos;une de ces chaînes (séparées par des espaces) dans les messages</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="337"/>
+        <location filename="../kstmainwindow.ui" line="344"/>
         <location filename="../kstmainwindow.ui" line="393"/>
         <source>Clear the message filters</source>
         <translation>Effacer les filtres des messages</translation>
@@ -406,7 +406,7 @@ l&apos;indicatif sélectionné</translation>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1500"/>
+        <location filename="../kstmainwindow.cpp" line="1501"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>

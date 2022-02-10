@@ -48,9 +48,7 @@ bool showUnworked = false;
 StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     QFrame(parent),
     ui(new Ui::StackedInfoFrame),
-    stackInstance(instance),
-    contest(nullptr)
-
+    stackInstance(instance)
 {
     ui->setupUi(this);
 
@@ -87,7 +85,6 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToCountry, this, &StackedInfoFrame::on_ScrollToCountry, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToDistrict, this, &StackedInfoFrame::on_ScrollToDistrict, Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &StackedInfoFrame::on_FontChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FiltersChanged, this, &StackedInfoFrame::onFiltersChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::UpdateStats, this, &StackedInfoFrame::onUpdateStats, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::UpdateMemories, this, &StackedInfoFrame::onUpdateMemories, Qt::QueuedConnection);
@@ -100,8 +97,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
 
     QString n = QString("stackframe%1").arg(instance);
     setObjectName(n);
-    //setStyleSheet(QString(" #%1 { border: 2px solid red; }").arg(n));
 
+    ui->tabbar->setVisible(false);
 }
 
 StackedInfoFrame::~StackedInfoFrame()
@@ -139,6 +136,43 @@ void StackedInfoFrame::setCurrentFrameType(QString s)
     }
 }
 
+void StackedInfoFrame::setTabVisibility()
+{
+    if (!contest)
+    {
+        ui->tabbar->setVisible(false);
+        return;
+    }
+    bool setTabsVisible = (contest->contestBands.getValue() == allHF);
+
+    QString a = ui->infoCombo->currentText();
+
+    switch ( getAuxEntryType(a) )
+    {
+    case aeClock:
+        setTabsVisible = false;
+        break;
+
+    case aeFilter:
+        setTabsVisible = false;
+        break;
+
+    case aeMemories:
+        setTabsVisible = false;
+        break;
+
+    case aeStats:
+        setTabsVisible = false;
+        break;
+
+    default:
+        break;
+    }
+
+    ui->tabbar->setVisible(setTabsVisible);
+    ui->tabbar->setFocusPolicy(Qt::NoFocus);
+
+}
 void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 {
     if (!contest)
@@ -172,8 +206,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     locTreeFrame = nullptr;
     statsFrame = nullptr;
 
-    bool setTabsVisible = (contest->contestBands.getValue() == allHF);
-
     QString a = ui->infoCombo->currentText();
 
     switch ( getAuxEntryType(a) )
@@ -183,7 +215,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = clockFrame;
         layout()->addWidget(currStackFrame);
         clockFrame->setContest(contest);
-        setTabsVisible = false;
         break;
 
     case aeDXCC:
@@ -205,7 +236,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = filterFrame;
         layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
-        setTabsVisible = false;
         break;
 
     case aeMemories:
@@ -213,7 +243,6 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = rigMemFrame;
         layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
-        setTabsVisible = false;
         break;
 
     case aeLocatorMap:
@@ -235,12 +264,8 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         currStackFrame = statsFrame;
         layout()->addWidget(statsFrame);
         statsFrame->setContest(contest);
-        setTabsVisible = false;
         break;
     }
-
-    ui->tabbar->setVisible(setTabsVisible);
-    ui->tabbar->setFocusPolicy(Qt::NoFocus);
 
     if (contest && stackInstance < STACKITEMS)
     {
@@ -249,6 +274,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         contest->currentStackItems[stackInstance].setValue(auxoptions[ae].s);
         contest->commonSave(false);
     }
+    setTabVisibility();
 }
 
 
@@ -290,7 +316,7 @@ void StackedInfoFrame::setContest(LoggerContestLog *ct)
 
                 QString a = ui->infoCombo->currentText();
 
-                if(ct->currentStackItemsValid && aux != a )
+                if(ct->currentStackItemsValid && aux != a && !aux.isEmpty())
                 {
                     // set to contest value
                     ui->infoCombo->setCurrentText(aux);
@@ -315,7 +341,7 @@ void StackedInfoFrame::clearContestInFrame(BaseContestLog *ct)
 
 void StackedInfoFrame::onContestBandChanged(BaseContestLog *ct)
 {
-    if (ct && contest == ct)
+    if (ct && contest == ct && contest->contestBands.getValue() == allHF)
     {
         for (int i = 0; i < ui->tabbar->count(); i++)
         {
@@ -326,8 +352,7 @@ void StackedInfoFrame::onContestBandChanged(BaseContestLog *ct)
             }
         }
     }
-    bool setTabsVisible = ct && (ct->contestBands.getValue() == allHF);
-    ui->tabbar->setVisible(setTabsVisible);
+    setTabVisibility();
 }
 void StackedInfoFrame::on_ScrollToDistrict( const QString &qth, BaseContestLog *c )
 {
@@ -392,12 +417,6 @@ void StackedInfoFrame::onRefreshStackMults(BaseContestLog *ct)
             districtFrame->reInitialiseDistricts();
     }
 }
-
-void StackedInfoFrame::on_FontChanged()
-{
-}
-
-
 
 void StackedInfoFrame::onFiltersChanged(BaseContestLog *ct)
 {

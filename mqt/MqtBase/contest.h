@@ -348,7 +348,7 @@ class BaseContestLog: public BaseLogList
 
       virtual void processMinosStanza( const QString &methodName, MinosTestImport * const mt );
       virtual bool getStanza( unsigned int stanza, QString &stanzaData );
-      virtual void setStanza( unsigned int stanza, int stanzaStart );
+      virtual void setStanza( unsigned int stanza, int stanzaStart, int stanzaEnd );
 
       // general
 

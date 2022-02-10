@@ -51,19 +51,28 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       if ( Fieldname.toUpper() == "QSO_DATE" )
       {
          // ADIF now specifies 8 Digits representing a UTC date in YYYYMMDD format
-         if ( FieldLength == 6 )
-            aqso->time.setDate( FieldContent, DTGLOG );
-         else
-            if ( FieldLength == 8 )
-               aqso->time.setDate( FieldContent.right(6), DTGLOG );
+         dateOn = FieldContent.right(6);
       }
       if ( Fieldname.toUpper() == "TIME_ON" )
+      {
+          // 6 Digits representing a UTC time in HHMMSS format
+          // or 4 Digits representing a time in HHMM format
+          // either way we will take the 1st 4 chars
+          timeOn = FieldContent;
+
+      }
+      if ( Fieldname.toUpper() == "QSO_DATE_OFF" )
+      {
+         // ADIF now specifies 8 Digits representing a UTC date in YYYYMMDD format
+         dateOff = FieldContent.right(6);
+      }
+      if ( Fieldname.toUpper() == "TIME_OFF" )
       {
          // 6 Digits representing a UTC time in HHMMSS format
          // or 4 Digits representing a time in HHMM format
          // either way we will take the 1st 4 chars
 
-         aqso->time.setTime( FieldContent, DTGLOG );
+          timeOff = FieldContent;
       }
       if ( Fieldname.toUpper() == "CALL" )
       {
@@ -183,7 +192,29 @@ void ADIFImport::ADIFImportEndOfRecord( )
 {
    if ( aqso )
    {
-      // save contact
+       if (dateOn.isEmpty())
+       {
+           dateOn = dateOff;
+       }
+       if (dateOff.isEmpty())
+       {
+           dateOff = dateOn;
+       }
+       if (timeOn.isEmpty())
+       {
+           timeOn = timeOff;
+       }
+       if (timeOff.isEmpty())
+       {
+           timeOff = timeOn;
+       }
+       aqso->timeOn.setDate( dateOn, DTGLOG );
+       aqso->timeOn.setTime( timeOn, DTGLOG );
+
+       aqso->timeOff.setDate( dateOff, DTGLOG );
+       aqso->timeOff.setTime( timeOff, DTGLOG );
+
+       // save contact
 
       // we have to have log_sequence set before we insert - or it will cause
       // duplicates
@@ -269,7 +300,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
             }
         }
 
-        dtg d = bct->time;
+        dtg d = bct->timeOff;
         if (!c->checkTime(d))
         {
             // with multiple simultaneous contests (FT8 UK/EU) we can find not logging inconvenient

@@ -690,9 +690,19 @@ bool RigSetupDialog::checkTransvertFreqInBand()
             for(const auto &tv: qAsConst(transvertList))
             {
                 QString transVertBand;
-                if (!transVerterInBand(availRadioData.value(r)->transVertSettings.value(tv), transVertBand ))
+                QSharedPointer<TransVertParams>tvp = availRadioData.value(r)->transVertSettings.value(tv);
+                if (!transVerterInBand(tvp, transVertBand ))
                 {
-                    outOfBandTransverts.append(r + ':' + transVertBand);
+                    if (transVertBand.isEmpty())
+                    {
+                        QString na = tr("%1 Transvert band not enabled : %2").arg(r, tvp->band);
+
+                        outOfBandTransverts.append(na);
+                    }
+                    else
+                    {
+                        outOfBandTransverts.append(r + ':' + transVertBand);
+                    }
                 }
 
             }

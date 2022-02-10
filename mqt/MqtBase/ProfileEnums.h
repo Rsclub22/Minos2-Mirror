@@ -62,7 +62,11 @@ enum LOGGERPROFILE {
    elpAgeProtectContests,
    elpAgeToProtectContests,
    elpBandmapOldStyle,
+   elpAddBandMapTuningEnable,
    elpAddBandMapTuningTolerance,
+   elpBandMapDisableNotShown,
+   elpBandMapDisableLoggedCalls,
+   elpBandMapDisablePlaceHolders,
    elpCQRit,
 
    elpContestStartIgnorePresetFreq,

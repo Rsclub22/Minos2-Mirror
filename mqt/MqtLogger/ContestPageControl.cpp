@@ -190,7 +190,7 @@ void ContestPageControl::onContestShownChanged()
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
 
     QMap<BaseContestLog *, ContestPage *>::iterator p = pages.find(ct);
-    if (p == pages.end())
+    if (!(*p) || p == pages.end())
     {
         trace(QString("Hide CPC %1 %2").arg(instance).arg(ct->name.getValue()));
         hide();

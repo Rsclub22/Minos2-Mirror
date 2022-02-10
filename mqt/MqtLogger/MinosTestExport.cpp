@@ -57,7 +57,7 @@ void MinosTestExport::sendRequest(QSharedPointer<QFile> expfd, const QString &cm
    }
    // set the stanza into the contest so we can monitor it later
    exp_stanzaCount += 1;
-   ct->setStanza( static_cast<unsigned int>(exp_stanzaCount), static_cast<int>(fpos) );
+   ct->setStanza( static_cast<unsigned int>(exp_stanzaCount), static_cast<int>(fpos), static_cast<int>(fpos) + written );
 
 
    delete m;
@@ -309,9 +309,13 @@ void MinosTestExport::exportComment(QSharedPointer<QFile> expfd, const QSharedPo
    makeHeader( st, 1 );
 
    bool dirty = false;
-   if ( lct->time.isDirty() )
+   if ( lct->timeOn.isDirty() )
    {
-      st->addDtgMember( lct->time.getIsoDTG( dirty ), "logTime" );
+      st->addDtgMember( lct->timeOn.getIsoDTG( dirty ), "QSOStartTime" );
+   }
+   if ( lct->timeOff.isDirty() )
+   {
+      st->addDtgMember( lct->timeOff.getIsoDTG( dirty ), "logTime" );
    }
    if ( lct->contactFlags.isDirty() )
    {
@@ -335,9 +339,13 @@ int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer
    makeHeader( st, lct->getLogSequence() );
 
    bool dirty = false;
-   if ( lct->time.isDirty() )
+   if ( lct->timeOn.isDirty() )
    {
-      st->addDtgMember( lct->time.getIsoDTG( dirty ), "logTime" );
+      st->addDtgMember( lct->timeOn.getIsoDTG( dirty ), "QSOStartTime" );
+   }
+   if ( lct->timeOff.isDirty() )
+   {
+      st->addDtgMember( lct->timeOff.getIsoDTG( dirty ), "logTime" );
    }
    if ( lct->contactFlags.isDirty() )
    {

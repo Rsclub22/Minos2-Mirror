@@ -1169,14 +1169,14 @@ void TLogContainer::AppendAdifActionExecute()
         {
             MinosParameters::getMinosParameters() ->mshowMessage( tr("Failed to append %1").arg(fname) );
         }
-        ct->scanContest();
-        ct->validateLoc();
         for ( int i = spoint; i != ct->ctList.count(); i++ )
         {
             QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
             bct->commonSave(bct);
         }
         ct->commonSave( false );
+        ct->scanContest();
+        ct->validateLoc();
         MinosLoggerEvents::SendAfterLogContact(ct);
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
@@ -1425,7 +1425,6 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
          {
             if ( ced->exec() == QDialog::Accepted )
             {
-               contest->scanContest();
                show = true;
             }
             else
@@ -1438,13 +1437,13 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
       }
       else
       {
-         contest->scanContest();
          show = true;
       }
 
       if ( show )
       {
          TContestApp::getContestApp() ->setCurrentContest( contest );
+         contest->scanContest();
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
 

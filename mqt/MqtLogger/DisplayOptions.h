@@ -3,6 +3,7 @@
 
 #include <QFrame>
 #include "ProfileEnums.h"
+#include "ConfigurationOption.h"
 
 namespace Ui {
 class DisplayOptions;
@@ -27,10 +28,12 @@ private slots:
 private:
     Ui::DisplayOptions *ui;
 
-    bool so = false;
-    bool reportReadabilityInitialise = false;
-    bool reportStrengthAutoFill = false;
-    bool TabSandP = false;
+    ConfigurationOption ShowOperators;
+    ConfigurationOption ReadabilityInit;
+    ConfigurationOption AutoFill;
+    ConfigurationOption TabforSandP;
+    ConfigurationOption SeparateIcons;
+
     int lcf;
     int qff;
     QFont f;
@@ -47,8 +50,6 @@ private:
     int cmt;
     int cmr;
     int cmb;
-
-    bool sepIcons;
 
     void doFontChange();
 

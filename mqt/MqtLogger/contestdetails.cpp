@@ -84,6 +84,11 @@ ContestDetails::ContestDetails(QWidget *parent) :
     ExchangeComboBoxFW = new FocusWatcher(ui->ExchangeComboBox);
     ui->ExchangeComboBox->installEventFilter(this);
 
+    allowLoc4FW = new FocusWatcher(ui->AllowLoc4CB);
+    ui->AllowLoc4CB->installEventFilter(this);
+
+    allowLoc8FW = new FocusWatcher(ui->AllowLoc8CB);
+    ui->AllowLoc8CB->installEventFilter(this);
 
     connect(ContestNameEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(BandComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
@@ -93,6 +98,9 @@ ContestDetails::ContestDetails(QWidget *parent) :
     connect(MainOpComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(ExchangeEditFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
     connect(ExchangeComboBoxFW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+
+    connect(allowLoc4FW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
+    connect(allowLoc8FW, &FocusWatcher::focusChanged, this, &ContestDetails::focusChange);
 
     connect(LogContainer->sendDM, &TSendDM::setRadioList, this, &ContestDetails::on_SetRadioList);
     connect(LogContainer->sendDM, &TSendDM::RotatorList, this, &ContestDetails::on_RotatorList);
@@ -1087,15 +1095,29 @@ void ContestDetails::focusChange(QObject * /*obj*/, bool in, QFocusEvent * /*eve
         {
             ui->CallsignEdit->setStyleSheet(ssLineEditOK);
         }
+        contestTransferObject->allowLoc4.setValue( ui->AllowLoc4CB->isChecked() );    // bool
+        contestTransferObject->allowLoc8.setValue( ui->AllowLoc8CB->isChecked() );    // bool
 
         contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
-        if ( contestTransferObject->locatorMandatoryField.getValue() && contestTransferObject->myloc.getValRes() != LOC_OK )
+        contestTransferObject->validateLoc();
+        bool locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
+        if (locOk)
         {
-            ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
+            locOk = false;
+            int locLen = contestTransferObject->myloc.getLoc().length();
+            if (locLen == 6 || locLen == 8)
+            {
+                locOk = true;
+            }
+        }
+
+        if ( locOk )
+        {
+            ui->LocatorEdit->setStyleSheet(ssLineEditOK);
         }
         else
         {
-            ui->LocatorEdit->setStyleSheet(ssLineEditOK);
+            ui->LocatorEdit->setStyleSheet(ssLineEditFrRedBkRed);
         }
 
         if ( ui->PowerEdit->text().trimmed().isEmpty() )
@@ -1189,8 +1211,24 @@ QWidget * ContestDetails::getDetails( )
             nextD = ui->CallsignEdit;
         }
     }
+
+    contestTransferObject->allowLoc4.setValue( ui->AllowLoc4CB->isChecked() );
+    contestTransferObject->allowLoc8.setValue( ui->AllowLoc8CB->isChecked() );
+
     contestTransferObject->myloc.setLoc( ui->LocatorEdit->text() );
-    if (contestTransferObject->locatorMandatoryField.getValue() &&  contestTransferObject->myloc.getValRes() != LOC_OK )
+    contestTransferObject->validateLoc();
+    bool locOk = contestTransferObject->myloc.getValRes() == LOC_OK;
+    if (locOk)
+    {
+        locOk = false;
+        int locLen = contestTransferObject->myloc.getLoc().length();
+        if (locLen == 6 || locLen == 8)
+        {
+            locOk = true;
+        }
+    }
+
+    if (!locOk )
     {
         if (!nextD)
         {
@@ -1226,8 +1264,6 @@ QWidget * ContestDetails::getDetails( )
             nextD = ui->MainOpComboBox;
         }
     }
-    contestTransferObject->allowLoc4.setValue( ui->AllowLoc4CB->isChecked() );    // bool
-    contestTransferObject->allowLoc8.setValue( ui->AllowLoc8CB->isChecked() );    // bool
     contestTransferObject->location.setValue( ui->ExchangeEdit->text() );
     contestTransferObject->scoreMode.setValue( static_cast< SCOREMODE > (ui->PPQSORB->isChecked()?1:0) );  // combo
 

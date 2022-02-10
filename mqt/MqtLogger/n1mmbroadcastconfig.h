@@ -2,6 +2,8 @@
 #define N1MMBROADCASTCONFIG_H
 
 #include <QFrame>
+#include "ConfigurationOption.h"
+
 
 namespace Ui {
 class N1MMBroadcastConfig;
@@ -22,6 +24,11 @@ public:
     void cancel();
 private:
     Ui::N1MMBroadcastConfig *ui;
+
+    ConfigurationOption contactsSelect;
+    ConfigurationOption extCSSelect;
+    ConfigurationOption ADIFSelect;
+
 };
 
 #endif // N1MMBROADCASTCONFIG_H

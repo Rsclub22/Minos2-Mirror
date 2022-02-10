@@ -117,6 +117,7 @@ void ContestDetailsTransferObject::getFromContest(LoggerContestLog *ct)
 
     mycall = ct->mycall;
     myloc = ct->myloc;
+    validateLoc();
 
     allowLoc4 = ct->allowLoc4;
     allowLoc8 = ct->allowLoc8;
@@ -229,6 +230,7 @@ void ContestDetailsTransferObject::setToContest(LoggerContestLog *ct)
     ct->location = location;
 
     ct->mycall = mycall;
+    validateLoc();
     ct->myloc = myloc;
 
     ct->allowLoc4 = allowLoc4;

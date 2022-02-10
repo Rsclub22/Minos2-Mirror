@@ -217,7 +217,7 @@ QString N1MMBroadcast::genDeleteStanza(QSharedPointer<BaseContact> tct)
                   + "<contactdelete>\n"
                    + makeTag("app", "Minos")
                    + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
-                   + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("timestamp", tct->timeOff.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("call", tct->cs.getFullCall())       //        <call>W2BBB</call>
                    + makeTag("StationName", "")                         //        <StationName>PHONE-15M</StationName>
             + "</contactdelete>\n";
@@ -250,7 +250,7 @@ QString N1MMBroadcast::genContactStanza(QString type, BaseContestLog *b, QShared
                    + makeTag("app", "Minos")
                    + makeTag("contestname", c->name.getValue())         //        <contestname>DXPEDITION</contestname>
                    + makeTag("contestnr", "0")                          //        <contestnr>10</contestnr>
-                   + makeTag("timestamp", tct->time.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
+                   + makeTag("timestamp", tct->timeOff.getN1mmDTG())       //        <timestamp>2016-04-10 16:17:41</timestamp>
                    + makeTag("mycall", c->mycall.getFullCall())   //        <mycall>K8UT</mycall>
                    + makeTag("band", cb)                                //        <band>21</band>
                    + makeTag("rxfreq", sfreq)                          //        <rxfreq>2125500</rxfreq>

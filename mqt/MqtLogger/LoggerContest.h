@@ -25,6 +25,7 @@ struct StanzaPos
 {
    unsigned int stanza;
    long stanzaStart;
+   long stanzaEnd;
 };
 class LoggerContestLog : public BaseContestLog
 {
@@ -75,7 +76,7 @@ protected:
       }
 
       virtual void processMinosStanza( const QString &methodName, MinosTestImport * const mt ) override;
-      virtual void setStanza( unsigned int stanza, int stanzaStart ) override;
+      virtual void setStanza(unsigned int stanza, int stanzaStart , int stanzaEnd) override;
       virtual bool getStanza(unsigned int Stanza, QString &stanzaData ) override;
 
       // The contest details
@@ -209,7 +210,7 @@ protected:
       bool exportMinos(QSharedPointer<QFile> expfd );
 
       virtual void makeContact( bool time_now, QSharedPointer<BaseContact>& ) override;
-      QSharedPointer<BaseContact> addContact(int newctno, unsigned short extra_flags, bool save_new, bool catchup , QString mode, QString mgmSubmode, dtg ctTime, Frequency &freq);
+      QSharedPointer<BaseContact> addContact(int newctno, unsigned short extra_flags, bool save_new, bool catchup , QString mode, QString mgmSubmode, dtg ctTime, const Frequency &freq);
       QSharedPointer<BaseContact> addContactBetween(QSharedPointer<BaseContact> prior, QSharedPointer<BaseContact> next , dtg ctTime);
       void removeContact(QSharedPointer<BaseContact> );
 

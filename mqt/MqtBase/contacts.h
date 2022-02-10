@@ -82,6 +82,10 @@ class BaseContact: public QObject
       {
          return 0;
       }
+      bool notValidContact()
+      {
+          return ( contactFlags.getValue() & ( NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT | TO_BE_ENTERED) );
+      }
       virtual QVector < QSharedPointer<BaseContact> > &getHistory()
       {
          return history;
@@ -115,7 +119,8 @@ class BaseContact: public QObject
 
       Callsign cs;   //CONTAIN MinosItem
       Locator loc;   //CONTAIN MinosItem
-      dtg time;      //CONTAIN MinosItem
+      dtg timeOn;    //CONTAIN MinosItem
+      dtg timeOff;   //CONTAIN MinosItem
 
       MinosStringItem<QString> extraText;
       MinosStringItem<QString> mode;

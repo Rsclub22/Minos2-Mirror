@@ -1,0 +1,18 @@
+We now have the ability to build two different versions on Minos, known as
+"First Installation" (or "normal") and "Second Installation"
+  
+ The primary reason for a second installation is to keep your proper release 
+ installation intact when testing Beta releases.
+ 
+ The two versions can be installed and uninstalled independantly.
+ 
+First Installation is the traditional build, as for normal releases.
+
+Second Installation is for a "parallel" installation; it will not overwrite a
+"first" installation (but should ALWAYS be installed to a separate directory).
+ 
+ It uses separate Windows registry entries (and on Linux, separate files in ./config);
+ and the networking aspects should never interact with a first installation.
+ 
+ To build a second installation, use buildSecondInstall.bat (Windows) or buildSecondInstall.sh (Linux)
+ 

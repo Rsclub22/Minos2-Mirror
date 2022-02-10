@@ -169,12 +169,14 @@ void RadioSettingDialog::initialise()
 
     freqPresetReadSettings(presetFreq, bands); // static
 
-    ui->turnOffColourRadioFreqDialChkBox->setChecked(readRadioSettingsCheckBox(elpContestTurnOffOperatingFreqColorRadioDial));
-    ui->contestStartIgnorePresetFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestStartIgnorePresetFreq));
-    ui->contestChangeIgnorePreviousFreqChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeIgnorePreviousFreq));
-    ui->constestChangeRestoreContestModeChkBox->setChecked(readRadioSettingsCheckBox(elpContestChangeRestoreContestMode));
-    ui->CQRitChkBox->setChecked(readRadioSettingsCheckBox(elpCQRit));
+    //===========================================================================================================
+    turnOffColourRadioFreqDial.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestTurnOffOperatingFreqColorRadioDial, ui->turnOffColourRadioFreqDialChkBox);
+    contestStartIgnorePresetFreq.initialise(&TContestApp::getContestApp() ->loggerBundle,elpContestStartIgnorePresetFreq, ui->contestStartIgnorePresetFreqChkBox );
+    contestChangeIgnorePreviousFreq.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeIgnorePreviousFreq, ui->contestChangeIgnorePreviousFreqChkBox );
+    constestChangeRestoreContestMode.initialise(&TContestApp::getContestApp() ->loggerBundle, elpContestChangeRestoreContestMode, ui->constestChangeRestoreContestModeChkBox );
+    CQRit.initialise(&TContestApp::getContestApp() ->loggerBundle, elpCQRit, ui->CQRitChkBox);
 
+    //===========================================================================================================
     ui->enableBandSwChkBox->setChecked(readEnableBandSwitchFromIni());
     enableBandSwLineEdits(ui->enableBandSwChkBox->isChecked());
 
@@ -229,6 +231,26 @@ void RadioSettingDialog::cancel()
 void RadioSettingDialog::finalise()
 {
     saveSettings();
+    if (turnOffColourRadioFreqDial.finalise())
+    {
+        logRadioSettingsChangeFlag->operatingFreqColor = true;
+    }
+    if (contestStartIgnorePresetFreq.finalise( ))
+    {
+        logRadioSettingsChangeFlag->ignorePresetFreq = true;
+    }
+    if (contestChangeIgnorePreviousFreq.finalise( ))
+    {
+        logRadioSettingsChangeFlag->ignorePreviousFreq = true;
+    }
+    if (constestChangeRestoreContestMode.finalise( ))
+    {
+        logRadioSettingsChangeFlag->restoreContestMode = true;
+    }
+    if (CQRit.finalise())
+    {
+        logRadioSettingsChangeFlag->cqRit = true;
+    }
 
     if (logRadioSettingsChangeFlag->isChanged())
     {
@@ -424,12 +446,6 @@ void RadioSettingDialog::saveSettings()
     saveModePresetFreqSettings(freqPresetData::PRESET_MODE_MGM, config);
 
     presetFreq.clearDirty();
-
-    saveRadioSettingsCheckBoxes();
-    saveBandSwComport();
-    saveBandSwData();
-    saveBandSwCheckBoxes();
-
 }
 
 
@@ -445,18 +461,6 @@ void RadioSettingDialog::saveModePresetFreqSettings(QString mode, QSettings &con
         }
     }
     config.endGroup();
-}
-
-
-void RadioSettingDialog::saveRadioSettingsCheckBoxes()
-{
-    saveRadioSettingsCheckBox(ui->turnOffColourRadioFreqDialChkBox, elpContestTurnOffOperatingFreqColorRadioDial);
-    saveRadioSettingsCheckBox(ui->contestStartIgnorePresetFreqChkBox, elpContestStartIgnorePresetFreq);
-    saveRadioSettingsCheckBox(ui->contestChangeIgnorePreviousFreqChkBox, elpContestChangeIgnorePreviousFreq);
-    saveRadioSettingsCheckBox(ui->constestChangeRestoreContestModeChkBox, elpContestChangeRestoreContestMode);
-    saveRadioSettingsCheckBox(ui->CQRitChkBox, elpCQRit);
-
-
 }
 
 void RadioSettingDialog::saveBandSwData()
@@ -555,66 +559,4 @@ void RadioSettingDialog::enableBandSwLineEdits(bool enabled)
     ui->enableSerialBandSwChkBox->setEnabled(enabled);
     ui->bandSwCombo->setEnabled(enabled);
     ui->comportLabel->setEnabled(enabled);
-}
-
-
-void RadioSettingDialog::onTurnOffColourRadioFreqDialChkChanged(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestTurnOffOperatingFreqColorRadioDial, checked);
-
-}
-
-
-void RadioSettingDialog::onIgnorePreviousFreqChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeIgnorePreviousFreq, checked);
-
-}
-
-void RadioSettingDialog::onIgnorePresetFreqChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestStartIgnorePresetFreq, checked);
-
-}
-
-bool RadioSettingDialog::readRadioSettingsCheckBox(LOGGERPROFILE profile)
-{
-
-    bool state;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( profile, state );
-    return state;
-}
-
-
-void RadioSettingDialog::saveRadioSettingsCheckBox(QCheckBox* chkbox, LOGGERPROFILE profile)
-{
-    if (chkbox->isChecked() != readRadioSettingsCheckBox(profile))
-    {
-       TContestApp::getContestApp()->loggerBundle.setBoolProfile(profile, chkbox->isChecked());
-       // flag change
-       if (chkbox == ui->turnOffColourRadioFreqDialChkBox)
-       {
-           logRadioSettingsChangeFlag->operatingFreqColor = true;
-       }
-       else if (chkbox == ui->contestStartIgnorePresetFreqChkBox)
-       {
-           logRadioSettingsChangeFlag->ignorePresetFreq = true;
-       }
-       else if (chkbox == ui->contestChangeIgnorePreviousFreqChkBox)
-       {
-           logRadioSettingsChangeFlag->ignorePreviousFreq = true;
-       }
-       else if (chkbox == ui->constestChangeRestoreContestModeChkBox)
-       {
-           logRadioSettingsChangeFlag->restoreContestMode = true;
-       }
-    }
-
-}
-
-
-void RadioSettingDialog::onRestoreContestModeChecked(bool checked)
-{
-    TContestApp::getContestApp()->loggerBundle.setBoolProfile(elpContestChangeRestoreContestMode, checked);
-
 }

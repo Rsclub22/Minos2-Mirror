@@ -70,10 +70,6 @@ public:
 
     void setClusterServerState(QString stateMsg);
 
-    void saveTuneAddBandMapSetting(bool state);
-    bool readTuneAddBandMapSetting();
-
-
     void setRunOnFlag(Frequency _runFreq, QString mode, bool _runModeOn);
     void setRunOffFreqFlag(Frequency _runFreq, bool _offRunFreq);
     void setBandmapRadioIsConnect(bool state);
@@ -81,6 +77,8 @@ public:
     void setMode(QString mode);
 
 
+    void checkLegalFrequencies(Frequency freq);
+    
 signals:
 
     void freqDisplayClicked();

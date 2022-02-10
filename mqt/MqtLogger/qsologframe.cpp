@@ -130,8 +130,6 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &QSOLogFrame::on_FontChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QSOMargins, this, &QSOLogFrame::on_QSOMargins);
 
-    connect(ui->tuningAddMapChkBox, &QCheckBox::stateChanged, this, &QSOLogFrame::tuningAddMapChkBoxStateChange);
-
     TContestApp::getContestApp() ->loggerBundle.getIntProfile( elpAddBandMapTuningTolerance, addToBandmapTuneTolerance );
 
     if (addToBandmapTuneTolerance < ADD_TUNING_BANDMAP_FREQ_DEFAULT_MIN_TOLERANCE || addToBandmapTuneTolerance > ADD_TUNING_BANDMAP_FREQ_DEFAULT_MAX_TOLERANCE)
@@ -451,6 +449,10 @@ bool QSOLogFrame::frameHasFocus()
             || ui->LocFrame->getTextEditEdit()->hasFocus()
             || ui->QTHFrame->getTextEditEdit()->hasFocus()
             || ui->commentsFrame->getTextEditEdit()->hasFocus()
+            || ui->MainOpComboBox->hasFocus()
+            || ui->SecondOpComboBox->hasFocus()
+            || ui->MainOpComboBox->view()->hasFocus()
+            || ui->SecondOpComboBox->view()->hasFocus()
             )
     {
         return true;
@@ -506,7 +508,7 @@ void QSOLogFrame::initialise()
     vcs.push_back( ssIl );
     rrIl = new ValidatedControl( ui->RSTRxFrame->getTextEditEdit(), vtRST );
     vcs.push_back( rrIl );
-    srIl = new ValidatedControl( ui->SerRxFrame->getTextEditEdit(), vtSN );
+    srIl = new ValidatedControl( ui->SerRxFrame->getTextEditEdit(), vtSN0 );
     vcs.push_back( srIl );
     locIl = new ValidatedControl( ui->LocFrame->getTextEditEdit(), vtLoc );
     vcs.push_back( locIl );
@@ -649,8 +651,10 @@ void QSOLogFrame::on_CatchupButton_clicked()
 
     }
     // set the screencontact dtg as not entered
-    screenContact.time.setDate(QString(), DTGLOG);
-    screenContact.time.setTime(QString(), DTGLOG);
+    screenContact.timeOn.setDate(QString(), DTGLOG);
+    screenContact.timeOn.setTime(QString(), DTGLOG);
+    screenContact.timeOff.setDate(QString(), DTGLOG);
+    screenContact.timeOff.setTime(QString(), DTGLOG);
     setTimeStyles();
     sortUnfilledCatchupTime();
     selectField( nullptr );
@@ -713,49 +717,51 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
 
     getScreenEntry(); // make sure it is saved
+    bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
 
-    if ( screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
+    if ( selectedContact && screenContact.contactFlags & ( LOCAL_COMMENT | DONT_PRINT | COMMENT_ONLY ) )
     {
         if ( !checkAndLogEntry() )  // if it is the same, then don't log
         {
            return;
         }
-//       logCurrentContact( );
-//       return;
     }
-    // Do we want "call" tab order or "S and P" tab order?
-    bool tabSandPstate;
-    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
-
-    if (tabSandPstate)
-    {
-        tabSandPstate = ui->SandPrb->isChecked();
-    }
-
-    // validate the entry; if still invalid, spin round the invalid
-    // controls (this should really be the job of tab, but...)
-
+    bool tabSandPstate = false;
     QWidget *currn = current;
-    QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
-    QLineEdit *lte = ui->LocFrame->getTextEditEdit();
-
-    if (currn == cte && cte->text().isEmpty())
+    if (!edit && !was_unfilled && !catchup)
     {
-        QString pht = cte->placeholderText();
-        QString lht = lte->placeholderText();
+        // Do we want "call" tab order or "S and P" tab order?
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpTabforSandP, tabSandPstate );
 
-        if (!pht.isEmpty())
+        if (tabSandPstate)
         {
-            cte->setText(pht);
+            tabSandPstate = ui->SandPrb->isChecked();
         }
-        if (contest->locatorMandatoryField.getValue())
+
+        // validate the entry; if still invalid, spin round the invalid
+        // controls (this should really be the job of tab, but...)
+
+        QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
+        QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+
+        if (currn == cte && cte->text().isEmpty())
         {
-            if (!lht.isEmpty())
+            QString pht = cte->placeholderText();
+            QString lht = lte->placeholderText();
+
+            if (!pht.isEmpty())
             {
-                lte->setText(lht);
+                cte->setText(pht);
             }
-        }
+            if (contest->locatorMandatoryField.getValue())
+            {
+                if (!lht.isEmpty())
+                {
+                    lte->setText(lht);
+                }
+            }
 
+        }
     }
 
     if ( !valid( cmCheckValid )
@@ -768,7 +774,6 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     {
        doAutofill();
     }
-    bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
                                     // validation has been done
     {
@@ -1918,36 +1923,39 @@ bool QSOLogFrame::checkAndLogEntry()
 
    // check if the screen contact and selected log contact differ
    bool retval = true;
-   getScreenEntry();
-   QSharedPointer<BaseContact> sct = selectedContact ;
-   if ( sct->ne( screenContact ) )
+   if (selectedContact)
    {
-      bool mresp = true;
+       getScreenEntry();
+       QSharedPointer<BaseContact> sct = selectedContact ;
+       if ( sct->ne( screenContact ) )
+       {
+          bool mresp = true;
 
-      // Dont check with op if not entered, and e.g. ESC pressed
-      // Also allows for partial saving when in Uri mode
-      if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
-      {
-         mresp = mShowYesNoMessage( this,
-                             tr("This Contact has changed: Shall I log the changes?\n"
-                             "\n"
-                             "Yes         - Log as shown\n"
-                             "No          - Discard changes")
-                              );
-      }
-      if ( mresp )
-      {
-         //Yes - log and continue
-         logScreenEntry( );
-         retval = true;
-      }
-      else
-      {
-         //Cancel - Discard changes, continue action
-         screenContact.copyFromArg( selectedContact );  // we have to ACTUALLY revert, as the action may not conmplete
-         showScreenEntry();
-         retval = false;	// stay where we are
-      }
+          // Dont check with op if not entered, and e.g. ESC pressed
+          // Also allows for partial saving when in Uri mode
+          if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
+          {
+             mresp = mShowYesNoMessage( this,
+                                 tr("This Contact has changed: Shall I log the changes?\n"
+                                 "\n"
+                                 "Yes         - Log as shown\n"
+                                 "No          - Discard changes")
+                                  );
+          }
+          if ( mresp )
+          {
+             //Yes - log and continue
+             logScreenEntry( );
+             retval = true;
+          }
+          else
+          {
+             //Cancel - Discard changes, continue action
+             screenContact.copyFromArg( selectedContact );  // we have to ACTUALLY revert, as the action may not conmplete
+             showScreenEntry();
+             retval = false;	// stay where we are
+          }
+       }
    }
    return retval;
 }
@@ -2034,8 +2042,36 @@ void QSOLogFrame::setMode(QString m)
 //---------------------------------------------------------------------------
 void QSOLogFrame::setFreq(Frequency f)
 {
+    //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     if (curFreq != f)
     {
+        BandList &blist = BandList::getBandList();
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK;
+
+        bandOK = blist.findBand(f, bi);
+        if (bandOK)
+        {
+            if (bi->uk != contest->currentBand.getValue())
+            {
+                f.clear();
+            }
+        }
+        else
+        {
+            f.clear();
+        }
+
+        if (qint64(f) < 100)
+        {
+            QString cband = contest->currentBand.getValue().trimmed();
+            bandOK = blist.findBand(cband, bi);
+            if (bandOK)
+            {
+                f = bi->fLow;
+            }
+        }
+
         curFreq = f;
         emit freqChanged(f);
 
@@ -2139,10 +2175,9 @@ void QSOLogFrame::checkQsoFrameColour()
     }
     else
     {
-        if (!frameHasFocus())
+        if (!edit && !frameHasFocus())
         {
-            //ui->RHSFrame->setVisible(false);
-            doShowOperators(false);
+            ui->flagsFrame->setVisible(false);
             ssQsoFrame = ssQsoFrameRed;
 
             ui->protectionLabel->setText(HtmlFontColour(Qt::red) + "<b>  " + tr("No QSO entry field focussed!"));
@@ -2151,8 +2186,7 @@ void QSOLogFrame::checkQsoFrameColour()
         else
         {
             ui->protectionLabel->setText("");
-            //ui->RHSFrame->setVisible(true);
-            on_ShowOperators();
+            ui->flagsFrame->setVisible(true);
         }
     }
 
@@ -2419,6 +2453,7 @@ void QSOLogFrame::on_ModeButton_clicked()
     oldMode = myOldMode;
     ui->ModeButton->setText(oldMode);
     ui->MGMSubModeFrame->setVisible(ui->ModeComboBoxGJV->currentText() == hamlibData::MGM);
+    contest->currentMode.setValue(mode);
     EditControlExit(ui->ModeButton);
 }
 
@@ -2509,7 +2544,7 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
-   lct->time.setDirty(); // As we may have created the contact with the same time as the screen contact
+   lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
                          // But this only happens when seconds are :00, as the main log
                          // is only to a minute resolution
@@ -2540,28 +2575,28 @@ void QSOLogFrame::logScreenEntry( )
 void QSOLogFrame::getScreenContactTime()
 {
    updateQSOTime();
-   screenContact.time.setDate( ui->dateEdit->date() );
-   screenContact.time.setTime( ui->timeEdit->time() );
+   screenContact.timeOn.setDate( ui->dateEdit->date() );
+   screenContact.timeOn.setTime( ui->timeEdit->time() );
+   screenContact.timeOff.setDate( ui->dateEdit->date() );
+   screenContact.timeOff.setTime( ui->timeEdit->time() );
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::showScreenContactTime()
 {
-   ui->dateEdit->setDate(screenContact.time.getDate( ));
-   ui->timeEdit->setTime(screenContact.time.getTime( ));
+   ui->dateEdit->setDate(screenContact.timeOff.getDate( ));
+   ui->timeEdit->setTime(screenContact.timeOff.getTime( ));
 
    setDtgSection();
 }
 void QSOLogFrame::getScreenRigData()
 {
-    if (!edit && !catchup && isRadioLoaded())
+    screenContact.rigName = curRadioName;
+    if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
     {
-        screenContact.rigName = curRadioName;
         screenContact.frequency = curFreq;
     }
     else
     {
-        screenContact.rigName.clear();
-
         QString cb;
         screenContact.frequency = contest->getTxFreqBand(Frequency(), cb);
     }
@@ -2597,13 +2632,13 @@ void QSOLogFrame::logCurrentContact( )
       {
          if ( mShowYesNoMessage( this, tr("Do you want to enter the missing contacts later?") ) )
          {
-             dtg ctTime(screenContact.time);
+             dtg ctTime(screenContact.timeOff);
              QSharedPointer<BaseContact> pct;
              if (contest->getContactCount() > 0)
                 pct = contest->pcontactAt(contest->getContactCount() - 1);
              if ( pct )
              {
-                ctTime = pct->time;
+                ctTime = pct->timeOff;
              }
              else
              {
@@ -2863,7 +2898,7 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
         ui->timeEdit->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         */
 
-        int tne = screenContact.time.notEntered(); // partial dtg will give +fe
+        int tne = screenContact.timeOff.notEntered(); // partial dtg will give +fe
         // full dtg gives -ve, none gives 0
         if ( tne == 0 )
         {
@@ -2874,9 +2909,10 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
                 pct = getPriorContact();
             if ( pct )
             {
-                screenContact.time = pct->time;
-                ui->dateEdit->setDate(screenContact.time.getDate( ));
-                ui->timeEdit->setTime(screenContact.time.getTime( ));
+                screenContact.timeOn = pct->timeOn;
+                screenContact.timeOff = pct->timeOff;
+                ui->dateEdit->setDate(screenContact.timeOff.getDate( ));
+                ui->timeEdit->setTime(screenContact.timeOff.getTime( ));
             }
             else
             {
@@ -2887,7 +2923,8 @@ void QSOLogFrame::sortUnfilledCatchupTime( )
                 dtg time(false);
                 time.setDate( ui->dateEdit->date());
                 time.setTime( ui->timeEdit->time() );
-                screenContact.time = time;
+                screenContact.timeOn = time;
+                screenContact.timeOff = time;
             }
 
             setDtgSection();
@@ -2918,7 +2955,7 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    sortUnfilledCatchupTime();
    ui->SerTxFrame->getTextEditEdit()->setReadOnly(!edit);
 
-   int tne = screenContact.time.notEntered(); // partial dtg will give +fe
+   int tne = screenContact.timeOff.notEntered(); // partial dtg will give +fe
    // full dtg gives -ve, none gives 0
 
    if (tne < 0)
@@ -3021,10 +3058,10 @@ void QSOLogFrame::on_InsertBeforeButton_clicked()
     QSharedPointer<BaseContact> pct = getPriorContact();
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
 
-    dtg ctTime = selectedContact->time;
+    dtg ctTime = selectedContact->timeOff;
 
     if (pct)
-        ctTime = pct->time;
+        ctTime = pct->timeOff;
 
     QSharedPointer<BaseContact> newct = ct->addContactBetween(pct, selectedContact, ctTime);
     newct->contactFlags.setValue(newct->contactFlags.getValue()|TO_BE_ENTERED);
@@ -3035,7 +3072,7 @@ void QSOLogFrame::on_InsertAfterButton_clicked()
 {
     QSharedPointer<BaseContact> nct = getNextContact();
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    dtg ctTime = selectedContact->time;
+    dtg ctTime = selectedContact->timeOff;
 
     QSharedPointer<BaseContact> newct = ct->addContactBetween(selectedContact, nct, ctTime);
     newct->contactFlags.setValue(newct->contactFlags.getValue()|TO_BE_ENTERED);
@@ -3100,64 +3137,6 @@ void QSOLogFrame::on_ValidateError (int mess_no )
 }
 
 //---------------------------------------------------------
-void QSOLogFrame::tuningAddMapChkBoxStateChange(int state)
-{
-
-
-    if (state == Qt::Checked)
-    {
-        if (!getTuneAddBandMapSetting())
-        {
-            setTuneAddBandMapSetting(true);
-        }
-
-    }
-    else
-    {
-        if (getTuneAddBandMapSetting())
-        {
-            setTuneAddBandMapSetting(false);
-        }
-
-    }
-}
-
-void QSOLogFrame::setTuningAddMapChkBoxState()
-{
-    bool state = getTuneAddBandMapSetting();
-    if (state != ui->tuningAddMapChkBox->isChecked())
-    {
-        if (state)
-        {
-            ui->tuningAddMapChkBox->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            ui->tuningAddMapChkBox->setCheckState(Qt::Unchecked);
-        }
-    }
-
-}
-
-bool QSOLogFrame::getTuneAddBandMapSetting()
-{
-    bool state = false;
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->isBandMapLoaded())
-    {
-        state = tslf->getTuneAddBandMapSetting();
-    }
-    return state;
-}
-
-void QSOLogFrame::setTuneAddBandMapSetting(bool state)
-{
-    TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (tslf && tslf->isBandMapLoaded())
-    {
-        tslf->setTuneAddBandMapSetting(state);
-    }
-}
 
 void QSOLogFrame::on_SpotLastLoggedPbClicked()
 {
@@ -3312,7 +3291,8 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
             scc.mode = n[3];
-            scc.time = dtg(true);
+            scc.timeOn = dtg(true);
+            scc.timeOff = dtg(true);
             QString cb;
             scc.frequency = contest->getTxFreqBand(Frequency(), cb);
 
@@ -3437,7 +3417,6 @@ void QSOLogFrame::setBandMapControlsVisible(bool visible)
 {
     ui->bandmapMarkFreqPb->setVisible(visible);
     ui->bandmapSaveFreqPb->setVisible(visible);
-    ui->tuningAddMapChkBox->setVisible(visible);
     bandmapControlsVisible = visible;
     checkQRZClusterBandmapShowing();
 }
@@ -3446,7 +3425,6 @@ void QSOLogFrame::setBandMapControlsDisabled(bool disabled)
 {
     ui->bandmapMarkFreqPb->setDisabled(disabled);
     ui->bandmapSaveFreqPb->setDisabled(disabled);
-    ui->tuningAddMapChkBox->setDisabled(disabled);
 }
 
 
@@ -3481,7 +3459,6 @@ void QSOLogFrame::checkBandMapAndClusterLoaded()
     if (contest && !contest->isReadOnly() && tslf && tslf->isBandMapLoaded())
     {
         setBandmapControlsState();
-        setTuningAddMapChkBoxState();
     }
     else
     {
@@ -3593,7 +3570,7 @@ void QSOLogFrame::setClusterSendSpotControlsState()
 void QSOLogFrame::on_FreqChanged(Frequency f)
 {
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && ui->tuningAddMapChkBox->isChecked())
+    if (!logDataFromBandmapOrMemory && tslf && tslf->isBandMapLoaded() && readTuneAddBandMapSetting())
     {
         qint64 dialFreq = qint64(f) / 1000;
         qint64 callsignEnterFreq = qint64(callsignEnterTextFreq) / 1000;
@@ -3629,7 +3606,6 @@ void QSOLogFrame::on_callRb_clicked()
 
     if (ui->callRb->isChecked())
     {
-
         TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
         if (tslf && tslf->runButtonsFrame)
         {
@@ -3638,3 +3614,9 @@ void QSOLogFrame::on_callRb_clicked()
     }
 }
 
+bool QSOLogFrame::readTuneAddBandMapSetting()
+{
+    bool state;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnable, state);
+    return state;
+}
