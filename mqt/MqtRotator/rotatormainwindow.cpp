@@ -470,6 +470,9 @@ int RotatorMainWindow::openRotator()
         logMessage(QString("Failed to create rotator from factory"));
         return OPEN_FAILED;
     }
+
+    dumpRotatorToTraceLog();
+
     connect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::displayBearing);
     connect(rotator, &RotatorBase::traceCommsMsg, this, &RotatorMainWindow::logMessage);
     connect(rotator, &RotatorBase::bearing_updated, this, &RotatorMainWindow::checkMoving);
@@ -978,8 +981,6 @@ void RotatorMainWindow::upDateAntenna()
             {
                 return;
             }
-
-
 
 
             //writeWindowTitle(appName);
