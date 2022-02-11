@@ -271,7 +271,8 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             antennaData->southStopType = S_STOPOFF;
         }
 
-        else if (maxRot == COMPASS_MAX360 && minRot == COMPASS_MIN0)
+        // COMPASS_MAX359 is for Green Heron which is max 359
+        else if ((maxRot == COMPASS_MAX360 || maxRot == COMPASS_MAX359) && minRot == COMPASS_MIN0)
         {
 
             antennaData->rotType = ROT_0_360;
@@ -284,7 +285,8 @@ bool rotSetupForm::setEndStopType(srotParams* antennaData, int minRot, int maxRo
             }
             else if (antennaData->southStopType ==  S_STOPINV)
             {
-                antennaData->max_azimuth = COMPASS_MAX360;
+                //antennaData->max_azimuth = COMPASS_MAX360;
+                antennaData->max_azimuth = maxRot;      // for Green Heron which isn't 360
                 antennaData->min_azimuth = COMPASS_MIN0;
                 antennaData->endStopType = ROT_0_360;
             }
