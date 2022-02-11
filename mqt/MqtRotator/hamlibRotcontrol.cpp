@@ -305,14 +305,9 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
             min_az = capsList[i]->min_az;
         }
 
-        if (key == "Green Heron RT-21")
-        {
-            max_az = 360;
-        }
-        else
-        {
-            max_az = capsList[i]->max_az;
-        }
+
+        max_az = capsList[i]->max_az;
+
 
         // uncomment to dump the rotator values to tracelog
         trace(QString("Manufacturer = %1, Model Name = %2, RotModel = %3, move = %4, stop = %5, minAz = %6, maxAz = %7")
