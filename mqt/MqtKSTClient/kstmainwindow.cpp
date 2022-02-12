@@ -30,13 +30,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     mainWindow = this;
 
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
-    ui->kstSplitter->setSizePolicy(sizePolicy);
-    ui->kstSplitter->setOrientation(Qt::Horizontal);
-
     QSettings settings;
 
     KSTserverName = settings.value("hostname", "www.on4kst.info").toString().trimmed();
@@ -128,6 +121,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QByteArray state;
     state = settings.value("kstSplitterState").toByteArray();
     ui->kstSplitter->restoreState(state);
+
+    // Make sure the kstSplitter covers the maximum vertical space
+
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
+    ui->kstSplitter->setSizePolicy(sizePolicy);
 
     state = settings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);

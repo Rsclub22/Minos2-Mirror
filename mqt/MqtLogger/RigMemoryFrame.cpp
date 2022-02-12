@@ -795,10 +795,6 @@ QVariant RigMemoryGridModel::headerData( int section, Qt::Orientation orientatio
         {
             if (delegate)
             {
-                // BUT the headers aren't drawn using the delegate, so this
-                // all fails to work
-
-                // Do we lose the vertical header?
                 QString s = "__";
                 QSize r = delegate->docSize(s);
                 return r;

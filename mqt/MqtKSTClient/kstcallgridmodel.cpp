@@ -366,10 +366,6 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
     {
         if (delegate)
         {
-            // BUT the headers aren't drawn using the delegate, so this
-            // all fails to work
-
-            // Do we lose the vertical header?
             QString s = "Memxx";
             QSize r = delegate->docSize(s);
             return r;
