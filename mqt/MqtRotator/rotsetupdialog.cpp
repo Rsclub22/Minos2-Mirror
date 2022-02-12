@@ -488,7 +488,7 @@ void RotSetupDialog::getAvailAntenna(int antNum, QSettings& config)
     availAntData[antNum]->supportCwCcwCmd = config.value("supportCwCcwCmd", false).toBool();
     availAntData[antNum]->simCwCcwCmd = config.value("simulateCwCCw", true).toBool();
     availAntData[antNum]->overRunFlag = config.value("overRun", false).toBool();
-    availAntData[antNum]->southStopType = (southStop) config.value("southStopType", southStop::S_STOPOFF).toInt();
+    availAntData[antNum]->southStopType = static_cast<southStop> (config.value("southStopType", southStop::S_STOPOFF).toInt());
     availAntData[antNum]->antennaOffset = config.value("antennaOffset", "").toInt();
     availAntData[antNum]->portType = (config.value("portType", RotCapConstants::PortType::none).toInt());
     availAntData[antNum]->comport = config.value("comport", "").toString();
