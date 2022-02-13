@@ -106,7 +106,6 @@ SOURCES += \
     bearinglineedit.cpp \
     callsigninputdialog.cpp \
     locatorinputdialog.cpp \
-    bandmapdatamodel.cpp \
     WsjtxNetworkMessage.cpp \
     WsjtxMessageServer.cpp \
     Wsjtx_qt_helpers.cpp
@@ -199,7 +198,6 @@ HEADERS += \
     bearinglineedit.h \
     callsigninputdialog.h \
     locatorinputdialog.h \
-    bandmapdatamodel.h \
     bandmapcommon.h \
     WsjtxNetworkMessage.hpp \
     WsjtxMessageServer.hpp \

@@ -136,6 +136,7 @@ void ClusterBandmapConfigure::initialise()
      BandMapMouseInFrameDelay.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandMapMouseInFrameDelay, ui->mouseInBcb);
      BandMapShowDerivedLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowDerivedLoc, ui->showDerivedLocChkBox);
      BandmapOldStyle.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandmapOldStyle, ui->oldBandmapChkBox);
+     BandmapInvert.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandmapInvert, ui->invertBandmap);
 }
 bool ClusterBandmapConfigure::check()
 {
@@ -161,6 +162,7 @@ void ClusterBandmapConfigure::finalise()
     BandMapMouseInFrameDelay.finalise();
     BandMapShowDerivedLoc.finalise();
     BandmapOldStyle.finalise();
+    BandmapInvert.finalise();
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 }

@@ -118,6 +118,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableNotShown , "BandMapDisableNotShown", true, QT_TR_NOOP("Disable Bandmap when not shown"), QT_TR_NOOP("Disable Bandmap when not shown"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableLoggedCalls , "BandMapDisableLoggedCalls", false, QT_TR_NOOP("Disable adding logged Calls to bandmap"), QT_TR_NOOP("Disable adding logged Calls to bandmap"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisablePlaceHolders , "BandMapDisablePlaceHolders", false, QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapInvert , "InvertBandmap", false, QT_TR_NOOP("Bandmap High Frequency At Top"), QT_TR_NOOP("Bandmap High Frequency At Top"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpCQRit , "CQRit", true, QT_TR_NOOP("RIT on CQ"), QT_TR_NOOP("RIT on CQ"), false ) ) );
 

@@ -66,6 +66,7 @@ SOURCES += \
     TSessionManager.cpp \
     WsjtxConfigureCQ.cpp \
     bandmapclientfilterdialog.cpp \
+    bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
     bandselbuttons.cpp \
@@ -164,6 +165,7 @@ HEADERS  += \
     TSessionManager.h \
     WsjtxConfigureCQ.h \
     bandmapclientfilterdialog.h \
+    bandmapdatamodel.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
     bandselbuttons.h \

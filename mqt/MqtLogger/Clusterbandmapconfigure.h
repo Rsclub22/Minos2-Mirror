@@ -43,6 +43,7 @@ private:
     ConfigurationOption BandMapMouseInFrameDelay;
     ConfigurationOption BandmapOldStyle;
     ConfigurationOption BandMapShowDerivedLoc;
+    ConfigurationOption BandmapInvert;
 
     struct distValue{
         QLineEdit *distLineEdit;

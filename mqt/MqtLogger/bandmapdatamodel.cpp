@@ -12,6 +12,7 @@
 
 #include "bandmapdatamodel.h"
 #include "rigutils.h"
+#include "ContestApp.h"
 
 // Note this is being used by a custom view with no horizontal headers.
 
@@ -367,12 +368,19 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
     {
         bandmapData.insert(row , rowData);
     }
+    bool invertBandmap = false;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
+
     std::sort(bandmapData.begin(), bandmapData.end(),
               [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
                 {
                     if (a->getFreq() == b->getFreq())
                     {
                         return a->getDxCall() < b->getDxCall();
+                    }
+                    if (invertBandmap)
+                    {
+                        return b->getFreq() < a->getFreq();
                     }
                     return a->getFreq() < b->getFreq();
                 }

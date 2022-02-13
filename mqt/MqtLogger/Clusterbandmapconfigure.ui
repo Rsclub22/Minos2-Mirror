@@ -113,6 +113,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="invertBandmap">
+           <property name="text">
+            <string>Bandmap High Frequency At Top</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="mouseInBcb">
            <property name="text">
             <string>Delay updates when mouse pointer is in the Bandmap</string>

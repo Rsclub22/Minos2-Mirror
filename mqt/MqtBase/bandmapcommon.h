@@ -44,9 +44,6 @@ const int MIN_ZOOM_LEVEL = 0;
 const int MAX_ZOOM_LEVEL = 20;
 const int START_ZOOM_LEVEL = MAX_ZOOM_LEVEL;
 
-
-const int DIAL_VERT_OFFSET = 10;      // dial offset to show first text
-
 }
 
 class BandmapZoomLevelIdAndNames

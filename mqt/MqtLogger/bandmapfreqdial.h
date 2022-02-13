@@ -66,7 +66,7 @@ public:
     void onFontChanged(QFont cf);
     void setCursorColour(QColor colour);
 
-    int getYCoordOnDial(const Frequency &frequency);
+    double getYCoordOnDial(const Frequency &frequency) const;
 
 
     Frequency getFreqFromYCoordOnDial(int y);
@@ -75,11 +75,7 @@ public:
 
     int getFullBandHeight(const Frequency &flow, const Frequency &fhigh) const;
 
-
-    Frequency getViewPortFreq(int startPos, Frequency contestBandFlow);
-
-    void setViewPortStartEndFreq(int startPos, int endPos, Frequency contestBandFlow);
-
+    void setViewPortStartEndFreq(int startPos, int endPos);
 
     void setContestBandLimits(const Frequency &flow, const Frequency &fhigh);
     void setFreqOperatingInfo(const QString contestBandStr, const QString contestModeStr, CheckOperatingFreq *operatingFreq, const bool operatingPlanOk);

@@ -69,6 +69,7 @@ enum LOGGERPROFILE {
    elpBandMapDisableNotShown,
    elpBandMapDisableLoggedCalls,
    elpBandMapDisablePlaceHolders,
+   elpBandmapInvert,
    elpCQRit,
 
    elpContestStartIgnorePresetFreq,
