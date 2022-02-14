@@ -2043,7 +2043,7 @@ void QSOLogFrame::setMode(QString m)
 void QSOLogFrame::setFreq(Frequency f)
 {
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    if (curFreq != f)
+    if (contest && curFreq != f)
     {
         BandList &blist = BandList::getBandList();
         QSharedPointer<BandInfo>  bi;
