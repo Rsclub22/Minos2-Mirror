@@ -141,7 +141,17 @@ void BandmapFreqDial::drawMarkerText(QPainter *painter, int ycoord, Frequency ma
 {
     painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord ),
                       QPoint(dialWidth, ycoord ));
-    QRect textPos = QRect(dialData::fMajTextXStart, ycoord - (fontHeight/2) ,
+    int ypos = ycoord - (fontHeight/2);
+    if (ypos < 0)
+    {
+        ypos = ycoord;
+    }
+    int h = getCurHeight();
+    if (ypos + fontHeight >= h)
+    {
+        ypos = h - fontHeight;
+    }
+    QRect textPos = QRect(dialData::fMajTextXStart, ypos ,
                           dialData::fMajTextXStart + freqTextWidth, fontHeight);
     QSharedPointer<DialFreqText> dft = QSharedPointer<DialFreqText>(new DialFreqText(textPos, markFreq));
     dialFreqList.append(dft);
@@ -264,11 +274,11 @@ void BandmapFreqDial::drawScale(QPainter *painter)
 
     Frequency fInc(ifInc);
     double ycoord = 0;
-    while (ycoord < dialHeight)
+    while (floor(ycoord) <= dialHeight)
     {
         if (markCount == 0 || markCount % labelStep == 0)   // just to match other cases
         {
-            drawMarkerText(painter, ycoord, markFreq, fontHeight);
+            drawMarkerText(painter, floor(ycoord), markFreq, fontHeight);
         }
         else
         {
