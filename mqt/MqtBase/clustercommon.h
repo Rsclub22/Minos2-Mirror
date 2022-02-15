@@ -87,6 +87,9 @@ const int RXTIME_COL_NUM = 16;
 const int DATE_COL_NUM = 17;
 const int DATE_TIME_COL_NUM = 18;
 const int DXCLUSTER_SPOT_TYPE = 19;
+
+const int bandmapColCount = 28;
+
 const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
 const int ROT_BEARING_COL_NUM = 22;     // used in bandmap
