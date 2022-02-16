@@ -24,11 +24,12 @@ const int SPOTMARKER_XOFFSET = 20;
 const int FREQ_SEL_WIDTH = 20;
 const int NO_OP_FREQ_WIDTH = 5;
 
-const QString BANDMAP_INI_FILE = "./Configuration/bandmap.ini";
+const QString BAND_LIST_INI = "./Configuration/bandList.ini";
+const QString BAND_LIST_SECT_FREQ_LOW = "BandLimitsLow";
+const QString BAND_LIST_SECT_FREQ_HIGH = "BandLimitsHigh";
+
 
 namespace dialData {
-
-
 
 const int fMajMrkLength = 20;
 const int fMajTextXStart = 5;

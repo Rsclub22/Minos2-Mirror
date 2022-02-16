@@ -33,7 +33,7 @@ void BandmapFreqDial::setHeight(int h)
 
 void BandmapFreqDial::onFontChanged(QFont /*cf*/)
 {
-    newFreqTextWidth = checkFreqWidth(currentFreq);
+    newFreqTextWidth = calcFreqWidth(currentFreq);
 
     update();
 }
@@ -67,7 +67,7 @@ void BandmapFreqDial::setCurFreq(const Frequency &f)
     if (f != currentFreq)
     {
         currentFreq = f;
-        newFreqTextWidth = checkFreqWidth(f);
+        newFreqTextWidth = calcFreqWidth(f);
     }
 
 }
@@ -108,7 +108,7 @@ int BandmapFreqDial::getCurWidth()
     return dialWidth;
 }
 
-int BandmapFreqDial::checkFreqWidth(const Frequency &freq)
+int BandmapFreqDial::calcFreqWidth(const Frequency &freq)
 {
     //calc dial width
     QFont cf = QApplication::font();
@@ -141,6 +141,8 @@ void BandmapFreqDial::drawMarkerText(QPainter *painter, int ycoord, Frequency ma
 {
     painter->drawLine(QPoint(dialWidth - dialData::fMajMrkLength, ycoord ),
                       QPoint(dialWidth, ycoord ));
+
+    // make sure that text is within the band edges
     int ypos = ycoord - (fontHeight/2);
     if (ypos < 0)
     {
@@ -406,7 +408,7 @@ void BandmapFreqDial::setContestBandLimits(const Frequency &flow, const Frequenc
     contestBandFlow = flow;
     contestBandFhigh = fhigh;
 
-    newFreqTextWidth = checkFreqWidth(fhigh);
+    newFreqTextWidth = calcFreqWidth(fhigh);
 
 }
 
@@ -455,17 +457,9 @@ double BandmapFreqDial::getHzPixelStepR() const
 
     qint64 range = contestBandFhigh - contestBandFlow;
 
-    int h = height; // use the actual height, not the mapped height
+    double h = height; // use the actual height, not the mapped height
 
-    double ps = ((h * 1.0) * (dialData::MAX_ZOOM_LEVEL - zoomLevel + 1))/range;
-
-    bool invertBandmap = false;
-    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
-
-    if (invertBandmap)
-    {
-        //ps = -ps;
-    }
+    double ps = (h * (dialData::MAX_ZOOM_LEVEL - zoomLevel + 1))/range;
 
     return ps;
 }

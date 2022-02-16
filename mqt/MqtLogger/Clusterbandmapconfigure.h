@@ -57,6 +57,8 @@ private:
     int addBandmapTuningTolerance;
     bool lessGreaterThanDistanceFlag = false;   // less than = false, greater than = true;
 
+    QVector<ConfigurationOption> bandLimits;
+
     void saveDistances();
     QString findBandKey(QLineEdit *distLineEdit);
 };

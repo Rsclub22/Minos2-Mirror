@@ -695,8 +695,10 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
     {
         if (bi->uk == contestBandStr)
         {
-            contestBandFlow = bi->bandmapLow;
-            contestBandFHigh = bi->bandmapHigh;
+            QSettings config(BAND_LIST_INI, QSettings::IniFormat);
+            contestBandFlow = config.value( BAND_LIST_SECT_FREQ_LOW + "/" + bi->uk, bi->bandmapLow.convertFreqStrDispSingle() ).toString();
+            contestBandFHigh = config.value( BAND_LIST_SECT_FREQ_HIGH + "/" + bi->uk, bi->bandmapHigh.convertFreqStrDispSingle() ).toString();
+
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
             traceMsg(QString("contestBand Freq low = %1, contestBand Freq high = %2").arg(contestBandFlow.traceStr(), contestBandFHigh.traceStr()));

@@ -27,8 +27,6 @@ BandmapView::BandmapView(QWidget *parent) :
     zoomLevel(0),
     contestBandFlow(0),
     contestBandFhigh(0),
-    idealWidth(0),
-    idealHeight(0),
     fullBandHeight(4000),
     fontHeight(0),
     selectedSpot(bandmapSpotType::NONE),
@@ -125,15 +123,11 @@ void BandmapView::setBandmapZoom(int level)
         zoomLevel = level;
         dial->setZoomLevel(level);
 
-//        Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
-//        Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
-//        Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
-
         setBandmapHeight(contestBandFlow, contestBandFhigh);
         trace("BandmapView::bandmapUpdate()setBandMapZoom ");
         bandmapUpdate(true);
         scrollBandmapCenterToFreq(dial->getCurFreq());
-//        scrollBandmapCenterToFreq(midScaleFreq);
+
         emit newZoomlevel(level);
     }
 }
@@ -142,10 +136,6 @@ void BandmapView::setBandmapZoom(int level)
 void BandmapView::zoomUpdated(bool dir)
 {
     zoomLevel = dial->getZoomLevel();
-
-//    Frequency scaleStartFreq = dial->getViewPortFreq(getViewPortStartYCoordOnScene(), contestBandFlow);
-//    Frequency scaleEndFreq = dial->getViewPortFreq(getViewPortEndYCoordOnScene(), contestBandFlow);
-//    Frequency midScaleFreq = scaleStartFreq + Frequency(qint64(scaleEndFreq - scaleStartFreq) / 2);
 
     if (dir)
     {
@@ -158,7 +148,7 @@ void BandmapView::zoomUpdated(bool dir)
             trace("BandmapView::bandmapUpdate() zoomUpdated 1");
             bandmapUpdate(true);
             scrollBandmapCenterToFreq(dial->getCurFreq());
-//            scrollBandmapCenterToFreq(midScaleFreq);
+
             emit newZoomlevel(zoomLevel);
         }
     }
@@ -172,7 +162,7 @@ void BandmapView::zoomUpdated(bool dir)
             trace("BandmapView::bandmapUpdate() zoomUpdated 2");
             bandmapUpdate(true);
             scrollBandmapCenterToFreq(dial->getCurFreq());
-//            scrollBandmapCenterToFreq(midScaleFreq);
+
             emit newZoomlevel(zoomLevel);
         }
     }
@@ -188,9 +178,6 @@ void BandmapView::setSuppressUpdate(bool value)
 {
     suppressUpdate = value;
 }
-
-
-
 
 void BandmapView::on_scrollMap(bool dir)
 {
@@ -655,8 +642,6 @@ int BandmapView::getBandmapFrameWidth()
 
 void BandmapView::setFreq(Frequency f, bool legalFreq)
 {
-    // The 1000 and 2000 below aren't enough - should they be configurable?
-    // or a proportion of the freq range?
     curFreq = f;
 
     int dfwv = dialCursorWithinViewport(f);

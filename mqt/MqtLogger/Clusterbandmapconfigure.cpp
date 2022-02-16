@@ -1,6 +1,6 @@
 #include "ContestApp.h"
 #include "bandmapcommon.h"
-
+#include "rigutils.h"
 #include "base_pch.h"
 #include "Clusterbandmapconfigure.h"
 #include "ui_Clusterbandmapconfigure.h"
@@ -137,10 +137,69 @@ void ClusterBandmapConfigure::initialise()
      BandMapShowDerivedLoc.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowDerivedLoc, ui->showDerivedLocChkBox);
      BandmapOldStyle.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandmapOldStyle, ui->oldBandmapChkBox);
      BandmapInvert.initialise(&TContestApp::getContestApp() ->loggerBundle, elpBandmapInvert, ui->invertBandmap);
+
+     QVBoxLayout *vbl = new QVBoxLayout(ui->scrollAreaWidgetContents);
+     vbl->setContentsMargins(1, 1, 1, 1);
+     ui->scrollAreaWidgetContents->setLayout(vbl);
+
+     bandLimits.clear();
+     for (const auto &b: qAsConst(bands))
+     {
+         QFrame *bFrame = new QFrame;
+         QHBoxLayout *hbl = new QHBoxLayout;
+         bFrame->setLayout(hbl);
+
+         QLabel *qlel = new QLabel();
+         qlel->setText(b->uk);
+
+         hbl->addWidget(qlel);
+
+         QLabel *sLabel = new QLabel();
+         sLabel->setText(tr("Low Freq"));
+         hbl->addWidget(sLabel);
+
+
+         QLineEdit *qlbs = new QLineEdit();
+         connect(qlbs, &QLineEdit::editingFinished, this, [=]() {
+            QString freq = qlbs->text();
+            valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
+         });
+
+         ConfigurationOption lb;
+         lb.initialise(BAND_LIST_INI, BAND_LIST_SECT_FREQ_LOW, b->uk, qlbs, b->bandmapLow.convertFreqStrDispSingle() );
+         bandLimits.push_back(lb);
+         hbl->addWidget(qlbs);
+
+         QLabel *eLabel = new QLabel();
+         eLabel->setText(tr("High Freq"));
+         hbl->addWidget(eLabel);
+
+         QLineEdit *qlbe = new QLineEdit();
+         connect(qlbe, &QLineEdit::editingFinished, this, [=]() {
+            QString freq = qlbe->text();
+            valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG));
+         });
+         ConfigurationOption hb;
+         hb.initialise(BAND_LIST_INI, BAND_LIST_SECT_FREQ_HIGH, b->uk, qlbe, b->bandmapHigh.convertFreqStrDispSingle() );
+         bandLimits.push_back(hb);
+         hbl->addWidget(qlbe);
+
+         vbl->addWidget(bFrame);
+     }
 }
+
 bool ClusterBandmapConfigure::check()
 {
-    return true;
+    bool valid = true;
+    for (const auto &bl : qAsConst(bandLimits))
+    {
+        QString freq = bl.sValue();
+        if (!valInputFreq(freq, tr(RADIO_FREQ_EDIT_ERR_MSG)))
+        {
+            valid = false;
+        }
+    }
+    return valid;
 }
 void ClusterBandmapConfigure::cancel()
 {
@@ -165,6 +224,14 @@ void ClusterBandmapConfigure::finalise()
     BandmapInvert.finalise();
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
+
+    for (const auto &bl : qAsConst(bandLimits))
+    {
+        if (bl.finalise())
+        {
+            // validate...
+        }
+    }
 }
 
 

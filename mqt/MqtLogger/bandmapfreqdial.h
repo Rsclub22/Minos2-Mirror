@@ -60,7 +60,7 @@ public:
     int getCurWidth();
 
     void changeBoundingRect(int height, int width);
-    int checkFreqWidth(const Frequency &freq);
+    int calcFreqWidth(const Frequency &freq);
 
 
     void onFontChanged(QFont cf);

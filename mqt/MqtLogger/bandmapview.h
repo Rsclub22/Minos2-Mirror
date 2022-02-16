@@ -144,8 +144,6 @@ private:
     Frequency contestBandFhigh;
     Frequency curViewPortStartFreq;
 
-    int idealWidth;
-    int idealHeight;
     int fullBandHeight;
     int fontHeight;
 
