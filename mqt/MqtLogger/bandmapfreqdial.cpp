@@ -31,6 +31,28 @@ void BandmapFreqDial::setHeight(int h)
     height = h;
 }
 
+double BandmapFreqDial::getHzPixelStepR() const
+{
+    // This routine is the single point that controls scale and zoom
+    // Max zoom level is equivalent to the band covering the entire height
+    // (i.e. most zoomed out)
+
+    // What should most zoomed in (zoom level 0) represent?
+
+    // default setting is "maximum"
+
+
+    // (real) pixels/Hz at this zoom level
+
+    qint64 range = contestBandFhigh - contestBandFlow;
+
+    double h = height; // use the actual height, not the mapped height
+
+    double ps = (h * (dialData::MAX_ZOOM_LEVEL - zoomLevel + 1))/range;
+
+    return ps;
+}
+
 void BandmapFreqDial::onFontChanged(QFont /*cf*/)
 {
     newFreqTextWidth = calcFreqWidth(currentFreq);
@@ -449,19 +471,6 @@ void BandmapFreqDial::wheelEvent(QGraphicsSceneWheelEvent *event)
     }
 
     event->accept();
-}
-
-double BandmapFreqDial::getHzPixelStepR() const
-{
-    // (real) pixels/Hz at this zoom level
-
-    qint64 range = contestBandFhigh - contestBandFlow;
-
-    double h = height; // use the actual height, not the mapped height
-
-    double ps = (h * (dialData::MAX_ZOOM_LEVEL - zoomLevel + 1))/range;
-
-    return ps;
 }
 
 void BandmapFreqDial::changeZoom(bool direction)
