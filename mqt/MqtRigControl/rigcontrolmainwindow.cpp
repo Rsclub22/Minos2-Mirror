@@ -4672,7 +4672,7 @@ void RigControlMainWindow::aboutRigConfig()
             {
                 msg.append(tr("Comport = %1\n").arg(currentRadio.comport));
                 msg.append(tr("Baudrate = %1\n").arg(currentRadio.baudrate));
-                msg.append(tr("Data bits = %1").arg(currentRadio.databits));
+                msg.append(tr("Data bits = %1\n").arg(currentRadio.databits));
                 msg.append(tr("Stop bits = %1\n").arg(QString::number(currentRadio.stopbits)));
                 msg.append(tr("Parity = %1\n").arg(serialCommonData::parityStr[currentRadio.parity]));
                 msg.append(tr("Handshake = %1\n").arg(serialCommonData::handshakeStr[currentRadio.handshake]));
