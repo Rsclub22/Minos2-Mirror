@@ -530,6 +530,12 @@ void BandmapClientFrame::context_bearingActionSelected()
             brg = brg.append(SHORTLOCATOR_IDENTIFIER);
         }
         sendBrgToRot(brg);
+        traceMsg(QString("Bandmap Context Menu Send to Rotator, locator bearing = %1").arg(brg));
+    }
+    else if (!contextMenuSelectedSpotData.getRotBrg().isEmpty())
+    {
+        sendBrgToRot(contextMenuSelectedSpotData.getRotBrg());
+        traceMsg(QString("Bandmap Context Menu Send to Rotator, rotator bearing = %1").arg(brg));
     }
 }
 
