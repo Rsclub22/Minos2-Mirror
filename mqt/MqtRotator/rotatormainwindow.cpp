@@ -1333,6 +1333,11 @@ void RotatorMainWindow::rotateTo(int bearing)
         if (rotator->getRotConnected())
         {
 
+            if ((setupAntenna->currentAntenna.max_azimuth == COMPASS_MAX360 || setupAntenna->currentAntenna.max_azimuth == COMPASS_MAX359) && rotateTo == COMPASS_MAX360)
+            {
+                rotateTo = rotateTo - 1;        // some hamlib and PST Rotator do not like 360
+            }
+
             retCode = rotator->rotate_to_bearing(rotateTo);
             if (retCode < 0)
             {
@@ -1667,9 +1672,9 @@ void RotatorMainWindow::rotateCW(bool /*clicked*/)
                 {
 
                     int bearing = setupAntenna->currentAntenna.max_azimuth;
-                    if (rotator->getLibraryName() == PSTROTATOR_API)
+                    if ( bearing == COMPASS_MAX360)
                     {
-                        bearing -=  1;  // PSTrotator doesn't like 360
+                        bearing -=  1;  // some rotators change 360 to 0, but we want max here
                     }
 
                     retCode = rotator->rotate_to_bearing(bearing);

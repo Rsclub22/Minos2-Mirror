@@ -420,6 +420,30 @@ bool HamlibRigControl::checkFreqRange(int rigNumber, const Frequency &freq)
         }
         else
 #endif
+#if defined(RIG_MODEL_FTDX10)
+        if (myRig->caps->rig_model == RIG_MODEL_FTDX10)
+        {
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, f, mode);
+        }
+        else
+
+#endif
+#if defined(RIG_MODEL_FTDX101D)
+        if (myRig->caps->rig_model == RIG_MODEL_FTDX101D)
+        {
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, f, mode);
+        }
+        else
+
+#endif
+#if defined(RIG_MODEL_FTDX101MP)
+        if (myRig->caps->rig_model == RIG_MODEL_FTDX101MP)
+        {
+             freq_range = rig_get_range(myRig->caps->tx_range_list2, f, mode);
+        }
+        else
+
+#endif
 
         {
             freq_range = rig_get_range(myRig->caps->tx_range_list1, f, mode);
