@@ -118,6 +118,12 @@ void StackedInfoFrame::on_ShowAuxHeaders()
 }
 void StackedInfoFrame::on_currentTabChangedSlot(int index)
 {
+    for (int i = 0; i < ui->tabbar->count(); i++)
+    {
+        ui->tabbar->setTabTextColor(i, ui->tabbar->palette().color( ui->tabbar->foregroundRole()));
+    }
+    ui->tabbar->setTabTextColor(index, Qt::red);
+
     QString cb = ui->tabbar->tabText(index);
 
     if (dxccFrame)
