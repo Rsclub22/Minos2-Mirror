@@ -116,6 +116,11 @@ void MinosLoggerEvents::SendShowAuxHeaders()
 {
     emit mle.showAuxHeaders();
 }
+
+void MinosLoggerEvents::sendBandmapLimitsChanged()
+{
+    emit mle.bandMapLimitsChanged();
+}
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()
 {

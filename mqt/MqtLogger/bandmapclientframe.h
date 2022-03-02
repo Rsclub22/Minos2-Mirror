@@ -271,6 +271,7 @@ private slots:
      void onContestBandChanged(BaseContestLog *ct);
      void on_zoomSpinner_valueChanged(int arg1);
 
+     void on_bandmapLimitsChanged();
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };

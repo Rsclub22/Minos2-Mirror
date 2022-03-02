@@ -54,6 +54,7 @@ BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     connect (checkNewSpotsTimer, &QTimer::timeout, this, &BandmapClientFrame::timerCheckNewBandMapSpots);
     checkNewSpotsTimer->start(CHECKSPOTS_DURATION);
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::bandMapLimitsChanged, this, &BandmapClientFrame::on_bandmapLimitsChanged);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FontChanged, this, &BandmapClientFrame::on_FontChanged, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &BandmapClientFrame::on_AfterLogContact);
     connect(bandmapView, &BandmapView::contextMenuSelected, this, &BandmapClientFrame::on_contextMenuSelected);
@@ -261,6 +262,10 @@ void BandmapClientFrame::on_FontChanged()
     bandmapView->onFontChanged(cf);
 }
 
+void BandmapClientFrame::on_bandmapLimitsChanged()
+{
+    setContest(ct);
+}
 // this is for the Tool button Action Menu
 void BandmapClientFrame::onMenuShow()
 {

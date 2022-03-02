@@ -1,7 +1,10 @@
+#include "base_pch.h"
 #include "ContestApp.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
-#include "base_pch.h"
+#include "tlogcontainer.h"
+#include "bandmapclientframe.h"
+#include "tsinglelogframe.h"
 #include "Clusterbandmapconfigure.h"
 #include "ui_Clusterbandmapconfigure.h"
 
@@ -225,12 +228,18 @@ void ClusterBandmapConfigure::finalise()
 
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
 
+    bool limitsChanged = false;
     for (const auto &bl : qAsConst(bandLimits))
     {
         if (bl.finalise())
         {
             // validate...
+            limitsChanged = true;
         }
+    }
+    if (limitsChanged)
+    {
+        MinosLoggerEvents::sendBandmapLimitsChanged();
     }
 }
 
