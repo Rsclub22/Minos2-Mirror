@@ -326,7 +326,7 @@ void BandmapFreqDial::setViewPortStartEndFreq(int startPos, int endPos)
     scaleStartYCoord = startPos ;
     scaleEndYCoord = endPos;
     scaleStartFreq = getFreqFromYCoordOnDial(startPos );
-    scaleEndFreq = getFreqFromYCoordOnDial(startPos );
+    scaleEndFreq = getFreqFromYCoordOnDial(endPos );
 
 }
 

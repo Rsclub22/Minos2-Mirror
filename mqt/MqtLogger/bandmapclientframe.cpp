@@ -15,6 +15,7 @@
 #include "checkoperatingfreq.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "rigutils.h"
 #include "ui_bandmapclientframe.h"
 #include "bandmapclientframe.h"
 
@@ -702,8 +703,8 @@ void BandmapClientFrame::getBandLimitsFromBandListXML()
         if (bi->uk == contestBandStr)
         {
             QSettings config(BAND_LIST_INI, QSettings::IniFormat);
-            contestBandFlow = config.value( BAND_LIST_SECT_FREQ_LOW + "/" + bi->uk, bi->bandmapLow.convertFreqStrDispSingle() ).toString();
-            contestBandFHigh = config.value( BAND_LIST_SECT_FREQ_HIGH + "/" + bi->uk, bi->bandmapHigh.convertFreqStrDispSingle() ).toString();
+            contestBandFlow = convertFreqToFullDigit(config.value( BAND_LIST_SECT_FREQ_LOW + "/" + bi->uk, bi->bandmapLow.convertFreqStrDispSingle() ).toString());
+            contestBandFHigh = convertFreqToFullDigit(config.value( BAND_LIST_SECT_FREQ_HIGH + "/" + bi->uk, bi->bandmapHigh.convertFreqStrDispSingle() ).toString());
 
             bandmapView->setBandFreqLimits(contestBandFlow, contestBandFHigh);
             bandmapView->setBandmapHeight(contestBandFlow, contestBandFHigh);
