@@ -5229,8 +5229,9 @@ void RigControlMainWindow::handleIcomCwMessage(QString cwMsg)
 
     if (cwMsg.length() == 1)
     {
+        trace(QString("Stop Message is = %1").arg(cwMsg, 0, 16));
         QChar c = cwMsg.at(0);
-        if (c == '\xff')
+        if (c == 65533)  // QChar value of '\xff'
         {
             // send stop CW
             trace(QString("Icom Cw Tx Message Stop received from logger"));
