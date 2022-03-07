@@ -478,8 +478,10 @@ int HamlibRigControl::getMode(VFO vfo, MODE& mode)
 
 int HamlibRigControl::setMode(VFO vfo, MODE mode)
 {
+    //this should be passband no change!
     // we need to use passband, so set it to normal
-    pbwidth_t pb = passbandNormal(mapMode(mode));
+    //pbwidth_t pb = passbandNormal(mapMode(mode));
+    pbwidth_t pb = RIG_PASSBAND_NOCHANGE;
     return rig_set_mode(my_rig, hamlibVfoNames[vfo], mapMode(mode), pb);
 }
 

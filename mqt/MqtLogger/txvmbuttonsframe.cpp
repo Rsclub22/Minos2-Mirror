@@ -185,7 +185,8 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
 
                 txVoiceKeyer->voiceKeyerInit(txVoiceKeyer->numButtons);
 
-
+                vmKeyParamList.clear();
+                buttonNumSent = NO_VM_BUTTON_ON;
 
                for (int i = 0; i < voiceMemButtonList.count(); i++)
                {
@@ -203,14 +204,6 @@ void TxVmButtonsFrame::createKeyer(QString voiceKeyerName)
                setVoiceNumMemButtonsVisible(txVoiceKeyer->numButtons);
 
 
-               //ui->vmSetupPb->setVisible(voiceCap.getSetupButton());
-               //ui->pipCb->setVisible(voiceCap.getHasPip());
-               //ui->txStatusFrame->setVisible(voiceCap.getHasTxStatus());
-
-               //if ( voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl] || voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
-               //{
-               //    setFrameWidgetsState();
-               //}
             }
         }
     }
@@ -503,10 +496,12 @@ void TxVmButtonsFrame::onVmStopClicked()
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
+
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
             txVoiceKeyer->stopCwMsg();
         }
+
 
         // Yaesu doesn't support a stop message command!
         //else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)

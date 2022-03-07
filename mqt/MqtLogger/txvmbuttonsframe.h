@@ -117,7 +117,7 @@ private:
 
     QTimer* msgDurTimer;
     QTimer* repeatPauseTimer;
-    int buttonNumSent;
+    int buttonNumSent ;
 
     bool usePttForEomFlag = false;
 
