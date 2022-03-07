@@ -288,16 +288,16 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
         runner->closeWriteChannel();
         runner->deleteLater();
         runner = nullptr;
-        if (stopping)
-        {
-            stopping = false;
-            MinosConfig::getMinosConfig()->checkAllStopped();
-        }
-        else
-        {
-            createProcess();
+    }
+    if (stopping)
+    {
+        stopping = false;
+        MinosConfig::getMinosConfig()->checkAllStopped();
+    }
+    else
+    {
+        createProcess();
 //            runner->start();    // but we have to be careful when we close!
-        }
     }
 }
 
