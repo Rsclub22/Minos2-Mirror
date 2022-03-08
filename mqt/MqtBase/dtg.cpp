@@ -2,7 +2,7 @@
 #include "dtg.h"
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
 
-dtg::dtg( bool now ): baddtg(false)
+dtg::dtg( bool now ): baddtg(true)
 {
     if ( now )
     {
@@ -17,8 +17,7 @@ dtg::dtg( bool now ): baddtg(false)
         sdate.setValue(d);
         QString t = tdt.toString("HHmmss");
         stime.setValue(t);
-//        setDate( tdt.toString( "dd/MM/yy" ), DTGDISP );
-//        setTime( tdt.toString(hh:mm:ss" ), DTGDISP );
+        baddtg = false;
     }
     else
     {
@@ -421,13 +420,13 @@ dtg::dtg(const dtg&rhs)
 {
    sdate.setValue(rhs.sdate);
    stime.setValue(rhs.stime);
-   baddtg = false;
+   baddtg = rhs.baddtg;
 }
 dtg& dtg::operator =(const dtg&rhs)
 {
    sdate.setValue(rhs.sdate);
    stime.setValue(rhs.stime);
-   baddtg = false;
+   baddtg = rhs.baddtg;
    return *this;
 }
 dtg::~dtg()

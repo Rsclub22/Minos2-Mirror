@@ -9,7 +9,7 @@ class dtg
       MinosStringItem<QString> sdate;
       MinosStringItem<QString> stime;
 
-      bool baddtg;
+      bool baddtg = true;
    public:
       static const double daySecs;
 
