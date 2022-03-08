@@ -53,6 +53,7 @@ void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 }
 void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
+    trace("ExternalMqtKeyer::sendMsgNum");
     emit LogContainer->sendKeyerPlay( msgNum );
 }
 void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
