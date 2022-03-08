@@ -511,7 +511,7 @@ QString ContestContact::getADIFLine()
 
     //---------------------------------------
     dtg on = timeOn;
-    if (on.isBadDtg())
+    if (on.isBadDtg() || on.notEntered())
     {
         on = timeOff;
     }
@@ -526,8 +526,8 @@ QString ContestContact::getADIFLine()
 
     outstr += makeADIFField( "TIME_ON", exp_buff );
 
-    exp_buff = on.getDate( DTGLOG ).left(6 );
     //---------------------------------------
+    exp_buff = timeOff.getDate( DTGLOG ).left(6 );
 
     cent = "19";
     if ( exp_buff.toInt() < 300000 )

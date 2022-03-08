@@ -2537,6 +2537,7 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
+   lct->timeOn.setDirty();
    lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
                          // But this only happens when seconds are :00, as the main log
