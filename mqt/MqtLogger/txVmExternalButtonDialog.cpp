@@ -97,6 +97,7 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
 
 void TxVmExternalButtonDialog::on_replayButton_clicked()
 {
+    trace("TxVmExternalButtonDialog::on_replayButton_clicked()");
     emit LogContainer->sendKeyerPlay( vmData->getvmButtonNum() );
 }
 

@@ -417,6 +417,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         trace(QString("[TxVmButtonsFrame] readActionSelected rigControl CW Message Keyer Selected, but not available for this radio "));
         return;
     }
+    trace(QString("[TxVmButtonsFrame] readActionSelected"));
 
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
@@ -444,6 +445,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
+    trace("TxVmButtonsFrame::startVMMsg");
     buttonNumSent = buttonNumber;
     usePttForEomFlag = false;
 
@@ -692,6 +694,7 @@ void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
     {
        if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
        {
+           trace("TxVmButtonsFrame::onRepeatPauseTimerTimeout()");
            startVMMsg(buttonNumSent);
 
        }
@@ -1030,6 +1033,7 @@ void TxVoiceMemButton::memoryShortCutSelected()
 }
 void TxVoiceMemButton::readActionSelected()
 {
+    trace(QString("TxVoiceMemButton::readActionSelected from %1 %2").arg(sender()->metaObject()->className()).arg(sender()->objectName()));
     txVmButtonsFrame->readActionSelected(memNo);
 }
 void TxVoiceMemButton::editActionSelected()
