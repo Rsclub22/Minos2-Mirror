@@ -103,10 +103,12 @@ public:
 };
 class KstMeepGridSortFilterModel: public QSortFilterProxyModel
 {
-    QString filterString;
+    QString myCSfilterString;
+    QStringList filterStrings;
     bool showRead = false;
 public:
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
+    void setMyCsFilterString(QString f);
     void setFilterString(QString f);
     QVariant data( const QModelIndex &index, int role ) const Q_DECL_OVERRIDE;
     void setShowRead(bool);
