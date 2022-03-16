@@ -478,6 +478,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
         if (msgDur > 0)
         {
+            trace(QString("msgDurTimer->start(%1)").arg(msgDur));
             msgDurTimer->start(msgDur);
         }
     }
@@ -638,6 +639,7 @@ void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
     int msgDur = vmKeyParamList[buttonNumSent].getVmDuration() * 1000;
     if (msgDur > 0)
     {
+        trace(QString("msgDurTimer->start(%1)").arg(msgDur));
         msgDurTimer->start(msgDur);
     }
     txVmButtonMap[buttonNumSent]->showButtonOnOff(true);
