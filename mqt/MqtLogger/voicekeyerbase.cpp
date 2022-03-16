@@ -5,7 +5,7 @@
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 /////////////////////////////////////////////////////////////////////////////
-
+#include "base_pch.h"
 #include "voicekeyerbase.h"
 
 VoiceKeyerParams::VoiceKeyerParams()
@@ -36,6 +36,15 @@ VoiceKeyerParams& VoiceKeyerParams::operator = (const VoiceKeyerParams& vkp)
     vmRepeatPauseDur = vkp.vmRepeatPauseDur;
     vmButtonNum = vkp.vmButtonNum;
     return *this;
+}
+
+void VoiceKeyerParams::setVmDuration(const int vmDuration_)
+{
+    if (vmDuration_ > 0)
+    {
+        trace(QString("setVmDuration(%1)").arg(vmDuration_));
+    }
+    vmDuration = vmDuration_;
 }
 
 
