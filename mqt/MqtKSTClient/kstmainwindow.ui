@@ -303,7 +303,7 @@ when user selected</string>
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -406,9 +406,23 @@ when user selected</string>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
-            <widget class="QLabel" name="includeLabel">
+            <widget class="QCheckBox" name="includeMeCb">
              <property name="text">
               <string>Including me</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="toMeFilter">
+             <property name="toolTip">
+              <string>Look for any of these strings (space separated) in messages</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="clearMeepFiltersButton">
+             <property name="text">
+              <string>X</string>
              </property>
             </widget>
            </item>

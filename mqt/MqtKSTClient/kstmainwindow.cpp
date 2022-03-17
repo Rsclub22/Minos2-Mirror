@@ -259,6 +259,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->msgEdit->installEventFilter(this);
     ui->planesView->installEventFilter(this);
     ui->messageTable->installEventFilter(this);
+    ui->toMeFilter->installEventFilter(this);
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
@@ -390,21 +391,27 @@ void KSTMainWindow::connectToHost()
     }
 }
 
-
 void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
-    ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
-    kstMeepFilterModel.setFilterString(myCallsign.toUpper());
+    ui->includeMeCb->setText(tr("Including %1").arg(myCallsign));
+    ui->includeMeCb->setChecked(true);
+
+    kstMeepFilterModel.setMyCsFilterString(myCallsign.toUpper());
+    ui->toMeFilter->clear();
+
     kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
+
+    setMeepFilters();
 }
 
 
 void KSTMainWindow::clearConnection()
 {
-    ui->includeLabel->clear();
-    kstMeepFilterModel.setFilterString("");
+    ui->includeMeCb->setChecked(false);
+    ui->includeMeCb->setText(QString());
+    kstMeepFilterModel.setMyCsFilterString("");
     ui->connectButton->setText(tr("Connect"));
     kstconnected = false;
     kstLoggedIn.clear();
@@ -1533,6 +1540,10 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
                 {
                     ui->msgEdit->clear();
                 }
+                else if (obj == ui->toMeFilter)
+                {
+                    ui->toMeFilter->clear();
+                }
             }
             if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
             {
@@ -1838,5 +1849,37 @@ void KSTMainWindow::on_countryRb_clicked()
 void KSTMainWindow::on_clearSelectedMessage_clicked()
 {
     ui->bodyLabel->clear();
+}
+
+void KSTMainWindow::setMeepFilters()
+{
+    if (ui->includeMeCb->isChecked())
+    {
+        kstMeepFilterModel.setMyCsFilterString(myCallsign.toUpper());
+    }
+    else
+    {
+        kstMeepFilterModel.setMyCsFilterString(QString());
+    }
+    kstMeepFilterModel.setFilterString(ui->toMeFilter->text().trimmed());
+}
+
+void KSTMainWindow::on_includeMeCb_stateChanged(int /*arg1*/)
+{
+    setMeepFilters();
+}
+
+
+void KSTMainWindow::on_toMeFilter_textChanged(const QString &/*arg1*/)
+{
+    setMeepFilters();
+}
+
+
+void KSTMainWindow::on_clearMeepFiltersButton_clicked()
+{
+    ui->toMeFilter->clear();
+    ui->includeMeCb->setChecked(true);
+    setMeepFilters();
 }
 

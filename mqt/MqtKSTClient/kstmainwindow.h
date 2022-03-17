@@ -221,6 +221,12 @@ private slots:
     void onCSTableSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     void on_clearSelectedMessage_clicked();
 
+    void on_includeMeCb_stateChanged(int arg1);
+
+    void on_toMeFilter_textChanged(const QString &arg1);
+
+    void on_clearMeepFiltersButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
@@ -228,6 +234,7 @@ private:
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
     void checkAwayButton();
+    void setMeepFilters();
 };
 
 extern KSTMainWindow *mainWindow;
