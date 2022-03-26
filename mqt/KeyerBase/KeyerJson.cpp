@@ -40,7 +40,7 @@ QString KeyerJson::getString(QJsonObject o, QString key, QString def)
     }
     return def;
 }
-bool KeyerJson::parseConfig(QString conf)
+bool KeyerJson::parseConfig(QString conf, bool incSliders)
 {
     QJsonParseError err;
     QJsonDocument json = QJsonDocument::fromJson(conf.toUtf8(), &err);
@@ -51,10 +51,18 @@ bool KeyerJson::parseConfig(QString conf)
             QJsonObject sconf = json.object();
             pipEnable = getBool(sconf, "pipEnable", false);
 
-            recordSliderPosition = getInt(sconf, "record", 0);
-            replaySliderPosition = getInt(sconf, "replay", 0);
-            passthroughSliderPosition = getInt(sconf, "pass", 0);
-
+            if (incSliders)
+            {
+                recordSliderPosition = getInt(sconf, "record", 0);
+                replaySliderPosition = getInt(sconf, "replay", 0);
+                passthroughSliderPosition = getInt(sconf, "pass", 0);
+            }
+            else
+            {
+                recordSliderPosition = -1000;
+                replaySliderPosition = -1000;
+                passthroughSliderPosition = -1000;
+            }
             QJsonValue keys = sconf.value("keys");
             if (keys.isArray())
             {
@@ -87,7 +95,7 @@ bool KeyerJson::parseConfig(QString conf)
 
     return false;
 }
-QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force)
+QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force, bool incSliders)
 {
     QJsonDocument json;
     QJsonObject sconf;
@@ -105,10 +113,12 @@ QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force)
 
     sconf.insert("pipEnable", pipEnable);
 
-    sconf.insert("record", recordSliderPosition);
-    sconf.insert("replay", replaySliderPosition);
-    sconf.insert("pass", passthroughSliderPosition);
-
+    if (incSliders)
+    {
+        sconf.insert("record", recordSliderPosition);
+        sconf.insert("replay", replaySliderPosition);
+        sconf.insert("pass", passthroughSliderPosition);
+    }
 
     QJsonArray ja;
     for (int i = 0; i < KEYERKEYS; i++)
@@ -139,7 +149,7 @@ bool KeyerJson::read(QString fileName)
     if (jf.open(QIODevice::ReadOnly))
     {
         QString s = jf.readAll();
-        ret = parseConfig(s);
+        ret = parseConfig(s, true);
     }
     return ret;
 }
@@ -153,7 +163,7 @@ bool KeyerJson::write(QString fileName)
         return false;
     }
 
-    QString conf = makeConfig(QJsonDocument::Indented, false);
+    QString conf = makeConfig(QJsonDocument::Indented, false, true);
     jf.write(conf.toUtf8());
 
     jf.close();

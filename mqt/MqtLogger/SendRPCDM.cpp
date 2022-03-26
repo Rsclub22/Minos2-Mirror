@@ -873,9 +873,9 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                     if (keyerApp.isEmpty())
                     {
                         keyerApp = PubSubName(an);
+                        keyerLoaded = true;
+                        sendKeyerUser();
                     }
-                    keyerLoaded = true;
-                    sendKeyerUser();
                     LogContainer->setCaption( v );
                     traceMsg( "KeyerReport " + v );
                     emit keyerReport(v);

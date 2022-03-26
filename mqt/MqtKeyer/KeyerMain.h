@@ -107,7 +107,7 @@ private:
     bool recordWait;
     bool recording;
 
-    bool inVolChange;
+    int inVolChangeCount = 0;
 
     unsigned int rmsvol= 0;
     unsigned int peakvol = 0;
