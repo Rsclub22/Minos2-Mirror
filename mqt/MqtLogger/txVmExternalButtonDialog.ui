@@ -250,7 +250,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QDoubleSpinBox" name="recordLevel">
+           <widget class="QDoubleSpinBox" name="recordValue">
             <property name="alignment">
              <set>Qt::AlignCenter</set>
             </property>

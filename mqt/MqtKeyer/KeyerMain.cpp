@@ -26,10 +26,20 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
 
 void KeyerMain::doSliders(int rec, int rep, int pass)
 {
+    inVolChangeCount++;
     trace(QString("Set Slider positions %1;%2;%3").arg(rec).arg(rep).arg(pass));
     ui->recordSlider->setValue(rec);
+    trace(QString("(doSliders) rec chnaged to %1").arg(rec));
     ui->replaySlider->setValue(rep);
+    trace(QString("(doSliders) rep chnaged to %1").arg(rep));
     ui->passThroughSlider->setValue(pass);
+    trace(QString("(doSliders) pass chnaged to %1").arg(pass));
+
+    ui->recordValue->setValue(rec/10.0);
+    ui->replayValue->setValue(rep/10.0);
+    ui->passThroughValue->setValue(pass/10.0);
+
+    inVolChangeCount--;
 }
 void KeyerMain::doSetVU(unsigned int prmsvol , unsigned int ppeakvol, unsigned int psamples)
 {
@@ -79,7 +89,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     PTT(false), PTTRef(false), L1Ref(false), L2Ref(false),
     recordWait(false),
     recording(false),
-    inVolChange(false),
+    inVolChangeCount(0),
     runner(nullptr)
 {
     ui->setupUi(this);
@@ -119,7 +129,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     connect (KS, &KeyerServer::sliders, this, &KeyerMain::doSliders);
     connect (KS, &KeyerServer::keyerConfig, this, &KeyerMain::doConfig);
 
-    inVolChange = true;
+    inVolChangeCount++;
 
     // Initially look in settings...
     int recordLevel = settings.value("RecordLevel", 0).toInt();
@@ -137,7 +147,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->replaySlider->setValue(replayLevel);
     ui->passThroughSlider->setValue(passThroughLevel);
 
-    inVolChange = false;
+    inVolChangeCount--;
 
     ui->PipCheckBox->setChecked(getPipEnabled());
 
@@ -188,13 +198,13 @@ bool KeyerMain::writeConfig(bool force)
 {
     bool ret = true;
     static QString old;
-    QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force);
+    QString conf = masterConfig.makeConfig(QJsonDocument::Compact, force, true);
     if (force || old != conf)
     {
         ret = masterConfig.write("./Configuration/MinosKeyer.json");
         trace(QString("publishConfig force = %1").arg(force));
 
-        KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force));
+        KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force, false));
 
         old = conf;
     }
@@ -496,77 +506,74 @@ void KeyerMain::on_restoreAlsaButton_clicked()
 
 void KeyerMain::setVolumeMults()
 {
+    inVolChangeCount++;
+
     int record = ui->recordSlider->value();
     int replay = ui->replaySlider->value();
     int passThrough = ui->passThroughSlider->value();
     SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough);
 
-    inVolChange = true;
-
     ui->recordValue->setValue(record/10.0);
     ui->replayValue->setValue(replay/10.0);
     ui->passThroughValue->setValue(passThrough/10.0);
 
-    inVolChange = false;
+    inVolChangeCount--;
 }
 
 void KeyerMain::on_recordSlider_valueChanged(int position)
 {
-    if (!inVolChange)
-    {
-        masterConfig.recordSliderPosition = position;
-        writeConfig(false);
-    }
+    masterConfig.recordSliderPosition = position;
+    writeConfig(false);
+
     setVolumeMults();
 }
 
 void KeyerMain::on_replaySlider_valueChanged(int position)
 {
-    if (!inVolChange)
-    {
-        masterConfig.replaySliderPosition = position;
-        writeConfig(false);
-    }
+    masterConfig.replaySliderPosition = position;
+    writeConfig(false);
+
     setVolumeMults();
 }
 
 void KeyerMain::on_passThroughSlider_valueChanged(int position)
 {
-    if (!inVolChange)
-    {
-        masterConfig.passthroughSliderPosition = position;
-        writeConfig(false);
-    }
+    masterConfig.passthroughSliderPosition = position;
+    writeConfig(false);
+
     setVolumeMults();
 }
 
 void KeyerMain::on_recordValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
+        trace(QString("(v) record chnaged to %1").arg(arg1));
     }
 }
 
 void KeyerMain::on_replayValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         ui->replaySlider->setValue(static_cast<int>(arg1 * 10));
+        trace(QString("(v) replay chnaged to %1").arg(arg1));
     }
 }
 
 void KeyerMain::on_passThroughValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         ui->passThroughSlider->setValue(static_cast<int>(arg1 * 10));
+        trace(QString("(v) pass chnaged to %1").arg(arg1));
     }
 }
 
 void KeyerMain::doConfig(QString config)
 {
-    if (getMasterConfig()->parseConfig(config))
+    if (getMasterConfig()->parseConfig(config, false))
     {
         ui->PipCheckBox->setChecked(getMasterConfig()->pipEnable);
 
