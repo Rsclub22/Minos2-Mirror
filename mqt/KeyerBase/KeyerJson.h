@@ -29,8 +29,8 @@ public:
 
     KeyerJson();
 
-    bool parseConfig(QString);
-    QString makeConfig(QJsonDocument::JsonFormat format, bool force);
+    bool parseConfig(QString, bool incSliders);
+    QString makeConfig(QJsonDocument::JsonFormat format, bool force, bool incSliders);
 
     bool read(QString fileName);
     bool write(QString fileName);
