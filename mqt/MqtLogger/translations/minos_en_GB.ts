@@ -120,7 +120,7 @@
         <location filename="../bandmapclientframe.cpp" line="404"/>
         <location filename="../bandmapclientframe.cpp" line="421"/>
         <location filename="../bandmapclientframe.cpp" line="438"/>
-        <location filename="../bandmapclientframe.cpp" line="570"/>
+        <location filename="../bandmapclientframe.cpp" line="576"/>
         <source>Bandmap</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,7 +248,7 @@
     </message>
     <message>
         <location filename="../bandmapclientframe.cpp" line="405"/>
-        <location filename="../bandmapclientframe.cpp" line="571"/>
+        <location filename="../bandmapclientframe.cpp" line="577"/>
         <source>Please confirm you want to delete this spot - %1?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -263,32 +263,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="599"/>
+        <location filename="../bandmapclientframe.cpp" line="605"/>
         <source>Filter %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1712"/>
+        <location filename="../bandmapclientframe.cpp" line="1718"/>
         <source>Mouse in frame, updates paused</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1444"/>
+        <location filename="../bandmapclientframe.cpp" line="1450"/>
         <source>Cluster Server Not Running</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1477"/>
+        <location filename="../bandmapclientframe.cpp" line="1483"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1487"/>
+        <location filename="../bandmapclientframe.cpp" line="1493"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapclientframe.cpp" line="1604"/>
+        <location filename="../bandmapclientframe.cpp" line="1610"/>
         <source>Freq out of band</source>
         <translation type="unfinished"></translation>
     </message>
@@ -296,38 +296,38 @@
 <context>
     <name>BandmapView</name>
     <message>
-        <location filename="../bandmapview.cpp" line="1367"/>
+        <location filename="../bandmapview.cpp" line="1368"/>
         <source>%1%2CQ Frequency @ .%3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1397"/>
+        <location filename="../bandmapview.cpp" line="1398"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1488"/>
+        <location filename="../bandmapview.cpp" line="1489"/>
         <source>min</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1505"/>
+        <location filename="../bandmapview.cpp" line="1506"/>
         <source>CQ Frequency = %1
 The mode is %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1533"/>
+        <location filename="../bandmapview.cpp" line="1534"/>
         <source>The computed mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1536"/>
+        <location filename="../bandmapview.cpp" line="1537"/>
         <source>The mode is</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../bandmapview.cpp" line="1543"/>
+        <location filename="../bandmapview.cpp" line="1544"/>
         <source>%1 - %2, %3, %4, %5 [%6 %7 @ %8 min] 
 %9 %10
 %11
@@ -2350,7 +2350,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2179"/>
+        <location filename="../qsologframe.cpp" line="2183"/>
         <source>No QSO entry field focussed!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2430,7 +2430,7 @@ to</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="1936"/>
+        <location filename="../qsologframe.cpp" line="1939"/>
         <source>This Contact has changed: Shall I log the changes?
 
 Yes         - Log as shown
@@ -2438,52 +2438,52 @@ No          - Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2161"/>
+        <location filename="../qsologframe.cpp" line="2165"/>
         <source>Read Only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2165"/>
+        <location filename="../qsologframe.cpp" line="2169"/>
         <source>Protected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2169"/>
+        <location filename="../qsologframe.cpp" line="2173"/>
         <source>Protected by age of contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2524"/>
+        <location filename="../qsologframe.cpp" line="2528"/>
         <source>Change mode to CW?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2531"/>
+        <location filename="../qsologframe.cpp" line="2535"/>
         <source>Change mode to USB?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2562"/>
+        <location filename="../qsologframe.cpp" line="2567"/>
         <source>Spot Last Logged (%1) </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2627"/>
+        <location filename="../qsologframe.cpp" line="2632"/>
         <source>&quot;Serial sent&quot; is too high - please confirm that this is correct?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="2629"/>
+        <location filename="../qsologframe.cpp" line="2634"/>
         <source>Do you want to enter the missing contacts later?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3013"/>
+        <location filename="../qsologframe.cpp" line="3018"/>
         <source>Start of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../qsologframe.cpp" line="3048"/>
+        <location filename="../qsologframe.cpp" line="3053"/>
         <source>End of QSOs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5286,64 +5286,64 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="300"/>
+        <location filename="../txvmbuttonsframe.cpp" line="293"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="385"/>
-        <location filename="../txvmbuttonsframe.cpp" line="545"/>
+        <location filename="../txvmbuttonsframe.cpp" line="378"/>
+        <location filename="../txvmbuttonsframe.cpp" line="540"/>
         <source>Rig CW Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="389"/>
-        <location filename="../txvmbuttonsframe.cpp" line="549"/>
+        <location filename="../txvmbuttonsframe.cpp" line="382"/>
+        <location filename="../txvmbuttonsframe.cpp" line="544"/>
         <source>Voice Memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="391"/>
+        <location filename="../txvmbuttonsframe.cpp" line="384"/>
         <source>%1 %2 - Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="551"/>
+        <location filename="../txvmbuttonsframe.cpp" line="546"/>
         <source>%1 %2 - New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="585"/>
+        <location filename="../txvmbuttonsframe.cpp" line="580"/>
         <source>Voice Memory Button %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="586"/>
+        <location filename="../txvmbuttonsframe.cpp" line="581"/>
         <source>Are you sure you want to clear this Button?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="587"/>
+        <location filename="../txvmbuttonsframe.cpp" line="582"/>
         <source>Click save to clear, cancel to ignore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="872"/>
+        <location filename="../txvmbuttonsframe.cpp" line="867"/>
         <source>Rig Voice Keyer Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="876"/>
+        <location filename="../txvmbuttonsframe.cpp" line="871"/>
         <source>Rig CW Messages Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="973"/>
+        <location filename="../txvmbuttonsframe.cpp" line="968"/>
         <source>TX On</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="979"/>
+        <location filename="../txvmbuttonsframe.cpp" line="974"/>
         <source>TX Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5609,22 +5609,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1001"/>
+        <location filename="../txvmbuttonsframe.cpp" line="996"/>
         <source>&amp;Read</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1002"/>
+        <location filename="../txvmbuttonsframe.cpp" line="997"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1003"/>
+        <location filename="../txvmbuttonsframe.cpp" line="998"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1004"/>
+        <location filename="../txvmbuttonsframe.cpp" line="999"/>
         <source>&amp;Clear</source>
         <translation type="unfinished"></translation>
     </message>

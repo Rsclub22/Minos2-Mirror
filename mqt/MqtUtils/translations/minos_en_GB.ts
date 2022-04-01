@@ -20,12 +20,12 @@
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="778"/>
-        <source>More than one router is defined and enabled</source>
+        <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="787"/>
-        <source>A local router is required.<byte value="xd"/>
+        <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>

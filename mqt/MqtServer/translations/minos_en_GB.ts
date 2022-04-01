@@ -66,7 +66,7 @@
     </message>
     <message>
         <location filename="../MServerPubSub.cpp" line="383"/>
-        <source>router</source>
+        <source>server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
