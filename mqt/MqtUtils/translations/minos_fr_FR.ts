@@ -19,17 +19,27 @@
         <translation>Configuration d&apos;application défaut</translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="778"/>
         <source>More than one router is defined and enabled</source>
-        <translation>Plus d&apos;un routeur est défini et activé </translation>
+        <translation type="vanished">Plus d&apos;un routeur est défini et activé </translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="787"/>
         <source>A local router is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
-        <translation>Un routeur local est requis.
+        <translation type="vanished">Un routeur local est requis.
 What??</translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="778"/>
+        <source>More than one server is defined and enabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ConfigFile.cpp" line="787"/>
+        <source>A local server is required.<byte value="xd"/>
+<byte value="xd"/>
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../ConfigFile.cpp" line="802"/>
