@@ -125,7 +125,7 @@ double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
         cb = bi->adif;
         if (freq < 100)
         {
-            freq = bi->fLow;
+            freq = bi->bandfreq;
         }
     }
     return freq;
@@ -178,7 +178,7 @@ Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
         if (bandOK)
         {
             cb = bi->uk;
-            freq = bi->fLow;
+            freq = bi->bandfreq;
         }
         else
         {

@@ -84,7 +84,7 @@ bool ModeInfo::isFreqOK(const Frequency &f, bool &excludedFreq)
 {
     for(const auto &exc:qAsConst(exclusions))
     {
-        if (f >= exc->fLow && f <= exc->fHigh )
+        if (f >= exc->fExcLow && f <= exc->fExcHigh )
         {
 
             excludedFreq = true;
@@ -209,6 +209,16 @@ bool BandList::parseBand ( TiXmlElement * e )
     band->fLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
     band->fHigh = Frequency(temp);
+    temp = getAttribute(e, "BandFreq");
+    if (temp.isEmpty())
+    {
+        band->bandfreq = band->fLow;
+    }
+    else
+    {
+        band->bandfreq = Frequency(temp);
+    }
+
     int fMult = 1;
     if ( unit == "K" )
     {
@@ -226,6 +236,7 @@ bool BandList::parseBand ( TiXmlElement * e )
             }
     band->fLow  = qint64(band->fLow) * fMult;
     band->fHigh = qint64(band->fHigh) * fMult;
+    band->bandfreq = qint64(band->bandfreq) * fMult;
 
     band->wlen = getAttribute ( e, "wlen" );
     band->uk = getAttribute ( e, "UK" );
@@ -335,9 +346,9 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
 
     QString temp;
     temp = getAttribute ( e, "flow" );
-    mode->fLow = Frequency(temp);
+    mode->fModeLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
-    mode->fHigh = Frequency(temp);
+    mode->fModeHigh = Frequency(temp);
 
     temp = getAttribute ( e, "fclow1" );
     mode->fcLow1 = Frequency(temp);
@@ -351,8 +362,8 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
 
     if ( unit == "K" )
     {
-        mode->fLow = qint64(mode->fLow) * 1000;
-        mode->fHigh = qint64(mode->fHigh) * 1000;
+        mode->fModeLow = qint64(mode->fModeLow) * 1000;
+        mode->fModeHigh = qint64(mode->fModeHigh) * 1000;
         mode->fcLow1 = qint64(mode->fcLow1) * 1000;
         mode->fcHigh1 = qint64(mode->fcHigh1) * 1000;
         mode->fcLow2 = qint64(mode->fcLow2) * 1000;
@@ -361,8 +372,8 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
     else
         if ( unit == "M" )
         {
-            mode->fLow = qint64(mode->fLow) * 1000000;
-            mode->fHigh = qint64(mode->fHigh) * 1000000;
+            mode->fModeLow = qint64(mode->fModeLow) * 1000000;
+            mode->fModeHigh = qint64(mode->fModeHigh) * 1000000;
             mode->fcLow1 = qint64(mode->fcLow1) * 1000000;
             mode->fcHigh1 = qint64(mode->fcHigh1) * 1000000;
             mode->fcLow2 = qint64(mode->fcLow2) * 1000000;
@@ -371,8 +382,8 @@ bool BandList::parseMode (QSharedPointer<BandInfo> band, QString unit, TiXmlElem
         else
             if ( unit == "G" )
             {
-                mode->fLow = qint64(mode->fLow) * 1000000000;
-                mode->fHigh = qint64(mode->fHigh) * 1000000000;
+                mode->fModeLow = qint64(mode->fModeLow) * 1000000000;
+                mode->fModeHigh = qint64(mode->fModeHigh) * 1000000000;
                 mode->fcLow1 = qint64(mode->fcLow1) * 1000000000;
                 mode->fcHigh1 = qint64(mode->fcHigh1) * 1000000000;
                 mode->fcLow2 = qint64(mode->fcLow2) * 1000000000;
@@ -398,25 +409,25 @@ bool BandList::parseExclusion (QSharedPointer<ModeInfo> mode, QString unit, TiXm
     QSharedPointer<ExclusionInfo> excl(new ExclusionInfo());
 
     QString temp = getAttribute ( e, "flow" );
-    excl->fLow = Frequency(temp);
+    excl->fExcLow = Frequency(temp);
     temp = getAttribute ( e, "fhigh" );
-    excl->fHigh = Frequency(temp);
+    excl->fExcHigh = Frequency(temp);
     if ( unit == "K" )
     {
-        excl->fLow = qint64(excl->fLow) * 1000;
-        excl->fHigh = qint64(excl->fHigh) * 1000;
+        excl->fExcLow = qint64(excl->fExcLow) * 1000;
+        excl->fExcHigh = qint64(excl->fExcHigh) * 1000;
     }
     else
         if ( unit == "M" )
         {
-            excl->fLow = qint64(excl->fLow) * 1000000;
-            excl->fHigh = qint64(excl->fHigh) * 1000000;
+            excl->fExcLow = qint64(excl->fExcLow) * 1000000;
+            excl->fExcHigh = qint64(excl->fExcHigh) * 1000000;
         }
         else
             if ( unit == "G" )
             {
-                excl->fLow = qint64(excl->fLow) * 1000000000;
-                excl->fHigh = qint64(excl->fHigh) * 1000000000;
+                excl->fExcLow = qint64(excl->fExcLow) * 1000000000;
+                excl->fExcHigh = qint64(excl->fExcHigh) * 1000000000;
             }
     excl->reason = getAttribute( e, "reason");
     mode->exclusions.push_back(excl);

@@ -2068,7 +2068,7 @@ void QSOLogFrame::setFreq(Frequency f)
             bandOK = blist.findBand(cband, bi);
             if (bandOK)
             {
-                f = bi->fLow;
+                f = bi->bandfreq;
             }
         }
 
