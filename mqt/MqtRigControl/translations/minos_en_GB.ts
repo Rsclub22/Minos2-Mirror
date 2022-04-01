@@ -154,7 +154,7 @@ Please enter a name for the radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1450"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1476"/>
         <source>hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -800,7 +800,8 @@ Please delete them and set up the radios again</source>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4662"/>
-        <source>Data bits = %1</source>
+        <source>Data bits = %1
+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

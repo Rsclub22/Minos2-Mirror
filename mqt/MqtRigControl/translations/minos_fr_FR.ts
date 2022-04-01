@@ -157,7 +157,7 @@ Please enter a name for the radio</source>
         <translation>Erreur interne - RIG_EDOM</translation>
     </message>
     <message>
-        <location filename="../hamlibrigcontrol.cpp" line="1450"/>
+        <location filename="../hamlibrigcontrol.cpp" line="1476"/>
         <source>hamlib Errorcode too large!</source>
         <translation>Code d&apos;erreur de hamlib trop grand!</translation>
     </message>
@@ -840,8 +840,14 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4662"/>
+        <source>Data bits = %1
+</source>
+        <translation type="unfinished">Bits de données = %1
+</translation>
+    </message>
+    <message>
         <source>Data bits = %1</source>
-        <translation>Bits de données = %1</translation>
+        <translation type="vanished">Bits de données = %1</translation>
     </message>
     <message>
         <location filename="../rigcontrolmainwindow.cpp" line="4663"/>
