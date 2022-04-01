@@ -35,8 +35,8 @@ const QString NO_BANDTYPE = "NONE";
 class ExclusionInfo
 {
 public:
-    Frequency fLow;
-    Frequency fHigh;
+    Frequency fExcLow;
+    Frequency fExcHigh;
     QString reason;
 };
 
@@ -44,8 +44,8 @@ class ModeInfo
 {
     QString type;
 public:
-    Frequency fLow;
-    Frequency fHigh;
+    Frequency fModeLow;
+    Frequency fModeHigh;
     Frequency fcLow1;
     Frequency fcHigh1;
     Frequency fcLow2;
@@ -73,6 +73,8 @@ class BandInfo
 
         Frequency bandmapLow;
         Frequency bandmapHigh;
+
+        Frequency bandfreq;
 
         QString wlen;
         QString uk;

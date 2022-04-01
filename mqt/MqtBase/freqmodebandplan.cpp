@@ -78,7 +78,7 @@ bool freqModeBandPlan::loadExclusionsFromBandList()
                 }
                 for (auto const &e: qAsConst(m->exclusions))
                 {
-                    addPair(mfl, e->fLow, e->fHigh);
+                    addPair(mfl, e->fExcLow, e->fExcHigh);
                 }
                 if (qint64(m->fcLow2) > 0)
                 {
