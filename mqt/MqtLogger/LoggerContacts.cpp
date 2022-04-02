@@ -468,7 +468,14 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     // loc - or other exchange
     if (lcl->locatorMandatoryField.getValue())
     {
-        outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
+        if (contest->MGMContestRules.getValue())
+        {
+            outstr += getCabrilloField(lcl->myloc.getLoc().left(4), 4);
+        }
+        else
+        {
+            outstr += getCabrilloField(lcl->myloc.getLoc(), 6);
+        }
     }
     if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
     {
@@ -579,7 +586,14 @@ QString ContestContact::getADIFLine()
 
     outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
     outstr += makeADIFField( "OPERATOR", op1.getValue() );
-    outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
+    if (contest->MGMContestRules.getValue())
+    {
+        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc().left(4));
+    }
+    else
+    {
+        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
+    }
     int zone = 0;
     lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
     outstr+= makeADIFField("ITUZ", zone);
