@@ -175,6 +175,11 @@ BundleFile::BundleFile( PROFILES p )
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpExpertMode, "ExpertMode", false, "Expert Mode Display", "Expert Mode Display", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpAlternateFKeys, "AlternateFKeys", false, "Alternate F key Definitions", "Alternate F key Definitions", false ) ) );
+
+
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpSeparateIcons, "SeparateIcons", false, "Separate Icons in Taskbar", "Separate Icons in Taskbar", false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpls, "Layout Spacing", 2, "", "hint", false ) ) );

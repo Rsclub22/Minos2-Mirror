@@ -144,6 +144,9 @@ private:
 
     bool edit = false;
 
+    bool expert = false;
+    bool altFKeys = false;
+
     QString mySentLabelString;
     QString theirSentLabelString;
 
@@ -277,6 +280,7 @@ private:
     void doShowOperators(bool so);
     
     bool readTuneAddBandMapSetting();
+    QString getFKeyLabel(int n);
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );

@@ -18,6 +18,31 @@
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
 
+QString QSOLogFrame::getFKeyLabel(int n)
+{
+    if (altFKeys)
+    {
+        if (expert)
+        {
+            return QString(" CF%1").arg(n);
+        }
+        else
+        {
+            return QString(" (CF%1)").arg(n);
+        }
+    }
+    else
+    {
+        if (expert)
+        {
+            return QString(" F%1").arg(n);
+        }
+        else
+        {
+            return QString(" (F%1)").arg(n);
+        }
+    }
+}
 
 QSOLogFrame::QSOLogFrame(QWidget *parent) :
     QFrame(parent)
@@ -41,58 +66,85 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    TContestApp::getContestApp() ->getBoolDisplayProfile( edpExpertMode, expert );
+    TContestApp::getContestApp() ->getBoolDisplayProfile( edpAlternateFKeys, altFKeys );
+
+    if (expert)
+    {
+        CallsignLabelString = tr("Call%1").arg(getFKeyLabel(1));
+        RSTTXLabelString = tr("Rep%1").arg(getFKeyLabel(2));
+        SerTXLabelString = tr("Sn");
+        RSTRXLabelString = tr("Rep%1").arg(getFKeyLabel(3));
+        SerRXLabelString = tr("Sn%1").arg(getFKeyLabel(4));
+        LocLabelString = tr("Loc%1").arg(getFKeyLabel(5));
+        QTHLabelString = tr("Exch%1").arg(getFKeyLabel(6));
+        CommentsLabelString = tr("Comments");
+
+        ui->hl1->setVisible(false);
+        ui->hl2->setVisible(false);
+        ui->callBox->layout()->removeItem(ui->hsp1);
+        delete ui->hsp1;
+        ui->hsp1 = nullptr;
+    }
+    else
+    {
+        CallsignLabelString = tr("Callsign%1").arg(getFKeyLabel(1));
+        RSTTXLabelString = tr("RS(T)Tx%1").arg(getFKeyLabel(2));
+        SerTXLabelString = tr("Serial Tx");
+        RSTRXLabelString = tr("RS(T)Rx%1").arg(getFKeyLabel(3));
+        SerRXLabelString = tr("Serial Rx%1").arg(getFKeyLabel(4));
+        LocLabelString = tr("Loc%1").arg(getFKeyLabel(5));
+        QTHLabelString = tr("Exchange%1").arg(getFKeyLabel(6));
+        CommentsLabelString = tr("Comments");
+
+        mySentLabelString = tr("Sent by Me");
+        ui->mySentLabel->setText("<b>" + mySentLabelString);
+        theirSentLabelString = tr("Sent by Them");
+        ui->theirSentLabel->setText("<b>" + theirSentLabelString);
+    }
+
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
 
-    ui->CallsignFrame->setup("Call", this);
-    CallsignLabelString = tr("Callsign (F1)");
+    bool horizontal = expert ;
+
+    ui->CallsignFrame->setup("Call", this, true, horizontal);
     CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
     ui->CallsignFrame->getTextEditlabel()->setText("<b>" + CallsignLabelString);
     connect(ui->CallsignFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onCallsignEdit_textChanged);
 
-    mySentLabelString = tr("Sent by Me");
-    ui->mySentLabel->setText("<b>" + mySentLabelString);
-    ui->RSTTxFrame->setup("RstTx", this);
-    RSTTXLabelString = tr("RS(T)Tx(F2)");
+    ui->RSTTxFrame->setup("RstTx", this, true, horizontal);
     RSTTXFW = new FocusWatcher(ui->RSTTxFrame->getTextEditEdit());
     ui->RSTTxFrame->getTextEditlabel()->setText("<b>" + RSTTXLabelString);
     connect(ui->RSTTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTTXEdit_textChanged);
 
-    theirSentLabelString = tr("Sent by Them");
-    ui->theirSentLabel->setText("<b>" + theirSentLabelString);
-    ui->SerTxFrame->setup("serTx", this);
-    SerTXLabelString = tr("Serial Tx");
+    ui->SerTxFrame->setup("serTx", this, true, horizontal);
     SerTXFW = new FocusWatcher(ui->SerTxFrame->getTextEditEdit());
     ui->SerTxFrame->getTextEditlabel()->setText("<b>" + SerTXLabelString);
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(Qt::ClickFocus);
     connect(ui->SerTxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerTXEdit_textChanged);
 
-    ui->RSTRxFrame->setup("RstRx", this);
-    RSTRXLabelString = tr("RS(T)Rx(F3)");
+    ui->RSTRxFrame->setup("RstRx", this, true, horizontal);
     RSTRXFW = new FocusWatcher(ui->RSTRxFrame->getTextEditEdit());
     ui->RSTRxFrame->getTextEditlabel()->setText("<b>" + RSTRXLabelString);
     connect(ui->RSTRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onRSTRXEdit_textChanged);
 
-    ui->SerRxFrame->setup("SerRx", this);
-    SerRXLabelString = tr("Serial Rx (F4)");
+    ui->SerRxFrame->setup("SerRx", this, true, horizontal);
     SerRXFW = new FocusWatcher(ui->SerRxFrame->getTextEditEdit());
     ui->SerRxFrame->getTextEditlabel()->setText("<b>" + SerRXLabelString);
     connect(ui->SerRxFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onSerRXEdit_textChanged);
 
-    ui->LocFrame->setup("Loc", this);
-    LocLabelString = tr("Loc (F5)");
+    ui->LocFrame->setup("Loc", this, true, horizontal);
     LocFW = new FocusWatcher(ui->LocFrame->getTextEditEdit());
     ui->LocFrame->getTextEditlabel()->setText("<b>" + LocLabelString);
     connect(ui->LocFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onLocEdit_textChanged);
 
-    ui->QTHFrame->setup("QTH", this);
-    QTHLabelString = tr("Exchange (F6)");
+    ui->QTHFrame->setup("QTH", this, true, horizontal);
     QTHFW = new FocusWatcher(ui->QTHFrame->getTextEditEdit());
     ui->QTHFrame->getTextEditlabel()->setText("<b>" + QTHLabelString);
     connect(ui->QTHFrame->getTextEditEdit(), &QLineEdit::textChanged, this, &QSOLogFrame::onQTHEdit_textChanged);
 
-    ui->commentsFrame->setup("Comments", this);
-    CommentsLabelString = tr("Comments");
+    ui->commentsFrame->setup("Comments", this, true, horizontal);
     CommentsFW = new FocusWatcher(ui->commentsFrame->getTextEditEdit());
     ui->commentsFrame->getTextEditlabel()->setText("<b>" + CommentsLabelString);
 
@@ -156,23 +208,57 @@ void QSOLogFrame::on_FontChanged()
     qreal fs = cf.pointSizeF();
     int fsi = static_cast<int>(fs * lcf/100.0);
     cf.setPointSize(fsi);
+
+    ui->callBox->setFont(cf);
     ui->CallsignFrame->getTextEditEdit()->setFont(cf);
 
     ui->mySentFrame->setFont(cf);
     ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
     ui->SerTxFrame->getTextEditEdit()->setFont(cf);
+
     ui->themSentFrame->setFont(cf);
     ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
     ui->SerRxFrame->getTextEditEdit()->setFont(cf);
     ui->LocFrame->getTextEditEdit()->setFont(cf);
     ui->QTHFrame->getTextEditEdit()->setFont(cf);
+    ui->commentsFrame->getTextEditEdit()->setFont(cf);
 
+    if (expert)
+    {
+        int fsl = static_cast<int>(fs * 80/100.0);
+        cf.setPointSize(fsl);
+    }
+    else
+    {
+        cf = QApplication::font();
+    }
+    ui->CallsignFrame->getTextEditlabel()->setFont(cf);
+    ui->RSTTxFrame->getTextEditlabel()->setFont(cf);
+    ui->SerTxFrame->getTextEditlabel()->setFont(cf);
+    ui->RSTRxFrame->getTextEditlabel()->setFont(cf);
+    ui->SerRxFrame->getTextEditlabel()->setFont(cf);
+    ui->LocFrame->getTextEditlabel()->setFont(cf);
+    ui->QTHFrame->getTextEditlabel()->setFont(cf);
+    ui->commentsFrame->getTextEditlabel()->setFont(cf);
 
+    if (expert)
+    {
+        ui->CallsignFrame->setWidth("PA0/2E0WWW/P");
+        ui->RSTTxFrame->setWidth("599A");
+        ui->SerTxFrame->setWidth("19999");
+        ui->RSTRxFrame->setWidth("599A");
+        ui->SerRxFrame->setWidth("19999");
+        ui->LocFrame->setWidth("IO80MM99");
+        ui->QTHFrame->setWidth("ABCDEF");
+        ui->commentsFrame->setWidth("This is a comment");
+    }
     for (QMap<QWidget *, QString>::iterator i = widgetStyles.begin(); i != widgetStyles.end(); i++)
     {
         QWidget *w = i.key();
         w->setStyleSheet(i.value());
     }
+
+    ui->qsoFrame->repaint();
 }
 
 void QSOLogFrame::on_QSOMargins()

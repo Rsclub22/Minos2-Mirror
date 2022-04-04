@@ -79,7 +79,7 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
 
     clearButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 }
 QLineEdit *QSOTextEditFrame::getTextEditEdit() const
 {
@@ -89,6 +89,46 @@ QLineEdit *QSOTextEditFrame::getTextEditEdit() const
 QLabel *QSOTextEditFrame::getTextEditlabel() const
 {
     return TextEditlabel;
+}
+
+void QSOTextEditFrame::setWidth(QString s)
+{
+
+    QFont ef = TextEditEdit->font();
+    QFontMetrics efm(ef);
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int teel = efm.horizontalAdvance(s);
+#else
+    int teel = efm.width(s);
+#endif
+
+    TextEditEdit->setMaximumWidth(teel);
+    TextEditEdit->setMinimumWidth(teel);
+
+
+    QFont lf = TextEditlabel->font();
+    QFontMetrics lfm(lf);
+
+    QString l = TextEditlabel->text();
+    int b = l.indexOf("<b>");
+    if (b >= 0)
+    {
+        l = l.right(l.length() - (b + 3));
+    }
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int tell = lfm.horizontalAdvance(l + "W");
+#else
+    int tell = lfm.width(l + "W");
+#endif
+
+    TextEditlabel->setMaximumWidth(tell);
+    TextEditlabel->setMinimumWidth(tell);
+
+    QSize sh = minimumSizeHint();
+    setMinimumSize(sh);
+    setMaximumSize(sh);
 }
 void QSOTextEditFrame::onTextEdit_textChanged(const QString &arg)
 {

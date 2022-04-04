@@ -26,6 +26,7 @@ public:
     void setup(QString name, QWidget *filterWidget, bool uc = true, bool horizontal = false);
     QLineEdit *getTextEditEdit() const;
     QLabel *getTextEditlabel() const;
+    void setWidth(QString);
 private slots:
     void onTextEdit_textChanged(const QString &);
     void onClearButtonClicked();

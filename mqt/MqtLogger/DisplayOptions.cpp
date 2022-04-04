@@ -27,6 +27,8 @@ void DisplayOptions::initialise()
     AutoFill.initialise(&TContestApp::getContestApp() ->loggerBundle, elpAutoFill, ui->ReportAutofillcb);
     TabforSandP.initialise(&TContestApp::getContestApp() ->loggerBundle, elpTabforSandP, ui->TabSandPActioncb);
     SeparateIcons.initialise(&TContestApp::getContestApp() ->displayBundle, edpSeparateIcons, ui->separateIconsCb);
+    ExpertMode.initialise(&TContestApp::getContestApp() ->displayBundle, edpExpertMode, ui->expertModeCheckBox);
+    AlternateFKeys.initialise(&TContestApp::getContestApp() ->displayBundle, edpAlternateFKeys, ui->alternateFKeysCheckBox);
     ShowAuxHeaders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowAuxHeaders, ui->ShowAuxHeadersCheckBox);
 
 #ifndef Q_OS_WIN
@@ -120,6 +122,14 @@ void DisplayOptions::finalise()
     {
         doSelectSession = true;
     }
+    if (AlternateFKeys.finalise())
+    {
+        doSelectSession = true;
+    }
+    if (ExpertMode.finalise())
+    {
+        doSelectSession = true;
+    }
 
     if (ShowAuxHeaders.finalise())
     {
@@ -162,6 +172,8 @@ void DisplayOptions::finalise()
         MinosLoggerEvents::SendFontChanged();
         doSelectSession = true;
     }
+
+    // f and nf are set by the font choise button
     if (f != nf)
     {
         doFontChange();
