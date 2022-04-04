@@ -57,6 +57,7 @@ void DisplayOptions::initialise()
     ui->QSOFieldExpansionSpinner->setValue(qff);
 
     f = font();
+    nf = f;
     //ui->FontLabel->setText(f.toString());
 
     QString currentLang = getCurrentLanguage();
@@ -143,6 +144,7 @@ void DisplayOptions::finalise()
     if (nlcf != lcf)
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, nlcf);
+        TContestApp::getContestApp() ->displayBundle.flushProfile();
         MinosLoggerEvents::sendListCompressionChanged(nlcf/100.0);
         doSelectSession = true;
     }
@@ -150,7 +152,8 @@ void DisplayOptions::finalise()
     int nqff = ui->QSOFieldExpansionSpinner->value();
     if (qff != nqff)
     {
-        TContestApp::getContestApp() ->setIntDisplayProfile(edpQSOFieldFont, qff);
+        TContestApp::getContestApp() ->setIntDisplayProfile(edpQSOFieldFont, nqff);
+        TContestApp::getContestApp() ->displayBundle.flushProfile();
         MinosLoggerEvents::SendFontChanged();
         doSelectSession = true;
     }
@@ -205,6 +208,7 @@ void DisplayOptions::finalise()
         MinosConfig::getMinosConfig() ->bounce();
     }
     TContestApp::getContestApp() ->loggerBundle.flushProfile();
+    TContestApp::getContestApp() ->displayBundle.flushProfile();
 
     if (doSelectSession)
     {

@@ -159,11 +159,11 @@ void QSOLogFrame::on_FontChanged()
     ui->CallsignFrame->getTextEditEdit()->setFont(cf);
 
     ui->mySentFrame->setFont(cf);
-//    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
-//    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
+    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
     ui->themSentFrame->setFont(cf);
-//    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
-//    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
+    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
     ui->LocFrame->getTextEditEdit()->setFont(cf);
     ui->QTHFrame->getTextEditEdit()->setFont(cf);
 
