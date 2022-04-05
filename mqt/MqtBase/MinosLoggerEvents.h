@@ -63,6 +63,7 @@ signals:
    void QSOMargins();
    void showAuxHeaders();
    void bandMapLimitsChanged();
+   void fKey(QKeyEvent e);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -176,6 +177,8 @@ public:
     static void sendQRZInfoToLog(QString callsign, QString locator, QString name);
     static void SendShowAuxHeaders();
     static void sendBandmapLimitsChanged();
+
+    static void sendFKey(QKeyEvent *event);
 };
 //---------------------------------------------------------------------------
 #endif

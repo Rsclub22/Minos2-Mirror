@@ -305,7 +305,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     Qt::KeyboardModifiers mods = event->modifiers();
     bool shift = mods & Qt::ShiftModifier;
     bool ctrl = mods & Qt::ControlModifier;
-    //bool alt = mods & Qt::AltModifier;
+    bool alt = mods & Qt::AltModifier;
 
     bool hasFocus = false;
     if (Key == Qt::Key_Return || Key == Qt::Key_Enter ||Key == Qt::Key_Tab)
@@ -370,11 +370,22 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
     }
     else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
     {
-        setActiveControl( &Key );
-        raise();
-        return true;
+        if (setActiveControl( &Key, mods ))
+        {
+            raise();
+            return true;
+        }
     }
 
+    if (!shift && !alt && ((ctrl && !altFKeys) || (!ctrl && altFKeys)))
+    {
+        if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
+        {
+            // key may be for keyer or Digi Macro use
+            MinosLoggerEvents::sendFKey(event);
+            return true;
+        }
+    }
     bool doReturn = false;
     if ( ( Key == Qt::Key_Insert ) && !shift && !ctrl )
     {
@@ -1208,39 +1219,45 @@ void QSOLogFrame::do_mouseDoubleClickEvent(QObject *w)
 
 
 
-void QSOLogFrame::setActiveControl( int *Key )
+bool QSOLogFrame::setActiveControl(int *Key , Qt::KeyboardModifiers mods)
 {
-   switch ( *Key )
-   {
-      case Qt::Key_F1:
-         selectField( ui->CallsignFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-      case Qt::Key_F2:
-         selectField( ui->RSTTxFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-      case Qt::Key_F3:
-         selectField( ui->RSTRxFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-      case Qt::Key_F4:
-         selectField( ui->SerRxFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-      case Qt::Key_F5:
-         selectField( ui->LocFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-      case Qt::Key_F6:
-         selectField( ui->QTHFrame->getTextEditEdit() );
-         *Key = 0;
-         break;
-   case Qt::Key_F12:
-       MinosLoggerEvents::sendXferPressed(contest, baseName);
-         *Key = 0;
-         break;
-   }
+    bool ctrl = mods & Qt::ControlModifier;
+
+    if ((altFKeys && ctrl) || !(altFKeys || ctrl))
+    {
+        switch ( *Key )
+        {
+        case Qt::Key_F1:
+            selectField( ui->CallsignFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F2:
+            selectField( ui->RSTTxFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F3:
+            selectField( ui->RSTRxFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F4:
+            selectField( ui->SerRxFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F5:
+            selectField( ui->LocFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F6:
+            selectField( ui->QTHFrame->getTextEditEdit() );
+            *Key = 0;
+            return true;
+        case Qt::Key_F12:
+            MinosLoggerEvents::sendXferPressed(contest, baseName);
+            *Key = 0;
+            return true;
+        }
+    }
+    return false;
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::getScreenEntry()

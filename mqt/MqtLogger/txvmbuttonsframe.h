@@ -49,10 +49,7 @@ private slots:
     void readActionSelected();
     void editActionSelected();
     void writeActionSelected();
-
     void buttonSelected();
-
-
     void clearActionSelected();
 signals:
 
@@ -161,6 +158,7 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
+    void fKey(QKeyEvent e);
 
 
     void onRemoteConfigChanged();

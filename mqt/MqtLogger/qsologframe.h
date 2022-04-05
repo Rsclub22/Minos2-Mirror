@@ -42,7 +42,7 @@ public:
     bool catchup = false;
     bool unfilled = false;
 
-    void setActiveControl( int *Key );
+    bool setActiveControl( int *Key, Qt::KeyboardModifiers mods );
     void clearCurrentField();
     void lgTraceerr( int err );
 

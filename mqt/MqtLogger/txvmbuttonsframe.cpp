@@ -3,6 +3,7 @@
 #include "SendRPCDM.h"
 #include "KeyerJson.h"
 #include "cutils.h"
+#include "MinosLoggerEvents.h"
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
 
@@ -43,6 +44,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     extKeyerConnectTimer = new QTimer(this);
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &TxVmButtonsFrame::fKey);
 
     initTxVmButtonFrame();
 
@@ -980,6 +983,24 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     }
 
 }
+void TxVmButtonsFrame::fKey(QKeyEvent e)
+{
+    // FKey event received by log frame (or ctrl/FKey)
+    int mem = e.key() - Qt::Key_F1 + 1;
+    if (mem > 10)
+    {
+
+    }
+    else if (mem == 10)
+    {
+        onVmStopClicked();
+    }
+    else
+    {
+        readActionSelected(mem);
+    }
+
+}
 
 //*******************TX Voice Memory Button *************************//
 
@@ -1053,6 +1074,7 @@ void TxVoiceMemButton::clearActionSelected()
 {
     txVmButtonsFrame->clearActionSelected(memNo);
 }
+
 
 
 void TxVoiceMemButton::buttonSelected()
