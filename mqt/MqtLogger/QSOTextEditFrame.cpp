@@ -1,8 +1,9 @@
+#include "ContestApp.h"
 #include "QSOTextEditFrame.h"
 
 QSOTextEditFrame::QSOTextEditFrame(QWidget *parent):QFrame(parent)
 {
-
+    TContestApp::getContestApp() ->getBoolDisplayProfile( edpExpertMode, expert );
 }
 
 QSOTextEditFrame::~QSOTextEditFrame()
@@ -30,10 +31,9 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditlabel->setObjectName(name + "label");
     hb->addWidget(TextEditlabel);
 
-
     TextEditEdit = new QLineEdit(this);
     TextEditEdit->setObjectName(name + "Edit");
-    connect(TextEditEdit, &QLineEdit::textChanged, this, &QSOTextEditFrame::onTextEdit_textChanged);
+    TextEditEdit->setClearButtonEnabled(true);
 
     if (horizontal)
     {
@@ -44,15 +44,6 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
         QSpacerItem *horizontalSpacer = new QSpacerItem(4, 2, QSizePolicy::Expanding, QSizePolicy::Minimum);
         hb->addItem(horizontalSpacer);
     }
-
-    clearButton = new QToolButton(this);
-    clearButton->setFocusPolicy(Qt::NoFocus);
-    clearButton->setEnabled(false);
-
-    clearButton->setToolTip(tr("Click to clear edit content"));
-    connect(clearButton, &QToolButton::clicked, this, &QSOTextEditFrame::onClearButtonClicked);
-
-    hb->addWidget(clearButton);
 
     if (!horizontal)
     {
@@ -77,7 +68,6 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
 
     TextEditlabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-    clearButton->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Minimum);
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 }
@@ -93,20 +83,6 @@ QLabel *QSOTextEditFrame::getTextEditlabel() const
 
 void QSOTextEditFrame::setWidth(QString s)
 {
-
-    QFont ef = TextEditEdit->font();
-    QFontMetrics efm(ef);
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
-    int teel = efm.horizontalAdvance(s);
-#else
-    int teel = efm.width(s);
-#endif
-
-    TextEditEdit->setMaximumWidth(teel);
-    TextEditEdit->setMinimumWidth(teel);
-
-
     QFont lf = TextEditlabel->font();
     QFontMetrics lfm(lf);
 
@@ -126,28 +102,25 @@ void QSOTextEditFrame::setWidth(QString s)
     TextEditlabel->setMaximumWidth(tell);
     TextEditlabel->setMinimumWidth(tell);
 
+    QFont ef = TextEditEdit->font();
+    QFontMetrics efm(ef);
+    int editHeight = efm.height();
+
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 11, 0)
+    int teel = efm.horizontalAdvance(s);
+#else
+    int teel = efm.width(s);
+#endif
+
+    teel += editHeight; // allow for clear button
+
+    teel = std::max(teel, tell);
+
+    TextEditEdit->setMaximumWidth(teel);
+    TextEditEdit->setMinimumWidth(teel);
+
     QSize sh = minimumSizeHint();
     setMinimumSize(sh);
     setMaximumSize(sh);
-}
-void QSOTextEditFrame::onTextEdit_textChanged(const QString &arg)
-{
-    if (arg.isEmpty())
-    {
-        clearButton->setText("");
-        clearButton->setEnabled(false);
-    }
-    else
-    {
-        if (!TextEditEdit->isReadOnly())
-        {
-            clearButton->setText("x");
-            clearButton->setEnabled(true);
-        }
-    }
-}
-void QSOTextEditFrame::onClearButtonClicked()
-{
-    TextEditEdit->clear();
-    TextEditEdit->setFocus();
 }

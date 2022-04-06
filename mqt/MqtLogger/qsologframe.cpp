@@ -106,7 +106,7 @@ QSOLogFrame::QSOLogFrame(QWidget *parent) :
     ui->BrgSt->setFixedSize(ui->BrgSt->size());
     ui->DistSt->setFixedSize(ui->DistSt->size());
 
-    bool horizontal = expert ;
+    bool horizontal = false ;
 
     ui->CallsignFrame->setup("Call", this, true, horizontal);
     CallsignFW = new FocusWatcher(ui->CallsignFrame->getTextEditEdit());
@@ -241,17 +241,15 @@ void QSOLogFrame::on_FontChanged()
     ui->QTHFrame->getTextEditlabel()->setFont(cf);
     ui->commentsFrame->getTextEditlabel()->setFont(cf);
 
-    if (expert)
-    {
-        ui->CallsignFrame->setWidth("PA0/2E0WWW/P");
-        ui->RSTTxFrame->setWidth("599A");
-        ui->SerTxFrame->setWidth("19999");
-        ui->RSTRxFrame->setWidth("599A");
-        ui->SerRxFrame->setWidth("19999");
-        ui->LocFrame->setWidth("IO80MM99");
-        ui->QTHFrame->setWidth("ABCDEF");
-        ui->commentsFrame->setWidth("This is a comment");
-    }
+    ui->CallsignFrame->setWidth("PA0/2E0WWW/P");
+    ui->RSTTxFrame->setWidth("599A");
+    ui->SerTxFrame->setWidth("19999");
+    ui->RSTRxFrame->setWidth("599A");
+    ui->SerRxFrame->setWidth("19999");
+    ui->LocFrame->setWidth("IO80MM99");
+    ui->QTHFrame->setWidth("ABCDEF");
+    ui->commentsFrame->setWidth("This is a comment");
+
     for (QMap<QWidget *, QString>::iterator i = widgetStyles.begin(); i != widgetStyles.end(); i++)
     {
         QWidget *w = i.key();

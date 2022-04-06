@@ -18,7 +18,8 @@ class QSOTextEditFrame : public QFrame
 
     QLabel *TextEditlabel = nullptr;
     QLineEdit *TextEditEdit = nullptr;
-    QToolButton *clearButton = nullptr;
+
+    bool expert = false;
 
 public:
     QSOTextEditFrame(QWidget *parent);
@@ -27,9 +28,6 @@ public:
     QLineEdit *getTextEditEdit() const;
     QLabel *getTextEditlabel() const;
     void setWidth(QString);
-private slots:
-    void onTextEdit_textChanged(const QString &);
-    void onClearButtonClicked();
 };
 
 #endif // QSOTEXTEDITFRAME_H
