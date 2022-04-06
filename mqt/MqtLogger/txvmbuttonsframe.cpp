@@ -669,48 +669,47 @@ void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString na
 
 void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
-
-
-    if (buttonNumSent >= 0)
+    if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 && txVoiceKeyer->doRepeatFromLogger())
     {
-        if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+        // message duration of zero means that there shouldn't be a timer running
+        if (buttonNumSent >= 0)
         {
-            int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
-            repeatPauseTimer->start(repeatPauseDur);
-        }
-        else
-        {
-            txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
-            setRepeatIndicatorOnOff(false);
-            buttonNumSent = NO_VM_BUTTON_ON;
+            if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+            {
+                int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
+                repeatPauseTimer->start(repeatPauseDur);
+            }
+            else
+            {
+                txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+                setRepeatIndicatorOnOff(false);
+                buttonNumSent = NO_VM_BUTTON_ON;
+            }
         }
     }
-
     msgDurTimer->stop();
-
-
 }
 
 
 
 void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 {
-    if (buttonNumSent >= 0)
+    if (txVoiceKeyer->doRepeatFromLogger())
     {
-       if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
-       {
-           trace("TxVmButtonsFrame::onRepeatPauseTimerTimeout()");
-           startVMMsg(buttonNumSent);
+        if (buttonNumSent >= 0)
+        {
+           if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+           {
+               trace("TxVmButtonsFrame::onRepeatPauseTimerTimeout()");
+               startVMMsg(buttonNumSent);
 
-       }
-       else
-       {
-           onVmStopClicked();
-
-
-       }
+           }
+           else
+           {
+               onVmStopClicked();
+           }
+        }
     }
-
     repeatPauseTimer->stop();
 
 
@@ -954,19 +953,17 @@ void TxVmButtonsFrame::setPttState(bool state)
 
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
-    if (!state)
-    {
-       trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
+   trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
+   if (!state)
+   {
         onMsgDurTimerTimeout();
-    }
-
-
+   }
 }
+
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)
 {
     txVoiceKeyer->setPip(ui->pipCb->isChecked());
 }
-
 
 void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
 {

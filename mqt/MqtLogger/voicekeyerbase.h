@@ -56,7 +56,6 @@ public:
     int getVmRepeatPauseDur() const {return vmRepeatPauseDur;}
     void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
 
-
     int getVmDuration() const {return vmDuration;}
     void setVmDuration(const int vmDuration_);
 
@@ -94,6 +93,8 @@ public:
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg(VoiceKeyerParams * vkParam) = 0;
+
+    virtual bool doRepeatFromLogger(){return true;}
 
     virtual void sendCwMsg(QString message) = 0;
     virtual void stopCwMsg() = 0;
