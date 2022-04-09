@@ -666,7 +666,7 @@ void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString na
 
 void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
-    if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 && txVoiceKeyer->doRepeatFromLogger())
+    if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 )
     {
         // message duration of zero means that there shouldn't be a timer running
         if (buttonNumSent >= 0)
@@ -951,7 +951,7 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
    trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
-   if (!state)
+   if (txVoiceKeyer->doRepeatFromLogger() && !state)
    {
         onMsgDurTimerTimeout();
    }
