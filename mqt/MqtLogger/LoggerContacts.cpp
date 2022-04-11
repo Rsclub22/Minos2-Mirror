@@ -488,6 +488,23 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
         outstr += getCabrilloField(extra, 6);
     }
 }
+/*
+<call:5>EA1BA
+<gridsquare:4>IN73
+<mode:4>MFSK
+<submode:3>FT4
+<rst_sent:3>+02
+<rst_rcvd:3>-12
+<qso_date:8>20220411
+<time_on:6>190001
+<qso_date_off:8>20220411
+<time_off:6>190115
+<band:3>20m
+<freq:9>14.080366
+<station_callsign:3>M5N
+<my_gridsquare:6>IO91OK
+<eor>
+*/
 QString ContestContact::getADIFLine()
 {
     //date
@@ -517,61 +534,10 @@ QString ContestContact::getADIFLine()
     QString exp_buff;
 
     //---------------------------------------
-    dtg on = timeOn;
-    if (on.isBadDtg() || on.notEntered())
-    {
-        on = timeOff;
-    }
-    exp_buff = on.getDate( DTGLOG ).left(6 );
-    QString cent = "19";
-    if ( exp_buff.toInt() < 300000 )
-        cent = "20";
+    outstr += makeADIFField( "CALL", cs.getFullCall() );
 
-    outstr += makeADIFField( "QSO_DATE", cent + exp_buff );
-
-    exp_buff = on.getTime( DTGLOG ).left( 4 );
-
-    outstr += makeADIFField( "TIME_ON", exp_buff );
-
-    //---------------------------------------
-    exp_buff = timeOff.getDate( DTGLOG ).left(6 );
-
-    cent = "19";
-    if ( exp_buff.toInt() < 300000 )
-        cent = "20";
-
-    outstr += makeADIFField( "QSO_DATE_OFF", cent + exp_buff );
-
-    exp_buff = timeOff.getTime( DTGLOG ).left( 4 );
-
-    outstr += makeADIFField( "TIME_OFF", exp_buff );
-    //---------------------------------------
-
-
-    QString cb;
-    double txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
-    outstr += makeADIFField( "BAND", cb );
-
-    double dfreq = txfreq/1000000.0;  // MHz
-
-    QString freq = QString::number(dfreq, 'f', 3); //MHz to 3 decimal places
-    outstr += makeADIFField("FREQ", freq);
-
-    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
-    outstr += makeADIFField( "OPERATOR", op1.getValue() );
-    if (contest->MGMContestRules.getValue())
-    {
-        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc().left(4));
-    }
-    else
-    {
-        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
-    }
-    int zone = 0;
-    lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
-    outstr+= makeADIFField("ITUZ", zone);
-    lcl->QTHBundle.getIntProfile(eqpCQZone, zone);
-    outstr+= makeADIFField("CQZ", zone);
+    if (contest->locatorMandatoryField.getValue())
+        outstr += makeADIFField( "GRIDSQUARE", loc.getLoc() );
 
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
@@ -601,8 +567,6 @@ QString ContestContact::getADIFLine()
                     outstr += makeADIFField( "MODE", mode.getValue() );
                 }
 
-    outstr += makeADIFField( "CALL", cs.getFullCall() );
-
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_SENT", reps.getValue() );
     if (contest->serialMandatoryField.getValue())
@@ -612,17 +576,75 @@ QString ContestContact::getADIFLine()
     }
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_RCVD", repr.getValue() );
+
     if (contest->serialMandatoryField.getValue())
     {
         outstr += makeADIFField( "SRX", serialr.getValue() );
         outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
     }
-    if (contest->locatorMandatoryField.getValue())
-        outstr += makeADIFField( "GRIDSQUARE", loc.getLoc() );
     if ( districtMult )
         outstr += makeADIFField( "QTH", districtMult->districtCode );
     else
         outstr += makeADIFField( "QTH", extraText.getValue() );
+
+    dtg on = timeOn;
+    if (on.isBadDtg() || on.notEntered() != -1)
+    {
+        on = timeOff;
+    }
+    exp_buff = on.getDate( DTGLOG ).left(6 );
+    QString cent = "19";
+    if ( exp_buff.toInt() < 300000 )
+        cent = "20";
+
+    outstr += makeADIFField( "QSO_DATE", cent + exp_buff );
+
+    exp_buff = on.getTime( DTGADIF );
+
+    outstr += makeADIFField( "TIME_ON", exp_buff );
+
+    //---------------------------------------
+    exp_buff = timeOff.getDate( DTGLOG ).left(6 );
+
+    cent = "19";
+    if ( exp_buff.toInt() < 300000 )
+        cent = "20";
+
+    outstr += makeADIFField( "QSO_DATE_OFF", cent + exp_buff );
+
+    exp_buff = timeOff.getTime( DTGADIF );
+
+    outstr += makeADIFField( "TIME_OFF", exp_buff );
+    //---------------------------------------
+
+
+    QString cb;
+    double txfreq = contest->getAdifFreqBand(frequency.getValue(), cb);
+    outstr += makeADIFField( "BAND", cb );
+
+    double dfreq = txfreq/1000000.0;  // MHz
+
+    QString freq = QString::number(dfreq, 'f', 6); //MHz to 6 decimal places
+    outstr += makeADIFField("FREQ", freq);
+
+    outstr += makeADIFField("STATION_CALLSIGN", clp->mycall.getFullCall());
+    outstr += makeADIFField( "OPERATOR", op1.getValue() );
+    if (contest->MGMContestRules.getValue())
+    {
+        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc().left(6));
+    }
+    else
+    {
+        outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
+    }
+
+    int zone = 0;
+    lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
+    outstr+= makeADIFField("ITUZ", zone);
+    lcl->QTHBundle.getIntProfile(eqpCQZone, zone);
+    outstr+= makeADIFField("CQZ", zone);
+
+
 
     outstr += makeADIFField( "TX_PWR", clp->power.getValue() );
     outstr += makeADIFField( "COMMENT", comments.getValue() );

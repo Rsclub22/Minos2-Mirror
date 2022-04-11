@@ -228,8 +228,7 @@ QString makeADIFField( const QString &fieldname, const QString &content )
    int len = content.size();
    if ( len )
    {
-      QString buff = QString( "<%1:%2>" ).arg(fieldname).arg(len );
-      tag = buff + content;
+      tag = QString( "<%1:%2>%3 " ).arg(fieldname.toLower()).arg(len ).arg(content);
    }
    return tag;
 }
