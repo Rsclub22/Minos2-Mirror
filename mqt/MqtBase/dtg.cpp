@@ -268,6 +268,15 @@ QString dtg::getTime( DTG dstyle, bool &d ) const
             if ( temp_time[ i ].unicode() == 0 )
                 temp_time[ i ] = ' ';
     }
+    else if (dstyle == DTGADIF)
+    {
+        temp_time += timeValue [ 0 ];
+        temp_time += timeValue [ 1 ];
+        temp_time += timeValue [ 2 ];
+        temp_time += timeValue [ 3 ];
+        temp_time += timeValue [ 4 ];
+        temp_time += timeValue [ 5 ];
+    }
     else
     {
         temp_time += timeValue [ 0 ];
