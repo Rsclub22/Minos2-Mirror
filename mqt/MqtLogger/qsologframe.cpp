@@ -2155,6 +2155,12 @@ void QSOLogFrame::checkQsoFrameColour()
     {
         return;
     }
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        // only worry about the current visible contest
+        return;
+    }
     QString ssQsoFrame = ssQsoFrameBlue;
     if (contest->isReadOnly())
     {
@@ -2679,6 +2685,11 @@ void QSOLogFrame::logCurrentContact( )
 }
 void QSOLogFrame::updateQSOTime(bool fromTimer)
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
     sortUnfilledCatchupTime();
     // Check if dtg is within the contest time
     // If not we wish to show as red
@@ -3356,6 +3367,12 @@ bool QSOLogFrame::isQrzDisplayFrameLoaded()
 
 void QSOLogFrame::checkQrzDisplayFrameLoaded()
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
+
     if (contest && !contest->isReadOnly() && isQrzDisplayFrameLoaded())
     {
         setQrzButtonVisible(true);
@@ -3456,6 +3473,12 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 
 void QSOLogFrame::checkBandMapAndClusterLoaded()
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (contest && !contest->isReadOnly() && tslf && tslf->isBandMapLoaded())
     {
