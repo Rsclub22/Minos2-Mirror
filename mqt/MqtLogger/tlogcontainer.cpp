@@ -1499,6 +1499,8 @@ void TLogContainer::closeSlot(int t, bool addToMRU)
 
       if (f)
       {
+          f->GJVQSOLogFrame->killPartial(); // seems to remove possible crash
+
           BaseContestLog *bct = f->getContest();
           if ( bct && addToMRU )
           {
