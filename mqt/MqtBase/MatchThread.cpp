@@ -193,10 +193,10 @@ void TMatchThread::Execute()
          bool doSleep = !thisLogMatch->idleMatch( 20 );
 
          yieldCurrentThread();
-         doSleep |= !otherLogMatch->idleMatch( 20 );
+         doSleep &= !otherLogMatch->idleMatch( 20 );
 
          yieldCurrentThread();
-         doSleep |= !listMatch->idleMatch( 20 ) ;
+         doSleep &= !listMatch->idleMatch( 20 ) ;
 
          yieldCurrentThread();
 
