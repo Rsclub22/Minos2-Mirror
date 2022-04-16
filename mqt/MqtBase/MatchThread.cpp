@@ -176,6 +176,10 @@ const int MATCH_LIM = 20;
 void TMatchThread::Execute()
 {
    //---- Place thread code here ----
+
+    // NB that Linux doesn't have a concept of thread priority, so we attempt
+    // to le others run by yielding the thread;
+
    try
    {
       while ( !Terminated )
@@ -186,8 +190,20 @@ void TMatchThread::Execute()
 
          // so it only does a max of 20+20 contacts before switching
          // to "other" of log/list
-         if ( !thisLogMatch->idleMatch( 20 ) && !otherLogMatch->idleMatch( 20 ) && !listMatch->idleMatch( 20 ) )
-            msleep(100);
+         bool doSleep = !thisLogMatch->idleMatch( 20 );
+
+         yieldCurrentThread();
+         doSleep |= !otherLogMatch->idleMatch( 20 );
+
+         yieldCurrentThread();
+         doSleep |= !listMatch->idleMatch( 20 ) ;
+
+         yieldCurrentThread();
+
+         if (doSleep)
+         {
+             msleep(100);
+         }
       }
 
       // make sure everything is cleared down, so we can stop matching while managing lists
