@@ -43,6 +43,7 @@ public:
     void setKey(const QString &key);
 
     QString getRouterApp() const;
+    QString getLocalName() const;
 };
 
 #endif // PUBSUBVALUE_H

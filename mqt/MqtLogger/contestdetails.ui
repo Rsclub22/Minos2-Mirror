@@ -639,7 +639,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="radioNameEdit">
+           <widget class="QComboBox" name="radioNameSel">
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
             </property>
@@ -666,7 +666,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="antennaNameEdit">
+           <widget class="QComboBox" name="antennaNameSel">
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
             </property>

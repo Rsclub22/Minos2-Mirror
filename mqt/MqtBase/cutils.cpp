@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
+#include <QComboBox>
 #include <QSplitter>
 #include <QScrollArea>
 #include "MinosLoggerEvents.h"
@@ -843,4 +844,70 @@ void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, s
 void createColumnsMenu(QMenu &menu, QHeaderView *hdr, QWidget *p, std::function<void()> pred)
 {
     createColumnsMenu(menu, hdr->model(), p, pred);
+}
+void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
+{
+    QVector<PubSubName> names;
+
+    for(const auto &s: qAsConst(nameList))
+    {
+        // get unique names
+        names.push_back(PubSubName(s));
+    }
+
+    QStringList uniqueNames;
+    for(const auto &p:names)
+    {
+        QString r = p.key();
+
+        int sameNames = 0;
+        QString uniqueName;
+        for(const auto &p2:names)
+        {
+            if (p2.key() == r)
+            {
+                sameNames++;
+            }
+        }
+        if (sameNames > 1)
+        {
+            // NB that app + key on a single machine will always be unique
+            // sowe need to test for the same across machines
+
+            // we could also look for router + key?
+
+            sameNames = 0;
+            r = p.getLocalName();
+            for(const auto &p2:names)
+            {
+                if (p2.getLocalName() == r)
+                {
+                    sameNames++;
+                }
+                if (sameNames > 1)
+                {
+                    uniqueName = p.toString();
+                }
+                else
+                {
+                    uniqueName = r;
+                }
+            }
+        }
+        else
+        {
+            uniqueName = r;
+        }
+
+        uniqueNames.append(uniqueName);
+    }
+
+    cb->clear();
+    cb->addItem("");
+    for(int i = 0; i < names.count(); i++)
+    {
+        cb->addItem( uniqueNames[i], names[i].toString());
+        cb->setItemData( i + 1, names[i].toString(), Qt::ToolTipRole );
+
+    }
 }

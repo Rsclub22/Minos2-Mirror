@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>301</width>
-    <height>131</height>
+    <height>133</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_7">
      <item>
-      <widget class="QComboBox" name="antennaName">
+      <widget class="QComboBox" name="antennaNameSel">
        <property name="focusPolicy">
         <enum>Qt::ClickFocus</enum>
        </property>
@@ -135,7 +135,6 @@
             </property>
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -217,7 +216,6 @@
            <widget class="QLabel" name="RotBrg">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>

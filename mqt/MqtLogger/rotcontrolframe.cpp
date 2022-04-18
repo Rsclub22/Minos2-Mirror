@@ -550,9 +550,7 @@ void RotControlFrame::setRotatorList()
 {
     QStringList rots = LogContainer->sendDM->rotators();
 
-    ui->antennaName->clear();
-    ui->antennaName->addItem("");
-    ui->antennaName->addItems(rots);
+    comboSetUniqueNames(rots, ui->antennaNameSel);
 
     if (ct && !ct->isReadOnly())
     {
@@ -578,6 +576,7 @@ void RotControlFrame::setRotatorState(const QString &s)
                    ui->rotConnectState->setText(tr("Connected"));
                    rotError = false;
                    rotConnected = true;
+
                    setRotatorAntennaName(ct->antennaName.getValue().toString()); // make sure the name appears
 
                    emit rotatorConnected(true);     // tell bandmap
@@ -674,16 +673,16 @@ void RotControlFrame::setRotatorState(const QString &s)
 void RotControlFrame::setRotatorAntennaName(const QString &s)
 {
    traceMsg("Set Antenna Name = " + s);
-   int index = ui->antennaName->findText(s, Qt::MatchFixedString);
+   int index = ui->antennaNameSel->findData(s);
    if (index >= 0)
-       ui->antennaName->setCurrentIndex(index);
+       ui->antennaNameSel->setCurrentIndex(index);
    else
-       ui->antennaName->setCurrentText(s);
+       trace(QString("Antenna %1 not found").arg(s));
 
-   antennaName = ui->antennaName->currentText();
+   antennaName = ui->antennaNameSel->currentData().toString();
    if (ct && !ct->isReadOnly())
    {
-        emit selectRotator(s);
+        emit selectRotator(antennaName);
    }
 }
 void RotControlFrame::on_ContestPageChanged()
@@ -811,10 +810,9 @@ void RotControlFrame::traceMsg(QString msg)
     trace(QString("[RotcontrolFrame] %1 - %2").arg(antennaName).arg( msg));
 }
 
-void RotControlFrame::on_antennaName_activated(const QString &arg1)
+void RotControlFrame::on_antennaNameSel_activated(const QString &/*arg1*/)
 {
-
-    antennaName = arg1;
+    antennaName = ui->antennaNameSel->currentData().toString();
 
     emit selectRotator(antennaName);
 
@@ -840,7 +838,7 @@ void RotControlFrame::checkConnection()
     {
         // clear the rot selection
 
-        ui->antennaName->setCurrentText("");
+        ui->antennaNameSel->setCurrentText("");
         setRotatorState(ROT_STATUS_DISCONNECTED);
     }
 }

@@ -1423,9 +1423,9 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
 
     if (LogContainer->sendDM->isRadioLoaded())
-        contestTransferObject->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
+        contestTransferObject->radioName.setValue(PubSubName(getSelectedRadio()));
     if (LogContainer->sendDM->isRotatorLoaded())
-        contestTransferObject->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
+        contestTransferObject->antennaName.setValue(PubSubName(getSelectedAntenna()));
 
     contestTransferObject->currentMode.setValue(ui->ModeComboBox->currentText());
 
@@ -1502,8 +1502,8 @@ void ContestDetails::enableControls()
    ui->MainOpComboBox->setEnabled(!protectedChecked);
    ui->SecondOpComboBox->setEnabled(!protectedChecked);
    ui->AntOffsetEdit->setEnabled(!protectedChecked);
-   ui->radioNameEdit->setEnabled(!protectedChecked);
-   ui->antennaNameEdit->setEnabled(!protectedChecked);
+   ui->radioNameSel->setEnabled(!protectedChecked);
+   ui->antennaNameSel->setEnabled(!protectedChecked);
 
    ui->PowerEdit->setEnabled(!protectedChecked);
    ui->ModeComboBox->setEnabled(!protectedChecked);
@@ -1861,24 +1861,44 @@ void ContestDetails::on_MGMCheckBox_stateChanged(int)
 //    }
     enableControls();
 }
+QString ContestDetails::getSelectedAntenna()
+{
+    return ui->antennaNameSel->currentData().toString();
+}
+
+void ContestDetails::setSelectedAntenna(QString s)
+{
+   int c = ui->antennaNameSel->findData(s);
+   ui->antennaNameSel->setCurrentIndex(c);
+}
 void ContestDetails::on_RotatorList()
 {
-    ui->antennaNameEdit->clear();
-    ui->antennaNameEdit->addItem("");
-    ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
+    QStringList rots = LogContainer->sendDM->rotators();
+    comboSetUniqueNames(rots, ui->antennaNameSel);
     if (contestTransferObject)
     {
-        ui->antennaNameEdit->setCurrentText(contestTransferObject->antennaName.getValue().toString());
+        setSelectedAntenna(contestTransferObject->antennaName.getValue().toString());
     }
+}
+
+QString ContestDetails::getSelectedRadio()
+{
+    return ui->radioNameSel->currentData().toString();
+}
+
+void ContestDetails::setSelectedRadio(QString s)
+{
+   int c = ui->radioNameSel->findData(s);
+   ui->radioNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_SetRadioList()
 {
-    ui->radioNameEdit->clear();
-    ui->radioNameEdit->addItem("");
-    ui->radioNameEdit->addItems( LogContainer->sendDM->rigs());
+    QStringList names = LogContainer->sendDM->rigs();
+
+    comboSetUniqueNames(names, ui->radioNameSel);
     if (contestTransferObject)
     {
-        ui->radioNameEdit->setCurrentText(contestTransferObject->radioName.getValue().toString());
+        setSelectedRadio(contestTransferObject->radioName.getValue().toString());
     }
 }
 

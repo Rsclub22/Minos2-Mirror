@@ -58,6 +58,11 @@ private:
 
    void setExchangeComboBox();
    
+   QString getSelectedRadio();
+   void setSelectedRadio(QString );
+   QString getSelectedAntenna();
+   void setSelectedAntenna(QString s);
+
 public Q_SLOTS:
    virtual void accept() override;
    virtual void reject() override;

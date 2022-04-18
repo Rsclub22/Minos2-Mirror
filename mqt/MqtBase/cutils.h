@@ -15,6 +15,8 @@
 extern const double pi /* = (double )3.141592653 */;  /* pi */
 extern const double dr /* = pi/180.0*/;      			  // degree to radian conversion factor
 
+class QComboBox;
+
 extern void clearBuffer( );
 extern void strtobuf( const QString &str );
 extern void strtobuf( const MinosStringItem<QString> &str );
@@ -137,5 +139,6 @@ void resetHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h
 void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr);
 void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, std::function<void()> pred);
 void createColumnsMenu(QMenu &menu, QHeaderView *h, QWidget *p, std::function<void()> pred);
+void comboSetUniqueNames(QStringList nameList, QComboBox *cb);
 
 #endif
