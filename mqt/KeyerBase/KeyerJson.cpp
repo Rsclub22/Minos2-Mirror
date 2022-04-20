@@ -56,7 +56,7 @@ bool KeyerJson::parseConfig(QString conf, bool incSliders)
                 recordSliderPosition = getInt(sconf, "record", 0);
                 replaySliderPosition = getInt(sconf, "replay", 0);
                 passthroughSliderPosition = getInt(sconf, "pass", 0);
-                dry = (getInt(sconf, "dry", 0) > 0);
+                dry = getBool(sconf, "dry", false);
             }
             else
             {
