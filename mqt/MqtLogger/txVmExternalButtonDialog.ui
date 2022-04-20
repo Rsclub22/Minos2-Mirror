@@ -219,6 +219,13 @@
            </property>
           </spacer>
          </item>
+         <item>
+          <widget class="QCheckBox" name="dryCheckBox">
+           <property name="text">
+            <string>Dry</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>

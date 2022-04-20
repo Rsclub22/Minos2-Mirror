@@ -83,11 +83,13 @@ private slots:
     void doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
-    void doSliders(int, int, int);
+    void doSliders(int, int, int, bool);
 
     void on_messageName_editingFinished();
 
     void on_keyCombo_currentIndexChanged(int index);
+
+    void on_dryCheckBox_stateChanged(int arg1);
 
 private:
     void syncSetLines();

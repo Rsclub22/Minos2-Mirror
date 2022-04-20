@@ -32,6 +32,8 @@ private slots:
 
     void on_toneButton_clicked();
 
+    void on_showWaveButton_clicked();
+
 private:
     Ui::mqtktMainWindow *ui;
 };

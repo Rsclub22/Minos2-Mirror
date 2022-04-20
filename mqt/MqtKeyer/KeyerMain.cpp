@@ -24,10 +24,10 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
 
-void KeyerMain::doSliders(int rec, int rep, int pass)
+void KeyerMain::doSliders(int rec, int rep, int pass, bool d)
 {
     inVolChangeCount++;
-    trace(QString("Set Slider positions %1;%2;%3").arg(rec).arg(rep).arg(pass));
+    trace(QString("Set Slider positions %1;%2;%3;%4").arg(rec).arg(rep).arg(pass).arg(d));
     ui->recordSlider->setValue(rec);
     trace(QString("(doSliders) rec chnaged to %1").arg(rec));
     ui->replaySlider->setValue(rep);
@@ -38,6 +38,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass)
     ui->recordValue->setValue(rec/10.0);
     ui->replayValue->setValue(rep/10.0);
     ui->passThroughValue->setValue(pass/10.0);
+    ui->dryCheckBox->setChecked(d);
 
     inVolChangeCount--;
 }
@@ -135,17 +136,20 @@ KeyerMain::KeyerMain(QWidget *parent) :
     int recordLevel = settings.value("RecordLevel", 0).toInt();
     int replayLevel = settings.value("ReplayLevel", 0).toInt();
     int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
+    bool dry = settings.value("dry", false).toBool();
 
     if (masterConfig.read("./Configuration/MinosKeyer.json"))
     {
         recordLevel = masterConfig.recordSliderPosition;
         replayLevel = masterConfig.replaySliderPosition;
         passThroughLevel = masterConfig.passthroughSliderPosition;
+        dry = masterConfig.dry;
     }
 
     ui->recordSlider->setValue(recordLevel);
     ui->replaySlider->setValue(replayLevel);
     ui->passThroughSlider->setValue(passThroughLevel);
+    ui->dryCheckBox->setChecked(dry);
 
     inVolChangeCount--;
 
@@ -280,9 +284,10 @@ void KeyerMain::lineTimerTimer( )
        masterConfig.recordSliderPosition = ui->recordSlider->value();
        masterConfig.replaySliderPosition = ui->replaySlider->value();
        masterConfig.passthroughSliderPosition = ui->passThroughSlider->value();
+       masterConfig.dry = ui->dryCheckBox->isChecked();
        writeConfig(false);
 
-       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
+       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
        {
            doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
@@ -511,7 +516,8 @@ void KeyerMain::setVolumeMults()
     int record = ui->recordSlider->value();
     int replay = ui->replaySlider->value();
     int passThrough = ui->passThroughSlider->value();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough);
+    bool dry = ui->dryCheckBox->isChecked();
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, dry);
 
     ui->recordValue->setValue(record/10.0);
     ui->replayValue->setValue(replay/10.0);
@@ -523,25 +529,22 @@ void KeyerMain::setVolumeMults()
 void KeyerMain::on_recordSlider_valueChanged(int position)
 {
     masterConfig.recordSliderPosition = position;
-    writeConfig(false);
-
     setVolumeMults();
+    writeConfig(false);
 }
 
 void KeyerMain::on_replaySlider_valueChanged(int position)
 {
     masterConfig.replaySliderPosition = position;
-    writeConfig(false);
-
     setVolumeMults();
+    writeConfig(false);
 }
 
 void KeyerMain::on_passThroughSlider_valueChanged(int position)
 {
     masterConfig.passthroughSliderPosition = position;
-    writeConfig(false);
-
     setVolumeMults();
+    writeConfig(false);
 }
 
 void KeyerMain::on_recordValue_valueChanged(double arg1)
@@ -570,6 +573,11 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
         trace(QString("(v) pass chnaged to %1").arg(arg1));
     }
 }
+void KeyerMain::on_dryCheckBox_stateChanged(int /*arg1*/)
+{
+    setVolumeMults();
+    writeConfig(false);
+}
 
 void KeyerMain::doConfig(QString config)
 {
@@ -588,8 +596,8 @@ void KeyerMain::doConfig(QString config)
     {
         writeConfig(true);
         // the value change should cause a force publish. We have to set it back again or it stays there!
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value());
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
     }
 }
 void doConfig(QString config)
@@ -606,4 +614,3 @@ void KeyerMain::on_keyCombo_currentIndexChanged(int /*index*/)
     ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
     ui->delayEdit->setValue(kjj.autoRepeatDelay);
 }
-

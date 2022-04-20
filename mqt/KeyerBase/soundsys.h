@@ -102,7 +102,7 @@ public:
     bool startMicPassThrough();
     bool stopMicPassThrough();
 
-    void setVolumeMults(qreal record, qreal replay, qreal passThrough);
+    void setVolumeMults(qreal record, qreal replay, qreal passThrough, bool dryproc);
 
     void setData(int16_t *data, unsigned int len);
     void setPipData(int16_t *data, unsigned int len, unsigned int delayLen);
@@ -128,7 +128,9 @@ private:
 
     QMap<QString, int> deviceIds;
 
-    chunkware_simple::SimpleCompRms compressor;
+    chunkware_simple::SimpleCompRms micCompressor;
+    chunkware_simple::SimpleCompRms replayCompressor;
+
     LPFilter lpFilter;
 
     int filterCorner = 0;
@@ -145,6 +147,8 @@ private:
     bool inputEnabled = false;
     bool outputEnabled = false;
     bool passThroughEnabled = false;
+
+    bool dry = false;
 
     qreal recordMult = 0.0;
     qreal replayMult = 0.0;

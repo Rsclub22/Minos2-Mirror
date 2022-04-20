@@ -205,13 +205,23 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
         wThread = new RiffWriter(this);
         wThread->start();
     }
-    compressor.setSampleRate(sampleRate);
-    compressor.setWindow(10);       // milliseconds
-    compressor.setThresh( -10 );
-    compressor.setRatio( 0.1 );
-    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    compressor.setRelease( 10.0 ); // 10ms release is good
-    compressor.initRuntime();
+    micCompressor.setSampleRate(sampleRate);
+
+    micCompressor.setWindow(10);       // milliseconds
+    micCompressor.setThresh( -10 );
+    micCompressor.setRatio( 0.1 );
+    micCompressor.setAttack( 0.01 );
+    micCompressor.setRelease( 10.0 );
+
+    micCompressor.initRuntime();
+
+    replayCompressor.setWindow(10);       // milliseconds
+    replayCompressor.setThresh( -10 );
+    replayCompressor.setRatio( 0.1 );
+    replayCompressor.setAttack( 0.01 );
+    replayCompressor.setRelease( 10.0 );
+
+    replayCompressor.initRuntime();
 
     lpFilter.initialise(2, filterCorner, sampleRate);
 
@@ -312,13 +322,15 @@ void RtAudioSoundSystem::setFilter(int fc)
    filterCorner = fc;
 }
 
-void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough)
+void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, bool dryproc)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
     recordMult = qPow(10, record/100);
     replayMult = qPow(10, replay/100);
     passThroughMult = qPow(10, passThrough/100);
+
+    dry = dryproc;
 }
 
 
@@ -371,13 +383,23 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
             double s1 = initi1;
             double s2 = initi2;
 
-            s1 /= 32768.0;
-            s2 /= 32768.0;
+            if (!dry && passThroughEnabled)
+            {
+                // this is happening to INPUT i.e. on passthrough/recording
+                // NOT on replay
 
-            compressor.process(s1, s2);
+                double ds1 = s1/32768.0;
+                double ds2 = s2/32768.0;
 
-            s1 *= 32768.0;
-            s2 *= 32768.0;
+                micCompressor.process(ds1, ds2);
+
+                if (abs(s1 - ds1 * 32768.0) > 1)
+                {
+                    s1 = ds1 * 32768.0;
+                }
+                s1 = ds1 * 32768.0;
+                s2 = ds2 * 32768.0;
+            }
 
             qreal val1 = s1 * volmult;
             qreal val2 = s2 * volmult;
@@ -594,7 +616,6 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 {
                     total = qMin((p_buffer.size() - p_pos), len);
                     memcpy(q, p_buffer.constData() + p_pos, static_cast<size_t>(total));
-//                    q += total/2;
                     p_pos += total;
                 }
                 else
@@ -617,14 +638,39 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 if (tone)
                     mult = 1.0;
 
-                for (int i = 0; i < total/2; i++)
+                for (int i = 0; i < total/(2 * 2); i += 2)
                 {
-                    qreal val =*m++ * mult;
+                    // if NOT pip and NOT tone apply the compressor
+
+                    qreal val = *m++;
+                    qreal val2 = *m++;
+                    if (!dry && !tone)
+                    {
+
+                        double ds1 = val/32768.0;
+                        double ds2 = val2/32768.0;
+
+                        replayCompressor.process(ds1, ds2);
+
+                        val = ds1 * 32768.0;
+                        val2 = ds2 * 32768.0;
+
+
+                    }
+
+                    val *= mult;
                     if (val > 32767.0)
                         val = 32767.0;
                     if (val < -32767.0)
                         val = -32767.0;
+
+                    val2 *= mult;
+                    if (val2 > 32767.0)
+                        val2 = 32767.0;
+                    if (val2 < -32767.0)
+                        val2 = -32767.0;
                     *q++ = static_cast<qint16>(val);
+                    *q++ = static_cast<qint16>(val2);
                 }
                 m_pos += total;
             }

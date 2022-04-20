@@ -323,9 +323,9 @@ bool SoundSystemDriver::stopMicPassThrough()
 {
     return soundSystem->stopMicPassThrough();
 }
-void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough)
+void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, bool dry)
 {
-    soundSystem->setVolumeMults(record, replay, passThrough);
+    soundSystem->setVolumeMults(record, replay, passThrough, dry);
 }
 
 int SoundSystemDriver::getMessageLen(int buttonNumber)

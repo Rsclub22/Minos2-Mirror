@@ -190,7 +190,8 @@ void TxVmExternalButtonDialog::pubSliders()
     int v0 = ui->recordSlider->value();
     int v1 = ui->replaySlider->value();
     int v2 = ui->passThroughSlider->value();
-    QString sliders = QString("%1;%2;%3").arg(v0).arg(v1).arg(v2);
+    bool d = ui->dryCheckBox->isChecked();
+    QString sliders = QString("%1;%2;%3;%4").arg(v0).arg(v1).arg(v2).arg(d);
     RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSliders, sliders, psPublished);
 }
 void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
@@ -225,7 +226,7 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 QStringList vals = val.split(";");
                 inVolChangeCount++;
 
-                trace(QString("onKeyerConfig keyerSliders %1;%2;%3").arg(vals[0], vals[1], vals[2]));
+                trace(QString("onKeyerConfig keyerSliders %1;%2;%3;%4").arg(vals[0], vals[1], vals[2], vals[3]));
                 ui->recordSlider->setValue(vals[0].toDouble());
                 ui->recordValue->setValue(vals[0].toDouble()/10.0);
                 ui->replaySlider->setValue(vals[1].toDouble());
@@ -233,6 +234,19 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 ui->passThroughSlider->setValue(vals[2].toDouble());
                 ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
 
+                ui->dryCheckBox->setChecked(vals[3].toInt() > 0);
+
                 inVolChangeCount--;
             }
 }
+
+void TxVmExternalButtonDialog::on_dryCheckBox_clicked()
+{
+    if (inVolChangeCount <= 0)
+    {
+        inVolChangeCount = 1;
+        pubSliders();
+        inVolChangeCount--;
+    }
+}
+

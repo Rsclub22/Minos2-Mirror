@@ -1,3 +1,4 @@
+#include "WaveShowDialog.h"
 #include "mqtktMainWindow.h"
 #include "ui_mqtktMainWindow.h"
 
@@ -298,3 +299,10 @@ void mqtktMainWindow::on_toneButton_clicked()
 
     const double volmult = 32767.0 * 100.0 / 100.0;
     genTone( toneptr, tone, samples, samples, ramptime, volmult );}
+
+void mqtktMainWindow::on_showWaveButton_clicked()
+{
+    WaveShowDialog wsd(this);
+    wsd.exec();
+}
+

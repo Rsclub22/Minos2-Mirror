@@ -165,7 +165,7 @@ void TxVmInternalButtonDialog::on_stopButton_clicked()
 void TxVmInternalButtonDialog::setVolumeMults()
 {
     int record = ui->recordSlider->value();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0);  // for now, set everything to 0db
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0, false);  // for now, set everything to 0db
 
     inVolChange = true;
 
