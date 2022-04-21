@@ -5,7 +5,7 @@
 #include "cutils.h"
 #include "MTrace.h"
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "ui_MainWindow.h"
 
 const QString indevKey("InDevice");
 const QString outdevKey("OutDevice");
@@ -14,12 +14,12 @@ const QString cycleRateKey("CycleRate");
 
 MainWindow *mainWindow = nullptr;
 
-void volcallback( unsigned int rmsvol, unsigned int peakvol, unsigned int samples )
+void volcallback( unsigned int peakvol, unsigned int rmsvol, unsigned int samples )
 {
-        mainWindow->volcallback(rmsvol, peakvol, samples);
+        mainWindow->volcallback(peakvol, rmsvol, samples);
 }
 
-void MainWindow::volcallback(unsigned int rmsvol , unsigned int peakvol, unsigned int samples)
+void MainWindow::volcallback(unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
 {
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
 }
