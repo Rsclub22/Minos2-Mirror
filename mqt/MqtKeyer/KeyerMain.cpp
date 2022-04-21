@@ -41,7 +41,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass)
 
     inVolChangeCount--;
 }
-void KeyerMain::doSetVU(unsigned int prmsvol , unsigned int ppeakvol, unsigned int psamples)
+void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
 {
     if (!inhibitCallbacks)
     {

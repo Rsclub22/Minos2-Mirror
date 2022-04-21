@@ -16,7 +16,7 @@ public:
     explicit TxVmInternalButtonDialog(QWidget *parent = nullptr);
     ~TxVmInternalButtonDialog();
 
-    void doSetVU(unsigned int rmsvol, unsigned int peakvol, unsigned int samples);
+    void doSetVU(unsigned int peakvol, unsigned int rmsvol, unsigned int samples);
     void setVmData(VoiceKeyerParams* vmData);
 private slots:
     void on_okButtonCicked();
