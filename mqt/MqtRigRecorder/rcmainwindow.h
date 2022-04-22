@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RCMAINWINDOW_H
+#define RCMAINWINDOW_H
 
 #include "base_pch.h"
 
@@ -68,4 +68,4 @@ private:
     void setVolumeMults();
 };
 extern MainWindow *mainWindow;
-#endif // MAINWINDOW_H
+#endif // RCMAINWINDOW_H

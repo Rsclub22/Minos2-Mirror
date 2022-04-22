@@ -1,7 +1,7 @@
 #include <QApplication>
 
 #include "AppStartup.h"
-#include "mainwindow.h"
+#include "rcmainwindow.h"
 
 int main(int argc, char *argv[])
 {

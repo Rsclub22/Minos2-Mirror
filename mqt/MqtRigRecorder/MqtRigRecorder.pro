@@ -17,17 +17,17 @@ win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp \
+    rcmainwindow.cpp \
     rrsoundsys.cpp
 
 HEADERS += \
-    mainwindow.h \
+    rcmainwindow.h \
     rr_pch.h \
     rrsoundsys.h \
     vucallback.h
 
 FORMS += \
-    mainwindow.ui
+    rcmainwindow.ui
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/release/ -lKeyerBase
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/debug/ -lKeyerBase

@@ -16,9 +16,11 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosAppStarter.ico
 
-SOURCES += main.cpp\
-        MainWindow.cpp
+SOURCES += main.cpp \
+    AsMainWindow.cpp
 
-HEADERS  += MainWindow.h
+HEADERS  += \
+    AsMainWindow.h
 
-FORMS    += MainWindow.ui
+FORMS    += \
+    AsMainWindow.ui

@@ -4,8 +4,8 @@
 #include "fileutils.h"
 #include "cutils.h"
 #include "MTrace.h"
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "rcmainwindow.h"
+#include "ui_rcmainwindow.h"
 
 const QString indevKey("InDevice");
 const QString outdevKey("OutDevice");

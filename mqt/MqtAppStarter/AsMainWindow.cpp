@@ -5,8 +5,8 @@
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
 #include "StartConfig.h"
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "AsMainWindow.h"
+#include "ui_AsMainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
