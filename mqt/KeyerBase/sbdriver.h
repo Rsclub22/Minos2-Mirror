@@ -9,6 +9,7 @@
 #ifndef sbdriverH
 #define sbdriverH
 #include <QObject>
+#include <QVector>
 #include "keyctrl.h"
 
 class dvkFile
