@@ -17,86 +17,6 @@
 #include "soundsys.h"
 
 //==============================================================================
-class dvkFile
-{
-   public:
-      QString fileName;
-      bool loaded = false;
-      bool frec = false;          // flag set to true if audio has been recorded
-      unsigned int sampleRate = 0;       // system required sample rate
-      unsigned long fsample = 0;        // number of bytes for each sound files
-      int16_t *fptr = nullptr;          // data area for each sound file
-      unsigned int rate = 0;
-      int BitsPerSample = 0;
-      int NumChannels = 0;
-
-      bool LoadFile( QString &errmess )
-      {
-         if ( sblog )
-         {
-            trace( "Trying to open file " + fileName );
-         }
-         loaded = false;
-         delete[] fptr;
-         fptr = nullptr;
-         // should be initiated by keyer, which should call the sound engine
-         WaveFile inWave;
-         int ret = inWave.OpenForRead( fileName );
-         if ( ret != DDC_SUCCESS )
-         {
-            errmess = "Invalid WAV file " + fileName + "\n";
-            if ( sblog )
-            {
-               trace( errmess );
-            }
-            return false;
-         }
-         else
-         {
-            rate = inWave.SamplingRate();
-            BitsPerSample = inWave.BitsPerSample();
-            NumChannels = inWave.NumChannels();
-            frec = false;
-            fsample = inWave.NumSamples();
-
-            if ( rate == static_cast<unsigned int>(sampleRate) && BitsPerSample == 16 && NumChannels == 2 )
-            {
-               fptr = new int16_t[ fsample * 2 ];
-               if ( inWave.ReadData( fptr, fsample * 2 ) == DDC_SUCCESS )
-               {
-                  if ( sblog )
-                  {
-                     trace( "File " + fileName + " opened samples = " + QString::number( fsample ) );
-                  }
-                  loaded = true;
-               }
-               else
-               {
-                  loaded = false;
-               }
-            }
-            else
-            {
-               if ( sblog )
-               {
-                  trace( "File " + fileName + " wrong data format" );
-               }
-               loaded = false;
-            }
-
-         }
-         return loaded;
-      }
-      dvkFile()
-      {}
-      ~dvkFile()
-      {
-         delete[] fptr;
-         fptr = nullptr;
-      }
-};
-#define MAXFILES 8
-static QVector <dvkFile *> recfil;
 //==============================================================================
 
 bool SoundSystemDriver::dofile( int i, int clipRecord )
@@ -590,6 +510,16 @@ SoundSystemDriver *SoundSystemDriver::getSbDriver()
    singleton_sb = new SoundSystemDriver();
    return singleton_sb;
 }
+
+const dvkFile *SoundSystemDriver::getFile(int fno)
+{
+    if (fno >= 0 && fno < recfil.size())
+    {
+        return recfil[fno];
+    }
+
+    return nullptr;
+}
 SoundSystemDriver::SoundSystemDriver()
 {
    soundSystem = RtAudioSoundSystem::createSoundSystem();
@@ -800,3 +730,70 @@ void SoundSystemDriver::stopDMA()
    soundSystem->stopDMA();
 }
 //==============================================================================
+
+bool dvkFile::LoadFile(QString &errmess)
+{
+    if ( sblog )
+    {
+        trace( "Trying to open file " + fileName );
+    }
+    loaded = false;
+    delete[] fptr;
+    fptr = nullptr;
+    // should be initiated by keyer, which should call the sound engine
+    WaveFile inWave;
+    int ret = inWave.OpenForRead( fileName );
+    if ( ret != DDC_SUCCESS )
+    {
+        errmess = "Invalid WAV file " + fileName + "\n";
+        if ( sblog )
+        {
+            trace( errmess );
+        }
+        return false;
+    }
+    else
+    {
+        rate = inWave.SamplingRate();
+        BitsPerSample = inWave.BitsPerSample();
+        NumChannels = inWave.NumChannels();
+        frec = false;
+        fsample = inWave.NumSamples();
+
+        if ( rate == static_cast<unsigned int>(sampleRate) && BitsPerSample == 16 && NumChannels == 2 )
+        {
+            fptr = new int16_t[ fsample * 2 ];
+            if ( inWave.ReadData( fptr, fsample * 2 ) == DDC_SUCCESS )
+            {
+                if ( sblog )
+                {
+                    trace( "File " + fileName + " opened samples = " + QString::number( fsample ) );
+                }
+                loaded = true;
+            }
+            else
+            {
+                loaded = false;
+            }
+        }
+        else
+        {
+            if ( sblog )
+            {
+                trace( "File " + fileName + " wrong data format" );
+            }
+            loaded = false;
+        }
+
+    }
+    return loaded;
+}
+
+dvkFile::dvkFile()
+{}
+
+dvkFile::~dvkFile()
+{
+    delete[] fptr;
+    fptr = nullptr;
+}

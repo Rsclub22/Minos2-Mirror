@@ -13,6 +13,7 @@ lessThan(QT_MAJOR_VERSION, 6){
 QT       += serialport
 }
 QT       += help
+QT       += charts
 
 TARGET = MqtLogger
 TEMPLATE = app

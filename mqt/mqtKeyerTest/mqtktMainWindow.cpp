@@ -1,4 +1,4 @@
-#include "WaveShowDialog.h"
+#include "mqtktWaveShowDialog.h"
 #include "mqtktMainWindow.h"
 #include "ui_mqtktMainWindow.h"
 

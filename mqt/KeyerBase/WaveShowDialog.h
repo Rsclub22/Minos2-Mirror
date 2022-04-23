@@ -13,30 +13,29 @@ class WaveShowDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit WaveShowDialog(QWidget *parent = nullptr);
+    explicit WaveShowDialog(QWidget *parent, int fno);
     ~WaveShowDialog();
 
 private slots:
     void on_closeButton_clicked();
 
-    void on_showButton_clicked();
+public Q_SLOTS:
+   virtual void accept() override;
+   virtual void reject() override;
 
 private:
     Ui::WaveShowDialog *ui;
+
+    int fno = -1;
 
     QLineSeries *originalSeries = nullptr;
     QChartView *originalChartView = nullptr;
     QChart *originalChart = nullptr;
 
-    QLineSeries *processedSeries = nullptr;
-    QChartView *processedChartView = nullptr;
-    QChart *processedChart = nullptr;
-
-    QLineSeries *diffSeries = nullptr;
-    QChartView *diffChartView = nullptr;
-    QChart *diffChart = nullptr;
+    void doCloseEvent();
 
     void showSeries();
+    void on_showButton_clicked();
 };
 
 #endif // WAVESHOWDIALOG_H

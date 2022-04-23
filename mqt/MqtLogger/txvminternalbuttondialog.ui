@@ -101,6 +101,13 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
+             <widget class="QPushButton" name="showButton">
+              <property name="text">
+               <string>Show</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QPushButton" name="replayButton">
               <property name="text">
                <string>Test Replay</string>

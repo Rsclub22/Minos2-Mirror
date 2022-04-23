@@ -1,8 +1,6 @@
 #include <QFileDialog>
 
 #include "keyerAbout.h"
-#include "KeyerMain.h"
-#include "ui_KeyerMain.h"
 #include "keyctrl.h"
 #include "KeyerRPCServer.h"
 #include "VKMixer.h"
@@ -10,6 +8,10 @@
 #include "keyers.h"
 #include "portcon.h"
 #include "KeyerJson.h"
+#include "WaveShowDialog.h"
+
+#include "KeyerMain.h"
+#include "ui_KeyerMain.h"
 
 KeyerMain *keyerMain = nullptr;
 
@@ -614,3 +616,11 @@ void KeyerMain::on_keyCombo_currentIndexChanged(int /*index*/)
     ui->AutoRepeatCheckBox->setChecked(kjj.autoRepeat);
     ui->delayEdit->setValue(kjj.autoRepeatDelay);
 }
+
+void KeyerMain::on_showButton_clicked()
+{
+    int fno = ui->keyCombo->currentText().toInt() - 1;
+    WaveShowDialog wsd(this, fno);
+    wsd.exec();
+}
+

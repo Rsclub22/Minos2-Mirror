@@ -638,7 +638,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 if (tone)
                     mult = 1.0;
 
-                for (int i = 0; i < total/(2 * 2); i += 2)
+                for (int i = 0; i < total/(2 * 2); i += 1)
                 {
                     // if NOT pip and NOT tone apply the compressor
 

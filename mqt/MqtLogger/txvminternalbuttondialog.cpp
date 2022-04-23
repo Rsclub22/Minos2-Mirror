@@ -1,8 +1,10 @@
 #include <QMessageBox>
 #include <QSettings>
 #include "sbdriver.h"
-#include "txvminternalbuttondialog.h"
+#include "WaveShowDialog.h"
 #include "voicekeyerfactory.h"
+
+#include "txvminternalbuttondialog.h"
 #include "ui_txvminternalbuttondialog.h"
 
 static bool inhibitCallbacks = false;
@@ -165,7 +167,7 @@ void TxVmInternalButtonDialog::on_stopButton_clicked()
 void TxVmInternalButtonDialog::setVolumeMults()
 {
     int record = ui->recordSlider->value();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0, false);  // for now, set everything to 0db
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0, true);  // for now, set everything to 0db
 
     inVolChange = true;
 
@@ -193,4 +195,12 @@ void TxVmInternalButtonDialog::on_recordSlider_valueChanged(int position)
     setVolumeMults();
 }
 
+
+
+void TxVmInternalButtonDialog::on_showButton_clicked()
+{
+    int fno = vmData->getvmButtonNum();
+    WaveShowDialog wsd(this, fno);
+    wsd.exec();
+}
 

@@ -91,6 +91,8 @@ private slots:
 
     void on_dryCheckBox_stateChanged(int arg1);
 
+    void on_showButton_clicked();
+
 private:
     void syncSetLines();
     QTimer lineTimer;

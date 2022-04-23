@@ -148,7 +148,7 @@ private:
     bool outputEnabled = false;
     bool passThroughEnabled = false;
 
-    bool dry = false;
+    bool dry = true;
 
     qreal recordMult = 0.0;
     qreal replayMult = 0.0;

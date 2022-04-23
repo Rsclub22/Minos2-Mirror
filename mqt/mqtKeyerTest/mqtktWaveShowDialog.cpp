@@ -2,7 +2,7 @@
 #include "ddc.h"
 #include "riff.h"
 #include "SimpleComp.h"
-#include "WaveShowDialog.h"
+#include "mqtktWaveShowDialog.h"
 #include "ui_WaveShowDialog.h"
 
 bool sblog = true;

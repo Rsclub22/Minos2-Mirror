@@ -11,6 +11,25 @@
 #include <QObject>
 #include "keyctrl.h"
 
+class dvkFile
+{
+   public:
+      QString fileName;
+      bool loaded = false;
+      bool frec = false;          // flag set to true if audio has been recorded
+      unsigned int sampleRate = 0;       // system required sample rate
+      unsigned long fsample = 0;        // number of bytes for each sound files
+      int16_t *fptr = nullptr;          // data area for each sound file
+      unsigned int rate = 0;
+      int BitsPerSample = 0;
+      int NumChannels = 0;
+
+      bool LoadFile( QString &errmess );
+      dvkFile();
+      ~dvkFile();
+};
+#define MAXFILES 8
+
 enum sbControls {ePTT, eL1, eL2};
 
 #define DOFILE_PIP -1
@@ -44,12 +63,17 @@ class SoundSystemDriver:public QObject
       int ihand = -1;
       int isave = -1;
 
+      QVector <dvkFile *> recfil;
+
       void unload( );
 public:
       SoundSystemDriver();
       virtual ~SoundSystemDriver();
 
       static SoundSystemDriver *getSbDriver();
+
+      const dvkFile *getFile(int fno);
+
 
       int recording = false;
       bool loadFailed = false;

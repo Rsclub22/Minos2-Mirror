@@ -62,7 +62,7 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
     {
        trace( "sbdvp_init failed! " + errmess );
     }
-    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0, false);  // for now, set everything to 0db
+    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0, true);  // for now, set everything to 0db
 
     for (int i = 0; i < numButtons; i++)
     {

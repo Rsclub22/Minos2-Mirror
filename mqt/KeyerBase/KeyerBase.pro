@@ -1,6 +1,6 @@
 include($$PWD/../mqt.pri)
 
-QT       += core gui network widgets
+QT       += core gui network widgets charts
 
 TEMPLATE = lib
 CONFIG += staticlib
@@ -25,6 +25,7 @@ SOURCES += \
     ../Chunkware/SimpleEnvelope.cpp \
     KeyerJson.cpp \
     VKMixer.cpp \
+    WaveShowDialog.cpp \
     keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     ../Chunkware/SimpleHeader.h \
     KeyerJson.h \
     VKMixer.h \
+    WaveShowDialog.h \
     ddc.h \
     keyctrl.h \
     keyerBase.h \
@@ -57,3 +59,6 @@ unix {
     target.path = $$[QT_INSTALL_PLUGINS]/generic
 }
 !isEmpty(target.path): INSTALLS += target
+
+FORMS += \
+    WaveShowDialog.ui

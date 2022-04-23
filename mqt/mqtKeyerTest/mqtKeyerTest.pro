@@ -20,9 +20,9 @@ SOURCES += \
         ../Chunkware/SimpleComp.cpp \
         ../Chunkware/SimpleEnvelope.cpp \
         ../KeyerBase/riff.cpp \
-        WaveShowDialog.cpp \
         main.cpp \
-        mqtktMainWindow.cpp
+        mqtktMainWindow.cpp \
+        mqtktWaveShowDialog.cpp
 
 HEADERS += \
         ../Chunkware/SimpleComp.h \
@@ -30,12 +30,12 @@ HEADERS += \
         ../Chunkware/SimpleEnvelope.h \
         ../KeyerBase/ddc.h \
         ../KeyerBase/riff.h \
-        WaveShowDialog.h \
-        mqtktMainWindow.h
+        mqtktMainWindow.h \
+        mqtktWaveShowDialog.h
 
 FORMS += \
-        WaveShowDialog.ui \
-        mqtktMainWindow.ui
+        mqtktMainWindow.ui \
+        mqtktWaveShowDialog.ui
 
 
 # include system libs last, so they get included for KeyerBase

@@ -33,6 +33,8 @@ private slots:
     void on_recordLevel_valueChanged(double arg1);
     void on_recordSlider_valueChanged(int position);
 
+    void on_showButton_clicked();
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
