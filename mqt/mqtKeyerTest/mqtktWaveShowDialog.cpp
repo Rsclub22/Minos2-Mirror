@@ -3,7 +3,7 @@
 #include "riff.h"
 #include "SimpleComp.h"
 #include "mqtktWaveShowDialog.h"
-#include "ui_WaveShowDialog.h"
+#include "ui_mqtktWaveShowDialog.h"
 
 bool sblog = true;
 void trace(const QString &s)
