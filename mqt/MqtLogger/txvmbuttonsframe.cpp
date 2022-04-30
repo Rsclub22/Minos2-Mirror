@@ -5,6 +5,7 @@
 #include "cutils.h"
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
+#include "rigcommon.h"
 
 
 const int NO_VM_BUTTON_ON = -1;
@@ -451,11 +452,23 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
+            if (curMode != rigcommon::convertModeToQString(MODE::CW))
+            {
+                savedMode = curMode;
+                sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+            }
+            else
+            {
+                savedMode = curMode;        // keep current mode if CW
+            }
+
+
             VoiceKeyerParams vmData;
             vmData.setType(voiceKeyerType);
             txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
             txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
             usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
+
 
         }
         else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
@@ -500,6 +513,11 @@ void TxVmButtonsFrame::onVmStopClicked()
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
             txVoiceKeyer->stopCwMsg();
+            if (curMode != savedMode)       // restore mode?
+            {
+                sendModeToRadio(savedMode);
+            }
+
         }
 
 
@@ -680,6 +698,25 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
     }
 
     msgDurTimer->stop();
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+        {
+
+            if (curMode != savedMode)       // restore mode?
+            {
+                sendModeToRadio(savedMode);
+            }
+
+        }
+
+    }
+
+
+
+
 
 
 }
@@ -974,6 +1011,20 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
        ui->txStatusIndicator->setToolTip(tr("TX Off"));
     }
 
+}
+
+void TxVmButtonsFrame::setMode(const QString m)
+{
+    QString mode = m;
+    if (curMode != mode.remove(':'))
+    {
+        curMode = mode;
+    }
+}
+
+void TxVmButtonsFrame::sendModeToRadio(const QString m)
+{
+    emit sendRadioMode(m);
 }
 
 //*******************TX Voice Memory Button *************************//
