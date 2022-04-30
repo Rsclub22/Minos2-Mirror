@@ -23,6 +23,7 @@ public:
     int getNumButtons(){return numButtons;}
 
     bool getCatPttForEomState();
+    bool getSetCwModeAndRestoreState();
 private slots:
 
     void onNumButtonsValueChanged(int num);

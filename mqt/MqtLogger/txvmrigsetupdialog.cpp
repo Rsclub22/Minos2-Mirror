@@ -72,6 +72,21 @@ void TxVmRigSetupDialog::initSetup()
     }
 
 
+    if (voiceCap.getEnableCwMode())
+    {
+        ui->switchToCw->setVisible(true);
+        QString fileName = VOICE_KEYER_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
+        QSettings config(fileName, QSettings::IniFormat);
+        ui->switchToCw->setChecked(config.value("Common/SwitchToCwMode", true).toBool());
+    }
+    else
+    {
+        ui->switchToCw->setVisible(false);
+    }
+
+
+
+
 
     connect(ui->numButtons, QOverload<int>::of(&QSpinBox::valueChanged), this, &TxVmRigSetupDialog::onNumButtonsValueChanged);
 
@@ -84,6 +99,10 @@ bool TxVmRigSetupDialog::getCatPttForEomState()
     return ui->pttEOMChkBox->isChecked();
 }
 
+bool TxVmRigSetupDialog::getSetCwModeAndRestoreState()
+{
+    return ui->switchToCw->isChecked();
+}
 
 void TxVmRigSetupDialog::onNumButtonsValueChanged(int num)
 {

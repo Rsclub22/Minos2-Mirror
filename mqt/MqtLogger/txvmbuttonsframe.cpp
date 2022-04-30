@@ -419,6 +419,18 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         return;
     }
 
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    {
+        if(curMode != rigcommon::convertModeToQString(MODE::USB)
+                && curMode != rigcommon::convertModeToQString(MODE::LSB)
+                && curMode != rigcommon::convertModeToQString(MODE::FM)
+                && curMode != "PH")
+        {
+            trace(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
+            return;
+        }
+    }
+
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
@@ -452,7 +464,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
-            if (curMode != rigcommon::convertModeToQString(MODE::CW))
+            if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
             {
                 savedMode = curMode;
                 sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
@@ -513,7 +525,8 @@ void TxVmButtonsFrame::onVmStopClicked()
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
             txVoiceKeyer->stopCwMsg();
-            if (curMode != savedMode)       // restore mode?
+
+            if (curMode != savedMode && txVoiceKeyer->getSetCwModeAndRestoreFlag())       // restore mode?
             {
                 sendModeToRadio(savedMode);
             }
@@ -702,7 +715,7 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
 
-        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM  && txVoiceKeyer->getSetCwModeAndRestoreFlag())
         {
 
             if (curMode != savedMode)       // restore mode?

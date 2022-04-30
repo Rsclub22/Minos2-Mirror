@@ -54,7 +54,7 @@
      <item>
       <widget class="QCheckBox" name="switchToCw">
        <property name="text">
-        <string>Switch to CW</string>
+        <string>Switch to CW Mode and then Restore Current Mode</string>
        </property>
       </widget>
      </item>
