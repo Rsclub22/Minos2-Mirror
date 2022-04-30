@@ -7,7 +7,7 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-
+#include "SecondInstall.h"
 #include "fileutils.h"
 #include "ConfigFile.h"
 
@@ -183,6 +183,11 @@ void RunConfigElement::createProcess()
         if (!locale.isEmpty())
         {
             program += "--lang " + locale + " ";
+        }
+        QString si = SecondInstall::getSecondInstallSwitch();
+        if (!si.isEmpty())
+        {
+            params += si;
         }
 
         program += params;

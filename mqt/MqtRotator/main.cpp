@@ -12,18 +12,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "rotatormainwindow.h"
 #include <QApplication>
-#include <QCommandLineOption>
-#include <QCommandLineParser>
-#include <QDebug>
-#include <QString>
-#include <QStringList>
-
+#include "SecondInstall.h"
 #include "AppStartup.h"
+#include "rotatormainwindow.h"
 
 int main(int argc, char *argv[])
 {
+    SecondInstall::parseSecondInstall(argc, argv);
+
     QApplication a(argc, argv);
 
     appStartup(rpcConstants::rotatorApp);

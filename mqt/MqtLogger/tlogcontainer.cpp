@@ -225,9 +225,13 @@ bool TLogContainer::show(int argc, char *argv[])
     {
        // here need to pre-open the contest list
        QString conarg;
-       if ( argc > 1 )
+       for(int i = 1; i < argc; i++)
        {
-          conarg = argv[1];
+           if ( argv[i][0] != '/' && argv[i][0] != '-' ) // i.e. not a switch character
+           {
+              conarg = argv[i];
+              break;
+           }
        }
        preloadLists();
        preloadFiles( conarg );

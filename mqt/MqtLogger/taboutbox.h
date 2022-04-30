@@ -11,7 +11,6 @@ class TAboutBox : public QDialog
 {
     Q_OBJECT
 
-    static QString welcomeText;
     static QString creditsText;
     static QString MinosText;
 

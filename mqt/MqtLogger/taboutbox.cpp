@@ -10,10 +10,6 @@
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 
-QString TAboutBox::welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
-                               "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
-                               "<br><br>";
-
 QString TAboutBox::creditsText = QString(
     "<br><center><h2>%1</h2>"
 
@@ -116,6 +112,9 @@ TAboutBox::TAboutBox(QWidget *parent, bool onStartup) :
 
     ui->PageControl1->setCurrentWidget(ui->AboutTabSheet);
 
+    QString welcomeText = QString("<br><h1>%1 ") + STRINGVERSION  + " " + PRERELEASETYPE + " " + SecondInstall::getSecondInstallText() + "</h1>"
+                                   "<br><a href=\"http://minos.sourceforge.net/\">http://minos.sourceforge.net</a>"
+                                   "<br><br>";
     ui->AboutMemo->setText(welcomeText.arg(tr("Welcome to Minos Version")));
     ui->AboutMemo->setTextFormat(Qt::RichText);
     ui->AboutMemo->setTextInteractionFlags(Qt::TextBrowserInteraction);

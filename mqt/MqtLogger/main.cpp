@@ -1,4 +1,4 @@
-#include "base_pch.h"
+#include <QApplication>
 #include "SecondInstall.h"
 #include "singleapplication.h"
 #include "tlogcontainer.h"
@@ -15,6 +15,7 @@
 
 int main(int argc, char *argv[])
 {
+    SecondInstall::parseSecondInstall(argc, argv);
     int appError = 1;
     {
         SingleApplication a( SecondInstall::getSingleAppLoggerName(), argc, argv);
