@@ -488,41 +488,8 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
         outstr += getCabrilloField(extra, 6);
     }
 }
-/*
-<call:5>EA1BA
-<gridsquare:4>IN73
-<mode:4>MFSK
-<submode:3>FT4
-<rst_sent:3>+02
-<rst_rcvd:3>-12
-<qso_date:8>20220411
-<time_on:6>190001
-<qso_date_off:8>20220411
-<time_off:6>190115
-<band:3>20m
-<freq:9>14.080366
-<station_callsign:3>M5N
-<my_gridsquare:6>IO91OK
-<eor>
-*/
 QString ContestContact::getADIFLine()
 {
-    //date
-    //time
-    //band
-    //freq
-    //mode
-    //power
-    //call
-    //RST sent
-    //SN sent
-    //RST Received
-    //SN received
-    //GridSquare
-    //QTH, district, whatever
-    //Comments
-    //QSO Pts
-
     QString outstr;
     BaseContestLog * clp = contest;
     if ( !bool( clp ) )
@@ -637,6 +604,28 @@ QString ContestContact::getADIFLine()
     {
         outstr += makeADIFField("MY_GRIDSQUARE", clp->myloc.getLoc());
     }
+
+    QString entTx = lcl->entTx.getValue();
+    if (entTx.isEmpty())
+    {
+        entTx = tr("Unknown Radio");
+    }
+    outstr += makeADIFField("MY_RIG", entTx);
+
+    QString entAnt = lcl->entAnt.getValue();
+    if (entAnt.isEmpty())
+    {
+        entAnt = tr("Unknown Antenna");
+    }
+    outstr += makeADIFField("MY_ANTENNA", entAnt);
+
+    QString ctName = lcl->name.getValue();
+    if (ctName.isEmpty())
+    {
+        ctName = tr("Unknown Contest");
+    }
+
+    outstr += makeADIFField("APP_MINOS_CONTEST", ctName);
 
     int zone = 0;
     lcl->QTHBundle.getIntProfile(eqpITUZone, zone);
