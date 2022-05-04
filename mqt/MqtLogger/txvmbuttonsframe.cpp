@@ -954,7 +954,7 @@ void TxVmButtonsFrame::setPttState(bool state)
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
    trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
-   if (txVoiceKeyer->doRepeatFromLogger() && !state)
+   if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
    {
         onMsgDurTimerTimeout();
    }
