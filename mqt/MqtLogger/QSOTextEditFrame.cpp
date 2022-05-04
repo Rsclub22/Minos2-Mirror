@@ -4,6 +4,7 @@
 QSOTextEditFrame::QSOTextEditFrame(QWidget *parent):QFrame(parent)
 {
     TContestApp::getContestApp() ->getBoolDisplayProfile( edpExpertMode, expert );
+
 }
 
 QSOTextEditFrame::~QSOTextEditFrame()
@@ -34,6 +35,7 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
     TextEditEdit = new QLineEdit(this);
     TextEditEdit->setObjectName(name + "Edit");
     TextEditEdit->setClearButtonEnabled(true);
+    TextEditEdit->installEventFilter(this);
 
     if (horizontal)
     {
@@ -71,6 +73,32 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
 
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum);
 }
+bool QSOTextEditFrame::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == TextEditEdit)
+    {
+        // Fix placeholder colour set incorrectly (QTBUG-95297)
+        if (event->type() == QEvent::PaletteChange)
+        {
+            auto pal = palette();
+            for (auto role : { QPalette::Active, QPalette::Disabled, QPalette::Inactive })
+            {
+                int palalpha = pal.color(role, QPalette::PlaceholderText).alpha();
+                if (palalpha == 255)
+                {
+                    auto col = pal.color(role, QPalette::Text);
+                    col.setAlpha(128);
+                    pal.setColor(role, QPalette::PlaceholderText, col);
+                    setPalette(pal);
+                }
+            }
+
+            //return true;
+        }
+    }
+    return false;
+}
+
 QLineEdit *QSOTextEditFrame::getTextEditEdit() const
 {
     return TextEditEdit;
