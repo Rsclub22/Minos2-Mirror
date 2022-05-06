@@ -75,6 +75,8 @@ void QSOTextEditFrame::setup(QString name, QWidget *filterWidget, bool uc, bool 
 }
 bool QSOTextEditFrame::eventFilter(QObject *obj, QEvent *event)
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 12, 0)
+
     if (obj == TextEditEdit)
     {
         // Fix placeholder colour set incorrectly (QTBUG-95297)
@@ -96,6 +98,7 @@ bool QSOTextEditFrame::eventFilter(QObject *obj, QEvent *event)
             //return true;
         }
     }
+#endif
     return false;
 }
 
