@@ -13,21 +13,15 @@ QT       += network
 TARGET = mqtKeyerTest
 TEMPLATE = app
 
-INCLUDEPATH += $$PWD/../Chunkware
 INCLUDEPATH += $$PWD/../KeyerBase
 
 SOURCES += \
-        ../Chunkware/SimpleComp.cpp \
-        ../Chunkware/SimpleEnvelope.cpp \
         ../KeyerBase/riff.cpp \
         main.cpp \
         mqtktMainWindow.cpp \
         mqtktWaveShowDialog.cpp
 
 HEADERS += \
-        ../Chunkware/SimpleComp.h \
-        ../Chunkware/SimpleCompProcess.inl \
-        ../Chunkware/SimpleEnvelope.h \
         ../KeyerBase/ddc.h \
         ../KeyerBase/riff.h \
         mqtktMainWindow.h \

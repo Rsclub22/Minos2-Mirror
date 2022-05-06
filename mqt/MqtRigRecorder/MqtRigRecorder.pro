@@ -9,7 +9,6 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRecorder.ico
 INCLUDEPATH += $$PWD/../rtaudio
-INCLUDEPATH += $$PWD/../Chunkware
 
 unix:!macos{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_DS__}

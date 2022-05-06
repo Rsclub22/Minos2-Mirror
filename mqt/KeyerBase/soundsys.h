@@ -12,7 +12,7 @@
 #include "mqtUtils_pch.h"
 
 #include "riff.h"
-#include "SimpleComp.h"
+#include "MqtLogCompressor.h"
 
 
 class RtAudioSoundSystem;
@@ -27,8 +27,6 @@ class RtAudioSoundSystem;
 #pragma GCC diagnostic pop
 #endif
 
-#include "SimpleComp.h"
-
 class RiffWriter : public QThread
 {
     Q_OBJECT
@@ -41,23 +39,6 @@ public:
 
     virtual void run() Q_DECL_OVERRIDE;
 
-};
-class LPFilter
-{
-    int mNumChannels;
-    // past data
-    double mZx[4];
-    double mZy[4];
-    // filter coefficients
-    double a0;
-    double a1;
-    double a2;
-    double b1;
-    double b2;
-public:
-    LPFilter(){}
-    void initialise(int channels, double corner, double sampleRate);
-    inline double filterSample (const double inSample, const int channel);
 };
 class RtAudioSoundSystem: public QObject
 {
@@ -128,10 +109,8 @@ private:
 
     QMap<QString, int> deviceIds;
 
-    chunkware_simple::SimpleCompRms micCompressor;
-    chunkware_simple::SimpleCompRms replayCompressor;
-
-    LPFilter lpFilter;
+    MqtLogCompressor micCompressor;
+    MqtLogCompressor replayCompressor;
 
     int filterCorner = 0;
 

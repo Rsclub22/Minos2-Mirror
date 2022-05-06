@@ -77,49 +77,6 @@ RtAudioSoundSystem *RtAudioSoundSystem::createSoundSystem()
 {
    return new RtAudioSoundSystem();
 }
-void LPFilter::initialise (int channels, double corner, double sampleRate)
-{
-    mNumChannels = channels;
-    mZx[0] = mZx[1] = mZx[2] = mZx[3] = 0.0;
-    mZy[0] = mZy[1] = mZy[2] = mZy[3] = 0.0;
-
-    double mQuality = 0.707;
-
-    double theta = 2. * M_PI * (corner/sampleRate);
-    double d = 0.5 * (1. / mQuality) * sin(theta);
-    double beta = 0.5 * ( (1. - d) / (1. + d) );
-    double gamma = (0.5 + beta) * cos(theta);
-
-    a0 = 0.5 * (0.5 + beta - gamma);
-    a1 = 0.5 + beta - gamma;
-
-    a2 = a0;
-    b1 = -2. * gamma;
-    b2 = 2. * beta;
-}
-
-double LPFilter::filterSample (const double inSample, const int channel)
-{
-    // Derived from
-    // http://creatingsound.com/2014/02/dsp-audio-programming-series-part-2/
-
-    double outSample;
-    int idx0 = mNumChannels * channel;
-    int idx1 = idx0 + 1;
-
-    outSample = (a0 * inSample)
-                + (a1 * mZx[idx0])
-                + (a2 * mZx[idx1])
-                - (b1 * mZy[idx0])
-                - (b2 * mZy[idx1]);
-
-    mZx[idx1] = mZx[idx0];
-    mZx[idx0] = inSample;
-    mZy[idx1] = mZy[idx0];
-    mZy[idx0] = outSample;
-
-    return outSample;
-}
 //==============================================================================
 int audioCallback( void *outputBuffer, void *inputBuffer,
                                 unsigned int nFrames,
@@ -205,26 +162,9 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
         wThread = new RiffWriter(this);
         wThread->start();
     }
-    micCompressor.setSampleRate(sampleRate);
+    micCompressor.setGamma(100);
 
-    micCompressor.setWindow(10);       // milliseconds
-    micCompressor.setThresh( -10 );
-    micCompressor.setRatio( 0.1 );
-    micCompressor.setAttack( 0.01 );
-    micCompressor.setRelease( 10.0 );
-
-    micCompressor.initRuntime();
-
-    replayCompressor.setWindow(10);       // milliseconds
-    replayCompressor.setThresh( -10 );
-    replayCompressor.setRatio( 0.1 );
-    replayCompressor.setAttack( 0.01 );
-    replayCompressor.setRelease( 10.0 );
-
-    replayCompressor.initRuntime();
-
-    lpFilter.initialise(2, filterCorner, sampleRate);
-
+    replayCompressor.setGamma(100);
     try
     {
         RtAudio::StreamParameters outParams;
@@ -393,10 +333,6 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
                 micCompressor.process(ds1, ds2);
 
-                if (abs(s1 - ds1 * 32768.0) > 1)
-                {
-                    s1 = ds1 * 32768.0;
-                }
                 s1 = ds1 * 32768.0;
                 s2 = ds2 * 32768.0;
             }
@@ -413,12 +349,6 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                 val2 = 32767.0;
             if (val2 < -32767.0)
                 val2 = -32767.0;
-
-            if (filterCorner > 0)
-            {
-                val1 = lpFilter.filterSample(val1, 0);
-                val2 = lpFilter.filterSample(val2, 1);
-            }
 
             if (passThroughEnabled)
             {

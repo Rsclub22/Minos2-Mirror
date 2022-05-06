@@ -35,7 +35,6 @@ private:
     void doCloseEvent();
 
     void showSeries();
-    void on_showButton_clicked();
 };
 
 #endif // WAVESHOWDIALOG_H

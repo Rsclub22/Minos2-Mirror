@@ -1,7 +1,7 @@
 #include <QDebug>
 #include "ddc.h"
 #include "riff.h"
-#include "SimpleComp.h"
+#include "MqtLogCompressor.h"
 #include "mqtktWaveShowDialog.h"
 #include "ui_mqtktWaveShowDialog.h"
 
@@ -118,6 +118,8 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     diffChartView->setRenderHint(QPainter::Antialiasing);
 
     ui->chartLayout->addWidget(diffChartView);
+
+    showSeries();
 }
 
 WaveShowDialog::~WaveShowDialog()
@@ -131,7 +133,7 @@ void WaveShowDialog::on_closeButton_clicked()
 }
 void WaveShowDialog::showSeries()
 {
-    chunkware_simple::SimpleCompRms compressor;
+    MqtLogCompressor compressor;
 
     dvkFile originalFile;
     originalFile.fileName = "C:/temp/CQF1.wav";
@@ -143,13 +145,7 @@ void WaveShowDialog::showSeries()
         return;
     }
 
-    compressor.setSampleRate(originalFile.sampleRate);
-    compressor.setWindow(10);       // milliseconds
-    compressor.setThresh( -10 );
-    compressor.setRatio( 0.1 );
-    compressor.setAttack( 0.01 );
-    compressor.setRelease( 10.0 );
-    compressor.initRuntime();
+    compressor.setGamma(100);
 
     originalChart->removeAllSeries();       // removes AND DELETES
     processedChart->removeAllSeries();
@@ -222,8 +218,4 @@ void WaveShowDialog::showSeries()
     diffChart->setTitle("mqt Difference");
 }
 
-void WaveShowDialog::on_showButton_clicked()
-{
-    showSeries();
-}
 

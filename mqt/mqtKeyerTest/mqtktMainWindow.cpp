@@ -2,9 +2,10 @@
 #include "mqtktMainWindow.h"
 #include "ui_mqtktMainWindow.h"
 
-#include "SimpleComp.h"
+#include "MqtLogCompressor.h"
 
 const double pi = 3.141592653;
+
 
 mqtktMainWindow::mqtktMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -86,41 +87,33 @@ void mqtktMainWindow::on_compressorButton_clicked()
     int tone = 1000;
     int samples = 49000;    // 1 secs worth
     int ramptime = 0;
-    const double volmult = 32767.0 * 100.0 / 100.0;
+    const double tvolmult = 32767.0 * 100.0 / 100.0;
 
     int16_t *toneptr = new int16_t [ samples * 2 ];
 
-    genTone( toneptr, tone, samples, samples, ramptime, volmult );
+    genTone( toneptr, tone, samples, samples, ramptime, tvolmult );
 
-
-    chunkware_simple::SimpleCompRms compressor;
-
-    compressor.setSampleRate(samples);
-    compressor.setWindow(10);       // milliseconds
-    compressor.setThresh( -10 );
-    compressor.setRatio( 0.1 );
-    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    compressor.setRelease( 10.0 ); // 10ms release is good
-    compressor.initRuntime();
-
+    MqtLogCompressor compressor;
+    compressor.setGamma(100);
 
     chart->removeAllSeries();       // removes AND DELETES
 
     originalSeries = new QLineSeries();
     processedSeries = new QLineSeries();
 
-    for (int i = 0; i <= 100; i++)
+    for (int s = 0; s <= 100; s++)
     {
-        qreal volmult = i * 0.01;
-
+        qreal volmult = s * 0.01;
 
         int16_t * q = reinterpret_cast<  int16_t * > ( toneptr );
         int16_t maxvol = 0;
 
         for (int i = 0; i < samples ; i++)
         {
-            double initi1 = q[i * 2] * volmult;
-            double initi2 = q[i * 2 + 1] * volmult;
+            int t1 = q[i * 2];
+            int t2 = q[i * 2 + 1];
+            double initi1 = t1 * volmult;
+            double initi2 = t2 * volmult;
 
             double s1 = initi1;
             double s2 = initi2;
@@ -130,31 +123,17 @@ void mqtktMainWindow::on_compressorButton_clicked()
 
             compressor.process(s1, s2);
 
-
             s1 *= 32768.0;
             s2 *= 32768.0;
 
-            qreal val1 = s1;
-            qreal val2 = s2;
-
-            if (val1 > 32767.0)
-                val1 = 32767.0;
-            if (val1 < -32767.0)
-                val1 = -32767.0;
-
-            if (val2 > 32767.0)
-                val2 = 32767.0;
-            if (val2 < -32767.0)
-                val2 = -32767.0;
-
-            int16_t sample = static_cast<int16_t>(std::abs( (val1 + val2)/2 ));
+            int16_t sample = static_cast<int16_t>(std::abs( (s1 + s2)/2 ));
             if ( sample > maxvol )
                maxvol = sample;
         }
 
-        originalSeries->append(i, volmult);
+        originalSeries->append(s, volmult);
 
-        processedSeries->append(i, maxvol/32768.0);
+        processedSeries->append(s, maxvol/32768.0);
     }
 
     delete [] toneptr;

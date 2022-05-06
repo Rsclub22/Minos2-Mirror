@@ -703,14 +703,10 @@ void MonitorMain::on_monitorTimeout()
           close();
        }
     }
-    int icnt = 0;
     for ( auto const &s: qAsConst(stationList) )
     {
-        icnt++;
-        int jcnt = 0;
        for ( auto &l: s->slotList )
        {
-           jcnt++;
           if (l->getState() == psRevoked)
           {
              MonitoringFrame *cttab = findContestPage( l->getContest() );

@@ -98,6 +98,9 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
       contest->ct_stanzaCount = mt->importTestBuffer( stanzaData.toUtf8() );
       stanzasPulled.insert(stanza);
 
+      // This is what slows it down most...
+      //although QSO scanning gets slower as we go on
+
       if (frame)
           frame->update();
    }

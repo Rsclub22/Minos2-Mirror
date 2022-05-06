@@ -19,8 +19,6 @@ public:
 private slots:
     void on_closeButton_clicked();
 
-    void on_showButton_clicked();
-
 private:
     Ui::WaveShowDialog *ui;
 
