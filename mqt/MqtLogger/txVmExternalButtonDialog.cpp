@@ -91,8 +91,6 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
     ui->txVmNameEdit->setText(vmData->getVmName());
     ui->repeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->repeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
-
 }
 
 void TxVmExternalButtonDialog::on_replayButton_clicked()
@@ -190,8 +188,8 @@ void TxVmExternalButtonDialog::pubSliders()
     int v0 = ui->recordSlider->value();
     int v1 = ui->replaySlider->value();
     int v2 = ui->passThroughSlider->value();
-    bool d = ui->dryCheckBox->isChecked();
-    QString sliders = QString("%1;%2;%3;%4").arg(v0).arg(v1).arg(v2).arg(d);
+    int c = ui->compressionSlider->value();
+    QString sliders = QString("%1;%2;%3;%4").arg(v0).arg(v1).arg(v2).arg(c);
     RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSliders, sliders, psPublished);
 }
 void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
@@ -234,13 +232,13 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 ui->passThroughSlider->setValue(vals[2].toDouble());
                 ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
 
-                ui->dryCheckBox->setChecked(vals[3].toInt() > 0);
+                ui->compressionSlider->setValue(vals[3].toInt());
 
                 inVolChangeCount--;
             }
 }
 
-void TxVmExternalButtonDialog::on_dryCheckBox_clicked()
+void TxVmExternalButtonDialog::on_compressionSlider_valueChanged(int /*value*/)
 {
     if (inVolChangeCount <= 0)
     {

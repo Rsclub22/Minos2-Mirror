@@ -26,10 +26,10 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
 
-void KeyerMain::doSliders(int rec, int rep, int pass, bool d)
+void KeyerMain::doSliders(int rec, int rep, int pass, int comp)
 {
     inVolChangeCount++;
-    trace(QString("Set Slider positions %1;%2;%3;%4").arg(rec).arg(rep).arg(pass).arg(d));
+    trace(QString("Set Slider positions %1;%2;%3;%4").arg(rec).arg(rep).arg(pass).arg(comp));
     ui->recordSlider->setValue(rec);
     trace(QString("(doSliders) rec chnaged to %1").arg(rec));
     ui->replaySlider->setValue(rep);
@@ -40,7 +40,8 @@ void KeyerMain::doSliders(int rec, int rep, int pass, bool d)
     ui->recordValue->setValue(rec/10.0);
     ui->replayValue->setValue(rep/10.0);
     ui->passThroughValue->setValue(pass/10.0);
-    ui->dryCheckBox->setChecked(d);
+
+    ui->compressionSlider->setValue(comp);
 
     inVolChangeCount--;
 }
@@ -138,20 +139,20 @@ KeyerMain::KeyerMain(QWidget *parent) :
     int recordLevel = settings.value("RecordLevel", 0).toInt();
     int replayLevel = settings.value("ReplayLevel", 0).toInt();
     int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
-    bool dry = settings.value("dry", false).toBool();
+    int comp = settings.value("compression", 0).toInt();
 
     if (masterConfig.read("./Configuration/MinosKeyer.json"))
     {
         recordLevel = masterConfig.recordSliderPosition;
         replayLevel = masterConfig.replaySliderPosition;
         passThroughLevel = masterConfig.passthroughSliderPosition;
-        dry = masterConfig.dry;
+        comp = masterConfig.compression;
     }
 
     ui->recordSlider->setValue(recordLevel);
     ui->replaySlider->setValue(replayLevel);
     ui->passThroughSlider->setValue(passThroughLevel);
-    ui->dryCheckBox->setChecked(dry);
+    ui->compressionSlider->setValue(comp);
 
     inVolChangeCount--;
 
@@ -286,10 +287,10 @@ void KeyerMain::lineTimerTimer( )
        masterConfig.recordSliderPosition = ui->recordSlider->value();
        masterConfig.replaySliderPosition = ui->replaySlider->value();
        masterConfig.passthroughSliderPosition = ui->passThroughSlider->value();
-       masterConfig.dry = ui->dryCheckBox->isChecked();
+       masterConfig.compression = ui->compressionSlider->value();
        writeConfig(false);
 
-       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
+       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->compressionSlider->value());
        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
        {
            doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
@@ -518,8 +519,8 @@ void KeyerMain::setVolumeMults()
     int record = ui->recordSlider->value();
     int replay = ui->replaySlider->value();
     int passThrough = ui->passThroughSlider->value();
-    bool dry = ui->dryCheckBox->isChecked();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, dry);
+    int comp = ui->compressionSlider->value();
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, comp);
 
     ui->recordValue->setValue(record/10.0);
     ui->replayValue->setValue(replay/10.0);
@@ -575,10 +576,13 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
         trace(QString("(v) pass chnaged to %1").arg(arg1));
     }
 }
-void KeyerMain::on_dryCheckBox_stateChanged(int /*arg1*/)
+void KeyerMain::on_compressionSlider_valueChanged(int value)
 {
-    setVolumeMults();
-    writeConfig(false);
+    if (inVolChangeCount <= 0)
+    {
+        SoundSystemDriver::getSbDriver()->setCompression(value);
+        trace(QString("(v) comp chnaged to %1").arg(value));
+    }
 }
 
 void KeyerMain::doConfig(QString config)
@@ -598,8 +602,8 @@ void KeyerMain::doConfig(QString config)
     {
         writeConfig(true);
         // the value change should cause a force publish. We have to set it back again or it stays there!
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->dryCheckBox->isChecked());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value(), ui->compressionSlider->value());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->compressionSlider->value());
     }
 }
 void doConfig(QString config)
@@ -625,8 +629,4 @@ void KeyerMain::on_showButton_clicked()
 }
 
 
-void KeyerMain::on_compressionSlider_valueChanged(int value)
-{
-    SoundSystemDriver::getSbDriver()->setCompression(value);
-}
 

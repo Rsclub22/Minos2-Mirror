@@ -24,7 +24,7 @@ public:
     int recordSliderPosition = 0;
     int replaySliderPosition = 0;
     int passthroughSliderPosition = 0;
-    bool dry = false;
+    int compression = 0;
 
     KeyerKeyJson kjj[KEYERKEYS];
 

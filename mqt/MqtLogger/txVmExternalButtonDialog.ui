@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>549</width>
-    <height>250</height>
+    <height>377</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -193,36 +193,31 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLineEdit" name="txVmMessageDur">
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="messageDurLbl">
+          <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Message Duration</string>
+            <string>Compression</string>
            </property>
           </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_4">
+          <widget class="QSlider" name="compressionSlider">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>20</number>
+           </property>
+           <property name="pageStep">
+            <number>5</number>
+           </property>
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
+           <property name="tickPosition">
+            <enum>QSlider::TicksAbove</enum>
            </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="dryCheckBox">
-           <property name="text">
-            <string>Dry</string>
+           <property name="tickInterval">
+            <number>2</number>
            </property>
           </widget>
          </item>

@@ -83,7 +83,7 @@ public:
     bool startMicPassThrough();
     bool stopMicPassThrough();
 
-    void setVolumeMults(qreal record, qreal replay, qreal passThrough, bool dryproc);
+    void setVolumeMults(qreal record, qreal replay, qreal passThrough, int comp);
 
     void setData(int16_t *data, unsigned int len);
     void setPipData(int16_t *data, unsigned int len, unsigned int delayLen);
@@ -128,7 +128,7 @@ private:
     bool outputEnabled = false;
     bool passThroughEnabled = false;
 
-    bool dry = true;
+    int compression = 0;
 
     qreal recordMult = 0.0;
     qreal replayMult = 0.0;

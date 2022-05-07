@@ -42,7 +42,7 @@ private slots:
 
     void on_passThroughSlider_valueChanged(int value);
 
-    void on_dryCheckBox_clicked();
+    void on_compressionSlider_valueChanged(int);
 
 public Q_SLOTS:
     virtual void accept() override;

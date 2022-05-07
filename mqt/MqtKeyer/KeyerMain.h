@@ -78,22 +78,20 @@ private slots:
 
     void on_passThroughValue_valueChanged(double arg1);
 
+    void on_compressionSlider_valueChanged(int value);
+
     void onPTT(bool);
 
     void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
-    void doSliders(int, int, int, bool);
+    void doSliders(int, int, int, int comp);
 
     void on_messageName_editingFinished();
 
     void on_keyCombo_currentIndexChanged(int index);
 
-    void on_dryCheckBox_stateChanged(int arg1);
-
     void on_showButton_clicked();
-
-    void on_compressionSlider_valueChanged(int value);
 
 private:
     void syncSetLines();

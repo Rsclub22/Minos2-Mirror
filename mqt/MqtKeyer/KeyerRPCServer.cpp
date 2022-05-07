@@ -90,23 +90,23 @@ void KeyerServer::publishConfig(const QString &config)
     KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
-void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, bool dry, int seq)
+void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, int comp, int seq)
 {
     static QString old;
     QString sliders;
-    sliders = QString("%1;%2;%3;%4;%5").arg(rec).arg(replay).arg(passthrough).arg(dry).arg(seq);
+    sliders = QString("%1;%2;%3;%4;%5").arg(rec).arg(replay).arg(passthrough).arg(comp).arg(seq);
     if (sliders != old)
     {
         old = sliders;
         RPCPubSub::publish(rpcConstants::KeyerCategory, rpcConstants::keyerSliders, sliders, psPublished);
     }
 }
-void KeyerServer::publishSliders(int rec, int replay, int passthrough, bool dry)
+void KeyerServer::publishSliders(int rec, int replay, int passthrough, int comp)
 {
     checkConnection();
 
     if (sendSliders)
-        KS->doPublishSliders(rec, replay, passthrough, dry, slidersSeq);
+        KS->doPublishSliders(rec, replay, passthrough, comp, slidersSeq);
 }
 //---------------------------------------------------------------------------
 void KeyerServer::doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples, int seq)
@@ -250,8 +250,8 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                   int rec = vals[0].toInt();
                   int rep = vals[1].toInt();
                   int pass = vals[2].toInt();
-                  bool dry = (vals[3].toInt() > 0);
-                  emit sliders(rec, rep, pass, dry);
+                  int comp = (vals[3].toInt());
+                  emit sliders(rec, rep, pass, comp);
               }
           }
 

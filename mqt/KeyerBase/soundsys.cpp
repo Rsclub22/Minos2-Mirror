@@ -262,7 +262,7 @@ void RtAudioSoundSystem::setFilter(int fc)
    filterCorner = fc;
 }
 
-void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, bool dryproc)
+void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, int comp)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
@@ -270,7 +270,7 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
     replayMult = qPow(10, replay/100);
     passThroughMult = qPow(10, passThrough/100);
 
-    dry = dryproc;
+    compression = comp;
 }
 
 void RtAudioSoundSystem::setCompression(int value)
@@ -328,7 +328,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
             double s1 = initi1;
             double s2 = initi2;
 
-            if (!dry && passThroughEnabled)
+            if (passThroughEnabled)
             {
                 // this is happening to INPUT i.e. on passthrough/recording
                 // NOT on replay
@@ -579,7 +579,7 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
 
                     qreal val = *m++;
                     qreal val2 = *m++;
-                    if (!dry && !tone)
+                    if (!tone)
                     {
 
                         double ds1 = val/32768.0;

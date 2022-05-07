@@ -243,9 +243,9 @@ bool SoundSystemDriver::stopMicPassThrough()
 {
     return soundSystem->stopMicPassThrough();
 }
-void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, bool dry)
+void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, int compression)
 {
-    soundSystem->setVolumeMults(record, replay, passThrough, dry);
+    soundSystem->setVolumeMults(record, replay, passThrough, compression);
 }
 void SoundSystemDriver::setCompression(int value)
 {
