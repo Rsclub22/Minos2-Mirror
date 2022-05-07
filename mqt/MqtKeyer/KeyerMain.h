@@ -93,6 +93,8 @@ private slots:
 
     void on_showButton_clicked();
 
+    void on_compressionSlider_valueChanged(int value);
+
 private:
     void syncSetLines();
     QTimer lineTimer;

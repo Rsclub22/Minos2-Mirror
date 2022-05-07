@@ -94,7 +94,7 @@ void mqtktMainWindow::on_compressorButton_clicked()
     genTone( toneptr, tone, samples, samples, ramptime, tvolmult );
 
     MqtLogCompressor compressor;
-    compressor.setGamma(100);
+    compressor.setGamma(7);
 
     chart->removeAllSeries();       // removes AND DELETES
 

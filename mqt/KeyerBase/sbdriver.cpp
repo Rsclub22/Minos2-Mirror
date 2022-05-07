@@ -247,6 +247,10 @@ void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, 
 {
     soundSystem->setVolumeMults(record, replay, passThrough, dry);
 }
+void SoundSystemDriver::setCompression(int value)
+{
+    soundSystem->setCompression(value);
+}
 
 int SoundSystemDriver::getMessageLen(int buttonNumber)
 {

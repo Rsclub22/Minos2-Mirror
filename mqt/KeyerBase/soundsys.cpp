@@ -162,9 +162,9 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
         wThread = new RiffWriter(this);
         wThread->start();
     }
-    micCompressor.setGamma(100);
+    micCompressor.setGamma(5);
 
-    replayCompressor.setGamma(100);
+    replayCompressor.setGamma(5);
     try
     {
         RtAudio::StreamParameters outParams;
@@ -273,6 +273,11 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
     dry = dryproc;
 }
 
+void RtAudioSoundSystem::setCompression(int value)
+{
+    micCompressor.setGamma(value);
+    replayCompressor.setGamma(value);
+}
 
 int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 unsigned int nFrames,

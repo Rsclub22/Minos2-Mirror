@@ -7,7 +7,7 @@ class MqtLogCompressor
 {
     int gamma = 1;
     double limit = 1;
-    double threshold = 0.25;
+    double threshold = 0/*.25*/;
 public:
     MqtLogCompressor()
     {}
@@ -25,6 +25,10 @@ public:
 
     double logfunc(double s)
     {
+        if (gamma == 0)
+        {
+            return s;
+        }
         if (s > threshold)
         {
             return log((s - threshold) * gamma + 1 )/limit;

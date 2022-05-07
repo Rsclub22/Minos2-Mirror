@@ -145,7 +145,7 @@ void WaveShowDialog::showSeries()
         return;
     }
 
-    compressor.setGamma(100);
+    compressor.setGamma(7);
 
     originalChart->removeAllSeries();       // removes AND DELETES
     processedChart->removeAllSeries();

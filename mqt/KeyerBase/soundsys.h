@@ -100,6 +100,7 @@ public:
                                     double streamTime,
                                     unsigned int status );
 
+    void setCompression(int value);
 private:
 
     RtAudio *audio = nullptr;

@@ -130,6 +130,7 @@ public:
       QStringList getInputDevices();
       QStringList getOutputDevices();
       void closedown();
+      void setCompression(int value);
 private slots:
       void interruptOK();
       void outputFinished();

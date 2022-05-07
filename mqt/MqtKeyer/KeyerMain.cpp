@@ -624,3 +624,9 @@ void KeyerMain::on_showButton_clicked()
     wsd.exec();
 }
 
+
+void KeyerMain::on_compressionSlider_valueChanged(int value)
+{
+    SoundSystemDriver::getSbDriver()->setCompression(value);
+}
+
