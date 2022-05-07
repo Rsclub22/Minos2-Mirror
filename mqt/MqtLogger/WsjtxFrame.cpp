@@ -662,8 +662,9 @@ void WsjtxFrame::update_status (QString const& id, Frequency f, QString const& m
     decodeMessage *lastTx = nullptr;
     if (transmitting && !currentlyTransmitting)
     {
+        QDateTime ut = QDateTime::currentDateTimeUtc();
 
-        decodeMessage dc = decoder.decode(id, eTX, QTime::currentTime(), 0, 0
+        decodeMessage dc = decoder.decode(id, eTX, ut.time(), 0, 0
                                         , 0, mode
                                         , tx_message, false, true);
 
