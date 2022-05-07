@@ -221,6 +221,9 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QSpinBox" name="compressionValue"/>
+         </item>
         </layout>
        </item>
       </layout>

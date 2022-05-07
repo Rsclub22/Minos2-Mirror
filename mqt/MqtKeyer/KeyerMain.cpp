@@ -31,11 +31,11 @@ void KeyerMain::doSliders(int rec, int rep, int pass, int comp)
     inVolChangeCount++;
     trace(QString("Set Slider positions %1;%2;%3;%4").arg(rec).arg(rep).arg(pass).arg(comp));
     ui->recordSlider->setValue(rec);
-    trace(QString("(doSliders) rec chnaged to %1").arg(rec));
+    trace(QString("(doSliders) rec changed to %1").arg(rec));
     ui->replaySlider->setValue(rep);
-    trace(QString("(doSliders) rep chnaged to %1").arg(rep));
+    trace(QString("(doSliders) rep changed to %1").arg(rep));
     ui->passThroughSlider->setValue(pass);
-    trace(QString("(doSliders) pass chnaged to %1").arg(pass));
+    trace(QString("(doSliders) pass changed to %1").arg(pass));
 
     ui->recordValue->setValue(rec/10.0);
     ui->replayValue->setValue(rep/10.0);
@@ -114,6 +114,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     keyerMain = this;
 
+    ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
 
     commonPort * cp = loadKeyers();
@@ -525,6 +526,7 @@ void KeyerMain::setVolumeMults()
     ui->recordValue->setValue(record/10.0);
     ui->replayValue->setValue(replay/10.0);
     ui->passThroughValue->setValue(passThrough/10.0);
+    ui->compressionValue->setValue(comp);
 
     inVolChangeCount--;
 }
@@ -549,13 +551,20 @@ void KeyerMain::on_passThroughSlider_valueChanged(int position)
     setVolumeMults();
     writeConfig(false);
 }
+void KeyerMain::on_compressionSlider_valueChanged(int value)
+{
+    masterConfig.compression = value;
+    setVolumeMults();
+    writeConfig(false);
+    SoundSystemDriver::getSbDriver()->setCompression(value);
+}
 
 void KeyerMain::on_recordValue_valueChanged(double arg1)
 {
     if (inVolChangeCount <= 0)
     {
         ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
-        trace(QString("(v) record chnaged to %1").arg(arg1));
+        trace(QString("(v) record changed to %1").arg(arg1));
     }
 }
 
@@ -564,7 +573,7 @@ void KeyerMain::on_replayValue_valueChanged(double arg1)
     if (inVolChangeCount <= 0)
     {
         ui->replaySlider->setValue(static_cast<int>(arg1 * 10));
-        trace(QString("(v) replay chnaged to %1").arg(arg1));
+        trace(QString("(v) replay changed to %1").arg(arg1));
     }
 }
 
@@ -573,17 +582,18 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
     if (inVolChangeCount <= 0)
     {
         ui->passThroughSlider->setValue(static_cast<int>(arg1 * 10));
-        trace(QString("(v) pass chnaged to %1").arg(arg1));
+        trace(QString("(v) pass changed to %1").arg(arg1));
     }
 }
-void KeyerMain::on_compressionSlider_valueChanged(int value)
+void KeyerMain::on_compressionValue_valueChanged(int arg1)
 {
     if (inVolChangeCount <= 0)
     {
-        SoundSystemDriver::getSbDriver()->setCompression(value);
-        trace(QString("(v) comp chnaged to %1").arg(value));
+        ui->compressionSlider->setValue(arg1);
+        trace(QString("(v) comp changed to %1").arg(arg1));
     }
 }
+
 
 void KeyerMain::doConfig(QString config)
 {
@@ -627,6 +637,4 @@ void KeyerMain::on_showButton_clicked()
     WaveShowDialog wsd(this, fno);
     wsd.exec();
 }
-
-
 

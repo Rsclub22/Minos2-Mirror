@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 
 const int KEYERKEYS = 8;    // to match VOICEKEYER_MAX_BUTTONS
+const int COMPRESSION_LIMIT = 30;
 class KeyerKeyJson
 {
 public:

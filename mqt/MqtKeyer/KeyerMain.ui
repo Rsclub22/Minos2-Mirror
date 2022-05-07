@@ -341,6 +341,9 @@
            </widget>
           </item>
           <item>
+           <widget class="QSpinBox" name="compressionValue"/>
+          </item>
+          <item>
            <widget class="QPushButton" name="aboutButton">
             <property name="text">
              <string>About</string>

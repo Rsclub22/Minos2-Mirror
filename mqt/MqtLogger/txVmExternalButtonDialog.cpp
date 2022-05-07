@@ -15,6 +15,8 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
+
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
     LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
 }
@@ -183,6 +185,28 @@ void TxVmExternalButtonDialog::on_passThroughSlider_valueChanged(int /*value*/)
         inVolChangeCount--;
     }
 }
+void TxVmExternalButtonDialog::on_compressionValue_valueChanged(int arg1)
+{
+    if (inVolChangeCount <= 0)
+    {
+        inVolChangeCount = 1;
+        ui->compressionSlider->setValue(arg1);
+        pubSliders();
+        inVolChangeCount--;
+    }
+}
+void TxVmExternalButtonDialog::on_compressionSlider_valueChanged(int /*value*/)
+{
+    pubSliders();
+    if (inVolChangeCount <= 0)
+    {
+        inVolChangeCount = 1;
+        int v = ui->compressionSlider->value();
+        ui->compressionValue->setValue(v);
+        inVolChangeCount--;
+    }
+}
+
 void TxVmExternalButtonDialog::pubSliders()
 {
     int v0 = ui->recordSlider->value();
@@ -233,18 +257,10 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
 
                 ui->compressionSlider->setValue(vals[3].toInt());
+                ui->compressionValue->setValue(vals[3].toInt());
 
                 inVolChangeCount--;
             }
 }
 
-void TxVmExternalButtonDialog::on_compressionSlider_valueChanged(int /*value*/)
-{
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        pubSliders();
-        inVolChangeCount--;
-    }
-}
 

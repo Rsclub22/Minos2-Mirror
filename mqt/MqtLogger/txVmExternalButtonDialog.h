@@ -44,6 +44,8 @@ private slots:
 
     void on_compressionSlider_valueChanged(int);
 
+    void on_compressionValue_valueChanged(int arg1);
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;
