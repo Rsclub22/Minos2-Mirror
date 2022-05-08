@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStringList>
 
-#include "hamlib/rig.h"
+#include <hamlib/rig.h>
 class serialData: public QObject
 {
     Q_OBJECT
