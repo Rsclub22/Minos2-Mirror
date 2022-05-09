@@ -18,6 +18,13 @@
 #include "qsologframe.h"
 #include "ui_qsologframe.h"
 
+void QSOLogFrame::setEditStyleSheet(QLineEdit * qle, QString ss)
+{
+    ss += "QLineEdit[text=\"\"]{ color:gray; }";
+    qle->setStyleSheet(ss );
+    connect(qle, &QLineEdit::textChanged, [=]{ style()->polish(qle); });
+    widgetStyles[qle] = ss;
+}
 QString QSOLogFrame::getFKeyLabel(int n)
 {
     if (altFKeys)
@@ -428,8 +435,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         QString t = event->text();
         if (ed == ui->CallsignFrame->getTextEditEdit() && !t.isEmpty())
         {
-            ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
-            widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditOK;
+            setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(), ssLineEditOK);
         }
     }
     return false;
@@ -631,15 +637,13 @@ void QSOLogFrame::initialise()
     {
         ui->radioDetailsFrame->setVisible(true);
         ui->EditFrame->setVisible(true);
-        ui->SerTxFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
-        widgetStyles[ui->SerTxFrame->getTextEditEdit()] = ssLineEditOK;
+        setEditStyleSheet(ui->SerTxFrame->getTextEditEdit(), ssLineEditOK);
     }
     else
     {
         ui->radioDetailsFrame->setVisible(false);
         ui->EditFrame->setVisible(false);
-        ui->SerTxFrame->getTextEditEdit()->setStyleSheet(ssLineEditGreyBackground);
-        widgetStyles[ui->SerTxFrame->getTextEditEdit()] = ssLineEditGreyBackground;
+        setEditStyleSheet(ui->SerTxFrame->getTextEditEdit(), ssLineEditGreyBackground);
     }
 
     current = nullptr;
@@ -1712,8 +1716,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
             // don't override placeholder duplicate colour
             if (vcp != csIl)
             {
-                vcp->wc->setStyleSheet(ss);
-                widgetStyles[vcp->wc] = ss;
+                setEditStyleSheet(vcp->wc, ss);
             }
             else
             {
@@ -1721,8 +1724,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
                         (text.isEmpty() && vcp->wc->placeholderText().isEmpty())
                      ||   !text.isEmpty())
                 {
-                    vcp->wc->setStyleSheet(ss);
-                    widgetStyles[vcp->wc] = ss;
+                    setEditStyleSheet(vcp->wc, ss);
 
                 }
             }
@@ -1730,8 +1732,7 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
         else
         {
             QString ss = QString("[readOnly=\"true\"] { background-color: %0 }").arg(qApp->palette().color(QPalette::Window).name(QColor::HexRgb));
-            vcp->wc->setStyleSheet(ss);
-            widgetStyles[vcp->wc] = ss;
+            setEditStyleSheet(vcp->wc, ss);
         }
    }
    return ret;
@@ -3405,13 +3406,11 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.checkScreenContact();
             if ( scc.cs.getValRes() == ERR_DUPCS)
             {
-                ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditFrLightRedBkBk);
-                widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditFrLightRedBkBk;
+                setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditFrLightRedBkBk);
             }
             else
             {
-                ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
-                widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditOK;
+                setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
             }
         }
         else
@@ -3423,8 +3422,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             }
             if (callText.isEmpty())
             {
-                ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
-                widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditOK;
+                setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
             }
         }
     }
@@ -3437,13 +3435,12 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         }
         if (callText.isEmpty())
         {
-            ui->CallsignFrame->getTextEditEdit()->setStyleSheet(ssLineEditOK);
-            widgetStyles[ui->CallsignFrame->getTextEditEdit()] = ssLineEditOK;
+            setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
         }
     }
     if (callText.isEmpty() && locText.isEmpty())
     {
-        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+//        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
     }
 }
 
