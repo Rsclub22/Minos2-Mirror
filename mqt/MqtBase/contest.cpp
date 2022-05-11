@@ -881,7 +881,7 @@ void BaseContestLog::scanContest( )
          nct->timeOff.setBadDtg();
       }
    }
-   validationPoint = 0;
+   //validationPoint = 0;
    if ( isReadOnly() )
    {
       DupSheet.clear();
