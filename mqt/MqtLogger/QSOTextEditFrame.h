@@ -21,8 +21,6 @@ class QSOTextEditFrame : public QFrame
 
     bool expert = false;
 
-    virtual bool eventFilter(QObject *obj, QEvent *event) override;
-
 public:
     QSOTextEditFrame(QWidget *parent);
     virtual ~QSOTextEditFrame() override;
