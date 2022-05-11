@@ -88,7 +88,7 @@ void ConfigElementFrame::setElement(QSharedPointer<RunConfigElement> c)
     }
     ui->programNameEdit->setText(c->commandLine);
     ui->homeDirectoryEdit->setText(c->rundir);
-    ui->parametersEdit->setText(c->params);
+    ui->parametersEdit->setText(c->params.join(" "));
     ui->serverNameEdit->setText(c->router);
     ui->remoteAppNameEdit->setText(c->remoteApp);
 
@@ -133,7 +133,7 @@ void ConfigElementFrame::saveElement()
         }
         configElement->rundir = ui->homeDirectoryEdit->text().trimmed();
         configElement->commandLine = ui->programNameEdit->text().trimmed();
-        configElement->params = ui->parametersEdit->text().trimmed();
+        configElement->params = ui->parametersEdit->text().trimmed().split(" ");
         configElement->router = ui->serverNameEdit->text().trimmed();
         configElement->remoteApp = ui->remoteAppNameEdit->text().trimmed();
 

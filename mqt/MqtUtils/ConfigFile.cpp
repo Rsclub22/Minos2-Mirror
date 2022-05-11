@@ -96,7 +96,8 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
 
     config.getPrivateProfileString(sect, "Program", "", commandLine);
     config.getPrivateProfileString( sect, "Server", "localhost", router );
-    config.getPrivateProfileString( sect, "Params", "", params );
+    QString p = params.join(" ");
+    config.getPrivateProfileString( sect, "Params", "", p );
     config.getPrivateProfileString( sect, "Directory", "", rundir );
     config.getPrivateProfileString( sect, "RemoteApp", "", remoteApp);
     showAdvanced = config.getPrivateProfileBool(sect, "ShowAdvanced", false);
@@ -128,7 +129,7 @@ void RunConfigElement::save(INIFile &config)
     if (!deleted)
     {
         config.writePrivateProfileString(name, "Program", commandLine);
-        config.writePrivateProfileString(name, "Params", params);
+        config.writePrivateProfileString(name, "Params", params.join(" "));
         config.writePrivateProfileString(name, "Directory", rundir);
         config.writePrivateProfileString(name, "Server", router);
         config.writePrivateProfileString(name, "RemoteApp", remoteApp);
@@ -172,25 +173,22 @@ void RunConfigElement::createProcess()
         runner = new QProcess(parent());
 
         QString program = commandLine;
+        QStringList progArgs = params;
         if (!FileExists(program))
         {
             trace(name + tr(":program doesn't exist:") + program);
         }
 
-        program += " ";
-
         QString locale = getCurrentLanguage();
         if (!locale.isEmpty())
         {
-            program += "--lang " + locale + " ";
+            progArgs.append("--lang " + locale);
         }
         QString si = SecondInstall::getSecondInstallSwitch();
         if (!si.isEmpty())
         {
-            params += si;
+            progArgs.append(si);
         }
-
-        program += params;
 
         QString wdir = rundir;
         runner->setWorkingDirectory(wdir);
@@ -214,12 +212,9 @@ void RunConfigElement::createProcess()
         connect (runner, &QProcess::readyReadStandardOutput, this, &RunConfigElement::on_readyReadStandardOutput);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        QStringList progArgs = runner->splitCommand(program);
-        const QString prog = progArgs.takeFirst();
-
-        runner->start(prog, progArgs);
+        runner->start(program, progArgs);
 #else
-        runner->start(program);
+        runner->start(program + progArgs.join(" "));
 #endif
 
         if (runner)
@@ -466,7 +461,7 @@ bool MinosConfig::saveAsJson(QString f)
              QJsonObject c;
 
              c.insert("Program", j->commandLine);
-             c.insert("Params", j->params);
+             c.insert("Params", j->params.join(" "));
              c.insert("name", j->name);
              c.insert("Directory", j->rundir);
              c.insert("Server", j->router);
@@ -528,7 +523,7 @@ bool MinosConfig::loadJson(QString f)
                         QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
 
                         tce->commandLine = conf.value("Program" ).toString();
-                        tce->params = conf.value("Params" ).toString();
+                        tce->params = conf.value("Params" ).toString().split(" ");
                         tce->name = conf.value("name" ).toString();
                         tce->rundir = conf.value("Directory" ).toString();
                         tce->router = conf.value("Server" ).toString();

@@ -60,7 +60,7 @@ public:  		// User declarations
     QString name;
     QString rundir;
     QString commandLine;
-    QString params;
+    QStringList params;
     QString router;
     QString remoteApp;
     bool localOK = false;
