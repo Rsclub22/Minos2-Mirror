@@ -493,7 +493,14 @@ void BandmapView::mouseDoubleClicked(QPoint p)
         spotData.callsign = selectedSpot.getDxCallStr();
         spotData.time = selectedSpot.getSpotTime();
         spotData.freq = selectedSpot.getFreq();
-        spotData.locator = selectedSpot.getDxLocator();
+
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !selectedSpot.getDxLocatorIsFromNode())
+        {
+            spotData.locator = selectedSpot.getDxLocator();
+        }
         spotData.bearing = selectedSpot.getDxBrg().toInt();
         spotData.fromBandmapOrMemory = true;
         spotData.exchange = selectedSpot.getDistrict();
@@ -825,7 +832,13 @@ void BandmapView::getSpotData(int &selectedSpotDataRowNum, int selectedSpotViewR
         selectedSpot.setSpotTime(model()->data(model()->index(selectedSpotDataRowNum, TIME_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setFreq(qvariant_cast<Frequency>(model()->data(model()->index(selectedSpotDataRowNum, FREQ_COL_NUM), BMP_DataStoredRole)));
         selectedSpot.setDxCall(model()->data(model()->index(selectedSpotDataRowNum, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString());
-        selectedSpot.setDxLocator(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString());
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !model()->data(model()->index(selectedSpotDataRowNum, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool())
+        {
+            selectedSpot.setDxLocator(model()->data(model()->index(selectedSpotDataRowNum, DXLOC_COL_NUM), BMP_DataStoredRole).toString());
+        }
         selectedSpot.setDxDist(model()->data(model()->index(selectedSpotDataRowNum, DXDIST_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setDxBrg(model()->data(model()->index(selectedSpotDataRowNum, DXBRG_COL_NUM), BMP_DataStoredRole).toString());
         selectedSpot.setRotBrg(model()->data(model()->index(selectedSpotDataRowNum, ROT_BEARING_COL_NUM),BMP_DataStoredRole).toString());

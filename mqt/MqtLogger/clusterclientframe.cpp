@@ -1347,7 +1347,15 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     spotData.freq = qvariant_cast<Frequency>(spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole));
 
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+
+    bool showDerivedLocFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+    if (showDerivedLocFlag || !spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool())
+    {
+        spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+    }
+
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
     spotData.fromBandmapOrMemory = true;
     spotData.dxLocFromNode = spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();

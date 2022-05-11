@@ -378,7 +378,15 @@ void BandmapClientFrame::on_logActionSelected()
         spotData.callsign = bandmapView->getSelectedSpotDataPtr()->getDxCallStr();
         spotData.time = bandmapView->getSelectedSpotDataPtr()->getSpotTime();
         spotData.freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
-        spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode())
+        {
+            spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+        }
+
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
         spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
         spotData.fromBandmapOrMemory = true;
@@ -397,7 +405,15 @@ void BandmapClientFrame::on_memoryActionSelected()
         spotData.callsign = bandmapView->getSelectedSpotDataPtr()->getDxCallStr();
         spotData.time = bandmapView->getSelectedSpotDataPtr()->getSpotTime();
         spotData.freq = bandmapView->getSelectedSpotDataPtr()->getFreq();
-        spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+
+        bool showDerivedLocFlag;
+        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+        if (showDerivedLocFlag || !bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode())
+        {
+            spotData.locator = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
+        }
+
         spotData.bearing = bandmapView->getSelectedSpotDataPtr()->getDxBrg().toInt();
         spotData.dxLocFromNode = bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode();
         spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
@@ -556,7 +572,15 @@ void BandmapClientFrame::context_logActionSelected()
     spotData.callsign = contextMenuSelectedSpotData.getDxCallStr();
     spotData.time = contextMenuSelectedSpotData.getSpotTime();
     spotData.freq = contextMenuSelectedSpotData.getFreq();
-    spotData.locator = contextMenuSelectedSpotData.getDxLocator();
+
+    bool showDerivedLocFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+    if (showDerivedLocFlag || !bandmapView->getSelectedSpotDataPtr()->getDxLocatorIsFromNode())
+    {
+        spotData.locator = contextMenuSelectedSpotData.getDxLocator();
+    }
+
     spotData.bearing = contextMenuSelectedSpotData.getDxBrg().toInt();
     spotData.fromBandmapOrMemory = true;
     spotData.exchange = bandmapView->getSelectedSpotDataPtr()->getDistrict();
