@@ -3440,7 +3440,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
     }
     if (callText.isEmpty() && locText.isEmpty())
     {
-//        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
+        MinosLoggerEvents::SendScreenContactChanged(&scc, contest, baseName);
     }
 }
 
