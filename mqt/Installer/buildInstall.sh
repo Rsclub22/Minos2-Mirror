@@ -130,14 +130,14 @@ cp $DIR/mqt/*.ico .
 cd Configuration
 
 wget https://www.country-files.com/cty/cty.dat -O cty.dat
-wget https://www.rsgbcc.org/vhf/vhfcontests20.xml -O vhfcontests20.xml
 wget https://www.rsgbcc.org/vhf/vhfcontests21.xml -O vhfcontests21.xml
+wget https://www.rsgbcc.org/vhf/vhfcontests22.xml -O vhfcontests22.xml
 
-wget https://www.rsgbcc.org/vhf/hfcontests20.xml -O hfcontests20.xml
 wget https://www.rsgbcc.org/vhf/hfcontests21.xml -O hfcontests21.xml
+wget https://www.rsgbcc.org/vhf/hfcontests22.xml -O hfcontests22.xml
 
-wget https://microwave.rsgbcc.org/microcontests20.xml -O microcontests20.xml
 wget https://microwave.rsgbcc.org/microcontests21.xml -O microcontests21.xml
+wget https://microwave.rsgbcc.org/microcontests22.xml -O microcontests22.xml
 
 cd ..
 
