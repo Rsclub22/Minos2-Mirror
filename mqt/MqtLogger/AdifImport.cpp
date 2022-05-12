@@ -301,11 +301,16 @@ void ADIFImport::ADIFImportEndOfRecord( )
         }
 
         dtg d = bct->timeOff;
-        if (!c->checkTime(d))
+        QDate date = d.getDate();
+
+        QDateTime DTGStart = CanonicalToTDT(c->DTGStart.getValue());
+        QDate ds = DTGStart.date();
+        QDateTime DTGEnd = CanonicalToTDT(c->DTGEnd.getValue());
+        QDate de = DTGEnd.date();
+        if (date < ds || date > de)
         {
-            // with multiple simultaneous contests (FT8 UK/EU) we can find not logging inconvenient
-            trace("ADIF date/time not in contest period");
-            //qsoOK = false;
+            trace("ADIF day not in contest period of days");
+            qsoOK = false;
         }
 
     }
