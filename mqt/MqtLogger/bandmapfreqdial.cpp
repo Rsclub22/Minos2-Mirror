@@ -185,6 +185,10 @@ void BandmapFreqDial::drawScale(QPainter *painter, Frequency frequency, int scal
     //dialHeight = scaleHeight;
     dialHeight = fullBandHeight;
 
+    if (dialHeight == 0)
+    {
+        return;
+    }
 
     int _fontHeight = getFontHeight();
     if (_fontHeight != fontHeight)
