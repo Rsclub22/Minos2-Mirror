@@ -210,8 +210,6 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         trace( "Failed to append ADIF from " + id );
         return;
     }
-    ct->scanContest();
-    ct->validateLoc();
     for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
@@ -225,6 +223,8 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         bct->commonSave(bct);
     }
     ct->commonSave( false );
+    ct->scanContest();
+    ct->validateLoc();
     MinosLoggerEvents::SendAfterLogContact(ct);
     TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 

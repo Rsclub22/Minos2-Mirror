@@ -837,8 +837,12 @@ void BaseContestLog::scanContest( )
          curop1 = temp;
          oplist.insert( curop1, curop1 );
       }
-      curop2 = nct->op2.getValue();
-      oplist.insert( curop2, curop2 );
+      temp = nct->op2.getValue();
+      if (temp.size())
+      {
+         curop2 = temp;
+          oplist.insert( curop2, curop2 );
+      }
 
       if ( nct->notValidContact() )
       {
