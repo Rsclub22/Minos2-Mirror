@@ -21,9 +21,11 @@
 void QSOLogFrame::setEditStyleSheet(QLineEdit * qle, QString ss)
 {
     ss += "QLineEdit[text=\"\"]{ color:gray; }";
-    qle->setStyleSheet(ss );
-    connect(qle, &QLineEdit::textChanged, [=]{ style()->polish(qle); });
-    widgetStyles[qle] = ss;
+    if (widgetStyles[qle] != ss)
+    {
+        qle->setStyleSheet(ss );
+        widgetStyles[qle] = ss;
+    }
 }
 QString QSOLogFrame::getFKeyLabel(int n)
 {
