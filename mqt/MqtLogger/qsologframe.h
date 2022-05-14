@@ -103,6 +103,7 @@ private:
     bool locValid;
 
     bool oldTimeOK;
+    QString timerSS;
 
     void EditControlEnter( QObject *Sender, QFocusEvent *event );
     void EditControlExit( QObject *Sender );

@@ -2291,7 +2291,12 @@ void QSOLogFrame::checkQsoFrameColour()
         }
     }
 
-   ui->qsoFrame->setStyleSheet(ssQsoFrame);
+    if (ssQsoFrame != timerSS)
+    {
+        timerSS = ssQsoFrame;
+        ui->qsoFrame->setStyleSheet(timerSS);
+        widgetStyles[ui->qsoFrame] = timerSS;
+    }
  }
 
 void QSOLogFrame::updateQSODisplay()
