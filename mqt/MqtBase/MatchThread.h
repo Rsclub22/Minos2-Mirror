@@ -80,7 +80,7 @@ class ThisLogMatcher: public Matcher
       virtual ~ThisLogMatcher();
 
       virtual bool idleMatch( int limit );
-      void addMatch(QSharedPointer<BaseContact>, BaseContestLog * );
+      void addMatch(CheckableContact *, BaseContestLog * );
 protected:
       void doMatch();
 };

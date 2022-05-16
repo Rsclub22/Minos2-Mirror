@@ -1302,15 +1302,15 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
     }
    // needs to be transferred into QSOLogFrame.cpp
    QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
+   BaseMatchContest *mct = MatchTreeIndex->getMatchContest();
 
-   if (mc)
+   if (mct)
    {
-       QSharedPointer<BaseContact> bct = mc->getBaseContact();
-
-       if ( bct )
+       CheckableContact *bct = mc->getBaseContact();
+       if (bct)
        {
-          BaseContestLog *matct = mc->getContactLog();
-          GJVQSOLogFrame->transferDetails( bct, matct );
+           const BaseContestLog *mcl = mc->getContactLog();
+           GJVQSOLogFrame->transferDetails( bct, mcl );
        }
        else
        {
@@ -1386,23 +1386,23 @@ void TSingleLogFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
 {
    if (lct)
    {
-      EditContact( lct );
+      EditContact( lct.data() );
    }
 }
 void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
 {
     QSOTreeSelectContact(contest->pcontactAt( index.row() ));
 }
-void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
+void TSingleLogFrame::EditContact( CheckableContact *cct )
 {
    TQSOEditDlg qdlg( this, false );
-   qdlg.selectContact( contest, lct );
+   qdlg.selectContact( contest, cct );
 
-   trace(QString("TSingleLogFrame::EditContact %1").arg(lct->cs.getFullCall()));
+   trace(QString("TSingleLogFrame::EditContact %1").arg(cct->cs.getFullCall()));
 
    qdlg.exec();
 
-   trace(QString("TSingleLogFrame::EditContact finished %1").arg(lct->cs.getFullCall()));
+   trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
 
    contest->scanContest();
 
@@ -1493,7 +1493,7 @@ void TSingleLogFrame::goNextUnfilled()
    {
       TQSOEditDlg qdlg(this, true );
       qdlg.setContest( contest );
-      qdlg.setFirstContact( nuc );
+      qdlg.setFirstContact( nuc.data() );
       qdlg.exec();
       contest->scanContest();
       refreshMults();
@@ -1539,7 +1539,7 @@ void TSingleLogFrame::goSerial( )
 
     if ( cfu )
     {
-       EditContact( cfu );
+       EditContact( cfu.data() );
     }
     else
        MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );

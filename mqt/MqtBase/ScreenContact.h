@@ -12,9 +12,8 @@
 #include "base_pch.h"
 #include "contacts.h"
 //----------------------------------------------------------------------------
-class ScreenContact
+class ScreenContact: public CheckableContact
 {
-      unsigned long logSequence = 0L; // sparse sequence, used to provide
    protected:
    public:
       ScreenContact();
@@ -22,26 +21,15 @@ class ScreenContact
       virtual void copyFromArg(QSharedPointer<BaseContact> );   // this MIGHT just get used for dummy, for ops
       virtual void copyFromArg( ScreenContact & );    // used for partialSave
       void checkScreenContact( );
-      virtual bool isNextContact() const;
-      virtual void setLogSequence( unsigned long ul )
-      {
-         logSequence = ul;
-      }
-      virtual unsigned long getLogSequence() const
-      {
-         return logSequence;
-      }
 
       void initialise( BaseContestLog *ct, bool rInit );
 
       void score();
 
-      BaseContestLog *contest =nullptr;
-
-      Callsign cs;   //CONTAIN MinosItem
-      Locator loc;   //CONTAIN MinosItem
-      dtg timeOn;    //CONTAIN MinosItem
-      dtg timeOff;   //CONTAIN MinosItem
+      virtual int getContactScore() const override
+      {
+          return contactScore;
+      }
 
       QString mode;
       QString mgmSubmode;
@@ -61,23 +49,9 @@ class ScreenContact
       QString op2;
 
       bool cqResponse;
-      //------------------
-
-      bool screenQSOValid =false;
-      bool newCtry = false;
-      bool newDistrict = false;
-      int locCount = 0;  // was newLocs, now is mult from locs
-      bool newGLoc = false;
-      bool newNonGLoc = false;
-
-      QSharedPointer<DistrictEntry> districtMult;
-      QSharedPointer<CountryEntry> ctryMult;
-
       int contactScore = 0;
-      int bearing = 0;
-      char multCount = 0;
-      int bonus = 0;
-      bool newBonus = 0;
+
+
 };
 
 #endif

@@ -128,7 +128,7 @@ bool decodeMessage::checkAsContact()
 
     scc.checkScreenContact();
     csret = scc.cs.getValRes();
-    if (scc.screenQSOValid)
+    if (scc.QSOValid)
     {
         scc.score();
         points = scc.contactScore;

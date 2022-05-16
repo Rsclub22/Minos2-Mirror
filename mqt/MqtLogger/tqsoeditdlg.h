@@ -30,7 +30,7 @@ private:
     int splitterHandleWidth;
 
     BaseContestLog * contest;
-    QSharedPointer<BaseContact> firstContact;
+    CheckableContact *firstContact;
     bool unfilled;
 
     MatchTreeFrame *xferTree = nullptr;
@@ -47,12 +47,12 @@ private:
 
     MatchTreeItem *getXferItem();
 public: 		// User declarations
-    void selectContact(BaseContestLog * contest, QSharedPointer<BaseContact> lct );
+    void selectContact(BaseContestLog * contest, CheckableContact *lct );
     void setContest( BaseContestLog * c )
     {
        contest = c;
     }
-    void setFirstContact( QSharedPointer<BaseContact> c )
+    void setFirstContact( CheckableContact *c )
     {
        firstContact = c;
     }

@@ -124,7 +124,7 @@ void TMatchThread::on_ScreenContactChanged(ScreenContact *sct, BaseContestLog *c
        baseName = b;    // baseName makes sure that results are only acted on by the correct windows - log, edit, monitor
       if (sct)
       {
-         contactToMatch = *sct;
+         contactToMatch.copyFromArg(*sct);
          // we want to initialise the search from the screen contact - break what couplings we can
          // we need to take care over thread safety as well!
          startMatch();
@@ -534,7 +534,7 @@ void ThisLogMatcher::matchCountry( const QString &cs )
 {
    TMatchThread::getMatchThread() ->matchCountry( cs );   // scroll to
 }
-void ThisLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog *ccon )
+void ThisLogMatcher::addMatch( CheckableContact *cct, BaseContestLog *ccon )
 {
    if ( !cct )
       return ;
@@ -857,7 +857,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
              if ( csmatch && locmatch && qthmatch )
              {
-                addMatch( cct, ccon );
+                addMatch( cct.data(), ccon );
                 if ( matchCollection->contactCount() > MATCH_LIM )
                    break;
              }
@@ -866,7 +866,7 @@ bool ThisLogMatcher::idleMatch( int limit )
           {
              if ( cct->ctryMult && ( cct->ctryMult == countryEntry ) )
              {
-                addMatch( cct, ccon );
+                addMatch( cct.data(), ccon );
                 if ( matchCollection->contactCount() > MATCH_LIM )
                    break;
              }
@@ -951,7 +951,7 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
        if (tcon == ccon)
        {
             found = test.wt;
-            MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct ));
+            MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct.data() ));
             found->contactMatchList.insert( mct, mct );
             break;
        }

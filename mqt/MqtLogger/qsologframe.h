@@ -59,7 +59,7 @@ public:
 
     void doGJVCancelButton_clicked();
 
-    void transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct );
+    void transferDetails(CheckableContact *lct, const BaseContestLog *matct );
     void transferDetails(const ListContact *lct, const ContactList *matct );
     void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 

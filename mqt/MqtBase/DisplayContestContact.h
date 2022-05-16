@@ -19,20 +19,11 @@ class DisplayContestContact: public BaseContact
     Q_OBJECT
 
       int modificationCount;
-      unsigned long logSequence; // sparse sequence, used to provide sort key
    protected:
       DisplayContestContact( const DisplayContestContact & );
       DisplayContestContact& operator =( const DisplayContestContact & );
    public:
 
-      virtual void setLogSequence( unsigned long ul ) override
-      {
-         logSequence = ul;
-      }
-      virtual unsigned long getLogSequence() const override
-      {
-         return logSequence;
-      }
       virtual int getModificationCount() const override
       {
          return modificationCount;
@@ -57,7 +48,7 @@ class DisplayContestContact: public BaseContact
       DisplayContestContact(BaseContestLog *contest, bool time_now , bool rInit);
       ~DisplayContestContact() override;
       virtual bool ne( const ScreenContact& ) const override;
-      virtual void checkContact(bool inScan) override;
+      virtual int checkContact() override;
 
       virtual void copyFromArg( ScreenContact & ) override;
 

@@ -68,7 +68,7 @@ void MatchOtherFrame::afterMatchTreeClicked()
         QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
         if (mc)
         {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            CheckableContact *bct = mc->getBaseContact();
 
             QString bearing = bct->getField(egBrg, contest);
             MinosLoggerEvents::SendBrgStrToRot(bearing);

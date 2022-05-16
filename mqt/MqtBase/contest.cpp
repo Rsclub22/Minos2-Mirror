@@ -322,6 +322,18 @@ void BaseContestLog::setDirty()
       i.wt->setDirty();
    }
 }
+
+QSharedPointer<BaseContact> BaseContestLog::findContact(CheckableContact *cct) const
+{
+    for ( auto const &i: qAsConst(ctList) )
+    {
+       if (i.wt.data() == cct)
+       {
+           return i.wt;
+       }
+    }
+    return QSharedPointer<BaseContact>();
+}
 void BaseContestLog::makeContact( bool timeNow, QSharedPointer<BaseContact>&lct )
 {
    lct = QSharedPointer<BaseContact>(new BaseContact( this, timeNow ));
@@ -559,7 +571,7 @@ int BaseContestLog::CalcCentres( const QString &qscalcloc, int &brg ) const
    }
    return static_cast<int>(dist);
 }
-void BaseContestLog::getMatchText( QSharedPointer<BaseContact> pct, QString &disp, const BaseContestLog *const ct ) const
+void BaseContestLog::getMatchText( CheckableContact *pct, QString &disp, const BaseContestLog *const ct ) const
 {
    if ( DupSheet.isCurDup( pct ) )
    {
@@ -571,11 +583,11 @@ void BaseContestLog::getMatchText( QSharedPointer<BaseContact> pct, QString &dis
 
    disp = disp.trimmed();
 }
-bool BaseContestLog::isCurDup( QSharedPointer<BaseContact> pct) const
+bool BaseContestLog::isCurDup( CheckableContact *pct) const
 {
    return pct && DupSheet.isCurDup( pct );
 }
-void BaseContestLog::getMatchField(QSharedPointer<BaseContact> pct, int col, QString &disp, const BaseContestLog *const ct ) const
+void BaseContestLog::getMatchField(CheckableContact *pct, int col, QString &disp, const BaseContestLog *const ct ) const
 {
    if ( col ==0 && isCurDup( pct ) )
    {
@@ -588,14 +600,14 @@ void BaseContestLog::getMatchField(QSharedPointer<BaseContact> pct, int col, QSt
 
    disp = temp.trimmed();
 }
-bool BaseContestLog::updateStat( QSharedPointer<BaseContact> cct, int sp1, int sp2 )
+bool BaseContestLog::updateStat( CheckableContact *cct, int sp1, int sp2 )
 {
    // need to check if a valid DTG
    bool acted = false;
 
    QDateTime cttime;
 
-   if ( ( cct->contactScore.getValue() <= 0 ) || !cct->timeOff.getDtg( cttime ) )
+   if ( ( cct->getContactScore() <= 0 ) || !cct->timeOff.getDtg( cttime ) )
       return true;
 
    QDateTime t = QDateTime::currentDateTimeUtc().addSecs( MinosParameters::getMinosParameters() ->getBigClockCorrection());
@@ -604,7 +616,7 @@ bool BaseContestLog::updateStat( QSharedPointer<BaseContact> cct, int sp1, int s
    if ( tdiff < 0 )
       return true;
 
-   long thisscore = cct->contactScore.getValue();
+   long thisscore = cct->getContactScore();
    switch ( scoreMode.getValue() )
    {
       case PPKM:
@@ -700,7 +712,7 @@ void BaseContestLog::updateStats( int p1, int p2 )
    auto it = ctList.end(), end = ctList.begin();
    while ( it != end ) {
        --it;
-       if ( !updateStat( it.value().wt, p1, p2 ) )
+       if ( !updateStat( it.value().wt.data(), p1, p2 ) )
           break;
    }
 
@@ -777,6 +789,67 @@ void BaseContestLog::setScore( QString &buff )
    buff = cs.disp();
 }
 // and we need to do this a bit more often to pick up unfilled properly
+QString BaseContestLog::scanContact(QSharedPointer<BaseContact> nct, QDateTime  contestStart, QDateTime  contestEnd)
+{
+    if (nct->contactFlags.getValue() & TO_BE_ENTERED)
+    {
+       unfilledCount++;
+    }
+    QString temp = nct->op1.getValue();
+    QString curop1 = temp;
+    if (temp.size())
+    {
+       oplist.insert( temp, temp );
+    }
+    temp = nct->op2.getValue();
+    if (temp.size())
+    {
+        oplist.insert( temp, temp );
+    }
+
+    if ( nct->notValidContact() )
+    {
+       nct->contactScore.setValue( -1 );		// force it!
+       return curop1;
+    }
+
+    QDateTime contactTime;
+    bool dirty = false;
+    nct->timeOff.getDtg(contactTime, dirty);
+    if (contactTime >= contestStart && contactTime < contestEnd)
+    {
+        int qoffset = contestStart.secsTo(contactTime)/60;
+        qsoTimeMap[qoffset].count++;
+    }
+
+    validationPoint = nct->getLogSequence();
+
+    // check for duplicates; accumulate the current points score
+
+    nct->bearing = -1;		// force a recalc
+
+    if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
+       nct->cs.setValRes( ERR_DUPCS);
+
+    nct->multCount = 0;
+    nct->newDistrict = false;
+    nct->newCtry = false;
+    nct->locCount = 0;
+    nct->newGLoc = false;
+    nct->newNonGLoc = false;
+    nct->bonus = 0;
+    nct->newBonus = false;
+    nct->checkContact( );   // in scanContest
+
+    if (nct->timeOff.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
+    {
+       nct->timeOff = nct->getHistory()[0]->updtime;
+       nct->timeOff.clearDirty();
+       nct->timeOff.setBadDtg();
+    }
+    return curop1;
+}
+
 void BaseContestLog::scanContest( )
 {
    DupSheet.clear();
@@ -807,7 +880,6 @@ void BaseContestLog::scanContest( )
 
    QDateTime  contestStart = CanonicalToTDT(DTGStart.getValue());
    QDateTime  contestEnd = CanonicalToTDT(DTGEnd.getValue());
-//   qint64 fromContestStart = contestStart.secsTo(QDateTime::currentDateTime());
 
    const int contestMinutes =  static_cast<int>(contestStart.secsTo(contestEnd)/60);
 
@@ -827,63 +899,7 @@ void BaseContestLog::scanContest( )
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
 
-      if (nct->contactFlags.getValue() & TO_BE_ENTERED)
-      {
-         unfilledCount++;
-      }
-      QString temp = nct->op1.getValue();
-      if (temp.size())
-      {
-         curop1 = temp;
-         oplist.insert( curop1, curop1 );
-      }
-      temp = nct->op2.getValue();
-      if (temp.size())
-      {
-         curop2 = temp;
-          oplist.insert( curop2, curop2 );
-      }
-
-      if ( nct->notValidContact() )
-      {
-         nct->contactScore.setValue( -1 );		// force it!
-         continue;
-      }
-
-      QDateTime contactTime;
-      bool dirty = false;
-      nct->timeOff.getDtg(contactTime, dirty);
-      if (contactTime >= contestStart && contactTime < contestEnd)
-      {
-          int qoffset = contestStart.secsTo(contactTime)/60;
-          qsoTimeMap[qoffset].count++;
-      }
-
-      validationPoint = nct->getLogSequence();
-
-      // check for duplicates; accumulate the current points score
-
-      nct->bearing = -1;		// force a recalc
-
-      if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
-         nct->cs.setValRes( ERR_DUPCS);
-
-      nct->multCount = 0;
-      nct->newDistrict = false;
-      nct->newCtry = false;
-      nct->locCount = 0;
-      nct->newGLoc = false;
-      nct->newNonGLoc = false;
-      nct->bonus = 0;
-      nct->newBonus = false;
-      nct->checkContact( true);   // in scanContest
-
-      if (nct->timeOff.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
-      {
-         nct->timeOff = nct->getHistory()[0]->updtime;
-         nct->timeOff.clearDirty();
-         nct->timeOff.setBadDtg();
-      }
+      curop1 = scanContact(nct, contestStart, contestEnd);
    }
    //validationPoint = 0;
    if ( isReadOnly() )
@@ -1150,11 +1166,9 @@ void BaseContestLog::getOpTime(QString &otBuff, SHOWOPERATINGTIME sot)
 }
 
 //============================================================
-DupContact::DupContact(QSharedPointer<BaseContact> c ) : dct( c ), sct( nullptr )
+DupContact::DupContact(CheckableContact *c ) : dct( c )
 {}
-DupContact::DupContact( ScreenContact *c ) : dct( nullptr ), sct( c )
-{}
-DupContact::DupContact() : dct( nullptr ), sct( nullptr )
+DupContact::DupContact()
 {}
 DupContact::~DupContact()
 {}
@@ -1168,28 +1182,11 @@ bool DupContact::operator<( const DupContact& rhs ) const
    QString b1;
    QString b2;
 
-   if ( dct )
-   {
-      c1 = &dct->cs;
-      dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
-   }
-   else
-      if ( sct )
-      {
-         c1 = &sct->cs;
-         sct->contest->getTxFreqBand(sct->frequency, b1);
-      }
-   if ( rhs.dct )
-   {
-      c2 = &rhs.dct->cs;
-      rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
-   }
-   else
-      if ( rhs.sct )
-      {
-         c2 = &rhs.sct->cs;
-         rhs.sct->contest->getTxFreqBand(rhs.sct->frequency, b2);
-      }
+   c1 = &dct->cs;
+   dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
+
+   c2 = &rhs.dct->cs;
+   rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
 
    if (!c1 || !c2)
    {
@@ -1209,29 +1206,10 @@ bool DupContact::operator==( const DupContact& rhs ) const
    QString b1;
    QString b2;
 
-   if ( dct )
-   {
-      c1 = &dct->cs;
-      dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
-   }
-   else
-      if ( sct )
-      {
-         c1 = &sct->cs;
-         sct->contest->getTxFreqBand(sct->frequency, b1);
-      }
-   if ( rhs.dct )
-   {
-      c2 = &rhs.dct->cs;
-      rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
-   }
-   else
-      if ( rhs.sct )
-      {
-         c2 = &rhs.sct->cs;
-         rhs.sct->contest->getTxFreqBand(rhs.sct->frequency, b2);
-      }
-
+    c1 = &dct->cs;
+    dct->contest->getTxFreqBand(dct->frequency.getValue(), b1);
+    c2 = &rhs.dct->cs;
+    rhs.dct->contest->getTxFreqBand(rhs.dct->frequency.getValue(), b2);
 
    return (c1 && c2 && *c1 == *c2 && b1 == b2);
 }
@@ -1245,7 +1223,7 @@ dupsheet::~dupsheet()
 {
    clear();
 }
-bool dupsheet::checkCurDup(ScreenContact *nct, unsigned long valpseq, bool insert )
+bool dupsheet::checkCurDup(CheckableContact *nct, unsigned long valpseq, bool insert )
 {
    curdup.reset();
    if ( nct->cs.getValRes() == CS_OK )
@@ -1254,7 +1232,7 @@ bool dupsheet::checkCurDup(ScreenContact *nct, unsigned long valpseq, bool inser
       DupIterator c = ctList.find(test);
       if ( c!= ctList.end() )
       {
-         if ( !( nct->contactFlags & VALID_DUPLICATE ) )
+         if ( !( nct->contactFlags.getValue() & VALID_DUPLICATE ) )
          {
             if ( valpseq != 0 && valpseq <= c->wt ->dct->getLogSequence() )
             {
@@ -1284,7 +1262,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
    QSharedPointer<BaseContact> nct = contest->pcontactAtSeq(nctseq);
    if ( nct && nct->cs.getValRes() == CS_OK )
    {
-      QSharedPointer<DupContact> test( new DupContact(nct) );
+      QSharedPointer<DupContact> test( new DupContact(nct.data()) );
       DupIterator c = ctList.find(test);
       if ( c != ctList.end() )
       {
@@ -1304,7 +1282,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
       else
          if ( insert )
          {
-            QSharedPointer<DupContact> ins(new DupContact( nct ));
+            QSharedPointer<DupContact> ins(new DupContact( nct.data() ));
             ctList.insert( ins, ins );
             return false;
          }
@@ -1312,21 +1290,8 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
    return false;
 }
 
-bool dupsheet::isCurDup( ScreenContact *nct ) const
-{
-   const DupContact test( nct );
-   bool cd = ( curdup && ( *curdup == test ) ) ;
 
-   if ( cd && !nct->isNextContact() )
-   {
-      if ( nct->getLogSequence() > curdup->dct->getLogSequence() )
-      {
-         return false;
-      }
-   }
-   return cd;
-}
-bool dupsheet::isCurDup(QSharedPointer<BaseContact> nct ) const
+bool dupsheet::isCurDup(CheckableContact *nct ) const
 {
    const DupContact test( nct );
    bool cd = curdup && ( *curdup == test ) ;
@@ -1344,11 +1309,11 @@ void dupsheet::clearCurDup()
 {
    curdup.reset();
 }
-QSharedPointer<BaseContact> dupsheet::getCurDup()
+CheckableContact *dupsheet::getCurDup()
 {
    if ( curdup )
       return curdup->dct;
-   return QSharedPointer<BaseContact>();
+   return nullptr;
 }
 void dupsheet::clear()
 {

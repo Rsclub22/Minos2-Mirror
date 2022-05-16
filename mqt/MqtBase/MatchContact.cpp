@@ -80,7 +80,7 @@ MatchContact::MatchContact( )
 MatchContact::~MatchContact()
 {}
 //==============================================================================
-MatchLogContact::MatchLogContact(BaseContestLog *ct, QSharedPointer<BaseContact> lc )
+MatchLogContact::MatchLogContact(BaseContestLog *ct, CheckableContact *lc )
       : matchedContest( ct ), matchedContact( lc )
 {}
 MatchLogContact::~MatchLogContact()

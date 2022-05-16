@@ -148,7 +148,7 @@ void MatchTreeFrame::doCustomContextMenuRequested()
         QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
         if (mc)
         {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            CheckableContact *bct = mc->getBaseContact();
             ListContact *lct = mc->getListContact();
             if (bct)
             {
@@ -343,7 +343,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
     BaseMatchContest *matchContest = thisItem->getMatchContest();
     QSharedPointer<MatchContact> mct = thisItem->getMatchContact();
-    QSharedPointer<BaseContact> ct;
+    CheckableContact *ct = nullptr;
     ListContact *lct = nullptr;
 
     if (mct)

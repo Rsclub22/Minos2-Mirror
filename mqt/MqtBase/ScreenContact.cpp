@@ -13,17 +13,14 @@
 
 #include "ScreenContact.h"
 
-ScreenContact::ScreenContact() :
-    logSequence( 0 )
-    , timeOn( false )
-    , timeOff( false )
+ScreenContact::ScreenContact():CheckableContact()
 {}
 ScreenContact::~ScreenContact()
 {}
 void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
 {
     contest = ct;
-    logSequence = static_cast<unsigned long> (- 1);
+    setLogSequence(static_cast<unsigned long> (- 1));
     cs = Callsign();
     loc = Locator();
     timeOn = dtg( false );
@@ -113,7 +110,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     frequency.clear();
     rotatorHeading = "";
     rigName = "";
-    screenQSOValid = false;
+    QSOValid = false;
     newCtry = false;
     newDistrict = false;
     locCount = 0 ;
@@ -136,7 +133,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
 }
 void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 {
-    logSequence = cct->getLogSequence();
+    setLogSequence(cct->getLogSequence());
     loc = cct->loc;
     loc.clearDirty();
 
@@ -155,7 +152,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     repr = cct->repr.getValue();
     serialr = cct->serialr.getValue();
 
-    screenQSOValid = cct->QSOValid;
+    QSOValid = cct->QSOValid;
 
     districtMult = cct->districtMult;
     ctryMult = cct->ctryMult;
@@ -207,7 +204,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     repr = cct.repr;
     serialr = cct.serialr;
 
-    screenQSOValid = cct.screenQSOValid;
+    QSOValid = cct.QSOValid;
 
     districtMult = cct.districtMult;
     ctryMult = cct.ctryMult;
@@ -240,109 +237,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 }
 void ScreenContact::checkScreenContact( )
 {
-    // check on country and district. If valid, return true,
-    // having mapped any synonyms to their parents and
-    // saved the pointers.
-
-    int checkret = 0;
-    BaseContestLog * clp = contest;
-
-    if ( contactFlags & NON_SCORING )
-        return ;
-
-    screenQSOValid = false;             // initially, anyway
-
-    int csret = cs.getValRes();
-    if ( csret != CS_OK && csret != ERR_DUPCS)
-        checkret = ERR_13;
-
-    // AND it has been dup checked
-    if ( !checkret )
-    {
-        unsigned long valp = clp->validationPoint;
-        if ( clp->DupSheet.checkCurDup( this, valp, false ) )
-        {
-            cs.setValRes( ERR_DUPCS);
-            checkret = ERR_12;
-        }
-    }
-
-    // search for prefix in country synonym list. Have to allow for e.g. HB0 as a mult
-
-    if ( contactFlags & COUNTRY_FORCED )
-    {
-        ctryMult = MultLists::getMultLists() ->getCtryForPrefix( forcedMult );
-    }
-    else
-    {
-        ctryMult = findCtryPrefix( cs );
-    }
-
-
-    unsigned short cf = contactFlags;
-    cf &= ~UNKNOWN_COUNTRY;
-    if ( !checkret && ( clp->countryMult.getValue() || clp->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
-    {
-        cf |= UNKNOWN_COUNTRY;
-    }
-    contactFlags = cf;
-    if ( clp->districtMult.getValue() && ctryMult )
-    {
-        // if CC_mult and country "has districts" search for the "extra" in the county synonym list
-
-        // check that the district and country agree
-
-        // if the correct parts don't exist, not a valid contact!
-        // NB that the rest of the contact has to be valid as well!
-
-        if ( ctryMult->hasDistricts() )    // continentals dont have counties
-        {
-            districtMult = MultLists::getMultLists() ->searchDistrict( extraText );
-            if ( !districtMult && !( cf & VALID_DISTRICT ) )
-            {
-                checkret = ERR_8;
-            }
-
-            if (
-                    !checkret &&       						// no errors
-                    !( cf & VALID_DISTRICT ) &&      // ? district forced OK
-                    districtMult &&
-                    ( districtMult->country1 != ctryMult ) &&     // check district in country
-                    ( districtMult->country2 != ctryMult )
-                    )
-            {
-                checkret = ERR_8;
-            }
-        }
-        // so all seems OK, or checkret is set to the first error
-    }
-    else
-        if ( !checkret )
-        {
-
-            districtMult.reset();						// just in case we have changed the type...
-            if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
-            {
-                if ( clp->districtMult.getValue() )
-                {
-                    if ( !comments.trimmed().size() )
-                        checkret = ERR_21;
-                }
-                else
-                    if ( !extraText.trimmed().size() )
-                        checkret = ERR_21;
-            }
-        }
-
-    if ( checkret )
-        return ;
-
-    screenQSOValid = true;        // for now
-
-}
-bool ScreenContact::isNextContact( ) const
-{
-    return ( logSequence == static_cast< unsigned long > (- 1L) ) ? true : false;
+    checkContact();
 }
 
 void ScreenContact::score()

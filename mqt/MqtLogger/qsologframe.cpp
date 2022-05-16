@@ -1899,11 +1899,8 @@ void QSOLogFrame::contactValid( )
     {
         if ( contest->DupSheet.checkCurDup( vcct, contest->validationPoint, false ) )
         {
-            if ( contest->DupSheet.isCurDup( vcct ) )      // But vcct is screen contact... so it won't be curdup
-            {
-                vcct->cs.setValRes(ERR_DUPCS);
-                csret = ERR_DUPCS;
-            }
+            vcct->cs.setValRes(ERR_DUPCS);
+            csret = ERR_DUPCS;
         }
     }
     if ( csret != CS_OK )
@@ -1976,7 +1973,7 @@ void QSOLogFrame::contactValid( )
             }
         }
     }
-   if ( contest->districtMult.getValue() && !vcct->screenQSOValid )
+   if ( contest->districtMult.getValue() && !vcct->QSOValid )
     {
         // no district when required
         // No CS means we should go to QTH, as its likely to be needed
@@ -2849,7 +2846,7 @@ void QSOLogFrame::setDtgSection()
 }
 
 
-void QSOLogFrame::transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct )
+void QSOLogFrame::transferDetails(CheckableContact *lct, const BaseContestLog *matct )
 {
     if (!contest)
     {
