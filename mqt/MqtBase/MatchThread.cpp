@@ -185,8 +185,11 @@ void TMatchThread::Execute()
       while ( !Terminated )
       {
          thisLogMatch->initMatch();  // does nothing unless matchRequired is true
+         yieldCurrentThread();
          otherLogMatch->initMatch();  // does nothing unless matchRequired is true
+         yieldCurrentThread();
          listMatch->initMatch();
+         yieldCurrentThread();
 
          // so it only does a max of 20+20 contacts before switching
          // to "other" of log/list
@@ -444,7 +447,7 @@ void Matcher::initMatch( )
       if ( matchRequired )
       {
          tickct++;
-         if ( tickct < 2 )
+         if ( tickct < 5 )
             return ;
       }
       else
