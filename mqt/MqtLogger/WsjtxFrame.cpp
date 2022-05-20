@@ -223,9 +223,9 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         bct->commonSave(bct);
     }
     ct->commonSave( false );
-    ct->scanContest();
-    ct->validateLoc();
-    MinosLoggerEvents::SendAfterLogContact(ct);
+    ct->scanContest();      // after ADIF logged, could we do a single QSO scan?
+    //ct->validateLoc();      // why do we need to do this here? Shoud already have happened
+    MinosLoggerEvents::SendAfterLogContact(ct, false); // after ADIF logged "last contact"
     TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
     tslf->showQSOs();

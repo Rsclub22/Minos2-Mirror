@@ -139,7 +139,7 @@ void TMatchThread::on_CountrySelect(QString sel, BaseContestLog *c)
    {
       contactToMatch.cs = Callsign();
       contactToMatch.loc = Locator();
-      contactToMatch.extraText.clear();
+      contactToMatch.extraText.setValue(QString());
       QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCtryForPrefix( sel );
       startMatch(ce);
    }
@@ -469,11 +469,11 @@ void Matcher::initMatch( )
          if ( !mct )
             return ;
 
-         unsigned char qth_changed = matchqth.set( mct->extraText );
+         unsigned char qth_changed = matchqth.set( mct->extraText.getValue() );
          QString md;
          if ( qth_changed & SET_CHANGED )
          {
-             md = mct->extraText;
+             md = mct->extraText.getValue();
          }
          matchDistrict( md );
          unsigned char changed = matchcs.set( mct->cs.getFullCall() );	// we rely on set to set up the search terms

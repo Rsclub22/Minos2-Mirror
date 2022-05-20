@@ -134,7 +134,7 @@ private:
 
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
-    void fillExchange(QLineEdit *rIl, QString &exch);
+    void fillExchange(QLineEdit *rIl, const QString &exch);
 
     virtual void showScreenEntry( );
     virtual void getScreenContactTime();

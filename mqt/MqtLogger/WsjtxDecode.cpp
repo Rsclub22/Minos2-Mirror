@@ -124,14 +124,14 @@ bool decodeMessage::checkAsContact()
     scc.timeOn = dtg(true);
     scc.timeOff = dtg(true);
     QString cb;
-    scc.frequency = cc->getTxFreqBand(Frequency(), cb);
+    scc.frequency.setValue( cc->getTxFreqBand(Frequency(), cb));
 
     scc.checkScreenContact();
     csret = scc.cs.getValRes();
     if (scc.QSOValid)
     {
         scc.score();
-        points = scc.contactScore;
+        points = scc.contactScore.getValue();
         distance = points;
         bearing = scc.bearing;
         mults = 0;

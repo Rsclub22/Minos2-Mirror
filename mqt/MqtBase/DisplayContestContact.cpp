@@ -99,12 +99,12 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
 {
    //   logSequence = cct.logSequence; // addContact or whatever will already have it correct
    loc = cct.loc;
-   extraText.setValue( cct.extraText );
+   extraText = cct.extraText;
 
    cs = cct.cs;
 
-   timeOn.setValue( cct.timeOn );
-   timeOff.setValue( cct.timeOff );
+   timeOn = cct.timeOn ;
+   timeOff = cct.timeOff ;
 
    reps.setValue( cct.reps );
    serials.setValue( cct.serials );
@@ -116,8 +116,8 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    districtMult = cct.districtMult;
    ctryMult = cct.ctryMult;
    multCount = cct.multCount;
-   forcedMult.setValue( cct.forcedMult );
-   frequency.setValue(cct.frequency);
+   forcedMult = cct.forcedMult ;
+   frequency = cct.frequency;
    rotatorHeading.setValue(cct.rotatorHeading);
    rigName.setValue(cct.rigName);
    bonus = cct.bonus;
@@ -132,11 +132,11 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    newDistrict = cct.newDistrict;
    newCtry = cct.newCtry;
 
-   comments.setValue( cct.comments );
+   comments = cct.comments ;
 
-   contactFlags.setValue( cct.contactFlags );
+   contactFlags = cct.contactFlags ;
 
-   contactScore.setValue( cct.contactScore );
+   contactScore = cct.contactScore;
    bearing = cct.bearing;
    mode.setValue( cct.mode );
    mgmSubmode.setValue( cct.mgmSubmode );
@@ -178,13 +178,13 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.loc.getLoc(), loc.getLoc() ) )
       return true; // i.e. not equal
 
-   if ( stricmpsp( mct.extraText, extraText.getValue() ) )       // we force exchange upper case if dist code
+   if ( stricmpsp( mct.extraText.getValue(), extraText.getValue() ) )       // we force exchange upper case if dist code
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.comments, comments.getValue() ) )
+   if ( strcmpsp( mct.comments.getValue(), comments.getValue() ) )
       return true; // i.e. not equal
 
-   if ( mct.contactFlags != contactFlags.getValue() )
+   if ( mct.contactFlags.getValue() != contactFlags.getValue() )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.mode, mode.getValue() ) )
@@ -193,10 +193,10 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
+   if ( strcmpsp( mct.forcedMult.getValue(), forcedMult.getValue() ) )
       return true; // i.e. not equal
 
-   if (frequency.getValue() != mct.frequency)
+   if (frequency.getValue() != mct.frequency.getValue())
       return true; // i.e. not equal
 
    if (cqResponse.getValue() != mct.cqResponse)
@@ -214,10 +214,6 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.op2, op2.getValue() ) )
       return true; // i.e. not equal
 
-
-//   if ( ( mct.contactScore != contactScore.getValue() ) && ( contactScore.getValue() != -1 ) )
-//      return true;	// not equal
-
    return false;  // i.e. equal
 }
 
@@ -225,11 +221,10 @@ int DisplayContestContact::checkContact()
 {
     int checkret = CheckableContact::checkContact();
 
-    double dist = 0.0;
+    double dist = getContactScore();    // calculated in CheckableContact
+   bool dupContact = (checkret == ERR_12);    // calculated in CheckableContact
 
-    BaseContestLog * clp = contest;
-
-   bool dupContact = (checkret == ERR_12);
+   BaseContestLog * clp = contest;
 
    QString band;
    contest->getTxFreqBand(frequency.getValue(), band);

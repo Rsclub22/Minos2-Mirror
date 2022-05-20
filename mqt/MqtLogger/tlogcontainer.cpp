@@ -1028,7 +1028,7 @@ void TLogContainer::ContestDetailsActionExecute()
                 f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
-                ct->scanContest();
+                ct->scanContest();      // if contest details have changed, required
                 f->refreshMults();
 
                 updateLayoutsMenu();
@@ -1179,9 +1179,9 @@ void TLogContainer::AppendAdifActionExecute()
             bct->commonSave(bct);
         }
         ct->commonSave( false );
-        ct->scanContest();
-        ct->validateLoc();
-        MinosLoggerEvents::SendAfterLogContact(ct);
+        ct->scanContest();          // after append ADIF file, required
+        //ct->validateLoc();
+        MinosLoggerEvents::SendAfterLogContact(ct, false);          // after append ADIF file
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
         tslf->showQSOs();
@@ -1447,7 +1447,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
       if ( show )
       {
          TContestApp::getContestApp() ->setCurrentContest( contest );
-         contest->scanContest();
+         contest->scanContest();    // contest initially opened (addSlot) required
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
 

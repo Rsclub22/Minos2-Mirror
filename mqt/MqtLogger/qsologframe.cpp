@@ -25,6 +25,11 @@ void QSOLogFrame::setEditStyleSheet(QLineEdit * qle, QString ss)
     {
         qle->setStyleSheet(ss );
         widgetStyles[qle] = ss;
+
+        if (qle == ui->QTHFrame->getTextEditEdit())
+        {
+            trace("QTH edit style " + ss);
+        }
     }
 }
 QString QSOLogFrame::getFKeyLabel(int n)
@@ -818,9 +823,9 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     ui->SerTxFrame->getTextEditEdit()->setFocusPolicy(edit?Qt::StrongFocus:Qt::ClickFocus);
 
     getScreenEntry(); // make sure it is saved
-    bool was_unfilled = screenContact.contactFlags & TO_BE_ENTERED;
+    bool was_unfilled = screenContact.contactFlags.getValue() & TO_BE_ENTERED;
 
-    if ( selectedContact && screenContact.contactFlags & ( DONT_PRINT ) )
+    if ( selectedContact && screenContact.contactFlags.getValue() & ( DONT_PRINT ) )
     {
         if ( !checkAndLogEntry() )  // if it is the same, then don't log
         {
@@ -947,7 +952,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     }
     else
     {
-       screenContact.contactFlags &= ~( TO_BE_ENTERED | FORCE_LOG );
+       screenContact.contactFlags.setValue( screenContact.contactFlags.getValue() & ~( TO_BE_ENTERED | FORCE_LOG ));
     }
 
 
@@ -1010,9 +1015,9 @@ bool QSOLogFrame::dlgForced()
     {
         // make sure marked on main screen
 
-        ui->NonScoreCheckBox->setChecked(screenContact.contactFlags & NON_SCORING);
-        ui->DeletedCheckBox->setChecked(screenContact.contactFlags & DONT_PRINT);
-        if ( screenContact.contactFlags & NON_SCORING )
+        ui->NonScoreCheckBox->setChecked(screenContact.contactFlags.getValue() & NON_SCORING);
+        ui->DeletedCheckBox->setChecked(screenContact.contactFlags.getValue() & DONT_PRINT);
+        if ( screenContact.contactFlags.getValue() & NON_SCORING )
         {
             screenContact.multCount = 0;
             screenContact.bonus = 0;
@@ -1280,17 +1285,17 @@ void QSOLogFrame::getScreenEntry()
    screenContact.loc.setLoc( loc );
 
    QString extra = ui->QTHFrame->getTextEditEdit()->text().trimmed();
-   screenContact.extraText = extra;
+   screenContact.extraText.setValue(extra);
 
    QString comments = ui->commentsFrame->getTextEditEdit()->text().trimmed();
-   screenContact.comments = comments;
+   screenContact.comments.setValue(comments);
    if (edit)
    {
        screenContact.rigName = ui->radioEdit->text().trimmed();
 
        QString f = ui->frequencyEdit->text().trimmed().remove( QRegularExpression("^[0]*")); //remove leading zeros
        f = convertSinglePeriodFreqToMultiPeriod(convertSinglePeriodFreqToFullDigit(f));
-       screenContact.frequency = f;
+       screenContact.frequency.setValue(Frequency(f));
 
        //screenContact.frequency = ui->frequencyEdit->text().trimmed();
        screenContact.rotatorHeading = ui->rotatorHeadingEdit->text().trimmed();
@@ -1304,19 +1309,22 @@ void QSOLogFrame::getScreenEntry()
    }
    screenContact.mode = ui->ModeComboBoxGJV->currentText().trimmed();
    screenContact.mgmSubmode = ui->MGMSubModeEdit->text().trimmed();
-   screenContact.contactFlags &= ~NON_SCORING;
+
+   unsigned short cf = screenContact.contactFlags.getValue();
+   cf &= ~NON_SCORING;
 
    // op1/op2 get set when the attached combos change - I hope :)
 
    if ( ui->NonScoreCheckBox->isChecked() )
    {
-      screenContact.contactFlags |= NON_SCORING;
+      cf |= NON_SCORING;
    }
-   screenContact.contactFlags &= ~DONT_PRINT;
+   cf &= ~DONT_PRINT;
    if ( ui->DeletedCheckBox->isChecked() )
    {
-      screenContact.contactFlags |= DONT_PRINT;
+      cf |= DONT_PRINT;
    }
+   screenContact.contactFlags.setValue(cf);
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::logTabChanged()
@@ -1343,21 +1351,21 @@ void QSOLogFrame::showScreenEntry( )
       ui->RSTRxFrame->getTextEditEdit()->setText(temp.repr.trimmed());
       ui->SerRxFrame->getTextEditEdit()->setText(temp.serialr.trimmed());
       ui->LocFrame->getTextEditEdit()->setText(temp.loc.getLoc());  // also forces update of score etc
-      ui->QTHFrame->getTextEditEdit()->setText(temp.extraText.trimmed());
-      ui->commentsFrame->getTextEditEdit()->setText(temp.comments.trimmed());
-      ui->NonScoreCheckBox->setChecked(temp.contactFlags & NON_SCORING);
-      ui->DeletedCheckBox->setChecked(temp.contactFlags & DONT_PRINT);
+      ui->QTHFrame->getTextEditEdit()->setText(temp.extraText.getValue());
+      ui->commentsFrame->getTextEditEdit()->setText(temp.comments.getValue());
+      ui->NonScoreCheckBox->setChecked(temp.contactFlags.getValue() & NON_SCORING);
+      ui->DeletedCheckBox->setChecked(temp.contactFlags.getValue() & DONT_PRINT);
       if (edit)
       {
           ui->radioEdit->setText(temp.rigName);
 
-          if (temp.frequency.isClear())
+          if (temp.frequency.getValue().isClear())
           {
               ui->frequencyEdit->clear();
           }
           else
           {
-              ui->frequencyEdit->setText(temp.frequency.convertFreqStrDispSingle());
+              ui->frequencyEdit->setText(temp.frequency.getValue().convertFreqStrDispSingle());
           }
           ui->rotatorHeadingEdit->setText(temp.rotatorHeading);
       }
@@ -1548,11 +1556,11 @@ void QSOLogFrame::calcLoc( )
             locValid = false;
 
         ScreenContact &sct = screenContact;
-        if ( ( sct.contactFlags & MANUAL_SCORE ) &&
-             !( sct.contactFlags & DONT_PRINT ) )
+        if ( ( sct.contactFlags.getValue() & MANUAL_SCORE ) &&
+             !( sct.contactFlags.getValue() & DONT_PRINT ) )
         {
-            int thisscore = sct.contactScore;
-            setScoreText( thisscore, false, sct.contactFlags & XBAND );
+            int thisscore = sct.contactScore.getValue();
+            setScoreText( thisscore, false, sct.contactFlags.getValue() & XBAND );
             ui->BrgSt->setText("MANUAL");
 
         }
@@ -1576,9 +1584,9 @@ void QSOLogFrame::calcLoc( )
                 {
                     sct.bearing = brg;
 
-                    if ( !( sct.contactFlags & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
+                    if ( !( sct.contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
                     {
-                        sct.contactScore = static_cast<int>(dist);
+                        sct.contactScore.setValue(static_cast<int>(dist));
                     }
 
                 }
@@ -1597,7 +1605,7 @@ void QSOLogFrame::calcLoc( )
                     vb = normBrg( vb - 180 );
                     rev += "R";
                 }
-                setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags & XBAND );
+                setScoreText( static_cast< int> ( dist), ( locValres == LOC_PARTIAL ), sct.contactFlags.getValue() & XBAND );
                 QString brgbuff;
                 const QChar degreeChar(0260); // octal value
                 if ( locValres == LOC_PARTIAL )
@@ -1615,7 +1623,7 @@ void QSOLogFrame::calcLoc( )
             {
                 ui->DistSt->clear();
                 ui->BrgSt->clear();
-                sct.contactScore = -1;
+                sct.contactScore.setValue(-1);
                 sct.bearing = -1;
                 MinosLoggerEvents::SendBrgStrToRot("");
             }
@@ -1774,7 +1782,7 @@ void QSOLogFrame::selectField( QWidget *v )
     {
         v = ui->CallsignFrame->getTextEditEdit();
 
-        if ( catchup || screenContact.contactFlags & TO_BE_ENTERED )
+        if ( catchup || screenContact.contactFlags.getValue() & TO_BE_ENTERED )
         {
             v = ui->timeEdit;
         }
@@ -1842,7 +1850,7 @@ void QSOLogFrame::fillRst( QLineEdit *rIl, QString &rep, const QString &fmode )
    }
 }
 //==============================================================================
-void QSOLogFrame::fillExchange( QLineEdit *rIl, QString &exch )
+void QSOLogFrame::fillExchange( QLineEdit *rIl, const QString &exch )
 {
     if (current == rIl && exch.isEmpty() && contest->otherOptionalExchange.getValue())
     {
@@ -1860,7 +1868,7 @@ void QSOLogFrame::doAutofill()
 
    fillRst( ui->RSTTxFrame->getTextEditEdit(), vcct->reps, vcct->mode );
    fillRst( ui->RSTRxFrame->getTextEditEdit(), vcct->repr, vcct->mode );
-   fillExchange( ui->QTHFrame->getTextEditEdit(), vcct->extraText);
+   fillExchange( ui->QTHFrame->getTextEditEdit(), vcct->extraText.getValue());
 }
 //==============================================================================
 void QSOLogFrame::lgTraceerr( int err )
@@ -1875,17 +1883,17 @@ void QSOLogFrame::contactValid( )
     getScreenEntry();
     ScreenContact *vcct = &screenContact;
 
-    if ( vcct->contactFlags & DONT_PRINT )
+    if ( vcct->contactFlags.getValue() & DONT_PRINT )
     {
         lgTraceerr(-1);
         lgTraceerr( ERR_26 );
     }
     else
     {
-        if ( vcct->contactFlags & NON_SCORING )
+        if ( vcct->contactFlags.getValue() & NON_SCORING )
             lgTraceerr( ERR_24 );
     }
-    if ( vcct->contactFlags & (NON_SCORING | DONT_PRINT ) )
+    if ( vcct->contactFlags.getValue() & (NON_SCORING | DONT_PRINT ) )
     {
         return ;
     }
@@ -1989,7 +1997,7 @@ void QSOLogFrame::contactValid( )
         {
             if (!contest->districtMult.getValue())
             {
-                if ( vcct->extraText.trimmed().size() == 0 )
+                if ( vcct->extraText.getValue().size() == 0 )
                 {
                     // no QTH info if required
 
@@ -1998,7 +2006,7 @@ void QSOLogFrame::contactValid( )
                 }
                 else
                 {
-                    if (vcct->extraText.trimmed() == "-" && contest->otherExchange .getValue())
+                    if (vcct->extraText.getValue() == "-" && contest->otherExchange .getValue())
                     {
                         lgTraceerr( ERR_21 );            // QTH required
                         qthIl->tIfValid = false;
@@ -2027,7 +2035,7 @@ bool QSOLogFrame::checkAndLogEntry()
 
           // Dont check with op if not entered, and e.g. ESC pressed
           // Also allows for partial saving when in Uri mode
-          if ( !( screenContact.contactFlags & TO_BE_ENTERED ) && !catchup )
+          if ( !( screenContact.contactFlags.getValue() & TO_BE_ENTERED ) && !catchup )
           {
              mresp = mShowYesNoMessage( this,
                                  tr("This Contact has changed: Shall I log the changes?\n"
@@ -2512,35 +2520,42 @@ void QSOLogFrame::closeContest()
 //---------------------------------------------------------------------------
 void QSOLogFrame::doGJVEditChange( QObject *Sender )
 {
-   // sensitive field changed - trigger match scan
-   if ( contest )
-   {
-      getScreenEntry();
+    // sensitive field changed - trigger match scan
+    if ( contest )
+    {
+        QLineEdit *qle = dynamic_cast<QLineEdit *>(Sender);
+        if (qle)
+        {
+            // make sure the style is honoured (especially first character typed)
+            qle->style()->polish(qle);
+        }
 
-      QLineEdit *csEdit = ui->CallsignFrame->getTextEditEdit();
+        getScreenEntry();
 
-      if ( current == csEdit || Sender == csEdit )
-      {
-         // clear the error list
-         contest->DupSheet.clearCurDup();	// as edited, no longer a dup(?)
+        QLineEdit *csEdit = ui->CallsignFrame->getTextEditEdit();
 
-      }
-      QLineEdit *locEdit = ui->LocFrame->getTextEditEdit();
-      if ( current == locEdit || Sender == locEdit )
-      {
-         // force bearing calc
-         calcLoc();
-      }
-      if (!csEdit->text().isEmpty() || !locEdit->text().isEmpty())
-      {
-        setPlaceholders(QStringList());
-      }
-      MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
-      valid( cmCheckValid ); // make sure all single and cross field
+        if ( current == csEdit || Sender == csEdit )
+        {
+            // clear the error list
+            contest->DupSheet.clearCurDup();	// as edited, no longer a dup(?)
 
-      // someone has changed one of the controls - which is the requirement for killing partial
-      killPartial();
-   }
+        }
+        QLineEdit *locEdit = ui->LocFrame->getTextEditEdit();
+        if ( current == locEdit || Sender == locEdit )
+        {
+            // force bearing calc
+            calcLoc();
+        }
+        if ((csEdit && !csEdit->text().isEmpty()) || (locEdit && !locEdit->text().isEmpty()))
+        {
+            setPlaceholders(QStringList());
+        }
+        MinosLoggerEvents::SendScreenContactChanged(&screenContact, contest, baseName);
+        valid( cmCheckValid ); // make sure all single and cross field
+
+        // someone has changed one of the controls - which is the requirement for killing partial
+        killPartial();
+    }
 }
 
 void QSOLogFrame::on_ModeButton_clicked()
@@ -2660,7 +2675,7 @@ void QSOLogFrame::logScreenEntry( )
 
    killPartial();
 
-   MinosLoggerEvents::SendAfterLogContact(ct);
+   MinosLoggerEvents::SendAfterLogContact(ct, false);  // in logScreenEntry, current or edit
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
@@ -2699,12 +2714,12 @@ void QSOLogFrame::getScreenRigData()
     screenContact.rigName = curRadioName;
     if (!edit && !catchup && isRadioLoaded() && !curRadioName.isEmpty() && !curFreq.isClear())
     {
-        screenContact.frequency = curFreq;
+        screenContact.frequency.setValue(curFreq);
     }
     else
     {
         QString cb;
-        screenContact.frequency = contest->getTxFreqBand(Frequency(), cb);
+        screenContact.frequency.setValue(contest->getTxFreqBand(Frequency(), cb));
     }
 }
 void QSOLogFrame::getscreenRotatorData()
@@ -2997,7 +3012,7 @@ void QSOLogFrame::transferFromQrz(QString callsign, QString locator, QString nam
 }
 void QSOLogFrame::sortUnfilledCatchupTime( )
 {
-    if (contest && !contest->isReadOnly() && ((screenContact.contactFlags & TO_BE_ENTERED) || catchup))
+    if (contest && !contest->isReadOnly() && ((screenContact.contactFlags.getValue() & TO_BE_ENTERED) || catchup))
     {
         // Uri Mode - catchuping QSOs from paper while logging current QSOs
         // catchup - post contest entry of QSOs
@@ -3405,7 +3420,7 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             scc.timeOn = dtg(true);
             scc.timeOff = dtg(true);
             QString cb;
-            scc.frequency = contest->getTxFreqBand(Frequency(), cb);
+            scc.frequency.setValue( contest->getTxFreqBand(Frequency(), cb));
 
             scc.checkScreenContact();
             if ( scc.cs.getValRes() == ERR_DUPCS)
@@ -3494,7 +3509,7 @@ void QSOLogFrame::getLogDetails(memoryData::memData &logData, int& callRes)
     logData.freq = curFreq;
     logData.locator = screenContact.loc.getLoc();
     logData.mode = screenContact.mode;
-    logData.exchange = screenContact.extraText;
+    logData.exchange = screenContact.extraText.getValue();
     if (screenContact.loc.getLoc().isEmpty())
     {
         logData.bearing = tslf->getCurrentBearing();

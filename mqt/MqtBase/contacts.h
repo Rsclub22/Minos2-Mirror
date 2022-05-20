@@ -126,7 +126,10 @@ public:
     {
         return QString();
     }
-    virtual int getContactScore() const = 0;
+    virtual int getContactScore() const
+    {
+        return contactScore.getValue();
+    }
 
     virtual int getModificationCount() const
     {
@@ -220,10 +223,6 @@ class BaseContact: public CheckableContact
       {}
       virtual void copyFromArg( ScreenContact & )
       {}
-      virtual int getContactScore() const override
-      {
-          return contactScore.getValue();
-      }
 
 };
 

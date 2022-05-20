@@ -69,7 +69,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::HideTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MakeEntry, this, &TSingleLogFrame::on_MakeEntry);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterSelectContact, this, &TSingleLogFrame::on_AfterSelectContact, Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemory, this, &TSingleLogFrame::on_SetMemory);
     // from cluster frame or bandmap frame
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToMemory, this, &TSingleLogFrame::on_dxSpotToMemory);
@@ -1396,7 +1396,8 @@ void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
 void TSingleLogFrame::EditContact( CheckableContact *cct )
 {
    TQSOEditDlg qdlg( this, false );
-   qdlg.selectContact( contest, cct );
+   qdlg.setContest(contest);
+   qdlg.setFirstContact( cct );
 
    trace(QString("TSingleLogFrame::EditContact %1").arg(cct->cs.getFullCall()));
 
@@ -1404,7 +1405,7 @@ void TSingleLogFrame::EditContact( CheckableContact *cct )
 
    trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
 
-   contest->scanContest();
+   contest->scanContest();  // as edit contact can change things mid-contest
 
    GJVQSOLogFrame->refreshOps();
    refreshMults();
@@ -1462,13 +1463,16 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
         );
     }
 }
-void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
+void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct, bool doScan)
 {
       if (ct == contest)
       {
-         contest->scanContest();
-         updateTrees();
-         NextContactDetailsTimerTimer( );
+         if (doScan)
+         {
+            contest->scanContest();        // parameterised
+         }
+         updateTrees();                 // complete redraw of QSO model...
+         NextContactDetailsTimerTimer( );   // so that the details get updated
       }
 }
 void TSingleLogFrame::refreshMults()
@@ -1491,13 +1495,8 @@ void TSingleLogFrame::goNextUnfilled()
    QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
    if ( nuc )
    {
-      TQSOEditDlg qdlg(this, true );
-      qdlg.setContest( contest );
-      qdlg.setFirstContact( nuc.data() );
-      qdlg.exec();
-      contest->scanContest();
-      refreshMults();
-      GJVQSOLogFrame->startNextEntry();
+       trace("Goto next unfiled");
+       EditContact(nuc.data());
    }
    else
    {

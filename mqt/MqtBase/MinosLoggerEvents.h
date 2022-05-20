@@ -38,7 +38,7 @@ signals:
    void doSplitterChanges(BaseContestLog *);
    void ValidateError(int err);
    void ReportOverstrike(bool ov, BaseContestLog *c);
-   void AfterLogContact(BaseContestLog *ct);
+   void AfterLogContact(BaseContestLog *ct, bool doScan);
    void AfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
    void AfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
@@ -114,7 +114,7 @@ public:
    static void SendDoSplitterChanges(BaseContestLog *);
    static void SendValidateError(int err);
    static void SendReportOverstrike(bool ov, BaseContestLog *c);
-   static void SendAfterLogContact(BaseContestLog *ct);
+   static void SendAfterLogContact(BaseContestLog *ct, bool doScan);
    static void SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc);
    static void SendAfterLogContactToBandmap(BaseContestLog *ct, QSharedPointer<BaseContact> lct);
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);

@@ -57,9 +57,9 @@ void MinosLoggerEvents::SendReportOverstrike(bool ov, BaseContestLog *c)
     emit mle.ReportOverstrike(ov, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendAfterLogContact(BaseContestLog *ct)
+void MinosLoggerEvents::SendAfterLogContact(BaseContestLog *ct, bool doScan)
 {
-    emit mle.AfterLogContact(ct);
+    emit mle.AfterLogContact(ct, doScan);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendAfterLogContactToCluster(BaseContestLog *ct, Callsign cs, QString loc)

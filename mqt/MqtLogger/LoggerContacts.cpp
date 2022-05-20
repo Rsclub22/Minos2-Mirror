@@ -160,7 +160,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       QString sbrg = QString::number(bearing) + degreeChar;
       next = placestr( contactBuffs.buff2, sbrg, next + 1, -6 );
 
-      contactBuffs.qthbuff += extraText.getValue().trimmed();
+      contactBuffs.qthbuff += extraText.getValue();
       contactBuffs.qthbuff.truncate( EXTRALENGTH);
       next = placestr( contactBuffs.buff2, contactBuffs.qthbuff, next + 1, contactBuffs.qthbuff.length() );
 

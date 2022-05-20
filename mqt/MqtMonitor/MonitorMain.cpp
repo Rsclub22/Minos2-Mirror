@@ -731,7 +731,7 @@ void MonitorMain::on_monitorTimeout()
     MonitoringFrame *f = findCurrentLogFrame();
     if ( f )
     {
-        f->getContest()->scanContest();
+        f->getContest()->scanContest();  // this is MUCH too often... timer is 100ms!
         f->setScore();
         // clear dups here - we have no need of them in monitor
         f->getContest()->DupSheet.clear();
@@ -815,7 +815,7 @@ void MonitorMain::searchChanged()
 
     screenContact.cs.setFullCall(ui->callsignEdit->text());
     screenContact.loc.setLoc(ui->locEdit->text());
-    screenContact.extraText = ui->exchangeEdit->text().trimmed();
+    screenContact.extraText.setValue( ui->exchangeEdit->text().trimmed());
 
     MinosLoggerEvents::SendScreenContactChanged(&screenContact, bct, "Monitor");
 

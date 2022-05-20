@@ -364,9 +364,9 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                      needExport = true;
                   }
 
-      scanContest();
+      scanContest();    // after log initialise/load/import
       clearDirty();  // what we have just read CAN'T be dirty
-      validateLoc();
+//      validateLoc();    // this was done in scanContest
       // run_contest_dialog has already loaded the LoggerContestLog and set log_count
       // here, we display a "loading" box
       if ( isUnwriteable() )     // Minos files can be unprotected if not realy RO

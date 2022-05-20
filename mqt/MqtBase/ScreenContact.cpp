@@ -103,11 +103,11 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     QString temp = QString("%1").arg(ms, 3, 10, QChar('0'));  //leading zeros
     serials = temp;
     serialr = QString( SERIALLENGTH, ' ' );
-    extraText = "";
-    comments = "";
-    contactFlags = 0;
-    forcedMult = "";
-    frequency.clear();
+    extraText.setValue(QString());
+    comments.setValue(QString());
+    contactFlags.setValue(0);
+    forcedMult.setValue(QString());
+    frequency.setValue(Frequency());
     rotatorHeading = "";
     rigName = "";
     QSOValid = false;
@@ -122,7 +122,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     districtMult = QSharedPointer<DistrictEntry>();
     ctryMult = QSharedPointer<CountryEntry>();
 
-    contactScore = -1;
+    contactScore.setValue(-1);
     bearing = 0;
 
     multCount = 0;
@@ -137,7 +137,7 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     loc = cct->loc;
     loc.clearDirty();
 
-    extraText = cct->extraText.getValue();
+    extraText = cct->extraText;
 
     cs = cct->cs;
     cs.clearDirty();
@@ -157,8 +157,8 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     districtMult = cct->districtMult;
     ctryMult = cct->ctryMult;
     multCount = cct->multCount;
-    forcedMult = cct->forcedMult.getValue();
-    frequency = cct->frequency.getValue();
+    forcedMult = cct->forcedMult;
+    frequency = cct->frequency;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
     bonus = cct->bonus;
@@ -173,11 +173,11 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     newDistrict = cct->newDistrict;
     newCtry = cct->newCtry;
 
-    comments = cct->comments.getValue();
+    comments = cct->comments;
 
-    contactFlags = cct->contactFlags.getValue();
+    contactFlags = cct->contactFlags;
 
-    contactScore = cct->contactScore.getValue();
+    contactScore = cct->contactScore;
     bearing = cct->bearing;
     mode = cct->mode.getValue();
     mgmSubmode = cct->mgmSubmode.getValue();
@@ -252,13 +252,13 @@ void ScreenContact::score()
     double longitude;
     /*int locValres =*/ lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
 
-    if ( !( contactFlags & MANUAL_SCORE ) || ( contactFlags & DONT_PRINT ) )
+    if ( !( contactFlags.getValue() & MANUAL_SCORE ) || ( contactFlags.getValue() & DONT_PRINT ) )
     {
 
         // now we want to look for mults and bonuses
 
         QString band;
-        contest->getTxFreqBand(frequency, band);
+        contest->getTxFreqBand(frequency.getValue(), band);
 
         if ( districtMult && districtMult->country1)
         {
@@ -287,7 +287,7 @@ void ScreenContact::score()
             }
         }
 
-        if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
+        if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
         {
             double dist;
             int brg = 0;
@@ -305,29 +305,29 @@ void ScreenContact::score()
             {
                 contest->disbeara( longitude, latitude, dist, brg );
             }
-            contactScore = static_cast<int>(dist);
+            contactScore.setValue(static_cast<int>(dist));
             bearing = brg;
         }
 
-        if ( !contest->locatorMandatoryField.getValue() || contactScore >= 0 )   		// don't add -1 scores in, but DO add zero km
+        if ( !contest->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
            // as it is 1 point.
         {
            switch ( contest->scoreMode.getValue() )
            {
               case PPKM:
                  {
-                    if ( contactFlags & XBAND )
+                    if ( contactFlags.getValue() & XBAND )
                     {
-                       contactScore = ( contactScore + 1 ) / 2;
+                       contactScore .setValue( ( contactScore.getValue() + 1 ) / 2);
                     }
                  }
                  break;
 
               case PPQSO:
-               if ( contactScore > 0 )
-                  contactScore = 1;
+               if ( contactScore.getValue() > 0 )
+                  contactScore.setValue(1);
                else
-                  contactScore = 0;
+                   contactScore.setValue(0);
                break;
            }
         }

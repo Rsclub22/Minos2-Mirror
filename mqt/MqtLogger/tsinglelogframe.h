@@ -226,7 +226,7 @@ private slots:
     void on_MakeEntry(BaseContestLog*);
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
-    void on_AfterLogContact( BaseContestLog *ct);
+    void on_AfterLogContact(BaseContestLog *ct, bool doScan);
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);

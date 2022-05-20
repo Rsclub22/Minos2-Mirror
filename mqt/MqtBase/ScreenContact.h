@@ -26,22 +26,12 @@ class ScreenContact: public CheckableContact
 
       void score();
 
-      virtual int getContactScore() const override
-      {
-          return contactScore;
-      }
-
       QString mode;
       QString mgmSubmode;
       QString reps;
       QString serials;
       QString repr;
       QString serialr;
-      QString extraText;
-      QString comments;
-      unsigned short contactFlags = 0;
-      QString forcedMult;
-      Frequency frequency;
       QString rotatorHeading;
       QString rigName;
 
@@ -49,9 +39,6 @@ class ScreenContact: public CheckableContact
       QString op2;
 
       bool cqResponse;
-      int contactScore = 0;
-
-
 };
 
 #endif

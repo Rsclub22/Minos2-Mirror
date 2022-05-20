@@ -7,6 +7,13 @@
 template < class itemtype >
 class MinosItem
 {
+private:
+    virtual itemtype &operator=(const itemtype &r)
+    {
+        setValue(r);
+        return val;
+    }
+
    protected:
       bool dirty = false;
       itemtype val{};                          // C++ 11 default brace initialisation

@@ -93,7 +93,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
 
     if (logdata->freq.isClear())
     {
-        logdata->freq = sc.frequency;
+        logdata->freq = sc.frequency.getValue();
     }
     if (logdata->freq.isClear())
     {
