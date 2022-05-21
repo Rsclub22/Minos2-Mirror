@@ -698,6 +698,11 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          // search for the country, district, locator multipliers as required
          // Add to the worked counts as required
 
+          QDateTime  contestStart = CanonicalToTDT(clp->DTGStart.getValue());
+          QDateTime  contestEnd = CanonicalToTDT(clp->DTGEnd.getValue());
+
+          clp->scanContact(tct, contestStart, contestEnd);
+
          checkContact( true);                    // in commonSave, AFTER saved, to update stats etc
       }
    }
