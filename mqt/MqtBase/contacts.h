@@ -135,7 +135,11 @@ public:
     {
        return 0;
     }
-    virtual int checkContact( );
+    virtual int checkContact(bool adddup );
+    bool notValidContact()
+    {
+        return ( contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED) );
+    }
 };
 
 class BaseContact: public CheckableContact
@@ -150,10 +154,6 @@ class BaseContact: public CheckableContact
       BaseContact& operator =( const BaseContact & );
       bool operator<( const BaseContact& rhs ) const;
       virtual ~BaseContact() override {}
-      bool notValidContact()
-      {
-          return ( contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED) );
-      }
       virtual QVector < QSharedPointer<BaseContact> > &getHistory()
       {
          return history;

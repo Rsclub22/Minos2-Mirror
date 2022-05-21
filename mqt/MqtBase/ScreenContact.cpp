@@ -237,12 +237,15 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 }
 void ScreenContact::checkScreenContact( )
 {
-    checkContact();
+    checkContact(false);
 }
 
 void ScreenContact::score()
 {
-    // check should already have run
+    // this is only called from wsjt-x decodeMessage::checkAsContact()
+    // which only affects the screen contact, not the contest
+
+    // checkContact should already have run
 
     QString gridref = loc.getLoc().trimmed();
     if (gridref.isEmpty())
@@ -287,7 +290,7 @@ void ScreenContact::score()
             }
         }
 
-        if ( !( contactFlags.getValue() & ( MANUAL_SCORE | NON_SCORING | DONT_PRINT ) ) )
+        if ( !notValidContact() )
         {
             double dist;
             int brg = 0;

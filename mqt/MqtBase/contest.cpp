@@ -839,7 +839,7 @@ QString BaseContestLog::scanContact(QSharedPointer<BaseContact> nct, QDateTime  
     nct->newNonGLoc = false;
     nct->bonus = 0;
     nct->newBonus = false;
-    nct->checkContact( );   // in scanContest
+    nct->checkContact( false);   // in scanContest
 
     if (nct->timeOff.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))
     {

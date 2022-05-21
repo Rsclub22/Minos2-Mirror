@@ -31,7 +31,7 @@ CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QO
 {
 
 }
-int CheckableContact::checkContact( )
+int CheckableContact::checkContact(bool adddup)
 {
     // check on country and district. If valid, return true,
     // having mapped any synonyms to their parents and
@@ -77,7 +77,7 @@ int CheckableContact::checkContact( )
     if ( !checkret )
     {
         unsigned long valp = clp->validationPoint;
-        if ( clp->DupSheet.checkCurDup( this, valp, false ) )
+        if ( clp->DupSheet.checkCurDup( this, valp, adddup ) )
         {
             cs.setValRes( ERR_DUPCS);
             checkret = ERR_12;

@@ -217,9 +217,9 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    return false;  // i.e. equal
 }
 
-int DisplayContestContact::checkContact()
+int DisplayContestContact::checkContact(bool adddup)
 {
-    int checkret = CheckableContact::checkContact();
+    int checkret = CheckableContact::checkContact(adddup);
 
     double dist = getContactScore();    // calculated in CheckableContact
    bool dupContact = (checkret == ERR_12);    // calculated in CheckableContact
@@ -761,7 +761,7 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "cqResponse", cqResponse );
 
          contest->validationPoint = getLogSequence();
-         checkContact();                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
+         checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
          QSharedPointer<BaseContact> bc( new BaseContact(*this) );   // this should get it now??
          getHistory().push_back( bc );
          contest->validationPoint = 0;

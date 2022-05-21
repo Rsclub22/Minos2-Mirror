@@ -48,7 +48,7 @@ class DisplayContestContact: public BaseContact
       DisplayContestContact(BaseContestLog *contest, bool time_now , bool rInit);
       ~DisplayContestContact() override;
       virtual bool ne( const ScreenContact& ) const override;
-      virtual int checkContact() override;
+      virtual int checkContact(bool adddup) override;
 
       virtual void copyFromArg( ScreenContact & ) override;
 
