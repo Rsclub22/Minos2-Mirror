@@ -849,11 +849,13 @@ void QSOLogFrame::on_GJVOKButton_clicked()
 
         QLineEdit *cte = ui->CallsignFrame->getTextEditEdit();
         QLineEdit *lte = ui->LocFrame->getTextEditEdit();
+        QLineEdit *qte = ui->QTHFrame->getTextEditEdit();
 
         if (currn == cte && cte->text().isEmpty())
         {
             QString pht = cte->placeholderText();
             QString lht = lte->placeholderText();
+            QString qht = qte->placeholderText();
 
             if (!pht.isEmpty())
             {
@@ -864,6 +866,13 @@ void QSOLogFrame::on_GJVOKButton_clicked()
                 if (!lht.isEmpty())
                 {
                     lte->setText(lht);
+                }
+            }
+            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            {
+                if (!qht.isEmpty())
+                {
+                    qte->setText(qht);
                 }
             }
 
@@ -3402,9 +3411,11 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
     ScreenContact scc;
     QString callText = ui->CallsignFrame->getTextEditEdit()->text();
     QString locText = ui->LocFrame->getTextEditEdit()->text();
+    QString qthText = ui->QTHFrame->getTextEditEdit()->text();
+
     if (nearMatches.size() && !callstate)
     {
-        if (callText.isEmpty() && locText.isEmpty())
+        if (callText.isEmpty() && locText.isEmpty() && qthText.isEmpty())
         {
             QStringList n = nearMatches[0].split('|');
             ui->CallsignFrame->getTextEditEdit()->setPlaceholderText(n[1]);
@@ -3412,11 +3423,15 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             {
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText(n[2]);
             }
-
+            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            {
+                ui->QTHFrame->getTextEditEdit()->setPlaceholderText(n[4]);
+            }
             scc.initialise(contest, false);
             scc.cs.setFullCall(n[1]);
             scc.loc.setLoc(n[2]);
             scc.mode = n[3];
+
             scc.timeOn = dtg(true);
             scc.timeOff = dtg(true);
             QString cb;
@@ -3439,6 +3454,10 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
             {
                 ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
             }
+            if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+            {
+                ui->QTHFrame->getTextEditEdit()->setPlaceholderText("");
+            }
             if (callText.isEmpty())
             {
                 setEditStyleSheet(ui->CallsignFrame->getTextEditEdit(),ssLineEditOK);
@@ -3451,6 +3470,10 @@ void QSOLogFrame::setPlaceholders(QStringList nearMatches)
         if (contest->locatorMandatoryField.getValue())
         {
             ui->LocFrame->getTextEditEdit()->setPlaceholderText("");
+        }
+        if (contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue())
+        {
+            ui->QTHFrame->getTextEditEdit()->setPlaceholderText("");
         }
         if (callText.isEmpty())
         {

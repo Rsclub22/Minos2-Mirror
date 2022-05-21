@@ -1343,6 +1343,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
     bool rotConnected = model()->data(model()->index(row, ROT_CONNECTED_COL_NUM), BMP_DataStoredRole).toBool();
     bool dxLocFromNodeFlag = model()->data(model()->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), BMP_DataStoredRole).toBool();
 
+    QString dxQth = model()->data(model()->index(row, DX_DISTRICT_COL_NUM), BMP_DataStoredRole).toString();
+
     bool showDerivedLocFlag;
     TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
 
@@ -1427,6 +1429,8 @@ void BandmapView::assembleSpotMsg(int row, QString& markerMsg)
         os << offset;
         os.setFieldWidth(0);
         os << "|" << dxCallsign << "|" << (dxLocFromNodeFlag?QString():dxLoc) << "|" << dxMode;
+        os << "|" << dxQth;
+
         nearMatches.push_back(nm);
     }
 
