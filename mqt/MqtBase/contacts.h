@@ -86,14 +86,16 @@ public:
 
     MinosFrequencyItem<Frequency> frequency;
 
+    int bearing = -1;
     bool QSOValid =false;
+
+    // these are used in the derived classes
     bool newCtry = false;
     bool newDistrict = false;
     int locCount = 0;  // was newLocs, now is mult from locs
     bool newGLoc = false;
     bool newNonGLoc = false;
 
-    int bearing = -1;
     char multCount = 0;
     int bonus = 0;
     bool newBonus = 0;
@@ -136,10 +138,7 @@ public:
        return 0;
     }
     virtual int checkContact(bool adddup );
-    bool notValidContact()
-    {
-        return ( contactFlags.getValue() & ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED) );
-    }
+    bool notValidContact();
 };
 
 class BaseContact: public CheckableContact

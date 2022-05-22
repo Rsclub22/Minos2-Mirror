@@ -160,6 +160,13 @@ int CheckableContact::checkContact(bool adddup)
 
 }
 
+bool CheckableContact::notValidContact()
+{
+    unsigned short cf = contactFlags.getValue();
+    cf &= ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED);
+    return ( cf != 0 );
+}
+
 //==========================================================================
 BaseContact::BaseContact( BaseContestLog * contest, dtg time_now ) :
     CheckableContact(contest, time_now)

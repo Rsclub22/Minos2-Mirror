@@ -725,7 +725,14 @@ int BaseContestLog::getValidQSOs()
       QSharedPointer<BaseContact> dct = i.wt;
 
       if ( dct->notValidContact() )
+      {
          continue;
+      }
+
+      if (dct->cs.getValRes() != CS_OK)    // duplicate?
+      {
+          continue;
+      }
 
       if ( dct->contactScore.getValue() > 0 )
          nvalid++;
@@ -826,19 +833,12 @@ QString BaseContestLog::scanContact(QSharedPointer<BaseContact> nct, QDateTime  
 
     // check for duplicates; accumulate the current points score
 
-    nct->bearing = -1;		// force a recalc
 
     if ( DupSheet.checkCurDup( this, nct->getLogSequence(), 0, true ) )    // check for dup, insert it if required
        nct->cs.setValRes( ERR_DUPCS);
 
-    nct->multCount = 0;
-    nct->newDistrict = false;
-    nct->newCtry = false;
-    nct->locCount = 0;
-    nct->newGLoc = false;
-    nct->newNonGLoc = false;
-    nct->bonus = 0;
-    nct->newBonus = false;
+    nct->bearing = -1;		// force a recalc
+
     nct->checkContact( false);   // in scanContest
 
     if (nct->timeOff.notEntered() == 0 && !(nct->contactFlags.getValue() & TO_BE_ENTERED))

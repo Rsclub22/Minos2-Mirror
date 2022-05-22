@@ -221,8 +221,17 @@ int DisplayContestContact::checkContact(bool adddup)
 {
     int checkret = CheckableContact::checkContact(adddup);
 
+    multCount = 0;
+    newDistrict = false;
+    newCtry = false;
+    locCount = 0;
+    newGLoc = false;
+    newNonGLoc = false;
+    bonus = 0;
+    newBonus = false;
+
     double dist = getContactScore();    // calculated in CheckableContact
-   bool dupContact = (checkret == ERR_12);    // calculated in CheckableContact
+   bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
 
    BaseContestLog * clp = contest;
 
@@ -284,33 +293,33 @@ int DisplayContestContact::checkContact(bool adddup)
        contactScore.setValue( static_cast<int>(dist) );
    }
 
-   if ( !clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
-      // as it is 1 point.
-   {
-      int cscore = contactScore.getValue();
-      switch ( clp->scoreMode.getValue() )
-      {
-         case PPKM:
-            {
-               if ( contactFlags.getValue() & XBAND )
-               {
-                  cscore = ( cscore + 1 ) / 2;
-               }
-               if (!dupContact)
-                    clp->contestScore += cscore;
-            }
-            break;
-
-         case PPQSO:
-            if ( cscore > 0 && !dupContact)
-               clp->contestScore++;
-            break;
-
-      }
-   }
-
    if (!dupContact)
    {
+       if (!clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+          // as it is 1 point.
+       {
+          int cscore = contactScore.getValue();
+          switch ( clp->scoreMode.getValue() )
+          {
+             case PPKM:
+                {
+                   if ( contactFlags.getValue() & XBAND )
+                   {
+                      cscore = ( cscore + 1 ) / 2;
+                   }
+                   if (!dupContact)
+                        clp->contestScore += cscore;
+                }
+                break;
+
+             case PPQSO:
+                if ( cscore > 0 && !dupContact)
+                   clp->contestScore++;
+                break;
+
+          }
+       }
+
       // now look at the locator list
       QString letters;
       QString numbers;

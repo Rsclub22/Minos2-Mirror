@@ -1007,6 +1007,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     }
     else
     {
+        MinosLoggerEvents::sendUpdateStats(contest);
         sortUnfilledCatchupTime();
     }
     return;
