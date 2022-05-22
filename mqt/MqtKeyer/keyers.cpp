@@ -494,15 +494,16 @@ voiceKeyer::~voiceKeyer()
 
 bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
 {
+    eMixerSets ems = VKMixer::GetVKMixer()->GetCurrentMixerSet();
    if ( sblog )
    {
-      trace( "docommand(" + QString::number( dvp_ctrl.command ) + ")" );
+      trace( QString("docommand(%1) mixerset is  %2" ).arg(QString::number( dvp_ctrl.command )).arg(VKMixer::GetVKMixer()->getCurrentMixerText()));
    }
    switch ( dvp_ctrl.command )
    {
       case eKEYER_STOPALL:      /* kill audio */
          {
-            if (VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughNoPTT && VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughPTT)
+            if (ems != emsPassThroughPTT)
             {
                 // don't kill if we are currently using the microphone - probably just delayed tuning reports
                 SoundSystemDriver::getSbDriver() ->stopall();
