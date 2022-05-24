@@ -236,6 +236,8 @@ private:
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);
     void checkAwayButton();
     void setMeepFilters();
+    void scrollMeepToBotton();
+    void scrollMesToBottom();
 };
 
 extern KSTMainWindow *mainWindow;
