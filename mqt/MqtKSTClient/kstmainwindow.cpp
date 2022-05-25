@@ -177,19 +177,19 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->CSTable->setItemDelegate(CSDelegate.data());
     ui->planesView->setItemDelegate(PlanesDelegate.data());
 
+    QSize mps = meepDelegate->docSize("XX");
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
     verticalHeader->setVisible(false);
-    verticalHeader->setDefaultSectionSize(10);
-    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setMinimumSectionSize(1);
+    verticalHeader->setDefaultSectionSize(mps.height());
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
-
+    QSize mss = messageDelegate->docSize("XX");
     verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
 
-    QSize ms = messageDelegate->docSize("XX");
-    verticalHeader->setDefaultSectionSize(ms.height() *4/5);
-    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setMinimumSectionSize(1);
+    verticalHeader->setDefaultSectionSize(mss.height());
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
@@ -216,9 +216,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     state = settings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
-
-//    state = settings.value("planesView/state").toByteArray();
-//    ui->planesView->horizontalHeader()->restoreState(state);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
     ui->CSTable->horizontalHeader()->setSectionsMovable( true );
