@@ -970,14 +970,18 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         {
             if ( args->getStructArgMember( 0, "LogName", psLogName )
                  && args->getStructArgMember( 0, "Stanza", psStanza )
-                 && args->getStructArgMember( 0, "Count", psStanzaCount )
                  )
             {
                 QString LogName;
                 int Stanza;
-                int StanzaCount;
-                if ( psLogName->getString( LogName ) && psStanza->getInt( Stanza )  && psStanzaCount->getInt( StanzaCount ) )
+                if ( psLogName->getString( LogName ) && psStanza->getInt( Stanza )  )
                 {
+                    // cope with old Monitor code - count may be missing
+                    int StanzaCount = 1;
+                    if (args->getStructArgMember( 0, "Count", psStanzaCount ))
+                    {
+                        psStanzaCount->getInt( StanzaCount );
+                    }
                     mro->clearCallArgs();
 
 
