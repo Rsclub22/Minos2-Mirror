@@ -139,6 +139,8 @@ public:
     }
     virtual int checkContact(bool adddup );
     bool notValidContact();
+    void calcDisBear();
+    int checkDistrict(int checkret);
 };
 
 class BaseContact: public CheckableContact

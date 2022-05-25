@@ -15,31 +15,6 @@ MonitoringFrame::MonitoringFrame(MonitorMain *parent) :
 {
     ui->setupUi(this);
 
-    ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
-    ui->QSOTable->horizontalHeader()->setSectionsMovable(true);
-
-    connect( ui->QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &MonitoringFrame::onQSOTable_customContextMenuRequested );
-    connect( ui->QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &MonitoringFrame::onQSOTable_sectionMoved);
-    connect( ui->QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &MonitoringFrame::onQSOTable_sectionResized);
-
-    QSharedPointer<HtmlDelegate> delegate(new HtmlDelegate(1.0, 1.0));
-    qsoModel.delegate = delegate;
-    ui->QSOTable->setModel(&qsoModel);
-    ui->QSOTable->setItemDelegate( delegate.data() );
-
-    ui->QSOTable->verticalHeader()->setVisible(false);
-    ui->QSOTable->setCornerButtonEnabled(false);
-    ui->QSOTable->verticalHeader()->setDefaultSectionSize(10);
-    ui->QSOTable->verticalHeader()->setMinimumSectionSize(10);
-    ui->QSOTable->setAlternatingRowColors(true);
-
-    ui->QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-
-    createColumnsMenu(columnsMenu, ui->QSOTable->horizontalHeader(), this,
-              [=]{
-                    viewColumn();
-              });
 
 }
 void MonitoringFrame::viewColumn()
@@ -97,8 +72,52 @@ MonitoringFrame::~MonitoringFrame()
 }
 void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {
+
    contest = pcontest;
+
+   ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+   ui->QSOTable->horizontalHeader()->setSectionsMovable(true);
+
+   connect( ui->QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &MonitoringFrame::onQSOTable_customContextMenuRequested );
+   connect( ui->QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &MonitoringFrame::onQSOTable_sectionMoved);
+   connect( ui->QSOTable->horizontalHeader(), &QHeaderView::sectionResized, this, &MonitoringFrame::onQSOTable_sectionResized);
+
+   ui->QSOTable->setAlternatingRowColors(true);
+   ui->QSOTable->verticalHeader()->setVisible(false);
+   ui->QSOTable->setCornerButtonEnabled(false);
+   ui->QSOTable->verticalHeader()->setVisible(false);
+   ui->QSOTable->verticalHeader()->setDefaultSectionSize(1);
+   ui->QSOTable->verticalHeader()->setMinimumSectionSize(1);
+   ui->QSOTable->setWordWrap(false);
+   ui->QSOTable->setCornerButtonEnabled(false);
+
+   ui->QSOTable->horizontalHeader()->setHighlightSections(false);
+   ui->QSOTable->horizontalHeader()->setStretchLastSection(true);
+   ui->QSOTable->horizontalHeader()->setMinimumSectionSize(10);
+   ui->QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+   ui->QSOTable->horizontalHeader() ->setSectionsMovable( true );
+   ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+
+   QSharedPointer<HtmlDelegate> delegate(new HtmlDelegate(1.0, 1.0));
+   qsoModel.delegate = delegate;
+
    qsoModel.initialise(contest);
+
+   ui->QSOTable->setModel(&qsoModel);
+   ui->QSOTable->setItemDelegate( delegate.data() );
+
+   ui->QSOTable->setItemDelegate( delegate.data() );
+   QSize ms = delegate->docSize("XX");
+   ui->QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+   ui->QSOTable->verticalHeader()->setMinimumSectionSize(10);
+
+   ui->QSOTable->verticalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+
+   createColumnsMenu(columnsMenu, ui->QSOTable->horizontalHeader(), this,
+             [=]{
+                   viewColumn();
+             });
+
 }
 void MonitoringFrame::showQSOs()
 {
@@ -112,7 +131,21 @@ void MonitoringFrame::setScore()
     ui->scoreLabel->setText(statbuf);
 }
 
-void MonitoringFrame::update()
+void MonitoringFrame::on_monitorTimeout()
 {
-    qsoModel.reset();
+    if (newStanzas)
+    {
+        newStanzas = false;
+        // only do this if the number of stanzas has changed
+        if (rescanNeeded)
+        {
+            // clear dups here - we have no need of them in monitor
+            getContest()->DupSheet.clear();
+            getContest()->scanContest();  // this is MUCH too often... timer is 100ms!
+            rescanNeeded = false;
+        }
+        setScore();
+
+        ui->QSOTable->scrollToBottom();
+    }
 }

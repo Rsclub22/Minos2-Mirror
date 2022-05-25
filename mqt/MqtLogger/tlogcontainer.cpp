@@ -1181,10 +1181,11 @@ void TLogContainer::AppendAdifActionExecute()
         ct->commonSave( false );
         ct->scanContest();          // after append ADIF file, required
         //ct->validateLoc();
-        MinosLoggerEvents::SendAfterLogContact(ct, false);          // after append ADIF file
+        MinosLoggerEvents::SendAfterLogContact(ct);          // after append ADIF file
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
-        tslf->showQSOs();
+        tslf->updateTrees();
+        tslf->startNextEntry();   //(AppendAdifActionExecute())
     }
 }
 

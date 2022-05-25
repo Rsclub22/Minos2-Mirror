@@ -728,13 +728,15 @@ void MonitorMain::on_monitorTimeout()
           syncStations();
        }
     }
-    MonitoringFrame *f = findCurrentLogFrame();
-    if ( f )
+    static int ticks = 0;
+    if (ticks++ > 10)
     {
-        f->getContest()->scanContest();  // this is MUCH too often... timer is 100ms!
-        f->setScore();
-        // clear dups here - we have no need of them in monitor
-        f->getContest()->DupSheet.clear();
+        MonitoringFrame *f = findCurrentLogFrame();
+        if ( f )
+        {
+            f->on_monitorTimeout();
+        }
+        ticks = 0;
     }
 }
 void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)

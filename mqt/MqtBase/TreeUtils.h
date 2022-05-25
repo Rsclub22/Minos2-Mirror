@@ -70,6 +70,9 @@ class QSOGridModel: public QAbstractItemModel
 
         int rowCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
         int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+
+        virtual bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
+        void changeRow(int row);
 };
 
 #endif

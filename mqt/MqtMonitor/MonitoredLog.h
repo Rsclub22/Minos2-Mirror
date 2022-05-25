@@ -27,8 +27,6 @@ class MonitoredLog
       MonitoringFrame *frame = nullptr;
 
    public:
-
-
       MonitoredLog();
       ~MonitoredLog();
 

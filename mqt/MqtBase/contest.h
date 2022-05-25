@@ -45,7 +45,7 @@ class dupsheet
       // sorted by the callsign and logSequence number
 
    private:
-      DupList ctList;
+      DupList dupList;
       QSharedPointer<DupContact> curdup; // points into dupsheet
 
    public:
@@ -238,6 +238,8 @@ class BaseContestLog: public BaseLogList
       // The log itself
 
       LogList ctList;
+
+      int lastInserted = -1;
 
       QSharedPointer<BaseContact> findContact(CheckableContact *) const;
 

@@ -565,6 +565,7 @@ bool reg1test::parseQSO( QString line )
 
       MapWrapper<BaseContact> wbct(aqso);
       ct->ctList.insert( wbct, wbct );
+      ct->lastInserted = ct->indexOf(aqso);
       return true;
    }
    return false;

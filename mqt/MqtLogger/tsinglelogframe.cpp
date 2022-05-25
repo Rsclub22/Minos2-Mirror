@@ -547,7 +547,7 @@ void TSingleLogFrame::applyScreenLayout()
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
-    updateTrees();
+    updateTrees();  //in apply screen layout
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -1003,7 +1003,7 @@ void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
     saveQSOTableColumns();
 }
 
-void TSingleLogFrame::showQSOs()
+void TSingleLogFrame::startNextEntry()
 {
     ScreenContact *p = GJVQSOLogFrame->getPartialContact();
     GJVQSOLogFrame->setPartialContact(nullptr);
@@ -1084,7 +1084,7 @@ void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
 {
     if (b == contest)
     {
-        showQSOs();             // this does a restorePartial
+        startNextEntry();             // (on_doColumnChanges) this does a restorePartial
     }
 }
 
@@ -1406,6 +1406,8 @@ void TSingleLogFrame::EditContact( CheckableContact *cct )
    trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
 
    contest->scanContest();  // as edit contact can change things mid-contest
+   updateTrees();
+
 
    GJVQSOLogFrame->refreshOps();
    refreshMults();
@@ -1463,15 +1465,10 @@ void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, Bas
         );
     }
 }
-void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct, bool doScan)
+void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 {
       if (ct == contest)
       {
-         if (doScan)
-         {
-            contest->scanContest();        // parameterised
-         }
-         updateTrees();                 // complete redraw of QSO model...
          NextContactDetailsTimerTimer( );   // so that the details get updated
       }
 }

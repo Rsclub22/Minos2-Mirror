@@ -225,6 +225,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
 
       MapWrapper<BaseContact> waqso(aqso);
       acontest->ctList.insert( waqso, waqso );
+      acontest->lastInserted = acontest->indexOf(aqso);
 
       QSharedPointer<BaseContact> bct;
       acontest->makeContact( false, bct );

@@ -31,6 +31,51 @@ CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QO
 {
 
 }
+void CheckableContact::calcDisBear()
+{
+    double lon = 0.0;
+    double lat = 0.0;
+    int brg = -1;
+    double dist = 0.0;
+
+    char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+    if ( v == LOC_OK )
+    {
+       contest->disbeara( lon, lat, dist, brg );
+    }
+    else if (v == LOC_PARTIAL)
+    {
+        contest->disbearc( lon, lat, dist, brg );
+    }
+    bearing = brg;
+    contactScore.setValue( static_cast<int>(dist) );
+}
+
+int CheckableContact::checkDistrict(int checkret)
+{
+    if ( ctryMult->hasDistricts() )    // continentals dont have counties
+    {
+        unsigned short cf = contactFlags.getValue();
+        districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
+        if ( !districtMult && !( cf & VALID_DISTRICT ) )
+        {
+            checkret = ERR_8;
+        }
+
+        if (
+                !checkret &&       						// no errors
+                !( cf & VALID_DISTRICT ) &&      // ? district forced OK
+                districtMult &&
+                ( districtMult->country1 != ctryMult ) &&     // check district in country
+                ( districtMult->country2 != ctryMult )
+                )
+        {
+            checkret = ERR_8;
+        }
+    }
+    return checkret;
+}
+
 int CheckableContact::checkContact(bool adddup)
 {
     // check on country and district. If valid, return true,
@@ -38,29 +83,12 @@ int CheckableContact::checkContact(bool adddup)
     // saved the pointers.
 
     int checkret = 0;
-    BaseContestLog * clp = contest;
-
 
     // calc the bearing and score anyway; otherwise dups get a bearing of -1
 
     if ( bearing < 0 )
     {
-       double lon = 0.0;
-       double lat = 0.0;
-       int brg = -1;
-       double dist = 0.0;
-
-       char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
-       if ( v == LOC_OK )
-       {
-          clp->disbeara( lon, lat, dist, brg );
-       }
-       else if (v == LOC_PARTIAL)
-       {
-           clp->disbearc( lon, lat, dist, brg );
-       }
-       bearing = brg;
-       contactScore.setValue( static_cast<int>(dist) );
+       calcDisBear();
     }
 
 
@@ -76,8 +104,8 @@ int CheckableContact::checkContact(bool adddup)
     // AND it has been dup checked
     if ( !checkret )
     {
-        unsigned long valp = clp->validationPoint;
-        if ( clp->DupSheet.checkCurDup( this, valp, adddup ) )
+        unsigned long valp = contest->validationPoint;
+        if ( contest->DupSheet.checkCurDup( this, valp, adddup ) )
         {
             cs.setValRes( ERR_DUPCS);
             checkret = ERR_12;
@@ -98,12 +126,12 @@ int CheckableContact::checkContact(bool adddup)
 
     unsigned short cf = contactFlags.getValue();
     cf &= ~UNKNOWN_COUNTRY;
-    if ( !checkret && ( clp->countryMult.getValue() || clp->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
+    if ( !checkret && ( contest->countryMult.getValue() || contest->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
     {
         cf |= UNKNOWN_COUNTRY;
     }
     contactFlags.setValue(cf);
-    if ( clp->districtMult.getValue() && ctryMult )
+    if ( contest->districtMult.getValue() && ctryMult )
     {
         // if CC_mult and country "has districts" search for the "extra" in the county synonym list
 
@@ -112,25 +140,7 @@ int CheckableContact::checkContact(bool adddup)
         // if the correct parts don't exist, not a valid contact!
         // NB that the rest of the contact has to be valid as well!
 
-        if ( ctryMult->hasDistricts() )    // continentals dont have counties
-        {
-            districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
-            if ( !districtMult && !( cf & VALID_DISTRICT ) )
-            {
-                checkret = ERR_8;
-            }
-
-            if (
-                    !checkret &&       						// no errors
-                    !( cf & VALID_DISTRICT ) &&      // ? district forced OK
-                    districtMult &&
-                    ( districtMult->country1 != ctryMult ) &&     // check district in country
-                    ( districtMult->country2 != ctryMult )
-                    )
-            {
-                checkret = ERR_8;
-            }
-        }
+        checkret = checkDistrict(checkret);
         // so all seems OK, or checkret is set to the first error
     }
     else
@@ -138,9 +148,9 @@ int CheckableContact::checkContact(bool adddup)
         {
 
             districtMult.reset();						// just in case we have changed the type...
-            if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
+            if ( contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
             {
-                if ( clp->districtMult.getValue() )
+                if ( contest->districtMult.getValue() )
                 {
                     if ( !comments.getValue().trimmed().size() )
                         checkret = ERR_21;

@@ -2,6 +2,7 @@
 #include "MonitoredContestLog.h"
 #include "MonitoringFrame.h"
 #include "MonitoredLog.h"
+#include "contacts.h"
 
 MonitoredLog::MonitoredLog()
 {}
@@ -53,11 +54,16 @@ void MonitoredLog::getLogStanza( int stanza )
 {
     inStanzaRequest = QDateTime::currentMSecsSinceEpoch();
 
+    int stanzaCount = expectedStanzaCount - stanza + 1;
+
+    stanzaCount = std::min(stanzaCount, 10);
+
     // and here we want to start getting the log from the remote logger
     RPCGeneralClient rpc(rpcConstants::loggerStanzaRequest);
     QSharedPointer<RPCParam>st(new RPCParamStruct);
     st->addMember( publishedName, "LogName" );
     st->addMember( stanza, "Stanza" );
+    st->addMember( stanzaCount, "Count" );
     rpc.getCallArgs() ->addParam( st );
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }
@@ -91,6 +97,7 @@ void MonitoredLog::checkMonitor()
 }
 void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
 {
+   getFrame()->newStanzas = true;
    inStanzaRequest = 0;
    if ( stanzasPulled.find( stanza ) == stanzasPulled.end() )
    {
@@ -101,7 +108,21 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
       // This is what slows it down most...
       //although QSO scanning gets slower as we go on
 
-      if (frame)
-          frame->update();
+      if (contest->lastInserted >= 0)
+      {
+          if ( contest->lastInserted == contest->ctList.count() - 1)
+          {
+              // new last contact; import will have checked it
+              QSharedPointer<BaseContact> bct = contest->pcontactAt(contest->lastInserted);
+              frame->qsoModel.insertRows(contest->lastInserted, 1, QModelIndex());
+              contest->lastInserted = -1;
+          }
+          else
+          {
+              // change to a contact; we need a full rescan to understand it
+              frame->qsoModel.changeRow(contest->lastInserted);
+              frame->rescanNeeded = true;
+          }
+      }
    }
 }

@@ -2643,6 +2643,9 @@ void QSOLogFrame::logScreenEntry( )
    if (!lct)
    {
         lct = ct->addContact( ctmax, 0, false, false, screenContact.mode, screenContact.mgmSubmode, dtg(true), curFreq );	// "current" doesn't get flag, don't save ContestLog yet
+
+        TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+        tslf->QSOTable->model()->insertRows(contest->ctList.count(), 1, QModelIndex());
    }
 
    if ( screenContact.mode.compare( hamlibData::MGM, Qt::CaseInsensitive ) != 0 )
@@ -2685,7 +2688,11 @@ void QSOLogFrame::logScreenEntry( )
 
    killPartial();
 
-   MinosLoggerEvents::SendAfterLogContact(ct, false);  // in logScreenEntry, current or edit
+   MinosLoggerEvents::SendAfterLogContact(ct);  // in logScreenEntry, current or edit
+
+   TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+   //tslf->updateTrees();                 // (logScreenEntry complete redraw of QSO model...
+
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
@@ -2790,8 +2797,12 @@ void QSOLogFrame::logCurrentContact( )
                 LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
                 QString currmode = ui->ModeComboBoxGJV->currentText();
                 QString currSubmode = ui->MGMSubModeEdit->text().trimmed();
+
                 QSharedPointer<BaseContact> bct = ct->addContact( nct_no, orflag, true, false, currmode, currSubmode, ctTime, curFreq ); // last contact
                 nct_no++;
+
+                TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+                tslf->QSOTable->model()->insertRows(nct_no, 1, QModelIndex());
              }
              while ( nct_no < ctno ) ;
          }

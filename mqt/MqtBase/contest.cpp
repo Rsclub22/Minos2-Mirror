@@ -90,7 +90,7 @@ int BaseContestLog::getContactCount( )
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
 {
-   if ( i < ctList.size() )
+   if ( i >= 0 && i < ctList.size() )
    {
        QSharedPointer<BaseContact> ce = std::next(ctList.begin(), i)->wt;
        return ce;
@@ -949,9 +949,21 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          continue;
       }
 
-     if ( locatorMandatoryField.getValue() || nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+     if ( nct->contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
                                                                                 // as it is 1 point.
       {
+         if ( locatorMandatoryField.getValue())
+         {
+             cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
+             if (nct->newGLoc)
+             {
+                cs.nGlocs++;
+             }
+             else if ((nct->newNonGLoc))
+             {
+                cs.nonGlocs++;
+             }
+         }
          int cscore = nct->contactScore.getValue();
          switch ( scoreMode.getValue() )
          {
@@ -979,14 +991,6 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          cs.bonus += nct->bonus;
          cs.nbonus += nct->newBonus?1:0;
 
-         if (nct->newGLoc)
-         {
-            cs.nGlocs++;
-         }
-         else if ((nct->newNonGLoc))
-         {
-            cs.nonGlocs++;
-         }
       }
       else
       {
@@ -1229,8 +1233,8 @@ bool dupsheet::checkCurDup(CheckableContact *nct, unsigned long valpseq, bool in
    if ( nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct) );
-      DupIterator c = ctList.find(test);
-      if ( c!= ctList.end() )
+      DupIterator c = dupList.find(test);
+      if ( c!= dupList.end() )
       {
          if ( !( nct->contactFlags.getValue() & VALID_DUPLICATE ) )
          {
@@ -1239,7 +1243,7 @@ bool dupsheet::checkCurDup(CheckableContact *nct, unsigned long valpseq, bool in
                return false; // as val point earlier than current list item
             }
 
-            if ( c != ctList.end() )
+            if ( c != dupList.end() )
                curdup = c->wt;
 
             return true;
@@ -1249,7 +1253,7 @@ bool dupsheet::checkCurDup(CheckableContact *nct, unsigned long valpseq, bool in
          if ( insert )
          {
             MapWrapper<DupContact> ins( test);
-            ctList.insert( ins, ins );
+            dupList.insert( ins, ins );
             return false;
          }
    }
@@ -1263,8 +1267,8 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
    if ( nct && nct->cs.getValRes() == CS_OK )
    {
       QSharedPointer<DupContact> test( new DupContact(nct.data()) );
-      DupIterator c = ctList.find(test);
-      if ( c != ctList.end() )
+      DupIterator c = dupList.find(test);
+      if ( c != dupList.end() )
       {
          if ( !( nct->contactFlags.getValue() & VALID_DUPLICATE ) )
          {
@@ -1273,7 +1277,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
                return false; // as val point earlier than current list item
             }
 
-            if ( c != ctList.end() )
+            if ( c != dupList.end() )
                curdup = c->wt;
 
             return true;
@@ -1283,7 +1287,7 @@ bool dupsheet::checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsign
          if ( insert )
          {
             QSharedPointer<DupContact> ins(new DupContact( nct.data() ));
-            ctList.insert( ins, ins );
+            dupList.insert( ins, ins );
             return false;
          }
    }
@@ -1318,7 +1322,7 @@ CheckableContact *dupsheet::getCurDup()
 void dupsheet::clear()
 {
    curdup.reset();
-   ctList.clear();
+   dupList.clear();
 }
 //============================================================
 void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImport * const mt )
@@ -1493,6 +1497,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                                  rct->setLogSequence( logSequence );
                                  MapWrapper<BaseContact> wrct(rct);
                                  ctList.insert( wrct, wrct );
+                                 lastInserted = indexOf(rct);
                                  if (logSequence >> 16 >= nextBlock)
                                  {
                                     nextBlock = (logSequence >> 16) + 1;
@@ -1511,6 +1516,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                                     rct->setLogSequence( logSequence );
                                     MapWrapper<BaseContact> wrct(rct);
                                     ctList.insert( wrct, wrct );
+                                    lastInserted = indexOf(rct);
                                     // Was just nextBlock++ - no test
                                     if (logSequence >> 16 >= nextBlock)
                                     {

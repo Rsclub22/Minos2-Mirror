@@ -72,7 +72,7 @@ public:
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 
-    void showQSOs();
+    void startNextEntry();
     void goSerial( );
     void closeContest();
 
@@ -226,7 +226,7 @@ private slots:
     void on_MakeEntry(BaseContestLog*);
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
-    void on_AfterLogContact(BaseContestLog *ct, bool doScan);
+    void on_AfterLogContact(BaseContestLog *ct);
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);

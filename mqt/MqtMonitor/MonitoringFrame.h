@@ -22,20 +22,22 @@ public:
     void initialise( BaseContestLog * contest );
     void showQSOs();
     void setScore();
+    void on_monitorTimeout();
     BaseContestLog * getContest()
     {
        return contest;
     }
+    QSOGridModel qsoModel;
 
-    void update();
+    bool rescanNeeded = false;
+    bool newStanzas = false;
+    bool armScan = false;
 
 private:
     Ui::MonitoringFrame *ui;
     BaseContestLog *contest;
     QMenu columnsMenu;
     bool inRestoreColumns = false;
-
-    QSOGridModel qsoModel;
 
     void saveQSOTableColumns();
     void restoreQSOTableColumns();

@@ -223,12 +223,13 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         bct->commonSave(bct);
     }
     ct->commonSave( false );
-    ct->scanContest();      // after ADIF logged, could we do a single QSO scan?
-    //ct->validateLoc();      // why do we need to do this here? Shoud already have happened
-    MinosLoggerEvents::SendAfterLogContact(ct, false); // after ADIF logged "last contact"
+    ct->scanContest();      // after ADIF logged, could we do a single QSO scan? But this is only every few seconds
+
+    MinosLoggerEvents::SendAfterLogContact(ct); // after ADIF logged "last contact"
     TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
-    tslf->showQSOs();
+    tslf->updateTrees();    // (log_ADIF complete redraw of QSO model...
+    tslf->startNextEntry();       // log_ADIF
 }
 void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QString const& /*revision*/)
 {
