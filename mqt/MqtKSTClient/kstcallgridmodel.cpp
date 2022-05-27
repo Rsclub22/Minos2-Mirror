@@ -416,8 +416,12 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
                 {
                     if (!filterString.isEmpty())
                     {
-                        if (call->dxcc == filterString)
-                            return true;
+                        QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( filterString );
+                        if ( syn )
+                        {
+                            if (call->dxcc == syn->getCountry()->getBasePrefix())
+                                return true;
+                        }
                     }
                 }
             }
