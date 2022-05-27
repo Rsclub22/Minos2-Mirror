@@ -287,7 +287,7 @@ class PlayAction: public VoiceAction
       virtual ~PlayAction() override;
       QString statusLetter() override
       {
-         return "K" + QString::number(mno + 1);
+         return "F" + QString::number(mno + 1);
       }
       virtual bool playingFile( const QString & ) override;
 };
