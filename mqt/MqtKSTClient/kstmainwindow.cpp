@@ -805,7 +805,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->prefix = syn->getBasePrefix();
                 test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
-                test->dxcc = cs.locCtryPrefix;
+                test->dxcc = syn->getCountry()->getBasePrefix();
                 test->distance = -2;
             }
 
