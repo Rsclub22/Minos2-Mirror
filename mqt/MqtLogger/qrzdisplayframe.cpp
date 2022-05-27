@@ -126,14 +126,12 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
         setLogonPushButtonLabelText(true);
         setQrzMessageText("");
-        trace(QString("QRZDisplayFrame - Logged on to QRZ"));
 
     }
     else
     {
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
         setLogonPushButtonLabelText(false);
-        trace(QString("QRZDisplayFrame - Logged off from QRZ"));
     }
 
 
@@ -515,6 +513,15 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                         if (logStateStr == rpcConstants::qrzServerLoggedIn)
                         {
                             loggedState = true;
+                        }
+
+                        if (loggedState)
+                        {
+                            trace(QString("QRZDisplayFrame - Logged on to QRZ"));
+                        }
+                        else
+                        {
+                            trace(QString("QRZDisplayFrame - Logged off from QRZ"));
                         }
 
                         msgQrzServerMessage->getString(stateMessage);

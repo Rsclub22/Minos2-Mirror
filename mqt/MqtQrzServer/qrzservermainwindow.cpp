@@ -83,7 +83,7 @@ QrzServerMainWindow::QrzServerMainWindow(QWidget *parent)
 
     pingStateTimer = new QTimer(this);
     connect(pingStateTimer, &QTimer::timeout, this, [=](){onPingStateTimerTimeout();});
-    pingStateTimer->start(3000);
+    pingStateTimer->start(5000);
 
     ui->messageTextWindow->isReadOnly();
     addTextToLogWindow(tr("Note! An xml subscription is required to look up QRA data on QRZ.com"));
