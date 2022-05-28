@@ -37,10 +37,7 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
     callVector = pcallVector;
     for (auto const &kstuser: qAsConst(*callVector))
     {
-        if (kstuser->distance == -2)
-        {
-            checkDistBear(kstuser);
-        }
+        checkDistBear(kstuser);
     }
     endResetModel();
 }
