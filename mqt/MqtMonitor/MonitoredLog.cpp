@@ -32,23 +32,8 @@ void MonitoredLog::initialise(const QString &prouter, const QString &name )
 
 void MonitoredLog::startMonitor()
 {
-   monitorEnabled = true;
+   setEnabled(true);
    //lastScannedStanza = -1;
-}
-void MonitoredLog::stopMonitor()
-{
-   monitorEnabled = false;
-
-   mt->endImportTest();
-
-   inStanzaRequest = 0;
-   lastScannedStanza = -1;
-   //   expectedStanzaCount = 0; // no - it is still correct as published...
-   stanzasPulled.clear();
-
-   frame = nullptr;
-
-   initialise( router, publishedName );  // make sure reset for next time
 }
 void MonitoredLog::getLogStanza( int stanza )
 {
@@ -87,7 +72,7 @@ void MonitoredLog::checkMonitor()
    }
    int curCount = contest->getCtStanzaCount();
    qint64 tick = QDateTime::currentMSecsSinceEpoch();
-   if ( monitorEnabled && ( inStanzaRequest == 0 || ( tick - inStanzaRequest > 10000 ) ) )
+   if ( enabled() && ( inStanzaRequest == 0 || ( tick - inStanzaRequest > 10000 ) ) )
    {
       if ( expectedStanzaCount > curCount )
       {

@@ -70,7 +70,6 @@ class MonitoredLog
          return state;
       }
       void startMonitor();
-      void stopMonitor();
       void checkMonitor();
       void processLogStanza( int stanza, const QString &stanzaData );
       QString getDisplayName() const;
