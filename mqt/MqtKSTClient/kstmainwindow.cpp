@@ -763,6 +763,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             if (l->call == sl[2] )
             {
                 l->loc = sl[3];
+                l->distance = -1;   // force recalc
                 emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
             }
             row++;
@@ -787,6 +788,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->call = sl[2];
         test->name = sl[3];
         test->loc = sl[4];
+
         QString state = sl[5];
         int istate = state.toInt();
         if (istate & 1)
@@ -806,7 +808,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
                 test->dxcc = syn->getCountry()->getBasePrefix();
-                test->distance = -2;
+                test->distance = -1;    // force recalc
             }
 
 
@@ -864,6 +866,12 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             QString msg = "MSG|" + QString::number(activeChat) + "|0|/SETLOC " + myLoc + "|0|";
             sendKST(msg);
             recLoc = myLoc;
+            kstCallModel.locator = myLoc;
+            for (auto const &l: qAsConst(*callVector))
+            {
+                l->distance = -1;
+            }
+            kstCallFilterModel.invalidate();
         }
 
 
@@ -922,6 +930,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->loc = test->loc;
             l->data()->away = test->away;
             l->data()->recent = test->recent;
+            l->data()->distance = -1;   // force recalc
             int row = l - callVector->begin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
 
@@ -963,6 +972,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->call = sl[2];
         test->name = sl[3];
         test->loc = sl[4];
+        test->distance = -1;   // force recalc
         QString state = sl[5];
         int istate = state.toInt();
         if (istate & 1)
@@ -1210,6 +1220,10 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("ASPort", ASPort);
         settings.setValue("ASTimeout", ASTimeout);
 
+        for (auto const &l: qAsConst(*callVector))
+        {
+            l->distance = -1;
+        }
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
