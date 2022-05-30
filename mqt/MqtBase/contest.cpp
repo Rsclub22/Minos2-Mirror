@@ -899,6 +899,8 @@ void BaseContestLog::scanContest( )
       // get the next contact in sequence and do any required scan checks
       QSharedPointer<BaseContact> nct = wnct.wt;
 
+      nct->cs.reValidate();
+
       curop1 = scanContact(nct, contestStart, contestEnd);
    }
    //validationPoint = 0;
@@ -985,7 +987,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
          }
          cs.nctry += nct->newCtry?1:0;
          cs.ndistrict += nct->newDistrict?1:0;
-         cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
+//         cs.nlocs += (nct->newGLoc || nct->newNonGLoc)?1:0;
          cs.nqsos++;
 
          cs.bonus += nct->bonus;
