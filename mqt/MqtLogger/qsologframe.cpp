@@ -2690,9 +2690,6 @@ void QSOLogFrame::logScreenEntry( )
 
    MinosLoggerEvents::SendAfterLogContact(ct);  // in logScreenEntry, current or edit
 
-   TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-   //tslf->updateTrees();                 // (logScreenEntry complete redraw of QSO model...
-
    MinosLoggerEvents::SendAfterLogContactToCluster(ct, lct->cs, lct->loc.getLoc());
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
