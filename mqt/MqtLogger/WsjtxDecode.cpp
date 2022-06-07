@@ -130,7 +130,6 @@ bool decodeMessage::checkAsContact()
     csret = scc.cs.getValRes();
     if (scc.QSOValid)
     {
-        scc.score();
         points = scc.contactScore.getValue();
         distance = points;
         bearing = scc.bearing;

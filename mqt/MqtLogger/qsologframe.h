@@ -243,6 +243,8 @@ private:
 
     QString ssLineEditGreyBackground = "QLineEdit { background-color: silver ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ;}";
     QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
+    QString ssLineEditNewMultPartial = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : limegreen ; }";
+    QString ssLineEditNewMultFull = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : limegreen ; }";
 
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";

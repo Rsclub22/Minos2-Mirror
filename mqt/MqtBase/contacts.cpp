@@ -53,10 +53,10 @@ void CheckableContact::calcDisBear()
 
 int CheckableContact::checkDistrict(int checkret)
 {
-    if ( ctryMult->hasDistricts() )    // continentals dont have counties
+    districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
+    if ( !ctryMult || ctryMult->hasDistricts() )    // continentals dont have counties
     {
         unsigned short cf = contactFlags.getValue();
-        districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
         if ( !districtMult && !( cf & VALID_DISTRICT ) )
         {
             checkret = ERR_8;
@@ -131,7 +131,7 @@ int CheckableContact::checkContact(bool adddup)
         cf |= UNKNOWN_COUNTRY;
     }
     contactFlags.setValue(cf);
-    if ( contest->districtMult.getValue() && ctryMult )
+    if ( contest->districtMult.getValue() )
     {
         // if CC_mult and country "has districts" search for the "extra" in the county synonym list
 
@@ -140,7 +140,12 @@ int CheckableContact::checkContact(bool adddup)
         // if the correct parts don't exist, not a valid contact!
         // NB that the rest of the contact has to be valid as well!
 
-        checkret = checkDistrict(checkret);
+        int distcheck = checkDistrict(checkret);
+
+        if (ctryMult)
+        {
+            checkret = distcheck;
+        }
         // so all seems OK, or checkret is set to the first error
     }
     else

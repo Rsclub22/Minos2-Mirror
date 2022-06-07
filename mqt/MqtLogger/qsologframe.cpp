@@ -1731,6 +1731,45 @@ bool QSOLogFrame::validateControls( validTypes command )   // do control validat
             }
         }
 
+        if (vcp->wc->isEnabled() && (ss == ssLineEditOK || ss == ssLineEditFrRedBkWhite))
+        {
+            if (vcp == csIl && screenContact.newCtry)
+            {
+                if (ss == ssLineEditFrRedBkWhite)
+                {
+                    ss = ssLineEditNewMultPartial;
+                }
+                else
+                {
+                    ss = ssLineEditNewMultFull;
+                }
+                setEditStyleSheet(vcp->wc, ss);
+            }
+            else if (vcp == locIl && screenContact.locCount > 0)
+            {
+                if (ss == ssLineEditFrRedBkWhite)
+                {
+                    ss = ssLineEditNewMultPartial;
+                }
+                else
+                {
+                    ss = ssLineEditNewMultFull;
+                }
+                setEditStyleSheet(vcp->wc, ss);
+            }
+            else if (vcp == qthIl && screenContact.newDistrict)
+            {
+                if (ss == ssLineEditFrRedBkWhite)
+                {
+                    ss = ssLineEditNewMultPartial;
+                }
+                else
+                {
+                    ss = ssLineEditNewMultFull;
+                }
+                setEditStyleSheet(vcp->wc, ss);
+            }
+        }
         if (vcp->wc->isEnabled())
         {
             // don't override placeholder duplicate colour

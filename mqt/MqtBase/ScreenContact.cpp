@@ -238,6 +238,18 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 void ScreenContact::checkScreenContact( )
 {
     checkContact(false);
+
+    multCount = 0;
+    newDistrict = false;
+    newCtry = false;
+    locCount = 0;
+    newGLoc = false;
+    newNonGLoc = false;
+    bonus = 0;
+    newBonus = false;
+
+    score();
+
 }
 
 void ScreenContact::score()
@@ -247,14 +259,14 @@ void ScreenContact::score()
 
     // checkContact should already have run
 
-    QString gridref = loc.getLoc().trimmed();
-    if (gridref.isEmpty())
-        return;
+    double latitude = 0.0;
+    double longitude = 0.0;
 
-    double latitude;
-    double longitude;
-    /*int locValres =*/ lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
-
+    QString gridref = loc.getLoc();
+    if (gridref.length() >= 4)
+    {
+        lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+    }
     if ( !( contactFlags.getValue() & MANUAL_SCORE ) || ( contactFlags.getValue() & DONT_PRINT ) )
     {
 
@@ -263,7 +275,7 @@ void ScreenContact::score()
         QString band;
         contest->getTxFreqBand(frequency.getValue(), band);
 
-        if ( districtMult && districtMult->country1)
+        if ( districtMult && (districtMult->country1 || cs.getFullCall().isEmpty()))
         {
            int n = contest->getDistrictsWorked(band, districtMult->districtCode) + 1;
            if ( n < districtMult->country1->districtLimit() )
@@ -277,7 +289,7 @@ void ScreenContact::score()
         if ( ctryMult)
         {
             int n = contest->getCountriesWorked(band, ctryMult->getBasePrefix());
-            if ( n == 1 )
+            if ( n == 0 )
             {
                 if (!contest->nonGCountryMult.getValue() || !cs.isUK())
                 {
@@ -292,19 +304,19 @@ void ScreenContact::score()
 
         if ( !notValidContact() )
         {
-            double dist;
+            double dist = 0.0;
             int brg = 0;
             if (contest->MGMContestRules.getValue())
             {
-                 dist = contest->CalcCentres ( loc.getLoc(), brg );
+                 dist = contest->CalcCentres ( gridref, brg );
                  if ( almost_equal(dist, 1.0, 2))
                      dist = 50;  // MGM same square == 50 points
             }
-            else if ( loc.getLoc().size() == 4 && contest->allowLoc4.getValue() )
+            else if ( gridref.size() == 4 && contest->allowLoc4.getValue() )
             {
                dist = contest->CalcNearest( loc.getLoc() ); // deal with 4 char locs
             }
-            else
+            else if (gridref.size() >= 4)
             {
                 contest->disbeara( longitude, latitude, dist, brg );
             }
@@ -335,6 +347,7 @@ void ScreenContact::score()
            }
         }
 
+        if (gridref.length() >= 4)
         {
            // now look at the locator list
            QString letters;
