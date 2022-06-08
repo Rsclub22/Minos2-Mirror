@@ -703,7 +703,7 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
 
           clp->scanContact(tct, contestStart, contestEnd);
 
-         checkContact( true);                    // in commonSave, AFTER saved, to update stats etc
+        // checkContact( true);                    // in commonSave, AFTER saved, to update stats etc
       }
    }
    return ret;

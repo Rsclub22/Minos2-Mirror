@@ -2733,6 +2733,12 @@ void QSOLogFrame::logScreenEntry( )
 
    MinosLoggerEvents::SendAfterLogContactToBandmap(ct, lct );
 
+   if (!edit)
+   {
+       TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
+       tslf->refreshMults();
+   }
+
    if (!lct->cqResponse.getValue())
    {
        // save for send spot to DX cluster
