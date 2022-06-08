@@ -338,6 +338,13 @@ void ContestDetails::setDetails(  )
       ui->EndDateEdit->setDate(t.date()); // short date format, hours:minutes
       QString etc = t.time().toString( "HH:mm UTC" );
       ui->EndTimeCombo->setCurrentText(etc); // short date format, hours:minutes
+
+      if (ui->EndTimeCombo->currentText() != etc)
+      {
+          // Cope with weird contest lengths - e.g. Platinum jubilee 70 minutes
+          ui->EndTimeCombo->addItem( etc );
+          ui->EndTimeCombo->setCurrentText(etc); // short date format, hours:minutes
+      }
    }
    else
    {
@@ -579,7 +586,16 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->StartTimeCombo->setCurrentText(ic.start.toString( "HH:mm" ) + " UTC");
 
    ui->EndDateEdit->setDate(ic.finish.date()); // short date format, hours:minutes
-   ui->EndTimeCombo->setCurrentText(ic.finish.toString( "HH:mm" ) + " UTC"); // short date format, hours:minutes
+   QString endt = ic.finish.toString( "HH:mm" ) + " UTC";
+   ui->EndTimeCombo->setCurrentText(endt); // short date format, hours:minutes
+
+   if (ui->EndTimeCombo->currentText() != endt)
+   {
+       // Cope with weird contest lengths - e.g. Platinum jubilee 70 minutes
+       ui->EndTimeCombo->addItem( endt );
+       ui->EndTimeCombo->setCurrentText(endt); // short date format, hours:minutes
+   }
+
 
    if (isHF)
    {
@@ -1202,6 +1218,18 @@ QWidget * ContestDetails::getDetails( )
         ui->EndDateEdit->setDate(QDate::currentDate());
     }
     contestTransferObject->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
+
+    QDateTime tstart = CanonicalToTDT(contestTransferObject->DTGStart.getValue());
+    QDateTime tend = CanonicalToTDT(contestTransferObject->DTGEnd.getValue());
+
+    if (tstart.secsTo( tend) <= 0)
+    {
+        if (!nextD)
+        {
+            mShowMessage(tr("Contest end is before contest start"), this);
+            nextD = ui->EndTimeCombo;
+        }
+    }
 
     contestTransferObject->mycall.setFullCall( ui->CallsignEdit->text() );
     if ( contestTransferObject->mycall.getValRes() != CS_OK )

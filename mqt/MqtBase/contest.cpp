@@ -881,7 +881,11 @@ void BaseContestLog::scanContest( )
    QDateTime  contestStart = CanonicalToTDT(DTGStart.getValue());
    QDateTime  contestEnd = CanonicalToTDT(DTGEnd.getValue());
 
-   const int contestMinutes =  static_cast<int>(contestStart.secsTo(contestEnd)/60);
+   int contestMinutes =  static_cast<int>(contestStart.secsTo(contestEnd)/60);
+   if (contestMinutes <= 0)
+   {
+       contestMinutes = 1;
+   }
 
    if (qsoTimeMap.size() != contestMinutes)
    {
