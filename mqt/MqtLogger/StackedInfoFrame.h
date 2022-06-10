@@ -10,7 +10,6 @@
 #include "locframe.h"
 #include "tstatsdispframe.h"
 #include "FilterFrame.h"
-#include "tsinglelogframe.h"
 
 namespace Ui {
 class StackedInfoFrame;

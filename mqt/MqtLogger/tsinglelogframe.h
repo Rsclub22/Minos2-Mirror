@@ -236,7 +236,7 @@ private slots:
     void onQSOGrid_customContextMenuRequested(const QPoint &pos);
     void onQSOGrid_sectionMoved(int, int, int);
 
-    void EditContact(CheckableContact *lct );
+    void EditContact(CheckableContact *lct , bool nextUnfilled);
 
     void on_SetRadioList();
 

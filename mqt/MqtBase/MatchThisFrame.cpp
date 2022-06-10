@@ -63,7 +63,7 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
 
     if ( bct )
     {
-        emit editContact( bct );
+        emit editContact( bct, false );
     }
 }
 

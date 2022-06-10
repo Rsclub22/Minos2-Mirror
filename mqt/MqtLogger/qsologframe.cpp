@@ -708,12 +708,16 @@ void QSOLogFrame::setTimeStyles()
     }
     else
     {
+        // as an edit dialog
         if (!unfilled)
         {
-            ui->timeEdit->setEnabled(false);
-            ui->dateEdit->setEnabled(false);
-            ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
-            ui->timeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+//            int w = ui->timeEdit->width();
+//            int h = ui->timeEdit->height();
+//            ui->timeEdit->setEnabled(false);
+//            ui->dateEdit->setEnabled(false);
+////            ui->dateEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+////            ui->timeEdit->setButtonSymbols(QAbstractSpinBox::NoButtons);
+//            ui->timeEdit->resize(w, h);
         }
         else
         {

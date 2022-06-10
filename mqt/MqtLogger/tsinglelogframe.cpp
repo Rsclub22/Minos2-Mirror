@@ -1386,16 +1386,16 @@ void TSingleLogFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
 {
    if (lct)
    {
-      EditContact( lct.data() );
+      EditContact( lct.data(), false );
    }
 }
 void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
 {
     QSOTreeSelectContact(contest->pcontactAt( index.row() ));
 }
-void TSingleLogFrame::EditContact( CheckableContact *cct )
+void TSingleLogFrame::EditContact( CheckableContact *cct, bool nextUnfilled )
 {
-   TQSOEditDlg qdlg( this, false );
+   TQSOEditDlg qdlg( this, nextUnfilled );
    qdlg.setContest(contest);
    qdlg.setFirstContact( cct );
 
@@ -1493,7 +1493,7 @@ void TSingleLogFrame::goNextUnfilled()
    if ( nuc )
    {
        trace("Goto next unfiled");
-       EditContact(nuc.data());
+       EditContact(nuc.data(), true);
    }
    else
    {
@@ -1535,7 +1535,7 @@ void TSingleLogFrame::goSerial( )
 
     if ( cfu )
     {
-       EditContact( cfu.data() );
+       EditContact( cfu.data(), false );
     }
     else
        MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );
