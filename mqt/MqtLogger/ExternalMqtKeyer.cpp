@@ -60,6 +60,7 @@ void ExternalMqtKeyer::sendMsgNum(int msgNum)
 }
 void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
 {
+    trace("ExternalMqtKeyer::stopMsg");
     emit LogContainer->sendKeyerStop();
 }
 void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)

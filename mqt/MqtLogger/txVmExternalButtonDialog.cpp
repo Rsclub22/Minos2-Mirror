@@ -108,6 +108,7 @@ void TxVmExternalButtonDialog::on_recordButton_clicked()
 
 void TxVmExternalButtonDialog::on_stopButton_clicked()
 {
+    trace("TxVmExternalButtonDialog::on_stopButton_clicked");
     emit LogContainer->sendKeyerStop();
 }
 
