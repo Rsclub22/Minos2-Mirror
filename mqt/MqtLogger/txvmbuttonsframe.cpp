@@ -493,7 +493,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
 void TxVmButtonsFrame::onVmStopClicked()
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
     {
         return;
     }
@@ -522,7 +522,10 @@ void TxVmButtonsFrame::onVmStopClicked()
 
     msgDurTimer->stop();
     repeatPauseTimer->stop();
-    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    if (buttonNumSent != NO_VM_BUTTON_ON)
+    {
+        txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
 }
@@ -1090,3 +1093,5 @@ void TxVoiceMemButton::showButtonOnOff(bool state)
         vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
     }
 }
+
+
