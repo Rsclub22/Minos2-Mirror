@@ -29,7 +29,7 @@ static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - No Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 5/6"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/ - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/8 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/8 - No Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 7/8"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
