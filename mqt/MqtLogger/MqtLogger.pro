@@ -4,8 +4,8 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
-include($$PWD/../keyerbase.pri)
 include($$PWD/../mqtapplibs.pri)
+include($$PWD/../keyerbase.pri)
 
 QT       += core gui
 QT       += widgets
