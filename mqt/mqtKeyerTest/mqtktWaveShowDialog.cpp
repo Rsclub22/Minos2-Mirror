@@ -1,6 +1,7 @@
 #include <QDebug>
 #include "ddc.h"
 #include "riff.h"
+#include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 #include "mqtktWaveShowDialog.h"
 #include "ui_mqtktWaveShowDialog.h"
@@ -133,8 +134,6 @@ void WaveShowDialog::on_closeButton_clicked()
 }
 void WaveShowDialog::showSeries()
 {
-    MqtLogCompressor compressor;
-
     dvkFile originalFile;
     originalFile.fileName = "C:/temp/CQF1.wav";
     originalFile.sampleRate = 48000;
@@ -145,7 +144,14 @@ void WaveShowDialog::showSeries()
         return;
     }
 
-    compressor.setGamma(7);
+    chunkware_simple::SimpleCompRms compressor;
+    compressor.setSampleRate(48000);
+    compressor.setWindow(10);       // milliseconds
+    compressor.setThresh( -10 );
+    compressor.setRatio( 0.1 );
+    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    compressor.setRelease( 10.0 ); // 10ms release is good
+    compressor.initRuntime();
 
     originalChart->removeAllSeries();       // removes AND DELETES
     processedChart->removeAllSeries();

@@ -12,6 +12,7 @@
 #include "mqtUtils_pch.h"
 
 #include "riff.h"
+#include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 
 
@@ -110,8 +111,8 @@ private:
 
     QMap<QString, int> deviceIds;
 
-    MqtLogCompressor micCompressor;
-    MqtLogCompressor replayCompressor;
+    chunkware_simple::SimpleCompRms micCompressor;
+    chunkware_simple::SimpleCompRms replayCompressor;
 
     int filterCorner = 0;
 

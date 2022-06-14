@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
+include($$PWD/../keyerbase.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui charts
@@ -13,17 +14,14 @@ QT       += network
 TARGET = mqtKeyerTest
 TEMPLATE = app
 
-INCLUDEPATH += $$PWD/../KeyerBase
+INCLUDEPATH += $$PWD/../Chunkware
 
 SOURCES += \
-        ../KeyerBase/riff.cpp \
         main.cpp \
         mqtktMainWindow.cpp \
         mqtktWaveShowDialog.cpp
 
 HEADERS += \
-        ../KeyerBase/ddc.h \
-        ../KeyerBase/riff.h \
         mqtktMainWindow.h \
         mqtktWaveShowDialog.h
 
@@ -31,8 +29,3 @@ FORMS += \
         mqtktMainWindow.ui \
         mqtktWaveShowDialog.ui
 
-
-# include system libs last, so they get included for KeyerBase
-
-unix:!macos{ LIBS += -lasound}
-win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32}

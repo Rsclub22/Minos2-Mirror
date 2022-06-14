@@ -2,6 +2,7 @@
 #include "mqtktMainWindow.h"
 #include "ui_mqtktMainWindow.h"
 
+#include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 
 const double pi = 3.141592653;
@@ -93,8 +94,14 @@ void mqtktMainWindow::on_compressorButton_clicked()
 
     genTone( toneptr, tone, samples, samples, ramptime, tvolmult );
 
-    MqtLogCompressor compressor;
-    compressor.setGamma(7);
+    chunkware_simple::SimpleCompRms compressor;
+    compressor.setSampleRate(samples);
+    compressor.setWindow(10);       // milliseconds
+    compressor.setThresh( -10 );
+    compressor.setRatio( 0.1 );
+    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    compressor.setRelease( 10.0 ); // 10ms release is good
+    compressor.initRuntime();
 
     chart->removeAllSeries();       // removes AND DELETES
 

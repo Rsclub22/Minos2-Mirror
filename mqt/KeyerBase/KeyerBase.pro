@@ -7,6 +7,7 @@ CONFIG += staticlib
 Target = KeyerBase
 
 INCLUDEPATH += $$PWD/../rtaudio
+INCLUDEPATH += $$PWD/../Chunkware
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../MqtBase
 INCLUDEPATH += ../XMPPLib
@@ -19,6 +20,9 @@ win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += \
     ../rtaudio/RtAudio.cpp \
+    ../Chunkware/SimpleComp.cpp \
+    ../Chunkware/SimpleCompProcess.inl \
+    ../Chunkware/SimpleEnvelope.cpp \
     KeyerJson.cpp \
     MqtLogCompressor.cpp \
     VKMixer.cpp \
@@ -35,6 +39,10 @@ HEADERS += \
     ../rtaudio/include/ginclude.h \
     ../rtaudio/include/iasiodrv.h \
     ../rtaudio/include/soundcard.h \
+    ../Chunkware/SimpleComp.h \
+    ../Chunkware/SimpleEnvelope.h \
+    ../Chunkware/SimpleGain.h \
+    ../Chunkware/SimpleHeader.h \
     KeyerJson.h \
     MqtLogCompressor.h \
     VKMixer.h \

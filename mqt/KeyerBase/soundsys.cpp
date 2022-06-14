@@ -162,9 +162,22 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
         wThread = new RiffWriter(this);
         wThread->start();
     }
-    micCompressor.setGamma(5);
+    micCompressor.setSampleRate(sampleRate);
+    micCompressor.setWindow(10);       // milliseconds
+    micCompressor.setThresh( -10 );
+    micCompressor.setRatio( 0.1 );
+    micCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    micCompressor.setRelease( 10.0 ); // 10ms release is good
+    micCompressor.initRuntime();
 
-    replayCompressor.setGamma(5);
+    replayCompressor.setSampleRate(sampleRate);
+    replayCompressor.setWindow(10);       // milliseconds
+    replayCompressor.setThresh( -10 );
+    replayCompressor.setRatio( 0.1 );
+    replayCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    replayCompressor.setRelease( 10.0 ); // 10ms release is good
+    replayCompressor.initRuntime();
+
     try
     {
         RtAudio::StreamParameters outParams;
@@ -275,8 +288,8 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
 
 void RtAudioSoundSystem::setCompression(int value)
 {
-    micCompressor.setGamma(value);
-    replayCompressor.setGamma(value);
+   // micCompressor.setGamma(value);
+   // replayCompressor.setGamma(value);
 }
 
 int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
