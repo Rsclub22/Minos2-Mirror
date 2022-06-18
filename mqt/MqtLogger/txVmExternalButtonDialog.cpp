@@ -15,8 +15,6 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
-
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
     LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
 }
@@ -186,35 +184,30 @@ void TxVmExternalButtonDialog::on_passThroughSlider_valueChanged(int /*value*/)
         inVolChangeCount--;
     }
 }
-void TxVmExternalButtonDialog::on_compressionValue_valueChanged(int arg1)
-{
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        ui->compressionSlider->setValue(arg1);
-        pubSliders();
-        inVolChangeCount--;
-    }
-}
-void TxVmExternalButtonDialog::on_compressionSlider_valueChanged(int /*value*/)
-{
-    pubSliders();
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        int v = ui->compressionSlider->value();
-        ui->compressionValue->setValue(v);
-        inVolChangeCount--;
-    }
-}
-
 void TxVmExternalButtonDialog::pubSliders()
 {
     int v0 = ui->recordSlider->value();
     int v1 = ui->replaySlider->value();
     int v2 = ui->passThroughSlider->value();
-    int c = ui->compressionSlider->value();
-    QString sliders = QString("%1;%2;%3;%4").arg(v0).arg(v1).arg(v2).arg(c);
+
+    getCompSliders();
+/*
+window
+threshold
+ratio
+attack
+release
+makeUpGain
+*/
+    QString sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
+            .arg(v0).arg(v1).arg(v2)
+            .arg(compParams.window)
+            .arg(compParams.threshold)
+            .arg(compParams.ratio)
+            .arg(compParams.attack)
+            .arg(compParams.release)
+            .arg(compParams.makeUpGain);
+
     RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSliders, sliders, psPublished);
 }
 void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
@@ -257,11 +250,127 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 ui->passThroughSlider->setValue(vals[2].toDouble());
                 ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
 
-                ui->compressionSlider->setValue(vals[3].toInt());
-                ui->compressionValue->setValue(vals[3].toInt());
+                compParams.window = vals[3].toDouble();
+                compParams.threshold = vals[4].toDouble();
+                compParams.ratio = vals[5].toDouble();
+                compParams.attack = vals[6].toDouble();
+                compParams.release = vals[7].toDouble();
+                compParams.makeUpGain = vals[8].toDouble();
+
+                setCompSliders();
 
                 inVolChangeCount--;
             }
 }
 
+
+void TxVmExternalButtonDialog::getCompSliders()
+{
+    compParams.window = ui->windowSlider->value();       // milliseconds
+    compParams.threshold = ui->thresholdSlider->value();
+    compParams.ratio = (1.0 * ui->ratioSlider->value())/(ui->ratioSlider->maximum() - ui->ratioSlider->minimum());
+    compParams.attack = ui->attackSlider->value();     // ms
+    compParams.release = ui->releaseSlider->value(); // ms
+    compParams.makeUpGain = ui->makeUpGainSlider->value();
+}
+
+void TxVmExternalButtonDialog::setCompSliders()
+{
+    ui->windowSlider->setValue(compParams.window);       // milliseconds
+    ui->thresholdSlider->setValue(compParams.threshold);
+    ui->ratioSlider->setValue((ui->ratioSlider->maximum() - ui->ratioSlider->minimum())*(compParams.ratio * 1.0));
+    ui->attackSlider->setValue(compParams.attack);     // ms
+    ui->releaseSlider->setValue(compParams.release); // ms
+    ui->makeUpGainSlider->setValue(compParams.makeUpGain);
+}
+
+
+void TxVmExternalButtonDialog::on_windowSlider_valueChanged(int )
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_thresholdSlider_valueChanged(int )
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_ratioSlider_valueChanged(int)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_attackSlider_valueChanged(int )
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_releaseSlider_valueChanged(int)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_makeUpGainSlider_valueChanged(int )
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+
+        inVolChangeCount = 1;
+//        int v = ui->passThroughSlider->value();
+//        ui->passThroughValue->setValue(v/10.0);
+        inVolChangeCount--;
+    }
+}
 

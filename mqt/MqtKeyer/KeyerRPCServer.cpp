@@ -90,18 +90,26 @@ void KeyerServer::publishConfig(const QString &config)
     KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
-void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, int comp, int seq)
+void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, CompressorParams &cp, int seq)
 {
     static QString old;
     QString sliders;
-    sliders = QString("%1;%2;%3;%4;%5").arg(rec).arg(replay).arg(passthrough).arg(comp).arg(seq);
+    sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10")
+            .arg(rec).arg(replay).arg(passthrough)
+            .arg(cp.window)
+            .arg(cp.threshold)
+            .arg(cp.ratio)
+            .arg(cp.attack)
+            .arg(cp.release)
+            .arg(cp.makeUpGain)
+            .arg(seq);
     if (sliders != old)
     {
         old = sliders;
         RPCPubSub::publish(rpcConstants::KeyerCategory, rpcConstants::keyerSliders, sliders, psPublished);
     }
 }
-void KeyerServer::publishSliders(int rec, int replay, int passthrough, int comp)
+void KeyerServer::publishSliders(int rec, int replay, int passthrough, CompressorParams &comp)
 {
     checkConnection();
 
@@ -250,8 +258,16 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                   int rec = vals[0].toInt();
                   int rep = vals[1].toInt();
                   int pass = vals[2].toInt();
-                  int comp = (vals[3].toInt());
-                  emit sliders(rec, rep, pass, comp);
+
+                  CompressorParams cp;
+                  cp.window = vals[3].toDouble();
+                  cp.threshold = vals[4].toDouble();
+                  cp.ratio = vals[5].toDouble();
+                  cp.attack = vals[6].toDouble();
+                  cp.release = vals[7].toDouble();
+                  cp.makeUpGain = vals[8].toDouble();
+
+                  emit sliders(rec, rep, pass, cp);
               }
           }
 

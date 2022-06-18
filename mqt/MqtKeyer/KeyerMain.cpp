@@ -26,10 +26,10 @@ void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, in
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
 
-void KeyerMain::doSliders(int rec, int rep, int pass, int comp)
+void KeyerMain::doSliders(int rec, int rep, int pass, CompressorParams comp)
 {
     inVolChangeCount++;
-    trace(QString("Set Slider positions %1;%2;%3;%4").arg(rec).arg(rep).arg(pass).arg(comp));
+    trace(QString("Set Slider positions %1;%2;%3").arg(rec).arg(rep).arg(pass));
     ui->recordSlider->setValue(rec);
     trace(QString("(doSliders) rec changed to %1").arg(rec));
     ui->replaySlider->setValue(rep);
@@ -41,7 +41,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass, int comp)
     ui->replayValue->setValue(rep/10.0);
     ui->passThroughValue->setValue(pass/10.0);
 
-    ui->compressionSlider->setValue(comp);
+    setCompSliders(comp);
 
     inVolChangeCount--;
 }
@@ -114,7 +114,7 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     keyerMain = this;
 
-    ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
+    //ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
 
     commonPort * cp = loadKeyers();
@@ -140,20 +140,20 @@ KeyerMain::KeyerMain(QWidget *parent) :
     int recordLevel = settings.value("RecordLevel", 0).toInt();
     int replayLevel = settings.value("ReplayLevel", 0).toInt();
     int passThroughLevel = settings.value("PassThroughLevel", 0).toInt();
-    int comp = settings.value("compression", 0).toInt();
 
+    CompressorParams cpar;
     if (masterConfig.read("./Configuration/MinosKeyer.json"))
     {
         recordLevel = masterConfig.recordSliderPosition;
         replayLevel = masterConfig.replaySliderPosition;
         passThroughLevel = masterConfig.passthroughSliderPosition;
-        comp = masterConfig.compression;
     }
 
+    cpar = masterConfig.compression;
+    setCompSliders(cpar);
     ui->recordSlider->setValue(recordLevel);
     ui->replaySlider->setValue(replayLevel);
     ui->passThroughSlider->setValue(passThroughLevel);
-    ui->compressionSlider->setValue(comp);
 
     inVolChangeCount--;
 
@@ -168,6 +168,12 @@ KeyerMain::KeyerMain(QWidget *parent) :
     }
     ui->keyCombo->setCurrentIndex(0);
 //    on_keyCombo_currentIndexChanged(0);
+
+    connect(ui->windowSlider, &QSlider::sliderMoved,
+      [&](int value) {
+                    ui->windowSlider->setToolTip(QString("%1").arg(value));
+                    QToolTip::showText(QCursor::pos(), QString("%1").arg(value), nullptr);
+      });
 }
 KeyerMain::~KeyerMain()
 {
@@ -210,8 +216,6 @@ bool KeyerMain::writeConfig(bool force)
     if (force || old != conf)
     {
         ret = masterConfig.write("./Configuration/MinosKeyer.json");
-        trace(QString("publishConfig force = %1").arg(force));
-
         KeyerServer::publishConfig(masterConfig.makeConfig(QJsonDocument::Compact, force, false));
 
         old = conf;
@@ -288,10 +292,12 @@ void KeyerMain::lineTimerTimer( )
        masterConfig.recordSliderPosition = ui->recordSlider->value();
        masterConfig.replaySliderPosition = ui->replaySlider->value();
        masterConfig.passthroughSliderPosition = ui->passThroughSlider->value();
-       masterConfig.compression = ui->compressionSlider->value();
+
+       masterConfig.compression = getCompSliders();
+
        writeConfig(false);
 
-       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->compressionSlider->value());
+       KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), masterConfig.compression);
        if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
        {
            doSetVU(0, 0, 0);    // make sure the metering goes to zero when nothing is happening
@@ -520,13 +526,14 @@ void KeyerMain::setVolumeMults()
     int record = ui->recordSlider->value();
     int replay = ui->replaySlider->value();
     int passThrough = ui->passThroughSlider->value();
-    int comp = ui->compressionSlider->value();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, comp);
+    CompressorParams cpar = getCompSliders();
+
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, cpar);
 
     ui->recordValue->setValue(record/10.0);
     ui->replayValue->setValue(replay/10.0);
     ui->passThroughValue->setValue(passThrough/10.0);
-    ui->compressionValue->setValue(comp);
+//    ui->compressionValue->setValue(comp);
 
     inVolChangeCount--;
 }
@@ -551,13 +558,13 @@ void KeyerMain::on_passThroughSlider_valueChanged(int position)
     setVolumeMults();
     writeConfig(false);
 }
-void KeyerMain::on_compressionSlider_valueChanged(int value)
-{
-    masterConfig.compression = value;
-    setVolumeMults();
-    writeConfig(false);
-    SoundSystemDriver::getSbDriver()->setCompression(value);
-}
+//void KeyerMain::on_compressionSlider_valueChanged(int value)
+//{
+//    masterConfig.compression = value;
+//    setVolumeMults();
+//    writeConfig(false);
+//    SoundSystemDriver::getSbDriver()->setCompression(value);
+//}
 
 void KeyerMain::on_recordValue_valueChanged(double arg1)
 {
@@ -585,14 +592,6 @@ void KeyerMain::on_passThroughValue_valueChanged(double arg1)
         trace(QString("(v) pass changed to %1").arg(arg1));
     }
 }
-void KeyerMain::on_compressionValue_valueChanged(int arg1)
-{
-    if (inVolChangeCount <= 0)
-    {
-        ui->compressionSlider->setValue(arg1);
-        trace(QString("(v) comp changed to %1").arg(arg1));
-    }
-}
 
 
 void KeyerMain::doConfig(QString config)
@@ -612,8 +611,8 @@ void KeyerMain::doConfig(QString config)
     {
         writeConfig(true);
         // the value change should cause a force publish. We have to set it back again or it stays there!
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value(), ui->compressionSlider->value());
-        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), ui->compressionSlider->value());
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value() - 1, ui->passThroughSlider->value(), masterConfig.compression);
+        KeyerServer::publishSliders(ui->recordSlider->value(), ui->replaySlider->value(), ui->passThroughSlider->value(), masterConfig.compression);
     }
 }
 void doConfig(QString config)
@@ -636,5 +635,77 @@ void KeyerMain::on_showButton_clicked()
     int fno = ui->keyCombo->currentText().toInt() - 1;
     WaveShowDialog wsd(this, fno);
     wsd.exec();
+}
+
+CompressorParams KeyerMain::getCompSliders()
+{
+    CompressorParams cp;
+    cp.window = ui->windowSlider->value();       // milliseconds
+    cp.threshold = ui->thresholdSlider->value();
+    cp.ratio = (1.0 * ui->ratioSlider->value())/(ui->ratioSlider->maximum() - ui->ratioSlider->minimum());
+    cp.attack = ui->attackSlider->value();     // ms
+    cp.release = ui->releaseSlider->value(); // ms
+    cp.makeUpGain = ui->makeUpGainSlider->value();
+
+    return cp;
+
+}
+
+void KeyerMain::setCompSliders(CompressorParams &cp)
+{
+    ui->windowSlider->setValue(cp.window);       // milliseconds
+    ui->thresholdSlider->setValue(cp.threshold);
+    ui->ratioSlider->setValue((ui->ratioSlider->maximum() - ui->ratioSlider->minimum())*(cp.ratio * 1.0));
+    ui->attackSlider->setValue(cp.attack);     // ms
+    ui->releaseSlider->setValue(cp.release); // ms
+    ui->makeUpGainSlider->setValue(cp.makeUpGain);
+}
+
+
+void KeyerMain::on_windowSlider_valueChanged(int )
+{
+    masterConfig.compression.window = ui->windowSlider->value();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_thresholdSlider_valueChanged(int )
+{
+    masterConfig.compression.threshold = ui->thresholdSlider->value();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_ratioSlider_valueChanged(int)
+{
+    masterConfig.compression.ratio = 1.0/ui->ratioSlider->value();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_attackSlider_valueChanged(int )
+{
+    masterConfig.compression.attack = ui->attackSlider->value();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_releaseSlider_valueChanged(int)
+{
+    masterConfig.compression.release = ui->releaseSlider->value();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_makeUpGainSlider_valueChanged(int )
+{
+    masterConfig.compression.makeUpGain = ui->makeUpGainSlider->value();
+    setVolumeMults();
+    writeConfig(false);
 }
 

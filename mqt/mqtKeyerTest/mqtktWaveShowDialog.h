@@ -19,8 +19,20 @@ public:
 private slots:
     void on_closeButton_clicked();
 
+    void on_recalcButton_clicked();
+
 private:
     Ui::WaveShowDialog *ui;
+
+    double window = 10.0;       // milliseconds
+    double threshold = -10.0;
+    double ratio = 0.1;
+    double attack = 1.0;     // 1ms seems like a good look-ahead to me
+    double release = 10.0; // 10ms release is good
+    double makeUpGain = 0;  // db
+
+    void getParams();
+    void setSliders();
 
     QLineSeries *originalSeries = nullptr;
     QChartView *originalChartView = nullptr;

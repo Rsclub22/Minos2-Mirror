@@ -11,7 +11,6 @@
 #include "riff.h"
 #include "cutils.h"
 #include "keyerlog.h"
-#include "keyerBase.h"
 #include "keyctrl.h"
 #include "sbdriver.h"
 #include "soundsys.h"
@@ -243,13 +242,9 @@ bool SoundSystemDriver::stopMicPassThrough()
 {
     return soundSystem->stopMicPassThrough();
 }
-void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, int compression)
+void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression)
 {
     soundSystem->setVolumeMults(record, replay, passThrough, compression);
-}
-void SoundSystemDriver::setCompression(int value)
-{
-    soundSystem->setCompression(value);
 }
 
 int SoundSystemDriver::getMessageLen(int buttonNumber)

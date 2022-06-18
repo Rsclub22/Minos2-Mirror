@@ -120,6 +120,7 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
 
     ui->chartLayout->addWidget(diffChartView);
 
+    setSliders();
     showSeries();
 }
 
@@ -146,11 +147,14 @@ void WaveShowDialog::showSeries()
 
     chunkware_simple::SimpleCompRms compressor;
     compressor.setSampleRate(48000);
-    compressor.setWindow(10);       // milliseconds
-    compressor.setThresh( -10 );
-    compressor.setRatio( 0.1 );
-    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    compressor.setRelease( 10.0 ); // 10ms release is good
+
+    getParams();
+    compressor.setWindow(window);       // milliseconds
+    compressor.setThresh( threshold );
+    compressor.setRatio( ratio );
+    compressor.setAttack( attack );     // 1ms seems like a good look-ahead to me
+    compressor.setRelease( release ); // 10ms release is good
+
     compressor.initRuntime();
 
     originalChart->removeAllSeries();       // removes AND DELETES
@@ -194,6 +198,9 @@ void WaveShowDialog::showSeries()
             ds1 *= 32768.0;
             ds2 *= 32768.0;
 
+            ds1 *= chunkware_simple::dB2lin(makeUpGain);
+            ds2 *= chunkware_simple::dB2lin(makeUpGain);
+
             qint16 ival = std::max(abs(is1), abs(is2));
             imaxSample = std::max(imaxSample, ival);
 
@@ -224,4 +231,32 @@ void WaveShowDialog::showSeries()
     diffChart->setTitle("mqt Difference");
 }
 
+
+
+void WaveShowDialog::on_recalcButton_clicked()
+{
+    // reset the compressor parameters and re-display
+
+    showSeries();
+}
+
+void WaveShowDialog::getParams()
+{
+    window = ui->windowSlider->value();       // milliseconds
+    threshold = ui->thresholdSlider->value();
+    ratio = (1.0 * ui->ratioSlider->value())/(ui->ratioSlider->maximum() - ui->ratioSlider->minimum());
+    attack = ui->attackSlider->value();     // 1ms seems like a good look-ahead to me
+    release = ui->releaseSlider->value(); // 10ms release is good
+    makeUpGain = ui->makeUpGainSlider->value();
+}
+
+void WaveShowDialog::setSliders()
+{
+    ui->windowSlider->setValue(window);       // milliseconds
+    ui->thresholdSlider->setValue(threshold);
+    ui->ratioSlider->setValue((ui->ratioSlider->maximum() - ui->ratioSlider->minimum())*(ratio * 1.0));
+    ui->attackSlider->setValue(attack);     // 1ms seems like a good look-ahead to me
+    ui->releaseSlider->setValue(release); // 10ms release is good
+    ui->makeUpGainSlider->setValue(makeUpGain);
+}
 

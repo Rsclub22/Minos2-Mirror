@@ -11,9 +11,11 @@
 
 #include "mqtUtils_pch.h"
 
+#include "keyerBase.h"
 #include "riff.h"
 #include "SimpleComp.h"
 #include "MqtLogCompressor.h"
+#include "CompressorParams.h"
 
 
 class RtAudioSoundSystem;
@@ -84,7 +86,7 @@ public:
     bool startMicPassThrough();
     bool stopMicPassThrough();
 
-    void setVolumeMults(qreal record, qreal replay, qreal passThrough, int comp);
+    void setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp);
 
     void setData(int16_t *data, unsigned int len);
     void setPipData(int16_t *data, unsigned int len, unsigned int delayLen);
@@ -100,8 +102,6 @@ public:
                                     unsigned int nFrames,
                                     double streamTime,
                                     unsigned int status );
-
-    void setCompression(int value);
 private:
 
     RtAudio *audio = nullptr;
@@ -113,6 +113,8 @@ private:
 
     chunkware_simple::SimpleCompRms micCompressor;
     chunkware_simple::SimpleCompRms replayCompressor;
+
+    double makeUpGain = 0.0;
 
     int filterCorner = 0;
 
@@ -129,7 +131,7 @@ private:
     bool outputEnabled = false;
     bool passThroughEnabled = false;
 
-    int compression = 0;
+    CompressorParams compression;
 
     qreal recordMult = 0.0;
     qreal replayMult = 0.0;

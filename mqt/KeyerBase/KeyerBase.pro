@@ -23,6 +23,7 @@ SOURCES += \
     ../Chunkware/SimpleComp.cpp \
     ../Chunkware/SimpleCompProcess.inl \
     ../Chunkware/SimpleEnvelope.cpp \
+    CompressorParams.cpp \
     KeyerJson.cpp \
     MqtLogCompressor.cpp \
     VKMixer.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     ../Chunkware/SimpleEnvelope.h \
     ../Chunkware/SimpleGain.h \
     ../Chunkware/SimpleHeader.h \
+    CompressorParams.h \
     KeyerJson.h \
     MqtLogCompressor.h \
     VKMixer.h \

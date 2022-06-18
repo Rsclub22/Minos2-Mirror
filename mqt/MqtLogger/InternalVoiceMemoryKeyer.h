@@ -4,6 +4,7 @@
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 #include "keyerBase.h"
+#include "CompressorParams.h"
 
 class InternalVoiceMemoryKeyer : public VoiceKeyerBase
 {

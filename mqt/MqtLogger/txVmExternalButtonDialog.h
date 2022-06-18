@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "voicekeyerbase.h"
+#include "CompressorParams.h"
 
 namespace Ui {
 class TxVmExternalButtonDialog;
@@ -42,9 +43,17 @@ private slots:
 
     void on_passThroughSlider_valueChanged(int value);
 
-    void on_compressionSlider_valueChanged(int);
+    void on_windowSlider_valueChanged(int);
 
-    void on_compressionValue_valueChanged(int arg1);
+    void on_thresholdSlider_valueChanged(int );
+
+    void on_ratioSlider_valueChanged(int );
+
+    void on_attackSlider_valueChanged(int);
+
+    void on_releaseSlider_valueChanged(int );
+
+    void on_makeUpGainSlider_valueChanged(int);
 
 public Q_SLOTS:
     virtual void accept() override;
@@ -58,6 +67,10 @@ private:
     void doCloseEvent();
     bool validateDur(QString durName, QString dur, int &dur_);
 
+    CompressorParams compParams;
+
+    void getCompSliders();
+    void setCompSliders();
 
     void pubSliders();
 };

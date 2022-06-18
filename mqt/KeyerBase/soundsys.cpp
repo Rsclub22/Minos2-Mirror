@@ -12,7 +12,6 @@
 #include <QtMath>
 #include <numeric>
 #include <QtCore>
-
 #include "soundsys.h"
 #include "keyerlog.h"
 #include "riff.h"
@@ -275,7 +274,7 @@ void RtAudioSoundSystem::setFilter(int fc)
    filterCorner = fc;
 }
 
-void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, int comp)
+void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
@@ -284,12 +283,24 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
     passThroughMult = qPow(10, passThrough/100);
 
     compression = comp;
-}
 
-void RtAudioSoundSystem::setCompression(int value)
-{
-   // micCompressor.setGamma(value);
-   // replayCompressor.setGamma(value);
+    micCompressor.setWindow(comp.window);
+    micCompressor.setAttack(comp.attack);
+    micCompressor.setRelease(comp.release);
+    micCompressor.setThresh(comp.threshold);
+    micCompressor.setRatio(comp.ratio);
+
+    micCompressor.initRuntime();
+
+    replayCompressor.setWindow(comp.window);
+    replayCompressor.setAttack(comp.attack);
+    replayCompressor.setRelease(comp.release);
+    replayCompressor.setThresh(comp.threshold);
+    replayCompressor.setRatio(comp.ratio);
+
+    replayCompressor.initRuntime();
+
+    makeUpGain = comp.makeUpGain;
 }
 
 int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
@@ -350,6 +361,9 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                 double ds2 = s2/32768.0;
 
                 micCompressor.process(ds1, ds2);
+
+                ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                ds2 *= chunkware_simple::dB2lin(makeUpGain);
 
                 s1 = ds1 * 32768.0;
                 s2 = ds2 * 32768.0;
@@ -599,6 +613,9 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                         double ds2 = val2/32768.0;
 
                         replayCompressor.process(ds1, ds2);
+
+                        ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                        ds2 *= chunkware_simple::dB2lin(makeUpGain);
 
                         val = ds1 * 32768.0;
                         val2 = ds2 * 32768.0;

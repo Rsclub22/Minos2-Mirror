@@ -31,6 +31,15 @@ int KeyerJson::getInt(QJsonObject o, QString key, int def)
     }
     return def;
 }
+int KeyerJson::getDouble(QJsonObject o, QString key, double def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isDouble())
+    {
+        return pe.toDouble();
+    }
+    return def;
+}
 QString KeyerJson::getString(QJsonObject o, QString key, QString def)
 {
     QJsonValue pe = o.value(key);
@@ -56,14 +65,14 @@ bool KeyerJson::parseConfig(QString conf, bool incSliders)
                 recordSliderPosition = getInt(sconf, "record", 0);
                 replaySliderPosition = getInt(sconf, "replay", 0);
                 passthroughSliderPosition = getInt(sconf, "pass", 0);
-                compression = getInt(sconf, "compression", 0);
+                compression.read(sconf);
             }
             else
             {
                 recordSliderPosition = -1000;
                 replaySliderPosition = -1000;
                 passthroughSliderPosition = -1000;
-                compression = 0;
+                compression = CompressorParams();
             }
             QJsonValue keys = sconf.value("keys");
             if (keys.isArray())
@@ -120,7 +129,7 @@ QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force, bool
         sconf.insert("record", recordSliderPosition);
         sconf.insert("replay", replaySliderPosition);
         sconf.insert("pass", passthroughSliderPosition);
-        sconf.insert("compression", compression);
+        compression.insert(sconf);
     }
 
     QJsonArray ja;

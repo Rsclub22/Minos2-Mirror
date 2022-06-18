@@ -7,6 +7,7 @@
 #include <QProcess>
 #include "KeyerJson.h"
 #include "VKMixer.h"
+#include "CompressorParams.h"
 
 namespace Ui {
 class KeyerMain;
@@ -78,14 +79,12 @@ private slots:
 
     void on_passThroughValue_valueChanged(double arg1);
 
-    void on_compressionSlider_valueChanged(int value);
-
     void onPTT(bool);
 
     void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
-    void doSliders(int, int, int, int comp);
+    void doSliders(int, int, int, CompressorParams comp);
 
     void on_messageName_editingFinished();
 
@@ -93,7 +92,17 @@ private slots:
 
     void on_showButton_clicked();
 
-    void on_compressionValue_valueChanged(int arg1);
+    void on_windowSlider_valueChanged(int);
+
+    void on_thresholdSlider_valueChanged(int );
+
+    void on_ratioSlider_valueChanged(int );
+
+    void on_attackSlider_valueChanged(int);
+
+    void on_releaseSlider_valueChanged(int );
+
+    void on_makeUpGainSlider_valueChanged(int);
 
 private:
     void syncSetLines();
@@ -120,6 +129,9 @@ private:
     QProcess *runner;
 
     void setVolumeMults();
+
+    CompressorParams getCompSliders();
+    void setCompSliders(CompressorParams &cp);
 
 
     void runAlsaScript(const QString &alsaFileName, const QString &command);
