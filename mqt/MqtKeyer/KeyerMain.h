@@ -8,6 +8,7 @@
 #include "KeyerJson.h"
 #include "VKMixer.h"
 #include "CompressorParams.h"
+#include "SliderSpinner.h"
 
 namespace Ui {
 class KeyerMain;
@@ -67,18 +68,6 @@ private slots:
 
     void on_restoreAlsaButton_clicked();
 
-    void on_recordSlider_valueChanged(int position);
-
-    void on_replaySlider_valueChanged(int position);
-
-    void on_passThroughSlider_valueChanged(int position);
-
-    void on_recordValue_valueChanged(double arg1);
-
-    void on_replayValue_valueChanged(double arg1);
-
-    void on_passThroughValue_valueChanged(double arg1);
-
     void onPTT(bool);
 
     void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
@@ -92,17 +81,21 @@ private slots:
 
     void on_showButton_clicked();
 
-    void on_windowSlider_valueChanged(int);
+    void window_valueChanged();
 
-    void on_thresholdSlider_valueChanged(int );
+    void threshold_valueChanged( );
 
-    void on_ratioSlider_valueChanged(int );
+    void ratio_valueChanged( );
 
-    void on_attackSlider_valueChanged(int);
+    void attack_valueChanged();
 
-    void on_releaseSlider_valueChanged(int );
+    void release_valueChanged( );
 
-    void on_makeUpGainSlider_valueChanged(int);
+    void makeUpGain_valueChanged();
+
+    void recordChanged();
+    void replayChanged();
+    void passthroughChanged();
 
 private:
     void syncSetLines();
@@ -110,6 +103,18 @@ private:
     QTimer CaptionTimer;
 
     StdInReader *stdinReader = new StdInReader(this);
+
+    SliderSpinner *recordFrame = nullptr;
+    SliderSpinner *replayFrame = nullptr;
+    SliderSpinner *passthroughFrame = nullptr;
+
+    SliderSpinner *windowFrame = nullptr;
+    SliderSpinner *thresholdFrame = nullptr;
+    SliderSpinner *ratioFrame = nullptr;
+    SliderSpinner *attackFrame = nullptr;
+    SliderSpinner *releaseFrame = nullptr;
+    SliderSpinner *makeUpGainFrame = nullptr;
+
 
     bool PTT;
     bool PTTRef;

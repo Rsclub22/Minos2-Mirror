@@ -38,6 +38,8 @@ public:
     bool read(QString fileName);
     bool write(QString fileName);
 
+    void traceConfig();
+
 private:
     bool getBool(QJsonObject pe, QString key, bool def);
     int getInt(QJsonObject pe, QString key, int def);

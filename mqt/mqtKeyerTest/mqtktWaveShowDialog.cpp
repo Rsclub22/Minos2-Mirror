@@ -120,6 +120,32 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
 
     ui->chartLayout->addWidget(diffChartView);
 
+    ui->compFrame->setLayout(new QVBoxLayout());
+
+    windowFrame = new SliderSpinner(this, tr("Window (ms)"), Qt::Horizontal, 1, +100, 1);
+    ui->compFrame->layout()->addWidget(windowFrame);
+    connect(windowFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
+    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -20, 0, 0);
+    ui->compFrame->layout()->addWidget(thresholdFrame);
+    connect(thresholdFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
+    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 1, +100, 0);
+    ui->compFrame->layout()->addWidget(ratioFrame);
+    connect(ratioFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
+    attackFrame = new SliderSpinner(this, tr("Attack (ms)"), Qt::Horizontal, 1, 100, 0);
+    ui->compFrame->layout()->addWidget(attackFrame);
+    connect(attackFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
+    releaseFrame = new SliderSpinner(this, tr("Release (ms)"), Qt::Horizontal, 1, 100, 0);
+    ui->compFrame->layout()->addWidget(releaseFrame);
+    connect(releaseFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
+    makeUpGainFrame = new SliderSpinner(this, tr("Makeup Gain (db)"), Qt::Horizontal, 0, +20, 0);
+    ui->compFrame->layout()->addWidget(makeUpGainFrame);
+    connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
+
     setSliders();
     showSeries();
 }
@@ -242,21 +268,23 @@ void WaveShowDialog::on_recalcButton_clicked()
 
 void WaveShowDialog::getParams()
 {
-    window = ui->windowSlider->value();       // milliseconds
-    threshold = ui->thresholdSlider->value();
-    ratio = (1.0 * ui->ratioSlider->value())/(ui->ratioSlider->maximum() - ui->ratioSlider->minimum());
-    attack = ui->attackSlider->value();     // 1ms seems like a good look-ahead to me
-    release = ui->releaseSlider->value(); // 10ms release is good
-    makeUpGain = ui->makeUpGainSlider->value();
+    window = windowFrame->getValue();       // milliseconds
+    threshold = thresholdFrame->getValue();
+    ratio = ratioFrame->getValue()/(ratioFrame->maximum() - ratioFrame->minimum());
+    attack = attackFrame->getValue();     // 1ms seems like a good look-ahead to me
+    release = releaseFrame->getValue(); // 10ms release is good
+    makeUpGain = makeUpGainFrame->getValue();
 }
 
 void WaveShowDialog::setSliders()
 {
-    ui->windowSlider->setValue(window);       // milliseconds
-    ui->thresholdSlider->setValue(threshold);
-    ui->ratioSlider->setValue((ui->ratioSlider->maximum() - ui->ratioSlider->minimum())*(ratio * 1.0));
-    ui->attackSlider->setValue(attack);     // 1ms seems like a good look-ahead to me
-    ui->releaseSlider->setValue(release); // 10ms release is good
-    ui->makeUpGainSlider->setValue(makeUpGain);
+    windowFrame->setValue(window);       // milliseconds
+    thresholdFrame->setValue(threshold);
+    ratioFrame->setValue((ratioFrame->maximum() - ratioFrame->minimum())*(ratio * 1.0));
+    attackFrame->setValue(attack);     // 1ms seems like a good look-ahead to me
+    releaseFrame->setValue(release); // 10ms release is good
+    makeUpGainFrame->setValue(makeUpGain);
 }
-
+void WaveShowDialog::compressionChanged()
+{
+}

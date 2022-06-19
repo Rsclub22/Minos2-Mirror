@@ -2,6 +2,7 @@
 #define MQTKTWAVESHOWDIALOG_H
 
 #include <QDialog>
+#include "SliderSpinner.h"
 #include <QtCharts>
 
 namespace Ui {
@@ -21,6 +22,7 @@ private slots:
 
     void on_recalcButton_clicked();
 
+    void compressionChanged();
 private:
     Ui::WaveShowDialog *ui;
 
@@ -45,6 +47,14 @@ private:
     QLineSeries *diffSeries = nullptr;
     QChartView *diffChartView = nullptr;
     QChart *diffChart = nullptr;
+
+    SliderSpinner *windowFrame = nullptr;
+    SliderSpinner *thresholdFrame = nullptr;
+    SliderSpinner *ratioFrame = nullptr;
+    SliderSpinner *attackFrame = nullptr;
+    SliderSpinner *releaseFrame = nullptr;
+    SliderSpinner *makeUpGainFrame = nullptr;
+
 
     void showSeries();
 };

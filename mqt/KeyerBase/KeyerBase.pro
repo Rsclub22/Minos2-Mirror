@@ -26,6 +26,7 @@ SOURCES += \
     CompressorParams.cpp \
     KeyerJson.cpp \
     MqtLogCompressor.cpp \
+    SliderSpinner.cpp \
     VKMixer.cpp \
     WaveShowDialog.cpp \
     keyerBase.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     CompressorParams.h \
     KeyerJson.h \
     MqtLogCompressor.h \
+    SliderSpinner.h \
     VKMixer.h \
     WaveShowDialog.h \
     ddc.h \
@@ -65,4 +67,5 @@ unix {
 !isEmpty(target.path): INSTALLS += target
 
 FORMS += \
+    SliderSpinner.ui \
     WaveShowDialog.ui

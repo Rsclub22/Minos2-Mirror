@@ -183,3 +183,8 @@ bool KeyerJson::write(QString fileName)
     return true;
 
 }
+
+void KeyerJson::traceConfig()
+{
+    trace(QString("masterconfig %1 %2 %3").arg(recordSliderPosition).arg(replaySliderPosition).arg(passthroughSliderPosition));
+}
