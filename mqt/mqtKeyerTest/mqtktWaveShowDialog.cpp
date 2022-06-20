@@ -6,6 +6,8 @@
 #include "mqtktWaveShowDialog.h"
 #include "ui_mqtktWaveShowDialog.h"
 
+const double pi = 3.141592653;
+
 bool sblog = true;
 void trace(const QString &s)
 {
@@ -96,8 +98,14 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    baseChart = new QChart();
+    baseChart->legend()->hide();
+    baseChartView = new QChartView(baseChart);
+    baseChartView->setRenderHint(QPainter::Antialiasing);
+    ui->chartLayout->addWidget(baseChartView);
+
     originalChart = new QChart();
-    originalChart->legend()->hide();            // colours against series
+    originalChart->legend()->hide();
 
     originalChartView = new QChartView(originalChart);
     originalChartView->setRenderHint(QPainter::Antialiasing);
@@ -105,7 +113,7 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui->chartLayout->addWidget(originalChartView);
 
     processedChart = new QChart();
-    processedChart->legend()->hide();            // colours against series
+    processedChart->legend()->hide();
 
     processedChartView = new QChartView(processedChart);
     processedChartView->setRenderHint(QPainter::Antialiasing);
@@ -113,7 +121,7 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui->chartLayout->addWidget(processedChartView);
 
     diffChart = new QChart();
-    diffChart->legend()->hide();            // colours against series
+    diffChart->legend()->hide();
 
     diffChartView = new QChartView(diffChart);
     diffChartView->setRenderHint(QPainter::Antialiasing);
@@ -126,11 +134,11 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui->compFrame->layout()->addWidget(windowFrame);
     connect(windowFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
 
-    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -20, 0, 0);
+    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -40, 0, 0);
     ui->compFrame->layout()->addWidget(thresholdFrame);
     connect(thresholdFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
 
-    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 1, +100, 0);
+    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 0, +50, 0);
     ui->compFrame->layout()->addWidget(ratioFrame);
     connect(ratioFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
 
@@ -146,12 +154,19 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui->compFrame->layout()->addWidget(makeUpGainFrame);
     connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &WaveShowDialog::compressionChanged);
 
+    ui->compFrame->setContentsMargins(0, 0, 0, 0);
+
     setSliders();
+
+    getParams();
+    showComp();
     showSeries();
 }
 
 WaveShowDialog::~WaveShowDialog()
 {
+    delete [] toneptr;
+
     delete ui;
 }
 
@@ -159,6 +174,134 @@ void WaveShowDialog::on_closeButton_clicked()
 {
     close();
 }
+void WaveShowDialog::genTone(int16_t *dest, int tone, int samples, int rate, int rtime, double volmult )
+{
+
+   double deltaAngle = 2 * pi * tone / rate;
+   double yk = 2 * cos( deltaAngle );
+   double y1 = sin ( -2 * deltaAngle );
+   double y2 = sin ( -deltaAngle );
+
+#define CHUNKSIZE 1024
+
+   int16_t *buff = new int16_t [ CHUNKSIZE ];
+
+
+   for ( int buffstart = 0; buffstart < samples * 2; buffstart += CHUNKSIZE * 2 )
+   {
+      int16_t * destptr = dest + buffstart;
+      int i;
+      for ( i = 0; i < CHUNKSIZE && buffstart + i*2 < samples * 2; i++ )
+      {
+         double y3 = yk * y2 - y1;
+         y1 = y2;
+         y2 = y3;
+         if ( buffstart + i * 2 < rtime * 2 )
+         {
+            buff[ i ] = int16_t( y3 * ( ( volmult * (( buffstart + i )/2) ) / rtime ) );	// not full volume
+         }
+         else
+         {
+            if ( buffstart + i * 2 > ( samples - rtime ) * 2 )
+            {
+               buff[ i ] = int16_t( y3 * ( ( volmult * (( samples * 2 - ( buffstart + i*2 ) )/2) ) / rtime ) );	// not full volume
+            }
+            else
+            {
+               buff[ i ] = int16_t( y3 * volmult );	// not full volume
+            }
+         }
+
+      }
+      // write (or add in place) i bytes to the handle
+
+      for (int j = 0; j < i; j++)
+      {
+          destptr[j * 2] = buff[j];
+          destptr[j * 2 + 1] = buff[j];
+      }
+   }
+   delete [] buff;
+   buff = nullptr;
+}
+
+void WaveShowDialog::showComp()
+{
+    // build single frequency buffer, pass it through compressor at varying volume mult,
+    // plot multiplier against original and old levels
+
+    int samples = 49000;    // 1 secs worth
+    int tone = 1000;
+    if (!toneptr)
+    {
+        int ramptime = 0;
+        const double tvolmult = 32767.0 * 100.0 / 100.0;
+
+        toneptr = new int16_t [ samples * 2 ];
+
+        genTone( toneptr, tone, samples, samples, ramptime, tvolmult );
+    }
+    chunkware_simple::SimpleCompRms compressor;
+    compressor.setSampleRate(samples);
+
+    compressor.setWindow(window);       // milliseconds
+    compressor.setThresh( threshold );
+    compressor.setRatio( ratio );
+    compressor.setAttack( attack );     // 1ms seems like a good look-ahead to me
+    compressor.setRelease( release ); // 10ms release is good
+
+    compressor.initRuntime();
+
+    baseChart->removeAllSeries();       // removes AND DELETES
+
+    baseSeries = new QLineSeries();
+    processedBaseSeries = new QLineSeries();
+
+    for (int s = 0; s <= 100; s++)
+    {
+        qreal volmult = s * 0.01;
+
+        int16_t * q = reinterpret_cast<  int16_t * > ( toneptr );
+        int16_t maxvol = 0;
+
+        for (int i = 0; i < samples/tone ; i++)
+        {
+            int t1 = q[i * 2];
+            int t2 = q[i * 2 + 1];
+            double initi1 = t1 * volmult;
+            double initi2 = t2 * volmult;
+
+            double s1 = initi1;
+            double s2 = initi2;
+
+            s1 /= 32768.0;
+            s2 /= 32768.0;
+
+            compressor.process(s1, s2);
+
+            s1 *= chunkware_simple::dB2lin(makeUpGain);
+            s2 *= chunkware_simple::dB2lin(makeUpGain);
+
+            s1 *= 32768.0;
+            s2 *= 32768.0;
+
+            int16_t sample = static_cast<int16_t>(std::abs( (s1 + s2)/2 ));
+            if ( sample > maxvol )
+               maxvol = sample;
+        }
+
+        baseSeries->append(s, volmult);
+
+        processedBaseSeries->append(s, maxvol/32768.0);
+    }
+
+    baseChart->addSeries(baseSeries);
+    baseChart->addSeries(processedBaseSeries);
+
+    baseChart->createDefaultAxes();
+    baseChart->setTitle("mqt Compressor Test");
+}
+
 void WaveShowDialog::showSeries()
 {
     dvkFile originalFile;
@@ -174,7 +317,6 @@ void WaveShowDialog::showSeries()
     chunkware_simple::SimpleCompRms compressor;
     compressor.setSampleRate(48000);
 
-    getParams();
     compressor.setWindow(window);       // milliseconds
     compressor.setThresh( threshold );
     compressor.setRatio( ratio );
@@ -190,6 +332,8 @@ void WaveShowDialog::showSeries()
     originalSeries = new QLineSeries();
     processedSeries = new QLineSeries();
     diffSeries = new QLineSeries();
+
+    limitSeries = new QLineSeries();
 
     // originalFile.fptr points to the data
 
@@ -237,8 +381,13 @@ void WaveShowDialog::showSeries()
             sampleOffset +=  originalFile.NumChannels;
         }
 
+        if (dmaxSample > 32768)
+        {
+            dmaxSample = 40000;     // clip the output
+        }
         originalSeries->append(xaxis, imaxSample);
         processedSeries->append(xaxis, dmaxSample);
+        limitSeries->append(xaxis, 32768.0);
         diffSeries->append(xaxis, imaxSample - dmaxSample);
 
         bufferOffset += bufferStep * originalFile.NumChannels;
@@ -249,6 +398,7 @@ void WaveShowDialog::showSeries()
     originalChart->setTitle("mqt Original Signal");
 
     processedChart->addSeries(processedSeries);
+    processedChart->addSeries(limitSeries);
     processedChart->createDefaultAxes();
     processedChart->setTitle("mqt Processed Signal");
 
@@ -263,6 +413,8 @@ void WaveShowDialog::on_recalcButton_clicked()
 {
     // reset the compressor parameters and re-display
 
+    getParams();
+    showComp();
     showSeries();
 }
 
@@ -270,7 +422,9 @@ void WaveShowDialog::getParams()
 {
     window = windowFrame->getValue();       // milliseconds
     threshold = thresholdFrame->getValue();
-    ratio = ratioFrame->getValue()/(ratioFrame->maximum() - ratioFrame->minimum());
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    ratio = 1 - ratioFrame->getValue()/rrange;
     attack = attackFrame->getValue();     // 1ms seems like a good look-ahead to me
     release = releaseFrame->getValue(); // 10ms release is good
     makeUpGain = makeUpGainFrame->getValue();
@@ -280,7 +434,8 @@ void WaveShowDialog::setSliders()
 {
     windowFrame->setValue(window);       // milliseconds
     thresholdFrame->setValue(threshold);
-    ratioFrame->setValue((ratioFrame->maximum() - ratioFrame->minimum())*(ratio * 1.0));
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    ratioFrame->setValue(rrange * (1 - ratio));
     attackFrame->setValue(attack);     // 1ms seems like a good look-ahead to me
     releaseFrame->setValue(release); // 10ms release is good
     makeUpGainFrame->setValue(makeUpGain);

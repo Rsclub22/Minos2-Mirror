@@ -34,11 +34,11 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     ui->compFrame->layout()->addWidget(windowFrame);
     connect(windowFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
 
-    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -20, 0, 0);
+    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -40, 0, 0);
     ui->compFrame->layout()->addWidget(thresholdFrame);
     connect(thresholdFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
 
-    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 1, +100, 0);
+    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 0, +50, 0);
     ui->compFrame->layout()->addWidget(ratioFrame);
     connect(ratioFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
 
@@ -223,7 +223,10 @@ void TxVmExternalButtonDialog::getCompSliders()
 {
     compParams.window = windowFrame->getValue();       // milliseconds
     compParams.threshold = thresholdFrame->getValue();
-    compParams.ratio = ratioFrame->getValue()/(ratioFrame->maximum() - ratioFrame->minimum());
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    compParams.ratio = 1 - ratioFrame->getValue()/rrange;
+
     compParams.attack = attackFrame->getValue();     // ms
     compParams.release = releaseFrame->getValue(); // ms
     compParams.makeUpGain = makeUpGainFrame->getValue();
@@ -233,7 +236,10 @@ void TxVmExternalButtonDialog::setCompSliders()
 {
     windowFrame->setValue(compParams.window);       // milliseconds
     thresholdFrame->setValue(compParams.threshold);
-    ratioFrame->setValue((ratioFrame->maximum() - ratioFrame->minimum())*compParams.ratio);
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    ratioFrame->setValue(rrange * (1 - compParams.ratio));
+
     attackFrame->setValue(compParams.attack);     // ms
     releaseFrame->setValue(compParams.release); // ms
     makeUpGainFrame->setValue(compParams.makeUpGain);

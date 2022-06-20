@@ -112,25 +112,25 @@ KeyerMain::KeyerMain(QWidget *parent) :
     ui->compFrame->layout()->addWidget(windowFrame);
     connect(windowFrame, &SliderSpinner::valueChanged, this, &KeyerMain::window_valueChanged);
 
-    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -20, 0, 0);
+    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -40, 0, 0);
     ui->compFrame->layout()->addWidget(thresholdFrame);
     connect(thresholdFrame, &SliderSpinner::valueChanged, this, &KeyerMain::threshold_valueChanged);
 
-    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 1, +100, 0);
+    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 0, +50, 0);
     ui->compFrame->layout()->addWidget(ratioFrame);
     connect(ratioFrame, &SliderSpinner::valueChanged, this, &KeyerMain::ratio_valueChanged);
 
     attackFrame = new SliderSpinner(this, tr("Attack (ms)"), Qt::Horizontal, 1, 100, 0);
     ui->compFrame->layout()->addWidget(attackFrame);
-    connect(passthroughFrame, &SliderSpinner::valueChanged, this, &KeyerMain::attack_valueChanged);
+    connect(attackFrame, &SliderSpinner::valueChanged, this, &KeyerMain::attack_valueChanged);
 
     releaseFrame = new SliderSpinner(this, tr("Release (ms)"), Qt::Horizontal, 1, 100, 0);
     ui->compFrame->layout()->addWidget(releaseFrame);
-    connect(passthroughFrame, &SliderSpinner::valueChanged, this, &KeyerMain::release_valueChanged);
+    connect(releaseFrame, &SliderSpinner::valueChanged, this, &KeyerMain::release_valueChanged);
 
     makeUpGainFrame = new SliderSpinner(this, tr("Makeup Gain (db)"), Qt::Horizontal, 0, +20, 0);
     ui->compFrame->layout()->addWidget(makeUpGainFrame);
-    connect(passthroughFrame, &SliderSpinner::valueChanged, this, &KeyerMain::makeUpGain_valueChanged);
+    connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &KeyerMain::makeUpGain_valueChanged);
 
 
     QSettings settings;
@@ -611,7 +611,10 @@ CompressorParams KeyerMain::getCompSliders()
     CompressorParams cp;
     cp.window = windowFrame->getValue();       // milliseconds
     cp.threshold = thresholdFrame->getValue();
-    cp.ratio = ratioFrame->getValue()/(ratioFrame->maximum() - ratioFrame->minimum());
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    cp.ratio = 1 - ratioFrame->getValue()/rrange;
+
     cp.attack = attackFrame->getValue();     // ms
     cp.release = releaseFrame->getValue(); // ms
     cp.makeUpGain = makeUpGainFrame->getValue();
@@ -624,7 +627,10 @@ void KeyerMain::setCompSliders(CompressorParams &cp)
 {
     windowFrame->setValue(cp.window);       // milliseconds
     thresholdFrame->setValue(cp.threshold);
-    ratioFrame->setValue((ratioFrame->maximum() - ratioFrame->minimum())*(cp.ratio * 1.0));
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    ratioFrame->setValue(rrange * (1 - cp.ratio));
+
     attackFrame->setValue(cp.attack);     // ms
     releaseFrame->setValue(cp.release); // ms
     makeUpGainFrame->setValue(cp.makeUpGain);
@@ -649,7 +655,9 @@ void KeyerMain::threshold_valueChanged( )
 
 void KeyerMain::ratio_valueChanged()
 {
-    masterConfig.compression.ratio = 1.0/ratioFrame->getValue();
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    masterConfig.compression.ratio = 1 - ratioFrame->getValue()/rrange;
+
     setVolumeMults();
     writeConfig(false);
 }
