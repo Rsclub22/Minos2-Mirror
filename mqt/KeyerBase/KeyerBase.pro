@@ -6,8 +6,9 @@ TEMPLATE = lib
 CONFIG += staticlib
 Target = KeyerBase
 
-INCLUDEPATH += $$PWD/../rtaudio
-INCLUDEPATH += $$PWD/../Chunkware
+INCLUDEPATH += ../rtaudio
+INCLUDEPATH += ../Chunkware
+INCLUDEPATH += ../filter_c
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../MqtBase
 INCLUDEPATH += ../XMPPLib
@@ -19,6 +20,7 @@ unix:!macos{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += \
+    ../filter_c/adis_filter.c \
     ../rtaudio/RtAudio.cpp \
     ../Chunkware/SimpleComp.cpp \
     ../Chunkware/SimpleCompProcess.inl \
@@ -36,6 +38,7 @@ SOURCES += \
     soundsys.cpp
 
 HEADERS += \
+    ../filter_c/adis_filter.h \
     ../rtaudio/RtAudio.h \
     ../rtaudio/include/dsound.h \
     ../rtaudio/include/ginclude.h \

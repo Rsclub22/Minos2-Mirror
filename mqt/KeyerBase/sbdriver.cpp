@@ -242,9 +242,9 @@ bool SoundSystemDriver::stopMicPassThrough()
 {
     return soundSystem->stopMicPassThrough();
 }
-void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression)
+void SoundSystemDriver::setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression, bool df, bool dc)
 {
-    soundSystem->setVolumeMults(record, replay, passThrough, compression);
+    soundSystem->setVolumeMults(record, replay, passThrough, compression, df, dc);
 }
 
 int SoundSystemDriver::getMessageLen(int buttonNumber)
@@ -290,7 +290,6 @@ bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess,
       // should be in each sound class
 
       rate = soundSystem->setRate(srate);
-      soundSystem->setFilter(filterCorner);
 
       if ( !soundSystem->initialise( ind, outd ) )
          return false;

@@ -157,14 +157,17 @@ void TxVmExternalButtonDialog::pubSliders()
     int v2 = passthroughFrame->getIntValue();
 
     getCompSliders();
-    QString sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9")
+    QString sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10;%11")
             .arg(v0).arg(v1).arg(v2)
             .arg(compParams.window)
             .arg(compParams.threshold)
             .arg(compParams.ratio)
             .arg(compParams.attack)
             .arg(compParams.release)
-            .arg(compParams.makeUpGain);
+            .arg(compParams.makeUpGain)
+            .arg(compParams.doFilter)
+            .arg(compParams.doCompression);
+            ;
 
     RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSliders, sliders, psPublished);
 }
@@ -212,6 +215,9 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 compParams.release = vals[7].toDouble();
                 compParams.makeUpGain = vals[8].toDouble();
 
+                compParams.doFilter = (vals[9].toInt() > 0);
+                compParams.doCompression = (vals[10].toInt() > 0);
+
                 setCompSliders();
 
                 inVolChangeCount--;
@@ -230,6 +236,9 @@ void TxVmExternalButtonDialog::getCompSliders()
     compParams.attack = attackFrame->getValue();     // ms
     compParams.release = releaseFrame->getValue(); // ms
     compParams.makeUpGain = makeUpGainFrame->getValue();
+
+    compParams.doFilter = ui->doFilter->isChecked();
+    compParams.doCompression = ui->doCompression->isChecked();
 }
 
 void TxVmExternalButtonDialog::setCompSliders()
@@ -243,6 +252,9 @@ void TxVmExternalButtonDialog::setCompSliders()
     attackFrame->setValue(compParams.attack);     // ms
     releaseFrame->setValue(compParams.release); // ms
     makeUpGainFrame->setValue(compParams.makeUpGain);
+
+    ui->doFilter->setChecked(compParams.doFilter);
+    ui->doCompression->setChecked(compParams.doCompression);
 }
 
 
@@ -262,4 +274,24 @@ void TxVmExternalButtonDialog::compressionChanged()
     }
 }
 
+
+
+void TxVmExternalButtonDialog::on_doFilter_stateChanged(int arg1)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_doCompression_stateChanged(int arg1)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+    }
+}
 

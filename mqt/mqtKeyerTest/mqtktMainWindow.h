@@ -30,7 +30,7 @@ private slots:
 
     void on_closeButton_clicked();
 
-    void on_toneButton_clicked();
+    void on_bpFilterButton_clicked();
 
     void on_showWaveButton_clicked();
 

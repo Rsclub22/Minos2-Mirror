@@ -148,7 +148,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
 
     keyerMain = this;
 
-    //ui->compressionSlider->setMaximum(COMPRESSION_LIMIT);
     connect(SoundSystemDriver::getSbDriver(), &SoundSystemDriver::setVU, this, &KeyerMain::doSetVU);
 
     commonPort * cp = loadKeyers();
@@ -201,8 +200,6 @@ KeyerMain::KeyerMain(QWidget *parent) :
         ui->keyCombo->addItem(QString::number(i));
     }
     ui->keyCombo->setCurrentIndex(0);
-//    on_keyCombo_currentIndexChanged(0);
-
 }
 KeyerMain::~KeyerMain()
 {
@@ -558,7 +555,10 @@ void KeyerMain::setVolumeMults()
     int passThrough = passthroughFrame->getIntValue();
     CompressorParams cpar = getCompSliders();
 
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, cpar);
+    bool doFilter = ui->doFilter->isChecked();
+    bool doCompression = ui->doCompression->isChecked();
+
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, replay, passThrough, cpar, doFilter, doCompression);
 
     inVolChangeCount--;
 }
@@ -619,6 +619,9 @@ CompressorParams KeyerMain::getCompSliders()
     cp.release = releaseFrame->getValue(); // ms
     cp.makeUpGain = makeUpGainFrame->getValue();
 
+    cp.doCompression = ui->doCompression->isChecked();
+    cp.doFilter = ui->doFilter->isChecked();
+
     return cp;
 
 }
@@ -634,6 +637,9 @@ void KeyerMain::setCompSliders(CompressorParams &cp)
     attackFrame->setValue(cp.attack);     // ms
     releaseFrame->setValue(cp.release); // ms
     makeUpGainFrame->setValue(cp.makeUpGain);
+
+    ui->doCompression->setChecked(cp.doCompression);
+    ui->doFilter->setChecked(cp.doFilter);
 }
 
 
@@ -701,6 +707,22 @@ void KeyerMain::replayChanged()
 void KeyerMain::passthroughChanged()
 {
     masterConfig.passthroughSliderPosition = passthroughFrame->getIntValue();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_doFilter_stateChanged(int )
+{
+    masterConfig.compression.doFilter = ui->doFilter->isChecked();
+    setVolumeMults();
+    writeConfig(false);
+}
+
+
+void KeyerMain::on_doCompression_stateChanged(int )
+{
+    masterConfig.compression.doCompression = ui->doCompression->isChecked();
     setVolumeMults();
     writeConfig(false);
 }

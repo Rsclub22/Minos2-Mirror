@@ -19,8 +19,13 @@ public:
     double attack = 1.0;
     double release = 1.0;
     double makeUpGain = 0;  // db
+
+    bool doCompression = false;
+    bool doFilter = false;
+
 private:
     double getDouble(QJsonObject o, QString key, double def);
+    bool getBool(QJsonObject o, QString key, bool def);
 };
 
 #endif // COMPRESSORPARAMS_H

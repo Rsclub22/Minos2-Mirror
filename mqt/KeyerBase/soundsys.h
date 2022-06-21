@@ -16,6 +16,7 @@
 #include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 #include "CompressorParams.h"
+#include "adis_filter.h"
 
 
 class RtAudioSoundSystem;
@@ -62,6 +63,9 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
+    bool doBWFilter = true;
+    bool doCompression = true;
+
     bool initialise(QString ind , QString outd);
     void stop();
     void closedown();
@@ -70,7 +74,6 @@ public:
     QStringList outputDevices;
 
     unsigned int setRate(unsigned int rate);
-    void setFilter(int cf);
 
     bool startDMA( bool play, const QString &fname, int pipSamples, int16_t *pipptr, int pipStartDelaySamples );
     void stopDMA();
@@ -86,7 +89,7 @@ public:
     bool startMicPassThrough();
     bool stopMicPassThrough();
 
-    void setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp);
+    void setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp, bool df, bool dc);
 
     void setData(int16_t *data, unsigned int len);
     void setPipData(int16_t *data, unsigned int len, unsigned int delayLen);
@@ -116,7 +119,11 @@ private:
 
     double makeUpGain = 0.0;
 
-    int filterCorner = 0;
+    BWBandPass* micfilter1;
+    BWBandPass* micfilter2;
+
+    BWBandPass* replayfilter1;
+    BWBandPass* replayfilter2;
 
     // internal values
     unsigned int sampleRate = 0;

@@ -37,6 +37,10 @@ private slots:
 
     void compressionChanged();
 
+    void on_doFilter_stateChanged(int arg1);
+
+    void on_doCompression_stateChanged(int arg1);
+
 public Q_SLOTS:
     virtual void accept() override;
     virtual void reject() override;

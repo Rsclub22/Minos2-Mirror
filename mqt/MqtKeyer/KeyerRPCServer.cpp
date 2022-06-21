@@ -94,7 +94,7 @@ void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, Compres
 {
     static QString old;
     QString sliders;
-    sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10")
+    sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10;%11;%12")
             .arg(rec).arg(replay).arg(passthrough)
             .arg(cp.window)
             .arg(cp.threshold)
@@ -102,6 +102,8 @@ void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, Compres
             .arg(cp.attack)
             .arg(cp.release)
             .arg(cp.makeUpGain)
+            .arg(cp.doFilter)
+            .arg(cp.doCompression)
             .arg(seq);
     if (sliders != old)
     {
@@ -267,6 +269,8 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                   cp.release = vals[7].toDouble();
                   cp.makeUpGain = vals[8].toDouble();
 
+                  cp.doFilter = vals[9].toDouble();
+                  cp.doCompression = vals[10].toDouble();
                   emit sliders(rec, rep, pass, cp);
               }
           }

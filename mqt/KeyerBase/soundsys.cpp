@@ -149,6 +149,12 @@ RtAudioSoundSystem::~RtAudioSoundSystem()
    }
    delete audio;
    delete wThread;
+
+   free_bw_band_pass(micfilter1);
+   free_bw_band_pass(micfilter2);
+   free_bw_band_pass(replayfilter1);
+   free_bw_band_pass(replayfilter2);
+
 }
 bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 {
@@ -176,6 +182,13 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
     replayCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
     replayCompressor.setRelease( 10.0 ); // 10ms release is good
     replayCompressor.initRuntime();
+
+    micfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+    micfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+    replayfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+    replayfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
 
     try
     {
@@ -269,12 +282,8 @@ unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
    sampleRate = rate;
    return sampleRate;
 }
-void RtAudioSoundSystem::setFilter(int fc)
-{
-   filterCorner = fc;
-}
 
-void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp)
+void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp, bool df, bool dc)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
@@ -290,7 +299,7 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
     micCompressor.setThresh(comp.threshold);
     micCompressor.setRatio(comp.ratio);
 
-    micCompressor.initRuntime();
+    //micCompressor.initRuntime();
 
     replayCompressor.setWindow(comp.window);
     replayCompressor.setAttack(comp.attack);
@@ -298,9 +307,12 @@ void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passTh
     replayCompressor.setThresh(comp.threshold);
     replayCompressor.setRatio(comp.ratio);
 
-    replayCompressor.initRuntime();
+    //replayCompressor.initRuntime();
 
     makeUpGain = comp.makeUpGain;
+
+    doBWFilter = df;
+    doCompression = dc;
 }
 
 int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
@@ -360,10 +372,17 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                 double ds1 = s1/32768.0;
                 double ds2 = s2/32768.0;
 
-                micCompressor.process(ds1, ds2);
-
-                ds1 *= chunkware_simple::dB2lin(makeUpGain);
-                ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                if (doBWFilter)
+                {
+                    ds1 =  bw_band_pass(micfilter1, ds1);
+                    ds2 =  bw_band_pass(micfilter2, ds2);
+                }
+                if (doCompression)
+                {
+                    micCompressor.process(ds1, ds2);
+                    ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                    ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                }
 
                 s1 = ds1 * 32768.0;
                 s2 = ds2 * 32768.0;
@@ -612,10 +631,17 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                         double ds1 = val/32768.0;
                         double ds2 = val2/32768.0;
 
-                        replayCompressor.process(ds1, ds2);
-
-                        ds1 *= chunkware_simple::dB2lin(makeUpGain);
-                        ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                        if (doBWFilter)
+                        {
+                            ds1 =  bw_band_pass(replayfilter1, ds1);
+                            ds2 =  bw_band_pass(replayfilter2, ds2);
+                        }
+                        if (doCompression)
+                        {
+                            replayCompressor.process(ds1, ds2);
+                            ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                            ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                        }
 
                         val = ds1 * 32768.0;
                         val2 = ds2 * 32768.0;

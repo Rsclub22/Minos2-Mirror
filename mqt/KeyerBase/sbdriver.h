@@ -102,7 +102,7 @@ public:
 
       unsigned int rate = 0;   /* rate in Hertz -- this gets reset to nearest available value */
 
-      void setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression);
+      void setVolumeMults(int record, int replay, int passThrough, const CompressorParams &compression, bool df, bool dc);
 
       int getMessageLen(int buttonNumber);
       bool dofile( int i, int clipRecord = 0 );

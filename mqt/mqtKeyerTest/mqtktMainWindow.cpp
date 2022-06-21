@@ -2,6 +2,7 @@
 #include "mqtktMainWindow.h"
 #include "ui_mqtktMainWindow.h"
 
+#include "adis_filter.h"
 #include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 
@@ -263,32 +264,76 @@ void mqtktMainWindow::on_filterButton_clicked()
     chart->createDefaultAxes();
     chart->setTitle("mqt Filter Test");
 }
+void mqtktMainWindow::on_bpFilterButton_clicked()
+{
+    // build series of frequency buffers, pass each through filter
+    // plot frequency against original and old levels
+
+    chart->removeAllSeries();       // removes AND DELETES
+
+    int samples = 49000;    // 1 secs worth
+
+    int ramptime = 0;
+
+    BWBandPass* filter = create_bw_band_pass_filter(4, samples, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+
+    originalSeries = new QLineSeries();
+    processedSeries = new QLineSeries();
+
+    int16_t *toneptr = new int16_t [ samples * 2 ];
+
+    for (int tone = 5; tone < 10000; tone += 10)
+    {
+        const double volmult = 32767.0;
+        genTone( toneptr, tone, samples, samples, ramptime, volmult );
+
+        float omax = 0;
+        float imax = 0;
+        // and apply low pass filter
+        for (int n=0; n < ((samples + tone) * 2)/tone ; n++)
+        {
+            for (int chan = 0; chan < 1; ++chan)
+            {
+                float i = toneptr[n * 2 + chan]/32768.0;
+                float o =  bw_band_pass(filter, i);
+
+                float im = abs(i);
+                if (im > imax)
+                    imax = im;
+
+                float om = abs(o);
+                if (om > omax)
+                    omax = om;
+            }
+        }
+
+        qreal imaxvol = imax;
+        originalSeries->append(tone, imaxvol * 32768.0);
+
+        qreal omaxvol = omax;
+        processedSeries->append(tone, omaxvol * 32768.0);
+    }
+    chart->addSeries(originalSeries);
+    chart->addSeries(processedSeries);
+
+    chart->createDefaultAxes();
+    chart->setTitle("mqt Filter Test");
+
+    free_bw_band_pass(filter);
+}
 
 void mqtktMainWindow::on_closeButton_clicked()
 {
     close();
 }
 
-void mqtktMainWindow::on_toneButton_clicked()
-{
-    // we want to draw the tone. Actually, we'd like to FFT it!
-    int samples = 49000;    // 1 secs worth
-    int tone = 1000;
-
-    int ramptime = 0;
-
-    originalSeries = new QLineSeries();
-    processedSeries = new QLineSeries();
-
-    int16_t *toneptr = new int16_t [ samples * 2 ];
-    //int16_t *toneop = new int16_t [ samples * 2 ];
-
-    const double volmult = 32767.0 * 100.0 / 100.0;
-    genTone( toneptr, tone, samples, samples, ramptime, volmult );}
 
 void mqtktMainWindow::on_showWaveButton_clicked()
 {
     WaveShowDialog wsd(this);
     wsd.exec();
 }
+
+
 

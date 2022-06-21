@@ -1,6 +1,7 @@
 #include <QDebug>
 #include "ddc.h"
 #include "riff.h"
+#include "adis_filter.h"
 #include "SimpleComp.h"
 #include "MqtLogCompressor.h"
 #include "mqtktWaveShowDialog.h"
@@ -325,6 +326,10 @@ void WaveShowDialog::showSeries()
 
     compressor.initRuntime();
 
+    BWBandPass* filter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+    BWBandPass* filter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+
     originalChart->removeAllSeries();       // removes AND DELETES
     processedChart->removeAllSeries();
     diffChart->removeAllSeries();
@@ -363,6 +368,8 @@ void WaveShowDialog::showSeries()
             ds1 /= 32768.0;
             ds2 /= 32768.0;
 
+            ds1 =  bw_band_pass(filter1, ds1);
+            ds2 =  bw_band_pass(filter2, ds2);
             compressor.process(ds1, ds2);
 
             ds1 *= 32768.0;
@@ -405,6 +412,9 @@ void WaveShowDialog::showSeries()
     diffChart->addSeries(diffSeries);
     diffChart->createDefaultAxes();
     diffChart->setTitle("mqt Difference");
+
+    free_bw_band_pass(filter1);
+    free_bw_band_pass(filter2);
 }
 
 

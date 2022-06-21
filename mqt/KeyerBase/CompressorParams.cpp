@@ -6,6 +6,16 @@ CompressorParams::CompressorParams()
     qRegisterMetaType< CompressorParams > ( "CompressorParams" );
 
 }
+bool CompressorParams::getBool(QJsonObject o, QString key, bool def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isBool())
+    {
+        return pe.toBool();
+    }
+    return def;
+}
+
 double CompressorParams::getDouble(QJsonObject o, QString key, double def)
 {
     QJsonValue pe = o.value(key);
@@ -30,6 +40,10 @@ void CompressorParams::read(QJsonObject sconf)
      release = std::max(1.0, release);
      makeUpGain = getDouble(sconf, "makeUpGain", def.makeUpGain);
 
+     doCompression = getBool(sconf, "doCompresson", true);
+     doFilter = getBool(sconf, "doFilter", true);
+
+
 }
 
 void CompressorParams::insert(QJsonObject &sconf)
@@ -41,5 +55,8 @@ void CompressorParams::insert(QJsonObject &sconf)
     sconf.insert("attack", attack);
     sconf.insert("release", release);
     sconf.insert("makeUpGain", makeUpGain);
+
+    sconf.insert("doCompression", doCompression);
+    sconf.insert("doFilter", doFilter);
 
 }

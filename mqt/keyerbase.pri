@@ -1,3 +1,7 @@
+INCLUDEPATH += $$PWD/filter_c
+INCLUDEPATH += $$PWD/Chunkware
+INCLUDEPATH += $$PWD/rtaudio
+
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/release/ -lKeyerBase
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/debug/ -lKeyerBase
 else:unix: LIBS += -L$$OUT_PWD/../KeyerBase/ -lKeyerBase

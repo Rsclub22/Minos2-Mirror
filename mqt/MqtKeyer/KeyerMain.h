@@ -97,6 +97,10 @@ private slots:
     void replayChanged();
     void passthroughChanged();
 
+    void on_doFilter_stateChanged(int arg1);
+
+    void on_doCompression_stateChanged(int arg1);
+
 private:
     void syncSetLines();
     QTimer lineTimer;
