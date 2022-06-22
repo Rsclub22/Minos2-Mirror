@@ -65,6 +65,8 @@ class BandInfo
     public:
         bool enabled = true;
 
+        bool contestAllowed = true;
+
         Frequency fLow;
         Frequency fHigh;
 

@@ -52,6 +52,10 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       {
          // ADIF now specifies 8 Digits representing a UTC date in YYYYMMDD format
          dateOn = FieldContent.right(6);
+         if (dateOff.isEmpty())
+         {
+             dateOff = dateOn;
+         }
       }
       if ( Fieldname.toUpper() == "TIME_ON" )
       {
@@ -184,6 +188,13 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           temp = temp.toUpper();
           aqso->mgmSubmode.setValue(temp.trimmed());
       }
+      if ( Fieldname.toUpper() == "OPERATOR" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+
+          temp = temp.toUpper();
+          aqso->op1.setValue(temp.trimmed());
+      }
    }
 }
 //---------------------------------------------------------------------------
@@ -213,6 +224,11 @@ void ADIFImport::ADIFImportEndOfRecord( )
 
        aqso->timeOff.setDate( dateOff, DTGLOG );
        aqso->timeOff.setTime( timeOff, DTGLOG );
+
+       dateOn.clear();
+       dateOff.clear();
+       timeOn.clear();
+       timeOff.clear();
 
        // save contact
 
@@ -417,6 +433,11 @@ bool ADIFImport::executeImport()
    }
 
    bool atEOR = false;
+   dateOn.clear();
+   dateOff.clear();
+   timeOn.clear();
+   timeOff.clear();
+
    do
    {
 

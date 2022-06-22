@@ -202,6 +202,12 @@ bool BandList::parseBand ( TiXmlElement * e )
     // we know we are on a band; get the attributes we want
     QSharedPointer<BandInfo>  band(new BandInfo());
 
+    QString nc = getAttribute(e, "contest");
+    if (nc == "N")
+    {
+        band ->contestAllowed = false;
+    }
+
     band->setType ( getAttribute ( e, "type" ) );
 
     QString unit = getAttribute ( e, "unit" );
@@ -558,13 +564,9 @@ bool BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
         // don't use bands > 1THz (can't support Freq display)
         // (fortunate that there aren't any!)
 
-        if ((!filtered || b->enabled) && b->fHigh < Frequency(1000000000000))
+        if ((!filtered || b->enabled) && b->contestAllowed && b->fHigh < Frequency(1000000000000))
         {
-            if (b->getType().compare(VHF_BANDTYPE, Qt::CaseInsensitive) == 0
-                    || b->getType().compare(MW_BANDTYPE, Qt::CaseInsensitive) == 0
-                    || b->getType().compare(HF_BANDTYPE, Qt::CaseInsensitive) == 0)
-
-                bands.append(b);
+            bands.append(b);
         }
         else
         {

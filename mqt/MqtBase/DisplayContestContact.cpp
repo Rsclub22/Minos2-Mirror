@@ -444,6 +444,9 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
    {
       switch ( ACol )
       {
+          case egDate:
+             res = timeOff.getDate( DTGDISP );
+             break;
          case egTime:
             res = timeOff.getTime( DTGDISP );
             break;
@@ -666,10 +669,14 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           {
               const QChar degreeChar(0260); // octal value
               res = QString("%1%2").arg( brg ).arg(degreeChar);
-              break;
           }
+          break;
       }
-
+      case egOperator:
+      {
+          res = op1.getValue();
+          break;
+      }
       }
    }
    return res;

@@ -237,7 +237,7 @@ void ContestDetails::setDetails(  )
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if (b->enabled)
+       if (b->enabled && b->contestAllowed)
        {
            if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
            {

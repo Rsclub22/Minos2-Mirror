@@ -35,13 +35,15 @@ class GridColumn
 };
 
 //---------------------------------------------------------------------------
-enum eLogGridCols {egTime,
+enum eLogGridCols {egDate,
+                   egTime,
                    egBand,
                    egCall,
                    egRSTTx, egSNTx, egRSTRx, egSNRx,
                    egLoc, egBrg, egScore,
                    egExchange, egComments,
                    egRigName, egFrequency, egRotatorHeading,
+                   egOperator,
                    egLogMaxCol
                   };
 //---------------------------------------------------------------------------

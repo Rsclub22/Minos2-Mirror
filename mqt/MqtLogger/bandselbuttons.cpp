@@ -33,7 +33,7 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     // we gt Rig Control's isdea later
     for (auto &b: bands)
     {
-        if (b->getType() == HF_BANDTYPE && b->enabled )
+        if (b->getType() == HF_BANDTYPE && b->enabled && b->contestAllowed )
         {
             availHfBands.append(b->uk);
         }

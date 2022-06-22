@@ -142,7 +142,7 @@ void OptionsDialog::on_optionTabs_currentChanged(int index)
 {
     if (current == bs && bs->checkChanged())
     {
-        mShowMessage(tr("We must save the band changes before continuing"), this);
+        mShowMessage(tr("We will save the band changes before continuing."), this);
         accept();
     }
 
