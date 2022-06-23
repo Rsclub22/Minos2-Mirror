@@ -2760,9 +2760,9 @@ void QSOLogFrame::getScreenContactTime()
 {
    updateQSOTime();
    screenContact.timeOn.setDate( ui->dateEdit->date() );
-   screenContact.timeOn.setTime( ui->timeEdit->time() );
+   screenContact.timeOn.setTime( ui->timeEdit->time().toString("HHmmss"), DTGFULL );
    screenContact.timeOff.setDate( ui->dateEdit->date() );
-   screenContact.timeOff.setTime( ui->timeEdit->time() );
+   screenContact.timeOff.setTime( ui->timeEdit->time().toString("HHmmss"), DTGFULL );
 }
 //---------------------------------------------------------------------------
 void QSOLogFrame::showScreenContactTime()
@@ -2883,7 +2883,7 @@ void QSOLogFrame::updateQSOTime(bool fromTimer)
     }
     dtg time(false);
     time.setDate( ui->dateEdit->date() );
-    time.setTime( ui->timeEdit->time() );
+    time.setTime( ui->timeEdit->time().toString("HHmmss"), DTGFULL );   // set trailing ms to zero
 
     bool timeOK = false;
 
