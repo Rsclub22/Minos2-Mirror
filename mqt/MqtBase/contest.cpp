@@ -937,8 +937,7 @@ void BaseContestLog::getScoresTo(ContestScore &cs, QDateTime limit)
 
 // NB this doesn't cope with crazy times from test contests and QSOs
 
-      QString dtgstr = nct->timeOff.getDate(DTGFULL) + nct->timeOff.getTime(DTGLOG);
-      QDateTime ncheck = CanonicalToTDT( dtgstr );
+      QDateTime ncheck =nct->timeOff.getQDT();
 
       if (ncheck > limit)
       {

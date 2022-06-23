@@ -1,6 +1,10 @@
 #ifndef DTG_H
 #define DTG_H
 #include "XMPP_pch.h"
+#include "minositem.h"
+
+extern QString TDTToCanonical( QString d );
+extern QDateTime CanonicalToTDT( QString cdtg );
 
 enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE, DTGADIF};
 class dtg
@@ -10,6 +14,7 @@ class dtg
       MinosStringItem<QString> stime;
 
       bool baddtg = true;
+      QDateTime qdatetime;
    public:
       static const double daySecs;
 
@@ -32,6 +37,8 @@ class dtg
       QDate getDate();
       QTime getTime();
 
+      QDateTime getQDT();
+
       void setDate(QDate);
       void setTime(QTime);
       void setDateTime(QDateTime tdt);
@@ -50,7 +57,7 @@ class dtg
 
       bool isDirty() const
       {
-         return ( sdate.isDirty() | stime.isDirty() );
+         return ( sdate.isDirty() || stime.isDirty() );
       }
       void setDirty()
       {

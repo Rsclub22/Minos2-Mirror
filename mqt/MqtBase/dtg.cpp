@@ -1,6 +1,29 @@
-#include "cutils.h"
+#include "MinosParameters.h"
 #include "dtg.h"
+
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
+#define DATELENGTH 8
+#define TIMELENGTH 5
+
+QDateTime CanonicalToTDT(QString cdtg )
+{
+   QDateTime d;
+   QString format("yyyyMMddHHmm");
+   d = QDateTime::fromString(cdtg, format );
+   d.setTimeSpec(Qt::UTC);
+   return d;
+
+}
+QString TDTToCanonical(QString d )
+{
+    // comes in as dd/MM/yyy HH:mm and maybe UTC/GMT
+   if (d.endsWith(" UTC"))
+        d = d.left(d.length() - 4);
+   QDateTime dt = QDateTime::fromString(d, "dd/MM/yyyy HH:mm");
+   QString s = dt.toString( "yyyyMMddHHmm" );
+   return s;
+}
+
 
 dtg::dtg( bool now ): baddtg(true)
 {
@@ -18,12 +41,16 @@ dtg::dtg( bool now ): baddtg(true)
         QString t = tdt.toString("HHmmss");
         stime.setValue(t);
         baddtg = false;
+
+        qdatetime = tdt;
+        qdatetime.setTimeSpec(Qt::UTC);
     }
     else
     {
         setDate( "", DTGDISP );
         setTime( "", DTGDISP );
         baddtg = true;
+        qdatetime = QDateTime();
     }
 }
 void dtg::setIsoDTG(const QString &d )
@@ -33,6 +60,8 @@ void dtg::setIsoDTG(const QString &d )
    QString curTime = d.mid( 9, 8 );
    setDate( curDate, DTGLOG );
    setTime( curTime, DTGDISP );
+
+
 }
 QString dtg::getIsoDTG( bool &d ) const
 {
@@ -353,6 +382,11 @@ void dtg::setDate(const QString &d, DTG dstyle )
       }
    sdate.setValue( temp );
    baddtg = false;
+
+   QString dtgstr = getDate(DTGFULL) + getTime(DTGLOG);
+   qdatetime.setDate(QDate::fromString(temp, "yymmdd"));
+   qdatetime.setTimeSpec(Qt::UTC);
+
 }
 
 void dtg::setTime( const QString &t, DTG dstyle )
@@ -382,6 +416,10 @@ void dtg::setTime( const QString &t, DTG dstyle )
       }
    stime.setValue( temp );
    baddtg = false;
+
+   qdatetime.setTime(QTime::fromString(temp, "HHmmss"));
+   qdatetime.setTimeSpec(Qt::UTC);
+
 }
 int dtg::notEntered( )
 {
@@ -442,28 +480,32 @@ dtg::~dtg()
 {}
 QDate dtg::getDate()
 {
-    QString dtgstr = getDate(DTGFULL) + getTime(DTGLOG);
-    QDateTime check = CanonicalToTDT( dtgstr );
-
-    return check.date();
-
+    return qdatetime.date();
 }
 QTime dtg::getTime()
 {
-    QString dtgstr = getDate(DTGFULL) + getTime(DTGLOG);
-    QDateTime check = CanonicalToTDT( dtgstr );
+    return qdatetime.time();
+}
 
-    return check.time();
+QDateTime dtg::getQDT()
+{
+    return qdatetime;
 }
 void dtg::setDate(QDate tdt)
 {
     QString d = tdt.toString("yyMMdd");
     sdate.setValue(d);
+
+    qdatetime.setDate(tdt);
+
 }
 void dtg::setTime(QTime tdt)
 {
     QString t = tdt.toString("HHmmss");
     stime.setValue(t);
+
+    qdatetime.setTimeSpec(Qt::UTC);
+
 }
 
 
