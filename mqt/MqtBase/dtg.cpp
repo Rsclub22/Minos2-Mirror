@@ -27,6 +27,8 @@ void testdtg(dtg *d)
 
         mShowMessage(ds + "  " + ns, 0);
     }
+#else
+    Q_UNUSED (d)
 #endif
 }
 QDateTime CanonicalToTDT(QString cdtg )
