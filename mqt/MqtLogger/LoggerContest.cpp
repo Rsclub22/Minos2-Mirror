@@ -47,7 +47,6 @@ void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lc
 }
 LoggerContestLog::~LoggerContestLog()
 {
-   closeFile();
 }
 void LoggerContestLog::initialiseINI()
 {

@@ -64,7 +64,6 @@ BaseContestLog::BaseContestLog(bool hf)
 }
 BaseContestLog::~BaseContestLog()
 {
-   closeFile();
 }
 void BaseContestLog::setVersion(QString v)
 {
@@ -76,6 +75,7 @@ int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
     int i = 0;
     for (auto const &m: qAsConst(ctList))
     {
+      //  Linear search
       if (m.wt.data() == item.data())
           return i;
 
@@ -92,6 +92,7 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
 {
    if ( i >= 0 && i < ctList.size() )
    {
+       //This is effectively a linear search - and expensive!
        QSharedPointer<BaseContact> ce = std::next(ctList.begin(), i)->wt;
        return ce;
    }
@@ -102,6 +103,7 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
 {
    for ( auto const &i: ctList )
    {
+      // Again a linear search. ctlist ordering is by logsequence, so we should be able to do better
       if ( i.wt ->getLogSequence() == logSequence )
          return i.wt;
    }
@@ -327,6 +329,7 @@ QSharedPointer<BaseContact> BaseContestLog::findContact(CheckableContact *cct) c
 {
     for ( auto const &i: qAsConst(ctList) )
     {
+       // linear search
        if (i.wt.data() == cct)
        {
            return i.wt;
