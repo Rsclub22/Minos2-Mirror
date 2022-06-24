@@ -153,7 +153,9 @@ class BaseContact: public CheckableContact
       BaseContact( const BaseContact & );
       BaseContact(BaseContestLog *contest, dtg time_now );
       BaseContact& operator =( const BaseContact & );
+      bool operator==(const BaseContact& rhs) const;
       bool operator<( const BaseContact& rhs ) const;
+      bool operator!=(const BaseContact& rhs) const;
       virtual ~BaseContact() override {}
       virtual QVector < QSharedPointer<BaseContact> > &getHistory()
       {

@@ -20,6 +20,8 @@
 
 #include "contest.h"
 
+#include "MShowMessageDlg.h"
+
 void BaseContestLog::addCountryWorked(QString band, const QString &basePrefix)
 {
     countryWorked[band][ basePrefix ]++;
@@ -29,6 +31,7 @@ void BaseContestLog::addDistrictWorked(QString band, const QString &cd)
 {
     districtWorked[band][ cd ]++;
 }
+
 
 BaseContestLog::BaseContestLog(bool hf)
 {
@@ -70,18 +73,81 @@ void BaseContestLog::setVersion(QString v)
     appVersion.setValue(v);
 }
 
+void BaseContestLog::clearCache()
+{
+    ctIndexCache.clear();
+    ctPointerIndexMap.clear();
+}
+
+void BaseContestLog::refreshCache()
+{
+    if (cacheRefreshNeeded)
+    {
+        clearCache();
+        int offset = 0;
+        for ( auto const &c: qAsConst(ctList ))
+        {
+            ctPointerIndexMap[c.wt.data()] = offset;
+            ctIndexCache[offset] = c.wt;
+            offset++;
+        }
+        cacheRefreshNeeded = false;
+    }
+}
+
+void BaseContestLog::addToContestList(QSharedPointer<BaseContact> rct )
+{
+    MapWrapper<BaseContact> wrct(rct);
+    ctList.insert( wrct, wrct );
+
+    MapWrapper<BaseContact> last = *(ctList.end() - 1);
+    if (last != rct)
+    {
+        cacheRefreshNeeded = true;
+        lastInserted = indexOf(rct);
+    }
+    else
+    {
+//        QVector<QSharedPointer<BaseContact> > ctIndexCache;
+//        QMap<const BaseContact *, int> ctPointerIndexMap;
+
+        int s = ctList.size() - 1;
+        ctPointerIndexMap[rct.data()] = s;
+        ctIndexCache.push_back(rct);
+        lastInserted = s;
+    }
+}
 int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
 {
-    int i = 0;
-    for (auto const &m: qAsConst(ctList))
+    refreshCache();
+    int offset = -1;
+    auto ci = ctPointerIndexMap.find(item.data());
+    if (ci != ctPointerIndexMap.end())
     {
-      //  Linear search
-      if (m.wt.data() == item.data())
-          return i;
-
-      i++;
+        offset = *ci;
     }
-    return -1;
+    return offset;
+
+//    int i = 0;
+//    for (auto const &m: qAsConst(ctList))
+//    {
+//      //  Linear search
+//      if (m.wt.data() == item.data())
+//      {
+//          if (offset != i)
+//          {
+//              mShowMessage("fault in indexOf", 0);
+//          }
+//          return i;
+//      }
+
+//      i++;
+//    }
+//    if (offset != -1)
+//    {
+//        mShowMessage("fault in indexOf", 0);
+//    }
+//    return -1;
 }
 int BaseContestLog::getContactCount( )
 {
@@ -90,23 +156,56 @@ int BaseContestLog::getContactCount( )
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
 {
-   if ( i >= 0 && i < ctList.size() )
-   {
-       //This is effectively a linear search - and expensive!
-       QSharedPointer<BaseContact> ce = std::next(ctList.begin(), i)->wt;
-       return ce;
-   }
-   return QSharedPointer<BaseContact>();
+    refreshCache();
+    QSharedPointer<BaseContact> bc;
+    if (i < ctIndexCache.size())
+    {
+        bc = ctIndexCache[i];
+    }
+    return bc;
+//   if ( i >= 0 && i < ctList.size() )
+//   {
+//       //This is effectively a linear search - and expensive!
+//       QSharedPointer<BaseContact> ce = std::next(ctList.begin(), i)->wt;
+//       if (ce != bc)
+//       {
+//           mShowMessage("pcontactAt fault", 0);
+//       }
+//       return ce;
+//   }
+//   if (bc)
+//   {
+//       mShowMessage("pcontactAt fault", 0);
+//   }
+//   return QSharedPointer<BaseContact>();
 }
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence ) const
 {
-   for ( auto const &i: ctList )
-   {
-      // Again a linear search. ctlist ordering is by logsequence, so we should be able to do better
-      if ( i.wt ->getLogSequence() == logSequence )
-         return i.wt;
-   }
+    QSharedPointer<BaseContact> test(new BaseContact(nullptr, false));
+    test->setLogSequence(logSequence);
+    auto res = ctList.find(test);
+    if (res != ctList.end())
+    {
+        return (*res).wt;
+    }
+
+//   for ( auto const &i: ctList )
+//   {
+//      // Again a linear search. ctlist ordering is by logsequence, so we should be able to do better
+//      if ( i.wt ->getLogSequence() == logSequence )
+//      {
+//          if (res == ctList.end() || *res != i)
+//          {
+//              mShowMessage("pcontactAtSeq fault", 0);
+//          }
+//         return i.wt;
+//      }
+//   }
+//   if (res != ctList.end())
+//   {
+//       mShowMessage("pcontactAtSeq fault", 0);
+//   }
    return QSharedPointer<BaseContact>();
 }
 double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
@@ -1503,9 +1602,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                               {
                                  makeContact( false, rct );
                                  rct->setLogSequence( logSequence );
-                                 MapWrapper<BaseContact> wrct(rct);
-                                 ctList.insert( wrct, wrct );
-                                 lastInserted = indexOf(rct);
+                                 addToContestList(rct);
                                  if (logSequence >> 16 >= nextBlock)
                                  {
                                     nextBlock = (logSequence >> 16) + 1;
@@ -1522,9 +1619,7 @@ void BaseContestLog::processMinosStanza( const QString &methodName, MinosTestImp
                                  {
                                     makeContact( false, rct );
                                     rct->setLogSequence( logSequence );
-                                    MapWrapper<BaseContact> wrct(rct);
-                                    ctList.insert( wrct, wrct );
-                                    lastInserted = indexOf(rct);
+                                    addToContestList(rct);
                                     // Was just nextBlock++ - no test
                                     if (logSequence >> 16 >= nextBlock)
                                     {

@@ -239,9 +239,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
        if ( stx > acontest->maxSerial )
           acontest->maxSerial = stx;
 
-      MapWrapper<BaseContact> waqso(aqso);
-      acontest->ctList.insert( waqso, waqso );
-      acontest->lastInserted = acontest->indexOf(aqso);
+      acontest->addToContestList(aqso);
 
       QSharedPointer<BaseContact> bct;
       acontest->makeContact( false, bct );

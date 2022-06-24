@@ -559,9 +559,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    {
       bct->commonSave(bct);		// make sure contact is correct
    }
-   MapWrapper<BaseContact> wbct(bct);
-   ctList.insert( wbct, wbct );         //(addContact)
-   lastInserted = indexOf(bct);
+   addToContestList(bct);
    if ( saveNew )
    {
       commonSave( false );
@@ -597,9 +595,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    bct->setLogSequence( seq );
 
    bct->commonSave(bct);		// make sure contact is correct
-   MapWrapper<BaseContact>wbct(bct);
-   ctList.insert( wbct, wbct );
-   lastInserted = indexOf(bct);
+   addToContestList(bct);
    commonSave( false );
 
    return bct;
@@ -930,9 +926,7 @@ bool LoggerContestLog::GJVloadContacts( )
       if ( bct->GJVload( static_cast< int >( nextBlock) ) )
       {
          nextBlock++;
-         MapWrapper<BaseContact> wbct(bct);
-         ctList.insert( wbct, wbct );
-         lastInserted = indexOf(bct);
+         addToContestList(bct);
          int maxct = bct->serials.getValue().toInt();
          if ( maxct > maxSerial )
             maxSerial = maxct;
@@ -1498,9 +1492,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       next_block++ ;
       bct->setLogSequence( static_cast<unsigned long>(next_block) << 16 );
 
-      MapWrapper<BaseContact> wbct(bct);
-      ctList.insert( wbct, wbct );
-      lastInserted = indexOf(bct);
+      addToContestList(bct);
    }
    return true;
 }

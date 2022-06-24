@@ -91,6 +91,14 @@ class BaseContestLog: public BaseLogList
          return protectedContest.getValue();
       }
 
+      QVector<QSharedPointer<BaseContact> > ctIndexCache;
+
+      QMap<const BaseContact *, int> ctPointerIndexMap;
+
+      bool cacheRefreshNeeded = false;
+      void clearCache();
+      void refreshCache();
+
    public:
       QString uuid;
       int cslotno = -1;
@@ -405,6 +413,7 @@ class BaseContestLog: public BaseLogList
       void getOpTime(QString &otBuff, SHOWOPERATINGTIME temp);
       QString  scanContact(QSharedPointer<BaseContact> nct, QDateTime contestStart, QDateTime contestEnd);
       
+      void addToContestList(QSharedPointer<BaseContact> rct);
 protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;

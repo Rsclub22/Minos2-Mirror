@@ -230,7 +230,16 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
 //==========================================================================
 bool BaseContact::operator<( const BaseContact& rhs ) const
 {
-   return getLogSequence() < rhs.getLogSequence();
+    return getLogSequence() < rhs.getLogSequence();
+}
+
+bool BaseContact::operator==(const BaseContact &rhs) const
+{
+    return getLogSequence() == rhs.getLogSequence();
+}
+bool BaseContact::operator!=(const BaseContact &rhs) const
+{
+    return getLogSequence() != rhs.getLogSequence();
 }
 //==========================================================================
 void BaseContact::clearDirty()

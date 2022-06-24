@@ -563,9 +563,7 @@ bool reg1test::parseQSO( QString line )
       nextBlock++;
       aqso->setLogSequence( nextBlock << 16 );
 
-      MapWrapper<BaseContact> wbct(aqso);
-      ct->ctList.insert( wbct, wbct );
-      ct->lastInserted = ct->indexOf(aqso);
+      ct->addToContestList(aqso);
       return true;
    }
    return false;
