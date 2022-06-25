@@ -88,7 +88,7 @@ void BaseContestLog::refreshCache()
         for ( auto const &c: qAsConst(ctList ))
         {
             ctPointerIndexMap[c.wt.data()] = offset;
-            ctIndexCache[offset] = c.wt;
+            ctIndexCache.push_back(c.wt);
             offset++;
         }
         cacheRefreshNeeded = false;
