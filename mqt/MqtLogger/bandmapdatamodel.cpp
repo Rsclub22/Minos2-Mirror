@@ -359,15 +359,8 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
 
 
 // NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
-bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
+void BandmapDataModel::sortBandmapModel()
 {
-    Q_UNUSED(index)
-
-    beginInsertRows(QModelIndex(), row , row + count - 1);
-    for (int i = 0; i < count; i++)
-    {
-        bandmapData.insert(row , rowData);
-    }
     bool invertBandmap = false;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
 
@@ -385,6 +378,22 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
                     return a->getFreq() < b->getFreq();
                 }
     );
+
+}
+
+bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
+{
+    Q_UNUSED(index)
+
+    beginInsertRows(QModelIndex(), row , row + count - 1);
+    for (int i = 0; i < count; i++)
+    {
+        bandmapData.insert(row , rowData);
+    }
+
+    // This is expensive... why do it now?
+    // we rely on the sorting for display, so can't we defer it?
+    sortBandmapModel();
 
     endInsertRows();
     return true;
@@ -430,16 +439,7 @@ void BandmapDataModel::sortModel()
 {
     beginResetModel();
 
-    std::sort(bandmapData.begin(), bandmapData.end(),
-              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
-                {
-                    if (a->getFreq() == b->getFreq())
-                    {
-                        return a->getDxCall() < b->getDxCall();
-                    }
-                    return a->getFreq() < b->getFreq();
-                }
-    );
+    sortBandmapModel();
 
     endResetModel();
 }
@@ -461,8 +461,8 @@ bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     QSharedPointer<BandmapSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
 
 
-    QString call = cgm->data(cgm->index(sourceRow, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
-    QString loc = cgm->data(cgm->index(sourceRow, DXLOC_COL_NUM ),  BMP_DataStoredRole).toString();
+    QString call = spotData->getDxCall().getFullCall();
+    QString loc = spotData->getDxLocator();
 
     if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
@@ -481,6 +481,8 @@ void BandmapSortFilterProxyModel::setFilterString(QString f)
 bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
                       const QModelIndex &right) const
 {
+    // we don't really need this - we don't use the proxy for sorting
+
     //Model Indices are to the SOURCE model
 
     BandmapDataModel *cgm = dynamic_cast<BandmapDataModel *>(sourceModel());
@@ -488,20 +490,26 @@ bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
     int lrow = left.row();
     int rrow = right.row();
 
+    QSharedPointer<BandmapSpotData> spotData1 = cgm->getBandmapDataRow(lrow);
+    QSharedPointer<BandmapSpotData> spotData2 = cgm->getBandmapDataRow(rrow);
 
-    Frequency ws1;
-    Frequency ws2;
-    ws1 = qvariant_cast<Frequency>(cgm->data(left, BMP_DataStoredRole));
-    ws2 = qvariant_cast<Frequency>(cgm->data(right, BMP_DataStoredRole));
+    Frequency ws1 = spotData1->getFreq();
+    Frequency ws2 = spotData2->getFreq();
 
     if (ws1 == ws2)
     {
-        QString ss1 = cgm->data(createIndex(lrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-        QString ss2 = cgm->data(createIndex(rrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+        QString ss1 = spotData1->getDxCallStr();
+        QString ss2 = spotData2->getDxCallStr();
         return ss1 < ss2;
     }
     else
     {
+        bool invertBandmap = false;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
+        if (invertBandmap)
+        {
+            return ws2 < ws1;
+        }
         return ws1 < ws2;
     }
 

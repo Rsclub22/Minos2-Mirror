@@ -58,6 +58,7 @@ private:
     QVector< QSharedPointer<BandmapSpotData>>  bandmapData;
 
 
+    void sortBandmapModel();
 };
 
 class BandmapSortFilterProxyModel: public QSortFilterProxyModel
