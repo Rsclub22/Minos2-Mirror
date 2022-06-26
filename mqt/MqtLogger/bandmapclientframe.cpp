@@ -972,6 +972,9 @@ void BandmapClientFrame::checkNewBandMapSpots()
             addDxSpotToBandmapTable(spotQueue[i]);
             doUpdate = true;
         }
+        bandmapDataModel->insertRows(bandmapDataModel->rowCount(), bandmapDataModel->rowData.size());
+        trace("BandmapView::bandmapUpdate() addLogSpotToBandmapTable completion");
+        bandmapView->bandmapUpdate(true);
         spotQueue.clear();
     }
 
@@ -989,6 +992,7 @@ void BandmapClientFrame::checkNewBandMapSpots()
                 doUpdate = true;
             }
         }
+        bandmapDataModel->insertRows(bandmapDataModel->rowCount(), bandmapDataModel->rowData.size());
         logSpotQueue.clear();
     }
     bandmapView->setSuppressUpdate(false);
@@ -1010,7 +1014,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>
              .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), (spot->getMode(), spot->getDxLocatorWorked(), spot->getDxLocatorIsFromNode() ? "true" : "false"))
                   );
 
-    bandmapDataModel->rowData = spot;
+    bandmapDataModel->rowData.push_back(spot);
 
     bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
 }
@@ -1174,10 +1178,12 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
                                 rotBrg = "0";
                             }
                             bsd->setDxLocator(loc);
-                            bandmapDataModel->rowData->setDxDist(distance);
-                            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
-                            bandmapDataModel->rowData->setRotBrg(rotBrg);
-                            bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+
+                            // what was this for? we never add the spot!
+//                            bandmapDataModel->rowData->setDxDist(distance);
+//                            bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
+//                            bandmapDataModel->rowData->setRotBrg(rotBrg);
+//                            bandmapDataModel->rowData->setRotConnected(rotatorConnected);
                         }
                         bandmapDataModel->sortModel();
                         bandmapView->bandmapUpdate(true);
@@ -1229,21 +1235,18 @@ void BandmapClientFrame::addLogSpotToBandmapTable(QSharedPointer<BandmapSpotData
 
         traceMsg(QString("Add Log Spot to Bandmap %1, %2, %3, %4").arg(spot->getDxCallStr(), spot->getFreq().traceStr(), spot->getMode(), spot->getDxLocator()));
 
-        bandmapDataModel->rowData = spot;
 
-        bandmapDataModel->rowData->setRxTime(logTime);
-        bandmapDataModel->rowData->setSpotTime(logTimeStr);
+        spot->setRxTime(logTime);
+        spot->setSpotTime(logTimeStr);
 
-        bandmapDataModel->rowData->setDxDist(distance);
-        bandmapDataModel->rowData->setDxBrg(spot->getDxBrg());
-        bandmapDataModel->rowData->setRotBrg(rotBrg);
-        bandmapDataModel->rowData->setRotConnected(rotatorConnected);
+        spot->setDxDist(distance);
+        spot->setDxBrg(spot->getDxBrg());
+        spot->setRotBrg(rotBrg);
+        spot->setRotConnected(rotatorConnected);
 
+        bandmapDataModel->rowData.push_back(spot);
 
-        bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
     }
-    trace("BandmapView::bandmapUpdate() addLogSpotToBandmapTable completion");
-    bandmapView->bandmapUpdate(true);
 }
 
 void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
@@ -1284,9 +1287,9 @@ void BandmapClientFrame::addRemoveCQSpot(QSharedPointer<BandmapSpotData>  spot)
             spot->setSpotTime(logTimeStr);
             spot->setRotConnected(rotatorConnected);
 
-            bandmapDataModel->rowData = spot;
+            bandmapDataModel->rowData.push_back(spot);
 
-            bandmapDataModel->insertRows(bandmapDataModel->rowCount(), 1);
+            bandmapDataModel->insertRows(bandmapDataModel->rowCount(), bandmapDataModel->rowData.size());
         }
         else
         {

@@ -47,7 +47,7 @@ public:
 
     QSharedPointer<BandmapSpotData> getBandmapDataRow(int row);
 
-    QSharedPointer<BandmapSpotData> rowData;
+    QVector< QSharedPointer<BandmapSpotData> > rowData;
 
     QSharedPointer<BandmapSpotData> getSpotData(int row){return bandmapData[row];};
 

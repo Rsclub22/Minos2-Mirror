@@ -388,11 +388,10 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
     beginInsertRows(QModelIndex(), row , row + count - 1);
     for (int i = 0; i < count; i++)
     {
-        bandmapData.insert(row , rowData);
+        bandmapData.insert(row , rowData[i]);
     }
+    rowData.clear();
 
-    // This is expensive... why do it now?
-    // we rely on the sorting for display, so can't we defer it?
     sortBandmapModel();
 
     endInsertRows();
