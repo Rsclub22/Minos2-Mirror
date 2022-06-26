@@ -6,31 +6,6 @@ const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
 #define DATELENGTH 8
 #define TIMELENGTH 5
 
-void testdtg(dtg *d)
-{
-#ifndef NDEBUG
-    QString dtgstr = d->getDate(DTGFULL);
-    QString t = d->getTime(DTGFULL);
-
-    QDateTime ncheck ;
-    QString format("yyyyMMddHHmmss");
-    ncheck = QDateTime::fromString(dtgstr + t, format );
-    ncheck.setTimeSpec(Qt::UTC);
-
-    if (ncheck != d->getQDT())
-    {
-        QString ds = d->getQDT().toString("yyyyMMddHHmmss.zzz t");
-        QString ns = ncheck.toString("yyyyMMddHHmmss.zzz t");
-
-        QString dtgstr1 = d->getDate(DTGFULL);
-        QString t1 = d->getTime(DTGFULL);
-
-        mShowMessage(ds + "  " + ns, 0);
-    }
-#else
-    Q_UNUSED (d)
-#endif
-}
 QDateTime CanonicalToTDT(QString cdtg )
 {
    QDateTime d;
@@ -88,8 +63,6 @@ void dtg::setIsoDTG(const QString &d )
    qdatetime = QDateTime();
    setDate( curDate, DTGLOG );
    setTime( curTime, DTGDISP );
-
-testdtg(this);
 }
 QString dtg::getIsoDTG( bool &d ) const
 {
@@ -436,8 +409,6 @@ void dtg::setDate(const QString &d, DTG dstyle )
    qdatetime.setDate(QDate::fromString(dtgstr, "yyyyMMdd"));
    qdatetime.setTime(QTime::fromString(t, "HHmmss"));
    qdatetime.setTimeSpec(Qt::UTC);
-
-   testdtg(this);
 }
 
 void dtg::setTime( const QString &t, DTG dstyle )
@@ -470,8 +441,6 @@ void dtg::setTime( const QString &t, DTG dstyle )
 
    qdatetime.setTime(QTime::fromString(temp, "HHmmss"));
    qdatetime.setTimeSpec(Qt::UTC);
-
-   testdtg(this);
 
 }
 int dtg::notEntered( )
@@ -553,8 +522,6 @@ void dtg::setDate(QDate tdt)
 
     qdatetime.setDate(tdt);
     qdatetime.setTimeSpec(Qt::UTC);
-
-    testdtg(this);
 }
 void dtg::setTime(QTime tdt)
 {
@@ -563,8 +530,6 @@ void dtg::setTime(QTime tdt)
 
     qdatetime.setTime(tdt);
     qdatetime.setTimeSpec(Qt::UTC);
-
-    testdtg(this);
 }
 
 

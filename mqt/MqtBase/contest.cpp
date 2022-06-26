@@ -108,9 +108,6 @@ void BaseContestLog::addToContestList(QSharedPointer<BaseContact> rct )
     }
     else
     {
-//        QVector<QSharedPointer<BaseContact> > ctIndexCache;
-//        QMap<const BaseContact *, int> ctPointerIndexMap;
-
         int s = ctList.size() - 1;
         ctPointerIndexMap[rct.data()] = s;
         ctIndexCache.push_back(rct);
@@ -127,27 +124,6 @@ int BaseContestLog::indexOf(QSharedPointer<BaseContact> item )
         offset = *ci;
     }
     return offset;
-
-//    int i = 0;
-//    for (auto const &m: qAsConst(ctList))
-//    {
-//      //  Linear search
-//      if (m.wt.data() == item.data())
-//      {
-//          if (offset != i)
-//          {
-//              mShowMessage("fault in indexOf", 0);
-//          }
-//          return i;
-//      }
-
-//      i++;
-//    }
-//    if (offset != -1)
-//    {
-//        mShowMessage("fault in indexOf", 0);
-//    }
-//    return -1;
 }
 int BaseContestLog::getContactCount( )
 {
@@ -163,21 +139,6 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAt( int i )
         bc = ctIndexCache[i];
     }
     return bc;
-//   if ( i >= 0 && i < ctList.size() )
-//   {
-//       //This is effectively a linear search - and expensive!
-//       QSharedPointer<BaseContact> ce = std::next(ctList.begin(), i)->wt;
-//       if (ce != bc)
-//       {
-//           mShowMessage("pcontactAt fault", 0);
-//       }
-//       return ce;
-//   }
-//   if (bc)
-//   {
-//       mShowMessage("pcontactAt fault", 0);
-//   }
-//   return QSharedPointer<BaseContact>();
 }
 
 QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequence ) const
@@ -190,22 +151,6 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
         return (*res).wt;
     }
 
-//   for ( auto const &i: ctList )
-//   {
-//      // Again a linear search. ctlist ordering is by logsequence, so we should be able to do better
-//      if ( i.wt ->getLogSequence() == logSequence )
-//      {
-//          if (res == ctList.end() || *res != i)
-//          {
-//              mShowMessage("pcontactAtSeq fault", 0);
-//          }
-//         return i.wt;
-//      }
-//   }
-//   if (res != ctList.end())
-//   {
-//       mShowMessage("pcontactAtSeq fault", 0);
-//   }
    return QSharedPointer<BaseContact>();
 }
 double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
