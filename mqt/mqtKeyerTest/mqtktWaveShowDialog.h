@@ -67,6 +67,11 @@ private:
 
     void showSeries();
     void genTone(int16_t *dest, int tone, int samples, int rate, int rtime, double volmult);
+
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
+
 };
 
 #endif // MQTKTWAVESHOWDIALOG_H

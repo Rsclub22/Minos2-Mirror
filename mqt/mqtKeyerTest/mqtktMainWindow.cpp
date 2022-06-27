@@ -16,6 +16,12 @@ mqtktMainWindow::mqtktMainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+    QSettings settings;
+    QByteArray geometry = settings.value("mqtktMainWindow/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
+
+
     chart = new QChart();
     chart->legend()->hide();            // colours against series
 
@@ -23,13 +29,35 @@ mqtktMainWindow::mqtktMainWindow(QWidget *parent) :
     chartView->setRenderHint(QPainter::Antialiasing);
 
     ui->chartLayout->addWidget(chartView);
-    show();
+    //show();
 }
 
 mqtktMainWindow::~mqtktMainWindow()
 {
     delete ui;
 }
+void mqtktMainWindow::moveEvent(QMoveEvent *event)
+{
+    QSettings settings;
+    QByteArray sg = saveGeometry();
+    settings.setValue("mqtktMainWindow/geometry", sg);
+    QWidget::moveEvent(event);
+}
+void mqtktMainWindow::resizeEvent(QResizeEvent * event)
+{
+    QSettings settings;
+    settings.setValue("mqtktMainWindow/geometry", saveGeometry());
+    QWidget::resizeEvent(event);
+}
+void mqtktMainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue("mqtktMainWindow/geometry", saveGeometry());
+    }
+}
+
 void mqtktMainWindow::genTone(int16_t *dest, int tone, int samples, int rate, int rtime, double volmult )
 {
 

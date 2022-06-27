@@ -1,4 +1,4 @@
-#include <QDebug>
+#include "base_pch.h"
 #include "ddc.h"
 #include "riff.h"
 #include "adis_filter.h"
@@ -8,12 +8,8 @@
 #include "ui_mqtktWaveShowDialog.h"
 
 const double pi = 3.141592653;
+extern bool sblog;
 
-bool sblog = true;
-void trace(const QString &s)
-{
-    qDebug() << s;
-}
 class dvkFile
 {
    public:
@@ -98,6 +94,12 @@ WaveShowDialog::WaveShowDialog(QWidget *parent) :
     ui(new Ui::WaveShowDialog)
 {
     ui->setupUi(this);
+    sblog = true;
+
+    QSettings settings;
+    QByteArray geometry = settings.value("WaveShowDialog/geometry").toByteArray();
+    if (geometry.size() > 0)
+        restoreGeometry(geometry);
 
     baseChart = new QChart();
     baseChart->legend()->hide();
@@ -170,7 +172,26 @@ WaveShowDialog::~WaveShowDialog()
 
     delete ui;
 }
-
+void WaveShowDialog::moveEvent(QMoveEvent *event)
+{
+    QSettings settings;
+    settings.setValue("WaveShowDialog/geometry", saveGeometry());
+    QDialog::moveEvent(event);
+}
+void WaveShowDialog::resizeEvent(QResizeEvent * event)
+{
+    QSettings settings;
+    settings.setValue("WaveShowDialog/geometry", saveGeometry());
+    QDialog::resizeEvent(event);
+}
+void WaveShowDialog::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue("WaveShowDialog/geometry", saveGeometry());
+    }
+}
 void WaveShowDialog::on_closeButton_clicked()
 {
     close();

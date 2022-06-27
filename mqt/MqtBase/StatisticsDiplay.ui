@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WaveShowDialog</class>
- <widget class="QDialog" name="WaveShowDialog">
+ <class>StatisticsDiplay</class>
+ <widget class="QDialog" name="StatisticsDiplay">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>437</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Wave Display</string>
-  </property>
-  <property name="sizeGripEnabled">
-   <bool>true</bool>
+   <string>Contest Statistice</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="chartLayout"/>
-   </item>
-   <item>
-    <widget class="QFrame" name="compFrame">
-     <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
-     </property>
-     <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
-     </property>
-    </widget>
+    <widget class="QTableView" name="StatsTable"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="recalcButton">
+      <widget class="QLabel" name="label">
        <property name="text">
-        <string>Recalc</string>
+        <string>Slot length(minutes)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="MinutesSpinner">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1440</number>
        </property>
       </widget>
      </item>
@@ -53,7 +50,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="closeButton">
+      <widget class="QPushButton" name="RecalcButton">
+       <property name="text">
+        <string>Recalc</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="CloseButton">
        <property name="text">
         <string>Close</string>
        </property>
