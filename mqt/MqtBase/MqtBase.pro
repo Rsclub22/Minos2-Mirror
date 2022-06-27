@@ -32,6 +32,7 @@ SOURCES += \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
     StartConfigManager.cpp \
+    StatisticsDiplay.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
     calcs.cpp \
@@ -116,6 +117,7 @@ HEADERS += \
     BandList.h \
     ConfigurationOption.h \
     StartConfigManager.h \
+    StatisticsDiplay.h \
     bandmapmarkerdetails.h \
     base_pch.h \
     CacheSelection.h \
@@ -211,6 +213,7 @@ FORMS += \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \
     StartConfigManager.ui \
+    StatisticsDiplay.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \

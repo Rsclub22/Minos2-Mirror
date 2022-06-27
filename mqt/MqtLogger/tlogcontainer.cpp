@@ -46,6 +46,7 @@
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
 #include "BandsSelect.h"
+#include "StatisticsDiplay.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -474,6 +475,7 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
     ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, &TLogContainer::ContestDetailsActionExecute);
     MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, &TLogContainer::MakeEntryActionExecute);
+    StatsAction = newAction(QT_TR_NOOP("Show Contest Statistics..."), ui->menuFile, &TLogContainer::StatsActionExecute);
     ui->menuFile->addSeparator();
 
     AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, &TLogContainer::AppendAdifActionExecute);
@@ -532,6 +534,7 @@ void TLogContainer::setupMenus()
 
     TabPopup.addAction(ContestDetailsAction);
     TabPopup.addAction(MakeEntryAction);
+    TabPopup.addAction(StatsAction);
     TabPopup.addSeparator();
 
     TabPopup.addAction(AppendAdifAction);
@@ -572,6 +575,7 @@ void TLogContainer::enableActions()
    CloseAllButAction->setEnabled(f);
 
    ContestDetailsAction->setEnabled(f);
+   StatsAction->setEnabled(f);
    GoToSerialAction->setEnabled(f);
    NextUnfilledAction->setEnabled(f);
    MakeEntryAction->setEnabled(f);
@@ -1193,6 +1197,12 @@ void TLogContainer::MakeEntryActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     MinosLoggerEvents::SendMakeEntry(ct);
+}
+void TLogContainer::StatsActionExecute()
+{
+    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    StatisticsDiplay  sd(ct, this);
+    sd.exec();
 }
 void TLogContainer::LocCalcActionExecute()
 {

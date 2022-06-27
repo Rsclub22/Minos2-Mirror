@@ -150,6 +150,7 @@ private:
     QAction *ExitAction;
     QAction *ExitClearAction;
     QAction *MakeEntryAction;
+    QAction *StatsAction;
     QAction *AppendAdifAction;
     QAction *VHFFileNewAction;
     QAction *HFFileNewAction;
@@ -237,6 +238,7 @@ private slots:
 
     void appStarted();
 
+    void StatsActionExecute();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

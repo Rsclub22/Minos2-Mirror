@@ -5,6 +5,9 @@
 
 extern QString TDTToCanonical( QString d );
 extern QDateTime CanonicalToTDT( QString cdtg );
+extern int DTGToInt ( const QString &datg );
+extern int DTGToInt ( const QDateTime &datg );
+extern QDateTime DTGToDTG ( const QString &sdtg );
 
 enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE, DTGADIF};
 class dtg
