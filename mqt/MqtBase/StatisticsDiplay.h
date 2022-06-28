@@ -22,6 +22,9 @@ private slots:
 
     void on_RecalcButton_clicked();
 
+    void on_currentTabChangedSlot(int index);
+    void on_MinutesSpinner_textChanged(const QString &arg1);
+
 private:
     Ui::StatisticsDiplay *ui;
 

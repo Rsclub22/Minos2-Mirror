@@ -13,47 +13,26 @@ Interval rationalise (30 mins/60 mins/24 hours?)
 
 Column saving
 Column dragging and saving
-"natural" sort order for columns (and wavelength?)
+"natural" sort order for bands (and wavelength?)
 
 Export as CSV
 
 Filtering
 
-Is there any way of compressing things? Do we need to?
+Is there any way of compressing things? Do we need to? (band tabs!)
 
 Added breaks on operator change
+
+Sort on a column by each component - or separate the columns (would raise column naming problems
+Or band tabs (like it!) for each band (and overall)
 */
-//============================================================================================
-class BandMode
-{
-public:
-    BandMode(){}
-    BandMode(const QString &b, const QString &m):band(b), mode(m){}
-    QString band;
-    QString mode;
-
-    bool operator==(const BandMode &rhs) const
-    {
-        return band == rhs.band && mode == rhs.mode;
-    }
-    bool operator<(const BandMode &rhs) const
-    {
-        if (band == rhs.band)
-        {
-            return mode < rhs.mode;
-        }
-
-        return band < rhs.band;
-    }
-    QString toString()
-    {
-        return band + "-" + mode;
-    }
-};
 //============================================================================================
 class BandModeSlot
 {
 public:
+    BandModeSlot(const QString m):mode(m){}
+    BandModeSlot(){}
+    QString mode;
     QStringList ops;
     int QSOs = 0;
     int points = 0;
@@ -70,6 +49,15 @@ public:
         return res;
     }
 };
+//============================================================================================
+class BandMode
+{
+public:
+    BandMode(const QString b):band(b){}
+    BandMode(){}
+    QString band;
+    QMap <QString, BandModeSlot> modes;
+};
 
 //============================================================================================
 class StatisticsSlot
@@ -82,8 +70,7 @@ public:
     QString sstart2;
     int slotDuration = 0;
 
-    QMap<BandMode, BandModeSlot> bmSlots;
-    QVector<BandModeSlot> bmSlotVector;
+    QMap<QString, BandMode> modesMap;   // mode slots by band
 
     StatisticsSlot(){}  // for QVector
     StatisticsSlot ( QDateTime current, int slot, int duration );
@@ -99,10 +86,19 @@ StatisticsSlot::StatisticsSlot ( QDateTime current, int slot, int duration ) :
 }
 
 //============================================================================================
-QVector<BandMode> bandModeList;
+class Band
+{
+public:
+    QStringList modes;
+};
+
+QMap<QString, Band> bandList;
+int curBand = 0;
+
 QVector<StatisticsSlot> contestSlots;
 
-
+QStringList bandStrings;
+QStringList modeStrings;
 //============================================================================================
 class SlotsModel: public QAbstractTableModel
 {
@@ -136,7 +132,7 @@ int SlotsModel::rowCount(const QModelIndex &/*parent*/) const
 
 int SlotsModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return bandModeList.size();
+    return 5 * modeStrings.size();   // cols in a band/mode slot
 }
 
 QVariant SlotsModel::data(const QModelIndex &index, int role) const
@@ -158,7 +154,28 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
         QVariant cell;
         if (contestSlots.size())
         {
-            cell = contestSlots[row].bmSlotVector[col].toString();
+            BandModeSlot &bms = contestSlots[row].modesMap[bandStrings[curBand]].modes[modeStrings[col /5 ] ];
+            if (bms.QSOs > 0)
+            {
+                switch(col % 5)
+                {
+                case 0:
+                    cell = bms.QSOs;
+                    break;
+                case 1:
+                    cell = bms.points;
+                    break;
+                case 2:
+                    cell = bms.newMults;
+                    break;
+                case 3:
+                    cell = bms.bonus;
+                    break;
+                case 4:
+                    cell = bms.ops.join(" ");
+                    break;
+                }
+            }
         }
         return cell;
     }
@@ -169,12 +186,30 @@ QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int ro
 {
     if (role == Qt::DisplayRole)
     {
-        QVariant cell;
+        QString cell;
         if ( orientation == Qt::Horizontal)
         {
             if (contestSlots.size())
             {
-                cell = bandModeList[section].toString();
+                switch(section % 5)
+                {
+                case 0:
+                    cell = "QSOs";
+                    break;
+                case 1:
+                    cell = "Points";
+                    break;
+                case 2:
+                    cell = "Mults";
+                    break;
+                case 3:
+                    cell = "Bonus";
+                    break;
+                case 4:
+                    cell = "Operators";
+                    break;
+                }
+                cell = modeStrings[section/5] + " " + cell;
             }
         }
         else
@@ -227,6 +262,9 @@ StatisticsDiplay::StatisticsDiplay(BaseContestLog *ct, QWidget *parent) :
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    int interval = settings.value("StatisticsDisplay/interval", 60).toInt();
+    ui->MinutesSpinner->setValue(interval);
+
     SlotsModel *sm = new SlotsModel();
     SlotsProxyModel *spm = new SlotsProxyModel();
 
@@ -236,8 +274,21 @@ StatisticsDiplay::StatisticsDiplay(BaseContestLog *ct, QWidget *parent) :
     ui->StatsTable->horizontalHeader()->setVisible(true);
     ui->StatsTable->verticalHeader()->setVisible(true);
 
-}
+    ui->tabBar->setCurrentIndex( 0 );
 
+    connect( ui->tabBar , &QTabBar::currentChanged, this, &StatisticsDiplay::on_currentTabChangedSlot );
+
+
+}
+void StatisticsDiplay::on_currentTabChangedSlot(int index)
+{
+    curBand = index;
+    SlotsProxyModel * spm = dynamic_cast<SlotsProxyModel *>(ui->StatsTable->model());
+    if (spm)
+    {
+        spm->invalidate();
+    }
+}
 StatisticsDiplay::~StatisticsDiplay()
 {
     contestSlots.clear();
@@ -272,6 +323,11 @@ void StatisticsDiplay::on_CloseButton_clicked()
 
 void StatisticsDiplay::on_RecalcButton_clicked()
 {
+    bandList.clear();
+    contestSlots.clear();
+    bandStrings.clear();
+    modeStrings.clear();
+
     int istart =  DTGToInt ( ct->DTGStart.getValue() );
 
     int interval = ui->MinutesSpinner->value();
@@ -300,32 +356,76 @@ void StatisticsDiplay::on_RecalcButton_clicked()
             QString band;
             ct->getTxFreqBand(c.wt->frequency.getValue(), band);
 
-            BandMode bm(band, c.wt->mode.getValue());
-            if (!bandModeList.contains(bm))
+            if (!contestSlots[sno].modesMap.contains(band))
             {
-                bandModeList.push_back(bm);
+                contestSlots[sno].modesMap[band] = BandMode(band);
             }
 
-            contestSlots[sno].bmSlots[bm].QSOs++;
-            contestSlots[sno].bmSlots[bm].points += c.wt->contactScore.getValue();
-            contestSlots[sno].bmSlots[bm].bonus += c.wt->bonus;
-            contestSlots[sno].bmSlots[bm].newMults += c.wt->multCount;
-            QString op = c.wt->op1.getValue();
-            if (!contestSlots[sno].bmSlots[bm].ops.contains(op))
+            QString mode = c.wt->mode.getValue();
+
+            if (!contestSlots[sno].modesMap[band].modes.contains(mode))
             {
-                contestSlots[sno].bmSlots[bm].ops.append(op);
+                contestSlots[sno].modesMap[band].modes[mode] = BandModeSlot(mode);
+            }
+
+            BandModeSlot &bms = contestSlots[sno].modesMap[band].modes[mode];
+            bms.QSOs++;
+            bms.points += c.wt->contactScore.getValue();
+            bms.bonus += c.wt->bonus;
+            bms.newMults += c.wt->multCount;
+            QString op = c.wt->op1.getValue();
+            if (!bms.ops.contains(op))
+            {
+                bms.ops.append(op);
             }
         }
 
     }
-    std::sort(bandModeList.begin(), bandModeList.end());
 
-    for (auto &c:contestSlots)
+    for (auto const &c:qAsConst(contestSlots))
     {
-        for (auto &b:bandModeList)
+        for (auto const &b: qAsConst(c.modesMap))
         {
-            c.bmSlotVector.push_back(c.bmSlots[b]);
+            QString band = b.band;
+            if (!bandStrings.contains(band))
+            {
+                bandStrings.append(band);
+                bandStrings.sort();
+            }
+            for (auto const &m: qAsConst(b.modes))
+            {
+                QString mode = m.mode;
+                if (!modeStrings.contains(mode))
+                {
+                    modeStrings.append(mode);
+                    modeStrings.sort();
+                }
+                if (!bandList[band].modes.contains(mode))
+                {
+                    bandList[band].modes.append(mode);
+                    bandList[band].modes.sort();
+                }
+            }
         }
+    }
+
+    while ( ui->tabBar->count() > 0 )
+    {
+        ui->tabBar->removeTab( ui->tabBar->count() - 1 );
+    }
+
+    curBand = 0;
+    if (bandStrings.size() > 1)
+    {
+        for(auto const &b:qAsConst(bandStrings))
+        {
+            ui->tabBar->addTab( b );
+        }
+        ui->tabBar->setVisible(true);
+    }
+    else
+    {
+        ui->tabBar->setVisible(false);
     }
 
     SlotsProxyModel * spm = dynamic_cast<SlotsProxyModel *>(ui->StatsTable->model());
@@ -333,5 +433,15 @@ void StatisticsDiplay::on_RecalcButton_clicked()
     {
         spm->invalidate();
     }
+}
+
+
+void StatisticsDiplay::on_MinutesSpinner_textChanged(const QString &)
+{
+    int interval = ui->MinutesSpinner->value();
+    QSettings settings;
+    settings.setValue("StatisticsDisplay/interval", interval);
+
+    on_RecalcButton_clicked();
 }
 
