@@ -442,7 +442,7 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               {
                   // NB a lambda function
                   suppressSaveColumns = true;
-                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
                   suppressSaveColumns = false;
               }
               , 10
@@ -452,7 +452,7 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               {
                   // NB a lambda function
                   suppressSaveColumns = true;
-                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
                   suppressSaveColumns = false;
               }
               , 20
