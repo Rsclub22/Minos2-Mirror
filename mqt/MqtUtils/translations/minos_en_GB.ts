@@ -65,7 +65,7 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="177"/>
+        <location filename="../ConfigFile.cpp" line="179"/>
         <source>:program doesn&apos;t exist:</source>
         <translation type="unfinished"></translation>
     </message>
