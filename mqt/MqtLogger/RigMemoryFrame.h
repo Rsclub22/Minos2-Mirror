@@ -70,6 +70,7 @@ class RigMemoryFrame : public QFrame
     RigMemorySortFilterProxyModel proxyModel;
     QMenu columnsMenu;
     bool inRestoreColumns = false;
+    bool inSendMemoryUpdates = false;
     TSingleLogFrame *tslf = nullptr;
 
 public:

@@ -262,13 +262,18 @@ void RigMemoryFrame::setRigMemoryData(int memoryNumber, memoryData::memData m)
 
 void RigMemoryFrame::doMemoryUpdates()
 {
+    // and it is queued
     // called from minosLoggerEvents following sendUpdateMemories
     // clear all the "old" buttons
 
-    model.reset();
-    restoreRigMemTableColumns();
-    firstTime = true;
-    on_AfterLogContact(ct);
+    if (!inSendMemoryUpdates)
+    {
+        model.reset();
+        restoreRigMemTableColumns();    // This manages to reset he sort order again
+        firstTime = true;
+        on_AfterLogContact(ct);
+    }
+    inSendMemoryUpdates = false;
 }
 
 void RigMemoryFrame::checkTimerTimer()
@@ -397,7 +402,10 @@ void RigMemoryFrame::sendUpdateMemories()
 {
     // go through the signal/slot mechanism so all auxiliary displays are updated
     if (!suppressSendUpdate)
+    {
+        inSendMemoryUpdates = true; // THIS panel shouldn't action it
         MinosLoggerEvents::sendUpdateMemories(ct);
+    }
 
     doTimer = true;
 }
@@ -466,7 +474,7 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               {
                   // NB a lambda function
                   suppressSaveColumns = true;
-                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
                   suppressSaveColumns = false;
               }
               , 10
@@ -476,7 +484,7 @@ void RigMemoryFrame::on_AfterLogContact( BaseContestLog *c)
               {
                   // NB a lambda function
                   suppressSaveColumns = true;
-                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::DescendingOrder:Qt::AscendingOrder);
+                  ui->rigMemTable->sortByColumn(sortCol, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
                   suppressSaveColumns = false;
               }
               , 20
