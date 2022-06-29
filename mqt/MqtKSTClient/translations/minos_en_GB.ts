@@ -211,11 +211,11 @@
         <location filename="../kstmainwindow.ui" line="69"/>
         <location filename="../kstmainwindow.ui" line="76"/>
         <location filename="../kstmainwindow.ui" line="83"/>
-        <location filename="../kstmainwindow.ui" line="503"/>
-        <location filename="../kstmainwindow.ui" line="513"/>
-        <location filename="../kstmainwindow.ui" line="523"/>
-        <location filename="../kstmainwindow.ui" line="533"/>
-        <location filename="../kstmainwindow.ui" line="675"/>
+        <location filename="../kstmainwindow.ui" line="509"/>
+        <location filename="../kstmainwindow.ui" line="519"/>
+        <location filename="../kstmainwindow.ui" line="529"/>
+        <location filename="../kstmainwindow.ui" line="539"/>
+        <location filename="../kstmainwindow.ui" line="681"/>
         <source>-</source>
         <translation type="unfinished"></translation>
     </message>
@@ -237,8 +237,8 @@
     <message>
         <location filename="../kstmainwindow.ui" line="169"/>
         <location filename="../kstmainwindow.ui" line="347"/>
-        <location filename="../kstmainwindow.ui" line="396"/>
-        <location filename="../kstmainwindow.ui" line="425"/>
+        <location filename="../kstmainwindow.ui" line="399"/>
+        <location filename="../kstmainwindow.ui" line="428"/>
         <source>X</source>
         <translation type="unfinished"></translation>
     </message>
@@ -292,115 +292,115 @@ when user selected</source>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="334"/>
-        <location filename="../kstmainwindow.ui" line="418"/>
+        <location filename="../kstmainwindow.ui" line="421"/>
         <source>Look for any of these strings (space separated) in messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="344"/>
-        <location filename="../kstmainwindow.ui" line="393"/>
+        <location filename="../kstmainwindow.ui" line="396"/>
         <source>Clear the message filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="411"/>
+        <location filename="../kstmainwindow.ui" line="414"/>
         <source>Including me</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="432"/>
+        <location filename="../kstmainwindow.ui" line="435"/>
         <source>Show read (ticked) messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="462"/>
+        <location filename="../kstmainwindow.ui" line="468"/>
         <source>Chat to which messages will be sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="480"/>
+        <location filename="../kstmainwindow.ui" line="486"/>
         <source>Active chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="556"/>
+        <location filename="../kstmainwindow.ui" line="562"/>
         <source>AS Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="566"/>
+        <location filename="../kstmainwindow.ui" line="572"/>
         <source>AS Active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="584"/>
+        <location filename="../kstmainwindow.ui" line="590"/>
         <source>General message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="591"/>
+        <location filename="../kstmainwindow.ui" line="597"/>
         <source>Meep</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="602"/>
+        <location filename="../kstmainwindow.ui" line="608"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="620"/>
+        <location filename="../kstmainwindow.ui" line="626"/>
         <source>Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="636"/>
+        <location filename="../kstmainwindow.ui" line="642"/>
         <source>Clear message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="648"/>
-        <location filename="../kstmainwindow.ui" line="710"/>
+        <location filename="../kstmainwindow.ui" line="654"/>
+        <location filename="../kstmainwindow.ui" line="716"/>
         <source>Configure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="655"/>
+        <location filename="../kstmainwindow.ui" line="661"/>
         <source>Clear Messages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="682"/>
-        <location filename="../kstmainwindow.cpp" line="420"/>
+        <location filename="../kstmainwindow.ui" line="688"/>
+        <location filename="../kstmainwindow.cpp" line="417"/>
         <source>Connect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.ui" line="689"/>
+        <location filename="../kstmainwindow.ui" line="695"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="402"/>
+        <location filename="../kstmainwindow.cpp" line="399"/>
         <source>Including %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="409"/>
+        <location filename="../kstmainwindow.cpp" line="406"/>
         <source>Disconnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="567"/>
+        <location filename="../kstmainwindow.cpp" line="564"/>
         <source>Set Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="571"/>
+        <location filename="../kstmainwindow.cpp" line="568"/>
         <source>Set Away</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1508"/>
+        <location filename="../kstmainwindow.cpp" line="1500"/>
         <source>Message updates paused</source>
         <translation type="unfinished"></translation>
     </message>
@@ -408,47 +408,47 @@ when user selected</source>
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="338"/>
+        <location filename="../kstcallgridmodel.cpp" line="335"/>
         <source>Chat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="341"/>
+        <location filename="../kstcallgridmodel.cpp" line="338"/>
         <source>Callsign</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="344"/>
+        <location filename="../kstcallgridmodel.cpp" line="341"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="347"/>
+        <location filename="../kstcallgridmodel.cpp" line="344"/>
         <source>Dist</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="350"/>
+        <location filename="../kstcallgridmodel.cpp" line="347"/>
         <source>Brg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="353"/>
+        <location filename="../kstcallgridmodel.cpp" line="350"/>
         <source>AS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="356"/>
+        <location filename="../kstcallgridmodel.cpp" line="353"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="359"/>
+        <location filename="../kstcallgridmodel.cpp" line="356"/>
         <source>Prefix</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="362"/>
+        <location filename="../kstcallgridmodel.cpp" line="359"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>

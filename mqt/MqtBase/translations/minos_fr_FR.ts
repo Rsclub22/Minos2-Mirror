@@ -91,12 +91,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="546"/>
+        <location filename="../contest.cpp" line="566"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="562"/>
+        <location filename="../contest.cpp" line="582"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -976,12 +976,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1817"/>
+        <location filename="../contest.cpp" line="1837"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1830"/>
+        <location filename="../contest.cpp" line="1850"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
@@ -2003,27 +2003,27 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>ThisLogMatcher</name>
     <message>
-        <location filename="../MatchThread.cpp" line="742"/>
+        <location filename="../MatchThread.cpp" line="758"/>
         <source>Possible</source>
         <translation>Possible</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="745"/>
+        <location filename="../MatchThread.cpp" line="761"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="749"/>
+        <location filename="../MatchThread.cpp" line="765"/>
         <source>District</source>
         <translation>District</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="753"/>
+        <location filename="../MatchThread.cpp" line="769"/>
         <source>Locator</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../MatchThread.cpp" line="755"/>
+        <location filename="../MatchThread.cpp" line="771"/>
         <source> - %1%2 %3 matches</source>
         <translation> - %1%2 %3 correspondances</translation>
     </message>

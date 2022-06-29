@@ -167,22 +167,22 @@ Through</source>
         <translation>Passthrough</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="315"/>
+        <location filename="../KeyerMain.cpp" line="325"/>
         <source>Push PTT to Commence Recording</source>
         <translation>Appuyer PTT pour commencer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="466"/>
+        <location filename="../KeyerMain.cpp" line="476"/>
         <source>Alsa Control Files</source>
         <translation>Fichiers de contrôle Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="467"/>
+        <location filename="../KeyerMain.cpp" line="477"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="470"/>
+        <location filename="../KeyerMain.cpp" line="480"/>
         <source>File for mixer setup</source>
         <translation>Fichier pour la configuration du mixer</translation>
     </message>
