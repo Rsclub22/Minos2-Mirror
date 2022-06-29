@@ -46,7 +46,7 @@
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
 #include "BandsSelect.h"
-#include "StatisticsDiplay.h"
+#include "StatisticsDisplay.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -1201,7 +1201,7 @@ void TLogContainer::MakeEntryActionExecute()
 void TLogContainer::StatsActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
-    StatisticsDiplay  sd(ct, this);
+    StatisticsDisplay  sd(ct, this);
     sd.exec();
 }
 void TLogContainer::LocCalcActionExecute()

@@ -91,7 +91,7 @@ void MinosTableWidget::statusClicked()
 
     sortOrder = !sortOrder;
 
-    sortByColumn(0, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
+    sortByColumn(-1, sortOrder?Qt::AscendingOrder:Qt::DescendingOrder);
 }
 
 void MinosTableWidget::onResizeTimer()

@@ -1,15 +1,17 @@
-#include "StatisticsDiplay.h"
-#include "ui_StatisticsDiplay.h"
-
 #include "base_pch.h"
 #include "contacts.h"
 #include "contest.h"
+#include "cutils.h"
 
+#include "StatisticsDisplay.h"
+#include "ui_StatisticsDisplay.h"
 //============================================================================================ (
 /*
 To Do:
 Interval saving
 Interval rationalise (30 mins/60 mins/24 hours?)
+
+band saving
 
 Column saving
 Column dragging and saving
@@ -19,62 +21,10 @@ Export as CSV
 
 Filtering
 
-Is there any way of compressing things? Do we need to? (band tabs!)
-
 Added breaks on operator change
-
-Sort on a column by each component - or separate the columns (would raise column naming problems
-Or band tabs (like it!) for each band (and overall)
 */
-//============================================================================================
-class BandModeSlot
-{
-public:
-    BandModeSlot(const QString m):mode(m){}
-    BandModeSlot(){}
-    QString mode;
-    QStringList ops;
-    int QSOs = 0;
-    int points = 0;
-    int newMults = 0;
-    int bonus = 0;
-
-    QString toString()
-    {
-        if (QSOs == 0)
-        {
-            return QString();
-        }
-        QString res = QString("Q %1 P %2 M %3 B %4 %5").arg(QSOs).arg(points).arg(newMults).arg(bonus).arg(ops.join(" "));
-        return res;
-    }
-};
-//============================================================================================
-class BandMode
-{
-public:
-    BandMode(const QString b):band(b){}
-    BandMode(){}
-    QString band;
-    QMap <QString, BandModeSlot> modes;
-};
 
 //============================================================================================
-class StatisticsSlot
-{
-public:
-public:
-    int slotStart = 0;
-    QDateTime dtStart;
-    QString sstart;
-    QString sstart2;
-    int slotDuration = 0;
-
-    QMap<QString, BandMode> modesMap;   // mode slots by band
-
-    StatisticsSlot(){}  // for QVector
-    StatisticsSlot ( QDateTime current, int slot, int duration );
-};
 StatisticsSlot::StatisticsSlot ( QDateTime current, int slot, int duration ) :
         slotStart ( slot )
       ,  dtStart ( current )
@@ -86,35 +36,7 @@ StatisticsSlot::StatisticsSlot ( QDateTime current, int slot, int duration ) :
 }
 
 //============================================================================================
-class Band
-{
-public:
-    QStringList modes;
-};
-
-QMap<QString, Band> bandList;
-int curBand = 0;
-
-QVector<StatisticsSlot> contestSlots;
-
-QStringList bandStrings;
-QStringList modeStrings;
-//============================================================================================
-class SlotsModel: public QAbstractTableModel
-{
-public:
-    SlotsModel();
-    virtual ~SlotsModel() override;
-
-    // QAbstractItemModel interface
-public:
-    virtual int rowCount(const QModelIndex &parent) const override;
-    virtual int columnCount(const QModelIndex &parent) const override;
-    virtual QVariant data(const QModelIndex &index, int role) const override;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
-    void reset();
-};
-SlotsModel::SlotsModel()
+SlotsModel::SlotsModel(StatisticsDisplay *s):sd(s)
 {}
 
 SlotsModel::~SlotsModel()
@@ -127,12 +49,12 @@ void SlotsModel::reset()
 
 int SlotsModel::rowCount(const QModelIndex &/*parent*/) const
 {
-    return contestSlots.size();
+    return sd->contestSlots.size();
 }
 
 int SlotsModel::columnCount(const QModelIndex &/*parent*/) const
 {
-    return 5 * modeStrings.size();   // cols in a band/mode slot
+    return 5 * sd->modeStrings.size();   // cols in a band/mode slot
 }
 
 QVariant SlotsModel::data(const QModelIndex &index, int role) const
@@ -142,7 +64,7 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
 
-    if (index.row() >= contestSlots.size() || index.row() < 0)
+    if (index.row() >= sd->contestSlots.size() || index.row() < 0)
     {
              return QVariant();
     }
@@ -152,9 +74,9 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
     {
         QVariant cell;
-        if (contestSlots.size())
+        if (sd->contestSlots.size())
         {
-            BandModeSlot &bms = contestSlots[row].modesMap[bandStrings[curBand]].modes[modeStrings[col /5 ] ];
+            BandModeSlot &bms = sd->contestSlots[row].modesMap[sd->bandStrings[sd->curBand]].modes[sd->modeStrings[col /5 ] ];
             if (bms.QSOs > 0)
             {
                 switch(col % 5)
@@ -189,7 +111,7 @@ QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int ro
         QString cell;
         if ( orientation == Qt::Horizontal)
         {
-            if (contestSlots.size())
+            if (sd->contestSlots.size())
             {
                 switch(section % 5)
                 {
@@ -209,12 +131,12 @@ QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int ro
                     cell = "Operators";
                     break;
                 }
-                cell = modeStrings[section/5] + " " + cell;
+                cell = sd->modeStrings[section/5] + " " + cell;
             }
         }
         else
         {
-            cell = contestSlots[section].sstart;
+            cell = sd->contestSlots[section].sstart;
         }
         return cell;
     }
@@ -222,17 +144,6 @@ QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int ro
 }
 
 //============================================================================================
-class SlotsProxyModel: public QSortFilterProxyModel
-{
-public:
-    SlotsProxyModel();
-    virtual ~SlotsProxyModel();
-
-    // QSortFilterProxyModel interface
-protected:
-    virtual bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
-    virtual bool lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const override;
-};
 SlotsProxyModel::SlotsProxyModel()
 {}
 
@@ -246,11 +157,27 @@ bool SlotsProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source
 
 bool SlotsProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex &source_right) const
 {
-    return source_left.row() < source_right.row();
+    //Model Indices are to the SOURCE model
+
+    QAbstractItemModel *aim = sourceModel();
+    SlotsModel *sm = dynamic_cast<SlotsModel *>(aim);
+
+    QVariant l = sm->data(source_left, Qt::DisplayRole);
+    QVariant r = sm->data(source_right, Qt::DisplayRole);
+
+    if (source_right.column() == 5)
+    {
+        return (l.toString() < r.toString());
+    }
+    else
+    {
+        return (l.toInt() < r.toInt());
+    }
+
 }
 //============================================================================================
 
-StatisticsDiplay::StatisticsDiplay(BaseContestLog *ct, QWidget *parent) :
+StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::StatisticsDiplay),
     ct(ct)
@@ -265,8 +192,8 @@ StatisticsDiplay::StatisticsDiplay(BaseContestLog *ct, QWidget *parent) :
     int interval = settings.value("StatisticsDisplay/interval", 60).toInt();
     ui->MinutesSpinner->setValue(interval);
 
-    SlotsModel *sm = new SlotsModel();
-    SlotsProxyModel *spm = new SlotsProxyModel();
+    sm = new SlotsModel(this);
+    spm = new SlotsProxyModel();
 
     spm->setSourceModel(sm);
     ui->StatsTable->setModel(spm);
@@ -276,37 +203,53 @@ StatisticsDiplay::StatisticsDiplay(BaseContestLog *ct, QWidget *parent) :
 
     ui->tabBar->setCurrentIndex( 0 );
 
-    connect( ui->tabBar , &QTabBar::currentChanged, this, &StatisticsDiplay::on_currentTabChangedSlot );
+    connect( ui->tabBar , &QTabBar::currentChanged, this, &StatisticsDisplay::on_currentTabChangedSlot );
 
+    ui->StatsTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->StatsTable->horizontalHeader()->setSectionsMovable(true);
+
+    connect( ui->StatsTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &StatisticsDisplay::onStatisticsGrid_customContextMenuRequested );
+    connect( ui->StatsTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &StatisticsDisplay::onStatisticsGrid_sectionMoved);
+    connect( ui->StatsTable->horizontalHeader(), &QHeaderView::sectionResized, this, &StatisticsDisplay::on_sectionResized);
+
+    createColumnsMenu(columnsMenu, sm, this,
+              [=]{
+                    viewColumn();
+              });
+
+    restoreStatisticsTableColumns();
 
 }
-void StatisticsDiplay::on_currentTabChangedSlot(int index)
+StatisticsDisplay::~StatisticsDisplay()
+{
+    delete ui;
+
+    delete sm;
+    sm = nullptr;
+    delete spm;
+    spm = nullptr;
+}
+void StatisticsDisplay::on_currentTabChangedSlot(int index)
 {
     curBand = index;
-    SlotsProxyModel * spm = dynamic_cast<SlotsProxyModel *>(ui->StatsTable->model());
     if (spm)
     {
         spm->invalidate();
     }
 }
-StatisticsDiplay::~StatisticsDiplay()
-{
-    contestSlots.clear();
-    delete ui;
-}
-void StatisticsDiplay::moveEvent(QMoveEvent *event)
+void StatisticsDisplay::moveEvent(QMoveEvent *event)
 {
     QSettings settings;
     settings.setValue("StatisticsDisplay/geometry", saveGeometry());
     QDialog::moveEvent(event);
 }
-void StatisticsDiplay::resizeEvent(QResizeEvent * event)
+void StatisticsDisplay::resizeEvent(QResizeEvent * event)
 {
     QSettings settings;
     settings.setValue("StatisticsDisplay/geometry", saveGeometry());
     QDialog::resizeEvent(event);
 }
-void StatisticsDiplay::changeEvent( QEvent* e )
+void StatisticsDisplay::changeEvent( QEvent* e )
 {
     if( e->type() == QEvent::WindowStateChange )
     {
@@ -314,14 +257,65 @@ void StatisticsDiplay::changeEvent( QEvent* e )
         settings.setValue("StatisticsDisplay/geometry", saveGeometry());
     }
 }
+void StatisticsDisplay::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->StatsTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/LoggerTableHeaders.ini");
+            resetHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+        }
+    }
+    saveStatisticsTableColumns();
+}
 
-void StatisticsDiplay::on_CloseButton_clicked()
+// This isn't quite right; each CONTEST will be different! Maybe save to .minos
+// rather than file? So long as it isn't protected!
+
+void StatisticsDisplay::saveStatisticsTableColumns()
+{
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/LoggerTableHeaders.ini");
+        saveHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+    }
+}
+void StatisticsDisplay::restoreStatisticsTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/LoggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+    inRestoreColumns = false;
+}
+void StatisticsDisplay::onStatisticsGrid_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->StatsTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->StatsTable->horizontalHeader());
+}
+void StatisticsDisplay::onStatisticsGrid_sectionMoved(int, int, int)
+{
+    saveStatisticsTableColumns();
+}
+void StatisticsDisplay::on_sectionResized(int, int , int)
+{
+    saveStatisticsTableColumns();
+}
+void StatisticsDisplay::on_CloseButton_clicked()
 {
     close();
 }
 
 
-void StatisticsDiplay::on_RecalcButton_clicked()
+void StatisticsDisplay::on_RecalcButton_clicked()
 {
     bandList.clear();
     contestSlots.clear();
@@ -428,7 +422,6 @@ void StatisticsDiplay::on_RecalcButton_clicked()
         ui->tabBar->setVisible(false);
     }
 
-    SlotsProxyModel * spm = dynamic_cast<SlotsProxyModel *>(ui->StatsTable->model());
     if (spm)
     {
         spm->invalidate();
@@ -436,7 +429,7 @@ void StatisticsDiplay::on_RecalcButton_clicked()
 }
 
 
-void StatisticsDiplay::on_MinutesSpinner_textChanged(const QString &)
+void StatisticsDisplay::on_MinutesSpinner_textChanged(const QString &)
 {
     int interval = ui->MinutesSpinner->value();
     QSettings settings;
