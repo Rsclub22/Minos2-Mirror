@@ -116,6 +116,7 @@ private:
 
     QMenu columnsMenu;
     bool inRestoreColumns = false;
+    bool rebuildingTabs = false;
 
     SlotsModel *sm = nullptr;
     SlotsProxyModel *spm = nullptr;

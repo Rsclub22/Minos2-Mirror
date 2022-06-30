@@ -226,6 +226,7 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
 
     restoreStatisticsTableColumns();
 
+    on_RecalcButton_clicked();
 }
 StatisticsDisplay::~StatisticsDisplay()
 {
@@ -238,10 +239,13 @@ StatisticsDisplay::~StatisticsDisplay()
 }
 void StatisticsDisplay::on_currentTabChangedSlot(int index)
 {
-    curBand = index;
-    if (spm)
+    if (!rebuildingTabs)
     {
-        spm->invalidate();
+        curBand = index;
+        if (spm)
+        {
+            spm->invalidate();
+        }
     }
 }
 void StatisticsDisplay::moveEvent(QMoveEvent *event)
@@ -441,6 +445,8 @@ void StatisticsDisplay::on_RecalcButton_clicked()
         bandStrings.push_back(b->name());
     }
 
+    rebuildingTabs = true;
+
     while ( ui->tabBar->count() > 0 )
     {
         ui->tabBar->removeTab( ui->tabBar->count() - 1 );
@@ -459,6 +465,7 @@ void StatisticsDisplay::on_RecalcButton_clicked()
     {
         ui->tabBar->setVisible(false);
     }
+    rebuildingTabs = false;
 
     if (spm)
     {
@@ -473,6 +480,5 @@ void StatisticsDisplay::on_MinutesSpinner_textChanged(const QString &)
     QSettings settings;
     settings.setValue("StatisticsDisplay/interval", interval);
 
-    on_RecalcButton_clicked();
 }
 
