@@ -55,12 +55,27 @@ dtg::dtg( bool now ): baddtg(true)
 void dtg::setIsoDTG(const QString &d )
 {
    // Untested! No errror handling!
-   QString curDate = d.mid( 2, 6 );
-   QString curTime = d.mid( 9, 8 );
 
-   qdatetime = QDateTime();
-   setDate( curDate, DTGLOG );
-   setTime( curTime, DTGDISP );
+    QString curDate = d.mid( 2, 6 );
+    sdate.setValue(curDate);
+
+    QString curTime = d.mid( 9, 8 );
+
+    QString temp;
+    QString t2 = curTime + ":00:00:00";
+    temp = t2[ 0 ];
+    temp += t2[ 1 ];
+
+    temp += t2[ 3 ];
+    temp += t2[ 4 ];
+
+    temp += t2[ 6 ];
+    temp += t2[ 7 ];
+    stime.setValue(temp);
+    baddtg = false;
+
+    qdatetime = QDateTime();
+
 }
 QString dtg::getIsoDTG( bool &d ) const
 {
@@ -402,11 +417,7 @@ void dtg::setDate(const QString &d, DTG dstyle )
    sdate.setValue( temp );
    baddtg = false;
 
-   QString dtgstr = getDate(DTGFULL);
-   QString t = getTime(DTGFULL);
-   qdatetime.setDate(QDate::fromString(dtgstr, "yyyyMMdd"));
-   qdatetime.setTime(QTime::fromString(t, "HHmmss"));
-   qdatetime.setTimeSpec(Qt::UTC);
+   qdatetime = QDateTime();
 }
 
 void dtg::setTime( const QString &t, DTG dstyle )
@@ -437,9 +448,7 @@ void dtg::setTime( const QString &t, DTG dstyle )
    stime.setValue( temp );
    baddtg = false;
 
-   qdatetime.setTime(QTime::fromString(temp, "HHmmss"));
-   qdatetime.setTimeSpec(Qt::UTC);
-
+   qdatetime = QDateTime();
 }
 int dtg::notEntered( )
 {
@@ -502,15 +511,24 @@ dtg::~dtg()
 {}
 QDate dtg::getDate()
 {
-    return qdatetime.date();
+    return getQDT().date();
 }
 QTime dtg::getTime()
 {
-    return qdatetime.time();
+    return getQDT().time();
 }
 
 QDateTime dtg::getQDT()
 {
+    if (!qdatetime.isValid())
+    {
+        QString dtgstr = getDate(DTGFULL);
+        QString t = getTime(DTGFULL);
+        qdatetime.setDate(QDate::fromString(dtgstr, "yyyyMMdd"));
+        qdatetime.setTime(QTime::fromString(t, "HHmmss"));
+        qdatetime.setTimeSpec(Qt::UTC);
+
+    }
     return qdatetime;
 }
 void dtg::setDate(QDate tdt)
