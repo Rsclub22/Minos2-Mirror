@@ -24,21 +24,6 @@ QString TDTToCanonical(QString d )
    QString s = dt.toString( "yyyyMMddHHmm" );
    return s;
 }
-int DTGToInt ( const QString &datg )
-{
-    QDateTime epoch(QDate(2000, 1, 1), QTime(0, 0, 0, 0));
-    QDateTime qdtg = QDateTime::fromString(datg, "yyyyMMddHHmm");
-
-    int mdiff = static_cast<int>(epoch.secsTo(qdtg)/60);
-
-    return mdiff;
-}
-
-int DTGToInt ( const QDateTime &datg )
-{
-    QString dt = datg.toString( "yyyyMMddHHmm" );
-    return DTGToInt( dt );
-}
 dtg::dtg( bool now ): baddtg(true)
 {
     if ( now )

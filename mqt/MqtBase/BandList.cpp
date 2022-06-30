@@ -35,6 +35,19 @@ QString BandInfo::getType() const
 {
     return type;
 }
+
+bool BandInfo::operator<(const BandInfo &rhs)
+{
+    if (fLow.isClear())
+    {
+        return false;
+    }
+    if (rhs.fLow.isClear())
+    {
+        return true;
+    }
+    return fLow < rhs.fLow;
+}
 QSharedPointer<ModeInfo> BandInfo::findMode(const QString &mstr) const
 {
     for(auto m: modes)

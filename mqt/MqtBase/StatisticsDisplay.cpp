@@ -2,6 +2,7 @@
 #include "contacts.h"
 #include "contest.h"
 #include "cutils.h"
+#include "BandList.h"
 
 #include "StatisticsDisplay.h"
 #include "ui_StatisticsDisplay.h"
@@ -25,14 +26,11 @@ Added breaks on operator change
 */
 
 //============================================================================================
-StatisticsSlot::StatisticsSlot ( QDateTime current, int slot, int duration ) :
-        slotStart ( slot )
-      ,  dtStart ( current )
+StatisticsSlot::StatisticsSlot (QDateTime current, int duration ) :
+      dtStart ( current )
       , slotDuration ( duration )
 {
     sstart = current.toString ( "hh:mm dd/MM/yyyy" );
-    sstart2 = current.toString ( "yyMMddhhmm" );
-
 }
 
 //============================================================================================
@@ -71,9 +69,9 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
     int row = index.row();
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
-        QVariant cell;
+        QString cell;
         if (sd->contestSlots.size())
         {
             BandModeSlot &bms = sd->contestSlots[row].modesMap[sd->bandStrings[sd->curBand]].modes[sd->modeStrings[col /5 ] ];
@@ -82,22 +80,27 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
                 switch(col % 5)
                 {
                 case 0:
-                    cell = bms.QSOs;
+                    cell = QString::number(bms.QSOs);
                     break;
                 case 1:
-                    cell = bms.points;
+                    cell = QString::number(bms.points);
                     break;
                 case 2:
-                    cell = bms.newMults;
+                    cell = QString::number(bms.newMults);
                     break;
                 case 3:
-                    cell = bms.bonus;
+                    cell = QString::number(bms.bonus);
                     break;
                 case 4:
                     cell = bms.ops.join(" ");
                     break;
                 }
             }
+        }
+        if (role == Qt::ToolTipRole)
+        {
+            QString hdr = headerData(col, Qt::Horizontal, role).toString();
+            cell = hdr + QString(" ") + cell;
         }
         return cell;
     }
@@ -106,7 +109,7 @@ QVariant SlotsModel::data(const QModelIndex &index, int role) const
 
 QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
         QString cell;
         if ( orientation == Qt::Horizontal)
@@ -137,6 +140,10 @@ QVariant SlotsModel::headerData(int section, Qt::Orientation orientation, int ro
         else
         {
             cell = sd->contestSlots[section].sstart;
+        }
+        if (role == Qt::ToolTipRole)
+        {
+            cell = sd->bandStrings[sd->curBand] + " " + cell;
         }
         return cell;
     }
@@ -322,28 +329,24 @@ void StatisticsDisplay::on_RecalcButton_clicked()
     bandStrings.clear();
     modeStrings.clear();
 
-    int istart =  DTGToInt ( ct->DTGStart.getValue() );
-
     int interval = ui->MinutesSpinner->value();
 
     QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
     QDateTime  contestEnd = CanonicalToTDT(ct->DTGEnd.getValue());
     QDateTime current = contestStart;
-    int istart2 = istart;
     while ( current < contestEnd )
     {
         // we have already got interval from the constructor
-        StatisticsSlot ss ( current, istart2, interval );
+        StatisticsSlot ss ( current, interval );
         contestSlots.push_back ( ss );
         current = current.addSecs( interval * 60 );
-        istart2 += interval;
     }
 
     // First scan the contest to get all the time slots and all the band/mode slots
     for ( auto const &c: qAsConst(ct->ctList ))
     {
-        int cdtg = DTGToInt ( c.wt->timeOff.getQDT() );
-        int sno = cdtg - istart;
+        QDateTime cdtg = c.wt->timeOff.getQDT();
+        int sno = contestStart.secsTo(cdtg)/60;
         sno /= interval;
         if ( sno >= 0 && sno < contestSlots.size() )
         {
@@ -401,6 +404,41 @@ void StatisticsDisplay::on_RecalcButton_clicked()
                 }
             }
         }
+    }
+
+    QVector<QSharedPointer<BandInfo>> vbi;
+    // need to get bandinfo for each bandstring, then sort it decently in frequency order
+
+    BandList &blist = BandList::getBandList();
+    for(auto const &b:qAsConst(bandStrings))
+    {
+        QString cb = b;
+        QSharedPointer<BandInfo>  bi;
+        bool bandOK = blist.findBand(b, bi);
+        if (bandOK)
+        {
+            vbi.push_back(bi);
+        }
+        else
+        {
+            // what if we can't find the band?
+            QSharedPointer<BandInfo> badbi(new BandInfo());
+            badbi->uk = b;
+            vbi.push_back(badbi);
+        }
+    }
+
+    std::sort(vbi.begin(), vbi.end(),
+          [=](const QSharedPointer<BandInfo> a, const QSharedPointer<BandInfo> b)->bool
+            {
+                return *a < *b;
+            }
+          );
+    bandStrings.clear();
+
+    for(const auto &b:vbi)
+    {
+        bandStrings.push_back(b->name());
     }
 
     while ( ui->tabBar->count() > 0 )

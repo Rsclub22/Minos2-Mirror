@@ -109,6 +109,7 @@ class BandInfo
             QString n = normalise(uk);
             return n;
         }
+        bool operator<(const BandInfo &rhs);
 };
 class TiXmlElement;
 class BandList

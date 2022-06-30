@@ -42,13 +42,12 @@ public:
     int slotStart = 0;
     QDateTime dtStart;
     QString sstart;
-    QString sstart2;
     int slotDuration = 0;
 
     QMap<QString, BandMode> modesMap;   // mode slots by band
 
     StatisticsSlot(){}  // for QVector
-    StatisticsSlot ( QDateTime current, int slot, int duration );
+    StatisticsSlot ( QDateTime current, int duration );
 };
 
 //============================================================================================
