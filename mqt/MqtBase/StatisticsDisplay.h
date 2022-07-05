@@ -131,6 +131,7 @@ private:
     void saveStatisticsTableColumns();
     void restoreStatisticsTableColumns();
     void doRecalc();
+    QString getIniKey();
 };
 
 #endif // STATISTICSDISPLAY_H

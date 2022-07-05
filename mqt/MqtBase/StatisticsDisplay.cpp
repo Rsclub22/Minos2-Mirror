@@ -229,6 +229,13 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
 
     restoreStatisticsTableColumns();
 
+    connect( ui->StatsTable->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, [=]()
+        {
+            saveStatisticsTableColumns();
+        }
+    );
+
+
     if (spm)
     {
         spm->invalidate();
@@ -275,6 +282,22 @@ void StatisticsDisplay::changeEvent( QEvent* e )
         settings.setValue("StatisticsDisplay/geometry", saveGeometry());
     }
 }
+QString StatisticsDisplay::getIniKey()
+{
+    QString key = "Statistics";
+    if (ct)
+    {
+        if (ct->contestBands.getValue() == allHF)
+        {
+            key = "MultiBand";
+        }
+        else
+        {
+            key = "SingleBand";
+        }
+    }
+    return key;
+}
 void StatisticsDisplay::viewColumn()
 {
     // a columnsMenu entry has been clicked... action it
@@ -290,7 +313,7 @@ void StatisticsDisplay::viewColumn()
         else
         {
             QString fname("./Configuration/LoggerTableHeaders.ini");
-            resetHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+            resetHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
         }
     }
     saveStatisticsTableColumns();
@@ -304,14 +327,14 @@ void StatisticsDisplay::saveStatisticsTableColumns()
     if (!inRestoreColumns)
     {
         QString fname("./Configuration/LoggerTableHeaders.ini");
-        saveHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+        saveHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
     }
 }
 void StatisticsDisplay::restoreStatisticsTableColumns()
 {
     inRestoreColumns = true;
     QString fname("./Configuration/LoggerTableHeaders.ini");
-    restoreHeaderColumns(fname, "StatisticsTable", "Statistics", ui->StatsTable->horizontalHeader());
+    restoreHeaderColumns(fname, "StatisticsTable", getIniKey(), ui->StatsTable->horizontalHeader());
     inRestoreColumns = false;
 }
 void StatisticsDisplay::onStatisticsGrid_customContextMenuRequested(const QPoint &pos)
