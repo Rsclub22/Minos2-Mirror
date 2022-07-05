@@ -15,8 +15,9 @@ class BaseContestLog;
 class BandModeSlot
 {
 public:
-    BandModeSlot(const QString m):mode(m){}
+    BandModeSlot(const QString &b, const QString m):band(b), mode(m){}
     BandModeSlot(){}
+    QString band;
     QString mode;
     QStringList ops;
     int QSOs = 0;
@@ -113,6 +114,7 @@ private slots:
 private:
     Ui::StatisticsDiplay *ui;
     BaseContestLog * ct = nullptr;
+    QString trAll;
 
     QMenu columnsMenu;
     bool inRestoreColumns = false;
@@ -128,6 +130,7 @@ private:
     void viewColumn();
     void saveStatisticsTableColumns();
     void restoreStatisticsTableColumns();
+    void doRecalc();
 };
 
 #endif // STATISTICSDISPLAY_H

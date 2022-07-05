@@ -191,6 +191,7 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    trAll = tr("ALL");
     QSettings settings;
     QByteArray geometry = settings.value("StatisticsDisplay/geometry").toByteArray();
     if (geometry.size() > 0)
@@ -219,6 +220,8 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
     connect( ui->StatsTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &StatisticsDisplay::onStatisticsGrid_sectionMoved);
     connect( ui->StatsTable->horizontalHeader(), &QHeaderView::sectionResized, this, &StatisticsDisplay::on_sectionResized);
 
+    doRecalc();
+
     createColumnsMenu(columnsMenu, sm, this,
               [=]{
                     viewColumn();
@@ -226,7 +229,11 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
 
     restoreStatisticsTableColumns();
 
-    on_RecalcButton_clicked();
+    if (spm)
+    {
+        spm->invalidate();
+    }
+
 }
 StatisticsDisplay::~StatisticsDisplay()
 {
@@ -326,7 +333,7 @@ void StatisticsDisplay::on_CloseButton_clicked()
 }
 
 
-void StatisticsDisplay::on_RecalcButton_clicked()
+void StatisticsDisplay::doRecalc()
 {
     bandList.clear();
     contestSlots.clear();
@@ -361,12 +368,28 @@ void StatisticsDisplay::on_RecalcButton_clicked()
             {
                 contestSlots[sno].modesMap[band] = BandMode(band);
             }
+            if (!contestSlots[sno].modesMap.contains(trAll))
+            {
+                contestSlots[sno].modesMap[trAll] = BandMode(trAll);
+            }
 
             QString mode = c.wt->mode.getValue();
 
             if (!contestSlots[sno].modesMap[band].modes.contains(mode))
             {
-                contestSlots[sno].modesMap[band].modes[mode] = BandModeSlot(mode);
+                contestSlots[sno].modesMap[band].modes[mode] = BandModeSlot(band, mode);
+            }
+            if (!contestSlots[sno].modesMap[band].modes.contains(trAll))
+            {
+                contestSlots[sno].modesMap[band].modes[trAll] = BandModeSlot(band, trAll);
+            }
+            if (!contestSlots[sno].modesMap[trAll].modes.contains(trAll))
+            {
+                contestSlots[sno].modesMap[trAll].modes[trAll] = BandModeSlot(trAll, trAll);
+            }
+            if (!contestSlots[sno].modesMap[trAll].modes.contains(mode))
+            {
+                contestSlots[sno].modesMap[trAll].modes[mode] = BandModeSlot(trAll, mode);
             }
 
             BandModeSlot &bms = contestSlots[sno].modesMap[band].modes[mode];
@@ -387,6 +410,10 @@ void StatisticsDisplay::on_RecalcButton_clicked()
     {
         for (auto const &b: qAsConst(c.modesMap))
         {
+            if (!bandStrings.contains(trAll))
+            {
+                bandStrings.append(trAll);
+            }
             QString band = b.band;
             if (!bandStrings.contains(band))
             {
@@ -396,15 +423,63 @@ void StatisticsDisplay::on_RecalcButton_clicked()
             for (auto const &m: qAsConst(b.modes))
             {
                 QString mode = m.mode;
+                if (!modeStrings.contains(trAll))
+                {
+                    modeStrings.append(trAll);
+                }
                 if (!modeStrings.contains(mode))
                 {
                     modeStrings.append(mode);
                     modeStrings.sort();
                 }
+                if (!bandList[band].modes.contains(trAll))
+                {
+                    bandList[band].modes.append(trAll);
+                }
                 if (!bandList[band].modes.contains(mode))
                 {
                     bandList[band].modes.append(mode);
                     bandList[band].modes.sort();
+                }
+            }
+        }
+    }
+//    BandModeSlot &bms = contestSlots[row].modesMap[bandStrings[curBand]].modes[modeStrings[moffset ] ];
+    for (auto &c:contestSlots)
+    {
+        BandMode &allBandsModes = c.modesMap[trAll];  // map of modes for band
+        BandModeSlot &allBandsallModesSlot = allBandsModes.modes[trAll];
+        for (auto &b: c.modesMap)
+        {
+            if (b.band != trAll)
+            {
+                BandModeSlot &allModesSlot = b.modes[trAll];
+                for (auto &m: b.modes)
+                {
+                    if (m.mode != trAll)
+                    {
+                        allBandsModes.modes[m.mode].QSOs += m.QSOs;
+                        allBandsallModesSlot.QSOs += m.QSOs;
+                        allModesSlot.QSOs += m.QSOs;
+
+                        allBandsModes.modes[m.mode].bonus += m.bonus;
+                        allBandsallModesSlot.bonus += m.bonus;
+                        allModesSlot.bonus += m.bonus;
+
+                        allBandsModes.modes[m.mode].newMults += m.newMults;
+                        allBandsallModesSlot.newMults += m.newMults;
+                        allModesSlot.newMults += m.newMults;
+
+                        allBandsModes.modes[m.mode].bonus += m.bonus;
+                        allBandsallModesSlot.bonus += m.bonus;
+                        allModesSlot.bonus += m.bonus;
+
+                        allBandsModes.modes[m.mode].points += m.points;
+                        allBandsallModesSlot.points += m.points;
+                        allModesSlot.points += m.points;
+
+                        //AND we need to merge operators
+                    }
                 }
             }
         }
@@ -416,7 +491,6 @@ void StatisticsDisplay::on_RecalcButton_clicked()
     BandList &blist = BandList::getBandList();
     for(auto const &b:qAsConst(bandStrings))
     {
-        QString cb = b;
         QSharedPointer<BandInfo>  bi;
         bool bandOK = blist.findBand(b, bi);
         if (bandOK)
@@ -466,6 +540,10 @@ void StatisticsDisplay::on_RecalcButton_clicked()
         ui->tabBar->setVisible(false);
     }
     rebuildingTabs = false;
+}
+void StatisticsDisplay::on_RecalcButton_clicked()
+{
+    doRecalc();
 
     if (spm)
     {

@@ -38,6 +38,14 @@ QString BandInfo::getType() const
 
 bool BandInfo::operator<(const BandInfo &rhs)
 {
+    if (name() == "ALL")
+    {
+        return true;
+    }
+    if (rhs.name() == "ALL")
+    {
+        return false;
+    }
     if (fLow.isClear())
     {
         return false;
