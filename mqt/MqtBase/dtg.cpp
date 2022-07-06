@@ -2,7 +2,7 @@
 #include "dtg.h"
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60
 
-dtg::dtg( bool now ): baddtg(false)
+dtg::dtg( bool now ): baddtg(true)
 {
     if ( now )
     {
@@ -17,8 +17,7 @@ dtg::dtg( bool now ): baddtg(false)
         sdate.setValue(d);
         QString t = tdt.toString("HHmmss");
         stime.setValue(t);
-//        setDate( tdt.toString( "dd/MM/yy" ), DTGDISP );
-//        setTime( tdt.toString(hh:mm:ss" ), DTGDISP );
+        baddtg = false;
     }
     else
     {
@@ -269,6 +268,15 @@ QString dtg::getTime( DTG dstyle, bool &d ) const
             if ( temp_time[ i ].unicode() == 0 )
                 temp_time[ i ] = ' ';
     }
+    else if (dstyle == DTGADIF)
+    {
+        temp_time += timeValue [ 0 ];
+        temp_time += timeValue [ 1 ];
+        temp_time += timeValue [ 2 ];
+        temp_time += timeValue [ 3 ];
+        temp_time += timeValue [ 4 ];
+        temp_time += timeValue [ 5 ];
+    }
     else
     {
         temp_time += timeValue [ 0 ];
@@ -421,13 +429,13 @@ dtg::dtg(const dtg&rhs)
 {
    sdate.setValue(rhs.sdate);
    stime.setValue(rhs.stime);
-   baddtg = false;
+   baddtg = rhs.baddtg;
 }
 dtg& dtg::operator =(const dtg&rhs)
 {
    sdate.setValue(rhs.sdate);
    stime.setValue(rhs.stime);
-   baddtg = false;
+   baddtg = rhs.baddtg;
    return *this;
 }
 dtg::~dtg()

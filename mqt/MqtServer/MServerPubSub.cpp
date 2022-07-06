@@ -15,6 +15,7 @@
 #include "PubSubServer.h"
 #include "MServerPubSub.h"
 #include "MServer.h"
+#include "MTrace.h"
 
 extern bool closeApp;
 
@@ -252,6 +253,8 @@ class PublishedKey: public Published
       {
          return state;
       }
+
+      void traceKey();
 };
 //---------------------------------------------------------------------------
 void Subscriber::SendTo ( const PublishedKey &pk )
@@ -380,7 +383,7 @@ void Published::buildPublishedTree(QTreeWidget *tree)
 {
     tree->clear();
     tree->setColumnCount(4);
-    QStringList h = {tr("cat/key"), tr("router"), tr("pubid"), tr("state"), tr("value")};
+    QStringList h = {tr("cat/key"), tr("server"), tr("pubid"), tr("state"), tr("value")};
     tree->setHeaderLabels(h);
     for ( auto const &p: qAsConst(Published::publist) )
     {
@@ -630,6 +633,7 @@ void PublishedCategory::publish( const QString &pubId, const QString &k, const Q
    {
       ( *kl ) ->setPubValue( v );
       ( *kl ) ->setPubState( pState );
+       (*kl) ->traceKey();
       for ( SubscriberListIterator i = subscribedLocal.begin(); i != subscribedLocal.end(); i++ )
       {
          // send to all who have subscribed to the category
@@ -758,6 +762,11 @@ PublishedKey::PublishedKey( bool local, const QString &publId, const QString &sv
 {}
 PublishedKey::~PublishedKey()
 {}
+
+void PublishedKey::traceKey()
+{
+    trace(QString("Published Key %1 %2 %3").arg(cat->getCategory(), key, value));
+}
 //---------------------------------------------------------------------------
 TPubSubMain::TPubSubMain( )
 {

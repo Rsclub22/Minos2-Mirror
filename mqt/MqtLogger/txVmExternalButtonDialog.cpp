@@ -16,7 +16,7 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
-    LogContainer->sendDM->publishKeyerMS(true);
+    LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
 }
 
 TxVmExternalButtonDialog::~TxVmExternalButtonDialog()
@@ -97,6 +97,7 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
 
 void TxVmExternalButtonDialog::on_replayButton_clicked()
 {
+    trace("TxVmExternalButtonDialog::on_replayButton_clicked()");
     emit LogContainer->sendKeyerPlay( vmData->getvmButtonNum() );
 }
 
@@ -110,75 +111,78 @@ void TxVmExternalButtonDialog::on_stopButton_clicked()
     emit LogContainer->sendKeyerStop();
 }
 
-void TxVmExternalButtonDialog::on_recordLevel_valueChanged(double arg1)
+void TxVmExternalButtonDialog::on_recordValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
-        inVolChange = true;
+        inVolChangeCount = 1;
         ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
-        inVolChange = false;
+        pubSliders();
+        inVolChangeCount--;
     }
 }
 
 void TxVmExternalButtonDialog::on_recordSlider_valueChanged(int /*position*/)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         pubSliders();
 
-        inVolChange = true;
+        inVolChangeCount = 1;
         int v = ui->recordSlider->value();
-        ui->recordLevel->setValue(v/10.0);
-        inVolChange = false;
+        ui->recordValue->setValue(v/10.0);
+        inVolChangeCount--;
     }
 }
 
 void TxVmExternalButtonDialog::on_replayValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
-        inVolChange = true;
+        inVolChangeCount = 1;
         ui->replaySlider->setValue(static_cast<int>(arg1 * 10));
-        inVolChange = false;
+        pubSliders();
+        inVolChangeCount--;
     }
 }
 
 
 void TxVmExternalButtonDialog::on_replaySlider_valueChanged(int /*value*/)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         pubSliders();
 
-        inVolChange = true;
+        inVolChangeCount = 1;
         int v = ui->replaySlider->value();
         ui->replayValue->setValue(v/10.0);
-        inVolChange = false;
+        inVolChangeCount--;
     }
 }
 
 
 void TxVmExternalButtonDialog::on_passThroughValue_valueChanged(double arg1)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
-        inVolChange = true;
+        inVolChangeCount = 1;
         ui->passThroughSlider->setValue(static_cast<int>(arg1 * 10));
-        inVolChange = false;
+        pubSliders();
+        inVolChangeCount--;
     }
 }
 
 
 void TxVmExternalButtonDialog::on_passThroughSlider_valueChanged(int /*value*/)
 {
-    if (!inVolChange)
+    if (inVolChangeCount <= 0)
     {
         pubSliders();
 
-        inVolChange = true;
+        inVolChangeCount = 1;
         int v = ui->passThroughSlider->value();
         ui->passThroughValue->setValue(v/10.0);
-        inVolChange = false;
+        inVolChangeCount--;
     }
 }
 void TxVmExternalButtonDialog::pubSliders()
@@ -195,7 +199,7 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
     {
         // JSON
         KeyerJson kj;
-        kj.parseConfig(val);
+        kj.parseConfig(val, false);
         // and now use it!
 
         int buttonNumber = vmData->getvmButtonNum();
@@ -219,9 +223,16 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
             if (key == rpcConstants::keyerSliders)
             {
                 QStringList vals = val.split(";");
-                //    sliders = QString("%1;%2;%3").arg(rec, replay, passthrough);
+                inVolChangeCount++;
+
+                trace(QString("onKeyerConfig keyerSliders %1;%2;%3").arg(vals[0], vals[1], vals[2]));
                 ui->recordSlider->setValue(vals[0].toDouble());
+                ui->recordValue->setValue(vals[0].toDouble()/10.0);
                 ui->replaySlider->setValue(vals[1].toDouble());
+                ui->replayValue->setValue(vals[1].toDouble()/10.0);
                 ui->passThroughSlider->setValue(vals[2].toDouble());
+                ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
+
+                inVolChangeCount--;
             }
 }

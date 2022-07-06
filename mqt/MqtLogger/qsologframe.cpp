@@ -159,11 +159,11 @@ void QSOLogFrame::on_FontChanged()
     ui->CallsignFrame->getTextEditEdit()->setFont(cf);
 
     ui->mySentFrame->setFont(cf);
-//    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
-//    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
+    ui->RSTTxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerTxFrame->getTextEditEdit()->setFont(cf);
     ui->themSentFrame->setFont(cf);
-//    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
-//    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
+    ui->RSTRxFrame->getTextEditEdit()->setFont(cf);
+    ui->SerRxFrame->getTextEditEdit()->setFont(cf);
     ui->LocFrame->getTextEditEdit()->setFont(cf);
     ui->QTHFrame->getTextEditEdit()->setFont(cf);
 
@@ -2043,7 +2043,7 @@ void QSOLogFrame::setMode(QString m)
 void QSOLogFrame::setFreq(Frequency f)
 {
     //xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    if (curFreq != f)
+    if (contest && curFreq != f)
     {
         BandList &blist = BandList::getBandList();
         QSharedPointer<BandInfo>  bi;
@@ -2068,7 +2068,7 @@ void QSOLogFrame::setFreq(Frequency f)
             bandOK = blist.findBand(cband, bi);
             if (bandOK)
             {
-                f = bi->fLow;
+                f = bi->bandfreq;
             }
         }
 
@@ -2153,6 +2153,12 @@ void QSOLogFrame::checkQsoFrameColour()
 {
     if (!contest)
     {
+        return;
+    }
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        // only worry about the current visible contest
         return;
     }
     QString ssQsoFrame = ssQsoFrameBlue;
@@ -2544,6 +2550,7 @@ void QSOLogFrame::logScreenEntry( )
    screenContact.op2 = ct->currentOp2.getValue();
 
    lct->copyFromArg( screenContact );
+   lct->timeOn.setDirty();
    lct->timeOff.setDirty(); // As we may have created the contact with the same time as the screen contact
                          // This then becomes "not dirty", so we end up not saving the dtg.
                          // But this only happens when seconds are :00, as the main log
@@ -2678,6 +2685,11 @@ void QSOLogFrame::logCurrentContact( )
 }
 void QSOLogFrame::updateQSOTime(bool fromTimer)
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
     sortUnfilledCatchupTime();
     // Check if dtg is within the contest time
     // If not we wish to show as red
@@ -3355,6 +3367,12 @@ bool QSOLogFrame::isQrzDisplayFrameLoaded()
 
 void QSOLogFrame::checkQrzDisplayFrameLoaded()
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
+
     if (contest && !contest->isReadOnly() && isQrzDisplayFrameLoaded())
     {
         setQrzButtonVisible(true);
@@ -3455,6 +3473,12 @@ void QSOLogFrame::setClusterSendSpotControlsDisabled(bool disabled)
 
 void QSOLogFrame::checkBandMapAndClusterLoaded()
 {
+    BaseContestLog * cct = TContestApp::getContestApp() ->getCurrentContest();
+    if (contest != cct)
+    {
+        return;
+    }
+
     TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
     if (contest && !contest->isReadOnly() && tslf && tslf->isBandMapLoaded())
     {

@@ -23,6 +23,11 @@ public:
     virtual void sendMsgNum(int msgNum) override;
     virtual void stopMsg(VoiceKeyerParams * vkParam) override;
 
+    virtual bool doRepeatFromLogger() override
+    {
+        return false;
+    }
+
     void sendCwMsg(QString message) override {Q_UNUSED(message)};
     void stopCwMsg() override {};
     void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};

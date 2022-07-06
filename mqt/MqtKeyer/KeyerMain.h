@@ -82,7 +82,7 @@ private slots:
 
     void onPTT(bool);
 
-    void doSetVU(unsigned int rmsvol , unsigned int peakvol, unsigned int samples );
+    void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
     void doSliders(int, int, int);
@@ -107,7 +107,7 @@ private:
     bool recordWait;
     bool recording;
 
-    bool inVolChange;
+    int inVolChangeCount = 0;
 
     unsigned int rmsvol= 0;
     unsigned int peakvol = 0;

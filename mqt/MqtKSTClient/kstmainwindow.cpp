@@ -177,19 +177,19 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->CSTable->setItemDelegate(CSDelegate.data());
     ui->planesView->setItemDelegate(PlanesDelegate.data());
 
+    QSize mps = meepDelegate->docSize("XX");
     QHeaderView *verticalHeader = ui->meepTable->verticalHeader();
     verticalHeader->setVisible(false);
-    verticalHeader->setDefaultSectionSize(10);
-    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setMinimumSectionSize(1);
+    verticalHeader->setDefaultSectionSize(mps.height());
+    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
-    verticalHeader->setSectionResizeMode(QHeaderView::ResizeToContents);
-
+    QSize mss = messageDelegate->docSize("XX");
     verticalHeader = ui->messageTable->verticalHeader();
     verticalHeader->setVisible(false);
 
-    QSize ms = messageDelegate->docSize("XX");
-    verticalHeader->setDefaultSectionSize(ms.height() *4/5);
-    verticalHeader->setMinimumSectionSize(10);
+    verticalHeader->setMinimumSectionSize(1);
+    verticalHeader->setDefaultSectionSize(mss.height());
     verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
 
     verticalHeader = ui->CSTable->verticalHeader();
@@ -216,9 +216,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 
     state = settings.value("meepTable/state").toByteArray();
     ui->meepTable->horizontalHeader()->restoreState(state);
-
-//    state = settings.value("planesView/state").toByteArray();
-//    ui->planesView->horizontalHeader()->restoreState(state);
 
     ui->CSTable->horizontalHeader()->setStretchLastSection(true);
     ui->CSTable->horizontalHeader()->setSectionsMovable( true );
@@ -260,6 +257,7 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->msgEdit->installEventFilter(this);
     ui->planesView->installEventFilter(this);
     ui->messageTable->installEventFilter(this);
+    ui->toMeFilter->installEventFilter(this);
 
     installEventFilter(this);   // so we pick up return, and implement the default button
 
@@ -395,21 +393,27 @@ void KSTMainWindow::connectToHost()
     }
 }
 
-
 void KSTMainWindow::connected()
 {
     trace("connection to ON4KST established");
-    ui->includeLabel->setText(tr("Including %1").arg(myCallsign));
-    kstMeepFilterModel.setFilterString(myCallsign.toUpper());
+    ui->includeMeCb->setText(tr("Including %1").arg(myCallsign));
+    ui->includeMeCb->setChecked(true);
+
+    kstMeepFilterModel.setMyCsFilterString(myCallsign.toUpper());
+    ui->toMeFilter->clear();
+
     kstMessageModel.setCacheSize();
     ui->connectButton->setText(tr("Disconnect"));
+
+    setMeepFilters();
 }
 
 
 void KSTMainWindow::clearConnection()
 {
-    ui->includeLabel->clear();
-    kstMeepFilterModel.setFilterString("");
+    ui->includeMeCb->setChecked(false);
+    ui->includeMeCb->setText(QString());
+    kstMeepFilterModel.setMyCsFilterString("");
     ui->connectButton->setText(tr("Connect"));
     kstconnected = false;
     kstLoggedIn.clear();
@@ -678,14 +682,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
     else if (sl[0] == "CE")
     {
         // end of CR frames
-        if (!mouseInMessages)
-        {
-            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-            ui->messageTable->scrollTo(mesIndex);
-        }
+        scrollMesToBottom();
 
-        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
-        ui->meepTable->scrollTo(meepIndex);
+        scrollMeepToBotton();
     }
     else if (sl[0] == "CH")
     {
@@ -720,13 +719,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
 
         kstMessageModel.appendLastRow(kst);
 
-        if (!mouseInMessages)
-        {
-            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-            ui->messageTable->scrollTo(mesIndex);
-        }
-        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
-        ui->meepTable->scrollTo(meepIndex);
+        scrollMesToBottom();
+        scrollMeepToBotton();
 
         if (kst->otherCall == myCallsign)
         {
@@ -769,6 +763,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             if (l->call == sl[2] )
             {
                 l->loc = sl[3];
+                l->distance = -1;   // force recalc
                 emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
             }
             row++;
@@ -793,6 +788,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->call = sl[2];
         test->name = sl[3];
         test->loc = sl[4];
+
         QString state = sl[5];
         int istate = state.toInt();
         if (istate & 1)
@@ -811,8 +807,8 @@ void KSTMainWindow::analyseKstMessage(QString atj)
                 test->prefix = syn->getBasePrefix();
                 test->country = syn->getRealName();
                 test->baseCall = cs.realCall;
-                test->dxcc = cs.locCtryPrefix;
-                test->distance = -2;
+                test->dxcc = syn->getCountry()->getBasePrefix();
+                test->distance = -1;    // force recalc
             }
 
 
@@ -834,14 +830,9 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
-        if (!mouseInMessages)
-        {
-            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-            ui->messageTable->scrollTo(mesIndex);
-        }
+        scrollMesToBottom();
 
-        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
-        ui->meepTable->scrollTo(meepIndex);
+        scrollMeepToBotton();
 
         if (!firstName.isEmpty() && recName != firstName)
         {
@@ -875,6 +866,12 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             QString msg = "MSG|" + QString::number(activeChat) + "|0|/SETLOC " + myLoc + "|0|";
             sendKST(msg);
             recLoc = myLoc;
+            kstCallModel.locator = myLoc;
+            for (auto const &l: qAsConst(*callVector))
+            {
+                l->distance = -1;
+            }
+            kstCallFilterModel.invalidate();
         }
 
 
@@ -933,6 +930,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
             l->data()->loc = test->loc;
             l->data()->away = test->away;
             l->data()->recent = test->recent;
+            l->data()->distance = -1;   // force recalc
             int row = l - callVector->begin();
             emit kstCallModel.dataChanged(kstCallModel.index(row, 0), kstCallModel.index(row, kstCallModel.columnCount() - 1));
 
@@ -974,6 +972,7 @@ void KSTMainWindow::analyseKstMessage(QString atj)
         test->call = sl[2];
         test->name = sl[3];
         test->loc = sl[4];
+        test->distance = -1;   // force recalc
         QString state = sl[5];
         int istate = state.toInt();
         if (istate & 1)
@@ -1039,11 +1038,7 @@ void KSTMainWindow::on_closeButton_clicked()
 void KSTMainWindow::on_messageFilter_textChanged(const QString &arg1)
 {
     kstMessageFilterModel.setFilterString(arg1.toUpper());
-    if (!mouseInMessages)
-    {
-        QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
-        ui->messageTable->scrollTo(mesIndex);
-    }
+    scrollMesToBottom();
 }
 
 void KSTMainWindow::on_CSFilter_textChanged(const QString &arg1)
@@ -1225,6 +1220,10 @@ bool KSTMainWindow::doConfiguration()
         settings.setValue("ASPort", ASPort);
         settings.setValue("ASTimeout", ASTimeout);
 
+        for (auto const &l: qAsConst(*callVector))
+        {
+            l->distance = -1;
+        }
         kstCallFilterModel.invalidate();
         kstMessageFilterModel.invalidate();
 
@@ -1506,13 +1505,7 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
            kstMessageFilterModel.setMousePausePoint(-1);
            ui->messageTable->update();
            ui->pauseLabel->clear();
-           QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageModel.rowCount() - 1, 0);
-           delayedAction(this, [=]()
-           {
-               // NB a lambda function
-               ui->messageTable->scrollTo(mesIndex);
-           }
-           );
+           scrollMesToBottom();
        }
     }
     else
@@ -1537,6 +1530,10 @@ bool KSTMainWindow::eventFilter(QObject *obj, QEvent *event)
                 else if (obj == ui->msgEdit)
                 {
                     ui->msgEdit->clear();
+                }
+                else if (obj == ui->toMeFilter)
+                {
+                    ui->toMeFilter->clear();
                 }
             }
             if (ke->key() == Qt::Key_Return || ke->key() == Qt::Key_Enter)
@@ -1700,13 +1697,14 @@ void KSTMainWindow::on_CSChatFilter_currentIndexChanged(int index)
     }
 }
 
-
 void KSTMainWindow::on_clearMessageFilter_clicked()
 {
     ui->messageChatFilter->setCurrentIndex(0);
     ui->messageFilter->clear();
 
     kstMeepFilterModel.invalidate();    // try to get rid of the colouring in the meep table
+
+    scrollMesToBottom();
 }
 
 void KSTMainWindow::on_clearUserFilter_clicked()
@@ -1843,5 +1841,60 @@ void KSTMainWindow::on_countryRb_clicked()
 void KSTMainWindow::on_clearSelectedMessage_clicked()
 {
     ui->bodyLabel->clear();
+}
+
+void KSTMainWindow::scrollMesToBottom()
+{
+    if (!mouseInMessages)
+    {
+        delayedAction(this, [=]()
+        {
+            QModelIndex mesIndex = kstMessageFilterModel.index(kstMessageFilterModel.rowCount() - 1, 0);
+            ui->messageTable->scrollTo(mesIndex, QAbstractItemView::PositionAtBottom);
+        });
+    }
+}
+
+void KSTMainWindow::scrollMeepToBotton()
+{
+    delayedAction(this, [=]()
+    {
+        QModelIndex meepIndex = kstMeepFilterModel.index(kstMeepFilterModel.rowCount() - 1, 0);
+        ui->meepTable->scrollTo(meepIndex, QAbstractItemView::PositionAtBottom);
+    });
+}
+
+void KSTMainWindow::setMeepFilters()
+{
+    if (ui->includeMeCb->isChecked())
+    {
+        kstMeepFilterModel.setMyCsFilterString(myCallsign.toUpper());
+    }
+    else
+    {
+        kstMeepFilterModel.setMyCsFilterString(QString());
+    }
+    kstMeepFilterModel.setFilterString(ui->toMeFilter->text().trimmed());
+
+    scrollMeepToBotton();
+}
+
+void KSTMainWindow::on_includeMeCb_stateChanged(int /*arg1*/)
+{
+    setMeepFilters();
+}
+
+
+void KSTMainWindow::on_toMeFilter_textChanged(const QString &/*arg1*/)
+{
+    setMeepFilters();
+}
+
+
+void KSTMainWindow::on_clearMeepFiltersButton_clicked()
+{
+    ui->toMeFilter->clear();
+    ui->includeMeCb->setChecked(true);
+    setMeepFilters();
 }
 

@@ -288,16 +288,16 @@ void RunConfigElement::on_finished(int err, QProcess::ExitStatus exitStatus)
         runner->closeWriteChannel();
         runner->deleteLater();
         runner = nullptr;
-        if (stopping)
-        {
-            stopping = false;
-            MinosConfig::getMinosConfig()->checkAllStopped();
-        }
-        else
-        {
-            createProcess();
+    }
+    if (stopping)
+    {
+        stopping = false;
+        MinosConfig::getMinosConfig()->checkAllStopped();
+    }
+    else
+    {
+        createProcess();
 //            runner->start();    // but we have to be careful when we close!
-        }
     }
 }
 
@@ -775,7 +775,7 @@ QString MinosConfig::checkConfig(QString name)
             {
                 if (routerPresent)
                 {
-                    reqErrs += tr("More than one router is defined and enabled");
+                    reqErrs += tr("More than one server is defined and enabled");
                 }
                 routerPresent = true;
             }
@@ -784,7 +784,7 @@ QString MinosConfig::checkConfig(QString name)
 
     if (eleListSize && !routerPresent)
     {
-        reqErrs += tr("A local router is required.\r\n\r\n") ;
+        reqErrs += tr("A local server is required.\r\n\r\n") ;
     }
 
     //Check that the name is not blank, and only has allowed characters

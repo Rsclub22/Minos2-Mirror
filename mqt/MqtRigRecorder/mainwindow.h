@@ -19,7 +19,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void volcallback(unsigned int rmsvol, unsigned int peakvol, unsigned int samples);
+    void volcallback(unsigned int peakvol, unsigned int rmsvol, unsigned int samples);
 private slots:
     void onStdInRead(QString);
 

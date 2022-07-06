@@ -57,9 +57,8 @@ public:
     int getVmRepeatPauseDur() const {return vmRepeatPauseDur;}
     void setVmRepeatPauseDur(const int vmRepeatPauseDur_){vmRepeatPauseDur = vmRepeatPauseDur_;}
 
-
     int getVmDuration() const {return vmDuration;}
-    void setVmDuration(const int vmDuration_){vmDuration = vmDuration_;}
+    void setVmDuration(const int vmDuration_);
 
     int getvmButtonNum() const {return vmButtonNum;}
     void setvmButtonNum(const int vmButtonNum_){vmButtonNum = vmButtonNum_;}
@@ -75,10 +74,10 @@ private:
     QSharedPointer<VoiceKeyerBase> vkBase;
     QString vmName;
     QString vmCwMessage;
-    int vmDuration;
-    bool vmRepeatFlag;
-    int vmRepeatPauseDur;
-    int vmButtonNum;
+    int vmDuration = 0;
+    bool vmRepeatFlag = false;
+    int vmRepeatPauseDur = -1;
+    int vmButtonNum = -1;
 };
 
 class VoiceKeyerBase  : public QObject
@@ -95,6 +94,8 @@ public:
     virtual void voiceKeyerInit(int &numButtons) = 0;
     virtual void sendMsgNum(int msgNum) = 0;
     virtual void stopMsg(VoiceKeyerParams * vkParam) = 0;
+
+    virtual bool doRepeatFromLogger(){return true;}
 
     virtual void sendCwMsg(QString message) = 0;
     virtual void stopCwMsg() = 0;

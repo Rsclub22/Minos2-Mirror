@@ -50,27 +50,27 @@
 <context>
     <name>Published</name>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
+        <location filename="../MServerPubSub.cpp" line="386"/>
         <source>state</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
+        <location filename="../MServerPubSub.cpp" line="386"/>
         <source>value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
+        <location filename="../MServerPubSub.cpp" line="386"/>
         <source>cat/key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
-        <source>router</source>
+        <location filename="../MServerPubSub.cpp" line="386"/>
+        <source>server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MServerPubSub.cpp" line="383"/>
+        <location filename="../MServerPubSub.cpp" line="386"/>
         <source>pubid</source>
         <translation type="unfinished"></translation>
     </message>

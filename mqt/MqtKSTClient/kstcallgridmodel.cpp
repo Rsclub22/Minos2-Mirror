@@ -37,10 +37,7 @@ void KstCallGridModel::setCallVector(QSharedPointer<QVector<QSharedPointer<KstUs
     callVector = pcallVector;
     for (auto const &kstuser: qAsConst(*callVector))
     {
-        if (kstuser->distance == -2)
-        {
-            checkDistBear(kstuser);
-        }
+        checkDistBear(kstuser);
     }
     endResetModel();
 }
@@ -420,8 +417,12 @@ bool KstCallGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
                 {
                     if (!filterString.isEmpty())
                     {
-                        if (call->dxcc == filterString)
-                            return true;
+                        QSharedPointer<CountrySynonym> syn = MultLists::getMultLists()->searchCountrySynonym ( filterString );
+                        if ( syn )
+                        {
+                            if (call->dxcc == syn->getCountry()->getBasePrefix())
+                                return true;
+                        }
                     }
                 }
             }

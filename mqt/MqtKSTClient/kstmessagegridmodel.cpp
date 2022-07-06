@@ -319,28 +319,58 @@ bool KstMeepGridSortFilterModel::filterAcceptsRow(int sourceRow, const QModelInd
 
     QSharedPointer<KstMessageLine> kstmsg = cgm->messageVector->at(sourceRow);
 
-    if (filterString.isEmpty())
-        return false;
+    bool showLine = false;
 
-    if (!showRead && kstmsg->markedRead)
-        return false;
+    if (!myCSfilterString.isEmpty())
+    {
+        if (!showLine && kstmsg->call.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+            showLine = true;
+        if (!showLine && kstmsg->name.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+            showLine = true;
+        if (!showLine && kstmsg->otherCall.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+            showLine = true;
+        if (!showLine && kstmsg->message.indexOf(myCSfilterString, 0, Qt::CaseInsensitive) >= 0)
+            showLine = true;
+    }
 
-    if (kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-    if (kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-    if (kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
-    if (kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-        return true;
+    if (!showLine && !filterStrings.isEmpty())
+    {
+        for (auto const &filterString: qAsConst( filterStrings))
+        {
+            if (!filterString.isEmpty())
+            {
+                if (!showLine && kstmsg->call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    showLine = true;
+                if (!showLine && kstmsg->name.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    showLine = true;
+                if (!showLine && kstmsg->otherCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    showLine = true;
+                if (!showLine && kstmsg->message.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
+                    showLine = true;
+            }
+        }
+    }
 
-    return false;
+    if (showLine && kstmsg->markedRead && !showRead)
+        showLine = false;
+
+    return showLine;
+}
+
+void KstMeepGridSortFilterModel::setMyCsFilterString(QString f)
+{
+    myCSfilterString = f;
+    invalidateFilter();
 }
 
 void KstMeepGridSortFilterModel::setFilterString(QString f)
 {
-    filterString = f;
-    invalidateFilter();
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    filterStrings = f.split(" ", Qt::SkipEmptyParts);
+#else
+    filterStrings = f.split(" ", QString::SkipEmptyParts);
+#endif
+    invalidate();
 }
 void KstMeepGridSortFilterModel::setShowRead(bool s)
 {

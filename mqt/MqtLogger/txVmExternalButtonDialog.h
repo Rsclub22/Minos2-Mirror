@@ -25,7 +25,7 @@ private slots:
 
     void on_stopButton_clicked();
 
-    void on_recordLevel_valueChanged(double arg1);
+    void on_recordValue_valueChanged(double arg1);
     void on_recordSlider_valueChanged(int position);
 
     void onKeyerConfig(QString key, QString val);
@@ -49,7 +49,7 @@ public Q_SLOTS:
 private:
     Ui::TxVmExternalButtonDialog *ui;
     VoiceKeyerParams* vmData;
-    bool inVolChange = false;
+    int inVolChangeCount = 0;
 
     void doCloseEvent();
     bool validateDur(QString durName, QString dur, int &dur_);

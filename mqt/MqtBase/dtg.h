@@ -2,14 +2,14 @@
 #define DTG_H
 #include "XMPP_pch.h"
 
-enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE};
+enum DTG {DTGLOG, DTGDISP, DTGReg1Test, DTGFULL, DTGPRINT, DTGACCURATE, DTGADIF};
 class dtg
 {
    private:
       MinosStringItem<QString> sdate;
       MinosStringItem<QString> stime;
 
-      bool baddtg;
+      bool baddtg = true;
    public:
       static const double daySecs;
 

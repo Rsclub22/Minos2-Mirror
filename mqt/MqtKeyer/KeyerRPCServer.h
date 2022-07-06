@@ -25,8 +25,8 @@ class KeyerServer:public QObject
       void doPublishState( const QString &state );
       void doPublishCommand( const QString &cmd );
       void doPublishConfig(const QString &config);
-      void doPublishSliders(int rec, int replay, int passthrough);
-      void doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples);
+      void doPublishSliders(int rec, int replay, int passthrough, int seq);
+      void doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples, int seq);
    public:
       KeyerServer();
       ~KeyerServer();

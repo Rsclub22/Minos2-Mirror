@@ -113,19 +113,35 @@ double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
     // rig control, and the proper ADIF name of the band
 
     double freq = txfreq;
+    BandList &blist = BandList::getBandList();
+    QSharedPointer<BandInfo>  bi;
+    bool bandOK = false;
+
+    if (freq >= 100)
+    {
+        bandOK = blist.findBand(freq, bi);
+        if (bandOK)
+        {
+            cb = bi->adif;
+            return freq;
+        }
+
+    }
+
+    //currentBand is irrelevant (might not be the same as the QSO) - we have to work from frequency
 
     QString cband = currentBand.getValue();
 
-    cb = cband.trimmed();
-    BandList &blist = BandList::getBandList();
-    QSharedPointer<BandInfo>  bi;
-    bool bandOK = blist.findBand(cb, bi);
+    QString tcb = cband.trimmed();
+    bandOK = blist.findBand(tcb, bi);
     if (bandOK)
     {
-        cb = bi->adif;
+        tcb = bi->adif;
         if (freq < 100)
         {
-            freq = bi->fLow;
+            cb = tcb;
+            freq = bi->bandfreq;
+            return freq;
         }
     }
     return freq;
@@ -136,6 +152,9 @@ QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq ) const
     // rig control, and the proper Cabrillo name of the band
 
     QString cband = currentBand.getValue();
+
+    // currentBand is irrelevant (might not be the same as the QSO) - we have to work from frequency
+    // but I think this still works
 
     QString cb = cband.trimmed();
     BandList &blist = BandList::getBandList();
@@ -173,12 +192,13 @@ Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
 
     if (qint64(txfreq) < 100)
     {
+        // we are only using currentBand here as a last resort
         QString cband = currentBand.getValue().trimmed();
         bandOK = blist.findBand(cband, bi);
         if (bandOK)
         {
             cb = bi->uk;
-            freq = bi->fLow;
+            freq = bi->bandfreq;
         }
         else
         {

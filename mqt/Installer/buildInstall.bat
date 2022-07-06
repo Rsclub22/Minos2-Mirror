@@ -15,7 +15,7 @@ set QtTools=C:\Qt\Tools\mingw810_32\bin
 set QtKit=C:\Qt\5.15.2\mingw81_32\bin
 set QtOpenSSL="C:\Qt\Tools\OpenSSL\Win_x86\bin"
 set QtLicenses="C:\Qt\Licenses"
-set HamlibPath="C:\Projects\hamlib-w32-4.4"
+set HamlibPath="C:\Projects\hamlib-w32-4.5"
 
 if exist %QtKit% goto kitInstalled
 
@@ -99,14 +99,14 @@ xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Clust
 cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests20.xml -Outfile vhfcontests20.xml}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests21.xml -Outfile vhfcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests22.xml -Outfile vhfcontests22.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests20.xml -Outfile hfcontests20.xml}"
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests21.xml -Outfile hfcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests22.xml -Outfile hfcontests22.xml}"
 
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests20.xml -Outfile microcontests20.xml}"
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests21.xml -Outfile microcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests22.xml -Outfile microcontests22.xml}"
 
 
 cd ../Bin

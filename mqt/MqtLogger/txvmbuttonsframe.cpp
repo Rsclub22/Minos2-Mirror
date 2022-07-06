@@ -418,6 +418,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
         trace(QString("[TxVmButtonsFrame] readActionSelected rigControl CW Message Keyer Selected, but not available for this radio "));
         return;
     }
+    trace(QString("[TxVmButtonsFrame] readActionSelected"));
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
     {
@@ -457,6 +458,7 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
 
 void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 {
+    trace("TxVmButtonsFrame::startVMMsg");
     buttonNumSent = buttonNumber;
     usePttForEomFlag = false;
 
@@ -501,6 +503,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
         int msgDur = vmKeyParamList[buttonNumber].getVmDuration() * 1000;
         if (msgDur > 0)
         {
+            trace(QString("msgDurTimer->start(%1)").arg(msgDur));
             msgDurTimer->start(msgDur);
         }
     }
@@ -667,6 +670,7 @@ void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
     int msgDur = vmKeyParamList[buttonNumSent].getVmDuration() * 1000;
     if (msgDur > 0)
     {
+        trace(QString("msgDurTimer->start(%1)").arg(msgDur));
         msgDurTimer->start(msgDur);
     }
     txVmButtonMap[buttonNumSent]->showButtonOnOff(true);
@@ -693,24 +697,26 @@ void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString na
 
 void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
-
-
-    if (buttonNumSent >= 0)
+    if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 )
     {
-        if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+        // message duration of zero means that there shouldn't be a timer running
+        if (buttonNumSent >= 0)
         {
-            int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
-            repeatPauseTimer->start(repeatPauseDur);
-        }
-        else
-        {
-            txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
-            setRepeatIndicatorOnOff(false);
-            buttonNumSent = NO_VM_BUTTON_ON;
+            if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+            {
+                int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
+                repeatPauseTimer->start(repeatPauseDur);
+            }
+            else
+            {
+                txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+                setRepeatIndicatorOnOff(false);
+                buttonNumSent = NO_VM_BUTTON_ON;
+            }
         }
     }
-
     msgDurTimer->stop();
+
 
     if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
     {
@@ -729,30 +735,28 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
 
 
 
-
-
-
 }
 
 
 
 void TxVmButtonsFrame::onRepeatPauseTimerTimeout()
 {
-    if (buttonNumSent >= 0)
+    if (txVoiceKeyer->doRepeatFromLogger())
     {
-       if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
-       {
-           startVMMsg(buttonNumSent);
+        if (buttonNumSent >= 0)
+        {
+           if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
+           {
+               trace("TxVmButtonsFrame::onRepeatPauseTimerTimeout()");
+               startVMMsg(buttonNumSent);
 
-       }
-       else
-       {
-           onVmStopClicked();
-
-
-       }
+           }
+           else
+           {
+               onVmStopClicked();
+           }
+        }
     }
-
     repeatPauseTimer->stop();
 
 
@@ -996,19 +1000,17 @@ void TxVmButtonsFrame::setPttState(bool state)
 
 void TxVmButtonsFrame::pttStopMessage(bool state)
 {
-    if (!state)
-    {
-       trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
+   trace(QString("[TxVmButtonsFrame] pttStopMessage state = %1").arg(state ? "true" : "false"));
+   if (txVoiceKeyer && txVoiceKeyer->doRepeatFromLogger() && !state)
+   {
         onMsgDurTimerTimeout();
-    }
-
-
+   }
 }
+
 void TxVmButtonsFrame::on_pipCb_stateChanged(int /*arg1*/)
 {
     txVoiceKeyer->setPip(ui->pipCb->isChecked());
 }
-
 
 void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
 {
@@ -1094,6 +1096,7 @@ void TxVoiceMemButton::memoryShortCutSelected()
 }
 void TxVoiceMemButton::readActionSelected()
 {
+    trace(QString("TxVoiceMemButton::readActionSelected from %1 %2").arg(sender()->metaObject()->className()).arg(sender()->objectName()));
     txVmButtonsFrame->readActionSelected(memNo);
 }
 void TxVoiceMemButton::editActionSelected()

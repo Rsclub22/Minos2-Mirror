@@ -46,14 +46,17 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
 
 void ExternalMqtKeyer::voiceKeyerInit(int &numButtons)
 {
+    trace("ExternalMqtKeyer::voiceKyerInit");
+
     numButtons = VOICEKEYER_MAX_NUMBUTTONS;
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &ExternalMqtKeyer::onKeyerConfig, Qt::UniqueConnection);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &ExternalMqtKeyer::onKeyerReport, Qt::UniqueConnection);
-    LogContainer->sendDM->publishKeyerConfig("config");
+    LogContainer->sendDM->publishKeyerConfig(rpcConstants::keyerConfig);
 
 }
 void ExternalMqtKeyer::sendMsgNum(int msgNum)
 {
+    trace("ExternalMqtKeyer::sendMsgNum");
     emit LogContainer->sendKeyerPlay( msgNum );
 }
 void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
@@ -80,6 +83,7 @@ void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
 {
     // We should send this config to the external keyer
 
+    trace("ExternalMqtKeyer::saveVmButtonParams");
     int buttonNum = vmParams_.getvmButtonNum();
     KeyerKeyJson &kkj = remoteConfig.kjj[buttonNum];
 
@@ -89,7 +93,7 @@ void ExternalMqtKeyer::saveVmButtonParams(const VoiceKeyerParams &vmParams_ )
     kkj.autoRepeat = vmParams_.getVmRepeatFlag();
     kkj.autoRepeatDelay = vmParams_.getVmRepeatPauseDur();
 
-    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false);
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false, false);
     LogContainer->sendDM->publishKeyerConfig(config);
 
 }
@@ -130,9 +134,10 @@ int ExternalMqtKeyer::editButton(VoiceKeyerParams* vmData, QString title)
 
 void ExternalMqtKeyer::setPip(bool p)
 {
+    trace("ExternalMqtKeyer::setPip");
     remoteConfig.pipEnable = p;
 
-    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false);
+    QString config = remoteConfig.makeConfig(QJsonDocument::Compact, false, false);
     LogContainer->sendDM->publishKeyerConfig(config);
 
 }
@@ -141,7 +146,7 @@ void ExternalMqtKeyer::onKeyerConfig(QString key, QString val)
 {
     if (key == rpcConstants::keyerConfig)
     {
-        remoteConfig.parseConfig(val);
+        remoteConfig.parseConfig(val, false);
         // and now use it!
 
         emit remoteConfigChanged();
