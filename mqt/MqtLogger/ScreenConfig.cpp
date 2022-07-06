@@ -59,6 +59,10 @@ ScreenConfigScreen *ScreenConfig::buildScreens(SC &sc)
         }
     }
     checkScreens();
+    if (scr == nullptr)
+    {
+        scr = curScreen;
+    }
     return scr;
 }
 ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s, int pos)

@@ -190,6 +190,7 @@ StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
     ct(ct)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     trAll = tr("ALL");
     QSettings settings;
@@ -502,6 +503,18 @@ void StatisticsDisplay::doRecalc()
                         allModesSlot.points += m.points;
 
                         //AND we need to merge operators
+
+                        allBandsModes.modes[m.mode].ops.append(m.ops);
+                        allBandsModes.modes[m.mode].ops.sort();
+                        allBandsModes.modes[m.mode].ops.removeDuplicates();
+
+                        allBandsallModesSlot.ops.append(m.ops);
+                        allBandsallModesSlot.ops.sort();
+                        allBandsallModesSlot.ops.removeDuplicates();
+
+                        allModesSlot.ops.append(m.ops);
+                        allModesSlot.ops.sort();
+                        allModesSlot.ops.removeDuplicates();
                     }
                 }
             }
