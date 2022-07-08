@@ -638,7 +638,7 @@ bool isPureNumeric ( const QString &s )
 }
 void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-    trace(QString("saveHeaderColumns %1").arg(layoutName));
+ //   trace(QString("saveHeaderColumns %1").arg(layoutName));
     QString hLine;
     for (int i = 0; i < hdr->count(); i++)
     {
@@ -733,7 +733,7 @@ void setHeaderColumns(QString hLine, QHeaderView *hdr)
 }
 void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-    trace(QString("restoreHeaderColumns %1").arg(layoutName));
+//    trace(QString("restoreHeaderColumns %1").arg(layoutName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     QString hLine = hdrSettings.value(tableName + "/" + layoutName + "_" + "state", "").toString();
 
@@ -748,7 +748,7 @@ void restoreHeaderColumns(QString fileName, QString tableName, QString layoutNam
 }
 void resetHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
 {
-    trace(QString("resetHeaderColumns %1").arg(layoutName));
+//    trace(QString("resetHeaderColumns %1").arg(layoutName));
     QSettings hdrSettings(fileName, QSettings::IniFormat);
     hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", "");
 
