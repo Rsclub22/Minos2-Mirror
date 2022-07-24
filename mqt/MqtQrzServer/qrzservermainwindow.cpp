@@ -273,11 +273,18 @@ void QrzServerMainWindow::sendUrl(QString url)
     }
     else
     {
+
         QString url_ = stripPasswordFromUrl(url);
 
         // error
-        QString msg = QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString();
-        trace ( QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString() );
+        QString sslError;
+        if (!QSslSocket::supportsSsl())
+        {
+            sslError = "\r\n" + tr("SSL not supported on this system.");
+        }
+
+        QString msg = QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString() + sslError;
+        trace ( QString( "HTPP Get of " ) + url_ + " failed: " + reply->errorString()  + sslError );
         stateErrorMessage = reply->errorString();
         addToErrorTextLabel(msg);
         addTextToLogWindow(msg);
