@@ -1429,7 +1429,7 @@ QWidget * ContestDetails::getDetails( )
         break;
 
     case 3:     //Optional Exchange Multiplier
-        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(2);
