@@ -1907,7 +1907,7 @@ void QSOLogFrame::fillExchange( QLineEdit *rIl, const QString &exch )
 {
     if (current == rIl && exch.isEmpty() && contest->otherOptionalExchange.getValue())
     {
-        rIl->setText("-");
+        //rIl->setText("-");
     }
 }
 //==============================================================================

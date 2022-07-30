@@ -161,7 +161,8 @@ int CheckableContact::checkContact(bool adddup)
                         checkret = ERR_21;
                 }
                 else
-                    if ( !extraText.getValue().trimmed().size() )
+                    if ( contest->otherExchange.getValue() && !extraText.getValue().trimmed().size() )
+
                         checkret = ERR_21;
             }
         }
