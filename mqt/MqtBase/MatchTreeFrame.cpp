@@ -86,6 +86,8 @@ void MatchTreeFrame::initialise()
 
 
     connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
+    connect( header(), &QHeaderView::sectionMoved, this, &MatchTreeFrame::onSectionMoved);
+
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     connect( header(), &QHeaderView::customContextMenuRequested, this, &MatchTreeFrame::onMatch_customContextMenuRequested );
 
@@ -203,6 +205,10 @@ void MatchTreeFrame::saveHeaderLayout()
 }
 
 void MatchTreeFrame::on_sectionResized(int, int, int)
+{
+    saveHeaderLayout();
+}
+void MatchTreeFrame::onSectionMoved(int, int, int)
 {
     saveHeaderLayout();
 }
@@ -354,20 +360,20 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
-        if (ct && type == ThisMatch && baseName.compare("Monitor") != 0 )
-        {
-            if ( ct->contactFlags.getValue() & FORCE_LOG )
-            {
-                return static_cast< QColor > ( 0x00FF80C0 );        // Pink(ish)
-            }
-            else
-            {
-                if ( ct->getModificationCount() > 1 )
-                {
-                    return static_cast< QColor > ( 0x00C0DCC0 );    // "money green"
-                }
-            }
-        }
+//        if (ct && type == ThisMatch && baseName.compare("Monitor") != 0 )
+//        {
+//            if ( ct->contactFlags.getValue() & FORCE_LOG )
+//            {
+//                return static_cast< QColor > ( 0x00FF80C0 );        // Pink(ish)
+//            }
+//            else
+//            {
+//                if ( ct->getModificationCount() > 1 )
+//                {
+//                    return static_cast< QColor > ( 0x00C0DCC0 );    // "money green"
+//                }
+//            }
+//        }
         return QVariant();
     }
 

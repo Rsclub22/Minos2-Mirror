@@ -140,6 +140,7 @@ private slots:
 
     void on_doColumnChanges(BaseContestLog*);
     void onMatch_customContextMenuRequested(const QPoint &pos);
+    void onSectionMoved(int, int, int);
 signals:
     void editContact(CheckableContact *bct, bool nc);
 
