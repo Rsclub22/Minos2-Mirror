@@ -2054,14 +2054,14 @@ void QSOLogFrame::contactValid( )
                 {
                     // no QTH info if required
 
-                    lgTraceerr( ERR_21 );            // QTH required
+                    lgTraceerr( ERR_21 );            // Exchange required
                     qthIl->tIfValid = false;
                 }
                 else
                 {
                     if (vcct->extraText.getValue() == "-" && contest->otherExchange .getValue())
                     {
-                        lgTraceerr( ERR_21 );            // QTH required
+                        lgTraceerr( ERR_21 );            // Exchange required
                         qthIl->tIfValid = false;
                     }
                 }

@@ -36,7 +36,7 @@ ErrEntry Validator::errDefs[] =
       ErrEntry( 20, QT_TR_NOOP("No Locator") ),             //ERR_18
       ErrEntry( 2, QT_TR_NOOP("!!Loc not AA00AA to RR99XX!!") ),   //ERR_19
       ErrEntry( 16, QT_TR_NOOP("Invalid district multiplier") ),          //ERR_20
-      ErrEntry( 10, QT_TR_NOOP("QTH required") ),           //ERR_21
+      ErrEntry( 10, QT_TR_NOOP("Exchange required") ),           //ERR_21
       ErrEntry( 10, "" ),         //ERR_22
       ErrEntry( 5, QT_TR_NOOP("Unknown Country") ),         //ERR_23
       ErrEntry( 2, QT_TR_NOOP("!!! Non Scoring Contact !!!")),         //ERR_24
