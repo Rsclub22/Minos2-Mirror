@@ -35,9 +35,12 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QTableView" name="decodes_table_view_">
+     <widget class="MinosTableView" name="decodes_table_view_">
       <property name="focusPolicy">
        <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
       </property>
       <property name="cornerButtonEnabled">
        <bool>false</bool>
@@ -80,7 +83,7 @@
          <x>0</x>
          <y>0</y>
          <width>793</width>
-         <height>169</height>
+         <height>174</height>
         </rect>
        </property>
        <property name="sizePolicy">
@@ -407,6 +410,11 @@
    <extends>QSplitter</extends>
    <header>minossplitter.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MinosTableView</class>
+   <extends>QTableView</extends>
+   <header>MinosTableView.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
