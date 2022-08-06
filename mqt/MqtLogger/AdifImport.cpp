@@ -119,7 +119,7 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
             aqso->contactFlags.setValue( NON_SCORING );
          }
       }
-      if ( Fieldname.toUpper() == "QTH" )
+      if ( Fieldname.toUpper() == "SRX_STRING" )
       {
          strcpysp( temp, FieldContent, FieldLength );
          aqso->extraText.setValue( temp );

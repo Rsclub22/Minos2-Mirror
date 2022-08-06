@@ -506,6 +506,14 @@ QString ContestContact::getADIFLine()
     if (contest->locatorMandatoryField.getValue())
         outstr += makeADIFField( "GRIDSQUARE", loc.getLoc() );
 
+    if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    {
+        if (contest->location.getValue().size())
+        {
+            outstr += makeADIFField("STX_STRING", lcl->location.getValue());
+        }
+    }
+
     QString smode = mode.getValue().toUpper();
     QString smgmSubmode = mgmSubmode.getValue();
     if (  smode.compare( hamlibData::CW ) == 0 )
@@ -539,7 +547,6 @@ QString ContestContact::getADIFLine()
     if (contest->serialMandatoryField.getValue())
     {
         outstr += makeADIFField( "STX", serials.getValue() );
-        outstr += makeADIFField( "STX_STRING", serials.getValue() );
     }
     if (contest->RSTMandatoryField.getValue())
         outstr += makeADIFField( "RST_RCVD", repr.getValue() );
@@ -550,9 +557,16 @@ QString ContestContact::getADIFLine()
         outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
     }
     if ( districtMult )
-        outstr += makeADIFField( "QTH", districtMult->districtCode );
-    else
-        outstr += makeADIFField( "QTH", extraText.getValue() );
+    {
+        outstr += makeADIFField( "SRX_STRING", districtMult->districtCode );
+    }
+    else if (lcl->otherExchange.getValue() || lcl->otherOptionalExchange.getValue())
+    {
+        if (contest->location.getValue().size())
+        {
+            outstr += makeADIFField("SRX_STRING", extraText.getValue());
+        }
+    }
 
     dtg on = timeOn;
     if (on.isBadDtg() || on.notEntered() != -1)
