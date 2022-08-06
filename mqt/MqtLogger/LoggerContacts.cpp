@@ -537,7 +537,7 @@ QString ContestContact::getADIFLine()
     {
         if (contest->location.getValue().size())
         {
-            outstr += makeADIFField("STX_STRING", lcl->location.getValue());
+            outstr += makeADIFField("STX_STRING", lcl->location.getValue().toUpper());
         }
     }
 
@@ -581,7 +581,6 @@ QString ContestContact::getADIFLine()
     if (contest->serialMandatoryField.getValue())
     {
         outstr += makeADIFField( "SRX", serialr.getValue() );
-        outstr += makeADIFField( "SRX_STRING", serialr.getValue() );
     }
     if ( districtMult )
     {
