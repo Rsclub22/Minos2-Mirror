@@ -277,13 +277,15 @@ void ScreenContact::score()
 
         if ( districtMult && (districtMult->country1 || cs.getFullCall().isEmpty()))
         {
-           int n = contest->getDistrictsWorked(band, districtMult->districtCode) + 1;
+           int n = contest->getDistrictsWorked(band, districtMult->districtCode);
            if ( n < districtMult->country1->districtLimit() )
-          if ( contest->districtMult.getValue() )
-          {
-             multCount++;
-          }
-          newDistrict = true;
+           {
+                if ( contest->districtMult.getValue() )
+                {
+                    multCount++;
+                }
+                newDistrict = true;
+           }
        }
 
         if ( ctryMult)
