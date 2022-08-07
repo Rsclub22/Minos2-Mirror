@@ -217,9 +217,9 @@ void ContestPageControl::onContestShownChanged()
         {
             ContestPage *ctab = dynamic_cast<ContestPage *>(widget(i));
 
-            BaseContestLog *pc = tslf->getContest();
+            BaseContestLog *pc = ctab->getContest();
 
-            if (pc == ctab->getContest())
+            if (pc == tslf->getContest())
             {
                 setWindowTitle(ctab->pageName);
                 trace(QString("setWindowTitle %1").arg(ctab->pageName));
