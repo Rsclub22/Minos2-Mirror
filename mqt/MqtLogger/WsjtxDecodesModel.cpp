@@ -1,4 +1,4 @@
-#include "base_pch.h"
+//#include "base_pch.h"
 
 #include <QStandardItem>
 
@@ -312,6 +312,7 @@ QVariant DecodesModel::data (QModelIndex const& pindex, int role) const
             {
                 return "";
             }
+
             if (msg.csret == ERR_DUPCS)
             {
                 return "(wkd)";

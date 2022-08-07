@@ -265,10 +265,18 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
 
         // NB we can get bad decodes
+
         if (callIndex + 1 < sl.count())
         {
             dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
             dc.fromGrid.setLoc(sl[callIndex + 1]);
+            addCall(dc.fromCall, dc.fromGrid);
+        }
+        else if (sl.count() == callIndex + 1)
+        {
+            // probably a compound call
+            dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
+            // no grid, so don't try to remember it
             addCall(dc.fromCall, dc.fromGrid);
         }
     }
