@@ -1,6 +1,6 @@
 #ifndef MONITORPARAMETERS_H
 #define MONITORPARAMETERS_H
-#include "base_pch.h"
+#include "MinosParameters.h"
 
 class MonitorParameters : public MinosParametersAdapter
 {

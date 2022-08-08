@@ -1,4 +1,4 @@
-#include "base_pch.h"
+//#include "base_pch.h"
 #include "MinosRPC.h"
 
 #include "chatmain.h"

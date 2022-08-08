@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 #ifndef keyersH
 #define keyersH
-#include "base_pch.h"
 
+#include <QTimer>
 #include "keyerBase.h"
 #include "keyconf.h"
 #include "keyctrl.h"

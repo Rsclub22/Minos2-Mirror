@@ -177,7 +177,6 @@ void PstRotControl::processPendingReportDatagrams()
         pstReportSocket->readDatagram(datagram.data(), datagram.size());
     } while (pstReportSocket->hasPendingDatagrams());
 
-    //qDebug() << "Report = "  << datagram.data();
     b = QString(datagram.data());
 
     traceCommsMsg(QString("received %1 chars, message %2").arg(b.count()).arg(b));

@@ -1,19 +1,11 @@
 #ifndef CLUSTERRPC_H
 #define CLUSTERRPC_H
 
-#include <QObject>
 #include "base_pch.h"
-//#include "clusterClientServer.h"
-#include "MinosLoggerEvents.h"
-
-
 
 class Clusterrpc : public QObject
 {
     Q_OBJECT
-
-//    QVector<Provider> serverList;
-
 
 public:
     explicit Clusterrpc();

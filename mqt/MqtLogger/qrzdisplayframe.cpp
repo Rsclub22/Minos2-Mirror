@@ -6,7 +6,6 @@
 #include "minosqlabel.h"
 
 #include <QSizePolicy>
-#include <QDebug>
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -273,7 +272,6 @@ void QrzDisplayFrame::setQrzMessageText(QString msg)
 
 void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
 {
-    //qDebug() << "state = " << (loggedOn ? "true" : "false");
     if (loggedOn)
     {
         ui->logOnStatusPb->setText(tr("Connected"));

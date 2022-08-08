@@ -19,10 +19,7 @@
 #include <QStringList>
 #include <QVector>
 #include "rigsetupform.h"
-#include "transvertsetupform.h"
 #include "rigfactory.h"
-
-
 
 
 class QIntValidator;

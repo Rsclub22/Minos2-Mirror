@@ -1,6 +1,5 @@
 #ifndef MONITOREDLOG_H
 #define MONITOREDLOG_H
-#include "base_pch.h"
 #include "MonitoredContestLog.h"
 
 class MonitoringFrame;

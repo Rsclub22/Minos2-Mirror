@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"

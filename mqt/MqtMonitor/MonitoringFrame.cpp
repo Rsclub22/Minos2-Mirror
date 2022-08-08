@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "htmldelegate.h"
 #include "contest.h"
 #include "cutils.h"

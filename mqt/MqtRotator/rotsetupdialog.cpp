@@ -26,11 +26,6 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <QDebug>
-
-
-
-
 RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RotSetupDialog)

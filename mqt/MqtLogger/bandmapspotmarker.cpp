@@ -5,13 +5,12 @@
 //                      Bandmap Spot Marker
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
-///
+//
 //
 //
 /////////////////////////////////////////////////////////////////////////////
 
 #include "bandmapspotmarker.h"
-#include <QDebug>
 
 BandmapSpotMarker::BandmapSpotMarker(const QPoint &_position)
     : QGraphicsTextItem(),
@@ -71,7 +70,5 @@ void BandmapSpotMarker::hoverMoveEvent(QGraphicsSceneHoverEvent* /*event*/)
 
 void BandmapSpotMarker::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << x() << " " << y();
-    //qDebug() << displayText;
     QGraphicsTextItem::mousePressEvent(event);
 }

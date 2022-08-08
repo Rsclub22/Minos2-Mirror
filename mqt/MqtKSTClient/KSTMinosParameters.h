@@ -1,6 +1,7 @@
 #ifndef KSTMINOSPARAMETERS_H
 #define KSTMINOSPARAMETERS_H
-#include "base_pch.h"
+
+#include "MinosParameters.h"
 
 class KSTMinosParameters : public MinosParametersAdapter
 {

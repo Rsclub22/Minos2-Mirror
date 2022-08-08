@@ -1,9 +1,8 @@
-#include "base_pch.h"
+#include "MTrace.h"
 #include "ddc.h"
 #include "riff.h"
 #include "adis_filter.h"
 #include "SimpleComp.h"
-#include "MqtLogCompressor.h"
 #include "mqtktWaveShowDialog.h"
 #include "ui_mqtktWaveShowDialog.h"
 

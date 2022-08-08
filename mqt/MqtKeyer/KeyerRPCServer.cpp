@@ -7,9 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include "MinosRPC.h"
 #include "KeyerJson.h"
+#include "RPCCommandConstants.h"
 #include "keyctrl.h"
 #include "KeyerRPCServer.h"
 

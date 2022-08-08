@@ -1,3 +1,5 @@
+#include "MShowMessageDlg.h"
+#include "MMessageDialog.h"
 #include "KSTMinosParameters.h"
 
 static KSTMinosParameters mp;
@@ -17,6 +19,6 @@ bool KSTMinosParameters::yesNoMessage( QWidget* Owner, const QString &mess )
 }
 void KSTMinosParameters::mshowMessage( const QString &mess, QWidget* Owner )
 {
-   mShowMessage( mess, Owner );
+    mShowMessage( mess, Owner );
 }
 

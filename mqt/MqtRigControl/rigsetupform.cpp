@@ -10,14 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-#include "rigsetupform.h"
-#include "BandList.h"
-#include "addtransverterdialog.h"
-#include "rigutils.h"
 #include <QHostInfo>
-#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QtSerialPort/QSerialPort>
@@ -26,8 +19,12 @@
 #include <QHostAddress>
 #include <QInputDialog>
 
+#include "minosNetUtils.h"
+#include "BandList.h"
+#include "addtransverterdialog.h"
+#include "serialCommonData.h"
 
-//static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
+#include "rigsetupform.h"
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
                            const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):

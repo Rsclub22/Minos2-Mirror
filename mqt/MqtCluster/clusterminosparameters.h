@@ -1,7 +1,7 @@
 #ifndef CLUSTERMINOSPARAMETERS_H
 #define CLUSTERMINOSPARAMETERS_H
 
-#include "base_pch.h"
+#include "MinosParameters.h"
 
 class ClusterMinosParameters : public MinosParametersAdapter
 {

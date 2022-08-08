@@ -1,7 +1,9 @@
 #ifndef MONITORINGFRAME_H
 #define MONITORINGFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
+#include "TreeUtils.h"
+#include "qmenu.h"
 
 namespace Ui {
 class MonitoringFrame;

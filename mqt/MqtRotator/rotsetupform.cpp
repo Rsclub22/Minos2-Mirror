@@ -17,7 +17,6 @@
 #include "ui_rotsetupform.h"
 #include "minosNetUtils.h"
 #include "rotatorfactory.h"
-#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QtSerialPort/QSerialPort>

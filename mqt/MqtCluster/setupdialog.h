@@ -5,7 +5,6 @@
 #include <QStandardItemModel>
 #include <QSettings>
 #include "cutils.h"
-#include "clustercommon.h"
 
 
 class QDialogButtonBox;

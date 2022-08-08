@@ -12,11 +12,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include "rigcontrolmainwindow.h"
 #include "rigcontrolrpc.h"
-
-//RigControlRpc *rigControlRpc;
 
 RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), parent(parent)
 {

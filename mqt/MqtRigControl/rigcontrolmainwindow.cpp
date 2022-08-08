@@ -12,23 +12,19 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-#include "mqtUtils_pch.h"
-
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
 
 #include <QBitArray>
-#include <QDebug>
 #include <QMetaType>
 
-#include "RPCCommandConstants.h"
 #include "rigcommon.h"
 #include "rigsetupdialog.h"
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
 #include "rigctldclient.h"
+#include "serialCommonData.h"
 #include "serialdata.h"
 
 #include "cutils.h"

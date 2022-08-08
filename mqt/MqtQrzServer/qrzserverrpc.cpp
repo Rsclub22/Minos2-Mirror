@@ -13,9 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "base_pch.h"
 #include "MinosRPC.h"
-#include "MinosLoggerEvents.h"
 #include "ConfigFile.h"
 #include "qrzserverrpc.h"
 

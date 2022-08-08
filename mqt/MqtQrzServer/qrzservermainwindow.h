@@ -23,8 +23,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 
-#include "mqtUtils_pch.h"
-#include "qrzserverrpc.h"
+#include "clustercommon.h"
 #include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE

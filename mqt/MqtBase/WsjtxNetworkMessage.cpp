@@ -1,11 +1,11 @@
 #include "WsjtxNetworkMessage.hpp"
+#include "MTrace.h"
 
 #include <exception>
 #include <stdexcept>
 
 #include <QString>
 #include <QByteArray>
-#include <QDebug>
 #include <QIODevice>
 
 #include "Wsjtx_pimpl_impl.hpp"
@@ -91,7 +91,7 @@ namespace NetworkMessage
       *parent >> type >> id_;
       if (type >= maximum_message_type_)
         {
-          qDebug () << "Unrecognized message type:" << type << "from id:" << id_;
+          trace(QString("Unrecognized message type: %1 from id: %2").arg(type).arg(QString(id_)));
           type_ = maximum_message_type_;
         }
       else

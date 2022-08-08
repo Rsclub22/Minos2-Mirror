@@ -90,7 +90,6 @@
 //#define QTTELNET_DEBUG
 
 #ifdef QTTELNET_DEBUG
-#include <QtCore/QDebug>
 using namespace Auth;
 using namespace Common;
 using namespace LineMode;

@@ -15,8 +15,8 @@
 #ifndef SENTSPOTDATA_H
 #define SENTSPOTDATA_H
 
+#include "frequency.h"
 #include <QString>
-#include "clustercommon.h"
 
 class SentSpotData
 {

@@ -6,8 +6,8 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 
+#include "MTrace.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "keyers.h"

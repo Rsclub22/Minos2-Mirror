@@ -22,15 +22,12 @@
 #include <QVector>
 #include <QProcess>
 
-#include "mqtUtils_pch.h"
 #include "BandList.h"
 #include "serialtvswitch.h"
-#include "smeterbar.h"
 #include "rigcommon.h"
 #include "rigbase.h"
 #include "rigfactory.h"
 #include "rigcapabilities.h"
-#include "serialCommonData.h"
 
 
 class QLabel;

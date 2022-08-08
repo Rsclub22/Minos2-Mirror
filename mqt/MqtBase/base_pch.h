@@ -41,8 +41,6 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 
-#include <QDebug>
-
 #include <math.h>
 #include <time.h>
 

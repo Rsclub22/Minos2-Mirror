@@ -1,8 +1,9 @@
-#include "ControlMain.h"
-#include "ui_ControlMain.h"
-
+#include "controlport.h"
 #include "portconf.h"
 #include "MinosLines.h"
+
+#include "ControlMain.h"
+#include "ui_ControlMain.h"
 
 ControlMain *controlMain = nullptr;
 void ControlMain::logMessage( QString s )

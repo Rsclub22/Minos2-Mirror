@@ -2,11 +2,8 @@
 #define RIGSETUPFORM_H
 
 #include <QWidget>
-#include "base_pch.h"
 #include "transvertsetupform.h"
 #include "rigcommon.h"
-#include "minosNetUtils.h"
-#include "serialCommonData.h"
 #include "ui_rigsetupform.h"
 #include "rigfactory.h"
 

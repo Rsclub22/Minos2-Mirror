@@ -9,18 +9,15 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
+#include <QLineEdit>
+#include <QCheckBox>
 
-
-
-
-#include "transvertsetupform.h"
 #include "rigcommon.h"
 #include "rigutils.h"
 #include "BandList.h"
 #include "cutils.h"
-#include <QLineEdit>
-#include <QCheckBox>
 
+#include "transvertsetupform.h"
 
 TransVertSetupForm::TransVertSetupForm(QSharedPointer<scatParams> _radioData, QString _bandName, const QVector<QSharedPointer<BandInfo> > _bands, QWidget *parent) :
     QWidget(parent),

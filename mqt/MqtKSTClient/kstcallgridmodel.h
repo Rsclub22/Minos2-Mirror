@@ -1,7 +1,6 @@
 #ifndef KSTCALLGRIDMODEL_H
 #define KSTCALLGRIDMODEL_H
 
-#include "base_pch.h"
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
 #include "htmldelegate.h"

@@ -17,13 +17,9 @@
 #include <QObject>
 #include <QUdpSocket>
 #include <QNetworkDatagram>
-#include <QDebug>
 #include "rotatorcommon.h"
 #include "rotatorfactory.h"
 #include "rotatorbase.h"
-
-
-
 
 
 enum pstErrorCode {PST_OK = 0, BIND_FAILURE = -1, DATAGRAM_WRITE_ERROR = -2, REQ_BEARING_CMD_TIMEOUT = -3, ROT_TO_BEARING_CMD_TIMEOUT = -4, STOP_CMD_TIMEOUT = -5};

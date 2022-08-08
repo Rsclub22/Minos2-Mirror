@@ -10,28 +10,19 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include <QSettings>
 #include <QTimer>
 #include <QProcessEnvironment>
 #include <QHeaderView>
 #include <QTextStream>
-#include <QDebug>
 
-#include "clustermainwindow.h"
 #include "clustercommon.h"
 #include "qrzServerCommon.h"
-#include "rigutils.h"
-#include "cutils.h"
 #include "BandList.h"
 #include "delayedaction.h"
 
+#include "clustermainwindow.h"
 #include "ui_clustermainwindow.h"
-#include "latlong.h"
-
-
-
-
 
 static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
                                            QT_TRANSLATE_NOOP("cluster", "Not Logged On"), QT_TRANSLATE_NOOP("cluster", "Freq out of band"),

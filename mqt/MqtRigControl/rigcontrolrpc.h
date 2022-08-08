@@ -16,8 +16,6 @@
 #define RIGCONTROLRPC_H
 
 #include "RigCache.h"
-
-#include "base_pch.h"
 #include "rigcommon.h"
 
 class RigControlMainWindow;

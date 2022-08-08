@@ -4,8 +4,6 @@
 #include "base_pch.h"
 #include <QMainWindow>
 #include "CommonMonitor.h"
-#include "controlport.h"
-#include "ConfigFile.h"
 #include "RigCache.h"
 
 namespace Ui {

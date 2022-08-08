@@ -1,14 +1,14 @@
 #ifndef KEYERMAIN_H
 #define KEYERMAIN_H
 
-#include "base_pch.h"
 #include <QComboBox>
 #include <QMainWindow>
 #include <QProcess>
 #include "KeyerJson.h"
-#include "VKMixer.h"
 #include "CompressorParams.h"
 #include "SliderSpinner.h"
+#include "StdInReader.h"
+#include "qtimer.h"
 
 namespace Ui {
 class KeyerMain;

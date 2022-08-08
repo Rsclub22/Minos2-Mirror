@@ -1,13 +1,10 @@
 #include "rigctldclient.h"
-#include "base_pch.h"
-#include <QDebug>
+#include "MTrace.h"
 
 /*
  * Currently this is specific to obaining caps dump
  * from the ritctld client.
 */
-
-static inline QByteArray IntToArray(qint32 source);
 
 RigCtldClient::RigCtldClient(QObject *parent) :
     QObject(parent)
@@ -59,7 +56,6 @@ bool RigCtldClient::writeData(const QByteArray &data)
     trace(QString("RigCtldClient - Sending Data"));
     if(socket->state() == QAbstractSocket::ConnectedState)
     {
-        //socket->write(IntToArray(data.size())); //write size of data
         socket->write(data, qstrlen(data)); //write the data itself
 
         return socket->waitForBytesWritten();
@@ -105,7 +101,6 @@ void RigCtldClient::readyRead()
     while (socket->canReadLine())
     {
         line = QString(socket->readLine());
-        //qDebug() << line;
         bytes += line.count();
         msg.append(line);
     }
@@ -240,13 +235,4 @@ int RigCtldClient::getErrorCode(QString msg)
 
     return -51;
 
-}
-
-QByteArray IntToArray(qint32 source) //Use qint32 to ensure that the number have 4 bytes
-{
-    //Avoid use of cast, this is the Qt way to serialize objects
-    QByteArray temp;
-    QDataStream data(&temp, QIODevice::ReadWrite);
-    data << source;
-    return temp;
 }

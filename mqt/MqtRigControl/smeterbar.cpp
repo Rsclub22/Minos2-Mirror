@@ -1,12 +1,6 @@
-#include "smeterbar.h"
-
-
-
 #include <QPainter>
-#include <QDebug>
 
-
-
+#include "smeterbar.h"
 
 SmeterBar::SmeterBar(QWidget *parent)
     :   QWidget(parent)

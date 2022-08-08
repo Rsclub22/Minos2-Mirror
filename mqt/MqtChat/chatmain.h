@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include "base_pch.h"
-#include "ChatServer.h"
 
 namespace Ui {
 class MainWindow;

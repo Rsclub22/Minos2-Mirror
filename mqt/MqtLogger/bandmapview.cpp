@@ -14,7 +14,6 @@
 #include "tlogcontainer.h"
 #include "ContestApp.h"
 #include "delayedaction.h"
-#include <QDebug>
 
 const int DIAL_CURSOR_BELOW_VIEWSTART_FREQ = 0;
 const int DIAL_CURSOR_ABOVE_VIEWSTART_FREQ = 1;

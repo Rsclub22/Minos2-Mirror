@@ -14,12 +14,12 @@
 
 
 #include <QFile>
-#include <QDebug>
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
 #include "SecondInstall.h"
 #include "qrzservermainwindow.h"
+#include "qrzserverrpc.h"
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
 

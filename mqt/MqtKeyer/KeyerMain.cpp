@@ -1,5 +1,8 @@
 #include <QFileDialog>
 
+#include "LogEvents.h"
+#include "MTrace.h"
+#include "fileutils.h"
 #include "keyerAbout.h"
 #include "keyctrl.h"
 #include "KeyerRPCServer.h"

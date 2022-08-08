@@ -1,7 +1,7 @@
 #ifndef CHANGENAME_H
 #define CHANGENAME_H
 
-#include "base_pch.h"
+#include <QDialog>
 #include "qttelnet.h"
 
 namespace Ui {

@@ -14,7 +14,6 @@
 #ifndef HAMLIBRIGCONTROL_H
 #define HAMLIBRIGCONTROL_H
 
-//#include "hamlibCommon.h"
 #include "rigbase.h"
 #include "rigfactory.h"
 #include <hamlib/rig.h>

@@ -10,10 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <QDebug>
 #include "cutils.h"
-#include "rigutils.h"
-#include "htmldelegate.h"
 #include "sentSpotdatamodel.h"
 
 

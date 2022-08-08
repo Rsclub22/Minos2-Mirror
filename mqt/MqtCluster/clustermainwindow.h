@@ -7,14 +7,12 @@
 #include <QVector>
 #include <QSortFilterProxyModel>
 #include "BandList.h"
-#include "base_pch.h"
 #include "qttelnet.h"
 #include "clustercommands.h"
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
 #include "sentSpotdatamodel.h"
-//#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
 #include "presetbutton.h"

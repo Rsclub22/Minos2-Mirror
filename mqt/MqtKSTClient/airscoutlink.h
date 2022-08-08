@@ -1,8 +1,6 @@
 #ifndef AIRSCOUTLINK_H
 #define AIRSCOUTLINK_H
 
-#include "base_pch.h"
-
 #include <QTimer>
 #include <QUdpSocket>
 

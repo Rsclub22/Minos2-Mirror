@@ -8,6 +8,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "addradiodialog.h"
+#include "cutils.h"
 #include "ui_addradiodialog.h"
 
 #include <QMessageBox>

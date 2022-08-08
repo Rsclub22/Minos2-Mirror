@@ -1,14 +1,13 @@
 #ifndef MONITORMAIN_H
 #define MONITORMAIN_H
 
-#include "base_pch.h"
-#include "cutils.h"
 #include <QAction>
 #include <QMenu>
 #include "ScreenContact.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorTreeModel.h"
+#include "cutils.h"
 
 
 class MonitoringFrame;

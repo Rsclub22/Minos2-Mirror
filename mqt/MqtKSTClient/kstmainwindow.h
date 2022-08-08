@@ -1,15 +1,12 @@
 #ifndef KSTMAINWINDOW_H
 #define KSTMAINWINDOW_H
 
-#include "base_pch.h"
-
-#include "airscoutlink.h"
-
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QRadioButton>
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
+#include "airscoutlink.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
 
