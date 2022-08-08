@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "base_pch.h"
 
-#include "MLogFile.h"
 #include "INIFile.h"
+#include "clustercommon.h"
 #include "profiles.h"
 
 //#include "ScreenConfigFile.h"

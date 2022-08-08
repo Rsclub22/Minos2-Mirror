@@ -276,7 +276,7 @@ void TxVmExternalButtonDialog::compressionChanged()
 
 
 
-void TxVmExternalButtonDialog::on_doFilter_stateChanged(int arg1)
+void TxVmExternalButtonDialog::on_doFilter_stateChanged(int /*arg1*/)
 {
     if (inVolChangeCount <= 0)
     {
@@ -286,7 +286,7 @@ void TxVmExternalButtonDialog::on_doFilter_stateChanged(int arg1)
 }
 
 
-void TxVmExternalButtonDialog::on_doCompression_stateChanged(int arg1)
+void TxVmExternalButtonDialog::on_doCompression_stateChanged(int /*arg1*/)
 {
     if (inVolChangeCount <= 0)
     {

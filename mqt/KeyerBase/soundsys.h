@@ -9,12 +9,9 @@
 #ifndef soundsysH
 #define soundsysH
 
-#include "mqtUtils_pch.h"
-
-#include "keyerBase.h"
+#include <QThread>
 #include "riff.h"
 #include "SimpleComp.h"
-#include "MqtLogCompressor.h"
 #include "CompressorParams.h"
 #include "adis_filter.h"
 

@@ -11,8 +11,8 @@
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "keyers.h"
-#include "portcon.h"
 #include "keyconf.h"
+#include "keyerlog.h"
 
 //==============================================================================
 // The keyer factory
@@ -116,7 +116,6 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
          int PlayPTTDelay;
          int pipVolume;
          int ClipRecord;
-         int filterCorner;
 
          if ( GetStringAttribute( c, "name", name ) == TIXML_SUCCESS )
          {
@@ -131,11 +130,10 @@ void KeyerConfigure::SetKeyers( TiXmlElement *e )
             GetIntAttribute( c, "startDelay", StartDelay, 0 );
             GetIntAttribute( c, "playPTTDelay", PlayPTTDelay, 0 );
             GetIntAttribute( c, "clipRecord", ClipRecord, 0 );
-            GetIntAttribute( c, "filterCorner", filterCorner, 0 );
 
             KeyerConfig k( name, sampleRate, PipTone, pipVolume, PipLength, StartDelay,
                            PipStartDelay, PlayPTTDelay,
-                           ClipRecord, filterCorner );
+                           ClipRecord );
             keyermap[ name ] = k;
          }
       }

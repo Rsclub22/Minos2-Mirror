@@ -157,7 +157,7 @@ SlotsProxyModel::SlotsProxyModel()
 SlotsProxyModel::~SlotsProxyModel()
 {}
 
-bool SlotsProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool SlotsProxyModel::filterAcceptsRow(int /*source_row*/, const QModelIndex &/*source_parent*/) const
 {
     return true;
 }

@@ -3,15 +3,11 @@
 
 #include "ContestApp.h"
 #include "LoggerContest.h"
-#include "LoggerContacts.h"
 #include "ListContact.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
-#include "tqsoeditdlg.h"
 #include "tforcelogdlg.h"
 #include "SendRPCDM.h"
-#include "rigcommon.h"
-#include "bandmapcommon.h"
 #include "rigutils.h"
 #include "delayedaction.h"
 
@@ -3022,10 +3018,7 @@ void QSOLogFrame::transferDetails(QString cs, const QString loc, QString exchang
     {
        if ( contest->districtMult.getValue() || contest->otherExchange.getValue() )
        {
-           if (exchange.size())
-           {
-                ui->QTHFrame->getTextEditEdit()->setText(exchange);
-           }
+            ui->QTHFrame->getTextEditEdit()->setText(exchange);
        }
     }
 

@@ -5,6 +5,7 @@
 #include "ContestApp.h"
 #include "htmldelegate.h"
 #include "tsinglelogframe.h"
+#include "StackedInfoFrame.h"
 #include "districtframe.h"
 #include "ui_districtframe.h"
 

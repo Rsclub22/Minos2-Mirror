@@ -4,7 +4,6 @@
 #include "base_pch.h"
 #include "contest.h"
 #include "MatchCollection.h"
-#include "MinosLoggerEvents.h"
 
 namespace Ui {
 class MatchTreeFrame;

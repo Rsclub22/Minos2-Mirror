@@ -1,5 +1,3 @@
-#include "mqtUtils_pch.h"
-
 #include <QLabel>
 #include "cutils.h"
 #include "SliderSpinner.h"

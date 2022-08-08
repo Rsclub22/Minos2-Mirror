@@ -1,10 +1,5 @@
 #include "riff.h"
-#include "cutils.h"
-#include "keyerlog.h"
-#include "keyerBase.h"
-#include "keyctrl.h"
 #include "sbdriver.h"
-#include "soundsys.h"
 
 #include "WaveShowDialog.h"
 #include "ui_WaveShowDialog.h"

@@ -1,7 +1,7 @@
 #ifndef BASELOGLIST_H
 #define BASELOGLIST_H
 
-#include "XMPP_pch.h"
+#include <QObject>
 
 class BaseLogList: public QObject
 {

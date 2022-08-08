@@ -18,14 +18,9 @@
 #include "enqdlg.h"
 #include "MatchTreeFrame.h"
 #include "rigmemdialog.h"
-#include "rigutils.h"
 #include "LoggerContest.h"
 
 #include "ScreenConfigFile.h"
-#include "ScreenConfigElement.h"
-#include "ScreenConfigRow.h"
-#include "ScreenConfig.h"
-
 #include "MatchArchiveFrame.h"
 #include "MatchOtherFrame.h"
 #include "MatchThisFrame.h"

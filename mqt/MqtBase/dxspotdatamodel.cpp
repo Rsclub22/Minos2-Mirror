@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QDebug>
+#include "clustercommon.h"
 #include "cutils.h"
 #include "rigutils.h"
 #include "htmldelegate.h"

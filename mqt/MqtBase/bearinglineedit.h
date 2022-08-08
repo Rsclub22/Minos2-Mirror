@@ -17,7 +17,6 @@
 #include <QObject>
 #include <QLineEdit>
 #include "cutils.h"
-#include "rotatorcommon.h"
 
 class BearingLineEdit : public QLineEdit
 {

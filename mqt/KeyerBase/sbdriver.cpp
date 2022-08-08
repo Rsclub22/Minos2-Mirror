@@ -6,12 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
 
 #include "riff.h"
 #include "cutils.h"
+#include "keyerBase.h"
 #include "keyerlog.h"
-#include "keyctrl.h"
 #include "sbdriver.h"
 #include "soundsys.h"
 
@@ -270,7 +269,7 @@ bool SoundSystemDriver::initialise(QString ind, QString outd)
     return ret;
 }
 
-bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength, int filterCorner )
+bool SoundSystemDriver::sbdvp_init( QString ind, QString outd, QString &errmess, unsigned int srate, int pipTone, int pipVolume, int pipLength )
 {
    // should be done from config when the sb is defined as in use.
 

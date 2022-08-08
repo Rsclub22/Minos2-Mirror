@@ -13,7 +13,6 @@
 #include "keyerBase.h"
 #include "keyconf.h"
 #include "keyctrl.h"
-#include "keyerlog.h"
 #include "sbdriver.h"
 
 enum LineModes{
@@ -151,7 +150,7 @@ class sbKeyer
       sbKeyer();
       virtual ~sbKeyer();
       void sbTickEvent();       // this will often be an interrupt routine
-      bool sbInitialise(unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
+      bool sbInitialise(unsigned int rate, int pipTone, int pipVolume, int pipLength );
       void sbInitTone1( int );
       void sbInitTone2( int, int );
       void sbStartTone1();

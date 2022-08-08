@@ -9,11 +9,9 @@
 
 #include "bandmapgraphicspanel.h"
 #include "bandmapview.h"
-#include "rigutils.h"
 #include "MinosLoggerEvents.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
-#include "rigutils.h"
 #include "ContestApp.h"
 #include "delayedaction.h"
 #include <QDebug>

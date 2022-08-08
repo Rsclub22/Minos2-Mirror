@@ -4,7 +4,6 @@
 #include <QStatusBar>
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
-#include "StartConfig.h"
 #include "AsMainWindow.h"
 #include "ui_AsMainWindow.h"
 

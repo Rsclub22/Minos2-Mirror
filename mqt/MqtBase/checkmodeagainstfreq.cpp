@@ -1,4 +1,5 @@
 #include "checkmodeagainstfreq.h"
+#include "clustercommon.h"
 
 checkModeAgainstFreq::checkModeAgainstFreq()
 {

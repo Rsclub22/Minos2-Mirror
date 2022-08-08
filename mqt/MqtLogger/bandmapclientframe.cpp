@@ -6,7 +6,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "MinosRPC.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"

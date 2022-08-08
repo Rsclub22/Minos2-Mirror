@@ -16,6 +16,7 @@
 #include "ScreenContact.h"
 #include "contest.h"
 #include "ListContact.h"
+#include "list.h"
 //---------------------------------------------------------------------------
 TMatchThread *TMatchThread::matchThread = nullptr;
 

@@ -10,7 +10,6 @@
 #define sbdriverH
 #include <QObject>
 #include <QVector>
-#include "keyctrl.h"
 #include "CompressorParams.h"
 
 class dvkFile
@@ -127,7 +126,7 @@ public:
       void createCWBuffer( const char *message, int speed, int tone );
 
       bool initialise(QString ind, QString outd);
-      bool sbdvp_init(QString ind, QString outd, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength , int filterCorner);
+      bool sbdvp_init(QString ind, QString outd, QString &errmess, unsigned int rate, int pipTone, int pipVolume, int pipLength );
       QStringList getInputDevices();
       QStringList getOutputDevices();
       void closedown();

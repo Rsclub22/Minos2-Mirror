@@ -2,8 +2,6 @@
 #define FREQMODEBANDPLAN_H
 
 #include "base_pch.h"
-#include "clustercommon.h"
-
 
 template <class T>
 class ModeFreqDetail

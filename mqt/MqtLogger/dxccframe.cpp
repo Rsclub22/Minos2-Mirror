@@ -8,6 +8,7 @@
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 
+#include "StackedInfoFrame.h"
 #include "dxccframe.h"
 #include "ui_dxccframe.h"
 

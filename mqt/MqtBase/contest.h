@@ -10,7 +10,6 @@
 #ifndef ContestH
 #define ContestH 
 #include "base_pch.h"
-#include "list.h"
 
 //----------------------------------------------------------------------------
 // This header covers the structure of contests, logs, etc

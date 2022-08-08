@@ -2,8 +2,6 @@
 #define ASMAINWINDOW_H
 
 #include "base_pch.h"
-//#include <QMainWindow>
-#include "StartConfig.h"
 
 namespace Ui {
 class MainWindow;

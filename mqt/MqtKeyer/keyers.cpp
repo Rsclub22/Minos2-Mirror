@@ -6,13 +6,14 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
 #include "keyers.h"
 #include "portcon.h"
 #include "VKMixer.h"
 #include "sbdriver.h"
 #include "KeyerJson.h"
+#include "keyerlog.h"
+
 #define TIMER_INTERVAL 55U         // 55-millisecond target interval
 
 //==============================================================================
@@ -859,7 +860,7 @@ bool voiceKeyer::initialise( const KeyerConfig &keyer, const PortConfig &port )
       {
          trace( "commonkeyer initialised" );
       }
-      return sbInitialise(kconf.sampleRate, kconf.pipTone, kconf.pipVolume, kconf.pipLength, kconf.filterCorner );
+      return sbInitialise(kconf.sampleRate, kconf.pipTone, kconf.pipVolume, kconf.pipLength );
    }
    return false;
 }
@@ -944,10 +945,10 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
       currentKeyer->checkControls();   // which we are a base class of...
    }
 }
-bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength, int filterCorner )
+bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength )
 {
    QString errmess;
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength  ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;

@@ -17,7 +17,6 @@
 #include <QString>
 #include <QMap>
 #include <QStringList>
-#include "ProfileEnums.h"
 #include "BandList.h"
 
 const int SPOTMARKER_XOFFSET = 20;

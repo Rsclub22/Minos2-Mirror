@@ -2,15 +2,6 @@
 #define CHATSERVER_H
 #include "base_pch.h"
 
-//class Provider
-//{
-//public:
-//    Provider(){}
-
-//    QString routerName;
-//    QString app;
-//    PublishState state = psNotConnected;
-//}
 class ChatServerApp
 {
 public:

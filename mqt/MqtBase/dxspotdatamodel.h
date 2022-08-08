@@ -14,8 +14,6 @@
 #define DXSPOTDATAMODEL_H
 
 #include <QAbstractTableModel>
-//#include "spotdata.h"
-#include "clustercommon.h"
 #include "spotbasedata.h"
 
 const int dxSpotColCount = 20;

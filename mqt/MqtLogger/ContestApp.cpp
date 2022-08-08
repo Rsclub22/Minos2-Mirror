@@ -11,6 +11,7 @@
 #include "LoggerContest.h"
 #include "ContestApp.h"
 #include "MatchThread.h"
+#include "list.h"
 
 //---------------------------------------------------------------------------
 #define INITIAL_CONTEST_SLOTS 2

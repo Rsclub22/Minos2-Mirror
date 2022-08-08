@@ -5,9 +5,8 @@
 #include "contest.h"
 #include "htmldelegate.h"
 #include "MatchThread.h"
-//#include "tlogcontainer.h"
 #include "cutils.h"
-
+#include "MinosLoggerEvents.h"
 #include "MatchTreeFrame.h"
 #include "ui_MatchTreeFrame.h"
 
