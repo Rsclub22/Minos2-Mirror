@@ -1,3 +1,4 @@
+#include "mqtUtils_pch.h"
 #include <QFileDialog>
 
 #include "LogEvents.h"
