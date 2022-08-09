@@ -10,21 +10,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-#include "rotsetupdialog.h"
-#include "ui_rotsetupdialog.h"
-//#include "rotcontrol.h"
-#include "addantennadialog.h"
-
 #include <QComboBox>
 #include <QLineEdit>
 #include <QCheckBox>
-
 #include <QMessageBox>
 #include <QInputDialog>
+
+#include "addantennadialog.h"
+#include "rotsetupdialog.h"
+#include "ui_rotsetupdialog.h"
 
 RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     QDialog(parent),

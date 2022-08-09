@@ -16,8 +16,8 @@
 #include <QDateTime>
 #include <QSettings>
 
-#include "rotatorlog.h"
 #include "rotatorcommon.h"
+#include "rotatorlog.h"
 
 RotatorLog::RotatorLog()
 {

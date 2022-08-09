@@ -1,9 +1,11 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QDateTime>
+#include "RPCCommandConstants.h"
+#include "dtg.h"
 #include "fileutils.h"
-#include "cutils.h"
 #include "MTrace.h"
+#include "MinosRPC.h"
 #include "rcmainwindow.h"
 #include "ui_rcmainwindow.h"
 

@@ -14,7 +14,6 @@
 #ifndef MINOSCOMPASS_H
 #define MINOSCOMPASS_H
 
-//#include <QWidget>
 #include <QDial>
 
 class MinosCompass : public QDial

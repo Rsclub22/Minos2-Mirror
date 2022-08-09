@@ -3,7 +3,6 @@
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "cutils.h"
-#include "rigutils.h"
 #include "n1mmlink.h"
 /*
  *

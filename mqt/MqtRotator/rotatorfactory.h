@@ -14,7 +14,6 @@
 #define ROTATORFACTORY_H
 
 #include <QObject>
-#include "rotatorcommon.h"
 #include "rotcapabilities.h"
 #include "rotatorbase.h"
 

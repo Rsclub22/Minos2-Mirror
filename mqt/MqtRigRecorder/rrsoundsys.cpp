@@ -12,7 +12,6 @@
 #include <numeric>
 #include <QtCore>
 
-#include "rcmainwindow.h"
 #include "fileutils.h"
 #include "MTrace.h"
 #include "rrsoundsys.h"

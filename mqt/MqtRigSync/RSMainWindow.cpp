@@ -1,12 +1,6 @@
-#include "base_pch.h"
-
 #include <QThread>
 #include "cutils.h"
 #include "MinosRPC.h"
-#include "ConfigFile.h"
-#include "rigutils.h"
-#include "BandList.h"
-#include "delayedaction.h"
 #include "RSConfigure.h"
 #include "RSMainWindow.h"
 #include "ui_RSMainWindow.h"

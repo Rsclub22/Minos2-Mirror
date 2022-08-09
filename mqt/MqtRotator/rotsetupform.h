@@ -17,7 +17,6 @@
 
 #include <QWidget>
 #include "rotatorfactory.h"
-#include "serialCommonData.h"
 
 namespace Ui {
 class rotSetupForm;

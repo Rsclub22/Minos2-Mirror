@@ -1,7 +1,6 @@
 #ifndef RSMAINWINDOW_H
 #define RSMAINWINDOW_H
 
-#include "base_pch.h"
 #include <QComboBox>
 #include "RigCache.h"
 #include "n1mmlink.h"

@@ -1,12 +1,11 @@
-#include "minos_pch.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "SecondInstall.h"
-#include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
 
+#include "ServerEvent.h"
 #include "servermain.h"
 #include "ui_servermain.h"
 

@@ -61,7 +61,7 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
 
   if (traceComms)
   {
-      trace(QString("%1 %2").arg(fmt).arg(message));
+      trace(QString("%1 %2").arg(fmt, message));
   }
 
 
@@ -268,7 +268,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
         auto port_type = RotCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {

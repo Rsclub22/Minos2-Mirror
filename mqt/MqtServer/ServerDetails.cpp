@@ -1,13 +1,5 @@
-#include "minos_pch.h"
-
-#include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
-#include "MServerZConf.h"
-#include "MServer.h"
 #include "MServerPubSub.h"
-
-#include "servermain.h"
+#include "minoslistener.h"
 
 #include "ServerDetails.h"
 #include "ui_ServerDetails.h"

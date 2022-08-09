@@ -8,16 +8,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
 #include <QtWidgets>
 #include <QStringList>
 #include <QFont>
 
 #include "minoscompass.h"
-#include <QtDebug>
 
 /*
 // for test

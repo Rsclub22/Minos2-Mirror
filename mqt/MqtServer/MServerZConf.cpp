@@ -7,14 +7,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
 #include <QUuid>
+#include "MTrace.h"
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
+#include "fileutils.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 
 #include "MinosLink.h"
-#include "clientThread.h"
 #include "serverThread.h"
 
 #include "minoslistener.h"

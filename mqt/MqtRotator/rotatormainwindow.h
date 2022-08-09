@@ -17,13 +17,6 @@
 #ifndef ROTATORMAINWINDOW_H
 #define ROTATORMAINWINDOW_H
 
-#include "base_pch.h"
-#include "rotatorRpc.h"
-#include "rotatorbase.h"
-#include "rotatorfactory.h"
-#include "rotatorcommon.h"
-#include "presetbutton.h"
-#include "rotpresetdialog.h"
 #include <QMainWindow>
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
@@ -31,8 +24,11 @@
 #include <QPushButton>
 #include <QShortcut>
 
-
-
+#include "rotatorRpc.h"
+#include "rotatorbase.h"
+#include "rotatorfactory.h"
+#include "rotatorcommon.h"
+#include "presetbutton.h"
 
 #define NUM_PRESETS 10
 #define OFF false

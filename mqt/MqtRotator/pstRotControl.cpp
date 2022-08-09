@@ -10,10 +10,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-#include "pstRotControl.h"
 #include "rotatorfactory.h"
-#include "minosNetUtils.h"
+#include "pstRotControl.h"
 
 const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Command OK"),
                                                      QT_TR_NOOP("Network Address failed to bind"),
@@ -21,11 +19,7 @@ const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Comm
                                                      QT_TR_NOOP("Request Bearing Command Timeout"),
                                                      QT_TR_NOOP("Rotate to Bearing Command Timeout"),
                                                      QT_TR_NOOP("Stop Commond Timeout"),
-
-
                                                     };
-
-
 
 PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
 {

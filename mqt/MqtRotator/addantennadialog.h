@@ -3,7 +3,6 @@
 
 #include <QDialog>
 #include "rotatorfactory.h"
-#include "cutils.h"
 
 namespace Ui {
 class AddAntennaDialog;

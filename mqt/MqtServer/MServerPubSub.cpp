@@ -7,15 +7,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
 #include <QHeaderView>
-#include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
 #include "PubSubServer.h"
-#include "MServerPubSub.h"
 #include "MServer.h"
 #include "MTrace.h"
+#include "MServerPubSub.h"
 
 extern bool closeApp;
 

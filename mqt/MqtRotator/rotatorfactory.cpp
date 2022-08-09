@@ -10,13 +10,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "rotatorfactory.h"
 #include "hamlibRotcontrol.h"
-
 
 #if defined (WIN32)
 #include "pstRotControl.h"
 #endif
+
+#include "rotatorfactory.h"
 
 RotatorFactory::RotatorFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {

@@ -6,19 +6,14 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------------
-#include "minos_pch.h"
 
 #include "MinosLink.h"
-#include "clientThread.h"
 #include "serverThread.h"
 #include "PubSubServer.h"
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
-#include "minoslistener.h"
 
-//==============================================================================
 //==============================================================================
 MinosRouterConnection::MinosRouterConnection(bool fromDatagram) : fromDatagram(fromDatagram)
 {}

@@ -8,9 +8,8 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
-#include "minos_pch.h"
-
 #include <QTreeWidget>
+#include "PublishState.h"
 
 #ifndef MServerPubSubH
 #define MServerPubSubH 

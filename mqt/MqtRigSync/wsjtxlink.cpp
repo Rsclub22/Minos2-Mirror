@@ -1,4 +1,5 @@
 #include "wsjtxlink.h"
+#include "rigcontrolcommonconstants.h"
 
 WsjtxLink::WsjtxLink(QObject *parent):
     QObject(parent),

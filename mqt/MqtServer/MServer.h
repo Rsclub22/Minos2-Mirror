@@ -9,14 +9,17 @@
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 
-#include "minos_pch.h"
-
 #ifndef MServerH
 #define MServerH 
+
+#include "XMPPStanzas.h"
+#include "tinyxml.h"
+
 //---------------------------------------------------------------------------
 #define DEFAULT_ROUTER_NAME "localhost"
 
 class MinosCommonConnection;
+class ThisMinosRouter;
 
 class ThisMinosRouter
 {

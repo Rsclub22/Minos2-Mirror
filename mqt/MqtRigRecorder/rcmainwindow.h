@@ -1,9 +1,10 @@
 #ifndef RCMAINWINDOW_H
 #define RCMAINWINDOW_H
 
-#include "base_pch.h"
-
-#include "vucallback.h"
+#include <QMainWindow>
+#include "AnalysePubSubNotify.h"
+#include "StdInReader.h"
+#include "qtimer.h"
 #include "rrsoundsys.h"
 
 QT_BEGIN_NAMESPACE

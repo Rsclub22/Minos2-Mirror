@@ -21,7 +21,6 @@ SOURCES += \
 
 HEADERS += \
     rcmainwindow.h \
-    rr_pch.h \
     rrsoundsys.h \
     vucallback.h
 

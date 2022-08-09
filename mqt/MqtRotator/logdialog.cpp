@@ -8,10 +8,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-#include "logdialog.h"
-#include "ui_logdialog.h"
 #include <QFile>
 #include <QDateTime>
 #include <QPushButton>
@@ -19,6 +15,9 @@
 #include <QSpinBox>
 #include <QSettings>
 #include <QKeyEvent>
+
+#include "logdialog.h"
+#include "ui_logdialog.h"
 
 LogDialog::LogDialog(QWidget *parent) :
     QDialog(parent),

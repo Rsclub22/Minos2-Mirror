@@ -14,7 +14,6 @@
 #ifndef ROTATORRPC_H
 #define ROTATORRPC_H
 
-#include "base_pch.h"
 #include "RotatorCache.h"
 
 class RotatorMainWindow;

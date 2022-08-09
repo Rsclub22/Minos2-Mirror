@@ -12,11 +12,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include "rotatormainwindow.h"
 #include "rotatorRpc.h"
-
-//RotatorRpc *rotatorRpc;
 
 RotatorRpc::RotatorRpc(RotatorMainWindow *parent) : QObject(parent), parent(parent)
 {

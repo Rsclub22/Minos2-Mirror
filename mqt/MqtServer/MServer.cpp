@@ -7,15 +7,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
-#include "TinyUtils.h"
 
 #include "ConfigFile.h"
-
+#include "Dispatcher.h"
 #include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
+#include "RPCCommandConstants.h"
+#include "TinyUtils.h"
 #include "MServer.h"
+#include "XMPPEvents.h"
 
 ThisMinosRouter *ThisMinosRouter::singleton = nullptr;
 /*static*/

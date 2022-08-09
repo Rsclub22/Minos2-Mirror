@@ -12,19 +12,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-#include "RPCCommandConstants.h"
-#include "rotatorRpc.h"
-#include "rotatorlog.h"
-#include "rotatormainwindow.h"
-#include "rotatorcommon.h"
-#include "ui_rotatormainwindow.h"
-#include "minoscompass.h"
-#include "hamlibRotcontrol.h"
-#include "rotsetupdialog.h"
-#include "logdialog.h"
-#include "serialdata.h"
-#include "pstconfigdialog.h"
 #include <QString>
 #include <QLabel>
 #include <QMessageBox>
@@ -32,9 +19,20 @@
 #include <QTime>
 #include <QSettings>
 #include <QProcessEnvironment>
-#include <QtDebug>
 
-
+#include "RPCCommandConstants.h"
+#include "rotatorRpc.h"
+#include "rotatorlog.h"
+#include "rotatormainwindow.h"
+#include "rotatorcommon.h"
+#include "rotpresetdialog.h"
+#include "serialCommonData.h"
+#include "ui_rotatormainwindow.h"
+#include "minoscompass.h"
+#include "rotsetupdialog.h"
+#include "logdialog.h"
+#include "serialdata.h"
+#include "pstconfigdialog.h"
 
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
