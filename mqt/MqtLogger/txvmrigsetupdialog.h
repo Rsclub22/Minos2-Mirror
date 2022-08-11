@@ -2,7 +2,6 @@
 #define TXVMRIGSETUPDIALOG_H
 
 #include <QDialog>
-#include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
 namespace Ui {

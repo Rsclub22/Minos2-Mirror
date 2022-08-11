@@ -15,7 +15,6 @@
 
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "rigcontrolcommonconstants.h"
 
 #include <QObject>
 

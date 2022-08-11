@@ -1,6 +1,5 @@
 #include <QSettings>
 
-#include "latlong.h"
 #include "tloccalcform.h"
 #include "ui_tloccalcform.h"
 

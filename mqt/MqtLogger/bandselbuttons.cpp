@@ -9,11 +9,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "LoggerContest.h"
-
 #include "MinosLoggerEvents.h"
-#include "bandselbuttons.h"
 #include "BandList.h"
+#include "contest.h"
+#include "bandselbuttons.h"
 
 
 BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands, QGridLayout *_bandSelGrid, QObject *parent) : QObject(parent)

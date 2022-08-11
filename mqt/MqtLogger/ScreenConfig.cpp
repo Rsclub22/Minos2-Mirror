@@ -5,7 +5,6 @@
 
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
-#include "ScreenConfigElement.h"
 #include "ScreenConfigScreen.h"
 #include "MTrace.h"
 

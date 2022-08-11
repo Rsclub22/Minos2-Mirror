@@ -2,7 +2,6 @@
 #define DEFDIRSDLG_H
 
 #include <QFrame>
-#include "OptionsDialog.h"
 #include "ConfigurationOption.h"
 
 namespace Ui {

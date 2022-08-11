@@ -13,7 +13,6 @@
 #include "bandmapdatamodel.h"
 #include "clustercommon.h"
 #include "cutils.h"
-#include "rigutils.h"
 #include "ContestApp.h"
 
 // Note this is being used by a custom view with no horizontal headers.
