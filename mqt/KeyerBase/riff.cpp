@@ -37,6 +37,9 @@
 
 // DDCLIB includes
 #include "riff.h"
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 
 
 uint32_t FourCC ( const char *ChunkName )
