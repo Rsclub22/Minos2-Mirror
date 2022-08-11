@@ -6,6 +6,8 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+
+#include <QDateTime>
 #include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "keyers.h"
