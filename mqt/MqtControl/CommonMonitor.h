@@ -12,7 +12,9 @@
 #define CommonMonitorH 
 //---------------------------------------------------------------------------
 
-#include<QTimer>
+#include <QTimer>
+#include <QVector>
+
 class commonController;
 class commonPort;
 class commonLineControl;
