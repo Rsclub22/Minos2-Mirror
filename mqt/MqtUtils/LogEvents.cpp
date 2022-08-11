@@ -14,6 +14,11 @@
 #include <tlhelp32.h>
 #endif
 
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
+
 #include "MTrace.h"
 
 //---------------------------------------------------------------------------
