@@ -1,6 +1,6 @@
 #include <QTimer>
 #include "delayedaction.h"
-#include <algorithm>
+#include <functional>
 
 void delayedAction(QObject *p, std::function<void()> pred , int t)
 {
