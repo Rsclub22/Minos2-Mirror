@@ -6,6 +6,9 @@
 #ifdef Q_OS_WIN
 #include <io.h>
 #endif
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 #include <QSharedPointer>
 #include <QThread>
 
