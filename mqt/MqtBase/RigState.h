@@ -9,8 +9,11 @@
 
 #ifndef RIGSTATE_H
 #define RIGSTATE_H
-#include "base_pch.h"
 
+#include "AnalysePubSubNotify.h"
+#include "PubSubValue.h"
+#include "CacheSelection.h"
+#include "frequency.h"
 const QString RigStateType("RigState");
 class RigState: public PubSubValue
 {

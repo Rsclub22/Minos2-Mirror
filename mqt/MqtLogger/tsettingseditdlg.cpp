@@ -1,7 +1,9 @@
-#include "base_pch.h"
+#include <QSettings>
 
 #include "profiles.h"
 #include "enqdlg.h"
+#include "MinosParameters.h"
+
 #include "tsettingseditdlg.h"
 #include "ui_tsettingseditdlg.h"
 

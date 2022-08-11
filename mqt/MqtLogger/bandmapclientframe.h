@@ -17,22 +17,15 @@
 #include <QObject>
 #include <QFrame>
 #include <QShortcut>
-#include "dxspotdatamodel.h"
-#include "base_pch.h"
-#include "clusterClientServer.h"
-#include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
 #include "contest.h"
-#include "ContestApp.h"
-#include "MinosLoggerEvents.h"
-#include "bandmapcallsignmarker.h"
 #include "bandmapview.h"
-#include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
 #include "BandList.h"
 #include "checkmodeagainstfreq.h"
 #include "checkoperatingfreq.h"
+#include "cutils.h"
 
 
 

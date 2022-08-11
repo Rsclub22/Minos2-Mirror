@@ -1,6 +1,10 @@
-#include "base_pch.h"
+#include <QFileDialog>
+
 #include "LoggerContest.h"
 #include "ContestDetailsTransferObject.h"
+#include "fileutils.h"
+#include "MinosParameters.h"
+
 #include "tentryoptionsform.h"
 #include "ui_tentryoptionsform.h"
 

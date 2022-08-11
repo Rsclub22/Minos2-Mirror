@@ -1,4 +1,7 @@
 #include "MinosRPC.h"
+#include "RPCCommandConstants.h"
+#include "RPCPubSub.h"
+#include "MTrace.h"
 #include "clusterrpc.h"
 
 Clusterrpc::Clusterrpc()

@@ -1,3 +1,6 @@
+#include <QSettings>
+
+#include "MTrace.h"
 #include "delayedaction.h"
 
 #include "changename.h"

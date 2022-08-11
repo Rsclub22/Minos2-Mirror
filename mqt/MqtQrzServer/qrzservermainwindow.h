@@ -23,6 +23,7 @@
 #include <QNetworkReply>
 #include <QTimer>
 
+#include "StdInReader.h"
 #include "clustercommon.h"
 #include "qrzServerCommon.h"
 

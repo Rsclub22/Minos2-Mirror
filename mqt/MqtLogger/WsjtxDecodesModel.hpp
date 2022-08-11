@@ -1,7 +1,6 @@
 #ifndef WSJTX_UDP_DECODES_MODEL_HPP
 #define WSJTX_UDP_DECODES_MODEL_HPP
 
-#include "base_pch.h"
 #include <QAbstractItemModel>
 #include <QRegularExpression>
 #include "htmldelegate.h"

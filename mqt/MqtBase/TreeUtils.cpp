@@ -6,13 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
 #include "contacts.h"
 #include "contest.h"
 #include "TreeUtils.h"
 #include "htmldelegate.h"
-#include "BandList.h"
 
 QVector<GridColumn> QSOGridModel::QSOTreeColumns =
    {

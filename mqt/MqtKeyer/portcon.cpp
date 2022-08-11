@@ -12,6 +12,7 @@
 #include "keyerlog.h"
 #include "windowMonitor.h"
 #include "MinosLines.h"
+#include "MTrace.h"
 
 //==============================================================================
 

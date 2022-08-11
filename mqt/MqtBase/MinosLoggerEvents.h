@@ -9,8 +9,11 @@
 #ifndef MinosLoggerEventsH
 #define MinosLoggerEventsH
 
-#include "base_pch.h"
+#include <QItemSelection>
+#include <QKeyEvent>
+
 #include "MatchCollection.h"
+#include "baseconstants.h"
 #include "rigmemcommondata.h"
 #include "clustercommon.h"
 //---------------------------------------------------------------------------

@@ -10,7 +10,7 @@
 #include "portconf.h"
 #include "CommonMonitor.h"
 #include "controlport.h"
-
+#include "MTrace.h"
 #include "windowMonitor.h"
 #include "PiGPIO.h"
 

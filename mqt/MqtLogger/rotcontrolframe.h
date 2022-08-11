@@ -15,13 +15,11 @@
 #ifndef ROTCONTROLFRAME_H
 #define ROTCONTROLFRAME_H
 
-#include "base_pch.h"
-#include "MinosLoggerEvents.h"
+#include <QFrame>
 #include <QShortcut>
-#include "rotatorcommon.h"
-#include "presetbutton.h"
+#include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
-#include "rotpresetdialog.h"
+#include "MinosLoggerEvents.h"
 
 
 namespace Ui {

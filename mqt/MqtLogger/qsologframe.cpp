@@ -1,4 +1,6 @@
-#include "base_pch.h"
+#include <QTableView>
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
@@ -10,6 +12,8 @@
 #include "SendRPCDM.h"
 #include "rigutils.h"
 #include "delayedaction.h"
+#include "MTrace.h"
+#include "calcs.h"
 
 #include "qsologframe.h"
 #include "ui_qsologframe.h"

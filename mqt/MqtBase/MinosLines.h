@@ -1,9 +1,9 @@
 #ifndef MINOSLINES_H
 #define MINOSLINES_H
 
-#include "base_pch.h"
+#include <QTimer>
+#include <QMap>
 
-//---------------------------------------------------------------------------
 class LineFileMapper;
 class LineSet: public QObject
 {

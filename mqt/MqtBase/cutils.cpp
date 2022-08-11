@@ -6,14 +6,17 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include <QApplication>
 #include <QComboBox>
 #include <QSplitter>
 #include <QScrollArea>
-#include "MinosLoggerEvents.h"
+#include <QSettings>
+#include <QMenu>
 
+#include "PubSubValue.h"
 #include "cutils.h"
 #include "qnamespace.h"
+#include "MinosParameters.h"
 
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor

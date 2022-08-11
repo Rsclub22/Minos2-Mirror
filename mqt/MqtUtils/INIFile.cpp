@@ -6,7 +6,8 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
+#include <QDateTime>
+
 #include "fileutils.h"
 #include "MLogFile.h"
 #include "INIFile.h"

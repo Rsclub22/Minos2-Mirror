@@ -1,5 +1,3 @@
-//#include "base_pch.h"
-
 #include <QStandardItem>
 
 #include "cutils.h"

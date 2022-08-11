@@ -9,8 +9,7 @@
 //----------------------------------------------------------------------------
 #ifndef LatlongH
 #define LatlongH 
-
-#include "base_pch.h"
+#include <QString>
 //----------------------------------------------------------------------------
 #define GRIDOK 10000
 #define INVALIDGREF 10001

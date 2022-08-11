@@ -9,6 +9,7 @@
 #include <QHash>
 
 #include "MinosLoggerEvents.h"
+#include "MTrace.h"
 
 #include "WsjtxNetworkMessage.hpp"
 #include "Wsjtx_qt_helpers.hpp"

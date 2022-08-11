@@ -6,7 +6,10 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+
+#include "MinosParameters.h"
+#include "TreeUtils.h"
+#include "calcs.h"
 #include "contest.h"
 #include "ListContact.h"
 QString ListContact::getField( int ACol, const BaseContestLog *const curcon ) const

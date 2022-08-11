@@ -6,12 +6,13 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "contest.h"
 #include "cutils.h"
 #include "BandList.h"
-
+#include "calcs.h"
+#include "MinosParameters.h"
 #include "ScreenContact.h"
+#include "rigcontrolcommonconstants.h"
 
 ScreenContact::ScreenContact():CheckableContact()
 {}

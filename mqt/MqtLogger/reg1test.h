@@ -8,7 +8,9 @@
 /////////////////////////////////////////////////////////////////////////////
 #ifndef Reg1testH
 #define Reg1testH
-#include "base_pch.h"
+
+#include <QFile>
+#include <QSharedPointer>
 
 class LoggerContestLog;
 

@@ -1,5 +1,8 @@
-#include "base_pch.h"
+
 #include <QScrollBar>
+#include <QSettings>
+
+#include "MShowMessageDlg.h"
 #include "StartConfig.h"
 
 #include "ConfigFile.h"

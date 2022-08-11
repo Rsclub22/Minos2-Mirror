@@ -1,5 +1,6 @@
-#include "base_pch.h"
 #include <QCheckBox>
+#include <QSettings>
+#include <QLineEdit>
 #include "profiles.h"
 
 #include "ConfigurationOption.h"

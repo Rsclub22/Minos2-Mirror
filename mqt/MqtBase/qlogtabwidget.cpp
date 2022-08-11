@@ -1,3 +1,4 @@
+#include <QTabBar>
 #include "qlogtabwidget.h"
 
 QLogTabWidget::QLogTabWidget(QWidget *parent) : QTabWidget(parent)

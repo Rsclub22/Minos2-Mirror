@@ -1,9 +1,12 @@
+#include <QMessageBox>
+
 #include "tlogcontainer.h"
 #include "delayedaction.h"
 #include "SendRPCDM.h"
-#include "KeyerJson.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
+#include "MTrace.h"
+
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
 

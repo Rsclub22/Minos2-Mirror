@@ -1,7 +1,8 @@
 #ifndef TSESSIONMANAGER_H
 #define TSESSIONMANAGER_H
 
-#include "base_pch.h"
+#include <QDialog>
+#include <QVector>
 
 class TLogContainer;
 class QTableWidgetItem;

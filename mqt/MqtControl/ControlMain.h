@@ -1,10 +1,10 @@
 #ifndef CONTROLMAIN_H
 #define CONTROLMAIN_H
 
-#include "base_pch.h"
 #include <QMainWindow>
 #include "CommonMonitor.h"
 #include "RigCache.h"
+#include "StdInReader.h"
 
 namespace Ui {
 class ControlMain;

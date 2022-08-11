@@ -1,7 +1,5 @@
-#include "base_pch.h"
-
+#include "ScreenConfigFile.h"
 #include "tlogcontainer.h"
-#include "ScreenConfigScreen.h"
 #include "minossplitter.h"
 #include "tsinglelogframe.h"
 #include "ContestPage.h"

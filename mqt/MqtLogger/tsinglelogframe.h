@@ -1,12 +1,7 @@
 #ifndef TSINGLELOGFRAME_H
 #define TSINGLELOGFRAME_H
 
-//#include "base_pch.h"
-
 #include "ContestPage.h"
-//#include "StackedInfoFrame.h"
-//#include "ConfigFile.h"
-//#include "rotatorcommon.h"
 #include "rigmemcommondata.h"
 #include "MatchTreeFrame.h"
 #include "MatchThisFrame.h"
@@ -32,6 +27,7 @@ class TSingleLogFrame;
 // for each needed type...
 //==========================================================
 
+class QTableView;
 class TSingleLogFrame : public ContestPage
 {
     friend class TSendDM;

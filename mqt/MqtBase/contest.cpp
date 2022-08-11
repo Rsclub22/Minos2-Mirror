@@ -6,21 +6,20 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include <QHostInfo>
+#include <cmath>
+#include "calcs.h"
+#include "contacts.h"
 #include "cutils.h"
 #include "Calendar.h"
 #include "CalendarList.h"
-#include "contacts.h"
-#include "ScreenContact.h"
 #include "MinosTestImport.h"
-#include "rigutils.h"
 #include "BandList.h"
-#include "rigcommon.h"
-
+#include "MinosParameters.h"
 #include "contest.h"
-
-#include "MShowMessageDlg.h"
+#include "fileutils.h"
+#include "rigcontrolcommonconstants.h"
+#include "MTrace.h"
 
 void BaseContestLog::addCountryWorked(QString band, const QString &basePrefix)
 {

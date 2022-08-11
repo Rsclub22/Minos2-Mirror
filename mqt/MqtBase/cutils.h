@@ -9,7 +9,13 @@
 //----------------------------------------------------------------------------
 #ifndef CutilsH
 #define CutilsH
-#include "base_pch.h"
+#include <QString>
+#include <QFile>
+#include <QValidator>
+#include <QLayout>
+#include <QHeaderView>
+
+#include "minositem.h"
 
 //----------------------------------------------------------------------------
 extern const double pi /* = (double )3.141592653 */;  /* pi */

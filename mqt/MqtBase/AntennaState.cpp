@@ -1,9 +1,10 @@
-#include "base_pch.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
 #include "AntennaState.h"
+#include "RPCCommandConstants.h"
+#include "MTrace.h"
 
 AntennaState::AntennaState():PubSubValue(AntennaStateType)
 {

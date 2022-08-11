@@ -1,4 +1,3 @@
-#include "mqtUtils_pch.h"
 #include <QPalette>
 #include <QApplication>
 #include <QCommandLineParser>
@@ -6,7 +5,15 @@
 #include <QProcessEnvironment>
 #include <QMessageBox>
 #include <QTranslator>
+#include <QSettings>
+
+#include "fileutils.h"
+#include "MTrace.h"
 #include "SecondInstall.h"
+
+#include "AppStartup.h"
+#include "frequency.h"
+#include "qdiriterator.h"
 
 static bool appClosing = false;
 static QString appStartupName;

@@ -7,10 +7,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include "AppStartup.h"
+#include "MTrace.h"
 #include "MinosRPC.h"
 #include "KeyerJson.h"
 #include "RPCCommandConstants.h"
 #include "keyctrl.h"
+#include "RPCPubSub.h"
 #include "KeyerRPCServer.h"
 
 KeyerServer *KS = nullptr;

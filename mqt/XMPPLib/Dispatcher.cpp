@@ -7,9 +7,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "XMPP_pch.h"
+#include <QString>
+#include "XMPPStanzas.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
+
+#include "Dispatcher.h"
+#include "MTrace.h"
 
 RPCDispatcher::RPCDispatcher()
 {}

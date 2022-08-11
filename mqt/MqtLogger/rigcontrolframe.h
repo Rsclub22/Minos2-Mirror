@@ -16,12 +16,12 @@
 #ifndef RIGCONTROLFRAME_H
 #define RIGCONTROLFRAME_H
 
-#include "base_pch.h"
-#include "MinosLoggerEvents.h"
+#include <QFrame>
 #include <QShortcut>
-#include "RPCCommandConstants.h"
+
+#include "MinosLoggerEvents.h"
+#include "PubSubValue.h"
 #include "rigmemcommondata.h"
-#include "rigcommon.h"
 #include "radiodetails.h"
 #include "checkoperatingfreq.h"
 #include "BandList.h"

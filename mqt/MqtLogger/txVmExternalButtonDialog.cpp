@@ -1,4 +1,8 @@
 #include <QSettings>
+#include <QMessageBox>
+
+#include "MTrace.h"
+#include "RPCPubSub.h"
 #include "SendRPCDM.h"
 #include "tlogcontainer.h"
 #include "KeyerJson.h"

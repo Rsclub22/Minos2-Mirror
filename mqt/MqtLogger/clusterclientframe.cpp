@@ -9,22 +9,22 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-#include "base_pch.h"
-
-#include "MinosRPC.h"
+#include <QTableView>
+#include <QMessageBox>
 #include "MinosLoggerEvents.h"
-#include "clusterclientframe.h"
+#include "clusterclientfilterdialog.h"
 #include "contest.h"
 #include "ContestApp.h"
-#include "cutils.h"
 #include "rigmemcommondata.h"
 #include "rotatorcommon.h"
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
-#include "tsinglelogframe.h"
 #include "SendRPCDM.h"
 #include "delayedaction.h"
+#include "calcs.h"
+#include "MTrace.h"
+#include "clusterClientServer.h"
+#include "clusterclientframe.h"
 #include "ui_clusterclientframe.h"
 
 

@@ -1,7 +1,11 @@
 #ifndef ASMAINWINDOW_H
 #define ASMAINWINDOW_H
 
-#include "base_pch.h"
+#include <QMainWindow>
+#include <QLabel>
+#include <QTimer>
+#include <QAction>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;

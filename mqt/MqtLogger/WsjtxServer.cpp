@@ -1,8 +1,9 @@
-#include "ConfigFile.h"
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
+#include "MTrace.h"
 
 #include "WsjtxServer.h"
+#include "fileutils.h"
 
 WsjtxServer *WsjtxServer::wsjtxServer = nullptr;
 

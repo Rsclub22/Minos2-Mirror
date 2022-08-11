@@ -1,5 +1,6 @@
-#include "base_pch.h"
-
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include <QSslSocket>
 #include "tcalendarform.h"

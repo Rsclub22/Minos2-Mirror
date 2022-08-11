@@ -1,9 +1,13 @@
 #include <QFontDialog>
-#include "base_pch.h"
+#include "AppStartup.h"
 #include "ContestApp.h"
+#include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"
 #include "ConfigFile.h"
+#include "waitcursor.h"
+#include "ServerEvent.h"
+
 #include "DisplayOptions.h"
 #include "ui_DisplayOptions.h"
 

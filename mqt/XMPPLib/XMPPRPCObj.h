@@ -15,10 +15,9 @@
 #include <string>
 #include <QString>
 #include <QSharedPointer>
-#include "PublishState.h"
 #include "XMPPRPCParams.h"
 #include "PubSubValue.h"
-#include "PublishState.h"
+
 //---------------------------------------------------------------------------
 class XStanza;
 typedef void ( *sendActionCall ) ( XStanza *a  );

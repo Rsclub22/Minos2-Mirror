@@ -9,9 +9,11 @@
 //----------------------------------------------------------------------------
 #ifndef LoggerContestH
 #define LoggerContestH 
-#include "base_pch.h"
-#include "cutils.h"
 //----------------------------------------------------------------------------
+#include <QFile>
+
+#include "baseconstants.h"
+#include "gjvparams.h"
 #include "profiles.h"
 #include "rigmemcommondata.h"
 #include "clustercommon.h"

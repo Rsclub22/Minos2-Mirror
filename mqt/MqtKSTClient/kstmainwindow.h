@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QRadioButton>
+#include <QCheckBox>
+#include "StdInReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
 #include "airscoutlink.h"

@@ -1,3 +1,5 @@
+#include <QSettings>
+
 #include "MServerPubSub.h"
 #include "minoslistener.h"
 

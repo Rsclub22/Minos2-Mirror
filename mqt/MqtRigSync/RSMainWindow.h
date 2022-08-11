@@ -1,10 +1,14 @@
 #ifndef RSMAINWINDOW_H
 #define RSMAINWINDOW_H
 
+#include <QMainWindow>
 #include <QComboBox>
 #include "RigCache.h"
+#include "StdInReader.h"
+#include "XMPPRPCObj.h"
 #include "n1mmlink.h"
 #include "wsjtxlink.h"
+#include "AnalysePubSubNotify.h"
 
 class BandInfo;
 class ModeInfo;

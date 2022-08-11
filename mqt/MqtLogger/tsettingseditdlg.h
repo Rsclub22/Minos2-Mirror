@@ -1,7 +1,7 @@
 #ifndef TSETTINGSEDITDLG_H
 #define TSETTINGSEDITDLG_H
 
-#include "base_pch.h"
+#include <QDialog>
 
 namespace Ui {
 class TSettingsEditDlg;

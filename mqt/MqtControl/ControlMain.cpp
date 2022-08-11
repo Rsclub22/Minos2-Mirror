@@ -1,7 +1,13 @@
+#include <QSettings>
+#include <QCloseEvent>
+#include "AppStartup.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 #include "controlport.h"
 #include "portconf.h"
 #include "MinosLines.h"
-
+#include "MTrace.h"
+#include "LogEvents.h"
 #include "ControlMain.h"
 #include "ui_ControlMain.h"
 

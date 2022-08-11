@@ -9,12 +9,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QWheelEvent>
 
-#include "base_pch.h"
-#include "rigutils.h"
 #include "BandList.h"
+#include "MTrace.h"
+
 #include "freqlineedit.h"
-#include "cutils.h"
 
 FreqLineEdit::FreqLineEdit(QWidget *parent):
     QLineEdit(parent)

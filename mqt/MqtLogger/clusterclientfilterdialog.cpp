@@ -12,11 +12,17 @@
 
 #include <QStringListModel>
 #include <QMessageBox>
-#include "ContestApp.h"
+#include <QLineEdit>
+#include <QTextStream>
+#include <QFileDialog>
+
+#include "MShowMessageDlg.h"
 #include "cutils.h"
-#include "list.h"
 #include "clusterclientfilterdialog.h"
 #include "callsigninputdialog.h"
+#include "fileutils.h"
+#include "MTrace.h"
+
 #include "locatorinputdialog.h"
 #include "ui_clusterclientfilterdialog.h"
 

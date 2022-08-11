@@ -10,6 +10,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QTimer>
+
+#include "MTrace.h"
 #include "rotatorfactory.h"
 #include "pstRotControl.h"
 

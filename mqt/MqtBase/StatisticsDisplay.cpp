@@ -1,4 +1,4 @@
-#include "base_pch.h"
+#include <QSettings>
 #include "contacts.h"
 #include "contest.h"
 #include "cutils.h"

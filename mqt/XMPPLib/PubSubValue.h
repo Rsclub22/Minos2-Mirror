@@ -2,7 +2,6 @@
 #define PUBSUBVALUE_H
 #include "XMPPRPCParams.h"
 
-//#include "AnalysePubSubNotify.h"
 class AnalysePubSubNotify;
 class PubSubValue
 {

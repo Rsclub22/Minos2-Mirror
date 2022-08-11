@@ -13,6 +13,7 @@
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
+#include "MTrace.h"
 
 //==============================================================================
 MinosRouterConnection::MinosRouterConnection(bool fromDatagram) : fromDatagram(fromDatagram)

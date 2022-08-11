@@ -16,6 +16,7 @@
 #define RIGCONTROLRPC_H
 
 #include "RigCache.h"
+#include "XMPPRPCObj.h"
 #include "rigcommon.h"
 
 class RigControlMainWindow;

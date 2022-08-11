@@ -1,11 +1,15 @@
+#include <QSizePolicy>
 
-#include "qrzdisplayframe.h"
+#include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 #include "minosqlabel.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+#include "MTrace.h"
 
-#include <QSizePolicy>
+#include "qrzdisplayframe.h"
 
 const int PINGTIMER_DURATION = 10000;
 

@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include <QSizeGrip>
 #include <QToolTip>
 #include "WindowsAppId.h"
@@ -10,8 +9,10 @@
 #include "MinosLoggerEvents.h"
 #include "LoggerContest.h"
 #include "qlogtabwidget.h"
-#include "ContestPageControl.h"
 #include "ContestPage.h"
+#include "MTrace.h"
+
+#include "ContestPageControl.h"
 #include "ui_ContestPageControl.h"
 
 ContestPageControl::ContestPageControl(QWidget *parent) :

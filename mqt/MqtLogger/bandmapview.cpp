@@ -6,14 +6,19 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
+#include <QApplication>
 
+#include "bandmapdatamodel.h"
 #include "bandmapgraphicspanel.h"
-#include "bandmapview.h"
 #include "MinosLoggerEvents.h"
+#include "bandmapspotmarker.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
 #include "ContestApp.h"
 #include "delayedaction.h"
+#include "MTrace.h"
+
+#include "bandmapview.h"
 
 const int DIAL_CURSOR_BELOW_VIEWSTART_FREQ = 0;
 const int DIAL_CURSOR_ABOVE_VIEWSTART_FREQ = 1;

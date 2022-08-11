@@ -1,7 +1,6 @@
 #ifndef STACKEDINFOFRAME_H
 #define STACKEDINFOFRAME_H
 
-#include "base_pch.h"
 #include "RigMemoryFrame.h"
 #include "TClockFrame.h"
 #include "districtframe.h"

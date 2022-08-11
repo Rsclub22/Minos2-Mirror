@@ -1,7 +1,10 @@
 #ifndef DXCCFRAME_H
 #define DXCCFRAME_H
 
-#include "base_pch.h"
+#include "TreeUtils.h"
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QMenu>
 
 namespace Ui {
 class DXCCFrame;

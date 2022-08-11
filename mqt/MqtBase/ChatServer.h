@@ -1,6 +1,12 @@
 #ifndef CHATSERVER_H
 #define CHATSERVER_H
-#include "base_pch.h"
+
+#include <QTimer>
+
+#include "MinosRPC.h"
+#include "frequency.h"
+
+class BaseContestLog;
 
 class ChatServerApp
 {

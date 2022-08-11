@@ -3,7 +3,6 @@
 #include <QPainter>
 #include <QGraphicsItem>
 #include <QGraphicsSceneWheelEvent>
-#include "base_pch.h"
 #include "bandmapcommon.h"
 #include "checkoperatingfreq.h"
 

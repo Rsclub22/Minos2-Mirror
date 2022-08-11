@@ -1,4 +1,8 @@
-#include "mqtUtils_pch.h"
+#include  <QtGlobal>
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 #include <QFileDialog>
 
 #include "LogEvents.h"

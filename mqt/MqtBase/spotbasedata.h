@@ -13,8 +13,11 @@
 
 #ifndef SPOTBASEDATA_H
 #define SPOTBASEDATA_H
+#include <QCoreApplication>
+#include <QDateTime>
 
 #include "callsign.h"
+#include "frequency.h"
 
 namespace bandmapSpotType {
 

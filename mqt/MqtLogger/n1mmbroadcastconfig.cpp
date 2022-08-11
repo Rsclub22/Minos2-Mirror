@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 

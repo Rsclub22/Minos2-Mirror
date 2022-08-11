@@ -1,6 +1,5 @@
-#include "base_pch.h"
-
 #include "ContestApp.h"
+#include "MMessageDialog.h"
 #include "tloccalcform.h"
 #include "contest.h"
 #include "ScreenContact.h"

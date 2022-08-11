@@ -1,9 +1,9 @@
-#include "base_pch.h"
 #include "ContestApp.h"
 #include "cutils.h"
 #include "contest.h"
 #include "htmldelegate.h"
 #include "MinosLoggerEvents.h"
+#include "calcs.h"
 
 #include "locframe.h"
 #include "ui_locframe.h"

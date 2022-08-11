@@ -1,7 +1,9 @@
+#include "MinosRPC.h"
 #include "MinosTestImport.h"
 #include "MonitoredContestLog.h"
 #include "MonitoringFrame.h"
 #include "MonitoredLog.h"
+#include "RPCCommandConstants.h"
 #include "contacts.h"
 
 MonitoredLog::MonitoredLog()

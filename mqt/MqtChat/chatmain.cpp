@@ -1,6 +1,7 @@
-//#include "base_pch.h"
+#include <QSettings>
+#include "AppStartup.h"
 #include "MinosRPC.h"
-
+#include "LogEvents.h"
 #include "chatmain.h"
 #include "ui_chatmain.h"
 

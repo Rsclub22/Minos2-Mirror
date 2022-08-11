@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QInputDialog>
 
+#include "MShowMessageDlg.h"
 #include "addantennadialog.h"
 #include "rotsetupdialog.h"
 #include "ui_rotsetupdialog.h"

@@ -1,7 +1,8 @@
 #ifndef MONITORTREEMODEL_H
 #define MONITORTREEMODEL_H
 
-#include "base_pch.h"
+#include <QSharedPointer>
+#include <QAbstractItemModel>
 
 class MonitorMain;
 class MonitoredLog;

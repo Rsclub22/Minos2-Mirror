@@ -1,12 +1,15 @@
 #ifndef MONITORMAIN_H
 #define MONITORMAIN_H
 
+#include <QMainWindow>
 #include <QAction>
 #include <QMenu>
+#include "MinosRPC.h"
 #include "ScreenContact.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorTreeModel.h"
+#include "StdInReader.h"
 #include "cutils.h"
 
 

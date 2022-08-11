@@ -1,17 +1,20 @@
-#include "base_pch.h"
 #include <QScrollArea>
+#include <QLabel>
+#include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
 #include "MatchThread.h"
 #include "BandList.h"
 #include "cutils.h"
+#include "fileutils.h"
 #include "qheaderview.h"
 #include "qtableview.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
 #include "SendRPCDM.h"
+#include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "focuswatcher.h"
 #include "htmldelegate.h"
@@ -33,8 +36,8 @@
 #include "clusterclientframe.h"
 #include "bandmapclientframe.h"
 #include "delayedaction.h"
-
 #include "ContestPageControl.h"
+#include "MTrace.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"

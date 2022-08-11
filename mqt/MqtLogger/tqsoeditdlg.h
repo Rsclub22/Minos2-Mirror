@@ -1,7 +1,9 @@
 #ifndef TQSOEDITDLG_H
 #define TQSOEDITDLG_H
 
-#include "base_pch.h"
+#include <QDialog>
+#include <QItemSelection>
+#include "baseconstants.h"
 #include "contacts.h"
 
 class QTreeWidgetItem;

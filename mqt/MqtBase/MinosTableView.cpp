@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "MinosTableView.h"
 #include <QScrollBar>
 #include <QHeaderView>

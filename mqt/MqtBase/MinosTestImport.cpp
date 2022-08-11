@@ -6,10 +6,8 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "TinyUtils.h"
-#include "cutils.h"
 #include "contest.h"
+#include "MTrace.h"
 #include "MinosTestImport.h"
 
 MinosTestImport::MinosTestImport( BaseContestLog * const ct ) : ct( ct )

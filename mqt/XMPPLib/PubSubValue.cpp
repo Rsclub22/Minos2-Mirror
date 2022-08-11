@@ -1,9 +1,7 @@
-#include "XMPP_pch.h"
-
 #include "PubSubValue.h"
 #include "ConfigFile.h"
-#include "RPCPubSub.h"
 #include "AnalysePubSubNotify.h"
+#include "MinosRPC.h"
 
 QString PubSubValue::psType() const
 {

@@ -1,10 +1,10 @@
 #ifndef HELPBROWSER_H
 #define HELPBROWSER_H
 
-#include "base_pch.h"
 #include <QHelpEngine>
 #include <QHelpContentWidget>
 #include <QHelpIndexWidget>
+#include <QDialog>
 
 namespace Ui {
 class HelpBrowser;

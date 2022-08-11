@@ -1,7 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "base_pch.h"
+#include <QMainWindow>
+#include <QTimer>
+
+#include "StdInReader.h"
 
 namespace Ui {
 class MainWindow;

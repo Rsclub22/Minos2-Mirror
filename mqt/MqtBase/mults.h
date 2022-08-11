@@ -10,6 +10,9 @@
 #ifndef MultsH
 #define MultsH 
 #include <QString>
+#include <QMap>
+
+#include "MapWrapper.h"
 #include "locator.h"
 #include "callsign.h"
 //----------------------------------------------------------------------------

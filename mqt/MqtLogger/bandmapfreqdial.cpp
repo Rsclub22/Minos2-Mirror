@@ -5,11 +5,12 @@
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2019
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
-#include "bandmapfreqdial.h"
-#include "ContestApp.h"
+#include <QApplication>
 #include <QFontMetrics>
+#include <cmath>
+#include "MTrace.h"
+#include "ContestApp.h"
+#include "bandmapfreqdial.h"
 
 BandmapFreqDial::BandmapFreqDial(int _width, int _height):
     height(_height),

@@ -17,7 +17,7 @@
 
 #ifndef RIGMEMDIALOG_H
 #define RIGMEMDIALOG_H
-#include "base_pch.h"
+#include <QDialog>
 #include "rigmemcommondata.h"
 #include "cutils.h"
 

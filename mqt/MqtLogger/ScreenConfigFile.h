@@ -1,6 +1,6 @@
 #ifndef SCREENCONFIGFILE_H
 #define SCREENCONFIGFILE_H
-#include "base_pch.h"
+#include <QCoreApplication>
 #include "StackedInfoFrame.h"
 class ScreenConfigScreen;
 enum SCType
@@ -69,7 +69,7 @@ public:
 
 class ScreenConfigFile
 {
-    Q_DECLARE_TR_FUNCTIONS(ScreenConfigFie)
+    Q_DECLARE_TR_FUNCTIONS(ScreenConfigFile)
 
     static ScreenConfigFile scf;
     bool loaded = false;

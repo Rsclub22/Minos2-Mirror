@@ -1,15 +1,21 @@
-#include "base_pch.h"
 #include <QStyleFactory>
-#include "MinosLoggerEvents.h"
-#include "SecondInstall.h"
 #include <QFontDialog>
 #include <QDesktopServices>
 #include <QToolTip>
+#include <QFileDialog>
+#include <QLabel>
 
+#include "AppStartup.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
+#include "MinosLoggerEvents.h"
+#include "PubSubClient.h"
+#include "SecondInstall.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "WindowsAppId.h"
 
+#include "fileutils.h"
 #include "list.h"
 #include "tsinglelogframe.h"
 #include "taboutbox.h"
@@ -26,7 +32,6 @@
 #include "ScreenConfigManager.h"
 #include "MinosTestImport.h"
 #include "singleapplication.h"
-#include "helpbrowser.h"
 #include "WsjtxServer.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
@@ -36,6 +41,10 @@
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
 #include "StatisticsDisplay.h"
+#include "MTrace.h"
+#include "RPCPubSub.h"
+#include "MinosConnection.h"
+#include "waitcursor.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"

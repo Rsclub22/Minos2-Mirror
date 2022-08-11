@@ -1,6 +1,5 @@
 #ifndef CONTESTDETAILSTRANSFEROBJECT_H
 #define CONTESTDETAILSTRANSFEROBJECT_H
-#include "base_pch.h"
 #include "LoggerContest.h"
 
 class ContestDetailsTransferObject

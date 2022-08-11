@@ -1,3 +1,4 @@
+#include <QSettings>
 #include "ControlMain.h"
 
 #include "windowMonitor.h"

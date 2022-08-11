@@ -22,8 +22,11 @@
 #ifndef BandListH
 #define BandListH
 
-#include "base_pch.h"
 //---------------------------------------------------------------------------
+#include <QVector>
+#include <QSharedPointer>
+
+#include "frequency.h"
 extern const QString allHF;
 
 const QString HF_BANDTYPE = "HF";

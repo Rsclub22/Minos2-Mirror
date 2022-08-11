@@ -1,6 +1,10 @@
-#include "base_pch.h"
+#include <QPainter>
+#include <QDir>
+#include <QFileDialog>
 
 #include "ConfigElementFrame.h"
+#include "fileutils.h"
+#include "qevent.h"
 #include "ui_ConfigElementFrame.h"
 
 const char *ConfigElementFrame::deltext = QT_TR_NOOP("<Deleted>");

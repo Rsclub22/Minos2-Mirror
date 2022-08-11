@@ -37,13 +37,12 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#include "base_pch.h"
 #include "minostablewidget.h"
 
 #include <QScrollBar>
 #include <QHeaderView>
-
+#include <QToolButton>
+#include <QTimer>
 
 MinosTableWidget::MinosTableWidget(QWidget *parent):QTableView(parent)
 {

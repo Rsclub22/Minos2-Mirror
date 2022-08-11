@@ -12,16 +12,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-
+#include <QMessageBox>
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-//#include "rigcontrolcommonconstants.h"
-#include"rigcommon.h"
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
-#include "tlogcontainer.h"
 #include "ContestApp.h"
+#include "MinosParameters.h"
+#include "MTrace.h"
+#include "calcs.h"
 
 #include "rigmemdialog.h"
 #include "ui_rigmemdialog.h"

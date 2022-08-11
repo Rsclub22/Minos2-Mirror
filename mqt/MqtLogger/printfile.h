@@ -9,8 +9,9 @@
 
 #ifndef PrintFileH
 #define PrintFileH
-#include "base_pch.h"
 
+#include <QCoreApplication>
+#include <QFile>
 //---------------------------------------------------------------------------
 class LoggerContestLog;
 

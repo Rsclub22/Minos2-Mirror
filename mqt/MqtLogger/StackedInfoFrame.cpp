@@ -1,9 +1,8 @@
-#include "base_pch.h"
 #include <QTabBar>
-#include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "LoggerContest.h"
 #include "ContestApp.h"
+#include "MTrace.h"
 
 #include "StackedInfoFrame.h"
 #include "ui_StackedInfoFrame.h"

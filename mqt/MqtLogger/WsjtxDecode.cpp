@@ -1,7 +1,7 @@
 #include "WsjtxDecode.h"
 #include "ScreenContact.h"
 #include "contest.h"
-#include "rigutils.h"
+#include "MinosParameters.h"
 
 /*
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};

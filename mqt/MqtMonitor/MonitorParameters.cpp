@@ -1,3 +1,5 @@
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "MonitorMain.h"
 #include "MonitorParameters.h"
 

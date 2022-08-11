@@ -15,11 +15,20 @@
 #include <QProcessEnvironment>
 #include <QHeaderView>
 #include <QTextStream>
+#include <MTrace.h>
+#include <QTableView>
+#include <QMessageBox>
 
+#include "AppStartup.h"
+#include "MShowMessageDlg.h"
 #include "clustercommon.h"
+#include "fileutils.h"
+#include "mults.h"
 #include "qrzServerCommon.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 
 #include "clustermainwindow.h"
 #include "ui_clustermainwindow.h"

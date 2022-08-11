@@ -7,13 +7,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
+#include <QDateTime>
 #include "MTrace.h"
 #include "XMPPRPCObj.h"
 #include "minoslistener.h"
 #include "MServer.h"
 #include "TinyUtils.h"
 #include "MinosLink.h"
-#include "qdatetime.h"
 
 extern bool closeApp;
 

@@ -2,6 +2,8 @@
 #include "contest.h"
 #include "kstmainwindow.h"
 #include "cutils.h"
+#include "MinosParameters.h"
+#include "calcs.h"
 
 // kst2me sort by
 // new before old

@@ -13,7 +13,6 @@
 #include <QMutexLocker>
 #include <QTextStream>
 //---------------------------------------------------------------------------
-#include "fileutils.h"
 
 class CsGuard:public QMutexLocker
 {

@@ -1,9 +1,10 @@
 #include <QApplication>
+#include <QMessageBox>
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "singleapplication.h"
 #include "tlogcontainer.h"
 
-#include "fileutils.h"
 #include "AppStartup.h"
 
 #ifdef _MSC_VER

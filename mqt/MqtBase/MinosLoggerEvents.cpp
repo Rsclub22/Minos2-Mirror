@@ -7,6 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
+#include  <QKeyEvent>
 #include "MinosLoggerEvents.h"
 
 MinosLoggerEvents MinosLoggerEvents::mle;

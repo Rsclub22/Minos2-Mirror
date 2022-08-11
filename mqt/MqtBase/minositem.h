@@ -1,6 +1,8 @@
 #ifndef MINOSITEM_H
 #define MINOSITEM_H
-#include "XMPP_pch.h"
+
+#include "XMPPRPCParams.h"
+#include <QString>
 
 // templated class for items in contest and contact
 

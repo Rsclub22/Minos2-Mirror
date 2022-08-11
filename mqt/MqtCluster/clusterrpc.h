@@ -1,7 +1,9 @@
 #ifndef CLUSTERRPC_H
 #define CLUSTERRPC_H
 
-#include "base_pch.h"
+#include "AnalysePubSubNotify.h"
+#include "MinosRPC.h"
+#include "frequency.h"
 
 class Clusterrpc : public QObject
 {

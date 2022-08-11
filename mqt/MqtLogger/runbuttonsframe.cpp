@@ -2,10 +2,10 @@
 #include "LoggerContest.h"
 #include "rotatorcommon.h"
 #include "runbuttondialog.h"
-#include "rigutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
+#include "MTrace.h"
 
 #include "runbuttonsframe.h"
 #include "ui_runbuttonsframe.h"

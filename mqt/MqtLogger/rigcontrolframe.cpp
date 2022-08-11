@@ -12,25 +12,22 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include <math.h>
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
-#include "runbuttondialog.h"
 #include "BandList.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
-#include "rigcontrolframe.h"
 #include "volumeslider.h"
 #include "freqlineedit.h"
 #include "ritlineedit.h"
 #include "delayedaction.h"
+#include "MTrace.h"
+
+#include "rigcontrolframe.h"
 #include "ui_rigcontrolframe.h"
-
-
-
 
 RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
     QFrame(parent),

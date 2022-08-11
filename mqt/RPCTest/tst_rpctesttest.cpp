@@ -3,9 +3,9 @@
 
 #include "BandList.h"
 #include "Calendar.h"
-#include "CalendarList.h"
-
-#include "base_pch.h"
+#include "XMPPStanzas.h"
+#include "Dispatcher.h"
+//#include "CalendarList.h"
 
 
 class RPCTestTest : public QObject, RPCDispatcher

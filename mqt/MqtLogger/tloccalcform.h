@@ -1,7 +1,7 @@
 #ifndef TLOCCALCFORM_H
 #define TLOCCALCFORM_H
 
-#include "base_pch.h"
+#include <QDialog>
 
 namespace Ui {
 class TLocCalcForm;

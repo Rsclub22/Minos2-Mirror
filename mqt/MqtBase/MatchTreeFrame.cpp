@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "MinosParameters.h"
 #include "ListContact.h"
 #include "list.h"

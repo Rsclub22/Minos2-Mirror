@@ -6,7 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
+#include "MTrace.h"
+#include  <QtGlobal>
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 
 #include <QtEndian>
 #include <QtMath>

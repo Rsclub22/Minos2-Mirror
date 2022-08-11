@@ -1,8 +1,13 @@
 #ifndef RIGMEMORYFRAME_H
 #define RIGMEMORYFRAME_H
 
-#include "base_pch.h"
-#include "qvector.h"
+#include <QVector>
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QHeaderView>
+#include <QMenu>
+
+#include "TreeUtils.h"
 #include "rigmemcommondata.h"
 
 class LoggerContestLog;

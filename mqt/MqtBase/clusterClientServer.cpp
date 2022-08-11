@@ -13,12 +13,13 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "base_pch.h"
 #include "MinosRPC.h"
-#include "MinosLoggerEvents.h"
 #include "ConfigFile.h"
+#include "RPCPubSub.h"
 
+#include "RPCCommandConstants.h"
 #include "clusterClientServer.h"
+#include "MTrace.h"
 
 static QVector<ClusterMessage> spotQueue;
 

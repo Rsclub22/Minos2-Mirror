@@ -1,5 +1,4 @@
 #include "MinosParameters.h"
-#include "MShowMessageDlg.h"
 #include "dtg.h"
 
 const double dtg::daySecs = 86400.0;	// 24 * 60 * 60

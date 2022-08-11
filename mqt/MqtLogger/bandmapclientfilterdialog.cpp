@@ -8,11 +8,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include <QMessageBox>
+#include "MTrace.h"
 
 #include "bandmapclientfilterdialog.h"
 #include "ui_bandmapclientfilterdialog.h"
-#include "BandList.h"
 
 int BandmapClientFilterDialog::mainTabIndex;
 

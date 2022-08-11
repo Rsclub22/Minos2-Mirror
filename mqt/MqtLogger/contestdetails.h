@@ -2,9 +2,9 @@
 #define CONTESTDETAILS_H
 
 #include <QDialog>
-#include "tbundleframe.h"
 #include "focuswatcher.h"
 #include "ContestDetailsTransferObject.h"
+#include "cutils.h"
 
 namespace Ui {
 class ContestDetails;

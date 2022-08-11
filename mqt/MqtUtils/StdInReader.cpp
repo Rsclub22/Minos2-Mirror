@@ -1,7 +1,8 @@
-#include "mqtUtils_pch.h"
 #include <QTextStream>
 
+#include "AppStartup.h"
 #include "StdInReader.h"
+#include "MTrace.h"
 
 StdInReader::StdInReader(QMainWindow *m):qmw(m)
 {

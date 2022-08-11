@@ -6,13 +6,18 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
+#include <QFileInfo>
+#include <QTextStream>
 #include "LoggerContest.h"
-#include "ContestApp.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "MatchThread.h"
+#include "fileutils.h"
 #include "list.h"
+#include "MTrace.h"
+#include "MLogFile.h"
 
+#include "ContestApp.h"
 //---------------------------------------------------------------------------
 #define INITIAL_CONTEST_SLOTS 2
 #define INITIAL_LIST_SLOTS 10

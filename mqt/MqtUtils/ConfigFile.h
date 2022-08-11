@@ -2,6 +2,8 @@
 #define CONFIGFILE_H
 #include <QWidget>
 #include <QProcess>
+#include <QMap>
+
 #include "INIFile.h"
 //---------------------------------------------------------------------------
 extern QString RunLocal;

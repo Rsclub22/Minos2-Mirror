@@ -1,7 +1,7 @@
 #ifndef TABOUTBOX_H
 #define TABOUTBOX_H
 
-#include "base_pch.h"
+#include <QDialog>
 
 namespace Ui {
 class TAboutBox;

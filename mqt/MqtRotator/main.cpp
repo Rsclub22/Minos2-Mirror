@@ -13,6 +13,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QApplication>
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "AppStartup.h"
 #include "rotatormainwindow.h"

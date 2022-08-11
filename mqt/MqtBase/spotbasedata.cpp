@@ -11,10 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#include "base_pch.h"
 #include "spotbasedata.h"
-
-
 
 SpotBaseData::SpotBaseData()
 {

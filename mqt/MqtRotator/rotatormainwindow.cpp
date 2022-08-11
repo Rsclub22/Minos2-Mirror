@@ -19,21 +19,23 @@
 #include <QTime>
 #include <QSettings>
 #include <QProcessEnvironment>
+#include <QDir>
 
 #include "RPCCommandConstants.h"
 #include "rotatorRpc.h"
 #include "rotatorlog.h"
-#include "rotatormainwindow.h"
 #include "rotatorcommon.h"
 #include "rotpresetdialog.h"
 #include "serialCommonData.h"
-#include "ui_rotatormainwindow.h"
 #include "minoscompass.h"
 #include "rotsetupdialog.h"
 #include "logdialog.h"
 #include "serialdata.h"
 #include "pstconfigdialog.h"
-
+#include "MTrace.h"
+#include "LogEvents.h"
+#include "rotatormainwindow.h"
+#include "ui_rotatormainwindow.h"
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     QMainWindow(parent),

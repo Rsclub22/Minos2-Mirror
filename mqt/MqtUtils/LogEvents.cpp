@@ -7,12 +7,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "mqtUtils_pch.h"
+#include <QString>
 
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <tlhelp32.h>
 #endif
+
+#include "MTrace.h"
 
 //---------------------------------------------------------------------------
 void logMessage( const QString &level, const QString &mess )

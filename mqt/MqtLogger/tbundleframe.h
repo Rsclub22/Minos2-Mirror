@@ -1,7 +1,8 @@
 #ifndef TBUNDLEFRAME_H
 #define TBUNDLEFRAME_H
 
-#include "base_pch.h"
+#include "minositem.h"
+#include <QFrame>
 
 namespace Ui {
 class TBundleFrame;

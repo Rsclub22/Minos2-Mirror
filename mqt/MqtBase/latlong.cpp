@@ -6,10 +6,15 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include <cmath>
+#include <QTextStream>
+
+#include "calcs.h"
 #include "cutils.h"
 
 #include "latlong.h"
+#include "locator.h"
+#include "MinosParameters.h"
 
 typedef struct transformelement
 {

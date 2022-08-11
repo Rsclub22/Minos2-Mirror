@@ -10,7 +10,8 @@
 
 #ifndef MinosTestExportH
 #define MinosTestExportH 
-#include "base_pch.h"
+#include <QCoreApplication>
+#include <QFile>
 #include "rigmemcommondata.h"
 
 //---------------------------------------------------------------------------

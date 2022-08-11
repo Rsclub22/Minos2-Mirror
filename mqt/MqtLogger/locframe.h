@@ -1,7 +1,9 @@
 #ifndef LOCFRAME_H
 #define LOCFRAME_H
 
-#include "base_pch.h"
+#include <QAbstractItemModel>
+
+#include "htmldelegate.h"
 
 namespace Ui {
 class LocFrame;

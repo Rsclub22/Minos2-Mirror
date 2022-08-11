@@ -6,6 +6,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QMessageBox>
+#include "ContestApp.h"
+#include "clusterClientServer.h"
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "tlogcontainer.h"
@@ -15,8 +18,11 @@
 #include "BandList.h"
 #include "delayedaction.h"
 #include "rigutils.h"
-#include "ui_bandmapclientframe.h"
+#include "MTrace.h"
+#include "calcs.h"
+
 #include "bandmapclientframe.h"
+#include "ui_bandmapclientframe.h"
 
 BandmapClientFrame::BandmapClientFrame(QWidget *parent):
     QFrame(parent),

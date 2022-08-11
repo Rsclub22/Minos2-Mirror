@@ -1,7 +1,11 @@
 #ifndef MATCHTREEFRAME_H
 #define MATCHTREEFRAME_H
 
-#include "base_pch.h"
+#include <QTreeView>
+#include <QMenu>
+
+#include "baseconstants.h"
+#include "TreeUtils.h"
 #include "contest.h"
 #include "MatchCollection.h"
 

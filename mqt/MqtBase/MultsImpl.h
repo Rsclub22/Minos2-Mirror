@@ -11,10 +11,12 @@
 //----------------------------------------------------------------------------
 #ifndef MultsImplH
 #define MultsImplH 
-#include "base_pch.h"
+#include <QTextStream>
+
+#include "calcs.h"
 #include "contest.h"
 #include "cutils.h"
-
+#include "MinosParameters.h"
 template < class itemtype >
 class MultList : public QObject, public QHash < MapWrapper<itemtype>, MapWrapper<itemtype> >
 {

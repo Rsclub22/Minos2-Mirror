@@ -9,9 +9,7 @@
 
 #ifndef SendRPCDMH
 #define SendRPCDMH 
-#include "base_pch.h"
-
-#include "ConfigFile.h"
+#include "RPCCommandConstants.h"
 #include "RigCache.h"
 #include "RotatorCache.h"
 #include "clustercommon.h"

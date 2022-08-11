@@ -1,9 +1,11 @@
 #ifndef STATISTICSDISPLAY_H
 #define STATISTICSDISPLAY_H
 
-#include "base_pch.h"
 #include <QMenu>
 #include <QDialog>
+#include <QDateTime>
+#include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
 
 namespace Ui {
 class StatisticsDiplay;

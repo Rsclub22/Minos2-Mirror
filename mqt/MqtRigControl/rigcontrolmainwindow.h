@@ -23,6 +23,8 @@
 #include <QProcess>
 
 #include "BandList.h"
+#include "PubSubValue.h"
+#include "StdInReader.h"
 #include "serialtvswitch.h"
 #include "rigcommon.h"
 #include "rigbase.h"
@@ -36,7 +38,7 @@ class QBitArray;
 class RigSetupDialog;
 class RigControl;
 class RigControlRpc;
-
+class QPushButton;
 
 
 

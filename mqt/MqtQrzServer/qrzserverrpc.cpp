@@ -12,9 +12,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include "MinosRPC.h"
 #include "ConfigFile.h"
+#include "RPCCommandConstants.h"
+#include "RPCPubSub.h"
+#include "MTrace.h"
+
 #include "qrzserverrpc.h"
 
 

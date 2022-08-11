@@ -1,16 +1,17 @@
 #ifndef TXVMBUTTONSFRAME_H
 #define TXVMBUTTONSFRAME_H
 
-
-#include "base_pch.h"
 #include <QShortcut>
 #include <QGroupBox>
-#include <QObject>
+#include <QKeyEvent>
+
+#include "PubSubValue.h"
+#include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "radiodetails.h"
-#include "rigcontrolframe.h"
 
+class QToolButton;
+class QMenu;
 
 namespace Ui {
 class TxVmButtonsFrame;

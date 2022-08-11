@@ -1,6 +1,7 @@
 #ifndef DTG_H
 #define DTG_H
-#include "XMPP_pch.h"
+
+#include <QDateTime>
 #include "minositem.h"
 
 extern QString TDTToCanonical( QString d );

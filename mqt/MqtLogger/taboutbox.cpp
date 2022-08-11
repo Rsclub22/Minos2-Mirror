@@ -1,5 +1,5 @@
-#include "base_pch.h"
 #include <QDesktopServices>
+#include "MShowMessageDlg.h"
 #include "SecondInstall.h"
 #include "ContestApp.h"
 #include "tlogcontainer.h"
@@ -7,6 +7,7 @@
 #include "StartConfig.h"
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
+#include "ServerEvent.h"
 #include "taboutbox.h"
 #include "ui_taboutbox.h"
 

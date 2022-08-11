@@ -7,7 +7,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "XMPP_pch.h"
+#include <QMap>
+#include "XMPPRPCObj.h"
+#include "XMPPStanzas.h"
+#include "MTrace.h"
 
 sendActionCall sendAction = nullptr;
 void setSendAction(sendActionCall sa)

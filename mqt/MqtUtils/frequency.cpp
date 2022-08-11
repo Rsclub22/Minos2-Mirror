@@ -1,5 +1,6 @@
-#include "mqtUtils_pch.h"
 #include <QRegularExpression>
+
+#include "frequency.h"
 
 void register_frequency_types ()
 {

@@ -2,10 +2,17 @@
 #define CLUSTERCOMMON_H
 
 
-#include "base_pch.h"
-#include "BandList.h"
 #include <QList>
 #include <QColor>
+#include <QRegularExpression>
+#include <QSharedPointer>
+
+#include "BandList.h"
+#include "PublishState.h"
+
+class QCheckBox;
+class QLineEdit;
+class QLabel;
 
 extern const char * clusterStateList[];
 

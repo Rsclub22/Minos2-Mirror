@@ -12,14 +12,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "tlogcontainer.h"
-#include "tsinglelogframe.h"
-#include "qsologframe.h"
 #include "SendRPCDM.h"
 #include "rotatorcommon.h"
+#include "MTrace.h"
+
 #include "rotcontrolframe.h"
 #include "ui_rotcontrolframe.h"
 
@@ -733,12 +732,12 @@ void RotControlFrame::setRotatorBearing(const QString &s)
     if (len < 2)
     {
         brg = QString("%1%2%3")
-        .arg("00").arg(sl[0]).arg(degsym);
+        .arg("00").arg(sl[0], degsym);
     }
     else if (len < 3)
     {
         brg = QString("%1%2%3")
-        .arg("0").arg(sl[0]).arg(degsym);
+        .arg("0").arg(sl[0], degsym);
     }
     else
     {

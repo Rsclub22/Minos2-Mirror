@@ -8,9 +8,10 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
 
-#include "MLogFile.h"
+#include <QString>
+#include <QVector>
+#include <QFileInfo>
 
 // Here we define all the possible profile entries in a section
 // we use them for new sections in a bundle, and also to get

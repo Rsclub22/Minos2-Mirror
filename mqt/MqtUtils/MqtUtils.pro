@@ -16,8 +16,6 @@ CONFIG += staticlib
 *g++*:CONFIG(release, debug|release): QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast -DNDEBUG
 else:*g++*:CONFIG(debug, debug|release):QMAKE_CXXFLAGS_WARN_ON += -Wno-reorder -Wold-style-cast
 
-#PRECOMPILED_HEADER = mqtUtils_pch.h
-
 SOURCES += \
     SecondInstall.cpp \
     WindowsAppId.cpp \
@@ -49,7 +47,6 @@ HEADERS += \
     MTrace.h \
     LogEvents.h \
     frequency.h \
-    mqtUtils_pch.h \
     singleapplication.h \
     INIFile.h \
     MMessageDialog.h \

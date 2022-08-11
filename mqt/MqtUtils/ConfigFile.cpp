@@ -1,5 +1,3 @@
-#include "mqtUtils_pch.h"
-
 #include <QTimer>
 #include <QHostInfo>
 #include <QSharedPointer>
@@ -7,10 +5,12 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "AppStartup.h"
+#include "LogEvents.h"
 #include "SecondInstall.h"
 #include "fileutils.h"
 #include "ConfigFile.h"
-
+#include "MTrace.h"
 
 //---------------------------------------------------------------------------
 MinosConfigEvents MinosConfigEvents::mce;

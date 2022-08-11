@@ -1,4 +1,6 @@
-#include "base_pch.h"
+#include <QDir>
+#include <QFileDialog>
+#include "fileutils.h"
 #include "ContestApp.h"
 #include "WsjtxMessageServer.hpp"
 #include "WsjtxServer.h"

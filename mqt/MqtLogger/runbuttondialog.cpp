@@ -11,15 +11,12 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-#include "base_pch.h"
-
+#include <QMessageBox>
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-#include "rigcommon.h"
-#include "rotatorcommon.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
+#include "MTrace.h"
 
 #include "runbuttondialog.h"
 #include "ui_runbuttondialog.h"

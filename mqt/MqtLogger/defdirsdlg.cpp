@@ -1,6 +1,10 @@
-#include "base_pch.h"
+#include <QDir>
+#include <QFileDialog>
 #include "ContestApp.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
+#include "waitcursor.h"
+
 #include "defdirsdlg.h"
 #include "ui_defdirsdlg.h"
 

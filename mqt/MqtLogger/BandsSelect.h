@@ -1,7 +1,9 @@
 #ifndef BANDSSELECT_H
 #define BANDSSELECT_H
 
-#include "base_pch.h"
+#include "BandList.h"
+#include <QFrame>
+class QCheckBox;
 
 namespace Ui {
 class BandsSelect;

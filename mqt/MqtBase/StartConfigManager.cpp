@@ -1,7 +1,10 @@
-#include "base_pch.h"
+#include <QSettings>
+
+#include "ConfigFile.h"
 #include "StartConfig.h"
 #include "enqdlg.h"
 #include "delayedaction.h"
+#include "MinosParameters.h"
 
 #include "StartConfigManager.h"
 #include "ui_StartConfigManager.h"

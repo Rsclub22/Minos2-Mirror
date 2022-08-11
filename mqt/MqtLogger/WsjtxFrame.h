@@ -1,12 +1,13 @@
 #ifndef WSJTXFRAME_H
 #define WSJTXFRAME_H
 
-#include "base_pch.h"
+#include <QFile>
 
 #include "WsjtxDecode.h"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxMessageServer.hpp"
-#include "WsjtxServer.h"
+
+class BaseContestLog;
 
 using port_type = MessageServer::port_type;
 

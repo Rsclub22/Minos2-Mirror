@@ -9,12 +9,24 @@
 //----------------------------------------------------------------------------
 #ifndef ContestH
 #define ContestH 
-#include "base_pch.h"
 
 //----------------------------------------------------------------------------
 // This header covers the structure of contests, logs, etc
 
-//class DisplayContestContact;
+#include <QCoreApplication>
+#include <QMap>
+
+#include "BandList.h"
+#include "MapWrapper.h"
+#include "ProfileEnums.h"
+#include "callsign.h"
+#include "dtg.h"
+#include "frequency.h"
+#include "locator.h"
+#include "minositem.h"
+#include "baseloglist.h"
+#include "mults.h"
+
 class CheckableContact;
 class BaseContact;
 class ContestContact;
@@ -22,6 +34,7 @@ class ScreenContact;
 class DisplayContestContact;
 class ContestScore;
 class MinosTestImport;
+class BaseContestLog;
 
 class DupContact
 {

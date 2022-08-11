@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QSettings>
-
+#include <QMessageBox>
 #include "cutils.h"
 #include "clustercommon.h"
 #include "CallsignLineEdit.h"

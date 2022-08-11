@@ -10,8 +10,14 @@
 #ifndef ContactsH
 #define ContactsH 
 //----------------------------------------------------------------------------
-#include "base_pch.h"
+#include "callsign.h"
+#include "dtg.h"
+#include "frequency.h"
+#include "gjvparams.h"
+#include "mults.h"
+#include <QString>
 class MinosTestImport;
+class ScreenContact;
 
 // This header covers the structure of contests, logs, etc
 

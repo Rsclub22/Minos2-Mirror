@@ -1,7 +1,6 @@
 #ifndef QSOLOGFRAME_H
 #define QSOLOGFRAME_H
 
-#include "base_pch.h"
 #include "contacts.h"
 #include "ScreenContact.h"
 #include "focuswatcher.h"
@@ -10,6 +9,7 @@
 #include "rigmemcommondata.h"
 
 class ListContact;
+class ContactList;
 
 namespace Ui {
 class QSOLogFrame;

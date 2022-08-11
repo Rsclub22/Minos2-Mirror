@@ -6,13 +6,17 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include "TreeUtils.h"
 #include "cutils.h"
 #include "contest.h"
 #include "MinosTestImport.h"
 #include "ScreenContact.h"
 #include "DisplayContestContact.h"
 #include "BandList.h"
+#include "rigcontrolcommonconstants.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+
 //==========================================================================
 DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now, bool rInit )
       : BaseContact( ct, time_now ),

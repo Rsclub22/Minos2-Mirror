@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
@@ -7,6 +6,7 @@
 
 #include "sbdriver.h"
 #include "keyerlog.h"
+#include "MTrace.h"
 
 #include "InternalVoiceMemoryKeyer.h"
 

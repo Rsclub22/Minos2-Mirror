@@ -9,7 +9,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include "rotatorcommon.h"
 
 const char * RotPresetData::presetButtonLabels[4] = {QT_TR_NOOP("&Read"),

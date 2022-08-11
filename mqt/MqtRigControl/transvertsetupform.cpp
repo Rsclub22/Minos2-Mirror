@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QMessageBox>
 
 #include "rigcommon.h"
 #include "rigutils.h"

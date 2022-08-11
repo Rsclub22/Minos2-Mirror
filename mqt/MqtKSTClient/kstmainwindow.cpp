@@ -1,14 +1,18 @@
 #include <QHostInfo>
 #include <QSettings>
+#include <QKeyEvent>
 
+#include "MShowMessageDlg.h"
 #include "cutils.h"
-
+#include "callsign.h"
 #include "kstconfigure.h"
 #include "airscoutlink.h"
 #include "delayedaction.h"
 #include "changename.h"
+#include "LogEvents.h"
 
 #include "kstmainwindow.h"
+#include "mults.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =

@@ -6,13 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "BandList.h"
-#include "rigutils.h"
 #include "LoggerContest.h"
-#include "LoggerContacts.h"
-#include "ContestApp.h"
 #include "MinosLoggerEvents.h"
+#include "cutils.h"
+#include "MinosParameters.h"
+#include "LoggerContacts.h"
 
 ContestContact::ContestContact( LoggerContestLog * ct, bool time_now, bool rInit ) : DisplayContestContact( ct, time_now, rInit )
 {}

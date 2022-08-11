@@ -15,10 +15,13 @@
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
-
+#include <QFileDialog>
 #include <QBitArray>
 #include <QMetaType>
+#include <QDir>
 
+#include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "rigcommon.h"
 #include "rigsetupdialog.h"
 #include "rigcontrolrpc.h"
@@ -26,8 +29,9 @@
 #include "rigctldclient.h"
 #include "serialCommonData.h"
 #include "serialdata.h"
-
+#include "LogEvents.h"
 #include "cutils.h"
+#include "MTrace.h"
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
@@ -4258,10 +4262,10 @@ void RigControlMainWindow::onLaunchSetup()
 }
 void RigControlMainWindow::onConfigureRigctld()
 {
-    QString filepath = getRigCtldExePath();
-    QString filename = getRigCtldExeName();
+//    QString filepath = getRigCtldExePath();
+//    QString filename = getRigCtldExeName();
 
-    QDir cdir(GetCurrentDir());
+//    QDir cdir(GetCurrentDir());
     QString InitialDir = getRigCtldExePath();
 
     QFileDialog dialog(this, tr("Select Rigctld Program"), InitialDir);

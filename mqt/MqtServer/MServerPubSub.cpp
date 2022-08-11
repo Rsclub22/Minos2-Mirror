@@ -8,10 +8,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 #include <QHeaderView>
+#include "AnalysePubSubNotify.h"
 #include "PubSubServer.h"
 #include "MServer.h"
 #include "MTrace.h"
 #include "MServerPubSub.h"
+#include "qcoreapplication.h"
 
 extern bool closeApp;
 

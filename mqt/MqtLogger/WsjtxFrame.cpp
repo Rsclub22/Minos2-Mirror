@@ -1,13 +1,17 @@
+#include <QFileDialog>
+
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "AdifImport.h"
 #include "MinosLoggerEvents.h"
 #include "contacts.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 #include "cutils.h"
 #include "BandList.h"
+#include "MTrace.h"
 
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"

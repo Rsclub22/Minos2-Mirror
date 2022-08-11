@@ -1,8 +1,14 @@
 #include <QThread>
+#include <QSettings>
+#include "AppStartup.h"
+#include "RPCCommandConstants.h"
 #include "cutils.h"
 #include "MinosRPC.h"
 #include "RSConfigure.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "RSMainWindow.h"
+#include "rigcontrolcommonconstants.h"
 #include "ui_RSMainWindow.h"
 
 static const char *rigSyncUuid = "RigSync";

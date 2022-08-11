@@ -1,8 +1,10 @@
+#include "MMessageDialog.h"
 #include "ScreenConfigFile.h"
 #include "ScreenConfigScreen.h"
 #include "ScreenConfigRow.h"
 #include <QStandardItemModel>
 #include <QListView>
+#include "MTrace.h"
 
 #include "ScreenConfigElement.h"
 #include "ui_ScreenConfigElement.h"

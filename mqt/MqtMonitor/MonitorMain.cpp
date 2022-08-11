@@ -1,3 +1,5 @@
+#include "AppStartup.h"
+#include "RPCCommandConstants.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
@@ -5,7 +7,10 @@
 #include "cutils.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "MonitorMain.h"
+#include "fileutils.h"
 #include "ui_MonitorMain.h"
 
 MonitorMain *monitorMain = nullptr;

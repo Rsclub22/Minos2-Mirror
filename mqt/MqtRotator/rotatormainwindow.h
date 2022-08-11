@@ -23,7 +23,9 @@
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QShortcut>
+#include <QTimer>
 
+#include "StdInReader.h"
 #include "rotatorRpc.h"
 #include "rotatorbase.h"
 #include "rotatorfactory.h"

@@ -1,6 +1,5 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
-
+#include "MinosParameters.h"
 #include "LoggerContest.h"
 #include "tstatsdispframe.h"
 #include "ui_tstatsdispframe.h"

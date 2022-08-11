@@ -1,7 +1,15 @@
-#include "base_pch.h"
 #include <QFontDialog>
 #include <QFont>
 #include <QStatusBar>
+#include <QSettings>
+
+#include "MTrace.h"
+
+#include "MShowMessageDlg.h"
+#include "ServerEvent.h"
+#include "waitcursor.h"
+#include "AppStartup.h"
+#include "LogEvents.h"
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
 #include "AsMainWindow.h"
@@ -157,8 +165,6 @@ void MainWindow::FontEditAcceptActionExecute()
 
             QSettings settings;
             settings.setValue( "font", font() );
-
-            QString fs = f.toString();
 
             bool routerRunning = checkRouterReady();
             if (routerRunning)

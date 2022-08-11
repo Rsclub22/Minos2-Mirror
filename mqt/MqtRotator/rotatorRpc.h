@@ -15,6 +15,7 @@
 #define ROTATORRPC_H
 
 #include "RotatorCache.h"
+#include "XMPPRPCObj.h"
 
 class RotatorMainWindow;
 

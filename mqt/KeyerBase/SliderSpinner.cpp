@@ -1,5 +1,7 @@
 #include <QLabel>
 #include "cutils.h"
+#include "MTrace.h"
+
 #include "SliderSpinner.h"
 #include "ui_SliderSpinner.h"
 

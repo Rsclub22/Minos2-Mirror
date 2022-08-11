@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include "AppStartup.h"
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "clustermainwindow.h"
 

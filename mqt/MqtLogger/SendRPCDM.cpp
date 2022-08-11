@@ -7,14 +7,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include <QHostInfo>
+#include "AppStartup.h"
 #include "cutils.h"
+#include "MTrace.h"
 
-#include "SendRPCDM.h"
+#include "RPCPubSub.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
-#include "rigutils.h"
+#include "SendRPCDM.h"
 //---------------------------------------------------------------------------
 TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )

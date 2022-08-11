@@ -6,7 +6,6 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "cutils.h"
 #include "MinosParameters.h"
@@ -17,6 +16,7 @@
 #include "contest.h"
 #include "ListContact.h"
 #include "list.h"
+#include "MTrace.h"
 //---------------------------------------------------------------------------
 TMatchThread *TMatchThread::matchThread = nullptr;
 

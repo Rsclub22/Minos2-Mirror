@@ -6,11 +6,12 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "rigutils.h"
+#include <QTextStream>
+#include "cutils.h"
 #include "LoggerContest.h"
 #include "contacts.h"
 #include "BandList.h"
+#include "MTrace.h"
 #include "AdifImport.h"
 
 //====================================================================

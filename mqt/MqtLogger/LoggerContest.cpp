@@ -6,13 +6,14 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 
+#include <QTextStream>
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
-#include "ScreenConfigFile.h"
 #include "AdifImport.h"
+#include "cutils.h"
+#include "fileutils.h"
 #include "reg1test.h"
 #include "cabrillo.h"
 #include "printfile.h"
@@ -21,6 +22,9 @@
 #include "MinosTestExport.h"
 #include "BandList.h"
 #include "latlong.h"
+#include "calcs.h"
+#include "MinosParameters.h"
+#include "MTrace.h"
 
 #include "LoggerContest.h"
 
@@ -260,6 +264,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
    }
 
    // open the LoggerContestLog file
+
 
    cfileName = fn;
    QString ext = ExtractFileExt( fn );

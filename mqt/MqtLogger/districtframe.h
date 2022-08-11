@@ -1,7 +1,12 @@
 #ifndef DISTRICTFRAME_H
 #define DISTRICTFRAME_H
 
-#include "base_pch.h"
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QMenu>
+
+#include "TreeUtils.h"
+#include "mults.h"
 
 namespace Ui {
 class DistrictFrame;

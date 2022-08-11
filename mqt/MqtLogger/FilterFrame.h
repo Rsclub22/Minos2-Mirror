@@ -1,7 +1,6 @@
 #ifndef FILTERFRAME_H
 #define FILTERFRAME_H
-
-#include "base_pch.h"
+#include <QFrame>
 #include "MinosLoggerEvents.h"
 
 namespace Ui {

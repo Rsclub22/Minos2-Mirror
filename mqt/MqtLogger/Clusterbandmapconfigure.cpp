@@ -1,10 +1,11 @@
-#include "base_pch.h"
+#include <QSettings>
+#include <QLineEdit>
+#include <QMessageBox>
+
 #include "ContestApp.h"
 #include "bandmapcommon.h"
 #include "rigutils.h"
-#include "tlogcontainer.h"
-#include "bandmapclientframe.h"
-#include "tsinglelogframe.h"
+#include "MinosLoggerEvents.h"
 #include "Clusterbandmapconfigure.h"
 #include "ui_Clusterbandmapconfigure.h"
 

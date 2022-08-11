@@ -9,6 +9,8 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "locator.h"
+#include "calcs.h"
 #include "locatorlineedit.h"
 
 LocatorLineEdit::LocatorLineEdit(QWidget * parent) : QLineEdit (parent),

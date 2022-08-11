@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QSortFilterProxyModel>
 #include "BandList.h"
+#include "StdInReader.h"
 #include "qttelnet.h"
 #include "clustercommands.h"
 #include "setupdialog.h"

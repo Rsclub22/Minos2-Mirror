@@ -1,9 +1,8 @@
-#include "mqtUtils_pch.h"
-#include "minossplitter.h"
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 #include <QStylePainter>
 #include <QStyleOptionButton>
+#include "minossplitter.h"
 //============================================================================
 MinosSplitterHandle::MinosSplitterHandle(Qt::Orientation orientation, QSplitter *parent)
     : QSplitterHandle(orientation, parent)

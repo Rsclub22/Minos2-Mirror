@@ -1,9 +1,7 @@
 #ifndef FILEUTILS_H
 #define FILEUTILS_H
-#include <cstdint>
-#include <QDir>
-#include <QFileInfo>
-#include <QFile>
+
+#include <QString>
 
 QString GetCurrentDir();
 void SetCurrentDir( const QString &dir );

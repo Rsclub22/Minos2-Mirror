@@ -1,6 +1,8 @@
 #ifndef MONITOREDLOG_H
 #define MONITOREDLOG_H
+#include <QSet>
 #include "MonitoredContestLog.h"
+#include "PublishState.h"
 
 class MonitoringFrame;
 class MinosTestImport;

@@ -15,13 +15,15 @@
 #include <QSettings>
 #include <QInputDialog>
 
-#include "rigsetupdialog.h"
 #include "rigsetupform.h"
 #include "serialCommonData.h"
 #include "transvertsetupform.h"
-#include "ui_rigsetupdialog.h"
 #include "rigcontrolcommonconstants.h"
 #include "addradiodialog.h"
+#include "MTrace.h"
+
+#include "rigsetupdialog.h"
+#include "ui_rigsetupdialog.h"
 
 
 

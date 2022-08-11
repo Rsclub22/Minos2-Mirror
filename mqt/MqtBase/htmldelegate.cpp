@@ -19,7 +19,11 @@
     
 ======================================================================================*/
 
-#include "base_pch.h"
+#include <QApplication>
+#include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
+#include <QPainter>
+
 #include "MinosLoggerEvents.h"
 
 #include "htmldelegate.h"

@@ -1,4 +1,5 @@
 #include <QHostInfo>
+#include <cmath>
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
 #include "cutils.h"

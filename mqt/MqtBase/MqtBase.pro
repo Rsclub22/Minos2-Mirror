@@ -23,8 +23,6 @@ INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
 
-#PRECOMPILED_HEADER = ../MqtBase/base_pch.h
-
 SOURCES += \
     AntennaDetail.cpp \
     AntennaState.cpp \
@@ -119,7 +117,6 @@ HEADERS += \
     StartConfigManager.h \
     StatisticsDisplay.h \
     bandmapmarkerdetails.h \
-    base_pch.h \
     CacheSelection.h \
     baseloglist.h \
     calcs.h \

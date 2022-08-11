@@ -1,7 +1,7 @@
 #ifndef MINOSKEYBOARD_H
 #define MINOSKEYBOARD_H
 
-#include "base_pch.h"
+#include <QFrame>
 
 namespace Ui {
 class MinosKeyboard;

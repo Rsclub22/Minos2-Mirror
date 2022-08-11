@@ -14,7 +14,9 @@
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
 #include "ContestApp.h"
+#include "rigutils.h"
 #include "tlogcontainer.h"
+#include "MTrace.h"
 
 #include "radiosettingdialog.h"
 #include "ui_radiosettingdialog.h"

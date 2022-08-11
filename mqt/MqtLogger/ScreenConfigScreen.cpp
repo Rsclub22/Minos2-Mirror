@@ -1,9 +1,10 @@
-#include "base_pch.h"
 #include <QScrollBar>
 
+#include "MShowMessageDlg.h"
 #include "ScreenConfigElement.h"
 #include "ScreenConfigRow.h"
 #include "ScreenConfig.h"
+#include "MTrace.h"
 
 #include "ScreenConfigScreen.h"
 #include "ui_ScreenConfigScreen.h"

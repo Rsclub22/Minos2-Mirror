@@ -8,7 +8,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
-#include "mqtUtils_pch.h"
+#include <QDateTime>
+#include <QFile>
+#include <QDirIterator>
+#include <QMutex>
+#include "MLogFile.h"
+#include "MTrace.h"
 #include "fileutils.h"
 
 QMutex CsGuard::m_mutex(QMutex::Recursive);

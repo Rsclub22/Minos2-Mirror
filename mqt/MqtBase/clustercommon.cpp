@@ -1,6 +1,8 @@
+#include <QDateTime>
 #include "clustercommon.h"
 #include "checkmodeagainstfreq.h"
 #include "BandList.h"
+#include "MTrace.h"
 
 const char * clusterStateList[] =
 {

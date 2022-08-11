@@ -1,11 +1,11 @@
-#include "base_pch.h"
 #include <QScrollBar>
 
 #include "ScreenConfigElement.h"
-#include "ScreenConfigRow.h"
 #include "ScreenConfigScreen.h"
 #include "ScreenConfig.h"
+#include  "MTrace.h"
 
+#include "ScreenConfigRow.h"
 #include "ui_ScreenConfigRow.h"
 
 ScreenConfigRow::ScreenConfigRow(ScreenConfigElement *parentc) :

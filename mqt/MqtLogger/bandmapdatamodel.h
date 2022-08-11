@@ -14,10 +14,9 @@
 #define BANDMAPDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "clustercommon.h"
-#include "bandmapcommon.h"
+#include <QSortFilterProxyModel>
+
 #include "spotbasedata.h"
-#include "cutils.h"
 
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 

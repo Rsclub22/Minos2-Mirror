@@ -1,9 +1,13 @@
 #ifndef TLOGCONTAINER_H
 #define TLOGCONTAINER_H
 
-#include "base_pch.h"
+#include <QAction>
+#include <QMainWindow>
+#include <QMenu>
+#include <QTimer>
 #include "helpbrowser.h"
 #include "n1mmbroadcast.h"
+#include "rigcontrolcommonconstants.h"
 #include "serialtvswitch.h"
 
 namespace Ui {
@@ -19,6 +23,7 @@ class ContactList;
 class MatchContact;
 class TSendDM;
 class ContestPageControl;
+class QLabel;
 
 class SetMemoryAction: public QAction
 {

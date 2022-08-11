@@ -18,9 +18,8 @@
     along with AdjQt in file gpl.txt.  If not, see <http://www.gnu.org/licenses/>.
     
 ======================================================================================*/
-
-#include "base_pch.h"
-
+#include <QCoreApplication>
+#include <QInputDialog>
 #include "enqdlg.h" 
 //---------------------------------------------------------------------------
 // dialog for simple enquiries that have a simple question/answer format

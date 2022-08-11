@@ -8,10 +8,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
 #include "rigutils.h"
+#include "validators.h"
+#include "MinosParameters.h"
+#include "calcs.h"
 
 ErrEntry Validator::errDefs[] =
    {

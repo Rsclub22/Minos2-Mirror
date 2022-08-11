@@ -18,12 +18,14 @@
     along with AdjQt in file gpl.txt.  If not, see <http://www.gnu.org/licenses/>.
     
 ======================================================================================*/
+#include <QSharedPointer>
 
-#include "base_pch.h"
 #include "INIFile.h"
-#include "bandmapcommon.h"
 #include "BandList.h"
-#include "cutils.h"
+#include "TinyUtils.h"
+#include "tinyxml.h"
+#include "MTrace.h"
+
 //---------------------------------------------------------------------------
 const QString allHF{"ALLHF"}; // not to be translated
 

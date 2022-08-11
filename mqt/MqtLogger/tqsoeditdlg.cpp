@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
 #include "MatchTreeFrame.h"

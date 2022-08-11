@@ -1,5 +1,6 @@
-#include "base_pch.h"
 #include "locator.h"
+#include "MinosParameters.h"
+#include "calcs.h"
 
 Locator::Locator( )
 {

@@ -3,6 +3,7 @@
 
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
+#include <QDateTime>
 #include "htmldelegate.h"
 
 

@@ -1,12 +1,8 @@
-#include "base_pch.h"
-
 #include "LoggerContest.h"
-#include "LoggerContacts.h"
-
-#include "ContestApp.h"
 #include "Calendar.h"
-#include "CalendarList.h"
 #include "BandList.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "tentryoptionsform.h"
 #include "tminosbshelpform.h"
 #include "tcalendarform.h"

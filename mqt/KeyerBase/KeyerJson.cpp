@@ -1,11 +1,11 @@
-#include "mqtUtils_pch.h"
-
+#include <QFile>
 #include <QSharedPointer>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include "MTrace.h"
 #include "KeyerJson.h"
 
 KeyerJson::KeyerJson()

@@ -1,16 +1,19 @@
 #ifndef AIRSCOUTLINK_H
 #define AIRSCOUTLINK_H
 
+#include <QCoreApplication>
 #include <QTimer>
 #include <QUdpSocket>
 
 #include <QSharedPointer>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QDateTime>
 
 #include <QSettings>
 #include <QNetworkInterface>
 #include "kstcallgridmodel.h"
+#include "MTrace.h"
 
 enum ASBand {
     asb50M,

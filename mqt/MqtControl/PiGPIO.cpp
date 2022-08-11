@@ -6,7 +6,10 @@
 #ifdef Q_OS_WIN
 #include <io.h>
 #endif
+#include <QSharedPointer>
+#include <QThread>
 
+#include "MTrace.h"
 #include "PiGPIO.h"
 
 GPIOLine::GPIOLine(int pin, bool input):

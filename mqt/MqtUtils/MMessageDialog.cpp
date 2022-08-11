@@ -19,8 +19,8 @@
     
 ======================================================================================*/
 
-#include "MMessageDialog.h"
 #include <QMessageBox>
+#include "MMessageDialog.h"
 
 //---------------------------------------------------------------------------
 bool mShowYesNoMessage( QWidget* Owner, const QString &mess )

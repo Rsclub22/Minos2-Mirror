@@ -17,9 +17,16 @@
 #include <QSharedPointer>
 #include <QSettings>
 #include <QProcessEnvironment>
+#include "AppStartup.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "qrzservermainwindow.h"
 #include "qrzserverrpc.h"
+#include "LogEvents.h"
+#include "MTrace.h"
+#include "callsign.h"
+
 #include "qrzconfiguredialog.h"
 #include "ui_qrzservermainwindow.h"
 

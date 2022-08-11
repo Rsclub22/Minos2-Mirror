@@ -1,10 +1,10 @@
-#include "base_pch.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "RPCCommandConstants.h"
 #include "RigState.h"
-
+#include "MTrace.h"
 
 RigState::RigState()
     :PubSubValue(RigStateType)

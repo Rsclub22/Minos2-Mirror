@@ -1,8 +1,11 @@
 #include <QHostAddress>
 #include <QHostInfo>
+#include "rigcontrolcommonconstants.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 #include "cutils.h"
+#include "MTrace.h"
+
 #include "n1mmlink.h"
 /*
  *

@@ -1,6 +1,3 @@
-#include "base_pch.h"
-
-#include "tlogcontainer.h"
 #include "Clusterbandmapconfigure.h"
 #include "defdirsdlg.h"
 #include "DisplayOptions.h"

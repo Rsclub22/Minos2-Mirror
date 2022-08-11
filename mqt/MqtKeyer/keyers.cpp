@@ -6,6 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "keyers.h"
 #include "portcon.h"
@@ -13,6 +14,7 @@
 #include "sbdriver.h"
 #include "KeyerJson.h"
 #include "keyerlog.h"
+#include "MTrace.h"
 
 #define TIMER_INTERVAL 55U         // 55-millisecond target interval
 

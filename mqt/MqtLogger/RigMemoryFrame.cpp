@@ -1,15 +1,17 @@
-#include "base_pch.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "tlogcontainer.h"
 #include "SendRPCDM.h"
 #include "tsinglelogframe.h"
 #include "rigmemdialog.h"
 #include "StackedInfoFrame.h"
-#include "RigMemoryFrame.h"
 #include "htmldelegate.h"
 #include "delayedaction.h"
+#include "MTrace.h"
 
+#include "RigMemoryFrame.h"
 #include "ui_RigMemoryFrame.h"
 
 

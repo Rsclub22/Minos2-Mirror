@@ -10,15 +10,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-
+#include "callsign.h"
 #include "CallsignLineEdit.h"
-
-
-
 
 CallsignLineEdit::CallsignLineEdit(QWidget * parent): QLineEdit (parent),
     callsignValid(false)
