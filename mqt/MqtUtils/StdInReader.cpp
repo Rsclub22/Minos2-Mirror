@@ -1,4 +1,5 @@
 #include <QTextStream>
+#include <QIODevice>
 
 #include "AppStartup.h"
 #include "StdInReader.h"

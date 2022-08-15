@@ -37,8 +37,6 @@ public:
 
 extern QVector<ContList> contlist;
 
-const int UKREGIONS = 10;
-
 enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
                     ectCQZone, ectITUZone, ectOtherCalls,
                     ectMultMaxCol
