@@ -213,7 +213,7 @@ private slots:
     void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
 
     void on_XferPressed(BaseContestLog *c, QString basename);
-    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected);
+    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename);
 
     void on_MatchStarting(BaseContestLog*);
     void NextContactDetailsTimerTimer();

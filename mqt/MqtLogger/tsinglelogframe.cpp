@@ -1242,6 +1242,13 @@ MatchTreeItem * TSingleLogFrame::getXferItem()
    // transfer from current match
 
    // copy relevant parts of match contact to screen contact
+    if ( thisMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  thisMatchFrame == xferTree ) )
+    {
+       MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(thisMatchFrame->treeClickIndex.internalPointer());
+
+       return MatchTreeIndex;
+
+    }
    if ( archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  archiveMatchFrame == xferTree ) )
    {
       MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(archiveMatchFrame->treeClickIndex.internalPointer());
@@ -1270,14 +1277,14 @@ void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
 
    transferDetails(mi);
 }
-void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)
+void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename)
 {
     if (contest == c && basename == "Logger")
     {
         switch (m)
         {
         case ThisMatch:
-            //xferTree =  thisMatchFrame;
+            xferTree =  thisMatchFrame;
             break;
 
         case OtherMatch:

@@ -1,3 +1,4 @@
+#include "MMessageDialog.h"
 #include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
@@ -63,7 +64,34 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
 
     if ( bct )
     {
-        emit editContact( bct, false );
+        QString matchBand;
+        contest->getTxFreqBand(bct->frequency.getValue(), matchBand);
+
+        QString currBand = contest->currentBand.getValue();
+
+        if (matchBand != currBand)
+        {
+            if ( mShowYesNoMessage(this, tr("Press \"Yes\" to transfer details, or \"No\" to edit the QSO") ) )
+            {
+                setCurrentModel(true);
+
+
+                QItemSelectionModel *ism = selectionModel();
+                QItemSelection selected = ism-> selection();
+
+                MinosLoggerEvents::sendMatchTreeSelected(ThisMatch, contest, baseName, selected);
+
+                MinosLoggerEvents::sendXferPressed(contest, baseName);
+            }
+            else
+            {
+                emit editContact( bct, false );
+            }
+        }
+        else
+        {
+            emit editContact( bct, false );
+        }
     }
 }
 

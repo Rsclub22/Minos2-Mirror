@@ -126,8 +126,8 @@ class BaseContestLog: public BaseLogList
       {
          return ct_stanzaCount;
       }
-      Frequency getTxFreqBand(Frequency txf, QString &cb);
-      double getAdifFreqBand(Frequency txfreq, QString &cb);
+      Frequency getTxFreqBand(Frequency txf, QString &cb) const;
+      double getAdifFreqBand(Frequency txfreq, QString &cb) const;
 
       QString getCabrilloFreqBand(Frequency txfreq) const;
 

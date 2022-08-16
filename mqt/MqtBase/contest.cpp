@@ -152,7 +152,7 @@ QSharedPointer<BaseContact> BaseContestLog::pcontactAtSeq( unsigned long logSequ
 
    return QSharedPointer<BaseContact>();
 }
-double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb)
+double BaseContestLog::getAdifFreqBand(Frequency txfreq, QString &cb) const
 {
     // get a tx freq, even when we don't have
     // rig control, and the proper ADIF name of the band
@@ -224,7 +224,7 @@ QString BaseContestLog::getCabrilloFreqBand(Frequency txfreq ) const
     return "XXX";
 }
 
-Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb)
+Frequency BaseContestLog::getTxFreqBand(Frequency txfreq, QString &cb) const
 {
     // we now want to get the band associated with the current freq
     // so we can get the correct map value for mults etc
