@@ -22,6 +22,8 @@
 #include "addradiodialog.h"
 #include "MTrace.h"
 
+#include <hamlib/rig.h>
+
 #include "rigsetupdialog.h"
 #include "ui_rigsetupdialog.h"
 
@@ -193,7 +195,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
         radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
         radioTab.value(tabName)->networkDataEntryVisible(false);
-        if (radioTab.value(tabName)->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
+        if (radioTab.value(tabName)->getRadioData()->handshake == RIG_HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab.value(tabName)->setForceRTSDisabled(true);
         }

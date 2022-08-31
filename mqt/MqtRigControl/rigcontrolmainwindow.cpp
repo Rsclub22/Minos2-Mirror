@@ -20,6 +20,7 @@
 #include <QMetaType>
 #include <QDir>
 
+#include "serialCommonData.h"
 #include "MShowMessageDlg.h"
 #include "fileutils.h"
 #include "rigcommon.h"
@@ -27,7 +28,6 @@
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
 #include "rigctldclient.h"
-#include "serialCommonData.h"
 #include "serialdata.h"
 #include "LogEvents.h"
 #include "cutils.h"

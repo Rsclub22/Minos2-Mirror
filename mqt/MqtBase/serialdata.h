@@ -17,9 +17,9 @@ public:
 
     enum serial_force_Lines_e {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
 
-    static const serial_parity_e parityCodes[];
-    static const serial_handshake_e handshakeCodes[];
-    static const serial_force_Lines_e forceLinesCodes[];
+    static const serial_parity_e eparityCodes[];
+    static const serial_handshake_e ehandshakeCodes[];
+    static const serial_force_Lines_e eforceLinesCodes[];
     static QStringList parityStr;
     static QStringList rigctldParityStr;
     static QStringList handshakeStr;

@@ -18,12 +18,13 @@
 #include <QMessageBox>
 #include <QHostAddress>
 #include <QInputDialog>
+#include "serialCommonData.h"
+
+#include "hamlib/rig.h"
 
 #include "minosNetUtils.h"
 #include "BandList.h"
 #include "addtransverterdialog.h"
-#include "serialCommonData.h"
-
 #include "rigsetupform.h"
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
@@ -606,7 +607,7 @@ void RigSetupForm::on_forceDTRSelected()
 
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setPttDTRDisabled(false);
             }
@@ -643,7 +644,7 @@ void RigSetupForm::on_forceRTSSelected()
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setPttRTSDisabled(false);
             }
@@ -1911,8 +1912,8 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
         pttComportSelDisabled(true);
         if (isPttComportEqualCatComport())
         {
-            if (radioData->handshake != serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE
-                    || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->handshake != RIG_HANDSHAKE_HARDWARE
+                    || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setForceRTSDisabled(false);
             }
@@ -1920,7 +1921,7 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
             {
                 setForceRTSDisabled(true);
             }
-            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setForceDTRDisabled(false);
             }
@@ -2088,10 +2089,10 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
             {
                 setForceRTSDisabled(true);
                 setForceDTRDisabled(false);
-                if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
-                    radioData->forceRts = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
                     setForceRTSComboBox(radioData->forceRts);
                 }
             }
@@ -2099,10 +2100,10 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
             {
                 setForceDTRDisabled(true);
                 setForceRTSDisabled(false);
-                if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
-                    radioData->forceDtr = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
                     setForceDTRComboBox(radioData->forceDtr);
                 }
             }
