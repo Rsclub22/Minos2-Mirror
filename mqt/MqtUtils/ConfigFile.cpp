@@ -129,7 +129,7 @@ void RunConfigElement::save(INIFile &config)
     if (!deleted)
     {
         config.writePrivateProfileString(name, "Program", commandLine);
-        config.writePrivateProfileString(name, "Params", params.join(" "));
+        config.writePrivateProfileString(name, "Params", params.join(" ").trimmed());
         config.writePrivateProfileString(name, "Directory", rundir);
         config.writePrivateProfileString(name, "Server", router);
         config.writePrivateProfileString(name, "RemoteApp", remoteApp);
@@ -182,7 +182,7 @@ void RunConfigElement::createProcess()
         QString locale = getCurrentLanguage();
         if (!locale.isEmpty())
         {
-            progArgs.append("--lang " + locale);
+            progArgs.append("--lang=" + locale);
         }
         QString si = SecondInstall::getSecondInstallSwitch();
         if (!si.isEmpty())
@@ -523,7 +523,12 @@ bool MinosConfig::loadJson(QString f)
                         QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
 
                         tce->commandLine = conf.value("Program" ).toString();
-                        tce->params = conf.value("Params" ).toString().split(" ");
+
+                        QString pstr = conf.value("Params" ).toString().trimmed();
+                        if (!pstr.isEmpty())
+                        {
+                            tce->params = pstr.split(" ");
+                        }
                         tce->name = conf.value("name" ).toString();
                         tce->rundir = conf.value("Directory" ).toString();
                         tce->router = conf.value("Server" ).toString();

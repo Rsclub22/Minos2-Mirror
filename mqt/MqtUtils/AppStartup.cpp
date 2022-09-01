@@ -194,19 +194,6 @@ void appStartup(const QString &pappName)
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
-    QCommandLineParser parser;
-
-    QString languageName = getAppLanguage();
-    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
-    parser.addOption(languageOption);
-
-    parser.parse(QCoreApplication::instance()->arguments());
-
-    if (parser.isSet(languageOption))
-    {
-        languageName = parser.value(languageOption);
-    }
-
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
     if (!DirectoryExists("./Configuration"))
@@ -281,6 +268,28 @@ void appStartup(const QString &pappName)
     title += Version + compiler;
 
     trace(title);
+
+    QCommandLineParser parser;
+
+    QString languageName = getAppLanguage();
+    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
+    parser.addOption(languageOption);
+
+    QStringList args = QCoreApplication::instance()->arguments();
+    trace("Arguments" + args.join("|"));
+
+    parser.process(args);
+
+    if (parser.isSet(languageOption))
+    {
+        languageName = parser.value(languageOption);
+    }
+    else
+    {
+        trace("LanguageOption not found");
+    }
+
+    trace(QString("Language Name %1").arg(languageName));
 
     register_frequency_types();
 
