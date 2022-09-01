@@ -4,7 +4,7 @@
 <context>
     <name>LogTreeNode</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="95"/>
+        <location filename="../MonitorTreeModel.cpp" line="90"/>
         <source>Monitoring</source>
         <translation>Surveillance</translation>
     </message>
@@ -37,7 +37,7 @@
         <translation>Échange</translation>
     </message>
     <message>
-        <location filename="../MonitorMain.cpp" line="89"/>
+        <location filename="../MonitorMain.cpp" line="93"/>
         <source>Close tab</source>
         <translation>Fermer l&apos;onglet</translation>
     </message>
@@ -45,12 +45,12 @@
 <context>
     <name>MonitorTreeModel</name>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="168"/>
+        <location filename="../MonitorTreeModel.cpp" line="163"/>
         <source>Contest Name</source>
         <translation>Nom du concours</translation>
     </message>
     <message>
-        <location filename="../MonitorTreeModel.cpp" line="172"/>
+        <location filename="../MonitorTreeModel.cpp" line="167"/>
         <source>State</source>
         <translation>Serveurs/état</translation>
     </message>

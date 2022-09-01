@@ -375,26 +375,26 @@ C - Clear cmd
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../setupdialog.cpp" line="130"/>
+        <location filename="../setupdialog.cpp" line="520"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="131"/>
+        <location filename="../setupdialog.cpp" line="521"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../setupdialog.cpp" line="132"/>
         <location filename="../setupdialog.cpp" line="522"/>
-        <source>Name</source>
+        <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="133"/>
         <location filename="../setupdialog.cpp" line="523"/>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setupdialog.cpp" line="134"/>
-        <location filename="../setupdialog.cpp" line="524"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setupdialog.cpp" line="135"/>
-        <location filename="../setupdialog.cpp" line="525"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -402,47 +402,47 @@ C - Clear cmd
 <context>
     <name>SentSpotDataModel</name>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="44"/>
+        <location filename="../sentSpotdatamodel.cpp" line="41"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="46"/>
+        <location filename="../sentSpotdatamodel.cpp" line="43"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="48"/>
+        <location filename="../sentSpotdatamodel.cpp" line="45"/>
         <source>Dx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="50"/>
+        <location filename="../sentSpotdatamodel.cpp" line="47"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="52"/>
+        <location filename="../sentSpotdatamodel.cpp" line="49"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="54"/>
+        <location filename="../sentSpotdatamodel.cpp" line="51"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="56"/>
+        <location filename="../sentSpotdatamodel.cpp" line="53"/>
         <source>Reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="149"/>
+        <location filename="../sentSpotdatamodel.cpp" line="146"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="153"/>
+        <location filename="../sentSpotdatamodel.cpp" line="150"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,7 +530,7 @@ C - Clear cmd
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="162"/>
+        <location filename="../setupdialog.cpp" line="160"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation type="unfinished"></translation>

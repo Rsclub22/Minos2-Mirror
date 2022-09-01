@@ -19,30 +19,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="64"/>
+        <location filename="../addradiodialog.cpp" line="65"/>
         <source>Radio Name Empty
 Please enter a name for the radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="74"/>
+        <location filename="../addradiodialog.cpp" line="75"/>
         <source>Radio name contains invalid characters,
  please remove non-alpha or non-numeric characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="110"/>
+        <location filename="../addradiodialog.cpp" line="111"/>
         <source>Error Radio Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="117"/>
+        <location filename="../addradiodialog.cpp" line="118"/>
         <source>Radio %1 is marked for deletion,
  please use another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="123"/>
+        <location filename="../addradiodialog.cpp" line="124"/>
         <source>Radio %1 already exists,
  please use another name</source>
         <translation type="unfinished"></translation>
@@ -162,78 +162,78 @@ Please enter a name for the radio</source>
 <context>
     <name>OmnirigControl</name>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="22"/>
+        <location filename="../omnirigcontrol.cpp" line="26"/>
         <source>No Error, operation completed sucessfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="23"/>
+        <location filename="../omnirigcontrol.cpp" line="27"/>
         <source>Radio Function not supported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="24"/>
+        <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Omnirig Com Failed to start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="25"/>
+        <location filename="../omnirigcontrol.cpp" line="29"/>
         <source>Omnirig rig One failed to initialise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="26"/>
+        <location filename="../omnirigcontrol.cpp" line="30"/>
         <source>Omnirig rig Two failed to initialise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="27"/>
+        <location filename="../omnirigcontrol.cpp" line="31"/>
         <source>Omnirig rig is offline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="28"/>
+        <location filename="../omnirigcontrol.cpp" line="32"/>
         <source>Omnirig radio online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="29"/>
+        <location filename="../omnirigcontrol.cpp" line="33"/>
         <source>Omnirig get freq fail</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="30"/>
+        <location filename="../omnirigcontrol.cpp" line="34"/>
         <source>Omnirig COM Exception
 Check Rigcontrol tracelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="31"/>
+        <location filename="../omnirigcontrol.cpp" line="35"/>
         <source>Omnirig not configured</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="32"/>
+        <location filename="../omnirigcontrol.cpp" line="36"/>
         <source>Omnirig disabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="33"/>
+        <location filename="../omnirigcontrol.cpp" line="37"/>
         <source>Omnirig port busy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="34"/>
+        <location filename="../omnirigcontrol.cpp" line="38"/>
         <source>Omnirig not responding</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="35"/>
+        <location filename="../omnirigcontrol.cpp" line="39"/>
         <source>Omnirig rig pointer null</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1026"/>
+        <location filename="../omnirigcontrol.cpp" line="1030"/>
         <source>Omnirig Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1004,7 +1004,7 @@ Please delete them and set up the radios again</source>
     </message>
     <message>
         <location filename="../rigsetupdialog.ui" line="32"/>
-        <location filename="../rigsetupdialog.cpp" line="439"/>
+        <location filename="../rigsetupdialog.cpp" line="438"/>
         <source>Remove Radio</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1014,7 +1014,7 @@ Please delete them and set up the radios again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="136"/>
+        <location filename="../rigsetupdialog.cpp" line="135"/>
         <source>Select the RS-232 serial port used for PTT control,
 this option is available when DTR or RTS is selected above.
 
@@ -1026,52 +1026,52 @@ The handshake and forced settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="339"/>
+        <location filename="../rigsetupdialog.cpp" line="338"/>
         <source>Add Radio and Radio Model</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="432"/>
+        <location filename="../rigsetupdialog.cpp" line="431"/>
         <source>You can not remove the current radio!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="440"/>
+        <location filename="../rigsetupdialog.cpp" line="439"/>
         <source>Do you really want to remove radio - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="496"/>
+        <location filename="../rigsetupdialog.cpp" line="495"/>
         <source>You can not change the name of the current radio - %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="503"/>
+        <location filename="../rigsetupdialog.cpp" line="502"/>
         <source>Edit Radio Name - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="530"/>
+        <location filename="../rigsetupdialog.cpp" line="529"/>
         <source>%1 has been marked for deletion, please try another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="536"/>
+        <location filename="../rigsetupdialog.cpp" line="535"/>
         <source>%1 already exists, please try another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="698"/>
+        <location filename="../rigsetupdialog.cpp" line="697"/>
         <source>%1 Transvert band not enabled : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="730"/>
+        <location filename="../rigsetupdialog.cpp" line="729"/>
         <source>Save Radio - Transvert Settings Out of Band</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="731"/>
+        <location filename="../rigsetupdialog.cpp" line="730"/>
         <source>The Transvert settings are out of band for the
 following:
 %1
@@ -1079,12 +1079,12 @@ Please Correct before Continuing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="811"/>
+        <location filename="../rigsetupdialog.cpp" line="810"/>
         <source>Radio Supported Bands Missing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="812"/>
+        <location filename="../rigsetupdialog.cpp" line="811"/>
         <source>For Minos to work best with Radios,
 Please add bands or transverters to
 these radio definitions:
@@ -1095,75 +1095,75 @@ these radio definitions:
 <context>
     <name>RigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.cpp" line="353"/>
+        <location filename="../rigsetupform.cpp" line="351"/>
         <source>CIV Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="353"/>
+        <location filename="../rigsetupform.cpp" line="351"/>
         <source> CIV number out of range 0 - FF</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="461"/>
+        <location filename="../rigsetupform.cpp" line="459"/>
         <source>%1 Not Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="695"/>
+        <location filename="../rigsetupform.cpp" line="693"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="696"/>
+        <location filename="../rigsetupform.cpp" line="694"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1472"/>
+        <location filename="../rigsetupform.cpp" line="1470"/>
         <source>Omnirig Supported Bands - Please select the bands available on radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1586"/>
-        <location filename="../rigsetupform.cpp" line="1744"/>
+        <location filename="../rigsetupform.cpp" line="1584"/>
+        <location filename="../rigsetupform.cpp" line="1742"/>
         <source>Transverter Name Exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1587"/>
-        <location filename="../rigsetupform.cpp" line="1745"/>
+        <location filename="../rigsetupform.cpp" line="1585"/>
+        <location filename="../rigsetupform.cpp" line="1743"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1669"/>
+        <location filename="../rigsetupform.cpp" line="1667"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1678"/>
+        <location filename="../rigsetupform.cpp" line="1676"/>
         <source>Remove Transverter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1679"/>
+        <location filename="../rigsetupform.cpp" line="1677"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1720"/>
+        <location filename="../rigsetupform.cpp" line="1718"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1853"/>
+        <location filename="../rigsetupform.cpp" line="1851"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1854"/>
+        <location filename="../rigsetupform.cpp" line="1852"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1171,7 +1171,7 @@ Please enter another name</source>
 <context>
     <name>TransVertSetupForm</name>
     <message>
-        <location filename="../transvertsetupform.cpp" line="179"/>
+        <location filename="../transvertsetupform.cpp" line="177"/>
         <source>Target Freq. is out of band for %1
 Please correct the transverter entries.</source>
         <translation type="unfinished"></translation>

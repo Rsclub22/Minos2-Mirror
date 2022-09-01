@@ -161,73 +161,73 @@
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="95"/>
+        <location filename="../KeyerMain.cpp" line="103"/>
         <source>
 Record</source>
         <translation>
 Enregistrer</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="100"/>
+        <location filename="../KeyerMain.cpp" line="108"/>
         <source>
 Replay</source>
         <translation>
 Rejouer</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="105"/>
+        <location filename="../KeyerMain.cpp" line="113"/>
         <source>Pass
 Through</source>
         <translatorcomment>mode intermédiaire ??</translatorcomment>
         <translation>Passthrough</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="111"/>
+        <location filename="../KeyerMain.cpp" line="119"/>
         <source>Window (ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="115"/>
+        <location filename="../KeyerMain.cpp" line="123"/>
         <source>Threshold (db below max)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="119"/>
+        <location filename="../KeyerMain.cpp" line="127"/>
         <source>Compression Ratio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="123"/>
+        <location filename="../KeyerMain.cpp" line="131"/>
         <source>Attack (ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="127"/>
+        <location filename="../KeyerMain.cpp" line="135"/>
         <source>Release (ms)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="131"/>
+        <location filename="../KeyerMain.cpp" line="139"/>
         <source>Makeup Gain (db)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="351"/>
+        <location filename="../KeyerMain.cpp" line="359"/>
         <source>Push PTT to Commence Recording</source>
         <translation>Appuyer PTT pour commencer l&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="502"/>
+        <location filename="../KeyerMain.cpp" line="510"/>
         <source>Alsa Control Files</source>
         <translation>Fichiers de contrôle Alsa</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="503"/>
+        <location filename="../KeyerMain.cpp" line="511"/>
         <source>All Files</source>
         <translation>Tous les fichiers</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.cpp" line="506"/>
+        <location filename="../KeyerMain.cpp" line="514"/>
         <source>File for mixer setup</source>
         <translation>Fichier pour la configuration du mixer</translation>
     </message>
@@ -235,62 +235,62 @@ Through</source>
 <context>
     <name>VoiceKeyer</name>
     <message>
-        <location filename="../keyers.cpp" line="21"/>
+        <location filename="../keyers.cpp" line="26"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="23"/>
+        <location filename="../keyers.cpp" line="28"/>
         <source>Play 1/2 - Pip</source>
         <translation>Jouer 1/2 - Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="24"/>
+        <location filename="../keyers.cpp" line="29"/>
         <source>Play 1/2 - No Pip</source>
         <translation>Jouer 1/2 - pas de Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="22"/>
+        <location filename="../keyers.cpp" line="27"/>
         <source>Tuning Tones 1/2</source>
         <translation>Adjustment tones 1/2</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="25"/>
+        <location filename="../keyers.cpp" line="30"/>
         <source>Record 1/2</source>
         <translation>Enregistrer 1/2</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="26"/>
+        <location filename="../keyers.cpp" line="31"/>
         <source>Play 3/4 - Pip</source>
         <translation>Jouer 3/4 - Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="27"/>
+        <location filename="../keyers.cpp" line="32"/>
         <source>Play 3/4 - No Pip</source>
         <translation>Jouer 3/4 - pas de Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="28"/>
+        <location filename="../keyers.cpp" line="33"/>
         <source>Record 3/4</source>
         <translation>Enregistrer 3/4</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="29"/>
+        <location filename="../keyers.cpp" line="34"/>
         <source>Play 5/6 - Pip</source>
         <translation>Jouer 5/6 - Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="30"/>
+        <location filename="../keyers.cpp" line="35"/>
         <source>Play 5/6 - No Pip</source>
         <translation>Jouer 5/6 - pas de Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="31"/>
+        <location filename="../keyers.cpp" line="36"/>
         <source>Record 5/6</source>
         <translation>Enregistrer 5/6</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="32"/>
+        <location filename="../keyers.cpp" line="37"/>
         <source>Play 7/8 - Pip</source>
         <translation type="unfinished">Jouer 5/6 - Pip {7/8 ?}</translation>
     </message>
@@ -299,22 +299,22 @@ Through</source>
         <translation type="vanished">Jouer 7/8 - Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="33"/>
+        <location filename="../keyers.cpp" line="38"/>
         <source>Play 7/8 - No Pip</source>
         <translation>Jouer 7/8 - pas de Pip</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="34"/>
+        <location filename="../keyers.cpp" line="39"/>
         <source>Record 7/8</source>
         <translation>Enregistrer 7/8</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="35"/>
+        <location filename="../keyers.cpp" line="40"/>
         <source>Apps - Restart(1)/Close(2)</source>
         <translation>Applications - Redémarrer(1)/Fermer(2)</translation>
     </message>
     <message>
-        <location filename="../keyers.cpp" line="36"/>
+        <location filename="../keyers.cpp" line="41"/>
         <source>OS - Restart(1)/Close(2)</source>
         <translatorcomment>SO or OS??</translatorcomment>
         <translation>? Redémarrer(1)/Fermer(2)</translation>
@@ -323,7 +323,7 @@ Through</source>
 <context>
     <name>commonKeyer</name>
     <message>
-        <location filename="../keyers.cpp" line="396"/>
+        <location filename="../keyers.cpp" line="401"/>
         <source>No current actions</source>
         <translation>Aucune action (en cours ?)</translation>
     </message>

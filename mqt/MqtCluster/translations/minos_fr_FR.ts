@@ -397,26 +397,26 @@ C - Effacer cmd
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../setupdialog.cpp" line="132"/>
-        <location filename="../setupdialog.cpp" line="522"/>
+        <location filename="../setupdialog.cpp" line="130"/>
+        <location filename="../setupdialog.cpp" line="520"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="133"/>
-        <location filename="../setupdialog.cpp" line="523"/>
+        <location filename="../setupdialog.cpp" line="131"/>
+        <location filename="../setupdialog.cpp" line="521"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="134"/>
-        <location filename="../setupdialog.cpp" line="524"/>
+        <location filename="../setupdialog.cpp" line="132"/>
+        <location filename="../setupdialog.cpp" line="522"/>
         <source>Port</source>
         <translation>Port</translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="135"/>
-        <location filename="../setupdialog.cpp" line="525"/>
+        <location filename="../setupdialog.cpp" line="133"/>
+        <location filename="../setupdialog.cpp" line="523"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
@@ -424,47 +424,47 @@ C - Effacer cmd
 <context>
     <name>SentSpotDataModel</name>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="44"/>
+        <location filename="../sentSpotdatamodel.cpp" line="41"/>
         <source>UTC</source>
         <translation>UTC</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="46"/>
+        <location filename="../sentSpotdatamodel.cpp" line="43"/>
         <source>Freq</source>
         <translation>Fréquence</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="48"/>
+        <location filename="../sentSpotdatamodel.cpp" line="45"/>
         <source>Dx</source>
         <translation>DX</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="50"/>
+        <location filename="../sentSpotdatamodel.cpp" line="47"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="52"/>
+        <location filename="../sentSpotdatamodel.cpp" line="49"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="54"/>
+        <location filename="../sentSpotdatamodel.cpp" line="51"/>
         <source>Status</source>
         <translation>Statut</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="56"/>
+        <location filename="../sentSpotdatamodel.cpp" line="53"/>
         <source>Reason</source>
         <translation>Raison</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="149"/>
+        <location filename="../sentSpotdatamodel.cpp" line="146"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="153"/>
+        <location filename="../sentSpotdatamodel.cpp" line="150"/>
         <source>Failed</source>
         <translation>Echec</translation>
     </message>
@@ -552,7 +552,7 @@ C - Effacer cmd
         <translation>Supprimer</translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="162"/>
+        <location filename="../setupdialog.cpp" line="160"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation>%1 minutes a été entrée

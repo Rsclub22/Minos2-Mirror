@@ -19,32 +19,32 @@
         <translation>Type de la radio</translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="64"/>
+        <location filename="../addradiodialog.cpp" line="65"/>
         <source>Radio Name Empty
 Please enter a name for the radio</source>
         <translation>Nom de la radio vide - Entrer une nom pour la radio SVP</translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="74"/>
+        <location filename="../addradiodialog.cpp" line="75"/>
         <source>Radio name contains invalid characters,
  please remove non-alpha or non-numeric characters</source>
         <translation>Le nom de la radio contient des caractères non valides,
 &#xa0;supprimer les caractères non alphanumériques ou non numériques SVP</translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="110"/>
+        <location filename="../addradiodialog.cpp" line="111"/>
         <source>Error Radio Name</source>
         <translation>Erreur de Nom de la radio</translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="117"/>
+        <location filename="../addradiodialog.cpp" line="118"/>
         <source>Radio %1 is marked for deletion,
  please use another name</source>
         <translation>Radio %1 est marquée pour supprimer
  utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../addradiodialog.cpp" line="123"/>
+        <location filename="../addradiodialog.cpp" line="124"/>
         <source>Radio %1 already exists,
  please use another name</source>
         <translation>Radio %1 existe déjà
@@ -165,79 +165,79 @@ Please enter a name for the radio</source>
 <context>
     <name>OmnirigControl</name>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="22"/>
+        <location filename="../omnirigcontrol.cpp" line="26"/>
         <source>No Error, operation completed sucessfully</source>
         <translation>Pas d&apos;erreur, l&apos;opération a réussi</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="23"/>
+        <location filename="../omnirigcontrol.cpp" line="27"/>
         <source>Radio Function not supported</source>
         <translation>Fonction radio non supportée</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="24"/>
+        <location filename="../omnirigcontrol.cpp" line="28"/>
         <source>Omnirig Com Failed to start</source>
         <translation>Omnirig: la communication n&apos;a pas pu démarrer</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="25"/>
+        <location filename="../omnirigcontrol.cpp" line="29"/>
         <source>Omnirig rig One failed to initialise</source>
         <translation>Omnirig: l&apos;appareil 1 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="26"/>
+        <location filename="../omnirigcontrol.cpp" line="30"/>
         <source>Omnirig rig Two failed to initialise</source>
         <translation>Omnirig: l&apos;appareil 2 n&apos;a pas pu s&apos;initialiser</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="27"/>
+        <location filename="../omnirigcontrol.cpp" line="31"/>
         <source>Omnirig rig is offline</source>
         <translation>Omnirig: l&apos;appareil est hors ligne</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="28"/>
+        <location filename="../omnirigcontrol.cpp" line="32"/>
         <source>Omnirig radio online</source>
         <translation>Omnirig: l&apos;appareil est en ligne</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="29"/>
+        <location filename="../omnirigcontrol.cpp" line="33"/>
         <source>Omnirig get freq fail</source>
         <translation>Omnirig: échec de l&apos;obtention de la fréquence</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="30"/>
+        <location filename="../omnirigcontrol.cpp" line="34"/>
         <source>Omnirig COM Exception
 Check Rigcontrol tracelog</source>
         <translation>Omnirig: exception COM
 Vérifier le tracelog Rigcontrol</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="31"/>
+        <location filename="../omnirigcontrol.cpp" line="35"/>
         <source>Omnirig not configured</source>
         <translation>Omnirig: non configuré</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="32"/>
+        <location filename="../omnirigcontrol.cpp" line="36"/>
         <source>Omnirig disabled</source>
         <translation>Omnirig: désactivé</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="33"/>
+        <location filename="../omnirigcontrol.cpp" line="37"/>
         <source>Omnirig port busy</source>
         <translation>Omnirig: port occupé</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="34"/>
+        <location filename="../omnirigcontrol.cpp" line="38"/>
         <source>Omnirig not responding</source>
         <translation>Omnirig: ne répond pas</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="35"/>
+        <location filename="../omnirigcontrol.cpp" line="39"/>
         <source>Omnirig rig pointer null</source>
         <translation>Omnirig: pointeur nul</translation>
     </message>
     <message>
-        <location filename="../omnirigcontrol.cpp" line="1026"/>
+        <location filename="../omnirigcontrol.cpp" line="1030"/>
         <source>Omnirig Errorcode too large!</source>
         <translation>Code d&apos;erreur de Omnirig trop grand!</translation>
     </message>
@@ -1076,7 +1076,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.ui" line="32"/>
-        <location filename="../rigsetupdialog.cpp" line="439"/>
+        <location filename="../rigsetupdialog.cpp" line="438"/>
         <source>Remove Radio</source>
         <translation>Supprimer la radio</translation>
     </message>
@@ -1086,7 +1086,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Modifier la nom de la radio</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="136"/>
+        <location filename="../rigsetupdialog.cpp" line="135"/>
         <source>Select the RS-232 serial port used for PTT control,
 this option is available when DTR or RTS is selected above.
 
@@ -1105,54 +1105,54 @@ La sélection du même port que l&apos;interface CAT permettra aux paramètres C
 la poignée de main et les réglages forcés.</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="339"/>
+        <location filename="../rigsetupdialog.cpp" line="338"/>
         <source>Add Radio and Radio Model</source>
         <translation>Ajouter une radio et un type</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="432"/>
+        <location filename="../rigsetupdialog.cpp" line="431"/>
         <source>You can not remove the current radio!</source>
         <translation>Vous ne pouvez pas supprimer la radio actuelle!</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="440"/>
+        <location filename="../rigsetupdialog.cpp" line="439"/>
         <source>Do you really want to remove radio - %1?</source>
         <translation>Voulez-vous vraiment supprimer la Radio %1?</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="496"/>
+        <location filename="../rigsetupdialog.cpp" line="495"/>
         <source>You can not change the name of the current radio - %1!</source>
         <translation>Vous ne pouvez changer le nom de la Radio actuelle - %1!</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="503"/>
+        <location filename="../rigsetupdialog.cpp" line="502"/>
         <source>Edit Radio Name - %1</source>
         <translation>Modifier la nom de la radio - %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="530"/>
+        <location filename="../rigsetupdialog.cpp" line="529"/>
         <source>%1 has been marked for deletion, please try another name</source>
         <translation>%1 est marquée pour supprimer
  essayer un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="536"/>
+        <location filename="../rigsetupdialog.cpp" line="535"/>
         <source>%1 already exists, please try another name</source>
         <translation>%1 existe déjà
  essayer un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="698"/>
+        <location filename="../rigsetupdialog.cpp" line="697"/>
         <source>%1 Transvert band not enabled : %2</source>
         <translation>%1 bande transverter non activée: %2</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="730"/>
+        <location filename="../rigsetupdialog.cpp" line="729"/>
         <source>Save Radio - Transvert Settings Out of Band</source>
         <translation>Paramètres du Transverter sont hors bande</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="731"/>
+        <location filename="../rigsetupdialog.cpp" line="730"/>
         <source>The Transvert settings are out of band for the
 following:
 %1
@@ -1163,13 +1163,13 @@ Please Correct before Continuing</source>
 Corriger avant de continuer SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="811"/>
+        <location filename="../rigsetupdialog.cpp" line="810"/>
         <source>Radio Supported Bands Missing</source>
         <translatorcomment>&lt;&lt;Check context&gt;&gt;</translatorcomment>
         <translation>Les bandes supportées par la Radio sont manquantes</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="812"/>
+        <location filename="../rigsetupdialog.cpp" line="811"/>
         <source>For Minos to work best with Radios,
 Please add bands or transverters to
 these radio definitions:
@@ -1184,76 +1184,76 @@ ces définitions radio:
 <context>
     <name>RigSetupForm</name>
     <message>
-        <location filename="../rigsetupform.cpp" line="353"/>
+        <location filename="../rigsetupform.cpp" line="351"/>
         <source>CIV Error</source>
         <translation>Erreur de CIV</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="353"/>
+        <location filename="../rigsetupform.cpp" line="351"/>
         <source> CIV number out of range 0 - FF</source>
         <translation> Numéro CIV hors plage 0 - FF</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="461"/>
+        <location filename="../rigsetupform.cpp" line="459"/>
         <source>%1 Not Available</source>
         <translation>%1 pas disponible</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="695"/>
+        <location filename="../rigsetupform.cpp" line="693"/>
         <source>Invalid Network Address %1</source>
         <translation>Adresse réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="696"/>
+        <location filename="../rigsetupform.cpp" line="694"/>
         <source>Network Address Entry Error</source>
         <translation>Erreur d&apos;entrée d&apos;adresse réseau</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1472"/>
+        <location filename="../rigsetupform.cpp" line="1470"/>
         <source>Omnirig Supported Bands - Please select the bands available on radio</source>
         <translation>Bandes supportées par Omnirig - sélectionner les bandes disponibles à la radio SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1586"/>
-        <location filename="../rigsetupform.cpp" line="1744"/>
+        <location filename="../rigsetupform.cpp" line="1584"/>
+        <location filename="../rigsetupform.cpp" line="1742"/>
         <source>Transverter Name Exists</source>
         <translation>Le nom du transverter existe</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1587"/>
-        <location filename="../rigsetupform.cpp" line="1745"/>
+        <location filename="../rigsetupform.cpp" line="1585"/>
+        <location filename="../rigsetupform.cpp" line="1743"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation>Transverter %1 existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1669"/>
+        <location filename="../rigsetupform.cpp" line="1667"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas supprimer ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1678"/>
+        <location filename="../rigsetupform.cpp" line="1676"/>
         <source>Remove Transverter</source>
         <translation>Supprimer le transverter</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1679"/>
+        <location filename="../rigsetupform.cpp" line="1677"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation>Voulez-vous vraiment supprimer le transverter %1?</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1720"/>
+        <location filename="../rigsetupform.cpp" line="1718"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas modifier la bande de ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1853"/>
+        <location filename="../rigsetupform.cpp" line="1851"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Numéro de Port de réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1854"/>
+        <location filename="../rigsetupform.cpp" line="1852"/>
         <source>Network Port Number out of range</source>
         <translation>Numéro du Port de réseau hors plage</translation>
     </message>
@@ -1261,7 +1261,7 @@ utiliser un autre nom SVP</translation>
 <context>
     <name>TransVertSetupForm</name>
     <message>
-        <location filename="../transvertsetupform.cpp" line="179"/>
+        <location filename="../transvertsetupform.cpp" line="177"/>
         <source>Target Freq. is out of band for %1
 Please correct the transverter entries.</source>
         <translation>Fréq. cible est hors bande pour %1

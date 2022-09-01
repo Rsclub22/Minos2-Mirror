@@ -67,7 +67,7 @@
 <context>
     <name>Aircraft</name>
     <message>
-        <location filename="../airscoutlink.h" line="70"/>
+        <location filename="../airscoutlink.h" line="71"/>
         <source>Aircraft %1	category %2	distance %3	potential %4	minutes %5</source>
         <translation>Avion %1 catégorie %2 distance %3 potentiel %4 minutes %5</translation>
     </message>
@@ -377,7 +377,7 @@ l&apos;indicatif sélectionné</translation>
     </message>
     <message>
         <location filename="../kstmainwindow.ui" line="688"/>
-        <location filename="../kstmainwindow.cpp" line="412"/>
+        <location filename="../kstmainwindow.cpp" line="416"/>
         <source>Connect</source>
         <translation>Connecter</translation>
     </message>
@@ -387,28 +387,28 @@ l&apos;indicatif sélectionné</translation>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="401"/>
+        <location filename="../kstmainwindow.cpp" line="405"/>
         <source>Disconnect</source>
         <translation>Déconnecter</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="394"/>
+        <location filename="../kstmainwindow.cpp" line="398"/>
         <source>Including %1</source>
         <translation>%1 Compris</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="559"/>
+        <location filename="../kstmainwindow.cpp" line="563"/>
         <source>Set Back</source>
         <translatorcomment>ou Retour?</translatorcomment>
         <translation>Définir statut à « Présent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="563"/>
+        <location filename="../kstmainwindow.cpp" line="567"/>
         <source>Set Away</source>
         <translation>Définir statut à « Absent »</translation>
     </message>
     <message>
-        <location filename="../kstmainwindow.cpp" line="1495"/>
+        <location filename="../kstmainwindow.cpp" line="1499"/>
         <source>Message updates paused</source>
         <translation>Mises à jour des messages suspendues</translation>
     </message>
@@ -416,47 +416,47 @@ l&apos;indicatif sélectionné</translation>
 <context>
     <name>KstCallGridModel</name>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="335"/>
+        <location filename="../kstcallgridmodel.cpp" line="337"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="338"/>
+        <location filename="../kstcallgridmodel.cpp" line="340"/>
         <source>Callsign</source>
         <translation>Indicatif d&apos;appel</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="341"/>
+        <location filename="../kstcallgridmodel.cpp" line="343"/>
         <source>Loc</source>
         <translation>Locator</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="344"/>
+        <location filename="../kstcallgridmodel.cpp" line="346"/>
         <source>Dist</source>
         <translation>Distance</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="347"/>
+        <location filename="../kstcallgridmodel.cpp" line="349"/>
         <source>Brg</source>
         <translation>Direction</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="350"/>
+        <location filename="../kstcallgridmodel.cpp" line="352"/>
         <source>AS</source>
         <translation>AS</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="353"/>
+        <location filename="../kstcallgridmodel.cpp" line="355"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="356"/>
+        <location filename="../kstcallgridmodel.cpp" line="358"/>
         <source>Prefix</source>
         <translation>Préfixe</translation>
     </message>
     <message>
-        <location filename="../kstcallgridmodel.cpp" line="359"/>
+        <location filename="../kstcallgridmodel.cpp" line="361"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>

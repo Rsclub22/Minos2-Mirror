@@ -19,19 +19,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addantennadialog.cpp" line="52"/>
+        <location filename="../addantennadialog.cpp" line="54"/>
         <source>Antenna Name Empty
 Please enter a name for the antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addantennadialog.cpp" line="61"/>
+        <location filename="../addantennadialog.cpp" line="63"/>
         <source>Antenna name contains invalid characters,
  please remove non-alpha or non-numeric characters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../addantennadialog.cpp" line="69"/>
+        <location filename="../addantennadialog.cpp" line="71"/>
         <source>Antenna name already exists,
  please use another name</source>
         <translation type="unfinished"></translation>
@@ -40,97 +40,97 @@ Please enter a name for the antenna</source>
 <context>
     <name>HamlibRotControl</name>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="26"/>
+        <location filename="../hamlibRotcontrol.cpp" line="25"/>
         <source>No Error, operation completed sucessfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="27"/>
+        <location filename="../hamlibRotcontrol.cpp" line="26"/>
         <source>Invalid parameter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="28"/>
+        <location filename="../hamlibRotcontrol.cpp" line="27"/>
         <source>Invalid configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="29"/>
+        <location filename="../hamlibRotcontrol.cpp" line="28"/>
         <source>Memory shortage</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="30"/>
+        <location filename="../hamlibRotcontrol.cpp" line="29"/>
         <source>Function not implemented</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="31"/>
+        <location filename="../hamlibRotcontrol.cpp" line="30"/>
         <source>Communication timed out</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="32"/>
+        <location filename="../hamlibRotcontrol.cpp" line="31"/>
         <source>IO error, including open failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="33"/>
+        <location filename="../hamlibRotcontrol.cpp" line="32"/>
         <source>Internal Hamlib error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="34"/>
+        <location filename="../hamlibRotcontrol.cpp" line="33"/>
         <source>Protocol error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="35"/>
+        <location filename="../hamlibRotcontrol.cpp" line="34"/>
         <source>Command rejected by the rig</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="36"/>
+        <location filename="../hamlibRotcontrol.cpp" line="35"/>
         <source>Command performed, but arg truncated</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="37"/>
+        <location filename="../hamlibRotcontrol.cpp" line="36"/>
         <source>Function not available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="38"/>
+        <location filename="../hamlibRotcontrol.cpp" line="37"/>
         <source>VFO not targetable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="39"/>
+        <location filename="../hamlibRotcontrol.cpp" line="38"/>
         <source>Error talking on the bus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="40"/>
+        <location filename="../hamlibRotcontrol.cpp" line="39"/>
         <source>Collision on the bus</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="41"/>
+        <location filename="../hamlibRotcontrol.cpp" line="40"/>
         <source>NULL RIG handle or any invalid pointer parameter in get arg</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="42"/>
+        <location filename="../hamlibRotcontrol.cpp" line="41"/>
         <source>Invalid VFO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="43"/>
+        <location filename="../hamlibRotcontrol.cpp" line="42"/>
         <source>RIG_EDOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../hamlibRotcontrol.cpp" line="572"/>
+        <location filename="../hamlibRotcontrol.cpp" line="570"/>
         <source>hamlib Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -168,7 +168,7 @@ Please enter a name for the antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../logdialog.cpp" line="45"/>
+        <location filename="../logdialog.cpp" line="44"/>
         <source>Select Bearing Log Folder</source>
         <translation type="unfinished"></translation>
     </message>
@@ -176,7 +176,7 @@ Please enter a name for the antenna</source>
 <context>
     <name>MinosCompass</name>
     <message>
-        <location filename="../minoscompass.cpp" line="184"/>
+        <location filename="../minoscompass.cpp" line="179"/>
         <source>N,E,S,W</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,37 +222,37 @@ Please enter a name for the antenna</source>
 <context>
     <name>PstRotControl</name>
     <message>
-        <location filename="../pstRotControl.cpp" line="18"/>
+        <location filename="../pstRotControl.cpp" line="19"/>
         <source>PSTRotator Command OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="19"/>
+        <location filename="../pstRotControl.cpp" line="20"/>
         <source>Network Address failed to bind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="20"/>
+        <location filename="../pstRotControl.cpp" line="21"/>
         <source>Datagram Write Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="21"/>
+        <location filename="../pstRotControl.cpp" line="22"/>
         <source>Request Bearing Command Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="22"/>
+        <location filename="../pstRotControl.cpp" line="23"/>
         <source>Rotate to Bearing Command Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="23"/>
+        <location filename="../pstRotControl.cpp" line="24"/>
         <source>Stop Commond Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pstRotControl.cpp" line="348"/>
+        <location filename="../pstRotControl.cpp" line="344"/>
         <source>pstRotator Errorcode too large!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -271,7 +271,7 @@ Please enter a name for the antenna</source>
     </message>
     <message>
         <location filename="../rotsetupdialog.ui" line="28"/>
-        <location filename="../rotsetupdialog.cpp" line="697"/>
+        <location filename="../rotsetupdialog.cpp" line="687"/>
         <source>Remove Antenna</source>
         <translation type="unfinished"></translation>
     </message>
@@ -281,34 +281,34 @@ Please enter a name for the antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="89"/>
+        <location filename="../rotsetupdialog.cpp" line="79"/>
         <source>The Rotator configuration files in %1 are from an old incompatible version of Minos.<byte value="xd"/>
 <byte value="xd"/>
 Please delete them and set up the rotators again</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="690"/>
+        <location filename="../rotsetupdialog.cpp" line="680"/>
         <source>You can not remove the current antenna!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="698"/>
+        <location filename="../rotsetupdialog.cpp" line="688"/>
         <source>Do you really want to remove antenna - %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="733"/>
+        <location filename="../rotsetupdialog.cpp" line="723"/>
         <source>You can not change the name of the current antenna - %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="739"/>
+        <location filename="../rotsetupdialog.cpp" line="729"/>
         <source>Edit Antenna Name - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupdialog.cpp" line="740"/>
+        <location filename="../rotsetupdialog.cpp" line="730"/>
         <source>New Antenna Name:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -836,7 +836,7 @@ Do you want to reload the settings for the antenna now?</source>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="../rotsetupform.cpp" line="29"/>
+        <location filename="../rotsetupform.cpp" line="28"/>
         <source>N/A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -977,32 +977,32 @@ Do you want to reload the settings for the antenna now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="533"/>
+        <location filename="../rotsetupform.cpp" line="532"/>
         <source>Invalid Network Address %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="534"/>
+        <location filename="../rotsetupform.cpp" line="533"/>
         <source>Network Address Entry Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="565"/>
+        <location filename="../rotsetupform.cpp" line="564"/>
         <source>Invalid Network Port Number %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="566"/>
+        <location filename="../rotsetupform.cpp" line="565"/>
         <source>Network Port Number out of range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="835"/>
+        <location filename="../rotsetupform.cpp" line="834"/>
         <source>Value must be between %1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rotsetupform.cpp" line="836"/>
+        <location filename="../rotsetupform.cpp" line="835"/>
         <source>Antenna Offset Error</source>
         <translation type="unfinished"></translation>
     </message>
