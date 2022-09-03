@@ -6,47 +6,47 @@
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="14"/>
         <source>Wave Display</source>
-        <translation type="unfinished"></translation>
+        <translation>Affichage Waveform. </translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="38"/>
         <source>Recalc</source>
-        <translation type="unfinished"></translation>
+        <translation>Recalculer</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.ui" line="58"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer?</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="135"/>
         <source>Window (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenetre (ms)</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="139"/>
         <source>Threshold (db below max)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuil (db inférieur au max) </translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="143"/>
         <source>Compression Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux de compression</translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="147"/>
         <source>Attack (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="151"/>
         <source>Release (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../mqtktWaveShowDialog.cpp" line="155"/>
         <source>Makeup Gain (db)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
 </context>
 <context>
@@ -64,17 +64,17 @@
     <message>
         <location filename="../mqtktMainWindow.ui" line="33"/>
         <source>HP filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre HP </translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="40"/>
         <source>BP Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre BP </translation>
     </message>
     <message>
         <location filename="../mqtktMainWindow.ui" line="47"/>
         <source>Show Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Affichage Waveform. </translation>
     </message>
     <message>
         <source>Filter</source>

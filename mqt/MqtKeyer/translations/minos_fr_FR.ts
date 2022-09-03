@@ -31,7 +31,7 @@
     <message>
         <location filename="../KeyerMain.ui" line="115"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher [Context?]</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="122"/>
@@ -107,12 +107,12 @@
     <message>
         <location filename="../KeyerMain.ui" line="310"/>
         <source>do BW Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>BW filtre activée</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="317"/>
         <source>do Compression</source>
-        <translation type="unfinished"></translation>
+        <translation>Compression activée</translation>
     </message>
     <message>
         <location filename="../KeyerMain.ui" line="337"/>
@@ -184,32 +184,32 @@ Through</source>
     <message>
         <location filename="../KeyerMain.cpp" line="119"/>
         <source>Window (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenetre (ms)</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="123"/>
         <source>Threshold (db below max)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuil (db inférieur au max)</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="127"/>
         <source>Compression Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux de compression</translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="131"/>
         <source>Attack (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="135"/>
         <source>Release (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?]  </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="139"/>
         <source>Makeup Gain (db)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../KeyerMain.cpp" line="359"/>
@@ -292,11 +292,7 @@ Through</source>
     <message>
         <location filename="../keyers.cpp" line="37"/>
         <source>Play 7/8 - Pip</source>
-        <translation type="unfinished">Jouer 5/6 - Pip {7/8 ?}</translation>
-    </message>
-    <message>
-        <source>Play 7/ - Pip</source>
-        <translation type="vanished">Jouer 7/8 - Pip</translation>
+        <translation>Jouer 7/8 - Pip</translation>
     </message>
     <message>
         <location filename="../keyers.cpp" line="38"/>

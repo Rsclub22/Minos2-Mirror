@@ -419,7 +419,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="118"/>
         <source>Bandmap High Frequency At Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap haute fréquence en haut</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="125"/>
@@ -454,7 +454,7 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="265"/>
         <source>Bandmap Band Edges</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap bords de bande</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.ui" line="30"/>
@@ -475,12 +475,12 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="162"/>
         <source>Low Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse fréquence</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="178"/>
         <source>High Freq</source>
-        <translation type="unfinished"></translation>
+        <translation>Haute fréquence</translation>
     </message>
     <message>
         <location filename="../Clusterbandmapconfigure.cpp" line="265"/>
@@ -1013,17 +1013,17 @@ Le mode calculé est %2</translation>
     <message>
         <location filename="../LoggerContacts.cpp" line="622"/>
         <source>Unknown Radio</source>
-        <translation type="unfinished"></translation>
+        <translation>Radio inconnue</translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="629"/>
         <source>Unknown Antenna</source>
-        <translation type="unfinished"></translation>
+        <translation>Antenne inconnue</translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="636"/>
         <source>Unknown Contest</source>
-        <translation type="unfinished"></translation>
+        <translation>Concours inconnue</translation>
     </message>
     <message>
         <location filename="../LoggerContacts.cpp" line="698"/>
@@ -1346,7 +1346,7 @@ Comptabiliser entre Locators de 4 caractères</translation>
     <message>
         <location filename="../contestdetails.cpp" line="1225"/>
         <source>Contest end is before contest start</source>
-        <translation type="unfinished"></translation>
+        <translation>Fin du concours avant début du concours</translation>
     </message>
     <message>
         <location filename="../contestdetails.cpp" line="1550"/>
@@ -1729,17 +1729,17 @@ Déplacez-vous entre les composants d&apos;un groupe à l&apos;aide de la souris
     <message>
         <location filename="../DisplayOptions.ui" line="144"/>
         <source>Expert mode display</source>
-        <translation type="unfinished"></translation>
+        <translation>Affichage en mode expert</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="151"/>
         <source>Alternate Function Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Touches de fonction alternatives</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="160"/>
         <source>Show Auxiliary Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
         <location filename="../DisplayOptions.ui" line="167"/>
@@ -2253,11 +2253,7 @@ et envoyer le fichier .EDI produit.<byte value="xd"/>
     <message>
         <location filename="../OptionsDialog.cpp" line="142"/>
         <source>We will save the band changes before continuing.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>We must save the band changes before continuing</source>
-        <translation type="vanished">Les changements de bande doivent être enregistrés avant de continuer</translation>
+        <translation>Changements de bande seront enregistrés avant de continuer.</translation>
     </message>
 </context>
 <context>
@@ -2373,10 +2369,6 @@ to</source>
         <translation>Enregistrer la fréquence</translation>
     </message>
     <message>
-        <source>Tuning - Add Map</source>
-        <translation type="vanished">Réglage - ajouter à Bandmap</translation>
-    </message>
-    <message>
         <location filename="../qsologframe.ui" line="445"/>
         <source>Op1</source>
         <translation>Op1</translation>
@@ -2427,17 +2419,9 @@ to</source>
         <translation>Effacé</translation>
     </message>
     <message>
-        <source>Callsign (F1)</source>
-        <translation type="vanished">Indicatif d&apos;appel (F1)</translation>
-    </message>
-    <message>
         <location filename="../qsologframe.cpp" line="114"/>
         <source>Sent by Me</source>
         <translation>Envoyé par moi</translation>
-    </message>
-    <message>
-        <source>RS(T)Tx(F2)</source>
-        <translation type="vanished">RS(T)Tx(F2)</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="116"/>
@@ -2448,22 +2432,6 @@ to</source>
         <location filename="../qsologframe.cpp" line="107"/>
         <source>Serial Tx</source>
         <translation>Numéro de série Tx</translation>
-    </message>
-    <message>
-        <source>RS(T)Rx(F3)</source>
-        <translation type="vanished">RS(T)Rx(F3)</translation>
-    </message>
-    <message>
-        <source>Serial Rx (F4)</source>
-        <translation type="vanished">Numéro de série Rx (F4)</translation>
-    </message>
-    <message>
-        <source>Loc (F5)</source>
-        <translation type="vanished">Loc (F5)</translation>
-    </message>
-    <message>
-        <source>Exchange (F6)</source>
-        <translation type="vanished">Échange (F6)</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="95"/>
@@ -2540,59 +2508,59 @@ to</source>
     <message>
         <location filename="../qsologframe.cpp" line="88"/>
         <source>Call%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="89"/>
         <location filename="../qsologframe.cpp" line="91"/>
         <source>Rep%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Report%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="90"/>
         <source>Sn</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="92"/>
         <source>Sn%1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="93"/>
         <location filename="../qsologframe.cpp" line="110"/>
         <source>Loc%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Locator%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="94"/>
         <source>Exch%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échange%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="105"/>
         <source>Callsign%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatif d&apos;appel%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="106"/>
         <source>RS(T)Tx%1</source>
-        <translation type="unfinished"></translation>
+        <translation>RS(T)Tx%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="108"/>
         <source>RS(T)Rx%1</source>
-        <translation type="unfinished"></translation>
+        <translation>RS(T)Rx%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="109"/>
         <source>Serial Rx%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro de série Rx%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="111"/>
         <source>Exchange%1</source>
-        <translation type="unfinished"></translation>
+        <translation>Échange%1</translation>
     </message>
     <message>
         <location filename="../qsologframe.cpp" line="578"/>
@@ -2669,14 +2637,6 @@ Non - Ignorer les modifications</translation>
         <location filename="../qsologframe.cpp" line="3242"/>
         <source>End of QSOs</source>
         <translation>Fin des QSO</translation>
-    </message>
-</context>
-<context>
-    <name>QSOTextEditFrame</name>
-    <message>
-        <source>Click to clear edit content</source>
-        <translatorcomment>Cliquer pour supprimer le contenu modifié</translatorcomment>
-        <translation type="vanished">Cliquer pour supprimer le contenu modifié</translation>
     </message>
 </context>
 <context>
@@ -3754,18 +3714,11 @@ Non - Ignorer les modifications</translation>
     </message>
 </context>
 <context>
-    <name>ScreenConfigFie</name>
-    <message>
-        <source>Invalid or missing screen configurations; using built in defaults</source>
-        <translation type="vanished">Configurations d&apos;écran non valides ou manquantes; en utilisant les valeurs par défaut intégrées</translation>
-    </message>
-</context>
-<context>
     <name>ScreenConfigFile</name>
     <message>
         <location filename="../ScreenConfigFile.cpp" line="237"/>
         <source>Invalid or missing screen configurations; using built in defaults</source>
-        <translation type="unfinished">Configurations d&apos;écran non valides ou manquantes; en utilisant les valeurs par défaut intégrées</translation>
+        <translation>Configurations d&apos;écran non valides ou manquantes; en utilisant les valeurs par défaut intégrées</translation>
     </message>
 </context>
 <context>
@@ -4139,7 +4092,11 @@ L&apos;arrière-plan de la ligne change de couleur lorsqu&apos;elle est sélecti
 %1
 
 does not exist; do you wish to download the latest calendars?</source>
-        <translation type="unfinished"></translation>
+        <translation>Calendrier de cette année
+
+%1
+
+n&apos;existe pas; télécharger les derniers calendriers&#xa0;?</translation>
     </message>
     <message>
         <location filename="../tcalendarform.cpp" line="113"/>
@@ -4928,7 +4885,7 @@ does not exist; do you wish to download the latest calendars?</source>
     <message>
         <location filename="../tlogcontainer.cpp" line="476"/>
         <source>Show Contest Statistics...</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher statistiques aux concourse...</translation>
     </message>
     <message>
         <location filename="../tlogcontainer.cpp" line="545"/>
@@ -5539,10 +5496,6 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
         <translation>%1 %2 - Modifier</translation>
     </message>
     <message>
-        <source>Voice Memory %1 - New</source>
-        <translation type="vanished">Mémoire de voix %1 - Nouveau</translation>
-    </message>
-    <message>
         <location filename="../txvmbuttonsframe.cpp" line="299"/>
         <source>To use the external keyer mqtKeyer must be running and connected</source>
         <translation>Pour utiliser le keyer externe, mqtKeyer doit être en cours d&apos;exécution et connecté</translation>
@@ -5633,16 +5586,12 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="199"/>
         <source>do BW Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>BW filtre activée</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.ui" line="206"/>
         <source>do Compression</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Message Duration</source>
-        <translation type="vanished">Durée du message</translation>
+        <translation>Compression activée</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="23"/>
@@ -5667,32 +5616,32 @@ Through</source>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="37"/>
         <source>Window (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenetre (ms)</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="41"/>
         <source>Threshold (db below max)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seuil (db inférieur au max)</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="45"/>
         <source>Compression Ratio</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux de compression</translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="49"/>
         <source>Attack (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="53"/>
         <source>Release (ms)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="57"/>
         <source>Makeup Gain (db)</source>
-        <translation type="unfinished"></translation>
+        <translation>[Context?] </translation>
     </message>
     <message>
         <location filename="../txVmExternalButtonDialog.cpp" line="91"/>
@@ -5735,7 +5684,7 @@ Through</source>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="106"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Afficher [context?] </translation>
     </message>
     <message>
         <location filename="../txvminternalbuttondialog.ui" line="113"/>

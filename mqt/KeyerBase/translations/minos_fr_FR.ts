@@ -80,17 +80,17 @@
     <message>
         <location filename="../WaveShowDialog.ui" line="14"/>
         <source>Wave Display</source>
-        <translation type="unfinished"></translation>
+        <translation>affichage Wave</translation>
     </message>
     <message>
         <location filename="../WaveShowDialog.ui" line="25"/>
         <source>Show</source>
-        <translation type="unfinished"></translation>
+        <translation>présenter [Context?]</translation>
     </message>
     <message>
         <location filename="../WaveShowDialog.ui" line="45"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 </TS>

@@ -47,15 +47,6 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <source>LOCAL COMMENT</source>
-        <translation type="vanished">COMMENTAIRE LOCAL</translation>
-    </message>
-    <message>
-        <source>COMMENT FOR ADJUDICATOR</source>
-        <translatorcomment>Does this need to be in English for log submission???</translatorcomment>
-        <translation type="vanished">COMMENTAIRE POUR ARBITRE</translation>
-    </message>
-    <message>
         <location filename="../contacts.cpp" line="415"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
@@ -461,7 +452,7 @@
     <message>
         <location filename="../profiles.cpp" line="111"/>
         <source>Show Auxiliary Headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les en-têtes auxiliaires</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="113"/>
@@ -491,7 +482,7 @@
     <message>
         <location filename="../profiles.cpp" line="119"/>
         <source>Bandmap High Frequency At Top</source>
-        <translation type="unfinished"></translation>
+        <translation>Bandmap haute fréquence en haut</translation>
     </message>
     <message>
         <location filename="../profiles.cpp" line="121"/>
@@ -1052,14 +1043,6 @@
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <source>LOCAL COMMENT</source>
-        <translation type="vanished">COMMENTAIRE LOCAL</translation>
-    </message>
-    <message>
-        <source>COMMENT FOR ADJUDICATOR</source>
-        <translation type="vanished">COMMENTAIRE POUR L&apos;ARBITRE</translation>
-    </message>
-    <message>
         <location filename="../DisplayContestContact.cpp" line="497"/>
         <source>MAN</source>
         <translation>MANUEL</translation>
@@ -1304,7 +1287,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../MatchThisFrame.cpp" line="74"/>
         <source>Press &quot;Yes&quot; to transfer details, or &quot;No&quot; to edit the QSO</source>
-        <translation type="unfinished"></translation>
+        <translation>Appuyez sur &quot;Oui&quot; pour transférer les détails ou sur &quot;Non&quot; pour modifier le QSO</translation>
     </message>
 </context>
 <context>
@@ -1573,7 +1556,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../TreeUtils.cpp" line="17"/>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <location filename="../TreeUtils.cpp" line="18"/>
@@ -1653,7 +1636,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     <message>
         <location filename="../TreeUtils.cpp" line="33"/>
         <source>Op</source>
-        <translation type="unfinished"></translation>
+        <translation>Op</translation>
     </message>
 </context>
 <context>
@@ -2029,22 +2012,22 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StatisticsDisplay.ui" line="14"/>
         <source>Contest Statistice</source>
-        <translation type="unfinished"></translation>
+        <translation>Statistiques aux concours</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="38"/>
         <source>Slot length(minutes)</source>
-        <translation type="unfinished"></translation>
+        <translation>Durée de fente (minutes)</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="68"/>
         <source>Recalc</source>
-        <translation type="unfinished"></translation>
+        <translation>Recalculer</translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="78"/>
         <source>Close</source>
-        <translation type="unfinished">Fermer</translation>
+        <translation>Fermer</translation>
     </message>
 </context>
 <context>
@@ -2052,7 +2035,8 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../StatisticsDisplay.cpp" line="195"/>
         <source>ALL</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tous [Context?]
+</translation>
     </message>
 </context>
 <context>
@@ -2183,11 +2167,7 @@ Entrer une autre direction SVP</translation>
     <message>
         <location filename="../validators.cpp" line="41"/>
         <source>Exchange required</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>QTH required</source>
-        <translation type="vanished">QTH requis</translation>
+        <translation>Échange requis</translation>
     </message>
     <message>
         <location filename="../validators.cpp" line="43"/>

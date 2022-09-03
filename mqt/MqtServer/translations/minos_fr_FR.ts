@@ -67,11 +67,7 @@
     <message>
         <location filename="../MServerPubSub.cpp" line="384"/>
         <source>server</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>router</source>
-        <translation type="obsolete">???Where???</translation>
+        <translation>Serveur</translation>
     </message>
     <message>
         <location filename="../MServerPubSub.cpp" line="384"/>

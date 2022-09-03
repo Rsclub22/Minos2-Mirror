@@ -107,7 +107,7 @@
     <message>
         <location filename="../clustermainwindow.ui" line="502"/>
         <source>MW</source>
-        <translation>MW</translation>
+        <translation>MO</translation>
     </message>
     <message>
         <location filename="../clustermainwindow.ui" line="554"/>

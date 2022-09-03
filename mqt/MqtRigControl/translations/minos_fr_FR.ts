@@ -842,7 +842,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <location filename="../rigcontrolmainwindow.cpp" line="4662"/>
         <source>Data bits = %1
 </source>
-        <translation type="unfinished">Bits de données = %1
+        <translation>Bits de données = %1
 </translation>
     </message>
     <message>

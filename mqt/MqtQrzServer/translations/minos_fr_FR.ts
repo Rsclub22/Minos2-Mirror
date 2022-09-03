@@ -74,7 +74,7 @@
     <message>
         <location filename="../qrzservermainwindow.cpp" line="290"/>
         <source>SSL not supported on this system.</source>
-        <translation type="unfinished"></translation>
+        <translation>SSL n&apos;est pas supporté par cette système  </translation>
     </message>
     <message>
         <location filename="../qrzservermainwindow.cpp" line="356"/>
