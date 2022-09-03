@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Contest Statistice</string>
+   <string>Contest Statistics</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
