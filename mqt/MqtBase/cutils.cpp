@@ -12,6 +12,7 @@
 #include <QScrollArea>
 #include <QSettings>
 #include <QMenu>
+#include <cstring>
 
 #include "PubSubValue.h"
 #include "cutils.h"
@@ -789,7 +790,7 @@ void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, s
 {
     menu.clear();
 
-    QAction *newAct = new QAction(p->tr("Reset Columns"), p);
+    QAction *newAct = new QAction(QWidget::tr("Reset Columns", "createColumnsMenu"), p);
     newAct->setData( -1 );
     menu.addAction( newAct );
     menu.addSeparator();

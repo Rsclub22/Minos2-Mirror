@@ -35,7 +35,6 @@ equals(HAMLIBVER, 45) {
           msvc: INCLUDEPATH += $$HAMLIBDIR/include/hamlib
        }
        INCLUDEPATH += $$HAMLIBDIR/include
-       message(Hamlib LIBS is $$LIBS)
 
     }
 } else {

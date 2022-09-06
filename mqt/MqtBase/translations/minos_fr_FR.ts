@@ -1739,6 +1739,15 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
     </message>
 </context>
 <context>
+    <name>QWidget</name>
+    <message>
+        <location filename="../cutils.cpp" line="793"/>
+        <source>Reset Columns</source>
+        <comment>createColumnsMenu</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RotPresetData</name>
     <message>
         <location filename="../rotatorcommon.cpp" line="14"/>
@@ -2010,9 +2019,13 @@ Entrer une autre direction SVP</translation>
 <context>
     <name>StatisticsDiplay</name>
     <message>
-        <location filename="../StatisticsDisplay.ui" line="14"/>
         <source>Contest Statistice</source>
-        <translation>Statistiques aux concours</translation>
+        <translation type="vanished">Statistiques aux concours</translation>
+    </message>
+    <message>
+        <location filename="../StatisticsDisplay.ui" line="14"/>
+        <source>Contest Statistics</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="38"/>

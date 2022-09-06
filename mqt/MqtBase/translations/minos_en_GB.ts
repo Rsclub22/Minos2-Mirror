@@ -1716,6 +1716,15 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     </message>
 </context>
 <context>
+    <name>QWidget</name>
+    <message>
+        <location filename="../cutils.cpp" line="793"/>
+        <source>Reset Columns</source>
+        <comment>createColumnsMenu</comment>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>RotPresetData</name>
     <message>
         <location filename="../rotatorcommon.cpp" line="14"/>
@@ -1987,7 +1996,7 @@ Please enter another bearing</source>
     <name>StatisticsDiplay</name>
     <message>
         <location filename="../StatisticsDisplay.ui" line="14"/>
-        <source>Contest Statistice</source>
+        <source>Contest Statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
