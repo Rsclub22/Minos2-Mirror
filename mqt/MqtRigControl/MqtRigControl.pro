@@ -19,6 +19,7 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
 
+lessThan(QT_MAJOR_VERSION, 6){
 win32 {
     DEFINES += WIN32
     QT += axcontainer
@@ -27,7 +28,7 @@ win32 {
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
     }
 }
-
+}
 SOURCES += main.cpp\
     hamlibrigcontrol.cpp \
     rigbase.cpp \
