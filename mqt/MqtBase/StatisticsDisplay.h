@@ -8,7 +8,7 @@
 #include <QSortFilterProxyModel>
 
 namespace Ui {
-class StatisticsDiplay;
+class StatisticsDisplay;
 }
 
 class BaseContestLog;
@@ -114,7 +114,7 @@ private slots:
     void onStatisticsGrid_sectionMoved(int, int, int);
     void on_sectionResized(int, int, int);
 private:
-    Ui::StatisticsDiplay *ui;
+    Ui::StatisticsDisplay *ui;
     BaseContestLog * ct = nullptr;
     QString trAll;
 

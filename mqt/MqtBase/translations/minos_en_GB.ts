@@ -1993,7 +1993,12 @@ Please enter another bearing</source>
     </message>
 </context>
 <context>
-    <name>StatisticsDiplay</name>
+    <name>StatisticsDisplay</name>
+    <message>
+        <location filename="../StatisticsDisplay.cpp" line="195"/>
+        <source>ALL</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../StatisticsDisplay.ui" line="14"/>
         <source>Contest Statistics</source>
@@ -2012,14 +2017,6 @@ Please enter another bearing</source>
     <message>
         <location filename="../StatisticsDisplay.ui" line="78"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>StatisticsDisplay</name>
-    <message>
-        <location filename="../StatisticsDisplay.cpp" line="195"/>
-        <source>ALL</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

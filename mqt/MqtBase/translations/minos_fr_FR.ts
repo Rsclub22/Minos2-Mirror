@@ -2023,24 +2023,16 @@ Entrer une autre direction SVP</translation>
         <translation type="vanished">Statistiques aux concours</translation>
     </message>
     <message>
-        <location filename="../StatisticsDisplay.ui" line="14"/>
-        <source>Contest Statistics</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../StatisticsDisplay.ui" line="38"/>
         <source>Slot length(minutes)</source>
-        <translation>Durée de fente (minutes)</translation>
+        <translation type="vanished">Durée de fente (minutes)</translation>
     </message>
     <message>
-        <location filename="../StatisticsDisplay.ui" line="68"/>
         <source>Recalc</source>
-        <translation>Recalculer</translation>
+        <translation type="vanished">Recalculer</translation>
     </message>
     <message>
-        <location filename="../StatisticsDisplay.ui" line="78"/>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="vanished">Fermer</translation>
     </message>
 </context>
 <context>
@@ -2050,6 +2042,26 @@ Entrer une autre direction SVP</translation>
         <source>ALL</source>
         <translation type="unfinished">Tous [Context?]
 </translation>
+    </message>
+    <message>
+        <location filename="../StatisticsDisplay.ui" line="14"/>
+        <source>Contest Statistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../StatisticsDisplay.ui" line="38"/>
+        <source>Slot length(minutes)</source>
+        <translation type="unfinished">Durée de fente (minutes)</translation>
+    </message>
+    <message>
+        <location filename="../StatisticsDisplay.ui" line="68"/>
+        <source>Recalc</source>
+        <translation type="unfinished">Recalculer</translation>
+    </message>
+    <message>
+        <location filename="../StatisticsDisplay.ui" line="78"/>
+        <source>Close</source>
+        <translation type="unfinished">Fermer</translation>
     </message>
 </context>
 <context>

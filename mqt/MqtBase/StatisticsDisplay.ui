@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>StatisticsDiplay</class>
- <widget class="QDialog" name="StatisticsDiplay">
+ <class>StatisticsDisplay</class>
+ <widget class="QDialog" name="StatisticsDisplay">
   <property name="geometry">
    <rect>
     <x>0</x>

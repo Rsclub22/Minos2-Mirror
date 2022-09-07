@@ -186,7 +186,7 @@ bool SlotsProxyModel::lessThan(const QModelIndex &source_left, const QModelIndex
 
 StatisticsDisplay::StatisticsDisplay(BaseContestLog *ct, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::StatisticsDiplay),
+    ui(new Ui::StatisticsDisplay),
     ct(ct)
 {
     ui->setupUi(this);
