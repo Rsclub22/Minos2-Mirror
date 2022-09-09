@@ -15,7 +15,7 @@
 
 
 #include <QObject>
-#include <QSerialPort>
+#include <QtSerialPort/QSerialPort>
 #include <QByteArray>
 #include <QStringList>
 

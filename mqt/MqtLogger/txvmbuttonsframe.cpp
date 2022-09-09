@@ -986,10 +986,10 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     }
 
 }
-void TxVmButtonsFrame::fKey(QKeyEvent e)
+void TxVmButtonsFrame::fKey(int key)
 {
     // FKey event received by log frame (or ctrl/FKey)
-    int mem = e.key() - Qt::Key_F1 + 1;
+    int mem = key - Qt::Key_F1 + 1;
     if (mem > 10)
     {
 

@@ -10,9 +10,6 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-lessThan(QT_MAJOR_VERSION, 6){
-QT       += serialport
-}
 QT       += help
 
 TARGET = MqtBase

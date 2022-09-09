@@ -31,7 +31,8 @@ void BaseContestLog::addDistrictWorked(QString band, const QString &cd)
     districtWorked[band][ cd ]++;
 }
 
-
+BaseContestLog::BaseContestLog()
+{}
 BaseContestLog::BaseContestLog(bool hf)
 {
     hfContest.setValue(hf);

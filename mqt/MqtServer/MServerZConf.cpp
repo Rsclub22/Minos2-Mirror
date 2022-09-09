@@ -475,7 +475,7 @@ bool UDPSocket::sendMessage(const QString &mess )
 
     QString err = "No error";
     if (res < 0)
-        err = qus->error();
+        err = qus->errorString();
     trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
 

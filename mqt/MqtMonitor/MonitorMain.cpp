@@ -525,22 +525,28 @@ void MonitorMain::on_monitorTimeout()
     }
     for ( auto const &s: qAsConst(stationList) )
     {
-       for ( auto &l: s->slotList )
+
+//       for ( auto &l: s->slotList )
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#else
+        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#endif
        {
-          if (l->getState() == psRevoked)
+          if ((*l)->getState() == psRevoked)
           {
-             MonitoringFrame *cttab = findContestPage( l->getContest() );
+             MonitoringFrame *cttab = findContestPage( (*l)->getContest() );
              closeTab(cttab);
              // take it out of the slot list and close it
              // and we need to redo the list
-             s->slotList.erase(&l);
+             s->slotList.erase(l);
              syncstat = true;
              break;             // as we have changed the list - don't continue
 
           }
           else
           {
-             l->checkMonitor();
+             (*l)->checkMonitor();
           }
        }
        if (syncstat)

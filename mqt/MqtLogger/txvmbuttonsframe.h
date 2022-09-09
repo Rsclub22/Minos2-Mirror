@@ -159,7 +159,7 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
-    void fKey(QKeyEvent e);
+    void fKey(int e);
 
 
     void onRemoteConfigChanged();

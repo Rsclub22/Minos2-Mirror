@@ -496,7 +496,7 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
         writeEnableBandSwitchDataToIni(ui->enableBandSwChkBox->isChecked());
     }
 
-    if (readSerialComportBandSwitchFromIni() != ui->enableSerialBandSwChkBox->isChecked())
+    if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
         writeEnableSerialBandSwitchDataToIni(ui->enableSerialBandSwChkBox->isChecked());
     }

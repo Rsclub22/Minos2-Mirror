@@ -335,7 +335,7 @@ void WsjtxFrame::process_decodes()
                     decodeMessage &dc = messages[i];
                     if (dc.oldmsg)
                         continue;
-                    if (dc.decodeInd[0] == "?")
+                    if (dc.decodeInd[0] == '?')
                         continue;   // potentially bad decode
 
                     trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
@@ -416,7 +416,7 @@ void WsjtxFrame::process_decodes()
                      decodeMessage &dc = messages[i];
                      if (dc.oldmsg)
                          continue;
-                     if (dc.decodeInd[0] == "?")
+                     if (dc.decodeInd[0] == '?')
                          continue;
 
                      trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")

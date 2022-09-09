@@ -228,7 +228,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getBand();
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = dxSpot->getDxLocatorIsFromNode();
+                d = QChar(dxSpot->getDxLocatorIsFromNode());
             break;
             case DXCLUSTER_SPOT_TYPE:
                 d = dxSpot->getClusterSpotType();

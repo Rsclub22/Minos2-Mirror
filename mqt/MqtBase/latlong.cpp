@@ -648,6 +648,7 @@ void dms( double deg, int *d, int *m, double *s )
    *d *= sign;
 }
 
+static QRegularExpression cc("[NSEW]");
 static int geoinput( Location *ingrid )
 {
    QString longbuff;
@@ -663,7 +664,6 @@ static int geoinput( Location *ingrid )
    //		getline();
 
    ingrid->datastring = ingrid->datastring.toUpper();
-   QRegExp cc("[NSEW]");
 
    i = static_cast<int>(ingrid->datastring.indexOf( cc ));
    if ( i < ingrid->datastring.length() )

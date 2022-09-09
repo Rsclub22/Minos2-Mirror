@@ -43,6 +43,13 @@ enum eMultGridCols {ectCall, ectWorked, ectLocator, ectBearing, ectName,
                    };
 
 #define GLIST_PREFIX_LEN 5
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#define qHashRet size_t
+#else
+#define qHashRet uint
+#endif
+
 class GlistEntry
 {
    public:
@@ -55,7 +62,7 @@ class GlistEntry
 
       QString synPrefix;
       QString dupPrefix;
-      uint qHash()
+      qHashRet qHash()
       {
           return ::qHash(synPrefix);
       }
@@ -95,7 +102,7 @@ class DistrictEntry : public MultEntry
 
       virtual QString str( bool );
       virtual void addSynonyms( QString & );
-      uint qHash()
+      qHashRet qHash()
       {
           return ::qHash(districtCode);
       }
@@ -113,7 +120,7 @@ class DistrictSynonym
       bool operator<( const DistrictSynonym& rhs ) const;
       bool operator==( const DistrictSynonym& rhs ) const;
       bool operator!=( const DistrictSynonym& rhs ) const;
-      uint qHash()
+      qHashRet qHash()
       {
           return ::qHash(synonym);
       }
@@ -140,7 +147,7 @@ class CountryEntry : public MultEntry
       bool operator<( const CountryEntry& rhs ) const;
       bool operator==( const CountryEntry& rhs ) const;
       bool operator!=( const CountryEntry& rhs ) const;
-      uint qHash()
+      qHashRet qHash()
       {
           return ::qHash(basePrefix);
       }
@@ -173,7 +180,7 @@ public:
       bool operator<( const CountrySynonym& rhs ) const;
       bool operator==( const CountrySynonym& rhs ) const;
       bool operator!=( const CountrySynonym& rhs ) const;
-      uint qHash()
+      qHashRet qHash()
       {
           return ::qHash(synPrefix);
       }

@@ -19,7 +19,7 @@
 #include "spotbasedata.h"
 #include "bandmapgraphicspanel.h"
 
-const QChar DEG_SYMBOL = 0260; // octal value
+const QChar DEG_SYMBOL(0260); // octal value
 const int NO_SELECTED_ROWNUM = -1;
 
 const int KEY_SCROLL_STEP_SIZE = 50;

@@ -10,24 +10,28 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-lessThan(QT_MAJOR_VERSION, 6){
 QT       += serialport
-}
 
 TARGET = MqtRigControl
 TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
 
-lessThan(QT_MAJOR_VERSION, 6){
-win32 {
-    DEFINES += WIN32
-    QT += axcontainer
-    !msvc {
-        #TYPELIBS = $$system(dumpcpp -getfile {4FE359C5-A58F-459D-BE95-CA559FB4F270})
+message(rig control)
+win32-g++*{
+    lessThan(QT_MAJOR_VERSION, 6){
+        DEFINES += WIN32
+        QT += axcontainer
+
+message(g++ dumpcpp)
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
     }
 }
+win32-msvc{
+        DEFINES += WIN32
+        QT += axcontainer
+        message(msvc dumpcpp)
+        TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
 SOURCES += main.cpp\
     hamlibrigcontrol.cpp \

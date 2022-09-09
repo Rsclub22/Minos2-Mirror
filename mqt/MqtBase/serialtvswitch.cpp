@@ -11,7 +11,7 @@
 
 
 #include "serialtvswitch.h"
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPortInfo>
 
 SerialTVSwitch::SerialTVSwitch(QObject *parent) : QObject(parent)
 {

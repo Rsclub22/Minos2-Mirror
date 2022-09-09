@@ -48,7 +48,7 @@ class DistrictSortFilterProxyModel : public QSortFilterProxyModel
 public:
     QString scrolledDistrict;
     QString band;
-    DistrictSortFilterProxyModel(): scrolledDistrict(-1)
+    DistrictSortFilterProxyModel()
     {
     }
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;

@@ -13,7 +13,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QtSerialPort/QSerialPort>
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QMessageBox>
 #include <QHostAddress>
 

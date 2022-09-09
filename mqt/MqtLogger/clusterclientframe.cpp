@@ -519,15 +519,27 @@ void ClusterClientFrame::filterButtonSelected()
             || filterSetup.getIgnoreDistChangedFlag()
             || filterSetup.getIgnoreEmptyDistChangedFlag())
         {
-            dxSpotProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
+        dxSpotProxyModel->setFilterRegExp("");
+#endif
         }
         else if (filterSetup.getCallsignFilerChangedFlag())
         {
-            callSignProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        callSignProxyModel->setFilterRegularExpression("");
+#else
+        callSignProxyModel->setFilterRegExp("");
+#endif
         }
         else if (filterSetup.getLocatorFilterChangedFlag())
         {
-            locatorProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        locatorProxyModel->setFilterRegularExpression("");
+#else
+        locatorProxyModel->setFilterRegExp("");
+#endif
         }
     }
 }
@@ -1427,14 +1439,16 @@ void ClusterClientFrame::onSearchEditingFinished()
         if (ui->searchLineEdit->text().trimmed().isEmpty())
         {
             searchSortProxyModel->searchParameter = "";
-            searchSortProxyModel->setFilterRegExp("");
         }
         else
         {
             searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
-            //ui->searchLineEdit->selectAll();
-            searchSortProxyModel->setFilterRegExp("");
         }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        searchSortProxyModel->setFilterRegularExpression("");
+#else
+        searchSortProxyModel->setFilterRegExp("");
+#endif
 
         ui->searchLineEdit->setFocus();
     }
@@ -1502,22 +1516,38 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
 void ClusterClientFrame::dxSpotProxyModelUpdate()
 {
-    dxSpotProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
+        dxSpotProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::callSignProxyModelUpdate()
 {
-   callSignProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        callSignProxyModel->setFilterRegularExpression("");
+#else
+        callSignProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::locatorProxyModelUpdate()
 {
-    locatorProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        locatorProxyModel->setFilterRegularExpression("");
+#else
+        locatorProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::searchProxyModelUpdate()
 {
-    searchSortProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        searchSortProxyModel->setFilterRegularExpression("");
+#else
+        searchSortProxyModel->setFilterRegExp("");
+#endif
 }
 
 

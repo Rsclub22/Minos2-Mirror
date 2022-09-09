@@ -374,7 +374,7 @@ public:
     ~QtTelnetPrivate();
 
     QMap<char, bool> modes;
-    QList< QPair<uchar, uchar> > osent;
+    QList< QPair<char, char> > osent;
 
     QtTelnet *q;
     QTcpSocket *socket;

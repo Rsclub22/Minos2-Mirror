@@ -10,11 +10,9 @@ include($$PWD/../mqtapplibs.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-lessThan(QT_MAJOR_VERSION, 6){
-QT       += serialport
-}
 QT       += help
 QT       += charts
+QT       += serialport
 
 TARGET = MqtLogger
 TEMPLATE = app

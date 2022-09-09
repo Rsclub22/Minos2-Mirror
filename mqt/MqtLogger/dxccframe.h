@@ -44,7 +44,7 @@ public:
     QString scrolledCountry;
     QString band;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    DXCCSortFilterProxyModel(): scrolledCountry(-1)
+    DXCCSortFilterProxyModel()
     {
     }
 };

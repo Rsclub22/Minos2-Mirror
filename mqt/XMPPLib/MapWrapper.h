@@ -43,8 +43,15 @@ public:
     }
 
 };
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#define qHashRet size_t
+#else
+#define qHashRet uint
+#endif
+
 template <class itemtype>
-uint qHash(const MapWrapper<itemtype> &m)
+qHashRet qHash(const MapWrapper<itemtype> &m)
 {
     return m.wt->qHash();
 }

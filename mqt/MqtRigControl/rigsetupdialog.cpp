@@ -14,6 +14,7 @@
 #include <QCheckBox>
 #include <QSettings>
 #include <QInputDialog>
+#include <QFile>
 
 #include "rigsetupform.h"
 #include "serialCommonData.h"

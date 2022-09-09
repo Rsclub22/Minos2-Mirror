@@ -394,7 +394,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::sendFKey(event);
+            MinosLoggerEvents::sendFKey(event->key());
             return true;
         }
     }
@@ -3135,8 +3135,8 @@ void QSOLogFrame::selectEntryForEdit( QSharedPointer<BaseContact> slct )
    screenContact.copyFromArg( slct );
    showScreenEntry();
 
-   ui->PriorButton->setEnabled(getPriorContact());
-   ui->NextButton->setEnabled(getNextContact());
+   ui->PriorButton->setEnabled(bool(getPriorContact()));
+   ui->NextButton->setEnabled(bool(getNextContact()));
    ui->InsertAfterButton->setEnabled(getNextContact() && !contest->isReadOnly());  // dont allow insert after last contact
    ui->InsertBeforeButton->setEnabled(getPriorContact() && !contest->isReadOnly());  // dont allow insert after last contact
 

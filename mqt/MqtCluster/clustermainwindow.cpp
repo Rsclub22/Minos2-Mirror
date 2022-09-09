@@ -29,6 +29,7 @@
 #include "delayedaction.h"
 #include "LogEvents.h"
 #include "MTrace.h"
+#include "cutils.h"
 
 #include "clustermainwindow.h"
 #include "ui_clustermainwindow.h"
@@ -3019,7 +3020,11 @@ void ClusterMainWindow::updateDisplay()
 {
     if (dxSpotProxyModel)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
         dxSpotProxyModel->setFilterRegExp("");
+#endif
     }
 
 }
@@ -3183,7 +3188,7 @@ void ClusterMainWindow::testSpotPbClicked()
 void ClusterMainWindow::purgeSpots()
 {
 
-    if (setupCluster->getTimeToLive() > 0 /*&& !holdUpdateFlag && (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    if (toInt(setupCluster->getTimeToLive()) > 0 /*&& !holdUpdateFlag && (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
     {
         if (dxSpotDataModel->rowCount() > 0)
         {

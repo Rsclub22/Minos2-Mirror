@@ -122,9 +122,9 @@ void MinosLoggerEvents::sendBandmapLimitsChanged()
     emit mle.bandMapLimitsChanged();
 }
 
-void MinosLoggerEvents::sendFKey(QKeyEvent *event)
+void MinosLoggerEvents::sendFKey(int event)
 {
-    emit mle.fKey(*event);
+    emit mle.fKey(event);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()

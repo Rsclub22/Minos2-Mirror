@@ -253,23 +253,23 @@ void QrzServerMainWindow::sendUrl(QString url)
 
             if (xmlData.readNextStartElement())
             {
-                if (xmlData.name().contains("QRZDatabase"))
+                if (xmlData.name().contains(QString("QRZDatabase")))
                 {
                     if (xmlData.readNextStartElement())
                     {
-                        if (xmlData.name().contains("Session"))
+                        if (xmlData.name().contains(QString("Session")))
                         {
                             parseSessionData(xmlData);
                             sessionDataReceived();
                         }
-                        else if (xmlData.name().contains("Callsign"))
+                        else if (xmlData.name().contains(QString("Callsign")))
                         {
 
                             parseCallsignData(xmlData);
                             callsignDataReceived();
 
                         }
-                        else if (xmlData.name().contains("DXCC"))
+                        else if (xmlData.name().contains(QString("DXCC")))
                         {
                             parseDXCCData(xmlData);
                         }
@@ -446,22 +446,22 @@ void QrzServerMainWindow::parseSessionData(QXmlStreamReader &xmlData)
     QString("Parse Session Data");
     while(xmlData.readNextStartElement())
     {
-        if (xmlData.name() == "Error")
+        if (xmlData.name() == QString("Error"))
         {
            qrzSessionData.setError(xmlData.readElementText());
            trace(QString("Session Data: Error = %1").arg(qrzSessionData.getError()));
         }
-        else if(xmlData.name() == "Key")
+        else if(xmlData.name() == QString("Key"))
         {
             qrzSessionData.setKey( xmlData.readElementText() );
             trace(QString("Session Data: Key = %1").arg(qrzSessionData.getKey()));
         }
-        else if (xmlData.name() == "SubExp")
+        else if (xmlData.name() == QString("SubExp"))
         {
             qrzSessionData.setSubExp(xmlData.readElementText());
             trace(QString("Session Data: SubExp = %1").arg(qrzSessionData.getSubExp()));
         }
-        else if (xmlData.name() == "Message")
+        else if (xmlData.name() == QString("Message"))
         {
             qrzSessionData.setMessage(xmlData.readElementText());
             trace(QString("Session Data: Message = %1").arg(qrzSessionData.getMessage()));
@@ -483,52 +483,52 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
 
     while(xmlData.readNextStartElement())
     {
-        if(xmlData.name() == "call")
+        if(xmlData.name() == QString("call"))
         {
             qrzCallsignData.setCallsign(xmlData.readElementText());
             trace(QString("Callsign Data: callsign = %1").arg(qrzCallsignData.getCallsign()));
         }
-        else if (xmlData.name() == "fname")
+        else if (xmlData.name() == QString("fname"))
         {
             qrzCallsignData.setFirstName(xmlData.readElementText());
             trace(QString("Callsign Data: first name = %1").arg(qrzCallsignData.getFirstName()));
         }
-        else if (xmlData.name() == "name")
+        else if (xmlData.name() == QString("name"))
         {
             qrzCallsignData.setName(xmlData.readElementText());
             trace(QString("Callsign Data: name = %1").arg(qrzCallsignData.getName()));
         }
-        else if (xmlData.name() == "addr1")
+        else if (xmlData.name() == QString("addr1"))
         {
             qrzCallsignData.setAddr1(xmlData.readElementText());
             trace(QString("Callsign Data: addr1 = %1").arg(qrzCallsignData.getAddr1()));
         }
-        else if (xmlData.name() == "addr2")
+        else if (xmlData.name() == QString("addr2"))
         {
             qrzCallsignData.setAddr2(xmlData.readElementText());
             trace(QString("Callsign Data: addr2 = %1").arg(qrzCallsignData.getAddr2()));
         }
-        else if (xmlData.name() == "county")
+        else if (xmlData.name() == QString("county"))
         {
             qrzCallsignData.setCounty(xmlData.readElementText());
             trace(QString("Callsign Data: county = %1").arg(qrzCallsignData.getCounty()));
         }
-        else if (xmlData.name() == "country")
+        else if (xmlData.name() == QString("country"))
         {
             qrzCallsignData.setCountry(xmlData.readElementText());
             trace(QString("Callsign Data: country = %1").arg(qrzCallsignData.getCountry()));
         }
-        else if (xmlData.name() == "lat")
+        else if (xmlData.name() == QString("lat"))
         {
             qrzCallsignData.setLat(xmlData.readElementText());
             trace(QString("Callsign Data: lat = %1").arg(qrzCallsignData.getLat()));
         }
-        else if (xmlData.name() == "lon")
+        else if (xmlData.name() == QString("lon"))
         {
             qrzCallsignData.setLon(xmlData.readElementText());
             trace(QString("Callsign Data: lon = %1").arg(qrzCallsignData.getLon()));
         }
-        else if (xmlData.name() == "grid")
+        else if (xmlData.name() == QString("grid"))
         {
             QString grid = xmlData.readElementText();
             if (grid.count() == 6)
@@ -538,12 +538,12 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
             qrzCallsignData.setQra(grid);
             trace(QString("Callsign Data: grid = %1").arg(qrzCallsignData.getQra()));
         }
-        else if (xmlData.name() == "cqzone")
+        else if (xmlData.name() == QString("cqzone"))
         {
             qrzCallsignData.setCqZone(xmlData.readElementText());
             trace(QString("Callsign Data: cqZone = %1").arg(qrzCallsignData.getCqZone()));
         }
-        else if (xmlData.name() == "ituzone")
+        else if (xmlData.name() == QString("ituzone"))
         {
             qrzCallsignData.setItuZone(xmlData.readElementText());
             trace(QString("Callsign Data: ituZone = %1").arg(qrzCallsignData.getItuZone()));
