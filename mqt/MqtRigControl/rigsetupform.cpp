@@ -1583,8 +1583,7 @@ void RigSetupForm::addTransVerter()
         // error empty name or name already exists
         QMessageBox::information(this, tr("Transverter Name Exists"),
                                  tr("Transverter Name: %1, already exists \nPlease enter another name").arg(transVerterName.trimmed()),
-                                  QMessageBox::Ok|QMessageBox::Default,
-                                  QMessageBox::NoButton, QMessageBox::NoButton);
+                                  QMessageBox::Ok| QMessageBox::NoButton, QMessageBox::NoButton);
         return;
     }
 
@@ -1676,8 +1675,7 @@ void RigSetupForm::removeTransVerter()
                             tr("Remove Transverter"),
                             tr("Do you really want to remove transverter - %1?")
                             .arg(currentTransVertName),
-                            QMessageBox::Yes|QMessageBox::Default,
-                            QMessageBox::No|QMessageBox::Escape,
+                            QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
 
     if (status != QMessageBox::Yes)
@@ -1741,8 +1739,7 @@ void RigSetupForm::changeBand()
         // error empty name or name already exists
         QMessageBox::information(this, tr("Transverter Name Exists"),
                                  tr("Transverter Name: %1, already exists \nPlease enter another name").arg(transVertName.trimmed()),
-                                  QMessageBox::Ok|QMessageBox::Default,
-                                  QMessageBox::NoButton, QMessageBox::NoButton);
+                                  QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
         return;
     }
 

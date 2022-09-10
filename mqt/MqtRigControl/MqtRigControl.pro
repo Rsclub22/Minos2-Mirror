@@ -33,6 +33,7 @@ win32-msvc{
         message(msvc dumpcpp)
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
+message($$INCLUDEPATH)
 SOURCES += main.cpp\
     hamlibrigcontrol.cpp \
     rigbase.cpp \

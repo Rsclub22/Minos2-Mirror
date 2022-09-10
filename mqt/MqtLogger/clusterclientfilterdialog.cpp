@@ -342,7 +342,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         if (filterSettings.getBandFilter(band) != bandCheckBoxes.value(band).bandChkBox->isChecked())
         {
             filterSettings.setBandFilter(band, bandCheckBoxes.value(band).bandChkBox->isChecked());
-            trace(QString("BandFilter Changed = %1 , State = %2, ContestUuid = %3").arg(band).arg(bandCheckBoxes.value(band).bandChkBox->isChecked()  ? "True" : "False").arg(contestUuid));
+            trace(QString("BandFilter Changed = %1 , State = %2, ContestUuid = %3").arg(band, bandCheckBoxes.value(band).bandChkBox->isChecked()  ? "True" : "False", contestUuid));
 
             bandFilterChangedFlag = true;
         }
@@ -355,7 +355,7 @@ void ClusterClientFilterDialog::filtersAccepted()
         if (filterSettings.getModeFilter(m) != modeCheckBoxes.value(m)->isChecked())
         {
             filterSettings.setModeFilter(m, modeCheckBoxes.value(m)->isChecked());
-            trace(QString("ModeFilter Changed = %1 , State = %2, ContestUuid = %3").arg(m).arg(modeCheckBoxes.value(m)->isChecked()  ? "True" : "False").arg(contestUuid));
+            trace(QString("ModeFilter Changed = %1 , State = %2, ContestUuid = %3").arg(m, modeCheckBoxes.value(m)->isChecked()  ? "True" : "False",contestUuid));
 
             modeFilterChangedFlag = true;
         }
@@ -858,8 +858,7 @@ void ClusterClientFilterDialog::callsignAddClicked()
                 {
                     QMessageBox::information(this, tr("Add Callsign Filter"),
                                              tr("Callsign already exists in list!"),
-                                              QMessageBox::Ok|QMessageBox::Default,
-                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                                              QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
                 }
                 else
                 {
@@ -913,8 +912,7 @@ void ClusterClientFilterDialog::callsignDelClicked()
         int status = QMessageBox::question( this,
         tr("Delete Callsign Filter"),
         tr("Please confirm you want to delete callsign %1 ?").arg(callsignListWidget->currentItem()->text()),
-        QMessageBox::Yes|QMessageBox::Default,
-        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
@@ -938,8 +936,7 @@ void ClusterClientFilterDialog::callsignDelAllClicked()
         int status = QMessageBox::question( this,
         tr("Delete All Callsign Filters"),
         tr("Please confirm you want to delete all callsigns?"),
-        QMessageBox::Yes|QMessageBox::Default,
-        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
@@ -1044,8 +1041,7 @@ void ClusterClientFilterDialog::locatorAddClicked()
                 {
                     QMessageBox::information(this, tr("Add Locator Filter"),
                                              tr("Locator already exists in list!"),
-                                              QMessageBox::Ok|QMessageBox::Default,
-                                              QMessageBox::NoButton, QMessageBox::NoButton);
+                                              QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
                 }
                 else
                 {
@@ -1098,8 +1094,7 @@ void ClusterClientFilterDialog::locatorDelClicked()
         int status = QMessageBox::question( this,
         tr("Delete Locator Filter"),
         tr("Do you want to delete locator %1 ?").arg(locatorListWidget->currentItem()->text()),
-        QMessageBox::Yes|QMessageBox::Default,
-        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
@@ -1122,8 +1117,7 @@ void ClusterClientFilterDialog::locatorDelAllClicked()
         int status = QMessageBox::question( this,
         tr("Delete All Locator Filters"),
         tr("Please confirm you want to delete all locators?"),
-        QMessageBox::Yes|QMessageBox::Default,
-        QMessageBox::No|QMessageBox::Escape,
+        QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
         QMessageBox::NoButton);
         if (status == QMessageBox::Yes)
         {
@@ -1322,8 +1316,7 @@ void ClusterClientFilterDialog::onDistanceEditingFinished(QLineEdit *distanceLin
             {
                 QMessageBox::information(this, tr("Distance Filter"),
                                          tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
-                                          QMessageBox::Ok|QMessageBox::Default,
-                                          QMessageBox::NoButton, QMessageBox::NoButton);
+                                          QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
             }
         }
     }

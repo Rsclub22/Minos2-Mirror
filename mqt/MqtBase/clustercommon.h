@@ -258,6 +258,10 @@ class BandFilterSettings
 
         return *this;
     }
+    BandFilterSettings(const BandFilterSettings &bfs)
+    {
+        *this = bfs;
+    }
 
 
     bool operator==( const BandFilterSettings& bfs ) const

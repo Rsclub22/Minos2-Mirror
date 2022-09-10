@@ -100,7 +100,7 @@ void BaseContestLog::addToContestList(QSharedPointer<BaseContact> rct )
     MapWrapper<BaseContact> wrct(rct);
     ctList.insert( wrct, wrct );
 
-    MapWrapper<BaseContact> last = *(ctList.end() - 1);
+    MapWrapper<BaseContact> last = *(std::prev(ctList.end()));
     if (last != rct)
     {
         cacheRefreshNeeded = true;

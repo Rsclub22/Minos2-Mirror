@@ -70,16 +70,16 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
 
     BandList::getBandList().loadAllBands(bands);
 
-    freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
+    freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), parent);
     connect(freqEditShortKey, &QShortcut::activated, this, &RigControlFrame::freqEditSelected);
 
     connect(ui->freqStepCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RigControlFrame::freqStepComboChanged);
 
-    freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U), parent);
+    freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_U), parent);
     connect(freqPlusShortCut, &QShortcut::activated, this, &RigControlFrame::freqPlus_ShortCut);
     connect(ui->freqUp, &QToolButton::clicked, this, &RigControlFrame::freqPlusShortCut_clicked);
 
-    freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D), parent);
+    freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), parent);
     connect(freqNegShortCut, &QShortcut::activated, this, &RigControlFrame::freqNeg_ShortCut);
     connect(ui->freqDown, &QToolButton::clicked, this, &RigControlFrame::freqNegShortCut_clicked);
 

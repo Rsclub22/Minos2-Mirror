@@ -2349,13 +2349,19 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
     if (!userCommands[buttonNumber].isEmpty() || (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count()))
     {
-        int status = QMessageBox::question( this,
+//        static StandardButton question(QWidget *parent, const QString &title,
+//             const QString &text,
+//             StandardButtons buttons = StandardButtons(Yes | No),
+//             StandardButton defaultButton = NoButton);
+
+        QMessageBox::StandardButton status = QMessageBox::question( this,
                                 tr("Cluster %1 User Command Clear").arg(tabSelected),
                                 tr("Do you really want to clear cluster %1 user command number:%2?")
                                 .arg(tabSelected).arg(buttonNumber + 1),
-                                QMessageBox::Yes|QMessageBox::Default,
-                                QMessageBox::No|QMessageBox::Escape,
-                                QMessageBox::NoButton);
+
+                                QMessageBox::StandardButtons(QMessageBox::Yes|QMessageBox::StandardButton::No|QMessageBox::StandardButton::Escape),
+
+                                QMessageBox::StandardButton::NoButton);
 
         if (status == QMessageBox::Yes)
         {

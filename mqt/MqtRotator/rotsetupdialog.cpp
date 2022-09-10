@@ -687,8 +687,7 @@ void RotSetupDialog::removeAntenna()
                             tr("Remove Antenna"),
                             tr("Do you really want to remove antenna - %1?")
                             .arg(currentName),
-                            QMessageBox::Yes|QMessageBox::Default,
-                            QMessageBox::No|QMessageBox::Escape,
+                            QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
 
     if (status != QMessageBox::Yes)
