@@ -596,7 +596,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
         QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
         if (!brg.isEmpty())
         {
-            if (loc.count() < 6)
+            if (loc.size() < 6)
             {
                 brg = brg.append(SHORTLOCATOR_IDENTIFIER);
             }
@@ -989,7 +989,7 @@ void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
     if (ct && !locator.isEmpty())
     {
-        if (locator.count() == 4)
+        if (locator.size() == 4)
         {
             locator.append("MM");
         }
@@ -1294,7 +1294,7 @@ void ClusterClientFrame::bearingActionSelected()
             if (!brg.isEmpty())
             {
                 QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
-                if (loc.count() < 6)
+                if (loc.size() < 6)
                 {
                     brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 

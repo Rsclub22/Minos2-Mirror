@@ -57,12 +57,6 @@ void throw_qstring (QString const& qs)
   throw std::runtime_error {qs.toLocal8Bit ().constData ()};
 }
 
-QString font_as_stylesheet (QFont const&);
-
-// do what is necessary to change a dynamic property and trigger any
-// conditional style sheet updates
-void update_dynamic_property (QWidget *, char const * property, QVariant const& value);
-
 template <class T>
 class VPtr
 {

@@ -49,7 +49,7 @@ void RunButtonDialog::onFreqEditFinish()
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
-        if (fl[1].count() > 6)
+        if (fl[1].size() > 6)
         {
             fl[1].truncate(6);
             f = fl[0] + "." + fl[1];

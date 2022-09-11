@@ -519,7 +519,7 @@ void RigMemoryFrame::bearingActionSelected()
     traceMsg(QString("Memory Bearing Selected = %1").arg(QString::number(buttonNumber +1)));
     memoryData::memData m = ct->getRigMemoryData(buttonNumber);
     QString brg;
-    if (m.locator.count() < 6)
+    if (m.locator.size() < 6)
     {
         brg = QString::number(m.bearing).append(SHORTLOCATOR_IDENTIFIER); // flag bearing from a short locator
     }

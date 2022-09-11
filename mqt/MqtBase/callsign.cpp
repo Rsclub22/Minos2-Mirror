@@ -366,7 +366,7 @@ int Callsign::validate( )
 
     wpxPrefix = dupPrefix + number;     // for now...
 
-    for (int i = 0; i < body.count(); i++)
+    for (int i = 0; i < body.size(); i++)
     {
         if (body[i].isDigit())
         {

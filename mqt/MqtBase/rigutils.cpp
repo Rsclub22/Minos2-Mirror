@@ -124,23 +124,23 @@ QString convertSinglePeriodFreqToMultiPeriod(QString f)
     {
         sl.append("000");
     }
-    if (sl[0].count() > 3)
+    if (sl[0].size() > 3)
     {
-        retFreq = sl[0].left(sl[0].count()-3) + "." + sl[0].right(3) + ".";
+        retFreq = sl[0].left(sl[0].size()-3) + "." + sl[0].right(3) + ".";
     }
     else
     {
         retFreq = sl[0] + ".";
     }
 
-    if (sl[1].count() > 3)
+    if (sl[1].size() > 3)
     {
-       retFreq = retFreq + sl[1].left(3) + "." + sl[1].right(sl[1].count()-3);
-       if (sl[1].count() == 4)
+       retFreq = retFreq + sl[1].left(3) + "." + sl[1].right(sl[1].size()-3);
+       if (sl[1].size() == 4)
        {
            retFreq = retFreq + "00";
        }
-       else if (sl[1].count() == 5)
+       else if (sl[1].size() == 5)
        {
            retFreq = retFreq + "0";
        }

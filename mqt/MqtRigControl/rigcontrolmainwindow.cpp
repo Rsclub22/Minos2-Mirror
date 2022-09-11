@@ -640,7 +640,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         updateSupportedRadioIndicators();
 
-        if (appName.count() > 0)
+        if (appName.size() > 0)
         {
             logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr()).arg(loggerRequests->selRadioMode));
             loggerSetFreq(loggerRequests->selRadioFreq);
@@ -3713,7 +3713,7 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
     {
         errorMsg = radio->getErrorMsgText(errorCode);
 
-        if(appName.count() > 0)
+        if(appName.size() > 0)
         {
             sendStatusToLogError(errorMsg);
         }

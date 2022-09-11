@@ -477,7 +477,7 @@ void RigControlFrame::displayFreqOnFreqEditDisplay(const Frequency &freq)
         {
             traceMsg(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq.traceStr()));
             QString sf = freq.str();
-            ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
+            ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setLineText(sf);
 
@@ -635,7 +635,7 @@ void RigControlFrame::changeMainRadioFreq()
             if (checkValidFreq(newFreq))
             {
                 lastFreq = newFreq;
-                if (lastFreq.str().count() >= 4)
+                if (lastFreq.str().size() >= 4)
                 {
                     if (isRadioLoaded())
                     {
@@ -811,7 +811,7 @@ void RigControlFrame::exitFreqEdit()
     {
         // up date display to current radio freq
         QString sf = curFreq.str();
-        ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
+        ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
         ui->freqInput->setLineText(sf);
         emit setFreqDisplay(curFreq, legalFreq);
     }

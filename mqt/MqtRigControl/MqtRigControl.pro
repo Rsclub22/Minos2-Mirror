@@ -19,13 +19,11 @@ win32:RC_ICONS += ../MinosRig.ico
 
 message(rig control)
 win32-g++*{
-    lessThan(QT_MAJOR_VERSION, 6){
-        DEFINES += WIN32
-        QT += axcontainer
+    DEFINES += WIN32
+    QT += axcontainer
 
 message(g++ dumpcpp)
-        TYPELIBS = $$system(dumpcpp OmniRig.tlb)
-    }
+    TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
 win32-msvc{
         DEFINES += WIN32

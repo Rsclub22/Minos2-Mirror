@@ -531,7 +531,7 @@ void QrzServerMainWindow::parseCallsignData(QXmlStreamReader &xmlData)
         else if (xmlData.name() == QString("grid"))
         {
             QString grid = xmlData.readElementText();
-            if (grid.count() == 6)
+            if (grid.size() == 6)
             {
                 grid = grid.replace(4, 2, grid.right(2).toUpper());
             }

@@ -176,7 +176,7 @@ void PstRotControl::processPendingReportDatagrams()
 
     b = QString(datagram.data());
 
-    traceCommsMsg(QString("received %1 chars, message %2").arg(b.count()).arg(b));
+    traceCommsMsg(QString("received %1 chars, message %2").arg(b.size()).arg(b));
 
     if (b.contains(':') && b.contains('\r'))
     {

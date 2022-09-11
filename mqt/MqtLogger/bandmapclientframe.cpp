@@ -355,7 +355,7 @@ void BandmapClientFrame::on_bearingActionSelected()
         QString loc = bandmapView->getSelectedSpotDataPtr()->getDxLocator();
         if (!brg.isEmpty())
         {
-            if (loc.count() < 6)
+            if (loc.size() < 6)
             {
                 brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
@@ -555,7 +555,7 @@ void BandmapClientFrame::context_bearingActionSelected()
     QString loc = contextMenuSelectedSpotData.getDxLocator();
     if (!brg.isEmpty())
     {
-        if (loc.count() < 6)
+        if (loc.size() < 6)
         {
             brg = brg.append(SHORTLOCATOR_IDENTIFIER);
         }
@@ -1423,7 +1423,7 @@ void BandmapClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
     if (ct && !locator.isEmpty())
     {
-        if (locator.count() == 4)
+        if (locator.size() == 4)
         {
             locator.append("MM");
         }
@@ -1529,9 +1529,9 @@ void BandmapClientFrame::checkLegalFrequencies(Frequency freq)
 
     QString sf = freq.str();
 
-    if (sf.count() >= 4)
+    if (sf.size() >= 4)
     {
-        ui->freqDisplay->setInputMask(maskData::freqMask[sf.count() - 4]);
+        ui->freqDisplay->setInputMask(maskData::freqMask[sf.size() - 4]);
 
 
         if (isFreqLegal(freq, contestBandStr, contestModeStr))

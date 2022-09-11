@@ -1173,7 +1173,7 @@ void QSOLogFrame::onCallsignEdit_textChanged(const QString &text)
 
     }
 
-    if (text.count() > 0)
+    if (text.size() > 0)
     {
         callsignEnterTextFreq = curFreq;
     }

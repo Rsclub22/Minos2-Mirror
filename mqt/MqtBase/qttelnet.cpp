@@ -1041,7 +1041,7 @@ int QtTelnet::sendData(const QString &data)
 //    trace(QString("sendData: %1").arg(traceMsg));
 //    trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
 
-    if (charSent == str.count())
+    if (charSent == str.size())
     {
         return 0;
     }

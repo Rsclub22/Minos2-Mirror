@@ -101,7 +101,7 @@ void RigCtldClient::readyRead()
     while (socket->canReadLine())
     {
         line = QString(socket->readLine());
-        bytes += line.count();
+        bytes += line.size();
         msg.append(line);
     }
 

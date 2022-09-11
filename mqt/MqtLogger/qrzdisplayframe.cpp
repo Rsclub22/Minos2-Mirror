@@ -220,10 +220,10 @@ void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* d
 
     if (ct && !locator.isEmpty())
     {
-        if (locator.count() == 4)
-        {
-            locator.append("MM");
-        }
+        if (locator.size() == 4)
+         {
+             locator.append("MM");
+         }
 
         int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
