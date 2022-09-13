@@ -214,7 +214,9 @@ void RunConfigElement::createProcess()
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
         runner->start(program, progArgs);
 #else
-        runner->start(program + progArgs.join(" "));
+        QString runarg = program + " " + progArgs.join(" ");
+        runner->start(runarg);
+        trace(runarg)
 #endif
 
         if (runner)
