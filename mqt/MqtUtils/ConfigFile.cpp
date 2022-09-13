@@ -216,7 +216,7 @@ void RunConfigElement::createProcess()
 #else
         QString runarg = program + " " + progArgs.join(" ");
         runner->start(runarg);
-        trace(runarg)
+        trace(runarg);
 #endif
 
         if (runner)
