@@ -811,8 +811,7 @@ void BandmapClientFrame::dxSpots(QVector<ClusterMessage> spotMsg)
         for (int i = 0; i < spotMsg.count(); i++)
         {
             ClusterMessage msg = spotMsg[i];
-            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3")
-                     .arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
+            traceMsg(QString("retrieve cluster spot from queue - spot = %1 for loggeruuid = %2, this contest uuid = %3").arg(msg.getMessage(), msg.getLoggerUuid(), ct->uuid));
 
             // if loggerUuid is empty, message is for all frames
             if ((msg.getLoggerUuid().isEmpty() || msg.getLoggerUuid() == ct->uuid) && (msg.getFrameId() == resendFrameId::BANDMAP_CLIENT || msg.getFrameId() == resendFrameId::ALL_CLIENTS))
@@ -919,12 +918,11 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
-            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMddHHmmss" );
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
             spotDateTime.setTimeSpec(Qt::UTC);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
-            traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4")
-                     .arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
+            traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4").arg(spotlist[DXCALL], spotlist[DXFREQ], spotlist[DXMODESTR], spotlist[DXLOCATOR]));
 
             res = QSharedPointer<BandmapSpotData>(new BandmapSpotData(bandmapSpotType::CLUSTER));
 
@@ -1018,11 +1016,7 @@ void BandmapClientFrame::addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData>
     }
 
     traceMsg(QString("Add Cluster Spot to Bandmap %1, %2, %3, %4, dxLocatorIsFromNode = %5")
-             .arg(spot->getDxCall().getFullCall(),
-                  spot->getFreq().traceStr(),
-                  spot->getMode(),
-                  spot->getDxLocatorWorked()? "true" : "false",
-                  spot->getDxLocatorIsFromNode() ? "true" : "false")
+             .arg(spot->getDxCall().getFullCall(), spot->getFreq().traceStr(), (spot->getMode(), spot->getDxLocatorWorked(), spot->getDxLocatorIsFromNode() ? "true" : "false"))
                   );
 
     bandmapDataModel->rowData.push_back(spot);
@@ -1801,9 +1795,7 @@ void BandmapClientFrame::purgeSpots()
                {
                    if (spotTimedOut(bandmapDataModel->data(bandmapDataModel->index(idx, RXTIME_COL_NUM), BMP_DataStoredRole).toLongLong(), timeToLive))
                    {
-                       traceMsg(QString("Cluster Spot purged - %1 ttl %2")
-                                .arg(bandmapDataModel->data(bandmapDataModel->index(idx, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString())
-                                .arg(timeToLive));
+                       traceMsg(QString("Cluster Spot purged - %1").arg(bandmapDataModel->data(bandmapDataModel->index(idx, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString()));
                        bandmapDataModel->removeRows(idx, 1, QModelIndex());
                    }
                }

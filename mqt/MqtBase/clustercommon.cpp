@@ -600,7 +600,7 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
 
         QString time = dl[2] + dl[1] + dl[0] + spotTime + "00";
         trace(QString("getSpotDateTime: spotTime is %1").arg(time));
-        dt = QDateTime::fromString(time, "yyyyMMddHHmmss" );
+        dt = QDateTime::fromString(time, "yyyyMMMddHHmmss" );
         dt.setTimeSpec(Qt::UTC);
 
     }

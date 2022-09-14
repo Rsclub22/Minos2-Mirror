@@ -1421,7 +1421,7 @@ QString ClusterMainWindow::assembleSpotMsgToSendToClients(const QSharedPointer<C
             + QString(":%9:%10:%11:%12:%13:%14")
                        .arg(spotData->getSpotterCallStr(),      // %9
                        spotData->getSpotterLocator(),       // %10
-                       spotData->getSpotDateTime().toString("yyyyMMddHHmmss"),  // %11
+                       spotData->getSpotDateTime().toString("yyyyMMMddHHmmss"),  // %11
                        spotData->getSpotComment(),         // %12
                        spotData->getDxPropMode(),         // %13
                        timeToLive);                      // %14
