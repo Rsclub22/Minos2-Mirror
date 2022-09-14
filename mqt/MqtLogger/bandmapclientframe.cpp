@@ -918,7 +918,7 @@ QSharedPointer<BandmapSpotData> BandmapClientFrame::stringToDxSpot(QString spot)
 
             bool dxLocFromNodeFlag = extractDxLocFromNodeFlag(spotlist[DXLOC_FROM_NODE_FLAG]);
 
-            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMMddHHmmss" );
+            spotDateTime = QDateTime::fromString(spotlist[SPOTDATETIME], "yyyyMMddHHmmss" );
             spotDateTime.setTimeSpec(Qt::UTC);
             qint64 rxTime = spotDateTime.toMSecsSinceEpoch() / 1000;
 
