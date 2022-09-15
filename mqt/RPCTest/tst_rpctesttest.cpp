@@ -49,6 +49,8 @@ private Q_SLOTS:
     void testBST();
 
     void testMults();
+
+    void testQDateTime();
 };
 
 RPCTestTest::RPCTestTest()
@@ -629,6 +631,19 @@ void RPCTestTest::testMults()
        os << i->wt->synPrefix + " : " + i->wt->dupPrefix + "\n";
     }
     */
+}
+
+void RPCTestTest::testQDateTime()
+{
+    QDateTime now = QDateTime::currentDateTimeUtc();
+
+    QString snow = now.toString("yyyyMMMddhhmmss");
+
+    QDateTime newNow = QDateTime::fromString(snow, "yyyyMMMddhhmmss");
+
+    QString snewNow = newNow.toString("yyyyMMMddhhmmss");
+
+    QVERIFY(snow == snewNow);
 }
 
 QTEST_MAIN(RPCTestTest)
