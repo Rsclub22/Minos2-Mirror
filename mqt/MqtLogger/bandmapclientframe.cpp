@@ -1838,6 +1838,11 @@ void BandmapClientFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<Ba
 
         QString logModeStr = lct->mode.getValue();
 
+        if (logModeStr == hamlibData::MGM)
+        {
+            logModeStr = lct->mgmSubmode.getValue();
+        }
+
         traceMsg(QString("afterlog contact add marker - callsign %1, freq %2, loc %3, brg %4, mode %5")
                  .arg(cs.getFullCall(), freq.traceStr(), loc, brg, logModeStr));
 
