@@ -1126,7 +1126,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
 
 
 
-
+static QRegularExpression rews("\\s+");
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
@@ -1136,9 +1136,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
     newSpot->setClusterSpotType(clusterSpotType::SHOW_DXSPOT_TYPE);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    dxMsg = txt.split(rews, Qt::SkipEmptyParts);
 #else
-    dxMsg = txt.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+    dxMsg = txt.split(rews, QString::SkipEmptyParts);
 #endif
 
     if (dxMsg.count() > 4)

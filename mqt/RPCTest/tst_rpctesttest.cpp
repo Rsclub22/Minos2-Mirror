@@ -644,7 +644,18 @@ void RPCTestTest::testQDateTime()
     QString snewNow = newNow.toString("yyyyMMMddhhmmss");
 
     QVERIFY(snow == snewNow);
-}
+
+    QStringList monthNames;
+    for (int i = 1; i <= 12; i++)
+    {
+        QString s = QString("2022 %1 21 20 00 00").arg(i, 2, 10, QChar('0'));
+
+        QDateTime d = QDateTime::fromString(s, "yyyy MM dd hh mm ss");
+
+        QString m = d.toString("MMM");
+        monthNames.append(m);
+    }
+    QVERIFY(snow == snewNow);}
 
 QTEST_MAIN(RPCTestTest)
 

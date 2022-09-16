@@ -592,19 +592,28 @@ QDateTime getSpotDateTime(const QString spotDate, const QString spotTime)
     //    t = "0" + t;
     //}
 
+    QDate dto;
     QStringList dl = spotDate.split('-');
     if (dl.count() == 3)
     {
         dl[0].prepend('0');         // correct if date isn't 0x for < 10
         dl[0] = dl[0].right(2);
-
-        QString time = dl[2] + dl[1] + dl[0] + spotTime + "00";
-        trace(QString("getSpotDateTime: spotTime is %1").arg(time));
-        dt = QDateTime::fromString(time, "yyyyMMMddHHmmss" );
-        dt.setTimeSpec(Qt::UTC);
+        dto = QDate::fromString(dl[2] + dl[1] + dl[0], "yyyyMMMdd" );
 
     }
+    if (!dto.isValid())
+    {
+        dto = QDate::currentDate();
+    }
 
+    QString time =  spotTime + "00";
+    trace(QString("getSpotDateTime: spotTime is %1").arg(time));
+    QTime tmo = QTime::fromString(time, "HHmmss" );
+    if (!tmo.isValid())
+    {
+        tmo = QTime::currentTime();
+    }
+    dt = QDateTime(dto, tmo, Qt::UTC);
     return dt;
 }
 
