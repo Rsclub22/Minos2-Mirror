@@ -98,8 +98,8 @@ void TxVmButtonsFrame::initTxVmButtonFrame()
 
     QString voiceKeyerName = config.value("KeyerName").toString();
 
-    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
     voiceKeyerFactory->populateComboKeyerList(ui->voiceKeyerSelect, voiceKeyerName);
+    connect(ui->voiceKeyerSelect, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TxVmButtonsFrame::onVoiceKeyerSelect);
 
     trace(QString("start keyer name = %1").arg(ui->voiceKeyerSelect->currentText()));
 
@@ -582,9 +582,9 @@ void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
     QMessageBox msgBox;
     msgBox.setWindowTitle(tr("Voice Memory Button %1").arg(buttonNumber + 1));
     msgBox.setText(tr("Are you sure you want to clear this Button?"));
-    msgBox.setInformativeText(tr("Click save to clear, cancel to ignore"));
-    msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Save);
+    msgBox.setInformativeText(tr("Click OK to clear, cancel to ignore"));
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Ok);
     int ret = msgBox.exec();
 
     switch (ret)
