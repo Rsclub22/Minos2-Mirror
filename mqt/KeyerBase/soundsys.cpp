@@ -430,7 +430,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
         if (inputEnabled)
         {
             mutex.lock();
-            if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)
+            if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
                 bufferNotFull.wait(&mutex);
             mutex.unlock();
 
