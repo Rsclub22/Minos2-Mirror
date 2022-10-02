@@ -675,11 +675,11 @@ void TxVmButtonsFrame::setRunButtonText(const int buttonNumber, const QString na
 
 void TxVmButtonsFrame::onMsgDurTimerTimeout()
 {
-    if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 )
+    if (buttonNumSent >= 0)
     {
-        // message duration of zero means that there shouldn't be a timer running
-        if (buttonNumSent >= 0)
+        if (vmKeyParamList[buttonNumSent].getVmDuration() > 0 )
         {
+        // message duration of zero means that there shouldn't be a timer running
             if (vmKeyParamList[buttonNumSent].getVmRepeatFlag())
             {
                 int repeatPauseDur = vmKeyParamList[buttonNumSent].getVmRepeatPauseDur() * 1000;
