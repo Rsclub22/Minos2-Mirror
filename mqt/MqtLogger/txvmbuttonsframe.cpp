@@ -635,6 +635,10 @@ void TxVmButtonsFrame::onRemoteKeyerStarted(int key)
     onRemoteKeyerStopped();
 
     buttonNumSent = key;
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
+    {
+        return;
+    }
 
     int msgDur = vmKeyParamList[buttonNumSent].getVmDuration() * 1000;
     if (msgDur > 0)
