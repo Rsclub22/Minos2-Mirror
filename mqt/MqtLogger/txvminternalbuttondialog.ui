@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
+    <width>521</width>
     <height>324</height>
    </rect>
   </property>
@@ -101,9 +101,16 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
             <item>
-             <widget class="QPushButton" name="showButton">
+             <widget class="QPushButton" name="recordButton">
               <property name="text">
-               <string>Show</string>
+               <string>Record</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="stopButton">
+              <property name="text">
+               <string>Stop</string>
               </property>
              </widget>
             </item>
@@ -115,22 +122,9 @@
              </widget>
             </item>
             <item>
-             <spacer name="horizontalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>8</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="recordButton">
+             <widget class="QPushButton" name="showButton">
               <property name="text">
-               <string>Record</string>
+               <string>Show</string>
               </property>
              </widget>
             </item>
@@ -146,13 +140,6 @@
                </size>
               </property>
              </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="stopButton">
-              <property name="text">
-               <string>Stop</string>
-              </property>
-             </widget>
             </item>
            </layout>
           </item>

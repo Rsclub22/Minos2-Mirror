@@ -110,13 +110,6 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
-              <widget class="QPushButton" name="showButton">
-               <property name="text">
-                <string>Show</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="recordButton">
                <property name="text">
                 <string>Record</string>
@@ -127,6 +120,13 @@
               <widget class="QPushButton" name="playButton">
                <property name="text">
                 <string>Play</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="showButton">
+               <property name="text">
+                <string>Show</string>
                </property>
               </widget>
              </item>
