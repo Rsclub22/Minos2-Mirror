@@ -40,8 +40,6 @@ public:
     QAction* readAction;
     QAction* newAction;
     QAction* editAction;
-    QAction* clearAction;
-
 
     void showButtonOnOff(bool state);
 
@@ -51,7 +49,6 @@ private slots:
     void editActionSelected();
     void writeActionSelected();
     void buttonSelected();
-    void clearActionSelected();
 signals:
 
     void buttonActivated(int);
@@ -83,7 +80,6 @@ public:
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
-    void clearActionSelected(int buttonNumber);
 
     void setPttEnabled(bool state, PubSubName psn);
 

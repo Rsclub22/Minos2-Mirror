@@ -575,50 +575,6 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
 
 }
 
-void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
-{
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
-    {
-        return;
-    }
-
-    VoiceKeyerParams vmData;
-    vmData.clear();
-    vmData.setvmButtonNum(buttonNumber);
-    vmData.setType(voiceKeyerType);
-    vmData.setVkBase(txVoiceKeyer);
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(tr("Voice Memory Button %1").arg(buttonNumber + 1));
-    msgBox.setText(tr("Are you sure you want to clear this Button?"));
-    msgBox.setInformativeText(tr("Click OK to clear, cancel to ignore"));
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    int ret = msgBox.exec();
-
-    switch (ret)
-    {
-      case QMessageBox::Save:
-        if (txVoiceKeyer)
-        {
-            txVoiceKeyer->saveVmButtonParams(vmData);
-            setRunButtonText(buttonNumber, vmData.getVmName());
-            vmKeyParamList[buttonNumber] = vmData;
-        }
-          break;
-
-      case QMessageBox::Cancel:
-          // Cancel was clicked
-          break;
-      default:
-          // should never be reached
-          break;
-    }
-
-}
-
-
-
 void TxVmButtonsFrame::onRemoteConfigChanged()
 {
     bool s = txVoiceKeyer->getPip();
@@ -1022,14 +978,12 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
 
     shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
 
-    readAction = new QAction(tr("&Read"), vmButton);
+    readAction = new QAction(tr("&Play"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
-    clearAction = new QAction(tr("&Clear"), vmButton);
     vmMenu->addAction(readAction);
     vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
-    vmMenu->addAction(clearAction);
 
 
     vmButton->setMenu(vmMenu);
@@ -1040,7 +994,6 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::buttonSelected);
     connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::writeActionSelected);
     connect( editAction, &QAction::triggered, this, &TxVoiceMemButton::editActionSelected);
-    connect(clearAction, &QAction::triggered, this, &TxVoiceMemButton::clearActionSelected);
 
 
 }
@@ -1072,12 +1025,6 @@ void TxVoiceMemButton::writeActionSelected()
 {
     txVmButtonsFrame->writeActionSelected(memNo);
 }
-
-void TxVoiceMemButton::clearActionSelected()
-{
-    txVmButtonsFrame->clearActionSelected(memNo);
-}
-
 
 
 void TxVoiceMemButton::buttonSelected()
