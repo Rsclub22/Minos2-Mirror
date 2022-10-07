@@ -20,25 +20,6 @@
 #include "keyerlog.h"
 #include "riff.h"
 
-#define FRAMES 16
-#define FRAMESAMPLES 256
-#define RINGBUFFERSIZE 1024
-
-static QWaitCondition bufferNotEmpty;
-static QWaitCondition bufferNotFull;
-static QMutex mutex;
-
-class InBuff
-{
-public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
-};
-
-static InBuff inBuffs[RINGBUFFERSIZE];
-static int recIndex = 0;
-static int writeIndex = 0;
-
 RiffWriter::RiffWriter(RtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
 {
 }
@@ -51,27 +32,114 @@ void RiffWriter::run()
         mutex.lock();
         if (writeIndex == recIndex)
             bufferNotEmpty.wait(&mutex);
-        mutex.unlock();
 
         if (terminated)
+        {
+            mutex.unlock();
             break;
+        }
+
+        if (writeIndex == -1 && recIndex == -1)
+        {
+            mutex.unlock();
+            continue;
+        }
+        mutex.unlock();
 
         if (inBuffs[writeIndex%RINGBUFFERSIZE].frameCount > 0)
+        {
             ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
+            mutex.lock();
+            ++writeIndex;
+
+            bufferNotFull.wakeAll();
+            mutex.unlock();
+        }
         else
         {
             ss->outWave->Close();
+            mutex.lock();
+            writeIndex = -1;
+            recIndex = -1;
+            bufferNotFull.wakeAll();
+            bufferNotEmpty.wakeAll();
+            mutex.unlock();
 #ifdef Q_OS_UNIX
             sync();     // make sure it goes to disk
 #endif
         }
 
-        mutex.lock();
-        ++writeIndex;
-
-        bufferNotFull.wakeAll();
-        mutex.unlock();
     }
+}
+
+void RiffWriter::startInput()
+{
+    finishInput();
+    mutex.lock();
+    recIndex = 0;
+    writeIndex = 0;
+    mutex.unlock();
+}
+
+void RiffWriter::wakeAll()
+{
+    bufferNotEmpty.wakeAll();
+}
+
+void RiffWriter::copyBuffer(int16_t *inStageBuffer, int nFrames)
+{
+    mutex.lock();
+    if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     //both only ever increase and are used %RINGBUFFERSIZE
+    {
+        // wait for writer to create a gap
+        // NB writer waits when recIndex == writeIndex
+        // after writing it signals bufferNotFull
+        bufferNotFull.wait(&mutex);
+    }
+    mutex.unlock();
+
+    if (writeIndex == -1 && recIndex == -1)
+    {
+        return;
+    }
+
+    inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
+    memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
+
+    mutex.lock();
+    ++recIndex;
+    bufferNotEmpty.wakeAll();
+    mutex.unlock();
+}
+
+void RiffWriter::finishInput()
+{
+    // we want to wait for all buffers to be written
+
+    mutex.lock();
+    if (writeIndex == -1 && recIndex == -1)
+    {
+        mutex.unlock();
+        return;
+    }
+
+    if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // both only ever increase and are used %RINGBUFFERSIZE
+    {
+        // wait for writer to create a gap so that we can insert a "close" frame
+        // NB writer waits when recIndex == writeIndex
+        // after writing it signals bufferNotFull
+        bufferNotFull.wait(&mutex);
+    }
+
+    mutex.unlock();
+
+    inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
+
+    mutex.lock();
+    ++recIndex;
+
+    bufferNotEmpty.wakeAll();   // say there is room for input
+    mutex.unlock();
 }
 
 /*static*/
@@ -137,22 +205,23 @@ RtAudioSoundSystem::RtAudioSoundSystem()
 RtAudioSoundSystem::~RtAudioSoundSystem()
 {
    passThroughEnabled = false;
-   stopDMA();
+   closedown();
+//   stopDMA();
 
-   wThread->terminated = true;
-   bufferNotEmpty.wakeAll();
-   wThread->wait();
-   try
-   {
-      // Stop the stream.
-      audio->stopStream();
-   }
-   catch ( RtAudioError& error )
-   {
-       trace(error.getMessage().c_str());
-   }
-   delete audio;
-   delete wThread;
+//   wThread->terminated = true;
+//   wThread->wakeAll();
+//   wThread->wait();
+//   try
+//   {
+//      // Stop the stream.
+//      audio->stopStream();
+//   }
+//   catch ( RtAudioError& error )
+//   {
+//       trace(error.getMessage().c_str());
+//   }
+//   delete audio;
+//   delete wThread;
 
    free_bw_band_pass(micfilter1);
    free_bw_band_pass(micfilter2);
@@ -252,7 +321,7 @@ void RtAudioSoundSystem::stop()
     stopDMA();
 
     wThread->terminated = true;
-    bufferNotEmpty.wakeAll();
+    wThread->wakeAll();
     wThread->wait();
     try
     {
@@ -278,6 +347,9 @@ void RtAudioSoundSystem::closedown()
 
         delete outWave;
         outWave = nullptr;
+
+        delete wThread;
+        wThread = nullptr;
     }
 }
 
@@ -436,18 +508,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
         if (inputEnabled)
         {
-            mutex.lock();
-            if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
-                bufferNotFull.wait(&mutex);
-            mutex.unlock();
-
-            inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
-            memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
-
-            mutex.lock();
-            ++recIndex;
-            bufferNotEmpty.wakeAll();
-            mutex.unlock();
+            wThread->copyBuffer(inStageBuffer, nFrames);
         }
     }
     if (outputBuffer != nullptr && nFrames != 0 && outputEnabled )
@@ -493,18 +554,7 @@ void RtAudioSoundSystem::stopInput()
 {
     inputEnabled = false;
     emit actionQueueFinished();
-     mutex.lock();
-     if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
-         bufferNotFull.wait(&mutex);
-     mutex.unlock();
-
-     inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
-
-     mutex.lock();
-     ++recIndex;
-
-     bufferNotEmpty.wakeAll();
-     mutex.unlock();
+    wThread->finishInput();
 }
 bool RtAudioSoundSystem::startInput( QString fn )
 {
@@ -512,8 +562,7 @@ bool RtAudioSoundSystem::startInput( QString fn )
     // startInput() will also be called later
 
     // Should we do this in the writer thread?
-    recIndex = 0;
-    writeIndex = 0;
+    wThread->startInput();
     if (!outWave)
     {
         outWave = new WaveFile;

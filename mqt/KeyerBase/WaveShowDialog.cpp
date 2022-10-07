@@ -53,13 +53,14 @@ void WaveShowDialog::on_closeButton_clicked()
 }
 void WaveShowDialog::showSeries()
 {
+    originalChart->removeAllSeries();       // removes AND DELETES
+
     const dvkFile *originalFile = SoundSystemDriver::getSbDriver()->getFile(fno);
-    if (!originalFile)
+    if (!originalFile || !originalFile->loaded)
     {
         return;
     }
 
-    originalChart->removeAllSeries();       // removes AND DELETES
 
     originalSeries = new QLineSeries();
 

@@ -9,7 +9,6 @@
 #include "txVmExternalButtonDialog.h"
 #include "ui_txVmExternalButtonDialog.h"
 
-static bool inhibitCallbacks = false;
 static TxVmExternalButtonDialog *txvmbd = nullptr;
 
 TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
@@ -73,7 +72,6 @@ void TxVmExternalButtonDialog::doCloseEvent()
 {
     QSettings settings;
     settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
-    inhibitCallbacks = true;
     txvmbd = nullptr;
 }
 

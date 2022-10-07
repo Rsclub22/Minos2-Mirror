@@ -25,12 +25,12 @@ KeyerMain *keyerMain = nullptr;
 
 static QString alsaStore("store");
 static QString alsaRestore("restore");
-static bool inhibitCallbacks = false;
+static bool kmInhibitCallbacks = false;
 
 
 void KeyerMain::lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode )
 {
-    if (!inhibitCallbacks)
+    if (!kmInhibitCallbacks)
         keyerMain->setLines(pPTT, pPTTRef, pL1Ref, pL2Ref, lmode);
 }
 
@@ -47,7 +47,7 @@ void KeyerMain::doSliders(int rec, int rep, int pass, CompressorParams comp)
 }
 void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned int psamples)
 {
-    if (!inhibitCallbacks)
+    if (!kmInhibitCallbacks)
     {
         if (VKMixer::GetVKMixer()->GetCurrentMixerSet() == emsPassThroughNoPTT)
         {
@@ -211,12 +211,12 @@ KeyerMain::KeyerMain(QWidget *parent) :
 }
 KeyerMain::~KeyerMain()
 {
-    inhibitCallbacks = true;
+    kmInhibitCallbacks = true;
     delete ui;
 }
 void KeyerMain::closeEvent(QCloseEvent *event)
 {
-    inhibitCallbacks = true;
+    kmInhibitCallbacks = true;
     lineTimer.stop();
     unloadKeyers();
 
