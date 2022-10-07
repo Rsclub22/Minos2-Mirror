@@ -170,6 +170,7 @@ private:
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *AdvancedOptionsAction;
+    QAction *CheckUpdatesAction;
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
@@ -224,6 +225,7 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void AdvancedOptionsActionExecute();
+    void CheckUpdatesActionExecute();
 
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();

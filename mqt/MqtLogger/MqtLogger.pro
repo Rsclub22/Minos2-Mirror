@@ -71,6 +71,7 @@ SOURCES += \
     bandmapspotmarker.cpp \
     bandselbuttons.cpp \
     cabrillo.cpp \
+    checkupdates.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
@@ -170,6 +171,7 @@ HEADERS  += \
     bandmapspotmarker.h \
     bandselbuttons.h \
     cabrillo.h \
+    checkupdates.h \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
@@ -239,6 +241,7 @@ FORMS    += \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
+    checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
     districtframe.ui \

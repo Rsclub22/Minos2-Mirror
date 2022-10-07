@@ -15,6 +15,7 @@
 #include "LoggerContest.h"
 #include "WindowsAppId.h"
 
+#include "checkupdates.h"
 #include "fileutils.h"
 #include "list.h"
 #include "tsinglelogframe.h"
@@ -504,6 +505,8 @@ void TLogContainer::setupMenus()
 
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
+
+    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuTools, &TLogContainer::CheckUpdatesActionExecute);
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
@@ -1103,6 +1106,23 @@ void TLogContainer::OptionsActionExecute()
 
     od.exec();
 }
+void TLogContainer::AdvancedOptionsActionExecute()
+{
+    // not exposed - everything useful should be on the normal options menu
+    TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
+
+    ed.ShowCurrentSectionOnly();
+    if (ed.exec() == QDialog::Accepted)
+    {
+       mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
+    }
+}
+
+void TLogContainer::CheckUpdatesActionExecute()
+{
+    CheckUpdates cu(this);
+    cu.exec();
+}
 
 //---------------------------------------------------------------------------
 
@@ -1251,17 +1271,6 @@ void TLogContainer::CorrectDateTimeActionExecute()
 {
     TClockDlg cdlg(this);
     cdlg.exec();
-}
-
-void TLogContainer::AdvancedOptionsActionExecute()
-{
-    TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
-
-    ed.ShowCurrentSectionOnly();
-    if (ed.exec() == QDialog::Accepted)
-    {
-       mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
-    }
 }
 
 void TLogContainer::GoToSerialActionExecute()
