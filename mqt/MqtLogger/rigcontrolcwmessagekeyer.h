@@ -38,6 +38,7 @@ public:
     void sendCwMsg(const QString message) override;
     void stopCwMsg() override;
     void setCwMemType(int cwMemType) override;
+    bool getSetCwModeAndRestoreFlag() override;
 
     virtual bool hasRecord() override {return false;}
 
@@ -51,10 +52,12 @@ public:
     virtual int editButton(VoiceKeyerParams* vmData, QString title) override;
 
 
+
 private:
 
     int cwMemType;
     bool usePttForEom = false;
+    bool setCwModeAndRestoreCurrentMode = true;
 
 
 };

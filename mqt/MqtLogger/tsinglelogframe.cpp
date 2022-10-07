@@ -143,6 +143,9 @@ void TSingleLogFrame::buildFrame(int slotNo)
     // from Qrz Display Panel
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
 
+    // from tx Voice Memory Panel
+    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
 
@@ -1779,6 +1782,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             sCurMode = m;
             FKHRigControlFrame->setMode(m);
             GJVQSOLogFrame->modeSentFromRig(m);
+            txVmButtonsFrame->setMode(m);
             bandmapControlFrame->setMode(m);
             bandmapControlFrame->checkLegalFrequencies(sCurFreq);
         }

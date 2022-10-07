@@ -31,6 +31,7 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
     voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);
+    voiceMemCap.setEnableCwMode(false);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(true);
     voiceMemCap.setHasTxStatus(false);
