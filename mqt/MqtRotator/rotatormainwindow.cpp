@@ -2599,3 +2599,9 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     }
 
 }
+
+void RotatorMainWindow::on_reconnectPushButton_clicked()
+{
+    refreshAntenna();
+}
+

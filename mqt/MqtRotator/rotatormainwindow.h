@@ -265,6 +265,8 @@ private slots:
     void onSentCommandError(int errorCode, QString cmd);
     void onTestBearingEnter();
     void onPSTRotatorConfig();
+    void on_reconnectPushButton_clicked();
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);
