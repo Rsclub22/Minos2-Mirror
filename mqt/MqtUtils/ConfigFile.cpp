@@ -14,9 +14,9 @@
 
 //---------------------------------------------------------------------------
 MinosConfigEvents MinosConfigEvents::mce;
-void MinosConfigEvents::sendAppStarted()
+void MinosConfigEvents::sendStealFocus()
 {
-    emit mce.appStarted();
+    emit mce.stealFocus();
 }
 static bool terminated = false;
 
@@ -230,7 +230,7 @@ void RunConfigElement::createProcess()
             QString fontCommand = "Font " + QApplication::font().toString();
             sendCommand(fontCommand);
 
-             MinosConfigEvents::sendAppStarted();
+             MinosConfigEvents::sendStealFocus();
         }
     }
 }
@@ -586,7 +586,7 @@ void MinosConfig::askStop()
 {
    terminated = true;
 
-   for ( auto const &nc: configs)
+   for ( auto const &nc: qAsConst(configs))
    {
        for ( auto const &i: qAsConst(nc.elelist ))
        {
@@ -601,7 +601,7 @@ void MinosConfig::forceStop()
 {
    terminated = true;
 
-   for ( auto const &nc: configs)
+   for ( auto const &nc: qAsConst(configs))
    {
        for ( auto const &i: qAsConst(nc.elelist ))
        {
@@ -860,7 +860,7 @@ QString MinosConfig::checkConfig(QString name)
                     }
                     if (!reqFound)
                     {
-                        reqErrs += tr("%1 requires a local %2\n\n").arg(ele->appType).arg(req);
+                        reqErrs += tr("%1 requires a local %2\n\n").arg(ele->appType, req);
                     }
                 }
             }
@@ -884,7 +884,7 @@ QString MinosConfig::checkConfig(QString name)
 
 bool MinosConfig::anyRunning()
 {
-    for ( auto const &nc: configs)
+    for ( auto const &nc: qAsConst(configs))
     {
         for ( auto const &i: qAsConst(nc.elelist ))
         {

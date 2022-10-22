@@ -113,7 +113,7 @@ void ContestPage::getSplitters()
     QSettings settings;
     QByteArray state;
 
-    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter").arg(tslf->getCurScreenLayout()).arg(pageNo);
+    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
     state = settings.value(name).toByteArray();
     singleLogFrameSplitter->restoreState(state);
 
@@ -125,7 +125,7 @@ void ContestPage::getSplitters()
     for(auto const &s: qAsConst(rowSplitters))
     {
         QByteArray sstate;
-        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName()).arg(tslf->getCurScreenLayout()).arg(pageNo);
+        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
         sstate = settings.value(name, sstate).toByteArray();
         s->restoreState(sstate);
         s->setHandleWidth(splitterHandleWidth);
@@ -140,13 +140,13 @@ void ContestPage::onSplitterMoved(int /*pos*/, int /*index*/)
 {
     QByteArray state = singleLogFrameSplitter->saveState();
     QSettings settings;
-    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter").arg(tslf->getCurScreenLayout()).arg(pageNo);
+    QString name = QString("Splitters/%1/state/%2/%3").arg("singleLogFrameSplitter", tslf->getCurScreenLayout()).arg(pageNo);
     settings.setValue(name, state);
 
     for(auto const &s: qAsConst(rowSplitters))
     {
         state = s->saveState();
-        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName()).arg(tslf->getCurScreenLayout()).arg(pageNo);
+        QString name = QString("Splitters/%1/state/%2/%3").arg(s->objectName(), tslf->getCurScreenLayout()).arg(pageNo);
         settings.setValue(name, state);
         MinosLoggerEvents::SendSplittersChanged();
     }

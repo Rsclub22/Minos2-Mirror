@@ -103,7 +103,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
-    connect(&MinosConfigEvents::mce, &MinosConfigEvents::appStarted, this, &TLogContainer::appStarted);
+    connect(&MinosConfigEvents::mce, &MinosConfigEvents::stealFocus, this, &TLogContainer::stealFocus);
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
@@ -2231,7 +2231,7 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
 
 
-void TLogContainer::appStarted()
+void TLogContainer::stealFocus()
 {
     delayedAction(this,  [=]()
     {
@@ -2242,10 +2242,13 @@ void TLogContainer::appStarted()
             if (cpc)
             {
                 Qt::WindowStates css = cpc->windowState();
+
+                cpc->setWindowState(Qt::WindowState::WindowNoState);
                 cpc->setWindowState(css | Qt::WindowState::WindowActive);
             }
         }
         Qt::WindowStates ss = windowState();
+        setWindowState(Qt::WindowState::WindowNoState);
         setWindowState(ss | Qt::WindowState::WindowActive);
     });
 }

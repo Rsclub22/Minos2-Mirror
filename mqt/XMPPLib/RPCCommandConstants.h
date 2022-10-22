@@ -29,6 +29,7 @@ static const QString LocalStationCategory    ("LocalStation");
 // Logger
 static const QString loggerApp         ("MinosQtLogger");
 static const QString LoggerCategory    ("MinosLogger");
+static const QString loggerTakeFocus   ("Minos:Logger:TakeFocus");
 
 // Monitor
 static const QString monitorApp         ("mqtMonitor");

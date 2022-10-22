@@ -2,6 +2,7 @@
 #include <QSettings>
 #include <QKeyEvent>
 
+#include "AppStartup.h"
 #include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "callsign.h"
@@ -10,9 +11,12 @@
 #include "delayedaction.h"
 #include "changename.h"
 #include "LogEvents.h"
+#include "mults.h"
+#include "ConfigFile.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
-#include "mults.h"
 #include "ui_kstmainwindow.h"
 
 QStringList services =
@@ -33,6 +37,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     mainWindow = this;
+
+    /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     QSettings settings;
 
@@ -1895,5 +1901,19 @@ void KSTMainWindow::on_clearMeepFiltersButton_clicked()
     ui->toMeFilter->clear();
     ui->includeMeCb->setChecked(true);
     setMeepFilters();
+}
+
+
+void KSTMainWindow::on_pushButton_clicked()
+{
+    QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
+    RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
+//    QSharedPointer<RPCParam>st(new RPCParamStruct);
+//    st->addMember( publishedName, "LogName" );
+//    st->addMember( stanza, "Stanza" );
+//    st->addMember( stanzaCount, "Count" );
+//    rpc.getCallArgs() ->addParam( st );
+    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+
 }
 

@@ -18,10 +18,10 @@ public:
     static MinosConfigEvents mce;
 
 signals:
-    void appStarted();
+    void stealFocus();
 
 public:
-    static void sendAppStarted();
+    static void sendStealFocus();
 };
 
 class AppConfigElement
@@ -182,7 +182,7 @@ public:
 signals:
     void    stdOutLine(QString);
     void    allStopped();
-    void    appStarted();
+    //void    stealFocus();
 };
 //---------------------------------------------------------------------------
 

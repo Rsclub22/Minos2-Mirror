@@ -226,6 +226,8 @@ private slots:
 
     void on_clearMeepFiltersButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);

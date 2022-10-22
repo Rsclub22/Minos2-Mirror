@@ -243,7 +243,7 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
 
-    void appStarted();
+    void stealFocus();
 
     void StatsActionExecute();
 public slots:

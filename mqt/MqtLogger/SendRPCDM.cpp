@@ -967,7 +967,12 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         RPCArgs *args = mro->getCallArgs();
 
         QString call = mro->getMethodName();
-        if (call == rpcConstants::loggerStanzaRequest)
+        if (call == rpcConstants::loggerTakeFocus)
+        {
+            // attempt to steal focus
+            MinosConfigEvents::sendStealFocus();
+        }
+        else if (call == rpcConstants::loggerStanzaRequest)
         {
             if ( args->getStructArgMember( 0, "LogName", psLogName )
                  && args->getStructArgMember( 0, "Stanza", psStanza )
