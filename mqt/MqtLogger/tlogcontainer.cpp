@@ -2250,7 +2250,11 @@ void TLogContainer::stealFocus()
         Qt::WindowStates ss = windowState();
         setWindowState(Qt::WindowState::WindowNoState);
         setWindowState(ss | Qt::WindowState::WindowActive);
+
+        TSingleLogFrame *tslf = getCurrentLogFrame();
+        tslf->GJVQSOLogFrame->selectFirstInvalid();
     });
+
 }
 
 

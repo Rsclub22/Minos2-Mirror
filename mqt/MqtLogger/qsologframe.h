@@ -92,6 +92,7 @@ public:
     void setPlaceholders(QStringList nearMatches);
 
     void transferFromQrz(QString callsign, QString locator, QString name);
+    void selectFirstInvalid();
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;

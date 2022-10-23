@@ -1017,6 +1017,26 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     return;
 
 }
+void QSOLogFrame::selectFirstInvalid()
+{
+    getScreenEntry(); // make sure it is saved
+
+    for ( auto const &vcp: qAsConst(vcs) )
+    {
+       if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
+       {
+          continue;
+       }
+       if ( !vcp ->valid( cmValidStatus, screenContact ) )
+       {
+           selectField(vcp->wc);
+           return;
+       }
+    }
+
+    selectField( nullptr );
+
+}
 bool QSOLogFrame::dlgForced()
 {
     getScreenEntry();
