@@ -1042,10 +1042,8 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
 
     shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
 
-    readAction = new QAction(tr("&Play"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
-    vmMenu->addAction(readAction);
     vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
 
@@ -1053,7 +1051,6 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
     vmButton->setMenu(vmMenu);
 
     connect(shortKey, &QShortcut::activated, this, &TxVoiceMemButton::readActionSelected);
-    connect(readAction, &QAction::triggered, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::buttonSelected);
     connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::writeActionSelected);

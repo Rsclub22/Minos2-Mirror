@@ -36,8 +36,6 @@ public:
     QMenu* vmMenu;
     QShortcut* shortKey;
 
-    //QShortcut* shiftShortKey;
-    QAction* readAction;
     QAction* newAction;
     QAction* editAction;
 
