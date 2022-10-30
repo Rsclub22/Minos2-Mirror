@@ -42,8 +42,7 @@ git checkout mqt_Release_2.5.2.0
 sudo ./tools.sh
 
 ===================== Building Hamlib 4 ========================================
-The current Minos (2.5, and the various preceeding beta releases) uses hamlib 4.5,
-which is not yet available in the various Linux repositories .
+The current Minos (2.5, and the various preceeding beta releases) uses hamlib 4.5.
 
 Look at https://github.com/Hamlib/Hamlib for all the up to date hamlib information,
 including their build instructions, from which the following is derived.
