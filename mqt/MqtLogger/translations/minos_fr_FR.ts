@@ -991,27 +991,27 @@ Le mode calculé est %2</translation>
         <translation>Pas de code de district</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="638"/>
+        <location filename="../LoggerContacts.cpp" line="651"/>
         <source>Unknown Radio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="645"/>
+        <location filename="../LoggerContacts.cpp" line="658"/>
         <source>Unknown Antenna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="652"/>
+        <location filename="../LoggerContacts.cpp" line="665"/>
         <source>Unknown Contest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="719"/>
+        <location filename="../LoggerContacts.cpp" line="732"/>
         <source>GJV file should have been opened read only!</source>
         <translation>Le fichier .GJV aurait dû être ouvert en lecture seule!</translation>
     </message>
     <message>
-        <location filename="../LoggerContacts.cpp" line="825"/>
+        <location filename="../LoggerContacts.cpp" line="838"/>
         <source>Invalid block number in contact block</source>
         <translation>Numéro de bloc non valide dans le bloc de contacts</translation>
     </message>
@@ -3450,42 +3450,42 @@ Non - Ignorer les modifications</translation>
 <context>
     <name>ScreenConfigElement</name>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="64"/>
+        <location filename="../ScreenConfigElement.ui" line="51"/>
         <source>Add window to the left</source>
         <translation>Ajouter une fenêtre à gauche</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="67"/>
+        <location filename="../ScreenConfigElement.ui" line="54"/>
         <source>&lt;+</source>
         <translation>&lt;+</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="74"/>
+        <location filename="../ScreenConfigElement.ui" line="61"/>
         <source>Remove this window</source>
         <translation>Supprimer cette fenêtre</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="77"/>
+        <location filename="../ScreenConfigElement.ui" line="64"/>
         <source>Del</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="84"/>
+        <location filename="../ScreenConfigElement.ui" line="71"/>
         <source>Add window to the right</source>
         <translation>Ajouter une fenêtre à droite</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="87"/>
+        <location filename="../ScreenConfigElement.ui" line="74"/>
         <source>+&gt;</source>
         <translation>+&gt;</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="133"/>
+        <location filename="../ScreenConfigElement.ui" line="120"/>
         <source>Split Above</source>
         <translation>Fractionner au-dessus</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.ui" line="140"/>
+        <location filename="../ScreenConfigElement.ui" line="127"/>
         <source>Split Below</source>
         <translation>Fractionner ci-dessous</translation>
     </message>
@@ -5448,26 +5448,30 @@ Last %8 Mins: %9 QSO %10 pts %11 mults<byte value="xd"/>
     </message>
     <message>
         <location filename="../txvmbuttonsframe.cpp" line="585"/>
-        <source>Click save to clear, cancel to ignore</source>
-        <translation>Cliquer sur enregistrer pour effacer, annuler pour ignorer</translation>
+        <source>Click OK to clear, cancel to ignore</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="871"/>
+        <source>Click save to clear, cancel to ignore</source>
+        <translation type="vanished">Cliquer sur enregistrer pour effacer, annuler pour ignorer</translation>
+    </message>
+    <message>
+        <location filename="../txvmbuttonsframe.cpp" line="875"/>
         <source>Rig Voice Keyer Available</source>
         <translation>Mémoire de voix disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="875"/>
+        <location filename="../txvmbuttonsframe.cpp" line="879"/>
         <source>Rig CW Messages Available</source>
         <translation>Message CW disponible</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="970"/>
+        <location filename="../txvmbuttonsframe.cpp" line="974"/>
         <source>TX On</source>
         <translation>TX Actif</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="976"/>
+        <location filename="../txvmbuttonsframe.cpp" line="980"/>
         <source>TX Off</source>
         <translation>TX Éteint</translation>
     </message>
@@ -5735,22 +5739,22 @@ Through</source>
 <context>
     <name>TxVoiceMemButton</name>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="998"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1002"/>
         <source>&amp;Read</source>
         <translation>&amp;Lire</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="999"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1003"/>
         <source>&amp;New</source>
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1000"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1004"/>
         <source>&amp;Edit</source>
         <translation>&amp;Modifier</translation>
     </message>
     <message>
-        <location filename="../txvmbuttonsframe.cpp" line="1001"/>
+        <location filename="../txvmbuttonsframe.cpp" line="1005"/>
         <source>&amp;Clear</source>
         <translation>&amp;Effacer</translation>
     </message>
