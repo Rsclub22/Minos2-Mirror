@@ -5,7 +5,11 @@
 
 class SecondInstall
 {
+    static int installation;
 public:
+    static void parseSecondInstall(int argc, char *argv[]);
+    static QString getSecondInstallSwitch();
+
     SecondInstall();
 
     static QString getSecondInstallText();

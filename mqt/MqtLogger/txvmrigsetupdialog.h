@@ -2,7 +2,6 @@
 #define TXVMRIGSETUPDIALOG_H
 
 #include <QDialog>
-#include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
 
 namespace Ui {
@@ -23,6 +22,7 @@ public:
     int getNumButtons(){return numButtons;}
 
     bool getCatPttForEomState();
+    bool getSetCwModeAndRestoreState();
 private slots:
 
     void onNumButtonsValueChanged(int num);

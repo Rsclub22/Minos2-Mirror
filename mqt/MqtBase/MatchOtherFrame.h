@@ -24,6 +24,11 @@ public:
     {
         return &otherMatchModel;
     }
+    virtual MatchType getMatchType() override
+    {
+        return OtherMatch;
+    }
+
 private slots:
 
     virtual void on_MatchTreeSelectionChanged(const QItemSelection &, const QItemSelection &) override;

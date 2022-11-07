@@ -8,25 +8,25 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-#include "rigsetupdialog.h"
-#include "rigsetupform.h"
-#include "transvertsetupform.h"
-#include "ui_rigsetupdialog.h"
-#include "rigcontrolcommonconstants.h"
-#include "addradiodialog.h"
-#include "rigutils.h"
 #include <QComboBox>
 #include <QMessageBox>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QSettings>
 #include <QInputDialog>
+#include <QFile>
 
-#include <QDebug>
+#include "rigsetupform.h"
+#include "serialCommonData.h"
+#include "transvertsetupform.h"
+#include "rigcontrolcommonconstants.h"
+#include "addradiodialog.h"
+#include "MTrace.h"
+
+#include <hamlib/rig.h>
+
+#include "rigsetupdialog.h"
+#include "ui_rigsetupdialog.h"
 
 
 
@@ -196,7 +196,7 @@ void RigSetupDialog::loadSettingsToTab(int tabNum, QString tabName)
         radioTab.value(tabName)->setAdvancedCommsChkBoxVisible(true);
         radioTab.value(tabName)->checkAdvancedCommsCheckBox(availRadioData.value(tabName)->advancedCommsFlag);
         radioTab.value(tabName)->networkDataEntryVisible(false);
-        if (radioTab.value(tabName)->getRadioData()->handshake == serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE) // CTS/RTS enabled
+        if (radioTab.value(tabName)->getRadioData()->handshake == RIG_HANDSHAKE_HARDWARE) // CTS/RTS enabled
         {
             radioTab.value(tabName)->setForceRTSDisabled(true);
         }
@@ -439,8 +439,7 @@ void RigSetupDialog::removeRadio()
                             tr("Remove Radio"),
                             tr("Do you really want to remove radio - %1?")
                             .arg(currentName),
-                            QMessageBox::Yes|QMessageBox::Default,
-                            QMessageBox::No|QMessageBox::Escape,
+                            QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
 
     if (status != QMessageBox::Yes)

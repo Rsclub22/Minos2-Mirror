@@ -1,6 +1,3 @@
-#include "base_pch.h"
-
-#include "tlogcontainer.h"
 #include "contestdetails.h"
 #include "tsettingseditdlg.h"
 #include "profiles.h"

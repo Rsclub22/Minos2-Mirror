@@ -12,9 +12,8 @@
 #ifndef ROTATORCOMMON_H
 #define ROTATORCOMMON_H
 
-#include "base_pch.h"
-
-
+#include "rigcontrolcommonconstants.h"
+#include <QCoreApplication>
 class RotPresetData
 {
     Q_DECLARE_TR_FUNCTIONS(RotPresetData)

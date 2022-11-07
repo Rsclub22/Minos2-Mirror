@@ -10,10 +10,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QTimer>
 
-#include "pstRotControl.h"
+#include "MTrace.h"
 #include "rotatorfactory.h"
-#include "minosNetUtils.h"
+#include "pstRotControl.h"
 
 const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Command OK"),
                                                      QT_TR_NOOP("Network Address failed to bind"),
@@ -21,11 +22,7 @@ const char * PstRotControl::pstRotatorErrorMsg[] = { QT_TR_NOOP("PSTRotator Comm
                                                      QT_TR_NOOP("Request Bearing Command Timeout"),
                                                      QT_TR_NOOP("Rotate to Bearing Command Timeout"),
                                                      QT_TR_NOOP("Stop Commond Timeout"),
-
-
                                                     };
-
-
 
 PstRotControl::PstRotControl(QObject *parent) : RotatorBase(parent)
 {
@@ -177,10 +174,9 @@ void PstRotControl::processPendingReportDatagrams()
         pstReportSocket->readDatagram(datagram.data(), datagram.size());
     } while (pstReportSocket->hasPendingDatagrams());
 
-    //qDebug() << "Report = "  << datagram.data();
     b = QString(datagram.data());
 
-    traceCommsMsg(QString("received %1 chars, message %2").arg(b.count()).arg(b));
+    traceCommsMsg(QString("received %1 chars, message %2").arg(b.size()).arg(b));
 
     if (b.contains(':') && b.contains('\r'))
     {

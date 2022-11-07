@@ -11,6 +11,8 @@
 #ifndef TinyUtilsH
 #define TinyUtilsH
 
+#include <QString>
+
 class TiXmlElement;
 extern bool checkElementName( TiXmlElement *e, const QString &expected );
 extern QString getAttribute( TiXmlElement *tix, const QString &attname );

@@ -10,10 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <QDebug>
 #include "cutils.h"
-#include "rigutils.h"
-#include "htmldelegate.h"
 #include "sentSpotdatamodel.h"
 
 
@@ -239,7 +236,7 @@ bool SentSpotDataModel::setData(const QModelIndex & index, const QVariant & valu
                 sentSpot->sentOk = value.toBool();
             break;
             case SENT_SPOT_REASON_COL_NUM:
-                sentSpot->reason = value.toBool();
+                sentSpot->reason = value.toString();
             break;
 
 

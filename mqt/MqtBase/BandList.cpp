@@ -18,12 +18,14 @@
     along with AdjQt in file gpl.txt.  If not, see <http://www.gnu.org/licenses/>.
     
 ======================================================================================*/
+#include <QSharedPointer>
 
-#include "base_pch.h"
 #include "INIFile.h"
-#include "bandmapcommon.h"
 #include "BandList.h"
-#include "cutils.h"
+#include "TinyUtils.h"
+#include "tinyxml.h"
+#include "MTrace.h"
+
 //---------------------------------------------------------------------------
 const QString allHF{"ALLHF"}; // not to be translated
 
@@ -34,6 +36,27 @@ void BandInfo::setType ( const QString &t )
 QString BandInfo::getType() const
 {
     return type;
+}
+
+bool BandInfo::operator<(const BandInfo &rhs)
+{
+    if (name() == "ALL")
+    {
+        return true;
+    }
+    if (rhs.name() == "ALL")
+    {
+        return false;
+    }
+    if (fLow.isClear())
+    {
+        return false;
+    }
+    if (rhs.fLow.isClear())
+    {
+        return true;
+    }
+    return fLow < rhs.fLow;
 }
 QSharedPointer<ModeInfo> BandInfo::findMode(const QString &mstr) const
 {
@@ -201,6 +224,12 @@ bool BandList::parseBand ( TiXmlElement * e )
 {
     // we know we are on a band; get the attributes we want
     QSharedPointer<BandInfo>  band(new BandInfo());
+
+    QString nc = getAttribute(e, "contest");
+    if (nc == "N")
+    {
+        band ->contestAllowed = false;
+    }
 
     band->setType ( getAttribute ( e, "type" ) );
 
@@ -558,13 +587,9 @@ bool BandList::loadAllBands(QVector<QSharedPointer<BandInfo> > &bands, bool filt
         // don't use bands > 1THz (can't support Freq display)
         // (fortunate that there aren't any!)
 
-        if ((!filtered || b->enabled) && b->fHigh < Frequency(1000000000000))
+        if ((!filtered || b->enabled) && b->contestAllowed && b->fHigh < Frequency(1000000000000))
         {
-            if (b->getType().compare(VHF_BANDTYPE, Qt::CaseInsensitive) == 0
-                    || b->getType().compare(MW_BANDTYPE, Qt::CaseInsensitive) == 0
-                    || b->getType().compare(HF_BANDTYPE, Qt::CaseInsensitive) == 0)
-
-                bands.append(b);
+            bands.append(b);
         }
         else
         {

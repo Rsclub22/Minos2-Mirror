@@ -18,9 +18,8 @@
 #define QRZSERVERRPC_H
 
 #include <QObject>
-#include "base_pch.h"
-#include "ConfigFile.h"
-#include "clustercommon.h"
+#include "XMPPRPCObj.h"
+#include "AnalysePubSubNotify.h"
 #include "qrzServerCommon.h"
 
 class QrzServerRpc : public QObject

@@ -1,12 +1,20 @@
 #include <QHostInfo>
 #include <QSettings>
+#include <QKeyEvent>
 
+#include "AppStartup.h"
+#include "MShowMessageDlg.h"
 #include "cutils.h"
-
+#include "callsign.h"
 #include "kstconfigure.h"
 #include "airscoutlink.h"
 #include "delayedaction.h"
 #include "changename.h"
+#include "LogEvents.h"
+#include "mults.h"
+#include "ConfigFile.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 
 #include "kstmainwindow.h"
 #include "ui_kstmainwindow.h"
@@ -29,15 +37,8 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     mainWindow = this;
-    connect(&stdinReader, &StdInReader::stdinLine, this, &KSTMainWindow::onStdInRead);
-    stdinReader.start();
 
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-    sizePolicy.setHorizontalStretch(0);
-    sizePolicy.setVerticalStretch(0);
-    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
-    ui->kstSplitter->setSizePolicy(sizePolicy);
-    ui->kstSplitter->setOrientation(Qt::Horizontal);
+    /*MinosRPC *rpc =*/ MinosRPC::getMinosRPC(getAppStartupName(), true);
 
     QSettings settings;
 
@@ -130,6 +131,14 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     QByteArray state;
     state = settings.value("kstSplitterState").toByteArray();
     ui->kstSplitter->restoreState(state);
+
+    // Make sure the kstSplitter covers the maximum vertical space
+
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    sizePolicy.setHorizontalStretch(0);
+    sizePolicy.setVerticalStretch(0);
+    sizePolicy.setHeightForWidth(ui->kstSplitter->sizePolicy().hasHeightForWidth());
+    ui->kstSplitter->setSizePolicy(sizePolicy);
 
     state = settings.value("msgSplitterState").toByteArray();
     ui->msgSplitter->restoreState(state);
@@ -307,10 +316,6 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
 KSTMainWindow::~KSTMainWindow()
 {
     delete ui;
-}
-void KSTMainWindow::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
 }
 void KSTMainWindow::resizeEvent(QResizeEvent * event)
 {
@@ -1896,5 +1901,19 @@ void KSTMainWindow::on_clearMeepFiltersButton_clicked()
     ui->toMeFilter->clear();
     ui->includeMeCb->setChecked(true);
     setMeepFilters();
+}
+
+
+void KSTMainWindow::on_pushButton_clicked()
+{
+    QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
+    RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
+//    QSharedPointer<RPCParam>st(new RPCParamStruct);
+//    st->addMember( publishedName, "LogName" );
+//    st->addMember( stanza, "Stanza" );
+//    st->addMember( stanzaCount, "Count" );
+//    rpc.getCallArgs() ->addParam( st );
+    rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+
 }
 

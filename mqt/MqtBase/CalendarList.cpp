@@ -1,10 +1,12 @@
-#include "base_pch.h"
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QFile>
 
 #include "Calendar.h"
 #include "CalendarList.h"
+#include "MShowMessageDlg.h"
+#include "MTrace.h"
 
 QMap<QString, QString> contestNameMap;
 int calendarFormYear = 0;

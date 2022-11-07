@@ -1,12 +1,18 @@
-#include "base_pch.h"
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <QtGlobal>
 #ifdef Q_OS_WIN
 #include <io.h>
 #endif
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+#include <QSharedPointer>
+#include <QThread>
 
+#include "MTrace.h"
 #include "PiGPIO.h"
 
 GPIOLine::GPIOLine(int pin, bool input):

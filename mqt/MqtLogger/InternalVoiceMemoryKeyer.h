@@ -3,7 +3,6 @@
 
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "keyerBase.h"
 
 class InternalVoiceMemoryKeyer : public VoiceKeyerBase
 {
@@ -22,6 +21,7 @@ public:
     void sendCwMsg(QString message) override {Q_UNUSED(message)};
     void stopCwMsg() override {};
     void setCwMemType(int cwMemType) override {Q_UNUSED(cwMemType)};
+    bool getSetCwModeAndRestoreFlag() override {return false;};
 
     virtual bool hasRecord() override{return true;}
     virtual void doRecording(VoiceKeyerParams *vkParam) override;

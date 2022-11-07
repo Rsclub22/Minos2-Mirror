@@ -1,12 +1,11 @@
 #include <QHostInfo>
+#include <cmath>
 #include "MinosLoggerEvents.h"
 #include "ContestApp.h"
 #include "cutils.h"
 #include "contest.h"
 #include "contacts.h"
 #include "LoggerContest.h"
-#include "BandList.h"
-#include "rigutils.h"
 #include "n1mmbroadcast.h"
 
 N1MMBroadcast::N1MMBroadcast()

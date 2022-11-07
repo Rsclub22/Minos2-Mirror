@@ -1,7 +1,6 @@
 #ifndef RUNBUTTONSFRAME_H
 #define RUNBUTTONSFRAME_H
 
-#include "base_pch.h"
 #include <QShortcut>
 #include <QGroupBox>
 
@@ -12,6 +11,8 @@ class RunButtonsFrame;
 }
 
 class RunButtonsFrame;
+class QToolButton;
+class QMenu;
 
 class RunMemoryButton : public QObject
 {

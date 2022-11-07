@@ -6,10 +6,10 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
 #include "LoggerContest.h"
 #include "contacts.h"
+
+#include "cutils.h"
 #include "printfile.h"
 
 //==============================================================================

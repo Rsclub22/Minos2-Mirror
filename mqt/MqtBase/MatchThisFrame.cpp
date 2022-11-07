@@ -1,3 +1,4 @@
+#include "MMessageDialog.h"
 #include "MinosParameters.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
@@ -6,6 +7,10 @@
 MatchThisFrame::MatchThisFrame(QWidget *parent) :
     MatchTreeFrame (parent)
 {
+    SharedMatchCollection matchCollection;
+    thisMatchModel.initialise(ThisMatch, matchCollection);
+    getTreeView()->setModel(&thisMatchModel);
+
 }
 
 MatchThisFrame::~MatchThisFrame()
@@ -43,7 +48,7 @@ void MatchThisFrame::afterMatchTreeClicked()
         QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
         if (mc)
         {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            CheckableContact *bct = mc->getBaseContact();
 
             QString bearing = bct->getField(egBrg, contest);
             MinosLoggerEvents::SendBrgStrToRot(bearing);
@@ -55,11 +60,38 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
     MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem *>(index.internalPointer());
 
     QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
-    QSharedPointer<BaseContact> bct = mc->getBaseContact();
+    CheckableContact *bct = mc->getBaseContact();
 
     if ( bct )
     {
-        emit editContact( bct );
+        QString matchBand;
+        contest->getTxFreqBand(bct->frequency.getValue(), matchBand);
+
+        QString currBand = contest->currentBand.getValue();
+
+        if (matchBand != currBand)
+        {
+            if ( mShowYesNoMessage(this, tr("Press \"Yes\" to transfer details, or \"No\" to edit the QSO") ) )
+            {
+                setCurrentModel(true);
+
+
+                QItemSelectionModel *ism = selectionModel();
+                QItemSelection selected = ism-> selection();
+
+                MinosLoggerEvents::sendMatchTreeSelected(ThisMatch, contest, baseName, selected);
+
+                MinosLoggerEvents::sendXferPressed(contest, baseName);
+            }
+            else
+            {
+                emit editContact( bct, false );
+            }
+        }
+        else
+        {
+            emit editContact( bct, false );
+        }
     }
 }
 

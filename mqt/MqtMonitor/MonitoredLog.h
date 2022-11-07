@@ -1,7 +1,8 @@
 #ifndef MONITOREDLOG_H
 #define MONITOREDLOG_H
-#include "base_pch.h"
+#include <QSet>
 #include "MonitoredContestLog.h"
+#include "PublishState.h"
 
 class MonitoringFrame;
 class MinosTestImport;
@@ -27,8 +28,6 @@ class MonitoredLog
       MonitoringFrame *frame = nullptr;
 
    public:
-
-
       MonitoredLog();
       ~MonitoredLog();
 
@@ -72,7 +71,6 @@ class MonitoredLog
          return state;
       }
       void startMonitor();
-      void stopMonitor();
       void checkMonitor();
       void processLogStanza( int stanza, const QString &stanzaData );
       QString getDisplayName() const;

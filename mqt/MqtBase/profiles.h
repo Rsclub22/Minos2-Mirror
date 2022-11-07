@@ -8,11 +8,13 @@
 /////////////////////////////////////////////////////////////////////////////
 //----------------------------------------------------------------------------
 #ifndef ProfilesH
-#define ProfilesH 
-#include "base_pch.h"
+#define ProfilesH
+
+#include <QCoreApplication>
+#include <QSharedPointer>
+#include <QString>
 #include "ProfileEnums.h"
-#include "clustercommon.h"
-#include "bandmapcommon.h"
+#include "minositem.h"
 //----------------------------------------------------------------------------
 extern QString defaultLayoutName();
 extern QString defaultProtectedLayoutName();

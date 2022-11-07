@@ -7,7 +7,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
 #include "PubSubServer.h"
 
 QVector<RPCRouterSubscriber *> routerSubscribeList;

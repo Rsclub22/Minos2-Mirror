@@ -1,7 +1,9 @@
 #ifndef MONITORINGFRAME_H
 #define MONITORINGFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
+#include "TreeUtils.h"
+#include "qmenu.h"
 
 namespace Ui {
 class MonitoringFrame;
@@ -22,24 +24,31 @@ public:
     void initialise( BaseContestLog * contest );
     void showQSOs();
     void setScore();
+    void on_monitorTimeout();
     BaseContestLog * getContest()
     {
        return contest;
     }
+    QSOGridModel qsoModel;
 
-    void update();
+    bool rescanNeeded = false;
+    bool newStanzas = false;
+    bool armScan = false;
 
 private:
     Ui::MonitoringFrame *ui;
     BaseContestLog *contest;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
 
-    QSOGridModel qsoModel;
-
-    void restoreColumns();
-
+    void saveQSOTableColumns();
+    void restoreQSOTableColumns();
 private slots:
-    void on_sectionResized(int, int, int);
+    void onQSOTable_sectionResized(int, int, int);
+    void onQSOTable_customContextMenuRequested(const QPoint &pos);
+    void onQSOTable_sectionMoved(int, int, int);
 
+    void viewColumn();
 };
 
 #endif // MONITORINGFRAME_H

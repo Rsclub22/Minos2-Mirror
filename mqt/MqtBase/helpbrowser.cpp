@@ -1,6 +1,6 @@
-#include "base_pch.h"
-
 #include <QHelpEngine>
+#include <QSettings>
+#include <QInputDialog>
 
 #include "helpbrowser.h"
 #include "ui_helpbrowser.h"

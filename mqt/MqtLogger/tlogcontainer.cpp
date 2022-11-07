@@ -1,19 +1,25 @@
-#include "base_pch.h"
 #include <QStyleFactory>
-#include "MinosLoggerEvents.h"
-#include "SecondInstall.h"
 #include <QFontDialog>
 #include <QDesktopServices>
 #include <QToolTip>
+#include <QFileDialog>
+#include <QLabel>
 
+#include "AppStartup.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
+#include "MinosLoggerEvents.h"
+#include "PubSubClient.h"
+#include "SecondInstall.h"
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "WindowsAppId.h"
 
+#include "checkupdates.h"
+#include "fileutils.h"
+#include "list.h"
 #include "tsinglelogframe.h"
 #include "taboutbox.h"
-#include "Calendar.h"
-#include "CalendarList.h"
 #include "contestdetails.h"
 #include "tmanagelistsdlg.h"
 #include "tsettingseditdlg.h"
@@ -21,31 +27,25 @@
 #include "tloccalcform.h"
 #include "TSessionManager.h"
 #include "StartConfigManager.h"
-#include "StartConfig.h"
 #include "ConfigFile.h"
 #include "SendRPCDM.h"
-#include "MatchTreeFrame.h"
-#include "enqdlg.h"
 #include "AdifImport.h"
 #include "ScreenConfigManager.h"
 #include "MinosTestImport.h"
 #include "singleapplication.h"
-#include "helpbrowser.h"
 #include "WsjtxServer.h"
-#include "WsjtxConfigure.h"
-#include "Clusterbandmapconfigure.h"
-#include "radiosettingdialog.h"
 #include "ChatServer.h"
 #include "clusterClientServer.h"
 #include "MatchThread.h"
-#include "n1mmbroadcastconfig.h"
-#include "defdirsdlg.h"
-#include "BandList.h"
 #include "delayedaction.h"
 #include "ContestPageControl.h"
 #include "OptionsDialog.h"
 #include "bandmapclientframe.h"
-#include "BandsSelect.h"
+#include "StatisticsDisplay.h"
+#include "MTrace.h"
+#include "RPCPubSub.h"
+#include "MinosConnection.h"
+#include "waitcursor.h"
 
 #include "tlogcontainer.h"
 #include "ui_tlogcontainer.h"
@@ -103,7 +103,7 @@ TLogContainer::TLogContainer(QWidget *parent) :
     QString station = MinosConfig::getMinosConfig()->getThisRouterName();
     RPCPubSub::publish(rpcConstants::LoggerCategory, station, "", psPublished);
 
-    connect(&MinosConfigEvents::mce, &MinosConfigEvents::appStarted, this, &TLogContainer::appStarted);
+    connect(&MinosConfigEvents::mce, &MinosConfigEvents::stealFocus, this, &TLogContainer::stealFocus);
 
     ScreenConfigFile::getScreenConfigFile(this);  // get configs loaded
 
@@ -225,9 +225,13 @@ bool TLogContainer::show(int argc, char *argv[])
     {
        // here need to pre-open the contest list
        QString conarg;
-       if ( argc > 1 )
+       for(int i = 1; i < argc; i++)
        {
-          conarg = argv[1];
+           if ( argv[i][0] != '/' && argv[i][0] != '-' ) // i.e. not a switch character
+           {
+              conarg = argv[i];
+              break;
+           }
        }
        preloadLists();
        preloadFiles( conarg );
@@ -470,6 +474,7 @@ void TLogContainer::setupMenus()
     ui->menuFile->addSeparator();
     ContestDetailsAction = newAction(QT_TR_NOOP("Contest Details..."), ui->menuFile, &TLogContainer::ContestDetailsActionExecute);
     MakeEntryAction = newAction(QT_TR_NOOP("Produce Entry/Export File..."), ui->menuFile, &TLogContainer::MakeEntryActionExecute);
+    StatsAction = newAction(QT_TR_NOOP("Show Contest Statistics..."), ui->menuFile, &TLogContainer::StatsActionExecute);
     ui->menuFile->addSeparator();
 
     AppendAdifAction = newAction(QT_TR_NOOP("Append ADIF file to contest..."), ui->menuFile, &TLogContainer::AppendAdifActionExecute);
@@ -500,6 +505,8 @@ void TLogContainer::setupMenus()
 
     CorrectDateTimeAction = newAction(QT_TR_NOOP("Correct Date/Time..."), ui->menuTools, &TLogContainer::CorrectDateTimeActionExecute);
     ui->menuTools->addSeparator();
+
+    CheckUpdatesAction = newAction(QT_TR_NOOP("Check For Updates..."), ui->menuTools, &TLogContainer::CheckUpdatesActionExecute);
     OptionsAction = newAction(QT_TR_NOOP("Options..."), ui->menuTools, &TLogContainer::OptionsActionExecute);
 
     AdvancedOptionsAction = newAction(QT_TR_NOOP("Advanced Options..."), ui->menuTools, &TLogContainer::AdvancedOptionsActionExecute);
@@ -528,6 +535,7 @@ void TLogContainer::setupMenus()
 
     TabPopup.addAction(ContestDetailsAction);
     TabPopup.addAction(MakeEntryAction);
+    TabPopup.addAction(StatsAction);
     TabPopup.addSeparator();
 
     TabPopup.addAction(AppendAdifAction);
@@ -568,6 +576,7 @@ void TLogContainer::enableActions()
    CloseAllButAction->setEnabled(f);
 
    ContestDetailsAction->setEnabled(f);
+   StatsAction->setEnabled(f);
    GoToSerialAction->setEnabled(f);
    NextUnfilledAction->setEnabled(f);
    MakeEntryAction->setEnabled(f);
@@ -1024,7 +1033,7 @@ void TLogContainer::ContestDetailsActionExecute()
                 f->FKHRotControlFrame->on_ContestPageChanged();
                 // and we need to do some re-init on the display
                 f->updateQSODisplay();
-                ct->scanContest();
+                ct->scanContest();      // if contest details have changed, required
                 f->refreshMults();
 
                 updateLayoutsMenu();
@@ -1096,6 +1105,23 @@ void TLogContainer::OptionsActionExecute()
     OptionsDialog od;
 
     od.exec();
+}
+void TLogContainer::AdvancedOptionsActionExecute()
+{
+    // not exposed - everything useful should be on the normal options menu
+    TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
+
+    ed.ShowCurrentSectionOnly();
+    if (ed.exec() == QDialog::Accepted)
+    {
+       mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
+    }
+}
+
+void TLogContainer::CheckUpdatesActionExecute()
+{
+    CheckUpdates cu(this);
+    cu.exec();
 }
 
 //---------------------------------------------------------------------------
@@ -1175,12 +1201,13 @@ void TLogContainer::AppendAdifActionExecute()
             bct->commonSave(bct);
         }
         ct->commonSave( false );
-        ct->scanContest();
-        ct->validateLoc();
-        MinosLoggerEvents::SendAfterLogContact(ct);
+        ct->scanContest();          // after append ADIF file, required
+        //ct->validateLoc();
+        MinosLoggerEvents::SendAfterLogContact(ct);          // after append ADIF file
         TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
-        tslf->showQSOs();
+        tslf->updateTrees();
+        tslf->startNextEntry();   //(AppendAdifActionExecute())
     }
 }
 
@@ -1188,6 +1215,12 @@ void TLogContainer::MakeEntryActionExecute()
 {
     BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
     MinosLoggerEvents::SendMakeEntry(ct);
+}
+void TLogContainer::StatsActionExecute()
+{
+    BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+    StatisticsDisplay  sd(ct, this);
+    sd.exec();
 }
 void TLogContainer::LocCalcActionExecute()
 {
@@ -1238,17 +1271,6 @@ void TLogContainer::CorrectDateTimeActionExecute()
 {
     TClockDlg cdlg(this);
     cdlg.exec();
-}
-
-void TLogContainer::AdvancedOptionsActionExecute()
-{
-    TSettingsEditDlg ed(this, &TContestApp::getContestApp() ->loggerBundle );
-
-    ed.ShowCurrentSectionOnly();
-    if (ed.exec() == QDialog::Accepted)
-    {
-       mShowMessage(tr("You may need to close and reload Minos to have these settings applied"), this);
-    }
 }
 
 void TLogContainer::GoToSerialActionExecute()
@@ -1443,7 +1465,7 @@ BaseContestLog * TLogContainer::addSlot(ContestDetails *ced, const QString &fnam
       if ( show )
       {
          TContestApp::getContestApp() ->setCurrentContest( contest );
-         contest->scanContest();
+         contest->scanContest();    // contest initially opened (addSlot) required
          QString baseFName = ExtractFileName( contest->cfileName );
          TSingleLogFrame *f = new TSingleLogFrame( this, contest );
 
@@ -1650,6 +1672,7 @@ void TLogContainer::selectLayout(QString layout)
         f->setCurScreenLayout(layout);
         f->applyScreenLayout();
         updateLayoutsMenu();
+        f->restoreQSOTableColumns();
     }
 }
 void TLogContainer::applyScreenLayouts()
@@ -2208,7 +2231,7 @@ TSingleLogFrame *TLogContainer::findContest(BaseContestLog *ct )
 
 
 
-void TLogContainer::appStarted()
+void TLogContainer::stealFocus()
 {
     delayedAction(this,  [=]()
     {
@@ -2219,12 +2242,19 @@ void TLogContainer::appStarted()
             if (cpc)
             {
                 Qt::WindowStates css = cpc->windowState();
+
+                cpc->setWindowState(Qt::WindowState::WindowNoState);
                 cpc->setWindowState(css | Qt::WindowState::WindowActive);
             }
         }
         Qt::WindowStates ss = windowState();
+        setWindowState(Qt::WindowState::WindowNoState);
         setWindowState(ss | Qt::WindowState::WindowActive);
+
+        TSingleLogFrame *tslf = getCurrentLogFrame();
+        tslf->GJVQSOLogFrame->selectFirstInvalid();
     });
+
 }
 
 

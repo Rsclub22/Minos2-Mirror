@@ -1,12 +1,14 @@
 #ifndef KEYERMAIN_H
 #define KEYERMAIN_H
 
-#include "base_pch.h"
 #include <QComboBox>
 #include <QMainWindow>
 #include <QProcess>
 #include "KeyerJson.h"
-#include "VKMixer.h"
+#include "CompressorParams.h"
+#include "SliderSpinner.h"
+#include "StdInReader.h"
+#include "qtimer.h"
 
 namespace Ui {
 class KeyerMain;
@@ -28,8 +30,6 @@ public:
     void doConfig(QString);
     bool writeConfig(bool force);
 private slots:
-
-    void onStdInRead(QString);
 
     void CaptionTimerTimer();
 
@@ -68,35 +68,57 @@ private slots:
 
     void on_restoreAlsaButton_clicked();
 
-    void on_recordSlider_valueChanged(int position);
-
-    void on_replaySlider_valueChanged(int position);
-
-    void on_passThroughSlider_valueChanged(int position);
-
-    void on_recordValue_valueChanged(double arg1);
-
-    void on_replayValue_valueChanged(double arg1);
-
-    void on_passThroughValue_valueChanged(double arg1);
-
     void onPTT(bool);
 
     void doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples );
     void lcallback( bool pPTT, bool pPTTRef, bool pL1Ref, bool pL2Ref, int lmode );
 
-    void doSliders(int, int, int);
+    void doSliders(int, int, int, CompressorParams comp);
 
     void on_messageName_editingFinished();
 
     void on_keyCombo_currentIndexChanged(int index);
+
+    void on_showButton_clicked();
+
+    void window_valueChanged();
+
+    void threshold_valueChanged( );
+
+    void ratio_valueChanged( );
+
+    void attack_valueChanged();
+
+    void release_valueChanged( );
+
+    void makeUpGain_valueChanged();
+
+    void recordChanged();
+    void replayChanged();
+    void passthroughChanged();
+
+    void on_doFilter_stateChanged(int arg1);
+
+    void on_doCompression_stateChanged(int arg1);
 
 private:
     void syncSetLines();
     QTimer lineTimer;
     QTimer CaptionTimer;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
+
+    SliderSpinner *recordFrame = nullptr;
+    SliderSpinner *replayFrame = nullptr;
+    SliderSpinner *passthroughFrame = nullptr;
+
+    SliderSpinner *windowFrame = nullptr;
+    SliderSpinner *thresholdFrame = nullptr;
+    SliderSpinner *ratioFrame = nullptr;
+    SliderSpinner *attackFrame = nullptr;
+    SliderSpinner *releaseFrame = nullptr;
+    SliderSpinner *makeUpGainFrame = nullptr;
+
 
     bool PTT;
     bool PTTRef;
@@ -116,6 +138,9 @@ private:
     QProcess *runner;
 
     void setVolumeMults();
+
+    CompressorParams getCompSliders();
+    void setCompSliders(CompressorParams &cp);
 
 
     void runAlsaScript(const QString &alsaFileName, const QString &command);

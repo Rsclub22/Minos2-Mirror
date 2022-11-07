@@ -6,10 +6,18 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "MinosLoggerEvents.h"
+#include <QApplication>
+#include <QComboBox>
+#include <QSplitter>
+#include <QScrollArea>
+#include <QSettings>
+#include <QMenu>
+#include <cstring>
 
+#include "PubSubValue.h"
 #include "cutils.h"
+#include "qnamespace.h"
+#include "MinosParameters.h"
 
 const double pi = 3.141592653 ;  /* pi */
 const double dr = pi / 180.0;      // degree to radian conversion factor
@@ -185,7 +193,8 @@ void writer::lwrite( const char *b )
 }
 void writer::lwriteLine()
 {
-   QString l( 80, 0x5F );					// horizontal line
+    QChar hl(0x5F);
+   QString l( 80, hl );					// horizontal line
    lwrite( l );
 }
 void writer::lwriteNl()
@@ -241,27 +250,6 @@ int strnicmp( const QString &s1, const QString &s2, int len )
     return s1.left(len).compare(s2.left(len), Qt::CaseInsensitive);
 }
 //=============================================================================
-QDateTime CanonicalToTDT(QString cdtg )
-{
-   QDateTime d;
-   QString format("yyyyMMddHHmm");
-   d = QDateTime::fromString(cdtg, format );
-   d.setTimeSpec(Qt::UTC);
-   return d;
-
-}
-QString TDTToCanonical(QString d )
-{
-    // comes in as dd/MM/yyy HH:mm and maybe UTC/GMT
-   if (d.endsWith(" UTC"))
-        d = d.left(d.length() - 4);
-   QDateTime dt = QDateTime::fromString(d, "dd/MM/yyyy HH:mm");
-   QString s = dt.toString( "yyyyMMddHHmm" );
-   return s;
-}
-//=============================================================================
-
-
 
 int toInt ( const QString &s, int def )
 {
@@ -406,7 +394,7 @@ bool CsvReader::parseCsv(const QString &fileName, QList<QStringList> &csv)
             else if (offset == data.length())
             {
                 temp.append(character);
-                checkString(temp, 0, csv);
+                checkString(temp, QChar(0), csv);
             }
             else
             {
@@ -437,14 +425,14 @@ void CsvReader::parseCsvLine(const QString &line, QStringList &csv)
          }
          else if (character == nullptr)
          {
-             checkString(temp, 0, csv);
+             checkString(temp, QChar(0), csv);
          }
          else
          {
              temp.append(character);
          }
      }
-     checkString(temp, 0, csv);
+     checkString(temp, QChar(0), csv);
 }
 void CsvReader::checkString(QString &temp, QChar character, QStringList &csv)
 {
@@ -597,25 +585,45 @@ int getStringlistOffSet(QStringList supportedBands, QString contestBandStr)
 
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb)
 {
-    for(int i = 0; i < layout->count(); i++)
+    if (layout)
     {
-        QLayoutItem *li = layout->itemAt(i);
-        QLayout *l = li->layout();
-        QWidget *w = li->widget();
-        if (l)
+        for(int i = 0; i < layout->count(); i++)
         {
-            adjustMargins(l, ls, cml, cmt, cmr, cmb);
-        }
-        if (w)
-        {
-            if (w->layout())
+            QLayoutItem *li = layout->itemAt(i);
+            QLayout *l = li->layout();
+            QWidget *w = li->widget();
+            if (l)
             {
-                adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                adjustMargins(l, ls, cml, cmt, cmr, cmb);
+            }
+            if (w)
+            {
+                if (w->layout())
+                {
+                    adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                }
+                else
+                {
+                    QSplitter *s = dynamic_cast<QSplitter *>(w);
+                    if (s)
+                    {
+                        for (int j = 0; j< s->count(); j++)
+                        {
+                            adjustMargins(s->widget(j)->layout(), ls, cml, cmt, cmr, cmb);
+                        }
+                    }
+                    QScrollArea *sa = dynamic_cast<QScrollArea *>(w);
+                    if (sa)
+                    {
+                        w = sa->widget();
+                        adjustMargins(w->layout(), ls, cml, cmt, cmr, cmb);
+                    }
+                }
             }
         }
+        layout->setSpacing(ls);
+        layout->setContentsMargins(cml, cmt, cmr, cmb);
     }
-    layout->setSpacing(ls);
-    layout->setContentsMargins(cml, cmt, cmr, cmb);
 }
 bool isPureNumeric ( const QString &s )
 {
@@ -632,4 +640,258 @@ bool isPureNumeric ( const QString &s )
         }
     }
     return true;
+}
+void saveHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+ //   trace(QString("saveHeaderColumns %1").arg(layoutName));
+    QString hLine;
+    for (int i = 0; i < hdr->count(); i++)
+    {
+        int w = hdr->sectionSize(i);
+        int visPos = hdr->visualIndex(i);
+        bool visible = !hdr->isSectionHidden(i);
+
+        if (i != 0)
+        {
+            hLine += ";";
+        }
+        hLine += QString("( %1, %2, %3)").arg(w).arg(visPos).arg(visible);
+    }
+    int sort = hdr->sortIndicatorSection();
+    Qt::SortOrder so = hdr->sortIndicatorOrder();
+    hLine += QString(";%1,%2").arg(sort).arg(so);
+
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", hLine);
+}
+class HdrCol
+{
+public:
+    int logPos = 0;
+    int w = 0;
+    int visPos = 0;
+    bool visible = false;
+
+};
+
+void setHeaderColumns(QString hLine, QHeaderView *hdr)
+{
+    QVector<HdrCol> hdrs;
+    int sort = 0;
+    int sortOrder = Qt::AscendingOrder;
+    QStringList sl = hLine.split(";");
+
+    int lp = 0;
+    for(QString s:qAsConst(sl))
+    {
+        if (s[0] == '(')
+        {
+            s = s.mid(1, s.length() - 2);
+            QStringList hl = s.split(",");
+            if (hl.count() != 3)
+            {
+                continue;
+            }
+            HdrCol hc;
+            hc.w = hl[0].toInt();
+            hc.visPos = hl[1].toInt();
+            hc.visible = (hl[2].toInt() != 0);
+            hc.logPos = lp;
+            lp++;
+            hdrs.push_back(hc);
+        }
+        else
+        {
+            QStringList ss = s.split(",");
+            if (ss.count() == 2)
+            {
+                sort = ss[0].toInt();
+                sortOrder  = ss[1].toInt();
+            }
+        }
+    }
+    std::sort(hdrs.begin(), hdrs.end(),
+    [=](const HdrCol &a, const HdrCol &b)->bool
+      {
+          return a.visPos < b.visPos;
+      }
+    );
+
+    for(const auto &h:hdrs)
+    {
+        hdr->setSectionHidden(h.logPos, !h.visible);
+        if (h.w > 0)
+        {
+            hdr->resizeSection(h.logPos, h.w);
+        }
+        else
+        {
+            hdr->resizeSection(h.logPos, 100);
+        }
+        hdr->moveSection(hdr->visualIndex(h.logPos), h.visPos);
+    }
+    hdr->setSortIndicator(sort, static_cast<Qt::SortOrder>(sortOrder));
+
+    QFont cf = QApplication::font();
+    hdr->setFont(cf);
+
+}
+void restoreHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+//    trace(QString("restoreHeaderColumns %1").arg(layoutName));
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    QString hLine = hdrSettings.value(tableName + "/" + layoutName + "_" + "state", "").toString();
+
+    if (hLine.isEmpty())
+    {
+        resetHeaderColumns(fileName, tableName, layoutName, hdr);
+        return;
+    }
+
+    setHeaderColumns(hLine, hdr);
+
+}
+void resetHeaderColumns(QString fileName, QString tableName, QString layoutName, QHeaderView *hdr)
+{
+//    trace(QString("resetHeaderColumns %1").arg(layoutName));
+    QSettings hdrSettings(fileName, QSettings::IniFormat);
+    hdrSettings.setValue(tableName + "/" + layoutName + "_" + "state", "");
+
+    QString hLine;
+    for (int i = 0; i < hdr->count(); i++)
+    {
+        int w = -1;
+        int visPos = i;
+        bool visible = true;
+
+        if (i != 0)
+        {
+            hLine += ";";
+        }
+        hLine += QString("( %1, %2, %3)").arg(w).arg(visPos).arg(visible);
+    }
+    int sort = 0;
+    Qt::SortOrder so = Qt::AscendingOrder;
+    hLine += QString(";%1,%2").arg(sort).arg(so);
+
+    setHeaderColumns(hLine, hdr);
+}
+void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr)
+{
+    // go through columnsMenu, see which columns are visible
+
+    for (int i = 0; i < hdr->count(); i++)
+    {
+        bool vis = !hdr->isSectionHidden(i );
+        menu.actions().at(i + 2)->setChecked(vis);   // miss out reset and separator
+    }
+    menu.popup( globalPos );
+}
+void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, std::function<void()> pred)
+{
+    menu.clear();
+
+    QAction *newAct = new QAction(QWidget::tr("Reset Columns", "createColumnsMenu"), p);
+    newAct->setData( -1 );
+    menu.addAction( newAct );
+    menu.addSeparator();
+
+    p->connect( newAct, &QAction::triggered, p, [=]()
+        {
+            pred();
+        }
+    );
+    for ( int i = 0; i < hdrModel->columnCount(); i++ )
+    {
+        QString h = hdrModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+                //p->tr(def[ i ].title);
+
+        if (h.isEmpty())
+        {
+            h = "empty";
+        }
+
+        newAct = new QAction( h, p );
+        newAct->setData( i );
+        newAct->setCheckable( true );
+
+        menu.addAction( newAct );
+
+        p->connect( newAct, &QAction::triggered, p, [=]()
+            {
+                pred();
+            }
+        );
+    }
+}
+
+void createColumnsMenu(QMenu &menu, QHeaderView *hdr, QWidget *p, std::function<void()> pred)
+{
+    createColumnsMenu(menu, hdr->model(), p, pred);
+}
+void comboSetUniqueNames(QStringList nameList, QComboBox *cb)
+{
+    QVector<PubSubName> names;
+
+    for(const auto &s: qAsConst(nameList))
+    {
+        // get unique names
+        names.push_back(PubSubName(s));
+    }
+
+    QStringList uniqueNames;
+    for(const auto &p:names)
+    {
+        QString r = p.key();
+
+        int sameNames = 0;
+        QString uniqueName;
+        for(const auto &p2:names)
+        {
+            if (p2.key() == r)
+            {
+                sameNames++;
+            }
+        }
+        if (sameNames > 1)
+        {
+            // NB that app + key on a single machine will always be unique
+            // sowe need to test for the same across machines
+
+            // we could also look for router + key?
+
+            sameNames = 0;
+            r = p.getLocalName();
+            for(const auto &p2:names)
+            {
+                if (p2.getLocalName() == r)
+                {
+                    sameNames++;
+                }
+                if (sameNames > 1)
+                {
+                    uniqueName = p.toString();
+                }
+                else
+                {
+                    uniqueName = r;
+                }
+            }
+        }
+        else
+        {
+            uniqueName = r;
+        }
+
+        uniqueNames.append(uniqueName);
+    }
+
+    cb->clear();
+    cb->addItem("");
+    for(int i = 0; i < names.count(); i++)
+    {
+        cb->addItem( uniqueNames[i], names[i].toString());
+        cb->setItemData( i + 1, names[i].toString(), Qt::ToolTipRole );
+
+    }
 }

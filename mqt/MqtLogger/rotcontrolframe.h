@@ -15,13 +15,11 @@
 #ifndef ROTCONTROLFRAME_H
 #define ROTCONTROLFRAME_H
 
-#include "base_pch.h"
-#include "MinosLoggerEvents.h"
+#include <QFrame>
 #include <QShortcut>
-#include "rotatorcommon.h"
-#include "presetbutton.h"
+#include "RPCCommandConstants.h"
 #include "rigmemcommondata.h"
-#include "rotpresetdialog.h"
+#include "MinosLoggerEvents.h"
 
 
 namespace Ui {
@@ -148,7 +146,7 @@ private slots:
 
     void on_nudgeLeft_clicked();
     void on_nudgeRight_clicked();
-    void on_antennaName_activated(const QString &arg1);
+    void on_antennaNameSel_activated(const QString &arg1);
 
 
     void setBrgFromQSOLog(QString);

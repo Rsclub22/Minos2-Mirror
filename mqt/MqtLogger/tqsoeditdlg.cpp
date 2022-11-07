@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
 #include "MatchTreeFrame.h"
@@ -73,7 +72,9 @@ int TQSOEditDlg::exec()
     ui->GJVQSOEditFrame->initialise( );
     ui->GJVQSOEditFrame->setContest( contest );
 
-    ui->GJVQSOEditFrame->selectEntryForEdit( firstContact );   // first contact for the dialog to deal with
+    QSharedPointer<BaseContact> fct = contest->findContact(firstContact);
+
+    ui->GJVQSOEditFrame->selectEntryForEdit( fct );   // first contact for the dialog to deal with
     if ( unfilled )
     {
        setWindowTitle(tr("Completing unfilled contacts"));
@@ -82,7 +83,7 @@ int TQSOEditDlg::exec()
     {
        setWindowTitle(tr("Editing QSO"));
     }
-    firstContact.reset();
+    firstContact = nullptr;
 
     ui->thisMatchFrame->setContest(contest);
     ui->otherMatchFrame->setContest(contest);
@@ -90,7 +91,7 @@ int TQSOEditDlg::exec()
 
     int ret = QDialog::exec();
 
-    MinosLoggerEvents::SendAfterLogContact(contest);
+    MinosLoggerEvents::SendAfterLogContact(contest);    // after QSO edited
 
     return ret;
 }
@@ -156,7 +157,7 @@ void TQSOEditDlg::on_editSplitter_splitterMoved(int, int)
 }
 //---------------------------------------------------------------------------
 
-void TQSOEditDlg::selectContact( BaseContestLog * ccontest, QSharedPointer<BaseContact> lct )
+void TQSOEditDlg::selectContact( BaseContestLog * ccontest, CheckableContact *lct )
 {
    // this is the first call after construction
    contest = ccontest;
@@ -284,12 +285,12 @@ void TQSOEditDlg::transferDetails(MatchTreeItem *MatchTreeIndex )
 
    if (mc)
    {
-       QSharedPointer<BaseContact> bct = mc->getBaseContact();
+       QSharedPointer<BaseContact> bct = contest->findContact(mc->getBaseContact());
 
        if ( bct )
        {
           BaseContestLog *matct = mc->getContactLog();
-          ui->GJVQSOEditFrame->transferDetails( bct, matct );
+          ui->GJVQSOEditFrame->transferDetails( bct.data(), matct );
        }
        else
        {

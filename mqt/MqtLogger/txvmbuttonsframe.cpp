@@ -1,10 +1,15 @@
+#include <QMessageBox>
+
 #include "tlogcontainer.h"
 #include "delayedaction.h"
 #include "SendRPCDM.h"
-#include "KeyerJson.h"
 #include "cutils.h"
+#include "MinosLoggerEvents.h"
+#include "MTrace.h"
+
 #include "txvmbuttonsframe.h"
 #include "ui_txvmbuttonsframe.h"
+#include "rigcommon.h"
 
 
 const int NO_VM_BUTTON_ON = -1;
@@ -43,6 +48,8 @@ TxVmButtonsFrame::TxVmButtonsFrame(QWidget *parent) :
     extKeyerConnectTimer = new QTimer(this);
     connect(extKeyerConnectTimer, &QTimer::timeout, this, &TxVmButtonsFrame::onExtConnectTimer);
     connect(LogContainer->sendDM, &TSendDM::keyerReport, this, &TxVmButtonsFrame::onExtConnectTimer);
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::fKey, this, &TxVmButtonsFrame::fKey);
 
     initTxVmButtonFrame();
 
@@ -419,6 +426,18 @@ void TxVmButtonsFrame::readActionSelected(int buttonNumber)
     }
     trace(QString("[TxVmButtonsFrame] readActionSelected"));
 
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::RigControl])
+    {
+        if(curMode != rigcommon::convertModeToQString(MODE::USB)
+                && curMode != rigcommon::convertModeToQString(MODE::LSB)
+                && curMode != rigcommon::convertModeToQString(MODE::FM)
+                && curMode != "PH")
+        {
+            trace(QString("Mode needs to be a phone type for rigcontrol Voice Message, current mode = %1").arg(curMode));
+            return;
+        }
+    }
+
     VoiceKeyerParams vmData;
     vmData.setType(voiceKeyerType);
     txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
@@ -453,11 +472,23 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
     {
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
+            if (curMode != rigcommon::convertModeToQString(MODE::CW) && txVoiceKeyer->getSetCwModeAndRestoreFlag())
+            {
+                savedMode = curMode;
+                sendModeToRadio(rigcommon::convertModeToQString(MODE::CW));
+            }
+            else
+            {
+                savedMode = curMode;        // keep current mode if CW
+            }
+
+
             VoiceKeyerParams vmData;
             vmData.setType(voiceKeyerType);
             txVoiceKeyer->readVmButtonParams(buttonNumber, vmData);
             txVoiceKeyer->sendCwMsg(vmData.getVmCwMessage());
             usePttForEomFlag = txVoiceKeyer->getUsePttForEomFlag();
+
 
         }
         else if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::YAESU_MEM_RECALL)
@@ -490,7 +521,7 @@ void TxVmButtonsFrame::startVMMsg(int buttonNumber)
 
 void TxVmButtonsFrame::onVmStopClicked()
 {
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None] || buttonNumSent == NO_VM_BUTTON_ON)
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
     {
         return;
     }
@@ -503,6 +534,12 @@ void TxVmButtonsFrame::onVmStopClicked()
         if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM)
         {
             txVoiceKeyer->stopCwMsg();
+
+            if (curMode != savedMode && txVoiceKeyer->getSetCwModeAndRestoreFlag())       // restore mode?
+            {
+                sendModeToRadio(savedMode);
+            }
+
         }
 
 
@@ -519,7 +556,10 @@ void TxVmButtonsFrame::onVmStopClicked()
 
     msgDurTimer->stop();
     repeatPauseTimer->stop();
-    txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    if (buttonNumSent != NO_VM_BUTTON_ON)
+    {
+        txVmButtonMap[buttonNumSent]->showButtonOnOff(false);
+    }
     setRepeatIndicatorOnOff(false);
     buttonNumSent = NO_VM_BUTTON_ON;
 }
@@ -565,50 +605,6 @@ void TxVmButtonsFrame::writeActionSelected(int buttonNumber)
     }
 
 }
-
-void TxVmButtonsFrame::clearActionSelected(int buttonNumber)
-{
-    if (voiceKeyerType == keyerTypes[VoiceKeyerId::None])
-    {
-        return;
-    }
-
-    VoiceKeyerParams vmData;
-    vmData.clear();
-    vmData.setvmButtonNum(buttonNumber);
-    vmData.setType(voiceKeyerType);
-    vmData.setVkBase(txVoiceKeyer);
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle(tr("Voice Memory Button %1").arg(buttonNumber + 1));
-    msgBox.setText(tr("Are you sure you want to clear this Button?"));
-    msgBox.setInformativeText(tr("Click OK to clear, cancel to ignore"));
-    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msgBox.setDefaultButton(QMessageBox::Ok);
-    int ret = msgBox.exec();
-
-    switch (ret)
-    {
-      case QMessageBox::Save:
-        if (txVoiceKeyer)
-        {
-            txVoiceKeyer->saveVmButtonParams(vmData);
-            setRunButtonText(buttonNumber, vmData.getVmName());
-            vmKeyParamList[buttonNumber] = vmData;
-        }
-          break;
-
-      case QMessageBox::Cancel:
-          // Cancel was clicked
-          break;
-      default:
-          // should never be reached
-          break;
-    }
-
-}
-
-
 
 void TxVmButtonsFrame::onRemoteConfigChanged()
 {
@@ -689,6 +685,25 @@ void TxVmButtonsFrame::onMsgDurTimerTimeout()
         }
     }
     msgDurTimer->stop();
+
+
+    if (voiceKeyerType == keyerTypes[VoiceKeyerId::CW_RigControl])
+    {
+
+        if (getCwMemType(selectedRadio) == hamlibData::CW_MEMORY_TYPES::ICOM  && txVoiceKeyer->getSetCwModeAndRestoreFlag())
+        {
+
+            if (curMode != savedMode)       // restore mode?
+            {
+                sendModeToRadio(savedMode);
+            }
+
+        }
+
+    }
+
+
+
 }
 
 
@@ -981,6 +996,38 @@ void TxVmButtonsFrame::setPttStatusIndicatorOnOff(bool on)
     }
 
 }
+void TxVmButtonsFrame::fKey(int key)
+{
+    // FKey event received by log frame (or ctrl/FKey)
+    int mem = key - Qt::Key_F1 + 1;
+    if (mem > 10)
+    {
+
+    }
+    else if (mem == 10)
+    {
+        onVmStopClicked();
+    }
+    else
+    {
+        readActionSelected(mem);
+    }
+
+}
+
+void TxVmButtonsFrame::setMode(const QString m)
+{
+    QString mode = m;
+    if (curMode != mode.remove(':'))
+    {
+        curMode = mode;
+    }
+}
+
+void TxVmButtonsFrame::sendModeToRadio(const QString m)
+{
+    emit sendRadioMode(m);
+}
 
 //*******************TX Voice Memory Button *************************//
 
@@ -999,25 +1046,19 @@ TxVoiceMemButton::TxVoiceMemButton(QToolButton *b, TxVmButtonsFrame *tvmbf, int 
 
     shortKey = new QShortcut(QKeySequence(vmButtonShortCutKeys[memNo]), vmButton);
 
-    readAction = new QAction(tr("&Read"), vmButton);
     newAction = new QAction(tr("&New"),vmButton);
     editAction = new QAction(tr("&Edit"), vmButton);
-    clearAction = new QAction(tr("&Clear"), vmButton);
-    vmMenu->addAction(readAction);
     vmMenu->addAction(newAction);
     vmMenu->addAction(editAction);
-    vmMenu->addAction(clearAction);
 
 
     vmButton->setMenu(vmMenu);
 
     connect(shortKey, &QShortcut::activated, this, &TxVoiceMemButton::readActionSelected);
-    connect(readAction, &QAction::triggered, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::readActionSelected);
     connect(vmButton, &QToolButton::clicked, this, &TxVoiceMemButton::buttonSelected);
     connect( newAction, &QAction::triggered, this, &TxVoiceMemButton::writeActionSelected);
     connect( editAction, &QAction::triggered, this, &TxVoiceMemButton::editActionSelected);
-    connect(clearAction, &QAction::triggered, this, &TxVoiceMemButton::clearActionSelected);
 
 
 }
@@ -1050,11 +1091,6 @@ void TxVoiceMemButton::writeActionSelected()
     txVmButtonsFrame->writeActionSelected(memNo);
 }
 
-void TxVoiceMemButton::clearActionSelected()
-{
-    txVmButtonsFrame->clearActionSelected(memNo);
-}
-
 
 void TxVoiceMemButton::buttonSelected()
 {
@@ -1072,3 +1108,5 @@ void TxVoiceMemButton::showButtonOnOff(bool state)
         vmButton->setStyleSheet(VM_BUTTON_OFF_STYLE);
     }
 }
+
+

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>429</width>
-    <height>363</height>
+    <width>457</width>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -137,6 +137,31 @@
     </layout>
    </item>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_12">
+     <item>
+      <widget class="QCheckBox" name="expertModeCheckBox">
+       <property name="text">
+        <string>Expert mode display</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="alternateFKeysCheckBox">
+       <property name="text">
+        <string>Alternate Function Keys</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="ShowAuxHeadersCheckBox">
+     <property name="text">
+      <string>Show Auxiliary Headers</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="groupBox_3">
      <property name="title">
       <string>Display of Operating Time</string>
@@ -178,13 +203,6 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Set List Spacing Compression Value as percentage</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QSpinBox" name="ListCompressionSpinner">
        <property name="minimum">
         <number>50</number>
@@ -208,6 +226,13 @@
       </spacer>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Set List Spacing Compression Value as percentage</string>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">

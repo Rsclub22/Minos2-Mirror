@@ -1,18 +1,24 @@
 #ifndef STDINREADER_H
 #define STDINREADER_H
 #include <QThread>
-
-bool getShowApp( );
-void setShowApp(bool /*state*/);
+#include <QMainWindow>
 
 class StdInReader: public QThread
 {
     Q_OBJECT
 
+    void setShowApp(bool /*state*/);
+
     virtual void run();
+
+    QMainWindow *qmw = nullptr;
+
 public:
-    StdInReader();
+    StdInReader(QMainWindow *m);
     ~StdInReader();
+
+private slots:
+    void executeStdIn(QString cmd);
 
 signals:
     void stdinLine(QString);

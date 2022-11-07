@@ -6,35 +6,19 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
+#include "MTrace.h"
+#include  <QtGlobal>
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 
 #include <QtEndian>
 #include <QtMath>
 #include <numeric>
 #include <QtCore>
-
 #include "soundsys.h"
 #include "keyerlog.h"
 #include "riff.h"
-
-#define FRAMES 16
-#define FRAMESAMPLES 256
-#define RINGBUFFERSIZE 1024
-
-static QWaitCondition bufferNotEmpty;
-static QWaitCondition bufferNotFull;
-static QMutex mutex;
-
-class InBuff
-{
-public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
-};
-
-static InBuff inBuffs[RINGBUFFERSIZE];
-static int recIndex = 0;
-static int writeIndex = 0;
 
 RiffWriter::RiffWriter(RtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
 {
@@ -48,27 +32,114 @@ void RiffWriter::run()
         mutex.lock();
         if (writeIndex == recIndex)
             bufferNotEmpty.wait(&mutex);
-        mutex.unlock();
 
         if (terminated)
+        {
+            mutex.unlock();
             break;
+        }
+
+        if (writeIndex == -1 && recIndex == -1)
+        {
+            mutex.unlock();
+            continue;
+        }
+        mutex.unlock();
 
         if (inBuffs[writeIndex%RINGBUFFERSIZE].frameCount > 0)
+        {
             ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
+            mutex.lock();
+            ++writeIndex;
+
+            bufferNotFull.wakeAll();
+            mutex.unlock();
+        }
         else
         {
             ss->outWave->Close();
+            mutex.lock();
+            writeIndex = -1;
+            recIndex = -1;
+            bufferNotFull.wakeAll();
+            bufferNotEmpty.wakeAll();
+            mutex.unlock();
 #ifdef Q_OS_UNIX
             sync();     // make sure it goes to disk
 #endif
         }
 
-        mutex.lock();
-        ++writeIndex;
-
-        bufferNotFull.wakeAll();
-        mutex.unlock();
     }
+}
+
+void RiffWriter::startInput()
+{
+    finishInput();
+    mutex.lock();
+    recIndex = 0;
+    writeIndex = 0;
+    mutex.unlock();
+}
+
+void RiffWriter::wakeAll()
+{
+    bufferNotEmpty.wakeAll();
+}
+
+void RiffWriter::copyBuffer(int16_t *inStageBuffer, int nFrames)
+{
+    mutex.lock();
+    if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     //both only ever increase and are used %RINGBUFFERSIZE
+    {
+        // wait for writer to create a gap
+        // NB writer waits when recIndex == writeIndex
+        // after writing it signals bufferNotFull
+        bufferNotFull.wait(&mutex);
+    }
+    mutex.unlock();
+
+    if (writeIndex == -1 && recIndex == -1)
+    {
+        return;
+    }
+
+    inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
+    memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
+
+    mutex.lock();
+    ++recIndex;
+    bufferNotEmpty.wakeAll();
+    mutex.unlock();
+}
+
+void RiffWriter::finishInput()
+{
+    // we want to wait for all buffers to be written
+
+    mutex.lock();
+    if (writeIndex == -1 && recIndex == -1)
+    {
+        mutex.unlock();
+        return;
+    }
+
+    if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // both only ever increase and are used %RINGBUFFERSIZE
+    {
+        // wait for writer to create a gap so that we can insert a "close" frame
+        // NB writer waits when recIndex == writeIndex
+        // after writing it signals bufferNotFull
+        bufferNotFull.wait(&mutex);
+    }
+
+    mutex.unlock();
+
+    inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
+
+    mutex.lock();
+    ++recIndex;
+
+    bufferNotEmpty.wakeAll();   // say there is room for input
+    mutex.unlock();
 }
 
 /*static*/
@@ -76,49 +147,6 @@ void RiffWriter::run()
 RtAudioSoundSystem *RtAudioSoundSystem::createSoundSystem()
 {
    return new RtAudioSoundSystem();
-}
-void LPFilter::initialise (int channels, double corner, double sampleRate)
-{
-    mNumChannels = channels;
-    mZx[0] = mZx[1] = mZx[2] = mZx[3] = 0.0;
-    mZy[0] = mZy[1] = mZy[2] = mZy[3] = 0.0;
-
-    double mQuality = 0.707;
-
-    double theta = 2. * M_PI * (corner/sampleRate);
-    double d = 0.5 * (1. / mQuality) * sin(theta);
-    double beta = 0.5 * ( (1. - d) / (1. + d) );
-    double gamma = (0.5 + beta) * cos(theta);
-
-    a0 = 0.5 * (0.5 + beta - gamma);
-    a1 = 0.5 + beta - gamma;
-
-    a2 = a0;
-    b1 = -2. * gamma;
-    b2 = 2. * beta;
-}
-
-double LPFilter::filterSample (const double inSample, const int channel)
-{
-    // Derived from
-    // http://creatingsound.com/2014/02/dsp-audio-programming-series-part-2/
-
-    double outSample;
-    int idx0 = mNumChannels * channel;
-    int idx1 = idx0 + 1;
-
-    outSample = (a0 * inSample)
-                + (a1 * mZx[idx0])
-                + (a2 * mZx[idx1])
-                - (b1 * mZy[idx0])
-                - (b2 * mZy[idx1]);
-
-    mZx[idx1] = mZx[idx0];
-    mZx[idx0] = inSample;
-    mZy[idx1] = mZy[idx0];
-    mZy[idx0] = outSample;
-
-    return outSample;
 }
 //==============================================================================
 int audioCallback( void *outputBuffer, void *inputBuffer,
@@ -177,22 +205,29 @@ RtAudioSoundSystem::RtAudioSoundSystem()
 RtAudioSoundSystem::~RtAudioSoundSystem()
 {
    passThroughEnabled = false;
-   stopDMA();
+   closedown();
+//   stopDMA();
 
-   wThread->terminated = true;
-   bufferNotEmpty.wakeAll();
-   wThread->wait();
-   try
-   {
-      // Stop the stream.
-      audio->stopStream();
-   }
-   catch ( RtAudioError& error )
-   {
-       trace(error.getMessage().c_str());
-   }
-   delete audio;
-   delete wThread;
+//   wThread->terminated = true;
+//   wThread->wakeAll();
+//   wThread->wait();
+//   try
+//   {
+//      // Stop the stream.
+//      audio->stopStream();
+//   }
+//   catch ( RtAudioError& error )
+//   {
+//       trace(error.getMessage().c_str());
+//   }
+//   delete audio;
+//   delete wThread;
+
+   free_bw_band_pass(micfilter1);
+   free_bw_band_pass(micfilter2);
+   free_bw_band_pass(replayfilter1);
+   free_bw_band_pass(replayfilter2);
+
 }
 bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
 {
@@ -205,15 +240,28 @@ bool RtAudioSoundSystem::initialise( QString ind, QString outd  )
         wThread = new RiffWriter(this);
         wThread->start();
     }
-    compressor.setSampleRate(sampleRate);
-    compressor.setWindow(10);       // milliseconds
-    compressor.setThresh( -10 );
-    compressor.setRatio( 0.1 );
-    compressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
-    compressor.setRelease( 10.0 ); // 10ms release is good
-    compressor.initRuntime();
+    micCompressor.setSampleRate(sampleRate);
+    micCompressor.setWindow(10);       // milliseconds
+    micCompressor.setThresh( -10 );
+    micCompressor.setRatio( 0.1 );
+    micCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    micCompressor.setRelease( 10.0 ); // 10ms release is good
+    micCompressor.initRuntime();
 
-    lpFilter.initialise(2, filterCorner, sampleRate);
+    replayCompressor.setSampleRate(sampleRate);
+    replayCompressor.setWindow(10);       // milliseconds
+    replayCompressor.setThresh( -10 );
+    replayCompressor.setRatio( 0.1 );
+    replayCompressor.setAttack( 1.0 );     // 1ms seems like a good look-ahead to me
+    replayCompressor.setRelease( 10.0 ); // 10ms release is good
+    replayCompressor.initRuntime();
+
+    micfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+    micfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
+    replayfilter1 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+    replayfilter2 = create_bw_band_pass_filter(4, 48000, 100, 3000);   // order, sampling freq, lower half power, upper half power
+
 
     try
     {
@@ -273,7 +321,7 @@ void RtAudioSoundSystem::stop()
     stopDMA();
 
     wThread->terminated = true;
-    bufferNotEmpty.wakeAll();
+    wThread->wakeAll();
     wThread->wait();
     try
     {
@@ -299,6 +347,9 @@ void RtAudioSoundSystem::closedown()
 
         delete outWave;
         outWave = nullptr;
+
+        delete wThread;
+        wThread = nullptr;
     }
 }
 
@@ -307,20 +358,38 @@ unsigned int RtAudioSoundSystem::setRate(unsigned int rate)
    sampleRate = rate;
    return sampleRate;
 }
-void RtAudioSoundSystem::setFilter(int fc)
-{
-   filterCorner = fc;
-}
 
-void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough)
+void RtAudioSoundSystem::setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp, bool df, bool dc)
 {
     // input levels are dB, so the actual multiplier is 10**(level/10)
     // BUT level is already * 10, so we need /100
     recordMult = qPow(10, record/100);
     replayMult = qPow(10, replay/100);
     passThroughMult = qPow(10, passThrough/100);
-}
 
+    compression = comp;
+
+    micCompressor.setWindow(comp.window);
+    micCompressor.setAttack(comp.attack);
+    micCompressor.setRelease(comp.release);
+    micCompressor.setThresh(comp.threshold);
+    micCompressor.setRatio(comp.ratio);
+
+    //micCompressor.initRuntime();
+
+    replayCompressor.setWindow(comp.window);
+    replayCompressor.setAttack(comp.attack);
+    replayCompressor.setRelease(comp.release);
+    replayCompressor.setThresh(comp.threshold);
+    replayCompressor.setRatio(comp.ratio);
+
+    //replayCompressor.initRuntime();
+
+    makeUpGain = comp.makeUpGain;
+
+    doBWFilter = df;
+    doCompression = dc;
+}
 
 int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                                 unsigned int nFrames,
@@ -371,13 +440,29 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
             double s1 = initi1;
             double s2 = initi2;
 
-            s1 /= 32768.0;
-            s2 /= 32768.0;
+            if (passThroughEnabled)
+            {
+                // this is happening to INPUT i.e. on passthrough/recording
+                // NOT on replay
 
-            compressor.process(s1, s2);
+                double ds1 = s1/32768.0;
+                double ds2 = s2/32768.0;
 
-            s1 *= 32768.0;
-            s2 *= 32768.0;
+                if (doBWFilter)
+                {
+                    ds1 =  bw_band_pass(micfilter1, ds1);
+                    ds2 =  bw_band_pass(micfilter2, ds2);
+                }
+                if (doCompression)
+                {
+                    micCompressor.process(ds1, ds2);
+                    ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                    ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                }
+
+                s1 = ds1 * 32768.0;
+                s2 = ds2 * 32768.0;
+            }
 
             qreal val1 = s1 * volmult;
             qreal val2 = s2 * volmult;
@@ -391,12 +476,6 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
                 val2 = 32767.0;
             if (val2 < -32767.0)
                 val2 = -32767.0;
-
-            if (filterCorner > 0)
-            {
-                val1 = lpFilter.filterSample(val1, 0);
-                val2 = lpFilter.filterSample(val2, 1);
-            }
 
             if (passThroughEnabled)
             {
@@ -429,18 +508,7 @@ int RtAudioSoundSystem::audioCallback(void *outputBuffer, void *inputBuffer,
 
         if (inputEnabled)
         {
-            mutex.lock();
-            if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
-                bufferNotFull.wait(&mutex);
-            mutex.unlock();
-
-            inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
-            memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
-
-            mutex.lock();
-            ++recIndex;
-            bufferNotEmpty.wakeAll();
-            mutex.unlock();
+            wThread->copyBuffer(inStageBuffer, nFrames);
         }
     }
     if (outputBuffer != nullptr && nFrames != 0 && outputEnabled )
@@ -486,18 +554,7 @@ void RtAudioSoundSystem::stopInput()
 {
     inputEnabled = false;
     emit actionQueueFinished();
-     mutex.lock();
-     if (recIndex - writeIndex >= RINGBUFFERSIZE - 1)     // not correct... we want "caught up"
-         bufferNotFull.wait(&mutex);
-     mutex.unlock();
-
-     inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
-
-     mutex.lock();
-     ++recIndex;
-
-     bufferNotEmpty.wakeAll();
-     mutex.unlock();
+    wThread->finishInput();
 }
 bool RtAudioSoundSystem::startInput( QString fn )
 {
@@ -505,8 +562,7 @@ bool RtAudioSoundSystem::startInput( QString fn )
     // startInput() will also be called later
 
     // Should we do this in the writer thread?
-    recIndex = 0;
-    writeIndex = 0;
+    wThread->startInput();
     if (!outWave)
     {
         outWave = new WaveFile;
@@ -594,7 +650,6 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 {
                     total = qMin((p_buffer.size() - p_pos), len);
                     memcpy(q, p_buffer.constData() + p_pos, static_cast<size_t>(total));
-//                    q += total/2;
                     p_pos += total;
                 }
                 else
@@ -617,14 +672,49 @@ void RtAudioSoundSystem::readFromFile(void *outputBuffer, unsigned int nFrames, 
                 if (tone)
                     mult = 1.0;
 
-                for (int i = 0; i < total/2; i++)
+                for (int i = 0; i < total/(2 * 2); i += 1)
                 {
-                    qreal val =*m++ * mult;
+                    // if NOT pip and NOT tone apply the compressor
+
+                    qreal val = *m++;
+                    qreal val2 = *m++;
+                    if (!tone)
+                    {
+
+                        double ds1 = val/32768.0;
+                        double ds2 = val2/32768.0;
+
+                        if (doBWFilter)
+                        {
+                            ds1 =  bw_band_pass(replayfilter1, ds1);
+                            ds2 =  bw_band_pass(replayfilter2, ds2);
+                        }
+                        if (doCompression)
+                        {
+                            replayCompressor.process(ds1, ds2);
+                            ds1 *= chunkware_simple::dB2lin(makeUpGain);
+                            ds2 *= chunkware_simple::dB2lin(makeUpGain);
+                        }
+
+                        val = ds1 * 32768.0;
+                        val2 = ds2 * 32768.0;
+
+
+                    }
+
+                    val *= mult;
                     if (val > 32767.0)
                         val = 32767.0;
                     if (val < -32767.0)
                         val = -32767.0;
+
+                    val2 *= mult;
+                    if (val2 > 32767.0)
+                        val2 = 32767.0;
+                    if (val2 < -32767.0)
+                        val2 = -32767.0;
                     *q++ = static_cast<qint16>(val);
+                    *q++ = static_cast<qint16>(val2);
                 }
                 m_pos += total;
             }

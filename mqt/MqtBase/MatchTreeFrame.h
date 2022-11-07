@@ -1,10 +1,13 @@
 #ifndef MATCHTREEFRAME_H
 #define MATCHTREEFRAME_H
 
-#include "base_pch.h"
+#include <QTreeView>
+#include <QMenu>
+
+#include "baseconstants.h"
+#include "TreeUtils.h"
 #include "contest.h"
 #include "MatchCollection.h"
-#include "MinosLoggerEvents.h"
 
 namespace Ui {
 class MatchTreeFrame;
@@ -54,9 +57,6 @@ public:
 class QSOMatchGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-    static GridColumn ThisMatchTreeColumns[ THISMATCHTREECOLS ];
-    static GridColumn OtherMatchTreeColumns[ OTHERMATCHTREECOLS ];
-    static GridColumn ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ];
 
 protected:
     SharedMatchCollection match;
@@ -64,6 +64,10 @@ protected:
     MatchType type;
 
 public:
+    static QVector<GridColumn>  ThisMatchTreeColumns;
+    static QVector<GridColumn>  OtherMatchTreeColumns;
+    static QVector<GridColumn>  ArchiveMatchTreeColumns;
+
     QSOMatchGridModel();
     ~QSOMatchGridModel() override;
 
@@ -91,6 +95,7 @@ class MatchTreeFrame : public QTreeView
 
     QSharedPointer<HtmlDelegate> delegate;
 
+    void viewColumn();
 public:
     QModelIndex treeClickIndex;
 
@@ -100,22 +105,24 @@ public:
     QTreeView *getTreeView();
     virtual QString getTreeName(){return "";}
     void setCurrentModel(bool);
-    virtual QSOMatchGridModel *getMatchModel(){return nullptr;}
+    virtual QSOMatchGridModel *getMatchModel() = 0;
+    virtual MatchType getMatchType() = 0;
 
     void setBaseName(QString);
     void setContest(BaseContestLog *);
     void restoreColumns();
-//    void getSplitters();
 
     void doCustomContextMenuRequested();
 
-//    bool logColumnsChanged;
-
+    void setCurScreenLayout(const QString &value);
+    void saveHeaderLayout();
 
 protected:
     QString baseName;
     BaseContestLog *contest;
-
+    QMenu columnsMenu;
+    QString curScreenLayout;
+    bool inRestoreColumns = false;
 
     virtual void showThisMatchQSOs(SharedMatchCollection /*matchCollection*/ ){}
     virtual void showOtherMatchQSOs( SharedMatchCollection /*matchCollection*/ ){}
@@ -135,8 +142,10 @@ private slots:
     void on_sectionResized(int, int, int);
 
     void on_doColumnChanges(BaseContestLog*);
+    void onMatch_customContextMenuRequested(const QPoint &pos);
+    void onSectionMoved(int, int, int);
 signals:
-    void editContact(QSharedPointer<BaseContact> bct);
+    void editContact(CheckableContact *bct, bool nc);
 
     void matchTreeClicked();
 };

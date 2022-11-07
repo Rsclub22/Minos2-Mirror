@@ -12,25 +12,22 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include <math.h>
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
-#include "runbuttondialog.h"
 #include "BandList.h"
 #include "rigutils.h"
 #include "LoggerContest.h"
-#include "rigcontrolframe.h"
 #include "volumeslider.h"
 #include "freqlineedit.h"
 #include "ritlineedit.h"
 #include "delayedaction.h"
+#include "MTrace.h"
+
+#include "rigcontrolframe.h"
 #include "ui_rigcontrolframe.h"
-
-
-
 
 RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
     QFrame(parent),
@@ -73,16 +70,16 @@ RigControlFrame::RigControlFrame(TSingleLogFrame *parent):
 
     BandList::getBandList().loadAllBands(bands);
 
-    freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_F), parent);
+    freqEditShortKey = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), parent);
     connect(freqEditShortKey, &QShortcut::activated, this, &RigControlFrame::freqEditSelected);
 
     connect(ui->freqStepCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &RigControlFrame::freqStepComboChanged);
 
-    freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_U), parent);
+    freqPlusShortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_U), parent);
     connect(freqPlusShortCut, &QShortcut::activated, this, &RigControlFrame::freqPlus_ShortCut);
     connect(ui->freqUp, &QToolButton::clicked, this, &RigControlFrame::freqPlusShortCut_clicked);
 
-    freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_D), parent);
+    freqNegShortCut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_D), parent);
     connect(freqNegShortCut, &QShortcut::activated, this, &RigControlFrame::freqNeg_ShortCut);
     connect(ui->freqDown, &QToolButton::clicked, this, &RigControlFrame::freqNegShortCut_clicked);
 
@@ -169,6 +166,28 @@ void RigControlFrame::clearFreqInputFocus()
 {
     ui->freqInput->clearFocus();
 }
+QString RigControlFrame::getSelectedRadio()
+{
+    return ui->radioNameSel->currentData().toString();
+}
+
+bool RigControlFrame::setSelectedRadio(QString s)
+{
+   QStringList radios;
+   int c = ui->radioNameSel->findData(s);
+   if (c >= 0)
+   {
+        ui->radioNameSel->setCurrentIndex(c);
+   }
+   else
+   {
+       for (int i = 0; i < ui->radioNameSel->count(); i++)
+       {
+            radios.append(ui->radioNameSel->itemData(i).toString());
+       }
+   }
+   return c >= 0;
+}
 
 void RigControlFrame::checkRigDetailsAvail()
 {
@@ -193,7 +212,7 @@ void RigControlFrame::checkRigDetailsAvail()
 
     }
 
-    else if (ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
+    else if (ct && !ct->isReadOnly() )
     {
 
         if (!ct->radioName.getValue().toString().isEmpty() )
@@ -201,8 +220,7 @@ void RigControlFrame::checkRigDetailsAvail()
             traceMsg(QString("checkRigDetailsAvail: contest radio name is %1").arg(ct->radioName.getValue().toString()));
             traceMsg(QString("checkRigDetailsAvail: number of radios in allradioDetails = %1").arg(allRadioDetails.count()));
 
-            //if (allRadioDetails.contains(ct->radioName.getValue().toString() ))
-            if (ui->radioNameSel->findText(ct->radioName.getValue().toString()) != -1)
+            if (ui->radioNameSel->findData(ct->radioName.getValue().toString()) != -1)
             {
                traceMsg(QString("checkRigDetailsAvail: radioName in allRadioDetails = %1").arg(ct->radioName.getValue().toString()));
                if (allRadioDetails.contains(ct->radioName.getValue().toString())  && allRadioDetails[ct->radioName.getValue().toString()].getBandListCount() > 0)
@@ -296,10 +314,10 @@ void RigControlFrame::clusterUpdateRigFreq(Frequency freq)
 void RigControlFrame::on_radioNameSel_activated(const QString &arg1)
 {
     // radio combo selected
-    radioName = arg1;
+    radioName = getSelectedRadio();
 
     traceMsg(QString("on radioNameSel activated: radioName - %1 requested ***").arg(arg1));
-    setRadioName(arg1, true);       // set true here as we want to act like start and use preset freq, except if a last freq is available
+    setRadioName(radioName, true);       // set true here as we want to act like start and use preset freq, except if a last freq is available
 }
 
 void RigControlFrame::setTransVertOffset(double offset, PubSubName psn)
@@ -459,7 +477,7 @@ void RigControlFrame::displayFreqOnFreqEditDisplay(const Frequency &freq)
         {
             traceMsg(QString("displayFreqOnFreqEditDisplay: Freq = %1").arg(freq.traceStr()));
             QString sf = freq.str();
-            ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
+            ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
             setFreqTextLegalColour(freq, curMode);
             ui->freqInput->setLineText(sf);
 
@@ -617,7 +635,7 @@ void RigControlFrame::changeMainRadioFreq()
             if (checkValidFreq(newFreq))
             {
                 lastFreq = newFreq;
-                if (lastFreq.str().count() >= 4)
+                if (lastFreq.str().size() >= 4)
                 {
                     if (isRadioLoaded())
                     {
@@ -793,7 +811,7 @@ void RigControlFrame::exitFreqEdit()
     {
         // up date display to current radio freq
         QString sf = curFreq.str();
-        ui->freqInput->setInputMask(maskData::freqMask[sf.count() - 4]);
+        ui->freqInput->setInputMask(maskData::freqMask[sf.size() - 4]);
         ui->freqInput->setLineText(sf);
         emit setFreqDisplay(curFreq, legalFreq);
     }
@@ -1064,7 +1082,7 @@ void RigControlFrame::setRadioName(QString radNam, bool fromStartRigControl)
 
 
             // set Radio Sel Combo
-            int index = ui->radioNameSel->findText(radioName, Qt::MatchExactly);
+            int index = ui->radioNameSel->findData(radioName);
             if (index >= 0)
             {
                 traceMsg(QString("found radio, set radioComboSel to index %1").arg(index));
@@ -1463,15 +1481,13 @@ void RigControlFrame::setRadioListFromTslf()
 
 void RigControlFrame::setRadioList()
 {
-    QString currentSelRadioName;
-
     if (ct && !ct->isReadOnly() /*&& ct == TContestApp::getContestApp() ->getCurrentContest()*/)
     {
         if (LogContainer->sendDM->rigs().count() > 0)
         {
             traceMsg(QString("setRadioList: list of radios in LogContainer = %1, list of radios in radio selector = %2")
                      .arg(LogContainer->sendDM->rigs().count()).arg(ui->radioNameSel->count()));
-            currentSelRadioName = ui->radioNameSel->currentText();
+            QString currentSelRadioName = ui->radioNameSel->currentData().toString();
             traceMsg(QString("setRadioList: currentSelRadioName = %1").arg(currentSelRadioName));
 
             traceMsg(QString("setRadioList: Update list of radios and radioNameSel"));
@@ -1479,30 +1495,16 @@ void RigControlFrame::setRadioList()
             listOfRadios = LogContainer->sendDM->rigs();
 
             traceMsg(QString("setRadioList: add %1 radios to radioNameSel").arg(listOfRadios.count()));
+            comboSetUniqueNames(listOfRadios, ui->radioNameSel);
 
-            if (ui->radioNameSel->count() == 0)
+            if (setSelectedRadio(radioName))
             {
-               ui->radioNameSel->addItem("");
-            }
-
-           for (const auto &rn: qAsConst(listOfRadios))
-           {
-               if (ui->radioNameSel->findText(rn) == -1)
-               {
-                   ui->radioNameSel->addItem(rn);
-               }
-           }
-
-            int index = ui->radioNameSel->findText(radioName, Qt::MatchExactly);
-            if (index > 0)
-            {
-                traceMsg(QString("setRadioList: set index back to curselradio = %1").arg(currentSelRadioName));
-                 ui->radioNameSel->setCurrentIndex(index);
+                traceMsg(QString("setRadioList: set index back to radioName = %1").arg(radioName));
             }
             else
             {
                 ui->radioNameSel->setCurrentIndex(0);
-                traceMsg(QString("setRadioList: Can't find %1 in radioNameSel").arg(currentSelRadioName));
+                traceMsg(QString("setRadioList: Can't find %1 in radioNameSel").arg(radioName));
 
             }
 
@@ -1592,7 +1594,7 @@ void RigControlFrame::setRadioState(QString s)
         {
             radioConnected = true;
             ui->rigState->setText(tr("Connected"));
-            int index = ui->radioNameSel->findText(radioName, Qt::MatchFixedString);
+            int index = ui->radioNameSel->findData(radioName);
             if (index >= 0)
             {
                 ui->radioNameSel->setCurrentIndex(index);

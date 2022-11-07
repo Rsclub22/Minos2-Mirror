@@ -7,12 +7,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include  <QtGlobal>
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 #include <QtEndian>
 #include <QtMath>
 #include <numeric>
 #include <QtCore>
 
-#include "mainwindow.h"
 #include "fileutils.h"
 #include "MTrace.h"
 #include "rrsoundsys.h"

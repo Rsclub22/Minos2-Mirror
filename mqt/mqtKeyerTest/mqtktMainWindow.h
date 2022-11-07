@@ -30,10 +30,15 @@ private slots:
 
     void on_closeButton_clicked();
 
-    void on_toneButton_clicked();
+    void on_bpFilterButton_clicked();
+
+    void on_showWaveButton_clicked();
 
 private:
     Ui::mqtktMainWindow *ui;
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
 };
 
 #endif // MQTKTMAINWINDOW_H

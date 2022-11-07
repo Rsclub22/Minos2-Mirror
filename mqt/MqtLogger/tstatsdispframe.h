@@ -1,7 +1,8 @@
 #ifndef TSTATSDISPFRAME_H
 #define TSTATSDISPFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
+#include <QDateTime>
 
 class LoggerContestLog;
 

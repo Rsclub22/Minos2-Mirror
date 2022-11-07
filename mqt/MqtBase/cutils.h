@@ -9,11 +9,19 @@
 //----------------------------------------------------------------------------
 #ifndef CutilsH
 #define CutilsH
-#include "base_pch.h"
+#include <QString>
+#include <QFile>
+#include <QValidator>
+#include <QLayout>
+#include <QHeaderView>
+
+#include "minositem.h"
 
 //----------------------------------------------------------------------------
 extern const double pi /* = (double )3.141592653 */;  /* pi */
 extern const double dr /* = pi/180.0*/;      			  // degree to radian conversion factor
+
+class QComboBox;
 
 extern void clearBuffer( );
 extern void strtobuf( const QString &str );
@@ -36,8 +44,6 @@ extern QString trimr( const QString & );
 
 extern QString makeADIFField( const QString &fieldname, const QString &content );
 extern QString makeADIFField( const QString &fieldname, int content );
-extern QString TDTToCanonical( QString d );
-extern QDateTime CanonicalToTDT( QString cdtg );
 
 const int bsize = 256;
 extern char diskBuffer[ bsize + 1 ];
@@ -87,7 +93,7 @@ typename std::enable_if<!std::numeric_limits<T>::is_integer, bool>::type
     // and multiplied by the desired precision in ULPs (units in the last place)
     return std::abs(x-y) <= std::numeric_limits<T>::epsilon() * std::abs(x+y) * ulp
     // unless the result is subnormal
-           || std::abs(x-y) < std::numeric_limits<T>::min();
+           || std::abs(x-y) < (std::numeric_limits<T>::min());
 }
 
 class UpperCaseValidator:public QValidator
@@ -130,5 +136,13 @@ int getStringlistOffSet(QStringList supportedBands, QString contestBandStr);
 void adjustMargins(QLayout *layout, int ls, int cml, int cmt, int cmr, int cmb);
 bool isPureNumeric ( const QString &s );
 
+void saveHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
+void setHeaderColumns(QString hLine, QHeaderView *hdr);
+void restoreHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
+void resetHeaderColumns(QString fn, QString tname, QString lname, QHeaderView *h);
+void popupColumnsMenu(QMenu &menu, const QPoint &globalPos, QHeaderView *hdr);
+void createColumnsMenu(QMenu &menu, QAbstractItemModel *hdrModel,  QWidget *p, std::function<void()> pred);
+void createColumnsMenu(QMenu &menu, QHeaderView *h, QWidget *p, std::function<void()> pred);
+void comboSetUniqueNames(QStringList nameList, QComboBox *cb);
 
 #endif

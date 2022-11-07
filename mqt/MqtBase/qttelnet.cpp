@@ -90,7 +90,6 @@
 //#define QTTELNET_DEBUG
 
 #ifdef QTTELNET_DEBUG
-#include <QtCore/QDebug>
 using namespace Auth;
 using namespace Common;
 using namespace LineMode;
@@ -375,7 +374,7 @@ public:
     ~QtTelnetPrivate();
 
     QMap<char, bool> modes;
-    QList< QPair<uchar, uchar> > osent;
+    QList< QPair<char, char> > osent;
 
     QtTelnet *q;
     QTcpSocket *socket;
@@ -1042,7 +1041,7 @@ int QtTelnet::sendData(const QString &data)
 //    trace(QString("sendData: %1").arg(traceMsg));
 //    trace(QString("sendData hex: %1").arg(QString(str.toHex(' '))));
 
-    if (charSent == str.count())
+    if (charSent == str.size())
     {
         return 0;
     }

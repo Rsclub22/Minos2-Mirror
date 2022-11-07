@@ -1,9 +1,9 @@
 #ifndef N1MMLINK_H
 #define N1MMLINK_H
 
-#include "base_pch.h"
-
 #include <QUdpSocket>
+#include <QTimer>
+#include "frequency.h"
 
 class N1MMLink:public QObject
 {

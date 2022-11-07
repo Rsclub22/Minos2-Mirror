@@ -7,10 +7,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
+#include "AppStartup.h"
+#include "MTrace.h"
 #include "MinosRPC.h"
 #include "KeyerJson.h"
+#include "RPCCommandConstants.h"
 #include "keyctrl.h"
+#include "RPCPubSub.h"
 #include "KeyerRPCServer.h"
 
 KeyerServer *KS = nullptr;
@@ -90,23 +93,33 @@ void KeyerServer::publishConfig(const QString &config)
     KS->doPublishConfig(config);
 }
 //---------------------------------------------------------------------------
-void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, int seq)
+void KeyerServer::doPublishSliders(int rec, int replay, int passthrough, CompressorParams &cp, int seq)
 {
     static QString old;
     QString sliders;
-    sliders = QString("%1;%2;%3;%4").arg(rec).arg(replay).arg(passthrough).arg(seq);
+    sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10;%11;%12")
+            .arg(rec).arg(replay).arg(passthrough)
+            .arg(cp.window)
+            .arg(cp.threshold)
+            .arg(cp.ratio)
+            .arg(cp.attack)
+            .arg(cp.release)
+            .arg(cp.makeUpGain)
+            .arg(cp.doFilter)
+            .arg(cp.doCompression)
+            .arg(seq);
     if (sliders != old)
     {
         old = sliders;
         RPCPubSub::publish(rpcConstants::KeyerCategory, rpcConstants::keyerSliders, sliders, psPublished);
     }
 }
-void KeyerServer::publishSliders(int rec, int replay, int passthrough)
+void KeyerServer::publishSliders(int rec, int replay, int passthrough, CompressorParams &comp)
 {
     checkConnection();
 
     if (sendSliders)
-        KS->doPublishSliders(rec, replay, passthrough, slidersSeq);
+        KS->doPublishSliders(rec, replay, passthrough, comp, slidersSeq);
 }
 //---------------------------------------------------------------------------
 void KeyerServer::doPublishVUMeter(unsigned int rmsLevel, unsigned int peakLevel, unsigned int numSamples, int seq)
@@ -250,7 +263,18 @@ void KeyerServer::on_notify(AnalysePubSubNotify an, const QString from )
                   int rec = vals[0].toInt();
                   int rep = vals[1].toInt();
                   int pass = vals[2].toInt();
-                  emit sliders(rec, rep, pass);
+
+                  CompressorParams cp;
+                  cp.window = vals[3].toDouble();
+                  cp.threshold = vals[4].toDouble();
+                  cp.ratio = vals[5].toDouble();
+                  cp.attack = vals[6].toDouble();
+                  cp.release = vals[7].toDouble();
+                  cp.makeUpGain = vals[8].toDouble();
+
+                  cp.doFilter = vals[9].toDouble();
+                  cp.doCompression = vals[10].toDouble();
+                  emit sliders(rec, rep, pass, cp);
               }
           }
 

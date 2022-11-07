@@ -2,6 +2,8 @@
 #define CONFIGFILE_H
 #include <QWidget>
 #include <QProcess>
+#include <QMap>
+
 #include "INIFile.h"
 //---------------------------------------------------------------------------
 extern QString RunLocal;
@@ -16,10 +18,10 @@ public:
     static MinosConfigEvents mce;
 
 signals:
-    void appStarted();
+    void stealFocus();
 
 public:
-    static void sendAppStarted();
+    static void sendStealFocus();
 };
 
 class AppConfigElement
@@ -60,7 +62,7 @@ public:  		// User declarations
     QString name;
     QString rundir;
     QString commandLine;
-    QString params;
+    QStringList params;
     QString router;
     QString remoteApp;
     bool localOK = false;
@@ -180,7 +182,7 @@ public:
 signals:
     void    stdOutLine(QString);
     void    allStopped();
-    void    appStarted();
+    //void    stealFocus();
 };
 //---------------------------------------------------------------------------
 

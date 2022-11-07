@@ -1,3 +1,8 @@
+#include <cstdint>
+#include <QDir>
+#include <QFileInfo>
+#include <QFile>
+
 #include "fileutils.h"
 
 bool FileExists(const QString &path )

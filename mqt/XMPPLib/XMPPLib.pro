@@ -16,8 +16,6 @@ CONFIG += staticlib
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../MqtUtils
 
-#PRECOMPILED_HEADER = XMPP_pch.h
-
 SOURCES += \
     Dispatcher.cpp \
     PubSubClient.cpp \
@@ -35,10 +33,10 @@ SOURCES += \
 
 HEADERS += \
     Dispatcher.h \
+    MapWrapper.h \
     PubSubClient.h \
     RPCPubSub.h \
     ServerEvent.h \
-    XMPP_pch.h \
     XMPPEvents.h \
     XMPPRPCObj.h \
     XMPPRPCParams.h \

@@ -1,16 +1,17 @@
 #ifndef TXVMBUTTONSFRAME_H
 #define TXVMBUTTONSFRAME_H
 
-
-#include "base_pch.h"
 #include <QShortcut>
 #include <QGroupBox>
-#include <QObject>
+#include <QKeyEvent>
+
+#include "PubSubValue.h"
+#include "radiodetails.h"
 #include "voicekeyerbase.h"
 #include "voicekeyerfactory.h"
-#include "radiodetails.h"
-#include "rigcontrolframe.h"
 
+class QToolButton;
+class QMenu;
 
 namespace Ui {
 class TxVmButtonsFrame;
@@ -35,12 +36,8 @@ public:
     QMenu* vmMenu;
     QShortcut* shortKey;
 
-    //QShortcut* shiftShortKey;
-    QAction* readAction;
     QAction* newAction;
     QAction* editAction;
-    QAction* clearAction;
-
 
     void showButtonOnOff(bool state);
 
@@ -49,11 +46,7 @@ private slots:
     void readActionSelected();
     void editActionSelected();
     void writeActionSelected();
-
     void buttonSelected();
-
-
-    void clearActionSelected();
 signals:
 
     void buttonActivated(int);
@@ -85,7 +78,6 @@ public:
     void readActionSelected(int buttonNumber);
     void editActionSelected(int buttonNumber);
     void writeActionSelected(int buttonNumber);
-    void clearActionSelected(int buttonNumber);
 
     void setPttEnabled(bool state, PubSubName psn);
 
@@ -98,9 +90,11 @@ public:
     void setRadioIsConnected(bool connected);
     void setRadioName(const QString radName);
     int getCwMemType(PubSubName psn);
+    void setMode(const QString m);
 signals:
 
     void pttStatus(bool);
+    void sendRadioMode(QString m);
 
 private:
     Ui::TxVmButtonsFrame *ui;
@@ -128,11 +122,15 @@ private:
     QMap<PubSubName, RadioDetails> allRadioDetails;
 
     PubSubName selectedRadio;
+    QString curMode;
+    QString savedMode;
     bool radioConnected;
     bool pttState;
 
     bool notifyComboChange = true;
     void initTxVmButtonFrame();
+
+
 
     void setRunButtonText(const int buttonNumber, const QString name);
     void setVoiceNumMemButtonsVisible(int);
@@ -154,6 +152,7 @@ private:
 
     void updateVoiceMemAvailStateAndCwType();
     void setTXStatusVisible(bool visible);
+    void sendModeToRadio(const QString m);
 private slots:
 
     void onVoiceKeyerSelect(int idx);
@@ -161,6 +160,7 @@ private slots:
     void onRepeatPauseTimerTimeout();
     void onVmStopClicked();
     void onMsgDurTimerTimeout();
+    void fKey(int e);
 
 
     void onRemoteConfigChanged();

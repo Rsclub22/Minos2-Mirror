@@ -29,6 +29,7 @@ void RigControlVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers*
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(true);
+    voiceMemCap.setEnableCwMode(false);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(false);
     voiceMemCap.setHasTxStatus(true);

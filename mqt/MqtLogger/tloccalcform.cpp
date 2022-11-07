@@ -1,10 +1,10 @@
-#include "base_pch.h"
-#include "latlong.h"
+#include <QSettings>
+
 #include "tloccalcform.h"
 #include "ui_tloccalcform.h"
 
 TLocCalcForm::TLocCalcForm(QWidget *parent) :
-    QDialog(parent), Distance(-1),
+    QDialog(parent),
     ui(new Ui::TLocCalcForm)
 {
     ui->setupUi(this);

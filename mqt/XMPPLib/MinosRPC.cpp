@@ -1,9 +1,10 @@
 #include <QProcessEnvironment>
-#include "MinosRPC.h"
 #include "ServerEvent.h"
 #include "MinosConnection.h"
 #include "MTrace.h"
 #include "RPCCommandConstants.h"
+#include "RPCPubSub.h"
+#include "MinosRPC.h"
 
 /*static*/ MinosRPC *MinosRPC::rpc = nullptr;
 

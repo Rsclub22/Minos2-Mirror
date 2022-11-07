@@ -1,10 +1,10 @@
-#include "base_pch.h"
+#include "MShowMessageDlg.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
-#include "VKMixer.h"
 #include "txVmExternalButtonDialog.h"
 #include "KeyerJson.h"
+#include "MTrace.h"
 
 #include "ExternalMqtKeyer.h"
 
@@ -31,6 +31,7 @@ void ExternalMqtKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* vmKeyersL
     voiceMemCap.setNumVoiceKeys(KEYERKEYS);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);
+    voiceMemCap.setEnableCwMode(false);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(true);
     voiceMemCap.setHasTxStatus(false);
@@ -60,6 +61,7 @@ void ExternalMqtKeyer::sendMsgNum(int msgNum)
 }
 void ExternalMqtKeyer::stopMsg(VoiceKeyerParams */*vkParam*/)
 {
+    trace("ExternalMqtKeyer::stopMsg");
     emit LogContainer->sendKeyerStop();
 }
 void ExternalMqtKeyer::doRecording(VoiceKeyerParams *vkParam)

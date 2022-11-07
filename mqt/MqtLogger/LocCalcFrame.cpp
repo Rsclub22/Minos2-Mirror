@@ -1,7 +1,9 @@
-#include "base_pch.h"
+#include <QDialog>
+#include "calcs.h"
 #include "contest.h"
 #include "latlong.h"
 #include "cutils.h"
+#include "MinosParameters.h"
 #include "LocCalcFrame.h"
 #include "ui_LocCalcFrame.h"
 

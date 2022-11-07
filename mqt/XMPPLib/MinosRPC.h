@@ -4,7 +4,6 @@
 #include <QTimer>
 #include <QSet>
 #include "XMPPRPCObj.h"
-#include "RPCPubSub.h"
 #include "AnalysePubSubNotify.h"
 #include "ConfigFile.h"
 

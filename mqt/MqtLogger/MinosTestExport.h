@@ -10,7 +10,8 @@
 
 #ifndef MinosTestExportH
 #define MinosTestExportH 
-#include "base_pch.h"
+#include <QCoreApplication>
+#include <QFile>
 #include "rigmemcommondata.h"
 
 //---------------------------------------------------------------------------
@@ -40,7 +41,7 @@ class MinosTestExport
       void exportOperators( QSharedPointer<QFile> expfd );
       void exportApps(QSharedPointer<QFile> expfd);
       void exportBundles(QSharedPointer<QFile> expfd );
-      void exportComment( QSharedPointer<QFile> expfd, const QSharedPointer<BaseContact> lct );
+//      void exportComment( QSharedPointer<QFile> expfd, const QSharedPointer<BaseContact> lct );
       void exportRigMemory(QSharedPointer<QFile> expfd, int memno );
       void exportRunMemory(QSharedPointer<QFile> expfd, MinosItem<memoryData::memData> mem);
       int exportStackDisplay(QSharedPointer<QFile> expfd);

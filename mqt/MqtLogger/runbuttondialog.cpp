@@ -11,15 +11,12 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-#include "base_pch.h"
-
+#include <QMessageBox>
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-#include "rigcommon.h"
-#include "rotatorcommon.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
+#include "MTrace.h"
 
 #include "runbuttondialog.h"
 #include "ui_runbuttondialog.h"
@@ -52,7 +49,7 @@ void RunButtonDialog::onFreqEditFinish()
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
-        if (fl[1].count() > 6)
+        if (fl[1].size() > 6)
         {
             fl[1].truncate(6);
             f = fl[0] + "." + fl[1];
@@ -93,7 +90,7 @@ void RunButtonDialog::setLogData(memoryData::memData* ldata, int buttonNumber, L
 
     if (logdata->freq.isClear())
     {
-        logdata->freq = sc.frequency;
+        logdata->freq = sc.frequency.getValue();
     }
     if (logdata->freq.isClear())
     {

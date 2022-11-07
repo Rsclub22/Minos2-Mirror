@@ -1,12 +1,15 @@
+#include <QSizePolicy>
 
-#include "qrzdisplayframe.h"
+#include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "ui_qrzdisplayframe.h"
 #include "minosqlabel.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+#include "MTrace.h"
 
-#include <QSizePolicy>
-#include <QDebug>
+#include "qrzdisplayframe.h"
 
 const int PINGTIMER_DURATION = 10000;
 
@@ -126,14 +129,12 @@ void QrzDisplayFrame::onQrzServerLoggedState(bool state, QString stateMessage)
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_ON_STYLE);
         setLogonPushButtonLabelText(true);
         setQrzMessageText("");
-        trace(QString("QRZDisplayFrame - Logged on to QRZ"));
 
     }
     else
     {
         ui->logOnStatusPb->setStyleSheet(QRZ_BUTTON_OFF_STYLE);
         setLogonPushButtonLabelText(false);
-        trace(QString("QRZDisplayFrame - Logged off from QRZ"));
     }
 
 
@@ -219,10 +220,10 @@ void QrzDisplayFrame::calcSpotDistanceBearing(const QString& _locator, double* d
 
     if (ct && !locator.isEmpty())
     {
-        if (locator.count() == 4)
-        {
-            locator.append("MM");
-        }
+        if (locator.size() == 4)
+         {
+             locator.append("MM");
+         }
 
         int locValres = lonlat( locator, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
         if ( ( locValres ) != LOC_OK )
@@ -275,7 +276,6 @@ void QrzDisplayFrame::setQrzMessageText(QString msg)
 
 void QrzDisplayFrame::setLogonPushButtonLabelText(bool loggedOn)
 {
-    //qDebug() << "state = " << (loggedOn ? "true" : "false");
     if (loggedOn)
     {
         ui->logOnStatusPb->setText(tr("Connected"));
@@ -515,6 +515,15 @@ void QrzDisplayServerRpc::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mr
                         if (logStateStr == rpcConstants::qrzServerLoggedIn)
                         {
                             loggedState = true;
+                        }
+
+                        if (loggedState)
+                        {
+                            trace(QString("QRZDisplayFrame - Logged on to QRZ"));
+                        }
+                        else
+                        {
+                            trace(QString("QRZDisplayFrame - Logged off from QRZ"));
                         }
 
                         msgQrzServerMessage->getString(stateMessage);

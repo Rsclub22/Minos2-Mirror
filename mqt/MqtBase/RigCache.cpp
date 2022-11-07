@@ -1,6 +1,10 @@
-#include "base_pch.h"
-#include "rigcommon.h"
 #include "RigCache.h"
+#include "AnalysePubSubNotify.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
+#include "rigcontrolcommonconstants.h"
+#include "MTrace.h"
+
 RigCache::RigCache()
 {
 

@@ -1,7 +1,7 @@
 #include "WsjtxDecode.h"
 #include "ScreenContact.h"
 #include "contest.h"
-#include "rigutils.h"
+#include "MinosParameters.h"
 
 /*
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsRplusDb, emsRRR, ems73, emsFree};
@@ -124,14 +124,13 @@ bool decodeMessage::checkAsContact()
     scc.timeOn = dtg(true);
     scc.timeOff = dtg(true);
     QString cb;
-    scc.frequency = cc->getTxFreqBand(Frequency(), cb);
+    scc.frequency.setValue( cc->getTxFreqBand(Frequency(), cb));
 
     scc.checkScreenContact();
     csret = scc.cs.getValRes();
-    if (scc.screenQSOValid)
+    if (scc.QSOValid)
     {
-        scc.score();
-        points = scc.contactScore;
+        points = scc.contactScore.getValue();
         distance = points;
         bearing = scc.bearing;
         mults = 0;
@@ -266,10 +265,18 @@ decodeMessage WsjtxDecode::decode(const QString &id, TxRx tr, QTime time, qint32
         }
 
         // NB we can get bad decodes
+
         if (callIndex + 1 < sl.count())
         {
             dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
             dc.fromGrid.setLoc(sl[callIndex + 1]);
+            addCall(dc.fromCall, dc.fromGrid);
+        }
+        else if (sl.count() == callIndex + 1)
+        {
+            // probably a compound call
+            dc.fromCall.setFullCall(stripBrackets(sl[callIndex]));
+            // no grid, so don't try to remember it
             addCall(dc.fromCall, dc.fromGrid);
         }
     }

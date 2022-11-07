@@ -9,22 +9,22 @@
 //
 //
 /////////////////////////////////////////////////////////////////////////////
-
-#include "base_pch.h"
-
-#include "MinosRPC.h"
+#include <QTableView>
+#include <QMessageBox>
 #include "MinosLoggerEvents.h"
-#include "clusterclientframe.h"
+#include "clusterclientfilterdialog.h"
 #include "contest.h"
 #include "ContestApp.h"
-#include "cutils.h"
 #include "rigmemcommondata.h"
 #include "rotatorcommon.h"
 #include "htmldelegate.h"
 #include "tlogcontainer.h"
-#include "tsinglelogframe.h"
 #include "SendRPCDM.h"
 #include "delayedaction.h"
+#include "calcs.h"
+#include "MTrace.h"
+#include "clusterClientServer.h"
+#include "clusterclientframe.h"
 #include "ui_clusterclientframe.h"
 
 
@@ -519,15 +519,27 @@ void ClusterClientFrame::filterButtonSelected()
             || filterSetup.getIgnoreDistChangedFlag()
             || filterSetup.getIgnoreEmptyDistChangedFlag())
         {
-            dxSpotProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
+        dxSpotProxyModel->setFilterRegExp("");
+#endif
         }
         else if (filterSetup.getCallsignFilerChangedFlag())
         {
-            callSignProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        callSignProxyModel->setFilterRegularExpression("");
+#else
+        callSignProxyModel->setFilterRegExp("");
+#endif
         }
         else if (filterSetup.getLocatorFilterChangedFlag())
         {
-            locatorProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        locatorProxyModel->setFilterRegularExpression("");
+#else
+        locatorProxyModel->setFilterRegExp("");
+#endif
         }
     }
 }
@@ -584,7 +596,7 @@ void ClusterClientFrame::handleClickedItems(DxSpotSortFilterProxyModel* spotProx
         QString loc = spotProxyModel->data(spotProxyModel->index(index.row(), DXLOC_COL_NUM), DataStoredRole).toString();
         if (!brg.isEmpty())
         {
-            if (loc.count() < 6)
+            if (loc.size() < 6)
             {
                 brg = brg.append(SHORTLOCATOR_IDENTIFIER);
             }
@@ -977,7 +989,7 @@ void ClusterClientFrame::calcSpotDistanceBearing(const QString& _locator, double
 
     if (ct && !locator.isEmpty())
     {
-        if (locator.count() == 4)
+        if (locator.size() == 4)
         {
             locator.append("MM");
         }
@@ -1035,7 +1047,6 @@ void ClusterClientFrame::on_searchViewSectionResized(int, int , int)
     state = searchView->horizontalHeader()->saveState();
     settings.setValue("ClusterClientFilter/searchView/state", state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 void ClusterClientFrame::restoreDxSpotViewColumns()
@@ -1046,7 +1057,6 @@ void ClusterClientFrame::restoreDxSpotViewColumns()
     state = settings.value("ClusterClientFilter/dxSpotView/state").toByteArray();
     dxSpotView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 
@@ -1058,7 +1068,6 @@ void ClusterClientFrame::restoreCallsignViewColumns()
     state = settings.value("ClusterClientFilter/callSignView/state").toByteArray();
     callSignView->horizontalHeader()->restoreState(state);
     MinosLoggerEvents::SendColumnsChanged();
-
 }
 
 
@@ -1285,7 +1294,7 @@ void ClusterClientFrame::bearingActionSelected()
             if (!brg.isEmpty())
             {
                 QString loc = filterProxyModelList[curTab]->data(filterProxyModelList[curTab]->index(currentRow, DXLOC_COL_NUM), DataStoredRole).toString();
-                if (loc.count() < 6)
+                if (loc.size() < 6)
                 {
                     brg = brg.append(SHORTLOCATOR_IDENTIFIER);
 
@@ -1338,7 +1347,7 @@ void ClusterClientFrame::sendSpotToMemory(DxSpotSortFilterProxyModel* spotProxyM
     memoryData::memData spotData = getSpotDataToMemoryVariable(spotProxyModel, row);
 
     MinosLoggerEvents::SendSpotToMemory(ct, spotData);
-    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), BOOL_YES, DataStoredRole);
+    spotProxyModel->setData(spotProxyModel->index(row, DXSPOT_TO_MEMORY_FLAG_COL_NUM), true, DataStoredRole);
 
 }
 
@@ -1350,7 +1359,15 @@ memoryData::memData ClusterClientFrame::getSpotDataToMemoryVariable(DxSpotSortFi
     spotData.freq = qvariant_cast<Frequency>(spotProxyModel->data(spotProxyModel->index(row, FREQ_COL_NUM), DataStoredRole));
 
     spotData.mode = memDefData::DEFAULT_MODE;
-    spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+
+    bool showDerivedLocFlag;
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowDerivedLoc, showDerivedLocFlag );
+
+    if (showDerivedLocFlag || !spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool())
+    {
+        spotData.locator = spotProxyModel->data(spotProxyModel->index(row, DXLOC_COL_NUM), DataStoredRole).toString();
+    }
+
     spotData.bearing = spotProxyModel->data(spotProxyModel->index(row, DXBRG_COL_NUM), DataStoredRole).toString().toInt();
     spotData.fromBandmapOrMemory = true;
     spotData.dxLocFromNode = spotProxyModel->data(spotProxyModel->index(row, DXLOC_FROM_NODE_FLAG_COL_NUM), DataStoredRole).toBool();
@@ -1422,14 +1439,16 @@ void ClusterClientFrame::onSearchEditingFinished()
         if (ui->searchLineEdit->text().trimmed().isEmpty())
         {
             searchSortProxyModel->searchParameter = "";
-            searchSortProxyModel->setFilterRegExp("");
         }
         else
         {
             searchSortProxyModel->searchParameter = ui->searchLineEdit->text().trimmed();
-            //ui->searchLineEdit->selectAll();
-            searchSortProxyModel->setFilterRegExp("");
         }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        searchSortProxyModel->setFilterRegularExpression("");
+#else
+        searchSortProxyModel->setFilterRegExp("");
+#endif
 
         ui->searchLineEdit->setFocus();
     }
@@ -1452,7 +1471,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               if (cs.realCall == callsign)
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXSPOT_CALL_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
               }
 
@@ -1462,7 +1481,7 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
               if (loc.mid(0,4) == locator.mid(0, 4) )
               {
-                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), BOOL_YES, DataStoredRole);
+                  dxSpotDataModel->setData(dxSpotDataModel->index(spotNumber, DXLOC_WORKED_COL_NUM,  QModelIndex()), true, DataStoredRole);
                   worked = true;
               }
 
@@ -1497,22 +1516,38 @@ void ClusterClientFrame::on_AfterLogContact( BaseContestLog *c, Callsign cs, QSt
 
 void ClusterClientFrame::dxSpotProxyModelUpdate()
 {
-    dxSpotProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
+        dxSpotProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::callSignProxyModelUpdate()
 {
-   callSignProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        callSignProxyModel->setFilterRegularExpression("");
+#else
+        callSignProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::locatorProxyModelUpdate()
 {
-    locatorProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        locatorProxyModel->setFilterRegularExpression("");
+#else
+        locatorProxyModel->setFilterRegExp("");
+#endif
 }
 
 void ClusterClientFrame::searchProxyModelUpdate()
 {
-    searchSortProxyModel->setFilterRegExp("");
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        searchSortProxyModel->setFilterRegularExpression("");
+#else
+        searchSortProxyModel->setFilterRegExp("");
+#endif
 }
 
 

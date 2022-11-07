@@ -11,7 +11,9 @@
 #ifndef CommonMonitorH
 #define CommonMonitorH 
 //---------------------------------------------------------------------------
-#include "base_pch.h"
+
+#include <QTimer>
+#include <QVector>
 
 class commonController;
 class commonPort;

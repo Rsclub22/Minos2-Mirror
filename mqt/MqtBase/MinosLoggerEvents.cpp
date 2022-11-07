@@ -7,7 +7,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "base_pch.h"
+#include  <QKeyEvent>
 #include "MinosLoggerEvents.h"
 
 MinosLoggerEvents MinosLoggerEvents::mle;
@@ -110,6 +110,21 @@ void MinosLoggerEvents::SendClearContestInFrame(BaseContestLog *c)
 void MinosLoggerEvents::SendTabSandP()
 {
     emit mle.tabSandP();
+}
+//---------------------------------------------------------------------------
+void MinosLoggerEvents::SendShowAuxHeaders()
+{
+    emit mle.showAuxHeaders();
+}
+
+void MinosLoggerEvents::sendBandmapLimitsChanged()
+{
+    emit mle.bandMapLimitsChanged();
+}
+
+void MinosLoggerEvents::sendFKey(int event)
+{
+    emit mle.fKey(event);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()

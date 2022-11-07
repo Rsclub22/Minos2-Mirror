@@ -1,6 +1,10 @@
 #ifndef ANTENNADETAIL_H
 #define ANTENNADETAIL_H
-#include "base_pch.h"
+
+#include "AnalysePubSubNotify.h"
+#include "CacheSelection.h"
+#include "minositem.h"
+#include "PubSubValue.h"
 
 const QString AntennaDetailType("AntennaDetail");
 

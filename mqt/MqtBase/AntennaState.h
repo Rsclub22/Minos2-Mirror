@@ -1,7 +1,8 @@
 #ifndef ANTENNASTATE_H
 #define ANTENNASTATE_H
-#include "base_pch.h"
 
+#include "PubSubValue.h"
+#include "CacheSelection.h"
 const QString AntennaStateType("AntennaState");
 
 class AntennaState: public PubSubValue

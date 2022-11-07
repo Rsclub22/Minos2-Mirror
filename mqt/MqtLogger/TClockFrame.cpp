@@ -1,8 +1,7 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "contest.h"
 #include "cutils.h"
-#include "tlogcontainer.h"
+#include "MinosParameters.h"
 #include "TClockFrame.h"
 #include "ui_TClockFrame.h"
 

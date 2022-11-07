@@ -4,7 +4,6 @@
 #include <QDialog>
 #include <QMap>
 #include "rigfactory.h"
-#include "cutils.h"
 
 namespace Ui {
 class AddRadioDialog;

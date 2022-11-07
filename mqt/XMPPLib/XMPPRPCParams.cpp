@@ -7,9 +7,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "XMPP_pch.h"
+#include "XMPPRPCParams.h"
+#include "XMPPEvents.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
+#include "MTrace.h"
 
 //---------------------------------------------------------------------------
 // RPC parameter structures

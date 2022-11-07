@@ -1,12 +1,10 @@
 #ifndef CONTROLMAIN_H
 #define CONTROLMAIN_H
 
-#include "base_pch.h"
 #include <QMainWindow>
 #include "CommonMonitor.h"
-#include "controlport.h"
-#include "ConfigFile.h"
 #include "RigCache.h"
+#include "StdInReader.h"
 
 namespace Ui {
 class ControlMain;
@@ -48,13 +46,11 @@ private:
     RigCache rigCache;
     PubSubName rigSelected;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QTimer LogTimer;
     QTimer formShowTimer;
 
 private slots:
-    void onStdInRead(QString);
-
     void on_formShown();
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from );
     void on_notify( AnalysePubSubNotify an, const QString from );

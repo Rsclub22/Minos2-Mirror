@@ -1,7 +1,7 @@
 #ifndef WSJTXSERVER_H
 #define WSJTXSERVER_H
 
-#include "base_pch.h"
+#include <QFile>
 #include "WsjtxMessageServer.hpp"
 
 using port_type = MessageServer::port_type;

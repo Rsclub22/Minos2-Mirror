@@ -7,13 +7,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
-
+#include "MTrace.h"
 #include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
-
 #include "MServerPubSub.h"
+#include "clientThread.h"
 
 //==============================================================================
 

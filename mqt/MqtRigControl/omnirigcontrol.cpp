@@ -14,7 +14,11 @@
 
 #include <QObject>
 #include <QString>
+#include <QTimer>
+#include <QThread>
 #include "BandList.h"
+#include "MTrace.h"
+
 #if defined (WIN32)
 #include "omnirigcontrol.h"
 #endif

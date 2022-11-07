@@ -12,7 +12,8 @@
 #ifndef PubSubClientH
 #define PubSubClientH 
 #include "RPCCommandConstants.h"
-#include "MinosRPC.h"
+#include "RPCPubSub.h"
+
 //---------------------------------------------------------------------------
 void clearPubSub();
 class RPCPublishClient: public RPCPubSub

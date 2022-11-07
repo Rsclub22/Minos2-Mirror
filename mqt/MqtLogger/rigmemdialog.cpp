@@ -12,16 +12,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-
+#include <QMessageBox>
 #include "rigmemcommondata.h"
 #include "rigutils.h"
-//#include "rigcontrolcommonconstants.h"
-#include"rigcommon.h"
 #include "rotatorcommon.h"
 #include "LoggerContest.h"
-#include "tlogcontainer.h"
 #include "ContestApp.h"
+#include "MinosParameters.h"
+#include "MTrace.h"
+#include "calcs.h"
 
 #include "rigmemdialog.h"
 #include "ui_rigmemdialog.h"
@@ -56,7 +55,7 @@ void RigMemDialog::onFreqEditFinish()
     if (f.contains('.'))
     {
         QStringList fl = f.split('.');
-        if (fl[1].count() > 6)
+        if (fl[1].size() > 6)
         {
             fl[1].truncate(6);
             f = fl[0] + "." + fl[1];

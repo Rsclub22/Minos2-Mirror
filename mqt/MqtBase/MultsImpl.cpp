@@ -6,7 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include <QRegularExpression>
 #include "cutils.h"
 #include "contacts.h"
 #include "MultsImpl.h"
@@ -314,7 +314,11 @@ static QSharedPointer<DistrictEntry> searchDistrict( const QString &syn )
 //======================================================================
 CountryEntry::CountryEntry(const QString &continent, const QString &prefix,
                             const QString &name, const QString &cloc , int cq, int itu) :
-      MultEntry( name, cloc ), distLimit( -1 ), continent( continent ), CQZone(cq), ITUZone(itu)
+    MultEntry( name, cloc )
+  , distLimit( -1 )
+  , continent( continent )
+  , ITUZone(itu)
+  , CQZone(cq)
 {
    basePrefix = prefix.trimmed();
 }
@@ -581,8 +585,8 @@ void CountryList::loadEntries( const QString &fname, const QString &fmess )
 {
    // load a CT9 formatted list
 
-    QRegExp ccOpen( "[\\(\\{\\[\\<]");
-    QRegExp ccClose("[\\)\\}\\]\\>]");
+    static QRegularExpression ccOpen( "[\\(\\{\\[\\<]");
+    static QRegularExpression ccClose("[\\)\\}\\]\\>]");
 
     QFile lf(fname);
 

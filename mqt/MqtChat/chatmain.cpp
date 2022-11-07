@@ -1,6 +1,7 @@
-#include "base_pch.h"
+#include <QSettings>
+#include "AppStartup.h"
 #include "MinosRPC.h"
-
+#include "LogEvents.h"
 #include "chatmain.h"
 #include "ui_chatmain.h"
 
@@ -16,9 +17,6 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &TMinosChatForm::onStdInRead);
-    stdinReader.start();
-
     createCloseEvent();
     connect(&CloseTimer, &QTimer::timeout, this, &TMinosChatForm::CloseTimerTimer);
     CloseTimer.start(100);
@@ -32,10 +30,6 @@ TMinosChatForm::TMinosChatForm(QWidget *parent) :
 TMinosChatForm::~TMinosChatForm()
 {
     delete ui;
-}
-void TMinosChatForm::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
 }
 void TMinosChatForm::CloseTimerTimer(  )
 {

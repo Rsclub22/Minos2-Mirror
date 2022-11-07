@@ -1,15 +1,14 @@
 #ifndef KSTMAINWINDOW_H
 #define KSTMAINWINDOW_H
 
-#include "base_pch.h"
-
-#include "airscoutlink.h"
-
 #include <QMainWindow>
 #include <QTcpSocket>
 #include <QRadioButton>
+#include <QCheckBox>
+#include "StdInReader.h"
 #include "kstcallgridmodel.h"
 #include "kstmessagegridmodel.h"
+#include "airscoutlink.h"
 #include "kstplanesmodel.h"
 #include "cutils.h"
 
@@ -210,7 +209,6 @@ private slots:
 
     void on_callSplitter_splitterMoved(int pos, int index);
 
-    void onStdInRead(QString cmd);
     void on_maxDistanceEdit_editingFinished();
 
     void on_showReadcb_stateChanged(int arg1);
@@ -228,9 +226,11 @@ private slots:
 
     void on_clearMeepFiltersButton_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::KSTMainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     void clearConnection();
     void checkActive();
     void resetVectors(QCheckBox *cb, QRadioButton *rb, int c, QStringList &s, QVector<int> &v, QVector<int> &a);

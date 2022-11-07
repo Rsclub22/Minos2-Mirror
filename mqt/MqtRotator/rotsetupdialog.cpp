@@ -10,26 +10,16 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-#include "rotsetupdialog.h"
-#include "ui_rotsetupdialog.h"
-//#include "rotcontrol.h"
-#include "addantennadialog.h"
-
 #include <QComboBox>
 #include <QLineEdit>
 #include <QCheckBox>
-
 #include <QMessageBox>
 #include <QInputDialog>
 
-#include <QDebug>
-
-
-
+#include "MShowMessageDlg.h"
+#include "addantennadialog.h"
+#include "rotsetupdialog.h"
+#include "ui_rotsetupdialog.h"
 
 RotSetupDialog::RotSetupDialog(RotatorFactory* rotFactory_, QWidget *parent) :
     QDialog(parent),
@@ -697,8 +687,7 @@ void RotSetupDialog::removeAntenna()
                             tr("Remove Antenna"),
                             tr("Do you really want to remove antenna - %1?")
                             .arg(currentName),
-                            QMessageBox::Yes|QMessageBox::Default,
-                            QMessageBox::No|QMessageBox::Escape,
+                            QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
 
     if (status != QMessageBox::Yes)

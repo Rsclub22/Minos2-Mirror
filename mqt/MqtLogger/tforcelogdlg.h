@@ -1,12 +1,13 @@
 #ifndef TFORCELOGDLG_H
 #define TFORCELOGDLG_H
 
-#include "base_pch.h"
+#include "validators.h"
+#include <QDialog>
 
 namespace Ui {
 class TForceLogDlg;
 }
-
+class BaseContestLog;
 class TForceLogDlg : public QDialog
 {
     Q_OBJECT

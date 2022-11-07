@@ -41,7 +41,7 @@
 #ifndef MINOSTABLEWIDGET_H
 #define MINOSTABLEWIDGET_H
 
-#include "base_pch.h"
+#include <QTableView>
 
 class QToolButton;
 class QTimer;

@@ -1,4 +1,5 @@
-#include "base_pch.h"
+#include "AppStartup.h"
+#include "RPCCommandConstants.h"
 #include "contest.h"
 #include "MinosLoggerEvents.h"
 #include "ScreenContact.h"
@@ -6,227 +7,13 @@
 #include "cutils.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "MonitorMain.h"
+#include "fileutils.h"
 #include "ui_MonitorMain.h"
 
 MonitorMain *monitorMain = nullptr;
-
-//=============================================================================================
-TreeNode::TreeNode(NodeType sn, TreeNode *parent, QString name, MonitorMain *mm):
-    ntype(sn), NodeName(name), parentItem(parent), mlog(nullptr), monmain(mm)
-{
-    if (parent)
-        parent->nodes.push_back(this);
-}
-TreeNode::TreeNode(NodeType sn, TreeNode *parent, QSharedPointer<MonitoredLog> log, MonitorMain *mm):
-    ntype(sn), NodeName(log->getDisplayName()), hintString(log->getPublishedName()), parentItem(parent), mlog(log), monmain(mm)
-{
-    if (parent)
-        parent->nodes.push_back(this);
-}
-TreeNode:: ~TreeNode()
-{
-    clear();
-}
-int TreeNode::find( const TreeNode *t ) const
-{
-    int i = 0;
-    for ( auto v : nodes )
-    {
-        if ( v == t )
-            return i;
-        i++;
-    }
-    return 0;
-}
-
-TreeNode *TreeNode::parent()
-{
-    return parentItem;
-}
-
-TreeNode *TreeNode::child( int number )
-{
-    return nodes[ number ];
-}
-
-int TreeNode::childCount() const
-{
-    return nodes.size();
-}
-int TreeNode::childNumber() const
-{
-    if ( parentItem )
-    {
-        return parentItem->find( this );
-    }
-    return 0;
-}
-void TreeNode::clear()
-{
-    for ( auto const &tn: qAsConst(nodes) )
-    {
-        delete tn;
-    }
-    nodes.clear();
-}
-QString RootTreeNode::data(int /*column*/)
-{
-    return Name();
-}
-QString RouterTreeNode::data(int column)
-{
-    if (column == 0)
-        return Name();
-    return "";
-}
-static QStringList stateList =
-{
-   "P",
-   "R",
-   "NC"
-};
-QString LogTreeNode::data(int column)
-{
-    if (column == 1)
-        return Name();
-
-    if (column == 0)
-    {
-        QString state;
-        if (mlog->getFrame())
-            state = tr("Monitoring");
-        return state;
-    }
-    return "";
-}
-MonitorTreeModel::MonitorTreeModel()
-        : QAbstractItemModel( nullptr ), rootData( nullptr )
-{}
-MonitorTreeModel::~MonitorTreeModel()
-{
-    delete rootData;
-}
-void MonitorTreeModel::clear()
-{
-    beginResetModel();
-
-    delete rootData;
-    rootData = nullptr;
-
-    endResetModel();
-}
-void MonitorTreeModel::setRoot(  TreeNode *root )
-{
-    beginResetModel();
-    delete rootData;
-    rootData = root;
-    // And we probably need to tell the view that everything has changed
-    endResetModel();
-}
-
-int MonitorTreeModel::columnCount( const QModelIndex & parent  ) const
-{
-    TreeNode *parentItem = getItem( parent );
-    if (parentItem && parentItem->GetNodeType() == entRouter)
-        return 2;
-
-    return 2;
-}
-
-QVariant MonitorTreeModel::data( const QModelIndex &index, int role ) const
-{
-    if ( !index.isValid() )
-        return QVariant();
-
-    if ( role == Qt::DisplayRole )
-    {
-        TreeNode *item = getItem( index );
-
-        return item->data( index.column() );
-    }
-    if (role == Qt::ToolTipRole)
-    {
-        TreeNode *item = getItem( index );
-
-        return item->hint();
-    }
-    return QVariant();
-}
-
-QVariant MonitorTreeModel::headerData( int section, Qt::Orientation orientation,
-                     int role ) const
-{
-    if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-    {
-        QString cell;
-        switch (section)
-        {
-        case 1:
-            cell = tr("Contest Name");
-            break;
-
-        case 0:
-            cell = tr("State");
-            break;
-
-        default:
-            break;
-        }
-
-        return cell;
-    }
-    return QVariant();
-}
-
-QModelIndex MonitorTreeModel::index( int row, int column, const QModelIndex &parent ) const
-{
-    if ( parent.isValid() && parent.column() != 0 )
-        return QModelIndex();
-
-    TreeNode *parentItem = getItem( parent );
-
-    if ( parentItem && row < parentItem->childCount() && row >= 0 )
-    {
-        TreeNode * childItem = parentItem->child( row );
-        if ( childItem )
-            return createIndex( row, column, childItem );
-    }
-    return QModelIndex();
-}
-QModelIndex MonitorTreeModel::parent( const QModelIndex &index ) const
-{
-    if ( !index.isValid() )
-        return QModelIndex();
-
-    TreeNode *childItem = getItem( index );
-    TreeNode *parentItem = childItem->parent();
-
-    if ( parentItem == rootData )
-        return QModelIndex();
-
-    return createIndex( parentItem->childNumber(), 0, parentItem );
-}
-int MonitorTreeModel::rowCount( const QModelIndex &parent ) const
-{
-    TreeNode * parentItem = getItem( parent );
-
-    if ( parentItem )
-        return parentItem->childCount();
-
-    return 0;
-}
-TreeNode *MonitorTreeModel::getItem( const QModelIndex &index ) const
-{
-    if ( index.isValid() )
-    {
-        TreeNode * item = static_cast<TreeNode *>( index.internalPointer() );
-        if ( item )
-            return item;
-    }
-    return rootData;
-}
-
 
 //=============================================================================================
 
@@ -238,9 +25,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     monitorMain = this;
-
-    connect(&stdinReader, &StdInReader::stdinLine, this, &MonitorMain::onStdInRead);
-    stdinReader.start();
 
     createCloseEvent();
 #ifdef Q_OS_ANDROID
@@ -326,6 +110,8 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->otherMatchFrame->restoreColumns();
 
     ui->callsignEdit->setFocus();
+
+    readPersistedLogs();
 }
 
 MonitorMain::~MonitorMain()
@@ -379,9 +165,31 @@ bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
     }
     return false;
 }
-void MonitorMain::onStdInRead(QString cmd)
+
+void MonitorMain::readPersistedLogs()
 {
-    executeStdIn(cmd);
+    inReadPersistedLogs = true;
+
+    // read in the persistence file
+
+    inReadPersistedLogs =false;
+}
+
+void MonitorMain::writePersistedLogs()
+{
+    if (!inReadPersistedLogs)
+    {
+        for ( auto const &s: qAsConst(stationList) )
+        {
+            for ( auto const &l: qAsConst(s->slotList) )
+            {
+            }
+        }
+    }
+}
+void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
+{
+    searchChanged();
 }
 
 void MonitorMain::on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/)
@@ -664,6 +472,11 @@ void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
    ui->contestPageControl->setTabToolTip(tno, ct->getPublishedName());
    f->showQSOs();
    f->setFocusPolicy(Qt::NoFocus);
+
+//   QSettings
+
+   // we need to save the list of filenames, so that when we see them again we
+   // can re-open them when we are restarted
 }
 
 MonitoringFrame *MonitorMain::findCurrentLogFrame()
@@ -710,28 +523,30 @@ void MonitorMain::on_monitorTimeout()
           close();
        }
     }
-    int icnt = 0;
     for ( auto const &s: qAsConst(stationList) )
     {
-        icnt++;
-        int jcnt = 0;
-       for ( auto &l: s->slotList )
+
+//       for ( auto &l: s->slotList )
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#else
+        for (QVector< QSharedPointer<MonitoredLog> >::iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
+#endif
        {
-           jcnt++;
-          if (l->getState() == psRevoked)
+          if ((*l)->getState() == psRevoked)
           {
-             MonitoringFrame *cttab = findContestPage( l->getContest() );
+             MonitoringFrame *cttab = findContestPage( (*l)->getContest() );
              closeTab(cttab);
              // take it out of the slot list and close it
              // and we need to redo the list
-             s->slotList.erase(&l);
+             s->slotList.erase(l);
              syncstat = true;
              break;             // as we have changed the list - don't continue
 
           }
           else
           {
-             l->checkMonitor();
+             (*l)->checkMonitor();
           }
        }
        if (syncstat)
@@ -739,13 +554,15 @@ void MonitorMain::on_monitorTimeout()
           syncStations();
        }
     }
-    MonitoringFrame *f = findCurrentLogFrame();
-    if ( f )
+    static int ticks = 0;
+    if (ticks++ > 10)
     {
-        f->getContest()->scanContest();
-        f->setScore();
-        // clear dups here - we have no need of them in monitor
-        f->getContest()->DupSheet.clear();
+        MonitoringFrame *f = findCurrentLogFrame();
+        if ( f )
+        {
+            f->on_monitorTimeout();
+        }
+        ticks = 0;
     }
 }
 void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
@@ -826,14 +643,10 @@ void MonitorMain::searchChanged()
 
     screenContact.cs.setFullCall(ui->callsignEdit->text());
     screenContact.loc.setLoc(ui->locEdit->text());
-    screenContact.extraText = ui->exchangeEdit->text().trimmed();
+    screenContact.extraText.setValue( ui->exchangeEdit->text().trimmed());
 
     MinosLoggerEvents::SendScreenContactChanged(&screenContact, bct, "Monitor");
 
-}
-void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
-{
-    searchChanged();
 }
 
 void MonitorMain::on_locEdit_textChanged(const QString &/*arg1*/)

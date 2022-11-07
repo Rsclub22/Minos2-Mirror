@@ -12,9 +12,9 @@
 
 
 
+#include "serialCommonData.h"
 #include "hamlibrigcontrol.h"
 #include "minosNetUtils.h"
-#include "serialCommonData.h"
 #include "MTrace.h"
 
 #ifndef HAMLIB_FILPATHLEN

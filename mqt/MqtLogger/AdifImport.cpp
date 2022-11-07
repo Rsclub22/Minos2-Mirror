@@ -6,11 +6,12 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "rigutils.h"
+#include <QTextStream>
+#include "cutils.h"
 #include "LoggerContest.h"
 #include "contacts.h"
 #include "BandList.h"
+#include "MTrace.h"
 #include "AdifImport.h"
 
 //====================================================================
@@ -52,6 +53,10 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
       {
          // ADIF now specifies 8 Digits representing a UTC date in YYYYMMDD format
          dateOn = FieldContent.right(6);
+         if (dateOff.isEmpty())
+         {
+             dateOff = dateOn;
+         }
       }
       if ( Fieldname.toUpper() == "TIME_ON" )
       {
@@ -184,6 +189,13 @@ void ADIFImport::ADIFImportFieldDecode(QString Fieldname, int FieldLength, QStri
           temp = temp.toUpper();
           aqso->mgmSubmode.setValue(temp.trimmed());
       }
+      if ( Fieldname.toUpper() == "OPERATOR" )
+      {
+          strcpysp( temp, FieldContent, FieldLength );
+
+          temp = temp.toUpper();
+          aqso->op1.setValue(temp.trimmed());
+      }
    }
 }
 //---------------------------------------------------------------------------
@@ -214,6 +226,11 @@ void ADIFImport::ADIFImportEndOfRecord( )
        aqso->timeOff.setDate( dateOff, DTGLOG );
        aqso->timeOff.setTime( timeOff, DTGLOG );
 
+       dateOn.clear();
+       dateOff.clear();
+       timeOn.clear();
+       timeOff.clear();
+
        // save contact
 
       // we have to have log_sequence set before we insert - or it will cause
@@ -223,8 +240,7 @@ void ADIFImport::ADIFImportEndOfRecord( )
        if ( stx > acontest->maxSerial )
           acontest->maxSerial = stx;
 
-      MapWrapper<BaseContact> waqso(aqso);
-      acontest->ctList.insert( waqso, waqso );
+      acontest->addToContestList(aqso);
 
       QSharedPointer<BaseContact> bct;
       acontest->makeContact( false, bct );
@@ -416,6 +432,11 @@ bool ADIFImport::executeImport()
    }
 
    bool atEOR = false;
+   dateOn.clear();
+   dateOff.clear();
+   timeOn.clear();
+   timeOff.clear();
+
    do
    {
 

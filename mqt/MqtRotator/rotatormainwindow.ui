@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>675</width>
-    <height>479</height>
+    <height>540</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,6 @@
            <widget class="QLabel" name="Main">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -45,7 +44,6 @@
             <property name="font">
              <font>
               <pointsize>36</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -68,7 +66,6 @@
            <widget class="QLabel" name="Back">
             <property name="font">
              <font>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -85,7 +82,6 @@
             <property name="font">
              <font>
               <pointsize>24</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -107,7 +103,6 @@
              <widget class="QLabel" name="antennaSelectlbl">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -141,19 +136,11 @@
              </layout>
             </item>
             <item>
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string/>
-              </property>
-             </widget>
-            </item>
-            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_8">
               <item>
                <widget class="QLabel" name="usinglbl">
                 <property name="font">
                  <font>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -166,7 +153,6 @@
                <widget class="QLabel" name="usingLibText">
                 <property name="font">
                  <font>
-                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -192,7 +178,6 @@
                <widget class="QLabel" name="antNameDispLbl">
                 <property name="font">
                  <font>
-                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -231,10 +216,16 @@
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="reconnectPushButton">
+              <property name="text">
+               <string>Reconnect</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QLabel" name="label_4">
               <property name="font">
                <font>
-                <weight>75</weight>
                 <bold>true</bold>
                </font>
               </property>
@@ -585,7 +576,7 @@
      <x>0</x>
      <y>0</y>
      <width>675</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

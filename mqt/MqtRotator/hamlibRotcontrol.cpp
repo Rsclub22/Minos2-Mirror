@@ -11,7 +11,6 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include <QList>
-#include <QDebug>
 #include <QStringList>
 #include <QThread>
 #include "hamlibRotcontrol.h"
@@ -62,7 +61,7 @@ int debug_callback (enum rig_debug_level_e level, rig_ptr_t /* arg */, char cons
 
   if (traceComms)
   {
-      trace(QString("%1 %2").arg(fmt).arg(message));
+      trace(QString("%1 %2").arg(fmt, message));
   }
 
 
@@ -269,7 +268,7 @@ void HamlibRotControl::register_rotators(RotatorFactory::Rotators* rotatorsList)
 
     for (int i = 0; i < capsList.count(); i++)
     {
-        key = QString("%1 %2").arg(capsList[i]->mfg_name).arg(capsList[i]->model_name);
+        key = QString("%1 %2").arg(capsList[i]->mfg_name, capsList[i]->model_name);
         auto port_type = RotCapConstants::PortType::none;
         switch(capsList[i]->port_type)
         {
@@ -390,7 +389,6 @@ bool HamlibRotControl::getRotatorList(QComboBox *cb)
         t+=capsList.at(i)->model_name;
         if (getPortType(capsList.at(i)->rot_model, &portType) != -1)
         {
-            //qDebug() << capsList.at(i)->rot_model << capsList.at(i)->model_name << portType;
             if (portType == RIG_PORT_SERIAL || portType == RIG_PORT_NETWORK || portType == RIG_PORT_UDP_NETWORK || portType == RIG_PORT_NONE)
             {
                 sl << t;

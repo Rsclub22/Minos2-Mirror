@@ -6,7 +6,7 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "mqtUtils_pch.h"
+#include "fileutils.h"
 
 /*==========================================================================
  
@@ -37,6 +37,9 @@
 
 // DDCLIB includes
 #include "riff.h"
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
 
 
 uint32_t FourCC ( const char *ChunkName )

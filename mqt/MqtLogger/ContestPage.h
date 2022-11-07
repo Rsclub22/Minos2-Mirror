@@ -1,7 +1,9 @@
 #ifndef CONTESTPAGE_H
 #define CONTESTPAGE_H
 
-#include "base_pch.h"
+#include <QFrame>
+
+class QVBoxLayout;
 
 class TSingleLogFrame;
 class TMatchCollection;

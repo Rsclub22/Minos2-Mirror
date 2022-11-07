@@ -87,7 +87,7 @@ QString RadioDetails::getBandList()
 }
 int RadioDetails::getBandListCount()
 {
-    return bandList.count();
+    return bandList.size();
 }
 void RadioDetails::setPttType(int type)
 {

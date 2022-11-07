@@ -1,11 +1,12 @@
-#include "base_pch.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "RPCCommandConstants.h"
 #include "RigDetails.h"
 #include "rigcommon.h"
 #include "serialCommonData.h"
+#include "MTrace.h"
 
 RigDetails::RigDetails()
     :PubSubValue(RigDetailsType)

@@ -15,7 +15,7 @@
 
 #include <QAbstractTableModel>
 #include "sentSpotdata.h"
-#include "clustercommon.h"
+#include "htmldelegate.h"
 
 const int sentSpotColCount = 8;
 

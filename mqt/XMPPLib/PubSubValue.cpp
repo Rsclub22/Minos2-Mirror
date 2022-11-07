@@ -1,9 +1,7 @@
-#include "XMPP_pch.h"
-
 #include "PubSubValue.h"
 #include "ConfigFile.h"
-#include "RPCPubSub.h"
 #include "AnalysePubSubNotify.h"
+#include "MinosRPC.h"
 
 QString PubSubValue::psType() const
 {
@@ -124,6 +122,11 @@ void PubSubName::setKey(const QString &key)
 QString PubSubName::getRouterApp() const
 {
     return router() + "/" + appName();
+}
+
+QString PubSubName::getLocalName() const
+{
+    return appName() + "/" + key();
 }
 
 QString PubSubName::router() const

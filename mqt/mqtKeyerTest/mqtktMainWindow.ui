@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>450</width>
     <height>300</height>
    </rect>
   </property>
@@ -30,14 +30,21 @@
       <item>
        <widget class="QPushButton" name="filterButton">
         <property name="text">
-         <string>Filter</string>
+         <string>HP filter</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="toneButton">
+       <widget class="QPushButton" name="bpFilterButton">
         <property name="text">
-         <string>Tone</string>
+         <string>BP Filter</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="showWaveButton">
+        <property name="text">
+         <string>Show Wave</string>
         </property>
        </widget>
       </item>

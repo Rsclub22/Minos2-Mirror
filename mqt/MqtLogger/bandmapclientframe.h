@@ -17,22 +17,15 @@
 #include <QObject>
 #include <QFrame>
 #include <QShortcut>
-#include "dxspotdatamodel.h"
-#include "base_pch.h"
-#include "clusterClientServer.h"
-#include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
 #include "contest.h"
-#include "ContestApp.h"
-#include "MinosLoggerEvents.h"
-#include "bandmapcallsignmarker.h"
 #include "bandmapview.h"
-#include "bandmapfreqdial.h"
 #include "bandmapdatamodel.h"
 #include "bandmapclientfilterdialog.h"
 #include "BandList.h"
 #include "checkmodeagainstfreq.h"
 #include "checkoperatingfreq.h"
+#include "cutils.h"
 
 
 
@@ -61,7 +54,7 @@ public:
     void buttonHandleDxSpots();
     void mouseMoveEvent(QMouseEvent *event) override;
 
-    void setBandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
+    void setBandmapMarkFreq(Frequency freq, QString mode);
     void setBandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
 
     void setRotatorBearing(QString s);
@@ -87,9 +80,7 @@ private:
 
     Ui::BandmapClientFrame *ui;
     BaseContestLog *ct = nullptr;
-    QString contestUuid;
     QString contestBandStr;
-    //int contestBand = -1;
     Frequency contestBandFlow;
     Frequency contestBandFHigh;
     QString contestModeStr;
@@ -97,7 +88,6 @@ private:
 
     QString radioMode;
 
-    bool radioIsConnected = false;
     QString radioError;
     Frequency lastfreq;
     QPalette *freqDisplayPalette = nullptr;
@@ -124,7 +114,6 @@ private:
 
     // cluster spots
     QVector<QSharedPointer<BandmapSpotData> > spotQueue;
-//    bool clusterServerLoaded = false;
     bool clusterServerConnected = false;
 
     // CQ Frequency
@@ -144,12 +133,9 @@ private:
 
     UpperCaseValidator ucValidator;
 
-    //QString sfreq;
     Frequency curFreq;
-    int mapViewHeight = 0;
 
     BandmapDataModel *bandmapDataModel = nullptr;
-//    BandmapSpotData *bandmapData = nullptr;
 
     QMenu* spotsMenu = nullptr;
     QAction* markSpotAction = nullptr;
@@ -189,16 +175,12 @@ private:
     QString curRotBearing;
     bool rotatorConnected = false;
 
-
-
-    //int getBandOffSet(QString contestBandStr);
     int getModeOffSet(QString contestModeStr);
     void handleDxSpots(QVector<QString> &spotQueue);
-    //void handleClusterStatusMessage(QString &msg);
     void clusterStatusIndicatorToggle(bool on);
     void addDxSpotToBandmapTable(QSharedPointer<BandmapSpotData> spot);
     void calcSpotDistanceBearing(const QString &_locator, double *distance, int *bearing);
-    void checkSpotWorked(const QString &callsign, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
+    void checkSpotWorked(const Callsign &callsign, const QString &locator, const Frequency &freq, bool *callWorked, bool *locatorWorked);
     bool checkSpotInTable(QSharedPointer<BandmapSpotData> spot);
     void sendFreqToRig(Frequency freq);
 
@@ -280,6 +262,9 @@ private slots:
      void on_waitClusterServerLoadedTimeout();
      void on_clusterStatusIndicatorClicked();
      void onContestBandChanged(BaseContestLog *ct);
+     void on_zoomSpinner_valueChanged(int arg1);
+
+     void on_bandmapLimitsChanged();
 public slots:
      void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact>);
 };
@@ -290,9 +275,8 @@ class BMP_MouseInObject : public QObject
 {
     Q_OBJECT
 public:
-    BMP_MouseInObject(QWidget *parent, BandmapClientFrame* frame)
+    BMP_MouseInObject(QWidget */*parent*/, BandmapClientFrame* frame)
     {
-        Q_UNUSED(parent)
         bandmapFrame = frame;
     }
 

@@ -6,16 +6,15 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
 #include "contacts.h"
 #include "contest.h"
 #include "TreeUtils.h"
 #include "htmldelegate.h"
-#include "BandList.h"
 
-GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
+QVector<GridColumn> QSOGridModel::QSOTreeColumns =
    {
+      GridColumn( egDate, "XX/XX/XX", QT_TR_NOOP("Date"), taLeftJustify ),               // time
       GridColumn( egTime, "XXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
       GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // time
       GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
@@ -30,7 +29,8 @@ GridColumn QSOGridModel::QSOTreeColumns[ LOGTREECOLS ] =
       GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
       GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
       GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
-      GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
+      GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify ),
+      GridColumn( egOperator, "XXXXXX", QT_TR_NOOP("Op"), taLeftJustify )
 
    };
 
@@ -91,6 +91,7 @@ QVariant QSOGridModel::data( const QModelIndex &index, int role ) const
            bool setHighlight = false;
            switch ( QSOTreeColumns[ column ].fieldId )
            {
+              case egDate:
               case egTime:
                  if (!contest->checkTime(ct->timeOff))
                  {
@@ -192,5 +193,16 @@ int QSOGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int QSOGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return  LOGTREECOLS;
+    return  QSOGridModel::QSOTreeColumns.count();
+}
+
+bool QSOGridModel::insertRows(int row, int count, const QModelIndex &index)
+{
+    emit beginInsertRows(index, row, row + count - 1);
+    emit endInsertRows();
+    return true;
+}
+void QSOGridModel::changeRow(int row)
+{
+    emit dataChanged(index(row, 0), index(row, columnCount()));
 }

@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
@@ -7,6 +6,7 @@
 
 #include "sbdriver.h"
 #include "keyerlog.h"
+#include "MTrace.h"
 
 #include "InternalVoiceMemoryKeyer.h"
 
@@ -33,6 +33,7 @@ void InternalVoiceMemoryKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setKeyerName(keyerName);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(false);
+    voiceMemCap.setEnableCwMode(false);
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(false);
@@ -58,11 +59,11 @@ void InternalVoiceMemoryKeyer::voiceKeyerInit(int &numButtons)
     numButtons = settings.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
 
     QString errmess;
-    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ,0 ) )
+    if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init( indev, outdev, errmess, 48000, 0, 0, 0 ) )
     {
        trace( "sbdvp_init failed! " + errmess );
     }
-    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0);  // for now, set everything to 0db
+    SoundSystemDriver::getSbDriver()->setVolumeMults(0, 0, 0, CompressorParams(), false, false);  // for now, set everything to 0db
 
     for (int i = 0; i < numButtons; i++)
     {

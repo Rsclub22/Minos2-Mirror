@@ -6,13 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-#include "BandList.h"
-#include "rigutils.h"
 #include "LoggerContest.h"
-#include "LoggerContacts.h"
-#include "ContestApp.h"
 #include "MinosLoggerEvents.h"
+#include "cutils.h"
+#include "MinosParameters.h"
+#include "LoggerContacts.h"
 
 ContestContact::ContestContact( LoggerContestLog * ct, bool time_now, bool rInit ) : DisplayContestContact( ct, time_now, rInit )
 {}
@@ -47,21 +45,6 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       placestr( contactBuffs.buff2, timeOff.getDate( DTGPRINT ), 0, 10 );
       placestr( contactBuffs.buff2, timeOff.getTime( DTGPRINT ), 11, 5 );
       placestr( contactBuffs.buff2, "DON'T PRINT", 21, 14 );
-   }
-   else if ( contactFlags.getValue() & LOCAL_COMMENT  )
-   {
-      placestr( contactBuffs.buff2, timeOff.getDate( DTGDISP ), 0, 10 );
-      placestr( contactBuffs.buff2, timeOff.getTime( DTGDISP ), 11, 5 );
-      placestr( contactBuffs.buff2, "LOCAL COMMENT", 23, 14 );
-      placestr( contactBuffs.buff2, comments.getValue(), 31, 60 );
-   }
-   else if ( contactFlags.getValue() & COMMENT_ONLY )
-   {
-      placestr( contactBuffs.buff2, timeOff.getDate( DTGDISP ), 0, 10 );
-      placestr( contactBuffs.buff2, timeOff.getTime( DTGDISP ), 11, 5 );
-      placestr( contactBuffs.buff2, "LOGGED COMMENT", 23, 14 );
-      placestr( contactBuffs.buff2, comments.getValue(), 31, 60 );
-
    }
    else
    {
@@ -175,7 +158,7 @@ void ContestContact::getPrintFileText( QString &sdest, short maxlen )
       QString sbrg = QString::number(bearing) + degreeChar;
       next = placestr( contactBuffs.buff2, sbrg, next + 1, -6 );
 
-      contactBuffs.qthbuff += extraText.getValue().trimmed();
+      contactBuffs.qthbuff += extraText.getValue();
       contactBuffs.qthbuff.truncate( EXTRALENGTH);
       next = placestr( contactBuffs.buff2, contactBuffs.qthbuff, next + 1, contactBuffs.qthbuff.length() );
 
@@ -194,14 +177,8 @@ void ContestContact::addReg1TestComment( QStringList &remarks )
    cmnt += ';';
    cmnt += timeOff.getTime( DTGLOG );
    cmnt += ';';
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
+   if ( contactFlags.getValue() & DONT_PRINT )
       return ;
-   if ( contactFlags.getValue() & ( COMMENT_ONLY ) )
-   {
-      cmnt += comments.getValue();
-      remarks.append( cmnt );
-      return ;
-   }
 
    if ( !comments.getValue().isEmpty() )
    {
@@ -270,7 +247,7 @@ void ContestContact::getReg1TestText(QString &sdest , bool noSerials)
 
    */
    sdest = "";
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+   if ( contactFlags.getValue() & DONT_PRINT )
       return ;
 
    BaseContestLog * clp = contest;
@@ -428,9 +405,6 @@ QSO:  3799 PH 1999-03-06 0712 HC8N           59 700    N5KO           59 CA     
     if (!bool(lcl))
         return;
 
-    if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
-        return;
-
     if ( contactFlags.getValue() & NON_SCORING)
         outstr += "X-QSO: ";
     else
@@ -523,9 +497,6 @@ QString ContestContact::getADIFLine()
         return  outstr;
 
     QString exp_buff;
-
-    if ( contactFlags.getValue() & ( LOCAL_COMMENT | DONT_PRINT ) )
-        return outstr;
 
     //---------------------------------------
     outstr += makeADIFField( "CALL", cs.getFullCall() );
@@ -674,11 +645,6 @@ QString ContestContact::getADIFLine()
     outstr+= makeADIFField("CQZ", zone);
 
 
-    if ( contactFlags.getValue() & COMMENT_ONLY )
-    {
-        outstr += makeADIFField( "COMMENT", comments.getValue() );
-        return outstr;
-    }
 
     outstr += makeADIFField( "TX_PWR", clp->power.getValue() );
     outstr += makeADIFField( "COMMENT", comments.getValue() );
@@ -743,7 +709,12 @@ bool ContestContact::commonSave(QSharedPointer<BaseContact> tct)
          // search for the country, district, locator multipliers as required
          // Add to the worked counts as required
 
-         checkContact(false );                    // in commonSave, AFTER saved, to update stats etc
+          QDateTime  contestStart = CanonicalToTDT(clp->DTGStart.getValue());
+          QDateTime  contestEnd = CanonicalToTDT(clp->DTGEnd.getValue());
+
+          clp->scanContact(tct, contestStart, contestEnd);
+
+        // checkContact( true);                    // in commonSave, AFTER saved, to update stats etc
       }
    }
    return ret;
@@ -785,27 +756,15 @@ bool ContestContact::GJVsave( GJVParams &gp )
    strtobuf( timeOff.getDate( DTGDISP ) );
    strtobuf( timeOff.getTime( DTGDISP ) );
 
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-   {
-      strtobuf( nulc );   //cs
-      strtobuf( nulc );   //reps
-      strtobuf( nulc );   //serials
-      strtobuf( nulc );   //repr
-      strtobuf( nulc );   //serialr
-      strtobuf( nulc );   //loc
-      strtobuf( nulc );   //extra
-   }
-   else
-   {
-      strtobuf( cs.getFullCall() );
-      strtobuf( reps.getValue() );
-      strtobuf( serials.getValue() );
-      strtobuf( repr.getValue() );
-      strtobuf( serialr.getValue() );
-      strtobuf( loc.getLoc() );
-      strtobuf( extraText.getValue() );
-   }
-   strtobuf( comments.getValue() );
+    strtobuf( cs.getFullCall() );
+    strtobuf( reps.getValue() );
+    strtobuf( serials.getValue() );
+    strtobuf( repr.getValue() );
+    strtobuf( serialr.getValue() );
+    strtobuf( loc.getLoc() );
+    strtobuf( extraText.getValue() );
+
+    strtobuf( comments.getValue() );
 
    //	strtobuf(power);
    strtobuf( "0" );			// power - removed

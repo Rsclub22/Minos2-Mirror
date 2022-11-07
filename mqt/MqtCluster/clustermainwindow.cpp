@@ -10,28 +10,29 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
 #include <QSettings>
 #include <QTimer>
 #include <QProcessEnvironment>
 #include <QHeaderView>
 #include <QTextStream>
-#include <QDebug>
+#include <MTrace.h>
+#include <QTableView>
+#include <QMessageBox>
 
-#include "clustermainwindow.h"
+#include "AppStartup.h"
+#include "MShowMessageDlg.h"
 #include "clustercommon.h"
+#include "fileutils.h"
+#include "mults.h"
 #include "qrzServerCommon.h"
-#include "rigutils.h"
-#include "cutils.h"
 #include "BandList.h"
 #include "delayedaction.h"
+#include "LogEvents.h"
+#include "MTrace.h"
+#include "cutils.h"
 
+#include "clustermainwindow.h"
 #include "ui_clustermainwindow.h"
-#include "latlong.h"
-
-
-
-
 
 static const char * sendClusterReasonText[] = {QT_TRANSLATE_NOOP("cluster", "Ok"), QT_TRANSLATE_NOOP("cluster", "Failed - comms error"),
                                            QT_TRANSLATE_NOOP("cluster", "Not Logged On"), QT_TRANSLATE_NOOP("cluster", "Freq out of band"),
@@ -103,8 +104,7 @@ void ClusterMainWindow::connectToCluster()
 void ClusterMainWindow::doStartup()
 {
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &ClusterMainWindow::onStdInRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
     Q_UNUSED(rpc)
@@ -1126,7 +1126,7 @@ QString ClusterMainWindow::getQraFromCallsignPrefix(Callsign cs)
 
 
 
-
+static QRegularExpression rews("\\s+");
 
 int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<ClusterSpotData> newSpot)
 {
@@ -1136,9 +1136,9 @@ int ClusterMainWindow::upackShowDxSpot(const QString txt, QSharedPointer<Cluster
     newSpot->setClusterSpotType(clusterSpotType::SHOW_DXSPOT_TYPE);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    dxMsg = txt.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+    dxMsg = txt.split(rews, Qt::SkipEmptyParts);
 #else
-    dxMsg = txt.split(QRegularExpression("\\s+"), QString::SkipEmptyParts);
+    dxMsg = txt.split(rews, QString::SkipEmptyParts);
 #endif
 
     if (dxMsg.count() > 4)
@@ -1942,16 +1942,6 @@ void ClusterMainWindow::loadNodesSelectBox(QStringList listOfNodes)
 
 void ClusterMainWindow::LogTimerTimer()
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
-
     static bool closed = false;
     if ( !closed )
     {
@@ -2110,16 +2100,10 @@ void ClusterMainWindow::closeEvent(QCloseEvent *event)
 
 void ClusterMainWindow::onStdInRead(QString cmd)
 {
-    bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
-//        closeApp = true;
-        doClose = true;
-    }
-    executeStdIn(cmd);
-    if (doClose)
         close();
-
+    }
 }
 
 /*
@@ -2365,13 +2349,19 @@ void ClusterMainWindow::userCmdButtonClear(QStringList userCommands, QString tab
 
     if (!userCommands[buttonNumber].isEmpty() || (!userVHFUHFCmdButton.isEmpty()  && buttonNumber < userVHFUHFCmdButton.count()))
     {
-        int status = QMessageBox::question( this,
+//        static StandardButton question(QWidget *parent, const QString &title,
+//             const QString &text,
+//             StandardButtons buttons = StandardButtons(Yes | No),
+//             StandardButton defaultButton = NoButton);
+
+        QMessageBox::StandardButton status = QMessageBox::question( this,
                                 tr("Cluster %1 User Command Clear").arg(tabSelected),
                                 tr("Do you really want to clear cluster %1 user command number:%2?")
                                 .arg(tabSelected).arg(buttonNumber + 1),
-                                QMessageBox::Yes|QMessageBox::Default,
-                                QMessageBox::No|QMessageBox::Escape,
-                                QMessageBox::NoButton);
+
+                                QMessageBox::StandardButtons(QMessageBox::Yes|QMessageBox::StandardButton::No|QMessageBox::StandardButton::Escape),
+
+                                QMessageBox::StandardButton::NoButton);
 
         if (status == QMessageBox::Yes)
         {
@@ -3036,7 +3026,11 @@ void ClusterMainWindow::updateDisplay()
 {
     if (dxSpotProxyModel)
     {
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        dxSpotProxyModel->setFilterRegularExpression("");
+#else
         dxSpotProxyModel->setFilterRegExp("");
+#endif
     }
 
 }
@@ -3200,7 +3194,7 @@ void ClusterMainWindow::testSpotPbClicked()
 void ClusterMainWindow::purgeSpots()
 {
 
-    if (setupCluster->getTimeToLive() > 0 /*&& !holdUpdateFlag && (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
+    if (toInt(setupCluster->getTimeToLive()) > 0 /*&& !holdUpdateFlag && (ct && ct == TContestApp::getContestApp()->getCurrentContest())*/)      // don't purge spots if == 0 and holdupdateflag is on
     {
         if (dxSpotDataModel->rowCount() > 0)
         {

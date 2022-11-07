@@ -12,11 +12,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
+#include "AppStartup.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 #include "rigcontrolmainwindow.h"
 #include "rigcontrolrpc.h"
-
-//RigControlRpc *rigControlRpc;
+#include "MTrace.h"
 
 RigControlRpc::RigControlRpc(RigControlMainWindow *parent) : QObject(parent), parent(parent)
 {

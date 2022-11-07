@@ -23,17 +23,22 @@ bool processNetAddress(QLineEdit* networkAddBox, QString& netAddress, bool& radi
 
         radioValueChanged = true;
 
-        if (isHostLocal(networkAddBox->text().trimmed()))
+        QHostInfo connaddr = QHostInfo::fromName( networkAddBox->text().trimmed() );
+
+        if ( connaddr.addresses().contains(QHostInfo::fromName( "127.0.0.1" ).addresses().first() ))
         {
                 return true;
         }
         else
         {
-            QHostAddress address(networkAddBox->text());
-            if (QAbstractSocket::IPv4Protocol == address.protocol())
+            QList<QHostAddress>addresses = connaddr.addresses();
+            for (const auto &addr: qAsConst(addresses))
             {
-                return true;
+                if (QAbstractSocket::IPv4Protocol == addr.protocol())
+                {
+                    return true;
 
+                }
             }
         }
 

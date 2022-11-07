@@ -1,6 +1,7 @@
+#include "rotatorcommon.h"
+
 #include "pstconfigdialog.h"
 #include "ui_pstconfigdialog.h"
-#include "rotatorcommon.h"
 
 PstConfigDialog::PstConfigDialog(QWidget *parent) :
     QDialog(parent),

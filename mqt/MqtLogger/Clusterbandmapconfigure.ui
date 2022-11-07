@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>764</width>
-    <height>333</height>
+    <height>369</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="bandmapGeneralTab">
       <property name="autoFillBackground">
@@ -109,6 +109,13 @@
           <widget class="QCheckBox" name="showDerivedLocChkBox">
            <property name="text">
             <string>Display Locators in Cluster Spots  Derived from QRZ or Country</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="invertBandmap">
+           <property name="text">
+            <string>Bandmap High Frequency At Top</string>
            </property>
           </widget>
          </item>
@@ -250,6 +257,30 @@
           </spacer>
          </item>
         </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="bandEdges">
+      <attribute name="title">
+       <string>Bandmap Band Edges</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QScrollArea" name="scrollArea">
+         <property name="widgetResizable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="scrollAreaWidgetContents">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>722</width>
+            <height>301</height>
+           </rect>
+          </property>
+         </widget>
+        </widget>
        </item>
       </layout>
      </widget>

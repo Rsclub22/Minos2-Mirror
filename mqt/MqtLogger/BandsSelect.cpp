@@ -1,10 +1,10 @@
-#include "base_pch.h"
 #include <QCheckBox>
-#include "bandmapcommon.h"
 #include "BandList.h"
 #include "cutils.h"
 #include "tlogcontainer.h"
 #include "ContestApp.h"
+#include "waitcursor.h"
+#include "ConfigFile.h"
 #include "BandsSelect.h"
 #include "ui_BandsSelect.h"
 

@@ -1,10 +1,11 @@
-#include "minos_pch.h"
-
-#include "minoslistener.h"
+#include "MTrace.h"
+#include "TinyUtils.h"
+#include "XMPPEvents.h"
 #include "clientThread.h"
 #include "serverThread.h"
 #include "MServerZConf.h"
 #include "MServer.h"
+#include "minoslistener.h"
 
 MinosRouterListener *MinosRouterListener::MSL = nullptr;
 MinosClientListener *MinosClientListener::MCL = nullptr;

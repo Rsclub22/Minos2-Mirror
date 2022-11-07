@@ -14,13 +14,13 @@
 #include <QLineEdit>
 #include "BandList.h"
 #include "rigcontrolcommonconstants.h"
-#include "rigutils.h"
 #include "ConfigurationOption.h"
 
 namespace Ui {
 class RadioSettingDialog;
 }
 
+class QLabel;
 class BandSwDetails
 {
 

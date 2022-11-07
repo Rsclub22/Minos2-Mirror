@@ -2,6 +2,9 @@
 #define BANDMAPVIEW_H
 
 #include <QWidget>
+#include <QAbstractItemView>
+#include <QTimer>
+
 #include <QAbstractItemModel>
 #include <QGraphicsView>
 #include <QPainter>
@@ -11,20 +14,17 @@
 #include <QGraphicsScene>
 #include <QSortFilterProxyModel>
 #include "bandmapfreqdial.h"
-#include "bandmapspotmarker.h"
-#include "bandmapdatamodel.h"
 #include "bandmapmarkerdetails.h"
-#include "bandmapclientfilterdialog.h"
-#include "bandmapcommon.h"
+#include "clustercommon.h"
 #include "spotbasedata.h"
 #include "bandmapgraphicspanel.h"
 
-const QChar DEG_SYMBOL = 0260; // octal value
+const QChar DEG_SYMBOL(0260); // octal value
 const int NO_SELECTED_ROWNUM = -1;
 
 const int KEY_SCROLL_STEP_SIZE = 50;
 
-
+class BaseContestLog;
 class BandmapView : public QAbstractItemView
 {
     Q_OBJECT
@@ -107,7 +107,7 @@ protected:
     QRegion visualRegionForSelection(const QItemSelection &selection) const override;
 
 private slots:
-    void bandmapResize(int, int);
+    void bandmapResize(QSize s);
 
     void leftMouseButtonPressed(QPoint p);
     void mouseDoubleClicked(QPoint p);
@@ -144,13 +144,9 @@ private:
     Frequency contestBandFhigh;
     Frequency curViewPortStartFreq;
 
-    int idealWidth;
-    int idealHeight;
     int fullBandHeight;
     int fontHeight;
-    int maxNumSpots;
 
-    //void changeZoom(bool direction);
     void drawBandMapSpots();
     QVector<BandmapMarkerDetails*> listOfMarkers;
 

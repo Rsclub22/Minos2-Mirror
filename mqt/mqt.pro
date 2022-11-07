@@ -12,6 +12,7 @@ SUBDIRS += \
     MqtChat \
     MqtCluster\
     MqtKeyer \
+    mqtKeyerTest \
     MqtKSTClient \
     MqtLogger \
     MqtMonitor \
@@ -22,14 +23,6 @@ SUBDIRS += \
     MqtRotator \
     MqtServer
 
-win32 {
-greaterThan(QT_MAJOR_VERSION, 4) : greaterThan(QT_MINOR_VERSION, 8) {
-   SUBDIRS += mqtKeyerTest
-   mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
-}
-}
-
-
 KeyerBase.depends = MqtUtils TinyXML XMPPLib
 RPCTest.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtAppStarter.depends = MqtUtils TinyXML XMPPLib MqtBase
@@ -37,6 +30,7 @@ MqtChat.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtCluster.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtControl.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
+mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtRigRecorder.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtKSTClient.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtLogger.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase

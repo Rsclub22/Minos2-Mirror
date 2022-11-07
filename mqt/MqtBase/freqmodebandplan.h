@@ -1,9 +1,9 @@
 #ifndef FREQMODEBANDPLAN_H
 #define FREQMODEBANDPLAN_H
 
-#include "base_pch.h"
-#include "clustercommon.h"
-
+#include "frequency.h"
+#include <QList>
+#include <QObject>
 
 template <class T>
 class ModeFreqDetail

@@ -45,6 +45,7 @@ void RigControlCwMessageKeyer::registerVoiceKeyer(VoiceKeyerFactory::VmKeyers* v
     voiceMemCap.setNumVoiceKeys(8);
     voiceMemCap.setsupportSerial(false);
     voiceMemCap.setUseCatPTTForEom(true);
+    voiceMemCap.setEnableCwMode(true);
     voiceMemCap.setSupportRepeatMsg(true);
     voiceMemCap.setHasPip(false);
     voiceMemCap.setHasTxStatus(true);
@@ -68,12 +69,18 @@ bool RigControlCwMessageKeyer::getUsePttForEomFlag()
     return usePttForEom;
 }
 
+bool RigControlCwMessageKeyer::getSetCwModeAndRestoreFlag()
+{
+    return setCwModeAndRestoreCurrentMode;
+}
+
 void RigControlCwMessageKeyer::voiceKeyerInit(int &numButtons)
 {
     QString fileName = VOICEKEYER_COMMON_PARAMS_PATH + VOICE_KEYER_BASE_FILE_NAME + keyerTypes[VoiceKeyerId::CW_RigControl] + ".ini";
     QSettings config(fileName, QSettings::IniFormat);
     numButtons = config.value("Common/NumButtons", VOICEKEYER_MAX_NUMBUTTONS).toInt();
     usePttForEom = config.value("Common/UseCatPttForEom", true).toBool();
+    setCwModeAndRestoreCurrentMode = config.value("Common/SwitchToCwMode", true).toBool();
 }
 
 
@@ -157,6 +164,8 @@ int RigControlCwMessageKeyer::setup(VoiceKeyerFactory *voiceKeyerFactory, int &n
         config.setValue("Common/NumButtons", numButtons);
         config.setValue("Common/UseCatPttForEom", txVmSetupDialog.getCatPttForEomState() );
         usePttForEom = txVmSetupDialog.getCatPttForEomState();
+        config.setValue("Common/SwitchToCwMode", txVmSetupDialog.getSetCwModeAndRestoreState());
+        setCwModeAndRestoreCurrentMode = txVmSetupDialog.getSetCwModeAndRestoreState();
     }
     return ret;
 

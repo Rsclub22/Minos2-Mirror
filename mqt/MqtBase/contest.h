@@ -9,31 +9,42 @@
 //----------------------------------------------------------------------------
 #ifndef ContestH
 #define ContestH 
-#include "base_pch.h"
-#include "list.h"
 
 //----------------------------------------------------------------------------
 // This header covers the structure of contests, logs, etc
 
-//class DisplayContestContact;
+#include <QCoreApplication>
+#include <QMap>
+
+#include "BandList.h"
+#include "MapWrapper.h"
+#include "ProfileEnums.h"
+#include "callsign.h"
+#include "dtg.h"
+#include "frequency.h"
+#include "locator.h"
+#include "minositem.h"
+#include "baseloglist.h"
+#include "mults.h"
+
+class CheckableContact;
 class BaseContact;
 class ContestContact;
 class ScreenContact;
 class DisplayContestContact;
 class ContestScore;
 class MinosTestImport;
+class BaseContestLog;
 
 class DupContact
 {
    public:
-      QSharedPointer<BaseContact> dct;
-      ScreenContact *sct;
+      CheckableContact *dct = nullptr;
       bool operator<( const DupContact& rhs ) const;
       bool operator==( const DupContact& rhs ) const;
       bool operator!=( const DupContact& rhs ) const;
 
-      DupContact( QSharedPointer<BaseContact> c );
-      DupContact( ScreenContact *c );
+      DupContact(CheckableContact *c );
       DupContact();
       ~DupContact();
 };
@@ -46,17 +57,16 @@ class dupsheet
       // sorted by the callsign and logSequence number
 
    private:
-      DupList ctList;
+      DupList dupList;
       QSharedPointer<DupContact> curdup; // points into dupsheet
 
    public:
       bool checkCurDup(BaseContestLog *contest, unsigned long nctseq, unsigned long valpseq, bool insert );
-      bool checkCurDup(ScreenContact *nct, unsigned long valpseq, bool insert );
-      bool isCurDup(QSharedPointer<BaseContact> nct ) const;
-      bool isCurDup(ScreenContact *nct ) const;
+      bool checkCurDup(CheckableContact *nct, unsigned long valpseq, bool insert );
+      bool isCurDup(CheckableContact *nct ) const;
       void clearCurDup();
       void clear();
-      QSharedPointer<BaseContact> getCurDup();
+      CheckableContact *getCurDup();
       dupsheet();
       ~dupsheet();
 };
@@ -93,6 +103,14 @@ class BaseContestLog: public BaseLogList
          return protectedContest.getValue();
       }
 
+      QVector<QSharedPointer<BaseContact> > ctIndexCache;
+
+      QMap<const BaseContact *, int> ctPointerIndexMap;
+
+      bool cacheRefreshNeeded = false;
+      void clearCache();
+      void refreshCache();
+
    public:
       QString uuid;
       int cslotno = -1;
@@ -108,8 +126,8 @@ class BaseContestLog: public BaseLogList
       {
          return ct_stanzaCount;
       }
-      Frequency getTxFreqBand(Frequency txf, QString &cb);
-      double getAdifFreqBand(Frequency txfreq, QString &cb);
+      Frequency getTxFreqBand(Frequency txf, QString &cb) const;
+      double getAdifFreqBand(Frequency txfreq, QString &cb) const;
 
       QString getCabrilloFreqBand(Frequency txfreq) const;
 
@@ -241,6 +259,10 @@ class BaseContestLog: public BaseLogList
 
       LogList ctList;
 
+      int lastInserted = -1;
+
+      QSharedPointer<BaseContact> findContact(CheckableContact *) const;
+
       // Ancilliary variables
 
       OperatorList oplist;
@@ -319,7 +341,7 @@ class BaseContestLog: public BaseLogList
       int bonus2 = 0;
       int bonus1p = 0;
       int bonus2p = 0;
-      bool updateStat(QSharedPointer<BaseContact> cct , int sp1, int sp2);
+      bool updateStat(CheckableContact *cct , int sp1, int sp2);
       void updateStats(int p1, int p2);
 
 
@@ -353,11 +375,11 @@ class BaseContestLog: public BaseLogList
       // general
 
       void validateLoc( );
-      void getMatchText(QSharedPointer<BaseContact>, QString &, const BaseContestLog *const ct ) const;
-      void getMatchField( QSharedPointer<BaseContact> pct, int col, QString &disp, const BaseContestLog *const ct ) const;
+      void getMatchText(CheckableContact *, QString &, const BaseContestLog *const ct ) const;
+      void getMatchField( CheckableContact *pct, int col, QString &disp, const BaseContestLog *const ct ) const;
       void scanContest( );
       void setScore( QString & );
-      bool isCurDup(QSharedPointer<BaseContact>) const;
+      bool isCurDup(CheckableContact *) const;
 
       virtual void getScoresTo(ContestScore &cs, QDateTime limit);
 
@@ -401,6 +423,9 @@ class BaseContestLog: public BaseLogList
       int getBonus() const;
 
       void getOpTime(QString &otBuff, SHOWOPERATINGTIME temp);
+      QString  scanContact(QSharedPointer<BaseContact> nct, QDateTime contestStart, QDateTime contestEnd);
+      
+      void addToContestList(QSharedPointer<BaseContact> rct);
 protected:
       unsigned long nextBlock = 1;
    int ct_stanzaCount = 0;

@@ -1,18 +1,25 @@
 #ifndef DISTRICTFRAME_H
 #define DISTRICTFRAME_H
 
-#include "base_pch.h"
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QMenu>
+
+#include "TreeUtils.h"
+#include "mults.h"
 
 namespace Ui {
 class DistrictFrame;
 }
 
 class BaseContestLog;
+class TSingleLogFrame;
+class StackedInfoFrame;
 
 class DistrictGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-    static GridColumn DistrictTreeColumns[ ectMultMaxCol - 3 ];
+    static QVector<GridColumn> DistrictTreeColumns;
     public:
         DistrictGridModel();
         ~DistrictGridModel() override;
@@ -41,7 +48,7 @@ class DistrictSortFilterProxyModel : public QSortFilterProxyModel
 public:
     QString scrolledDistrict;
     QString band;
-    DistrictSortFilterProxyModel(): scrolledDistrict(-1)
+    DistrictSortFilterProxyModel()
     {
     }
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
@@ -55,9 +62,12 @@ class DistrictFrame : public QFrame
     DistrictGridModel model;
     DistrictSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    TSingleLogFrame *tslf = nullptr;
 
 public:
-    explicit DistrictFrame(QWidget *parent = nullptr);
+    explicit DistrictFrame(StackedInfoFrame *parent);
     ~DistrictFrame();
 
     void setContest(BaseContestLog *contest);
@@ -69,9 +79,18 @@ private:
     Ui::DistrictFrame *ui;
     void doScrollToDistrict();
     
+    void restoreDistrictTableColumns();
+    void saveDistrictTableColumns();
+
 private slots:
     void on_sectionResized(int, int , int);
     void on_DistrictTable_clicked(const QModelIndex &index);
+    void onDistrictGrid_customContextMenuRequested(const QPoint &pos);
+    void onDistrictGrid_sectionMoved(int, int, int);
+
+    void viewColumn();
+
+    void on_doColumnChanges(BaseContestLog *b);
 };
 
 #endif // DISTRICTFRAME_H

@@ -10,9 +10,6 @@ include($$PWD/../mqthamlib.pri)
 QT       += core gui
 QT       += widgets
 QT       += network
-lessThan(QT_MAJOR_VERSION, 6){
-QT       += serialport
-}
 QT       += help
 
 TARGET = MqtBase
@@ -23,8 +20,6 @@ INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../TinyXML
 INCLUDEPATH += ../XMPPLib
 
-#PRECOMPILED_HEADER = ../MqtBase/base_pch.h
-
 SOURCES += \
     AntennaDetail.cpp \
     AntennaState.cpp \
@@ -32,6 +27,7 @@ SOURCES += \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
     StartConfigManager.cpp \
+    StatisticsDisplay.cpp \
     bandmapmarkerdetails.cpp \
     baseloglist.cpp \
     calcs.cpp \
@@ -106,7 +102,6 @@ SOURCES += \
     bearinglineedit.cpp \
     callsigninputdialog.cpp \
     locatorinputdialog.cpp \
-    bandmapdatamodel.cpp \
     WsjtxNetworkMessage.cpp \
     WsjtxMessageServer.cpp \
     Wsjtx_qt_helpers.cpp
@@ -117,8 +112,8 @@ HEADERS += \
     BandList.h \
     ConfigurationOption.h \
     StartConfigManager.h \
+    StatisticsDisplay.h \
     bandmapmarkerdetails.h \
-    base_pch.h \
     CacheSelection.h \
     baseloglist.h \
     calcs.h \
@@ -199,7 +194,6 @@ HEADERS += \
     bearinglineedit.h \
     callsigninputdialog.h \
     locatorinputdialog.h \
-    bandmapdatamodel.h \
     bandmapcommon.h \
     WsjtxNetworkMessage.hpp \
     WsjtxMessageServer.hpp \
@@ -213,6 +207,7 @@ FORMS += \
     ConfigElementFrame.ui \
     MatchTreeFrame.ui \
     StartConfigManager.ui \
+    StatisticsDisplay.ui \
     minoskeyboard.ui \
     rotpresetdialog.ui \
     StartConfig.ui \

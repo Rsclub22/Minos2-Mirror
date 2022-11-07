@@ -6,12 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
-#include "contacts.h"
 #include "ListContact.h"
+#include "fileutils.h"
 #include "list.h"
-
+#include "MinosParameters.h"
 
 ContactList::ContactList() :
   cslFile( false )

@@ -23,8 +23,8 @@
 #include <QNetworkReply>
 #include <QTimer>
 
-#include "mqtUtils_pch.h"
-#include "qrzserverrpc.h"
+#include "StdInReader.h"
+#include "clustercommon.h"
 #include "qrzServerCommon.h"
 
 QT_BEGIN_NAMESPACE
@@ -154,10 +154,8 @@ private:
     Ui::QrzServerMainWindow *ui;
 
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QString appName = "";
-
-
 
     QTimer LogTimer;
     QTimer *pingStateTimer;

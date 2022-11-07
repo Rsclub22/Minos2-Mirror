@@ -1,7 +1,7 @@
 
 
 #include <QtSerialPort/QSerialPort>
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPortInfo>
 
 #include "rigcommon.h"
 

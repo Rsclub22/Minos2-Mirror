@@ -9,11 +9,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "LoggerContest.h"
-
 #include "MinosLoggerEvents.h"
-#include "bandselbuttons.h"
 #include "BandList.h"
+#include "contest.h"
+#include "bandselbuttons.h"
 
 
 BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands, QGridLayout *_bandSelGrid, QObject *parent) : QObject(parent)
@@ -33,7 +32,7 @@ BandSelButtons::BandSelButtons(const QVector<QSharedPointer<BandInfo> > &_bands,
     // we gt Rig Control's isdea later
     for (auto &b: bands)
     {
-        if (b->getType() == HF_BANDTYPE && b->enabled )
+        if (b->getType() == HF_BANDTYPE && b->enabled && b->contestAllowed )
         {
             availHfBands.append(b->uk);
         }

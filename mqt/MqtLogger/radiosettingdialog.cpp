@@ -14,7 +14,9 @@
 #include "rigcommon.h"
 #include "rigcontrolcommonconstants.h"
 #include "ContestApp.h"
+#include "rigutils.h"
 #include "tlogcontainer.h"
+#include "MTrace.h"
 
 #include "radiosettingdialog.h"
 #include "ui_radiosettingdialog.h"
@@ -494,7 +496,7 @@ void RadioSettingDialog::saveBandSwCheckBoxes()
         writeEnableBandSwitchDataToIni(ui->enableBandSwChkBox->isChecked());
     }
 
-    if (readSerialComportBandSwitchFromIni() != ui->enableSerialBandSwChkBox->isChecked())
+    if (readSerialComportBandSwitchFromIni() != ui->bandSwCombo->currentText())
     {
         writeEnableSerialBandSwitchDataToIni(ui->enableSerialBandSwChkBox->isChecked());
     }

@@ -1,6 +1,5 @@
 #ifndef MONITOREDCONTESTLOG_H
 #define MONITOREDCONTESTLOG_H
-#include "base_pch.h"
 #include "contest.h"
 
 class MonitoredContestLog:public BaseContestLog

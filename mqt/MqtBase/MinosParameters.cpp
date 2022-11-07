@@ -6,7 +6,9 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+
+#include "MinosParameters.h"
+#include "MShowMessageDlg.h"
 
 MinosParameters *MinosParameters::mp = nullptr;
 MinosParameters::MinosParameters()

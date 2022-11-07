@@ -1,5 +1,8 @@
+#include <QKeyEvent>
+
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
+#include "MTrace.h"
 
 #include "ChatFrame.h"
 #include "ui_ChatFrame.h"

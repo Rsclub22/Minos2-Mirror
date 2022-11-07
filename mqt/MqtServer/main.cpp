@@ -1,13 +1,13 @@
-#include "minos_pch.h"
-#include "servermain.h"
+#include <QApplication>
+#include <QMessageBox>
 #include "AppStartup.h"
 #include "SecondInstall.h"
-
 #include "singleapplication.h"
-#include <QMessageBox>
+#include "servermain.h"
 
 int main(int argc, char *argv[])
 {
+    SecondInstall::parseSecondInstall(argc, argv);
     SingleApplication a( SecondInstall::getSingleAppRouterName(), argc, argv);
 
     if (!a.isRunning())

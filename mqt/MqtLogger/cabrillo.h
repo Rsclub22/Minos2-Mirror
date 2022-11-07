@@ -1,8 +1,8 @@
 #ifndef CABRILLO_H
 #define CABRILLO_H
 
-#include "base_pch.h"
-
+#include <QFile>
+#include <QSharedPointer>
 class LoggerContestLog;
 
 

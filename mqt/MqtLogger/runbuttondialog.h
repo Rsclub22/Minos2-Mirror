@@ -12,15 +12,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
 #ifndef RUNBUTTONDIALOG_H
 #define RUNBUTTONDIALOG_H
-#include "base_pch.h"
-#include "LoggerContest.h"
 
+#include <QDialog>
+#include "LoggerContest.h"
 #include "rigmemcommondata.h"
 
 namespace Ui {

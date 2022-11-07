@@ -1,12 +1,19 @@
-#include "base_pch.h"
 #include <QFontDialog>
 #include <QFont>
 #include <QStatusBar>
+#include <QSettings>
+
+#include "MTrace.h"
+
+#include "MShowMessageDlg.h"
+#include "ServerEvent.h"
+#include "waitcursor.h"
+#include "AppStartup.h"
+#include "LogEvents.h"
 #include "ConfigFile.h"
 #include "StartConfigManager.h"
-#include "StartConfig.h"
-#include "MainWindow.h"
-#include "ui_MainWindow.h"
+#include "AsMainWindow.h"
+#include "ui_AsMainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -158,8 +165,6 @@ void MainWindow::FontEditAcceptActionExecute()
 
             QSettings settings;
             settings.setValue( "font", font() );
-
-            QString fs = f.toString();
 
             bool routerRunning = checkRouterReady();
             if (routerRunning)

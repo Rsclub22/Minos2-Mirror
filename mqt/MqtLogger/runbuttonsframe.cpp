@@ -2,10 +2,10 @@
 #include "LoggerContest.h"
 #include "rotatorcommon.h"
 #include "runbuttondialog.h"
-#include "rigutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "SendRPCDM.h"
+#include "MTrace.h"
 
 #include "runbuttonsframe.h"
 #include "ui_runbuttonsframe.h"
@@ -23,14 +23,14 @@ const int RUN_BUTTON_2_ON = 1;
 const int CHECK_RUN_FREQ_POLLTIME = 1000;
 
 static QKeySequence runButShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::Key_BracketRight)
+    QKeySequence(Qt::CTRL | Qt::Key_BracketLeft),
+    QKeySequence(Qt::CTRL | Qt::Key_BracketRight)
 
 };
 
 static QKeySequence runButShiftShortCut[] {
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketLeft),
-    QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_BracketRight)
+    QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_BracketLeft),
+    QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_BracketRight)
 
 };
 

@@ -9,9 +9,6 @@
 #ifndef ControlPortH
 #define ControlPortH 
 //==============================================================================
-//#include "comport.h"
-//#include "portconf.h"
-//#include "WindowsMonitor.h"
 #include <QString>
 #include <QVector>
 #include <QWidget>

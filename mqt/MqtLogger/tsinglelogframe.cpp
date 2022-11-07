@@ -1,28 +1,29 @@
-#include "base_pch.h"
 #include <QScrollArea>
+#include <QLabel>
+#include "MShowMessageDlg.h"
 #include "MinosLoggerEvents.h"
 
 #include "ContestApp.h"
 #include "MatchThread.h"
 #include "BandList.h"
+#include "cutils.h"
+#include "fileutils.h"
+#include "qheaderview.h"
+#include "qtableview.h"
 #include "tqsoeditdlg.h"
 #include "tentryoptionsform.h"
 
 #include "SendRPCDM.h"
+#include "RPCPubSub.h"
 #include "tlogcontainer.h"
 #include "focuswatcher.h"
 #include "htmldelegate.h"
 #include "enqdlg.h"
 #include "MatchTreeFrame.h"
 #include "rigmemdialog.h"
-#include "rigutils.h"
 #include "LoggerContest.h"
 
 #include "ScreenConfigFile.h"
-#include "ScreenConfigElement.h"
-#include "ScreenConfigRow.h"
-#include "ScreenConfig.h"
-
 #include "MatchArchiveFrame.h"
 #include "MatchOtherFrame.h"
 #include "MatchThisFrame.h"
@@ -35,8 +36,8 @@
 #include "clusterclientframe.h"
 #include "bandmapclientframe.h"
 #include "delayedaction.h"
-
 #include "ContestPageControl.h"
+#include "MTrace.h"
 
 #include "tsinglelogframe.h"
 #include "ui_tsinglelogframe.h"
@@ -52,7 +53,12 @@ void TSingleLogFrame::buildFrame(int slotNo)
     ArchiveMatchTreeFW = new FocusWatcher(archiveMatchFrame->getTreeView());
     connect(ArchiveMatchTreeFW, &FocusWatcher::focusChanged, this, &TSingleLogFrame::onArchiveTreeFocused);
 
-    restoreColumns();
+    createColumnsMenu(columnsMenu, QSOTable->horizontalHeader(), this,
+              [=]{
+                    viewColumn();
+              });
+
+    restoreQSOTableColumns();
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ContestPageChanged, this, &TSingleLogFrame::on_ContestPageChanged);
 
@@ -61,7 +67,7 @@ void TSingleLogFrame::buildFrame(int slotNo)
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::TimerDistribution, this, &TSingleLogFrame::HideTimerTimer);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::MakeEntry, this, &TSingleLogFrame::on_MakeEntry);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterSelectContact, this, &TSingleLogFrame::on_AfterSelectContact, Qt::QueuedConnection);
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact);
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContact, this, &TSingleLogFrame::on_AfterLogContact, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::setMemory, this, &TSingleLogFrame::on_SetMemory);
     // from cluster frame or bandmap frame
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::DxSpotToMemory, this, &TSingleLogFrame::on_dxSpotToMemory);
@@ -137,6 +143,9 @@ void TSingleLogFrame::buildFrame(int slotNo)
     // from Qrz Display Panel
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::QRZInfoToLog, this, &TSingleLogFrame::onQrzInfoToLog );
 
+    // from tx Voice Memory Panel
+    connect(txVmButtonsFrame, &TxVmButtonsFrame::sendRadioMode, this, &TSingleLogFrame::sendRadioMode);
+
     connect(FKHRigControlFrame, &RigControlFrame::radioIsConnected, this, &TSingleLogFrame::sendBandmapRadioIsConnected);
     connect(FKHRigControlFrame, &RigControlFrame::radioHasError, this, &TSingleLogFrame::sendBandmapRadioHasError);
 
@@ -198,14 +207,21 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->setSelectionMode(QAbstractItemView::SingleSelection);
     QSOTable->setSelectionBehavior(QAbstractItemView::SelectRows);
     QSOTable->setWordWrap(false);
-    QSOTable->horizontalHeader()->setHighlightSections(false);
-    QSOTable->horizontalHeader()->setStretchLastSection(true);
-    QSOTable->verticalHeader()->setVisible(false);
     QSOTable->setCornerButtonEnabled(false);
+
+    QSOTable->verticalHeader()->setVisible(false);
     QSOTable->verticalHeader()->setMinimumSectionSize(1);
     QSOTable->verticalHeader()->setDefaultSectionSize(1);
 
+    QSOTable->horizontalHeader()->setHighlightSections(false);
+    QSOTable->horizontalHeader()->setStretchLastSection(true);
     QSOTable->horizontalHeader()->setMinimumSectionSize(10);
+    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    QSOTable->horizontalHeader() ->setSectionsMovable( true );
+    QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    connect( QSOTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &TSingleLogFrame::onQSOGrid_customContextMenuRequested );
+    connect( QSOTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &TSingleLogFrame::onQSOGrid_sectionMoved);
 
     int lcf;
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -219,8 +235,6 @@ void TSingleLogFrame::createScreenComponents()
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height() );
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
-    QSOTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
-
     QSOTable->setVisible(false);
 
     GJVQSOLogFrame = new QSOLogFrame(this);
@@ -232,7 +246,7 @@ void TSingleLogFrame::createScreenComponents()
     GJVQSOLogFrame->setMidLineWidth(2);
 
     GJVQSOLogFrame->setVisible(false);
-    GJVQSOLogFrame->setAsEdit(false, "Log");
+    GJVQSOLogFrame->setAsEdit(false, "Logger");
     GJVQSOLogFrame->initialise( );
 
     txVmButtonsFrame = new TxVmButtonsFrame(this);
@@ -345,7 +359,7 @@ void TSingleLogFrame::createScreenComponents()
 
     thisMatchFrame->setVisible(false);
     thisMatchFrame->initialise();
-    thisMatchFrame->setBaseName("Log");
+    thisMatchFrame->setBaseName("Logger");
 
     otherMatchFrame = new MatchOtherFrame(this);
 
@@ -355,7 +369,7 @@ void TSingleLogFrame::createScreenComponents()
 
     otherMatchFrame->setVisible(false);
     otherMatchFrame->initialise();
-    otherMatchFrame->setBaseName("Log");
+    otherMatchFrame->setBaseName("Logger");
 
     archiveMatchFrame = new MatchArchiveFrame(this);
 
@@ -365,7 +379,7 @@ void TSingleLogFrame::createScreenComponents()
 
     archiveMatchFrame->setVisible(false);
     archiveMatchFrame->initialise();
-    archiveMatchFrame->setBaseName("Log");
+    archiveMatchFrame->setBaseName("Logger");
 
     chatFrame = new ChatFrame(this);
     chatFrame->setObjectName(QStringLiteral("chatFrame"));
@@ -534,7 +548,7 @@ void TSingleLogFrame::applyScreenLayout()
     QSOTable->verticalHeader()->setDefaultSectionSize(ms.height());
     QSOTable->verticalHeader()->setMinimumSectionSize(10);
 
-    updateTrees();
+    updateTrees();  //in apply screen layout
 }
 
 QString TSingleLogFrame::getCurScreenLayout() const
@@ -544,10 +558,23 @@ QString TSingleLogFrame::getCurScreenLayout() const
 
 void TSingleLogFrame::setCurScreenLayout(const QString &value)
 {
+    trace(QString("setCurScreenLayout %1").arg(value));
     curScreenLayout = value;
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
     ct->screenLayout.setValue(value);
     ct->commonSave(false);
+    if (thisMatchFrame)
+    {
+        thisMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
+    if (otherMatchFrame)
+    {
+        otherMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
+    if (archiveMatchFrame)
+    {
+        archiveMatchFrame->setCurScreenLayout(curScreenLayout);
+    }
 }
 void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent)
 {
@@ -601,7 +628,7 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 }
                 case sctAux:
                 {
-                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++);
+                    StackedInfoFrame *f = new StackedInfoFrame(elementScrollArea, auxInstance++, this);
 
                     f->setCurrentFrameType(StackedInfoFrame::getTrAuxTypeString(scele.auxType));
                     f->setContest(ct);
@@ -810,7 +837,7 @@ void TSingleLogFrame::buildScreenLayout(int slotNo)
         curConfigName = defaultLayoutName();
         ct->screenLayout.setValue(curConfigName);
     }
-    curScreenLayout = curConfigName;
+    setCurScreenLayout(curConfigName);
 
     SC sc = scf.configs[curConfigName];
 
@@ -918,35 +945,73 @@ void TSingleLogFrame::addAllQSOsToBandmap()
         bandmapControlFrame->on_AfterLogContact(contest, cct);
     }
 }
-void TSingleLogFrame::restoreColumns()
+void TSingleLogFrame::restoreQSOTableColumns()
 {
-    QSettings settings;
-    QByteArray state;
+    inRestoreColumns = true;
+    QString fname("./Configuration/LoggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
-    state = settings.value("QSOTable/state").toByteArray();
-    QSOTable->horizontalHeader()->restoreState(state);
-
-    QSOTable->horizontalHeader()->setMinimumSectionSize(10);
-
-// these now subscribe for themselves
-//    thisMatchFrame->restoreColumns();
-//    otherMatchFrame->restoreColumns();
-//    archiveMatchFrame->restoreColumns();
-
-    QFont cf = QApplication::font();
-    QSOTable->horizontalHeader()->setFont(cf);
     columnsChanged = false;
+    inRestoreColumns = false;
+}
+void TSingleLogFrame::saveQSOTableColumns()
+{
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/LoggerTableHeaders.ini");
+        saveHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
 
+        MinosLoggerEvents::SendColumnsChanged();
+    }
 }
 
-void TSingleLogFrame::showQSOs()
+void TSingleLogFrame::on_sectionResized(int, int, int)
+{
+    saveQSOTableColumns();
+}
+
+void TSingleLogFrame::onColumnsChanged()
+{
+    columnsChanged = true;
+}
+void TSingleLogFrame::onQSOGrid_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = QSOTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, QSOTable->horizontalHeader());
+}
+void TSingleLogFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            QSOTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/LoggerTableHeaders.ini");
+            resetHeaderColumns(fname, "QSOTable", curScreenLayout, QSOTable->horizontalHeader());
+        }
+    }
+    saveQSOTableColumns();
+}
+void TSingleLogFrame::onQSOGrid_sectionMoved(int, int, int)
+{
+    saveQSOTableColumns();
+}
+
+void TSingleLogFrame::startNextEntry()
 {
     ScreenContact *p = GJVQSOLogFrame->getPartialContact();
     GJVQSOLogFrame->setPartialContact(nullptr);
 
    NextContactDetailsTimerTimer( );
 
-   restoreColumns();
+   restoreQSOTableColumns();
    columnsChanged = false;
 
    GJVQSOLogFrame->clearCurrentField();
@@ -1020,7 +1085,7 @@ void TSingleLogFrame::on_doColumnChanges(BaseContestLog *b)
 {
     if (b == contest)
     {
-        showQSOs();             // this does a restorePartial
+        startNextEntry();             // (on_doColumnChanges) this does a restorePartial
     }
 }
 
@@ -1044,7 +1109,7 @@ void TSingleLogFrame::NextContactDetailsTimerTimer( )
             bic = Qt::red;
         }
 
-        //we want to put a line across, and colour the bands - need a map of band->colour
+        // we want to put a line across, and colour the bands - need a map of band->colour
         // ideally we want it configurable...
 
         CurrentBandLabel->setText( HtmlFontColour(bic) + "<b><center><nobr><p><big><h1>" + cb);
@@ -1171,7 +1236,7 @@ void TSingleLogFrame::on_MatchStarting(BaseContestLog *ct)
       otherMatchFrame->treeClickIndex = QModelIndex();
       archiveMatchFrame->treeClickIndex = QModelIndex();
 
-      GJVQSOLogFrame->setXferEnabled(false, contest, "Log");
+      GJVQSOLogFrame->setXferEnabled(false, contest, "Logger");
     }
 }
 
@@ -1180,6 +1245,13 @@ MatchTreeItem * TSingleLogFrame::getXferItem()
    // transfer from current match
 
    // copy relevant parts of match contact to screen contact
+    if ( thisMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  thisMatchFrame == xferTree ) )
+    {
+       MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(thisMatchFrame->treeClickIndex.internalPointer());
+
+       return MatchTreeIndex;
+
+    }
    if ( archiveMatchFrame->treeClickIndex.isValid() && ( xferTree == nullptr ||  archiveMatchFrame == xferTree ) )
    {
       MatchTreeItem * MatchTreeIndex = static_cast< MatchTreeItem * >(archiveMatchFrame->treeClickIndex.internalPointer());
@@ -1201,21 +1273,21 @@ MatchTreeItem * TSingleLogFrame::getXferItem()
 void TSingleLogFrame::on_XferPressed(BaseContestLog *c, QString basename)
 {
    // transfer from current match
-   if (!contest || contest->isReadOnly() || c != contest || basename != "Log" )
+   if (!contest || contest->isReadOnly() || c != contest || basename != "Logger" )
       return ;
 
    MatchTreeItem *mi = getXferItem();
 
    transferDetails(mi);
 }
-void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &/*selected*/)
+void TSingleLogFrame::MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename)
 {
-    if (contest == c && basename == "Log")
+    if (contest == c && basename == "Logger")
     {
         switch (m)
         {
         case ThisMatch:
-            //xferTree =  thisMatchFrame;
+            xferTree =  thisMatchFrame;
             break;
 
         case OtherMatch:
@@ -1238,15 +1310,15 @@ void TSingleLogFrame::transferDetails(MatchTreeItem *MatchTreeIndex )
     }
    // needs to be transferred into QSOLogFrame.cpp
    QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
+   BaseMatchContest *mct = MatchTreeIndex->getMatchContest();
 
-   if (mc)
+   if (mct)
    {
-       QSharedPointer<BaseContact> bct = mc->getBaseContact();
-
-       if ( bct )
+       CheckableContact *bct = mc->getBaseContact();
+       if (bct)
        {
-          BaseContestLog *matct = mc->getContactLog();
-          GJVQSOLogFrame->transferDetails( bct, matct );
+           const BaseContestLog *mcl = mc->getContactLog();
+           GJVQSOLogFrame->transferDetails( bct, mcl );
        }
        else
        {
@@ -1322,25 +1394,28 @@ void TSingleLogFrame::QSOTreeSelectContact( QSharedPointer<BaseContact> lct )
 {
    if (lct)
    {
-      EditContact( lct );
+      EditContact( lct.data(), false );
    }
 }
 void TSingleLogFrame::onQSOTable_doubleClicked(const QModelIndex &index)
 {
     QSOTreeSelectContact(contest->pcontactAt( index.row() ));
 }
-void TSingleLogFrame::EditContact( QSharedPointer<BaseContact> lct )
+void TSingleLogFrame::EditContact( CheckableContact *cct, bool nextUnfilled )
 {
-   TQSOEditDlg qdlg( this, false );
-   qdlg.selectContact( contest, lct );
+   TQSOEditDlg qdlg( this, nextUnfilled );
+   qdlg.setContest(contest);
+   qdlg.setFirstContact( cct );
 
-   trace(QString("TSingleLogFrame::EditContact %1").arg(lct->cs.getFullCall()));
+   trace(QString("TSingleLogFrame::EditContact %1").arg(cct->cs.getFullCall()));
 
    qdlg.exec();
 
-   trace(QString("TSingleLogFrame::EditContact finished %1").arg(lct->cs.getFullCall()));
+   trace(QString("TSingleLogFrame::EditContact finished %1").arg(cct->cs.getFullCall()));
 
-   contest->scanContest();
+   contest->scanContest();  // as edit contact can change things mid-contest
+   updateTrees();
+
 
    GJVQSOLogFrame->refreshOps();
    refreshMults();
@@ -1402,9 +1477,7 @@ void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 {
       if (ct == contest)
       {
-         contest->scanContest();
-         updateTrees();
-         NextContactDetailsTimerTimer( );
+         NextContactDetailsTimerTimer( );   // so that the details get updated
       }
 }
 void TSingleLogFrame::refreshMults()
@@ -1422,32 +1495,13 @@ bool TSingleLogFrame::getStanza( unsigned int stanza, QString &stanzaData )
 {
    return contest->getStanza( stanza, stanzaData );
 }
-void TSingleLogFrame::on_sectionResized(int, int, int)
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = QSOTable->horizontalHeader()->saveState();
-    settings.setValue("QSOTable/state", state);
-
-    MinosLoggerEvents::SendColumnsChanged();
-}
-void TSingleLogFrame::onColumnsChanged()
-{
-    columnsChanged = true;
-}
 void TSingleLogFrame::goNextUnfilled()
 {
    QSharedPointer<BaseContact> nuc = contest->findNextUnfilledContact( );
    if ( nuc )
    {
-      TQSOEditDlg qdlg(this, true );
-      qdlg.setContest( contest );
-      qdlg.setFirstContact( nuc );
-      qdlg.exec();
-      contest->scanContest();
-      refreshMults();
-      GJVQSOLogFrame->startNextEntry();
+       trace("Goto next unfiled");
+       EditContact(nuc.data(), true);
    }
    else
    {
@@ -1489,7 +1543,7 @@ void TSingleLogFrame::goSerial( )
 
     if ( cfu )
     {
-       EditContact( cfu );
+       EditContact( cfu.data(), false );
     }
     else
        MinosParameters::getMinosParameters() ->mshowMessage( tr("Serial number %1 not found").arg(serial) );
@@ -1602,16 +1656,9 @@ void TSingleLogFrame::sendKeyerRecord( int fno )
         LogContainer->sendDM->sendKeyerRecord(this, fno);
 }
 
-//void TSingleLogFrame::sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth )
-//{
-//    if (contest && contest == TContestApp::getContestApp() ->getCurrentContest())
-//        LogContainer->sendDM->sendBandMap(this, freq, call, utc, loc, qth);
-//}
-
-
-void TSingleLogFrame::on_BandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange)
+void TSingleLogFrame::on_BandmapMarkFreq(Frequency freq, QString mode)
 {
-    bandmapControlFrame->setBandmapMarkFreq(cs, freq, mode, loc, brg, exchange);
+    bandmapControlFrame->setBandmapMarkFreq(freq, mode);
 }
 
 
@@ -1645,11 +1692,6 @@ void TSingleLogFrame::sendRunOffFreqFlag(Frequency runFreq, bool offRunFreq)
 {
     GJVQSOLogFrame->setRunOffFreqFlag(offRunFreq);
     bandmapControlFrame->setRunOffFreqFlag(runFreq, offRunFreq);
-}
-
-void TSingleLogFrame::on_ZoomMap(bool dir)
-{
-    bandmapControlFrame->updateZoom(dir);
 }
 
 void TSingleLogFrame::sendKeyerTone()
@@ -1740,6 +1782,7 @@ void TSingleLogFrame::on_SetMode(QString m)
             sCurMode = m;
             FKHRigControlFrame->setMode(m);
             GJVQSOLogFrame->modeSentFromRig(m);
+            txVmButtonsFrame->setMode(m);
             bandmapControlFrame->setMode(m);
             bandmapControlFrame->checkLegalFrequencies(sCurFreq);
         }
@@ -1953,24 +1996,6 @@ void TSingleLogFrame::on_SetRadioStatus(QString s)
     }
 }
 
-/*
-
-void TSingleLogFrame::on_SetRadioVolumeState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRadioVolumeState(s);
-    }
-}
-
-void TSingleLogFrame::on_SetRitEnableState(bool s)
-{
-    if ( this == LogContainer->getCurrentLogFrame() )
-    {
-        FKHRigControlFrame->setRitEnableState(s);
-    }
-}
-*/
 //---- Send to RigController
 
 void TSingleLogFrame::sendRigTxVoiceMessage(QString msgNum)

@@ -1,14 +1,14 @@
-#include "base_pch.h"
-
 #include <QThread>
+#include <QSettings>
+#include "AppStartup.h"
+#include "RPCCommandConstants.h"
 #include "cutils.h"
 #include "MinosRPC.h"
-#include "ConfigFile.h"
-#include "rigutils.h"
-#include "BandList.h"
-#include "delayedaction.h"
 #include "RSConfigure.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "RSMainWindow.h"
+#include "rigcontrolcommonconstants.h"
 #include "ui_RSMainWindow.h"
 
 static const char *rigSyncUuid = "RigSync";
@@ -23,9 +23,6 @@ RSMainWindow::RSMainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    connect(&stdinReader,&StdInReader::stdinLine, this, &RSMainWindow::onStdInRead);
-    stdinReader.start();
 
     createCloseEvent();
 
@@ -115,11 +112,6 @@ RSMainWindow::~RSMainWindow()
     delete ui;
 }
 
-void RSMainWindow::onStdInRead(QString cmd)
-{
-    trace(QString("RSMainWindow::onStdInRead %1").arg(cmd));
-    executeStdIn(cmd);
-}
 void RSMainWindow::closeEvent(QCloseEvent *event)
 {
     // and tidy up all loose ends

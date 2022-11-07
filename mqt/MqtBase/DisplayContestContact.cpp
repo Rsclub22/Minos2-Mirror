@@ -6,18 +6,21 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include "TreeUtils.h"
 #include "cutils.h"
 #include "contest.h"
 #include "MinosTestImport.h"
 #include "ScreenContact.h"
 #include "DisplayContestContact.h"
 #include "BandList.h"
+#include "rigcontrolcommonconstants.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+
 //==========================================================================
 DisplayContestContact::DisplayContestContact( BaseContestLog * ct, bool time_now, bool rInit )
       : BaseContact( ct, time_now ),
-      modificationCount( 0 ),
-      logSequence( 0 )
+      modificationCount( 0 )
 {
    BaseContestLog * clp = ct;
 
@@ -100,25 +103,25 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
 {
    //   logSequence = cct.logSequence; // addContact or whatever will already have it correct
    loc = cct.loc;
-   extraText.setValue( cct.extraText );
+   extraText = cct.extraText;
 
    cs = cct.cs;
 
-   timeOn.setValue( cct.timeOn );
-   timeOff.setValue( cct.timeOff );
+   timeOn = cct.timeOn ;
+   timeOff = cct.timeOff ;
 
    reps.setValue( cct.reps );
    serials.setValue( cct.serials );
    repr.setValue( cct.repr );
    serialr.setValue( cct.serialr );
 
-   QSOValid = cct.screenQSOValid;
+   QSOValid = cct.QSOValid;
 
    districtMult = cct.districtMult;
    ctryMult = cct.ctryMult;
    multCount = cct.multCount;
-   forcedMult.setValue( cct.forcedMult );
-   frequency.setValue(cct.frequency);
+   forcedMult = cct.forcedMult ;
+   frequency = cct.frequency;
    rotatorHeading.setValue(cct.rotatorHeading);
    rigName.setValue(cct.rigName);
    bonus = cct.bonus;
@@ -133,11 +136,11 @@ void DisplayContestContact::copyFromArg( ScreenContact &cct )
    newDistrict = cct.newDistrict;
    newCtry = cct.newCtry;
 
-   comments.setValue( cct.comments );
+   comments = cct.comments ;
 
-   contactFlags.setValue( cct.contactFlags );
+   contactFlags = cct.contactFlags ;
 
-   contactScore.setValue( cct.contactScore );
+   contactScore = cct.contactScore;
    bearing = cct.bearing;
    mode.setValue( cct.mode );
    mgmSubmode.setValue( cct.mgmSubmode );
@@ -179,13 +182,13 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.loc.getLoc(), loc.getLoc() ) )
       return true; // i.e. not equal
 
-   if ( stricmpsp( mct.extraText, extraText.getValue() ) )       // we force exchange upper case if dist code
+   if ( stricmpsp( mct.extraText.getValue(), extraText.getValue() ) )       // we force exchange upper case if dist code
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.comments, comments.getValue() ) )
+   if ( strcmpsp( mct.comments.getValue(), comments.getValue() ) )
       return true; // i.e. not equal
 
-   if ( mct.contactFlags != contactFlags.getValue() )
+   if ( mct.contactFlags.getValue() != contactFlags.getValue() )
       return true; // i.e. not equal
 
    if ( strcmpsp( mct.mode, mode.getValue() ) )
@@ -194,10 +197,10 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.mgmSubmode, mgmSubmode.getValue() ) )
       return true; // i.e. not equal
 
-   if ( strcmpsp( mct.forcedMult, forcedMult.getValue() ) )
+   if ( strcmpsp( mct.forcedMult.getValue(), forcedMult.getValue() ) )
       return true; // i.e. not equal
 
-   if (frequency.getValue() != mct.frequency)
+   if (frequency.getValue() != mct.frequency.getValue())
       return true; // i.e. not equal
 
    if (cqResponse.getValue() != mct.cqResponse)
@@ -215,145 +218,29 @@ bool DisplayContestContact::ne(const ScreenContact &mct) const
    if ( strcmpsp( mct.op2, op2.getValue() ) )
       return true; // i.e. not equal
 
-
-//   if ( ( mct.contactScore != contactScore.getValue() ) && ( contactScore.getValue() != -1 ) )
-//      return true;	// not equal
-
    return false;  // i.e. equal
 }
 
-void DisplayContestContact::checkContact( bool inScan)
+int DisplayContestContact::checkContact(bool adddup)
 {
-   // check on country and district. If valid, return true,
-   // having mapped any synonyms to their parents and
-   // saved the pointers.
+    int checkret = CheckableContact::checkContact(adddup);
 
-   int checkret = 0;
-   double dist = 0.0;
+    multCount = 0;
+    newDistrict = false;
+    newCtry = false;
+    locCount = 0;
+    newGLoc = false;
+    newNonGLoc = false;
+    bonus = 0;
+    newBonus = false;
+
+    double dist = getContactScore();    // calculated in CheckableContact
+   bool dupContact = (cs.getValRes() == ERR_DUPCS);    // calculated in CheckableContact
+
    BaseContestLog * clp = contest;
-
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-      return ;
-
-   // calc the bearing and score anyway; otherwise dups get a bearing of -1
-
-   if ( bearing < 0 )
-   {
-      double lon = 0.0;
-      double lat = 0.0;
-      int brg = -1;
-
-      char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
-      if ( v == LOC_OK )
-      {
-         clp->disbeara( lon, lat, dist, brg );
-      }
-      else if (v == LOC_PARTIAL)
-      {
-          clp->disbearc( lon, lat, dist, brg );
-      }
-      bearing = brg;
-   }
-
-   if ( contactFlags.getValue() & NON_SCORING )
-      return ;
-
-   QSOValid = false;             // initially, anyway
-   int csret = cs.getValRes();
-//#warning scanContest may already have set ERR_DUPCS
-   if ( csret != CS_OK && csret != ERR_DUPCS )
-      checkret = ERR_13;
-
-   if ( !checkret )
-   {
-// and if scanContest has set dup, then this won't fire entering a new QSO
-// But it DOES fire when checking on
-      unsigned long valp  = clp->validationPoint;
-      if ( clp->DupSheet.checkCurDup( clp, getLogSequence(), valp, false ) )
-      {
-         cs.setValRes(ERR_DUPCS);
-         checkret = ERR_12;
-      }
-   }
 
    QString band;
    contest->getTxFreqBand(frequency.getValue(), band);
-
-   // search for prefix in country synonym list. Have to allow for e.g. HB0 as a mult
-
-   if ( contactFlags.getValue() & COUNTRY_FORCED )
-   {
-      ctryMult = MultLists::getMultLists() ->getCtryForPrefix( forcedMult.getValue() );
-   }
-   else
-      if ( !checkret )
-      {
-         ctryMult = findCtryPrefix( cs );
-      }
-
-   //   extraText = trimr( extraText );   // needs to be done already
-
-   unsigned short cf = contactFlags.getValue();
-   cf &= ~UNKNOWN_COUNTRY;
-   if ( !checkret && ( clp->countryMult.getValue() || clp->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
-   {
-      cf |= UNKNOWN_COUNTRY;
-   }
-   contactFlags.setValue( cf );
-   if ( clp->districtMult.getValue() && ctryMult )
-   {
-      // if CC_mult and country "has districts" search for the "extra" in the county synonym list
-
-      // check that the district and country agree
-
-      // if the correct parts don't exist, not a valid contact!
-      // NB that the rest of the contact has to be valid as well!
-
-      if ( ctryMult->hasDistricts() )    // continentals dont have counties
-      {
-         districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
-         if ( !districtMult && !( cf & VALID_DISTRICT ) )
-         {
-            checkret = ERR_8;
-         }
-
-         if (
-            !checkret &&       						// no errors
-            !( cf & VALID_DISTRICT ) &&      // ? district forced OK
-            districtMult &&
-            ( districtMult->country1 != ctryMult ) &&     // check district in country
-            ( districtMult->country2 != ctryMult )
-         )
-         {
-            checkret = ERR_8;
-         }
-      }
-      // so all seems OK, or checkret is set to the first error
-   }
-   else
-      if ( !checkret )
-      {
-         districtMult.reset();						// just in case we have changed the type...
-         if ( clp->otherExchange.getValue() )
-         {
-            if ( clp->districtMult.getValue() )
-            {
-               if ( comments.getValue().isEmpty() )
-                  checkret = ERR_21;
-            }
-            else
-               if ( extraText.getValue().isEmpty() )
-                  checkret = ERR_21;
-         }
-      }
-
-
-   if ( checkret )
-      return ;
-
-   QSOValid = true;        // for now
-
-   // same as ScreenContact::Check up to here
 
    if ( districtMult && districtMult->country1)
    {
@@ -390,11 +277,6 @@ void DisplayContestContact::checkContact( bool inScan)
        }
    }
 
-
-   bool dupContact = clp->DupSheet.checkCurDup( clp, clp->validationPoint, 0, true ); // add to duplicates list
-   if (inScan)
-       dupContact = (csret == ERR_DUPCS);
-
    if ( !notValidContact() )
    {
        if (!clp->locatorMandatoryField.getValue())
@@ -415,33 +297,33 @@ void DisplayContestContact::checkContact( bool inScan)
        contactScore.setValue( static_cast<int>(dist) );
    }
 
-   if ( !clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
-      // as it is 1 point.
-   {
-      int cscore = contactScore.getValue();
-      switch ( clp->scoreMode.getValue() )
-      {
-         case PPKM:
-            {
-               if ( contactFlags.getValue() & XBAND )
-               {
-                  cscore = ( cscore + 1 ) / 2;
-               }
-               if (!dupContact)
-                    clp->contestScore += cscore;
-            }
-            break;
-
-         case PPQSO:
-            if ( cscore > 0 && !dupContact)
-               clp->contestScore++;
-            break;
-
-      }
-   }
-
    if (!dupContact)
    {
+       if (!clp->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
+          // as it is 1 point.
+       {
+          int cscore = contactScore.getValue();
+          switch ( clp->scoreMode.getValue() )
+          {
+             case PPKM:
+                {
+                   if ( contactFlags.getValue() & XBAND )
+                   {
+                      cscore = ( cscore + 1 ) / 2;
+                   }
+                   if (!dupContact)
+                        clp->contestScore += cscore;
+                }
+                break;
+
+             case PPQSO:
+                if ( cscore > 0 && !dupContact)
+                   clp->contestScore++;
+                break;
+
+          }
+       }
+
       // now look at the locator list
       QString letters;
       QString numbers;
@@ -534,6 +416,7 @@ void DisplayContestContact::checkContact( bool inScan)
       }
       locCount = multCount - oldMultCount;
    }
+   return checkret;
 }
 
 QString DisplayContestContact::getField( int ACol, const BaseContestLog *const curcon ) const
@@ -546,7 +429,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
    BaseContestLog * clp = contest;
 
    unsigned short cf = contactFlags.getValue();
-   if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+   if ( cf & DONT_PRINT )
    {
       switch ( ACol )
       {
@@ -554,7 +437,7 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
             res = timeOff.getTime( DTGDISP );
             break;
          case egCall:
-            res = ( cf & DONT_PRINT ) ? tr("DELETED") : ( cf & LOCAL_COMMENT ) ? tr("LOCAL COMMENT") : tr("COMMENT FOR ADJUDICATOR");
+            res = tr("DELETED");
             break;
          case egRSTTx:
             res = comments.getValue();
@@ -565,6 +448,9 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
    {
       switch ( ACol )
       {
+          case egDate:
+             res = timeOff.getDate( DTGDISP );
+             break;
          case egTime:
             res = timeOff.getTime( DTGDISP );
             break;
@@ -787,10 +673,14 @@ QString DisplayContestContact::getField( int ACol, const BaseContestLog *const c
           {
               const QChar degreeChar(0260); // octal value
               res = QString("%1%2").arg( brg ).arg(degreeChar);
-              break;
           }
+          break;
       }
-
+      case egOperator:
+      {
+          res = op1.getValue();
+          break;
+      }
       }
    }
    return res;
@@ -801,33 +691,9 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
 
    int itemp;
    if ( mt->getStructArgMemberValue( "lseq", itemp ) )     // should already be done...
-      logSequence = static_cast< unsigned long > (itemp);
+      setLogSequence( static_cast< unsigned long > (itemp));
    mt->getStructArgMemberValueDTG( "uDTG", updtg );
 
-   if ( methodName == "MinosLogComment" )
-   {
-      QString ctimeoff;
-      QString ctimeon;
-      if (mt->getStructArgMemberValueDTG( "logTime", ctimeoff ))
-      {
-        timeOff.setIsoDTG( ctimeoff );
-      }
-      if (mt->getStructArgMemberValueDTG( "QSOStartTime", ctimeon ))
-      {
-        timeOn.setIsoDTG( ctimeon );
-      }
-
-      bool btemp = false;
-      unsigned short cf = contactFlags.getValue();
-      if ( mt->getStructArgMemberValue( "LocalComment", btemp ) )
-         mt->setBit( cf, LOCAL_COMMENT, btemp );
-      if ( mt->getStructArgMemberValue( "dontPrint", btemp ) )
-         mt->setBit( cf, DONT_PRINT, btemp );
-      contactFlags.setInitialValue( cf );
-      mt->getStructArgMemberValue( "comment", comments );
-
-   }
-   else
       if ( methodName == "MinosLogQSO" )
       {
          modificationCount++;
@@ -915,9 +781,10 @@ void DisplayContestContact::processMinosStanza( const QString &methodName, Minos
          mt->getStructArgMemberValue( "cqResponse", cqResponse );
 
          contest->validationPoint = getLogSequence();
-         checkContact(false);                 // processMinosStanza - Do we need to? scanContest will repeat it. Except we push the contact in it's current state into history
+         checkContact(true);                 // processMinosStanza
          QSharedPointer<BaseContact> bc( new BaseContact(*this) );   // this should get it now??
          getHistory().push_back( bc );
+         contest->validationPoint = 0;
       }
 }
 

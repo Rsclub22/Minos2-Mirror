@@ -14,12 +14,10 @@
 #define BANDMAPDATAMODEL_H
 
 #include <QAbstractTableModel>
-#include "clustercommon.h"
-#include "bandmapcommon.h"
-#include "spotbasedata.h"
-#include "cutils.h"
+#include <QSortFilterProxyModel>
 
-const int bandmapColCount = 28;
+#include "spotbasedata.h"
+
 const int BMP_DataStoredRole = Qt::UserRole + 0;
 
 class BandmapDataModel : public QAbstractTableModel
@@ -48,7 +46,7 @@ public:
 
     QSharedPointer<BandmapSpotData> getBandmapDataRow(int row);
 
-    QSharedPointer<BandmapSpotData> rowData;
+    QVector< QSharedPointer<BandmapSpotData> > rowData;
 
     QSharedPointer<BandmapSpotData> getSpotData(int row){return bandmapData[row];};
 
@@ -59,6 +57,7 @@ private:
     QVector< QSharedPointer<BandmapSpotData>>  bandmapData;
 
 
+    void sortBandmapModel();
 };
 
 class BandmapSortFilterProxyModel: public QSortFilterProxyModel

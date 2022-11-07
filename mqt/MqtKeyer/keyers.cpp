@@ -6,13 +6,18 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+
+#include <QDateTime>
+#include "MShowMessageDlg.h"
 #include "cutils.h"
 #include "keyers.h"
 #include "portcon.h"
 #include "VKMixer.h"
 #include "sbdriver.h"
 #include "KeyerJson.h"
+#include "keyerlog.h"
+#include "MTrace.h"
+
 #define TIMER_INTERVAL 55U         // 55-millisecond target interval
 
 //==============================================================================
@@ -29,7 +34,7 @@ static const char * lineModeStrings[] = {
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 5/6 - No Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 5/6"),
-    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/ - Pip"),
+    QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/8 - Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Play 7/8 - No Pip"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Record 7/8"),
     QT_TRANSLATE_NOOP("VoiceKeyer", "Apps - Restart(1)/Close(2)"),
@@ -494,15 +499,16 @@ voiceKeyer::~voiceKeyer()
 
 bool voiceKeyer::docommand( const KeyerCtrl &dvp_ctrl )
 {
+    eMixerSets ems = VKMixer::GetVKMixer()->GetCurrentMixerSet();
    if ( sblog )
    {
-      trace( "docommand(" + QString::number( dvp_ctrl.command ) + ")" );
+      trace( QString("docommand(%1) mixerset is  %2" ).arg(QString::number( dvp_ctrl.command )).arg(VKMixer::GetVKMixer()->getCurrentMixerText()));
    }
    switch ( dvp_ctrl.command )
    {
       case eKEYER_STOPALL:      /* kill audio */
          {
-            if (VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughNoPTT && VKMixer::GetVKMixer()->GetCurrentMixerSet() != emsPassThroughPTT)
+            if (ems != emsPassThroughPTT)
             {
                 // don't kill if we are currently using the microphone - probably just delayed tuning reports
                 SoundSystemDriver::getSbDriver() ->stopall();
@@ -858,7 +864,7 @@ bool voiceKeyer::initialise( const KeyerConfig &keyer, const PortConfig &port )
       {
          trace( "commonkeyer initialised" );
       }
-      return sbInitialise(kconf.sampleRate, kconf.pipTone, kconf.pipVolume, kconf.pipLength, kconf.filterCorner );
+      return sbInitialise(kconf.sampleRate, kconf.pipTone, kconf.pipVolume, kconf.pipLength );
    }
    return false;
 }
@@ -943,10 +949,10 @@ void sbKeyer::sbTickEvent()           // this will often be an interrupt routine
       currentKeyer->checkControls();   // which we are a base class of...
    }
 }
-bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength, int filterCorner )
+bool sbKeyer::sbInitialise( unsigned int rate, int pipTone, int pipVolume, int pipLength )
 {
    QString errmess;
-   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength ,filterCorner ) )
+   if ( !SoundSystemDriver::getSbDriver() ->sbdvp_init("", "", errmess, rate, pipTone, pipVolume, pipLength  ) )
    {
       trace( "sbdvp_init failed! " + errmess );
       return false;

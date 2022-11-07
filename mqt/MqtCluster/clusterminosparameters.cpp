@@ -1,3 +1,5 @@
+#include "MShowMessageDlg.h"
+#include "MMessageDialog.h"
 #include "clusterminosparameters.h"
 
 static ClusterMinosParameters mp;

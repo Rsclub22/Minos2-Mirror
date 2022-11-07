@@ -18,8 +18,6 @@ win32:RC_ICONS += ../MinosServer.ico
 
 win32:LIBS += -lws2_32
 
-#PRECOMPILED_HEADER = minos_pch.h
-
 SOURCES += main.cpp\
     MinosLink.cpp \
     MServer.cpp \
@@ -33,7 +31,6 @@ SOURCES += main.cpp\
     ServerDetails.cpp
 
 HEADERS  += \
-    minos_pch.h \
     MinosLink.h \
     MServer.h \
     MServerPubSub.h \

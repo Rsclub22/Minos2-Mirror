@@ -22,7 +22,7 @@
 #ifndef TCALENDARFORM_H
 #define TCALENDARFORM_H
 
-#include "base_pch.h"
+#include <QDialog>
 #include "Calendar.h"
 #include "CalendarList.h"
 

@@ -11,7 +11,9 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #include "bandmapdatamodel.h"
-#include "rigutils.h"
+#include "clustercommon.h"
+#include "cutils.h"
+#include "ContestApp.h"
 
 // Note this is being used by a custom view with no horizontal headers.
 
@@ -55,12 +57,8 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
 
     int col = index.column();
 
-//    BandmapData* bandmapSpot = new BandmapData();
-
     if (role == Qt::DisplayRole)
     {
-
-
         int row = index.row();
         if (row < 0 && row >= bandmapData.size())
         {
@@ -82,12 +80,12 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = bandmapSpot->getBand();
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (bandmapSpot->getDxCallWorked() )
                 {
                     d = HtmlFontColour(CALLSIGN_WORKED_COLOUR);
                 }
                 d = d + bandmapSpot->getDxCallStr();
-                if (bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (bandmapSpot->getDxCallWorked() )
                 {
                     d = d + HtmlFontColour(NOT_WORKED_COLOUR);
                 }
@@ -98,11 +96,11 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
             break;
 
             case DXLOC_COL_NUM:
-                if (bandmapSpot->getDxLocatorWorked() == BOOL_NO && bandmapSpot->getDxCallWorked() == BMP_BOOL_YES)
+                if (!bandmapSpot->getDxLocatorWorked() && bandmapSpot->getDxCallWorked())
                 {
                     d = HtmlFontColour(NOT_WORKED_COLOUR);
                 }
-                else if (bandmapSpot->getDxLocatorWorked() == BMP_BOOL_YES)
+                else if (bandmapSpot->getDxLocatorWorked())
                 {
                     d = HtmlFontColour(LOCATOR_WORKED_COLOUR);
                 }
@@ -110,8 +108,6 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = d + bandmapSpot->getDxLocator() + HtmlFontColour(NOT_WORKED_COLOUR);
             break;
             case DXDIST_COL_NUM:
-                //d = HtmlFontColour(NOT_WORKED_COLOUR);
-                //d = d + bandmapSpot->dxDist;
                 d = bandmapSpot->getDxDist();
             break;
             case DXBRG_COL_NUM:
@@ -130,31 +126,31 @@ QVariant BandmapDataModel::data(const QModelIndex &index, int role) const
                 d = QString::number(bandmapSpot->getRxTime());
             break;
             case SPOT_TYPE_COL_NUM:
-                d = bandmapSpot->getSpotType();
+                d = QChar(bandmapSpot->getSpotType());
             break;
             case ROT_BEARING_COL_NUM:
                 d = bandmapSpot->getRotBrg() + QChar('R');
             break;
             case ROT_CONNECTED_COL_NUM:
-                d = bandmapSpot->getRotConnected();
+                d = QChar(bandmapSpot->getRotConnected());
             break;
             case RUN_MODE_ON_COL_NUM:
-                d = bandmapSpot->getRunModeOn();
+                d = QChar(bandmapSpot->getRunModeOn());
             break;
             case OFF_RUN_FREQ_COL_NUM:
-                d = bandmapSpot->getOffRunFreq();
+                d = QChar(bandmapSpot->getOffRunFreq());
             break;
             case CQ_RESPONSE_COL:
-                d = bandmapSpot->getCqResponse();
+                d = QChar(bandmapSpot->getCqResponse());
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = bandmapSpot->getDxLocatorIsFromNode();
+                d = QChar(bandmapSpot->getDxLocatorIsFromNode());
             break;
             case DX_DISTRICT_COL_NUM:
                 d = bandmapSpot->getDistrict();
             break;
             case DX_DISTRICT_WORKED_COL_NUM:
-                d = bandmapSpot->getDistrictWorked();
+                d = QChar(bandmapSpot->getDistrictWorked());
             break;
             default:
                 d = "";
@@ -355,31 +351,20 @@ bool BandmapDataModel::setData(const QModelIndex & index, const QVariant & value
                 return false;
 
         }
-
-
-        //bandmapData.replace(row, bandmapSpot);    // not needed as bandmapspot points to the data anyway
         emit dataChanged(index, index);
-
-
         return true;
     }
-
-
-        return false;
+    return false;
 }
 
 
 
 // NOTE! This needs modification of the for loop and rowData to trully support multiple rows!!
-bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
+void BandmapDataModel::sortBandmapModel()
 {
-    Q_UNUSED(index)
+    bool invertBandmap = false;
+    TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
 
-    beginInsertRows(QModelIndex(), row , row + count - 1);
-    for (int i = 0; i < count; i++)
-    {
-        bandmapData.insert(row , rowData);
-    }
     std::sort(bandmapData.begin(), bandmapData.end(),
               [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
                 {
@@ -387,9 +372,28 @@ bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
                     {
                         return a->getDxCall() < b->getDxCall();
                     }
+                    if (invertBandmap)
+                    {
+                        return b->getFreq() < a->getFreq();
+                    }
                     return a->getFreq() < b->getFreq();
                 }
     );
+
+}
+
+bool BandmapDataModel::insertRows(int row, int count, const QModelIndex &index)
+{
+    Q_UNUSED(index)
+
+    beginInsertRows(QModelIndex(), row , row + count - 1);
+    for (int i = 0; i < count; i++)
+    {
+        bandmapData.insert(row , rowData[i]);
+    }
+    rowData.clear();
+
+    sortBandmapModel();
 
     endInsertRows();
     return true;
@@ -435,16 +439,7 @@ void BandmapDataModel::sortModel()
 {
     beginResetModel();
 
-    std::sort(bandmapData.begin(), bandmapData.end(),
-              [=](const QSharedPointer<BandmapSpotData> a, const QSharedPointer<BandmapSpotData> b)->bool
-                {
-                    if (a->getFreq() == b->getFreq())
-                    {
-                        return a->getDxCall() < b->getDxCall();
-                    }
-                    return a->getFreq() < b->getFreq();
-                }
-    );
+    sortBandmapModel();
 
     endResetModel();
 }
@@ -466,23 +461,13 @@ bool BandmapSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIn
     QSharedPointer<BandmapSpotData> spotData = cgm->getBandmapDataRow(sourceRow);
 
 
-    QString call = cgm->data(cgm->index(sourceRow, DXSPOT_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
-    QString loc = cgm->data(cgm->index(sourceRow, DXLOC_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString spotterCall = cgm->data(cgm->index(sourceRow, SPOTTER_CALL_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString spotterLoc = cgm->data(cgm->index(sourceRow, SPOTTER_LOC_COL_NUM ),  BMP_DataStoredRole).toString();
-//    QString comment = cgm->data(cgm->index(sourceRow, COMMENT_COL_NUM ),  BMP_DataStoredRole).toString();
+    QString call = spotData->getDxCall().getFullCall();
+    QString loc = spotData->getDxLocator();
 
     if (call.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
     if (loc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
         return true;
-
-//    if (spotterCall.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
-//    if (spotterLoc.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
-//    if (comment.indexOf(filterString, 0, Qt::CaseInsensitive) >= 0)
-//        return true;
 
     return false;
 }
@@ -496,6 +481,8 @@ void BandmapSortFilterProxyModel::setFilterString(QString f)
 bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
                       const QModelIndex &right) const
 {
+    // we don't really need this - we don't use the proxy for sorting
+
     //Model Indices are to the SOURCE model
 
     BandmapDataModel *cgm = dynamic_cast<BandmapDataModel *>(sourceModel());
@@ -503,20 +490,26 @@ bool BandmapSortFilterProxyModel::lessThan(const QModelIndex &left,
     int lrow = left.row();
     int rrow = right.row();
 
+    QSharedPointer<BandmapSpotData> spotData1 = cgm->getBandmapDataRow(lrow);
+    QSharedPointer<BandmapSpotData> spotData2 = cgm->getBandmapDataRow(rrow);
 
-    Frequency ws1;
-    Frequency ws2;
-    ws1 = qvariant_cast<Frequency>(cgm->data(left, BMP_DataStoredRole));
-    ws2 = qvariant_cast<Frequency>(cgm->data(right, BMP_DataStoredRole));
+    Frequency ws1 = spotData1->getFreq();
+    Frequency ws2 = spotData2->getFreq();
 
     if (ws1 == ws2)
     {
-        QString ss1 = cgm->data(createIndex(lrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
-        QString ss2 = cgm->data(createIndex(rrow, DXSPOT_CALL_COL_NUM), BMP_DataStoredRole).toString();
+        QString ss1 = spotData1->getDxCallStr();
+        QString ss2 = spotData2->getDxCallStr();
         return ss1 < ss2;
     }
     else
     {
+        bool invertBandmap = false;
+        TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpBandmapInvert, invertBandmap);
+        if (invertBandmap)
+        {
+            return ws2 < ws1;
+        }
         return ws1 < ws2;
     }
 

@@ -10,13 +10,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "rotatorfactory.h"
+#include <QFileInfo>
 #include "hamlibRotcontrol.h"
-
 
 #if defined (WIN32)
 #include "pstRotControl.h"
 #endif
+#include "MTrace.h"
+#include "rotatorfactory.h"
 
 RotatorFactory::RotatorFactory(bool tracecommFlag, QObject *parent) : QObject(parent)
 {
@@ -125,6 +126,6 @@ void RotatorFactory::checkPstRotatorExists(QString fileName, bool &fileExists)
 
     trace(QString("looking for PstRotator here %1").arg(fileName));
     fileExists = QFileInfo::exists(fileName) && QFileInfo(fileName).isFile();
-    trace(QString("PstRotator found here %1 = %2").arg(fileName).arg(fileExists ? "Yes" : "No"));
+    trace(QString("PstRotator found here %1 = %2").arg(fileName, fileExists ? "Yes" : "No"));
 
 }

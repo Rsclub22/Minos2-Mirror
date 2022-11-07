@@ -210,43 +210,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="123"/>
-        <location filename="../clustermainwindow.cpp" line="3115"/>
+        <location filename="../clustermainwindow.cpp" line="122"/>
+        <location filename="../clustermainwindow.cpp" line="3098"/>
         <source>Minos Cluster Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="210"/>
+        <location filename="../clustermainwindow.cpp" line="209"/>
         <source>Always loads last saved settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="455"/>
+        <location filename="../clustermainwindow.cpp" line="454"/>
         <source>Cluster</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="456"/>
+        <location filename="../clustermainwindow.cpp" line="455"/>
         <source>Please confirm you want to delete all the spots?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="566"/>
+        <location filename="../clustermainwindow.cpp" line="565"/>
         <source>Disconnect Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="567"/>
+        <location filename="../clustermainwindow.cpp" line="566"/>
         <source>Connect to Node - Disconnect Timeout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="603"/>
+        <location filename="../clustermainwindow.cpp" line="602"/>
         <source>Connect to Cluster Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="604"/>
+        <location filename="../clustermainwindow.cpp" line="603"/>
         <source>Personal Data missing.
 User Name: %1
 User Callsign: %2
@@ -256,104 +256,104 @@ Do you want to enter\change your details?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="640"/>
+        <location filename="../clustermainwindow.cpp" line="639"/>
         <source>Connected to: %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="641"/>
+        <location filename="../clustermainwindow.cpp" line="640"/>
         <source>Connection Established with host %1 %2:%3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="650"/>
+        <location filename="../clustermainwindow.cpp" line="649"/>
         <source>Connection Error: Error Code %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="651"/>
+        <location filename="../clustermainwindow.cpp" line="650"/>
         <source>Connection failed error %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="660"/>
+        <location filename="../clustermainwindow.cpp" line="659"/>
         <source>Login Start - Send logon message
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="665"/>
+        <location filename="../clustermainwindow.cpp" line="664"/>
         <source>Logging in with callsign %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="671"/>
+        <location filename="../clustermainwindow.cpp" line="670"/>
         <source>Logged Out of node  %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="678"/>
+        <location filename="../clustermainwindow.cpp" line="677"/>
         <source>Disconnected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="896"/>
+        <location filename="../clustermainwindow.cpp" line="895"/>
         <source>handleCmdFile: Command file found - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="913"/>
+        <location filename="../clustermainwindow.cpp" line="912"/>
         <source>handleCmdFile: Command File missing - %1!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="921"/>
+        <location filename="../clustermainwindow.cpp" line="920"/>
         <source>handleCmdFile: Sending Commands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="936"/>
+        <location filename="../clustermainwindow.cpp" line="935"/>
         <source>handleCmdFile: Finished sending Commands</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="943"/>
+        <location filename="../clustermainwindow.cpp" line="942"/>
         <source>handleCmdFile: Command file empty %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1874"/>
+        <location filename="../clustermainwindow.cpp" line="1873"/>
         <source>No spots will be sent to the log - please check one of the boxes!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="1921"/>
+        <location filename="../clustermainwindow.cpp" line="1920"/>
         <source>Sending command - Not logged in  - %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2369"/>
+        <location filename="../clustermainwindow.cpp" line="2352"/>
         <source>Cluster %1 User Command Clear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="2370"/>
+        <location filename="../clustermainwindow.cpp" line="2353"/>
         <source>Do you really want to clear cluster %1 user command number:%2?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3115"/>
+        <location filename="../clustermainwindow.cpp" line="3098"/>
         <source>Minos Cluster
 Copyright D Balharrie G8FKH/M0DGB 2016 - 2020</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3121"/>
+        <location filename="../clustermainwindow.cpp" line="3104"/>
         <source>Cluster Node User Command Shortcut Keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clustermainwindow.cpp" line="3122"/>
+        <location filename="../clustermainwindow.cpp" line="3105"/>
         <source>VHF/UHF User Commands
 
 Send Cmd
@@ -375,26 +375,26 @@ C - Clear cmd
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../setupdialog.cpp" line="130"/>
+        <location filename="../setupdialog.cpp" line="520"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../setupdialog.cpp" line="131"/>
+        <location filename="../setupdialog.cpp" line="521"/>
+        <source>Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../setupdialog.cpp" line="132"/>
         <location filename="../setupdialog.cpp" line="522"/>
-        <source>Name</source>
+        <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../setupdialog.cpp" line="133"/>
         <location filename="../setupdialog.cpp" line="523"/>
-        <source>Address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setupdialog.cpp" line="134"/>
-        <location filename="../setupdialog.cpp" line="524"/>
-        <source>Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../setupdialog.cpp" line="135"/>
-        <location filename="../setupdialog.cpp" line="525"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -402,47 +402,47 @@ C - Clear cmd
 <context>
     <name>SentSpotDataModel</name>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="44"/>
+        <location filename="../sentSpotdatamodel.cpp" line="41"/>
         <source>UTC</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="46"/>
+        <location filename="../sentSpotdatamodel.cpp" line="43"/>
         <source>Freq</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="48"/>
+        <location filename="../sentSpotdatamodel.cpp" line="45"/>
         <source>Dx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="50"/>
+        <location filename="../sentSpotdatamodel.cpp" line="47"/>
         <source>Loc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="52"/>
+        <location filename="../sentSpotdatamodel.cpp" line="49"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="54"/>
+        <location filename="../sentSpotdatamodel.cpp" line="51"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="56"/>
+        <location filename="../sentSpotdatamodel.cpp" line="53"/>
         <source>Reason</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="149"/>
+        <location filename="../sentSpotdatamodel.cpp" line="146"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../sentSpotdatamodel.cpp" line="153"/>
+        <location filename="../sentSpotdatamodel.cpp" line="150"/>
         <source>Failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -530,7 +530,7 @@ C - Clear cmd
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../setupdialog.cpp" line="162"/>
+        <location filename="../setupdialog.cpp" line="160"/>
         <source>%1 minutes has been entered
 The time to live must be between %2 minutes and %3 minutes</source>
         <translation type="unfinished"></translation>

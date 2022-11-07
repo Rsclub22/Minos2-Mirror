@@ -1,13 +1,14 @@
 include($$PWD/../mqt.pri)
 
-QT       += core gui network widgets
+QT       += core gui network widgets charts
 
 TEMPLATE = lib
 CONFIG += staticlib
 Target = KeyerBase
 
-INCLUDEPATH += $$PWD/../rtaudio
-INCLUDEPATH += $$PWD/../Chunkware
+INCLUDEPATH += ../rtaudio
+INCLUDEPATH += ../Chunkware
+INCLUDEPATH += ../filter_c
 INCLUDEPATH += ../MqtUtils
 INCLUDEPATH += ../MqtBase
 INCLUDEPATH += ../XMPPLib
@@ -19,12 +20,17 @@ unix:!macos{DEFINES += __LINUX_ALSA__}
 win32{DEFINES += __WINDOWS_DS__}
 
 SOURCES += \
+    ../filter_c/adis_filter.c \
     ../rtaudio/RtAudio.cpp \
     ../Chunkware/SimpleComp.cpp \
     ../Chunkware/SimpleCompProcess.inl \
     ../Chunkware/SimpleEnvelope.cpp \
+    CompressorParams.cpp \
     KeyerJson.cpp \
+    MqtLogCompressor.cpp \
+    SliderSpinner.cpp \
     VKMixer.cpp \
+    WaveShowDialog.cpp \
     keyerBase.cpp \
     levelmeter.cpp \
     riff.cpp \
@@ -32,6 +38,7 @@ SOURCES += \
     soundsys.cpp
 
 HEADERS += \
+    ../filter_c/adis_filter.h \
     ../rtaudio/RtAudio.h \
     ../rtaudio/include/dsound.h \
     ../rtaudio/include/ginclude.h \
@@ -41,8 +48,12 @@ HEADERS += \
     ../Chunkware/SimpleEnvelope.h \
     ../Chunkware/SimpleGain.h \
     ../Chunkware/SimpleHeader.h \
+    CompressorParams.h \
     KeyerJson.h \
+    MqtLogCompressor.h \
+    SliderSpinner.h \
     VKMixer.h \
+    WaveShowDialog.h \
     ddc.h \
     keyctrl.h \
     keyerBase.h \
@@ -57,3 +68,7 @@ unix {
     target.path = $$[QT_INSTALL_PLUGINS]/generic
 }
 !isEmpty(target.path): INSTALLS += target
+
+FORMS += \
+    SliderSpinner.ui \
+    WaveShowDialog.ui

@@ -2,7 +2,8 @@
 #define QRZDISPLAYFRAME_H
 
 #include <QFrame>
-#include "base_pch.h"
+#include "MinosRPC.h"
+#include "XMPPRPCObj.h"
 #include "cutils.h"
 #include "qrzServerCommon.h"
 
@@ -12,6 +13,7 @@ class QrzDisplayFrame;
 }
 
 class QrzDisplayServerRpc;
+class BaseContestLog;
 
 
 class QrzDisplayFrame : public QFrame

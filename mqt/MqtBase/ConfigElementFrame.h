@@ -1,7 +1,7 @@
 #ifndef CONFIGELEMENTFRAME_H
 #define CONFIGELEMENTFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
 #include "ConfigFile.h"
 
 namespace Ui {

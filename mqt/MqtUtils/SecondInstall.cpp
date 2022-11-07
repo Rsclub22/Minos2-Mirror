@@ -1,5 +1,33 @@
 #include "SecondInstall.h"
 
+int SecondInstall::installation = -1;
+void SecondInstall::parseSecondInstall(int argc, char *argv[])
+{
+    installation = -1;
+    for (int i = 0; i < argc; i++)
+    {
+        QString arg(argv[i]);
+        if (arg.compare("-1") == 0 || arg.compare("/1") == 0)
+        {
+            installation = 1;
+            break;
+        }
+        if (arg.compare( "-2") == 0 || arg.compare("/2") == 0)
+        {
+            installation = 2;
+            break;
+        }
+    }
+}
+
+QString SecondInstall::getSecondInstallSwitch()
+{
+    if (installation <= 0)
+    {
+        return QString();
+    }
+    return QString("-%1").arg(installation);
+}
 SecondInstall::SecondInstall()
 {
 
@@ -7,6 +35,18 @@ SecondInstall::SecondInstall()
 
 QString SecondInstall::getSecondInstallText()
 {
+    switch(installation)
+    {
+    case 1:
+        return QString();
+        break;
+    case 2:
+        return "Second Installation";
+        break;
+    default:
+        break;
+    }
+
 #if defined SECONDINSTALL
     return "Second Installation";
 #else
@@ -16,6 +56,17 @@ QString SecondInstall::getSecondInstallText()
 
 QString SecondInstall::getZConfName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "minosServer";
+        break;
+    case 2:
+        return "minosBetaServer";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "minosBetaServer";
 #else
@@ -24,6 +75,17 @@ QString SecondInstall::getZConfName()
 }
 QString SecondInstall::getOrgName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "Minos2Qt";
+        break;
+    case 2:
+        return "Minos2QtBeta";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "Minos2QtBeta";
 #else
@@ -32,6 +94,18 @@ QString SecondInstall::getOrgName()
 }
 QString SecondInstall::getSingleAppLoggerName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "MinosLogger";
+        break;
+    case 2:
+        return "MinosLoggerBeta";
+        break;
+    default:
+        break;
+    }
+
 #if defined SECONDINSTALL
     return "MinosLoggerBeta";
 #else
@@ -40,6 +114,17 @@ QString SecondInstall::getSingleAppLoggerName()
 }
 QString SecondInstall::getSingleAppRouterName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "MinosServer";
+        break;
+    case 2:
+        return "MinosServerBeta";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "MinosServerBeta";
 #else
@@ -48,6 +133,17 @@ QString SecondInstall::getSingleAppRouterName()
 }
 QString SecondInstall::getRouterEventName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "MinosQtServer";
+        break;
+    case 2:
+        return "MinosQtServerBeta";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "MinosQtServerBeta";
 #else
@@ -57,6 +153,18 @@ QString SecondInstall::getRouterEventName()
 
 QString SecondInstall::getSingleAppLoggerDescription()
 {
+    switch(installation)
+    {
+    case 1:
+        return "Minos Logger";
+        break;
+    case 2:
+        return "Minos Logger (Beta)";
+        break;
+    default:
+        break;
+    }
+
 #if defined SECONDINSTALL
     return "Minos Logger (Beta)";
 #else
@@ -65,6 +173,17 @@ QString SecondInstall::getSingleAppLoggerDescription()
 }
 QString SecondInstall::getSingleAppRouterDescription()
 {
+    switch(installation)
+    {
+    case 1:
+        return "Minos Server";
+        break;
+    case 2:
+        return "Minos Server (Beta)";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "Minos Server (Beta)";
 #else
@@ -74,6 +193,17 @@ QString SecondInstall::getSingleAppRouterDescription()
 
 qint16 SecondInstall::getClientPort()
 {
+    switch(installation)
+    {
+    case 1:
+        return 7777;
+        break;
+    case 2:
+        return 7775;
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return 7775;
 #else
@@ -82,6 +212,17 @@ qint16 SecondInstall::getClientPort()
 }
 qint16 SecondInstall::getRouterPort()
 {
+    switch(installation)
+    {
+    case 1:
+        return 7778;
+        break;
+    case 2:
+        return 7776;
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return 7776;
 #else
@@ -90,6 +231,17 @@ qint16 SecondInstall::getRouterPort()
 }
 QString SecondInstall::getLineMapFileName()
 {
+    switch(installation)
+    {
+    case 1:
+        return "LineMapFile";
+        break;
+    case 2:
+        return "LineMapBetaFile";
+        break;
+    default:
+        break;
+    }
 #if defined SECONDINSTALL
     return "LineMapBetaFile";
 #else

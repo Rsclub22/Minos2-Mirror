@@ -1,35 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// $Id$
-//
-// PROJECT NAME 		Minos Amateur Radio Control and Logging System
-//
-// COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
-//
-/////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+#ifndef MAPWRAPPER_H
+#define MAPWRAPPER_H
 
-#ifndef XMPP_pchH
-#define XMPP_pchH
-
-#include "mqtUtils_pch.h"
-
-#include "ServerEvent.h"
-#include "XMPPEvents.h"
-
-#include "Dispatcher.h"
-
-#include "XMPPRPCParams.h"
-#include "XMPPStanzas.h"
-#include "XMPPRPCObj.h"
-#include "RPCPubSub.h"
-
-#include "RPCCommandConstants.h"
-#include "MinosRPC.h"
-#include "PubSubClient.h"
-
-#include "MinosConnection.h"
-
+#include <QSharedPointer>
 template <class itemtype>
 class MapWrapper
 {
@@ -71,9 +43,17 @@ public:
     }
 
 };
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#define qHashRet size_t
+#else
+#define qHashRet uint
+#endif
+
 template <class itemtype>
-uint qHash(const MapWrapper<itemtype> &m)
+qHashRet qHash(const MapWrapper<itemtype> &m)
 {
     return m.wt->qHash();
 }
-#endif
+
+#endif // MAPWRAPPER_H

@@ -44,7 +44,6 @@
 
 #include <QPainter>
 #include <QTimer>
-#include <QDebug>
 
 
 // Constants

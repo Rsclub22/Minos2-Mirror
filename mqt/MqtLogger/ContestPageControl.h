@@ -1,6 +1,7 @@
 #ifndef CONTESTPAGECONTROL_H
 #define CONTESTPAGECONTROL_H
 
+#include <QMap>
 #include "qlogtabwidget.h"
 
 class BaseContestLog;

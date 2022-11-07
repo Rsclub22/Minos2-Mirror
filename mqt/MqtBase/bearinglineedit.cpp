@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include "rotatorcommon.h"
 #include "bearinglineedit.h"
 
 // we could remove the remove char code as it is now removed before display...

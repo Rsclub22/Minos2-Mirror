@@ -1,7 +1,7 @@
 #ifndef TABOUTBOX_H
 #define TABOUTBOX_H
 
-#include "base_pch.h"
+#include <QDialog>
 
 namespace Ui {
 class TAboutBox;
@@ -11,7 +11,6 @@ class TAboutBox : public QDialog
 {
     Q_OBJECT
 
-    static QString welcomeText;
     static QString creditsText;
     static QString MinosText;
 

@@ -17,12 +17,12 @@
 
 #include <QObject>
 #include <QFrame>
+#include <QSortFilterProxyModel>
+#include <QTimer>
 #include "dxspotdatamodel.h"
-#include "base_pch.h"
-#include "clusterClientServer.h"
-#include "clusterclientfilterdialog.h"
 #include "clustercommon.h"
-#include "MinosLoggerEvents.h"
+#include "cutils.h"
+#include "rigmemcommondata.h"
 
 
 namespace Ui {
@@ -31,14 +31,9 @@ namespace Ui {
 
 enum ClusterTabIndex {DXSPOT_TAB, SEARCH_TAB, CALLSIGN_TAB, LOCATOR_TAB};
 
-
-
 class ClusterClientFrame;
-
-
-
-
-
+class BaseContestLog;
+class QTableView;
 
 class DxSpotSortFilterProxyModel : public QSortFilterProxyModel
 {

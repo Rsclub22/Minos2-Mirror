@@ -7,14 +7,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
 #include <QHostInfo>
+#include "AppStartup.h"
 #include "cutils.h"
+#include "MTrace.h"
 
-#include "SendRPCDM.h"
+#include "RPCPubSub.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"
-#include "rigutils.h"
+#include "SendRPCDM.h"
 //---------------------------------------------------------------------------
 TSendDM::TSendDM(QWidget* Owner )
     : QObject( Owner )
@@ -962,18 +963,31 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
     {
         QSharedPointer<RPCParam> psLogName;
         QSharedPointer<RPCParam>psStanza;
+        QSharedPointer<RPCParam>psStanzaCount;
         RPCArgs *args = mro->getCallArgs();
 
         QString call = mro->getMethodName();
-        if (call == rpcConstants::loggerStanzaRequest)
+        if (call == rpcConstants::loggerTakeFocus)
+        {
+            // attempt to steal focus
+            MinosConfigEvents::sendStealFocus();
+        }
+        else if (call == rpcConstants::loggerStanzaRequest)
         {
             if ( args->getStructArgMember( 0, "LogName", psLogName )
-                 && args->getStructArgMember( 0, "Stanza", psStanza ) )
+                 && args->getStructArgMember( 0, "Stanza", psStanza )
+                 )
             {
                 QString LogName;
                 int Stanza;
-                if ( psLogName->getString( LogName ) && psStanza->getInt( Stanza ) )
+                if ( psLogName->getString( LogName ) && psStanza->getInt( Stanza )  )
                 {
+                    // cope with old Monitor code - count may be missing
+                    int StanzaCount = 1;
+                    if (args->getStructArgMember( 0, "Count", psStanzaCount ))
+                    {
+                        psStanzaCount->getInt( StanzaCount );
+                    }
                     mro->clearCallArgs();
 
 
@@ -983,36 +997,39 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                     // we publish the stanza count; it is up to the monitor to ensure
                     // it has a full set
 
-                    RPCGeneralClient rpc(rpcConstants::loggerStanzaResponse);
-                    QSharedPointer<RPCParam>st(new RPCParamStruct);
-                    st->addMember( LogName, "LogName" );
-                    st->addMember( Stanza, "Stanza" );
-                    rpc.getCallArgs() ->addParam( st );
-
-                    // we need to start pushing stanzas from the logfile - we can
-                    // only really process a log sequentially
-                    // Once it has all been pushed then later stanzas need
-                    // to go to all subscribers.
-
-                    // SO it is more in the nature of a "subscribe" but no
-                    // get the stanza data from the log and add it as a string
-                    TSingleLogFrame * lf = LogContainer ->findContest( LogName );
-                    if ( lf )
+                    for(int i = 0; callOK && i < StanzaCount; i++)
                     {
-                        QString StanzaData;
-                        callOK = lf->getStanza( static_cast<unsigned int>(Stanza), StanzaData );
-                        if ( callOK )
+                        RPCGeneralClient rpc(rpcConstants::loggerStanzaResponse);
+                        QSharedPointer<RPCParam>st(new RPCParamStruct);
+                        st->addMember( LogName, "LogName" );
+                        st->addMember( Stanza + i, "Stanza" );
+                        rpc.getCallArgs() ->addParam( st );
+
+                        // we need to start pushing stanzas from the logfile - we can
+                        // only really process a log sequentially
+                        // Once it has all been pushed then later stanzas need
+                        // to go to all subscribers.
+
+                        // SO it is more in the nature of a "subscribe" but no
+                        // get the stanza data from the log and add it as a string
+                        TSingleLogFrame * lf = LogContainer ->findContest( LogName );
+                        if ( lf )
                         {
-                            st->addMember( StanzaData, "StanzaData" );
+                            QString StanzaData;
+                            callOK = lf->getStanza( static_cast<unsigned int>(Stanza + i), StanzaData );
+                            if ( callOK )
+                            {
+                                st->addMember( StanzaData, "StanzaData" );
+                            }
                         }
-                    }
-                    else
-                    {
-                        callOK = false;
-                    }
+                        else
+                        {
+                            callOK = false;
+                        }
 
-                    st->addMember( callOK, "LoggerResult" );
-                    rpc.queueCall( from );
+                        st->addMember( callOK, "LoggerResult" );
+                        rpc.queueCall( from );
+                    }
 
                 }
             }

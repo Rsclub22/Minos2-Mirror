@@ -10,7 +10,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <QDebug>
+#include "clustercommon.h"
 #include "cutils.h"
 #include "rigutils.h"
 #include "htmldelegate.h"
@@ -99,10 +99,6 @@ QVariant DxSpotDataModel::headerData(int section, Qt::Orientation orientation, i
        {
            if (delegate)
            {
-               // BUT the headers aren't drawn using the delegate, so this
-               // all fails to work
-
-               // Do we lose the vertical header?
                QString s = "Memxx";
                QSize r = delegate->docSize(s);
                return r;
@@ -179,7 +175,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = removeHundredHzAndHzDigits(dxSpot->getFreq().convertFreqStrDisp());
             break;
             case DXSPOT_CALL_COL_NUM:
-                if (dxSpot->getDxCallWorked() == BOOL_YES)
+                if (dxSpot->getDxCallWorked())
                 {
                     QColor colour = CALLSIGN_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
@@ -188,7 +184,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = d + dxSpot->getDxCallStr();
             break;
             case DXLOC_COL_NUM:
-                if (dxSpot->getDxLocatorWorked() == BOOL_YES)
+                if (dxSpot->getDxLocatorWorked())
                 {
                     QColor colour = LOCATOR_WORKED_COLOUR;
                     d = HtmlFontColour(colour);
@@ -232,7 +228,7 @@ QVariant DxSpotDataModel::data(const QModelIndex &index, int role) const
                 d = dxSpot->getBand();
             break;
             case DXLOC_FROM_NODE_FLAG_COL_NUM:
-                d = dxSpot->getDxLocatorIsFromNode();
+                d = QChar(dxSpot->getDxLocatorIsFromNode());
             break;
             case DXCLUSTER_SPOT_TYPE:
                 d = dxSpot->getClusterSpotType();

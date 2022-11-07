@@ -13,13 +13,24 @@
 #include <QMutexLocker>
 #include <QTextStream>
 //---------------------------------------------------------------------------
-#include "fileutils.h"
 
 class CsGuard:public QMutexLocker
+        #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+        <QRecursiveMutex>
+        #endif
 {
-      static QMutex m_mutex;
    public:
-      CsGuard():QMutexLocker(&m_mutex)
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    CsGuard(
+        QRecursiveMutex *m_mutex
+    ):QMutexLocker<QRecursiveMutex>(m_mutex)
+#else
+    CsGuard(
+        QMutex *m_mutex
+    ):QMutexLocker(m_mutex)
+#endif
+
+
       {
       }
 
@@ -37,9 +48,18 @@ class MLogFile
 {
    private:
       QString fLogFileName;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    QRecursiveMutex m_mutex;
+#else
+    QMutex m_mutex;
+#endif
    public:
 
-      MLogFile()
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    MLogFile():m_mutex()
+#else
+    MLogFile():m_mutex(QMutex::Recursive)
+#endif
       { }
       // CreateLogFile is called by the boot form at startup
       void createLogFile(const QString &path, const QString filePrefix, int keepDays );

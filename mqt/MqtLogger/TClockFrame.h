@@ -1,7 +1,7 @@
 #ifndef TCLOCKFRAME_H
 #define TCLOCKFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
 
 class BaseContestLog;
 

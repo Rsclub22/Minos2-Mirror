@@ -1,12 +1,21 @@
 #ifndef MINOSITEM_H
 #define MINOSITEM_H
-#include "XMPP_pch.h"
+
+#include "XMPPRPCParams.h"
+#include <QString>
 
 // templated class for items in contest and contact
 
 template < class itemtype >
 class MinosItem
 {
+private:
+    virtual itemtype &operator=(const itemtype &r)
+    {
+        setValue(r);
+        return val;
+    }
+
    protected:
       bool dirty = false;
       itemtype val{};                          // C++ 11 default brace initialisation

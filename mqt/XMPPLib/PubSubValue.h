@@ -2,7 +2,6 @@
 #define PUBSUBVALUE_H
 #include "XMPPRPCParams.h"
 
-//#include "AnalysePubSubNotify.h"
 class AnalysePubSubNotify;
 class PubSubValue
 {
@@ -43,6 +42,7 @@ public:
     void setKey(const QString &key);
 
     QString getRouterApp() const;
+    QString getLocalName() const;
 };
 
 #endif // PUBSUBVALUE_H

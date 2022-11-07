@@ -1,7 +1,7 @@
 #ifndef MINOSSPLITTER_H
 #define MINOSSPLITTER_H
 
-#include "mqtUtils_pch.h"
+#include <QSplitter>
 #include <QSplitterHandle>
 
 class MinosSplitterHandle : public QSplitterHandle

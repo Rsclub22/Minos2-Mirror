@@ -1,7 +1,7 @@
 #ifndef TMINOSHELPFORM_H
 #define TMINOSHELPFORM_H
 
-#include "base_pch.h"
+#include <QDialog>
 
 namespace Ui {
 class TMinosBSHelpForm;

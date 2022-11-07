@@ -1,12 +1,11 @@
 #ifndef GJVPARAMS_H
 #define GJVPARAMS_H
-#include "XMPP_pch.h"
 
+#include <QFile>
+#include <QSharedPointer>
 #define GJVVERSION "0.41"
 #define VERLENGTH (4)
 
-#define DATELENGTH 8
-#define TIMELENGTH 5
 #define CALLSIGNLENGTH 15
 #define LOCLENGTH 8
 #define COMMENTLENGTH 27

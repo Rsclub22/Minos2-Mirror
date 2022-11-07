@@ -6,24 +6,22 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "contest.h"
 #include "cutils.h"
 #include "BandList.h"
-
+#include "calcs.h"
+#include "MinosParameters.h"
 #include "ScreenContact.h"
+#include "rigcontrolcommonconstants.h"
 
-ScreenContact::ScreenContact() :
-    logSequence( 0 )
-    , timeOn( false )
-    , timeOff( false )
+ScreenContact::ScreenContact():CheckableContact()
 {}
 ScreenContact::~ScreenContact()
 {}
 void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
 {
     contest = ct;
-    logSequence = static_cast<unsigned long> (- 1);
+    setLogSequence(static_cast<unsigned long> (- 1));
     cs = Callsign();
     loc = Locator();
     timeOn = dtg( false );
@@ -106,14 +104,14 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     QString temp = QString("%1").arg(ms, 3, 10, QChar('0'));  //leading zeros
     serials = temp;
     serialr = QString( SERIALLENGTH, ' ' );
-    extraText = "";
-    comments = "";
-    contactFlags = 0;
-    forcedMult = "";
-    frequency.clear();
+    extraText.setValue(QString());
+    comments.setValue(QString());
+    contactFlags.setValue(0);
+    forcedMult.setValue(QString());
+    frequency.setValue(Frequency());
     rotatorHeading = "";
     rigName = "";
-    screenQSOValid = false;
+    QSOValid = false;
     newCtry = false;
     newDistrict = false;
     locCount = 0 ;
@@ -125,7 +123,7 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
     districtMult = QSharedPointer<DistrictEntry>();
     ctryMult = QSharedPointer<CountryEntry>();
 
-    contactScore = -1;
+    contactScore.setValue(-1);
     bearing = 0;
 
     multCount = 0;
@@ -136,11 +134,11 @@ void ScreenContact::initialise(BaseContestLog *ct , bool rInit)
 }
 void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
 {
-    logSequence = cct->getLogSequence();
+    setLogSequence(cct->getLogSequence());
     loc = cct->loc;
     loc.clearDirty();
 
-    extraText = cct->extraText.getValue();
+    extraText = cct->extraText;
 
     cs = cct->cs;
     cs.clearDirty();
@@ -155,13 +153,13 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     repr = cct->repr.getValue();
     serialr = cct->serialr.getValue();
 
-    screenQSOValid = cct->QSOValid;
+    QSOValid = cct->QSOValid;
 
     districtMult = cct->districtMult;
     ctryMult = cct->ctryMult;
     multCount = cct->multCount;
-    forcedMult = cct->forcedMult.getValue();
-    frequency = cct->frequency.getValue();
+    forcedMult = cct->forcedMult;
+    frequency = cct->frequency;
     rotatorHeading = cct->rotatorHeading.getValue();
     rigName = cct->rigName.getValue();
     bonus = cct->bonus;
@@ -176,11 +174,11 @@ void ScreenContact::copyFromArg( QSharedPointer<BaseContact> cct )
     newDistrict = cct->newDistrict;
     newCtry = cct->newCtry;
 
-    comments = cct->comments.getValue();
+    comments = cct->comments;
 
-    contactFlags = cct->contactFlags.getValue();
+    contactFlags = cct->contactFlags;
 
-    contactScore = cct->contactScore.getValue();
+    contactScore = cct->contactScore;
     bearing = cct->bearing;
     mode = cct->mode.getValue();
     mgmSubmode = cct->mgmSubmode.getValue();
@@ -207,7 +205,7 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
     repr = cct.repr;
     serialr = cct.serialr;
 
-    screenQSOValid = cct.screenQSOValid;
+    QSOValid = cct.QSOValid;
 
     districtMult = cct.districtMult;
     ctryMult = cct.ctryMult;
@@ -240,148 +238,61 @@ void ScreenContact::copyFromArg( ScreenContact &cct )
 }
 void ScreenContact::checkScreenContact( )
 {
-    // check on country and district. If valid, return true,
-    // having mapped any synonyms to their parents and
-    // saved the pointers.
+    checkContact(false);
 
-    int checkret = 0;
-    BaseContestLog * clp = contest;
+    multCount = 0;
+    newDistrict = false;
+    newCtry = false;
+    locCount = 0;
+    newGLoc = false;
+    newNonGLoc = false;
+    bonus = 0;
+    newBonus = false;
 
-    if ( contactFlags & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-        return ;
-    if ( contactFlags & NON_SCORING )
-        return ;
+    score();
 
-    screenQSOValid = false;             // initially, anyway
-
-    int csret = cs.getValRes();
-    if ( csret != CS_OK && csret != ERR_DUPCS)
-        checkret = ERR_13;
-
-    // AND it has been dup checked
-    if ( !checkret )
-    {
-        unsigned long valp = clp->validationPoint;
-        if ( clp->DupSheet.checkCurDup( this, valp, false ) )
-        {
-            cs.setValRes( ERR_DUPCS);
-            checkret = ERR_12;
-        }
-    }
-
-    // search for prefix in country synonym list. Have to allow for e.g. HB0 as a mult
-
-    if ( contactFlags & COUNTRY_FORCED )
-    {
-        ctryMult = MultLists::getMultLists() ->getCtryForPrefix( forcedMult );
-    }
-    else
-    {
-        ctryMult = findCtryPrefix( cs );
-    }
-
-
-    unsigned short cf = contactFlags;
-    cf &= ~UNKNOWN_COUNTRY;
-    if ( !checkret && ( clp->countryMult.getValue() || clp->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
-    {
-        cf |= UNKNOWN_COUNTRY;
-    }
-    contactFlags = cf;
-    if ( clp->districtMult.getValue() && ctryMult )
-    {
-        // if CC_mult and country "has districts" search for the "extra" in the county synonym list
-
-        // check that the district and country agree
-
-        // if the correct parts don't exist, not a valid contact!
-        // NB that the rest of the contact has to be valid as well!
-
-        if ( ctryMult->hasDistricts() )    // continentals dont have counties
-        {
-            districtMult = MultLists::getMultLists() ->searchDistrict( extraText );
-            if ( !districtMult && !( cf & VALID_DISTRICT ) )
-            {
-                checkret = ERR_8;
-            }
-
-            if (
-                    !checkret &&       						// no errors
-                    !( cf & VALID_DISTRICT ) &&      // ? district forced OK
-                    districtMult &&
-                    ( districtMult->country1 != ctryMult ) &&     // check district in country
-                    ( districtMult->country2 != ctryMult )
-                    )
-            {
-                checkret = ERR_8;
-            }
-        }
-        // so all seems OK, or checkret is set to the first error
-    }
-    else
-        if ( !checkret )
-        {
-
-            districtMult.reset();						// just in case we have changed the type...
-            if ( clp->otherExchange.getValue() || clp->otherOptionalExchange.getValue() )
-            {
-                if ( clp->districtMult.getValue() )
-                {
-                    if ( !comments.trimmed().size() )
-                        checkret = ERR_21;
-                }
-                else
-                    if ( !extraText.trimmed().size() )
-                        checkret = ERR_21;
-            }
-        }
-
-    if ( checkret )
-        return ;
-
-    screenQSOValid = true;        // for now
-
-}
-bool ScreenContact::isNextContact( ) const
-{
-    return ( logSequence == static_cast< unsigned long > (- 1L) ) ? true : false;
 }
 
 void ScreenContact::score()
 {
-    // check should already have run
+    // this is only called from wsjt-x decodeMessage::checkAsContact()
+    // which only affects the screen contact, not the contest
 
-    QString gridref = loc.getLoc().trimmed();
-    if (gridref.isEmpty())
-        return;
+    // checkContact should already have run
 
-    double latitude;
-    double longitude;
-    /*int locValres =*/ lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+    double latitude = 0.0;
+    double longitude = 0.0;
 
-    if ( !( contactFlags & MANUAL_SCORE ) || ( contactFlags & DONT_PRINT ) )
+    QString gridref = loc.getLoc();
+    if (gridref.length() >= 4)
+    {
+        lonlat( gridref, longitude, latitude, MinosParameters::getMinosParameters() ->getAllowLoc4() );
+    }
+    if ( !( contactFlags.getValue() & MANUAL_SCORE ) || ( contactFlags.getValue() & DONT_PRINT ) )
     {
 
         // now we want to look for mults and bonuses
 
         QString band;
-        contest->getTxFreqBand(frequency, band);
+        contest->getTxFreqBand(frequency.getValue(), band);
 
-        if ( districtMult && districtMult->country1)
+        if ( districtMult && (districtMult->country1 || cs.getFullCall().isEmpty()))
         {
-           int n = contest->getDistrictsWorked(band, districtMult->districtCode) + 1;
+           int n = contest->getDistrictsWorked(band, districtMult->districtCode);
            if ( n < districtMult->country1->districtLimit() )
-          if ( contest->districtMult.getValue() )
-          {
-             multCount++;
-          }
-          newDistrict = true;
+           {
+                if ( contest->districtMult.getValue() )
+                {
+                    multCount++;
+                }
+                newDistrict = true;
+           }
        }
 
         if ( ctryMult)
         {
             int n = contest->getCountriesWorked(band, ctryMult->getBasePrefix());
-            if ( n == 1 )
+            if ( n == 0 )
             {
                 if (!contest->nonGCountryMult.getValue() || !cs.isUK())
                 {
@@ -394,51 +305,52 @@ void ScreenContact::score()
             }
         }
 
-        if ( !( contactFlags & ( MANUAL_SCORE | NON_SCORING | LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) ) )
+        if ( !notValidContact() )
         {
-            double dist;
+            double dist = 0.0;
             int brg = 0;
             if (contest->MGMContestRules.getValue())
             {
-                 dist = contest->CalcCentres ( loc.getLoc(), brg );
+                 dist = contest->CalcCentres ( gridref, brg );
                  if ( almost_equal(dist, 1.0, 2))
                      dist = 50;  // MGM same square == 50 points
             }
-            else if ( loc.getLoc().size() == 4 && contest->allowLoc4.getValue() )
+            else if ( gridref.size() == 4 && contest->allowLoc4.getValue() )
             {
                dist = contest->CalcNearest( loc.getLoc() ); // deal with 4 char locs
             }
-            else
+            else if (gridref.size() >= 4)
             {
                 contest->disbeara( longitude, latitude, dist, brg );
             }
-            contactScore = static_cast<int>(dist);
+            contactScore.setValue(static_cast<int>(dist));
             bearing = brg;
         }
 
-        if ( !contest->locatorMandatoryField.getValue() || contactScore >= 0 )   		// don't add -1 scores in, but DO add zero km
+        if ( !contest->locatorMandatoryField.getValue() || contactScore.getValue() >= 0 )   		// don't add -1 scores in, but DO add zero km
            // as it is 1 point.
         {
            switch ( contest->scoreMode.getValue() )
            {
               case PPKM:
                  {
-                    if ( contactFlags & XBAND )
+                    if ( contactFlags.getValue() & XBAND )
                     {
-                       contactScore = ( contactScore + 1 ) / 2;
+                       contactScore .setValue( ( contactScore.getValue() + 1 ) / 2);
                     }
                  }
                  break;
 
               case PPQSO:
-               if ( contactScore > 0 )
-                  contactScore = 1;
+               if ( contactScore.getValue() > 0 )
+                  contactScore.setValue(1);
                else
-                  contactScore = 0;
+                   contactScore.setValue(0);
                break;
            }
         }
 
+        if (gridref.length() >= 4)
         {
            // now look at the locator list
            QString letters;

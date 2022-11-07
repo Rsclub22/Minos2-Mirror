@@ -1,6 +1,5 @@
-#include "base_pch.h"
+#include <QTabBar>
 #include "qlogtabwidget.h"
-#include <QDebug>
 
 QLogTabWidget::QLogTabWidget(QWidget *parent) : QTabWidget(parent)
 {

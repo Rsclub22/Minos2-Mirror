@@ -19,7 +19,7 @@
 #include <QLabel>
 #include <QVector>
 #include <QSettings>
-//#include "rotcontrol.h"
+
 #include "rotsetupform.h"
 #include "rotatorcommon.h"
 #include "rotatorfactory.h"

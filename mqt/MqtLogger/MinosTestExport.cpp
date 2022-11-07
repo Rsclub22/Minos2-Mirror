@@ -6,11 +6,11 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
-#include "rotatorcommon.h"
 #include "LoggerContest.h"
+#include "XMPPStanzas.h"
 #include "contacts.h"
+#include "MTrace.h"
+#include "MinosParameters.h"
 #include "MinosTestExport.h"
 
 //==============================================================================
@@ -302,36 +302,6 @@ void MinosTestExport::exportBundles( QSharedPointer<QFile> expfd )
       delete st;
    }
 
-}
-void MinosTestExport::exportComment(QSharedPointer<QFile> expfd, const QSharedPointer<BaseContact> lct )
-{
-   RPCParamStruct * st = new RPCParamStruct;
-   makeHeader( st, 1 );
-
-   bool dirty = false;
-   if ( lct->timeOn.isDirty() )
-   {
-      st->addDtgMember( lct->timeOn.getIsoDTG( dirty ), "QSOStartTime" );
-   }
-   if ( lct->timeOff.isDirty() )
-   {
-      st->addDtgMember( lct->timeOff.getIsoDTG( dirty ), "logTime" );
-   }
-   if ( lct->contactFlags.isDirty() )
-   {
-      st->addMember( bool( (lct->contactFlags.getValue( dirty ) & LOCAL_COMMENT) != 0 ), "LocalComment" );
-      st->addMember( bool( (lct->contactFlags .getValue( dirty ) & DONT_PRINT) != 0 ), "dontPrint" );
-   }
-   lct->comments.addIfDirty( st, "comment", dirty );
-
-   if ( dirty )
-   {
-      sendRequest( expfd, "MinosLogComment", st );
-   }
-   else
-   {
-      delete st;
-   }
 }
 int MinosTestExport::exportQSO(QSharedPointer<QFile> expfd, const QSharedPointer<BaseContact> lct )
 {
@@ -628,12 +598,6 @@ int MinosTestExport::exportTest( QSharedPointer<QFile> expfd, int mindump, int m
    for(auto const &dct: qAsConst(ct->ctList))
    {
        QSharedPointer<BaseContact> lct = dct.wt;
-
-      if ( inDump && lct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY ) )
-      {
-         exportComment( expfd, lct );
-         continue;
-      }
 
       int serials = lct->serials.getValue().toInt();
       // dump the contact, until serial seen

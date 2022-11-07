@@ -5,6 +5,10 @@
 MatchOtherFrame::MatchOtherFrame(QWidget *parent) :
     MatchTreeFrame(parent)
 {
+    SharedMatchCollection matchCollection;
+    otherMatchModel.initialise(OtherMatch, matchCollection);
+    getTreeView()->setModel(&otherMatchModel);
+
 }
 
 MatchOtherFrame::~MatchOtherFrame()
@@ -64,7 +68,7 @@ void MatchOtherFrame::afterMatchTreeClicked()
         QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
         if (mc)
         {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            CheckableContact *bct = mc->getBaseContact();
 
             QString bearing = bct->getField(egBrg, contest);
             MinosLoggerEvents::SendBrgStrToRot(bearing);

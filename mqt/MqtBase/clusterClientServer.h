@@ -13,13 +13,10 @@
 #ifndef CLUSTERCLIENTSERVER_H
 #define CLUSTERCLIENTSERVER_H
 
-#include <QObject>
-#include "base_pch.h"
+#include <QTimer>
+
+#include "XMPPRPCObj.h"
 #include "clustercommon.h"
-
-
-
-
 
 class ClusterClientServer : public QObject
 {

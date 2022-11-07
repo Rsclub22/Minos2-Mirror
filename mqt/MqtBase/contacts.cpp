@@ -6,39 +6,192 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
 #include "contest.h"
 #include "contacts.h"
-#include "rigutils.h"
-#include "BandList.h"
+#include "MinosParameters.h"
+#include "calcs.h"
+#include "validators.h"
 //============================================================
 ContactBuffs contactBuffs;
 //==========================================================================
+CheckableContact::CheckableContact() : QObject()
+{
+
+}
+
+CheckableContact::CheckableContact(const CheckableContact &ct) : QObject()
+{
+    *this = ct;
+}
+
+CheckableContact &CheckableContact::operator =(const CheckableContact &){return *this;}
+CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QObject()
+  ,contest(contest), timeOn(time_now), timeOff(time_now)
+{
+
+}
+void CheckableContact::calcDisBear()
+{
+    double lon = 0.0;
+    double lat = 0.0;
+    int brg = -1;
+    double dist = 0.0;
+
+    char v = lonlat( loc.getLoc(), lon, lat, MinosParameters::getMinosParameters() ->getAllowLoc4());
+    if ( v == LOC_OK )
+    {
+       contest->disbeara( lon, lat, dist, brg );
+    }
+    else if (v == LOC_PARTIAL)
+    {
+        contest->disbearc( lon, lat, dist, brg );
+    }
+    bearing = brg;
+    contactScore.setValue( static_cast<int>(dist) );
+}
+
+int CheckableContact::checkDistrict(int checkret)
+{
+    districtMult = MultLists::getMultLists() ->searchDistrict( extraText.getValue() );
+    if ( !ctryMult || ctryMult->hasDistricts() )    // continentals dont have counties
+    {
+        unsigned short cf = contactFlags.getValue();
+        if ( !districtMult && !( cf & VALID_DISTRICT ) )
+        {
+            checkret = ERR_8;
+        }
+
+        if (
+                !checkret &&       						// no errors
+                !( cf & VALID_DISTRICT ) &&      // ? district forced OK
+                districtMult &&
+                ( districtMult->country1 != ctryMult ) &&     // check district in country
+                ( districtMult->country2 != ctryMult )
+                )
+        {
+            checkret = ERR_8;
+        }
+    }
+    return checkret;
+}
+
+int CheckableContact::checkContact(bool adddup)
+{
+    // check on country and district. If valid, return true,
+    // having mapped any synonyms to their parents and
+    // saved the pointers.
+
+    int checkret = 0;
+
+    // calc the bearing and score anyway; otherwise dups get a bearing of -1
+
+    if ( bearing < 0 )
+    {
+       calcDisBear();
+    }
+
+
+    if ( contactFlags.getValue() & NON_SCORING )
+        return checkret;
+
+    QSOValid = false;             // initially, anyway
+
+    int csret = cs.getValRes();
+    if ( csret != CS_OK && csret != ERR_DUPCS)
+        checkret = ERR_13;
+
+    // AND it has been dup checked
+    if ( !checkret )
+    {
+        unsigned long valp = contest->validationPoint;
+        if ( contest->DupSheet.checkCurDup( this, valp, adddup ) )
+        {
+            cs.setValRes( ERR_DUPCS);
+            checkret = ERR_12;
+        }
+    }
+
+    // search for prefix in country synonym list. Have to allow for e.g. HB0 as a mult
+
+    if ( contactFlags.getValue() & COUNTRY_FORCED )
+    {
+        ctryMult = MultLists::getMultLists() ->getCtryForPrefix( forcedMult.getValue() );
+    }
+    else
+    {
+        ctryMult = findCtryPrefix( cs );
+    }
+
+
+    unsigned short cf = contactFlags.getValue();
+    cf &= ~UNKNOWN_COUNTRY;
+    if ( !checkret && ( contest->countryMult.getValue() || contest->districtMult.getValue() ) && !ctryMult )    // need at least a valid country
+    {
+        cf |= UNKNOWN_COUNTRY;
+    }
+    contactFlags.setValue(cf);
+    if ( contest->districtMult.getValue() )
+    {
+        // if CC_mult and country "has districts" search for the "extra" in the county synonym list
+
+        // check that the district and country agree
+
+        // if the correct parts don't exist, not a valid contact!
+        // NB that the rest of the contact has to be valid as well!
+
+        int distcheck = checkDistrict(checkret);
+
+        if (ctryMult)
+        {
+            checkret = distcheck;
+        }
+        // so all seems OK, or checkret is set to the first error
+    }
+    else
+        if ( !checkret )
+        {
+
+            districtMult.reset();						// just in case we have changed the type...
+            if ( contest->otherExchange.getValue() || contest->otherOptionalExchange.getValue() )
+            {
+                if ( contest->districtMult.getValue() )
+                {
+                    if ( !comments.getValue().trimmed().size() )
+                        checkret = ERR_21;
+                }
+                else
+                    if ( contest->otherExchange.getValue() && !extraText.getValue().trimmed().size() )
+
+                        checkret = ERR_21;
+            }
+        }
+
+    if ( checkret )
+        return checkret;
+
+    QSOValid = true;        // for now
+
+    return checkret;
+
+}
+
+bool CheckableContact::notValidContact()
+{
+    unsigned short cf = contactFlags.getValue();
+    cf &= ( NON_SCORING | DONT_PRINT | TO_BE_ENTERED);
+    return ( cf != 0 );
+}
+
+//==========================================================================
 BaseContact::BaseContact( BaseContestLog * contest, dtg time_now ) :
-      contest( contest )
+    CheckableContact(contest, time_now)
     , updtime( true )
-    , timeOn( time_now )
-    , timeOff( time_now )
-    , contactFlags( 0 )
-    , contactScore( -1 )
-    , bearing( -1 )
-    , QSOValid( false )
-    , newDistrict( false )
-    , newCtry( false )
-    , locCount( 0 )
-    , newGLoc(false)
-    , newNonGLoc(false)
-    , bonus(0)
-    , newBonus(false)
-    , multCount( 0 )
 {
 }
 BaseContact::BaseContact( const BaseContact &ct )
-      : QObject()
+      : CheckableContact(ct)
       , updtime( false )
-      , timeOn( false )
-      , timeOff( false )
 {
    *this = ct;
 }
@@ -78,7 +231,16 @@ BaseContact& BaseContact::operator =( const BaseContact &ct )
 //==========================================================================
 bool BaseContact::operator<( const BaseContact& rhs ) const
 {
-   return getLogSequence() < rhs.getLogSequence();
+    return getLogSequence() < rhs.getLogSequence();
+}
+
+bool BaseContact::operator==(const BaseContact &rhs) const
+{
+    return getLogSequence() == rhs.getLogSequence();
+}
+bool BaseContact::operator!=(const BaseContact &rhs) const
+{
+    return getLogSequence() != rhs.getLogSequence();
 }
 //==========================================================================
 void BaseContact::clearDirty()
@@ -248,15 +410,13 @@ void BaseContact::getText(QString &dest, const BaseContestLog * const curcon, bo
    contactBuffs.ssbuff.clear();
    contactBuffs.buff.clear();
 
-   if ( contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+   if ( contactFlags.getValue() & DONT_PRINT )
    {
-       QString locComment = tr("LOCAL COMMENT");
-       QString adjComment = tr("COMMENT FOR ADJUDICATOR");
        QString deleted = tr("DELETED");
 
        contactBuffs.buff = QString("%1 %2 %3")
                .arg(timeOff.getTime( DTGDISP ), 5)
-               .arg(( contactFlags.getValue() & DONT_PRINT ) ? deleted: ( contactFlags.getValue() & LOCAL_COMMENT ) ? locComment: adjComment)
+               .arg(deleted)
                .arg(comments.getValue(), 60);
    }
    else
@@ -358,4 +518,3 @@ void BaseContact::makestrings( bool sf ) const
    else
       contactBuffs.srbuff.clear();
 }
-

@@ -1,16 +1,18 @@
 #include <QMessageBox>
 #include <QSettings>
 #include "sbdriver.h"
-#include "txvminternalbuttondialog.h"
+#include "WaveShowDialog.h"
 #include "voicekeyerfactory.h"
+
+#include "txvminternalbuttondialog.h"
 #include "ui_txvminternalbuttondialog.h"
 
-static bool inhibitCallbacks = false;
+static bool txvmIntInhibitCallbacks = false;
 
 static TxVmInternalButtonDialog *txvmbd = nullptr;
 void TxVmInternalButtonDialog::doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
 {
-    if (!inhibitCallbacks)
+    if (!txvmIntInhibitCallbacks)
         ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
 }
 
@@ -30,12 +32,14 @@ TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &TxVmInternalButtonDialog::on_okButtonCicked);
     connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &TxVmInternalButtonDialog::on_cancelbuttonClicked);
     connect(ui->txVmRepeatPauseDur , &QLineEdit::editingFinished, this, &TxVmInternalButtonDialog::onVmRepeatPauseDurEditingFinished);
+
+    txvmIntInhibitCallbacks = false;
 }
 
 TxVmInternalButtonDialog::~TxVmInternalButtonDialog()
 {
     txvmbd = nullptr;
-    inhibitCallbacks = true;
+    txvmIntInhibitCallbacks = true;
 
     delete ui;
 }
@@ -44,7 +48,7 @@ void TxVmInternalButtonDialog::doCloseEvent()
 {
     QSettings settings;
     settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
-    inhibitCallbacks = true;
+    txvmIntInhibitCallbacks = true;
     txvmbd = nullptr;
 }
 void TxVmInternalButtonDialog::reject()
@@ -165,7 +169,7 @@ void TxVmInternalButtonDialog::on_stopButton_clicked()
 void TxVmInternalButtonDialog::setVolumeMults()
 {
     int record = ui->recordSlider->value();
-    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0);  // for now, set everything to 0db
+    SoundSystemDriver::getSbDriver()->setVolumeMults(record, 0, 0, CompressorParams(), false, false);  // for now, set everything to 0db
 
     inVolChange = true;
 
@@ -193,4 +197,12 @@ void TxVmInternalButtonDialog::on_recordSlider_valueChanged(int position)
     setVolumeMults();
 }
 
+
+
+void TxVmInternalButtonDialog::on_showButton_clicked()
+{
+    int fno = vmData->getvmButtonNum();
+    WaveShowDialog wsd(this, fno);
+    wsd.exec();
+}
 

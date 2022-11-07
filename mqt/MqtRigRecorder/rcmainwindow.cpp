@@ -1,11 +1,15 @@
 #include <QSettings>
 #include <QFileDialog>
 #include <QDateTime>
+#include "AppStartup.h"
+#include "RPCCommandConstants.h"
+#include "dtg.h"
 #include "fileutils.h"
-#include "cutils.h"
 #include "MTrace.h"
-#include "mainwindow.h"
-#include "ui_MainWindow.h"
+#include "MinosRPC.h"
+#include "LogEvents.h"
+#include "rcmainwindow.h"
+#include "ui_rcmainwindow.h"
 
 const QString indevKey("InDevice");
 const QString outdevKey("OutDevice");
@@ -32,9 +36,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
-
-    connect(&stdinReader, &StdInReader::stdinLine, this, &MainWindow::onStdInRead);
-    stdinReader.start();
 
     QSettings gsettings;
     QByteArray geometry = gsettings.value("RigRecorderMain/geometry").toByteArray();
@@ -107,10 +108,6 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
-}
 
 void MainWindow::moveEvent(QMoveEvent *event)
 {
@@ -151,15 +148,6 @@ void MainWindow::onCloseTimer()
     {
         trace("closing set in close timer");
         return;
-    }
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
     }
     bool autostart = ui->autostartCb->isChecked();
     bool link = ui->contestLinkCB->isChecked();

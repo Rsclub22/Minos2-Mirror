@@ -11,7 +11,7 @@
 #ifndef ROTATORCACHE_H
 #define ROTATORCACHE_H
 
-#include "base_pch.h"
+
 #include "AntennaDetail.h"
 #include "AntennaState.h"
 

@@ -1,9 +1,11 @@
-#include "base_pch.h"
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
 #include "rotatorcommon.h"
+#include "MTrace.h"
 #include "RotatorCache.h"
 
 RotatorCache::RotatorCache()

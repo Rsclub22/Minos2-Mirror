@@ -1,7 +1,7 @@
 #ifndef TENTRYOPTIONSFORM_H
 #define TENTRYOPTIONSFORM_H
 
-#include "base_pch.h"
+#include <QDialog>
 #include "ContestDetailsTransferObject.h"
 
 class LoggerContestLog;

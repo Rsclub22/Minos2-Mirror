@@ -2,7 +2,9 @@
 #define TXVMEXTERNALBUTTONDIALOG_H
 
 #include <QDialog>
+#include "SliderSpinner.h"
 #include "voicekeyerbase.h"
+#include "CompressorParams.h"
 
 namespace Ui {
 class TxVmExternalButtonDialog;
@@ -25,22 +27,19 @@ private slots:
 
     void on_stopButton_clicked();
 
-    void on_recordValue_valueChanged(double arg1);
-    void on_recordSlider_valueChanged(int position);
-
     void onKeyerConfig(QString key, QString val);
 
     void on_buttonBox_accepted();
 
     void on_buttonBox_rejected();
 
-    void on_replayValue_valueChanged(double arg1);
+    void volsChanged();
 
-    void on_replaySlider_valueChanged(int value);
+    void compressionChanged();
 
-    void on_passThroughValue_valueChanged(double arg1);
+    void on_doFilter_stateChanged(int arg1);
 
-    void on_passThroughSlider_valueChanged(int value);
+    void on_doCompression_stateChanged(int arg1);
 
 public Q_SLOTS:
     virtual void accept() override;
@@ -48,12 +47,29 @@ public Q_SLOTS:
 
 private:
     Ui::TxVmExternalButtonDialog *ui;
+
+    SliderSpinner *recordFrame = nullptr;
+    SliderSpinner *replayFrame = nullptr;
+    SliderSpinner *passthroughFrame = nullptr;
+
+    SliderSpinner *windowFrame = nullptr;
+    SliderSpinner *thresholdFrame = nullptr;
+    SliderSpinner *ratioFrame = nullptr;
+    SliderSpinner *attackFrame = nullptr;
+    SliderSpinner *releaseFrame = nullptr;
+    SliderSpinner *makeUpGainFrame = nullptr;
+
+
     VoiceKeyerParams* vmData;
     int inVolChangeCount = 0;
 
     void doCloseEvent();
     bool validateDur(QString durName, QString dur, int &dur_);
 
+    CompressorParams compParams;
+
+    void getCompSliders();
+    void setCompSliders();
 
     void pubSliders();
 };

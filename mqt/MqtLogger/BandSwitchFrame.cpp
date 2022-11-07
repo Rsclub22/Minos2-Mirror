@@ -1,5 +1,5 @@
 
-#include "LoggerContest.h"
+#include "contest.h"
 #include "bandselbuttons.h"
 #include "BandSwitchFrame.h"
 #include "ui_BandSwitchFrame.h"

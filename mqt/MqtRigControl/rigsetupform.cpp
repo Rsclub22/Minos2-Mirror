@@ -10,24 +10,22 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-#include "rigsetupform.h"
-#include "BandList.h"
-#include "addtransverterdialog.h"
-#include "rigutils.h"
 #include <QHostInfo>
-#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QtSerialPort/QSerialPort>
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QMessageBox>
 #include <QHostAddress>
 #include <QInputDialog>
+#include "serialCommonData.h"
 
+#include "hamlib/rig.h"
 
-//static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
+#include "minosNetUtils.h"
+#include "BandList.h"
+#include "addtransverterdialog.h"
+#include "rigsetupform.h"
 
 RigSetupForm::RigSetupForm(RigFactory* rigFactory_, QSharedPointer<scatParams> _radioData,
                            const QVector<QSharedPointer<BandInfo> > _bands, QLogTabWidget* _ui_RadioTab, QWidget *parent):
@@ -609,7 +607,7 @@ void RigSetupForm::on_forceDTRSelected()
 
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setPttDTRDisabled(false);
             }
@@ -646,7 +644,7 @@ void RigSetupForm::on_forceRTSSelected()
         radioData->forceRts = serialCommonData::forceLinesCodesList[ui->forceRtsBox->currentIndex()];
         if (isPttComportEqualCatComport())
         {
-            if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setPttRTSDisabled(false);
             }
@@ -1585,8 +1583,7 @@ void RigSetupForm::addTransVerter()
         // error empty name or name already exists
         QMessageBox::information(this, tr("Transverter Name Exists"),
                                  tr("Transverter Name: %1, already exists \nPlease enter another name").arg(transVerterName.trimmed()),
-                                  QMessageBox::Ok|QMessageBox::Default,
-                                  QMessageBox::NoButton, QMessageBox::NoButton);
+                                  QMessageBox::Ok| QMessageBox::NoButton, QMessageBox::NoButton);
         return;
     }
 
@@ -1678,8 +1675,7 @@ void RigSetupForm::removeTransVerter()
                             tr("Remove Transverter"),
                             tr("Do you really want to remove transverter - %1?")
                             .arg(currentTransVertName),
-                            QMessageBox::Yes|QMessageBox::Default,
-                            QMessageBox::No|QMessageBox::Escape,
+                            QMessageBox::Yes|QMessageBox::No|QMessageBox::Escape,
                             QMessageBox::NoButton);
 
     if (status != QMessageBox::Yes)
@@ -1743,8 +1739,7 @@ void RigSetupForm::changeBand()
         // error empty name or name already exists
         QMessageBox::information(this, tr("Transverter Name Exists"),
                                  tr("Transverter Name: %1, already exists \nPlease enter another name").arg(transVertName.trimmed()),
-                                  QMessageBox::Ok|QMessageBox::Default,
-                                  QMessageBox::NoButton, QMessageBox::NoButton);
+                                  QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
         return;
     }
 
@@ -1914,8 +1909,8 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
         pttComportSelDisabled(true);
         if (isPttComportEqualCatComport())
         {
-            if (radioData->handshake != serialCommonData::handshakeCodes::HANDSHAKE_HARDWARE
-                    || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->handshake != RIG_HANDSHAKE_HARDWARE
+                    || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setForceRTSDisabled(false);
             }
@@ -1923,7 +1918,7 @@ void RigSetupForm::setPttTypeRadioButtons(int type)
             {
                 setForceRTSDisabled(true);
             }
-            if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_NONE)
+            if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE)
             {
                 setForceDTRDisabled(false);
             }
@@ -2091,10 +2086,10 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
             {
                 setForceRTSDisabled(true);
                 setForceDTRDisabled(false);
-                if (radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceRts == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                if (radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceRts == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
-                    radioData->forceRts = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    radioData->forceRts = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
                     setForceRTSComboBox(radioData->forceRts);
                 }
             }
@@ -2102,10 +2097,10 @@ void RigSetupForm::onPttComportSelActivated(int /*idx*/)
             {
                 setForceDTRDisabled(true);
                 setForceRTSDisabled(false);
-                if (radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_ON
-                        || radioData->forceDtr == serialCommonData::forceLinesCodes::FORCE_LINE_OFF)
+                if (radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_ON
+                        || radioData->forceDtr == serialCommonData::s_forceLinesCodes::FORCE_LINE_OFF)
                 {
-                    radioData->forceDtr = serialCommonData::forceLinesCodes::FORCE_LINE_NONE;
+                    radioData->forceDtr = serialCommonData::s_forceLinesCodes::FORCE_LINE_NONE;
                     setForceDTRComboBox(radioData->forceDtr);
                 }
             }

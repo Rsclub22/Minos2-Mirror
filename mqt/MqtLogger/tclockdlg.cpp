@@ -1,5 +1,9 @@
-#include "base_pch.h"
+#include <QSettings>
+#include <QFile>
+#include <QTextStream>
+
 #include "ContestApp.h"
+#include "MinosParameters.h"
 #include "tclockdlg.h"
 #include "ui_tclockdlg.h"
 

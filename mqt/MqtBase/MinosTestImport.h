@@ -10,8 +10,14 @@
 
 #ifndef MinosTestImportH
 #define MinosTestImportH 
-#include "base_pch.h"
-//---------------------------------------------------------------------------
+
+#include <QSharedPointer>
+#include <QFile>
+#include "Dispatcher.h"
+#include "XMPPStanzas.h"
+#include "minositem.h"
+
+class BaseContestLog;
 class MinosTestImport: public RPCDispatcher
 {
    protected:

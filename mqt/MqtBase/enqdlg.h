@@ -21,7 +21,10 @@
 
 #ifndef enqdlgH
 #define enqdlgH 
-#include "base_pch.h"
+
+#include <QString>
+class QWidget;
+
 //---------------------------------------------------------------------------
 extern bool enquireDialog (QWidget *owner, const QString &prompt, QString &Value );
 extern bool enquireDialog (QWidget *owner, const QString &prompt, int &Value , int minval = -2147483647, int maxval = 2147483647);

@@ -30,8 +30,9 @@ equals(HAMLIBVER, 45) {
           contains(QT_ARCH, x86_64) {
              HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5)
           }
-          msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-2
+          msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
           msvc: DEFINES += DLL_EXPORT
+          msvc: INCLUDEPATH += $$HAMLIBDIR/include/hamlib
        }
        INCLUDEPATH += $$HAMLIBDIR/include
 

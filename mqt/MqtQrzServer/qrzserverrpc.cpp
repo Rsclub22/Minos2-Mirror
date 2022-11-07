@@ -12,11 +12,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-#include "base_pch.h"
 #include "MinosRPC.h"
-#include "MinosLoggerEvents.h"
 #include "ConfigFile.h"
+#include "RPCCommandConstants.h"
+#include "RPCPubSub.h"
+#include "MTrace.h"
+
 #include "qrzserverrpc.h"
 
 

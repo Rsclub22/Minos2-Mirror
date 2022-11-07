@@ -1,5 +1,3 @@
-#include "mqtUtils_pch.h"
-
 #include <QTimer>
 #include <QHostInfo>
 #include <QSharedPointer>
@@ -7,16 +5,18 @@
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
-
+#include "AppStartup.h"
+#include "LogEvents.h"
+#include "SecondInstall.h"
 #include "fileutils.h"
 #include "ConfigFile.h"
-
+#include "MTrace.h"
 
 //---------------------------------------------------------------------------
 MinosConfigEvents MinosConfigEvents::mce;
-void MinosConfigEvents::sendAppStarted()
+void MinosConfigEvents::sendStealFocus()
 {
-    emit mce.appStarted();
+    emit mce.stealFocus();
 }
 static bool terminated = false;
 
@@ -96,7 +96,8 @@ bool RunConfigElement::initialise(INIFile &config, QString sect )
 
     config.getPrivateProfileString(sect, "Program", "", commandLine);
     config.getPrivateProfileString( sect, "Server", "localhost", router );
-    config.getPrivateProfileString( sect, "Params", "", params );
+    QString p = params.join(" ");
+    config.getPrivateProfileString( sect, "Params", "", p );
     config.getPrivateProfileString( sect, "Directory", "", rundir );
     config.getPrivateProfileString( sect, "RemoteApp", "", remoteApp);
     showAdvanced = config.getPrivateProfileBool(sect, "ShowAdvanced", false);
@@ -128,7 +129,7 @@ void RunConfigElement::save(INIFile &config)
     if (!deleted)
     {
         config.writePrivateProfileString(name, "Program", commandLine);
-        config.writePrivateProfileString(name, "Params", params);
+        config.writePrivateProfileString(name, "Params", params.join(" ").trimmed());
         config.writePrivateProfileString(name, "Directory", rundir);
         config.writePrivateProfileString(name, "Server", router);
         config.writePrivateProfileString(name, "RemoteApp", remoteApp);
@@ -172,20 +173,22 @@ void RunConfigElement::createProcess()
         runner = new QProcess(parent());
 
         QString program = commandLine;
+        QStringList progArgs = params;
         if (!FileExists(program))
         {
             trace(name + tr(":program doesn't exist:") + program);
         }
 
-        program += " ";
-
         QString locale = getCurrentLanguage();
         if (!locale.isEmpty())
         {
-            program += "--lang " + locale + " ";
+            progArgs.append("--lang=" + locale);
         }
-
-        program += params;
+        QString si = SecondInstall::getSecondInstallSwitch();
+        if (!si.isEmpty())
+        {
+            progArgs.append(si);
+        }
 
         QString wdir = rundir;
         runner->setWorkingDirectory(wdir);
@@ -209,12 +212,11 @@ void RunConfigElement::createProcess()
         connect (runner, &QProcess::readyReadStandardOutput, this, &RunConfigElement::on_readyReadStandardOutput);
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
-        QStringList progArgs = runner->splitCommand(program);
-        const QString prog = progArgs.takeFirst();
-
-        runner->start(prog, progArgs);
+        runner->start(program, progArgs);
 #else
-        runner->start(program);
+        QString runarg = program + " " + progArgs.join(" ");
+        runner->start(runarg);
+        trace(runarg);
 #endif
 
         if (runner)
@@ -228,7 +230,7 @@ void RunConfigElement::createProcess()
             QString fontCommand = "Font " + QApplication::font().toString();
             sendCommand(fontCommand);
 
-             MinosConfigEvents::sendAppStarted();
+             MinosConfigEvents::sendStealFocus();
         }
     }
 }
@@ -461,7 +463,7 @@ bool MinosConfig::saveAsJson(QString f)
              QJsonObject c;
 
              c.insert("Program", j->commandLine);
-             c.insert("Params", j->params);
+             c.insert("Params", j->params.join(" "));
              c.insert("name", j->name);
              c.insert("Directory", j->rundir);
              c.insert("Server", j->router);
@@ -523,7 +525,12 @@ bool MinosConfig::loadJson(QString f)
                         QSharedPointer<RunConfigElement> tce = QSharedPointer<RunConfigElement>(new RunConfigElement());
 
                         tce->commandLine = conf.value("Program" ).toString();
-                        tce->params = conf.value("Params" ).toString();
+
+                        QString pstr = conf.value("Params" ).toString().trimmed();
+                        if (!pstr.isEmpty())
+                        {
+                            tce->params = pstr.split(" ");
+                        }
                         tce->name = conf.value("name" ).toString();
                         tce->rundir = conf.value("Directory" ).toString();
                         tce->router = conf.value("Server" ).toString();
@@ -579,7 +586,7 @@ void MinosConfig::askStop()
 {
    terminated = true;
 
-   for ( auto const &nc: configs)
+   for ( auto const &nc: qAsConst(configs))
    {
        for ( auto const &i: qAsConst(nc.elelist ))
        {
@@ -594,7 +601,7 @@ void MinosConfig::forceStop()
 {
    terminated = true;
 
-   for ( auto const &nc: configs)
+   for ( auto const &nc: qAsConst(configs))
    {
        for ( auto const &i: qAsConst(nc.elelist ))
        {
@@ -853,7 +860,7 @@ QString MinosConfig::checkConfig(QString name)
                     }
                     if (!reqFound)
                     {
-                        reqErrs += tr("%1 requires a local %2\n\n").arg(ele->appType).arg(req);
+                        reqErrs += tr("%1 requires a local %2\n\n").arg(ele->appType, req);
                     }
                 }
             }
@@ -877,7 +884,7 @@ QString MinosConfig::checkConfig(QString name)
 
 bool MinosConfig::anyRunning()
 {
-    for ( auto const &nc: configs)
+    for ( auto const &nc: qAsConst(configs))
     {
         for ( auto const &i: qAsConst(nc.elelist ))
         {

@@ -1,9 +1,9 @@
-#include "singleapplication.h"
 #include <QLocalSocket>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QSettings>
 #include <QThread>
+#include "singleapplication.h"
 #include "SecondInstall.h"
 
 #define TIME_OUT                (500)    // 500ms

@@ -1,8 +1,8 @@
 #ifndef PIGPIO_H
 #define PIGPIO_H
 
-#include "base_pch.h"
 #include <QSocketNotifier>
+#include <QMap>
 
 class PiGPIO;
 

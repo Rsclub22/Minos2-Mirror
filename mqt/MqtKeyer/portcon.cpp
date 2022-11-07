@@ -6,20 +6,14 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "cutils.h"
-#include "keyctrl.h"
 #include "keyers.h"
 #include "portcon.h"
+#include "keyerlog.h"
 #include "windowMonitor.h"
 #include "MinosLines.h"
+#include "MTrace.h"
 
-// For serial port
-//#include "serial.h"     // serial port constants
-
-//#include "K8055D.h"        // Velleman K8055 interface
-
-#include "KeyerRPCServer.h" 
 //==============================================================================
 
 // This module needs splitting up into common, serial, parallel

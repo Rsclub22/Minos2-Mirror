@@ -1,4 +1,3 @@
-#include "mqtUtils_pch.h"
 #include <QPalette>
 #include <QApplication>
 #include <QCommandLineParser>
@@ -6,7 +5,15 @@
 #include <QProcessEnvironment>
 #include <QMessageBox>
 #include <QTranslator>
+#include <QSettings>
+
+#include "fileutils.h"
+#include "MTrace.h"
 #include "SecondInstall.h"
+
+#include "AppStartup.h"
+#include "frequency.h"
+#include "qdiriterator.h"
 
 static bool appClosing = false;
 static QString appStartupName;
@@ -187,19 +194,6 @@ void appStartup(const QString &pappName)
 
     QApplication *qa = dynamic_cast<QApplication *>(QApplication::instance());
 
-    QCommandLineParser parser;
-
-    QString languageName = getAppLanguage();
-    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
-    parser.addOption(languageOption);
-
-    parser.parse(QCoreApplication::instance()->arguments());
-
-    if (parser.isSet(languageOption))
-    {
-        languageName = parser.value(languageOption);
-    }
-
     qa->setStyleSheet(QString("[readOnly=\"true\"] { background-color: %0 }").arg(qa->palette().color(QPalette::Window).name(QColor::HexRgb)));
 
     if (!DirectoryExists("./Configuration"))
@@ -275,6 +269,28 @@ void appStartup(const QString &pappName)
 
     trace(title);
 
+    QCommandLineParser parser;
+
+    QString languageName = getAppLanguage();
+    QCommandLineOption languageOption({"l", "lang"}, "language", "languageName", "");
+    parser.addOption(languageOption);
+
+    QStringList args = QCoreApplication::instance()->arguments();
+    trace("Arguments" + args.join("|"));
+
+    parser.process(args);
+
+    if (parser.isSet(languageOption))
+    {
+        languageName = parser.value(languageOption);
+    }
+    else
+    {
+        trace("LanguageOption not found");
+    }
+
+    trace(QString("Language Name %1").arg(languageName));
+
     register_frequency_types();
 
     setAppLanguage(languageName);
@@ -321,20 +337,4 @@ void setAppClosing()
     appClosing = true;
 }
 
-void executeStdIn(QString cmd)
-{
-    trace("Command read from stdin: " + cmd);
-    if (cmd.indexOf("ShowServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowApp(true);
-    if (cmd.indexOf("HideServers", 0, Qt::CaseInsensitive) >= 0)
-        setShowApp(false);
-    if (cmd.indexOf("Font ", 0, Qt::CaseInsensitive) >= 0)
-    {
-        setAppFont(cmd);
-    }
-    if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
-    {
-        QApplication::closeAllWindows();
-    }
-}
 

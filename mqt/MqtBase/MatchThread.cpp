@@ -6,7 +6,6 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 #include "cutils.h"
 #include "MinosParameters.h"
@@ -16,6 +15,8 @@
 #include "ScreenContact.h"
 #include "contest.h"
 #include "ListContact.h"
+#include "list.h"
+#include "MTrace.h"
 //---------------------------------------------------------------------------
 TMatchThread *TMatchThread::matchThread = nullptr;
 
@@ -124,7 +125,7 @@ void TMatchThread::on_ScreenContactChanged(ScreenContact *sct, BaseContestLog *c
        baseName = b;    // baseName makes sure that results are only acted on by the correct windows - log, edit, monitor
       if (sct)
       {
-         contactToMatch = *sct;
+         contactToMatch.copyFromArg(*sct);
          // we want to initialise the search from the screen contact - break what couplings we can
          // we need to take care over thread safety as well!
          startMatch();
@@ -139,7 +140,7 @@ void TMatchThread::on_CountrySelect(QString sel, BaseContestLog *c)
    {
       contactToMatch.cs = Callsign();
       contactToMatch.loc = Locator();
-      contactToMatch.extraText.clear();
+      contactToMatch.extraText.setValue(QString());
       QSharedPointer<CountryEntry> ce = MultLists::getMultLists() ->getCtryForPrefix( sel );
       startMatch(ce);
    }
@@ -185,8 +186,11 @@ void TMatchThread::Execute()
       while ( !Terminated )
       {
          thisLogMatch->initMatch();  // does nothing unless matchRequired is true
+         yieldCurrentThread();
          otherLogMatch->initMatch();  // does nothing unless matchRequired is true
+         yieldCurrentThread();
          listMatch->initMatch();
+         yieldCurrentThread();
 
          // so it only does a max of 20+20 contacts before switching
          // to "other" of log/list
@@ -444,7 +448,7 @@ void Matcher::initMatch( )
       if ( matchRequired )
       {
          tickct++;
-         if ( tickct < 2 )
+         if ( tickct < 5 )
             return ;
       }
       else
@@ -466,11 +470,11 @@ void Matcher::initMatch( )
          if ( !mct )
             return ;
 
-         unsigned char qth_changed = matchqth.set( mct->extraText );
+         unsigned char qth_changed = matchqth.set( mct->extraText.getValue() );
          QString md;
          if ( qth_changed & SET_CHANGED )
          {
-             md = mct->extraText;
+             md = mct->extraText.getValue();
          }
          matchDistrict( md );
          unsigned char changed = matchcs.set( mct->cs.getFullCall() );	// we rely on set to set up the search terms
@@ -534,7 +538,7 @@ void ThisLogMatcher::matchCountry( const QString &cs )
 {
    TMatchThread::getMatchThread() ->matchCountry( cs );   // scroll to
 }
-void ThisLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog *ccon )
+void ThisLogMatcher::addMatch( CheckableContact *cct, BaseContestLog *ccon )
 {
    if ( !cct )
       return ;
@@ -742,7 +746,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
                 QString baseName = TMatchThread::getMatchThread() ->getBaseName();
                 BaseContestLog * ct = MinosParameters::getMinosParameters() ->getCurrentContest();
-                if (baseName == "Log" && bool( ct ) && ( matchPhase != empCountry )  && ( matchPhase != empDistrict )  && ( matchPhase != empLocator ) )
+                if (baseName == "Logger" && bool( ct ) && ( matchPhase != empCountry )  && ( matchPhase != empDistrict )  && ( matchPhase != empLocator ) )
                 {
                    addMatch( ct->DupSheet.getCurDup(), ct );	// in case it isn't already
                 }
@@ -802,7 +806,7 @@ bool ThisLogMatcher::idleMatch( int limit )
              return true;
 
           unsigned short cf = cct->contactFlags.getValue();
-          if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+          if ( cf & DONT_PRINT )
           {
               continue;
           }
@@ -857,7 +861,7 @@ bool ThisLogMatcher::idleMatch( int limit )
 
              if ( csmatch && locmatch && qthmatch )
              {
-                addMatch( cct, ccon );
+                addMatch( cct.data(), ccon );
                 if ( matchCollection->contactCount() > MATCH_LIM )
                    break;
              }
@@ -866,7 +870,7 @@ bool ThisLogMatcher::idleMatch( int limit )
           {
              if ( cct->ctryMult && ( cct->ctryMult == countryEntry ) )
              {
-                addMatch( cct, ccon );
+                addMatch( cct.data(), ccon );
                 if ( matchCollection->contactCount() > MATCH_LIM )
                    break;
              }
@@ -951,7 +955,7 @@ void OtherLogMatcher::addMatch( QSharedPointer<BaseContact> cct, BaseContestLog 
        if (tcon == ccon)
        {
             found = test.wt;
-            MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct ));
+            MapWrapper<MatchContact> mct(new MatchLogContact( ccon, cct.data() ));
             found->contactMatchList.insert( mct, mct );
             break;
        }
@@ -1026,7 +1030,7 @@ bool OtherLogMatcher::idleMatch( int limit )
             return true;
 
          unsigned short cf = cct->contactFlags.getValue();
-         if ( cf & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+         if ( cf & DONT_PRINT )
          {
              continue;
          }

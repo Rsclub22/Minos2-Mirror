@@ -7,14 +7,13 @@
 #include <QVector>
 #include <QSortFilterProxyModel>
 #include "BandList.h"
-#include "base_pch.h"
+#include "StdInReader.h"
 #include "qttelnet.h"
 #include "clustercommands.h"
 #include "setupdialog.h"
 #include "clusterrpc.h"
 #include "dxspotdatamodel.h"
 #include "sentSpotdatamodel.h"
-//#include "clusterClientServer.h"
 #include "userclustercommanddialog.h"
 #include "checkmodeagainstfreq.h"
 #include "presetbutton.h"
@@ -269,7 +268,7 @@ signals:
     void disconnectTimerfinished();
 private:
     Ui::ClusterMainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
 
     class QTimer LogTimer;

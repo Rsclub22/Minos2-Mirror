@@ -1,3 +1,5 @@
+#include "rigcontrolcommonconstants.h"
+#include "MTrace.h"
 #include "wsjtxlink.h"
 
 WsjtxLink::WsjtxLink(QObject *parent):
@@ -65,9 +67,9 @@ void WsjtxLink::log_ADIF(QString const& /*id*/, QByteArray const& /*ADIF*/)
     //trace(QString("WsjtxServer::log_ADIF %1").arg(QString(ADIF)));
 //    emit do_log_ADIF(id, ADIF);
 }
-void WsjtxLink::add_client (QString const& /*id*/, QString const& /*version*/, QString const& /*revision*/)
+void WsjtxLink::add_client (QString const& id, QString const& version, QString const& revision)
 {
-    trace(QString("WsjtxServer::add_client"));
+    trace(QString("WsjtxServer::add_client %1 %2 %3").arg(id, version, revision));
 //    emit do_add_client(id, version, revision);
 }
 

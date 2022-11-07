@@ -7,14 +7,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
 #include <QUuid>
+#include "MTrace.h"
+#include "RPCCommandConstants.h"
 #include "SecondInstall.h"
+#include "fileutils.h"
 #include "tinyxml.h"
 #include "TinyUtils.h"
 
 #include "MinosLink.h"
-#include "clientThread.h"
 #include "serverThread.h"
 
 #include "minoslistener.h"
@@ -474,7 +475,7 @@ bool UDPSocket::sendMessage(const QString &mess )
 
     QString err = "No error";
     if (res < 0)
-        err = qus->error();
+        err = qus->errorString();
     trace("send datagram on " + ifaceName + " result " + err
           + " : " + mess);
 

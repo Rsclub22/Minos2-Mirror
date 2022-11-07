@@ -35,20 +35,18 @@ class GridColumn
 };
 
 //---------------------------------------------------------------------------
-enum eLogGridCols {egTime,
+enum eLogGridCols {egDate,
+                   egTime,
                    egBand,
                    egCall,
                    egRSTTx, egSNTx, egRSTRx, egSNRx,
                    egLoc, egBrg, egScore,
                    egExchange, egComments,
                    egRigName, egFrequency, egRotatorHeading,
+                   egOperator,
                    egLogMaxCol
                   };
 //---------------------------------------------------------------------------
-#define LOGTREECOLS egLogMaxCol
-#define THISMATCHTREECOLS egLogMaxCol
-#define OTHERMATCHTREECOLS egLogMaxCol - 5
-#define ARCHIVEMATCHTREECOLS egLogMaxCol - 9
 
 class QSOGridModel: public QAbstractItemModel
 {
@@ -56,7 +54,7 @@ class QSOGridModel: public QAbstractItemModel
     protected:
         BaseContestLog *contest = nullptr;
     public:
-        static GridColumn QSOTreeColumns[ LOGTREECOLS ];
+        static QVector<GridColumn> QSOTreeColumns;
 
 
         QSOGridModel();
@@ -74,6 +72,9 @@ class QSOGridModel: public QAbstractItemModel
 
         int rowCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
         int columnCount( const QModelIndex &parent = QModelIndex() ) const Q_DECL_OVERRIDE;
+
+        virtual bool insertRows(int row, int count, const QModelIndex &index = QModelIndex()) override;
+        void changeRow(int row);
 };
 
 #endif

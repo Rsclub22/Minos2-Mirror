@@ -10,20 +10,19 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-
-
-#include "rotsetupform.h"
-#include "ui_rotsetupform.h"
-#include "minosNetUtils.h"
-#include "rotatorfactory.h"
-#include <QDebug>
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QtSerialPort/QSerialPort>
-#include <QSerialPortInfo>
+#include <QtSerialPort/QSerialPortInfo>
 #include <QMessageBox>
 #include <QHostAddress>
+
+#include "minosNetUtils.h"
+#include "rotatorfactory.h"
+#include "serialCommonData.h"
+
+#include "rotsetupform.h"
+#include "ui_rotsetupform.h"
 
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");

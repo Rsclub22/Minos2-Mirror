@@ -22,15 +22,14 @@
 #include <QVector>
 #include <QProcess>
 
-#include "mqtUtils_pch.h"
 #include "BandList.h"
+#include "PubSubValue.h"
+#include "StdInReader.h"
 #include "serialtvswitch.h"
-#include "smeterbar.h"
 #include "rigcommon.h"
 #include "rigbase.h"
 #include "rigfactory.h"
 #include "rigcapabilities.h"
-#include "serialCommonData.h"
 
 
 class QLabel;
@@ -39,7 +38,7 @@ class QBitArray;
 class RigSetupDialog;
 class RigControl;
 class RigControlRpc;
-
+class QPushButton;
 
 
 
@@ -249,7 +248,7 @@ public:
 private:
 
     Ui::RigControlMainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     bool closeApp = false;
     RigControlRpc *msg = nullptr;
 

@@ -15,6 +15,7 @@ apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plu
 apt-get install libqt5serialport5 -y
 apt-get install libqt5serialport5-dev -y
 apt-get install qttools5-dev -y
+apt-get install libqt5charts5-dev -y
 
 # ubuntu 21 doesn't seem to have g++ by default
 

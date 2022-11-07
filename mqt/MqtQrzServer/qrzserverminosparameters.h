@@ -1,7 +1,7 @@
 #ifndef QRZSERVERMINOSPARAMETERS_H
 #define QRZSERVERMINOSPARAMETERS_H
 
-#include "base_pch.h"
+#include "MinosParameters.h"
 
 class QrzServerMinosParameters : public MinosParametersAdapter
 {

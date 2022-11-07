@@ -1,11 +1,14 @@
 #include <QSettings>
+#include <QMessageBox>
+
+#include "MTrace.h"
+#include "RPCPubSub.h"
 #include "SendRPCDM.h"
 #include "tlogcontainer.h"
 #include "KeyerJson.h"
 #include "txVmExternalButtonDialog.h"
 #include "ui_txVmExternalButtonDialog.h"
 
-static bool inhibitCallbacks = false;
 static TxVmExternalButtonDialog *txvmbd = nullptr;
 
 TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
@@ -14,6 +17,46 @@ TxVmExternalButtonDialog::TxVmExternalButtonDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    // record
+    recordFrame = new SliderSpinner(this, tr("\nRecord"), Qt::Vertical, -10, +10, 0);
+    ui->levelsFrame->layout()->addWidget(recordFrame);
+    connect(recordFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::volsChanged);
+
+    // replay
+    replayFrame = new SliderSpinner(this, tr("\nReplay"), Qt::Vertical, -10, +10, 0);
+    ui->levelsFrame->layout()->addWidget(replayFrame);
+    connect(replayFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::volsChanged);
+
+    // passthrough
+    passthroughFrame = new SliderSpinner(this, tr("Pass\nThrough"), Qt::Vertical, -10, +10, 0);
+    ui->levelsFrame->layout()->addWidget(passthroughFrame);
+    connect(passthroughFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::volsChanged);
+
+    windowFrame = new SliderSpinner(this, tr("Window (ms)"), Qt::Horizontal, 1, +100, 1);
+    ui->compFrame->layout()->addWidget(windowFrame);
+    connect(windowFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
+    thresholdFrame = new SliderSpinner(this, tr("Threshold (db below max)"), Qt::Horizontal, -40, 0, 0);
+    ui->compFrame->layout()->addWidget(thresholdFrame);
+    connect(thresholdFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
+    ratioFrame = new SliderSpinner(this, tr("Compression Ratio"), Qt::Horizontal, 0, +50, 0);
+    ui->compFrame->layout()->addWidget(ratioFrame);
+    connect(ratioFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
+    attackFrame = new SliderSpinner(this, tr("Attack (ms)"), Qt::Horizontal, 1, 100, 0);
+    ui->compFrame->layout()->addWidget(attackFrame);
+    connect(attackFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
+    releaseFrame = new SliderSpinner(this, tr("Release (ms)"), Qt::Horizontal, 1, 100, 0);
+    ui->compFrame->layout()->addWidget(releaseFrame);
+    connect(releaseFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
+    makeUpGainFrame = new SliderSpinner(this, tr("Makeup Gain (db)"), Qt::Horizontal, 0, +20, 0);
+    ui->compFrame->layout()->addWidget(makeUpGainFrame);
+    connect(makeUpGainFrame, &SliderSpinner::valueChanged, this, &TxVmExternalButtonDialog::compressionChanged);
+
 
     connect(LogContainer->sendDM, &TSendDM::keyerConfig, this, &TxVmExternalButtonDialog::onKeyerConfig);
     LogContainer->sendDM->publishKeyerMS(true);   // force resubscribe so we get keyer configs
@@ -29,7 +72,6 @@ void TxVmExternalButtonDialog::doCloseEvent()
 {
     QSettings settings;
     settings.setValue("TxVmInternalButtonDialog/geometry", saveGeometry());
-    inhibitCallbacks = true;
     txvmbd = nullptr;
 }
 
@@ -91,8 +133,6 @@ void TxVmExternalButtonDialog::setVmData(VoiceKeyerParams *vmData_)
     ui->txVmNameEdit->setText(vmData->getVmName());
     ui->repeatChkBox->setChecked(vmData->getVmRepeatFlag());
     ui->repeatPauseDur->setText(QString::number(vmData->getVmRepeatPauseDur()));
-    ui->txVmMessageDur->setText(QString::number(vmData->getVmDuration()));
-
 }
 
 void TxVmExternalButtonDialog::on_replayButton_clicked()
@@ -108,89 +148,29 @@ void TxVmExternalButtonDialog::on_recordButton_clicked()
 
 void TxVmExternalButtonDialog::on_stopButton_clicked()
 {
+    trace("TxVmExternalButtonDialog::on_stopButton_clicked");
     emit LogContainer->sendKeyerStop();
 }
 
-void TxVmExternalButtonDialog::on_recordValue_valueChanged(double arg1)
-{
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        ui->recordSlider->setValue(static_cast<int>(arg1 * 10));
-        pubSliders();
-        inVolChangeCount--;
-    }
-}
-
-void TxVmExternalButtonDialog::on_recordSlider_valueChanged(int /*position*/)
-{
-    if (inVolChangeCount <= 0)
-    {
-        pubSliders();
-
-        inVolChangeCount = 1;
-        int v = ui->recordSlider->value();
-        ui->recordValue->setValue(v/10.0);
-        inVolChangeCount--;
-    }
-}
-
-void TxVmExternalButtonDialog::on_replayValue_valueChanged(double arg1)
-{
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        ui->replaySlider->setValue(static_cast<int>(arg1 * 10));
-        pubSliders();
-        inVolChangeCount--;
-    }
-}
-
-
-void TxVmExternalButtonDialog::on_replaySlider_valueChanged(int /*value*/)
-{
-    if (inVolChangeCount <= 0)
-    {
-        pubSliders();
-
-        inVolChangeCount = 1;
-        int v = ui->replaySlider->value();
-        ui->replayValue->setValue(v/10.0);
-        inVolChangeCount--;
-    }
-}
-
-
-void TxVmExternalButtonDialog::on_passThroughValue_valueChanged(double arg1)
-{
-    if (inVolChangeCount <= 0)
-    {
-        inVolChangeCount = 1;
-        ui->passThroughSlider->setValue(static_cast<int>(arg1 * 10));
-        pubSliders();
-        inVolChangeCount--;
-    }
-}
-
-
-void TxVmExternalButtonDialog::on_passThroughSlider_valueChanged(int /*value*/)
-{
-    if (inVolChangeCount <= 0)
-    {
-        pubSliders();
-
-        inVolChangeCount = 1;
-        int v = ui->passThroughSlider->value();
-        ui->passThroughValue->setValue(v/10.0);
-        inVolChangeCount--;
-    }
-}
 void TxVmExternalButtonDialog::pubSliders()
 {
-    int v0 = ui->recordSlider->value();
-    int v1 = ui->replaySlider->value();
-    int v2 = ui->passThroughSlider->value();
-    QString sliders = QString("%1;%2;%3").arg(v0).arg(v1).arg(v2);
+    int v0 = recordFrame->getIntValue();
+    int v1 = replayFrame->getIntValue();
+    int v2 = passthroughFrame->getIntValue();
+
+    getCompSliders();
+    QString sliders = QString("%1;%2;%3;%4;%5;%6;%7;%8;%9;%10;%11")
+            .arg(v0).arg(v1).arg(v2)
+            .arg(compParams.window)
+            .arg(compParams.threshold)
+            .arg(compParams.ratio)
+            .arg(compParams.attack)
+            .arg(compParams.release)
+            .arg(compParams.makeUpGain)
+            .arg(compParams.doFilter)
+            .arg(compParams.doCompression);
+            ;
+
     RPCPubSub::publish(rpcConstants::KeyerConfigCategory, rpcConstants::keyerSliders, sliders, psPublished);
 }
 void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
@@ -225,14 +205,95 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
                 QStringList vals = val.split(";");
                 inVolChangeCount++;
 
-                trace(QString("onKeyerConfig keyerSliders %1;%2;%3").arg(vals[0], vals[1], vals[2]));
-                ui->recordSlider->setValue(vals[0].toDouble());
-                ui->recordValue->setValue(vals[0].toDouble()/10.0);
-                ui->replaySlider->setValue(vals[1].toDouble());
-                ui->replayValue->setValue(vals[1].toDouble()/10.0);
-                ui->passThroughSlider->setValue(vals[2].toDouble());
-                ui->passThroughValue->setValue(vals[2].toDouble()/10.0);
+                trace(QString("onKeyerConfig keyerSliders %1;%2;%3;%4").arg(vals[0], vals[1], vals[2], vals[3]));
+                recordFrame->setIntValue(vals[0].toInt());
+                replayFrame->setIntValue(vals[1].toInt());
+                passthroughFrame->setIntValue(vals[2].toInt());
+
+                compParams.window = vals[3].toDouble();
+                compParams.threshold = vals[4].toDouble();
+                compParams.ratio = vals[5].toDouble();
+                compParams.attack = vals[6].toDouble();
+                compParams.release = vals[7].toDouble();
+                compParams.makeUpGain = vals[8].toDouble();
+
+                compParams.doFilter = (vals[9].toInt() > 0);
+                compParams.doCompression = (vals[10].toInt() > 0);
+
+                setCompSliders();
 
                 inVolChangeCount--;
             }
 }
+
+
+void TxVmExternalButtonDialog::getCompSliders()
+{
+    compParams.window = windowFrame->getValue();       // milliseconds
+    compParams.threshold = thresholdFrame->getValue();
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    compParams.ratio = 1 - ratioFrame->getValue()/rrange;
+
+    compParams.attack = attackFrame->getValue();     // ms
+    compParams.release = releaseFrame->getValue(); // ms
+    compParams.makeUpGain = makeUpGainFrame->getValue();
+
+    compParams.doFilter = ui->doFilter->isChecked();
+    compParams.doCompression = ui->doCompression->isChecked();
+}
+
+void TxVmExternalButtonDialog::setCompSliders()
+{
+    windowFrame->setValue(compParams.window);       // milliseconds
+    thresholdFrame->setValue(compParams.threshold);
+
+    double rrange = ratioFrame->maximum() - ratioFrame->minimum() + 1;
+    ratioFrame->setValue(rrange * (1 - compParams.ratio));
+
+    attackFrame->setValue(compParams.attack);     // ms
+    releaseFrame->setValue(compParams.release); // ms
+    makeUpGainFrame->setValue(compParams.makeUpGain);
+
+    ui->doFilter->setChecked(compParams.doFilter);
+    ui->doCompression->setChecked(compParams.doCompression);
+}
+
+
+void TxVmExternalButtonDialog::volsChanged()
+{
+    if (inVolChangeCount <= 0)
+    {
+        pubSliders();
+    }
+}
+void TxVmExternalButtonDialog::compressionChanged()
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+    }
+}
+
+
+
+void TxVmExternalButtonDialog::on_doFilter_stateChanged(int /*arg1*/)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+    }
+}
+
+
+void TxVmExternalButtonDialog::on_doCompression_stateChanged(int /*arg1*/)
+{
+    if (inVolChangeCount <= 0)
+    {
+        getCompSliders();
+        pubSliders();
+    }
+}
+

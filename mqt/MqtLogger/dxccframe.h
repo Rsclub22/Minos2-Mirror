@@ -1,18 +1,23 @@
 #ifndef DXCCFRAME_H
 #define DXCCFRAME_H
 
-#include "base_pch.h"
+#include "TreeUtils.h"
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QMenu>
 
 namespace Ui {
 class DXCCFrame;
 }
 
 class LoggerContestLog;
+class StackedInfoFrame;
+class TSingleLogFrame;
 
 class DXCCGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-        static GridColumn CountryTreeColumns[ ectMultMaxCol ] ;
+        static QVector<GridColumn> CountryTreeColumns ;
     public:
         DXCCGridModel();
         ~DXCCGridModel() Q_DECL_OVERRIDE;
@@ -39,7 +44,7 @@ public:
     QString scrolledCountry;
     QString band;
     bool filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const override;
-    DXCCSortFilterProxyModel(): scrolledCountry(-1)
+    DXCCSortFilterProxyModel()
     {
     }
 };
@@ -52,23 +57,35 @@ class DXCCFrame : public QFrame
     DXCCSortFilterProxyModel proxyModel;
     QSharedPointer<HtmlDelegate> delegate ;
     QString band;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    TSingleLogFrame *tslf = nullptr;
 
 public:
-    explicit DXCCFrame(QWidget *parent = nullptr);
+    explicit DXCCFrame(StackedInfoFrame  *parent);
     ~DXCCFrame() override;
 
     void setContest(LoggerContestLog *contest);
     void setBand(QString band);
     void reInitialiseCountries();
     void scrollToCountry(const QString &bp, bool makeVisible );
-
 private:
     Ui::DXCCFrame *ui;
     void doScrollToCountry();
     
+    void saveDXCCTableColumns();
+
+    void restoreDXCCTableColumns();
+
 private slots:
     void on_sectionResized(int, int , int);
     void on_DXCCTable_clicked(const QModelIndex &index);
+    void onDXCCGrid_customContextMenuRequested(const QPoint &pos);
+    void onDXCCGrid_sectionMoved(int, int, int);
+
+    void viewColumn();
+
+    void on_doColumnChanges(BaseContestLog *b);
 };
 
 #endif // DXCCFRAME_H

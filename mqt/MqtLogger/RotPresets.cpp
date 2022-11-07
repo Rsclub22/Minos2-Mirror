@@ -1,16 +1,9 @@
-#include "base_pch.h"
-#include "ContestApp.h"
 #include "LoggerContest.h"
-#include "tlogcontainer.h"
-#include "tsinglelogframe.h"
-#include "qsologframe.h"
-#include "SendRPCDM.h"
 #include "rotatorcommon.h"
-
+#include "MTrace.h"
 #include "RotPresets.h"
+#include "rotpresetdialog.h"
 #include "ui_RotPresets.h"
-
-
 
 
 RotPresets::RotPresets(QWidget *parent) :

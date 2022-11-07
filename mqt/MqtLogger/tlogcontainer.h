@@ -1,9 +1,13 @@
 #ifndef TLOGCONTAINER_H
 #define TLOGCONTAINER_H
 
-#include "base_pch.h"
+#include <QAction>
+#include <QMainWindow>
+#include <QMenu>
+#include <QTimer>
 #include "helpbrowser.h"
 #include "n1mmbroadcast.h"
+#include "rigcontrolcommonconstants.h"
 #include "serialtvswitch.h"
 
 namespace Ui {
@@ -19,6 +23,7 @@ class ContactList;
 class MatchContact;
 class TSendDM;
 class ContestPageControl;
+class QLabel;
 
 class SetMemoryAction: public QAction
 {
@@ -150,6 +155,7 @@ private:
     QAction *ExitAction;
     QAction *ExitClearAction;
     QAction *MakeEntryAction;
+    QAction *StatsAction;
     QAction *AppendAdifAction;
     QAction *VHFFileNewAction;
     QAction *HFFileNewAction;
@@ -164,6 +170,7 @@ private:
     QAction *CorrectDateTimeAction;
     QAction *ScreenConfigAction;
     QAction *AdvancedOptionsAction;
+    QAction *CheckUpdatesAction;
 
     QAction *GoToSerialAction;
     QAction *NextUnfilledAction;
@@ -218,6 +225,7 @@ private slots:
     void AnalyseMinosLogActionExecute();
     void CorrectDateTimeActionExecute();
     void AdvancedOptionsActionExecute();
+    void CheckUpdatesActionExecute();
 
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
@@ -235,8 +243,9 @@ private slots:
     void mleSetMemoryAction(BaseContestLog *, QString call, QString loc);
     void doScreenConfigAction();
 
-    void appStarted();
+    void stealFocus();
 
+    void StatsActionExecute();
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

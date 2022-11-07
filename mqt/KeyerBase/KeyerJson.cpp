@@ -1,11 +1,11 @@
-#include "mqtUtils_pch.h"
-
+#include <QFile>
 #include <QSharedPointer>
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include "MTrace.h"
 #include "KeyerJson.h"
 
 KeyerJson::KeyerJson()
@@ -23,6 +23,15 @@ bool KeyerJson::getBool(QJsonObject o, QString key, bool def)
     return def;
 }
 int KeyerJson::getInt(QJsonObject o, QString key, int def)
+{
+    QJsonValue pe = o.value(key);
+    if (pe.isDouble())
+    {
+        return pe.toDouble();
+    }
+    return def;
+}
+int KeyerJson::getDouble(QJsonObject o, QString key, double def)
 {
     QJsonValue pe = o.value(key);
     if (pe.isDouble())
@@ -56,12 +65,14 @@ bool KeyerJson::parseConfig(QString conf, bool incSliders)
                 recordSliderPosition = getInt(sconf, "record", 0);
                 replaySliderPosition = getInt(sconf, "replay", 0);
                 passthroughSliderPosition = getInt(sconf, "pass", 0);
+                compression.read(sconf);
             }
             else
             {
                 recordSliderPosition = -1000;
                 replaySliderPosition = -1000;
                 passthroughSliderPosition = -1000;
+                compression = CompressorParams();
             }
             QJsonValue keys = sconf.value("keys");
             if (keys.isArray())
@@ -118,6 +129,7 @@ QString KeyerJson::makeConfig(QJsonDocument::JsonFormat format, bool force, bool
         sconf.insert("record", recordSliderPosition);
         sconf.insert("replay", replaySliderPosition);
         sconf.insert("pass", passthroughSliderPosition);
+        compression.insert(sconf);
     }
 
     QJsonArray ja;
@@ -170,4 +182,9 @@ bool KeyerJson::write(QString fileName)
 
     return true;
 
+}
+
+void KeyerJson::traceConfig()
+{
+    trace(QString("masterconfig %1 %2 %3").arg(recordSliderPosition).arg(replaySliderPosition).arg(passthroughSliderPosition));
 }

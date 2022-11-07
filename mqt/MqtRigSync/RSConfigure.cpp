@@ -1,7 +1,7 @@
 #include <QSettings>
 #include "MShowMessageDlg.h"
-#include "cutils.h"
 #include "RSConfigure.h"
+#include "rigcontrolcommonconstants.h"
 #include "ui_RSConfigure.h"
 
 RSConfigure::RSConfigure(QWidget *parent) :

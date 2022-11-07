@@ -2,10 +2,17 @@
 #define CLUSTERCOMMON_H
 
 
-#include "base_pch.h"
-#include "BandList.h"
 #include <QList>
 #include <QColor>
+#include <QRegularExpression>
+#include <QSharedPointer>
+
+#include "BandList.h"
+#include "PublishState.h"
+
+class QCheckBox;
+class QLineEdit;
+class QLabel;
 
 extern const char * clusterStateList[];
 
@@ -87,6 +94,9 @@ const int RXTIME_COL_NUM = 16;
 const int DATE_COL_NUM = 17;
 const int DATE_TIME_COL_NUM = 18;
 const int DXCLUSTER_SPOT_TYPE = 19;
+
+const int bandmapColCount = 28;
+
 const int SPOT_TYPE_COL_NUM = 20;       // used in bandmap
 const int SPOT_IS_SELECTED_COL_NUM = 21;    // used in bandmap
 const int ROT_BEARING_COL_NUM = 22;     // used in bandmap
@@ -96,9 +106,6 @@ const int OFF_RUN_FREQ_COL_NUM = 25;    // used in bandmap
 const int CQ_RESPONSE_COL = 26;    // used in bandmap
 const int DX_DISTRICT_COL_NUM = 27;   // used in bandmap
 const int DX_DISTRICT_WORKED_COL_NUM = 28; // used in bandmap
-
-const bool BOOL_YES = true;
-const bool BOOL_NO = false;
 
 const QString SPOT_TX_ON = "TxSpotOn";
 const QString SPOT_TX_OFF = "TxSpotOff";
@@ -250,6 +257,10 @@ class BandFilterSettings
         bandType = bfs.bandType;
 
         return *this;
+    }
+    BandFilterSettings(const BandFilterSettings &bfs)
+    {
+        *this = bfs;
     }
 
 

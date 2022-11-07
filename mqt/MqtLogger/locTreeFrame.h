@@ -1,7 +1,8 @@
 #ifndef LOCTREEFRAME_H
 #define LOCTREEFRAME_H
 
-#include "base_pch.h"
+#include <QFrame>
+#include "htmldelegate.h"
 
 namespace Ui {
 class LocTreeFrame;

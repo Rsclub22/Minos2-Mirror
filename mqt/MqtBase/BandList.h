@@ -22,8 +22,11 @@
 #ifndef BandListH
 #define BandListH
 
-#include "base_pch.h"
 //---------------------------------------------------------------------------
+#include <QVector>
+#include <QSharedPointer>
+
+#include "frequency.h"
 extern const QString allHF;
 
 const QString HF_BANDTYPE = "HF";
@@ -64,6 +67,8 @@ class BandInfo
         QString type;
     public:
         bool enabled = true;
+
+        bool contestAllowed = true;
 
         Frequency fLow;
         Frequency fHigh;
@@ -107,6 +112,7 @@ class BandInfo
             QString n = normalise(uk);
             return n;
         }
+        bool operator<(const BandInfo &rhs);
 };
 class TiXmlElement;
 class BandList

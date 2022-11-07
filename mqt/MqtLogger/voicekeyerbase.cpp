@@ -5,7 +5,7 @@
 // Copyright        (c) D. G. Balharrie M0DGB/G8FKH 2016 - 2020
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
+#include "MTrace.h"
 #include "voicekeyerbase.h"
 
 VoiceKeyerParams::VoiceKeyerParams()

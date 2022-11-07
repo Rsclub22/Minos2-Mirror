@@ -3,9 +3,9 @@
 
 #include "BandList.h"
 #include "Calendar.h"
-#include "CalendarList.h"
-
-#include "base_pch.h"
+#include "XMPPStanzas.h"
+#include "Dispatcher.h"
+//#include "CalendarList.h"
 
 
 class RPCTestTest : public QObject, RPCDispatcher
@@ -49,6 +49,8 @@ private Q_SLOTS:
     void testBST();
 
     void testMults();
+
+    void testQDateTime();
 };
 
 RPCTestTest::RPCTestTest()
@@ -630,6 +632,30 @@ void RPCTestTest::testMults()
     }
     */
 }
+
+void RPCTestTest::testQDateTime()
+{
+    QDateTime now = QDateTime::currentDateTimeUtc();
+
+    QString snow = now.toString("yyyyMMMddhhmmss");
+
+    QDateTime newNow = QDateTime::fromString(snow, "yyyyMMMddhhmmss");
+
+    QString snewNow = newNow.toString("yyyyMMMddhhmmss");
+
+    QVERIFY(snow == snewNow);
+
+    QStringList monthNames;
+    for (int i = 1; i <= 12; i++)
+    {
+        QString s = QString("2022 %1 21 20 00 00").arg(i, 2, 10, QChar('0'));
+
+        QDateTime d = QDateTime::fromString(s, "yyyy MM dd hh mm ss");
+
+        QString m = d.toString("MMM");
+        monthNames.append(m);
+    }
+    QVERIFY(snow == snewNow);}
 
 QTEST_MAIN(RPCTestTest)
 

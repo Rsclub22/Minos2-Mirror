@@ -6,13 +6,14 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
 
+#include <QTextStream>
 #include "LoggerContest.h"
 #include "LoggerContacts.h"
 #include "ContestApp.h"
-#include "ScreenConfigFile.h"
 #include "AdifImport.h"
+#include "cutils.h"
+#include "fileutils.h"
 #include "reg1test.h"
 #include "cabrillo.h"
 #include "printfile.h"
@@ -21,6 +22,9 @@
 #include "MinosTestExport.h"
 #include "BandList.h"
 #include "latlong.h"
+#include "calcs.h"
+#include "MinosParameters.h"
+#include "MTrace.h"
 
 #include "LoggerContest.h"
 
@@ -47,7 +51,6 @@ void LoggerContestLog::makeContact(bool timeNow, QSharedPointer<BaseContact> &lc
 }
 LoggerContestLog::~LoggerContestLog()
 {
-   closeFile();
 }
 void LoggerContestLog::initialiseINI()
 {
@@ -262,6 +265,7 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
 
    // open the LoggerContestLog file
 
+
    cfileName = fn;
    QString ext = ExtractFileExt( fn );
    publishedName = ExtractFileName( fn );
@@ -364,9 +368,9 @@ bool LoggerContestLog::initialise( const QString &fn, bool newFile, int slotno )
                      needExport = true;
                   }
 
-      scanContest();
+      scanContest();    // after log initialise/load/import
       clearDirty();  // what we have just read CAN'T be dirty
-      validateLoc();
+//      validateLoc();    // this was done in scanContest
       // run_contest_dialog has already loaded the LoggerContestLog and set log_count
       // here, we display a "loading" box
       if ( isUnwriteable() )     // Minos files can be unprotected if not realy RO
@@ -560,8 +564,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContact( int newctno, unsigned 
    {
       bct->commonSave(bct);		// make sure contact is correct
    }
-   MapWrapper<BaseContact> wbct(bct);
-   ctList.insert( wbct, wbct );
+   addToContestList(bct);
    if ( saveNew )
    {
       commonSave( false );
@@ -597,8 +600,7 @@ QSharedPointer<BaseContact> LoggerContestLog::addContactBetween(QSharedPointer<B
    bct->setLogSequence( seq );
 
    bct->commonSave(bct);		// make sure contact is correct
-   MapWrapper<BaseContact>wbct(bct);
-   ctList.insert( wbct, wbct );
+   addToContestList(bct);
    commonSave( false );
 
    return bct;
@@ -929,8 +931,7 @@ bool LoggerContestLog::GJVloadContacts( )
       if ( bct->GJVload( static_cast< int >( nextBlock) ) )
       {
          nextBlock++;
-         MapWrapper<BaseContact> wbct(bct);
-         ctList.insert( wbct, wbct );
+         addToContestList(bct);
          int maxct = bct->serials.getValue().toInt();
          if ( maxct > maxSerial )
             maxSerial = maxct;
@@ -1496,8 +1497,7 @@ bool LoggerContestLog::importLOG(QSharedPointer<QFile> hLogFile )
       next_block++ ;
       bct->setLogSequence( static_cast<unsigned long>(next_block) << 16 );
 
-      MapWrapper<BaseContact> wbct(bct);
-      ctList.insert( wbct, wbct );
+      addToContestList(bct);
    }
    return true;
 }

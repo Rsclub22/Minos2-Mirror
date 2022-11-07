@@ -1,14 +1,15 @@
-#include "base_pch.h"
 
 #include <QJsonDocument>
 #include <QJsonParseError>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "MShowMessageDlg.h"
 #include "profiles.h"
+#include "MTrace.h"
 
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
-#include "ScreenConfigScreen.h"
+
 /*
 [{"name": "default",
 "rows":[

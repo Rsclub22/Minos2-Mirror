@@ -1,6 +1,8 @@
+#include <QMessageBox>
+#include "cutils.h"
+
 #include "addantennadialog.h"
 #include "ui_addantennadialog.h"
-#include <QMessageBox>
 
 AddAntennaDialog::AddAntennaDialog(QStringList _availAntennas, RotatorFactory *rotatorFactory, QWidget *parent) :
     QDialog(parent),

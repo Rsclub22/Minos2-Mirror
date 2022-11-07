@@ -9,12 +9,12 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <QWheelEvent>
 
-#include "base_pch.h"
-#include "rigutils.h"
 #include "BandList.h"
+#include "MTrace.h"
+
 #include "freqlineedit.h"
-#include "cutils.h"
 
 FreqLineEdit::FreqLineEdit(QWidget *parent):
     QLineEdit(parent)
@@ -41,7 +41,7 @@ void FreqLineEdit::wheelEvent(QWheelEvent *event)
     {
        changeFreq(true);
     }
-    else
+    else if (numTicks <= -1)
     {
         changeFreq(false);
     }

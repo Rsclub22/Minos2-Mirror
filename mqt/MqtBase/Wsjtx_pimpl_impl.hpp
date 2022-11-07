@@ -1,6 +1,7 @@
 #ifndef PIMPL_IMPL_HPP_
 #define PIMPL_IMPL_HPP_
 
+#include "Wsjtx_pimpl_h.hpp"
 #include <utility>
 
 template<typename T>

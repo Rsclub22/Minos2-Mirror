@@ -2,6 +2,8 @@
 #include "contest.h"
 #include "kstmainwindow.h"
 #include "cutils.h"
+#include "MinosParameters.h"
+#include "calcs.h"
 
 // kst2me sort by
 // new before old
@@ -363,10 +365,6 @@ QVariant KstCallGridModel::headerData( int section, Qt::Orientation orientation,
     {
         if (delegate)
         {
-            // BUT the headers aren't drawn using the delegate, so this
-            // all fails to work
-
-            // Do we lose the vertical header?
             QString s = "Memxx";
             QSize r = delegate->docSize(s);
             return r;
@@ -498,11 +496,12 @@ bool KstCallGridSortFilterModel::lessThan(const QModelIndex &left,
         ws1 = sourceModel()->data(createIndex(lrow, ecscCall), Qt::UserRole);
         ws2 = sourceModel()->data(createIndex(rrow, ecscCall), Qt::UserRole);
     }
-    if (ws1.type() == QVariant::Type::Int)
+    int column = left.column();
+    if (column == ecscBearing || column == ecscDistance)
     {
         return ws1.toInt() < ws2.toInt();
     }
-    else if (ws1.type() == QVariant::Type::String)
+    else
     {
         return ws1.toString() < ws2.toString();
     }

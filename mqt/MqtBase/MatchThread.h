@@ -7,7 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
+#include <QCoreApplication>
+#include <QThread>
 #include "MatchCollection.h"
 #include "ScreenContact.h"
 
@@ -17,8 +18,6 @@
 //---------------------------------------------------------------------------
 #define SET_CHANGED 1
 #define SET_NOT_GREATER 2
-
-
 
 class Matcher
 {
@@ -80,7 +79,7 @@ class ThisLogMatcher: public Matcher
       virtual ~ThisLogMatcher();
 
       virtual bool idleMatch( int limit );
-      void addMatch(QSharedPointer<BaseContact>, BaseContestLog * );
+      void addMatch(CheckableContact *, BaseContestLog * );
 protected:
       void doMatch();
 };

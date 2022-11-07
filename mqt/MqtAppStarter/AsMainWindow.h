@@ -1,9 +1,11 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef ASMAINWINDOW_H
+#define ASMAINWINDOW_H
 
-#include "base_pch.h"
-//#include <QMainWindow>
-#include "StartConfig.h"
+#include <QMainWindow>
+#include <QLabel>
+#include <QTimer>
+#include <QAction>
+#include <QMap>
 
 namespace Ui {
 class MainWindow;
@@ -56,4 +58,4 @@ private:
     QMenu *newMenu(QMenu *m, const char *text);
 };
 
-#endif // MAINWINDOW_H
+#endif // ASMAINWINDOW_H

@@ -1,7 +1,8 @@
-#include "base_pch.h"
+#include "TinyUtils.h"
 #include "cutils.h"
 #include "BandList.h"
 #include "Calendar.h"
+#include "rigcontrolcommonconstants.h"
 
 const QString monthTable[ 12 ] =
     {

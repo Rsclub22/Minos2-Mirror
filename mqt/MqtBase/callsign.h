@@ -1,7 +1,6 @@
 #ifndef CALLSIGN_H
 #define CALLSIGN_H
 
-#include "XMPP_pch.h"
 #include "minositem.h"
 
 #define CS_OK 0

@@ -1,4 +1,3 @@
-#include "base_pch.h"
 #include <QScrollBar>
 #include <QScrollArea>
 #include "ContestApp.h"
@@ -6,14 +5,13 @@
 
 #include "ScreenConfigFile.h"
 #include "ScreenConfigElement.h"
-#include "ScreenConfigRow.h"
-#include "ScreenConfigElement.h"
 #include "ScreenConfigScreen.h"
+#include "MTrace.h"
 
 #include "ScreenConfig.h"
 #include "ui_ScreenConfig.h"
-ScreenConfig *screenConfigDialog = nullptr;
 
+ScreenConfig *screenConfigDialog = nullptr;
 
 ScreenConfig::ScreenConfig(QWidget *parent, ScreenConfigFile &scfp, QString curConfigNamep) :
     QDialog(parent),
@@ -59,6 +57,10 @@ ScreenConfigScreen *ScreenConfig::buildScreens(SC &sc)
         }
     }
     checkScreens();
+    if (scr == nullptr)
+    {
+        scr = curScreen;
+    }
     return scr;
 }
 ScreenConfigScreen *ScreenConfig::buildScreen(SCScreen &s, int pos)

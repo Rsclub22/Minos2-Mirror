@@ -1,7 +1,6 @@
 #ifndef QSOLOGFRAME_H
 #define QSOLOGFRAME_H
 
-#include "base_pch.h"
 #include "contacts.h"
 #include "ScreenContact.h"
 #include "focuswatcher.h"
@@ -10,6 +9,7 @@
 #include "rigmemcommondata.h"
 
 class ListContact;
+class ContactList;
 
 namespace Ui {
 class QSOLogFrame;
@@ -42,7 +42,7 @@ public:
     bool catchup = false;
     bool unfilled = false;
 
-    void setActiveControl( int *Key );
+    bool setActiveControl( int *Key, Qt::KeyboardModifiers mods );
     void clearCurrentField();
     void lgTraceerr( int err );
 
@@ -59,7 +59,7 @@ public:
 
     void doGJVCancelButton_clicked();
 
-    void transferDetails(const QSharedPointer<BaseContact> lct, const BaseContestLog *matct );
+    void transferDetails(CheckableContact *lct, const BaseContestLog *matct );
     void transferDetails(const ListContact *lct, const ContactList *matct );
     void transferDetails(QString cs, const QString loc, QString exchange, const bool fromBandmapOrMemory );
 
@@ -92,6 +92,7 @@ public:
     void setPlaceholders(QStringList nearMatches);
 
     void transferFromQrz(QString callsign, QString locator, QString name);
+    void selectFirstInvalid();
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -103,6 +104,7 @@ private:
     bool locValid;
 
     bool oldTimeOK;
+    QString timerSS;
 
     void EditControlEnter( QObject *Sender, QFocusEvent *event );
     void EditControlExit( QObject *Sender );
@@ -133,7 +135,7 @@ private:
 
     void doAutofill( );
     void fillRst(QLineEdit *rIl, QString &rep, const QString &mode );
-    void fillExchange(QLineEdit *rIl, QString &exch);
+    void fillExchange(QLineEdit *rIl, const QString &exch);
 
     virtual void showScreenEntry( );
     virtual void getScreenContactTime();
@@ -143,6 +145,9 @@ private:
     bool checkAndLogEntry( );
 
     bool edit = false;
+
+    bool expert = false;
+    bool altFKeys = false;
 
     QString mySentLabelString;
     QString theirSentLabelString;
@@ -239,6 +244,8 @@ private:
 
     QString ssLineEditGreyBackground = "QLineEdit { background-color: silver ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ;}";
     QString ssLineEditOK = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : black ; }";
+    QString ssLineEditNewMultPartial = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : green ; }";
+    QString ssLineEditNewMultFull = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: black ; color : green ; }";
 
     QString ssLineEditFrRedBkRed = "QLineEdit { background-color: red ; border-style: outset ; border-width: 1px ; border-color: red ; color : white }";
     QString ssLineEditFrRedBkWhite = "QLineEdit { background-color: white ; border-style: outset ; border-width: 1px ; border-color: red ; color : black}";
@@ -277,11 +284,13 @@ private:
     void doShowOperators(bool so);
     
     bool readTuneAddBandMapSetting();
+    QString getFKeyLabel(int n);
+    void setEditStyleSheet(QLineEdit *qle, QString ss);
 signals:
     void QSOFrameCancelled();
     void sendBandMap( Frequency freq, QString call, QString utc, QString loc, QString qth );
     void sendModeControl(QString);
-    void bandmapMarkFreq(QString, Frequency, QString, QString, QString, QString);
+    void bandmapMarkFreq(Frequency, QString);
     void bandmapSaveFreq(QString, Frequency, QString, QString, QString, QString);
     void sendFreqControl(Frequency);
     void freqChanged(Frequency);

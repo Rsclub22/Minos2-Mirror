@@ -1,7 +1,10 @@
 #ifndef WSJTXDECODE_H
 #define WSJTXDECODE_H
-#include "base_pch.h"
 
+#include <QCoreApplication>
+#include <QTime>
+#include "callsign.h"
+#include "locator.h"
 enum MessageStage {emsNone, emsCQ, emsGrid, emsDb, emsDbGrid, emsRplusGrid, emsRplusDb, emsRplusDbGrid, emsRRR, ems73, emsFree};
 enum SpecialOperatingActivity {NONE, NA_VHF, EU_VHF, FIELD_DAY, RTTY, FOX, HOUND};
 enum TxRx {eTX, eRX};

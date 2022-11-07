@@ -10,16 +10,14 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
-#include "setupdialog.h"
-#include "ui_setupdialog.h"
+#include <QSettings>
+#include <QMessageBox>
 #include "cutils.h"
 #include "clustercommon.h"
 #include "CallsignLineEdit.h"
 
-
-#include <QSettings>
-
+#include "setupdialog.h"
+#include "ui_setupdialog.h"
 
 SetupDialog::SetupDialog(QWidget *parent) :
     QDialog(parent),

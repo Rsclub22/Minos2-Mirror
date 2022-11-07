@@ -1,8 +1,7 @@
 #ifndef CHATFRAME_H
 #define CHATFRAME_H
 
-#include "base_pch.h"
-
+#include <QFrame>
 #include "ChatServer.h"
 
 namespace Ui {

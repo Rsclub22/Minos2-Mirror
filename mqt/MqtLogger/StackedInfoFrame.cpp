@@ -1,10 +1,10 @@
-#include "base_pch.h"
 #include <QTabBar>
-#include "StackedInfoFrame.h"
-#include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "LoggerContest.h"
+#include "ContestApp.h"
+#include "MTrace.h"
 
+#include "StackedInfoFrame.h"
 #include "ui_StackedInfoFrame.h"
 
 QVector <AuxTypeOption> StackedInfoFrame::auxoptions = {
@@ -45,10 +45,11 @@ QString StackedInfoFrame::getTrAuxTypeString(AuxEntries t)
 bool showWorked = false;
 bool showUnworked = false;
 
-StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
+StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t) :
     QFrame(parent),
     ui(new Ui::StackedInfoFrame),
-    stackInstance(instance)
+    stackInstance(instance),
+    tslf(t)
 {
     ui->setupUi(this);
 
@@ -57,7 +58,7 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     for (const auto &b:qAsConst(blist.bandList))
     {
        bool hf = b->getType() == HF_BANDTYPE;
-       if (hf && b->enabled)
+       if (hf && b->enabled && b->contestAllowed)
        {
            ui->tabbar->addTab(b->uk);
        }
@@ -83,6 +84,8 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance) :
     // sort
     ui->infoCombo->model()->sort(0); // "A","B","C
 
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::showAuxHeaders, this, &StackedInfoFrame::on_ShowAuxHeaders);
+
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToCountry, this, &StackedInfoFrame::on_ScrollToCountry, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::ScrollToDistrict, this, &StackedInfoFrame::on_ScrollToDistrict, Qt::QueuedConnection);
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::FiltersChanged, this, &StackedInfoFrame::onFiltersChanged, Qt::QueuedConnection);
@@ -105,8 +108,21 @@ StackedInfoFrame::~StackedInfoFrame()
 {
     delete ui;
 }
+void StackedInfoFrame::on_ShowAuxHeaders()
+{
+    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowAuxHeaders, showAuxHeaders );
+
+    int topSplit = showAuxHeaders?1:0;
+    ui->stackSplitter->setSizes({topSplit, 10});
+}
 void StackedInfoFrame::on_currentTabChangedSlot(int index)
 {
+    for (int i = 0; i < ui->tabbar->count(); i++)
+    {
+        ui->tabbar->setTabTextColor(i, ui->tabbar->palette().color( ui->tabbar->foregroundRole()));
+    }
+    ui->tabbar->setTabTextColor(index, Qt::red);
+
     QString cb = ui->tabbar->tabText(index);
 
     if (dxccFrame)
@@ -183,7 +199,7 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
 
     if (currStackFrame)
     {
-        layout()->removeWidget(currStackFrame);
+        ui->stackFrame->layout()->removeWidget(currStackFrame);
         currStackFrame->deleteLater();
         currStackFrame = nullptr;
     }
@@ -213,56 +229,56 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
     case aeClock:
         clockFrame = new TClockFrame(this);
         currStackFrame = clockFrame;
-        layout()->addWidget(currStackFrame);
+        ui->stackFrame->layout()->addWidget(currStackFrame);
         clockFrame->setContest(contest);
         break;
 
     case aeDXCC:
         dxccFrame = new DXCCFrame(this);
         currStackFrame = dxccFrame;
-        layout()->addWidget(currStackFrame);
+        ui->stackFrame->layout()->addWidget(currStackFrame);
         dxccFrame->setContest(contest);
         break;
 
     case aeDistrict:
         districtFrame = new DistrictFrame(this);
         currStackFrame = districtFrame;
-        layout()->addWidget(districtFrame);
+        ui->stackFrame->layout()->addWidget(districtFrame);
         districtFrame->setContest(contest);
         break;
 
     case aeFilter:
         filterFrame = new FilterFrame(this);
         currStackFrame = filterFrame;
-        layout()->addWidget(filterFrame);
+        ui->stackFrame->layout()->addWidget(filterFrame);
         filterFrame->setContest(contest);
         break;
 
     case aeMemories:
         rigMemFrame = new RigMemoryFrame(this);
         currStackFrame = rigMemFrame;
-        layout()->addWidget(rigMemFrame);
+        ui->stackFrame->layout()->addWidget(rigMemFrame);
         rigMemFrame->setContest(contest);
         break;
 
     case aeLocatorMap:
         locFrame = new LocFrame(this);
         currStackFrame = locFrame;
-        layout()->addWidget(locFrame);
+        ui->stackFrame->layout()->addWidget(locFrame);
         locFrame->setContest(contest);
         break;
 
     case aeLocatorTree:
         locTreeFrame = new LocTreeFrame(this);
         currStackFrame = locTreeFrame;
-        layout()->addWidget(locTreeFrame);
+        ui->stackFrame->layout()->addWidget(locTreeFrame);
         locTreeFrame->setContest(contest);
         break;
 
     case aeStats:
         statsFrame = new TStatsDispFrame(this);
         currStackFrame = statsFrame;
-        layout()->addWidget(statsFrame);
+        ui->stackFrame->layout()->addWidget(statsFrame);
         statsFrame->setContest(contest);
         break;
     }
@@ -275,9 +291,27 @@ void StackedInfoFrame::onInfoComboCurrentIndexChanged(int /*arg1*/)
         contest->commonSave(false);
     }
     setTabVisibility();
+    on_ShowAuxHeaders();
+    stackMargins();
 }
 
+void StackedInfoFrame::stackMargins()
+{
+    int ls;
+    int cml;
+    int cmt;
+    int cmr;
+    int cmb;
 
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpls, ls);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcml, cml);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmt, cmt);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmr, cmr);
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpcmb, cmb);
+
+    adjustMargins(layout(), ls, cml, cmt, cmr, cmb);
+
+}
 
 void StackedInfoFrame::setContest(LoggerContestLog *ct)
 {

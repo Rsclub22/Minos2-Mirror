@@ -9,10 +9,8 @@
 #ifndef portconH
 #define portconH 
 //==============================================================================
-#include "base_pch.h"
 
 #include "keyers.h"
-#include "keyctrl.h"
 #include "keyconf.h"
 #include "windowMonitor.h"
 

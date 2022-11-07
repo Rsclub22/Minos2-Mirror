@@ -1,6 +1,5 @@
-#include "base_pch.h"
-
 #include "ContestApp.h"
+#include "MMessageDialog.h"
 #include "tloccalcform.h"
 #include "contest.h"
 #include "ScreenContact.h"
@@ -50,34 +49,34 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
     }
     ui->ErrList->setCurrentRow(0);
 
-    int s = screenContact.contactScore;
+    int s = screenContact.contactScore.getValue();
     if ( s < 0 )
        s = 0;
     QString temp = QString::number(s);
     ui->ScoreIl->setText(temp);
 
-    ui->CheckBox1->setChecked(screenContact.contactFlags & TO_BE_ENTERED);
-    ui->CheckBox2->setChecked(screenContact.contactFlags & VALID_DUPLICATE);
-    ui->CheckBox3->setChecked(screenContact.contactFlags & MANUAL_SCORE);
-    ui->CheckBox4->setChecked(screenContact.contactFlags & NON_SCORING);
-    ui->CheckBox5->setChecked(screenContact.contactFlags & DONT_PRINT);
-    ui->CheckBox6->setChecked(screenContact.contactFlags & COUNTRY_FORCED);
-    ui->CheckBox7->setChecked(screenContact.contactFlags & VALID_DISTRICT);
-    ui->CheckBox8->setChecked(screenContact.contactFlags & XBAND);
+    ui->CheckBox1->setChecked(screenContact.contactFlags.getValue() & TO_BE_ENTERED);
+    ui->CheckBox2->setChecked(screenContact.contactFlags.getValue() & VALID_DUPLICATE);
+    ui->CheckBox3->setChecked(screenContact.contactFlags.getValue() & MANUAL_SCORE);
+    ui->CheckBox4->setChecked(screenContact.contactFlags.getValue() & NON_SCORING);
+    ui->CheckBox5->setChecked(screenContact.contactFlags.getValue() & DONT_PRINT);
+    ui->CheckBox6->setChecked(screenContact.contactFlags.getValue() & COUNTRY_FORCED);
+    ui->CheckBox7->setChecked(screenContact.contactFlags.getValue() & VALID_DISTRICT);
+    ui->CheckBox8->setChecked(screenContact.contactFlags.getValue() & XBAND);
 
     if ((screenContact.cs.getValRes() == ERR_DUPCS) ||
-            ( screenContact.contactFlags & ( NON_SCORING | MANUAL_SCORE | DONT_PRINT | VALID_DUPLICATE | TO_BE_ENTERED | XBAND ) ) )
+            ( screenContact.contactFlags.getValue() & ( NON_SCORING | MANUAL_SCORE | DONT_PRINT | VALID_DUPLICATE | TO_BE_ENTERED | XBAND ) ) )
 
     {
         // set nothing! DUPs are dealt with!
     }
     else
         if ( errs.size() != 0 )  				// no errors -> OK
-            ui->CheckBox4->setChecked(screenContact.contactFlags | NON_SCORING);
+            ui->CheckBox4->setChecked(screenContact.contactFlags.getValue() | NON_SCORING);
 
-    if ( screenContact.contactFlags & COUNTRY_FORCED )
+    if ( screenContact.contactFlags.getValue() & COUNTRY_FORCED )
     {
-        ui->CtryMultIl->setText(screenContact.forcedMult);
+        ui->CtryMultIl->setText(screenContact.forcedMult.getValue());
     }
     else
         if ( contest->countryMult.getValue() && screenContact.ctryMult )
@@ -100,9 +99,9 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
         if ( !ui->CheckBox6->isChecked() )
         {
             tryagain = false;
-            screenContact.contactFlags &= ~ COUNTRY_FORCED;
+            screenContact.contactFlags.setValue(screenContact.contactFlags.getValue() & ~ COUNTRY_FORCED);
             screenContact.ctryMult.reset();
-            screenContact.forcedMult = "";
+            screenContact.forcedMult.setValue(QString());
             break;
         }
 
@@ -115,8 +114,8 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
             if ( screenContact.ctryMult != ctryMult )
             {
                 screenContact.ctryMult = ctryMult;
-                screenContact.contactFlags |= COUNTRY_FORCED;
-                screenContact.forcedMult = temp;
+                screenContact.contactFlags.setValue(screenContact.contactFlags.getValue() | COUNTRY_FORCED);
+                screenContact.forcedMult.setValue(temp);
             }
         }
         else
@@ -124,47 +123,48 @@ int TForceLogDlg::doexec(BaseContestLog *contest,  ScreenContact &screenContact,
             if ( mShowYesNoMessage( this, tr("Country not in CTY.DAT. Leave for now?")) )
             {
                 tryagain = false;
-                screenContact.contactFlags &= ~COUNTRY_FORCED;
-                screenContact.forcedMult = "";
+                screenContact.contactFlags.setValue(screenContact.contactFlags.getValue() & ~COUNTRY_FORCED);
+                screenContact.forcedMult.setValue(QString());
             }
         }
     }
     if ( res == QDialog::Accepted )
     {
+        unsigned short cf = screenContact.contactFlags.getValue();
         // save contact...
-        screenContact.contactFlags |= FORCE_LOG;
+        cf |= FORCE_LOG;
         // here read it all off the dialog
 
-        screenContact.contactFlags &= ~( NON_SCORING | MANUAL_SCORE | DONT_PRINT | VALID_DUPLICATE | TO_BE_ENTERED | VALID_DISTRICT | XBAND );
+        cf &= ~( NON_SCORING | MANUAL_SCORE | DONT_PRINT | VALID_DUPLICATE | TO_BE_ENTERED | VALID_DISTRICT | XBAND );
 
         if ( ui->CheckBox1->isChecked() )
         {
-            screenContact.contactFlags |= TO_BE_ENTERED;
+            cf |= TO_BE_ENTERED;
         }
         if ( ui->CheckBox2->isChecked() )
         {
-            screenContact.contactFlags |= VALID_DUPLICATE;
+            cf |= VALID_DUPLICATE;
         }
         if ( ui->CheckBox3->isChecked() )
         {
-            screenContact.contactFlags |= MANUAL_SCORE;
+            cf |= MANUAL_SCORE;
             temp = ui->ScoreIl->text().trimmed();
-            screenContact.contactScore = temp.toInt();
+            screenContact.contactScore.setValue( temp.toInt());
         }
-        if ( screenContact.contactFlags & ( TO_BE_ENTERED | VALID_DUPLICATE | MANUAL_SCORE ) )
+        if ( cf & ( TO_BE_ENTERED | VALID_DUPLICATE | MANUAL_SCORE ) )
             ui->CheckBox4->setChecked(false);
 
         if ( ui->CheckBox4->isChecked() )
-            screenContact.contactFlags |= NON_SCORING;
+            cf |= NON_SCORING;
         if ( ui->CheckBox5->isChecked() )
         {
-            screenContact.contactFlags |= ( DONT_PRINT | NON_SCORING );
+            cf |= ( DONT_PRINT | NON_SCORING );
         }
         if ( ui->CheckBox7->isChecked() )
-            screenContact.contactFlags |= VALID_DISTRICT;
+            cf |= VALID_DISTRICT;
         if ( ui->CheckBox8->isChecked() )
-            screenContact.contactFlags |= XBAND;
-
+            cf |= XBAND;
+        screenContact.contactFlags.setValue(cf);
     }
     return res;
 }

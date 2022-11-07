@@ -153,7 +153,6 @@
       <widget class="QLineEdit" name="freqDisplay">
        <property name="font">
         <font>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -262,6 +261,13 @@
       <widget class="QLabel" name="zoomLevelLabel">
        <property name="text">
         <string>zoom level</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="zoomSpinner">
+       <property name="maximum">
+        <number>16</number>
        </property>
       </widget>
      </item>

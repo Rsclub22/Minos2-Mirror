@@ -1,12 +1,7 @@
 #ifndef TSINGLELOGFRAME_H
 #define TSINGLELOGFRAME_H
 
-#include "base_pch.h"
-
 #include "ContestPage.h"
-#include "StackedInfoFrame.h"
-#include "ConfigFile.h"
-#include "rotatorcommon.h"
 #include "rigmemcommondata.h"
 #include "MatchTreeFrame.h"
 #include "MatchThisFrame.h"
@@ -32,6 +27,7 @@ class TSingleLogFrame;
 // for each needed type...
 //==========================================================
 
+class QTableView;
 class TSingleLogFrame : public ContestPage
 {
     friend class TSendDM;
@@ -43,7 +39,7 @@ public:
     explicit TSingleLogFrame(QWidget *parent, BaseContestLog *contest);
     virtual ~TSingleLogFrame();
 
-    QTableView *QSOTable;
+    QTableView *QSOTable = nullptr;
     RigControlFrame *FKHRigControlFrame = nullptr;
     RunButtonsFrame *runButtonsFrame = nullptr;
     BandSwitchFrame *bandSwitchFrame = nullptr;
@@ -54,8 +50,8 @@ public:
     RotPresets *rotPresets = nullptr;
 
     QFrame *CribSheet= nullptr;
-    QLabel *NextContactDetailsLabel;
-    QLabel *CurrentBandLabel;
+    QLabel *NextContactDetailsLabel = nullptr;
+    QLabel *CurrentBandLabel = nullptr;
 
     QSOLogFrame *GJVQSOLogFrame = nullptr;
     MatchThisFrame *thisMatchFrame = nullptr;
@@ -72,7 +68,7 @@ public:
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 
-    void showQSOs();
+    void startNextEntry();
     void goSerial( );
     void closeContest();
 
@@ -99,18 +95,14 @@ public:
     QString sSavedCurMode;
 
     bool isBandMapLoaded();
-    bool bandMapLoaded;
+    bool bandMapLoaded = false;
 
     bool isRotatorLoaded();
 
     bool isRadioLoaded();
 
-    bool qrzCallFrameLoaded;
+    bool qrzCallFrameLoaded = false;
     bool isQrzCallFrameLoaded();
-
-
-    void setRotatorState( QString f );
-    void setRotatorBearing( QString f );
 
     void updateTrees();
     void updateQSODisplay();
@@ -131,10 +123,13 @@ public:
     QString getCurScreenLayout() const;
 
     void setCurScreenLayout(const QString &value);
+    void restoreQSOTableColumns();
 
 
     void on_SetTransVertOffset(double offset, PubSubName psn);
     void on_SetTransVertSwitch(int switchNum, PubSubName psn);
+    void on_SetTransVertEnabled(bool status, PubSubName psn);
+
     void on_SetTransVertStatus(bool status, PubSubName psn);
     void on_SetVolumeStatus(bool status, PubSubName psn);
 
@@ -142,10 +137,8 @@ public:
     void on_SetRitMaxKHzFreq(int maxRitFreq, PubSubName psn);
 
     void on_SetBandList(QString s, PubSubName psn);
-    void on_SetTransVertEnabled(bool status, PubSubName psn);
 
     void on_SupportStopCommand(bool state);
-    void setPauseRigControlUpdatesFlag(bool status);
     void sendRigTxVoiceMessage(QString msgNum);
 
     void onSetPttEnabled(bool state, PubSubName psn);
@@ -156,12 +149,34 @@ public:
 
     void buildFrame(int slotNo);
 
+    bool doKeyPressEvent(QKeyEvent *event);
+    void transferFromWSJTX(QString call);
+    void onSetVoiceMemAvail(bool avail, PubSubName psn);
+    void onSetCwMemType(int cwMemType, PubSubName psn);
+    void sendRigTxCwMessage(QString msg);
+
+    void on_SetMode(QString);
+    void on_SetFreq(Frequency);
+    void on_SetRitFreq(ShortFreq);
+    void on_SetRitRadioStatus(bool);
+    void on_SetVolume(int level);
+    void on_SetRadioStatus(QString);
+
+    void on_RotatorPresetList(QString);
+    void on_RotatorStatus(QString);
+    void on_RotatorBearing(QString);
+    void on_RotatorMaxAzimuth(int);
+    void on_RotatorMinAzimuth(int);
+    void on_cwCcwCmdEnable(bool);
+    void presetTurn(QString);
+
 private:
     QSharedPointer<HtmlDelegate> delegate;
     QSOGridModel qsoModel;
     QString curScreenLayout;
+    QMenu columnsMenu;
 
-    int lastStanzaCount;
+    int lastStanzaCount = 0;
 
     MatchTreeFrame *xferTree = nullptr;
 
@@ -172,7 +187,8 @@ private:
 
     void transferDetails( MatchTreeItem *MatchTreeIndex );
 
-    void restoreColumns();
+    void saveQSOTableColumns();
+    bool inRestoreColumns = false;
 
     MatchTreeItem *getXferItem();
 
@@ -197,7 +213,7 @@ private slots:
     void onArchiveTreeFocused(QObject *, bool in, QFocusEvent *);
 
     void on_XferPressed(BaseContestLog *c, QString basename);
-    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, const QItemSelection &selected);
+    void MatchTreeSelected(MatchType m, BaseContestLog *c, QString basename);
 
     void on_MatchStarting(BaseContestLog*);
     void NextContactDetailsTimerTimer();
@@ -206,35 +222,24 @@ private slots:
     void on_MakeEntry(BaseContestLog*);
 
     void on_AfterSelectContact(QSharedPointer<BaseContact> lct, BaseContestLog *contest);
-    void on_AfterLogContact( BaseContestLog *ct);
+    void on_AfterLogContact(BaseContestLog *ct);
     void on_NextUnfilled(BaseContestLog*);
     void on_GoToSerial(BaseContestLog*);
     void on_SetMemory(BaseContestLog *, QString, QString);
 
     void onColumnsChanged();
     void on_sectionResized(int, int, int);
-    void EditContact(QSharedPointer<BaseContact> lct );
+    void onQSOGrid_customContextMenuRequested(const QPoint &pos);
+    void onQSOGrid_sectionMoved(int, int, int);
+
+    void EditContact(CheckableContact *lct , bool nextUnfilled);
 
     void on_SetRadioList();
-    void on_SetMode(QString);
-    void on_SetFreq(Frequency);
-    void on_SetRitFreq(ShortFreq);
-    void on_SetRitRadioStatus(bool);
-    void on_SetVolume(int level);
-    void on_SetRadioStatus(QString);
 
     void on_RotatorList();
-    void on_RotatorPresetList(QString);
-    void on_RotatorStatus(QString);
-    void on_RotatorBearing(QString);
-    void on_RotatorMaxAzimuth(int);
-    void on_RotatorMinAzimuth(int);
-    void on_cwCcwCmdEnable(bool);
-    void presetTurn(QString);
 
     void sendKeyerPlay( int fno );
     void sendKeyerRecord( int fno );
-    //void sendBandMap( QString freq, QString call, QString utc, QString loc, QString qth );
     void sendKeyerTone();
     void sendKeyerTwoTone();
     void sendKeyerStop();
@@ -255,13 +260,11 @@ private slots:
     void dxSpotToLog(memoryData::memData);
 
     void on_doColumnChanges(BaseContestLog*);
-    //void sendIgnoreRunChkBoxState(int num, bool checked);
-    void on_BandmapMarkFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
+    void on_BandmapMarkFreq(Frequency freq, QString mode);
     void on_BandmapSaveFreq(QString cs, Frequency freq, QString mode, QString loc, QString brg, QString exchange);
     void on_rotatorConnected(bool connected);
     void sendRunOnFlag(Frequency, QString mode, bool);
     void sendRunOffFreqFlag(Frequency, bool);
-    void on_ZoomMap(bool dir);
     void on_clusterServerState(QString state);
     void on_SendSpotToClusterServer(Frequency freq, QString callsign, QString loc);
     void on_setClusterTXSpotEnableState(QString state);
@@ -277,13 +280,7 @@ private slots:
 
     void onQrzCallsignRequest(QString callsign);
     void onQrzInfoToLog(QString callsign, QString qraLocator, QString name);
-
-public:
-    bool doKeyPressEvent(QKeyEvent *event);
-    void transferFromWSJTX(QString call);
-    void onSetVoiceMemAvail(bool avail, PubSubName psn);
-    void onSetCwMemType(int cwMemType, PubSubName psn);
-    void sendRigTxCwMessage(QString msg);
+    void viewColumn();
 };
 
 #endif // TSINGLELOGFRAME_H

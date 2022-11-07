@@ -7,7 +7,9 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "minos_pch.h"
+#include "XMPPRPCObj.h"
+#include "RPCPubSub.h"
+#include "PubSubClient.h"
 
 #ifndef PubSubServerH
 #define PubSubServerH

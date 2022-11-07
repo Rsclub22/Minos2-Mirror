@@ -1,15 +1,12 @@
 #ifndef ROTPRESETS_H
 #define ROTPRESETS_H
 
-#include "base_pch.h"
 #include <QShortcut>
 #include <QGroupBox>
 #include <QShortcut>
 #include "MinosLoggerEvents.h"
 #include "rotatorcommon.h"
 #include "presetbutton.h"
-#include "rigmemcommondata.h"
-#include "rotpresetdialog.h"
 
 namespace Ui {
 class RotPresets;

@@ -8,10 +8,15 @@
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
 
-#include "mqtUtils_pch.h"
+#include <QDateTime>
+#include <QFile>
+#include <QDirIterator>
+#include <QMutex>
+#include "MLogFile.h"
+#include "MTrace.h"
 #include "fileutils.h"
 
-QMutex CsGuard::m_mutex(QMutex::Recursive);
+//QMutex CsGuard::m_mutex(QMutex::Recursive);
 //---------------------------------------------------------------------------
 static QTextStream &getLogFile( QString name )
 {
@@ -53,7 +58,7 @@ QTextStream & MLogFile::log( )
 //---------------------------------------------------------------------------
 QTextStream &MLogFile::logT( )
 {
-    CsGuard lock;
+    CsGuard lock(&m_mutex);
     QDateTime dt = QDateTime::currentDateTimeUtc();
     QString time = dt.toString( "HH:mm:ss.zzz" );
     return log() << time;
@@ -69,7 +74,7 @@ void MLogFile::close( )
 //---------------------------------------------------------------------------
 QTextStream & MLogFile::log(const QString &s )
 {
-   CsGuard scoped_lock;
+   CsGuard scoped_lock(&m_mutex);
    QTextStream &l = logT();
    l << " " << s << "\n";
    l.flush();

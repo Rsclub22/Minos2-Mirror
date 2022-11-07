@@ -1,5 +1,5 @@
-#include "base_pch.h"
-
+#include <QFileInfo>
+#include <QFileDialog>
 #include "ContestApp.h"
 #include "tlogcontainer.h"
 #include "enqdlg.h"

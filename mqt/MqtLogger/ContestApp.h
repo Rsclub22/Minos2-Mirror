@@ -10,11 +10,15 @@
 
 #ifndef ContestAppH
 #define ContestAppH
-#include "base_pch.h"
+#include <QMap>
+#include "MinosParameters.h"
 #include "profiles.h"
 //---------------------------------------------------------------------------
 class TMatchThread;
 class LoggerContestLog;
+class BaseContestLog;
+class ContactList;
+
 class ContestSlot
 {
    public:

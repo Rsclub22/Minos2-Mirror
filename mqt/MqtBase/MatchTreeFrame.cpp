@@ -1,15 +1,58 @@
-#include "base_pch.h"
 #include "MinosParameters.h"
 #include "ListContact.h"
 #include "list.h"
 #include "contest.h"
 #include "htmldelegate.h"
 #include "MatchThread.h"
-//#include "tlogcontainer.h"
 #include "cutils.h"
-
+#include "MinosLoggerEvents.h"
 #include "MatchTreeFrame.h"
 #include "ui_MatchTreeFrame.h"
+
+
+QVector<GridColumn> QSOMatchGridModel::ThisMatchTreeColumns =
+{
+    GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
+    GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // band
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
+    GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
+    GridColumn( egRSTRx, "599XXX", QT_TR_NOOP("RepRx"), taLeftJustify ),                 // RST
+    GridColumn( egSNRx, "1234X", QT_TR_NOOP("SnRx"), taLeftJustify /*taRightJustify*/ ),   // Serial
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
+};
+//---------------------------------------------------------------------------
+QVector<GridColumn>  QSOMatchGridModel::OtherMatchTreeColumns =
+{
+    GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
+    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
+    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
+    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
+    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
+};
+//---------------------------------------------------------------------------
+QVector<GridColumn>  QSOMatchGridModel::ArchiveMatchTreeColumns =
+{
+    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
+    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
+    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
+    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
+    GridColumn( egExchange, "XXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),     // exchange
+    GridColumn( egComments, "XXXX", QT_TR_NOOP("Comments"), taLeftJustify )     // comments
+};
+//---------------------------------------------------------------------------
 
 MatchTreeFrame::MatchTreeFrame(QWidget *parent) :
     QTreeView(parent),
@@ -34,8 +77,17 @@ void MatchTreeFrame::initialise()
     setItemDelegate( delegate.data() );
     setUniformRowHeights(true);
 
+    createColumnsMenu(columnsMenu, header(), this,
+              [=]{
+                    viewColumn();
+              });
+
 
     connect( header(), &QHeaderView::sectionResized, this, &MatchTreeFrame::on_sectionResized);
+    connect( header(), &QHeaderView::sectionMoved, this, &MatchTreeFrame::onSectionMoved);
+
+    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( header(), &QHeaderView::customContextMenuRequested, this, &MatchTreeFrame::onMatch_customContextMenuRequested );
 
     connect(this, &MatchTreeFrame::matchTreeClicked, this, &MatchTreeFrame::afterMatchTreeClicked, Qt::QueuedConnection);
 
@@ -73,24 +125,15 @@ void MatchTreeFrame::setContest(BaseContestLog *ct)
         showMatchList(SharedMatchCollection());
     }
 }
-void MatchTreeFrame::restoreColumns()
-{
-    QSettings settings;
-    QByteArray state;
-
-    QString treeName = getTreeName();
-
-    state = settings.value(baseName + "/" + getTreeName() + "/state").toByteArray();
-    header()->restoreState(state);
-    QFont cf = QApplication::font();
-    header()->setFont(cf);
-    header()->setMinimumSectionSize(10);
-
-}
 void MatchTreeFrame::setCurrentModel(bool s)
 {
     getMatchModel()->currentModel = s;
 }
+void MatchTreeFrame::setCurScreenLayout(const QString &value)
+{
+    curScreenLayout = value;
+}
+
 //---------------------------------------------------------------------------
 void MatchTreeFrame::doCustomContextMenuRequested()
 {
@@ -105,7 +148,7 @@ void MatchTreeFrame::doCustomContextMenuRequested()
         QSharedPointer<MatchContact> mc = MatchTreeIndex->getMatchContact();
         if (mc)
         {
-            QSharedPointer<BaseContact> bct = mc->getBaseContact();
+            CheckableContact *bct = mc->getBaseContact();
             ListContact *lct = mc->getListContact();
             if (bct)
             {
@@ -118,17 +161,63 @@ void MatchTreeFrame::doCustomContextMenuRequested()
         }
     }
 }
+void MatchTreeFrame::onMatch_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = this->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, header());
+}
+void MatchTreeFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            this->header()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+            resetHeaderColumns(fname, "QSOTable", curScreenLayout, this->header());
+
+            MinosLoggerEvents::SendColumnsChanged();
+        }
+    }
+    saveHeaderLayout();
+}
 //---------------------------------------------------------------------------
+void MatchTreeFrame::saveHeaderLayout()
+{
+    if (!inRestoreColumns)
+    {
+        QString treeName = getTreeName();
+        QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+        saveHeaderColumns(fname, treeName, curScreenLayout, header());
+
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+
+}
+
 void MatchTreeFrame::on_sectionResized(int, int, int)
 {
-    QSettings settings;
-    QByteArray state;
+    saveHeaderLayout();
+}
+void MatchTreeFrame::onSectionMoved(int, int, int)
+{
+    saveHeaderLayout();
+}
+void MatchTreeFrame::restoreColumns()
+{
+    inRestoreColumns = true;
     QString treeName = getTreeName();
+    QString fname("./Configuration/" + baseName + "TableHeaders.ini");
+    restoreHeaderColumns(fname, treeName, curScreenLayout, header());
 
-    state = header()->saveState();
-    settings.setValue(baseName + "/" + treeName + "/state", state);
-
-    MinosLoggerEvents::SendColumnsChanged();
+    inRestoreColumns = false;
 }
 
 void MatchTreeFrame::on_doColumnChanges(BaseContestLog *b)
@@ -144,50 +233,6 @@ void MatchTreeFrame::on_MatchTreeFrame_clicked(const QModelIndex &)
 }
 
 //=============================================================================
-
-GridColumn QSOMatchGridModel::ThisMatchTreeColumns[ THISMATCHTREECOLS ] =
-{
-    GridColumn( egTime, "XXXXXXXXXX",QT_TR_NOOP( "UTC"), taLeftJustify ),               // time
-    GridColumn( egBand, "XXXXXX", QT_TR_NOOP("Band"), taLeftJustify ),               // band
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egRSTTx, "599XXX", QT_TR_NOOP("RepTx"), taLeftJustify ),                 // RST
-    GridColumn( egSNTx, "1234X", QT_TR_NOOP("SnTx"), taLeftJustify /*taRightJustify*/ ),   // serial
-    GridColumn( egRSTRx, "599XXX", QT_TR_NOOP("RepRx"), taLeftJustify ),                 // RST
-    GridColumn( egSNRx, "1234X", QT_TR_NOOP("SnRx"), taLeftJustify /*taRightJustify*/ ),   // Serial
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
-};
-//---------------------------------------------------------------------------
-GridColumn QSOMatchGridModel::OtherMatchTreeColumns[ OTHERMATCHTREECOLS ] =
-{
-    GridColumn( egTime, "XXXXXXXXXX", QT_TR_NOOP("UTC"), taLeftJustify ),               // time
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),    // QTH
-    GridColumn( egComments, "XXXXXXXXXXXXXXXX", QT_TR_NOOP("Comments"), taLeftJustify ),     // comments
-    GridColumn( egFrequency, "1.296.123.456XXX", QT_TR_NOOP("Freq"), taLeftJustify ),
-    GridColumn( egRotatorHeading, "XXXXXX", QT_TR_NOOP("Rot Heading"), taLeftJustify ),
-    GridColumn( egRigName, "XXXXXX", QT_TR_NOOP("Rig"), taLeftJustify )
-};
-//---------------------------------------------------------------------------
-GridColumn QSOMatchGridModel::ArchiveMatchTreeColumns[ ARCHIVEMATCHTREECOLS ] =
-{
-    GridColumn( egCall, "MMMMMMMMMMM", QT_TR_NOOP("Callsign"), taLeftJustify ),         // call
-    GridColumn( egLoc, "MM00MM00X", QT_TR_NOOP("Loc"), taLeftJustify ),            // LOC
-    GridColumn( egScore, "12345XX", QT_TR_NOOP("dist"), taLeftJustify /*taRightJustify*/ ),  // score
-    GridColumn( egBrg, "3601X", QT_TR_NOOP("brg"), taLeftJustify ),                // bearing
-    GridColumn( egExchange, "XXXXXX", QT_TR_NOOP("Exchange"), taLeftJustify ),     // exchange
-    GridColumn( egComments, "XXXX", QT_TR_NOOP("Comments"), taLeftJustify )     // comments
-};
-//---------------------------------------------------------------------------
 
 MatchTreeItem::MatchTreeItem(MatchTreeItem *parent, BaseMatchContest *matchContest, QSharedPointer<MatchContact> matchContact)
     :
@@ -226,7 +271,7 @@ BaseMatchContest *MatchTreeItem::getMatchContest()
     return matchContest;
 }
 
-
+//==========================================================================
 QSOMatchGridModel::QSOMatchGridModel():
     match(nullptr),
     rootItem(nullptr),
@@ -302,7 +347,7 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
     BaseMatchContest *matchContest = thisItem->getMatchContest();
     QSharedPointer<MatchContact> mct = thisItem->getMatchContact();
-    QSharedPointer<BaseContact> ct;
+    CheckableContact *ct = nullptr;
     ListContact *lct = nullptr;
 
     if (mct)
@@ -313,20 +358,20 @@ QVariant QSOMatchGridModel::data( const QModelIndex &index, int role ) const
 
     if (role == Qt::BackgroundRole)
     {
-        if (ct && type == ThisMatch && baseName.compare("Monitor") != 0 )
-        {
-            if ( ct->contactFlags.getValue() & FORCE_LOG )
-            {
-                return static_cast< QColor > ( 0x00FF80C0 );        // Pink(ish)
-            }
-            else
-            {
-                if ( ct->getModificationCount() > 1 )
-                {
-                    return static_cast< QColor > ( 0x00C0DCC0 );    // "money green"
-                }
-            }
-        }
+//        if (ct && type == ThisMatch && baseName.compare("Monitor") != 0 )
+//        {
+//            if ( ct->contactFlags.getValue() & FORCE_LOG )
+//            {
+//                return static_cast< QColor > ( 0x00FF80C0 );        // Pink(ish)
+//            }
+//            else
+//            {
+//                if ( ct->getModificationCount() > 1 )
+//                {
+//                    return static_cast< QColor > ( 0x00C0DCC0 );    // "money green"
+//                }
+//            }
+//        }
         return QVariant();
     }
 
@@ -558,15 +603,15 @@ int QSOMatchGridModel::columnCount( const QModelIndex &/*parent*/ ) const
     switch (type)
     {
     case ThisMatch:
-        cols = THISMATCHTREECOLS;
+        cols = ThisMatchTreeColumns.count();
         break;
 
     case OtherMatch:
-        cols = OTHERMATCHTREECOLS;
+        cols = OtherMatchTreeColumns.count();
         break;
 
     case ArchiveMatch:
-        cols = ARCHIVEMATCHTREECOLS;
+        cols = ArchiveMatchTreeColumns.count();
         break;
     }
     return cols;

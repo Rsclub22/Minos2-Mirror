@@ -1,8 +1,9 @@
-#include "ConfigFile.h"
 #include "ContestApp.h"
 #include "MinosLoggerEvents.h"
+#include "MTrace.h"
 
 #include "WsjtxServer.h"
+#include "fileutils.h"
 
 WsjtxServer *WsjtxServer::wsjtxServer = nullptr;
 
@@ -160,7 +161,7 @@ void WsjtxServer::log_ADIF(QString const& id, QByteArray const& ADIF)
 }
 void WsjtxServer::add_client (QString const& id, QString const& version, QString const& revision)
 {
-    trace(QString("WsjtxServer::add_client"));
+    trace(QString("WsjtxServer::add_client %1 %2 %3").arg(id, version, revision));
     emit do_add_client(id, version, revision);
     server_1->replay (id);         // request decodes and status
 }

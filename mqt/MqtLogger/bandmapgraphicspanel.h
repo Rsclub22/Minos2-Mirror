@@ -6,17 +6,15 @@
 
 class BandmapGraphicsPanel : public QGraphicsView
 {
-
     Q_OBJECT
 
 public:
     BandmapGraphicsPanel(QWidget *parent);
 
 signals:
-    void bandmapResize(int, int);
+    void bandmapResize(QSize);
     void leftMouseButtonPressed(QPoint);
     void mouseDoubleClicked(QPoint);
-    //void zoomMap(bool);
     void nextSpot(bool, bool);
     void scrollMap(bool);
 

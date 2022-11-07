@@ -1,6 +1,8 @@
 #include "MinosRPC.h"
 #include "MinosLoggerEvents.h"
+#include "RPCCommandConstants.h"
 #include "contest.h"
+#include "RPCPubSub.h"
 #include "ChatServer.h"
 
 const char * ChatServer::stateIndicator[] =

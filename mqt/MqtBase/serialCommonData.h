@@ -1,19 +1,20 @@
 #ifndef SERIALCOMMONDATA_H
 #define SERIALCOMMONDATA_H
 
+#include <QStringList>
 
 namespace serialCommonData
 {
-    enum parityCodes  {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
-    const parityCodes parityCodesList[] = {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
+    enum s_parityCodes  {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
+    const s_parityCodes parityCodesList[] = {PARITY_NONE, PARITY_ODD, PARITY_EVEN, PARITY_MARK, PARITY_SPACE};
     const QStringList parityStr = QStringList() << "None" << "Odd" << "Even" << "Mark" << "Space";
 
-    enum handshakeCodes {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
-    const handshakeCodes handshakeCodesList[] = {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
+    enum s_handshakeCodes {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
+    const s_handshakeCodes handshakeCodesList[] = {HANDSHAKE_NONE, HANDSHAKE_XONXOFF, HANDSHAKE_HARDWARE };
     const QStringList handshakeStr = QStringList() << "None" << "XON/XOFF" << "CTS/RTS";
 
-    enum forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
-    const forceLinesCodes forceLinesCodesList[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+    enum s_forceLinesCodes {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
+    const s_forceLinesCodes forceLinesCodesList[] = {FORCE_LINE_NONE, FORCE_LINE_OFF, FORCE_LINE_ON};
     const QStringList forceLinesStr = QStringList() << "None" << "High" << "Low";
     const QStringList forceLinstStr_Trans = QStringList() << "None" << "High" << "Low";
 

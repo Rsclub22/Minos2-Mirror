@@ -19,8 +19,8 @@
     
 ======================================================================================*/
 
-#include "mqtUtils_pch.h"
 #include <QMessageBox>
+#include "MMessageDialog.h"
 
 //---------------------------------------------------------------------------
 bool mShowYesNoMessage( QWidget* Owner, const QString &mess )

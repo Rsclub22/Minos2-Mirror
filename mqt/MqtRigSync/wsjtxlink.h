@@ -1,7 +1,6 @@
 #ifndef WSJTXLINK_H
 #define WSJTXLINK_H
 
-#include "base_pch.h"
 #include "WsjtxMessageServer.hpp"
 
 class WsjtxLink:public QObject

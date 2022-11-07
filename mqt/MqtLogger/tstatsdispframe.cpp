@@ -1,6 +1,5 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
-
+#include "MinosParameters.h"
 #include "LoggerContest.h"
 #include "tstatsdispframe.h"
 #include "ui_tstatsdispframe.h"
@@ -111,7 +110,8 @@ void TStatsDispFrame::reInitialiseStats()
    #ifndef MAX_DISPLAY_TEST
                            .arg( tempcs) .arg(bestdx->serials.getValue())
                            .arg(bestdx->loc.getLoc()) .arg( bestdx->contactScore.getValue())
-                           .arg(avpts, 0, 'f', 1);
+                           .arg(avpts, 0, 'f', 1)
+                            ;
    #else
                            .arg("PE0/LX5ABC/P") .arg("9999") .arg( "XX99XX") .arg(29999) .arg(9999.9);
    #endif

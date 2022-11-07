@@ -1,7 +1,13 @@
 #ifndef RIGMEMORYFRAME_H
 #define RIGMEMORYFRAME_H
 
-#include "base_pch.h"
+#include <QVector>
+#include <QAbstractItemModel>
+#include <QSortFilterProxyModel>
+#include <QHeaderView>
+#include <QMenu>
+
+#include "TreeUtils.h"
 #include "rigmemcommondata.h"
 
 class LoggerContestLog;
@@ -9,11 +15,13 @@ namespace Ui {
 class RigMemoryFrame;
 }
 class RigMemoryFrame;
+class TSingleLogFrame;
+class StackedInfoFrame;
 
 class RigMemoryGridModel: public QAbstractItemModel
 {
     Q_OBJECT
-    static GridColumn RigMemoryColumns[ ];
+    static QVector<GridColumn> RigMemoryColumns;
     public:
         RigMemoryGridModel();
         ~RigMemoryGridModel() Q_DECL_OVERRIDE;
@@ -65,9 +73,13 @@ class RigMemoryFrame : public QFrame
     void sendUpdateMemories();
     RigMemoryGridModel model;
     RigMemorySortFilterProxyModel proxyModel;
+    QMenu columnsMenu;
+    bool inRestoreColumns = false;
+    bool inSendMemoryUpdates = false;
+    TSingleLogFrame *tslf = nullptr;
 
 public:
-    explicit RigMemoryFrame(QWidget *parent = nullptr);
+    explicit RigMemoryFrame(StackedInfoFrame *parent);
     ~RigMemoryFrame();
 
     QMap<int, HeaderData> headerVal;
@@ -90,8 +102,6 @@ private slots:
 
     void vsectionClicked(int logicalIndex);
 
-    void on_sectionMoved(int logicalIndex, int oldVisualIndex, int newVisualIndex);
-    void on_sectionResized(int logicalIndex, int oldSize, int newSize);
     void on_sortIndicatorChanged(int logicalIndex, Qt::SortOrder order);
     void on_rigMemTable_customContextMenuRequested( const QPoint &pos );
     void rigMemTable_Hdr_customContextMenuRequested( const QPoint &pos );
@@ -111,6 +121,13 @@ private slots:
     void on_rigMemTable_clicked(const QModelIndex &index);
 
     void on_doColumnChanges(BaseContestLog *b);
+
+    void onRigMemTable_customContextMenuRequested(const QPoint &pos);
+    void onRigMemTable_sectionMoved(int, int, int);
+    void onRigMemTable_sectionResized(int logicalIndex, int oldSize, int newSize);
+
+    void viewColumn();
+
 private:
     Ui::RigMemoryFrame *ui;
     LoggerContestLog *ct = nullptr;
@@ -134,13 +151,16 @@ private:
     QAction* clearAllAction;
     QAction* clearWorkedAction;
 
-    void reloadColumns();
-    void saveAllColumnWidthsAndPositions();
     void setRigMemoryData(int memoryNumber, memoryData::memData m);
     void writeMemory(int n);
     int getSelectedLine();
     void traceMsg(QString msg);
     void scrollIntoView ( int firstMatch );
+
+    void saveRigMemTableColumns();
+
+    void restoreRigMemTableColumns();
+
 
 };
 

@@ -4,15 +4,15 @@
 #
 #-------------------------------------------------
 include($$PWD/../mqt.pri)
+include($$PWD/../keyerbase.pri)
 include($$PWD/../mqtapplibs.pri)
 
 QT       += core gui
 QT       += widgets
 QT       += network
-lessThan(QT_MAJOR_VERSION, 6){
-QT       += serialport
-}
 QT       += help
+QT       += charts
+QT       += serialport
 
 TARGET = MqtLogger
 TEMPLATE = app
@@ -66,10 +66,12 @@ SOURCES += \
     TSessionManager.cpp \
     WsjtxConfigureCQ.cpp \
     bandmapclientfilterdialog.cpp \
+    bandmapdatamodel.cpp \
     bandmapgraphicspanel.cpp \
     bandmapspotmarker.cpp \
     bandselbuttons.cpp \
     cabrillo.cpp \
+    checkupdates.cpp \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
@@ -164,10 +166,12 @@ HEADERS  += \
     TSessionManager.h \
     WsjtxConfigureCQ.h \
     bandmapclientfilterdialog.h \
+    bandmapdatamodel.h \
     bandmapgraphicspanel.h \
     bandmapspotmarker.h \
     bandselbuttons.h \
     cabrillo.h \
+    checkupdates.h \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
@@ -237,6 +241,7 @@ FORMS    += \
     ScreenConfigScreen.ui \
     WsjtxConfigureCQ.ui \
     bandmapclientfilterdialog.ui \
+    checkupdates.ui \
     contestdetails.ui \
     defdirsdlg.ui \
     districtframe.ui \
@@ -303,21 +308,4 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/AndroidTemplate
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/release/ -lKeyerBase
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../KeyerBase/debug/ -lKeyerBase
-else:unix: LIBS += -L$$OUT_PWD/../KeyerBase/ -lKeyerBase
-
-INCLUDEPATH += $$PWD/../KeyerBase
-DEPENDPATH += $$PWD/../KeyerBase
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/release/libKeyerBase.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/debug/libKeyerBase.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/release/KeyerBase.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/debug/KeyerBase.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../KeyerBase/libKeyerBase.a
-
-# include system libs last, so they get included for KeyerBase
-
-unix:!macos{ LIBS += -lasound}
-win32{ LIBS += -lole32 -lwinmm -luuid -lksuser -ldsound -lUser32 -lShlwapi}
-
+win32{ LIBS += -lUser32 -lole32 -luuid -lshlwapi}

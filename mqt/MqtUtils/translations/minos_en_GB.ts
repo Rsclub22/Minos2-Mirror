@@ -19,43 +19,43 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="778"/>
+        <location filename="../ConfigFile.cpp" line="783"/>
         <source>More than one server is defined and enabled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="787"/>
+        <location filename="../ConfigFile.cpp" line="792"/>
         <source>A local server is required.<byte value="xd"/>
 <byte value="xd"/>
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="802"/>
+        <location filename="../ConfigFile.cpp" line="807"/>
         <source> contains bad characters [ and/or ]</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="817"/>
+        <location filename="../ConfigFile.cpp" line="822"/>
         <source> appears more than once (names are not case sensitive)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="856"/>
+        <location filename="../ConfigFile.cpp" line="861"/>
         <source>%1 requires a local %2
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="866"/>
+        <location filename="../ConfigFile.cpp" line="871"/>
         <source> Executable path does not exist
 
 </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ConfigFile.cpp" line="870"/>
+        <location filename="../ConfigFile.cpp" line="875"/>
         <source> Working directory is not valid - no Configuration/MinosConfig.json
 
 </source>
@@ -65,7 +65,7 @@
 <context>
     <name>RunConfigElement</name>
     <message>
-        <location filename="../ConfigFile.cpp" line="177"/>
+        <location filename="../ConfigFile.cpp" line="179"/>
         <source>:program doesn&apos;t exist:</source>
         <translation type="unfinished"></translation>
     </message>

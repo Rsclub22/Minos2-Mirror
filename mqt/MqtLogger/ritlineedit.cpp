@@ -9,11 +9,13 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
+#include <QWheelEvent>
+#include <QKeyEvent>
+
 #include "rigutils.h"
+#include "MTrace.h"
+
 #include "ritlineedit.h"
-
-
 
 RitLineEdit::RitLineEdit(QWidget *parent):
     QLineEdit(parent)
@@ -28,10 +30,6 @@ RitLineEdit::~RitLineEdit()
 
 
 }
-
-
-
-
 
 void RitLineEdit::setRitOnFlag(bool state)
 {
@@ -130,11 +128,6 @@ void RitLineEdit::changeFreq(bool direction)
 
 }
 
-
-
-
-
-
 void RitLineEdit::wheelEvent(QWheelEvent *event)
 {
     int numDegrees = event->angleDelta().y() / 8;
@@ -144,7 +137,7 @@ void RitLineEdit::wheelEvent(QWheelEvent *event)
     {
        changeFreq(true);
     }
-    else
+    else if (numTicks <= -1)
     {
         changeFreq(false);
     }

@@ -6,17 +6,12 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2006 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
-//#include <process.h>
 #include "cutils.h"
-#include "tinyxml.h"
 #include "portconf.h"
 #include "CommonMonitor.h"
 #include "controlport.h"
-
+#include "MTrace.h"
 #include "windowMonitor.h"
-#include "K8055Container.h"
 #include "PiGPIO.h"
 
 //==============================================================================

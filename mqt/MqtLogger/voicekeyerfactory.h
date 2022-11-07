@@ -72,6 +72,10 @@ public:
     bool getUseCatPTTForEom() const {return useCatPTTForEom;}
     void setUseCatPTTForEom(const bool useCatPTTForEom_){useCatPTTForEom = useCatPTTForEom_;}
 
+    bool getEnableCwMode() const {return enableCwMode;}
+    void setEnableCwMode(const bool enableCwMode_){enableCwMode = enableCwMode_;}
+
+
     bool getHasPip(){return hasPip;}
     void setHasPip(const bool hasPip_){hasPip = hasPip_;}
 
@@ -97,6 +101,7 @@ private:
    bool supportRepeatMsg =false;
    bool supportSerial = false;
    bool useCatPTTForEom = false;
+   bool enableCwMode = false;
    bool setupButton = false;
    bool hasPip = false;
    bool hasTxStatus = false;

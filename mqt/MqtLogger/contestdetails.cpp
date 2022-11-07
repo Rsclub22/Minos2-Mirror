@@ -1,12 +1,8 @@
-#include "base_pch.h"
-
 #include "LoggerContest.h"
-#include "LoggerContacts.h"
-
-#include "ContestApp.h"
 #include "Calendar.h"
-#include "CalendarList.h"
 #include "BandList.h"
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
 #include "tentryoptionsform.h"
 #include "tminosbshelpform.h"
 #include "tcalendarform.h"
@@ -237,7 +233,7 @@ void ContestDetails::setDetails(  )
    }
    for (auto const &b: qAsConst(blist.bandList))
    {
-       if (b->enabled)
+       if (b->enabled && b->contestAllowed)
        {
            if ( (contestTransferObject->isHF()) && b->getType() == HF_BANDTYPE)
            {
@@ -338,6 +334,13 @@ void ContestDetails::setDetails(  )
       ui->EndDateEdit->setDate(t.date()); // short date format, hours:minutes
       QString etc = t.time().toString( "HH:mm UTC" );
       ui->EndTimeCombo->setCurrentText(etc); // short date format, hours:minutes
+
+      if (ui->EndTimeCombo->currentText() != etc)
+      {
+          // Cope with weird contest lengths - e.g. Platinum jubilee 70 minutes
+          ui->EndTimeCombo->addItem( etc );
+          ui->EndTimeCombo->setCurrentText(etc); // short date format, hours:minutes
+      }
    }
    else
    {
@@ -579,7 +582,16 @@ void ContestDetails::setDetails( const IndividualContest &ic )
    ui->StartTimeCombo->setCurrentText(ic.start.toString( "HH:mm" ) + " UTC");
 
    ui->EndDateEdit->setDate(ic.finish.date()); // short date format, hours:minutes
-   ui->EndTimeCombo->setCurrentText(ic.finish.toString( "HH:mm" ) + " UTC"); // short date format, hours:minutes
+   QString endt = ic.finish.toString( "HH:mm" ) + " UTC";
+   ui->EndTimeCombo->setCurrentText(endt); // short date format, hours:minutes
+
+   if (ui->EndTimeCombo->currentText() != endt)
+   {
+       // Cope with weird contest lengths - e.g. Platinum jubilee 70 minutes
+       ui->EndTimeCombo->addItem( endt );
+       ui->EndTimeCombo->setCurrentText(endt); // short date format, hours:minutes
+   }
+
 
    if (isHF)
    {
@@ -1203,6 +1215,18 @@ QWidget * ContestDetails::getDetails( )
     }
     contestTransferObject->DTGEnd.setValue(  TDTToCanonical(ui->EndDateEdit->date().toString("dd/MM/yyyy") + " " + ui->EndTimeCombo->currentText())) ;
 
+    QDateTime tstart = CanonicalToTDT(contestTransferObject->DTGStart.getValue());
+    QDateTime tend = CanonicalToTDT(contestTransferObject->DTGEnd.getValue());
+
+    if (tstart.secsTo( tend) <= 0)
+    {
+        if (!nextD)
+        {
+            mShowMessage(tr("Contest end is before contest start"), this);
+            nextD = ui->EndTimeCombo;
+        }
+    }
+
     contestTransferObject->mycall.setFullCall( ui->CallsignEdit->text() );
     if ( contestTransferObject->mycall.getValRes() != CS_OK )
     {
@@ -1401,7 +1425,7 @@ QWidget * ContestDetails::getDetails( )
         break;
 
     case 3:     //Optional Exchange Multiplier
-        contestTransferObject->otherExchange.setValue( true );
+        contestTransferObject->otherExchange.setValue( false );
         contestTransferObject->otherOptionalExchange.setValue( true );
         contestTransferObject->districtMult.setValue( false );
         contestTransferObject->otherMult.setValue(2);
@@ -1423,9 +1447,9 @@ QWidget * ContestDetails::getDetails( )
     contestTransferObject->bearingOffset.setValue(ui->AntOffsetEdit->text().toInt());	// int
 
     if (LogContainer->sendDM->isRadioLoaded())
-        contestTransferObject->radioName.setValue(PubSubName(ui->radioNameEdit->currentText().trimmed().remove(':')));
+        contestTransferObject->radioName.setValue(PubSubName(getSelectedRadio()));
     if (LogContainer->sendDM->isRotatorLoaded())
-        contestTransferObject->antennaName.setValue(PubSubName(ui->antennaNameEdit->currentText()));
+        contestTransferObject->antennaName.setValue(PubSubName(getSelectedAntenna()));
 
     contestTransferObject->currentMode.setValue(ui->ModeComboBox->currentText());
 
@@ -1502,8 +1526,8 @@ void ContestDetails::enableControls()
    ui->MainOpComboBox->setEnabled(!protectedChecked);
    ui->SecondOpComboBox->setEnabled(!protectedChecked);
    ui->AntOffsetEdit->setEnabled(!protectedChecked);
-   ui->radioNameEdit->setEnabled(!protectedChecked);
-   ui->antennaNameEdit->setEnabled(!protectedChecked);
+   ui->radioNameSel->setEnabled(!protectedChecked);
+   ui->antennaNameSel->setEnabled(!protectedChecked);
 
    ui->PowerEdit->setEnabled(!protectedChecked);
    ui->ModeComboBox->setEnabled(!protectedChecked);
@@ -1861,24 +1885,44 @@ void ContestDetails::on_MGMCheckBox_stateChanged(int)
 //    }
     enableControls();
 }
+QString ContestDetails::getSelectedAntenna()
+{
+    return ui->antennaNameSel->currentData().toString();
+}
+
+void ContestDetails::setSelectedAntenna(QString s)
+{
+   int c = ui->antennaNameSel->findData(s);
+   ui->antennaNameSel->setCurrentIndex(c);
+}
 void ContestDetails::on_RotatorList()
 {
-    ui->antennaNameEdit->clear();
-    ui->antennaNameEdit->addItem("");
-    ui->antennaNameEdit->addItems( LogContainer->sendDM->rotators());
+    QStringList rots = LogContainer->sendDM->rotators();
+    comboSetUniqueNames(rots, ui->antennaNameSel);
     if (contestTransferObject)
     {
-        ui->antennaNameEdit->setCurrentText(contestTransferObject->antennaName.getValue().toString());
+        setSelectedAntenna(contestTransferObject->antennaName.getValue().toString());
     }
+}
+
+QString ContestDetails::getSelectedRadio()
+{
+    return ui->radioNameSel->currentData().toString();
+}
+
+void ContestDetails::setSelectedRadio(QString s)
+{
+   int c = ui->radioNameSel->findData(s);
+   ui->radioNameSel->setCurrentIndex(c);
 }
 void ContestDetails::on_SetRadioList()
 {
-    ui->radioNameEdit->clear();
-    ui->radioNameEdit->addItem("");
-    ui->radioNameEdit->addItems( LogContainer->sendDM->rigs());
+    QStringList names = LogContainer->sendDM->rigs();
+
+    comboSetUniqueNames(names, ui->radioNameSel);
     if (contestTransferObject)
     {
-        ui->radioNameEdit->setCurrentText(contestTransferObject->radioName.getValue().toString());
+        setSelectedRadio(contestTransferObject->radioName.getValue().toString());
     }
 }
 

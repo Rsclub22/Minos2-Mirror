@@ -17,22 +17,20 @@
 #ifndef ROTATORMAINWINDOW_H
 #define ROTATORMAINWINDOW_H
 
-#include "base_pch.h"
-#include "rotatorRpc.h"
-#include "rotatorbase.h"
-#include "rotatorfactory.h"
-#include "rotatorcommon.h"
-#include "presetbutton.h"
-#include "rotpresetdialog.h"
 #include <QMainWindow>
 #include <QObject>
 #include <QtSerialPort/QSerialPort>
 #include <QKeyEvent>
 #include <QPushButton>
 #include <QShortcut>
+#include <QTimer>
 
-
-
+#include "StdInReader.h"
+#include "rotatorRpc.h"
+#include "rotatorbase.h"
+#include "rotatorfactory.h"
+#include "rotatorcommon.h"
+#include "presetbutton.h"
 
 #define NUM_PRESETS 10
 #define OFF false
@@ -99,7 +97,7 @@ signals:
 private:
     Ui::RotatorMainWindow *ui;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     bool closeApp = false;
     RotatorRpc *msg;
@@ -267,6 +265,8 @@ private slots:
     void onSentCommandError(int errorCode, QString cmd);
     void onTestBearingEnter();
     void onPSTRotatorConfig();
+    void on_reconnectPushButton_clicked();
+
 private:
     void rotateTo(int bearing);
     int northCalcTarget(int targetBearing);

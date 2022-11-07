@@ -68,8 +68,8 @@ bool RotPresetDialog::bearingEditFinished()
 
     QMessageBox::information(this, tr("Bearing Out of range"),
                              tr("Bearing: %1, out of range, should be 0-360 \nPlease enter another bearing").arg(ui->bearingEdit->text().trimmed()),
-                              QMessageBox::Ok|QMessageBox::Default,
-                              QMessageBox::NoButton, QMessageBox::NoButton);
+                              QMessageBox::Ok|QMessageBox::NoButton,
+                             QMessageBox::NoButton);
     return false;
 
 

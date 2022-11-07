@@ -5,12 +5,13 @@
 #include <QToolButton>
 #include <QRadioButton>
 #include <QMap>
+#include <QGridLayout>
+
 #include "BandList.h"
-#include "rigcommon.h"
-#include "radiosettingdialog.h"
+#include "rigcontrolcommonconstants.h"
 
 
-
+class BaseContestLog;
 
 namespace bandSelButtonData
 {

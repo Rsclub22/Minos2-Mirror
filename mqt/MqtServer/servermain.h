@@ -1,14 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "mqtUtils_pch.h"
 #include <QMainWindow>
 #include <QTimer>
 
-#include "MinosLink.h"
+#include "StdInReader.h"
 #include "minoslistener.h"
-#include "clientThread.h"
-#include "serverThread.h"
 #include "ServerDetails.h"
 
 class TZConf;
@@ -43,7 +40,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QSharedPointer<MinosClientListener> clientListener;
     QSharedPointer<MinosRouterListener> routerListener;
     QSharedPointer<TZConf> ZConf;

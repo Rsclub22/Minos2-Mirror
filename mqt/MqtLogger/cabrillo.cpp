@@ -1,7 +1,7 @@
-#include "base_pch.h"
-
 #include "LoggerContest.h"
 #include "contacts.h"
+#include "cutils.h"
+
 #include "cabrillo.h"
 
 /*
@@ -342,7 +342,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
        // Extract comments for "Remarks" section
        //cct->addReg1TestComment( remarks );
 
-       if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+       if ( cct->contactFlags.getValue() & DONT_PRINT )
           continue;
 
        nlines++;
@@ -417,7 +417,7 @@ bool Cabrillo::exportTest(QSharedPointer<QFile> expfd)
     {
         QSharedPointer<BaseContact> cct = dct.wt;
 
-       if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+       if ( cct->contactFlags.getValue() & DONT_PRINT )
        {
           // should all COMMENT_ONLY records go into remarks?
           // and also comments on individual QSOs?, noSerials

@@ -36,7 +36,7 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_24">
        <item>
-        <widget class="QFrame" name="frame">
+        <widget class="QFrame" name="bundleFrame">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -639,7 +639,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="radioNameEdit">
+           <widget class="QComboBox" name="radioNameSel">
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
             </property>
@@ -666,7 +666,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QComboBox" name="antennaNameEdit">
+           <widget class="QComboBox" name="antennaNameSel">
             <property name="sizeAdjustPolicy">
              <enum>QComboBox::AdjustToContents</enum>
             </property>
@@ -919,6 +919,19 @@ Score between 4 fig loc centres</string>
               <enum>QComboBox::AdjustToContents</enum>
              </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
           </layout>
          </item>

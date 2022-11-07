@@ -1,7 +1,6 @@
 #ifndef RIGCACHE_H
 #define RIGCACHE_H
 
-#include "base_pch.h"
 #include "RigState.h"
 #include "RigDetails.h"
 

@@ -1,5 +1,6 @@
-#include "base_pch.h"
-
+#include "MMessageDialog.h"
+#include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include <QSslSocket>
 #include "tcalendarform.h"
@@ -69,6 +70,26 @@ void TCalendarForm::doCloseEvent()
 
 bool TCalendarForm::loadYear ( Calendar &cal, int year )
 {
+    int yearOffset = -1;
+    for ( int i = yearList.size() - 1; i >= 0; i-- )
+    {
+        if (yearList[ i ] ->yearOffset  == 0)
+        {
+             yearOffset = i;
+        }
+    }
+    QString fname = yearList[ yearOffset ] ->getPath();
+    bool thisYearExists = FileExists ( fname );
+
+    if (!thisYearExists)
+    {
+        QString yearMessage = tr("This year's calendar file\n\n%1\n\ndoes not exist; do you wish to download the latest calendars?").arg(fname);
+        if (mShowYesNoMessage(this, yearMessage))
+        {
+            downloadFiles();
+        }
+    }
+
     bool loaded = false;
 
     for ( int i = yearList.size() - 1; i >= 0; i-- )
@@ -150,6 +171,7 @@ void TCalendarForm::LoadGrid ( Calendar &cal )
 }
 void TCalendarForm::FormShow ( )
 {
+
     bool ok;
     int year = ui->YearEdit->text().toInt(&ok);
     if (!ok)
@@ -302,7 +324,7 @@ void TCalendarForm::downloadFiles()
         return;
     }
 
-    QString fpath = "./Configuration";
+   // QString fpath = "./Configuration";
 
     int fileCount = 0;
 

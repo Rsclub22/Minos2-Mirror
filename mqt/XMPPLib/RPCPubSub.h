@@ -11,6 +11,8 @@
 
 #ifndef RPCPubSubH
 #define RPCPubSubH 
+
+#include "PublishState.h"
 #include "XMPPRPCObj.h"
 //---------------------------------------------------------------------------
 

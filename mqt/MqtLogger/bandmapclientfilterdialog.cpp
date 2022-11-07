@@ -8,11 +8,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-
+#include <QMessageBox>
+#include "MTrace.h"
 
 #include "bandmapclientfilterdialog.h"
 #include "ui_bandmapclientfilterdialog.h"
-#include "BandList.h"
 
 int BandmapClientFilterDialog::mainTabIndex;
 
@@ -222,8 +222,7 @@ void BandmapClientFilterDialog::onDistanceEditFinished()
     {
         QMessageBox::information(this, tr("Distance Filter"),
                                  tr("Please enter a number between %1 and %2!").arg(MIN_FILTER_DISTANCE).arg(MAX_FILTER_DISTANCE),
-                                  QMessageBox::Ok|QMessageBox::Default,
-                                  QMessageBox::NoButton, QMessageBox::NoButton);
+                                  QMessageBox::Ok|QMessageBox::NoButton, QMessageBox::NoButton);
         ui->spotDistanceEdit->setText(QString::number(filterSettings.getDistanceFilter()));
     }
 }

@@ -7,7 +7,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 //---------------------------------------------------------------------------
-#include "XMPP_pch.h"
+#include <QSharedMemory>
+
 #include "SecondInstall.h"
 #include "singleapplication.h"
 

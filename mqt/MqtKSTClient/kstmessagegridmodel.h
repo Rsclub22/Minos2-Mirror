@@ -1,10 +1,9 @@
 #ifndef KSTMESSAGEGRIDMODEL_H
 #define KSTMESSAGEGRIDMODEL_H
 
-#include "base_pch.h"
-
 #include <QAbstractItemModel>
 #include <QSortFilterProxyModel>
+#include <QDateTime>
 #include "htmldelegate.h"
 
 

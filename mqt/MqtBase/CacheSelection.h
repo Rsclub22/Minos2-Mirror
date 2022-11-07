@@ -1,6 +1,7 @@
 #ifndef CACHESELECTION_H
 #define CACHESELECTION_H
 
+#include <QMap>
 #include "minositem.h"
 
 class CacheSelection

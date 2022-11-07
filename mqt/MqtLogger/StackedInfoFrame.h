@@ -1,7 +1,6 @@
 #ifndef STACKEDINFOFRAME_H
 #define STACKEDINFOFRAME_H
 
-#include "base_pch.h"
 #include "RigMemoryFrame.h"
 #include "TClockFrame.h"
 #include "districtframe.h"
@@ -41,8 +40,9 @@ class StackedInfoFrame : public QFrame
 
 public:
     static QVector <AuxTypeOption> auxoptions;
+    TSingleLogFrame *tslf;
 
-    explicit StackedInfoFrame(QWidget *parent = nullptr, int instance = 0);
+    explicit StackedInfoFrame(QWidget *parent, int instance, TSingleLogFrame *t);
     ~StackedInfoFrame();
 
     void setCurrentFrameType(QString);
@@ -68,8 +68,11 @@ private:
 
     QFrame *currStackFrame = nullptr;
 
+    bool showAuxHeaders = true;
+
     void setTabVisibility();
 
+    void stackMargins();
 private slots:
     void on_ScrollToDistrict( const QString &qth, BaseContestLog* );
     void on_ScrollToCountry( const QString &csCs, BaseContestLog* );
@@ -84,6 +87,8 @@ private slots:
     void clearContestInFrame(BaseContestLog *ct);
     void onContestBandChanged(BaseContestLog *ct);
     void on_currentTabChangedSlot(int index);
+
+    void on_ShowAuxHeaders();
 public slots:
     void setContest(LoggerContestLog *contest);
 };

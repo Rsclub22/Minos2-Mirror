@@ -1,16 +1,18 @@
-#include "ConfigFile.h"
+#include <QFileDialog>
+
 #include "ContestApp.h"
 #include "LoggerContest.h"
 #include "AdifImport.h"
 #include "MinosLoggerEvents.h"
 #include "contacts.h"
+#include "fileutils.h"
 #include "tlogcontainer.h"
 #include "tsinglelogframe.h"
 #include "htmldelegate.h"
 #include "cutils.h"
 #include "BandList.h"
+#include "MTrace.h"
 
-#include "Wsjtx_qt_helpers.hpp"
 #include "WsjtxDecodesModel.hpp"
 #include "WsjtxServer.h"
 #include "WsjtxConfigureCQ.h"
@@ -210,8 +212,6 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         trace( "Failed to append ADIF from " + id );
         return;
     }
-    ct->scanContest();
-    ct->validateLoc();
     for ( int i = spoint; i < ct->ctList.count(); i++ )
     {
         QSharedPointer<BaseContact> bct = ct->pcontactAt(i);
@@ -225,10 +225,13 @@ void WsjtxFrame::log_ADIF(QString const& id, QByteArray const& ADIF)
         bct->commonSave(bct);
     }
     ct->commonSave( false );
-    MinosLoggerEvents::SendAfterLogContact(ct);
+    ct->scanContest();      // after ADIF logged, could we do a single QSO scan? But this is only every few seconds
+
+    MinosLoggerEvents::SendAfterLogContact(ct); // after ADIF logged "last contact"
     TSingleLogFrame * tslf = LogContainer ->findContest( ct );
 
-    tslf->showQSOs();
+    tslf->updateTrees();    // (log_ADIF complete redraw of QSO model...
+    tslf->startNextEntry();       // log_ADIF
 }
 void WsjtxFrame::add_client (QString const& id, QString const& /*version*/, QString const& /*revision*/)
 {
@@ -332,7 +335,7 @@ void WsjtxFrame::process_decodes()
                     decodeMessage &dc = messages[i];
                     if (dc.oldmsg)
                         continue;
-                    if (dc.decodeInd[0] == "?")
+                    if (dc.decodeInd[0] == '?')
                         continue;   // potentially bad decode
 
                     trace(QString("WsjtxFrame::process_decodes Checking against lastTx %1 stage %2 tocall %3 fromcall %4 callingCall %5 workingCall %6")
@@ -413,7 +416,7 @@ void WsjtxFrame::process_decodes()
                      decodeMessage &dc = messages[i];
                      if (dc.oldmsg)
                          continue;
-                     if (dc.decodeInd[0] == "?")
+                     if (dc.decodeInd[0] == '?')
                          continue;
 
                      trace(QString("WsjtxFrame::process_decodes Checking %1 stage %2 tocall %3 fromcall %4")
@@ -946,7 +949,7 @@ void WsjtxFrame::on_testButton_clicked()
 //                                     , QString const& configuration_name, QString const& tx_message)
 
 
-            update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, true, 0, 0
+            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, true, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");
 
@@ -963,68 +966,70 @@ void WsjtxFrame::on_testButton_clicked()
 //19:30:14.733 WsjtxFrame::decode_added - 18:30:00 new message G0GJV G3ZPB IO91 stage Grid points 50 snr -15
             QTime now = QTime::currentTime();
 
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
+            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ M/ZL1DRI", false, true);
 
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
-            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
-            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
-            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
-            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
-            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
 
-
-            // Normal
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ K1ABC FN42            a1", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ IO91", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ R-22", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC RR73", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ 73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0GJV M0GXZ IO92", false, true);
+//            decode_added(true, "test", now, -2, 0, 0, "FT8", "G0GJV G8KWX -19", false, true);
+//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB IO91", false, true);
+//            decode_added(true, "test", now, -1, 0, 0, "FT8", "G0GJV G3ZPB RR73", false, true);
+//            decode_added(true, "test", now, -19, 0, 0, "FT8", "<GB1945PJ> SP9DEM JO90", false, true);
+//            decode_added(true, "test", now, -19, 0, 0, "FT8", "<...> RW3SK KO94", false, true);
 
 
-            // EU VHF Contest
-
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC/P IO91", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ JO22", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ 590003 IO91NP", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P R 570007 JO22DB", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC/P RR73", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ 73", false, true);
-
-            //And in 2.2 (both callsigns, hashed)
-            //(Either callsign (or both) may have /P appended.)
-
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC IO91", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC PA9XYZ JO22", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "<PA9XYZ> <G4ABC> 570123 IO91NP", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC RR73", false, true);
+//            // Normal
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ K1ABC FN42            a1", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ IO91", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC -19", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ R-22", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G0XYZ K1ABC RR73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC G0XYZ 73", false, true);
 
 
-            // NA VHF Contest
-            //(Either callsign (or both) may have /R appended. You can use RR73 in place of RRR, and the final 73 is optional)
+//            // EU VHF Contest
 
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST K1ABC FN42", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ EN37", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC R FN42", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ RR73", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC 73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC/P IO91", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ JO22", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ 590003 IO91NP", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P R 570007 JO22DB", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC/P RR73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC/P PA9XYZ 73", false, true);
 
-            // test for Ken
+//            //And in 2.2 (both callsigns, hashed)
+//            //(Either callsign (or both) may have /P appended.)
 
-            //One thing I did notice was the predicted scores for unworked stations.
-            //It said 17 for IO83, 22 for IO93, and 78 for IO92 - they seem radically wrong.
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST G4ABC IO91", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "G4ABC PA9XYZ JO22", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "<PA9XYZ> <G4ABC> 570123 IO91NP", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "<G4ABC> <PA9XYZ> R 580071 JO22DB", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "PA9XYZ G4ABC RR73", false, true);
 
-            //In my log G3YDY (JO01) is shown as 243Km and G4RRA (IO80) is shown as 297Km.
-            //The robot works out ODX as G3YDY at 351Km
 
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G1FFF IO83", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G2FFF IO93", false, true);
-            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3FFF IO92", false, true);
+//            // NA VHF Contest
+//            //(Either callsign (or both) may have /R appended. You can use RR73 in place of RRR, and the final 73 is optional)
 
-            update_status ("test", Frequency(14070060), "FT8", "","0", "FT8", false, false, false, 0, 0
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ TEST K1ABC FN42", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ EN37", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC R FN42", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "K1ABC W9XYZ RR73", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "W9XYZ K1ABC 73", false, true);
+
+//            // test for Ken
+
+//            //One thing I did notice was the predicted scores for unworked stations.
+//            //It said 17 for IO83, 22 for IO93, and 78 for IO92 - they seem radically wrong.
+
+//            //In my log G3YDY (JO01) is shown as 243Km and G4RRA (IO80) is shown as 297Km.
+//            //The robot works out ODX as G3YDY at 351Km
+
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3YDY JO01", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G1FFF IO83", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G2FFF IO93", false, true);
+//            decode_added(true, "test", now, -14, 0, 0, "FT8", "CQ G3FFF IO92", false, true);
+
+            update_status ("test", Frequency(144174000), "FT8", "","0", "FT8", false, false, false, 0, 0
                                     , "G0GJV", "IO91", "JO01"
                                     , false, "", false, 0, 0, 0, "", "");
 
@@ -1070,7 +1075,6 @@ void WsjtxFrame::saveAllColumnWidthsAndPositions()
         //And we need to send this out to all other instances
 
         MinosLoggerEvents::SendColumnsChanged();
-
     }
 }
 void WsjtxFrame::reloadColumns()
@@ -1113,49 +1117,30 @@ void WsjtxFrame::on_configCQButton_clicked()
 
 void WsjtxFrame::on_decodes_table_view__clicked(const QModelIndex &index)
 {
+    // How do we say "use from call"?
+
     if (index.column() == dcMessage)
     {
-        QString call;
+        Callsign call;
         decodeMessage &dc = messages[index.row()];
         switch (dc.mstage)
         {
         case emsNone:
             break;
-        case emsCQ:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsGrid:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsDb:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsDbGrid:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsRplusGrid:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsRplusDb:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsRplusDbGrid:
-            call = dc.fromCall.getFullCall();
-            break;
-        case emsRRR:
-            call = dc.fromCall.getFullCall();
-            break;
-        case ems73:
-            call = dc.fromCall.getFullCall();
-            break;
         case emsFree:
             break;
-
+        default:
+            call = dc.fromCall;
+            break;
         }
-        if (!call.isEmpty())
+        if (call == decoder.getMyCall())
+        {
+            call = dc.toCall;
+        }
+        if (!call.getFullCall().isEmpty())
         {
             TSingleLogFrame *tslf = LogContainer->getCurrentLogFrame();
-            tslf->transferFromWSJTX(call);
+            tslf->transferFromWSJTX(call.getFullCall());
         }
     }
 }

@@ -1,13 +1,12 @@
 #ifndef LOCCALCFRAME_H
 #define LOCCALCFRAME_H
 
-#include "base_pch.h"
 #include "cutils.h"
 
 namespace Ui {
 class LocCalcFrame;
 }
-
+class BaseContestLog;
 class LocCalcFrame : public QFrame
 {
     Q_OBJECT

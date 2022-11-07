@@ -6,10 +6,10 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
+#include <QTextStream>
 #include "LoggerContest.h"
 #include "contacts.h"
+#include "cutils.h"
 #include "reg1test.h"
 
 enum reg1test_order
@@ -106,7 +106,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
       // Extract comments for "Remarks" section
       cct->addReg1TestComment( remarks );
 
-      if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+      if ( cct->contactFlags.getValue() & DONT_PRINT )
          continue;
 
       nlines++;
@@ -209,7 +209,7 @@ bool reg1test::exportTest( QSharedPointer<QFile> expfd, bool noSerials )
    {
        QSharedPointer<BaseContact> cct = dct.wt;
 
-      if ( cct->contactFlags.getValue() & ( LOCAL_COMMENT | COMMENT_ONLY | DONT_PRINT ) )
+      if ( cct->contactFlags.getValue() & DONT_PRINT )
       {
          // should all COMMENT_ONLY records go into remarks?
          // and also comments on individual QSOs?
@@ -563,8 +563,7 @@ bool reg1test::parseQSO( QString line )
       nextBlock++;
       aqso->setLogSequence( nextBlock << 16 );
 
-      MapWrapper<BaseContact> wbct(aqso);
-      ct->ctList.insert( wbct, wbct );
+      ct->addToContestList(aqso);
       return true;
    }
    return false;

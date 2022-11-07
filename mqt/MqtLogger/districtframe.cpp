@@ -1,14 +1,14 @@
-#include "base_pch.h"
 #include "MinosLoggerEvents.h"
 
 #include "LoggerContest.h"
 #include "ContestApp.h"
 #include "htmldelegate.h"
 #include "tsinglelogframe.h"
+#include "StackedInfoFrame.h"
 #include "districtframe.h"
 #include "ui_districtframe.h"
 
-GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 3 ] =
+QVector<GridColumn> DistrictGridModel::DistrictTreeColumns =
    {
       GridColumn( ectCall, "XXXXXXX", QT_TR_NOOP("Code"), taLeftJustify ),
       GridColumn( ectWorked, "Wk CtX", QT_TR_NOOP("Wkd"), taCenter ),
@@ -17,32 +17,106 @@ GridColumn DistrictGridModel::DistrictTreeColumns[ ectMultMaxCol - 3 ] =
       GridColumn( ectName, "This is a Very Very long District", QT_TR_NOOP("District"), taLeftJustify )
    };
 
-DistrictFrame::DistrictFrame(QWidget *parent) :
+DistrictFrame::DistrictFrame(StackedInfoFrame *parent) :
     QFrame(parent),
-    ui(new Ui::DistrictFrame)
+    ui(new Ui::DistrictFrame),
+    tslf(parent->tslf)
 {
     ui->setupUi(this);
+    ui->DistrictTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->DistrictTable->horizontalHeader()->setSectionsMovable(true);
+
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::customContextMenuRequested, this, &DistrictFrame::onDistrictGrid_customContextMenuRequested );
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionMoved, this, &DistrictFrame::onDistrictGrid_sectionMoved);
+    connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized, this, &DistrictFrame::on_sectionResized);
+
+    proxyModel.setSourceModel(&model);
+    ui->DistrictTable->setModel(&proxyModel);
+
+    int lcf;
+    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
+    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
+    model.delegate = delegate;
+
+    ui->DistrictTable->setItemDelegate( delegate.data() );
+    QSize ms = delegate->docSize("XX");
+    ui->DistrictTable->verticalHeader()->setDefaultSectionSize(ms.height() );
+
+    createColumnsMenu(columnsMenu, &model, this,
+              [=]{
+                    viewColumn();
+              });
+
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::doColumnChanges, this, &DistrictFrame::on_doColumnChanges);
+
 }
 
 DistrictFrame::~DistrictFrame()
 {
     delete ui;
 }
+
+void DistrictFrame::viewColumn()
+{
+    // a columnsMenu entry has been clicked... action it
+    QAction *act = dynamic_cast<QAction *>(sender());
+    if (act)
+    {
+        int col = act->data().toInt();
+        if (col >= 0)
+        {
+            bool check = act->isChecked();
+            ui->DistrictTable->horizontalHeader()->setSectionHidden(col, !check);
+        }
+        else
+        {
+            QString fname("./Configuration/LoggerTableHeaders.ini");
+            resetHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+        }
+    }
+    saveDistrictTableColumns();
+}
+void DistrictFrame::saveDistrictTableColumns()
+{
+    if (!inRestoreColumns)
+    {
+        QString fname("./Configuration/LoggerTableHeaders.ini");
+        saveHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+        MinosLoggerEvents::SendColumnsChanged();
+    }
+}
+void DistrictFrame::restoreDistrictTableColumns()
+{
+    inRestoreColumns = true;
+    QString fname("./Configuration/LoggerTableHeaders.ini");
+    restoreHeaderColumns(fname, "DistrictTable", tslf->getCurScreenLayout(), ui->DistrictTable->horizontalHeader());
+    inRestoreColumns = false;
+}
+void DistrictFrame::onDistrictGrid_customContextMenuRequested(const QPoint &pos)
+{
+    QPoint globalPos = ui->DistrictTable->mapToGlobal( pos );
+    popupColumnsMenu(columnsMenu, globalPos, ui->DistrictTable->horizontalHeader());
+}
+void DistrictFrame::onDistrictGrid_sectionMoved(int, int, int)
+{
+    saveDistrictTableColumns();
+}
+void DistrictFrame::on_sectionResized(int, int , int)
+{
+    saveDistrictTableColumns();
+}
+void DistrictFrame::on_doColumnChanges(BaseContestLog *b)
+{
+    if (b == model.ct)
+    {
+        restoreDistrictTableColumns();
+    }
+}
+
 void DistrictFrame::setContest(BaseContestLog *contest)
 {
     model.ct = contest;
-    int lcf;
-    TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
-    delegate = QSharedPointer<HtmlDelegate>(new HtmlDelegate(1.0, lcf/100.0));
-    model.delegate = delegate;
-    ui->DistrictTable->setItemDelegate(delegate.data());
 
-    ui->DistrictTable->setItemDelegate( delegate.data() );
-    QSize ms = delegate->docSize("XX");
-    ui->DistrictTable->verticalHeader()->setDefaultSectionSize(ms.height() );
-
-    proxyModel.setSourceModel(&model);
-    ui->DistrictTable->setModel(&proxyModel);
     if (contest)
     {
         band = contest->currentBand.getValue();
@@ -50,8 +124,6 @@ void DistrictFrame::setContest(BaseContestLog *contest)
         proxyModel.band = band;
 
         reInitialiseDistricts();
-        connect( ui->DistrictTable->horizontalHeader(), &QHeaderView::sectionResized,
-                 this, &DistrictFrame::on_sectionResized, Qt::UniqueConnection);
     }
 }
 
@@ -78,11 +150,7 @@ void DistrictFrame::doScrollToDistrict()
 
 void DistrictFrame::reInitialiseDistricts()
 {
-    QSettings settings;
-    QByteArray state;
-
-    state = settings.value("DistrictTable/state").toByteArray();
-    ui->DistrictTable->horizontalHeader()->restoreState(state);
+    restoreDistrictTableColumns();
 
     doScrollToDistrict();
 }
@@ -94,14 +162,6 @@ void DistrictFrame::scrollToDistrict( const QString &cd, bool makeVisible )
         proxyModel.scrolledDistrict.clear();
 
     doScrollToDistrict();
-}
-void DistrictFrame::on_sectionResized(int, int , int)
-{
-    QSettings settings;
-    QByteArray state;
-
-    state = ui->DistrictTable->horizontalHeader()->saveState();
-    settings.setValue("DistrictTable/state", state);
 }
 
 DistrictGridModel::DistrictGridModel():
@@ -154,7 +214,10 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
     {
         QString cell;
 
-        cell = tr(DistrictTreeColumns[section].title);
+        if (section >= 0)
+        {
+            cell = tr(DistrictTreeColumns[section].title);
+        }
 
         return cell;
     }
@@ -166,10 +229,14 @@ QVariant DistrictGridModel::headerData( int section, Qt::Orientation orientation
     {
         if (delegate)
         {
-            QString s = data(index(section, 0), Qt::DisplayRole).toString();
-            QSize r = delegate->docSize(s);
-            r.setWidth(0);
-            return r;
+            if (section >= 0)
+            {
+
+                QString s = data(index(section, 0), Qt::DisplayRole).toString();
+                QSize r = delegate->docSize(s);
+                r.setWidth(0);
+                return r;
+            }
         }
     }
     return QVariant();
@@ -195,7 +262,7 @@ int DistrictGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 
 int DistrictGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return ectMultMaxCol - 3;
+    return DistrictTreeColumns.count();
 }
 bool DistrictSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &/*sourceParent*/) const
 {

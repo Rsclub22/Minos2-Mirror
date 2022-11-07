@@ -1,9 +1,10 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef RCMAINWINDOW_H
+#define RCMAINWINDOW_H
 
-#include "base_pch.h"
-
-#include "vucallback.h"
+#include <QMainWindow>
+#include "AnalysePubSubNotify.h"
+#include "StdInReader.h"
+#include "qtimer.h"
 #include "rrsoundsys.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,8 +22,6 @@ public:
 
     void volcallback(unsigned int peakvol, unsigned int rmsvol, unsigned int samples);
 private slots:
-    void onStdInRead(QString);
-
     void on_startRecButton_clicked();
 
     void on_stopRecButton_clicked();
@@ -57,7 +56,7 @@ private:
     bool started = false;
     bool stopped = false;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
     QTimer closeTimer;
 
     bool closing = false;
@@ -70,4 +69,4 @@ private:
     void setVolumeMults();
 };
 extern MainWindow *mainWindow;
-#endif // MAINWINDOW_H
+#endif // RCMAINWINDOW_H

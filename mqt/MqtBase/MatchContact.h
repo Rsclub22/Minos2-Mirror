@@ -10,7 +10,7 @@
 
 #ifndef MatchContactH
 #define MatchContactH 
-#include "base_pch.h"
+#include "baseloglist.h"
 #include "contacts.h"
 //---------------------------------------------------------------------------
 class ListContact;
@@ -42,9 +42,9 @@ class MatchContact
       {
          return nullptr;
       }
-      virtual QSharedPointer<BaseContact> getBaseContact() const
+      virtual CheckableContact * getBaseContact() const
       {
-         return QSharedPointer<BaseContact>();
+         return nullptr;
       }
       virtual bool operator<( const MatchContact& rhs ) const = 0;
       virtual bool operator==( const MatchContact& rhs ) const = 0;
@@ -116,14 +116,14 @@ class MatchLogContact: public MatchContact
 {
    public:
       BaseContestLog *matchedContest;
-      QSharedPointer<BaseContact> matchedContact;
-      MatchLogContact(BaseContestLog * ct, QSharedPointer<BaseContact> lc );
+      CheckableContact *matchedContact;
+      MatchLogContact(BaseContestLog * ct, CheckableContact *lc );
       virtual ~MatchLogContact() override;
       virtual BaseContestLog * getContactLog() const override
       {
          return matchedContest;
       }
-      virtual QSharedPointer<BaseContact> getBaseContact() const override
+      virtual CheckableContact * getBaseContact() const override
       {
          return matchedContact;
       }

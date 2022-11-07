@@ -1,12 +1,11 @@
-#include "minos_pch.h"
+#include "LogEvents.h"
+#include "MTrace.h"
 #include "SecondInstall.h"
-#include "MinosLink.h"
-#include "clientThread.h"
-#include "serverThread.h"
 #include "MServerZConf.h"
 #include "MServer.h"
 #include "MServerPubSub.h"
 
+#include "ServerEvent.h"
 #include "servermain.h"
 #include "ui_servermain.h"
 
@@ -21,8 +20,7 @@ ServerMain::ServerMain(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &ServerMain::onStdInRead);
 
     createCloseEvent();
     QSettings settings;
@@ -61,7 +59,6 @@ void ServerMain::onStdInRead(QString cmd)
     {
         closeApp = true;
     }
-    executeStdIn(cmd);
 }
 
 void ServerMain::LogTimerTimer( )
@@ -99,16 +96,6 @@ void ServerMain::LogTimerTimer( )
    {
       lastPubCount = pubCount;
       ui->PubLabel->setText(QString::number(pubCount));
-   }
-
-   bool show = getShowApp();
-   if ( !isVisible() && show )
-   {
-      setVisible(true);
-   }
-   if ( isVisible() && !show )
-   {
-      setVisible(false);
    }
 
    if ( closeApp )

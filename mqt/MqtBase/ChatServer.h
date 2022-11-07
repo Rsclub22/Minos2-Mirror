@@ -1,16 +1,13 @@
 #ifndef CHATSERVER_H
 #define CHATSERVER_H
-#include "base_pch.h"
 
-//class Provider
-//{
-//public:
-//    Provider(){}
+#include <QTimer>
 
-//    QString routerName;
-//    QString app;
-//    PublishState state = psNotConnected;
-//}
+#include "MinosRPC.h"
+#include "frequency.h"
+
+class BaseContestLog;
+
 class ChatServerApp
 {
 public:

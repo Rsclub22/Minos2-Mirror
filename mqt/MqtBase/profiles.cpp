@@ -6,10 +6,8 @@
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //
 /////////////////////////////////////////////////////////////////////////////
-#include "base_pch.h"
-
-#include "MLogFile.h"
 #include "INIFile.h"
+#include "clustercommon.h"
 #include "profiles.h"
 
 //#include "ScreenConfigFile.h"
@@ -110,6 +108,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeProtectContests, "AgeProtectContests", true, QT_TR_NOOP("Protect contests by age"), QT_TR_NOOP("Protect contests by age"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAgeToProtectContests, "AgeToProtectContests", 1, QT_TR_NOOP("Days after which contests are protected"), QT_TR_NOOP("Days after which contests are protected"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapOldStyle, "OldStyleBandmap", false, QT_TR_NOOP("Old style of band map"), QT_TR_NOOP("Old style of band map"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpShowAuxHeaders, "ShowAuxHeaders", true, QT_TR_NOOP("Show Auxiliary Headers"), QT_TR_NOOP("Show Auxiliary Headers"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningEnable , "addBandmapTuningENABLE", ADD_TUNING_BANDMAP_FREQ_DEFAULT_ENABLED, QT_TR_NOOP("Add to Bandmap tuning enabled"), QT_TR_NOOP("Add to Bandmap tuning enabled"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpAddBandMapTuningTolerance , "addBandmapTuningTolerance", ADD_TUNING_BANDMAP_FREQ_DEFAULT_TOLERANCE, QT_TR_NOOP("Add to Bandmap tuning tolerance"), QT_TR_NOOP("Add to Bandmap tuning tolerance"), false ) ) );
@@ -117,6 +116,7 @@ BundleFile::BundleFile( PROFILES p )
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableNotShown , "BandMapDisableNotShown", true, QT_TR_NOOP("Disable Bandmap when not shown"), QT_TR_NOOP("Disable Bandmap when not shown"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisableLoggedCalls , "BandMapDisableLoggedCalls", false, QT_TR_NOOP("Disable adding logged Calls to bandmap"), QT_TR_NOOP("Disable adding logged Calls to bandmap"), false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandMapDisablePlaceHolders , "BandMapDisablePlaceHolders", false, QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), QT_TR_NOOP("Disable setting placeholders from current frequency on bandmap"), false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpBandmapInvert , "InvertBandmap", false, QT_TR_NOOP("Bandmap High Frequency At Top"), QT_TR_NOOP("Bandmap High Frequency At Top"), false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( elpCQRit , "CQRit", true, QT_TR_NOOP("RIT on CQ"), QT_TR_NOOP("RIT on CQ"), false ) ) );
 
@@ -172,14 +172,19 @@ BundleFile::BundleFile( PROFILES p )
             entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpProtectedLayout, "ProtectedLayout", temp.constData(), temp, "hint", false ) ) );
         }
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpListCompression, "List Compression Factor", 100, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 100, "", "hint", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpQSOFieldFont, "QSO Field Expansion Factor", 125, "", "hint", false ) ) );
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpExpertMode, "ExpertMode", false, "Expert Mode Display", "Expert Mode Display", false ) ) );
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpAlternateFKeys, "AlternateFKeys", false, "Alternate F key Definitions", "Alternate F key Definitions", false ) ) );
+
+
+        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpSeparateIcons, "SeparateIcons", false, "Separate Icons in Taskbar", "Separate Icons in Taskbar", false ) ) );
 
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpls, "Layout Spacing", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcml, "Content Margin Left", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmt, "Content Margin Top", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmr, "Content Margin Right", 2, "", "hint", false ) ) );
         entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpcmb, "Content Margin Bottom", 2, "", "hint", false ) ) );
-        entries.push_back(  QSharedPointer<ProfileEntry> (new ProfileEntry( edpSeparateIcons, "SeparateIcons", false, "Separate Icons in Taskbar", "Separate Icons in Taskbar", false ) ) );
 
         break;
     case epENTRYPROFILE:

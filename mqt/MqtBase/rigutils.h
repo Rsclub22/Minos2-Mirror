@@ -10,9 +10,7 @@
 #ifndef RIGUTILS_H
 #define RIGUTILS_H
 
-
-#include "base_pch.h"
-
+#include "frequency.h"
 extern const char * FREQ_EDIT_ERR_MSG;
 extern const char * RADIO_FREQ_EDIT_ERR_MSG;
 extern const char * TARGET_FREQ_EDIT_ERR_MSG;

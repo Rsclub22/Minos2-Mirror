@@ -9,10 +9,14 @@
 #ifndef soundsysH
 #define soundsysH
 
-#include "mqtUtils_pch.h"
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 
 #include "riff.h"
 #include "SimpleComp.h"
+#include "CompressorParams.h"
+#include "adis_filter.h"
 
 
 class RtAudioSoundSystem;
@@ -27,13 +31,32 @@ class RtAudioSoundSystem;
 #pragma GCC diagnostic pop
 #endif
 
-#include "SimpleComp.h"
+#define FRAMES 16
+#define FRAMESAMPLES 256
+#define RINGBUFFERSIZE 1024
+
+class InBuff
+{
+public:
+    unsigned int frameCount;
+    int16_t buff[FRAMESAMPLES * 2];
+};
 
 class RiffWriter : public QThread
 {
     Q_OBJECT
 
      RtAudioSoundSystem *ss;
+
+     QWaitCondition bufferNotEmpty;
+     QWaitCondition bufferNotFull;
+     QMutex mutex;
+
+     InBuff inBuffs[RINGBUFFERSIZE];
+     int recIndex = -1;
+     int writeIndex = -1;
+
+
 public:
      bool terminated;
     RiffWriter(RtAudioSoundSystem *parent = nullptr) ;
@@ -41,23 +64,12 @@ public:
 
     virtual void run() Q_DECL_OVERRIDE;
 
-};
-class LPFilter
-{
-    int mNumChannels;
-    // past data
-    double mZx[4];
-    double mZy[4];
-    // filter coefficients
-    double a0;
-    double a1;
-    double a2;
-    double b1;
-    double b2;
-public:
-    LPFilter(){}
-    void initialise(int channels, double corner, double sampleRate);
-    inline double filterSample (const double inSample, const int channel);
+    void startInput();
+    void wakeAll();
+
+    void copyBuffer(int16_t *inStageBuffer, int nFrames);
+    void finishInput();
+
 };
 class RtAudioSoundSystem: public QObject
 {
@@ -78,6 +90,9 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
+    bool doBWFilter = true;
+    bool doCompression = true;
+
     bool initialise(QString ind , QString outd);
     void stop();
     void closedown();
@@ -86,7 +101,6 @@ public:
     QStringList outputDevices;
 
     unsigned int setRate(unsigned int rate);
-    void setFilter(int cf);
 
     bool startDMA( bool play, const QString &fname, int pipSamples, int16_t *pipptr, int pipStartDelaySamples );
     void stopDMA();
@@ -102,7 +116,7 @@ public:
     bool startMicPassThrough();
     bool stopMicPassThrough();
 
-    void setVolumeMults(qreal record, qreal replay, qreal passThrough);
+    void setVolumeMults(qreal record, qreal replay, qreal passThrough, const CompressorParams &comp, bool df, bool dc);
 
     void setData(int16_t *data, unsigned int len);
     void setPipData(int16_t *data, unsigned int len, unsigned int delayLen);
@@ -118,7 +132,6 @@ public:
                                     unsigned int nFrames,
                                     double streamTime,
                                     unsigned int status );
-
 private:
 
     RtAudio *audio = nullptr;
@@ -128,10 +141,16 @@ private:
 
     QMap<QString, int> deviceIds;
 
-    chunkware_simple::SimpleCompRms compressor;
-    LPFilter lpFilter;
+    chunkware_simple::SimpleCompRms micCompressor;
+    chunkware_simple::SimpleCompRms replayCompressor;
 
-    int filterCorner = 0;
+    double makeUpGain = 0.0;
+
+    BWBandPass* micfilter1;
+    BWBandPass* micfilter2;
+
+    BWBandPass* replayfilter1;
+    BWBandPass* replayfilter2;
 
     // internal values
     unsigned int sampleRate = 0;
@@ -145,6 +164,8 @@ private:
     bool inputEnabled = false;
     bool outputEnabled = false;
     bool passThroughEnabled = false;
+
+    CompressorParams compression;
 
     qreal recordMult = 0.0;
     qreal replayMult = 0.0;

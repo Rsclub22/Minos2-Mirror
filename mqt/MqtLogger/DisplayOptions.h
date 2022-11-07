@@ -33,6 +33,9 @@ private:
     ConfigurationOption AutoFill;
     ConfigurationOption TabforSandP;
     ConfigurationOption SeparateIcons;
+    ConfigurationOption ExpertMode;
+    ConfigurationOption AlternateFKeys;
+    ConfigurationOption ShowAuxHeaders;
 
     int lcf;
     int qff;

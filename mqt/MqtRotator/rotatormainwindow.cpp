@@ -12,19 +12,6 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-#include "RPCCommandConstants.h"
-#include "rotatorRpc.h"
-#include "rotatorlog.h"
-#include "rotatormainwindow.h"
-#include "rotatorcommon.h"
-#include "ui_rotatormainwindow.h"
-#include "minoscompass.h"
-#include "hamlibRotcontrol.h"
-#include "rotsetupdialog.h"
-#include "logdialog.h"
-#include "serialdata.h"
-#include "pstconfigdialog.h"
 #include <QString>
 #include <QLabel>
 #include <QMessageBox>
@@ -32,10 +19,23 @@
 #include <QTime>
 #include <QSettings>
 #include <QProcessEnvironment>
-#include <QtDebug>
+#include <QDir>
 
-
-
+#include "RPCCommandConstants.h"
+#include "rotatorRpc.h"
+#include "rotatorlog.h"
+#include "rotatorcommon.h"
+#include "rotpresetdialog.h"
+#include "serialCommonData.h"
+#include "minoscompass.h"
+#include "rotsetupdialog.h"
+#include "logdialog.h"
+#include "serialdata.h"
+#include "pstconfigdialog.h"
+#include "MTrace.h"
+#include "LogEvents.h"
+#include "rotatormainwindow.h"
+#include "ui_rotatormainwindow.h"
 
 RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -56,9 +56,7 @@ RotatorMainWindow::RotatorMainWindow(QWidget *parent) :
         shiftShortCutKeyList.append(new QShortcut(QKeySequence(presetMenuShortCutKeys[i]), this));
     }
 
-
-    connect(&stdinReader, &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
-    stdinReader.start();
+    connect(stdinReader, &StdInReader::stdinLine, this, &RotatorMainWindow::onStdInRead);
 
     // get the antenna name from host process
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -229,17 +227,13 @@ void RotatorMainWindow::logMessage( QString s )
 
 void RotatorMainWindow::onStdInRead(QString cmd)
 {
-    bool doClose = false;
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         trace("onStdInRead - Start shutdown");
+        close();
 
         closeApp = true;
-        doClose = true;
     }
-    executeStdIn(cmd);
-    if (doClose)
-        close();
 }
 
 void RotatorMainWindow::closeEvent(QCloseEvent *event)
@@ -272,15 +266,6 @@ void RotatorMainWindow::resizeEvent(QResizeEvent * event)
 
 void RotatorMainWindow::LogTimerTimer(  )
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
     static bool closed = false;
     if ( !closed )
     {
@@ -2614,3 +2599,9 @@ void RotatorMainWindow::dumpRotatorToTraceLog()
     }
 
 }
+
+void RotatorMainWindow::on_reconnectPushButton_clicked()
+{
+    refreshAntenna();
+}
+

@@ -1,6 +1,3 @@
-#include "base_pch.h"
-
-#include "tlogcontainer.h"
 #include "Clusterbandmapconfigure.h"
 #include "defdirsdlg.h"
 #include "DisplayOptions.h"
@@ -142,7 +139,7 @@ void OptionsDialog::on_optionTabs_currentChanged(int index)
 {
     if (current == bs && bs->checkChanged())
     {
-        mShowMessage(tr("We must save the band changes before continuing"), this);
+        mShowMessage(tr("We will save the band changes before continuing."), this);
         accept();
     }
 

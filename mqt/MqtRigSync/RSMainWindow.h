@@ -1,11 +1,14 @@
 #ifndef RSMAINWINDOW_H
 #define RSMAINWINDOW_H
 
-#include "base_pch.h"
+#include <QMainWindow>
 #include <QComboBox>
 #include "RigCache.h"
+#include "StdInReader.h"
+#include "XMPPRPCObj.h"
 #include "n1mmlink.h"
 #include "wsjtxlink.h"
+#include "AnalysePubSubNotify.h"
 
 class BandInfo;
 class ModeInfo;
@@ -72,8 +75,6 @@ private slots:
 
     void claimTimerTimer();
 
-    void onStdInRead(QString);
-
     void on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from );
     void on_notify(AnalysePubSubNotify an, const QString from);
 
@@ -88,7 +89,7 @@ private:
     WsjtxLink wsjtxLink;
     bool firstTime = true;
 
-    StdInReader stdinReader;
+    StdInReader *stdinReader = new StdInReader(this);
 
     QTimer SyncTimer;
 

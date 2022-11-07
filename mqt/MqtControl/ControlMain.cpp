@@ -1,8 +1,15 @@
-#include "ControlMain.h"
-#include "ui_ControlMain.h"
-
+#include <QSettings>
+#include <QCloseEvent>
+#include "AppStartup.h"
+#include "MinosRPC.h"
+#include "RPCCommandConstants.h"
+#include "controlport.h"
 #include "portconf.h"
 #include "MinosLines.h"
+#include "MTrace.h"
+#include "LogEvents.h"
+#include "ControlMain.h"
+#include "ui_ControlMain.h"
 
 ControlMain *controlMain = nullptr;
 void ControlMain::logMessage( QString s )
@@ -33,10 +40,6 @@ ControlMain::ControlMain(QWidget *parent) :
     QByteArray geometry = settings.value("geometry").toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
-
-
-    connect(&stdinReader, &StdInReader::stdinLine, this, &ControlMain::onStdInRead);
-    stdinReader.start();
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
 
@@ -137,10 +140,6 @@ void ControlMain::subscribeApps()
 
 }
 
-void ControlMain::onStdInRead(QString cmd)
-{
-    executeStdIn(cmd);
-}
 void ControlMain::on_formShown( )
 {
     static bool shown = false;
@@ -187,16 +186,6 @@ void ControlMain::changeEvent( QEvent* e )
 }
 void ControlMain::LogTimerTimer( )
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-       setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-       setVisible(false);
-    }
-
    static bool closed = false;
    if ( !closed )
    {

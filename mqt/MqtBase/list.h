@@ -9,7 +9,9 @@
 
 #ifndef listH
 #define listH 
-#include "base_pch.h"
+#include <QVector>
+#include "baseloglist.h"
+class BaseContestLog;
 //---------------------------------------------------------------------------
 class ListContact;
 typedef QVector < ListContact *> ListList;

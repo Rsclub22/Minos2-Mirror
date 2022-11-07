@@ -1,6 +1,7 @@
-#include "base_pch.h"
+#include <QSharedMemory>
 #include "SecondInstall.h"
 #include "MinosLines.h"
+#include "tinyxml.h"
 
 #define MAX_LINE_SIZE 4096
 // Windows version  re-implemented using QSharedMemory

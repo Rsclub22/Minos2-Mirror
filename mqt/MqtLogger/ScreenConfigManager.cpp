@@ -1,5 +1,3 @@
-#include "base_pch.h"
-
 #include "ContestApp.h"
 #include "tsinglelogframe.h"
 #include "tlogcontainer.h"

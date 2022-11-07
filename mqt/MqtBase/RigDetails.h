@@ -11,7 +11,10 @@
 
 #ifndef RIGDETAILS_H
 #define RIGDETAILS_H
-#include "base_pch.h"
+
+#include "CacheSelection.h"
+#include "minositem.h"
+#include "PubSubValue.h"
 
 const QString RigDetailsType("RigDetails");
 class RigDetails: public PubSubValue

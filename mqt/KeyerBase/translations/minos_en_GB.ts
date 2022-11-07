@@ -56,4 +56,19 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>WaveShowDialog</name>
+    <message>
+        <source>Wave Display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

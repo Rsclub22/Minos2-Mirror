@@ -9,8 +9,11 @@
 #ifndef MinosLoggerEventsH
 #define MinosLoggerEventsH
 
-#include "base_pch.h"
+#include <QItemSelection>
+#include <QKeyEvent>
+
 #include "MatchCollection.h"
+#include "baseconstants.h"
 #include "rigmemcommondata.h"
 #include "clustercommon.h"
 //---------------------------------------------------------------------------
@@ -55,14 +58,15 @@ signals:
    void ScrollToDistrict(QString prefix, BaseContestLog *);
    void MatchStarting(BaseContestLog *);
    void ShowOperators();
-   //void BandMapPressed();
    void TimerDistribution();
    void AfterTabFocusIn(QLineEdit *tle);
    void clearContestInFrame(BaseContestLog *);
    void tabSandP();
    void MainRaised();
    void QSOMargins();
-
+   void showAuxHeaders();
+   void bandMapLimitsChanged();
+   void fKey(int e);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -174,6 +178,10 @@ public:
 
     static void sendReconnectFlagToClusterServer(bool state);
     static void sendQRZInfoToLog(QString callsign, QString locator, QString name);
+    static void SendShowAuxHeaders();
+    static void sendBandmapLimitsChanged();
+
+    static void sendFKey(int event);
 };
 //---------------------------------------------------------------------------
 #endif

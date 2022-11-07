@@ -4,8 +4,10 @@
 #include <QString>
 #include <QVector>
 #include <QJsonDocument>
+#include "CompressorParams.h"
 
 const int KEYERKEYS = 8;    // to match VOICEKEYER_MAX_BUTTONS
+const int COMPRESSION_LIMIT = 30;
 class KeyerKeyJson
 {
 public:
@@ -24,6 +26,7 @@ public:
     int recordSliderPosition = 0;
     int replaySliderPosition = 0;
     int passthroughSliderPosition = 0;
+    CompressorParams compression;
 
     KeyerKeyJson kjj[KEYERKEYS];
 
@@ -34,9 +37,13 @@ public:
 
     bool read(QString fileName);
     bool write(QString fileName);
+
+    void traceConfig();
+
 private:
     bool getBool(QJsonObject pe, QString key, bool def);
     int getInt(QJsonObject pe, QString key, int def);
+    int getDouble(QJsonObject o, QString key, double def);
     QString getString(QJsonObject o, QString key, QString def);
 };
 

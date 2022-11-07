@@ -12,26 +12,26 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include "base_pch.h"
-#include "mqtUtils_pch.h"
-
 #include <QTimer>
 #include <QMessageBox>
 #include <QProcessEnvironment>
-
+#include <QFileDialog>
 #include <QBitArray>
-#include <QDebug>
 #include <QMetaType>
+#include <QDir>
 
-#include "RPCCommandConstants.h"
+#include "serialCommonData.h"
+#include "MShowMessageDlg.h"
+#include "fileutils.h"
 #include "rigcommon.h"
 #include "rigsetupdialog.h"
 #include "rigcontrolrpc.h"
 #include "rigutils.h"
 #include "rigctldclient.h"
 #include "serialdata.h"
-
+#include "LogEvents.h"
 #include "cutils.h"
+#include "MTrace.h"
 
 #include "rigcontrolmainwindow.h"
 #include "ui_rigcontrolmainwindow.h"
@@ -51,9 +51,7 @@ RigControlMainWindow::RigControlMainWindow(QWidget *parent) :
 
     serialData::translateSerialData();
 
-    connect(&stdinReader, &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
-    stdinReader.start();
-
+    connect(stdinReader, &StdInReader::stdinLine, this, &RigControlMainWindow::onStdInRead);
 
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     appName = env.value("MQTRPCNAME", "") ;
@@ -306,16 +304,6 @@ void RigControlMainWindow::logMessage( QString s )
 
 void RigControlMainWindow::LogTimerTimer()
 {
-    bool show = getShowApp();
-    if ( !isVisible() && show )
-    {
-        setVisible(true);
-    }
-    if ( isVisible() && !show )
-    {
-        setVisible(false);
-    }
-
     static bool closed = false;
     if ( !closed )
     {
@@ -361,7 +349,6 @@ void RigControlMainWindow::onStdInRead(QString cmd)
         pollTimer->stop();
         RigCtldStatusTimer->stop();
     }
-    executeStdIn(cmd);
     if (doClose)
         close();
 
@@ -653,7 +640,7 @@ void RigControlMainWindow::upDateRadio(QString radioName)
 
         updateSupportedRadioIndicators();
 
-        if (appName.count() > 0)
+        if (appName.size() > 0)
         {
             logMessage(QString("Update Radio: Logger Set Freq = %1, Set Mode = %2").arg(loggerRequests->selRadioFreq.traceStr()).arg(loggerRequests->selRadioMode));
             loggerSetFreq(loggerRequests->selRadioFreq);
@@ -3726,7 +3713,7 @@ void RigControlMainWindow::radioError(int errorCode, QString cmd)
     {
         errorMsg = radio->getErrorMsgText(errorCode);
 
-        if(appName.count() > 0)
+        if(appName.size() > 0)
         {
             sendStatusToLogError(errorMsg);
         }
@@ -4275,10 +4262,10 @@ void RigControlMainWindow::onLaunchSetup()
 }
 void RigControlMainWindow::onConfigureRigctld()
 {
-    QString filepath = getRigCtldExePath();
-    QString filename = getRigCtldExeName();
+//    QString filepath = getRigCtldExePath();
+//    QString filename = getRigCtldExeName();
 
-    QDir cdir(GetCurrentDir());
+//    QDir cdir(GetCurrentDir());
     QString InitialDir = getRigCtldExePath();
 
     QFileDialog dialog(this, tr("Select Rigctld Program"), InitialDir);
@@ -5242,9 +5229,9 @@ void RigControlMainWindow::handleIcomCwMessage(QString cwMsg)
 
     if (cwMsg.length() == 1)
     {
-        trace(QString("Stop Message is = %1").arg(cwMsg, 0, 16));
+        trace(QString("Stop Message is = %1").arg(cwMsg));
         QChar c = cwMsg.at(0);
-        if (c == 65533)  // QChar value of '\xff'
+        if (c == QChar(65533))  // QChar value of '\xff'
         {
             // send stop CW
             trace(QString("Icom Cw Tx Message Stop received from logger"));
