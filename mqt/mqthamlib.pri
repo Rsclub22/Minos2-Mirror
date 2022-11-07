@@ -33,6 +33,7 @@ equals(HAMLIBVER, 45) {
           msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
           msvc: DEFINES += DLL_EXPORT
           msvc: INCLUDEPATH += $$HAMLIBDIR/include/hamlib
+          msvc: INCLUDEPATH += $$(USERPROFILE)/.nuget/packages/pthreads/2.9.1.4/build/native/include
        }
        INCLUDEPATH += $$HAMLIBDIR/include
 
