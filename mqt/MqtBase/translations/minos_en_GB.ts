@@ -80,12 +80,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="624"/>
+        <location filename="../contest.cpp" line="625"/>
         <source>DUPLICATE OF </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="640"/>
+        <location filename="../contest.cpp" line="641"/>
         <source>DUP OF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -969,12 +969,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1860"/>
+        <location filename="../contest.cpp" line="1861"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1873"/>
+        <location filename="../contest.cpp" line="1874"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1217,28 +1217,6 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
     <message>
         <location filename="../helpbrowser.ui" line="122"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../helpbrowser.ui" line="132"/>
-        <location filename="../helpbrowser.ui" line="135"/>
-        <source>Zoom In</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../helpbrowser.ui" line="138"/>
-        <source>Down</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../helpbrowser.ui" line="148"/>
-        <location filename="../helpbrowser.ui" line="151"/>
-        <source>Zoom Out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../helpbrowser.ui" line="154"/>
-        <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1718,7 +1696,7 @@ The format required is (e.g.) 1296.3, 144.32 or 144.290123<byte value="xd"/>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>

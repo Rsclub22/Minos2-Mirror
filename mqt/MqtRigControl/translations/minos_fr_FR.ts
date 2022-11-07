@@ -1076,7 +1076,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
     </message>
     <message>
         <location filename="../rigsetupdialog.ui" line="32"/>
-        <location filename="../rigsetupdialog.cpp" line="438"/>
+        <location filename="../rigsetupdialog.cpp" line="439"/>
         <source>Remove Radio</source>
         <translation>Supprimer la radio</translation>
     </message>
@@ -1086,7 +1086,7 @@ Veuillez les supprimer et configurer à nouveau les radios</translation>
         <translation>Modifier la nom de la radio</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="135"/>
+        <location filename="../rigsetupdialog.cpp" line="136"/>
         <source>Select the RS-232 serial port used for PTT control,
 this option is available when DTR or RTS is selected above.
 
@@ -1105,17 +1105,17 @@ La sélection du même port que l&apos;interface CAT permettra aux paramètres C
 la poignée de main et les réglages forcés.</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="338"/>
+        <location filename="../rigsetupdialog.cpp" line="339"/>
         <source>Add Radio and Radio Model</source>
         <translation>Ajouter une radio et un type</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="431"/>
+        <location filename="../rigsetupdialog.cpp" line="432"/>
         <source>You can not remove the current radio!</source>
         <translation>Vous ne pouvez pas supprimer la radio actuelle!</translation>
     </message>
     <message>
-        <location filename="../rigsetupdialog.cpp" line="439"/>
+        <location filename="../rigsetupdialog.cpp" line="440"/>
         <source>Do you really want to remove radio - %1?</source>
         <translation>Voulez-vous vraiment supprimer la Radio %1?</translation>
     </message>
@@ -1215,45 +1215,45 @@ ces définitions radio:
     </message>
     <message>
         <location filename="../rigsetupform.cpp" line="1584"/>
-        <location filename="../rigsetupform.cpp" line="1742"/>
+        <location filename="../rigsetupform.cpp" line="1740"/>
         <source>Transverter Name Exists</source>
         <translation>Le nom du transverter existe</translation>
     </message>
     <message>
         <location filename="../rigsetupform.cpp" line="1585"/>
-        <location filename="../rigsetupform.cpp" line="1743"/>
+        <location filename="../rigsetupform.cpp" line="1741"/>
         <source>Transverter Name: %1, already exists 
 Please enter another name</source>
         <translation>Transverter %1 existe déjà,
 utiliser un autre nom SVP</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1667"/>
+        <location filename="../rigsetupform.cpp" line="1666"/>
         <source>You can not remove this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas supprimer ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1676"/>
+        <location filename="../rigsetupform.cpp" line="1675"/>
         <source>Remove Transverter</source>
         <translation>Supprimer le transverter</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1677"/>
+        <location filename="../rigsetupform.cpp" line="1676"/>
         <source>Do you really want to remove transverter - %1?</source>
         <translation>Voulez-vous vraiment supprimer le transverter %1?</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1718"/>
+        <location filename="../rigsetupform.cpp" line="1716"/>
         <source>You can not change band on this transverter - %1, while it is the current radio - %2!</source>
         <translation>Vous ne pouvez pas modifier la bande de ce transverter - %1, alors qu&apos;il s&apos;agit de la radio actuelle - %2!</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1851"/>
+        <location filename="../rigsetupform.cpp" line="1848"/>
         <source>Invalid Network Port Number %1</source>
         <translation>Numéro de Port de réseau invalide %1</translation>
     </message>
     <message>
-        <location filename="../rigsetupform.cpp" line="1852"/>
+        <location filename="../rigsetupform.cpp" line="1849"/>
         <source>Network Port Number out of range</source>
         <translation>Numéro du Port de réseau hors plage</translation>
     </message>

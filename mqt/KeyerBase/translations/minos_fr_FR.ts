@@ -83,12 +83,11 @@
         <translation>affichage Wave</translation>
     </message>
     <message>
-        <location filename="../WaveShowDialog.ui" line="25"/>
         <source>Show</source>
-        <translation>présenter [Context?]</translation>
+        <translation type="vanished">présenter [Context?]</translation>
     </message>
     <message>
-        <location filename="../WaveShowDialog.ui" line="45"/>
+        <location filename="../WaveShowDialog.ui" line="38"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>

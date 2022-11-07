@@ -29,17 +29,17 @@
         <translation>Indicateur d&apos;enregistrement</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="115"/>
+        <location filename="../KeyerMain.ui" line="129"/>
         <source>Show</source>
         <translation>Afficher [Context?]</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="122"/>
+        <location filename="../KeyerMain.ui" line="115"/>
         <source>Record</source>
         <translation>Enregistrer</translation>
     </message>
     <message>
-        <location filename="../KeyerMain.ui" line="129"/>
+        <location filename="../KeyerMain.ui" line="122"/>
         <source>Play</source>
         <translation>Jouer</translation>
     </message>

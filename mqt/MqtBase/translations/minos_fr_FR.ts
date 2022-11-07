@@ -80,12 +80,12 @@
 <context>
     <name>BaseContestLog</name>
     <message>
-        <location filename="../contest.cpp" line="624"/>
+        <location filename="../contest.cpp" line="625"/>
         <source>DUPLICATE OF </source>
         <translation>Duplicata de </translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="640"/>
+        <location filename="../contest.cpp" line="641"/>
         <source>DUP OF</source>
         <translation>Duplicata de</translation>
     </message>
@@ -975,12 +975,12 @@
 <context>
     <name>ContestScore</name>
     <message>
-        <location filename="../contest.cpp" line="1860"/>
+        <location filename="../contest.cpp" line="1861"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5: bonuses %6(%7) = %8</source>
         <translation>QSOs: %1; %2 pts:%3%4 pays %5: bonus %6 (%7) = %8</translation>
     </message>
     <message>
-        <location filename="../contest.cpp" line="1873"/>
+        <location filename="../contest.cpp" line="1874"/>
         <source>Score: Qsos: %1; %2 pts :%3%4 countries%5:%6%7 districts%8:%9%10 locators %13 = %14</source>
         <translation>Score: QSO: %1; %2 pts: %3%4 pays %5:%6%7 Districts%8:%9%10 Locators %13 = %14</translation>
     </message>
@@ -1242,26 +1242,20 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
         <translation>à droite</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="132"/>
-        <location filename="../helpbrowser.ui" line="135"/>
         <source>Zoom In</source>
-        <translation>Zoom avant</translation>
+        <translation type="vanished">Zoom avant</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="138"/>
         <source>Down</source>
-        <translation>Vers le bas</translation>
+        <translation type="vanished">Vers le bas</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="148"/>
-        <location filename="../helpbrowser.ui" line="151"/>
         <source>Zoom Out</source>
-        <translation>Zoom arrière</translation>
+        <translation type="vanished">Zoom arrière</translation>
     </message>
     <message>
-        <location filename="../helpbrowser.ui" line="154"/>
         <source>Up</source>
-        <translation>En haut</translation>
+        <translation type="vanished">En haut</translation>
     </message>
     <message>
         <location filename="../helpbrowser.cpp" line="85"/>
@@ -1741,7 +1735,7 @@ Attention: &quot;.&quot; pas &quot;,&quot;<byte value="xd"/>
 <context>
     <name>QWidget</name>
     <message>
-        <location filename="../cutils.cpp" line="793"/>
+        <location filename="../cutils.cpp" line="794"/>
         <source>Reset Columns</source>
         <comment>createColumnsMenu</comment>
         <translation type="unfinished"></translation>
