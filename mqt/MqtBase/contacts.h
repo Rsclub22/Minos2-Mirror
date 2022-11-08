@@ -77,6 +77,10 @@ public:
     BaseContestLog *contest;
     Callsign cs;   //CONTAIN MinosItem
     Locator loc;   //CONTAIN MinosItem
+
+    double lon = 0.0;
+    double lat = 0.0;
+
     dtg timeOn = dtg(false);    //CONTAIN MinosItem
     dtg timeOff = dtg(false);   //CONTAIN MinosItem
 

@@ -14,6 +14,9 @@ QT       += help
 QT       += charts
 QT       += serialport
 
+QT += qml quick positioning positioning-private location
+
+
 TARGET = MqtLogger
 TEMPLATE = app
 
@@ -84,6 +87,7 @@ SOURCES += \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
+    qsomapframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolcwmessagekeyer.cpp \
@@ -184,6 +188,7 @@ HEADERS  += \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \
+    qsomapframe.h \
     radiosettingdialog.h \
     reg1test.h \
     rigcontrolcwmessagekeyer.h \
@@ -253,6 +258,7 @@ FORMS    += \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \
+    qsomapframe.ui \
     radiosettingdialog.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \
@@ -295,6 +301,8 @@ FORMS    += \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui
 
+RESOURCES += \
+    QSOView/qml.qrc
 
 DISTFILES += \
     AndroidTemplate/AndroidManifest.xml \
@@ -309,3 +317,4 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/AndroidTemplate
 
 win32{ LIBS += -lUser32 -lole32 -luuid -lshlwapi}
+

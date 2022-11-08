@@ -32,6 +32,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctSplit, QT_TR_NOOP("HSplit"), QT_TR_NOOP("Horizontally split element")},
     {sctTxVmButtons, QT_TR_NOOP("TX Voice Mem. Buttons"), QT_TR_NOOP("TX Voice Mem. Buttons")},
     {sctQrzDisplay, QT_TR_NOOP("QRZ Display"), QT_TR_NOOP("QRZ Display")},
+    {sctQsoMap, QT_TR_NOOP("QSO Map"), QT_TR_NOOP("QSO Map")},
     {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
 };
 SCType ScreenConfigElement::getScreenType(QString s)

@@ -17,6 +17,7 @@
 #include "BandSwitchFrame.h"
 #include "txvmbuttonsframe.h"
 #include "qrzdisplayframe.h"
+#include "qsomapframe.h"
 
 namespace Ui {
 class TSingleLogFrame;
@@ -65,6 +66,8 @@ public:
     ClusterClientFrame *clusterControlFrame = nullptr;
 
     BandmapClientFrame *bandmapControlFrame = nullptr;
+
+    QSOMapFrame *qsoMapFrame = nullptr;
 
     void buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, MinosSplitter *splitterParent);
 

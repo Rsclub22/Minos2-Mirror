@@ -26,6 +26,7 @@ enum SCType
 	sctSplit,
     sctTxVmButtons,
     sctQrzDisplay,
+    sctQsoMap,
     sctNone
 };
 class SCElement;

@@ -395,6 +395,13 @@ void TSingleLogFrame::createScreenComponents()
 
     wsjtxFrame->setVisible(false);
 
+    qsoMapFrame = new QSOMapFrame(this);
+    qsoMapFrame->setObjectName(QStringLiteral("qsoMapFrame"));
+    qsoMapFrame->setFrameShape(QFrame::StyledPanel);
+    qsoMapFrame->setFrameShadow(QFrame::Raised);
+
+    qsoMapFrame->setVisible(false);
+
 }
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
@@ -433,6 +440,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
+    qsoMapFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -499,6 +507,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         qrzDisplayFrame->setParent(this);
         qrzDisplayFrame->hide();
+
+        qsoMapFrame->setParent(this);
+        qsoMapFrame->hide();
 
         if (clearAllTabs)
         {
@@ -748,6 +759,13 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     // don't set contest here
                     break;
                 }
+                case sctQsoMap:
+                {
+                    elementScrollArea->setWidget(qsoMapFrame);
+                    qsoMapFrame->setVisible(true);
+                    qsoMapFrame->setContest(ct);
+                    break;
+                }
                 case sctSplit:
                 {
                     MinosSplitter *vs = new MinosSplitter();
@@ -920,6 +938,7 @@ void TSingleLogFrame::closeContest()
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
        GJVQSOLogFrame->closeContest();
+       qsoMapFrame->closeContest();
        if (contest)
        {
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
@@ -943,6 +962,8 @@ void TSingleLogFrame::addAllQSOsToBandmap()
            continue;
 
         bandmapControlFrame->on_AfterLogContact(contest, cct);
+
+        qsoMapFrame->on_AfterLogContact(contest, cct);
     }
 }
 void TSingleLogFrame::restoreQSOTableColumns()

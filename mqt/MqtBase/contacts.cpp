@@ -33,8 +33,6 @@ CheckableContact::CheckableContact(BaseContestLog * contest, dtg time_now ) : QO
 }
 void CheckableContact::calcDisBear()
 {
-    double lon = 0.0;
-    double lat = 0.0;
     int brg = -1;
     double dist = 0.0;
 
