@@ -14,7 +14,10 @@ QT       += help
 QT       += charts
 QT       += serialport
 
-QT += qml quick positioning positioning-private location
+lessThan(QT_MAJOR_VERSION, 6) {
+    QT += qml
+    QT += quick
+}
 
 
 TARGET = MqtLogger
@@ -301,8 +304,10 @@ FORMS    += \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui
 
+lessThan(QT_MAJOR_VERSION, 6) {
 RESOURCES += \
     QSOView/qml.qrc
+}
 
 DISTFILES += \
     AndroidTemplate/AndroidManifest.xml \

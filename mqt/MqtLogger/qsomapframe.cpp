@@ -1,8 +1,10 @@
-#include <QQuickView>
-#include <QQuickItem>
-
 #include <QVBoxLayout>
 #include <QTimer>
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QQuickView>
+#include <QQuickItem>
+#endif
 
 #include "contacts.h"
 #include "latlong.h"
@@ -17,6 +19,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // make a reference to the QML window available to C++
 
     QVBoxLayout *qvb = new QVBoxLayout(this);
@@ -34,6 +37,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)));
     connect(this, SIGNAL(homeSig(QVariant)), qmlObj, SLOT(newHome(QVariant)));
+#endif
 }
 
 QSOMapFrame::~QSOMapFrame()
@@ -74,25 +78,4 @@ void QSOMapFrame::closeContest()
 {
 
 }
-void QSOMapFrame::timeout()
-{
-    // test code...
 
-    static int n = 0;
-    QStringList callInfo; // [callsign, latitude, longitude]
-    QString s;
-
-    s = QString::number(n);
-
-    if (n == 0)
-        callInfo << "G5QQQ" << "51.9" << "0.7542";
-    else if (n < 10)
-        callInfo << "G" + s + "QNN" << "52." + s << "-0." + s;
-    else
-        callInfo << "G5QMM/" + s << "52." + s << "0." + s[1];
-
-   // emit callSig(QVariant(callInfo));
-
-    n++;
-
-}

@@ -48,8 +48,10 @@ import QtLocation 5.15
 Frame {
 
     // Initial App Size
-    width: parent.width
-    height: parent.height
+//    width: parent.width
+//    height: parent.height
+
+    anchors.fill: parent
 
     visible: true
 

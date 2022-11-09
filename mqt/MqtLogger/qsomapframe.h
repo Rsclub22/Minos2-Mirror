@@ -33,9 +33,6 @@ signals:
     void callSig(QVariant stringList);
     void homeSig(QVariant stringList);
 
-
-private slots:
-    void timeout();
 };
 
 #endif // QSOMAPFRAME_H
