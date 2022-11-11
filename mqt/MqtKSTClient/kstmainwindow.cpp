@@ -1717,6 +1717,7 @@ void KSTMainWindow::on_clearUserFilter_clicked()
     ui->CSChatFilter->setCurrentIndex(0);
     ui->CSFilter->clear();
     ui->CSTable->clearSelection();
+    on_clearMessageFilter_clicked();
 }
 
 void KSTMainWindow::on_asBandCombo_currentIndexChanged(int band)
