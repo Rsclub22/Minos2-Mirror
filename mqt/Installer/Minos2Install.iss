@@ -82,7 +82,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 Name: "minosAssociation"; Description: "{cm:AssociateExtensions}"; GroupDescription: "{cm:Extensions}"
 
 [Files]
-Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion
+Source: "*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion promptifolder
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [InstallDelete]
