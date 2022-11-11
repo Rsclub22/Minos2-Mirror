@@ -1,6 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.15
 
 Marker {
+    id: call
     imageName: "marker.png"
 
 }

@@ -38,11 +38,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 2.9
-import QtQuick.Controls 2.5
-import QtQuick.Controls.Styles 1.4
-import QtQuick.Window 2.3
-import QtPositioning 5.8
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtPositioning 5.15
 import QtLocation 5.15
 
 Frame {
@@ -101,23 +99,25 @@ Frame {
         mapOfEurope.addMapItem(circle)
     }
 
-    function addCall(coord, callsign)
+    function addCall(coord, callsign, loc)
     // Add the new callsign at coord to the map
     {
-        var cm = Qt.createQmlObject('CallMarker {}', mapOfEurope)  // use a modified Plane
+        var cm = Qt.createQmlObject('CallMarker {}', mapOfEurope)
         cm.callsign = callsign
         cm.coordinate = coord
+        cm.locator = loc;
 
         mapOfEurope.addMapItem(cm)
         cm.showMessage('New')
     }
 
-    function addHome(coord, callsign)
+    function addHome(coord, callsign, loc)
     // Add the new callsign at coord to the map
     {
-        var cm = Qt.createQmlObject('HomeMarker {}', mapOfEurope)  // use a modified Plane
+        var cm = Qt.createQmlObject('HomeMarker {}', mapOfEurope)
         cm.callsign = callsign
         cm.coordinate = coord
+        cm.locator = loc;
 
         mapOfEurope.addMapItem(cm)
         cm.showMessage('Home')
@@ -134,7 +134,8 @@ Frame {
 
         homeLat = callInfo[1];
         homeLon = callInfo[2];
-        addHome(coord, call)
+        var loc = callInfo[3]
+        addHome(coord, call, loc)
     }
     function newCall(callInfo)
     // slot to receive signal callSig(QVariant)
@@ -143,7 +144,8 @@ Frame {
         //console.log(callInfo)
         var call = callInfo[0]
         var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
-        addCall(coord, call)
+        var loc = callInfo[3]
+        addCall(coord, call, loc)
         drawLine(QtPositioning.coordinate(homeLat, homeLon), coord)
     }
 

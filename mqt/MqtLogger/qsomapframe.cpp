@@ -55,6 +55,7 @@ void QSOMapFrame::setContest(BaseContestLog *c)
         callInfo << ct->mycall.getFullCall();
         callInfo << QString::number(raddeg(ct->odna));
         callInfo << QString::number(raddeg(ct->odea));
+        callInfo << ct->myloc.getLoc();
         emit homeSig(callInfo);
     }
 }
@@ -70,6 +71,7 @@ void QSOMapFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseConta
         callInfo << lct->cs.getFullCall();
         callInfo << QString::number(raddeg(lct->lat));
         callInfo << QString::number(raddeg(lct->lon));
+        callInfo << lct->loc.getLoc();
         emit callSig(callInfo);
     }
 }

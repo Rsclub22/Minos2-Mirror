@@ -1,12 +1,14 @@
 
-import QtQuick 2.4
-import QtLocation 5.6
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtLocation 5.15
 
 // Marker.qml
 MapQuickItem {
     id: marker
     property string callsign;
     property string imageName;
+    property  string locator
 
     anchorPoint.x: image.width/2
     anchorPoint.y: image.height // bottom of the image
@@ -20,19 +22,28 @@ MapQuickItem {
                 rotation: 0
                 source: imageName
             }
-            Rectangle {
+            Label {
                 id: bubble
-                color: "lightblue"
-                border.width: 1
                 width: text.width * 1.3
                 height: text.height * 1.3
-                radius: 5
-                opacity: 0.5
+                opacity: 1.0
                 Text {
                     id: text
                     anchors.centerIn: parent
                     text: callsign
                     opacity: 1.0
+                }
+                background: Rectangle  {
+                    color: "lightblue"
+                    opacity: 0.5
+                    radius: 1.0
+                }
+                ToolTip.text: locator
+                ToolTip.visible: locator ? ma.containsMouse : false
+                MouseArea {
+                    id: ma
+                    anchors.fill: parent
+                    hoverEnabled: true
                 }
             }
         }
