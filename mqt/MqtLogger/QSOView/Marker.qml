@@ -44,6 +44,10 @@ MapQuickItem {
                     id: ma
                     anchors.fill: parent
                     hoverEnabled: true
+                    propagateComposedEvents: true
+
+                    // this seems to be needed to pass the press on
+                    onPressed: mouse.accepted = false;
                 }
             }
         }

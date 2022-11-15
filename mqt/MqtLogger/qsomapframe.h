@@ -33,6 +33,8 @@ signals:
     void callSig(QVariant stringList);
     void homeSig(QVariant stringList);
 
+private slots:
+    void onQmlClicked(QVariant v);
 };
 
 #endif // QSOMAPFRAME_H

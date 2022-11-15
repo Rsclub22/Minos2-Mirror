@@ -52,6 +52,7 @@ Frame {
     anchors.fill: parent
 
     visible: true
+    signal qmlSignal(variant msg)
 
     property string homeLat: "0.0"
     property string homeLon: "0.0"
@@ -70,8 +71,20 @@ Frame {
             name: "osm"
         }
 
-        // Set Visible Region of map
+        // Set (Initial) Visible Region of map
         visibleRegion: viewOfEurope
+        MouseArea {
+            id: mapMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            onPressed: {
+//                console.log('latitude = '+ (mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y)).latitude),
+//                                       'longitude = '+ (mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y)).longitude));
+                let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
+                let gc = [cc.latitude, cc.longitude];
+                qmlSignal(gc);
+            }
+            }
     } // end map
 
     Button {

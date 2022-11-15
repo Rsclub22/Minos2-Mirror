@@ -6,6 +6,8 @@
 #include <QQuickItem>
 #endif
 
+#include <QMouseEvent>
+
 #include "contacts.h"
 #include "latlong.h"
 #include "contest.h"
@@ -37,6 +39,8 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 
     connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)));
     connect(this, SIGNAL(homeSig(QVariant)), qmlObj, SLOT(newHome(QVariant)));
+
+    connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)));
 #endif
 }
 
@@ -45,6 +49,16 @@ QSOMapFrame::~QSOMapFrame()
     delete ui;
 }
 
+void QSOMapFrame::onQmlClicked(QVariant v)
+{
+   // QMouseEvent * me = qobject_cast<QMouseEvent *>(&v);
+   QList<QVariant> gc = v.toList();
+   QString latitude = gc[0].toString();
+   QString longitude = gc[1].toString();
+
+   qDebug() << latitude;
+   qDebug() << longitude;
+}
 void QSOMapFrame::setContest(BaseContestLog *c)
 {
     ct = c;
