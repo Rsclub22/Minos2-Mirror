@@ -333,7 +333,6 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
         return 0;   // no data
     }
 
-    int temp = 0;
     double recmult = recordMult;
     if (instance == 2)
     {
