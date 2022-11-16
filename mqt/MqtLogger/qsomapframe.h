@@ -29,6 +29,8 @@ private:
 
     BaseContestLog *ct = nullptr;
 
+    void startMap();
+    void stopMap();
 signals:
     void callSig(QVariant stringList);
     void homeSig(QVariant stringList);

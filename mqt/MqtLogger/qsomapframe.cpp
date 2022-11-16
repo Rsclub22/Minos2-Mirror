@@ -21,34 +21,47 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 {
     ui->setupUi(this);
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    // make a reference to the QML window available to C++
+    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &QSOMapFrame::on_AfterLogContact, Qt::UniqueConnection);
 
-    QVBoxLayout *qvb = new QVBoxLayout(this);
-
-    QQuickView *view = new QQuickView(QUrl("qrc:/qsoview.qml"));
-    QWidget *container = QWidget::createWindowContainer(view);
-
-    auto qmlObj = view->rootObject();
-
-    qvb->addWidget(container);
-
-    connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &QSOMapFrame::on_AfterLogContact);
-
-    // connect the C++ callSig signal to the QML slot
-
-    connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)));
-    connect(this, SIGNAL(homeSig(QVariant)), qmlObj, SLOT(newHome(QVariant)));
-
-    connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)));
-#endif
 }
 
 QSOMapFrame::~QSOMapFrame()
 {
     delete ui;
 }
+void QSOMapFrame::startMap()
+{
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // make a reference to the QML window available to C++
 
+    QLayout *qvb = layout();
+
+    if (!qvb)
+    {
+        qvb = new QVBoxLayout(this);
+
+        QQuickView *view = new QQuickView(QUrl("qrc:/qsoview.qml"));
+        QWidget *container = QWidget::createWindowContainer(view);
+
+        auto qmlObj = view->rootObject();
+
+        qvb->addWidget(container);
+
+
+        // connect the C++ callSig signal to the QML slot
+
+        connect(this, SIGNAL(callSig(QVariant)), qmlObj, SLOT(newCall(QVariant)), Qt::UniqueConnection);
+        connect(this, SIGNAL(homeSig(QVariant)), qmlObj, SLOT(newHome(QVariant)), Qt::UniqueConnection);
+
+        connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)), Qt::UniqueConnection);
+    }
+#endif
+}
+void QSOMapFrame::stopMap()
+{
+    QLayout *lo = layout();
+    delete lo;
+}
 void QSOMapFrame::onQmlClicked(QVariant v)
 {
    // QMouseEvent * me = qobject_cast<QMouseEvent *>(&v);
@@ -64,6 +77,8 @@ void QSOMapFrame::setContest(BaseContestLog *c)
     ct = c;
     if (c)
     {
+        startMap();
+
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << ct->mycall.getFullCall();
@@ -71,6 +86,10 @@ void QSOMapFrame::setContest(BaseContestLog *c)
         callInfo << QString::number(raddeg(ct->odea));
         callInfo << ct->myloc.getLoc();
         emit homeSig(callInfo);
+    }
+    else
+    {
+        stopMap();
     }
 }
 void QSOMapFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
@@ -92,6 +111,6 @@ void QSOMapFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseConta
 
 void QSOMapFrame::closeContest()
 {
-
+    setContest(nullptr);
 }
 
