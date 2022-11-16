@@ -288,10 +288,13 @@ void MainWindow::setVolumeMults()
 {
     int record = ui->recordSlider->value();
     rass.setRecordLevel(record);
+    int record2 = ui->recordSlider_2->value();
+    rass.setRecordLevel2(record2);
 
     inVolChange = true;
 
     ui->recordLevel->setValue(record/10.0);
+    ui->recordLevel_2->setValue(record2/10.0);
 
     inVolChange = false;
 }

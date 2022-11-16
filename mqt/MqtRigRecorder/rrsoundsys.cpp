@@ -333,11 +333,13 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
         return 0;   // no data
     }
 
-    int recmult = recordMult;
+    int temp = 0;
+    double recmult = recordMult;
     if (instance == 2)
     {
         recmult = recordMult2;
     }
+
     if ( status == RTAUDIO_INPUT_OVERFLOW)
     {
         trace("Stream input underflow detected.");
