@@ -197,7 +197,7 @@ void TxVmExternalButtonDialog::onKeyerConfig(QString key, QString val)
             int rmsvol = vals[0].toDouble();
             int peakvol = vals[1].toDouble();
             int samples = vals[1].toInt();
-            ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+            ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
         }
         else
             if (key == rpcConstants::keyerSliders)

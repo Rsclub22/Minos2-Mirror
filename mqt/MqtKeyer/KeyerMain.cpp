@@ -60,7 +60,7 @@ void KeyerMain::doSetVU( unsigned int ppeakvol, unsigned int prmsvol ,unsigned i
             peakvol = std::max(peakvol, ppeakvol);
         }
         samples += psamples;
-        ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+        ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
     }
 }
 

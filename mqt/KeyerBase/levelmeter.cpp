@@ -85,7 +85,7 @@ void LevelMeter::reset()
     update();
 }
 
-void LevelMeter::levelChanged(qreal rmsLevel, qreal peakLevel, unsigned int numSamples)
+void LevelMeter::levelChanged(qreal peakLevel, qreal rmsLevel, unsigned int numSamples)
 {
     // Smooth the RMS signal
     if (numSamples)

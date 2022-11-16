@@ -20,7 +20,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void volcallback(unsigned int peakvol, unsigned int rmsvol, unsigned int samples);
+    void volcallback(int instance, unsigned int peakvol, unsigned int rmsvol, unsigned int samples);
 private slots:
     void on_startRecButton_clicked();
 
@@ -29,6 +29,8 @@ private slots:
     void on_baseFileBrowse_clicked();
 
     void inChannelCB_currentTextChanged(const QString &arg1);
+
+    void inChannelCB_2_currentTextChanged(const QString &arg1);
 
     void on_baseFilename_editingFinished();
 
@@ -40,7 +42,11 @@ private slots:
 
     void on_recordMono_stateChanged(int arg1);
 
-    void on_autostartCb_stateChanged(int);
+    void on_recordLevel_2_valueChanged(double arg1);
+
+    void on_recordSlider_2_valueChanged(int value);
+
+    void on_recordMono_2_stateChanged(int arg1);
 
     void onCloseTimer();
 

@@ -34,21 +34,20 @@
 #define FRAMES 16
 #define FRAMESAMPLES 256
 #define RINGBUFFERSIZE 1024
+#define BUFFSIZE RINGBUFFERSIZE * FRAMESAMPLES * 2
 
 static QWaitCondition bufferNotEmpty;
 static QWaitCondition bufferNotFull;
 static QMutex mutex;
 
-class InBuff
-{
-public:
-    unsigned int frameCount;
-    int16_t buff[FRAMESAMPLES * 2];
-};
-
-static InBuff inBuffs[RINGBUFFERSIZE];
+static int16_t inBuff[BUFFSIZE];
 static int recIndex = 0;
+static int inFrame = 0;
+static int recIndex2 = 0;
+static int inFrame2 = 0;
 static int writeIndex = 0;
+
+bool closeFlag = false;
 
 RiffWriter::RiffWriter(RtAudioSoundSystem *parent) : QThread(parent), ss(parent), terminated(false)
 {
@@ -60,16 +59,28 @@ void RiffWriter::run()
     for (;;)
     {
         mutex.lock();
-        if (writeIndex == recIndex)
+        if (writeIndex == recIndex || writeIndex == recIndex2)
             bufferNotEmpty.wait(&mutex);
         mutex.unlock();
 
         if (terminated)
             break;
 
-        if (inBuffs[writeIndex%RINGBUFFERSIZE].frameCount > 0)
-            ss->writeDataToFile(inBuffs[writeIndex%RINGBUFFERSIZE].buff, inBuffs[writeIndex%RINGBUFFERSIZE].frameCount);
-        else
+        int f = std::min(recIndex, recIndex2);
+        while (f > writeIndex)
+        {
+            ss->writeDataToFile(&inBuff[writeIndex%RINGBUFFERSIZE * FRAMESAMPLES * 2], FRAMESAMPLES);
+            mutex.lock();
+            writeIndex += 1;
+
+            bufferNotFull.wakeAll();
+            mutex.unlock();
+#ifdef Q_OS_UNIX
+            sync();     // make sure it goes to disk
+#endif
+        }
+
+        if (closeFlag)
         {
             ss->outWave->Close();
 #ifdef Q_OS_UNIX
@@ -77,11 +88,6 @@ void RiffWriter::run()
 #endif
         }
 
-        mutex.lock();
-        ++writeIndex;
-
-        bufferNotFull.wakeAll();
-        mutex.unlock();
     }
 }
 
@@ -93,7 +99,16 @@ int audioCallback( void */*outputBuffer*/, void *inputBuffer,
                                 void *userData )
 {
     RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
-    return qss->audioCallback(inputBuffer, nFrames, streamTime, status);
+    return qss->audioCallback(inputBuffer, nFrames, streamTime, status, 1);
+}
+int audioCallback2( void */*outputBuffer*/, void *inputBuffer,
+                                unsigned int nFrames,
+                                double streamTime,
+                                RtAudioStreamStatus status,
+                                void *userData )
+{
+    RtAudioSoundSystem *qss = static_cast<RtAudioSoundSystem *>(userData);
+    return qss->audioCallback(inputBuffer, nFrames, streamTime, status, 2);
 }
 //==============================================================================
 RtAudioSoundSystem::RtAudioSoundSystem()
@@ -169,6 +184,16 @@ void RtAudioSoundSystem::stop()
 }
 void RtAudioSoundSystem::closedown()
 {
+    if (audio2)
+    {
+        stop();
+
+        delete audio2;
+        audio2 = nullptr;
+
+        delete outWave;
+        outWave = nullptr;
+    }
     if (audio)
     {
         stop();
@@ -189,8 +214,12 @@ void RtAudioSoundSystem::setVUCallBack( VUCallBack cb )
 {
    WinVUCallback = cb;
 }
+void RtAudioSoundSystem::setVUCallBack2( VUCallBack cb )
+{
+   WinVUCallback2 = cb;
+}
 
-bool RtAudioSoundSystem::initialise( QString ind)
+bool RtAudioSoundSystem::initialise( QString ind, QString ind2)
 {
     try
     {
@@ -222,6 +251,38 @@ bool RtAudioSoundSystem::initialise( QString ind)
         trace("Audio stream opened OK");
 
         audio->startStream();
+
+        if (!ind2.isEmpty())
+        {
+            if (!audio2)
+            {
+                audio2 = new RtAudio();
+            }
+            RtAudio::StreamParameters inParams;
+            RtAudio::StreamOptions soptions;
+
+            unsigned int bufferFrames = FRAMESAMPLES;
+
+            inParams.deviceId = deviceIds[ind2];
+            inParams.firstChannel = 0;
+            inParams.nChannels = inChannels;
+
+            soptions.flags = 0;
+            soptions.numberOfBuffers = FRAMES;
+            soptions.priority = 0;
+            soptions.streamName = "";
+
+            audio2->openStream(nullptr,
+                              &inParams,
+                              RTAUDIO_SINT16, sampleRate,
+                              &bufferFrames, ::audioCallback2,
+                              static_cast<void *>(this),
+                              &soptions
+                              );
+            trace("Audio 2 stream opened OK");
+
+            audio2->startStream();
+        }
     }
     catch (RtAudioError &error)
     {
@@ -243,22 +304,40 @@ void RtAudioSoundSystem::setRecordLevel(int l)
     // BUT level is already * 10, so we need /100
     recordMult = qPow(10, l/100.0);
 }
+void RtAudioSoundSystem::setRecordLevel2(int l)
+{
+    // input levels are dB, so the actual multiplier is 10**(level/10)
+    // BUT level is already * 10, so we need /100
+    recordMult2 = qPow(10, l/100.0);
+}
 
 void RtAudioSoundSystem::setMono(bool s)
 {
     mono = s;
 }
+void RtAudioSoundSystem::setMono2(bool s)
+{
+    mono2 = s;
+}
 int RtAudioSoundSystem::audioCallback( void *inputBuffer,
                                 unsigned int nFrames,
                                 double /*streamTime*/,
-                                RtAudioStreamStatus status )
+                                RtAudioStreamStatus status,
+                                int instance
+                                       )
 {
+
 
     if (inputBuffer == nullptr || nFrames == 0)
     {
         return 0;   // no data
     }
 
+    int recmult = recordMult;
+    if (instance == 2)
+    {
+        recmult = recordMult2;
+    }
     if ( status == RTAUDIO_INPUT_OVERFLOW)
     {
         trace("Stream input underflow detected.");
@@ -286,8 +365,8 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
         int16_t s1 = q[i * inChannels];
         int16_t s2 = (inChannels > 1)?q[i * inChannels + 1]:q[i * inChannels];
 
-        qreal val1 = s1 * recordMult;
-        qreal val2 = s2 * recordMult;
+        qreal val1 = s1 * recmult;
+        qreal val2 = s2 * recmult;
 
         if (mono)
         {
@@ -307,7 +386,7 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
 
         p[i * inChannels] = static_cast<qint16>(val1);
         p[i * inChannels + 1] = static_cast<qint16>(val2);
-        int16_t sample = static_cast<int16_t>(std::max( val1, val2 ));
+        int16_t sample = static_cast<int16_t>(std::max( std::abs(val1), std::abs(val2) ));
 
         if ( sample > maxvol )
            maxvol = sample;
@@ -315,7 +394,8 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
     }
 
     qreal rmsval = sqrt(sqaccum/nFrames);
-    WinVUCallback( static_cast<unsigned int>(maxvol),
+    trace(QString("VU %1 %2 %3").arg(maxvol).arg(rmsval).arg(nFrames));
+    WinVUCallback( instance, static_cast<unsigned int>(maxvol),
                   static_cast<unsigned int>(rmsval),
                   nFrames );
 
@@ -326,11 +406,56 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
             bufferNotFull.wait(&mutex);
         mutex.unlock();
 
-        inBuffs[recIndex % RINGBUFFERSIZE].frameCount = nFrames;
-        memcpy(inBuffs[recIndex % RINGBUFFERSIZE].buff, inStageBuffer, nFrames * 4);
+        // this is where we have to do the clever channel merging
+        // do we have to assume that nFrames is the same for both?
+        // or do we have to have a "simple" much larger ring of frames?
+
+        if (instance == 1)
+        {
+            for ( unsigned int i = 0; i < nFrames; i++)
+            {
+                int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
+                int offset = (recIndex % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame;
+                inBuff[offset] = mix;
+                inFrame += 2;
+            }
+        }
+        if (audio2)
+        {
+            if (instance == 2)
+            {
+                for ( unsigned int i = 0; i < nFrames; i++)
+                {
+                    int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
+                    int offset = (recIndex2 % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame2 + 1;
+                    inBuff[offset] = mix;
+                    inFrame2 += 2;
+                }
+            }
+        }
+        else
+        {
+            inFrame2 = inFrame;
+        }
 
         mutex.lock();
-        ++recIndex;
+        if (instance == 1)
+        {
+            if (inFrame >= FRAMESAMPLES)
+            {
+                ++recIndex;
+                inFrame = 0;
+            }
+        }
+
+        if (recIndex2 >= 0)
+        {
+            if (inFrame2 >= FRAMESAMPLES)
+            {
+                ++recIndex2;
+                inFrame2 = 0;
+            }
+        }
         bufferNotEmpty.wakeAll();
         mutex.unlock();
     }
@@ -361,7 +486,7 @@ void RtAudioSoundSystem::stopInput()
          bufferNotFull.wait(&mutex);
      mutex.unlock();
 
-     inBuffs[recIndex%RINGBUFFERSIZE].frameCount = 0;  // mark to close
+     closeFlag = true;;  // mark to close
 
      mutex.lock();
      ++recIndex;
@@ -375,9 +500,11 @@ bool RtAudioSoundSystem::startInput( QString fname , int ct, bool continuation)
     // startInput() will also be called later
 
     // Should we do this in the writer thread?
+    closeFlag = false;
     if (!continuation)
     {
         recIndex = 0;
+        recIndex2 = 0;
         writeIndex = 0;
         if (!outWave)
         {
@@ -437,6 +564,8 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
     if (outWave && inp && nFrames)
     {
         const int16_t *q = reinterpret_cast< const int16_t * > ( inp );
+        trace(QString("writeDataToFile %1 from %2 limit %3").arg(nFrames * 2).arg(q - inBuff).arg(RINGBUFFERSIZE * FRAMESAMPLES * 2));
+
         DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
         if ( ret != DDC_SUCCESS )
         {

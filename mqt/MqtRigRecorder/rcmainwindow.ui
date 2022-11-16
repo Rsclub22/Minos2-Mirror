@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>256</height>
+    <width>620</width>
+    <height>502</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_9">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
@@ -112,6 +112,100 @@
        </layout>
       </item>
       <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_10">
+        <item>
+         <widget class="QFrame" name="frame_2">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="LevelMeter" name="levelMeter_2" native="true"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frame1_2">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QDoubleSpinBox" name="recordLevel_2">
+             <property name="minimum">
+              <double>-10.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>20.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_11">
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>13</width>
+                 <height>17</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QSlider" name="recordSlider_2">
+               <property name="minimum">
+                <number>-100</number>
+               </property>
+               <property name="maximum">
+                <number>200</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::TicksBelow</enum>
+               </property>
+               <property name="tickInterval">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>13</width>
+                 <height>17</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="recordMono_2">
+             <property name="text">
+              <string>Mono</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <widget class="QFrame" name="detailsFrame">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -125,12 +219,26 @@
            <item>
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Input Channel</string>
+              <string>Input Channel for Left</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QComboBox" name="inChannelCB"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Input Channel for Right</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="inChannelCB_2"/>
            </item>
           </layout>
          </item>
@@ -181,13 +289,6 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_7">
-           <item>
-            <widget class="QCheckBox" name="autostartCb">
-             <property name="text">
-              <string>Auto Start</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QCheckBox" name="contestLinkCB">
              <property name="text">
@@ -240,8 +341,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>402</width>
-     <height>21</height>
+     <width>620</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>

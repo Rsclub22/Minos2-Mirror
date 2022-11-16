@@ -12,20 +12,28 @@
 #include "ui_rcmainwindow.h"
 
 const QString indevKey("InDevice");
+const QString indevKey2("InDevice2");
 const QString outdevKey("OutDevice");
 const QString baseFileKey("BaseFile");
 const QString cycleRateKey("CycleRate");
 
 MainWindow *mainWindow = nullptr;
 
-void volcallback( unsigned int peakvol, unsigned int rmsvol, unsigned int samples )
+void volcallback( int instance, unsigned int peakvol, unsigned int rmsvol, unsigned int samples )
 {
-        mainWindow->volcallback(peakvol, rmsvol, samples);
+        mainWindow->volcallback(instance, peakvol, rmsvol, samples);
 }
 
-void MainWindow::volcallback(unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
+void MainWindow::volcallback(int instance, unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
 {
-        ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+    if (instance == 1)
+    {
+        ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
+    }
+    else if (instance == 2)
+    {
+        ui->levelMeter_2->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -48,13 +56,19 @@ MainWindow::MainWindow(QWidget *parent)
     closeTimer.start(100);
 
     ui->inChannelCB->addItems(rass.inputDevices);
+    ui->inChannelCB_2->addItem(QString());
+    ui->inChannelCB_2->addItems(rass.inputDevices);
 
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
 
-    QString indev = settings.value(indevKey, "").toString();
+    QString indev = settings.value(indevKey).toString();
 
     ui->inChannelCB->setCurrentText(indev);
+
+    QString indev_2 = settings.value(indevKey2).toString();
+
+    ui->inChannelCB_2->setCurrentText(indev_2);
 
     QString baseFile = settings.value(baseFileKey, "./RigRecording/rigrec.wav").toString();
     ui->baseFilename->setText(baseFile);
@@ -63,12 +77,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->rotInterval->setValue(cycleTime);
 
     connect(ui->inChannelCB, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_currentTextChanged);
+    connect(ui->inChannelCB_2, &QComboBox::currentTextChanged, this, &MainWindow::inChannelCB_2_currentTextChanged);
 
     trace("About to initialise audio");
     rass.setRate(11025);
-    rass.initialise(ui->inChannelCB->currentText());
-
     rass.setVUCallBack( &::volcallback );
+
+    rass.initialise(ui->inChannelCB->currentText(), ui->inChannelCB_2->currentText());
 
     ui->startRecButton->setEnabled(true);
     ui->stopRecButton->setEnabled(false);
@@ -83,16 +98,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     bool mono = settings.value("Mono", false).toBool();
     ui->recordMono->setChecked(mono);
-
-    ui->autostartCb->hide();
-
-//    bool autostart = settings.value("AutoStart", false).toBool();
-//    ui->autostartCb->setChecked(autostart);
-
-//    if (autostart)
-//    {
-//        on_startRecButton_clicked();
-//    }
 
     bool link = settings.value("ContestLink", false).toBool();
     ui->contestLinkCB->setChecked(link);
@@ -149,10 +154,9 @@ void MainWindow::onCloseTimer()
         trace("closing set in close timer");
         return;
     }
-    bool autostart = ui->autostartCb->isChecked();
     bool link = ui->contestLinkCB->isChecked();
 
-    if (!stopped && link && !autostart && tstart.isValid() && tend.isValid())
+    if (!stopped && link && tstart.isValid() && tend.isValid())
     {
         QDateTime tnow = QDateTime::currentDateTimeUtc();
         QString t1 = tstart.addSecs(-60).toString();
@@ -242,7 +246,21 @@ void MainWindow::inChannelCB_currentTextChanged(const QString &arg1)
 
         trace("About to re-initialise audio");
         rass.closedown();
-        rass.initialise(ui->inChannelCB->currentText());
+        rass.initialise(ui->inChannelCB->currentText(), ui->inChannelCB_2->currentText());
+
+    }
+}
+void MainWindow::inChannelCB_2_currentTextChanged(const QString &arg1)
+{
+    if (!closing)
+    {
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
+        settings.setValue(indevKey2, arg1);
+
+        trace("About to re-initialise audio");
+        rass.closedown();
+        rass.initialise(ui->inChannelCB->currentText(), ui->inChannelCB_2->currentText());
 
     }
 }
@@ -305,6 +323,33 @@ void MainWindow::on_recordMono_stateChanged(int /*arg1*/)
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("Mono", mono);
 }
+void MainWindow::on_recordLevel_2_valueChanged(double arg1)
+{
+    if (!inVolChange)
+    {
+        ui->recordSlider_2->setValue(static_cast<int>(arg1 * 10));
+    }
+}
+
+void MainWindow::on_recordSlider_2_valueChanged(int position)
+{
+    if (!inVolChange)
+    {
+        QString filename = "./Configuration/RigRecorder.ini";
+        QSettings settings(filename, QSettings::IniFormat);
+        settings.setValue("RecordLevel2", position);
+    }
+    setVolumeMults();
+}
+
+void MainWindow::on_recordMono_2_stateChanged(int /*arg1*/)
+{
+    bool mono = ui->recordMono_2->isChecked();
+    rass.setMono2(mono);
+    QString filename = "./Configuration/RigRecorder.ini";
+    QSettings settings(filename, QSettings::IniFormat);
+    settings.setValue("Mono2", mono);
+}
 
 void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
 {
@@ -312,22 +357,6 @@ void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
     settings.setValue("ContestLink", link);
-    if (link)
-    {
-        ui->autostartCb->setChecked(false);
-    }
-}
-void MainWindow::on_autostartCb_stateChanged(int /*arg1*/)
-{
-    bool autostart = ui->autostartCb->isChecked();
-    QString filename = "./Configuration/RigRecorder.ini";
-    QSettings settings(filename, QSettings::IniFormat);
-    settings.setValue("AutoStart", autostart);
-
-    if (autostart)
-    {
-        ui->contestLinkCB->setChecked(false);
-    }
 }
 
 void MainWindow::on_notify(AnalysePubSubNotify an, const QString from )

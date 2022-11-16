@@ -13,7 +13,7 @@ static TxVmInternalButtonDialog *txvmbd = nullptr;
 void TxVmInternalButtonDialog::doSetVU(unsigned int peakvol, unsigned int rmsvol , unsigned int samples)
 {
     if (!txvmIntInhibitCallbacks)
-        ui->levelMeter->levelChanged( rmsvol / 32768.0, peakvol / 32768.0, samples );
+        ui->levelMeter->levelChanged( peakvol / 32768.0, rmsvol / 32768.0, samples );
 }
 
 TxVmInternalButtonDialog::TxVmInternalButtonDialog(QWidget *parent) :

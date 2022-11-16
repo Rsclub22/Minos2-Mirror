@@ -55,16 +55,16 @@ public:
     RtAudioSoundSystem();
     virtual ~RtAudioSoundSystem();
 
-    virtual bool initialise(QString ind);
+    bool initialise(QString ind, QString ind2);
     void stop();
     void closedown();
 
     QStringList inputDevices;
 
-    virtual unsigned int setRate(unsigned int rate);
+    unsigned int setRate(unsigned int rate);
 
-    virtual bool startDMA(const QString &fname , int ct);
-    virtual void stopDMA();
+    bool startDMA(const QString &fname , int ct);
+    void stopDMA();
 
     void startInput();
     void stopInput();
@@ -77,15 +77,21 @@ public:
     int audioCallback( void *inputBuffer,
                         unsigned int nFrames,
                         double streamTime,
-                        RtAudioStreamStatus status );
+                        RtAudioStreamStatus status,
+                        int instance);
 
     void setVUCallBack(VUCallBack cb);
+    void setVUCallBack2(VUCallBack cb);
     void setRecordLevel(int l);
+    void setRecordLevel2(int l);
     void setMono(bool);
+    void setMono2(bool);
 private:
 
     RtAudio *audio = nullptr;
-    VUCallBack WinVUCallback;
+    RtAudio *audio2 = nullptr;
+    VUCallBack WinVUCallback = nullptr;
+    VUCallBack WinVUCallback2 = nullptr;
 
     unsigned int inChannels = 0;
 
@@ -98,9 +104,11 @@ private:
     QString baseName;
     int cycleTime = 10;
     double recordMult = 1.0;
+    double recordMult2 = 1.0;
 
     bool inputEnabled = false;
     bool mono = false;
+    bool mono2 = false;
 };
 
 #endif
