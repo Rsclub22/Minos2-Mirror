@@ -16,6 +16,12 @@ apt-get install libqt5serialport5 -y
 apt-get install libqt5serialport5-dev -y
 apt-get install qttools5-dev -y
 apt-get install libqt5charts5-dev -y
+apt-get install qtdeclarative5-dev -y
+apt-get install qml-module-qtquick-controls2 -y
+apt-get install qtlocation5-dev -y
+apt-get install qtpositioning-dev -y
+apt-get install qml-module-qtlocation -y
+apt-get install qml-module-qtpositioning -y
 
 # ubuntu 21 doesn't seem to have g++ by default
 
