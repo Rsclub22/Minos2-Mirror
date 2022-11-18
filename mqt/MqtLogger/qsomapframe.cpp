@@ -73,8 +73,12 @@ void QSOMapFrame::onQmlClicked(QVariant v)
    QString latitude = gc[0].toString();
    QString longitude = gc[1].toString();
 
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    qDebug() << latitude;
    qDebug() << longitude;
+#endif
+#endif
 }
 void QSOMapFrame::setContest(BaseContestLog *c)
 {
