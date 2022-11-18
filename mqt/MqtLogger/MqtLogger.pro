@@ -92,7 +92,6 @@ SOURCES += \
     n1mmbroadcastconfig.cpp \
     qrzdisplayframe.cpp \
     qsologframe.cpp \
-    qsomapframe.cpp \
     radiosettingdialog.cpp \
     reg1test.cpp \
     rigcontrolcwmessagekeyer.cpp \
@@ -193,7 +192,6 @@ HEADERS  += \
     printfile.h \
     qrzdisplayframe.h \
     qsologframe.h \
-    qsomapframe.h \
     radiosettingdialog.h \
     reg1test.h \
     rigcontrolcwmessagekeyer.h \
@@ -263,7 +261,6 @@ FORMS    += \
     n1mmbroadcastconfig.ui \
     qrzdisplayframe.ui \
     qsologframe.ui \
-    qsomapframe.ui \
     radiosettingdialog.ui \
     rigcontrolframe.ui \
     rigmemdialog.ui \
@@ -305,11 +302,6 @@ FORMS    += \
     txvminternalbuttondialog.ui \
     txvmrigbuttondialog.ui \
     txvmrigsetupdialog.ui
-
-lessThan(QT_MAJOR_VERSION, 6) {
-RESOURCES += \
-    QSOView/qml.qrc
-}
 
 DISTFILES += \
     AndroidTemplate/AndroidManifest.xml \

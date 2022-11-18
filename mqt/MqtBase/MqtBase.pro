@@ -12,6 +12,13 @@ QT       += widgets
 QT       += network
 QT       += help
 
+win32: {
+lessThan(QT_MAJOR_VERSION, 6) {
+    QT += qml
+    QT += quick
+}
+}
+
 TARGET = MqtBase
 TEMPLATE = lib
 CONFIG += staticlib
@@ -75,6 +82,7 @@ SOURCES += \
     presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
+    qsomapframe.cpp \
     RigCache.cpp \
     rigcommon.cpp \
     RigDetails.cpp \
@@ -163,6 +171,7 @@ HEADERS += \
     presetbutton.h \
     profiles.h \
     qlogtabwidget.h \
+    qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
     rigRotSetupCommon.h \
@@ -213,4 +222,11 @@ FORMS += \
     StartConfig.ui \
     helpbrowser.ui \
     callsigninputdialog.ui \
-    locatorinputdialog.ui
+    locatorinputdialog.ui \
+    qsomapframe.ui
+
+lessThan(QT_MAJOR_VERSION, 6) {
+RESOURCES += \
+    QSOView/qml.qrc
+}
+

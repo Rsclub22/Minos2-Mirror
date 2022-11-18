@@ -21,6 +21,12 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
     QFrame(parent),
     ui(new Ui::QSOMapFrame)
 {
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    Q_INIT_RESOURCE(qml);
+#endif
+#endif
+
     ui->setupUi(this);
 
     connect(&MinosLoggerEvents::mle, &MinosLoggerEvents::AfterLogContactToBandmap, this, &QSOMapFrame::on_AfterLogContact, Qt::UniqueConnection);
