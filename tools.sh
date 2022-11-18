@@ -10,7 +10,9 @@ apt-get  install libtool -y
 apt-get install automake -y
 
 apt-get install cmake -y
-apt-get install build-essential qt5-default qtcreator -y
+apt-get install build-essential -y
+apt-get install qtbase5-dev qtchooser qt5-qmake qtbase5-dev-tools
+apt-get install qtcreator -y
 apt-get install qtmultimedia5-dev libqt5multimediawidgets5 libqt5multimedia5-plugins libqt5multimedia5 -y
 apt-get install libqt5serialport5 -y
 apt-get install libqt5serialport5-dev -y
