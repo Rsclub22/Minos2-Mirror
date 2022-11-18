@@ -14,9 +14,11 @@ QT       += help
 QT       += charts
 QT       += serialport
 
+win32: {
 lessThan(QT_MAJOR_VERSION, 6) {
     QT += qml
     QT += quick
+}
 }
 
 
