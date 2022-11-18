@@ -1,9 +1,11 @@
 #include <QVBoxLayout>
 #include <QTimer>
 
+#ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QQuickView>
 #include <QQuickItem>
+#endif
 #endif
 
 #include <QMouseEvent>
@@ -31,6 +33,7 @@ QSOMapFrame::~QSOMapFrame()
 }
 void QSOMapFrame::startMap()
 {
+#ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // make a reference to the QML window available to C++
 
@@ -55,6 +58,7 @@ void QSOMapFrame::startMap()
 
         connect(qmlObj, SIGNAL(qmlSignal(QVariant)), this, SLOT(onQmlClicked(QVariant)), Qt::UniqueConnection);
     }
+#endif
 #endif
 }
 void QSOMapFrame::stopMap()
