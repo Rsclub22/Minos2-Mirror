@@ -46,8 +46,6 @@ private slots:
 
     void on_recordSlider_2_valueChanged(int value);
 
-    void on_recordMono_2_stateChanged(int arg1);
-
     void onCloseTimer();
 
     void on_notify(AnalysePubSubNotify an, const QString from);

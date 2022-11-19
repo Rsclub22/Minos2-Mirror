@@ -15,6 +15,7 @@
 #include <QtMath>
 #include <numeric>
 #include <QtCore>
+#include <cstring>
 
 #include "fileutils.h"
 #include "MTrace.h"
@@ -40,7 +41,7 @@ static QWaitCondition bufferNotEmpty;
 static QWaitCondition bufferNotFull;
 static QMutex mutex;
 
-static int16_t inBuff[BUFFSIZE];
+static int16_t inBuff[BUFFSIZE] = {};
 static int recIndex = 0;
 static int inFrame = 0;
 static int recIndex2 = 0;
@@ -315,10 +316,7 @@ void RtAudioSoundSystem::setMono(bool s)
 {
     mono = s;
 }
-void RtAudioSoundSystem::setMono2(bool s)
-{
-    mono2 = s;
-}
+
 int RtAudioSoundSystem::audioCallback( void *inputBuffer,
                                 unsigned int nFrames,
                                 double /*streamTime*/,
@@ -429,7 +427,7 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
                 {
                     int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
                     int offset = (recIndex2 % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame2 + 1;
-                    inBuff[offset] = mix;
+                    inBuff[offset] += mix;
                     inFrame2 += 2;
                 }
             }
@@ -568,6 +566,8 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
         trace(QString("writeDataToFile %1 from %2 limit %3").arg(nFrames * 2).arg(q - inBuff).arg(RINGBUFFERSIZE * FRAMESAMPLES * 2));
 
         DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
+
+        std::memset(inp, 0, nFrames * 4); // clear to zero so that mono/mixing will work
         if ( ret != DDC_SUCCESS )
         {
             return;

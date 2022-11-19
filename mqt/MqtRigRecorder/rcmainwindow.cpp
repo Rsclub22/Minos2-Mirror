@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent)
     inVolChange = false;
 
     bool mono = settings.value("Mono", false).toBool();
-    ui->recordMono->setChecked(mono);
+    ui->monoCb->setChecked(mono);
 
     bool link = settings.value("ContestLink", false).toBool();
     ui->contestLinkCB->setChecked(link);
@@ -320,7 +320,7 @@ void MainWindow::on_recordSlider_valueChanged(int position)
 
 void MainWindow::on_recordMono_stateChanged(int /*arg1*/)
 {
-    bool mono = ui->recordMono->isChecked();
+    bool mono = ui->monoCb->isChecked();
     rass.setMono(mono);
     QString filename = "./Configuration/RigRecorder.ini";
     QSettings settings(filename, QSettings::IniFormat);
@@ -343,15 +343,6 @@ void MainWindow::on_recordSlider_2_valueChanged(int position)
         settings.setValue("RecordLevel2", position);
     }
     setVolumeMults();
-}
-
-void MainWindow::on_recordMono_2_stateChanged(int /*arg1*/)
-{
-    bool mono = ui->recordMono_2->isChecked();
-    rass.setMono2(mono);
-    QString filename = "./Configuration/RigRecorder.ini";
-    QSettings settings(filename, QSettings::IniFormat);
-    settings.setValue("Mono2", mono);
 }
 
 void MainWindow::on_contestLinkCB_stateChanged(int /*arg1*/)

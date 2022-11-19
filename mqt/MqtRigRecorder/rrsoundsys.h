@@ -85,7 +85,6 @@ public:
     void setRecordLevel(int l);
     void setRecordLevel2(int l);
     void setMono(bool);
-    void setMono2(bool);
 private:
 
     RtAudio *audio = nullptr;
@@ -108,7 +107,6 @@ private:
 
     bool inputEnabled = false;
     bool mono = false;
-    bool mono2 = false;
 };
 
 #endif
