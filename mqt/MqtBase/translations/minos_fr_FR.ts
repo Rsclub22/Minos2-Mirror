@@ -47,32 +47,32 @@
 <context>
     <name>BaseContact</name>
     <message>
-        <location filename="../contacts.cpp" line="415"/>
+        <location filename="../contacts.cpp" line="413"/>
         <source>DELETED</source>
         <translation>SUPPRIMÉ</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="430"/>
+        <location filename="../contacts.cpp" line="428"/>
         <source>MAN</source>
         <translation>MANUELLE</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="433"/>
+        <location filename="../contacts.cpp" line="431"/>
         <source>DEL</source>
         <translation>SUPPRIMER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="436"/>
+        <location filename="../contacts.cpp" line="434"/>
         <source>N/S</source>
         <translation>NON SIGNIFICATIF</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="441"/>
+        <location filename="../contacts.cpp" line="439"/>
         <source>DUP</source>
         <translation>DUPLIQUER</translation>
     </message>
     <message>
-        <location filename="../contacts.cpp" line="486"/>
+        <location filename="../contacts.cpp" line="484"/>
         <source>MHz</source>
         <translation>MHz</translation>
     </message>

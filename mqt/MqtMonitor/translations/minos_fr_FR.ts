@@ -55,4 +55,18 @@
         <translation>Serveurs/état</translation>
     </message>
 </context>
+<context>
+    <name>MonitoringFrame</name>
+    <message>
+        <location filename="../MonitoringFrame.ui" line="62"/>
+        <location filename="../MonitoringFrame.cpp" line="181"/>
+        <source>Show Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MonitoringFrame.cpp" line="172"/>
+        <source>Show Log</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

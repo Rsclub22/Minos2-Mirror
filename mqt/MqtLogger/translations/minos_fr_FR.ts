@@ -3732,11 +3732,16 @@ Non - Ignorer les modifications</translation>
     </message>
     <message>
         <location filename="../ScreenConfigElement.cpp" line="35"/>
+        <source>QSO Map</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ScreenConfigElement.cpp" line="36"/>
         <source>None</source>
         <translation>Aucun</translation>
     </message>
     <message>
-        <location filename="../ScreenConfigElement.cpp" line="35"/>
+        <location filename="../ScreenConfigElement.cpp" line="36"/>
         <source>Not in use</source>
         <translation>Pas en service</translation>
     </message>
@@ -5384,22 +5389,22 @@ Confirmer cette action en appuyant sur &quot;Oui&quot; SVP.</translation>
 <context>
     <name>TSingleLogFrame</name>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="905"/>
+        <location filename="../tsinglelogframe.cpp" line="923"/>
         <source>Save imported log as a .minos file</source>
         <translation>Enregistrer le Log importé en tant que fichier .minos</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1508"/>
+        <location filename="../tsinglelogframe.cpp" line="1527"/>
         <source>No unfilled contacts</source>
         <translation>Pas de contacts  non remplis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1527"/>
+        <location filename="../tsinglelogframe.cpp" line="1546"/>
         <source>Please give serial wanted</source>
         <translation>Numéro de série requis</translation>
     </message>
     <message>
-        <location filename="../tsinglelogframe.cpp" line="1549"/>
+        <location filename="../tsinglelogframe.cpp" line="1568"/>
         <source>Serial number %1 not found</source>
         <translation>Numéro de série %1 introuvable</translation>
     </message>

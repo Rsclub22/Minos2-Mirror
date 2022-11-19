@@ -9,57 +9,57 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="105"/>
+        <location filename="../rcmainwindow.ui" line="208"/>
+        <source>Input Channel for Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.ui" line="222"/>
+        <source>Input Channel for Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rcmainwindow.ui" line="281"/>
         <source>Mono</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="128"/>
-        <source>Input Channel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rcmainwindow.ui" line="142"/>
+        <location filename="../rcmainwindow.ui" line="236"/>
         <source>Base Output Filename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="152"/>
+        <location filename="../rcmainwindow.ui" line="246"/>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="163"/>
+        <location filename="../rcmainwindow.ui" line="257"/>
         <source>File Rotation Interval (minutes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="187"/>
-        <source>Auto Start</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rcmainwindow.ui" line="194"/>
+        <location filename="../rcmainwindow.ui" line="288"/>
         <source>Link to contest time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="210"/>
+        <location filename="../rcmainwindow.ui" line="304"/>
         <source>Start Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.ui" line="230"/>
+        <location filename="../rcmainwindow.ui" line="324"/>
         <source>Stop Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="219"/>
+        <location filename="../rcmainwindow.cpp" line="224"/>
         <source>Record Files (*.wav);;All Files (*.*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rcmainwindow.cpp" line="222"/>
+        <location filename="../rcmainwindow.cpp" line="227"/>
         <source>Recorded Files</source>
         <translation type="unfinished"></translation>
     </message>
