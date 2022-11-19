@@ -5,5 +5,5 @@ MapPolyline
 {
     id: mline
     line.color: "green"
-    line.width: 3
+    line.width: 1
 }
