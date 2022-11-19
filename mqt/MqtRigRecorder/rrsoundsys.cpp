@@ -367,12 +367,6 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
         qreal val1 = s1 * recmult;
         qreal val2 = s2 * recmult;
 
-        if (mono)
-        {
-            val1 = (val1 + val2)/2;
-            val2 = val1;
-        }
-
         if (val1 > 32767.0)
             val1 = 32767.0;
         if (val1 < -32767.0)
@@ -393,7 +387,7 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
     }
 
     qreal rmsval = sqrt(sqaccum/nFrames);
-    trace(QString("VU %1 %2 %3").arg(maxvol).arg(rmsval).arg(nFrames));
+    //trace(QString("VU %1 %2 %3").arg(maxvol).arg(rmsval).arg(nFrames));
     WinVUCallback( instance, static_cast<unsigned int>(maxvol),
                   static_cast<unsigned int>(rmsval),
                   nFrames );
@@ -413,9 +407,18 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
         {
             for ( unsigned int i = 0; i < nFrames; i++)
             {
-                int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
                 int offset = (recIndex % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame;
-                inBuff[offset] = mix;
+                if (mono)
+                {
+                    int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
+                    inBuff[offset] += mix;
+                    inBuff[offset + 1] += mix;
+                }
+                else
+                {
+                    inBuff[offset] += inStageBuffer[i*2];
+                    inBuff[offset + 1] += inStageBuffer[i*2 + 1];
+                }
                 inFrame += 2;
             }
         }
@@ -425,9 +428,18 @@ int RtAudioSoundSystem::audioCallback( void *inputBuffer,
             {
                 for ( unsigned int i = 0; i < nFrames; i++)
                 {
-                    int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
-                    int offset = (recIndex2 % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame2 + 1;
-                    inBuff[offset] += mix;
+                    int offset = (recIndex2 % RINGBUFFERSIZE) * FRAMESAMPLES * 2 + inFrame2;
+                    if (mono)
+                    {
+                        int16_t mix = (inStageBuffer[i * 2] + inStageBuffer[i * 2 + 1])/2;
+                        inBuff[offset] += mix;
+                        inBuff[offset + 1] += mix;
+                    }
+                    else
+                    {
+                        inBuff[offset] += inStageBuffer[i*2];
+                        inBuff[offset + 1] += inStageBuffer[i*2 + 1];
+                    }
                     inFrame2 += 2;
                 }
             }
@@ -563,7 +575,7 @@ void RtAudioSoundSystem::writeDataToFile(void *inp, unsigned int nFrames)
     if (outWave && inp && nFrames)
     {
         const int16_t *q = reinterpret_cast< const int16_t * > ( inp );
-        trace(QString("writeDataToFile %1 from %2 limit %3").arg(nFrames * 2).arg(q - inBuff).arg(RINGBUFFERSIZE * FRAMESAMPLES * 2));
+        //trace(QString("writeDataToFile %1 from %2 limit %3").arg(nFrames * 2).arg(q - inBuff).arg(RINGBUFFERSIZE * FRAMESAMPLES * 2));
 
         DDCRET ret = outWave->WriteData ( q, nFrames * 2 );   // size is numdata
 

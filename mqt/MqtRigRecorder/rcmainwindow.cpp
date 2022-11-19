@@ -98,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     bool mono = settings.value("Mono", false).toBool();
     ui->monoCb->setChecked(mono);
+    rass.setMono(mono);
 
     bool link = settings.value("ContestLink", false).toBool();
     ui->contestLinkCB->setChecked(link);
@@ -318,7 +319,7 @@ void MainWindow::on_recordSlider_valueChanged(int position)
     setVolumeMults();
 }
 
-void MainWindow::on_recordMono_stateChanged(int /*arg1*/)
+void MainWindow::on_monoCb_stateChanged(int /*arg1*/)
 {
     bool mono = ui->monoCb->isChecked();
     rass.setMono(mono);

@@ -40,7 +40,7 @@ private slots:
 
     void on_recordSlider_valueChanged(int value);
 
-    void on_recordMono_stateChanged(int arg1);
+    void on_monoCb_stateChanged(int arg1);
 
     void on_recordLevel_2_valueChanged(double arg1);
 
