@@ -962,8 +962,6 @@ void TSingleLogFrame::addAllQSOsToBandmap()
            continue;
 
         bandmapControlFrame->on_AfterLogContact(contest, cct);
-
-        qsoMapFrame->on_AfterLogContact(contest, cct);
     }
 }
 void TSingleLogFrame::restoreQSOTableColumns()

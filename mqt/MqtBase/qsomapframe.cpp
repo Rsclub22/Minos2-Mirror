@@ -101,13 +101,23 @@ void QSOMapFrame::setContest(BaseContestLog *c)
         callInfo << QString::number(raddeg(ct->odea));
         callInfo << ct->myloc.getLoc();
         emit homeSig(callInfo);
+
+        for ( auto const &c: qAsConst(c->ctList ))
+        {
+            QSharedPointer<BaseContact> cct = c.wt;
+
+            if ( cct->notValidContact() )
+               continue;
+
+            on_AfterLogContact(ct, cct);
+        }
     }
     else
     {
         stopMap();
     }
 }
-void QSOMapFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
+void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct)
 {
     if (ct == c && !ct->isReadOnly())
     {

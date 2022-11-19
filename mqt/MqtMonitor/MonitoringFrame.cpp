@@ -170,17 +170,6 @@ void MonitoringFrame::on_mapButton_clicked()
         vbl->setStretch(0, 25);
         vbl->setStretch(1, 1);
         ui->mapButton->setText(tr("Show Log"));
-
-        for ( auto const &c: qAsConst(contest->ctList ))
-        {
-            QSharedPointer<BaseContact> cct = c.wt;
-
-            if ( cct->notValidContact() )
-               continue;
-
-            qsoMapFrame->on_AfterLogContact(contest, cct);
-        }
-
     }
     else
     {

@@ -23,7 +23,7 @@ public:
     void setContest(BaseContestLog *);
     void closeContest();
 
-    void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct);
+    void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
 private:
     Ui::QSOMapFrame *ui;
 
