@@ -10,13 +10,12 @@ class MonitoringFrame;
 }
 class BaseContestLog;
 class MonitorMain;
+class QSOMapFrame;
+class BaseContact;
 
 class MonitoringFrame : public QFrame
 {
     Q_OBJECT
-
-    MonitorMain *mparent;
-
 public:
     explicit MonitoringFrame(MonitorMain *parent = nullptr);
     ~MonitoringFrame();
@@ -35,9 +34,12 @@ public:
     bool newStanzas = false;
     bool armScan = false;
 
+    void on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct);
 private:
     Ui::MonitoringFrame *ui;
+    MonitorMain *mparent = nullptr;
     BaseContestLog *contest;
+    QSOMapFrame *qsoMapFrame = nullptr;
     QMenu columnsMenu;
     bool inRestoreColumns = false;
 
@@ -49,6 +51,7 @@ private slots:
     void onQSOTable_sectionMoved(int, int, int);
 
     void viewColumn();
+    void on_mapButton_clicked();
 };
 
 #endif // MONITORINGFRAME_H

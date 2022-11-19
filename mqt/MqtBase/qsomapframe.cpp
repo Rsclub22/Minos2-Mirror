@@ -23,6 +23,7 @@ QSOMapFrame::QSOMapFrame(QWidget *parent) :
 {
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // This makes the resources accessible from the main executable
     Q_INIT_RESOURCE(qml);
 #endif
 #endif

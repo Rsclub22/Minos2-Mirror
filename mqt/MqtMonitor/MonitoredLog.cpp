@@ -103,6 +103,9 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
               QSharedPointer<BaseContact> bct = contest->pcontactAt(contest->lastInserted);
               frame->qsoModel.insertRows(contest->lastInserted, 1, QModelIndex());
               contest->lastInserted = -1;
+
+              frame->on_AfterLogContact(contest, bct);
+
           }
           else
           {

@@ -3,6 +3,7 @@
 #include "cutils.h"
 #include "MinosLoggerEvents.h"
 #include "MonitorMain.h"
+#include "qsomapframe.h"
 #include "MonitoringFrame.h"
 #include "ui_MonitoringFrame.h"
 
@@ -73,6 +74,10 @@ void MonitoringFrame::initialise( BaseContestLog * pcontest )
 {
 
    contest = pcontest;
+
+#if !defined(Q_OS_WIN) || QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+   ui->mapButton->setVisible(false);
+#endif
 
    ui->QSOTable->horizontalHeader()->setContextMenuPolicy( Qt::CustomContextMenu );
    ui->QSOTable->horizontalHeader()->setSectionsMovable(true);
@@ -148,3 +153,51 @@ void MonitoringFrame::on_monitorTimeout()
         ui->QSOTable->scrollToBottom();
     }
 }
+
+void MonitoringFrame::on_mapButton_clicked()
+{
+    // flip between visible log and a map view
+    if (ui->QSOTable->isVisible())
+    {
+        ui->QSOTable->setVisible(false);
+
+        qsoMapFrame = new QSOMapFrame(nullptr);
+        qsoMapFrame->setContest(getContest());
+        ui->logFrame->layout()->addWidget(qsoMapFrame);
+        ui->logFrame->layout()->removeWidget(ui->QSOTable);
+
+        QVBoxLayout *vbl = dynamic_cast<QVBoxLayout *>(layout());
+        vbl->setStretch(0, 25);
+        vbl->setStretch(1, 1);
+        ui->mapButton->setText(tr("Show Log"));
+
+        for ( auto const &c: qAsConst(contest->ctList ))
+        {
+            QSharedPointer<BaseContact> cct = c.wt;
+
+            if ( cct->notValidContact() )
+               continue;
+
+            qsoMapFrame->on_AfterLogContact(contest, cct);
+        }
+
+    }
+    else
+    {
+        ui->logFrame->layout()->removeWidget(qsoMapFrame);
+        ui->logFrame->layout()->addWidget(ui->QSOTable);
+        delete qsoMapFrame;
+        qsoMapFrame = nullptr;
+        ui->QSOTable->setVisible(true);
+        ui->mapButton->setText(tr("Show Map"));
+    }
+}
+void MonitoringFrame::on_AfterLogContact(BaseContestLog *c, QSharedPointer<BaseContact> lct)
+{
+    if (qsoMapFrame)
+    {
+        qsoMapFrame->on_AfterLogContact(c, lct);
+    }
+}
+
+
