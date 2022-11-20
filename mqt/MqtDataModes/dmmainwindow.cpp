@@ -53,15 +53,7 @@ void DMMainWindow::LogTimerTimer()
 }
 void DMMainWindow::closeEvent(QCloseEvent *event)
 {
-    LogTimer.stop();
-
-    // and tidy up all loose ends
-
-    QSettings settings;
-    settings.setValue(geoStr, saveGeometry());
-
-
-    trace("Minos Data Modes App Closing");
+    doCloseEvent();
     QWidget::closeEvent(event);
 }
 void DMMainWindow::moveEvent(QMoveEvent * event)
@@ -92,3 +84,101 @@ void DMMainWindow::onStdInRead(QString cmd)
         close();
     }
 }
+void DMMainWindow::showEvent(QShowEvent *event)
+{
+    QMainWindow::showEvent(event);
+
+
+}
+void DMMainWindow::closeAllEngines()
+{
+    if (mmvariFrame)
+    {
+        delete mmvariFrame;
+        mmvariFrame = nullptr;
+    }
+
+    ui->actionMMVARI->setChecked(false);
+
+    if (mmttyFrame)
+    {
+        mmttyFrame->closeFrame();
+
+        mmttyFrame->deleteLater();
+        mmttyFrame = nullptr;
+    }
+
+    ui->actionMMTTY->setChecked(false);
+    ui->action2Tone->setChecked(false);
+
+    if (fldigiFrame)
+    {
+        fldigiFrame->closeFrame();
+        fldigiFrame->deleteLater();
+        fldigiFrame = nullptr;
+
+    }
+}
+
+void DMMainWindow::on_actionMMVARI_triggered()
+{
+    closeAllEngines();
+
+    ui->actionMMVARI->setChecked(true);
+
+    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->rxChars, ui->sendEdit);
+}
+
+void DMMainWindow::on_actionMMTTY_triggered()
+{
+    closeAllEngines();
+    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit);
+    ui->actionMMTTY->setChecked(true);
+}
+
+void DMMainWindow::on_action2Tone_triggered()
+{
+    closeAllEngines();
+    mmttyFrame = new MMTTYFrame(true, ui->rxChars, ui->sendEdit);
+    ui->action2Tone->setChecked(true);
+}
+
+void DMMainWindow::on_actionFLDigi_triggered()
+{
+    closeAllEngines();
+    fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit);
+}
+void DMMainWindow::on_actionExit_triggered()
+{
+    close();
+}
+void DMMainWindow::doCloseEvent()
+{
+    closeAllEngines();
+
+
+    LogTimer.stop();
+
+    // and tidy up all loose ends
+
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+
+
+    trace("Minos Data Modes App Closing");
+
+}
+
+void DMMainWindow::on_sendButton_clicked()
+{
+    QString data = ui->sendEdit->text().trimmed();
+    if (mmvariFrame)
+    {
+        mmvariFrame->sendCharacters(data);
+    }
+    if (mmttyFrame)
+    {
+        mmttyFrame->sendCharacters(data);
+    }
+}
+
