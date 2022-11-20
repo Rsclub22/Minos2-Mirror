@@ -208,5 +208,7 @@ static const QString rigCwMemType ("CwMemType");
 // KSTClient
 static const QString KSTClientApp         ("mqtKSTClient");
 
+// Data Modes
+static const QString datamodesApp         ("mqtDataModesApp");
 }
 #endif // RPCCOMMANDRCONSTANTS_H

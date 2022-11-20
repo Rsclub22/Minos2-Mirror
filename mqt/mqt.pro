@@ -3,6 +3,7 @@ TEMPLATE = subdirs
 SUBDIRS += \
     KeyerBase \
     MqtBase \
+    MqtDataModes \
     MqtUtils \
     TinyXML \
     XMPPLib \
@@ -29,6 +30,7 @@ MqtAppStarter.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtChat.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtCluster.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtControl.depends = MqtUtils TinyXML XMPPLib MqtBase
+MqtDataModes.depends = MqtUtils TinyXML XMPPLib MqtBase
 MqtKeyer.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 mqtKeyerTest.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase
 MqtRigRecorder.depends = MqtUtils TinyXML XMPPLib MqtBase KeyerBase

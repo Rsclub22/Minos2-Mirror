@@ -230,7 +230,7 @@ class ClusterMainWindow : public QMainWindow
 public:
     explicit ClusterMainWindow(QWidget *parent = nullptr);
     void doStartup();
-    ~ClusterMainWindow();
+    virtual ~ClusterMainWindow() override;
 
     static const char *userCmdButtonLabels[4];
 
@@ -271,7 +271,7 @@ private:
     StdInReader *stdinReader = new StdInReader(this);
 
 
-    class QTimer LogTimer;
+    QTimer LogTimer;
     QTimer *disconnectTimer;
     QSharedPointer<HtmlDelegate> dxSpotViewDelegate;
     QSharedPointer<HtmlDelegate> sentSpotViewDelegate;
@@ -380,7 +380,10 @@ private:
 
     void restoreDxSpotViewColumns();
     void restoreSentSpotViewColumns();
-    void closeEvent(QCloseEvent *event);
+    virtual void closeEvent(QCloseEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
     void disconnectNode();
     void connectToHost(QString hostName);
 

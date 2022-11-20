@@ -117,12 +117,15 @@ void ControlMain::getRouterAppCatMap()
         }
         else if (c->appType == "Server")
         {
-//            routerAppCatMap[rpcConstants::LocalStationCategory].push_back(c);
-//            routerAppCatMap[rpcConstants::StationCategory].push_back(c);
+            // no action
         }
         else if (c->appType == "KSTClient")
         {
-
+            // no action
+        }
+        else if (c->appType == "DataModes")
+        {
+            // no action
         }
 
     }

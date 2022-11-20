@@ -15,7 +15,6 @@
 #include <QProcessEnvironment>
 #include <QHeaderView>
 #include <QTextStream>
-#include <MTrace.h>
 #include <QTableView>
 #include <QMessageBox>
 
@@ -2103,6 +2102,26 @@ void ClusterMainWindow::onStdInRead(QString cmd)
     if (cmd.indexOf("Shutdown", 0, Qt::CaseInsensitive) >= 0)
     {
         close();
+    }
+}
+void ClusterMainWindow::moveEvent(QMoveEvent * event)
+{
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    QWidget::moveEvent(event);
+}
+void ClusterMainWindow::resizeEvent(QResizeEvent * event)
+{
+    QSettings settings;
+    settings.setValue(geoStr, saveGeometry());
+    QWidget::resizeEvent(event);
+}
+void ClusterMainWindow::changeEvent( QEvent* e )
+{
+    if( e->type() == QEvent::WindowStateChange )
+    {
+        QSettings settings;
+        settings.setValue(geoStr, saveGeometry());
     }
 }
 

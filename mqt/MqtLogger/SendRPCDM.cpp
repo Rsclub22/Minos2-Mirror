@@ -96,8 +96,7 @@ void TSendDM::getRouterAppCatMap()
         }
         else if (i->appType == "Server")
         {
-//            routerAppCatMap[rpcConstants::LocalStationCategory].push_back(i);
-//            routerAppCatMap[rpcConstants::StationCategory].push_back(i);
+            // no action
         }
         else if (i->appType == "Cluster")
         {
@@ -106,7 +105,11 @@ void TSendDM::getRouterAppCatMap()
         }
         else if (i->appType == "KSTClient")
         {
-
+            // no action
+        }
+        else if (i->appType == "DataModes")
+        {
+            // no action - yet
         }
     }
     rpc->setRouterAppCatMap(routerAppCatMap);
