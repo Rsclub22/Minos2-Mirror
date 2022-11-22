@@ -24,14 +24,15 @@ void FLDigiFrame::createProcess()
     connect (fldigiProcess, &QProcess::readyReadStandardOutput, this, &FLDigiFrame::on_readyReadStandardOutput);
 
     QStringList engineOpts = {"--wo"/*, "--home-dir C:/temp"*/};
-    fldigiProcess->start("C:/Ham/Fldigi-4.1.20/fldigi.exe", engineOpts, QProcess::ReadWrite);
+    fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
 }
 
-FLDigiFrame::FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit) :
+FLDigiFrame::FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit, QString fname) :
     QFrame(parent),
     ui(new Ui::FLDigiFrame),
     rxChars(rxChars),
-    sendEdit(sendEdit)
+    sendEdit(sendEdit),
+    fname(fname)
 {
     ui->setupUi(this);
 

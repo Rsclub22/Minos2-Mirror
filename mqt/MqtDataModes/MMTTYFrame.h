@@ -18,7 +18,7 @@ class MMTTYFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMTTYFrame(bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit);
+    explicit MMTTYFrame(bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname);
     ~MMTTYFrame();
 
     void sendCharacters(const QString &);
@@ -29,6 +29,7 @@ public:
 
 private:
     Ui::MMTTYFrame *ui;
+    QString fname;
     QWidget *t = nullptr;
 
     QTextEdit *rxChars = nullptr;
@@ -44,9 +45,13 @@ private:
     bool twoToneActive = false;
     bool mmttyActive = false;
 
-    HWND getTempId()
+    HWND getTempHwnd()
     {
-        return (HWND)t->winId();
+        return reinterpret_cast<HWND>(t->winId());
+    }
+    WId getTempId()
+    {
+        return t->winId();
     }
 
     void runRttyEngine(QString app, QStringList opts);

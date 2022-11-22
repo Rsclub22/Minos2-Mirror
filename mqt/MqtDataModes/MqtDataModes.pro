@@ -18,11 +18,11 @@ CONFIG -= embed_manifest_dll
 
 QMAKE_MANIFEST += $$PWD/MqtDataModes.exe.manifest
 
-
 SOURCES += \
     FLDigiFrame.cpp \
     MMTTYFrame.cpp \
     MMVARIFrame.cpp \
+    engineconfigure.cpp \
     main.cpp \
     dmmainwindow.cpp \
     mmvarilib.cpp
@@ -32,15 +32,18 @@ HEADERS += \
     MMTTYFrame.h \
     MMTTY_N1MM.h \
     MMVARIFrame.h \
-    MqtDataModes.rc \
     dmmainwindow.h \
+    engineconfigure.h \
     mmvarilib.h
 
 FORMS += \
     FLDigiFrame.ui \
     MMTTYFrame.ui \
     MMVARIFrame.ui \
-    dmmainwindow.ui
+    dmmainwindow.ui \
+    engineconfigure.ui
+
+win32{ LIBS += -lwinmm}
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../maia/release/ -lmaia
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../maia/debug/ -lmaia

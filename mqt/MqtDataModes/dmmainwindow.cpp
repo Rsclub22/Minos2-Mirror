@@ -1,10 +1,18 @@
 #include <QSettings>
 #include <QTimer>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#include <mmsystem.h>
+#endif
+
 #include "AppStartup.h"
 #include "MinosRPC.h"
 #include "LogEvents.h"
 #include "MTrace.h"
+#include "fileutils.h"
+#include "waitcursor.h"
+#include "engineconfigure.h"
 
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
@@ -14,6 +22,44 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     , ui(new Ui::DMMainWindow)
 {
     ui->setupUi(this);
+
+
+#ifdef Q_OS_WIN
+    UINT devs = waveInGetNumDevs();
+    inChannels = devs;
+    QString defname = tr("Default Device");
+    inputDevices.append(defname);
+    deviceIds[defname] = -1;
+    for (UINT dev = 0; dev < devs; dev++) {
+        WAVEINCAPS caps = {};
+        MMRESULT mmr = waveInGetDevCaps(dev, &caps, sizeof(caps));
+        if (MMSYSERR_NOERROR != mmr) {
+            return /*mmr*/;
+        }
+
+        QString name = QString::fromWCharArray(caps.szPname);
+        inputDevices.append(name);
+        deviceIds[name] = dev;
+        trace( "input device = "  + QString::number(devs) +  " " + name);
+    }
+    devs = waveOutGetNumDevs();
+    outChannels = devs;
+    outputDevices.append(defname);
+    deviceIds[defname] = -1;        // repeated...
+    for (UINT dev = 0; dev < devs; dev++) {
+        WAVEOUTCAPS caps = {};
+        MMRESULT mmr = waveOutGetDevCaps(dev, &caps, sizeof(caps));
+
+        if (MMSYSERR_NOERROR != mmr) {
+            return /*mmr*/;
+        }
+        QString name = QString::fromWCharArray(caps.szPname);
+        outputDevices.append(name);
+        deviceIds[name] = dev;
+        trace( "output device = "  + QString::number(devs) +  " " + name);
+    }
+
+#endif
 
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
@@ -28,17 +74,66 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     LogTimer.start(100);
 
     QSettings settings;
-    geoStr = QString("clusterServer/geometry");
+    geoStr = QString("dataModes/geometry");
     QByteArray geometry = settings.value(geoStr).toByteArray();
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    actionMMVARI = newAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
+    action2Tone = newAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
+    actionMMTTY = newAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
+    actionFLDigi = newAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
+
+    actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuConfigure, &DMMainWindow::onActionConfigure_Engines_triggered);
+
+    checkEnginesAvailable();
 }
 
 DMMainWindow::~DMMainWindow()
 {
     delete ui;
 }
+void DMMainWindow::checkEnginesAvailable()
+{
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+
+    //QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
+    QString m = settings.value(eStr + "MMVARI").toString();
+    bool b = FileExists(m);
+    actionMMVARI->setEnabled(b);
+
+    m = settings.value(eStr + "2Tone").toString();
+    b = FileExists(m);
+    action2Tone->setEnabled(b);
+
+    m = settings.value(eStr + "MMTTY").toString();
+    b = FileExists(m);
+    actionMMTTY->setEnabled(b);
+
+    m = settings.value(eStr + "FLDigi").toString();
+    b = FileExists(m);
+    actionFLDigi->setEnabled(b);
+
+}
+QMenu *DMMainWindow::newMenu(QMenu *m, const char *text)
+{
+    QMenu *menu = m->addMenu(tr(text));
+    menuList[menu] = text;
+    return menu;
+}
+QAction *DMMainWindow::newAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)() )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
+    m->addAction( newAct );
+    if (slotparam)
+    {
+        connect( newAct, &QAction::triggered, this, slotparam );
+    }
+    return newAct;
+}
+
 void DMMainWindow::LogTimerTimer()
 {
     static bool closed = false;
@@ -75,6 +170,24 @@ void DMMainWindow::changeEvent( QEvent* e )
         QSettings settings;
         settings.setValue(geoStr, saveGeometry());
     }
+    if (e->type() == QEvent::LanguageChange)
+    {
+        // when language changes force a complete rebuild
+        TWaitCursor wc(this);
+
+        for(QMap<QMenu *, const char *>::iterator i = menuList.begin(); i != menuList.end(); i++)
+        {
+            i.key()->setTitle(tr(i.value()));
+        }
+        for(QMap<QAction *, const char *>::iterator i = actionList.begin(); i != actionList.end(); i++)
+        {
+            i.key()->setText(tr(i.value()));
+        }
+        ui->retranslateUi(this);
+        setWindowTitle(tr("Minos Data Modes App"));
+    }
+    QMainWindow::changeEvent(e);
+
 }
 
 void DMMainWindow::onStdInRead(QString cmd)
@@ -98,7 +211,7 @@ void DMMainWindow::closeAllEngines()
         mmvariFrame = nullptr;
     }
 
-    ui->actionMMVARI->setChecked(false);
+    actionMMVARI->setChecked(false);
 
     if (mmttyFrame)
     {
@@ -108,8 +221,8 @@ void DMMainWindow::closeAllEngines()
         mmttyFrame = nullptr;
     }
 
-    ui->actionMMTTY->setChecked(false);
-    ui->action2Tone->setChecked(false);
+    actionMMTTY->setChecked(false);
+    action2Tone->setChecked(false);
 
     if (fldigiFrame)
     {
@@ -120,35 +233,59 @@ void DMMainWindow::closeAllEngines()
     }
 }
 
-void DMMainWindow::on_actionMMVARI_triggered()
+void DMMainWindow::onActionMMVARI_triggered()
 {
     closeAllEngines();
 
-    ui->actionMMVARI->setChecked(true);
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString exePath = QCoreApplication::applicationDirPath() + QString("/MMVARI.ocx");
+    QString m = settings.value(eStr + "MMVARI", exePath).toString();
 
-    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->rxChars, ui->sendEdit);
+    actionMMVARI->setChecked(true);
+
+    QString idev = settings.value(eStr + "MMVARI/input").toString();
+    int inId = deviceIds[idev];
+
+    QString odev = settings.value(eStr + "MMVARI/output").toString();
+    int outId = deviceIds[odev];
+
+
+    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->rxChars, ui->sendEdit, m, inId, outId);
 }
 
-void DMMainWindow::on_actionMMTTY_triggered()
+void DMMainWindow::onActionMMTTY_triggered()
 {
     closeAllEngines();
-    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit);
-    ui->actionMMTTY->setChecked(true);
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString m = settings.value(eStr + "MMTTY").toString();
+
+    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit, m);
+    actionMMTTY->setChecked(true);
 }
 
-void DMMainWindow::on_action2Tone_triggered()
+void DMMainWindow::onAction2Tone_triggered()
 {
     closeAllEngines();
-    mmttyFrame = new MMTTYFrame(true, ui->rxChars, ui->sendEdit);
-    ui->action2Tone->setChecked(true);
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString m = settings.value(eStr + "2Tone").toString();
+
+    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit, m);
+    action2Tone->setChecked(true);
 }
 
-void DMMainWindow::on_actionFLDigi_triggered()
+void DMMainWindow::onActionFLDigi_triggered()
 {
     closeAllEngines();
-    fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit);
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString m = settings.value(eStr + "FLDigi").toString();
+
+    fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit, m);
 }
-void DMMainWindow::on_actionExit_triggered()
+void DMMainWindow::onActionExit_triggered()
 {
     close();
 }
@@ -180,5 +317,14 @@ void DMMainWindow::on_sendButton_clicked()
     {
         mmttyFrame->sendCharacters(data);
     }
+}
+
+
+void DMMainWindow::onActionConfigure_Engines_triggered()
+{
+    EngineConfigure ec(this);
+    ec.exec();
+
+    checkEnginesAvailable();
 }
 

@@ -276,7 +276,7 @@ void appStartup(const QString &pappName)
     parser.addOption(languageOption);
 
     QStringList args = QCoreApplication::instance()->arguments();
-    trace("Arguments" + args.join("|"));
+    trace("Arguments " + args.join("|"));
 
     parser.process(args);
 

@@ -11,10 +11,15 @@
 #include <QTextEdit>
 
 #if !defined (_MSC_VER)
+#pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif
-
+// as we don't want to change mmvarilib.h...
 #include "mmvarilib.h"
+#if !defined (_MSC_VER)
+#pragma GCC diagnostic pop
+#endif
+
 
 namespace Ui {
 class MMVARIFrame;
@@ -25,7 +30,7 @@ class MMVARIFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit);
+    explicit MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname, int inId, int outId);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &);
@@ -33,6 +38,7 @@ public:
 private:
     Ui::MMVARIFrame *ui;
 
+    QString fname;
     int mmvariWnd;
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;

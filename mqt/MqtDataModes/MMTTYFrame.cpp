@@ -120,9 +120,10 @@ public:
 //    t = new QWidget(this);
 //}
 
-MMTTYFrame::MMTTYFrame( bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit) :
+MMTTYFrame::MMTTYFrame( bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname) :
     QFrame(nullptr),
     ui(new Ui::MMTTYFrame),
+    fname(fname),
     rxChars(rxChars),
     sendEdit(sendEdit),
     twoTone(twoTone)
@@ -132,18 +133,15 @@ MMTTYFrame::MMTTYFrame( bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit) :
     setWindowTitle( "DI2 RX Window 1");
     t = new QWidget(this);
 
-    // create the window to take 2Tone and MMTTY messages
-    //TTYDialog = new HandleDialog(this);
-
     if (twoTone)
     {
         // -r remote -a stay on top -Z (?) allow multiple copies -h window handle
-        runRttyEngine("C:/Ham/2Tone/2Tone.exe", QStringList());
+        runRttyEngine(fname, QStringList());
     }
     else
     {
             // -r remote -a stay on top -Z (?) allow multiple copies -h window handle
-            runRttyEngine("C:/Ham/MMTTY/MMTTY.exe", { "-r", "-Z"});
+            runRttyEngine(fname, { "-r", "-Z"});
     }
 
 }
@@ -156,12 +154,12 @@ MMTTYFrame::~MMTTYFrame()
 
 void MMTTYFrame::sendCharacters(const QString &sendData)
 {
-    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, (DWORD)2);
+    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
     for(auto c:sendData)
     {
-        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_CHAR, (DWORD)c.toLatin1());
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_CHAR, c.toLatin1());
     }
-    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, (DWORD)1);
+    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 1);
 }
 
 void MMTTYFrame::closeFrame()
@@ -190,11 +188,11 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         switch(w)
         {
         case TXM_HANDLE:
-            mttyHWnd = (HWND)l;
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, (DWORD)getTempId());
+            mttyHWnd = reinterpret_cast<HWND>(l);
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, getTempId());
             break;
         case TXM_REQHANDLE:
-            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, (DWORD)getTempId());
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_HANDLE, getTempId());
             break;
         case TXM_START:
             break;
@@ -269,19 +267,18 @@ void MMTTYFrame::runRttyEngine(QString app, QStringList opts)
     rttyEngine = app;
     rttyEngineOpts = opts;
 
-    HWND hWnd = getTempId();
-    QString handleOpt = QString("-h%1").arg((UINT)hWnd, 4, 16, QChar('0'));
+    QString handleOpt = QString("-h%1").arg(getTempId(), 4, 16, QChar('0'));
     rttyEngineOpts.insert(0, handleOpt);
 
     LPCWSTR m = L"MMTTY";
     uMSG_MMTTY = ::RegisterWindowMessageW(m); //advert & get value
-    QApplication::instance()->installNativeEventFilter(new MyNativeEventFilter(this, (UINT)hWnd, uMSG_MMTTY));
+    QApplication::instance()->installNativeEventFilter(new MyNativeEventFilter(this, getTempId(), uMSG_MMTTY));
 
     QSharedMemory hMapFile(this);
     QString k = QString("MMTTY");
 
     // This works... but hMapFile.create doesn't work!
-    HANDLE m_hComFile = (HANDLE)::CreateFileMappingW(HANDLE(0xffffffff), NULL, PAGE_READWRITE, 0, sizeof(COMARRAY), m);
+    HANDLE m_hComFile = static_cast<HANDLE>(::CreateFileMappingW(HANDLE(0xffffffff), NULL, PAGE_READWRITE, 0, sizeof(COMARRAY), m));
     Q_UNUSED(m_hComFile)
 
     hMapFile.setNativeKey(k);
@@ -290,7 +287,7 @@ void MMTTYFrame::runRttyEngine(QString app, QStringList opts)
     //get shared memory area pointer
     if (hMapFile.isAttached())
     {
-        pMap = (COMARRAY *) hMapFile.data();
+        pMap = static_cast<COMARRAY *>(hMapFile.data());
     }
     if (pMap != nullptr)
     {

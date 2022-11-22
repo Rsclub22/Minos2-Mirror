@@ -17,21 +17,21 @@ TEMPLATE = app
 
 win32:RC_ICONS += ../MinosRig.ico
 
-message(rig control)
+#message(rig control)
 win32-g++*{
     DEFINES += WIN32
     QT += axcontainer
 
-message(g++ dumpcpp)
+#message(g++ dumpcpp)
     TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
 win32-msvc{
         DEFINES += WIN32
         QT += axcontainer
-        message(msvc dumpcpp)
+        #message(msvc dumpcpp)
         TYPELIBS = $$system(dumpcpp OmniRig.tlb)
 }
-message($$INCLUDEPATH)
+#message($$INCLUDEPATH)
 SOURCES += main.cpp\
     hamlibrigcontrol.cpp \
     rigbase.cpp \

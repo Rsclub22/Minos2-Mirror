@@ -44,65 +44,23 @@
      <x>0</x>
      <y>0</y>
      <width>501</width>
-     <height>21</height>
+     <height>24</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionExit"/>
-   </widget>
    <widget class="QMenu" name="menuEngine">
     <property name="title">
      <string>Engine</string>
     </property>
-    <addaction name="actionMMVARI"/>
-    <addaction name="actionMMTTY"/>
-    <addaction name="action2Tone"/>
-    <addaction name="actionFLDigi"/>
    </widget>
-   <addaction name="menuFile"/>
+   <widget class="QMenu" name="menuConfigure">
+    <property name="title">
+     <string>Configure</string>
+    </property>
+   </widget>
+   <addaction name="menuConfigure"/>
    <addaction name="menuEngine"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionExit">
-   <property name="text">
-    <string>Exit</string>
-   </property>
-  </action>
-  <action name="actionMMVARI">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>MMVARI</string>
-   </property>
-  </action>
-  <action name="actionMMTTY">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>MMTTY</string>
-   </property>
-  </action>
-  <action name="action2Tone">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>2Tone</string>
-   </property>
-  </action>
-  <action name="actionFLDigi">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>FLDigi</string>
-   </property>
-  </action>
  </widget>
  <resources/>
  <connections/>

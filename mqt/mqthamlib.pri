@@ -17,7 +17,7 @@ equals(HAMLIBVER, 45) {
        win32-g++* {
           contains(QT_ARCH, i386) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5)
-          ##message(Hamlib path is $$HAMLIBDIR)
+          #message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
           HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5)

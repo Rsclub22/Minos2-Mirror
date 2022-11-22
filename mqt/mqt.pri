@@ -35,8 +35,8 @@ DEFINES *= QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 
-CONFIG += lrelease
-TRANSLATIONS += translations/minos_en_GB.ts \
+CONFIG *= lrelease
+TRANSLATIONS *= translations/minos_en_GB.ts \
                 translations/minos_fr_FR.ts
 
 # Others we may want eventually

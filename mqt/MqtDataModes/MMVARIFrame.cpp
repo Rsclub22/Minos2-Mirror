@@ -6,9 +6,10 @@
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
-MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit) :
+MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname, int inId, int outId) :
     QFrame(parent),
     ui(new Ui::MMVARIFrame),
+    fname(fname),
     rxChars(rxChars),
     sendEdit(sendEdit)
 {
@@ -38,6 +39,7 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, 
 
     //====================================================================
     // N1MM also has BPF, ATC, FFT, Multi-Channel RX menus
+    // Do we need to have anything here?
 
     QMenuBar *mmbar = new QMenuBar(this);
     QMenu * bpfMenu = new QMenu("BPF");
@@ -179,8 +181,12 @@ MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, 
 
 // View and level are all mouse related
 
-    mmvari->setStrSoundID("1");
-    QString snd = mmvari->strSoundID();
+    // we need to configure the sound card!
+    // -1 is default; for two cards it is (RX,TX)
+
+    QString devs = QString("%1,%2").arg(inId).arg(outId);
+
+    mmvari->setStrSoundID(devs);
 
     mmvari->setStrMode(0, modeCombo->currentText());
     mmvari->setWCharset(0, mmvari->wDefaultCharset());

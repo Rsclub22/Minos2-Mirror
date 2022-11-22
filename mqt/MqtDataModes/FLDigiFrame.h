@@ -18,7 +18,7 @@ class FLDigiFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit);
+    explicit FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit, QString fname);
     ~FLDigiFrame();
 
     void sendCharacters(const QString &);
@@ -31,6 +31,7 @@ private:
     QLineEdit *sendEdit = nullptr;
     QProcess *fldigiProcess = nullptr;
     bool fldigiActive = false;
+    QString fname;
 
     void createProcess();
 

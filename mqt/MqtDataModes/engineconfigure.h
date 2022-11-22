@@ -1,0 +1,40 @@
+#ifndef ENGINECONFIGURE_H
+#define ENGINECONFIGURE_H
+
+#include <QDialog>
+
+namespace Ui {
+class EngineConfigure;
+}
+
+class QLineEdit;
+class DMMainWindow;
+
+class EngineConfigure : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit EngineConfigure(DMMainWindow *parent = nullptr);
+    ~EngineConfigure();
+
+private slots:
+    void on_mmvariBrowse_clicked();
+
+    void on_mmttyBrowse_clicked();
+
+    void on_twotoneBrowse_clicked();
+
+    void on_fldigiBrowse_clicked();
+
+    void on_OKButton_clicked();
+
+    void on_cancelButton_clicked();
+
+private:
+    Ui::EngineConfigure *ui;
+    DMMainWindow *mainWindow;
+    void doBrowse(QString key, QLineEdit *edit);
+};
+
+#endif // ENGINECONFIGURE_H
