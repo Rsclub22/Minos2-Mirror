@@ -7,46 +7,52 @@ QT += widgets
 TARGET = MqtDataModes
 TEMPLATE = app
 
-win32:RC_ICONS += ../minos.ico
+SOURCES += \
+    FLDigiFrame.cpp \
+    engineconfigure.cpp \
+    main.cpp \
+    dmmainwindow.cpp
 
-win32 {
-    DEFINES += WIN32
-    QT += axcontainer
-}
+HEADERS += \
+    FLDigiFrame.h \
+    dmmainwindow.h \
+    engineconfigure.h \
+
+FORMS += \
+    FLDigiFrame.ui \
+    dmmainwindow.ui \
+    engineconfigure.ui
+
+win32{
 CONFIG -= embed_manifest_exe
 CONFIG -= embed_manifest_dll
+
+RC_ICONS += ../minos.ico
+
+DEFINES += WIN32
+QT += axcontainer
 
 QMAKE_MANIFEST += $$PWD/MqtDataModes.exe.manifest
 
 SOURCES += \
-    FLDigiFrame.cpp \
     MMTTYFrame.cpp \
     MMVARIFrame.cpp \
-    engineconfigure.cpp \
+    mmvarilib.cpp \
     grittyframe.cpp \
-    main.cpp \
-    dmmainwindow.cpp \
-    mmvarilib.cpp
 
 HEADERS += \
-    FLDigiFrame.h \
     MMTTYFrame.h \
     MMTTY_N1MM.h \
     MMVARIFrame.h \
-    dmmainwindow.h \
-    engineconfigure.h \
+    mmvarilib.h \
     grittyframe.h \
-    mmvarilib.h
 
 FORMS += \
-    FLDigiFrame.ui \
     MMTTYFrame.ui \
     MMVARIFrame.ui \
-    dmmainwindow.ui \
-    engineconfigure.ui \
-    grittyframe.ui
+    grittyframe.ui \
 
-win32{ LIBS += -lwinmm}
+LIBS += -lwinmm}
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../maia/release/ -lmaia
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../maia/debug/ -lmaia

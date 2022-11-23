@@ -79,9 +79,11 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+#ifdef Q_OS_WIN
     actionMMVARI = newAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
     action2Tone = newAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
     actionMMTTY = newAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
+#endif
     actionFLDigi = newAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
 
     actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuConfigure, &DMMainWindow::onActionConfigure_Engines_triggered);
@@ -99,8 +101,12 @@ void DMMainWindow::checkEnginesAvailable()
     QString eStr = QString("dataModes/engines/");
 
     //QString m = QCoreApplication::applicationDirPath() + "/MMVARI.ocx";
-    QString m = settings.value(eStr + "MMVARI").toString();
-    bool b = FileExists(m);
+    QString m;
+    bool b = false;
+
+#ifdef Q_OS_WIN
+    m = settings.value(eStr + "MMVARI").toString();
+    b = FileExists(m);
     actionMMVARI->setEnabled(b);
 
     m = settings.value(eStr + "2Tone").toString();
@@ -110,7 +116,7 @@ void DMMainWindow::checkEnginesAvailable()
     m = settings.value(eStr + "MMTTY").toString();
     b = FileExists(m);
     actionMMTTY->setEnabled(b);
-
+#endif
     m = settings.value(eStr + "FLDigi").toString();
     b = FileExists(m);
     actionFLDigi->setEnabled(b);
@@ -205,6 +211,8 @@ void DMMainWindow::showEvent(QShowEvent *event)
 }
 void DMMainWindow::closeAllEngines()
 {
+#ifdef Q_OS_WIN
+
     if (mmvariFrame)
     {
         delete mmvariFrame;
@@ -223,7 +231,7 @@ void DMMainWindow::closeAllEngines()
 
     actionMMTTY->setChecked(false);
     action2Tone->setChecked(false);
-
+#endif
     if (fldigiFrame)
     {
         fldigiFrame->closeFrame();
@@ -232,6 +240,7 @@ void DMMainWindow::closeAllEngines()
 
     }
 }
+#ifdef Q_OS_WIN
 
 void DMMainWindow::onActionMMVARI_triggered()
 {
@@ -275,7 +284,7 @@ void DMMainWindow::onAction2Tone_triggered()
     mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit, m);
     action2Tone->setChecked(true);
 }
-
+#endif
 void DMMainWindow::onActionFLDigi_triggered()
 {
     closeAllEngines();
@@ -285,6 +294,8 @@ void DMMainWindow::onActionFLDigi_triggered()
 
     fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit, m);
 }
+#ifdef Q_OS_WIN
+
 void DMMainWindow::onActionGritty_triggered()
 {
     closeAllEngines();
@@ -294,6 +305,7 @@ void DMMainWindow::onActionGritty_triggered()
 
     grittyFrame = new GrittyFrame(this, ui->rxChars, ui->sendEdit, m);
 }
+#endif
 void DMMainWindow::onActionExit_triggered()
 {
     close();
@@ -318,6 +330,8 @@ void DMMainWindow::doCloseEvent()
 void DMMainWindow::on_sendButton_clicked()
 {
     QString data = ui->sendEdit->text().trimmed();
+#ifdef Q_OS_WIN
+
     if (mmvariFrame)
     {
         mmvariFrame->sendCharacters(data);
@@ -326,6 +340,7 @@ void DMMainWindow::on_sendButton_clicked()
     {
         mmttyFrame->sendCharacters(data);
     }
+#endif
 }
 
 
