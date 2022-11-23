@@ -5,12 +5,13 @@
 #include <QTimer>
 
 #include "StdInReader.h"
+#include "FLDigiFrame.h"
 
+#ifdef Q_OS_WIN
 #include "MMVARIFrame.h"
 #include "MMTTYFrame.h"
-#include "FLDigiFrame.h"
 #include "grittyframe.h"
-
+#endif
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DMMainWindow; }
@@ -41,11 +42,13 @@ private:
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
 
+    QAction *actionFLDigi;
+#ifdef Q_OS_WIN
     QAction *actionMMVARI;
     QAction *actionMMTTY;
     QAction *action2Tone;
-    QAction *actionFLDigi;
     QAction *actionGritty;
+#endif
     QAction *actionConfigure_Engines;
 
     QMenu *configMenu;
@@ -54,11 +57,12 @@ private:
     QTimer LogTimer;
     QString geoStr;         // geometry registry location
 
+    FLDigiFrame *fldigiFrame = nullptr;
+#ifdef Q_OS_WIN
     MMVARIFrame *mmvariFrame = nullptr;
     MMTTYFrame *mmttyFrame = nullptr;
-    FLDigiFrame *fldigiFrame = nullptr;
     GrittyFrame *grittyFrame = nullptr;
-
+#endif
     void closeAllEngines();
 
     virtual void closeEvent(QCloseEvent *event) override;
@@ -78,19 +82,22 @@ private slots:
 
     void onStdInRead(QString cmd);
 
+#ifdef Q_OS_WIN
+
     void onActionMMVARI_triggered();
 
     void onActionMMTTY_triggered();
 
     void onAction2Tone_triggered();
 
+    void onActionGritty_triggered();
+#endif
+
     void onActionFLDigi_triggered();
 
     void onActionExit_triggered();
 
     void onActionConfigure_Engines_triggered();
-
-    void onActionGritty_triggered();
 
     void on_sendButton_clicked();
 };
