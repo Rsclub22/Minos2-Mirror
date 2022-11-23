@@ -9,6 +9,7 @@
 #include "MMVARIFrame.h"
 #include "MMTTYFrame.h"
 #include "FLDigiFrame.h"
+#include "grittyframe.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -44,6 +45,7 @@ private:
     QAction *actionMMTTY;
     QAction *action2Tone;
     QAction *actionFLDigi;
+    QAction *actionGritty;
     QAction *actionConfigure_Engines;
 
     QMenu *configMenu;
@@ -55,6 +57,7 @@ private:
     MMVARIFrame *mmvariFrame = nullptr;
     MMTTYFrame *mmttyFrame = nullptr;
     FLDigiFrame *fldigiFrame = nullptr;
+    GrittyFrame *grittyFrame = nullptr;
 
     void closeAllEngines();
 
@@ -87,7 +90,8 @@ private slots:
 
     void onActionConfigure_Engines_triggered();
 
-    void on_sendButton_clicked();
+    void onActionGritty_triggered();
 
+    void on_sendButton_clicked();
 };
 #endif // DMMAINWINDOW_H

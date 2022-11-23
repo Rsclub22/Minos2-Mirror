@@ -23,6 +23,7 @@ SOURCES += \
     MMTTYFrame.cpp \
     MMVARIFrame.cpp \
     engineconfigure.cpp \
+    grittyframe.cpp \
     main.cpp \
     dmmainwindow.cpp \
     mmvarilib.cpp
@@ -34,6 +35,7 @@ HEADERS += \
     MMVARIFrame.h \
     dmmainwindow.h \
     engineconfigure.h \
+    grittyframe.h \
     mmvarilib.h
 
 FORMS += \
@@ -41,7 +43,8 @@ FORMS += \
     MMTTYFrame.ui \
     MMVARIFrame.ui \
     dmmainwindow.ui \
-    engineconfigure.ui
+    engineconfigure.ui \
+    grittyframe.ui
 
 win32{ LIBS += -lwinmm}
 

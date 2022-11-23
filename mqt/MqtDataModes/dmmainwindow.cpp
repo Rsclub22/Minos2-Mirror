@@ -285,6 +285,15 @@ void DMMainWindow::onActionFLDigi_triggered()
 
     fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit, m);
 }
+void DMMainWindow::onActionGritty_triggered()
+{
+    closeAllEngines();
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString m = settings.value(eStr + "Gritty").toString();
+
+    grittyFrame = new GrittyFrame(this, ui->rxChars, ui->sendEdit, m);
+}
 void DMMainWindow::onActionExit_triggered()
 {
     close();
