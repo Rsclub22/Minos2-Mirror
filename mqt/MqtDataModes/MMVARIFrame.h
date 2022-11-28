@@ -10,6 +10,7 @@
 #include <QLineEdit>
 #include <QTextEdit>
 
+
 #if !defined (_MSC_VER)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
@@ -30,7 +31,7 @@ class MMVARIFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname, int inId, int outId);
+    explicit MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit, QString fname, int inId, int outId);
     ~MMVARIFrame();
 
     void sendCharacters(const QString &);
@@ -43,7 +44,6 @@ private:
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
 
-    QTextEdit *rxChars;
     QLineEdit *sendEdit;
 
     MMVARILib::MMVARI *mmvari = nullptr;

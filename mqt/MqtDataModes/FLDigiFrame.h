@@ -12,13 +12,13 @@
 namespace Ui {
 class FLDigiFrame;
 }
-
+class QTimer;
 class FLDigiFrame : public QFrame
 {
     Q_OBJECT
 
 public:
-    explicit FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit, QString fname);
+    explicit FLDigiFrame(QWidget *parent,  QLineEdit *sendEdit, QString fname);
     ~FLDigiFrame();
 
     void sendCharacters(const QString &);
@@ -27,11 +27,11 @@ public:
 private:
     Ui::FLDigiFrame *ui;
     MaiaXmlRpcClient *rpcClient = nullptr;
-    QTextEdit *rxChars = nullptr;
     QLineEdit *sendEdit = nullptr;
     QProcess *fldigiProcess = nullptr;
     bool fldigiActive = false;
     QString fname;
+    QTimer *getTimer;
 
     void createProcess();
 
@@ -45,6 +45,7 @@ private slots:
     void myResponseMethod(QVariant&);
     void myFaultResponse(int, const QString &);
 
+    void onGetTimer();
 };
 
 #endif // FLDIGIFRAME_H

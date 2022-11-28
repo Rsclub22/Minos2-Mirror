@@ -18,7 +18,7 @@ class MMTTYFrame : public QFrame
     Q_OBJECT
 
 public:
-    explicit MMTTYFrame(bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname);
+    explicit MMTTYFrame(bool twoTone, QLineEdit *sendEdit, QString fname);
     ~MMTTYFrame();
 
     void sendCharacters(const QString &);
@@ -32,7 +32,6 @@ private:
     QString fname;
     QWidget *t = nullptr;
 
-    QTextEdit *rxChars = nullptr;
     QLineEdit *sendEdit = nullptr;
     bool twoTone = false;
 

@@ -7,6 +7,7 @@
 
 #include "MTrace.h"
 #include "MMTTY_N1MM.h"
+#include "rxbuffer.h"
 
 #include "MMTTYFrame.h"
 #include "ui_MMTTYFrame.h"
@@ -113,18 +114,17 @@ public:
 //{
 //    // 2Tone looks for a window titled something like "DI1 RX Window 1
 //    // N1MM hides it!
-//    // And uses what woud be the MMVARI window?
+//    // And uses what would be the MMVARI window?
 //    // Don't include "RX Window n" if it is a main (TX) window
 
 //    setWindowTitle( "DI2 RX Window 1");
 //    t = new QWidget(this);
 //}
 
-MMTTYFrame::MMTTYFrame( bool twoTone, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname) :
+MMTTYFrame::MMTTYFrame( bool twoTone, QLineEdit *sendEdit, QString fname) :
     QFrame(nullptr),
     ui(new Ui::MMTTYFrame),
     fname(fname),
-    rxChars(rxChars),
     sendEdit(sendEdit),
     twoTone(twoTone)
 {
@@ -199,8 +199,8 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
         case TXM_CHAR:
         {
             QChar c = QChar(QLatin1Char(l & 0xff));
-            rxChars->insertPlainText(QString(c));
-            rxChars->ensureCursorVisible();
+            RXChar rxch(c, false, 0);
+            RxBuffer::getRxBuffer()->addChar(rxch);
         }
             break;
         case TXM_PTTEVENT:
@@ -208,15 +208,21 @@ void MMTTYFrame::msgEventFilter(MSG *msg, long */*result*/ )
             if (l == 1 && !txState)
             {
                 txState = true;
-                rxChars->insertPlainText(QString("\nTX\n"));
-                rxChars->ensureCursorVisible();
+                RXChar rxch('T', true, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch);
+                RXChar rxch2('X', true, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch2);
 
             }
             else if (l == 0 && txState)
             {
                 txState = false;
-                rxChars->insertPlainText(QString("\nRX\n"));
-                rxChars->ensureCursorVisible();
+
+                RXChar rxch('R', true, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch);
+                RXChar rxch2('X', true, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch2);
+
 
             }
         }

@@ -19,18 +19,17 @@ public:
     ~EngineConfigure();
 
 private slots:
-    void on_mmvariBrowse_clicked();
-
     void on_mmttyBrowse_clicked();
 
     void on_twotoneBrowse_clicked();
 
     void on_fldigiBrowse_clicked();
 
+    void on_grittyBrowse_clicked();
+
     void on_OKButton_clicked();
 
     void on_cancelButton_clicked();
-
 private:
     Ui::EngineConfigure *ui;
     DMMainWindow *mainWindow;

@@ -6,6 +6,7 @@
 #include "engineconfigure.h"
 #include "ui_engineconfigure.h"
 
+
 EngineConfigure::EngineConfigure(DMMainWindow *parent) :
     QDialog(parent),
     ui(new Ui::EngineConfigure),
@@ -40,6 +41,9 @@ EngineConfigure::EngineConfigure(DMMainWindow *parent) :
 
     m = settings.value(eStr + "FLDigi").toString();
     ui->fldigiEdit->setText(m);
+
+    m = settings.value(eStr + "Gritty").toString();
+    ui->grittyEdit->setText(m);
 }
 
 EngineConfigure::~EngineConfigure()
@@ -74,11 +78,6 @@ void EngineConfigure::doBrowse(QString key, QLineEdit *edit)
     }
 
 }
-void EngineConfigure::on_mmvariBrowse_clicked()
-{
-    doBrowse("MMVARI", ui->mmvariEdit);
-}
-
 
 void EngineConfigure::on_mmttyBrowse_clicked()
 {
@@ -97,6 +96,11 @@ void EngineConfigure::on_fldigiBrowse_clicked()
     doBrowse("FLDigi", ui->fldigiEdit);
 }
 
+void EngineConfigure::on_grittyBrowse_clicked()
+{
+    doBrowse("Gritty", ui->grittyEdit);
+}
+
 
 void EngineConfigure::on_OKButton_clicked()
 {
@@ -110,6 +114,7 @@ void EngineConfigure::on_OKButton_clicked()
     settings.setValue(eStr + "MMTTY", ui->mmttyEdit->text());
     settings.setValue(eStr + "2Tone", ui->twotoneEdit->text());
     settings.setValue(eStr + "FLDigi", ui->fldigiEdit->text());
+    settings.setValue(eStr + "Gritty", ui->grittyEdit->text());
 
     accept();
 }

@@ -11,12 +11,14 @@ SOURCES += \
     FLDigiFrame.cpp \
     engineconfigure.cpp \
     main.cpp \
-    dmmainwindow.cpp
+    dmmainwindow.cpp \
+    rxbuffer.cpp
 
 HEADERS += \
     FLDigiFrame.h \
     dmmainwindow.h \
     engineconfigure.h \
+    rxbuffer.h
 
 FORMS += \
     FLDigiFrame.ui \

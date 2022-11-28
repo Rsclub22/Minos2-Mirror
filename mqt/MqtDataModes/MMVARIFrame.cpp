@@ -3,14 +3,15 @@
 #include <QDebug>
 
 #include "MTrace.h"
+
+#include "rxbuffer.h"
 #include "MMVARIFrame.h"
 #include "ui_MMVARIFrame.h"
 
-MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QTextEdit *rxChars, QLineEdit *sendEdit, QString fname, int inId, int outId) :
+MMVARIFrame::MMVARIFrame(QWidget *parent, QVBoxLayout *cwl, QLineEdit *sendEdit, QString fname, int inId, int outId) :
     QFrame(parent),
     ui(new Ui::MMVARIFrame),
     fname(fname),
-    rxChars(rxChars),
     sendEdit(sendEdit)
 {
     ui->setupUi(this);
@@ -393,7 +394,7 @@ void MMVARIFrame::OnTxCarrier(int txc)
 
 void MMVARIFrame::OnRxCarrier(int /*rxChannel*/, int rxc)
 {
-    rxCarrier->setText(QString("Tx %1").arg(rxc));
+    rxCarrier->setText(QString("Rx %1").arg(rxc));
 }
 
 void MMVARIFrame::OnSpeed(int /*rxChannel*/, double dblSpeed)
@@ -424,8 +425,11 @@ void MMVARIFrame::OnRxChar(int /*rxChannel*/, QString strChar, int /*wChar*/)
 //      strChar and wChar are the same data expressed in different formats,
 //      so you could use either of them as you like.
 
-    rxChars->insertPlainText(strChar);
-    rxChars->ensureCursorVisible();
+    for (auto c:strChar)
+    {
+        RXChar rxch(c, false, 0);
+        RxBuffer::getRxBuffer()->addChar(rxch);
+    }
 }
 
 void MMVARIFrame::OnTiming(int /*a*/, int /*b*/, int /*c*/)

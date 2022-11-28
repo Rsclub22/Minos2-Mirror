@@ -14,8 +14,43 @@
 #include "waitcursor.h"
 #include "engineconfigure.h"
 
+#include "rxbuffer.h"
+
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
+
+/*
+
+To Do
+
+Analysis and colouring of callsigns etc
+? callsign stack
+
+Frequency following and notification
+
+TX - select which app/window does TX, and drive it,
+get TX text from Minos and send it
+
+Collection of QSO parts and transfer to Minos
+
+TX messages and their maintenance
+
+F keys - do we implement here or in Minos Logger?
+Here allows stand-alone use...
+Pass F keys from any of our windows to Minos
+(which will then trigger TX messages)
+
+PSK as well as RTTY; any other modes? (FLDigi supports lots!)
+
+configuration and running multiple copies of engines
+
+auto-start "my" engine on load
+
+MMVARI - buttons and menu
+
+FLDigi - read characters
+
+*/
 
 DMMainWindow::DMMainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -23,7 +58,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-
+    connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
 #ifdef Q_OS_WIN
     UINT devs = waveInGetNumDevs();
     inChannels = devs;
@@ -83,6 +118,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     actionMMVARI = newAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
     action2Tone = newAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
     actionMMTTY = newAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
+    actionGritty = newAction("Gritty", ui->menuEngine, &DMMainWindow::onActionGritty_triggered);
 #endif
     actionFLDigi = newAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
 
@@ -116,6 +152,10 @@ void DMMainWindow::checkEnginesAvailable()
     m = settings.value(eStr + "MMTTY").toString();
     b = FileExists(m);
     actionMMTTY->setEnabled(b);
+
+    m = settings.value(eStr + "Gritty").toString();
+    b = FileExists(m);
+    actionGritty->setEnabled(b);
 #endif
     m = settings.value(eStr + "FLDigi").toString();
     b = FileExists(m);
@@ -229,8 +269,17 @@ void DMMainWindow::closeAllEngines()
         mmttyFrame = nullptr;
     }
 
+    if (grittyFrame)
+    {
+        grittyFrame->closeFrame();
+
+        grittyFrame->deleteLater();
+        grittyFrame = nullptr;
+    }
+
     actionMMTTY->setChecked(false);
     action2Tone->setChecked(false);
+    actionGritty->setChecked(false);
 #endif
     if (fldigiFrame)
     {
@@ -246,6 +295,8 @@ void DMMainWindow::onActionMMVARI_triggered()
 {
     closeAllEngines();
 
+    trace("Select MMVARI Engine");
+
     QSettings settings;
     QString eStr = QString("dataModes/engines/");
     QString exePath = QCoreApplication::applicationDirPath() + QString("/MMVARI.ocx");
@@ -260,50 +311,57 @@ void DMMainWindow::onActionMMVARI_triggered()
     int outId = deviceIds[odev];
 
 
-    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->rxChars, ui->sendEdit, m, inId, outId);
+    mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->sendEdit, m, inId, outId);
 }
 
 void DMMainWindow::onActionMMTTY_triggered()
 {
     closeAllEngines();
+    trace("Select MMTTY Engine");
+
     QSettings settings;
     QString eStr = QString("dataModes/engines/");
     QString m = settings.value(eStr + "MMTTY").toString();
 
-    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit, m);
+    mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     actionMMTTY->setChecked(true);
 }
 
 void DMMainWindow::onAction2Tone_triggered()
 {
     closeAllEngines();
+    trace("Select 2Tone Engine");
+
     QSettings settings;
     QString eStr = QString("dataModes/engines/");
     QString m = settings.value(eStr + "2Tone").toString();
 
-    mmttyFrame = new MMTTYFrame(false, ui->rxChars, ui->sendEdit, m);
+    mmttyFrame = new MMTTYFrame(false, ui->sendEdit, m);
     action2Tone->setChecked(true);
 }
 #endif
 void DMMainWindow::onActionFLDigi_triggered()
 {
     closeAllEngines();
+    trace("Select FLDigi Engine");
     QSettings settings;
     QString eStr = QString("dataModes/engines/");
     QString m = settings.value(eStr + "FLDigi").toString();
 
-    fldigiFrame = new FLDigiFrame(this, ui->rxChars, ui->sendEdit, m);
+    fldigiFrame = new FLDigiFrame(this, ui->sendEdit, m);
 }
 #ifdef Q_OS_WIN
 
 void DMMainWindow::onActionGritty_triggered()
 {
     closeAllEngines();
+    trace("Select Gritty Engine");
+
     QSettings settings;
     QString eStr = QString("dataModes/engines/");
     QString m = settings.value(eStr + "Gritty").toString();
 
-    grittyFrame = new GrittyFrame(this, ui->rxChars, ui->sendEdit, m);
+    grittyFrame = new GrittyFrame(this, ui->sendEdit, m);
 }
 #endif
 void DMMainWindow::onActionExit_triggered()
@@ -340,9 +398,16 @@ void DMMainWindow::on_sendButton_clicked()
     {
         mmttyFrame->sendCharacters(data);
     }
+    if (grittyFrame)
+    {
+        grittyFrame->sendCharacters(data);
+    }
 #endif
+    if (fldigiFrame)
+    {
+        fldigiFrame->sendCharacters(data);
+    }
 }
-
 
 void DMMainWindow::onActionConfigure_Engines_triggered()
 {
@@ -351,4 +416,56 @@ void DMMainWindow::onActionConfigure_Engines_triggered()
 
     checkEnginesAvailable();
 }
+/*
 
+    We want to hold all text still (NOT scrolling)
+    and insert new text in a way that rolls from bottom
+    to top of the window
+
+    So we want a fixed vector of lines, and move lines
+    on newline characters
+
+
+*/
+
+void DMMainWindow::onNewCharacter()
+{
+    // We also need to track screen character position to
+    // the rxbuffer position - or is that already OK
+    // as they are positioned line/column?
+
+    // we also need to scan the buffer for potential , "CQ",
+    // "De", "Test", "BARTG", "RSGB", callsigns,
+    // 599 reports, serial numbers, "other exchange"s (e.g.
+    // time for BARTG contests). Any others? States, names, all sorts!
+
+    // some we have to higlight and "accept" in order? Or just cursor in
+    // and take whole word/number/whatever
+
+    // gritty does some of this for us; MMTTY/2Tone/FLDigi/MMVARI don't
+
+    ui->rxChars->clear();
+
+    QString rxbuff;
+    int lines = RxBuffer::getRxBuffer()->getLines();
+    for (int i = 0; i < lines; i++)
+    {
+        int cols = RxBuffer::getRxBuffer()->getCols(i);
+        if (cols == 0)
+        {
+            rxbuff += '\n';
+        }
+        for (int j = 0; j < cols; j++)
+        {
+            RXChar nc = RxBuffer::getRxBuffer()->getCharAt(i, j);
+            if (nc.getNewLine())
+            {
+                rxbuff += '\n';
+            }
+            rxbuff += nc.getCh();
+        }
+    }
+
+    ui->rxChars->insertPlainText(rxbuff);
+    ui->rxChars->ensureCursorVisible();
+}

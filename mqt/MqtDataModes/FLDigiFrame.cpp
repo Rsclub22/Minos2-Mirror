@@ -2,6 +2,7 @@
 #include <QDateTime>
 
 #include "MTrace.h"
+#include "rxbuffer.h"
 
 #include "FLDigiFrame.h"
 #include "ui_FLDigiFrame.h"
@@ -27,10 +28,9 @@ void FLDigiFrame::createProcess()
     fldigiProcess->start(fname, engineOpts, QProcess::ReadWrite);
 }
 
-FLDigiFrame::FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEdit, QString fname) :
+FLDigiFrame::FLDigiFrame(QWidget *parent, QLineEdit *sendEdit, QString fname) :
     QFrame(parent),
     ui(new Ui::FLDigiFrame),
-    rxChars(rxChars),
     sendEdit(sendEdit),
     fname(fname)
 {
@@ -42,6 +42,9 @@ FLDigiFrame::FLDigiFrame(QWidget *parent,  QTextEdit *rxChars, QLineEdit *sendEd
 
     fldigiActive = true;
 
+    getTimer = new QTimer(this);
+    connect(getTimer, &QTimer::timeout, this, &FLDigiFrame::onGetTimer);
+    getTimer->start(500);
 
 }
 
@@ -49,6 +52,18 @@ FLDigiFrame::~FLDigiFrame()
 {
     delete ui;
     delete rpcClient;
+}
+void FLDigiFrame::onGetTimer()
+{
+    QVariantList args;
+    rpcClient->call("rx.get_data", args,
+       this, SLOT(myResponseMethod(QVariant&)),
+       this, SLOT(myFaultResponse(int, const QString &)));
+
+}
+void FLDigiFrame::sendCharacters(const QString &)
+{
+
 }
 
 void FLDigiFrame::closeFrame()
@@ -97,11 +112,6 @@ void FLDigiFrame::on_started()
        this, SLOT(myResponseMethod(QVariant&)),
        this, SLOT(myFaultResponse(int, const QString &)));
 
-    args.clear();
-    rpcClient->call("rx.get_data", args,
-       this, SLOT(myResponseMethod(QVariant&)),
-       this, SLOT(myFaultResponse(int, const QString &)));
-
 }
 
 void FLDigiFrame::myResponseMethod(QVariant &v)
@@ -111,14 +121,32 @@ void FLDigiFrame::myResponseMethod(QVariant &v)
     {
         QString s = v.toString();
 
-        trace(QString("Response %1").arg(s));
+        if (!s.isEmpty())
+        {
+            trace(QString("Response %1").arg(s));
+
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, false, 0);
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
+
+        }
     }
     else if (v.canConvert<QStringList>())
     {
         QStringList sl = v.toStringList();
-        for(auto s:qAsConst(sl))
+
+        for(const auto &s:qAsConst(sl))
         {
             trace(QString("Response %1").arg(s));
+            bool newLine = true;
+            for (auto c:qAsConst(s))
+            {
+                RXChar rxch(c, newLine, 0);
+                newLine = false;
+                RxBuffer::getRxBuffer()->addChar(rxch);
+            }
         }
     }
 }

@@ -63,6 +63,7 @@ private:
     MMTTYFrame *mmttyFrame = nullptr;
     GrittyFrame *grittyFrame = nullptr;
 #endif
+
     void closeAllEngines();
 
     virtual void closeEvent(QCloseEvent *event) override;
@@ -100,5 +101,7 @@ private slots:
     void onActionConfigure_Engines_triggered();
 
     void on_sendButton_clicked();
+
+    void onNewCharacter();
 };
 #endif // DMMAINWINDOW_H
