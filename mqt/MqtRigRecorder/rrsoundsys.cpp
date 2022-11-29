@@ -249,9 +249,8 @@ bool RtAudioSoundSystem::initialise( QString ind, QString ind2)
                           static_cast<void *>(this),
                           &soptions
                           );
-        trace("Audio stream opened OK");
-
         audio->startStream();
+        trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind]).arg(ind));
 
         if (!ind2.isEmpty())
         {
@@ -280,9 +279,9 @@ bool RtAudioSoundSystem::initialise( QString ind, QString ind2)
                               static_cast<void *>(this),
                               &soptions
                               );
-            trace("Audio 2 stream opened OK");
 
             audio2->startStream();
+            trace(QString("Audio stream %1 %2 opened OK").arg(deviceIds[ind2]).arg(ind2));
         }
     }
     catch (RtAudioError &error)

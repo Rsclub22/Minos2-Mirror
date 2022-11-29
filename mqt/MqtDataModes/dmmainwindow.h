@@ -41,6 +41,7 @@ private:
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
+    QAction *clearAction;
 
     QAction *actionFLDigi;
 #ifdef Q_OS_WIN
@@ -103,5 +104,7 @@ private slots:
     void on_sendButton_clicked();
 
     void onNewCharacter();
+
+    void onMenuClear();
 };
 #endif // DMMAINWINDOW_H

@@ -16,8 +16,8 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QTextEdit" name="rxChars">
-      <property name="readOnly">
+     <widget class="DataPainter" name="rxChars" native="true">
+      <property name="autoFillBackground">
        <bool>true</bool>
       </property>
      </widget>
@@ -57,11 +57,25 @@
      <string>Configure</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuClear">
+    <property name="title">
+     <string>Clear</string>
+    </property>
+   </widget>
    <addaction name="menuConfigure"/>
    <addaction name="menuEngine"/>
+   <addaction name="menuClear"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DataPainter</class>
+   <extends>QWidget</extends>
+   <header>datapainter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

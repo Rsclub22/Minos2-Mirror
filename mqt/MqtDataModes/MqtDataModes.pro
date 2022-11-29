@@ -9,6 +9,7 @@ TEMPLATE = app
 
 SOURCES += \
     FLDigiFrame.cpp \
+    datapainter.cpp \
     engineconfigure.cpp \
     main.cpp \
     dmmainwindow.cpp \
@@ -16,6 +17,7 @@ SOURCES += \
 
 HEADERS += \
     FLDigiFrame.h \
+    datapainter.h \
     dmmainwindow.h \
     engineconfigure.h \
     rxbuffer.h

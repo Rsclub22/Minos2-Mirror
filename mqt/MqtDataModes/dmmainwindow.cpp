@@ -114,6 +114,8 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     if (geometry.size() > 0)
         restoreGeometry(geometry);
 
+    clearAction = newAction("Clear Decodes", ui->menuClear, &DMMainWindow::onMenuClear);
+
 #ifdef Q_OS_WIN
     actionMMVARI = newAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
     action2Tone = newAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
@@ -444,28 +446,35 @@ void DMMainWindow::onNewCharacter()
 
     // gritty does some of this for us; MMTTY/2Tone/FLDigi/MMVARI don't
 
-    ui->rxChars->clear();
+    //ui->rxChars->clear();
 
-    QString rxbuff;
+    QStringList rxbuff;
     int lines = RxBuffer::getRxBuffer()->getLines();
     for (int i = 0; i < lines; i++)
     {
         int cols = RxBuffer::getRxBuffer()->getCols(i);
-        if (cols == 0)
-        {
-            rxbuff += '\n';
-        }
+        rxbuff.append(QString());
         for (int j = 0; j < cols; j++)
         {
             RXChar nc = RxBuffer::getRxBuffer()->getCharAt(i, j);
-            if (nc.getNewLine())
-            {
-                rxbuff += '\n';
-            }
-            rxbuff += nc.getCh();
+            rxbuff[i].append(nc.getCh());
         }
     }
 
-    ui->rxChars->insertPlainText(rxbuff);
-    ui->rxChars->ensureCursorVisible();
+    ui->rxChars->setText(rxbuff);
+    ui->rxChars->repaint();
+
+    // QTextEdit isn't the best for using cursors... maybe we need to move
+    // to a canvas of some sort?
+
+    // We wouldn't be able to use HTML for colours etc then, though
+
+//    ui->rxChars->textCursor().setPosition()
+//    ui->rxChars->ensureCursorVisible();
+}
+
+void DMMainWindow::onMenuClear()
+{
+    RxBuffer::getRxBuffer()->reset();
+    onNewCharacter();
 }
