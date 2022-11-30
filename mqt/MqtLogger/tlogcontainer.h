@@ -132,6 +132,8 @@ private:
     void FileImportActionExecute(bool hf);
     void FileNewActionExecute(bool hf);
 
+    QAction *EnterAction;
+
     QAction *HelpAction;
     QAction *HelpAboutAction;
 
@@ -222,6 +224,8 @@ private slots:
     void GoToSerialActionExecute();
     void NextUnfilledActionExecute();
 
+    void EnterActionExecute();
+
     void menuLogsActionExecute(bool);
 
     void ManageAppConfigsActionExecute();
@@ -236,7 +240,6 @@ private slots:
     void doScreenConfigAction();
 
     void appStarted();
-
 public slots:
     void onArgsReceived(QString conarg);
     void ListOpenActionExecute();

@@ -864,7 +864,45 @@ bool TSingleLogFrame::doKeyPressEvent( QKeyEvent* event )
     return GJVQSOLogFrame->doKeyPressEvent(event);
 }
 
-QString TSingleLogFrame::makeEntry( bool saveMinos )
+void TSingleLogFrame::doSendEntry(QString expName)
+{
+    // here we have to set up and execute the magic
+    // to trigger Petes web site
+
+    // first, check for VHF or HF
+    // For HF the link is e.g.
+    // https://www.rsgbcc.org/cgi-bin/hfenter.pl?Contest=DX%20Contest&year=2022
+    // I suspect section and club ar as for HF
+
+    // https://www.rsgbcc.org/cgi-bin/vhfentertest.pl?year=2022&Contest=70MHz+UKAC&Band=17+Nov&Req=Date&Section=AO&Category=&Club=Parallel+Lines+CG&this=NEXT
+
+    // so we need
+    // Contest Name
+    // year
+    // band (or if UKAC date)
+    // section
+    // club name
+
+    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
+    if ( !ct )
+    {
+       return;
+    }
+    QString cname = ct->VHFContestName.getValue();
+    cname.replace(" ", "+");    // replaces in-situ
+    QString club = ct->entrant.getValue();
+    QString dtgStart = ct->DTGStart.getValue();
+    QDateTime  contestStart = CanonicalToTDT(ct->DTGStart.getValue());
+
+    QString band;
+    QString year;
+    if (cname.contains("UKAC", Qt::CaseSensitive))
+    {
+        QString date = contestStart.toString("yyyy-MMM");
+    }
+    QString section = ct->entSect.getValue();
+}
+QString TSingleLogFrame::makeEntry( bool saveMinos, bool sendEntry )
 {
    LoggerContestLog * ct = dynamic_cast<LoggerContestLog *>( contest );
    if ( !ct )
@@ -872,7 +910,7 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
       return "";
    }
 
-   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos  );
+   TEntryOptionsForm EntryDlg( this, QSharedPointer<ContestDetailsTransferObject>(), ct, saveMinos, sendEntry  );
    if ( saveMinos )
    {
       EntryDlg.setWindowTitle(tr("Save imported log as a .minos file"));
@@ -881,6 +919,10 @@ QString TSingleLogFrame::makeEntry( bool saveMinos )
    {
       ct->commonSave( false );
       QString expName = EntryDlg.doFileSave( );
+      if (sendEntry)
+      {
+          doSendEntry(expName);
+      }
       return expName;
    }
    return "";
@@ -1368,11 +1410,11 @@ int TSingleLogFrame::getCurrentBearing()
 }
 //---------------------------------------------------------------------------
 
-void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct)
+void TSingleLogFrame::on_MakeEntry(BaseContestLog *ct, bool e)
 {
     if (ct == contest)
     {
-       makeEntry( false );
+       makeEntry( false, e );
     }
 }
 void TSingleLogFrame::on_AfterSelectContact( QSharedPointer<BaseContact>lct, BaseContestLog *ct)

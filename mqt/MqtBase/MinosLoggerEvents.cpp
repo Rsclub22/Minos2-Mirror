@@ -87,9 +87,9 @@ void MinosLoggerEvents::SendGoToSerial(BaseContestLog *c)
     emit mle.GoToSerial(c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::SendMakeEntry(BaseContestLog *c)
+void MinosLoggerEvents::SendMakeEntry(BaseContestLog *c, bool e)
 {
-    emit mle.MakeEntry(c);
+    emit mle.MakeEntry(c, e);
 }
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendNextUnfilled(BaseContestLog *c)

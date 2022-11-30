@@ -44,7 +44,7 @@ signals:
    void AfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    void ContestDetails(BaseContestLog *);
    void GoToSerial(BaseContestLog *);
-   void MakeEntry(BaseContestLog *);
+   void MakeEntry(BaseContestLog *, bool);
    void NextUnfilled(BaseContestLog *);
    void FormKey(unsigned int *, BaseContestLog *);
    void ScreenContactChanged(ScreenContact *, BaseContestLog *, QString b);
@@ -119,7 +119,7 @@ public:
    static void SendAfterSelectContact(QSharedPointer<BaseContact> ct, BaseContestLog *);
    static void SendContestDetails(BaseContestLog *);
    static void SendGoToSerial(BaseContestLog *);
-   static void SendMakeEntry(BaseContestLog *);
+   static void SendMakeEntry(BaseContestLog *, bool e);
    static void SendNextUnfilled(BaseContestLog *);
    static void SendFormKey(unsigned int *, BaseContestLog *);
    static void SendClearContestInFrame(BaseContestLog *);

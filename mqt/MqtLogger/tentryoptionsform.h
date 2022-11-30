@@ -17,7 +17,8 @@ class TEntryOptionsForm : public QDialog
     void doCloseEvent();
 
 public:
-    explicit TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> , LoggerContestLog *inputContest, bool minosSave );
+    explicit TEntryOptionsForm(QWidget* Owner, QSharedPointer<ContestDetailsTransferObject> ,
+                               LoggerContestLog *inputContest, bool minosSave, bool sendEntry );
     ~TEntryOptionsForm() override;
 
     QString doFileSave( );
@@ -39,6 +40,7 @@ private:
     LoggerContestLog *inputContest = nullptr;
 
     bool minosSave;
+    bool sendEntry;
     void getContestOperators();
 };
 
