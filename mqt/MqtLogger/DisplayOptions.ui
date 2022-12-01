@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>457</width>
-    <height>494</height>
+    <width>517</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -159,6 +159,55 @@
      <property name="text">
       <string>Show Auxiliary Headers</string>
      </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_4">
+     <property name="title">
+      <string>Centre locator map</string>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_13">
+      <item>
+       <widget class="QRadioButton" name="locDontMoverb">
+        <property name="text">
+         <string>Don't Move</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">locButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="locMyLocrb">
+        <property name="text">
+         <string>On My Locator</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">locButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="locLastLocrb">
+        <property name="text">
+         <string>On last clicked Locator</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">locButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="locCentrerb">
+        <property name="text">
+         <string>On worked area centre</string>
+        </property>
+        <attribute name="buttonGroup">
+         <string notr="true">locButtonGroup</string>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -440,5 +489,6 @@
  <connections/>
  <buttongroups>
   <buttongroup name="otButtonGroup"/>
+  <buttongroup name="locButtonGroup"/>
  </buttongroups>
 </ui>

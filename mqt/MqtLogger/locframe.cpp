@@ -206,6 +206,7 @@ LocFrame::~LocFrame()
     ct = nullptr;
     delete model;
 }
+
 void LocFrame::setContest(BaseContestLog *contest)
 {
     model->ct = contest;
@@ -250,6 +251,10 @@ void LocFrame::reInitialiseLocators()
         return;
     }
 
+    if (lastClickedLoc.isEmpty())
+    {
+        lastClickedLoc = ctLoc.left(4);
+    }
     QString ctLocN = l_add(ctLoc, 0, 5);
     QString NLoc = QString(ctLocN[1]) + ctLocN[3];
 
@@ -304,6 +309,8 @@ void LocFrame::reInitialiseLocators()
     QString tl = QString(WLoc[0]) + NLoc[0] + WLoc[1] + NLoc[1];
     QString br = lConv(tl, cols, rows);
 
+    QString mapCentre = lConv(tl, cols/2, rows/2);
+
     if (!oldTl.isEmpty())
     {
         if (oldAL(tl, oldTl))
@@ -331,6 +338,28 @@ void LocFrame::reInitialiseLocators()
     ui->LocView->resizeColumnsToContents();
     ui->LocView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
+    int temp;
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpLocMapCentre, temp);
+    LOCMAPCENTRE lmc = static_cast<LOCMAPCENTRE>(temp);
+    switch(lmc)
+    {
+    default:
+    case lmsDontMove:
+        break;
+
+    case lmsMyLoc:
+        currentCentre = ctLoc.left(4);
+        break;
+
+    case lmsClicked:
+        currentCentre = lastClickedLoc;
+        break;
+
+    case lmsCentre:
+        currentCentre = mapCentre;
+        break;
+    }
+
     for(int i = 0; i < model->rowCount(); i++)
     {
         for(int j = 0; j < model->columnCount(); j++)
@@ -340,9 +369,12 @@ void LocFrame::reInitialiseLocators()
             if (cell == currentCentre)
             {
                 ui->LocView->scrollTo(index, QAbstractItemView::PositionAtCenter);
+                selectLastClicked();
+                return;
             }
         }
     }
+    selectLastClicked();
 }
 
 
@@ -356,13 +388,23 @@ void LocFrame::on_LocView_clicked(const QModelIndex &index)
     if (!ct || model->getTl().isEmpty())
         return;
 
-    QString disp = lConv(model->getTl(), index.column(), index.row());
+    lastClickedLoc = lConv(model->getTl(), index.column(), index.row());
 
-    QString brgbuff = model->getBearing(disp);
+     QString brgbuff = model->getBearing(lastClickedLoc);
 
-    MinosLoggerEvents::SendBrgStrToRot(brgbuff);
+     MinosLoggerEvents::SendBrgStrToRot(brgbuff);
+
+     reInitialiseLocators();
+
 }
+void LocFrame::selectLastClicked()
+{
+    QString tl = dynamic_cast<LocGridModel *>(ui->LocView->model())->getTl();
+    int row = (tl[1].toLatin1() - lastClickedLoc[1].toLatin1()) * 10 + (tl[3].toLatin1() - lastClickedLoc[3].toLatin1());
+    int col = (lastClickedLoc[0].toLatin1() - tl[0].toLatin1()) * 10 + (lastClickedLoc[2].toLatin1() - tl[2].toLatin1());
 
+    ui->LocView->setCurrentIndex(ui->LocView->model()->index(row, col));
+}
 void LocFrame::on_LocView_doubleClicked(const QModelIndex &index)
 {
     model->beginReset();
@@ -528,13 +570,11 @@ QModelIndex LocGridModel::parent( const QModelIndex &/*index*/ ) const
 
 int LocGridModel::rowCount( const QModelIndex &/*parent*/ ) const
 {
-//    return 10;
     return rows;
 }
 
 int LocGridModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-//    return 10;
     return cols;
 }
 

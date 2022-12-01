@@ -46,6 +46,7 @@ private:
     bool doBounceOnExit = false;
 
     SHOWOPERATINGTIME sot = otNone;
+    LOCMAPCENTRE lmc = lmsMyLoc;
 
     int lm;
     int ls;
