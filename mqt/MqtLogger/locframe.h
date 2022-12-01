@@ -2,6 +2,7 @@
 #define LOCFRAME_H
 
 #include <QAbstractItemModel>
+#include <QItemSelection>
 
 #include "htmldelegate.h"
 
@@ -72,11 +73,15 @@ private:
     QString currentCentre;
     QString band;
 
+    QString lastClickedLoc;
+
+    void selectLastClicked();
 private slots:
     void on_minosViewScrolled();
 
     void on_LocView_clicked(const QModelIndex &index);
     void on_LocView_doubleClicked(const QModelIndex &index);
+    //void onLocSelectionChanged(const QItemSelection &, const QItemSelection &);
 };
 
 #endif // LOCFRAME_H

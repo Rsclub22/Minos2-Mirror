@@ -58,6 +58,7 @@ enum LOGGERPROFILE {
    elpReadabilityInit,
    elpAutoFill,
    elpShowOperateTime,
+   elpLocMapCentre,
    elpTabforSandP,
    elpShowAuxHeaders,
 
@@ -121,4 +122,6 @@ enum PROFILES {epLOGGERPROFILE, epPRELOADPROFILE, epLISTSPROFILE, epDISPLAYPROFI
                epMAXPROFILE};
 
 enum SHOWOPERATINGTIME {otNone, otRSGB, otIARU};
+
+enum LOCMAPCENTRE {lmsDontMove, lmsMyLoc, lmsClicked, lmsCentre};
 #endif

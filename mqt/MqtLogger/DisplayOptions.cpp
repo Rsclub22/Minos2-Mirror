@@ -55,6 +55,27 @@ void DisplayOptions::initialise()
         ui->otIARUrb->setChecked(true);
         break;
     }
+    TContestApp::getContestApp() ->loggerBundle.getIntProfile(elpLocMapCentre, temp);
+    lmc = static_cast<LOCMAPCENTRE>(temp);
+    switch(lmc)
+    {
+    default:
+    case lmsDontMove:
+        ui->locDontMoverb->setChecked(true);
+        break;
+
+    case lmsMyLoc:
+        ui->locMyLocrb->setChecked(true);
+        break;
+
+    case lmsClicked:
+        ui->locLastLocrb->setChecked(true);
+        break;
+
+    case lmsCentre:
+        ui->locCentrerb->setChecked(true);
+        break;
+    }
 
 
     TContestApp::getContestApp() ->getIntDisplayProfile(edpListCompression, lcf);
@@ -157,6 +178,34 @@ void DisplayOptions::finalise()
         TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpShowOperateTime, nsot);
         TContestApp::getContestApp() ->loggerBundle.flushProfile();
         sot = nsot;
+    }
+
+    LOCMAPCENTRE nlmc = lmsMyLoc;
+    if (ui->locDontMoverb->isChecked())
+    {
+        nlmc = lmsDontMove;
+    }
+    else if (ui->locMyLocrb->isChecked())
+    {
+        nlmc = lmsMyLoc;
+    }
+    else if (ui->locLastLocrb->isChecked())
+    {
+        nlmc = lmsClicked;
+    }
+    else if (ui->locCentrerb->isChecked())
+    {
+        nlmc = lmsCentre;
+    }
+    if (nlmc != lmc)
+    {
+        TContestApp::getContestApp() ->loggerBundle.setIntProfile(elpLocMapCentre, nlmc);
+        TContestApp::getContestApp() ->loggerBundle.flushProfile();
+        lmc = nlmc;
+
+        BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
+        MinosLoggerEvents::sendRefreshStackMults(ct);
+
     }
 
     int nlcf = ui->ListCompressionSpinner->value();
