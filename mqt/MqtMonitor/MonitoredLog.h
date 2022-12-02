@@ -12,6 +12,7 @@ class MonitoredLog
    private:
       void getLogStanza( int sno );
       bool monitorEnabled = false;
+      bool manualClose = false;
 
       qint64 inStanzaRequest = 0;
       QSet <int> stanzasPulled;
@@ -23,6 +24,8 @@ class MonitoredLog
       QString publishedName;
       QString displayName;
       int expectedStanzaCount = 0;
+      QDateTime startTime;
+      QDateTime endTime;
       MinosTestImport *mt = nullptr;
       MonitoredContestLog * contest = nullptr;
       MonitoringFrame *frame = nullptr;
@@ -70,11 +73,16 @@ class MonitoredLog
       {
          return state;
       }
+      void setStartEnd(QString s, QString e);
       void startMonitor();
       void checkMonitor();
       void processLogStanza( int stanza, const QString &stanzaData );
       QString getDisplayName() const;
       void setDisplayName(const QString &value);
+      bool testAutoStart();
+
+      bool getManualClose() const;
+      void setManualClose(bool newManualClose);
 };
 
 #endif // MONITOREDLOG_H

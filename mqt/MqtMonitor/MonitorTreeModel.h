@@ -62,10 +62,10 @@ public:
     {
         return mlog;
     }
-    void setLog(QSharedPointer< MonitoredLog>l)
-    {
-        mlog = l;
-    }
+//    void setLog(QSharedPointer< MonitoredLog>l)
+//    {
+//        mlog = l;
+//    }
 };
 class RootTreeNode:public TreeNode
 {

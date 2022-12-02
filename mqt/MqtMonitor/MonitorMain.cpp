@@ -110,8 +110,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->otherMatchFrame->restoreColumns();
 
     ui->callsignEdit->setFocus();
-
-    readPersistedLogs();
 }
 
 MonitorMain::~MonitorMain()
@@ -166,27 +164,6 @@ bool MonitorMain::eventFilter(QObject * /*obj*/, QEvent *event)
     return false;
 }
 
-void MonitorMain::readPersistedLogs()
-{
-    inReadPersistedLogs = true;
-
-    // read in the persistence file
-
-    inReadPersistedLogs =false;
-}
-
-void MonitorMain::writePersistedLogs()
-{
-    if (!inReadPersistedLogs)
-    {
-        for ( auto const &s: qAsConst(stationList) )
-        {
-            for ( auto const &l: qAsConst(s->slotList) )
-            {
-            }
-        }
-    }
-}
 void MonitorMain::on_callsignEdit_textChanged(const QString &/*arg1*/)
 {
     searchChanged();
@@ -224,9 +201,11 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
                 // and we need to redo the list
                 //treeModel->clear();
                 l->setEnabled(false);
+                l->setManualClose(true);
                 l->setFrame(nullptr);
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
+                syncstat = true;
                 return;
             }
         }
@@ -322,19 +301,25 @@ void MonitorMain::on_notify(AnalysePubSubNotify an, const QString from )
                     QSharedPointer<MonitoredLog> ml(new MonitoredLog());
                     ml->initialise( router, key );
 
+//cell = QString::number( stanzaCount ) + ";[" + band + "] " + name + ";" + tstart + ";" + tend;
 
-                    if (args.count() >= 1)
+                    if (args.count() >= 4)
                     {
-                        trace(QString("args 0 %1 ").arg(args[0]));
-                        ml->setExpectedStanzaCount( args[0].toInt() );
+                        ml->setDisplayName(args[1]);
+                        ml->setStartEnd(args[2], args[3]);
                     }
-                    if (args.count() >= 2)
+                    else if (args.count() >= 2)
                     {
-                        trace(QString("args 1 %2").arg(args[1]));
                         ml->setDisplayName(args[1]);
                     }
+                    if (args.count() >= 1)
+                    {
+                        ml->setExpectedStanzaCount( args[0].toInt() );
+                    }
                     else
+                    {
                         ml->setDisplayName(key);
+                    }
 
                     ml->setState(state);
                     stat->slotList.push_back( ml );
@@ -526,7 +511,6 @@ void MonitorMain::on_monitorTimeout()
     for ( auto const &s: qAsConst(stationList) )
     {
 
-//       for ( auto &l: s->slotList )
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
         for (QVector< QSharedPointer<MonitoredLog> >::const_iterator l = s->slotList.begin(); l != s->slotList.end(); l++)
 #else
@@ -564,7 +548,60 @@ void MonitorMain::on_monitorTimeout()
         }
         ticks = 0;
     }
+    testAutoStart();
+
 }
+void MonitorMain::testAutoStart()
+{
+    for ( auto const &s: qAsConst(stationList) )
+    {
+       for ( auto &ml: s->slotList )
+       {
+            if (!ml->enabled())
+            {
+                if (ml->testAutoStart())
+                {
+                    ml->startMonitor();
+                    addSlot( ml );
+                    //sel->setLog(ml);
+                    syncstat = true;
+                }
+            }
+       }
+    }
+
+}
+void MonitorMain::on_monitorTree_clicked(const QModelIndex &index)
+{
+    // select the correct tab
+    TreeNode * sel = static_cast< TreeNode *>(index.internalPointer());
+
+    if (!sel)
+    {
+       return;
+    }
+    if ( sel->GetNodeType() != entLog )
+    {
+       // station
+    }
+    else if (sel->getLog())
+    {
+        MonitoringFrame *mf = sel->getLog()->getFrame();
+        int pc = ui->contestPageControl->count();
+        for ( int i = 0; i < pc; i++ )
+        {
+            QWidget *tw = ui->contestPageControl->widget(i);
+            MonitoringFrame *f = dynamic_cast<MonitoringFrame *>(tw);
+            if (f == mf)
+            {
+                ui->contestPageControl->setCurrentWidget(f);
+                break;
+            }
+        }
+
+    }
+}
+
 void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
 {
     // apply double click to node MonitorTreeClickNode
@@ -609,7 +646,7 @@ void MonitorMain::on_monitorTree_doubleClicked(const QModelIndex &index)
       {
          ml->startMonitor();
          addSlot( ml );
-         sel->setLog(ml);
+         //sel->setLog(ml);
          syncstat = true;
       }
       else
@@ -674,4 +711,5 @@ void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
     searchChanged();
     ui->callsignEdit->setFocus();
 }
+
 

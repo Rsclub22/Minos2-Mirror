@@ -75,6 +75,8 @@ private slots:
 
     void on_searchSplitter_splitterMoved(int pos, int index);
 
+    void on_monitorTree_clicked(const QModelIndex &index);
+
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;
@@ -106,9 +108,7 @@ private:
     MonitoringFrame *findContestPage( BaseContestLog *ct );
     void searchChanged();
 
-    bool inReadPersistedLogs = false;
-    void readPersistedLogs();
-    void writePersistedLogs();
+    void testAutoStart();
 };
 
 extern MonitorMain *monitorMain;

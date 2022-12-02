@@ -1,10 +1,11 @@
+#include "MTrace.h"
 #include "MinosRPC.h"
+#include "RPCCommandConstants.h"
+#include "contacts.h"
 #include "MinosTestImport.h"
 #include "MonitoredContestLog.h"
 #include "MonitoringFrame.h"
 #include "MonitoredLog.h"
-#include "RPCCommandConstants.h"
-#include "contacts.h"
 
 MonitoredLog::MonitoredLog()
 {}
@@ -34,8 +35,8 @@ void MonitoredLog::initialise(const QString &prouter, const QString &name )
 
 void MonitoredLog::startMonitor()
 {
-   setEnabled(true);
-   //lastScannedStanza = -1;
+    setEnabled(true);
+    //lastScannedStanza = -1;
 }
 void MonitoredLog::getLogStanza( int stanza )
 {
@@ -55,6 +56,16 @@ void MonitoredLog::getLogStanza( int stanza )
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 }
 
+bool MonitoredLog::getManualClose() const
+{
+    return manualClose;
+}
+
+void MonitoredLog::setManualClose(bool newManualClose)
+{
+    manualClose = newManualClose;
+}
+
 QString MonitoredLog::getDisplayName() const
 {
     return displayName;
@@ -63,6 +74,46 @@ QString MonitoredLog::getDisplayName() const
 void MonitoredLog::setDisplayName(const QString &value)
 {
     displayName = value;
+}
+
+void MonitoredLog::setStartEnd(QString s, QString e)
+{
+    startTime = CanonicalToTDT(s);
+    endTime = CanonicalToTDT(e);
+}
+
+bool MonitoredLog::testAutoStart()
+{
+/*
+
+    if contest is not protected (if it is we won't be told of it)
+    and "now" date same or +1 from contest, autostart
+
+    BUT if we have manually stopped monitor, don't restart it
+
+    If you don't want monitoring of an "old" contest, protect it!
+
+    We never STOP monitor automatically
+
+    This should cater for all multi-band VHF contests, including
+    VHFNFD where 50 and 70 are split across two days
+
+*/
+    if (startTime.isValid() && endTime.isValid())
+    {
+        QDateTime tnow = QDateTime::currentDateTimeUtc();
+        QDateTime epoch = QDateTime::fromMSecsSinceEpoch(0);
+        int sday = epoch.daysTo(startTime);
+        int eday = epoch.daysTo(endTime);
+        int tday = epoch.daysTo(tnow);
+
+        if (!enabled() && !getManualClose() && tday >= sday && (eday >= tday || eday + 1 >= tday))
+        {
+            trace("Start trace by time");
+            return true;
+        }
+    }
+    return false;
 }
 void MonitoredLog::checkMonitor()
 {
