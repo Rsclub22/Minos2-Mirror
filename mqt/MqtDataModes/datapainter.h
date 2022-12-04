@@ -1,10 +1,15 @@
 #ifndef DATAPAINTER_H
 #define DATAPAINTER_H
 
-#include <QWidget>
+#include <QGraphicsView>
+#include <QGraphicsScene>
 #include <QStringList>
+#include <QFont>
 
-class DataPainter : public QWidget
+
+class QGraphicsTextItem;
+
+class DataPainter : public QGraphicsView
 {
     Q_OBJECT
 public:
@@ -12,18 +17,15 @@ public:
     virtual ~DataPainter()
     {}
 
-    void setText(QStringList pText)
-    {
-        text = pText;
-    }
+    void setText();
 
 signals:
 
-protected:
-    void paintEvent(QPaintEvent *e);
-
 private:
-    QStringList text;
+    QGraphicsScene *scene;
+    QVector<QGraphicsTextItem *> lines;
+    QFont ff;
+
 };
 
 #endif // DATAPAINTER_H

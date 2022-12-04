@@ -16,9 +16,9 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="DataPainter" name="rxChars" native="true">
-      <property name="autoFillBackground">
-       <bool>true</bool>
+     <widget class="DataPainter" name="rxChars">
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
       </property>
      </widget>
     </item>
@@ -71,9 +71,8 @@
  <customwidgets>
   <customwidget>
    <class>DataPainter</class>
-   <extends>QWidget</extends>
+   <extends>QGraphicsView</extends>
    <header>datapainter.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

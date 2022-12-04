@@ -446,23 +446,8 @@ void DMMainWindow::onNewCharacter()
 
     // gritty does some of this for us; MMTTY/2Tone/FLDigi/MMVARI don't
 
-    //ui->rxChars->clear();
-
-    QStringList rxbuff;
-    int lines = RxBuffer::getRxBuffer()->getLines();
-    for (int i = 0; i < lines; i++)
-    {
-        int cols = RxBuffer::getRxBuffer()->getCols(i);
-        rxbuff.append(QString());
-        for (int j = 0; j < cols; j++)
-        {
-            RXChar nc = RxBuffer::getRxBuffer()->getCharAt(i, j);
-            rxbuff[i].append(nc.getCh());
-        }
-    }
-
-    ui->rxChars->setText(rxbuff);
-    ui->rxChars->repaint();
+    ui->rxChars->setText();
+ //   ui->rxChars->repaint();
 
     // QTextEdit isn't the best for using cursors... maybe we need to move
     // to a canvas of some sort?

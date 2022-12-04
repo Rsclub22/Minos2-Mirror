@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+//=================================================
 
 class RXChar
 {
@@ -10,6 +11,7 @@ class RXChar
     bool newLine = false;
     bool valid = false;
     int deleteCount = 0;
+    bool dirty = false;
 public:
     RXChar();
     RXChar(QChar c, bool nl, int dc);
@@ -20,18 +22,39 @@ public:
     int getDeleteCharacters() const;
     bool isValid() const;
     void setNewLine(bool newNewLine = true);
+    bool getDirty() const;
+    void setDirty(bool newDirty);
 };
+//=================================================
+
+class RxLine
+{
+private:
+    QVector<RXChar> rxLine;
+    int curCol = 0;
+    bool dirty = false;
+public:
+    RxLine();
+    bool getDirty() const;
+    void setDirty(bool newDirty);
+    void  addChar(RXChar &c);
+    void reset();
+    int size() const;
+
+    RXChar getLastChar() const;
+    RXChar getCharAt(int col) const;
+    int deleteChars(int n, RXChar &lastDeleted); // return chars still to delete
+};
+//=================================================
 
 class RxBuffer: public QObject
 {
     Q_OBJECT
 private:
-    QVector< QVector<RXChar> > buff;
+    QVector< RxLine > buff;
     int curLine = 0;
-    int curCol = 0;
 
     int buffSize = 15;  // lines
-    int charCount = 0;
 public:
     static RxBuffer *getRxBuffer()
     {
@@ -45,9 +68,14 @@ public:
     RXChar getCharAt(int line, int col) const;
     void deleteChars(int n);
 
+    RxLine *getRxLine(int);
+
     int getLines() const;
 
     int getCols(int line) const;
+
+    int charCount() const;
+
 
 signals:
     void newCharacter();
