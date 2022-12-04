@@ -53,6 +53,9 @@ StackedInfoFrame::StackedInfoFrame(QWidget *parent, int instance, TSingleLogFram
 {
     ui->setupUi(this);
 
+    setFrameStyle(QStyleOptionFrame::None);
+    setFrameShadow(QFrame::Plain);
+
     BandList &blist = BandList::getBandList();
 
     for (const auto &b:qAsConst(blist.bandList))

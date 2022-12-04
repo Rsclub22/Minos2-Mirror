@@ -624,6 +624,9 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 elementScrollArea = new QScrollArea();
                 elementScrollArea->setWidgetResizable(true);
                 elementScrollArea->setFocusPolicy(Qt::NoFocus);
+                elementScrollArea->setFrameStyle(QStyleOptionFrame::None);
+                elementScrollArea->setFrameShadow(QFrame::Plain);
+
                 hs->addWidget(elementScrollArea);
             }
 
