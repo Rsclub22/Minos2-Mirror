@@ -12,7 +12,7 @@
 
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-        QQmlApplicationEngine *appQmlEngine = nullptr;
+        QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #endif
 
 int main(int argc, char *argv[])
@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // We must have a QCoreApplication before we do this
     // And we do this now so that the QML debugger can connect
-    appQmlEngine = new QQmlApplicationEngine();
+    appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
 #endif
 #endif
     appStartup(rpcConstants::monitorApp);
@@ -32,8 +32,6 @@ int main(int argc, char *argv[])
     w.show();
 
     auto r = a.exec();
-
-    delete appQmlEngine;
 
     return r;
 

@@ -20,7 +20,7 @@
 
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    extern QQmlApplicationEngine *appQmlEngine;
+extern QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 #endif
 #endif
 
@@ -58,7 +58,7 @@ void QSOMapFrame::startMap()
     {
         qvb = new QVBoxLayout(this);
 
-        QQuickView *view = new QQuickView(appQmlEngine, nullptr);
+        QQuickView *view = new QQuickView(appQmlEngine.data(), nullptr);
         view->setSource(QUrl("qrc:/qsoview.qml"));
         QWidget *container = QWidget::createWindowContainer(view);
         auto qmlObj = view->rootObject();
