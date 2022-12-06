@@ -3,6 +3,7 @@
 
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QQmlApplicationEngine>
 #include <QQuickView>
 #include <QQuickItem>
 #endif
@@ -16,6 +17,13 @@
 #include "MinosLoggerEvents.h"
 #include "qsomapframe.h"
 #include "ui_qsomapframe.h"
+
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    extern QQmlApplicationEngine *appQmlEngine;
+#endif
+#endif
+
 
 QSOMapFrame::QSOMapFrame(QWidget *parent) :
     QFrame(parent),
@@ -50,9 +58,9 @@ void QSOMapFrame::startMap()
     {
         qvb = new QVBoxLayout(this);
 
-        QQuickView *view = new QQuickView(QUrl("qrc:/qsoview.qml"));
+        QQuickView *view = new QQuickView(appQmlEngine, nullptr);
+        view->setSource(QUrl("qrc:/qsoview.qml"));
         QWidget *container = QWidget::createWindowContainer(view);
-
         auto qmlObj = view->rootObject();
 
         qvb->addWidget(container);

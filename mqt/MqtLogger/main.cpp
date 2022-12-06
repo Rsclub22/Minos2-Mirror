@@ -1,5 +1,12 @@
 #include <QApplication>
 #include <QMessageBox>
+
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#include <QQmlApplicationEngine>
+#endif
+#endif
+
 #include "RPCCommandConstants.h"
 #include "SecondInstall.h"
 #include "singleapplication.h"
@@ -13,9 +20,15 @@
 //#include <crtdbg.h>
 #endif // _MSC_VER
 
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+        QQmlApplicationEngine *appQmlEngine = nullptr;
+#endif
+#endif
 
 int main(int argc, char *argv[])
 {
+
     SecondInstall::parseSecondInstall(argc, argv);
     int appError = 1;
     {
@@ -36,6 +49,13 @@ int main(int argc, char *argv[])
             }
             return appError;
         }
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    // We must have a QCoreApplication before we do this
+    // And we do this now so that the QML debugger can connect
+    appQmlEngine = new QQmlApplicationEngine();
+#endif
+#endif
 
         appStartup(rpcConstants::loggerApp);
 
@@ -67,6 +87,7 @@ int main(int argc, char *argv[])
             appError = a.exec();
         }
         delete w;
+        delete appQmlEngine;
     }
 
     return appError;
