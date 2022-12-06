@@ -11,8 +11,10 @@
 #include "MonitorMain.h"
 
 
+#ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QSharedPointer<QQmlApplicationEngine> appQmlEngine;
+#endif
 #endif
 
 int main(int argc, char *argv[])
@@ -32,7 +34,11 @@ int main(int argc, char *argv[])
     w.show();
 
     auto r = a.exec();
-
+#ifdef Q_OS_WIN
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+    appQmlEngine.clear();
+#endif
+#endif
     return r;
 
 }
