@@ -121,7 +121,7 @@ Frame {
         cm.locator = loc;
 
         mapOfEurope.addMapItem(cm)
-        cm.showMessage('New')
+        //cm.showMessage('New')
     }
 
     function addHome(coord, callsign, loc)

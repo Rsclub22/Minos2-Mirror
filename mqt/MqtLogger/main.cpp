@@ -28,7 +28,7 @@ QSharedPointer<QQmlApplicationEngine> appQmlEngine;
 
 int main(int argc, char *argv[])
 {
-
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     SecondInstall::parseSecondInstall(argc, argv);
     int appError = 1;
     {

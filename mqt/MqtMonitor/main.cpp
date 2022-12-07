@@ -19,6 +19,7 @@
 
 int main(int argc, char *argv[])
 {
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     SecondInstall::parseSecondInstall(argc, argv);
     QApplication a(argc, argv);
 #ifdef Q_OS_WIN
