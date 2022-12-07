@@ -457,11 +457,6 @@ void MonitorMain::addSlot(  QSharedPointer< MonitoredLog>ct )
    ui->contestPageControl->setTabToolTip(tno, ct->getPublishedName());
    f->showQSOs();
    f->setFocusPolicy(Qt::NoFocus);
-
-//   QSettings
-
-   // we need to save the list of filenames, so that when we see them again we
-   // can re-open them when we are restarted
 }
 
 MonitoringFrame *MonitorMain::findCurrentLogFrame()
