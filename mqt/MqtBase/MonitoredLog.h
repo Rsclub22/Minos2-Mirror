@@ -7,8 +7,9 @@
 class MonitoringFrame;
 class MinosTestImport;
 
-class MonitoredLog
+class MonitoredLog : public QObject
 {
+    Q_OBJECT
    private:
       void getLogStanza( int sno );
       bool monitorEnabled = false;

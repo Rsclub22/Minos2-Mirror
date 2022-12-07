@@ -1,13 +1,11 @@
 #include "MTrace.h"
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
-#include "contacts.h"
 #include "MinosTestImport.h"
 #include "MonitoredContestLog.h"
-#include "MonitoringFrame.h"
 #include "MonitoredLog.h"
 
-MonitoredLog::MonitoredLog()
+MonitoredLog::MonitoredLog() : QObject()
 {}
 MonitoredLog::~MonitoredLog()
 {
@@ -135,7 +133,6 @@ void MonitoredLog::checkMonitor()
 }
 void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
 {
-   getFrame()->newStanzas = true;
    inStanzaRequest = 0;
    if ( stanzasPulled.find( stanza ) == stanzasPulled.end() )
    {
@@ -146,24 +143,6 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
       // This is what slows it down most...
       //although QSO scanning gets slower as we go on
 
-      if (contest->lastInserted >= 0)
-      {
-          if ( contest->lastInserted == contest->ctList.count() - 1)
-          {
-              // new last contact; import will have checked it
-              QSharedPointer<BaseContact> bct = contest->pcontactAt(contest->lastInserted);
-              frame->qsoModel.insertRows(contest->lastInserted, 1, QModelIndex());
-              contest->lastInserted = -1;
 
-              frame->on_AfterLogContact(contest, bct);
-
-          }
-          else
-          {
-              // change to a contact; we need a full rescan to understand it
-              frame->qsoModel.changeRow(contest->lastInserted);
-              frame->rescanNeeded = true;
-          }
-      }
    }
 }

@@ -33,6 +33,8 @@ SOURCES += \
     BandList.cpp \
     CacheSelection.cpp \
     ConfigurationOption.cpp \
+    MonitoredContestLog.cpp \
+    MonitoredLog.cpp \
     StartConfigManager.cpp \
     StatisticsDisplay.cpp \
     bandmapmarkerdetails.cpp \
@@ -119,6 +121,8 @@ HEADERS += \
     AntennaState.h \
     BandList.h \
     ConfigurationOption.h \
+    MonitoredContestLog.h \
+    MonitoredLog.h \
     StartConfigManager.h \
     StatisticsDisplay.h \
     bandmapmarkerdetails.h \

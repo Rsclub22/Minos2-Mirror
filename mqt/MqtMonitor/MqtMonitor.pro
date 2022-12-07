@@ -24,16 +24,12 @@ SOURCES += \
         main.cpp \
         MonitorMain.cpp \
     MonitoringFrame.cpp \
-    MonitoredLog.cpp \
-    MonitoredContestLog.cpp \
     MonitorParameters.cpp
 
 HEADERS += \
         MonitorMain.h \
     MonitorTreeModel.h \
     MonitoringFrame.h \
-    MonitoredLog.h \
-    MonitoredContestLog.h \
     MonitorParameters.h
 
 FORMS += \

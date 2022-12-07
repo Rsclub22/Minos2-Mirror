@@ -394,8 +394,31 @@ void MonitorMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const
                     {
                         if (l && l->getPublishedName() == logName )
                         {
+                            MonitoringFrame *frame = l->getFrame();
+                            frame->newStanzas = true;
                             trace( "||" + stanzaData + "||" );
                             l ->processLogStanza( stanza, stanzaData );
+
+                            BaseContestLog *contest = l->getContest();
+                            if (contest->lastInserted >= 0)
+                            {
+                                if ( contest->lastInserted == contest->ctList.count() - 1)
+                                {
+                                    // new last contact; import will have checked it
+                                    QSharedPointer<BaseContact> bct = contest->pcontactAt(contest->lastInserted);
+                                    frame->qsoModel.insertRows(contest->lastInserted, 1, QModelIndex());
+                                    contest->lastInserted = -1;
+
+                                    frame->on_AfterLogContact(contest, bct);
+
+                                }
+                                else
+                                {
+                                    // change to a contact; we need a full rescan to understand it
+                                    frame->qsoModel.changeRow(contest->lastInserted);
+                                    frame->rescanNeeded = true;
+                                }
+                            }
                             return ;
                         }
                     }
@@ -407,17 +430,6 @@ void MonitorMain::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const
 
 void MonitorMain::syncStations()
 {
-   // Here we want to subscribe to the loggers of the notified stations
-   // Shouldn't matter if we end up doing it twice
-
-   // Strictly I suppose we could ignore ourselves, but normally we won't run
-   // a full monitor on a logging computer - we need a module that can
-   // manage single stations for that.
-
-   // And this module must make use of that single station monitor!
-
-   // Probably it is basically the "MonitoredStation" class as a model, with a viewer
-   // and maybe a controller...
 
   if ( syncstat )
    {
@@ -426,6 +438,7 @@ void MonitorMain::syncStations()
       TreeNode *root = new RootTreeNode(this);
       for ( auto s = stationList.begin(); s != stationList.end(); s++ )
       {
+          // clang complains that snode may leak - but if gets taken over by the tree
           TreeNode *snode = new RouterTreeNode(root, s.key().app + "@" + s.key().routerName);
           for ( auto const &l: qAsConst(s.value()->slotList) )
           {
