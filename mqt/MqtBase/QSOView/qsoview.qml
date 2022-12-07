@@ -45,10 +45,6 @@ import QtLocation 5.15
 
 Frame {
 
-    // Initial App Size
-//    width: parent.width
-//    height: parent.height
-
     anchors.fill: parent
 
     visible: true
@@ -78,8 +74,6 @@ Frame {
             anchors.fill: parent
             hoverEnabled: true
             onPressed: {
-//                console.log('latitude = '+ (mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y)).latitude),
-//                                       'longitude = '+ (mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y)).longitude));
                 let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
                 let gc = [cc.latitude, cc.longitude];
                 qmlSignal(gc);
@@ -121,7 +115,6 @@ Frame {
         cm.locator = loc;
 
         mapOfEurope.addMapItem(cm)
-        //cm.showMessage('New')
     }
 
     function addHome(coord, callsign, loc)
@@ -133,7 +126,6 @@ Frame {
         cm.locator = loc;
 
         mapOfEurope.addMapItem(cm)
-        cm.showMessage('Home')
     }
 
     function newHome(callInfo)
@@ -141,7 +133,6 @@ Frame {
     // callInfo is a QStringList ["callsign", "latitude", "longitude"]
     {
         mapOfEurope.clearMapItems();
-        //console.log(callInfo)
         var call = callInfo[0]
         var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
 
