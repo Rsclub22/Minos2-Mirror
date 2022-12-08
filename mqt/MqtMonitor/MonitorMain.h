@@ -4,8 +4,9 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QMenu>
-#include "MinosRPC.h"
+
 #include "ScreenContact.h"
+#include "remotelogs.h"
 #include "MonitoredLog.h"
 #include "MonitoringFrame.h"
 #include "MonitorTreeModel.h"
@@ -15,21 +16,13 @@
 
 class MonitoringFrame;
 class MonitoredLog;
+class ContestLog;
 
 namespace Ui {
 class MonitorMain;
 }
 
-class MonitoredStation
-{
-   public:
-      QVector< QSharedPointer<MonitoredLog> > slotList;
-
-      MonitoredStation()
-      {}
-      ~MonitoredStation()
-      {}
-};
+class MonitoredStation;
 
 class MonitorMain : public QMainWindow
 {
@@ -39,7 +32,6 @@ public:
     explicit MonitorMain(QWidget *parent = nullptr);
     ~MonitorMain() override;
 
-    QMap<Provider, MonitoredStation *> stationList;
     ScreenContact screenContact;
 
     void closeTab(MonitoringFrame *tab);
@@ -49,10 +41,6 @@ public:
     BaseContestLog *getCurrentContest();
 
 private slots:
-    void on_notify(AnalysePubSubNotify an, const QString from );
-    void on_routerCall( bool err, QSharedPointer<MinosRPCObj>, const QString from );
-    void on_provider(Provider provider, QString cat);
-
     void on_monitorTimeout();
 
     void on_monitorTree_doubleClicked(const QModelIndex &index);
@@ -77,31 +65,37 @@ private slots:
 
     void on_monitorTree_clicked(const QModelIndex &index);
 
+    void onSyncNeeded();
+    void onNewLog(MonitoredLog *m);
+
+    void onNewStanzas(MonitoredLog *m);
+    void onNewLastContact(MonitoredLog *m);
+    void onContactChanged(MonitoredLog *m);
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;
 
-    QAction *newAction(const QString &text, QMenu *m, void (MonitorMain::*slotparam)() );
     QMenu TabPopup;
     QAction *closeMonitoredLog;
-
-
     int splitterHandleWidth;
 
-    virtual void closeEvent(QCloseEvent *event) override;
-    virtual void resizeEvent(QResizeEvent *event) override;
-    virtual void moveEvent(QMoveEvent *event) override;
-    virtual void changeEvent( QEvent* e ) override;
-    virtual bool eventFilter(QObject *obj, QEvent *event) override;
-
     StdInReader *stdinReader = new StdInReader(this);
-    QString localRouterName;
+
+    RemoteLogs *remoteLogs = nullptr;
 
     MonitorTreeModel *treeModel;
 
     QTimer *monitorTimer;
 
     bool syncstat = false;
+
+    QAction *newAction(const QString &text, QMenu *m, void (MonitorMain::*slotparam)() );
+    virtual void closeEvent(QCloseEvent *event) override;
+    virtual void resizeEvent(QResizeEvent *event) override;
+    virtual void moveEvent(QMoveEvent *event) override;
+    virtual void changeEvent( QEvent* e ) override;
+    virtual bool eventFilter(QObject *obj, QEvent *event) override;
+
     void syncStations();
     void addSlot(QSharedPointer<MonitoredLog> ct );
     MonitoringFrame *findCurrentLogFrame();

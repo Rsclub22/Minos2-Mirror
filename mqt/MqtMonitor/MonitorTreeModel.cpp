@@ -93,10 +93,6 @@ QString LogTreeNode::data(int column)
     return "";
 }
 //=============================================================================
-bool MonitoredLogCmp::operator()(QSharedPointer<MonitoredLog> s1) const
-{
-    return s1->getPublishedName().compare(cmpstr, Qt::CaseInsensitive ) == 0;
-}
 MonitorTreeModel::MonitorTreeModel()
         : QAbstractItemModel( nullptr ), rootData( nullptr )
 {}

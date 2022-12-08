@@ -79,6 +79,7 @@ SOURCES += \
     minosqlabel.cpp \
     minostablewidget.cpp \
     MinosTestImport.cpp \
+    monitoredstation.cpp \
     mults.cpp \
     MultsImpl.cpp \
     presetbutton.cpp \
@@ -86,6 +87,7 @@ SOURCES += \
     qlogtabwidget.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
+    remotelogs.cpp \
     rigcommon.cpp \
     RigDetails.cpp \
     RigState.cpp \
@@ -169,6 +171,7 @@ HEADERS += \
     minosqlabel.h \
     minostablewidget.h \
     MinosTestImport.h \
+    monitoredstation.h \
     mults.h \
     MultsImpl.h \
     ProfileEnums.h \
@@ -178,6 +181,7 @@ HEADERS += \
     qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
+    remotelogs.h \
     rigRotSetupCommon.h \
     rigcommon.h \
     rigcontrolcommonconstants.h \

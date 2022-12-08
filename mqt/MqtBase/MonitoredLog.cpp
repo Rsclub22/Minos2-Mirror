@@ -2,11 +2,20 @@
 #include "MinosRPC.h"
 #include "RPCCommandConstants.h"
 #include "MinosTestImport.h"
+#include "monitoredstation.h"
 #include "MonitoredContestLog.h"
 #include "MonitoredLog.h"
 
-MonitoredLog::MonitoredLog() : QObject()
-{}
+
+bool MonitoredLogCmp::operator()(QSharedPointer<MonitoredLog> s1) const
+{
+    return s1->getPublishedName().compare(cmpstr, Qt::CaseInsensitive ) == 0;
+}
+
+MonitoredLog::MonitoredLog(MonitoredStation *s) : QObject()
+  , station(s)
+{
+}
 MonitoredLog::~MonitoredLog()
 {
    mt->endImportTest();
@@ -17,6 +26,10 @@ MonitoredLog::~MonitoredLog()
 }
 void MonitoredLog::initialise(const QString &prouter, const QString &name )
 {
+    MinosRPC *rpc = MinosRPC::validMinosRPC();
+
+    connect(rpc, &MinosRPC::routerCall, this, &MonitoredLog::on_routerCall);
+
    publishedName = name;
    router = prouter;
 
@@ -145,4 +158,76 @@ void MonitoredLog::processLogStanza( int stanza, const QString &stanzaData )
 
 
    }
+}
+void MonitoredLog::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from )
+{
+    trace( "MonitoredLog router callback from " + from + ( err ? ":Error" : ":Normal" ) );
+    if ( !err )
+    {
+        // This will return stanza id, pubname, and stanza content
+        QString call = mro->getMethodName();
+        if (call == rpcConstants::loggerStanzaResponse)
+        {
+
+            QSharedPointer<RPCParam> psLogName;
+            QSharedPointer<RPCParam> psStanzaData;
+            QSharedPointer<RPCParam> psStanza;
+            QSharedPointer<RPCParam> psResult;
+            RPCArgs *args = mro->getCallArgs();
+            if ( args->getStructArgMember( 0, "LogName", psLogName )
+                 && args->getStructArgMember( 0, "LoggerResult", psResult )
+                 && args->getStructArgMember( 0, "Stanza", psStanza )
+                 && args->getStructArgMember( 0, "StanzaData", psStanzaData )
+                 )
+            {
+                QString logName;
+                QString stanzaData;
+                bool result;
+                int stanza;
+
+                if ( psLogName->getString( logName ) && psStanzaData->getString( stanzaData )
+                     && psStanza->getInt( stanza ) && psResult->getBoolean( result )
+                     )
+                {
+                    trace( "Name " + logName + " stanza " + QString::number( stanza ) );
+                    // Find the matching MonitoredLog and send the stanza their for processing
+
+                    QStringList sl = from.split('@');
+                    if (sl.count() != 2)
+                    {
+                        return;
+                    }
+                    QString ss = sl[1] + "/" + sl[0] + "/xxx";
+                    Provider p(ss);
+
+                    for ( auto const &l: qAsConst(station->slotList) )
+                    {
+                        if (l && l->getPublishedName() == logName )
+                        {
+                            emit newStanzas(this);
+
+                            trace( "||" + stanzaData + "||" );
+                            l ->processLogStanza( stanza, stanzaData );
+
+                            BaseContestLog *contest = l->getContest();
+                            if (contest->lastInserted >= 0)
+                            {
+                                if ( contest->lastInserted == contest->ctList.count() - 1)
+                                {
+                                    // new last contact; import will have checked it
+                                    emit newLastContact(this);
+                                }
+                                else
+                                {
+                                    // change to a contact; we need a full rescan to understand it
+                                    emit contactChanged(this);
+                                }
+                            }
+                            return ;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

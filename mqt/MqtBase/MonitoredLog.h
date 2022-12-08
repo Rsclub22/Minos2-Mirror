@@ -3,10 +3,19 @@
 #include <QSet>
 #include "MonitoredContestLog.h"
 #include "PublishState.h"
+#include "monitoredstation.h"
 
 class MonitoringFrame;
 class MinosTestImport;
+class MinosRPCObj;
+struct MonitoredLogCmp
+{
+   QString cmpstr;
+   MonitoredLogCmp( const QString &s ) : cmpstr( s )
+   {}
 
+   bool operator() ( QSharedPointer<MonitoredLog> s1 ) const;
+};
 class MonitoredLog : public QObject
 {
     Q_OBJECT
@@ -31,8 +40,10 @@ class MonitoredLog : public QObject
       MonitoredContestLog * contest = nullptr;
       MonitoringFrame *frame = nullptr;
 
+      MonitoredStation *station = nullptr;
+
    public:
-      MonitoredLog();
+      MonitoredLog(MonitoredStation *);
       ~MonitoredLog();
 
       bool enabled() const
@@ -84,6 +95,13 @@ class MonitoredLog : public QObject
 
       bool getManualClose() const;
       void setManualClose(bool newManualClose);
+private slots:
+      void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+
+signals:
+      void newStanzas(MonitoredLog *);
+      void newLastContact(MonitoredLog *);
+      void contactChanged(MonitoredLog *);
 };
 
 #endif // MONITOREDLOG_H

@@ -7,14 +7,7 @@
 class MonitorMain;
 class MonitoredLog;
 
-struct MonitoredLogCmp
-{
-   QString cmpstr;
-   MonitoredLogCmp( const QString &s ) : cmpstr( s )
-   {}
 
-   bool operator() ( QSharedPointer<MonitoredLog> s1 ) const;
-};
 //=============================================================================================
 enum NodeType{entRoot, entRouter, entLog};
 class TreeNode: public QObject
