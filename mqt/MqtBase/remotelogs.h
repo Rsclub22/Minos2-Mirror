@@ -12,10 +12,11 @@ class RemoteLogs : public QObject
 {
     Q_OBJECT
 public:
-    RemoteLogs();
-
     QMap<Provider, MonitoredStation *> stationList;
 
+    RemoteLogs();
+    void closeLog(MonitoredLog *);
+    void closeAll();
 private:
     QString localRouterName;
 

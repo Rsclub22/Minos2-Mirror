@@ -47,7 +47,6 @@ private slots:
     void on_monitorSplitter_splitterMoved(int /*pos*/, int /*index*/);
     void on_closeMonitoredLog();
     void on_contestPageControl_customContextMenuRequested(const QPoint &pos);
-    void CancelClick();
 
     void on_contestPageControl_tabCloseRequested(int index);
 

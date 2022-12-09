@@ -16,8 +16,18 @@ RemoteLogs::RemoteLogs()
 
     MinosConfig *config = MinosConfig::getMinosConfig();
     localRouterName = config->getThisRouterName();
+}
 
+void RemoteLogs::closeLog(MonitoredLog *l)
+{
+    l->setEnabled(false);
+    l->setManualClose(true);
+    l->setFrame(nullptr);
+}
 
+void RemoteLogs::closeAll()
+{
+    stationList.clear();
 }
 void RemoteLogs::on_provider(Provider provider, QString /*cat*/)
 {

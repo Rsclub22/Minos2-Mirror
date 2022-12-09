@@ -82,7 +82,6 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->contestPageControl->setContextMenuPolicy( Qt::CustomContextMenu );
 
     closeMonitoredLog = newAction(tr("Close tab"), &TabPopup, &MonitorMain::on_closeMonitoredLog);
-    newAction( "Cancel", &TabPopup, &MonitorMain::CancelClick );
 
     ui->callsignEdit->setValidator(&ucValidator);
     ui->locEdit->setValidator(&ucValidator);
@@ -106,8 +105,9 @@ MonitorMain::MonitorMain(QWidget *parent) :
 MonitorMain::~MonitorMain()
 {
     delete ui;
-    remoteLogs->stationList.clear();
+    remoteLogs->closeAll();
     delete MultLists::getMultLists();
+    delete remoteLogs;
 }
 void MonitorMain::closeEvent(QCloseEvent *event)
 {
@@ -190,10 +190,9 @@ void MonitorMain::closeTab(MonitoringFrame *cttab)
             {
                 // take it out of the slot list and close it
                 // and we need to redo the list
-                //treeModel->clear();
-                l->setEnabled(false);
-                l->setManualClose(true);
-                l->setFrame(nullptr);
+
+                remoteLogs->closeLog(l.data());
+
                 ui->contestPageControl->removeTab(ui->contestPageControl->indexOf(cttab));
                 delete cttab;
                 syncstat = true;
@@ -247,10 +246,6 @@ void MonitorMain::on_closeMonitoredLog()
 {
     closeTab(findCurrentLogFrame());
 }
-void MonitorMain::CancelClick()
-{
-    // do nothing...
-}
 //---------------------------------------------------------------------------
 // callback slots from RPC in MonitoredLog
 void MonitorMain::onNewStanzas(MonitoredLog *l)
@@ -276,7 +271,6 @@ void MonitorMain::onContactChanged(MonitoredLog *l)
     MonitoringFrame *frame = l->getFrame();
     frame->qsoModel.changeRow(l->getContest()->lastInserted);
     frame->rescanNeeded = true;
-
 }
 //=================================================================
 // callback slots from RemoteLogs
@@ -291,7 +285,6 @@ void MonitorMain::onNewLog(MonitoredLog *ml)
     connect(ml, &MonitoredLog::newStanzas, this, &MonitorMain::onNewStanzas);
     connect(ml, &MonitoredLog::newLastContact, this, &MonitorMain::onNewLastContact);
     connect(ml, &MonitoredLog::contactChanged, this, &MonitorMain::onContactChanged);
-
 }
 //=================================================================
 void MonitorMain::syncStations()
@@ -360,14 +353,6 @@ MonitoringFrame *MonitorMain::findContestPage( BaseContestLog *ct )
        }
    }
    return nullptr;
-}
-
-bool nolog( MonitoredLog *ip )
-{
-   if ( ip == nullptr )
-      return true;
-   else
-      return false;
 }
 
 void MonitorMain::on_monitorTimeout()
