@@ -1607,7 +1607,6 @@ void TLogContainer::updateLayoutsMenu()
 
         ScreenConfigFile &scf = ScreenConfigFile::getScreenConfigFile(this);
 
-        int j = 0;
         for(auto const &c: qAsConst(scf.configs ))
         {
             QAction *act =  new QAction(this);
@@ -1633,8 +1632,6 @@ void TLogContainer::updateLayoutsMenu()
                 act->setChecked(true);
                 lastLayoutSelected = act;
             }
-
-            j++;
         }
     }
 }
@@ -2252,7 +2249,10 @@ void TLogContainer::stealFocus()
         setWindowState(ss | Qt::WindowState::WindowActive);
 
         TSingleLogFrame *tslf = getCurrentLogFrame();
-        tslf->GJVQSOLogFrame->selectFirstInvalid();
+        if (tslf)
+        {
+            tslf->GJVQSOLogFrame->selectFirstInvalid();
+        }
     });
 
 }
