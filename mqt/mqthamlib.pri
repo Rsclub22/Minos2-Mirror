@@ -7,39 +7,37 @@
 
 #HAMLIBVER = $$(hamlib)
 #HAMLIBVER = $$(45)
-HAMLIBVER = 45
+HAMLIBVER = 451
 #message(The hamlib version is $$HAMLIBVER)
 
-equals(HAMLIBVER, 45) {
+equals(HAMLIBVER, 451) {
 
     #message(Using  hamlib V4.5)
     win32: {
        win32-g++* {
           contains(QT_ARCH, i386) {
-          HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5)
+          HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5.1)
           #message(Hamlib path is $$HAMLIBDIR)
           }
        contains(QT_ARCH, x86_64) {
-          HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5)
+          HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5.1)
           }
           LIBS += -L$$HAMLIBDIR/lib/gcc/ -llibhamlib
        } else {
           contains(QT_ARCH, i386) {
-             HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5)
+             HAMLIBDIR = $$absolute_path(../../hamlib-w32-4.5.1)
           }
           contains(QT_ARCH, x86_64) {
-             HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5)
+             HAMLIBDIR = $$absolute_path(../../hamlib-w64-4.5.1)
           }
           msvc: LIBS += -L$$HAMLIBDIR/lib/msvc/ -llibhamlib-4
           msvc: DEFINES += DLL_EXPORT
-          msvc: INCLUDEPATH += $$HAMLIBDIR/include/hamlib
-          msvc: INCLUDEPATH += $$(USERPROFILE)/.nuget/packages/pthreads/2.9.1.4/build/native/include
        }
        INCLUDEPATH += $$HAMLIBDIR/include
 
     }
 } else {
-    #message(Using default version - hamlib V4.3.1)
+    #message(Using other version - currently set at hamlib V4.3.1)
    win32: {
    win32-g++* {
       contains(QT_ARCH, i386) {
