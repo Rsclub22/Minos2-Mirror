@@ -221,7 +221,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="loggerPushButton">
              <property name="text">
               <string>Logger</string>
              </property>
@@ -740,7 +740,7 @@ when user selected</string>
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="callStringButtonGroup"/>
   <buttongroup name="activeChatGroup"/>
+  <buttongroup name="callStringButtonGroup"/>
  </buttongroups>
 </ui>

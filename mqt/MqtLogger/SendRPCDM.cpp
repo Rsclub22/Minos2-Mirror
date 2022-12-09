@@ -972,8 +972,10 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
         QString call = mro->getMethodName();
         if (call == rpcConstants::loggerTakeFocus)
         {
-            // attempt to steal focus
+            // attempt to steal focus - but it doesn't work on Linux :(
+#ifdef Q_OS_WIN
             MinosConfigEvents::sendStealFocus();
+#endif
         }
         else if (call == rpcConstants::loggerStanzaRequest)
         {

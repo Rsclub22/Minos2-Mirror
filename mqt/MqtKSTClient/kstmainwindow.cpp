@@ -311,6 +311,11 @@ KSTMainWindow::KSTMainWindow(QWidget *parent)
     ui->messageFilter->setFocus();
 
     ui->stringRb->setChecked(true);
+
+#ifndef Q_OS_WIN
+    ui->loggerPushButton->setVisible(false);
+#endif
+
 }
 
 KSTMainWindow::~KSTMainWindow()
@@ -1905,7 +1910,7 @@ void KSTMainWindow::on_clearMeepFiltersButton_clicked()
 }
 
 
-void KSTMainWindow::on_pushButton_clicked()
+void KSTMainWindow::on_loggerPushButton_clicked()
 {
     QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
     RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
