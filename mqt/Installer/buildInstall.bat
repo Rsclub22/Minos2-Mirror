@@ -100,13 +100,13 @@ cd Configuration
 
 call powershell.exe "& {Invoke-WebRequest https://www.country-files.com/cty/cty.dat -Outfile cty.dat}"
 call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests22.xml -Outfile vhfcontests22.xml}"
-call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests23.xml -Outfile vhfcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest https://www.rsgbcc.org/vhf/vhfcontests23.xml -Outfile vhfcontests23.xml}"
 
 call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests22.xml -Outfile hfcontests22.xml}"
-call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests23.xml -Outfile hfcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest http://www.rsgbcc.org/vhf/hfcontests23.xml -Outfile hfcontests23.xml}"
 
 call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests22.xml -Outfile microcontests22.xml}"
-call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests23.xml -Outfile microcontests21.xml}"
+call powershell.exe "& {Invoke-WebRequest http://microwave.rsgbcc.org/microcontests23.xml -Outfile microcontests23.xml}"
 
 
 cd ../Bin
