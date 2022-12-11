@@ -1,43 +1,3 @@
-/****************************************************************************
-**
-** Copyright (C) 2015 The Qt Company Ltd.
-** Contact: http://www.qt.io/licensing/
-**
-** This file is part of the examples of the Qt Toolkit.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of The Qt Company Ltd nor the names of its
-**     contributors may be used to endorse or promote products derived
-**     from this software without specific prior written permission.
-**
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-**
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtPositioning 5.15
@@ -54,7 +14,7 @@ Frame {
     property string homeLon: "0.0"
 
     // Define Visible Region of map
-    property variant topLeftEurope: QtPositioning.coordinate(60.5, 0.0)
+    property variant topLeftEurope: QtPositioning.coordinate(60.5, -11.0)
     property variant bottomRightEurope: QtPositioning.coordinate(45.0, 12.0)
     property variant viewOfEurope:
         QtPositioning.rectangle(topLeftEurope, bottomRightEurope)
@@ -69,14 +29,29 @@ Frame {
 
         // Set (Initial) Visible Region of map
         visibleRegion: viewOfEurope
+
+        ToolTip.text: calcToolTip()
+        ToolTip.visible: hovered && mapMouse.containsMouse
+        ToolTip.delay: 1000
+
         MouseArea {
             id: mapMouse
             anchors.fill: parent
             hoverEnabled: true
+            //onEntered: showToolTip = true
+            //onExited: showToolTip = false
             onPressed: {
+                let hcoord = QtPositioning.coordinate(homeLat, homeLon)
                 let cc = mapOfEurope.toCoordinate(Qt.point(mouse.x,mouse.y));
-                let gc = [cc.latitude, cc.longitude];
+                let b = hcoord.azimuthTo(cc)
+                let gc = [cc.latitude, cc.longitude, b];
                 qmlSignal(gc);
+            }
+            onPositionChanged: {
+                // doesn't work!
+                ToolTip.y = mapMouse.mouseY
+                ToolTip.x = mapMouse.mouseX
+
             }
             }
     } // end map
@@ -92,6 +67,18 @@ Frame {
         anchors.right: parent.right
         enabled: true
         onClicked: mapOfEurope.clearMapItems()
+    }
+
+    function calcToolTip()
+    {
+        let hcoord = QtPositioning.coordinate(homeLat, homeLon)
+        let cc = mapOfEurope.toCoordinate(Qt.point(mapMouse.mouseX, mapMouse.mouseY));
+        let b = hcoord.azimuthTo(cc)
+        let d = hcoord.distanceTo(cc)/1000
+
+        let r = d.toFixed(1) + " Km " + b.toFixed() + " deg"
+
+        return r
     }
 
     function addCircle(coord)
@@ -134,12 +121,12 @@ Frame {
     {
         mapOfEurope.clearMapItems();
         var call = callInfo[0]
-        var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
 
         homeLat = callInfo[1];
         homeLon = callInfo[2];
+        var hcoord = QtPositioning.coordinate(homeLat, homeLon)
         var loc = callInfo[3]
-        addHome(coord, call, loc)
+        addHome(hcoord, call, loc)
     }
     function newCall(callInfo)
     // slot to receive signal callSig(QVariant)

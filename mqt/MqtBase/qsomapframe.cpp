@@ -87,11 +87,11 @@ void QSOMapFrame::onQmlClicked(QVariant v)
    QList<QVariant> gc = v.toList();
    QString latitude = gc[0].toString();
    QString longitude = gc[1].toString();
+   QString bearing = gc[2].toString();
 
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-   qDebug() << latitude;
-   qDebug() << longitude;
+   qDebug() << latitude << " " << longitude << " " << bearing;
 #endif
 #endif
 }
