@@ -252,17 +252,23 @@ void MonitorMain::onNewStanzas(MonitoredLog *l)
 {
     trace("OnNewStanzas");
     MonitoringFrame *frame = l->getFrame();
-    frame->newStanzas = true;
+    if (frame)
+    {
+        frame->newStanzas = true;
+    }
 }
 void MonitorMain::onNewLastContact(MonitoredLog *l)
 {
     trace("onNewLastContact");
     MonitoringFrame *frame = l->getFrame();
-    QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
-    frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
-    l->getContest()->lastInserted = -1;
+    if (l->getContest()->lastInserted >= 0)
+    {
+        QSharedPointer<BaseContact> bct = l->getContest()->pcontactAt(l->getContest()->lastInserted);
+        frame->qsoModel.insertRows(l->getContest()->lastInserted, 1, QModelIndex());
+        l->getContest()->lastInserted = -1;
 
-    frame->on_AfterLogContact(l->getContest(), bct);
+        frame->on_AfterLogContact(l->getContest(), bct);
+    }
 }
 void MonitorMain::onContactChanged(MonitoredLog *l)
 {
