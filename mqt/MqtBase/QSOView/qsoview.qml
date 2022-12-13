@@ -62,7 +62,49 @@ Frame {
     }
     function drawGrid()
     {
+        // If we don't do it in chunks, the whole thing
+        // can get cropped
 
+        drawLatitude(-85, 85, -180, -90)
+        drawLatitude(-85, 85, -90, -0.000001)
+        drawLatitude(-85, 85, 0.000001, 90)
+        drawLatitude(-85, 85, 90, 180)
+
+        drawLongitude(-85, 85, -180, -90)
+        drawLongitude(-85, 85, -90, 0)
+        drawLongitude(-85, 85, 0, 90)
+        drawLongitude(-85, 85, 90, 180)
+    }
+
+    function drawLatitude(minlat, maxlat, minlong,maxlong)
+    {
+        var cmlat = Qt.createQmlObject(
+'import QtQuick 2.15
+import QtLocation 5.15
+
+MapPolyline
+{
+    id: mline
+    line.color: "grey"
+    line.width: 1
+}', mapOfEurope)
+    cmlat.line.color = setColorAlpha(cmlat.line.color, 0.5)
+
+    for (var latpos = minlat; latpos <= maxlat; latpos += 2)
+    {
+        cmlat.addCoordinate(QtPositioning.coordinate(latpos, minlong))
+        cmlat.addCoordinate(QtPositioning.coordinate(latpos, maxlong))
+
+        if (latpos !== maxlat)
+        {
+            cmlat.addCoordinate(QtPositioning.coordinate(latpos + 1, maxlong))
+            cmlat.addCoordinate(QtPositioning.coordinate(latpos + 1, minlong))
+        }
+    }
+    mapOfEurope.addMapItem(cmlat)
+    }
+    function drawLongitude(minlat, maxlat, minlong, maxlong)
+    {
         var cmlong = Qt.createQmlObject(
     'import QtQuick 2.15
     import QtLocation 5.15
@@ -76,97 +118,19 @@ Frame {
             cmlong.line.color = setColorAlpha(cmlong.line.color, 0.5)
 
         // QtPositioning.coordinate(lat, long)
-        for (var longpos = -180; longpos < 0 ; longpos += 4)
+        for (var longpos = minlong; longpos < maxlong ; longpos += 4)
         {
-            cmlong.addCoordinate(QtPositioning.coordinate(80, longpos))
-            //cmlong.addCoordinate(QtPositioning.coordinate(80, longpos))
-            cmlong.addCoordinate(QtPositioning.coordinate(-80, longpos))
+            cmlong.addCoordinate(QtPositioning.coordinate(maxlat, longpos))
+            //cmlong.addCoordinate(QtPositioning.coordinate(0, longpos))
+            cmlong.addCoordinate(QtPositioning.coordinate(minlat, longpos))
 
-            cmlong.addCoordinate(QtPositioning.coordinate(-80, longpos + 2 ))
-            //cmlong.addCoordinate(QtPositioning.coordinate(80, longpos + 2))
-            cmlong.addCoordinate(QtPositioning.coordinate(80, longpos + 2))
+            cmlong.addCoordinate(QtPositioning.coordinate(minlat, longpos + 2 ))
+            //cmlong.addCoordinate(QtPositioning.coordinate(0, longpos + 2))
+            cmlong.addCoordinate(QtPositioning.coordinate(maxlat, longpos + 2))
         }
         mapOfEurope.addMapItem(cmlong)
 
-        var cmlong1 = Qt.createQmlObject(
-    'import QtQuick 2.15
-    import QtLocation 5.15
-
-    MapPolyline
-    {
-        id: mline
-        line.color: "grey"
-        line.width: 1
-    }', mapOfEurope)
-            cmlong1.line.color = setColorAlpha(cmlong1.line.color, 0.5)
-
-        // QtPositioning.coordinate(lat, long)
-        for (var longpos1 = 0; longpos1 < 180; longpos1 += 4)
-        {
-            cmlong1.addCoordinate(QtPositioning.coordinate(80, longpos1))
-            //cmlong1.addCoordinate(QtPositioning.coordinate(80, longpos1))
-            cmlong1.addCoordinate(QtPositioning.coordinate(-80, longpos1))
-
-            cmlong1.addCoordinate(QtPositioning.coordinate(-80, longpos1 + 2 ))
-            //cmlong1.addCoordinate(QtPositioning.coordinate(80, longpos1 + 2))
-            cmlong1.addCoordinate(QtPositioning.coordinate(80, longpos1 + 2))
-        }
-        mapOfEurope.addMapItem(cmlong1)
-
-
-            var cmlat = Qt.createQmlObject(
-    'import QtQuick 2.15
-    import QtLocation 5.15
-
-    MapPolyline
-    {
-        id: mline
-        line.color: "grey"
-        line.width: 1
-    }', mapOfEurope)
-        cmlat.line.color = setColorAlpha(cmlat.line.color, 0.5)
-
-        for (var latpos = -80; latpos <= 80; latpos += 2)
-        {
-            cmlat.addCoordinate(QtPositioning.coordinate(latpos, -180))
-            cmlat.addCoordinate(QtPositioning.coordinate(latpos, -0.00001))
-
-            if (latpos != 80)
-            {
-                cmlat.addCoordinate(QtPositioning.coordinate(latpos + 1, -0.00001))
-                cmlat.addCoordinate(QtPositioning.coordinate(latpos + 1, -180))
-            }
-        }
-        mapOfEurope.addMapItem(cmlat)
-
-        var cmlat1 = Qt.createQmlObject(
-'import QtQuick 2.15
-import QtLocation 5.15
-
-MapPolyline
-{
-    id: mline
-    line.color: "grey"
-    line.width: 1
-}', mapOfEurope)
-    cmlat1.line.color = setColorAlpha(cmlat1.line.color, 0.5)
-
-    for (var latpos1 = -80; latpos1 <= 80; latpos1 += 2)
-    {
-        cmlat1.addCoordinate(QtPositioning.coordinate(latpos1, 0.00001))
-        cmlat1.addCoordinate(QtPositioning.coordinate(latpos1, 180))
-
-        if (latpos1 != 80)
-        {
-            cmlat1.addCoordinate(QtPositioning.coordinate(latpos1 + 1, 180))
-            cmlat1.addCoordinate(QtPositioning.coordinate(latpos1 + 1, 0.00001))
-        }
     }
-    mapOfEurope.addMapItem(cmlat1)
-
-        return 'OK'
-    }
-
     function calcToolTip()
     {
         let hcoord = QtPositioning.coordinate(homeLat, homeLon)
@@ -235,10 +199,6 @@ MapPolyline
 
     function drawLine(hcoord, ccoord)
     {
-//        var cm = Qt.createQmlObject('HomeMarker {}', mapOfEurope)
-//        var uline = Qt.createComponent("qrc:/mapline.qml", Component.PreferSynchronous, mapOfEurope);
-//        var line = uline.createObject(mapOfEurope);
-
         var line = Qt.createQmlObject(
 'import QtQuick 2.15
 import QtLocation 5.15
