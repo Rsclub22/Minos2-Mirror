@@ -81,17 +81,16 @@ void QSOMapFrame::stopMap()
     QLayout *lo = layout();
     delete lo;
 }
-void QSOMapFrame::onQmlClicked(QVariant v)
+void QSOMapFrame::onQmlClicked(QVariant /*v*/)
 {
-   // QMouseEvent * me = qobject_cast<QMouseEvent *>(&v);
-   QList<QVariant> gc = v.toList();
-   QString latitude = gc[0].toString();
-   QString longitude = gc[1].toString();
-   QString bearing = gc[2].toString();
+//   QList<QVariant> gc = v.toList();
+//   QString latitude = gc[0].toString();
+//   QString longitude = gc[1].toString();
+//   QString bearing = gc[2].toString();
 
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-   qDebug() << latitude << " " << longitude << " " << bearing;
+//   qDebug() << latitude << " " << longitude << " " << bearing;
 #endif
 #endif
 }
