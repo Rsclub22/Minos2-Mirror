@@ -67,6 +67,7 @@ signals:
    void showAuxHeaders();
    void bandMapLimitsChanged();
    void fKey(int e);
+   void redrawQSOMap();
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -146,9 +147,9 @@ public:
    static void SendCountrySelect(QString cty, BaseContestLog *c);
    static void SendDistrictSelect(QString dist, BaseContestLog *c);
    static void SendLocSelect(QString loc, BaseContestLog *c);
-   static void sendRefreshStackMults(BaseContestLog *contest);
-   static void sendSetMemory(BaseContestLog *, QString call, QString loc);
-   static void sendSetMemoryAction(BaseContestLog *, QString call, QString loc);
+   static void SendRefreshStackMults(BaseContestLog *contest);
+   static void SendSetMemory(BaseContestLog *, QString call, QString loc);
+   static void SendSetMemoryAction(BaseContestLog *, QString call, QString loc);
 
    static void SendFontChanged();
    static void SendBrgStrToRot(QString);
@@ -160,28 +161,30 @@ public:
    static void SendRequestResendSpotsToClusterServer(resendFrameId, QString, QString, QString);
    static void SendSpotToMemory(BaseContestLog *,memoryData::memData);  // cluster spot
 
-   static void sendUpdateStats(BaseContestLog *c );
-   static void sendFiltersChanged(BaseContestLog *c );
-   static void sendUpdateMemories(BaseContestLog *c );
+   static void SendUpdateStats(BaseContestLog *c );
+   static void SendFiltersChanged(BaseContestLog *c );
+   static void SendUpdateMemories(BaseContestLog *c );
 
-    static void sendRigFreqChanged(Frequency f, BaseContestLog *c);
-    static void sendRotBearingChanged(int f, BaseContestLog *c);
+    static void SendRigFreqChanged(Frequency f, BaseContestLog *c);
+    static void SendRotBearingChanged(int f, BaseContestLog *c);
 
-    static void sendXferEnabled(bool s, BaseContestLog *c, QString basename);
-    static void sendXferPressed(BaseContestLog *c, QString basename);
-    static void sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
-    static void sendListCompressionChanged(qreal hmult);
+    static void SendXferEnabled(bool s, BaseContestLog *c, QString basename);
+    static void SendXferPressed(BaseContestLog *c, QString basename);
+    static void SendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected);
+    static void SendListCompressionChanged(qreal hmult);
 
-    static void sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
-    static void sendWsjtxDatagram(int instance, QByteArray *);
-    static void sendCallsignLookup(BaseContestLog *, QString);
+    static void SendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct);
+    static void SendWsjtxDatagram(int instance, QByteArray *);
+    static void SendCallsignLookup(BaseContestLog *, QString);
 
-    static void sendReconnectFlagToClusterServer(bool state);
-    static void sendQRZInfoToLog(QString callsign, QString locator, QString name);
+    static void SendReconnectFlagToClusterServer(bool state);
+    static void SendQRZInfoToLog(QString callsign, QString locator, QString name);
     static void SendShowAuxHeaders();
     static void sendBandmapLimitsChanged();
 
-    static void sendFKey(int event);
+    static void SendRedrawQSOMap();
+
+    static void SendFKey(int event);
 };
 //---------------------------------------------------------------------------
 #endif

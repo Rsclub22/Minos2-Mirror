@@ -116,13 +116,16 @@ void MinosLoggerEvents::SendShowAuxHeaders()
 {
     emit mle.showAuxHeaders();
 }
-
+void MinosLoggerEvents::SendRedrawQSOMap()
+{
+    emit mle.redrawQSOMap();
+}
 void MinosLoggerEvents::sendBandmapLimitsChanged()
 {
     emit mle.bandMapLimitsChanged();
 }
 
-void MinosLoggerEvents::sendFKey(int event)
+void MinosLoggerEvents::SendFKey(int event)
 {
     emit mle.fKey(event);
 }
@@ -207,17 +210,17 @@ void MinosLoggerEvents::SendLocSelect(QString loc, BaseContestLog *c)
     emit mle.LocSelect(loc, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendRefreshStackMults(BaseContestLog *contest)
+void MinosLoggerEvents::SendRefreshStackMults(BaseContestLog *contest)
 {
     emit mle.refreshStackMults(contest);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendSetMemory(BaseContestLog * ct, QString call, QString loc)
+void MinosLoggerEvents::SendSetMemory(BaseContestLog * ct, QString call, QString loc)
 {
     emit mle.setMemory(ct, call, loc);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendSetMemoryAction(BaseContestLog * ct, QString call, QString loc)
+void MinosLoggerEvents::SendSetMemoryAction(BaseContestLog * ct, QString call, QString loc)
 {
     emit mle.setMemoryAction(ct, call, loc);
 }
@@ -227,28 +230,28 @@ void MinosLoggerEvents::SendFontChanged()
     emit mle.FontChanged();
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendFiltersChanged(BaseContestLog *c)
+void MinosLoggerEvents::SendFiltersChanged(BaseContestLog *c)
 {
     emit mle.FiltersChanged(c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendUpdateStats(BaseContestLog *c )
+void MinosLoggerEvents::SendUpdateStats(BaseContestLog *c )
 {
     emit mle.UpdateStats(c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendUpdateMemories(BaseContestLog *c )
+void MinosLoggerEvents::SendUpdateMemories(BaseContestLog *c )
 {
     emit mle.UpdateMemories(c);
 }
 
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendRigFreqChanged(Frequency f, BaseContestLog *c)
+void MinosLoggerEvents::SendRigFreqChanged(Frequency f, BaseContestLog *c)
 {
     emit mle.RigFreqChanged(f, c);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendRotBearingChanged(int f, BaseContestLog *c)
+void MinosLoggerEvents::SendRotBearingChanged(int f, BaseContestLog *c)
 {
     emit mle.RotBearingChanged(f, c);
 }
@@ -284,7 +287,7 @@ void MinosLoggerEvents::SendSpotToLog(memoryData::memData spotData)
     emit mle.DxSpotToLog(spotData);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendQRZInfoToLog(QString callsign, QString locator, QString name)
+void MinosLoggerEvents::SendQRZInfoToLog(QString callsign, QString locator, QString name)
 {
     emit mle.QRZInfoToLog(callsign, locator, name);
 }
@@ -298,43 +301,43 @@ void MinosLoggerEvents::SendSpotToMemory(BaseContestLog *c, memoryData::memData 
     emit mle.DxSpotToMemory(c, spotData);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendReconnectFlagToClusterServer(bool state)
+void MinosLoggerEvents::SendReconnectFlagToClusterServer(bool state)
 {
     emit mle.SendReconnectFlagToServer(state);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendXferEnabled(bool s, BaseContestLog *c, QString basename)
+void MinosLoggerEvents::SendXferEnabled(bool s, BaseContestLog *c, QString basename)
 {
     emit mle.XferEnabled(s, c, basename);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendXferPressed(BaseContestLog *c, QString basename)
+void MinosLoggerEvents::SendXferPressed(BaseContestLog *c, QString basename)
 {
     emit mle.XferPressed(c, basename);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected)
+void MinosLoggerEvents::SendMatchTreeSelected(MatchType m, BaseContestLog *c, QString basename, QItemSelection selected)
 {
     emit mle.MatchTreeSelected(m, c, basename, selected);
 }
 //---------------------------------------------------------------------------
-void MinosLoggerEvents::sendListCompressionChanged(qreal hmult)
+void MinosLoggerEvents::SendListCompressionChanged(qreal hmult)
 {
     emit mle.listCompressionChanged(hmult);
 }
 //---------------------------------------------------------------------------
 
-void MinosLoggerEvents::sendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
+void MinosLoggerEvents::SendAfterQSOSaved(BaseContestLog *c, QSharedPointer<BaseContact> tct)
 {
     emit mle.afterQSOSaved(c, tct);
 }
 
-void MinosLoggerEvents::sendWsjtxDatagram(int instance, QByteArray *datagram)
+void MinosLoggerEvents::SendWsjtxDatagram(int instance, QByteArray *datagram)
 {
     emit mle.wsjtxDatagram(instance, datagram);
 }
 
-void MinosLoggerEvents::sendCallsignLookup(BaseContestLog *l, QString c)
+void MinosLoggerEvents::SendCallsignLookup(BaseContestLog *l, QString c)
 {
     emit mle.callsignLookup(l, c);
 }

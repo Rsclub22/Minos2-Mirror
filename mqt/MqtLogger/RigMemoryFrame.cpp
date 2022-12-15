@@ -405,7 +405,7 @@ void RigMemoryFrame::sendUpdateMemories()
     if (!suppressSendUpdate)
     {
         inSendMemoryUpdates = true; // THIS panel shouldn't action it
-        MinosLoggerEvents::sendUpdateMemories(ct);
+        MinosLoggerEvents::SendUpdateMemories(ct);
     }
 
     doTimer = true;

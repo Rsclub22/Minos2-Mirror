@@ -37,7 +37,7 @@ void MatchThisFrame::on_ReplaceThisLogList(SharedMatchCollection matchCollection
 }
 void MatchThisFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
-    MinosLoggerEvents::sendMatchTreeSelected(ThisMatch, contest, baseName, selected);
+    MinosLoggerEvents::SendMatchTreeSelected(ThisMatch, contest, baseName, selected);
 }
 void MatchThisFrame::afterMatchTreeClicked()
 {
@@ -79,9 +79,9 @@ void MatchThisFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &index)
                 QItemSelectionModel *ism = selectionModel();
                 QItemSelection selected = ism-> selection();
 
-                MinosLoggerEvents::sendMatchTreeSelected(ThisMatch, contest, baseName, selected);
+                MinosLoggerEvents::SendMatchTreeSelected(ThisMatch, contest, baseName, selected);
 
-                MinosLoggerEvents::sendXferPressed(contest, baseName);
+                MinosLoggerEvents::SendXferPressed(contest, baseName);
             }
             else
             {

@@ -152,11 +152,11 @@ void MatchTreeFrame::doCustomContextMenuRequested()
             ListContact *lct = mc->getListContact();
             if (bct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
+                MinosLoggerEvents::SendSetMemoryAction(contest, bct->cs.getFullCall(), bct->loc.getLoc());
             }
             else if (lct)
             {
-                MinosLoggerEvents::sendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
+                MinosLoggerEvents::SendSetMemoryAction(contest, lct->cs.getFullCall(), lct->loc.getLoc());
             }
         }
     }

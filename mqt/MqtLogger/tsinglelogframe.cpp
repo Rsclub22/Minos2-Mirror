@@ -1505,7 +1505,7 @@ void TSingleLogFrame::on_AfterLogContact( BaseContestLog *ct)
 void TSingleLogFrame::refreshMults()
 {
     LoggerContestLog *ct = dynamic_cast<LoggerContestLog *>( contest );
-    MinosLoggerEvents::sendRefreshStackMults(ct);
+    MinosLoggerEvents::SendRefreshStackMults(ct);
 }
 
 void TSingleLogFrame::updateTrees()
@@ -1618,7 +1618,7 @@ void TSingleLogFrame::on_SetMemory(BaseContestLog *c, QString call, QString loc)
        {
            ct->saveRigMemory(n, logData);
 
-           MinosLoggerEvents::sendUpdateMemories(ct);
+           MinosLoggerEvents::SendUpdateMemories(ct);
        }
     }
 }
@@ -1657,7 +1657,7 @@ void TSingleLogFrame::on_dxSpotToMemory(BaseContestLog *c, memoryData::memData d
 
         ct->saveRigMemory(n, dxData);
 
-        MinosLoggerEvents::sendUpdateMemories(ct);
+        MinosLoggerEvents::SendUpdateMemories(ct);
     }
 }
 
@@ -1862,7 +1862,7 @@ void TSingleLogFrame::updateFreq(Frequency f)
     GJVQSOLogFrame->setFreq(f);
     bandmapControlFrame->setFreq(f);
 
-    MinosLoggerEvents::sendRigFreqChanged(f, contest);
+    MinosLoggerEvents::SendRigFreqChanged(f, contest);
 }
 
 

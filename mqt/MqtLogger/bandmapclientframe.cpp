@@ -1485,7 +1485,7 @@ void BandmapClientFrame::on_clusterStatusIndicatorClicked()
             if (!clusterServerConnected && ui->clusterStatusIndicator->toolTip() != "Connected")
             {
                 trace(QString("cluster server disconnected - request reconnect"));
-                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+                MinosLoggerEvents::SendReconnectFlagToClusterServer(true);
             }
     }
 }

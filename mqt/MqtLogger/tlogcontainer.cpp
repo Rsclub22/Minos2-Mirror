@@ -777,7 +777,7 @@ void TLogContainer::onSetMemoryActionExecute()
 {
     // look in setMemoryaction
 
-    emit MinosLoggerEvents::sendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
+    emit MinosLoggerEvents::SendSetMemory(setMemoryAction->ct, setMemoryAction->call, setMemoryAction->loc);
 }
 void TLogContainer::FileNewActionExecute(bool hf)
 {

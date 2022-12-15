@@ -24,7 +24,7 @@ void MatchOtherFrame::showOtherMatchQSOs(SharedMatchCollection matchCollection )
 {
     if (matchCollection && matchCollection->contactCount())
     {
-        MinosLoggerEvents::sendXferEnabled(true, contest, baseName);
+        MinosLoggerEvents::SendXferEnabled(true, contest, baseName);
     }
     otherMatchModel.initialise(OtherMatch, matchCollection);
     getTreeView()->setModel(&otherMatchModel);
@@ -52,11 +52,11 @@ void MatchOtherFrame::on_ReplaceOtherLogList( SharedMatchCollection matchCollect
 void MatchOtherFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
 {
     // needs to be a MinosLogEvent, including Log/Edit
-    MinosLoggerEvents::sendXferPressed(contest, baseName);
+    MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
 void MatchOtherFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
-    MinosLoggerEvents::sendMatchTreeSelected(OtherMatch, contest, baseName, selected);
+    MinosLoggerEvents::SendMatchTreeSelected(OtherMatch, contest, baseName, selected);
 }
 
 void MatchOtherFrame::afterMatchTreeClicked()

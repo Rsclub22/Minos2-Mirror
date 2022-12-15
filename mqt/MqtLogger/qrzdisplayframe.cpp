@@ -89,7 +89,7 @@ void QrzDisplayFrame::onCallsignTextMouseDoubleClicked()
     if (!ui->callsignText->text().isEmpty())
     {
 
-        MinosLoggerEvents::sendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
+        MinosLoggerEvents::SendQRZInfoToLog(ui->callsignText->text(), ui->qraText->text(), ui->nameText->text());
     }
 
 }
@@ -99,7 +99,7 @@ void QrzDisplayFrame::onQraTextMouseDoubleClicked()
 {
     if (!ui->qraText->text().isEmpty())
     {
-        MinosLoggerEvents::sendQRZInfoToLog("" , ui->qraText->text(), "");
+        MinosLoggerEvents::SendQRZInfoToLog("" , ui->qraText->text(), "");
     }
 }
 
@@ -115,7 +115,7 @@ void QrzDisplayFrame::onNameTextMouseDoubleClicked()
 {
     if (!ui->nameText->text().isEmpty())
     {
-        MinosLoggerEvents::sendQRZInfoToLog("" , "", ui->nameText->text());
+        MinosLoggerEvents::SendQRZInfoToLog("" , "", ui->nameText->text());
     }
 }
 

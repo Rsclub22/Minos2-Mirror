@@ -24,7 +24,7 @@ void MatchArchiveFrame::showMatchList( SharedMatchCollection matchCollection )
 {
     if (matchCollection && matchCollection->contactCount())
     {
-        MinosLoggerEvents::sendXferEnabled(true, contest, baseName);
+        MinosLoggerEvents::SendXferEnabled(true, contest, baseName);
     }
     archiveMatchModel.initialise(ArchiveMatch, matchCollection);
     getTreeView()->setModel(&archiveMatchModel);
@@ -69,12 +69,12 @@ void MatchArchiveFrame::afterMatchTreeClicked()
 }
 void MatchArchiveFrame::on_MatchTreeFrame_doubleClicked(const QModelIndex &/*index*/)
 {
-    MinosLoggerEvents::sendXferPressed(contest, baseName);
+    MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
 
 void MatchArchiveFrame::on_MatchTreeSelectionChanged(const QItemSelection &selected, const QItemSelection &)
 {
-    MinosLoggerEvents::sendMatchTreeSelected(ArchiveMatch, contest, baseName, selected);
+    MinosLoggerEvents::SendMatchTreeSelected(ArchiveMatch, contest, baseName, selected);
 }
 
 

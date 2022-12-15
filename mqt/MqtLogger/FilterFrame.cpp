@@ -19,7 +19,7 @@ void FilterFrame::filtersChanged()
 {
     if (contest)
     {
-        MinosLoggerEvents::sendFiltersChanged(contest);
+        MinosLoggerEvents::SendFiltersChanged(contest);
     }
 }
 void FilterFrame::setContest(LoggerContestLog *ct)

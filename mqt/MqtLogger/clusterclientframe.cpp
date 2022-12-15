@@ -1757,7 +1757,7 @@ void ClusterClientFrame::on_clusterStatusIndicatorClicked()
             if (!clusterServerConnected && ui->statusIndicator->toolTip() != "Connected")
             {
                 trace(QString("cluster server disconnected - request reconnect"));
-                MinosLoggerEvents::sendReconnectFlagToClusterServer(true);
+                MinosLoggerEvents::SendReconnectFlagToClusterServer(true);
             }
     }
 

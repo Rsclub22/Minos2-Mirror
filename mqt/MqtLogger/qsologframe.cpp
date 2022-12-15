@@ -394,7 +394,7 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         if (Key >= Qt::Key_F1 && Key <= Qt::Key_F12)
         {
             // key may be for keyer or Digi Macro use
-            MinosLoggerEvents::sendFKey(event->key());
+            MinosLoggerEvents::SendFKey(event->key());
             return true;
         }
     }
@@ -1011,7 +1011,7 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     }
     else
     {
-        MinosLoggerEvents::sendUpdateStats(contest);
+        MinosLoggerEvents::SendUpdateStats(contest);
         sortUnfilledCatchupTime();
     }
     return;
@@ -1172,7 +1172,7 @@ void QSOLogFrame::on_GJVCancelButton_clicked()
 
 void QSOLogFrame::on_MatchXferButton_clicked()
 {
-    MinosLoggerEvents::sendXferPressed(contest, baseName);
+    MinosLoggerEvents::SendXferPressed(contest, baseName);
 }
 
 void QSOLogFrame::onQTHEdit_textChanged(const QString &/*arg1*/)
@@ -1295,7 +1295,7 @@ bool QSOLogFrame::setActiveControl(int *Key , Qt::KeyboardModifiers mods)
             *Key = 0;
             return true;
         case Qt::Key_F12:
-            MinosLoggerEvents::sendXferPressed(contest, baseName);
+            MinosLoggerEvents::SendXferPressed(contest, baseName);
             *Key = 0;
             return true;
         }
@@ -1545,7 +1545,7 @@ void QSOLogFrame::EditControlExit( QObject * /*Sender*/ )
 
       if (current == ui->CallsignFrame->getTextEditEdit())
       {
-          MinosLoggerEvents::sendCallsignLookup(contest, ui->CallsignFrame->getTextEditEdit()->text());
+          MinosLoggerEvents::SendCallsignLookup(contest, ui->CallsignFrame->getTextEditEdit()->text());
       }
    }
 }

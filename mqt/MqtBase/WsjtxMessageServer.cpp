@@ -172,7 +172,7 @@ void MessageServer::impl::pending_datagrams ()
         {
           parse_message (sender_address, sender_port, datagram);
 
-          MinosLoggerEvents::sendWsjtxDatagram(self_->serverInstance, &datagram);
+          MinosLoggerEvents::SendWsjtxDatagram(self_->serverInstance, &datagram);
         }
     }
 }
