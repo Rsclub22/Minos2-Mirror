@@ -34,6 +34,9 @@ public:
 
     ScreenContact screenContact;
 
+    bool QSOGrid = true;
+    bool QSOLines = true;
+
     void closeTab(MonitoringFrame *tab);
 
     int getContestSlotCount();
@@ -70,6 +73,10 @@ private slots:
     void onNewStanzas(MonitoredLog *m);
     void onNewLastContact(MonitoredLog *m);
     void onContactChanged(MonitoredLog *m);
+    void on_showGridcb_stateChanged(int arg1);
+
+    void on_showLinescb_stateChanged(int arg1);
+
 private:
     Ui::MonitorMain *ui;
     UpperCaseValidator ucValidator;

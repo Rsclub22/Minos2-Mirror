@@ -100,6 +100,11 @@ MonitorMain::MonitorMain(QWidget *parent) :
     ui->otherMatchFrame->restoreColumns();
 
     ui->callsignEdit->setFocus();
+
+    QSOGrid = settings.value("showQSOGrid", true).toBool();
+    ui->showGridcb->setChecked(QSOGrid);
+    QSOLines = settings.value("showQSOLines", true).toBool();
+    ui->showLinescb->setChecked(QSOLines);
 }
 
 MonitorMain::~MonitorMain()
@@ -576,4 +581,22 @@ void MonitorMain::on_contestPageControl_currentChanged(int /*index*/)
     ui->callsignEdit->setFocus();
 }
 
+
+
+void MonitorMain::on_showGridcb_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    QSOGrid = ui->showGridcb->isChecked();
+    settings.setValue("showQSOGrid", QSOGrid);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines);
+}
+
+
+void MonitorMain::on_showLinescb_stateChanged(int /*arg1*/)
+{
+    QSettings settings;
+    QSOLines = ui->showLinescb->isChecked();
+    settings.setValue("showQSOLines", QSOLines);
+    MinosLoggerEvents::SendRedrawQSOMap(QSOGrid, QSOLines);
+}
 

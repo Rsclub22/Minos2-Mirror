@@ -116,9 +116,9 @@ void MinosLoggerEvents::SendShowAuxHeaders()
 {
     emit mle.showAuxHeaders();
 }
-void MinosLoggerEvents::SendRedrawQSOMap()
+void MinosLoggerEvents::SendRedrawQSOMap(bool grid, bool lines)
 {
-    emit mle.redrawQSOMap();
+    emit mle.redrawQSOMap(grid, lines);
 }
 void MinosLoggerEvents::sendBandmapLimitsChanged()
 {

@@ -10,6 +10,9 @@ Frame {
     visible: true
     signal qmlSignal(variant msg)
 
+    property bool showGrid: false
+    property bool showLines: false
+
     property string homeLat: "0.0"
     property string homeLon: "0.0"
 
@@ -62,18 +65,21 @@ Frame {
     }
     function drawGrid()
     {
-        // If we don't do it in chunks, the whole thing
-        // can get cropped
+        if (showGrid)
+        {
+            // If we don't do it in chunks, the whole thing
+            // can get cropped
 
-        drawLatitude(-85, 85, -180, -90)
-        drawLatitude(-85, 85, -90, -0.000001)
-        drawLatitude(-85, 85, 0.000001, 90)
-        drawLatitude(-85, 85, 90, 180)
+            drawLatitude(-85, 85, -180, -90)
+            drawLatitude(-85, 85, -90, /*-0.000001*/0)
+            drawLatitude(-85, 85, /*0.000001*/0, 90)
+            drawLatitude(-85, 85, 90, 180)
 
-        drawLongitude(-85, 85, -180, -90)
-        drawLongitude(-85, 85, -90, 0)
-        drawLongitude(-85, 85, 0, 90)
-        drawLongitude(-85, 85, 90, 180)
+            drawLongitude(-85, 85, -180, -90)
+            drawLongitude(-85, 85, -90, 0)
+            drawLongitude(-85, 85, 0, 90)
+            drawLongitude(-85, 85, 90, 180)
+        }
     }
 
     function drawLatitude(minlat, maxlat, minlong,maxlong)
@@ -137,10 +143,12 @@ MapPolyline
         let cc = mapOfEurope.toCoordinate(Qt.point(mapMouse.mouseX, mapMouse.mouseY));
         if (cc.isValid)
         {
+
             let b = hcoord.azimuthTo(cc)
             let d = hcoord.distanceTo(cc)/1000
 
-            let r = d.toFixed(1) + " Km " + b.toFixed() + " deg"
+            let r = d.toFixed(1) + " Km " + b.toFixed() + " deg "
+                + QmlCppLink.locator(cc.latitude, cc.longitude)
 
             return r
         }
@@ -154,6 +162,9 @@ MapPolyline
         cm.callsign = callsign
         cm.coordinate = coord
         cm.locator = loc;
+
+
+        //Can we determine if this will overlap anything, and then offset it?
 
         mapOfEurope.addMapItem(cm)
 
@@ -193,7 +204,10 @@ MapPolyline
         var coord = QtPositioning.coordinate(callInfo[1], callInfo[2])
         var loc = callInfo[3]
         addCall(coord, call, loc)
-        drawLine(QtPositioning.coordinate(homeLat, homeLon), coord)
+        if (showLines)
+        {
+            drawLine(QtPositioning.coordinate(homeLat, homeLon), coord)
+        }
     }
 
 
@@ -215,4 +229,17 @@ MapPolyline
         mapOfEurope.addMapItem(line)
     }
 
+    function setDrawLines(dl)
+    {
+        showLines = dl
+    }
+    function setDrawGrid(dg)
+    {
+        showGrid = dg
+    }
+    function clearAll()
+    {
+        mapOfEurope.clearData()
+    }
 }
+

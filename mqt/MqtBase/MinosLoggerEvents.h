@@ -67,7 +67,7 @@ signals:
    void showAuxHeaders();
    void bandMapLimitsChanged();
    void fKey(int e);
-   void redrawQSOMap();
+   void redrawQSOMap(bool grid, bool lines);
 
    void BrgStrToRot(QString);
    void FreqToRig(Frequency);
@@ -182,7 +182,7 @@ public:
     static void SendShowAuxHeaders();
     static void sendBandmapLimitsChanged();
 
-    static void SendRedrawQSOMap();
+    static void SendRedrawQSOMap(bool grid, bool lines);
 
     static void SendFKey(int event);
 };

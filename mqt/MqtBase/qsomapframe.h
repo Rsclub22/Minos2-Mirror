@@ -20,10 +20,9 @@ public:
     explicit QSOMapFrame(QWidget *parent = nullptr);
     ~QSOMapFrame();
 
-    void setContest(BaseContestLog *);
+    void setContest(BaseContestLog *, bool grid, bool lines);
     void closeContest();
 
-    void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
 private:
     Ui::QSOMapFrame *ui;
 
@@ -31,12 +30,22 @@ private:
 
     void startMap();
     void stopMap();
+    void doRedraw(BaseContestLog *c, bool grid, bool lines);
+
 signals:
     void callSig(QVariant stringList);
     void homeSig(QVariant stringList);
 
+    void drawLines(QVariant dl);
+    void drawGrid(QVariant dg);
+    void clearAll();
+
 private slots:
     void onQmlClicked(QVariant v);
+public slots:
+    void on_AfterLogContact(const BaseContestLog *c, const QSharedPointer<BaseContact> lct);
+    void on_redrawQSOMap(bool grid, bool lines);
+
 };
 
 #endif // QSOMAPFRAME_H

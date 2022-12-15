@@ -10,10 +10,11 @@
 #include "SecondInstall.h"
 #include "MonitorMain.h"
 
-
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         QSharedPointer<QQmlApplicationEngine> appQmlEngine;
+#endif
 #endif
 #endif
 
@@ -22,11 +23,13 @@ int main(int argc, char *argv[])
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     SecondInstall::parseSecondInstall(argc, argv);
     QApplication a(argc, argv);
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // We must have a QCoreApplication before we do this
     // And we do this now so that the QML debugger can connect
     appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
+#endif
 #endif
 #endif
     appStartup(rpcConstants::monitorApp);
@@ -35,9 +38,11 @@ int main(int argc, char *argv[])
     w.show();
 
     auto r = a.exec();
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     appQmlEngine.clear();
+#endif
 #endif
 #endif
     return r;

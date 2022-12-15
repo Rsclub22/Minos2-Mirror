@@ -20,9 +20,11 @@
 //#include <crtdbg.h>
 #endif // _MSC_VER
 
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 QSharedPointer<QQmlApplicationEngine> appQmlEngine;
+#endif
 #endif
 #endif
 
@@ -49,6 +51,7 @@ int main(int argc, char *argv[])
             }
             return appError;
         }
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     // We must have a QCoreApplication before we do this
@@ -56,7 +59,7 @@ int main(int argc, char *argv[])
         appQmlEngine = QSharedPointer<QQmlApplicationEngine>(new QQmlApplicationEngine());
 #endif
 #endif
-
+#endif
         appStartup(rpcConstants::loggerApp);
 
 #ifdef Q_OS_ANDROID
@@ -86,12 +89,13 @@ int main(int argc, char *argv[])
         {
             appError = a.exec();
         }
+#ifndef NDEBUG
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     appQmlEngine.clear();
 #endif
 #endif
-
+#endif
         delete w;
     }
 

@@ -36,6 +36,8 @@ private:
     ConfigurationOption ExpertMode;
     ConfigurationOption AlternateFKeys;
     ConfigurationOption ShowAuxHeaders;
+    ConfigurationOption ShowQSOMapGrid;
+    ConfigurationOption ShowQSOMapLines;
 
     int lcf;
     int qff;

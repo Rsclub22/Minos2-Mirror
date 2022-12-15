@@ -162,7 +162,10 @@ void MonitoringFrame::on_mapButton_clicked()
         ui->QSOTable->setVisible(false);
 
         qsoMapFrame = new QSOMapFrame(nullptr);
-        qsoMapFrame->setContest(getContest());
+        BaseContestLog *ct = getContest();
+        bool grid = monitorMain->QSOGrid;
+        bool lines = monitorMain->QSOLines;
+        qsoMapFrame->setContest(ct, grid, lines);
         ui->logFrame->layout()->addWidget(qsoMapFrame);
         ui->logFrame->layout()->removeWidget(ui->QSOTable);
 

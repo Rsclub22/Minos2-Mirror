@@ -440,7 +440,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     wsjtxFrame->setContest(nullptr);
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
-    qsoMapFrame->setContest(nullptr);
+    qsoMapFrame->setContest(nullptr, false, false);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -766,7 +766,16 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                 {
                     elementScrollArea->setWidget(qsoMapFrame);
                     qsoMapFrame->setVisible(true);
-                    qsoMapFrame->setContest(ct);
+
+                    bool grid = false;
+                    if (ct->locatorMandatoryField.getValue())
+                    {
+                        TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapGrid, grid );
+                    }
+                    bool lines;
+                    TContestApp::getContestApp() ->loggerBundle.getBoolProfile( elpShowQSOMapLines, lines );
+
+                    qsoMapFrame->setContest(ct, grid, lines);
                     break;
                 }
                 case sctSplit:

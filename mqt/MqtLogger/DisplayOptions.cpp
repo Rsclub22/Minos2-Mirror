@@ -35,6 +35,8 @@ void DisplayOptions::initialise()
     AlternateFKeys.initialise(&TContestApp::getContestApp() ->displayBundle, edpAlternateFKeys, ui->alternateFKeysCheckBox);
     ShowAuxHeaders.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowAuxHeaders, ui->ShowAuxHeadersCheckBox);
 
+    ShowQSOMapGrid.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapGrid, ui->QSOMapShowGrid);
+    ShowQSOMapLines.initialise(&TContestApp::getContestApp() ->loggerBundle, elpShowQSOMapLines, ui->QSOMapShowLines);
 #ifndef Q_OS_WIN
     ui->separateIconsCb->hide();
 #endif
@@ -160,6 +162,15 @@ void DisplayOptions::finalise()
     {
         MinosLoggerEvents::SendShowAuxHeaders();
     }
+    bool gchanged = ShowQSOMapGrid.finalise();
+    bool lchanged = ShowQSOMapLines.finalise();
+
+    if (gchanged || lchanged)
+    {
+        MinosLoggerEvents::SendRedrawQSOMap(ShowQSOMapGrid.value(), ShowQSOMapLines.value());
+    }
+
+    MinosLoggerEvents::SendShowAuxHeaders();
     SHOWOPERATINGTIME nsot = otNone;
     if (ui->otNonerb->isChecked())
     {
@@ -204,7 +215,7 @@ void DisplayOptions::finalise()
         lmc = nlmc;
 
         BaseContestLog * ct = TContestApp::getContestApp() ->getCurrentContest();
-        MinosLoggerEvents::sendRefreshStackMults(ct);
+        MinosLoggerEvents::SendRefreshStackMults(ct);
 
     }
 
@@ -213,7 +224,7 @@ void DisplayOptions::finalise()
     {
         TContestApp::getContestApp() ->setIntDisplayProfile(edpListCompression, nlcf);
         TContestApp::getContestApp() ->displayBundle.flushProfile();
-        MinosLoggerEvents::sendListCompressionChanged(nlcf/100.0);
+        MinosLoggerEvents::SendListCompressionChanged(nlcf/100.0);
         doSelectSession = true;
     }
 

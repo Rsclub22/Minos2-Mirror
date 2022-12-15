@@ -85,6 +85,7 @@ SOURCES += \
     presetbutton.cpp \
     profiles.cpp \
     qlogtabwidget.cpp \
+    qmlcpplink.cpp \
     qsomapframe.cpp \
     RigCache.cpp \
     remotelogs.cpp \
@@ -178,6 +179,7 @@ HEADERS += \
     presetbutton.h \
     profiles.h \
     qlogtabwidget.h \
+    qmlcpplink.h \
     qsomapframe.h \
     RigCache.h \
     qrzServerCommon.h \
