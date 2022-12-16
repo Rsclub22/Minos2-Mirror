@@ -1,5 +1,6 @@
 #include <QVBoxLayout>
 #include <QTimer>
+#include <math.h>
 
 #ifdef Q_OS_WIN
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
@@ -115,12 +116,20 @@ void QSOMapFrame::doRedraw(BaseContestLog *c, bool grid, bool lines)
     callInfo << ct->myloc.getLoc();
     emit homeSig(callInfo);
 
+    locs.clear();
+
     for ( auto const &c: qAsConst(c->ctList ))
     {
         QSharedPointer<BaseContact> cct = c.wt;
 
         if ( cct->notValidContact() )
            continue;
+
+        if (cct->cs.getValRes() != CS_OK)    // duplicate?
+        {
+            continue;
+        }
+
 
         on_AfterLogContact(ct, cct);
     }
@@ -147,12 +156,52 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         if ( lct->notValidContact() )
             return;
 
+        if (lct->cs.getValRes() != CS_OK)    // duplicate?
+        {
+            return;
+        }
+
+        QString loc = lct->loc.getLoc();
+        double lat = raddeg(lct->lat);
+        double lon = raddeg(lct->lon);
+
+        bool fourLoc = (loc.length() == 4);
+
+        int n = 0;
+        if (locs.contains(loc))
+        {
+            n = locs[loc];
+            locs[loc] = ++n;
+
+        }
+        else
+        {
+            n = 1;
+            locs[loc] = n;
+        }
+        if (fourLoc)
+        {
+            if (lat < 0)
+            {
+                lat = lat - 1;
+            }
+            lat = std::round(lat) + 0.75;
+            if (lon < 0)
+            {
+                lon = lon -1;
+            }
+            lon = std::round(lon);
+            int ilon = lon;
+            lon = lon - ilon%2 + 0.25  + 0.1 * n;
+
+        }
+
         QStringList callInfo; // [callsign, latitude, longitude]
 
         callInfo << lct->cs.getFullCall();
-        callInfo << QString::number(raddeg(lct->lat));
-        callInfo << QString::number(raddeg(lct->lon));
-        callInfo << lct->loc.getLoc();
+        callInfo << QString::number(lat);
+        callInfo << QString::number(lon);
+        callInfo << loc;
         emit callSig(callInfo);
     }
 }

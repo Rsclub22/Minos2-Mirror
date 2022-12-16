@@ -28,6 +28,8 @@ private:
 
     BaseContestLog *ct = nullptr;
 
+    QMap <QString, int> locs;
+
     void startMap();
     void stopMap();
     void doRedraw(BaseContestLog *c, bool grid, bool lines);
