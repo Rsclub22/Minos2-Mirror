@@ -59,6 +59,7 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     ui->setupUi(this);
 
     connect(RxBuffer::getRxBuffer(), &RxBuffer::newCharacter, this, &DMMainWindow::onNewCharacter);
+    connect(ui->rxChars, &DataPainter::wordSelected, this, &DMMainWindow::wordSelected);
 #ifdef Q_OS_WIN
     UINT devs = waveInGetNumDevs();
     inChannels = devs;
@@ -117,12 +118,13 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     clearAction = newAction("Clear Decodes", ui->menuClear, &DMMainWindow::onMenuClear);
 
 #ifdef Q_OS_WIN
-    actionMMVARI = newAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
-    action2Tone = newAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
-    actionMMTTY = newAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
-    actionGritty = newAction("Gritty", ui->menuEngine, &DMMainWindow::onActionGritty_triggered);
+    actionMMVARI = newCheckableAction("MMVARI", ui->menuEngine, &DMMainWindow::onActionMMVARI_triggered);
+    action2Tone = newCheckableAction("2Tone", ui->menuEngine, &DMMainWindow::onAction2Tone_triggered);
+    actionMMTTY = newCheckableAction("MMTTY", ui->menuEngine, &DMMainWindow::onActionMMTTY_triggered);
+    actionGritty = newCheckableAction("Gritty", ui->menuEngine, &DMMainWindow::onActionGritty_triggered);
 #endif
-    actionFLDigi = newAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
+    actionFLDigi = newCheckableAction("FLDigi", ui->menuEngine, &DMMainWindow::onActionFLDigi_triggered);
+    actionTest = newCheckableAction("Test", ui->menuEngine, &DMMainWindow::onActionTest_triggered);
 
     actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuConfigure, &DMMainWindow::onActionConfigure_Engines_triggered);
 
@@ -174,6 +176,29 @@ QAction *DMMainWindow::newAction(const char *text, QMenu *m, void (DMMainWindow:
 {
     QAction * newAct = new QAction( tr(text), this );
     actionList[newAct] = text;
+    m->addAction( newAct );
+    if (slotparam)
+    {
+        connect( newAct, &QAction::triggered, this, slotparam );
+    }
+    return newAct;
+}
+QAction *DMMainWindow::newCheckableAction( const char *text, QMenu *m, void (DMMainWindow::*slotparam)(bool) )
+{
+    QAction * newAct = new QAction( tr(text), this );
+    actionList[newAct] = text;
+    newAct->setCheckable( true );
+    m->addAction( newAct );
+    if (slotparam)
+    {
+        connect( newAct, &QAction::triggered, this, slotparam );
+    }
+    return newAct;
+}
+QAction *DMMainWindow::newCheckableAction(const QString text, QMenu *m, void (DMMainWindow::*slotparam)(bool) )
+{
+    QAction * newAct = new QAction( text, this );
+    newAct->setCheckable( true );
     m->addAction( newAct );
     if (slotparam)
     {
@@ -259,6 +284,7 @@ void DMMainWindow::closeAllEngines()
     {
         delete mmvariFrame;
         mmvariFrame = nullptr;
+        actionMMVARI->setChecked(false);
     }
 
     actionMMVARI->setChecked(false);
@@ -269,6 +295,8 @@ void DMMainWindow::closeAllEngines()
 
         mmttyFrame->deleteLater();
         mmttyFrame = nullptr;
+        actionMMTTY->setChecked(false);
+        action2Tone->setChecked(false);
     }
 
     if (grittyFrame)
@@ -277,23 +305,28 @@ void DMMainWindow::closeAllEngines()
 
         grittyFrame->deleteLater();
         grittyFrame = nullptr;
+        actionGritty->setChecked(false);
     }
-
-    actionMMTTY->setChecked(false);
-    action2Tone->setChecked(false);
-    actionGritty->setChecked(false);
 #endif
     if (fldigiFrame)
     {
         fldigiFrame->closeFrame();
         fldigiFrame->deleteLater();
         fldigiFrame = nullptr;
+        actionFLDigi->setChecked(false);
 
+    }
+    if (testFrame)
+    {
+        testFrame->closeFrame();
+        testFrame->deleteLater();
+        testFrame = nullptr;
+        actionTest->setChecked(false);
     }
 }
 #ifdef Q_OS_WIN
 
-void DMMainWindow::onActionMMVARI_triggered()
+void DMMainWindow::onActionMMVARI_triggered(bool /*checked*/)
 {
     closeAllEngines();
 
@@ -316,7 +349,7 @@ void DMMainWindow::onActionMMVARI_triggered()
     mmvariFrame = new MMVARIFrame(this, dynamic_cast<QVBoxLayout *>(ui->centralwidget->layout()), ui->sendEdit, m, inId, outId);
 }
 
-void DMMainWindow::onActionMMTTY_triggered()
+void DMMainWindow::onActionMMTTY_triggered(bool /*checked*/)
 {
     closeAllEngines();
     trace("Select MMTTY Engine");
@@ -329,7 +362,7 @@ void DMMainWindow::onActionMMTTY_triggered()
     actionMMTTY->setChecked(true);
 }
 
-void DMMainWindow::onAction2Tone_triggered()
+void DMMainWindow::onAction2Tone_triggered(bool /*checked*/)
 {
     closeAllEngines();
     trace("Select 2Tone Engine");
@@ -342,7 +375,7 @@ void DMMainWindow::onAction2Tone_triggered()
     action2Tone->setChecked(true);
 }
 #endif
-void DMMainWindow::onActionFLDigi_triggered()
+void DMMainWindow::onActionFLDigi_triggered(bool /*checked*/)
 {
     closeAllEngines();
     trace("Select FLDigi Engine");
@@ -352,9 +385,19 @@ void DMMainWindow::onActionFLDigi_triggered()
 
     fldigiFrame = new FLDigiFrame(this, ui->sendEdit, m);
 }
+
+void DMMainWindow::onActionTest_triggered(bool /*checked*/)
+{
+    closeAllEngines();
+    QSettings settings;
+    QString eStr = QString("dataModes/engines/");
+    QString m = settings.value(eStr + "Test").toString();
+
+    testFrame = new TestFrame(this, ui->sendEdit, m);
+}
 #ifdef Q_OS_WIN
 
-void DMMainWindow::onActionGritty_triggered()
+void DMMainWindow::onActionGritty_triggered(bool /*checked*/)
 {
     closeAllEngines();
     trace("Select Gritty Engine");
@@ -418,48 +461,21 @@ void DMMainWindow::onActionConfigure_Engines_triggered()
 
     checkEnginesAvailable();
 }
-/*
-
-    We want to hold all text still (NOT scrolling)
-    and insert new text in a way that rolls from bottom
-    to top of the window
-
-    So we want a fixed vector of lines, and move lines
-    on newline characters
-
-
-*/
 
 void DMMainWindow::onNewCharacter()
 {
-    // We also need to track screen character position to
-    // the rxbuffer position - or is that already OK
-    // as they are positioned line/column?
-
-    // we also need to scan the buffer for potential , "CQ",
-    // "De", "Test", "BARTG", "RSGB", callsigns,
-    // 599 reports, serial numbers, "other exchange"s (e.g.
-    // time for BARTG contests). Any others? States, names, all sorts!
-
-    // some we have to higlight and "accept" in order? Or just cursor in
-    // and take whole word/number/whatever
-
-    // gritty does some of this for us; MMTTY/2Tone/FLDigi/MMVARI don't
-
     ui->rxChars->setText();
- //   ui->rxChars->repaint();
-
-    // QTextEdit isn't the best for using cursors... maybe we need to move
-    // to a canvas of some sort?
-
-    // We wouldn't be able to use HTML for colours etc then, though
-
-//    ui->rxChars->textCursor().setPosition()
-//    ui->rxChars->ensureCursorVisible();
 }
 
 void DMMainWindow::onMenuClear()
 {
     RxBuffer::getRxBuffer()->reset();
     onNewCharacter();
+}
+
+void DMMainWindow::wordSelected(QString word)
+{
+// word has been clicked on the datapainter; we need to send it
+// on to the logger
+    qDebug() << word;
 }

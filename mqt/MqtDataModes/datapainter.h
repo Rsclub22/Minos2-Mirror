@@ -1,13 +1,30 @@
 #ifndef DATAPAINTER_H
 #define DATAPAINTER_H
 
+#include <QGraphicsTextItem>
 #include <QGraphicsView>
 #include <QGraphicsScene>
 #include <QStringList>
 #include <QFont>
 
 
-class QGraphicsTextItem;
+class DPGraphicsTextItem: public QGraphicsTextItem
+{
+    Q_OBJECT
+public:
+    explicit DPGraphicsTextItem(QGraphicsItem *parent = nullptr);
+    explicit DPGraphicsTextItem(const QString &text, QGraphicsItem *parent = nullptr);
+    virtual ~DPGraphicsTextItem();
+
+protected:
+
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+
+signals:
+
+    void wordSelected(QString);
+
+};
 
 class DataPainter : public QGraphicsView
 {
@@ -20,6 +37,8 @@ public:
     void setText();
 
 signals:
+
+    void wordSelected(QString);
 
 private:
     QGraphicsScene *scene;

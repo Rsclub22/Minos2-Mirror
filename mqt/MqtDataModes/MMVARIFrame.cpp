@@ -1,6 +1,5 @@
 #include <QMenuBar>
 #include <QMenu>
-#include <QDebug>
 
 #include "MTrace.h"
 

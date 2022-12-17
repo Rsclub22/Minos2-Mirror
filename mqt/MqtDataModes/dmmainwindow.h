@@ -5,13 +5,14 @@
 #include <QTimer>
 
 #include "StdInReader.h"
-#include "FLDigiFrame.h"
 
 #ifdef Q_OS_WIN
 #include "MMVARIFrame.h"
 #include "MMTTYFrame.h"
 #include "grittyframe.h"
 #endif
+#include "FLDigiFrame.h"
+#include "testframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class DMMainWindow; }
@@ -43,13 +44,15 @@ private:
     QMap<QMenu *, const char *> menuList;
     QAction *clearAction;
 
-    QAction *actionFLDigi;
 #ifdef Q_OS_WIN
     QAction *actionMMVARI;
     QAction *actionMMTTY;
     QAction *action2Tone;
     QAction *actionGritty;
 #endif
+    QAction *actionFLDigi;
+    QAction *actionTest;
+
     QAction *actionConfigure_Engines;
 
     QMenu *configMenu;
@@ -58,12 +61,13 @@ private:
     QTimer LogTimer;
     QString geoStr;         // geometry registry location
 
-    FLDigiFrame *fldigiFrame = nullptr;
 #ifdef Q_OS_WIN
     MMVARIFrame *mmvariFrame = nullptr;
     MMTTYFrame *mmttyFrame = nullptr;
     GrittyFrame *grittyFrame = nullptr;
 #endif
+    FLDigiFrame *fldigiFrame = nullptr;
+    TestFrame *testFrame = nullptr;
 
     void closeAllEngines();
 
@@ -75,6 +79,8 @@ private:
     void doCloseEvent();
     QMenu *newMenu(QMenu *m, const char *text);
     QAction *newAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)());
+    QAction *newCheckableAction(const char *text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
+    QAction *newCheckableAction(const QString text, QMenu *m, void (DMMainWindow::*slotparam)(bool));
     void checkEnginesAvailable();
 protected:
     virtual void showEvent(QShowEvent *) override;
@@ -86,16 +92,18 @@ private slots:
 
 #ifdef Q_OS_WIN
 
-    void onActionMMVARI_triggered();
+    void onActionMMVARI_triggered(bool checked);
 
-    void onActionMMTTY_triggered();
+    void onActionMMTTY_triggered(bool checked);
 
-    void onAction2Tone_triggered();
+    void onAction2Tone_triggered(bool checked);
 
-    void onActionGritty_triggered();
+    void onActionGritty_triggered(bool checked);
 #endif
 
-    void onActionFLDigi_triggered();
+    void onActionFLDigi_triggered(bool checked);
+
+    void onActionTest_triggered(bool checked);
 
     void onActionExit_triggered();
 
@@ -104,6 +112,8 @@ private slots:
     void on_sendButton_clicked();
 
     void onNewCharacter();
+
+    void wordSelected(QString);
 
     void onMenuClear();
 };

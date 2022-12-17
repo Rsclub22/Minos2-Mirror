@@ -1,6 +1,5 @@
 #include <windows.h>    // needed for shared memory
 
-#include <QDebug>
 #include <QAbstractNativeEventFilter>
 #include <QDialog>
 #include <QDateTime>

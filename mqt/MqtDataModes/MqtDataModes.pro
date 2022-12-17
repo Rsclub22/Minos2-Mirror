@@ -13,19 +13,22 @@ SOURCES += \
     engineconfigure.cpp \
     main.cpp \
     dmmainwindow.cpp \
-    rxbuffer.cpp
+    rxbuffer.cpp \
+    testframe.cpp
 
 HEADERS += \
     FLDigiFrame.h \
     datapainter.h \
     dmmainwindow.h \
     engineconfigure.h \
-    rxbuffer.h
+    rxbuffer.h \
+    testframe.h
 
 FORMS += \
     FLDigiFrame.ui \
     dmmainwindow.ui \
-    engineconfigure.ui
+    engineconfigure.ui \
+    testframe.ui
 
 win32{
 CONFIG -= embed_manifest_exe
