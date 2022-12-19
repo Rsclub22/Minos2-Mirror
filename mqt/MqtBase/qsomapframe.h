@@ -21,7 +21,6 @@ public:
     ~QSOMapFrame();
 
     void setContest(BaseContestLog *, bool grid, bool lines);
-    void closeContest();
 
 private:
     Ui::QSOMapFrame *ui;

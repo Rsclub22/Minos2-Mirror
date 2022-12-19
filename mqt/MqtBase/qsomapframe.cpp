@@ -162,6 +162,10 @@ void QSOMapFrame::on_AfterLogContact(const BaseContestLog *c, const QSharedPoint
         }
 
         QString loc = lct->loc.getLoc();
+        if (loc.isEmpty())
+        {
+            return;
+        }
         double lat = raddeg(lct->lat);
         double lon = raddeg(lct->lon);
 
@@ -213,9 +217,5 @@ void QSOMapFrame::on_redrawQSOMap(bool grid, bool lines)
     emit clearAll();
 
     doRedraw(ct, grid, lines);
-}
-void QSOMapFrame::closeContest()
-{
-    setContest(nullptr, false, false);
 }
 
