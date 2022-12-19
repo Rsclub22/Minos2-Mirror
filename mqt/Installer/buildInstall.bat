@@ -95,6 +95,7 @@ copy %MROOT%\mqt\Help\*.* Help
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\WindowsFiles .\Configuration
 xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\Cluster .\Configuration\Cluster
+xcopy /F /Y %MROOT%\mqt\ControlFiles\Configuration\FunctionKeyMessages .\Configuration\FunctionKeyMessages
 
 cd Configuration
 

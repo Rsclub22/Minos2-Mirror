@@ -1914,11 +1914,6 @@ void KSTMainWindow::on_loggerPushButton_clicked()
 {
     QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
     RPCGeneralClient rpc(rpcConstants::loggerTakeFocus);
-//    QSharedPointer<RPCParam>st(new RPCParamStruct);
-//    st->addMember( publishedName, "LogName" );
-//    st->addMember( stanza, "Stanza" );
-//    st->addMember( stanzaCount, "Count" );
-//    rpc.getCallArgs() ->addParam( st );
     rpc.queueCall( rpcConstants::loggerApp + "@" + router );
 
 }

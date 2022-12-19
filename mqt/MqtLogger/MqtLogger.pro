@@ -83,6 +83,7 @@ SOURCES += \
     contestdetails.cpp \
     defdirsdlg.cpp \
     districtframe.cpp \
+    dmbuttonframe.cpp \
     dxccframe.cpp \
     freqlineedit.cpp \
     locTreeFrame.cpp \
@@ -183,6 +184,7 @@ HEADERS  += \
     contestdetails.h \
     defdirsdlg.h \
     districtframe.h \
+    dmbuttonframe.h \
     dxccframe.h \
     freqlineedit.h \
     locTreeFrame.h \
@@ -253,6 +255,7 @@ FORMS    += \
     contestdetails.ui \
     defdirsdlg.ui \
     districtframe.ui \
+    dmbuttonframe.ui \
     dxccframe.ui \
     FilterFrame.ui \
     LocCalcFrame.ui \

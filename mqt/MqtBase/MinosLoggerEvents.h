@@ -106,6 +106,8 @@ signals:
    void wsjtxDatagram(int instance, QByteArray *);
    void callsignLookup(BaseContestLog *l, QString c);
    void ResendSpotsFromClusterCommand(resendFrameId, QString, QString, QString);
+   void SandPChanged(bool);
+   void DMSender(QString);
 public:
    static MinosLoggerEvents mle;
 
@@ -185,6 +187,8 @@ public:
     static void SendRedrawQSOMap(bool grid, bool lines);
 
     static void SendFKey(int event);
+    static void SendSandPChanged(bool);
+    static void SendDMSender(QString);
 };
 //---------------------------------------------------------------------------
 #endif

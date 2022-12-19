@@ -232,11 +232,18 @@ void MMVARIFrame::sendCharacters(const QString &sendData)
     //        3 - txstateWAIT		Switching to RX (flushing PCM data in the sound buffer)
     //        4 - txstateTONE		Transmitting a single tone
 
+    if (sendData.isEmpty())
+    {
+        mmvari->setBTX(false);  // stop immediately
+    }
+    else
+    {
         mmvari->setBAddStartCR(true);
         mmvari->setBAddStopCR(true);
         mmvari->SendText(sendData);
         mmvari->setBTX(true);
         mmvari->setBReqRX(true);    // return to RX when buffer empty
+    }
 }
 QMenu *MMVARIFrame::newMenu(QMenu *m, const char *text)
 {

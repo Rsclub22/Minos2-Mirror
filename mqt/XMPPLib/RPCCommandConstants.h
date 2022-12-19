@@ -210,5 +210,11 @@ static const QString KSTClientApp         ("mqtKSTClient");
 
 // Data Modes
 static const QString datamodesApp         ("mqtDataModesApp");
+static const QString DMCat                {"DataModes"};
+static const QString DMSender             {"Sender"};
+static const QString DMWord               {"DMWord"};
+static const QString DMKeyPress           {"DMKeyPress"};
+static const QString DMTransmit           {"DMTransmit"};
+static const QString DMStopTransmit       {"DMStopTransmit"};
 }
 #endif // RPCCOMMANDRCONSTANTS_H

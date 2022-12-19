@@ -13,8 +13,9 @@
 #include "fileutils.h"
 #include "waitcursor.h"
 #include "engineconfigure.h"
-
 #include "rxbuffer.h"
+#include "RPCCommandConstants.h"
+#include "ServerEvent.h"
 
 #include "dmmainwindow.h"
 #include "ui_dmmainwindow.h"
@@ -102,7 +103,16 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     connect(stdinReader, &StdInReader::stdinLine, this, &DMMainWindow::onStdInRead);
 
     MinosRPC *rpc = MinosRPC::getMinosRPC(getAppStartupName());
-    Q_UNUSED(rpc)
+    connect(rpc, &MinosRPC::routerCall, this, &DMMainWindow::on_routerCall);
+    connect(rpc, &MinosRPC::notify, this, &DMMainWindow::on_notify);
+    //connect(rpc, &MinosRPC::provider, this, &DMMainWindow::on_provider);
+
+    QStringList sv = {rpcConstants::DMSender};
+    rpc->findProviders(rpcConstants::DMCat, sv);
+
+    QString a = rpc->getAppName();
+    QString station = MinosConfig::getMinosConfig()->getThisRouterName();
+    me = a + "@" + station;
 
     createCloseEvent();
 
@@ -129,12 +139,79 @@ DMMainWindow::DMMainWindow(QWidget *parent)
     actionConfigure_Engines = newAction(QT_TR_NOOP("Configure Engines"), ui->menuConfigure, &DMMainWindow::onActionConfigure_Engines_triggered);
 
     checkEnginesAvailable();
+
+    QString sender = settings.value("Sender").toString();
+    if (sender == me)
+    {
+        ui->sendercb->setChecked(true);
+    }
 }
 
 DMMainWindow::~DMMainWindow()
 {
     delete ui;
 }
+
+void DMMainWindow::on_routerCall(bool err, QSharedPointer<MinosRPCObj>mro, const QString from )
+{
+    trace( "DM callback from " + from + ( err ? ":Error" : ":Normal" ) );
+
+    if ( !err )
+    {
+        QString call = mro->getMethodName();
+        if (call == rpcConstants::DMTransmit)
+        {
+
+            RPCArgs *args = mro->getCallArgs();
+
+            if (args)
+            {
+                QSharedPointer<RPCParam> psMess;
+                if (args->getStructArgMember(0, rpcConstants::DMTransmit, psMess))
+                {
+                    QString pmess;
+                    if (psMess->getString(pmess))
+                    {
+                        ui->sendEdit->setText(pmess);
+                        on_sendButton_clicked();
+                    }
+                }
+            }
+        }
+        else if (call == rpcConstants::DMStopTransmit)
+        {
+            ui->sendEdit->clear();
+            on_sendButton_clicked();
+        }
+    }
+}
+void DMMainWindow::on_notify(AnalysePubSubNotify an, const QString from )
+{
+    // pubsub notify
+    trace( "Notify callback from " + from + ( !an.getOK() ? ":Error" : ":Normal" ) );
+
+    if ( an.getOK() )
+    {
+        PublishState state = an.getState();
+        if (state != psPublished)
+        {
+            return;
+        }
+        QString key = an.getKey();
+        QString value = an.getValue();
+
+        if ( an.getCategory() == rpcConstants::DMCat && key == rpcConstants::DMSender)
+        {
+            if (value != me)
+            {
+                ui->sendercb->setChecked(false);
+                ui->sendEdit->clear();
+            }
+        }
+    }
+}
+
+
 void DMMainWindow::checkEnginesAvailable()
 {
     QSettings settings;
@@ -433,6 +510,8 @@ void DMMainWindow::doCloseEvent()
 void DMMainWindow::on_sendButton_clicked()
 {
     QString data = ui->sendEdit->text().trimmed();
+
+    // empty data means stop transmitting
 #ifdef Q_OS_WIN
 
     if (mmvariFrame)
@@ -451,6 +530,10 @@ void DMMainWindow::on_sendButton_clicked()
     if (fldigiFrame)
     {
         fldigiFrame->sendCharacters(data);
+    }
+    if (testFrame)
+    {
+        testFrame->sendCharacters(data);
     }
 }
 
@@ -477,5 +560,37 @@ void DMMainWindow::wordSelected(QString word)
 {
 // word has been clicked on the datapainter; we need to send it
 // on to the logger
-    qDebug() << word;
+    bool routerRunning = checkRouterReady();
+
+    if (routerRunning)
+    {
+        QString router = MinosConfig::getMinosConfig( )->getThisRouterName();
+
+        RPCGeneralClient rpc(rpcConstants::DMWord);
+        QSharedPointer<RPCParam>st(new RPCParamStruct);
+        st->addMember( word, "Word" );
+        rpc.getCallArgs() ->addParam( st );
+        rpc.queueCall( rpcConstants::loggerApp + "@" + router );
+    }
 }
+
+void DMMainWindow::on_sendercb_stateChanged(int /*arg1*/)
+{
+    MinosRPC *rpc = MinosRPC::getMinosRPC();
+    if (ui->sendercb->isChecked())
+    {
+        // publish ourself as sender
+        QSettings settings;
+        settings.setValue("Sender", me);
+
+        rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, me, psPublished);
+    }
+    else
+    {
+        QSettings settings;
+        settings.setValue("Sender", QString());
+        rpc->publish(rpcConstants::DMCat, rpcConstants::DMSender, "not" + me, psRevoked);
+
+    }
+}
+

@@ -380,7 +380,10 @@ bool QSOLogFrame::doKeyPressEvent( QKeyEvent* event )
         raise();
         return true;
     }
-    else if ( ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3 || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6|| Key == Qt::Key_F12) )
+    else if ( ((ctrl && altFKeys) || (!ctrl && !altFKeys))
+              && ( Key == Qt::Key_F1 || Key == Qt::Key_F2 || Key == Qt::Key_F3
+                   || Key == Qt::Key_F4 || Key == Qt::Key_F5 || Key == Qt::Key_F6
+                   || Key == Qt::Key_F12) )
     {
         if (setActiveControl( &Key, mods ))
         {
@@ -604,6 +607,8 @@ void QSOLogFrame::setContest(BaseContestLog *pcontest)
 
     refreshOps();
     MinosLoggerEvents::SendReportOverstrike(overstrike, contest);
+    MinosLoggerEvents::SendSandPChanged(getSandP());
+
 }
 void QSOLogFrame::initialise()
 {
@@ -817,7 +822,43 @@ void QSOLogFrame::SecondOpComboBox_Exit()
        refreshOps();
     }
 }
-void QSOLogFrame::on_GJVOKButton_clicked()
+QWidget *QSOLogFrame::getNextInvalid(QWidget * &firstInvalid)
+{
+    firstInvalid = nullptr;
+    QWidget *nextInvalid = nullptr;
+    bool onCurrent = false;
+    bool pastCurrent = false;
+    for ( auto const &vcp: qAsConst(vcs) )
+    {
+       if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
+       {
+          continue;
+       }
+       if ( onCurrent )
+          pastCurrent = true;
+       if ( vcp ->wc == current )
+          onCurrent = true;
+       if ( !vcp ->valid( cmValidStatus, screenContact ) )
+       {
+          if ( !firstInvalid )
+             firstInvalid = vcp ->wc;
+          if ( pastCurrent )
+          {
+             if ( !nextInvalid )
+             {
+                nextInvalid = vcp->wc;
+                break;
+             }
+          }
+       }
+    }
+
+    // make sure we go to the invalid field
+
+    QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
+    return nextf;
+}
+void QSOLogFrame::doGJVOKButton_clicked()
 {
     if ( contest->isReadOnly() )
     {
@@ -896,38 +937,8 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     if ( !valid( cmCheckValid ) )   // make sure all single and cross field
                                     // validation has been done
     {
-       QWidget * firstInvalid = nullptr;
-       QWidget *nextInvalid = nullptr;
-       bool onCurrent = false;
-       bool pastCurrent = false;
-       for ( auto const &vcp: qAsConst(vcs) )
-       {
-          if ( !vcp ->wc->isVisible() || !vcp ->wc->isEnabled())
-          {
-             continue;
-          }
-          if ( onCurrent )
-             pastCurrent = true;
-          if ( vcp ->wc == current )
-             onCurrent = true;
-          if ( !vcp ->valid( cmValidStatus, screenContact ) )
-          {
-             if ( !firstInvalid )
-                firstInvalid = vcp ->wc;
-             if ( pastCurrent )
-             {
-                if ( !nextInvalid )
-                {
-                   nextInvalid = vcp->wc;
-                   break;
-                }
-             }
-          }
-       }
-
-       // make sure we go to the invalid field
-
-       QWidget *nextf = ( nextInvalid ) ? nextInvalid : firstInvalid;
+        QWidget *firstInvalid = nullptr;
+        QWidget *nextf = getNextInvalid(firstInvalid);
 
        if (tabSandPstate && edit == false && catchup == false)
        {
@@ -1017,6 +1028,11 @@ void QSOLogFrame::on_GJVOKButton_clicked()
     return;
 
 }
+void QSOLogFrame::on_GJVOKButton_clicked()
+{
+    doGJVOKButton_clicked();
+}
+
 void QSOLogFrame::selectFirstInvalid()
 {
     getScreenEntry(); // make sure it is saved
@@ -1035,6 +1051,40 @@ void QSOLogFrame::selectFirstInvalid()
     }
 
     selectField( nullptr );
+
+}
+
+void QSOLogFrame::rxDMWord(QString rxWord)
+{
+    QLineEdit *ed = dynamic_cast<QLineEdit *>( current );
+    ed->setText(rxWord);
+
+    if ( !valid( cmCheckValid ) )   // make sure all single and cross field
+    {
+        QWidget *firstInvalid = nullptr;
+        QWidget *nextf = getNextInvalid(firstInvalid);
+
+        if (!nextf)
+        {
+            nextf = current;
+        }
+
+        selectField(nextf);
+    }
+}
+
+void QSOLogFrame::DMKey(int key)
+{
+    if (key == Qt::Key_Return)
+    {
+
+    }
+    else if (key >= Qt::Key_F1 && key <= Qt::Key_F12)
+    {
+        // key may be for keyer or Digi Macro use
+        MinosLoggerEvents::SendFKey(key);
+        return;
+    }
 
 }
 bool QSOLogFrame::dlgForced()
@@ -2134,6 +2184,8 @@ bool QSOLogFrame::checkAndLogEntry()
    }
    return retval;
 }
+
+
 //---------------------------------------------------------------------------
 void QSOLogFrame::setModes()
 {
@@ -3844,11 +3896,19 @@ void QSOLogFrame::on_callRb_clicked()
             tslf->runButtonsFrame->setCallFreq();
         }
     }
+    MinosLoggerEvents::SendSandPChanged(getSandP());
 }
-
+void QSOLogFrame::on_SandPrb_clicked()
+{
+    MinosLoggerEvents::SendSandPChanged(getSandP());
+}
 bool QSOLogFrame::readTuneAddBandMapSetting()
 {
     bool state;
     TContestApp::getContestApp()->loggerBundle.getBoolProfile(elpAddBandMapTuningEnable, state);
     return state;
+}
+bool QSOLogFrame::getSandP()
+{
+    return ui->SandPrb->isChecked();
 }

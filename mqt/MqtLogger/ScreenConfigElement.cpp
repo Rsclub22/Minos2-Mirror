@@ -33,6 +33,7 @@ QVector <SCTypeOption> ScreenConfigElement::scoptions =
     {sctTxVmButtons, QT_TR_NOOP("TX Voice Mem. Buttons"), QT_TR_NOOP("TX Voice Mem. Buttons")},
     {sctQrzDisplay, QT_TR_NOOP("QRZ Display"), QT_TR_NOOP("QRZ Display")},
     {sctQsoMap, QT_TR_NOOP("QSO Map"), QT_TR_NOOP("QSO Map")},
+    {sctDMButtons, QT_TR_NOOP("Data Modes Buttons"), QT_TR_NOOP("Data Modes Buttons")},
     {sctNone, QT_TR_NOOP("None"), QT_TR_NOOP("Not in use")}
 };
 SCType ScreenConfigElement::getScreenType(QString s)

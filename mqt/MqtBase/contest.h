@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // $Id$
 //
-// PROJECT NAME 		Minos Amateur Radio Control and Logging System
+// PROJECT NAME 		Minos Amateur Radio Control and Logging Systemextra
 //
 // COPYRIGHT         (c) M. J. Goodey G0GJV 2005 - 2008
 //

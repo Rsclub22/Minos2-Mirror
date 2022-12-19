@@ -1,4 +1,5 @@
 #include "testframe.h"
+#include "MShowMessageDlg.h"
 #include "rxbuffer.h"
 #include "MTrace.h"
 #include "ui_testframe.h"
@@ -36,9 +37,9 @@ TestFrame::~TestFrame()
     delete ui;
 }
 
-void TestFrame::sendCharacters(const QString &)
+void TestFrame::sendCharacters(const QString &toSend)
 {
-
+    mShowMessage(toSend, this);
 }
 
 void TestFrame::closeFrame()

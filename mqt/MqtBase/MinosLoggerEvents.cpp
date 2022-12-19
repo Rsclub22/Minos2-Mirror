@@ -129,6 +129,15 @@ void MinosLoggerEvents::SendFKey(int event)
 {
     emit mle.fKey(event);
 }
+
+void MinosLoggerEvents::SendSandPChanged(bool s)
+{
+    emit mle.SandPChanged(s);
+}
+void MinosLoggerEvents::SendDMSender(QString s)
+{
+    emit mle.DMSender(s);
+}
 //---------------------------------------------------------------------------
 void MinosLoggerEvents::SendMainRaised()
 {

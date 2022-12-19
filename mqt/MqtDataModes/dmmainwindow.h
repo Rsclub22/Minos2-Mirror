@@ -5,6 +5,8 @@
 #include <QTimer>
 
 #include "StdInReader.h"
+#include "XMPPRPCObj.h"
+#include "AnalysePubSubNotify.h"
 
 #ifdef Q_OS_WIN
 #include "MMVARIFrame.h"
@@ -27,6 +29,7 @@ public:
     DMMainWindow(QWidget *parent = nullptr);
     virtual ~DMMainWindow() override;
 
+    QString router;
 
     unsigned int inChannels = 0;
     unsigned int outChannels = 0;
@@ -39,6 +42,7 @@ public:
 private:
     Ui::DMMainWindow *ui;
     StdInReader *stdinReader = new StdInReader(this);
+    QString me;
 
     QMap<QAction *, const char *> actionList;
     QMap<QMenu *, const char *> menuList;
@@ -116,5 +120,8 @@ private slots:
     void wordSelected(QString);
 
     void onMenuClear();
+    void on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QString from);
+    void on_sendercb_stateChanged(int arg1);
+    void on_notify(AnalysePubSubNotify an, const QString from);
 };
 #endif // DMMAINWINDOW_H

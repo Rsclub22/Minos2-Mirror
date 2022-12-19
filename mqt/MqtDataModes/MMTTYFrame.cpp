@@ -153,12 +153,19 @@ MMTTYFrame::~MMTTYFrame()
 
 void MMTTYFrame::sendCharacters(const QString &sendData)
 {
-    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
-    for(auto c:sendData)
+    if (sendData.isEmpty())
     {
-        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_CHAR, c.toLatin1());
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 0);    // PTT off immediate
     }
-    ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 1);
+    else
+    {
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 2);
+        for(auto c:sendData)
+        {
+            ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_CHAR, c.toLatin1());
+        }
+        ::PostMessage(mttyHWnd, uMSG_MMTTY, RXM_PTT, 1);
+    }
 }
 
 void MMTTYFrame::closeFrame()

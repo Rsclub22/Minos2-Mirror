@@ -58,6 +58,7 @@ public:
     virtual void closeContest();
 
     void doGJVCancelButton_clicked();
+    void doGJVOKButton_clicked();
 
     void transferDetails(CheckableContact *lct, const BaseContestLog *matct );
     void transferDetails(const ListContact *lct, const ContactList *matct );
@@ -93,6 +94,9 @@ public:
 
     void transferFromQrz(QString callsign, QString locator, QString name);
     void selectFirstInvalid();
+    void rxDMWord(QString rxWord);
+    void DMKey(int key);
+    bool getSandP();
 private:
     ScreenContact *partialContact; // contact being edited on screen
     virtual bool eventFilter(QObject *obj, QEvent *event) override;
@@ -193,6 +197,8 @@ private:
     ValidatedControl *cmntIl;
 
     ValidatedControl *freqIl;
+
+    QWidget *getNextInvalid(QWidget *&firstInvalid);
 
     bool isRotatorLoaded();
 
@@ -340,6 +346,7 @@ private slots:
     void onQrzButtonClicked();
     void on_callRb_clicked();
 
+    void on_SandPrb_clicked();
 public slots:
     void setXferEnabled(bool s, BaseContestLog *c, QString basename);
 

@@ -109,7 +109,7 @@ void TSendDM::getRouterAppCatMap()
         }
         else if (i->appType == "DataModes")
         {
-            // no action - yet
+            routerAppCatMap[rpcConstants::DMCat].push_back(i);
         }
     }
     rpc->setRouterAppCatMap(routerAppCatMap);
@@ -890,6 +890,10 @@ void TSendDM::on_notify( AnalysePubSubNotify an, const QString from )
                     emit keyerConfig(k, v);
                 }
             }
+            else if ( an.getCategory() == rpcConstants::DMCat)
+            {
+                MinosLoggerEvents::SendDMSender(an.getValue());
+            }
         }
         else if (an.getState() == psRevoked)
         {
@@ -1036,6 +1040,38 @@ void TSendDM::on_routerCall(bool err, QSharedPointer<MinosRPCObj> mro, const QSt
                         rpc.queueCall( from );
                     }
 
+                }
+            }
+        }
+        else if (call == rpcConstants::DMWord)
+        {
+            // word received from DataModes app
+            // pass it on to the current contest
+            QSharedPointer<RPCParam> psrxWord;
+            if ( args->getStructArgMember( 0, "Word", psrxWord ))
+            {
+                QString rxWord;
+                psrxWord->getString(rxWord);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->GJVQSOLogFrame->rxDMWord(rxWord);
+                }
+            }
+        }
+        else if (call == rpcConstants::DMKeyPress)
+        {
+            QSharedPointer<RPCParam> psKey;
+            if ( args->getStructArgMember( 0, "Key", psKey ))
+            {
+                int key;
+                psKey->getInt(key);
+
+                TSingleLogFrame * lf = LogContainer->getCurrentLogFrame();
+                if ( lf )
+                {
+                    lf->GJVQSOLogFrame->DMKey(key);
                 }
             }
         }

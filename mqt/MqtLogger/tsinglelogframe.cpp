@@ -7,6 +7,7 @@
 #include "MatchThread.h"
 #include "BandList.h"
 #include "cutils.h"
+#include "dmbuttonframe.h"
 #include "fileutils.h"
 #include "qheaderview.h"
 #include "qtableview.h"
@@ -402,6 +403,12 @@ void TSingleLogFrame::createScreenComponents()
 
     qsoMapFrame->setVisible(false);
 
+    dmButtonFrame = new DMButtonFrame(this);
+    dmButtonFrame->setObjectName(QStringLiteral("qsoMapFrame"));
+    dmButtonFrame->setFrameShape(QFrame::StyledPanel);
+    dmButtonFrame->setFrameShadow(QFrame::Raised);
+
+    dmButtonFrame->setVisible(false);
 }
 void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 {
@@ -441,6 +448,7 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
     clusterControlFrame->setContest(nullptr);
     bandmapControlFrame->setContest(nullptr);
     qsoMapFrame->setContest(nullptr, false, false);
+    dmButtonFrame->setContest(nullptr);
 
     setBandmapLoaded(false);
     setQrzDisplayFrameLoaded(false);
@@ -510,6 +518,9 @@ void TSingleLogFrame::clearScreenLayout(bool clearAllTabs)
 
         qsoMapFrame->setParent(this);
         qsoMapFrame->hide();
+
+        dmButtonFrame->setParent(this);
+        dmButtonFrame->hide();
 
         if (clearAllTabs)
         {
@@ -778,6 +789,13 @@ void TSingleLogFrame::buildRow(ContestPage *cp, SCRow &scrow, int &auxInstance, 
                     qsoMapFrame->setContest(ct, grid, lines);
                     break;
                 }
+                case sctDMButtons:
+                {
+                    elementScrollArea->setWidget(dmButtonFrame);
+                    dmButtonFrame->setVisible(true);
+                    dmButtonFrame->setContest(ct);
+                    break;
+                }
                 case sctSplit:
                 {
                     MinosSplitter *vs = new MinosSplitter();
@@ -950,7 +968,6 @@ void TSingleLogFrame::closeContest()
        FKHRigControlFrame->closeContest();          // this disconnects rig on last closing contest
        FKHRotControlFrame->closeContest();
        GJVQSOLogFrame->closeContest();
-       qsoMapFrame->closeContest();
        if (contest)
        {
             RPCPubSub::publish( rpcConstants::monitorLogCategory, contest->publishedName, QString::number( 0 ), psRevoked );
